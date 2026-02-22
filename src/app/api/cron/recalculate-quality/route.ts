@@ -10,11 +10,6 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 500
@@ -57,6 +52,11 @@ function calculateQualityScore(provider: Record<string, unknown>): {
 
 export async function GET(request: Request) {
   try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
     // Verify cron secret
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
