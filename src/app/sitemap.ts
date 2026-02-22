@@ -630,7 +630,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           const cityName = isInsee ? (inseeMap[rawCity]?.n || rawCity) : rawCity
           const normalizedCity = cityName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const locationSlug = arrondissementSlug || villeMap.get(normalizedCity)
-          const publicId = p.stable_id || p.slug || p.id
+          // MUST match getArtisanUrl() priority: slug first, then stable_id
+          // Previous: stable_id || slug caused canonical mismatch → isWrongUrl → noindex
+          const publicId = p.slug || p.stable_id || p.id
 
           if (!serviceSlug || !locationSlug || !publicId) return null
 
