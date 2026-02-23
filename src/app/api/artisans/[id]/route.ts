@@ -139,7 +139,7 @@ export async function GET(
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(artisanId)
 
     // First, try a simple query to find the provider
-    const PROVIDER_COLUMNS = 'id,name,slug,email,phone,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form,creation_date,description,meta_description,website,latitude,longitude'
+    const PROVIDER_COLUMNS = 'id,name,slug,email,phone,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form_code,description,meta_description,website,latitude,longitude'
     let simpleQuery = supabase
       .from('providers')
       .select(PROVIDER_COLUMNS)
@@ -319,8 +319,8 @@ export async function GET(
         faq,
         siret: provider.siret,
         siren: provider.siren,
-        legal_form: provider.legal_form,
-        creation_date: provider.creation_date,
+        legal_form: provider.legal_form_code,
+        creation_date: null,
         phone: provider.phone,
         email: provider.email,
         website: provider.website,

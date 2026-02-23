@@ -6,11 +6,6 @@ import { getProblemSlugs } from '@/lib/data/problems'
 import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
-import inseeCommunes from '@/lib/data/insee-communes.json'
-
-// Provider batch size — small enough to avoid Vercel function timeout (5 DB queries of 1k each)
-const PROVIDER_BATCH_SIZE = 5_000
-
 // Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
 const STATIC_BATCH = 10_000
 
@@ -80,31 +75,10 @@ export async function generateSitemaps() {
     { id: 'guides' },
   ]
 
-  // Determine how many provider batches we need
-  let providerCount = 0
-  try {
-    const { createAdminClient } = await import('@/lib/supabase/admin')
-    const supabase = createAdminClient()
-
-    const { count, error } = await supabase
-      .from('providers')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-      .eq('noindex', false)
-
-    if (!error && count) {
-      providerCount = count
-    }
-  } catch {
-    // DB unavailable at build time — no provider sitemaps
-  }
-
-  if (providerCount > 0) {
-    const batchCount = Math.ceil(providerCount / PROVIDER_BATCH_SIZE)
-    for (let i = 0; i < batchCount; i++) {
-      sitemaps.push({ id: `providers-${i}` })
-    }
-  }
+  // Provider sitemaps are served dynamically via /api/sitemap-providers
+  // (DB-dependent, can't reliably pre-render at build time).
+  // They are referenced in the sitemap index (/api/sitemap-index) and
+  // rewritten via next.config.js: /sitemap/providers-*.xml → /api/sitemap-providers?id=*
 
   return sitemaps
 }
@@ -452,206 +426,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Provider pages — lastModified réel depuis updated_at ────────────
-  if (id.startsWith('providers-')) {
-    const batchIndex = parseInt(id.replace('providers-', ''), 10)
-    const offset = batchIndex * PROVIDER_BATCH_SIZE
-
-    try {
-      const { createAdminClient } = await import('@/lib/supabase/admin')
-      const supabase = createAdminClient()
-
-      const serviceMap = new Map<string, string>()
-      for (const s of services) {
-        serviceMap.set(
-          s.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(),
-          s.slug
-        )
-      }
-
-      const villeMap = new Map<string, string>()
-      for (const v of villes) {
-        villeMap.set(
-          v.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(),
-          v.slug
-        )
-      }
-
-      // Arrondissement INSEE codes → main city slug
-      // Paris 75101-75120, Marseille 13201-13216, Lyon 69381-69389
-      const arrondissementMap: Record<string, string> = {}
-      for (let i = 1; i <= 20; i++) arrondissementMap[`751${String(i).padStart(2, '0')}`] = 'paris'
-      for (let i = 1; i <= 16; i++) arrondissementMap[`132${String(i).padStart(2, '0')}`] = 'marseille'
-      for (let i = 81; i <= 89; i++) arrondissementMap[`693${String(i)}`] = 'lyon'
-
-      const specialtyToSlug: Record<string, string> = {
-        'plombier': 'plombier',
-        'electricien': 'electricien',
-        'chauffagiste': 'chauffagiste',
-        'menuisier': 'menuisier',
-        'menuisier-metallique': 'serrurier',
-        'carreleur': 'carreleur',
-        'couvreur': 'couvreur',
-        'macon': 'macon',
-        'peintre': 'peintre-en-batiment',
-        'charpentier': 'charpentier',
-        'isolation': 'isolation-thermique',
-        'platrier': 'platrier',
-        'finition': 'peintre-en-batiment',
-        'serrurier': 'serrurier',
-        'jardinier': 'jardinier',
-        'paysagiste': 'paysagiste',
-        'vitrier': 'vitrier',
-        'miroitier': 'miroitier',
-        'cuisiniste': 'cuisiniste',
-        'installateur-de-cuisine': 'cuisiniste',
-        'solier': 'solier',
-        'poseur-de-parquet': 'poseur-de-parquet',
-        'parqueteur': 'poseur-de-parquet',
-        'moquettiste': 'solier',
-        'nettoyage': 'nettoyage',
-        'nettoyage-professionnel': 'nettoyage',
-        'terrassier': 'terrassier',
-        'terrassement': 'terrassier',
-        'zingueur': 'zingueur',
-        'couvreur-zingueur': 'zingueur',
-        'etancheiste': 'etancheiste',
-        'etancheite': 'etancheiste',
-        'facadier': 'facadier',
-        'facade': 'facadier',
-        'ravalement': 'facadier',
-        'plaquiste': 'platrier',
-        'platrerie': 'platrier',
-        'metallier': 'metallier',
-        'metallerie': 'metallier',
-        'ferronnier': 'ferronnier',
-        'ferronnerie': 'ferronnier',
-        'storiste': 'storiste',
-        'store': 'storiste',
-        'volet': 'storiste',
-        'salle-de-bain': 'salle-de-bain',
-        'installateur-de-salle-de-bain': 'salle-de-bain',
-        'architecte-interieur': 'architecte-interieur',
-        'architecte-d-interieur': 'architecte-interieur',
-        'decoration': 'decorateur',
-        'decorateur': 'decorateur',
-        'peintre-decorateur': 'decorateur',
-        'domoticien': 'domoticien',
-        'domotique': 'domoticien',
-        'pompe-a-chaleur': 'pompe-a-chaleur',
-        'pac': 'pompe-a-chaleur',
-        'panneaux-solaires': 'panneaux-solaires',
-        'photovoltaique': 'panneaux-solaires',
-        'solaire': 'panneaux-solaires',
-        'isolation-thermique': 'isolation-thermique',
-        'ite': 'isolation-thermique',
-        'iti': 'isolation-thermique',
-        'renovation-energetique': 'renovation-energetique',
-        'rge': 'renovation-energetique',
-        'borne-recharge': 'borne-recharge',
-        'borne-electrique': 'borne-recharge',
-        'ramoneur': 'ramoneur',
-        'ramonage': 'ramoneur',
-        'amenagement-exterieur': 'paysagiste',
-        'pisciniste': 'pisciniste',
-        'piscine': 'pisciniste',
-        'alarme': 'alarme-securite',
-        'securite': 'alarme-securite',
-        'videosurveillance': 'alarme-securite',
-        'alarme-securite': 'alarme-securite',
-        'antenniste': 'antenniste',
-        'antenne': 'antenniste',
-        'ascensoriste': 'ascensoriste',
-        'ascenseur': 'ascensoriste',
-        'diagnostiqueur': 'diagnostiqueur',
-        'diagnostic': 'diagnostiqueur',
-        'dpe': 'diagnostiqueur',
-        'geometre': 'geometre',
-        'geometre-expert': 'geometre',
-        'desinsectisation': 'desinsectisation',
-        'desinsectiseur': 'desinsectisation',
-        'nuisibles': 'desinsectisation',
-        'deratisation': 'deratisation',
-        'deratiseur': 'deratisation',
-        'demenageur': 'demenageur',
-        'demenagement': 'demenageur',
-        'climaticien': 'climaticien',
-      }
-
-      type ProviderRow = {
-        id: string
-        name: string | null
-        slug: string | null
-        stable_id: string | null
-        specialty: string | null
-        address_city: string | null
-        updated_at: string | null
-      }
-
-      const inseeMap = inseeCommunes as Record<string, { n: string }>
-
-      // Extend villeMap with all inseeCommunes for 100% coverage (small communes)
-      // Generated slugs match the locations table exactly (verified against DB)
-      const slugify = (s: string) =>
-        s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-      for (const entry of Object.values(inseeMap)) {
-        const norm = entry.n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-        if (!villeMap.has(norm)) {
-          villeMap.set(norm, slugify(entry.n))
-        }
-      }
-
-      let allProviders: ProviderRow[] = []
-      let from = offset
-      const PAGE_SIZE = 1000
-      const limit = offset + PROVIDER_BATCH_SIZE
-
-      while (from < limit) {
-        const { data, error } = await supabase
-          .from('providers')
-          .select('id, name, slug, stable_id, specialty, address_city, updated_at')
-          .eq('is_active', true)
-          .eq('noindex', false)
-          .order('updated_at', { ascending: false })
-          .range(from, Math.min(from + PAGE_SIZE - 1, limit - 1))
-
-        if (error || !data || data.length === 0) break
-        allProviders = allProviders.concat(data)
-        if (data.length < PAGE_SIZE) break
-        from += PAGE_SIZE
-      }
-
-      const providerEntries: MetadataRoute.Sitemap = allProviders
-        .filter((p) => p.name && p.specialty && p.address_city)
-        .map((p) => {
-          const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-          const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
-          const rawCity = p.address_city!
-          const isInsee = /^\d{4,5}$/.test(rawCity) || /^[0-9][A-Z0-9]\d{3}$/.test(rawCity)
-          // Try arrondissement map first (Paris 75101-75120, Marseille 13201-13216, Lyon 69381-69389)
-          const arrondissementSlug = isInsee ? arrondissementMap[rawCity] : undefined
-          const cityName = isInsee ? (inseeMap[rawCity]?.n || rawCity) : rawCity
-          const normalizedCity = cityName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-          const locationSlug = arrondissementSlug || villeMap.get(normalizedCity)
-          // MUST match getArtisanUrl() priority: slug first, then stable_id
-          // Previous: stable_id || slug caused canonical mismatch → isWrongUrl → noindex
-          const publicId = p.slug || p.stable_id || p.id
-
-          if (!serviceSlug || !locationSlug || !publicId) return null
-
-          return {
-            url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
-            // lastModified réel — seul cas où la date est vérifiable par Google
-            lastModified: p.updated_at ? new Date(p.updated_at) : undefined,
-          }
-        })
-        .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
-
-      return providerEntries
-    } catch {
-      return []
-    }
-  }
+  // Provider sitemaps are served via /api/sitemap-providers (dynamic API route).
+  // Requests to /sitemap/providers-*.xml are rewritten by next.config.js.
 
   return []
 }
