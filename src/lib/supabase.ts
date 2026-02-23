@@ -215,8 +215,34 @@ export async function getLocationBySlug(slug: string) {
 // Full SELECT for single-provider detail pages — includes all columns needed for
 // rich artisan profiles (description, location, legal info, etc.)
 // Listing pages use PROVIDER_LIST_SELECT instead (lightweight).
-// NOTE: Must be inline string literal for Supabase TS type inference to work.
-const PROVIDER_DETAIL_SELECT = 'id, name, slug, stable_id, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, address_department, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, user_id, claimed_at, created_at, updated_at, code_naf, libelle_naf'
+//
+// IMPORTANT: Only include columns VERIFIED to exist in production.
+// Columns like address_department, user_id, claimed_at, code_naf, libelle_naf
+// are defined in migrations but may not have been applied to the production DB.
+// Including a non-existent column causes PostgREST to error → silent 404.
+// These columns are fetched separately below when needed.
+const PROVIDER_DETAIL_SELECT = 'id, stable_id, name, slug, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, created_at, updated_at'
+
+// Optional columns that may not exist in production yet (migrations pending).
+// Fetched separately so a missing column doesn't break the main query.
+const PROVIDER_OPTIONAL_COLS = 'user_id, claimed_at, address_department, code_naf, libelle_naf'
+
+async function enrichWithOptionalCols(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  provider: Record<string, any>,
+  client: ReturnType<typeof createAdminClient>,
+): Promise<void> {
+  try {
+    const { data } = await client
+      .from('providers')
+      .select(PROVIDER_OPTIONAL_COLS)
+      .eq('id', provider.id)
+      .single()
+    if (data) Object.assign(provider, data)
+  } catch {
+    // Columns don't exist yet — continue without them
+  }
+}
 
 // Lookup by stable_id ONLY — no fallback.
 // Uses admin client (service_role) to bypass RLS — this runs server-side only.
@@ -233,7 +259,9 @@ export async function getProviderByStableId(stableId: string) {
           .eq('is_active', true)
           .single()
 
-        return data ? resolveProviderCity(data) : null
+        if (!data) return null
+        await enrichWithOptionalCols(data, admin)
+        return resolveProviderCity(data)
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderByStableId(${stableId})`,
@@ -258,7 +286,9 @@ export async function getProviderById(id: string) {
           .eq('is_active', true)
           .single()
 
-        return data ? resolveProviderCity(data) : null
+        if (!data) return null
+        await enrichWithOptionalCols(data, admin)
+        return resolveProviderCity(data)
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderById(${id})`,
@@ -283,7 +313,9 @@ export async function getProviderBySlug(slug: string) {
           .eq('is_active', true)
           .single()
 
-        return data ? resolveProviderCity(data) : null
+        if (!data) return null
+        await enrichWithOptionalCols(data, admin)
+        return resolveProviderCity(data)
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderBySlug(${slug})`,
