@@ -211,27 +211,38 @@ export async function getLocationBySlug(slug: string) {
   }
 }
 
-// Full SELECT for single-provider detail pages — includes all columns needed for
-// rich artisan profiles (description, location, legal info, etc.)
-// Listing pages use PROVIDER_LIST_SELECT instead (lightweight).
-// NOTE: Must be inline string literal for Supabase TS type inference to work.
-const PROVIDER_DETAIL_SELECT = 'id, name, slug, stable_id, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, address_department, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, user_id, claimed_at, created_at, updated_at, code_naf, libelle_naf'
+// Provider detail SELECT — uses EXACTLY the same columns as the listing pages.
+// PROVIDER_LIST_SELECT is proven to work in production (listing pages render).
+// Any extra columns can be added back ONE AT A TIME after verifying they exist.
+const PROVIDER_DETAIL_SELECT = PROVIDER_LIST_SELECT
+
+/**
+ * Query a single provider by field.
+ * Uses PROVIDER_LIST_SELECT (same as listing pages — proven to work).
+ */
+async function queryProviderDetail(
+  field: 'stable_id' | 'id' | 'slug',
+  value: string,
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type Row = Record<string, any>
+
+  const { data } = await supabase
+    .from('providers')
+    .select(PROVIDER_DETAIL_SELECT)
+    .eq(field, value)
+    .eq('is_active', true)
+    .single()
+
+  return data ? resolveProviderCity(data as Row) : null
+}
 
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      (async () => {
-        const { data } = await supabase
-          .from('providers')
-          .select(PROVIDER_DETAIL_SELECT)
-          .eq('stable_id', stableId)
-          .eq('is_active', true)
-          .single()
-
-        return data ? resolveProviderCity(data) : null
-      })(),
+      queryProviderDetail('stable_id', stableId),
       QUERY_TIMEOUT_MS,
       `getProviderByStableId(${stableId})`,
     )
@@ -245,16 +256,7 @@ export async function getProviderById(id: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      (async () => {
-        const { data } = await supabase
-          .from('providers')
-          .select(PROVIDER_DETAIL_SELECT)
-          .eq('id', id)
-          .eq('is_active', true)
-          .single()
-
-        return data ? resolveProviderCity(data) : null
-      })(),
+      queryProviderDetail('id', id),
       QUERY_TIMEOUT_MS,
       `getProviderById(${id})`,
     )
@@ -268,16 +270,7 @@ export async function getProviderBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      (async () => {
-        const { data } = await supabase
-          .from('providers')
-          .select(PROVIDER_DETAIL_SELECT)
-          .eq('slug', slug)
-          .eq('is_active', true)
-          .single()
-
-        return data ? resolveProviderCity(data) : null
-      })(),
+      queryProviderDetail('slug', slug),
       QUERY_TIMEOUT_MS,
       `getProviderBySlug(${slug})`,
     )
