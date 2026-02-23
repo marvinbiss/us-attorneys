@@ -216,11 +216,11 @@ export async function getLocationBySlug(slug: string) {
 // Listing pages use PROVIDER_LIST_SELECT instead (lightweight).
 //
 // IMPORTANT: Only include columns VERIFIED to exist in production.
-// Columns like address_department, user_id, claimed_at, code_naf, libelle_naf
-// are defined in migrations but may not have been applied to the production DB.
+// Columns like address_department, user_id, claimed_at, code_naf, libelle_naf,
+// legal_form, legal_form_code, creation_date are defined in migrations but may
+// not have been applied to the production DB.
 // Including a non-existent column causes PostgREST to error → silent 404.
-// These columns are fetched separately below when needed.
-const PROVIDER_DETAIL_SELECT = 'id, stable_id, name, slug, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, created_at, updated_at'
+const PROVIDER_DETAIL_SELECT = 'id, stable_id, name, slug, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, is_verified, is_active, noindex, rating_average, review_count, website, latitude, longitude, created_at, updated_at'
 
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
