@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 
@@ -218,12 +219,14 @@ export async function getLocationBySlug(slug: string) {
 const PROVIDER_DETAIL_SELECT = 'id, name, slug, stable_id, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, address_department, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, user_id, claimed_at, created_at, updated_at, code_naf, libelle_naf'
 
 // Lookup by stable_id ONLY — no fallback.
+// Uses admin client (service_role) to bypass RLS — this runs server-side only.
 export async function getProviderByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
       (async () => {
-        const { data } = await supabase
+        const admin = createAdminClient()
+        const { data } = await admin
           .from('providers')
           .select(PROVIDER_DETAIL_SELECT)
           .eq('stable_id', stableId)
@@ -241,12 +244,14 @@ export async function getProviderByStableId(stableId: string) {
 }
 
 // Lookup by primary UUID id — fallback for providers with no stable_id/slug.
+// Uses admin client (service_role) to bypass RLS — this runs server-side only.
 export async function getProviderById(id: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
       (async () => {
-        const { data } = await supabase
+        const admin = createAdminClient()
+        const { data } = await admin
           .from('providers')
           .select(PROVIDER_DETAIL_SELECT)
           .eq('id', id)
@@ -264,12 +269,14 @@ export async function getProviderById(id: string) {
 }
 
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
+// Uses admin client (service_role) to bypass RLS — this runs server-side only.
 export async function getProviderBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
       (async () => {
-        const { data } = await supabase
+        const admin = createAdminClient()
+        const { data } = await admin
           .from('providers')
           .select(PROVIDER_DETAIL_SELECT)
           .eq('slug', slug)
