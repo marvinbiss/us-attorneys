@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 
@@ -223,45 +222,20 @@ export async function getLocationBySlug(slug: string) {
 // These columns are fetched separately below when needed.
 const PROVIDER_DETAIL_SELECT = 'id, stable_id, name, slug, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, created_at, updated_at'
 
-// Optional columns that may not exist in production yet (migrations pending).
-// Fetched separately so a missing column doesn't break the main query.
-const PROVIDER_OPTIONAL_COLS = 'user_id, claimed_at, address_department, code_naf, libelle_naf'
-
-async function enrichWithOptionalCols(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  provider: Record<string, any>,
-  client: ReturnType<typeof createAdminClient>,
-): Promise<void> {
-  try {
-    const { data } = await client
-      .from('providers')
-      .select(PROVIDER_OPTIONAL_COLS)
-      .eq('id', provider.id)
-      .single()
-    if (data) Object.assign(provider, data)
-  } catch {
-    // Columns don't exist yet — continue without them
-  }
-}
-
 // Lookup by stable_id ONLY — no fallback.
-// Uses admin client (service_role) to bypass RLS — this runs server-side only.
 export async function getProviderByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
       (async () => {
-        const admin = createAdminClient()
-        const { data } = await admin
+        const { data } = await supabase
           .from('providers')
           .select(PROVIDER_DETAIL_SELECT)
           .eq('stable_id', stableId)
           .eq('is_active', true)
           .single()
 
-        if (!data) return null
-        await enrichWithOptionalCols(data, admin)
-        return resolveProviderCity(data)
+        return data ? resolveProviderCity(data) : null
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderByStableId(${stableId})`,
@@ -272,23 +246,19 @@ export async function getProviderByStableId(stableId: string) {
 }
 
 // Lookup by primary UUID id — fallback for providers with no stable_id/slug.
-// Uses admin client (service_role) to bypass RLS — this runs server-side only.
 export async function getProviderById(id: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
       (async () => {
-        const admin = createAdminClient()
-        const { data } = await admin
+        const { data } = await supabase
           .from('providers')
           .select(PROVIDER_DETAIL_SELECT)
           .eq('id', id)
           .eq('is_active', true)
           .single()
 
-        if (!data) return null
-        await enrichWithOptionalCols(data, admin)
-        return resolveProviderCity(data)
+        return data ? resolveProviderCity(data) : null
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderById(${id})`,
@@ -299,23 +269,19 @@ export async function getProviderById(id: string) {
 }
 
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
-// Uses admin client (service_role) to bypass RLS — this runs server-side only.
 export async function getProviderBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
       (async () => {
-        const admin = createAdminClient()
-        const { data } = await admin
+        const { data } = await supabase
           .from('providers')
           .select(PROVIDER_DETAIL_SELECT)
           .eq('slug', slug)
           .eq('is_active', true)
           .single()
 
-        if (!data) return null
-        await enrichWithOptionalCols(data, admin)
-        return resolveProviderCity(data)
+        return data ? resolveProviderCity(data) : null
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderBySlug(${slug})`,
