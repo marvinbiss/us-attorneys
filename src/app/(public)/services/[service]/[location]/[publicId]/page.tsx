@@ -44,6 +44,7 @@ interface ProviderRecord {
   website?: string | null
   siret?: string | null
   legal_form?: string | null
+  legal_form_code?: string | null
   creation_date?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -144,8 +145,7 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     intervention_radius_km: provider.intervention_radius_km || undefined,
     member_since: (memberYear && memberYear < currentYear) ? memberYear.toString() : undefined,
     siret: provider.siret || undefined,
-    legal_form: provider.legal_form || undefined,
-    creation_date: provider.creation_date || undefined,
+    legal_form: provider.legal_form_code || provider.legal_form || undefined,
     phone: provider.phone || undefined,
     email: provider.email || undefined,
     website: provider.website || undefined,
@@ -190,8 +190,8 @@ function generateDescription(name: string, specialty: string, city: string, prov
   }
 
   // Legal form
-  if (provider?.legal_form) {
-    parts.push(`Forme juridique : ${provider.legal_form}.`)
+  if (provider?.legal_form_code || provider?.legal_form) {
+    parts.push(`Forme juridique : ${provider.legal_form_code || provider.legal_form}.`)
   }
 
   // Rating

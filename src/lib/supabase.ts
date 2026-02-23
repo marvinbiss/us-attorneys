@@ -215,7 +215,7 @@ export async function getLocationBySlug(slug: string) {
 // rich artisan profiles (description, location, legal info, etc.)
 // Listing pages use PROVIDER_LIST_SELECT instead (lightweight).
 // NOTE: Must be inline string literal for Supabase TS type inference to work.
-const PROVIDER_DETAIL_SELECT = 'id, name, slug, stable_id, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, address_department, is_verified, is_active, noindex, rating_average, review_count, legal_form, creation_date, website, latitude, longitude, user_id, claimed_at, created_at, updated_at, code_naf, libelle_naf'
+const PROVIDER_DETAIL_SELECT = 'id, name, slug, stable_id, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, address_department, is_verified, is_active, noindex, rating_average, review_count, legal_form_code, website, latitude, longitude, user_id, claimed_at, created_at, updated_at, code_naf, libelle_naf'
 
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
