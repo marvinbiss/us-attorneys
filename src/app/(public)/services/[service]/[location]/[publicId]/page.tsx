@@ -428,9 +428,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       specialty: provider.specialty,
       city: realCity,
     })
-    const currentPath = `/services/${serviceSlug}/${locationSlug}/${publicId}`
-    const isWrongUrl = currentPath !== canonicalPath
-
     const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}`)
 
     const descParts: string[] = []
@@ -443,8 +440,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const rawDesc = descParts.join(' \u00b7 ') + '.'
     const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '\u2026' : rawDesc
 
-    // Noindex if provider is flagged OR if this URL is not the canonical (wrong service/city)
-    const shouldNoindex = provider.noindex === true || isWrongUrl
+    // Noindex only if provider is explicitly flagged by admin.
+    // Non-canonical URLs are handled by redirect() in the page component + alternates.canonical.
+    // Previously also checked isWrongUrl, but this caused 710+ false noindex pages because
+    // the sitemap used stable_id while getArtisanUrl preferred slug.
+    const shouldNoindex = provider.noindex === true
 
     const serviceImage = getServiceImage(serviceSlug)
     const ogAlt = `${displayName} - ${serviceName} à ${realCity}`
@@ -475,7 +475,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     }
   } catch {
-    return { title: 'Artisan non trouvé', robots: { index: false, follow: true } }
+    // Don't noindex on transient DB errors — ISR will retry and Google will recrawl.
+    // Returning index:true prevents permanent noindex from temporary failures.
+    return { title: 'Artisan non trouvé' }
   }
 }
 

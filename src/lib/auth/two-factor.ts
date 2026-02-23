@@ -105,7 +105,13 @@ export interface TwoFactorStatus {
 }
 
 export class TwoFactorAuthService {
-  private supabase = getSupabaseAdmin()
+  private _supabase: ReturnType<typeof getSupabaseAdmin> | null = null
+  private get supabase() {
+    if (!this._supabase) {
+      this._supabase = getSupabaseAdmin()
+    }
+    return this._supabase
+  }
 
   /**
    * Generate a new 2FA secret and QR code for setup

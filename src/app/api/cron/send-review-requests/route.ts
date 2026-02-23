@@ -10,11 +10,6 @@ import { sendEmail } from '@/lib/notifications/email'
 import { sendReviewRequestSMS, type SMSData } from '@/lib/notifications/sms'
 import { logger } from '@/lib/logger'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 // Review request email template
@@ -89,6 +84,11 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
     // Verify cron secret - REQUIRED in production
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET

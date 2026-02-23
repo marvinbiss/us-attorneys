@@ -37,13 +37,15 @@ const preferencesSchema = z.object({
   }).optional(),
 })
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 // GET /api/user/preferences - Get user preferences
 export const dynamic = 'force-dynamic'
+
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 export async function GET() {
   try {
@@ -74,7 +76,7 @@ export async function GET() {
       )
     }
 
-    const { data: prefs } = await supabaseAdmin
+    const { data: prefs } = await getSupabaseAdmin()
       .from('user_preferences')
       .select('user_id, email_booking_confirmation, email_booking_reminder, email_marketing, email_newsletter, sms_booking_reminder, sms_marketing, push_enabled, push_booking_updates, push_messages, push_promotions, profile_public, show_online_status, allow_reviews, language, currency, theme, timezone, updated_at')
       .eq('user_id', user.id)
@@ -140,7 +142,7 @@ export async function PUT(request: Request) {
     }
 
     // Upsert preferences using flat columns (no ghost 'preferences' jsonb column)
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from('user_preferences')
       .upsert(flatColumns, { onConflict: 'user_id' })
 

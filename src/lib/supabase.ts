@@ -2,10 +2,16 @@ import { createClient } from '@supabase/supabase-js'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+/**
+ * Detect if we're inside `next build` (static generation phase).
+ * During build, skip Supabase client creation to avoid crashes when
+ * env vars are not available (e.g. Vercel preview deployments).
+ */
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = IS_BUILD
+  ? (null as unknown as ReturnType<typeof createClient>)
+  : createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 /**
  * Row shape returned by provider listing queries (PROVIDER_LIST_SELECT).
@@ -33,13 +39,6 @@ interface ProviderListRow {
   created_at: string | null
   updated_at: string | null
 }
-
-/**
- * Detect if we're inside `next build` (static generation phase).
- * During build, skip heavy DB queries to avoid overwhelming Supabase free tier.
- * Pages use ISR (revalidate) so they'll get fresh data on first visit.
- */
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 /**
  * Race a promise against a timeout. If the promise doesn't resolve within
@@ -212,6 +211,12 @@ export async function getLocationBySlug(slug: string) {
   }
 }
 
+// Full SELECT for single-provider detail pages — includes all columns needed for
+// rich artisan profiles (description, location, legal info, etc.)
+// Listing pages use PROVIDER_LIST_SELECT instead (lightweight).
+// NOTE: Must be inline string literal for Supabase TS type inference to work.
+const PROVIDER_DETAIL_SELECT = 'id, name, slug, stable_id, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, address_department, is_verified, is_active, noindex, rating_average, review_count, legal_form, creation_date, website, latitude, longitude, user_id, claimed_at, created_at, updated_at, code_naf, libelle_naf'
+
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
@@ -220,7 +225,7 @@ export async function getProviderByStableId(stableId: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+          .select(PROVIDER_DETAIL_SELECT)
           .eq('stable_id', stableId)
           .eq('is_active', true)
           .single()
@@ -243,7 +248,7 @@ export async function getProviderById(id: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+          .select(PROVIDER_DETAIL_SELECT)
           .eq('id', id)
           .eq('is_active', true)
           .single()
@@ -266,7 +271,7 @@ export async function getProviderBySlug(slug: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+          .select(PROVIDER_DETAIL_SELECT)
           .eq('slug', slug)
           .eq('is_active', true)
           .single()

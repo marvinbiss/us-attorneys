@@ -9,17 +9,16 @@ import { createClient } from '@supabase/supabase-js'
 import { getNotificationService, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
 import { logger } from '@/lib/logger'
 
-// Use service role for cron jobs to bypass RLS
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 // GET /api/cron/send-reminders-1h - Send 1h reminder SMS
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
+    // Use service role for cron jobs to bypass RLS
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
     // Verify cron secret - REQUIRED in production
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
