@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
+import { logger } from '@/lib/logger'
 
 /**
  * Detect if we're inside `next build` (static generation phase).
@@ -211,32 +212,80 @@ export async function getLocationBySlug(slug: string) {
   }
 }
 
-// Full SELECT for single-provider detail pages — includes all columns needed for
-// rich artisan profiles (description, location, legal info, etc.)
-// Listing pages use PROVIDER_LIST_SELECT instead (lightweight).
+// ---------------------------------------------------------------------------
+// Provider detail SELECT — with defensive fallback
+// ---------------------------------------------------------------------------
+// PROVIDER_DETAIL_SELECT includes extra columns for rich artisan pages.
+// If PostgREST rejects the query (e.g. a column doesn't exist because a
+// migration hasn't been applied), we automatically fall back to the safe
+// PROVIDER_LIST_SELECT + email which is PROVEN to work in production.
 //
-// IMPORTANT: Only include columns VERIFIED to exist in production.
-// Columns like address_department, user_id, claimed_at, code_naf, libelle_naf,
-// legal_form, legal_form_code, creation_date are defined in migrations but may
-// not have been applied to the production DB.
-// Including a non-existent column causes PostgREST to error → silent 404.
-const PROVIDER_DETAIL_SELECT = 'id, stable_id, name, slug, specialty, email, phone, siret, siren, description, meta_description, address_street, address_city, address_postal_code, address_region, is_verified, is_active, noindex, rating_average, review_count, website, latitude, longitude, created_at, updated_at'
+// Columns deliberately excluded (migrations possibly not applied):
+//   address_department, user_id, claimed_at, code_naf, libelle_naf,
+//   legal_form, legal_form_code, creation_date
+// ---------------------------------------------------------------------------
+const PROVIDER_DETAIL_SELECT = [
+  // ── Safe base (same as PROVIDER_LIST_SELECT) ──
+  'id', 'stable_id', 'name', 'slug', 'specialty',
+  'address_street', 'address_postal_code', 'address_city', 'address_region',
+  'is_verified', 'is_active', 'noindex',
+  'rating_average', 'review_count',
+  'phone', 'siret',
+  'latitude', 'longitude',
+  'created_at', 'updated_at',
+  // ── Extra columns for detail pages ──
+  'email', 'siren', 'description', 'meta_description', 'website',
+].join(', ')
+
+// Safe fallback: only columns proven to work via PROVIDER_LIST_SELECT + email
+const PROVIDER_SAFE_SELECT = PROVIDER_LIST_SELECT + ', email'
+
+/**
+ * Query a single provider with automatic fallback.
+ * If PROVIDER_DETAIL_SELECT fails (column missing → PostgREST error),
+ * retries with PROVIDER_SAFE_SELECT so the page renders with reduced data
+ * instead of returning a silent 404.
+ */
+async function queryProviderDetail(
+  field: 'stable_id' | 'id' | 'slug',
+  value: string,
+  label: string,
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type Row = Record<string, any>
+
+  const { data, error } = await supabase
+    .from('providers')
+    .select(PROVIDER_DETAIL_SELECT)
+    .eq(field, value)
+    .eq('is_active', true)
+    .single()
+
+  if (data) return resolveProviderCity(data as Row)
+
+  // If error is a column/schema issue, fallback to safe columns
+  if (error) {
+    const { data: safe } = await supabase
+      .from('providers')
+      .select(PROVIDER_SAFE_SELECT)
+      .eq(field, value)
+      .eq('is_active', true)
+      .single()
+    if (safe) {
+      logger.warn(`[${label}] DETAIL_SELECT failed, used SAFE fallback`, { error: error.message })
+      return resolveProviderCity(safe as Row)
+    }
+  }
+
+  return null
+}
 
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      (async () => {
-        const { data } = await supabase
-          .from('providers')
-          .select(PROVIDER_DETAIL_SELECT)
-          .eq('stable_id', stableId)
-          .eq('is_active', true)
-          .single()
-
-        return data ? resolveProviderCity(data) : null
-      })(),
+      queryProviderDetail('stable_id', stableId, `getProviderByStableId(${stableId})`),
       QUERY_TIMEOUT_MS,
       `getProviderByStableId(${stableId})`,
     )
@@ -250,16 +299,7 @@ export async function getProviderById(id: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      (async () => {
-        const { data } = await supabase
-          .from('providers')
-          .select(PROVIDER_DETAIL_SELECT)
-          .eq('id', id)
-          .eq('is_active', true)
-          .single()
-
-        return data ? resolveProviderCity(data) : null
-      })(),
+      queryProviderDetail('id', id, `getProviderById(${id})`),
       QUERY_TIMEOUT_MS,
       `getProviderById(${id})`,
     )
@@ -273,16 +313,7 @@ export async function getProviderBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      (async () => {
-        const { data } = await supabase
-          .from('providers')
-          .select(PROVIDER_DETAIL_SELECT)
-          .eq('slug', slug)
-          .eq('is_active', true)
-          .single()
-
-        return data ? resolveProviderCity(data) : null
-      })(),
+      queryProviderDetail('slug', slug, `getProviderBySlug(${slug})`),
       QUERY_TIMEOUT_MS,
       `getProviderBySlug(${slug})`,
     )
