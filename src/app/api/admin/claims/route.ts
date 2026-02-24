@@ -191,7 +191,7 @@ export async function PATCH(request: NextRequest) {
               error: createUserError,
             })
             return NextResponse.json(
-              { success: false, error: { message: 'Erreur lors de la création du compte artisan' } },
+              { success: false, error: { message: 'Erreur lors de la création du compte artisan', debug: { message: createUserError?.message } } },
               { status: 500 }
             )
           }
@@ -229,7 +229,7 @@ export async function PATCH(request: NextRequest) {
 
       if (providerError) {
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche' } },
+          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche', debug: { message: providerError.message, code: providerError.code, details: providerError.details } } },
           { status: 500 }
         )
       }
