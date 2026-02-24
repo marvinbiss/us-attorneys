@@ -162,7 +162,7 @@ export async function PATCH(request: NextRequest) {
           )
         }
 
-        // Check if a user with this email already exists
+        // Check if a user with this email already exists (profiles OR auth.users)
         const { data: existingProfile } = await supabase
           .from('profiles')
           .select('id')
@@ -171,9 +171,9 @@ export async function PATCH(request: NextRequest) {
 
         if (existingProfile) {
           resolvedUserId = existingProfile.id
-          logger.info('Anonymous claim: reusing existing user', { claimId, email: claimEmail, userId: resolvedUserId })
+          logger.info('Anonymous claim: reusing existing user from profiles', { claimId, email: claimEmail, userId: resolvedUserId })
         } else {
-          // Create new account via Supabase admin auth
+          // Try to create new account via Supabase admin auth
           const { data: newUser, error: createUserError } = await supabase.auth.admin.createUser({
             email: claimEmail,
             password: crypto.randomUUID(),
@@ -185,31 +185,52 @@ export async function PATCH(request: NextRequest) {
           })
 
           if (createUserError || !newUser.user) {
-            logger.error('Failed to create user for anonymous claim', {
-              claimId,
+            // User might exist in auth.users but not in profiles (e.g. incomplete signup)
+            // Use generateLink to resolve their ID from auth.users
+            const { data: linkData } = await supabase.auth.admin.generateLink({
+              type: 'recovery',
               email: claimEmail,
-              error: createUserError,
             })
-            return NextResponse.json(
-              { success: false, error: { message: 'Erreur lors de la création du compte artisan', debug: { message: createUserError?.message } } },
-              { status: 500 }
-            )
+
+            if (linkData?.user?.id) {
+              resolvedUserId = linkData.user.id
+              logger.info('Anonymous claim: found existing auth user via recovery', { claimId, email: claimEmail, userId: resolvedUserId })
+
+              // Ensure profile exists (upsert)
+              await supabase.from('profiles').upsert({
+                id: resolvedUserId,
+                email: claimEmail,
+                full_name: claim.claimant_name || '',
+                phone_e164: claim.claimant_phone || null,
+                created_at: now,
+              }, { onConflict: 'id' })
+            } else {
+              logger.error('Failed to create or resolve user for anonymous claim', {
+                claimId,
+                email: claimEmail,
+                createError: createUserError?.message,
+              })
+              return NextResponse.json(
+                { success: false, error: { message: 'Erreur lors de la création du compte artisan' } },
+                { status: 500 }
+              )
+            }
+          } else {
+            resolvedUserId = newUser.user.id
+            accountCreated = true
+
+            // Create profile row
+            await supabase.from('profiles').insert({
+              id: resolvedUserId,
+              email: claimEmail,
+              full_name: claim.claimant_name || '',
+              phone_e164: claim.claimant_phone || null,
+              role: 'artisan',
+              created_at: now,
+            })
+
+            logger.info('Anonymous claim: created new user', { claimId, email: claimEmail, userId: resolvedUserId })
           }
-
-          resolvedUserId = newUser.user.id
-          accountCreated = true
-
-          // Create profile row
-          await supabase.from('profiles').insert({
-            id: resolvedUserId,
-            email: claimEmail,
-            full_name: claim.claimant_name || '',
-            phone_e164: claim.claimant_phone || null,
-            role: 'artisan',
-            created_at: now,
-          })
-
-          logger.info('Anonymous claim: created new user', { claimId, email: claimEmail, userId: resolvedUserId })
         }
       }
 
