@@ -250,7 +250,7 @@ export async function PATCH(request: NextRequest) {
 
       if (providerError) {
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche', debug: { message: providerError.message, code: providerError.code, details: providerError.details } } },
+          { success: false, error: { message: `Erreur attribution: ${providerError.message} [code=${providerError.code}] [details=${providerError.details}]` } },
           { status: 500 }
         )
       }
