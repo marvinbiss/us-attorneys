@@ -58,6 +58,7 @@ export default function AdminClaimsPage() {
   const [filter, setFilter] = useState<'pending' | 'approved' | 'rejected' | 'all'>('pending')
   const [page, setPage] = useState(1)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null)
 
   const url = `/api/admin/claims?page=${page}&limit=20&status=${filter}`
   const { data, isLoading, error, mutate } = useAdminFetch<ClaimsResponse>(url)
@@ -78,7 +79,8 @@ export default function AdminClaimsPage() {
   const confirmAction = async () => {
     try {
       setActionError(null)
-      await adminMutate('/api/admin/claims', {
+      setActionSuccess(null)
+      const result = await adminMutate<{ success: boolean; message?: string }>('/api/admin/claims', {
         method: 'PATCH',
         body: {
           claimId: actionModal.claimId,
@@ -88,6 +90,7 @@ export default function AdminClaimsPage() {
       })
       setActionModal({ open: false, claimId: '', action: 'approve', providerName: '', userName: '' })
       setRejectionReason('')
+      if (result?.message) setActionSuccess(result.message)
       mutate()
     } catch (err) {
       setActionError(err instanceof Error ? err.message : 'Erreur lors du traitement')
@@ -133,6 +136,18 @@ export default function AdminClaimsPage() {
       </div>
 
       {actionError && <ErrorBanner message={actionError} onDismiss={() => setActionError(null)} />}
+
+      {actionSuccess && (
+        <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-xl">
+          <div className="flex items-center gap-2 text-green-800 text-sm">
+            <CheckCircle className="w-4 h-4" />
+            <span>{actionSuccess}</span>
+          </div>
+          <button onClick={() => setActionSuccess(null)} className="text-green-600 hover:text-green-800 text-sm">
+            Fermer
+          </button>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex gap-2">
