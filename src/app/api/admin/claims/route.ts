@@ -228,15 +228,23 @@ export async function PATCH(request: NextRequest) {
             resolvedUserId = newUser.user.id
             accountCreated = true
 
-            // Create profile row
-            await supabase.from('profiles').insert({
+            // Create profile row (upsert in case a trigger already created a partial row)
+            const { error: profileError } = await supabase.from('profiles').upsert({
               id: resolvedUserId,
               email: claimEmail,
               full_name: claim.claimant_name || '',
-              phone_e164: claim.claimant_phone || null,
               role: 'artisan',
               created_at: now,
-            })
+              updated_at: now,
+            }, { onConflict: 'id' })
+
+            if (profileError) {
+              logger.error('Failed to create profile for new user', { claimId, userId: resolvedUserId, error: profileError })
+              return NextResponse.json(
+                { success: false, error: { message: `Erreur création profil: ${profileError.message}` } },
+                { status: 500 }
+              )
+            }
 
             logger.info('Anonymous claim: created new user', { claimId, email: claimEmail, userId: resolvedUserId })
           }

@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
+import { checkRateLimit } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
