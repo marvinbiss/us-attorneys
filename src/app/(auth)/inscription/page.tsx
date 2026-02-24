@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
@@ -11,6 +12,8 @@ interface FormErrors {
 }
 
 export default function InscriptionPage() {
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect')
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -31,7 +34,7 @@ export default function InscriptionPage() {
       const response = await fetch('/api/auth/oauth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider: 'google' }),
+        body: JSON.stringify({ provider: 'google', ...(redirectTo ? { next: redirectTo } : {}) }),
       })
       const data = await response.json()
       if (data.url) {
@@ -163,7 +166,7 @@ export default function InscriptionPage() {
             Cliquez sur le lien pour activer votre compte.
           </p>
           <Link
-            href="/connexion"
+            href={`/connexion${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg"
           >
             Se connecter
@@ -416,7 +419,7 @@ export default function InscriptionPage() {
             <div className="mt-8 text-center">
               <p className="text-gray-400">
                 Déjà un compte ?{' '}
-                <Link href="/connexion" className="text-blue-400 hover:text-blue-300 font-medium">
+                <Link href={`/connexion${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-blue-400 hover:text-blue-300 font-medium">
                   Se connecter
                 </Link>
               </p>

@@ -14,6 +14,10 @@ export const dynamic = 'force-dynamic'
 const claimSchema = z.object({
   providerId: z.string().uuid('ID artisan invalide'),
   siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir exactement 14 chiffres'),
+  fullName: z.string().min(2, 'Le nom est requis (min. 2 caractères)'),
+  email: z.string().email('Email invalide'),
+  phone: z.string().min(10, 'Numéro de téléphone invalide'),
+  position: z.string().min(2, 'Le poste est requis'),
 })
 
 export async function POST(request: Request) {
@@ -48,7 +52,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const { providerId, siret } = validation.data
+    const { providerId, siret, fullName, email, phone, position } = validation.data
     const adminClient = createAdminClient()
 
     // Check if user already owns a provider
@@ -154,8 +158,22 @@ export async function POST(request: Request) {
         provider_id: providerId,
         user_id: user.id,
         siret_provided: normalizedInput,
+        claimant_name: fullName,
+        claimant_email: email,
+        claimant_phone: phone,
+        claimant_position: position,
         status: 'pending',
       })
+
+    // Update user profile with provided contact info
+    await adminClient
+      .from('profiles')
+      .update({
+        full_name: fullName,
+        phone_e164: phone.replace(/\s/g, ''),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', user.id)
 
     if (insertError) {
       // Handle unique constraint violation (race condition: 2 requests at once)

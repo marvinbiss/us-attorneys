@@ -58,6 +58,10 @@ export async function GET(request: NextRequest) {
         id,
         status,
         siret_provided,
+        claimant_name,
+        claimant_email,
+        claimant_phone,
+        claimant_position,
         rejection_reason,
         reviewed_at,
         created_at,
@@ -148,6 +152,8 @@ export async function PATCH(request: NextRequest) {
         .from('providers')
         .update({
           user_id: claim.user_id,
+          claimed_at: now,
+          claimed_by: claim.user_id,
           updated_at: now,
         })
         .eq('id', claim.provider_id)

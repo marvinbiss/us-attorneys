@@ -11,6 +11,9 @@ import {
   Building2,
   User,
   Calendar,
+  Mail,
+  Phone,
+  Briefcase,
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
@@ -20,6 +23,10 @@ interface ProviderClaim {
   id: string
   status: 'pending' | 'approved' | 'rejected'
   siret_provided: string
+  claimant_name: string | null
+  claimant_email: string | null
+  claimant_phone: string | null
+  claimant_position: string | null
   rejection_reason: string | null
   reviewed_at: string | null
   created_at: string
@@ -71,9 +78,10 @@ export default function AdminClaimsPage() {
   const confirmAction = async () => {
     try {
       setActionError(null)
-      await adminMutate(`/api/admin/claims/${actionModal.claimId}`, {
-        method: 'PUT',
+      await adminMutate('/api/admin/claims', {
+        method: 'PATCH',
         body: {
+          claimId: actionModal.claimId,
           action: actionModal.action,
           ...(actionModal.action === 'reject' && rejectionReason ? { rejectionReason } : {}),
         },
@@ -181,19 +189,47 @@ export default function AdminClaimsPage() {
                     )}
                   </div>
 
-                  {/* User info */}
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700">{claim.user?.full_name || 'Utilisateur'}</span>
-                    <span className="text-gray-400">({claim.user?.email})</span>
+                  {/* Claimant contact info */}
+                  <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
+                    <div className="flex items-center gap-2 text-sm">
+                      <User className="w-4 h-4 text-gray-400" />
+                      <span className="font-medium text-gray-900">{claim.claimant_name || claim.user?.full_name || 'Utilisateur'}</span>
+                      {claim.claimant_position && (
+                        <span className="text-gray-500">— {claim.claimant_position}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="w-4 h-4 text-gray-400" />
+                      <a href={`mailto:${claim.claimant_email || claim.user?.email}`} className="text-blue-600 hover:underline">
+                        {claim.claimant_email || claim.user?.email}
+                      </a>
+                    </div>
+                    {claim.claimant_phone && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="w-4 h-4 text-gray-400" />
+                        <a href={`tel:${claim.claimant_phone}`} className="text-gray-700">{claim.claimant_phone}</a>
+                      </div>
+                    )}
+                    {claim.claimant_position && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Briefcase className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-700">{claim.claimant_position}</span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* SIRET en base */}
-                  <div className="flex items-center gap-4 text-sm">
+                  {/* SIRET comparison */}
+                  <div className="flex items-center gap-6 text-sm">
                     <div>
                       <span className="text-gray-500">SIRET en base :</span>{' '}
                       <span className="font-mono font-medium text-gray-900">
                         {claim.provider?.siret || 'N/A'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">SIRET fourni :</span>{' '}
+                      <span className="font-mono font-medium text-gray-900">
+                        {claim.siret_provided}
                       </span>
                     </div>
                   </div>
@@ -202,16 +238,6 @@ export default function AdminClaimsPage() {
                   <div className="flex items-center gap-2 text-xs text-gray-400">
                     <Calendar className="w-3 h-3" />
                     {formatDate(claim.created_at)}
-                  </div>
-
-                  {/* SIRET fourni par le demandeur */}
-                  <div className="flex items-center gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-500">SIRET fourni :</span>{' '}
-                      <span className="font-mono font-medium text-gray-900">
-                        {claim.siret_provided}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Rejection reason */}

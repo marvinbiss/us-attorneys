@@ -2,13 +2,15 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Loader2, Wrench, User } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export default function ConnexionPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -48,8 +50,10 @@ export default function ConnexionPage() {
         }
       }
 
-      // Redirect based on user type
-      if (data.data?.user?.isArtisan) {
+      // Redirect: honor ?redirect= param, else default to dashboard
+      if (redirectTo) {
+        router.push(redirectTo)
+      } else if (data.data?.user?.isArtisan) {
         router.push('/espace-artisan')
       } else {
         router.push('/espace-client')
@@ -67,7 +71,7 @@ export default function ConnexionPage() {
       const response = await fetch('/api/auth/oauth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider: 'google' }),
+        body: JSON.stringify({ provider: 'google', ...(redirectTo ? { next: redirectTo } : {}) }),
       })
       const data = await response.json()
       if (data.url) {
@@ -227,7 +231,7 @@ export default function ConnexionPage() {
               <p className="text-gray-400">
                 Pas encore de compte ?{' '}
                 <Link
-                  href={userType === 'artisan' ? '/inscription-artisan' : '/inscription'}
+                  href={`${userType === 'artisan' ? '/inscription-artisan' : '/inscription'}${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
                   className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'}`}
                 >
                   Créer un compte

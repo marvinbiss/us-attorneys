@@ -14,9 +14,39 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [siret, setSiret] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [position, setPosition] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [checkingAuth, setCheckingAuth] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+
+  // Check auth + prefill profile BEFORE opening modal
+  const handleOpenClaim = async () => {
+    setCheckingAuth(true)
+    try {
+      const res = await fetch('/api/auth/me')
+      if (res.status === 401 || !res.ok) {
+        // Not logged in — redirect to login, then back here
+        router.push(`/connexion?redirect=${encodeURIComponent(window.location.pathname)}`)
+        return
+      }
+      const data = await res.json()
+      if (data?.user) {
+        if (data.user.fullName) setFullName(data.user.fullName)
+        if (data.user.email) setEmail(data.user.email)
+        if (data.user.phone) setPhone(data.user.phone)
+      }
+      setShowModal(true)
+    } catch {
+      // Network error — open modal anyway, submit will catch 401
+      setShowModal(true)
+    } finally {
+      setCheckingAuth(false)
+    }
+  }
 
   // Format SIRET with spaces for display (XXX XXX XXX XXXXX)
   const formatSiret = (value: string) => {
@@ -35,9 +65,36 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
     setError(null)
   }
 
+  const formatPhone = (value: string) => {
+    return value.replace(/[^\d+]/g, '').slice(0, 15)
+  }
+
+  const isFormValid =
+    siret.length === 14 &&
+    fullName.trim().length >= 2 &&
+    email.includes('@') &&
+    phone.replace(/\D/g, '').length >= 10 &&
+    position.trim().length >= 2
+
   const handleClaim = async () => {
     if (siret.length !== 14) {
       setError('Le SIRET doit contenir exactement 14 chiffres')
+      return
+    }
+    if (fullName.trim().length < 2) {
+      setError('Veuillez entrer votre nom complet')
+      return
+    }
+    if (!email.includes('@')) {
+      setError('Veuillez entrer une adresse email valide')
+      return
+    }
+    if (phone.replace(/\D/g, '').length < 10) {
+      setError('Veuillez entrer un numéro de téléphone valide')
+      return
+    }
+    if (position.trim().length < 2) {
+      setError('Veuillez indiquer votre poste dans l\'entreprise')
       return
     }
 
@@ -48,14 +105,20 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       const response = await fetch('/api/artisan/claim', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ providerId, siret }),
+        body: JSON.stringify({
+          providerId,
+          siret,
+          fullName: fullName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
+          position: position.trim(),
+        }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
         if (response.status === 401) {
-          // Not logged in — redirect to login with return URL
           router.push(`/connexion?redirect=${encodeURIComponent(window.location.pathname)}`)
           return
         }
@@ -95,10 +158,15 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   return (
     <>
       <button
-        onClick={() => setShowModal(true)}
-        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"
+        onClick={handleOpenClaim}
+        disabled={checkingAuth}
+        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20 disabled:opacity-70"
       >
-        <Shield className="w-5 h-5" />
+        {checkingAuth ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          <Shield className="w-5 h-5" />
+        )}
         Vous êtes cet artisan ? Revendiquez cette fiche
       </button>
 
@@ -112,7 +180,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
           />
 
           {/* Modal content */}
-          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             {/* Close button */}
             <button
               onClick={() => !isLoading && setShowModal(false)}
@@ -157,8 +225,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 </div>
 
                 <p className="text-sm text-gray-600 mb-4">
-                  Pour vérifier que vous êtes bien le propriétaire de cette entreprise,
-                  veuillez entrer votre numéro SIRET (14 chiffres).
+                  Remplissez vos coordonnées et votre SIRET pour prouver que vous êtes le propriétaire de cette entreprise.
                 </p>
 
                 {error && (
@@ -168,33 +235,96 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                   </div>
                 )}
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Numéro SIRET
-                  </label>
-                  <input
-                    type="text"
-                    value={formatSiret(siret)}
-                    onChange={(e) => handleSiretChange(e.target.value)}
-                    placeholder="XXX XXX XXX XXXXX"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
-                    maxLength={17}
-                    disabled={isLoading}
-                  />
-                  <p className="mt-1.5 text-xs text-gray-500">
-                    Votre SIRET figure sur votre extrait Kbis ou sur{' '}
-                    <a
-                      href="https://www.societe.com"
-                      target="_blank"
-                      rel="nofollow noopener noreferrer"
-                      className="text-clay-400 hover:underline"
-                    >
-                      societe.com
-                    </a>
-                  </p>
+                <div className="space-y-3">
+                  {/* Nom complet */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nom complet <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => { setFullName(e.target.value); setError(null) }}
+                      placeholder="Jean Dupont"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email professionnel <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setError(null) }}
+                      placeholder="jean@monentreprise.fr"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  {/* Téléphone */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Téléphone <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => { setPhone(formatPhone(e.target.value)); setError(null) }}
+                      placeholder="06 12 34 56 78"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  {/* Poste */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Poste / Fonction <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={position}
+                      onChange={(e) => { setPosition(e.target.value); setError(null) }}
+                      placeholder="Gérant, Artisan plombier, Chef d'entreprise..."
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  {/* SIRET */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Numéro SIRET <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formatSiret(siret)}
+                      onChange={(e) => handleSiretChange(e.target.value)}
+                      placeholder="XXX XXX XXX XXXXX"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
+                      maxLength={17}
+                      disabled={isLoading}
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      Votre SIRET figure sur votre extrait Kbis ou sur{' '}
+                      <a
+                        href="https://www.societe.com"
+                        target="_blank"
+                        rel="nofollow noopener noreferrer"
+                        className="text-amber-600 hover:underline"
+                      >
+                        societe.com
+                      </a>
+                    </p>
+                  </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 mt-5">
                   <button
                     onClick={() => setShowModal(false)}
                     disabled={isLoading}
@@ -204,7 +334,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                   </button>
                   <button
                     onClick={handleClaim}
-                    disabled={isLoading || siret.length !== 14}
+                    disabled={isLoading || !isFormValid}
                     className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
