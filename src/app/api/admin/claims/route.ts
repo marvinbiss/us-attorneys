@@ -341,11 +341,14 @@ export async function PATCH(request: NextRequest) {
             emailStatus = `link_error: ${linkError?.message || 'no action_link returned'}`
             logger.error('Failed to generate recovery link', { claimId, error: linkError })
           } else {
+            // Wrap action_link in an intermediate page to prevent email client pre-fetching
+            const safeLink = `${siteUrl}/auth/setup-password?link=${encodeURIComponent(linkData.properties.action_link)}`
+
             const emailResult = await sendClaimApprovedEmail({
               to: claimEmail,
               name: claim.claimant_name || 'Artisan',
               providerName: updatedProvider.name || 'Votre fiche',
-              passwordLink: linkData.properties.action_link,
+              passwordLink: safeLink,
             })
 
             emailStatus = emailResult?.id ? `sent (id: ${emailResult.id})` : 'sent (no id)'
