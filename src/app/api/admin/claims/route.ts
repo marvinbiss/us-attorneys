@@ -315,6 +315,7 @@ export async function PATCH(request: NextRequest) {
       })
 
       // 5. For anonymous claims: generate recovery link + send email
+      let emailStatus = 'skipped'
       if (!claim.user_id) {
         const claimEmail = claim.claimant_email!.trim().toLowerCase()
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
@@ -329,19 +330,21 @@ export async function PATCH(request: NextRequest) {
           })
 
           if (linkError || !linkData?.properties?.action_link) {
+            emailStatus = `link_error: ${linkError?.message || 'no action_link returned'}`
             logger.error('Failed to generate recovery link', { claimId, error: linkError })
           } else {
-            await sendClaimApprovedEmail({
+            const emailResult = await sendClaimApprovedEmail({
               to: claimEmail,
               name: claim.claimant_name || 'Artisan',
               providerName: updatedProvider.name || 'Votre fiche',
               passwordLink: linkData.properties.action_link,
             })
 
-            logger.info('Claim approval email sent', { claimId, email: claimEmail, accountCreated })
+            emailStatus = emailResult?.id ? `sent (id: ${emailResult.id})` : 'sent (no id)'
+            logger.info('Claim approval email result', { claimId, email: claimEmail, emailResult })
           }
         } catch (emailErr) {
-          // Email failure should not block the approval
+          emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`
           logger.error('Failed to send claim approval email', { claimId, error: emailErr })
         }
       }
@@ -352,13 +355,12 @@ export async function PATCH(request: NextRequest) {
         userId: resolvedUserId,
         adminId: authResult.admin.id,
         accountCreated,
+        emailStatus,
       })
 
       return NextResponse.json({
         success: true,
-        message: accountCreated
-          ? 'Demande approuvée. Un compte a été créé et un email envoyé à l\'artisan.'
-          : 'Demande approuvée. La fiche a été attribuée à l\'artisan.',
+        message: `Demande approuvée. La fiche a été attribuée. Email: ${emailStatus}`,
       })
     } else {
       // Reject
