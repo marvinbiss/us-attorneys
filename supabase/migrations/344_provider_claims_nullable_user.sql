@@ -11,7 +11,7 @@ ALTER TABLE provider_claims ALTER COLUMN user_id DROP NOT NULL;
 
 -- 2. Replace the old UNIQUE constraint with partial indexes
 -- (the old constraint: UNIQUE(provider_id, user_id) from migration 314)
-DROP INDEX IF EXISTS provider_claims_provider_id_user_id_key;
+ALTER TABLE provider_claims DROP CONSTRAINT IF EXISTS provider_claims_provider_id_user_id_key;
 
 -- a) Authenticated claims: one pending claim per user per provider
 CREATE UNIQUE INDEX IF NOT EXISTS idx_provider_claims_user_pending
