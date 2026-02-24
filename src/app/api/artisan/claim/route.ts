@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       || request.headers.get('x-real-ip')
       || request.headers.get('cf-connecting-ip')
       || 'unknown'
-    const rl = await checkRateLimit(`claim:${ip}`, RATE_LIMITS.inscription)
+    const rl = await checkRateLimit(`claim:${ip}`, { window: 300_000, max: 20 })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de demandes. Réessayez dans quelques minutes.' },
