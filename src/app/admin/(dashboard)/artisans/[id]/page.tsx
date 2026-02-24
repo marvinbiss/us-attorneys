@@ -24,13 +24,15 @@ import { getArtisanUrl } from '@/lib/utils'
 
 interface ArtisanProfile {
   id: string
-  stable_id?: string
+  stable_id?: string | null
   email: string
   name: string | null
+  full_name: string | null
   slug: string | null
   phone: string | null
   siret: string | null
   description: string | null
+  bio: string | null
   specialty: string | null
   address_street: string | null
   address_city: string | null
@@ -42,13 +44,6 @@ interface ArtisanProfile {
   review_count: number
   created_at: string
   updated_at: string | null
-  stats?: {
-    bookings_total: number
-    bookings_completed: number
-    quotes_received: number
-    quotes_responded: number
-    response_rate: number
-  }
 }
 
 export default function AdminArtisanDetailPage() {
@@ -217,7 +212,12 @@ export default function AdminArtisanDetailPage() {
               <p className="text-gray-500 mt-1">{artisan.email}</p>
               <div className="flex items-center gap-3 mt-3">
                 {getStatusBadge()}
-                {artisan.rating_average && artisan.review_count > 0 && (
+                {artisan.specialty && (
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                    {artisan.specialty}
+                  </span>
+                )}
+                {artisan.rating_average != null && artisan.review_count > 0 && (
                   <div className="flex items-center gap-1 text-sm">
                     <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                     <span className="font-medium">{artisan.rating_average.toFixed(1)}</span>
@@ -288,14 +288,6 @@ export default function AdminArtisanDetailPage() {
               </div>
             </div>
 
-            {/* Description */}
-            {artisan.description && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Description</h2>
-                <p className="text-gray-700 whitespace-pre-wrap">{artisan.description}</p>
-              </div>
-            )}
-
             {/* Spécialité */}
             {artisan.specialty && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -308,6 +300,22 @@ export default function AdminArtisanDetailPage() {
                 </span>
               </div>
             )}
+
+            {/* Description */}
+            {artisan.description && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Description</h2>
+                <p className="text-gray-700 whitespace-pre-wrap">{artisan.description}</p>
+              </div>
+            )}
+
+            {/* Bio */}
+            {artisan.bio && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Bio</h2>
+                <p className="text-gray-700 whitespace-pre-wrap">{artisan.bio}</p>
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -317,27 +325,20 @@ export default function AdminArtisanDetailPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiques</h2>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Réservations</span>
+                  <span className="text-gray-500">Note moyenne</span>
+                  <span className="font-semibold text-gray-900 flex items-center gap-1">
+                    {artisan.rating_average ? (
+                      <>
+                        <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                        {artisan.rating_average.toFixed(1)}
+                      </>
+                    ) : 'N/A'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500">Nombre d&apos;avis</span>
                   <span className="font-semibold text-gray-900">
-                    {artisan.stats?.bookings_total || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Complétées</span>
-                  <span className="font-semibold text-green-600">
-                    {artisan.stats?.bookings_completed || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Devis reçus</span>
-                  <span className="font-semibold text-gray-900">
-                    {artisan.stats?.quotes_received || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Taux de réponse</span>
-                  <span className="font-semibold text-blue-600">
-                    {artisan.stats?.response_rate || 0}%
+                    {artisan.review_count || 0}
                   </span>
                 </div>
               </div>

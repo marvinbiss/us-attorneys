@@ -21,7 +21,9 @@ interface ArtisanData {
   user_id: string
   email: string
   full_name: string | null
+  name: string | null
   phone: string | null
+  siret: string | null
   specialty: string | null
   description: string | null
   bio: string | null
@@ -51,6 +53,7 @@ export default function EditArtisanPage() {
     email: '',
     full_name: '',
     phone: '',
+    siret: '',
     specialty: '',
     description: '',
     bio: '',
@@ -118,8 +121,9 @@ export default function EditArtisanPage() {
           setArtisan(data.provider)
           setFormData({
             email: data.provider.email || '',
-            full_name: data.provider.full_name || '',
+            full_name: data.provider.full_name || data.provider.name || '',
             phone: data.provider.phone || '',
+            siret: data.provider.siret || '',
             specialty: data.provider.specialty || '',
             description: data.provider.description || '',
             bio: data.provider.bio || '',
@@ -360,6 +364,20 @@ export default function EditArtisanPage() {
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
                   )}
                 </div>
+              </div>
+              <div>
+                <label htmlFor="siret" className="block text-sm font-medium text-gray-700 mb-1">
+                  SIRET
+                </label>
+                <input
+                  id="siret"
+                  type="text"
+                  value={formData.siret}
+                  onChange={(e) => updateFormData({ siret: e.target.value })}
+                  placeholder="123 456 789 00012"
+                  maxLength={20}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                />
               </div>
               <div>
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
