@@ -21,7 +21,7 @@ export async function GET() {
     const adminClient = createAdminClient()
     const { data: profile } = await adminClient
       .from('profiles')
-      .select('full_name, email, phone_e164, role')
+      .select('full_name, email, role')
       .eq('id', user.id)
       .single()
 
@@ -30,7 +30,7 @@ export async function GET() {
         id: user.id,
         email: profile?.email || user.email || '',
         fullName: profile?.full_name || '',
-        phone: profile?.phone_e164 || '',
+        phone: '',
         role: profile?.role || 'client',
       },
     })

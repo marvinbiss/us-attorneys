@@ -10,11 +10,10 @@ import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 // PUT request schema — only columns that actually exist
-// profiles: full_name, phone_e164
+// profiles: full_name
 // providers: name, siret, phone, address_street, address_city, address_postal_code, specialty
 const updateProfileSchema = z.object({
   full_name: z.string().max(100).optional(),
-  phone_e164: z.string().max(20).optional(),
   // Provider fields (written to providers table, not profiles)
   name: z.string().max(200).optional(),
   siret: z.string().max(20).optional(),
@@ -35,7 +34,7 @@ export async function GET() {
     // Fetch profile with explicit column list (profiles table)
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('id, email, full_name, role, phone_e164, average_rating, review_count')
+      .select('id, email, full_name, role, average_rating, review_count')
       .eq('id', user!.id)
       .single()
 
@@ -80,7 +79,6 @@ export async function PUT(request: Request) {
     }
     const {
       full_name,
-      phone_e164,
       name,
       siret,
       phone,
@@ -90,10 +88,9 @@ export async function PUT(request: Request) {
       specialty,
     } = result.data
 
-    // Update profiles table (only columns that exist: full_name, phone_e164)
+    // Update profiles table (only columns that exist: full_name)
     const profileUpdate: Record<string, string> = {}
     if (full_name !== undefined) profileUpdate.full_name = full_name
-    if (phone_e164 !== undefined) profileUpdate.phone_e164 = phone_e164
 
     let profile = null
     if (Object.keys(profileUpdate).length > 0) {
@@ -101,7 +98,7 @@ export async function PUT(request: Request) {
         .from('profiles')
         .update(profileUpdate)
         .eq('id', user!.id)
-        .select('id, email, full_name, role, phone_e164, average_rating, review_count')
+        .select('id, email, full_name, role, average_rating, review_count')
         .single()
 
       if (updateError) {
