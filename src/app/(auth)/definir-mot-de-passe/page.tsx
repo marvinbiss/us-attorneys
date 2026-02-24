@@ -15,6 +15,7 @@ export default function DefinirMotDePassePage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [checking, setChecking] = useState(true)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
 
   // Verify session exists (user clicked recovery link)
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function DefinirMotDePassePage() {
       if (!data.user) {
         router.push('/connexion')
       } else {
+        setUserEmail(data.user.email || null)
         setChecking(false)
       }
     })
@@ -61,6 +63,11 @@ export default function DefinirMotDePassePage() {
       if (updateError) {
         setError(updateError.message || 'Erreur lors de la mise a jour du mot de passe')
         return
+      }
+
+      // Re-authenticate with the new password to ensure a clean session
+      if (userEmail) {
+        await supabase.auth.signInWithPassword({ email: userEmail, password })
       }
 
       setSuccess(true)
