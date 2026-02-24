@@ -15,6 +15,8 @@ import {
   ChevronDown,
   ChevronUp,
   Euro,
+  Hammer,
+  Send,
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
@@ -36,8 +38,17 @@ interface DevisRequest {
   created_at: string
 }
 
+interface Assignment {
+  id: string
+  status: string
+  assigned_at: string
+  provider_id: string
+  provider_name: string
+}
+
 interface DevisResponse {
   demandes: DevisRequest[]
+  assignments: Record<string, Assignment[]>
   totalPages: number
   total: number
 }
@@ -58,6 +69,13 @@ const URGENCY_CONFIG: Record<string, { variant: 'error' | 'warning' | 'default';
   normal: { variant: 'default', label: 'Normal' },
 }
 
+const ASSIGNMENT_STATUS: Record<string, { cls: string; label: string }> = {
+  pending: { cls: 'bg-yellow-100 text-yellow-800', label: 'En attente' },
+  viewed: { cls: 'bg-blue-100 text-blue-800', label: 'Vu' },
+  quoted: { cls: 'bg-green-100 text-green-800', label: 'Devis envoyé' },
+  declined: { cls: 'bg-red-100 text-red-800', label: 'Décliné' },
+}
+
 const BUDGET_LABELS: Record<string, string> = {
   'moins-500': '< 500 €',
   '500-2000': '500 – 2 000 €',
@@ -76,6 +94,7 @@ export default function AdminDevisPage() {
   const { data, isLoading, error, mutate } = useAdminFetch<DevisResponse>(url)
 
   const demandes = data?.demandes || []
+  const assignments = data?.assignments || {}
   const totalPages = data?.totalPages || 1
   const total = data?.total || 0
 
@@ -161,6 +180,7 @@ export default function AdminDevisPage() {
                   const isExpanded = expandedId === demande.id
                   const statusConf = STATUS_CONFIG[demande.status] || STATUS_CONFIG.pending
                   const urgencyConf = URGENCY_CONFIG[demande.urgency] || URGENCY_CONFIG.normal
+                  const demandeAssignments = assignments[demande.id] || []
 
                   return (
                     <div key={demande.id} className="hover:bg-gray-50 transition-colors">
@@ -193,6 +213,26 @@ export default function AdminDevisPage() {
                                 {formatDate(demande.created_at)}
                               </span>
                             </div>
+
+                            {/* Artisan(s) assigné(s) — visible sans expand */}
+                            {demandeAssignments.length > 0 ? (
+                              <div className="mt-2 flex items-center gap-2 flex-wrap">
+                                <Hammer className="w-4 h-4 text-gray-400" />
+                                {demandeAssignments.map((a) => {
+                                  const st = ASSIGNMENT_STATUS[a.status] || ASSIGNMENT_STATUS.pending
+                                  return (
+                                    <span key={a.id} className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                                      {a.provider_name}
+                                    </span>
+                                  )
+                                })}
+                              </div>
+                            ) : (
+                              <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-400">
+                                <Send className="w-3.5 h-3.5" />
+                                Non assigné
+                              </div>
+                            )}
 
                             {/* Description preview (truncated) */}
                             {demande.description && !isExpanded && (
@@ -286,6 +326,41 @@ export default function AdminDevisPage() {
                                   <StatusBadge variant={statusConf.variant}>{statusConf.label}</StatusBadge>
                                 </div>
                               </div>
+                            </div>
+
+                            {/* Artisan(s) assigné(s) — détail */}
+                            <div className="md:col-span-2">
+                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                                Artisan{demandeAssignments.length > 1 ? 's' : ''} assigné{demandeAssignments.length > 1 ? 's' : ''}
+                              </h4>
+                              {demandeAssignments.length > 0 ? (
+                                <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
+                                  {demandeAssignments.map((a) => {
+                                    const st = ASSIGNMENT_STATUS[a.status] || ASSIGNMENT_STATUS.pending
+                                    return (
+                                      <div key={a.id} className="px-4 py-3 flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                          <Hammer className="w-4 h-4 text-gray-400" />
+                                          <span className="font-medium text-gray-900 text-sm">{a.provider_name}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                          <span className="text-xs text-gray-400">
+                                            {formatDate(a.assigned_at)}
+                                          </span>
+                                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                                            {st.label}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              ) : (
+                                <div className="bg-white rounded-lg border border-gray-200 p-4 text-sm text-gray-400 flex items-center gap-2">
+                                  <Send className="w-4 h-4" />
+                                  Aucun artisan assigné à cette demande
+                                </div>
+                              )}
                             </div>
                           </div>
 

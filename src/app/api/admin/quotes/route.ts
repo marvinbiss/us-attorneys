@@ -75,15 +75,46 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         demandes: [],
+        assignments: {},
         total: 0,
         page,
         totalPages: 0,
       })
     }
 
+    // Fetch lead_assignments for these demandes to show which artisan(s) received each request
+    const demandeIds = (demandes || []).map((d) => d.id)
+    let assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; provider_id: string }>> = {}
+
+    if (demandeIds.length > 0) {
+      const { data: assignments } = await supabase
+        .from('lead_assignments')
+        .select('id, lead_id, status, assigned_at, provider_id, provider:providers(id, name)')
+        .in('lead_id', demandeIds)
+        .order('position', { ascending: true })
+
+      if (assignments) {
+        for (const a of assignments) {
+          const provider = a.provider as unknown as { id: string; name: string } | null
+          const entry = {
+            id: a.id,
+            status: a.status,
+            assigned_at: a.assigned_at,
+            provider_id: a.provider_id,
+            provider_name: provider?.name || 'Inconnu',
+          }
+          if (!assignmentsByLead[a.lead_id]) {
+            assignmentsByLead[a.lead_id] = []
+          }
+          assignmentsByLead[a.lead_id].push(entry)
+        }
+      }
+    }
+
     return NextResponse.json({
       success: true,
       demandes: demandes || [],
+      assignments: assignmentsByLead,
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),
