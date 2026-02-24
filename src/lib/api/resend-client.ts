@@ -390,7 +390,6 @@ export async function sendClaimApprovedEmail(params: {
     html,
     tags: [
       { name: 'type', value: 'claim_approved' },
-      { name: 'provider', value: providerName },
     ],
   })
 }
