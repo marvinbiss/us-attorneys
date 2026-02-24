@@ -34,15 +34,11 @@ function getVoterFingerprint(
 
 export async function POST(request: Request) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
     const body = await request.json()
     const result = voteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Requête invalide', details: result.error.flatten() },
+        { success: false, error: { message: 'Requête invalide', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -66,7 +62,7 @@ export async function POST(request: Request) {
 
     if (fetchError || !review) {
       return NextResponse.json(
-        { error: 'Avis non trouvé ou non publié' },
+        { success: false, error: { message: 'Avis non trouvé ou non publié' } },
         { status: 404 }
       )
     }
@@ -135,7 +131,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Erreur vote avis:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur lors du vote' },
+      { success: false, error: { message: 'Erreur serveur lors du vote' } },
       { status: 500 }
     )
   }
