@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         const result = geocodeSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Address is required', details: result.error.flatten() },
+            { success: false, error: { message: 'Adresse requise', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
         const result = reverseSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Valid lon and lat are required', details: result.error.flatten() },
+            { success: false, error: { message: 'Coordonnées lon et lat valides requises', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         const result = citiesSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Query is required', details: result.error.flatten() },
+            { success: false, error: { message: 'Requête requise', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
         const result = addressesSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Query is required', details: result.error.flatten() },
+            { success: false, error: { message: 'Requête requise', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -116,14 +116,14 @@ export async function GET(request: NextRequest) {
 
       default:
         return NextResponse.json(
-          { success: false, error: 'Invalid action. Use: geocode, reverse, cities, addresses' },
+          { success: false, error: { message: 'Action invalide. Utilisez : geocode, reverse, cities, addresses' } },
           { status: 400 }
         )
     }
   } catch (error) {
     logger.error('Geocode API error', error)
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }

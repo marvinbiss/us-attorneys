@@ -18,23 +18,29 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    const supabase = await createClient()
+
+    // Auth guard: require authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+    }
+
     const body = await request.json()
     const result = rescheduleBookingSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
     const { newSlotId } = result.data
 
-    const supabase = await createClient()
-
     // Fetch current booking
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
       .select(`
-        id, status, client_name, client_email, client_phone, service_description,
+        id, status, client_id, client_name, client_email, client_phone, service_description,
         slot:availability_slots(
           id,
           date,
@@ -48,14 +54,26 @@ export async function POST(
 
     if (bookingError || !booking) {
       return NextResponse.json(
-        { error: 'Réservation introuvable' },
+        { success: false, error: { message: 'Réservation introuvable' } },
         { status: 404 }
+      )
+    }
+
+    // Ownership check: user must be the client or the assigned artisan
+    const bookingSlotForAuth = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot
+    const isClient = booking.client_id === user.id
+    const isArtisan = bookingSlotForAuth?.artisan_id === user.id
+    const isEmailMatch = user.email?.toLowerCase() === booking.client_email?.toLowerCase()
+    if (!isClient && !isArtisan && !isEmailMatch) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Vous n\'êtes pas autorisé à reporter cette réservation' } },
+        { status: 403 }
       )
     }
 
     if (booking.status === 'cancelled') {
       return NextResponse.json(
-        { error: 'Impossible de reporter une réservation annulée' },
+        { success: false, error: { message: 'Impossible de reporter une réservation annulée' } },
         { status: 400 }
       )
     }
@@ -70,7 +88,7 @@ export async function POST(
 
     if (slotError || !newSlot) {
       return NextResponse.json(
-        { error: 'Le nouveau créneau n\'est plus disponible' },
+        { success: false, error: { message: 'Le nouveau créneau n\'est plus disponible' } },
         { status: 400 }
       )
     }
@@ -79,7 +97,7 @@ export async function POST(
     const bookingSlot = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot
     if (newSlot.artisan_id !== bookingSlot?.artisan_id) {
       return NextResponse.json(
-        { error: 'Le créneau doit appartenir au même artisan' },
+        { success: false, error: { message: 'Le créneau doit appartenir au même artisan' } },
         { status: 400 }
       )
     }
@@ -88,7 +106,7 @@ export async function POST(
     const newSlotDate = new Date(`${newSlot.date}T${newSlot.start_time}`)
     if (newSlotDate <= new Date()) {
       return NextResponse.json(
-        { error: 'Le nouveau créneau doit être dans le futur' },
+        { success: false, error: { message: 'Le nouveau créneau doit être dans le futur' } },
         { status: 400 }
       )
     }
@@ -175,7 +193,7 @@ export async function POST(
   } catch (error) {
     logger.error('Error rescheduling booking:', error)
     return NextResponse.json(
-      { error: 'Erreur lors du report' },
+      { success: false, error: { message: 'Erreur lors du report' } },
       { status: 500 }
     )
   }

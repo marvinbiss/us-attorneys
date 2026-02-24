@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { importContacts, parseCSV, suggestColumnMapping } from '@/lib/prospection/import-service'
-import type { ContactType, ColumnMapping } from '@/types/prospection'
+import type { ColumnMapping } from '@/types/prospection'
+import { z } from 'zod'
+
+const importFormSchema = z.object({
+  contact_type: z.enum(['artisan', 'client', 'mairie']),
+  mapping: z.string().optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -11,10 +17,33 @@ export async function POST(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    const formData = await request.formData()
+    let formData: FormData
+    try {
+      formData = await request.formData()
+    } catch {
+      return NextResponse.json(
+        { success: false, error: { message: 'Donnees invalides' } },
+        { status: 400 }
+      )
+    }
+
     const file = formData.get('file') as File | null
-    const contactType = formData.get('contact_type') as ContactType | null
-    const mappingJson = formData.get('mapping') as string | null
+
+    // Validate form fields with Zod
+    const parsed = importFormSchema.safeParse({
+      contact_type: formData.get('contact_type'),
+      mapping: formData.get('mapping') || undefined,
+    })
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Donnees invalides' } },
+        { status: 400 }
+      )
+    }
+
+    const contactType = parsed.data.contact_type
+    const mappingJson = parsed.data.mapping ?? null
 
     if (!file) {
       return NextResponse.json(
@@ -27,7 +56,7 @@ export async function POST(request: NextRequest) {
     const MAX_FILE_SIZE = 10 * 1024 * 1024
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le fichier dépasse la taille maximale autorisée (10 Mo)' } },
+        { success: false, error: { message: 'Le fichier depasse la taille maximale autorisee (10 Mo)' } },
         { status: 400 }
       )
     }
@@ -38,14 +67,7 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.name ? '.' + file.name.split('.').pop()?.toLowerCase() : ''
     if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Type de fichier non autorisé. Formats acceptés : CSV, TSV, TXT' } },
-        { status: 400 }
-      )
-    }
-
-    if (!contactType || !['artisan', 'client', 'mairie'].includes(contactType)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Type de contact invalide' } },
+        { success: false, error: { message: 'Type de fichier non autorise. Formats acceptes : CSV, TSV, TXT' } },
         { status: 400 }
       )
     }

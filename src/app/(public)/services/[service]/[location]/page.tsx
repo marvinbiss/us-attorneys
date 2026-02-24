@@ -24,6 +24,7 @@ import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getPageContent } from '@/lib/cms'
+import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType, Provider } from '@/types'
@@ -231,7 +232,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   try {
     cmsPage = await getPageContent(`${serviceSlug}-${locationSlug}`, 'location', { serviceSlug, locationSlug })
   } catch (err) {
-    console.error('[CMS] Error fetching page content for', `${serviceSlug}-${locationSlug}`, err)
+    logger.error('[CMS] Error fetching page content for', { slug: `${serviceSlug}-${locationSlug}`, error: err })
   }
 
   if (cmsPage?.content_html) {

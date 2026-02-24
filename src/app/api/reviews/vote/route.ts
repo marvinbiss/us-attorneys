@@ -1,20 +1,36 @@
 /**
  * Review Vote API - ServicesArtisans
- * Handles "Was this review helpful?" votes
+ * Handles "Was this review helpful?" votes with deduplication
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-// POST request schema
 const voteSchema = z.object({
   reviewId: z.string().uuid(),
-  isHelpful: z.boolean().optional().default(true),
 })
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * Build a voter fingerprint for deduplication.
+ * Authenticated user -> user id; anonymous -> IP address.
+ */
+function getVoterFingerprint(
+  userId: string | null,
+  request: Request
+): string {
+  if (userId) return `user:${userId}`
+  const forwarded = request.headers.get('x-forwarded-for')
+  const ip =
+    forwarded?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
+  return `ip:${ip}`
+}
 
 export async function POST(request: Request) {
   try {
@@ -25,36 +41,101 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = voteSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Requête invalide', details: result.error.flatten() },
+        { status: 400 }
+      )
     }
     const { reviewId } = result.data
 
-    // Read current helpful_count
-    const { data: review, error: fetchError } = await supabase
+    const supabase = await createClient()
+
+    // Optional auth for fingerprint
+    const { data: { user } } = await supabase.auth.getUser()
+    const fingerprint = getVoterFingerprint(user?.id ?? null, request)
+
+    const adminSupabase = createAdminClient()
+
+    // Verify the review exists and is published
+    const { data: review, error: fetchError } = await adminSupabase
       .from('reviews')
-      .select('helpful_count')
+      .select('id, helpful_count')
       .eq('id', reviewId)
+      .eq('status', 'published')
       .single()
 
     if (fetchError || !review) {
-      return NextResponse.json({ error: 'Avis non trouvé' }, { status: 404 })
+      return NextResponse.json(
+        { error: 'Avis non trouvé ou non publié' },
+        { status: 404 }
+      )
     }
 
-    // Increment helpful_count
-    const { error: updateError } = await supabase
-      .from('reviews')
-      .update({ helpful_count: (review.helpful_count ?? 0) + 1 })
-      .eq('id', reviewId)
+    // Try deduplication via review_votes upsert
+    try {
+      const { error: voteError } = await adminSupabase
+        .from('review_votes')
+        .upsert(
+          {
+            review_id: reviewId,
+            voter_fingerprint: fingerprint,
+            is_helpful: true,
+          },
+          { onConflict: 'review_id,voter_fingerprint', ignoreDuplicates: true }
+        )
 
-    if (updateError) {
-      throw updateError
+      if (voteError) {
+        // If review_votes table doesn't exist yet (42P01), fall through
+        const pgCode = typeof voteError === 'object' && voteError !== null && 'code' in voteError
+          ? (voteError as { code: string }).code
+          : undefined
+        if (pgCode === '42P01') {
+          throw new Error('TABLE_NOT_FOUND')
+        }
+        throw voteError
+      }
+
+      // Recount from actual votes (authoritative, avoids race condition)
+      const { count, error: countError } = await adminSupabase
+        .from('review_votes')
+        .select('id', { count: 'exact', head: true })
+        .eq('review_id', reviewId)
+        .eq('is_helpful', true)
+
+      if (countError) throw countError
+
+      const newCount = count ?? 0
+      const { error: updateError } = await adminSupabase
+        .from('reviews')
+        .update({ helpful_count: newCount })
+        .eq('id', reviewId)
+
+      if (updateError) throw updateError
+
+      return NextResponse.json({ success: true, helpful_count: newCount })
+    } catch (err) {
+      // Fallback: review_votes table doesn't exist yet
+      const msg = err instanceof Error ? err.message : ''
+      if (msg === 'TABLE_NOT_FOUND') {
+        logger.warn('review_votes table missing - falling back to simple increment')
+        const { error: updateError } = await adminSupabase
+          .from('reviews')
+          .update({ helpful_count: (review.helpful_count ?? 0) + 1 })
+          .eq('id', reviewId)
+
+        if (updateError) throw updateError
+
+        return NextResponse.json({
+          success: true,
+          helpful_count: (review.helpful_count ?? 0) + 1,
+        })
+      }
+      throw err
     }
-
-    return NextResponse.json({ success: true })
   } catch (error) {
-    logger.error('Review vote error:', error)
+    logger.error('Erreur vote avis:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Erreur serveur lors du vote' },
       { status: 500 }
     )
   }

@@ -9,6 +9,12 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const leadsQuerySchema = z.object({
+  city: z.string().max(200).nullable().default(null),
+  service: z.string().max(200).nullable().default(null),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -21,12 +27,18 @@ export async function GET(request: Request) {
     const supabase = createAdminClient()
     const { searchParams } = new URL(request.url)
 
-    const cityRaw = searchParams.get('city') || null
-    const serviceRaw = searchParams.get('service') || null
+    const parsed = leadsQuerySchema.safeParse({
+      city: searchParams.get('city') || null,
+      service: searchParams.get('service') || null,
+    })
+
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+    }
 
     // Sanitize search inputs to prevent ILIKE injection
-    const city = cityRaw ? sanitizeSearchQuery(cityRaw) : null
-    const service = serviceRaw ? sanitizeSearchQuery(serviceRaw) : null
+    const city = parsed.data.city ? sanitizeSearchQuery(parsed.data.city) : null
+    const service = parsed.data.service ? sanitizeSearchQuery(parsed.data.service) : null
 
     // 1. Count leads created (optionally filtered by city/service)
     let leadsQuery = supabase

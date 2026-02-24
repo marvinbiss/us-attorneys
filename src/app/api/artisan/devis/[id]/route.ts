@@ -37,7 +37,7 @@ export async function DELETE(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ error: 'Profil artisan non trouvé' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
     }
 
     // Fetch the quote and verify ownership
@@ -48,12 +48,12 @@ export async function DELETE(
       .single()
 
     if (!quote || quote.provider_id !== provider.id) {
-      return NextResponse.json({ error: 'Devis introuvable' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
     }
 
     if (quote.status !== 'pending') {
       return NextResponse.json(
-        { error: 'Seul un devis en attente peut être rétracté' },
+        { success: false, error: { message: 'Seul un devis en attente peut être rétracté' } },
         { status: 403 }
       )
     }
@@ -67,7 +67,7 @@ export async function DELETE(
     if (deleteError) {
       logger.error('Error deleting quote:', deleteError)
       return NextResponse.json(
-        { error: 'Erreur lors de la suppression du devis' },
+        { success: false, error: { message: 'Erreur lors de la suppression du devis' } },
         { status: 500 }
       )
     }
@@ -75,7 +75,7 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Artisan devis DELETE error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -98,14 +98,14 @@ export async function PATCH(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ error: 'Profil artisan non trouvé' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
     }
 
     const body = await req.json()
     const result = patchQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -118,7 +118,7 @@ export async function PATCH(
       today.setHours(0, 0, 0, 0)
       if (validUntilDate < today) {
         return NextResponse.json(
-          { error: 'La date d\'expiration doit être dans le futur' },
+          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
           { status: 400 }
         )
       }
@@ -132,12 +132,12 @@ export async function PATCH(
       .single()
 
     if (!existing || existing.provider_id !== provider.id) {
-      return NextResponse.json({ error: 'Devis introuvable' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
     }
 
     if (existing.status !== 'pending') {
       return NextResponse.json(
-        { error: 'Seul un devis en attente peut être modifié' },
+        { success: false, error: { message: 'Seul un devis en attente peut être modifié' } },
         { status: 403 }
       )
     }
@@ -149,7 +149,7 @@ export async function PATCH(
 
     if (Object.keys(patch).length === 0) {
       return NextResponse.json(
-        { error: 'Aucun champ modifiable fourni' },
+        { success: false, error: { message: 'Aucun champ modifiable fourni' } },
         { status: 400 }
       )
     }
@@ -165,7 +165,7 @@ export async function PATCH(
     if (updateError) {
       logger.error('Error patching quote:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour du devis' },
+        { success: false, error: { message: 'Erreur lors de la mise à jour du devis' } },
         { status: 500 }
       )
     }
@@ -173,6 +173,6 @@ export async function PATCH(
     return NextResponse.json({ success: true, devis: updated })
   } catch (error) {
     logger.error('Artisan devis PATCH error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

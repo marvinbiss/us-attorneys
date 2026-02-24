@@ -8,6 +8,8 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const archiveSchema = z.object({
   is_archived: z.boolean(),
 })
@@ -22,7 +24,7 @@ export async function POST(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     const body = await request.json()
@@ -30,7 +32,7 @@ export async function POST(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Données invalides' },
+        { success: false, error: { message: 'Données invalides' } },
         { status: 400 }
       )
     }
@@ -45,7 +47,7 @@ export async function POST(
 
     if (!conversation) {
       return NextResponse.json(
-        { error: 'Conversation non trouvée' },
+        { success: false, error: { message: 'Conversation non trouvée' } },
         { status: 404 }
       )
     }
@@ -62,7 +64,7 @@ export async function POST(
     if (error) {
       logger.error('Archive conversation error', error)
       return NextResponse.json(
-        { error: 'Impossible d\'archiver la conversation' },
+        { success: false, error: { message: 'Impossible d\'archiver la conversation' } },
         { status: 500 }
       )
     }
@@ -71,7 +73,7 @@ export async function POST(
   } catch (error) {
     logger.error('Archive error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }

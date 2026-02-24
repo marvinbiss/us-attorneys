@@ -39,14 +39,14 @@ export async function POST(request: NextRequest) {
 
     const { data: messages } = await supabase
       .from('prospection_conversation_messages')
-      .select('*')
+      .select('id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at')
       .eq('conversation_id', parsed.data.conversation_id)
       .order('created_at', { ascending: true })
 
     // Charger les settings IA
     const { data: aiSettings } = await supabase
       .from('prospection_ai_settings')
-      .select('*')
+      .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt, updated_by, updated_at')
       .limit(1)
       .single()
 

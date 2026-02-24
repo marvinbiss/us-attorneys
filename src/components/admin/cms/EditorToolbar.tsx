@@ -76,7 +76,8 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
 
   useEffect(() => {
     if (urlModal) {
-      setTimeout(() => urlInputRef.current?.focus(), 50)
+      const timer = setTimeout(() => urlInputRef.current?.focus(), 50)
+      return () => clearTimeout(timer)
     }
   }, [urlModal])
 

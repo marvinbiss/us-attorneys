@@ -4,55 +4,29 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
-import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-// POST request schema
 const deletePostSchema = z.object({
   reason: z.string().max(500).optional(),
   password: z.string().min(1),
   confirmText: z.literal('SUPPRIMER MON COMPTE'),
 })
 
-// Lazy initialize to avoid build-time errors
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
-
 // POST /api/gdpr/delete - Request account deletion
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
@@ -60,7 +34,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = deletePostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { reason, password, confirmText: _confirmText } = result.data
 
@@ -72,15 +46,17 @@ export async function POST(request: Request) {
 
     if (signInError) {
       return NextResponse.json(
-        { error: 'Invalid password' },
+        { success: false, error: { message: 'Mot de passe invalide' } },
         { status: 401 }
       )
     }
 
+    const adminSupabase = createAdminClient()
+
     // Check for existing pending request
-    const { data: existingRequest } = await getSupabaseAdmin()
+    const { data: existingRequest } = await adminSupabase
       .from('deletion_requests')
-      .select('*')
+      .select('id, user_id, reason, status, scheduled_deletion_at, created_at')
       .eq('user_id', user.id)
       .eq('status', 'scheduled')
       .single()
@@ -88,7 +64,7 @@ export async function POST(request: Request) {
     if (existingRequest) {
       return NextResponse.json(
         {
-          error: 'You already have a pending deletion request',
+          success: false, error: { message: 'Vous avez déjà une demande de suppression en cours' },
           scheduledDate: existingRequest.scheduled_deletion_at,
         },
         { status: 400 }
@@ -96,7 +72,7 @@ export async function POST(request: Request) {
     }
 
     // Check for pending bookings
-    const { data: pendingBookings } = await getSupabaseAdmin()
+    const { data: pendingBookings } = await adminSupabase
       .from('bookings')
       .select('id')
       .eq('provider_id', user.id)
@@ -106,7 +82,7 @@ export async function POST(request: Request) {
     if (pendingBookings && pendingBookings.length > 0) {
       return NextResponse.json(
         {
-          error: 'You have pending bookings. Please cancel or complete them before deleting your account.',
+          success: false, error: { message: 'Vous avez des réservations en cours. Veuillez les annuler ou les terminer avant de supprimer votre compte.' },
           pendingBookingsCount: pendingBookings.length,
         },
         { status: 400 }
@@ -117,7 +93,7 @@ export async function POST(request: Request) {
     const scheduledDate = new Date()
     scheduledDate.setDate(scheduledDate.getDate() + 30)
 
-    const { data: deletionRequest, error } = await getSupabaseAdmin()
+    const { data: deletionRequest, error } = await adminSupabase
       .from('deletion_requests')
       .insert({
         user_id: user.id,
@@ -130,56 +106,38 @@ export async function POST(request: Request) {
 
     if (error) throw error
 
-    // Send confirmation email (would integrate with email service)
-    // await sendDeletionConfirmationEmail(user.email, scheduledDate)
-
     return NextResponse.json({
       success: true,
       requestId: deletionRequest.id,
       scheduledDate: scheduledDate.toISOString(),
-      message: `Your account is scheduled for deletion on ${scheduledDate.toLocaleDateString('fr-FR')}. You can cancel this request before that date.`,
+      message: `Votre compte est programmé pour suppression le ${scheduledDate.toLocaleDateString('fr-FR')}. Vous pouvez annuler cette demande avant cette date.`,
     })
   } catch (error) {
     logger.error('GDPR deletion error:', error)
     return NextResponse.json(
-      { error: 'Failed to process deletion request' },
+      { success: false, error: { message: 'Échec du traitement de la demande de suppression' } },
       { status: 500 }
     )
   }
 }
 
 // DELETE /api/gdpr/delete - Cancel deletion request
-export async function DELETE(_request: Request) {
+export async function DELETE() {
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
 
-    // Cancel pending deletion request
-    const { data: deletionRequest, error } = await getSupabaseAdmin()
+    const adminSupabase = createAdminClient()
+
+    const { data: deletionRequest, error } = await adminSupabase
       .from('deletion_requests')
       .update({
         status: 'cancelled',
@@ -192,57 +150,43 @@ export async function DELETE(_request: Request) {
 
     if (error || !deletionRequest) {
       return NextResponse.json(
-        { error: 'No pending deletion request found' },
+        { success: false, error: { message: 'Aucune demande de suppression en cours trouvée' } },
         { status: 404 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Your deletion request has been cancelled',
+      message: 'Votre demande de suppression a été annulée',
     })
   } catch (error) {
     logger.error('GDPR cancel deletion error:', error)
     return NextResponse.json(
-      { error: 'Failed to cancel deletion request' },
+      { success: false, error: { message: 'Échec de l\'annulation de la demande de suppression' } },
       { status: 500 }
     )
   }
 }
 
 // GET /api/gdpr/delete - Get deletion status
-export async function GET(_request: Request) {
+export async function GET() {
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
 
-    const { data: deletionRequest } = await getSupabaseAdmin()
+    const adminSupabase = createAdminClient()
+
+    const { data: deletionRequest } = await adminSupabase
       .from('deletion_requests')
-      .select('*')
+      .select('id, user_id, reason, status, scheduled_deletion_at, cancelled_at, created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(1)
@@ -254,7 +198,7 @@ export async function GET(_request: Request) {
   } catch (error) {
     logger.error('GDPR deletion status error:', error)
     return NextResponse.json(
-      { error: 'Failed to get deletion status' },
+      { success: false, error: { message: 'Échec de la récupération du statut de suppression' } },
       { status: 500 }
     )
   }

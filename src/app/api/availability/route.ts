@@ -35,7 +35,7 @@ export async function GET(request: Request) {
   const result = availabilityGetSchema.safeParse(queryParams)
   if (!result.success) {
     return NextResponse.json(
-      { error: 'Invalid parameters', details: result.error.flatten() },
+      { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
       { status: 400 }
     )
   }
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     const result = availabilityPostSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -65,13 +65,13 @@ export async function POST(request: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { success: false, error: { message: 'Non authentifié' } },
         { status: 401 }
       )
     }
     if (result.data.artisanId !== user.id) {
       return NextResponse.json(
-        { error: 'Accès refusé' },
+        { success: false, error: { message: 'Accès refusé' } },
         { status: 403 }
       )
     }
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Error updating availability:', error)
     return NextResponse.json(
-      { error: 'Failed to update availability' },
+      { success: false, error: { message: 'Erreur lors de la mise à jour de la disponibilité' } },
       { status: 500 }
     )
   }
@@ -130,7 +130,7 @@ export async function DELETE(request: Request) {
   const result = availabilityDeleteSchema.safeParse(queryParams)
   if (!result.success) {
     return NextResponse.json(
-      { error: 'Invalid parameters', details: result.error.flatten() },
+      { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
       { status: 400 }
     )
   }
@@ -138,6 +138,12 @@ export async function DELETE(request: Request) {
 
   try {
     const supabase = await createClient()
+
+    // Auth guard: require authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+    }
 
     // Check if slot has a booking
     const { data: slot, error: slotError } = await supabase
@@ -148,9 +154,17 @@ export async function DELETE(request: Request) {
 
     if (slotError) throw slotError
 
+    // Ownership check: only the artisan who owns the slot can delete it
+    if (slot?.artisan_id !== user.id) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Vous n\'êtes pas autorisé à supprimer ce créneau' } },
+        { status: 403 }
+      )
+    }
+
     if (slot?.booking && slot.booking.length > 0) {
       return NextResponse.json(
-        { error: 'Ce créneau a une réservation et ne peut pas être supprimé' },
+        { success: false, error: { message: 'Ce créneau a une réservation et ne peut pas être supprimé' } },
         { status: 400 }
       )
     }
@@ -167,7 +181,7 @@ export async function DELETE(request: Request) {
   } catch (error) {
     logger.error('Error deleting slot:', error)
     return NextResponse.json(
-      { error: 'Failed to delete slot' },
+      { success: false, error: { message: 'Erreur lors de la suppression du créneau' } },
       { status: 500 }
     )
   }

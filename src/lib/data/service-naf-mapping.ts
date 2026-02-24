@@ -43,7 +43,7 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   // Bathroom/Interior
   'salle-de-bain': ['4322A', '4333Z'],        // Plomberie + revêtement
   'architecte-interieur': ['7111Z'],          // Architecture
-  decorateur: ['7410Z'],                      // Design spécialisé
+  'decorateur-interieur': ['7410Z'],          // Design spécialisé
 
   // Tech/Smart home
   domoticien: ['4321A'],                      // Installation électrique
@@ -60,13 +60,13 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   pisciniste: ['4322A'],                      // Installation d'eau
 
   // Security
-  'alarme-securite': ['4321A'],               // Installation électrique
+  'alarme-securite': ['4321A', '8020Z'],      // Installation électrique + systèmes de sécurité
   antenniste: ['4321A'],                      // Installation électrique
 
   // Other
   ascensoriste: ['4329B'],                    // Autres travaux d'installation
   diagnostiqueur: ['7120B'],                  // Analyses techniques
-  geometre: ['7112B'],                        // Géomètre-expert
+  geometre: ['7112A', '7112B'],                // Géomètre-expert + ingénierie
   desinsectisation: ['8129A'],                // Désinfection, désinsectisation
   deratisation: ['8129A'],                    // Désinfection, désinsectisation
   demenageur: ['4942Z'],                      // Déménagement

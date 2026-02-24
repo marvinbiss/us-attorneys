@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { syncArtisansFromDatabase } from '@/lib/prospection/import-service'
+import { z } from 'zod'
+
+const syncSchema = z.object({
+  department: z.string().max(10).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -10,8 +15,19 @@ export async function POST(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    const body = await request.json().catch(() => ({}))
-    const department = body.department as string | undefined
+    let rawBody: unknown
+    try {
+      rawBody = await request.json()
+    } catch {
+      rawBody = {}
+    }
+
+    const parsed = syncSchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { message: 'Donnees invalides' } }, { status: 400 })
+    }
+
+    const department = parsed.data.department
 
     const result = await syncArtisansFromDatabase({ department })
 

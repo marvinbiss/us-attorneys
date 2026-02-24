@@ -27,7 +27,7 @@ export async function GET(
     const idValidation = bookingIdSchema.safeParse(bookingId)
     if (!idValidation.success) {
       return NextResponse.json(
-        { error: 'ID de réservation invalide' },
+        { success: false, error: { message: 'ID de réservation invalide' } },
         { status: 400 }
       )
     }
@@ -70,7 +70,7 @@ export async function GET(
 
     if (error || !booking) {
       return NextResponse.json(
-        { error: 'Réservation introuvable' },
+        { success: false, error: { message: 'Réservation introuvable' } },
         { status: 404 }
       )
     }
@@ -89,7 +89,7 @@ export async function GET(
         // Check if user email matches booking email (for non-registered users who made booking)
         if (user.email?.toLowerCase() !== booking.client_email?.toLowerCase()) {
           return NextResponse.json(
-            { error: 'Accès non autorisé à cette réservation' },
+            { success: false, error: { message: 'Accès non autorisé à cette réservation' } },
             { status: 403 }
           )
         }
@@ -144,7 +144,7 @@ export async function GET(
   } catch (error) {
     logger.error('Error fetching booking:', error)
     return NextResponse.json(
-      { error: 'Erreur lors du chargement de la réservation' },
+      { success: false, error: { message: 'Erreur lors du chargement de la réservation' } },
       { status: 500 }
     )
   }
@@ -162,7 +162,7 @@ export async function PATCH(
     const idValidation = bookingIdSchema.safeParse(bookingId)
     if (!idValidation.success) {
       return NextResponse.json(
-        { error: 'ID de réservation invalide' },
+        { success: false, error: { message: 'ID de réservation invalide' } },
         { status: 400 }
       )
     }
@@ -173,7 +173,7 @@ export async function PATCH(
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentification requise' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
@@ -181,7 +181,7 @@ export async function PATCH(
     const body = await request.json()
     const result = bookingPatchSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Requête invalide', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { status, notes } = result.data
 
@@ -195,7 +195,7 @@ export async function PATCH(
 
     if (fetchError || !existingBooking) {
       return NextResponse.json(
-        { error: 'Réservation introuvable' },
+        { success: false, error: { message: 'Réservation introuvable' } },
         { status: 404 }
       )
     }
@@ -208,7 +208,7 @@ export async function PATCH(
 
     if (!isOwner && !isArtisan && !isEmailMatch) {
       return NextResponse.json(
-        { error: 'Vous n\'êtes pas autorisé à modifier cette réservation' },
+        { success: false, error: { message: 'Vous n\'êtes pas autorisé à modifier cette réservation' } },
         { status: 403 }
       )
     }
@@ -237,7 +237,7 @@ export async function PATCH(
   } catch (error) {
     logger.error('Booking PATCH error:', error)
     return NextResponse.json(
-      { error: 'Erreur lors de la mise à jour' },
+      { success: false, error: { message: 'Erreur lors de la mise à jour' } },
       { status: 500 }
     )
   }

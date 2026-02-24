@@ -30,7 +30,7 @@ export async function GET() {
     const supabase = createAdminClient()
     const { data, error } = await supabase
       .from('prospection_ai_settings')
-      .select('*')
+      .select('id, default_provider, claude_model, claude_api_key_set, claude_max_tokens, claude_temperature, openai_model, openai_api_key_set, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt, updated_by, updated_at')
       .limit(1)
       .single()
 

@@ -51,7 +51,7 @@ export async function GET(
 
     if (error) {
       logger.error('Admin fetch error', error)
-      return NextResponse.json({ error: 'Administrateur non trouvé' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Administrateur non trouvé' } }, { status: 404 })
     }
 
     return NextResponse.json({
@@ -66,7 +66,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Admin fetch error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -122,7 +122,7 @@ export async function PATCH(
 
     if (error) {
       logger.error('Admin update error', error)
-      return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
 
     // Log audit
@@ -140,7 +140,7 @@ export async function PATCH(
     })
   } catch (error) {
     logger.error('Admin update error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -180,7 +180,7 @@ export async function DELETE(
 
     if (error) {
       logger.error('Admin delete error', error)
-      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
     }
 
     // Log audit
@@ -189,6 +189,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Admin delete error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

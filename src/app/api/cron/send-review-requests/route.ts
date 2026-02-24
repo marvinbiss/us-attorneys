@@ -95,7 +95,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Review Cron] Unauthorized access attempt')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     // Calculate time window: appointments that started 2-3 hours ago (availability_slots has no FK on bookings)
@@ -249,7 +249,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Review Cron] Error:', error)
     return NextResponse.json(
-      { error: 'Failed to send review requests' },
+      { success: false, error: { message: 'Erreur lors de l\'envoi des demandes d\'avis' } },
       { status: 500 }
     )
   }

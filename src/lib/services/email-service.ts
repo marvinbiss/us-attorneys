@@ -3,6 +3,8 @@
  * Centralized email sending with templates
  */
 
+import { logger } from '@/lib/logger'
+
 export interface EmailTemplate {
   subject: string
   html: string
@@ -26,7 +28,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
   if (!resendApiKey) {
     // Dev mode: log email details when API key not configured
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Email Service] No RESEND_API_KEY — would send to:', options.to, 'Subject:', options.template.subject)
+      logger.info('[Email Service] No RESEND_API_KEY — would send to:', { to: options.to, subject: options.template.subject })
     }
     return { success: true, id: 'dev-mode' }
   }
@@ -55,7 +57,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
 
     return { success: true, id: data.id }
   } catch (error) {
-    console.error('[Email Service] Error:', error)
+    logger.error('[Email Service] Error:', error)
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error'

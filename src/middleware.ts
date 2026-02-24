@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
+import { logger } from '@/lib/logger'
 
 /**
  * Middleware v2 — simplified
@@ -137,15 +138,15 @@ export async function middleware(request: NextRequest) {
         }
       }
     } catch (error) {
-      console.error('Middleware auth error:', error)
+      logger.error('Middleware auth error:', error)
       const loginUrl = new URL('/connexion', request.url)
       loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
       return NextResponse.redirect(loginUrl)
     }
   }
 
-  // Rate limiting for API routes
-  if (pathname.startsWith('/api/')) {
+  // Rate limiting for API routes (skip health check — must always respond fast)
+  if (pathname.startsWith('/api/') && pathname !== '/api/health') {
     const clientIp = getClientIp(request.headers)
     const rateLimitConfig = getRateLimitConfig(pathname)
     const rateLimitKey = getRateLimitKey(clientIp, pathname)
@@ -171,7 +172,7 @@ export async function middleware(request: NextRequest) {
       }
     } catch (error) {
       // Fail open: if rate limiter errors, allow the request through
-      console.error('Rate limiter error:', error)
+      logger.error('Rate limiter error:', error)
     }
   }
 

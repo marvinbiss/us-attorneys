@@ -28,7 +28,7 @@ export async function GET(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: 'Identifiant invalide' },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
@@ -43,13 +43,13 @@ export async function GET(
 
     if (error) {
       logger.error('Quote fetch error', error)
-      return NextResponse.json({ error: 'Devis non trouvé' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Devis non trouvé' } }, { status: 404 })
     }
 
     return NextResponse.json({ quote })
   } catch (error) {
     logger.error('Quote fetch error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -66,7 +66,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: 'Identifiant invalide' },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
@@ -101,7 +101,7 @@ export async function PATCH(
 
     if (error) {
       logger.error('Quote operation error', error)
-      return NextResponse.json({ error: 'Erreur lors de l\'opération' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de l\'opération' } }, { status: 500 })
     }
 
     // Log audit
@@ -110,7 +110,7 @@ export async function PATCH(
     return NextResponse.json({ quote })
   } catch (error) {
     logger.error('Quote update error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -127,7 +127,7 @@ export async function DELETE(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: 'Identifiant invalide' },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
@@ -148,7 +148,7 @@ export async function DELETE(
 
     if (error) {
       logger.error('Quote operation error', error)
-      return NextResponse.json({ error: 'Erreur lors de l\'opération' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de l\'opération' } }, { status: 500 })
     }
 
     // Log audit
@@ -157,6 +157,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Quote delete error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

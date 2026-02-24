@@ -7,6 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const journalQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  action: z.string().max(100).nullable().default(null),
+  user_id: z.string().uuid().nullable().default(null),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -18,11 +25,22 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = createAdminClient()
     const url = new URL(request.url)
-    const page = parseInt(url.searchParams.get('page') || '1')
+
+    const parsed = journalQuerySchema.safeParse({
+      page: url.searchParams.get('page') ?? undefined,
+      action: url.searchParams.get('action') || null,
+      user_id: url.searchParams.get('user_id') || null,
+    })
+
+    if (!parsed.success) {
+      return NextResponse.json({ logs: [], total: 0, page: 1, pageSize: 50 })
+    }
+
+    const page = parsed.data.page
     const limit = 50
     const offset = (page - 1) * limit
-    const actionFilter = url.searchParams.get('action') || null
-    const userFilter = url.searchParams.get('user_id') || null
+    const actionFilter = parsed.data.action
+    const userFilter = parsed.data.user_id
 
     let query = supabase
       .from('audit_logs')

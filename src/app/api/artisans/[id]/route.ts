@@ -489,8 +489,7 @@ export async function GET(
       source,
     })
 
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
-    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
 
     return response
 

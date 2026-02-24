@@ -45,6 +45,48 @@ describe('getRateLimitConfig', () => {
     expect(getRateLimitConfig('/api/search')).toBe(RATE_LIMITS.search)
   })
 
+  it('returns search config for provider listing/by-city routes', () => {
+    expect(getRateLimitConfig('/api/providers/listing')).toBe(RATE_LIMITS.search)
+    expect(getRateLimitConfig('/api/providers/by-city')).toBe(RATE_LIMITS.search)
+  })
+
+  it('returns gdpr config for GDPR routes', () => {
+    expect(getRateLimitConfig('/api/gdpr/export')).toBe(RATE_LIMITS.gdpr)
+    expect(getRateLimitConfig('/api/gdpr/delete')).toBe(RATE_LIMITS.gdpr)
+  })
+
+  it('returns newsletter config for newsletter route', () => {
+    expect(getRateLimitConfig('/api/newsletter')).toBe(RATE_LIMITS.newsletter)
+  })
+
+  it('returns inscription config for artisan registration route', () => {
+    expect(getRateLimitConfig('/api/inscription-artisan')).toBe(RATE_LIMITS.inscription)
+  })
+
+  it('returns ai config for AI generation routes', () => {
+    expect(getRateLimitConfig('/api/admin/prospection/ai/generate')).toBe(RATE_LIMITS.ai)
+    expect(getRateLimitConfig('/api/admin/prospection/ai/settings')).toBe(RATE_LIMITS.ai)
+  })
+
+  it('returns verify config for verification routes', () => {
+    expect(getRateLimitConfig('/api/verify/siret')).toBe(RATE_LIMITS.verify)
+    expect(getRateLimitConfig('/api/verify/entreprise')).toBe(RATE_LIMITS.verify)
+  })
+
+  it('returns geocode config for geocode routes', () => {
+    expect(getRateLimitConfig('/api/geocode')).toBe(RATE_LIMITS.geocode)
+  })
+
+  it('returns webhook config for external webhook routes', () => {
+    expect(getRateLimitConfig('/api/admin/prospection/webhooks/resend')).toBe(RATE_LIMITS.webhook)
+    expect(getRateLimitConfig('/api/admin/prospection/webhooks/twilio')).toBe(RATE_LIMITS.webhook)
+  })
+
+  it('returns cron config for cron routes', () => {
+    expect(getRateLimitConfig('/api/cron/send-reminders')).toBe(RATE_LIMITS.cron)
+    expect(getRateLimitConfig('/api/cron/calculate-trust-badges')).toBe(RATE_LIMITS.cron)
+  })
+
   it('returns api config for generic API routes', () => {
     expect(getRateLimitConfig('/api/geo/cities')).toBe(RATE_LIMITS.api)
   })
@@ -178,6 +220,21 @@ describe('RATE_LIMITS constants', () => {
 
   it('contact has longer window than auth', () => {
     expect(RATE_LIMITS.contact.window).toBeGreaterThan(RATE_LIMITS.auth.window)
+  })
+
+  it('email-sending tiers are strict (newsletter, inscription, contact)', () => {
+    expect(RATE_LIMITS.newsletter.max).toBeLessThanOrEqual(5)
+    expect(RATE_LIMITS.inscription.max).toBeLessThanOrEqual(5)
+    expect(RATE_LIMITS.contact.max).toBeLessThanOrEqual(5)
+  })
+
+  it('webhook and cron tiers have failOpen enabled', () => {
+    expect(RATE_LIMITS.webhook.failOpen).toBe(true)
+    expect(RATE_LIMITS.cron.failOpen).toBe(true)
+  })
+
+  it('gdpr tier has longer window', () => {
+    expect(RATE_LIMITS.gdpr.window).toBeGreaterThan(RATE_LIMITS.api.window)
   })
 
   it('all configs have positive window and max', () => {

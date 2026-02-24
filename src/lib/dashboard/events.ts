@@ -5,6 +5,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { processLeadEvent } from '@/lib/notifications/lead-notifications'
+import { logger } from '@/lib/logger'
 
 export type LeadEventType =
   | 'created'
@@ -36,7 +37,7 @@ export async function logLeadEvent(
     metadata: opts?.metadata ?? {},
   }).select('id').single()
   if (error) {
-    console.error('Failed to log lead event:', error.message)
+    logger.error('Failed to log lead event:', { error: error.message })
     return
   }
 
@@ -49,7 +50,7 @@ export async function logLeadEvent(
     actor_id: opts?.actorId ?? null,
     metadata: opts?.metadata ?? {},
   }).catch((err) => {
-    console.error('Notification processing failed:', err)
+    logger.error('Notification processing failed:', err)
   })
 }
 
@@ -73,6 +74,6 @@ export async function logAccess(
     user_agent: opts?.userAgent ?? null,
   })
   if (error) {
-    console.error('Failed to log access:', error.message)
+    logger.error('Failed to log access:', { error: error.message })
   }
 }

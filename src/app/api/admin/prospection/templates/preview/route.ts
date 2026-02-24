@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { renderPreview, extractVariables } from '@/lib/prospection/template-renderer'
+import { z } from 'zod'
+
+const previewSchema = z.object({
+  body: z.string().min(1, 'Body requis'),
+  subject: z.string().optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -10,14 +16,25 @@ export async function POST(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
 
-    const { body, subject } = await request.json()
-
-    if (!body) {
+    let rawBody: unknown
+    try {
+      rawBody = await request.json()
+    } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Body requis' } },
+        { success: false, error: { message: 'Donnees invalides' } },
         { status: 400 }
       )
     }
+
+    const result = previewSchema.safeParse(rawBody)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Donnees invalides' } },
+        { status: 400 }
+      )
+    }
+
+    const { body, subject } = result.data
 
     const renderedBody = renderPreview(body)
     const renderedSubject = subject ? renderPreview(subject) : null

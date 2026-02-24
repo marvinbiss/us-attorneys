@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     }
     const result = slotsQuerySchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { artisanIds: artisanIdsParam, days, startDate: startDateParam } = result.data
 
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Availability slots error:', error)
     return NextResponse.json(
-      { error: 'Failed to get availability slots' },
+      { success: false, error: { message: 'Erreur lors de la récupération des créneaux' } },
       { status: 500 }
     )
   }

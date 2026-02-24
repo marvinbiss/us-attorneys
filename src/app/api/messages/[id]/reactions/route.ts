@@ -8,9 +8,9 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function POST() {
-  return NextResponse.json({ success: false, error: 'Fonctionnalité non disponible' }, { status: 501 })
+  return NextResponse.json({ success: false, error: { message: 'Fonctionnalité non disponible' } }, { status: 501 })
 }
 
 export async function DELETE() {
-  return NextResponse.json({ success: false, error: 'Fonctionnalité non disponible' }, { status: 501 })
+  return NextResponse.json({ success: false, error: { message: 'Fonctionnalité non disponible' } }, { status: 501 })
 }

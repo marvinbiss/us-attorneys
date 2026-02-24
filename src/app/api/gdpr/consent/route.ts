@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = consentPostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { preferences, timestamp, userAgent } = result.data
 
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('GDPR consent error:', error)
     return NextResponse.json(
-      { error: 'Failed to record consent' },
+      { success: false, error: { message: 'Erreur lors de l\'enregistrement du consentement' } },
       { status: 500 }
     )
   }
@@ -124,7 +124,7 @@ export async function GET(_request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
@@ -139,7 +139,7 @@ export async function GET(_request: Request) {
   } catch (error) {
     logger.error('GDPR consent fetch error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch consent history' },
+      { success: false, error: { message: 'Erreur lors de la récupération de l\'historique de consentement' } },
       { status: 500 }
     )
   }

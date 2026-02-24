@@ -10,6 +10,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/api/resend-client'
 import type { LeadEventType } from '@/lib/dashboard/events'
+import { logger } from '@/lib/logger'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const SITE_NAME = 'ServicesArtisans'
@@ -183,7 +184,7 @@ async function deliverNotification(
   } catch (err) {
     status = 'failed'
     errorMessage = err instanceof Error ? err.message : String(err)
-    console.error(`Notification delivery failed [${channel}/${spec.type}]:`, errorMessage)
+    logger.error(`Notification delivery failed [${channel}/${spec.type}]:`, { error: errorMessage })
   }
 
   // Record delivery (idempotency key)

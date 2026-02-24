@@ -6,6 +6,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const leadsQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(50).default(20),
+  status: z.string().max(50).default('all'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -24,19 +31,24 @@ export async function GET(request: NextRequest) {
 
     if (!provider) {
       return NextResponse.json(
-        { error: 'Aucun profil artisan trouvé' },
+        { success: false, error: { message: 'Aucun profil artisan trouvé' } },
         { status: 403 }
       )
     }
 
-    // Parse pagination & filter params
+    // Parse and validate pagination & filter params
     const { searchParams } = request.nextUrl
-    const rawPage = parseInt(searchParams.get('page') || '1', 10)
-    const rawPageSize = parseInt(searchParams.get('pageSize') || '20', 10)
-    const status = searchParams.get('status') || 'all'
+    const parsed = leadsQuerySchema.safeParse({
+      page: searchParams.get('page') ?? undefined,
+      pageSize: searchParams.get('pageSize') ?? undefined,
+      status: searchParams.get('status') ?? undefined,
+    })
 
-    const page = Math.max(1, isNaN(rawPage) ? 1 : rawPage)
-    const pageSize = Math.min(50, Math.max(1, isNaN(rawPageSize) ? 20 : rawPageSize))
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { message: 'Donnees invalides' } }, { status: 400 })
+    }
+
+    const { page, pageSize, status } = parsed.data
     const from = (page - 1) * pageSize
     const to = from + pageSize - 1
 
@@ -55,7 +67,7 @@ export async function GET(request: NextRequest) {
     if (countError) {
       logger.error('Error counting leads:', countError)
       return NextResponse.json(
-        { error: 'Erreur lors du comptage des leads' },
+        { success: false, error: { message: 'Erreur lors du comptage des leads' } },
         { status: 500 }
       )
     }
@@ -97,7 +109,7 @@ export async function GET(request: NextRequest) {
     if (assignError) {
       logger.error('Error fetching assigned leads:', assignError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des leads' },
+        { success: false, error: { message: 'Erreur lors de la récupération des leads' } },
         { status: 500 }
       )
     }
@@ -114,6 +126,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Artisan leads GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

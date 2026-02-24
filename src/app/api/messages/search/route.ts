@@ -8,6 +8,8 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const searchSchema = z.object({
   conversation_id: z.string().uuid(),
   q: z.string().min(1).max(200),
@@ -20,7 +22,7 @@ export async function GET(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -33,7 +35,7 @@ export async function GET(request: NextRequest) {
     const parsed = searchSchema.safeParse(queryParams)
     if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Paramètres invalides', details: parsed.error.flatten() },
+        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -50,7 +52,7 @@ export async function GET(request: NextRequest) {
 
     if (!conversation) {
       return NextResponse.json(
-        { error: 'Conversation non trouvée ou non autorisée' },
+        { success: false, error: { message: 'Conversation non trouvée ou non autorisée' } },
         { status: 404 }
       )
     }
@@ -67,7 +69,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('Message search error', error)
       return NextResponse.json(
-        { error: 'Erreur de recherche' },
+        { success: false, error: { message: 'Erreur de recherche' } },
         { status: 500 }
       )
     }
@@ -80,7 +82,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Search error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }

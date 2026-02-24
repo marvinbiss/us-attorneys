@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { villes } from '@/lib/data/france'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 60 // Cache for 1 minute (updated more frequently)
@@ -53,10 +54,14 @@ export async function GET() {
       averageRating: averageRating,
       cityCount: villes.length,
       updatedAt: new Date().toISOString()
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
     })
 
   } catch (error) {
-    console.error('Error fetching public stats:', error)
+    logger.error('Error fetching public stats:', error)
     return NextResponse.json(
       { error: 'Failed to fetch stats' },
       { status: 500 }

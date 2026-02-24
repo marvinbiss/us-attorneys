@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to calculate-trust-badges')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     logger.info('[Cron] Starting review metrics recalculation')
@@ -148,7 +148,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)
     return NextResponse.json(
-      { error: 'Failed to recalculate review metrics' },
+      { success: false, error: { message: 'Erreur lors du recalcul des métriques d\'avis' } },
       { status: 500 }
     )
   }

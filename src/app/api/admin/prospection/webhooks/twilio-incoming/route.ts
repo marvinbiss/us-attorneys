@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Vérifier la signature
     const signature = request.headers.get('x-twilio-signature') || ''
     if (!verifyTwilioSignature(signature, request.url, params)) {
-      return NextResponse.json({ error: 'Signature invalide' }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
     }
 
     const from = params.From?.replace('whatsapp:', '') || ''
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     // Trouver le contact par numéro de téléphone
     const { data: contact } = await supabase
       .from('prospection_contacts')
-      .select('*')
+      .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, commune_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
       .eq('phone_e164', from)
       .eq('is_active', true)
       .single()
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     // Trouver ou créer la conversation
     let { data: conversation } = await supabase
       .from('prospection_conversations')
-      .select('*')
+      .select('id, campaign_id, contact_id, message_id, channel, status, ai_provider, ai_model, ai_replies_count, assigned_to, last_message_at, created_at, updated_at')
       .eq('contact_id', contact.id)
       .eq('channel', channel)
       .in('status', ['open', 'ai_handling'])
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
     // Vérifier si auto-reply IA est activée
     const { data: aiSettings } = await supabase
       .from('prospection_ai_settings')
-      .select('*')
+      .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt')
       .limit(1)
       .single()
 
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
           // Charger l'historique
           const { data: history } = await supabase
             .from('prospection_conversation_messages')
-            .select('*')
+            .select('id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at')
             .eq('conversation_id', conversation.id)
             .order('created_at', { ascending: true })
 

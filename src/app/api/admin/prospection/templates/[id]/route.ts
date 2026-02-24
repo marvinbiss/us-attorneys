@@ -40,7 +40,7 @@ export async function GET(
 
     const { data, error } = await supabase
       .from('prospection_templates')
-      .select('*')
+      .select('id, name, channel, audience_type, subject, body, html_body, whatsapp_template_name, whatsapp_template_sid, whatsapp_approved, ai_system_prompt, ai_context, variables, is_active, created_by, created_at, updated_at')
       .eq('id', id)
       .single()
 

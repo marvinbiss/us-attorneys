@@ -15,6 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
+import * as crypto from 'crypto'
 import { supabase } from './lib/supabase-admin'
 import {
   CODES_NAF,
@@ -115,7 +116,14 @@ const ALL_POSSIBLE_COLUMNS = [
   // Migration 108
   'code_naf', 'libelle_naf', 'legal_form_code', 'is_artisan',
   'source_api', 'derniere_maj_api', 'data_quality_score', 'data_quality_flags',
+  // Stable ID (public URL identifier)
+  'stable_id',
 ]
+
+// Generate a random 16-char URL-safe stable_id
+function generateStableId(): string {
+  return crypto.randomBytes(12).toString('base64url').substring(0, 16)
+}
 
 async function detectColumns(): Promise<void> {
   console.log('   Detection du schema providers...')
@@ -187,8 +195,15 @@ async function smartUpsertProviders(records: Record<string, unknown>[]): Promise
   const toInsert = validRecords.filter(r => !existingSirens.has(String(r.siren)))
   const toUpdate = validRecords.filter(r => existingSirens.has(String(r.siren)))
 
-  // Batch insert new providers
+  // Batch insert new providers — generate stable_id if column exists
   if (toInsert.length > 0) {
+    if (validColumns.has('stable_id')) {
+      for (const record of toInsert) {
+        if (!record.stable_id) {
+          record.stable_id = generateStableId()
+        }
+      }
+    }
     const { error } = await supabase.from('providers').insert(toInsert)
 
     if (error) {

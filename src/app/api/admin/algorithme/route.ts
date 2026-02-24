@@ -97,8 +97,7 @@ export async function PATCH(request: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json(
         {
-          error: 'Données invalides',
-          details: parsed.error.flatten().fieldErrors,
+          success: false, error: { message: 'Données invalides', details: parsed.error.flatten().fieldErrors },
         },
         { status: 400 }
       )
@@ -127,7 +126,7 @@ export async function PATCH(request: NextRequest) {
 
       if (error) {
         logger.error('Algorithm config insert error', { message: error.message })
-        return NextResponse.json({ error: 'Erreur lors de la sauvegarde de la configuration' }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la sauvegarde de la configuration' } }, { status: 500 })
       }
 
       await logAdminAction(
@@ -151,7 +150,7 @@ export async function PATCH(request: NextRequest) {
 
     if (error) {
       logger.error('Algorithm config update error', { message: error.message })
-      return NextResponse.json({ error: 'Erreur lors de la mise à jour de la configuration' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour de la configuration' } }, { status: 500 })
     }
 
     await logAdminAction(
@@ -165,6 +164,6 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ config: data, action: 'updated' })
   } catch (error) {
     logger.error('Algorithm config PATCH error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

@@ -7,6 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const clientLeadsQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(50).default(20),
+  status: z.string().max(50).default('all'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -42,14 +49,23 @@ export async function GET(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
     }
 
-    // Parse pagination from query params
+    // Parse and validate pagination from query params
     const url = request.nextUrl
-    const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'))
-    const pageSize = Math.min(50, Math.max(1, parseInt(url.searchParams.get('pageSize') || '20')))
-    const statusFilter = url.searchParams.get('status') || 'all'
+    const parsed = clientLeadsQuerySchema.safeParse({
+      page: url.searchParams.get('page') ?? undefined,
+      pageSize: url.searchParams.get('pageSize') ?? undefined,
+      status: url.searchParams.get('status') ?? undefined,
+    })
+
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+    }
+
+    const { page, pageSize } = parsed.data
+    const statusFilter = parsed.data.status
 
     // Fetch all devis_requests for this client
     const { data: demandes, error: demandesError } = await supabase
@@ -60,7 +76,7 @@ export async function GET(request: NextRequest) {
 
     if (demandesError) {
       logger.error('Client leads fetch error:', demandesError)
-      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
     }
 
     if (!demandes || demandes.length === 0) {
@@ -142,6 +158,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Client leads GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

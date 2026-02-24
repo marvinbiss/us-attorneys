@@ -18,8 +18,22 @@ export async function PATCH(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
+        { success: false, error: { message: 'Non authentifié' } },
         { status: 401 }
+      )
+    }
+
+    // Admin role check: only admins can bulk moderate reviews
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile?.is_admin) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Accès réservé aux administrateurs' } },
+        { status: 403 }
       )
     }
 

@@ -37,7 +37,7 @@ export async function GET() {
 
   if (!vapidKey) {
     return NextResponse.json(
-      { error: 'Push notifications not configured' },
+      { success: false, error: { message: 'Notifications push non configurées' } },
       { status: 503 }
     )
   }
@@ -52,19 +52,19 @@ export async function POST(request: Request) {
     const serverSupabase = await createServerClient()
     const { data: { user } } = await serverSupabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Authentification requise' } }, { status: 401 })
     }
 
     const body = await request.json()
     const result = subscribePostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Requête invalide', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { userId, subscription } = result.data
 
     // Verify userId matches authenticated user
     if (userId !== user.id) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 403 })
     }
 
     // TODO: push_subscriptions table was dropped in migration 100. Re-create the table
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Push subscribe error:', error)
     return NextResponse.json(
-      { error: 'Failed to save subscription' },
+      { success: false, error: { message: 'Erreur lors de l\'enregistrement de l\'abonnement' } },
       { status: 500 }
     )
   }
@@ -88,7 +88,7 @@ export async function DELETE(request: Request) {
     const serverSupabase = await createServerClient()
     const { data: { user } } = await serverSupabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Authentification requise' } }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -98,13 +98,13 @@ export async function DELETE(request: Request) {
     }
     const result = unsubscribeSchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json({ error: 'Requête invalide', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { endpoint, userId } = result.data
 
     // Verify userId matches authenticated user if provided
     if (userId && userId !== user.id) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 403 })
     }
 
     // TODO: push_subscriptions table was dropped in migration 100. Re-create the table
@@ -116,7 +116,7 @@ export async function DELETE(request: Request) {
   } catch (error) {
     logger.error('Push unsubscribe error:', error)
     return NextResponse.json(
-      { error: 'Failed to remove subscription' },
+      { success: false, error: { message: 'Erreur lors de la suppression de l\'abonnement' } },
       { status: 500 }
     )
   }

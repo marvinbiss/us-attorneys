@@ -64,7 +64,7 @@ export async function GET() {
     return NextResponse.json({ settings: settings.data || DEFAULT_SETTINGS })
   } catch (error) {
     logger.error('Settings fetch error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -117,7 +117,7 @@ export async function PATCH(request: NextRequest) {
 
       if (error) {
         logger.error('Settings update error', error)
-        return NextResponse.json({ error: 'Erreur lors de la mise à jour des paramètres. La table platform_settings n\'existe peut-être pas encore.' }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour des paramètres. La table platform_settings n\'existe peut-être pas encore.' } }, { status: 500 })
       }
 
       // Log audit
@@ -128,11 +128,11 @@ export async function PATCH(request: NextRequest) {
       // platform_settings table may not exist yet
       logger.error('Settings table not found — platform_settings may not be created yet')
       return NextResponse.json({
-        error: 'La table platform_settings n\'existe pas encore. Veuillez exécuter la migration correspondante.',
+        success: false, error: { message: 'La table platform_settings n\'existe pas encore. Veuillez exécuter la migration correspondante.' },
       }, { status: 500 })
     }
   } catch (error) {
     logger.error('Settings update error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

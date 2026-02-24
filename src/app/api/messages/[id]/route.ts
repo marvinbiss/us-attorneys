@@ -9,6 +9,8 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const editMessageSchema = z.object({
   content: z.string().min(1).max(5000),
 })
@@ -23,7 +25,7 @@ export async function PATCH(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     const body = await request.json()
@@ -31,7 +33,7 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: parsed.error.flatten() },
+        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -50,14 +52,14 @@ export async function PATCH(
     if (error) {
       logger.error('Error editing message', error)
       return NextResponse.json(
-        { error: 'Impossible de modifier le message' },
+        { success: false, error: { message: 'Impossible de modifier le message' } },
         { status: 500 }
       )
     }
 
     if (!data) {
       return NextResponse.json(
-        { error: 'Message non trouvé ou non autorisé' },
+        { success: false, error: { message: 'Message non trouvé ou non autorisé' } },
         { status: 404 }
       )
     }
@@ -66,7 +68,7 @@ export async function PATCH(
   } catch (error) {
     logger.error('Edit message error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }
@@ -82,7 +84,7 @@ export async function DELETE(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     // Hard delete message (RLS will verify ownership)
@@ -96,7 +98,7 @@ export async function DELETE(
     if (error) {
       logger.error('Error deleting message', error)
       return NextResponse.json(
-        { error: 'Impossible de supprimer le message' },
+        { success: false, error: { message: 'Impossible de supprimer le message' } },
         { status: 500 }
       )
     }
@@ -105,7 +107,7 @@ export async function DELETE(
   } catch (error) {
     logger.error('Delete message error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }

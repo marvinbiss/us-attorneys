@@ -13,11 +13,11 @@ export async function POST(request: NextRequest) {
     const result = submitSchema.safeParse(body)
 
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Paramètres invalides' } }, { status: 400 })
     }
 
     if (result.data.secret !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ error: 'Invalid secret' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
     }
 
     const indexResult = await submitToIndexNow(result.data.urls)
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (err) {
     return NextResponse.json(
-      { error: 'IndexNow submission failed', details: err instanceof Error ? err.message : String(err) },
+      { success: false, error: { message: 'Erreur lors de la soumission IndexNow', details: err instanceof Error ? err.message : String(err) } },
       { status: 500 }
     )
   }

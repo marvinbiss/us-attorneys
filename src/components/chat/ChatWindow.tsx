@@ -38,14 +38,16 @@ export function ChatWindow({
 
   // Load initial messages
   useEffect(() => {
+    let scrollTimer: ReturnType<typeof setTimeout>
     const loadMessages = async () => {
       setIsLoading(true)
       const msgs = await chatService.getMessages(conversationId)
       setMessages(msgs)
       setIsLoading(false)
-      setTimeout(scrollToBottom, 100)
+      scrollTimer = setTimeout(scrollToBottom, 100)
     }
     loadMessages()
+    return () => clearTimeout(scrollTimer)
   }, [conversationId, scrollToBottom])
 
   // Subscribe to real-time updates

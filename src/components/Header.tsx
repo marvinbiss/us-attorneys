@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, TreeDeciduous,
-  ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
+  ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users,
   ChefHat, Layers, Brush, Navigation, Map, Building2, Globe, Heart
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -299,35 +299,6 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
         ? 'bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-200/50'
         : 'bg-white/95 backdrop-blur-sm border-b border-gray-100/80'
     )}>
-      {/* Top bar premium */}
-      <div className={cn(
-        'transition-all duration-300 overflow-hidden',
-        scrolled ? 'max-h-0 opacity-0 py-0' : 'max-h-12 opacity-100 py-2',
-        'bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white'
-      )}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-green-400" />
-              <span className="text-white/90">Artisans référencés</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors duration-200">
-              <Award className="w-4 h-4" />
-              <span className="hidden sm:inline">Espace Pro</span>
-            </Link>
-            <Link href="/urgence" className="flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full hover:bg-red-500/30 transition-colors duration-200">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-              </span>
-              <span className="text-red-300 font-medium">Urgences 24h</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={cn(
@@ -474,6 +445,17 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
               className="relative text-gray-600 hover:text-clay-400 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
+            </Link>
+
+            <Link
+              href="/urgence"
+              className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors duration-200"
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500" />
+              </span>
+              Urgences 24h
             </Link>
 
             <Link
@@ -829,7 +811,9 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 {/* Service Input Mobile */}
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <label htmlFor="mobile-search-service" className="sr-only">Service recherché</label>
                   <input
+                    id="mobile-search-service"
                     type="text"
                     placeholder="Service..."
                     value={serviceQuery}
@@ -844,7 +828,9 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 {/* Location Input Mobile */}
                 <div className="relative flex-1">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <label htmlFor="mobile-search-location" className="sr-only">Ville ou code postal</label>
                   <input
+                    id="mobile-search-location"
                     type="text"
                     placeholder="Ville..."
                     value={locationQuery}
@@ -857,6 +843,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                     onClick={handleGeolocation}
                     disabled={isLocating}
                     className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                    aria-label="Utiliser ma position"
                     title="Ma position"
                   >
                     <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-clay-400' : 'text-gray-400'}`} />
@@ -880,6 +867,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('services')}
+                  aria-expanded={mobileAccordion === 'services'}
                   className={cn(
                     'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
                     mobileAccordion === 'services' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
@@ -942,6 +930,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('villes')}
+                  aria-expanded={mobileAccordion === 'villes'}
                   className={cn(
                     'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
                     mobileAccordion === 'villes' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
@@ -994,6 +983,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('regions')}
+                  aria-expanded={mobileAccordion === 'regions'}
                   className={cn(
                     'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
                     mobileAccordion === 'regions' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
@@ -1090,8 +1080,8 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
         </div>
       )}
     </header>
-    {/* Spacer to offset fixed header height (top bar ~40px + nav 64px) */}
-    <div className="h-[104px]" aria-hidden="true" />
+    {/* Spacer to offset fixed header height (nav 64px) */}
+    <div className="h-16" aria-hidden="true" />
     </>
   )
 }

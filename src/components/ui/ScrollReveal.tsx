@@ -18,28 +18,41 @@ export function ScrollReveal({
   className,
   delay = 0,
   direction = 'up',
-  duration = 0.6,
-  distance = 40,
+  duration = 0.5,
+  distance = 24,
   as = 'div',
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  // Start visible (SSR-safe) — animation only kicks in after hydration
+  const [mounted, setMounted] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
+  // After hydration, hide elements that are below the fold so they can animate in
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReducedMotion(mq.matches)
 
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
     mq.addEventListener('change', handler)
+
+    if (!mq.matches) {
+      const el = ref.current
+      if (el) {
+        const rect = el.getBoundingClientRect()
+        // Only hide elements that are below the current viewport (not yet scrolled to)
+        if (rect.top > window.innerHeight) {
+          setIsVisible(false)
+        }
+      }
+    }
+
+    setMounted(true)
     return () => mq.removeEventListener('change', handler)
   }, [])
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setIsVisible(true)
-      return
-    }
+    if (!mounted || prefersReducedMotion || isVisible) return
 
     const el = ref.current
     if (!el) return
@@ -51,12 +64,12 @@ export function ScrollReveal({
           observer.unobserve(el)
         }
       },
-      { rootMargin: '-100px' }
+      { rootMargin: '0px' }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [prefersReducedMotion])
+  }, [mounted, prefersReducedMotion, isVisible])
 
   const directions: Record<string, string> = {
     up: `translateY(${distance}px)`,
@@ -68,16 +81,18 @@ export function ScrollReveal({
 
   const Component = as === 'section' ? 'section' : 'div'
 
+  const shouldAnimate = mounted && !prefersReducedMotion && !isVisible
+
   return (
     <Component
       ref={ref as React.RefObject<HTMLDivElement>}
       className={className}
       style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'none' : directions[direction],
-        transition: prefersReducedMotion
-          ? 'none'
-          : `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
+        opacity: shouldAnimate ? 0 : 1,
+        transform: shouldAnimate ? directions[direction] : 'none',
+        transition: mounted && !prefersReducedMotion
+          ? `opacity ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`
+          : 'none',
       }}
     >
       {children}

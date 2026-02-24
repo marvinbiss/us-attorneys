@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin fetch error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
         )
       }
       logger.error('Error promoting user to admin', error)
-      return NextResponse.json({ error: 'Erreur lors de la création de l\'administrateur' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création de l\'administrateur' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'admin_created', 'settings', updatedProfile.id, { role })
@@ -148,6 +148,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin create error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

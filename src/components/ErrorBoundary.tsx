@@ -26,11 +26,6 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo)
-
-    // Send to error tracking service (e.g., Sentry)
-    // if (typeof window !== 'undefined') {
-    //   Sentry.captureException(error)
-    // }
   }
 
   private handleRetry = () => {

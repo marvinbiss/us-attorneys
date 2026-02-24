@@ -104,7 +104,7 @@ export async function GET(
     const providerId = params.id
     if (!isValidUuid(providerId)) {
       return NextResponse.json(
-        { success: false, error: 'Identifiant invalide' },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
@@ -113,12 +113,12 @@ export async function GET(
 
     const { data: provider, error } = await supabase
       .from('providers')
-      .select('*')
+      .select('id, user_id, name, slug, email, phone, siret, description, address_street, address_city, address_postal_code, address_region, latitude, longitude, is_verified, is_active, rating_average, review_count, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
     if (error || !provider) {
-      return NextResponse.json({ success: false, error: 'Provider non trouvé' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Provider non trouvé' } }, { status: 404 })
     }
 
     const response = NextResponse.json({
@@ -157,7 +157,7 @@ export async function GET(
     return response
   } catch (error) {
     logger.error('Admin provider GET error', error)
-    return NextResponse.json({ success: false, error: 'Erreur lors de la récupération du profil' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération du profil' } }, { status: 500 })
   }
 }
 
@@ -174,7 +174,7 @@ export async function PATCH(
 
     if (!isValidUuid(providerId)) {
       return NextResponse.json(
-        { success: false, error: 'Identifiant invalide' },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
@@ -186,13 +186,13 @@ export async function PATCH(
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ success: false, error: 'JSON invalide dans le body' }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'JSON invalide dans le body' } }, { status: 400 })
     }
 
     const validationResult = updateProviderSchema.safeParse(body)
     if (!validationResult.success) {
       return NextResponse.json(
-        { success: false, error: 'Erreur de validation', details: validationResult.error.flatten() },
+        { success: false, error: { message: 'Erreur de validation', details: validationResult.error.flatten() } },
         { status: 400 }
       )
     }
@@ -212,7 +212,7 @@ export async function PATCH(
 
     if (error) {
       logger.error('Database update failed', { code: error.code, message: error.message })
-      return NextResponse.json({ success: false, error: 'Erreur lors de la mise à jour' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
 
     // Audit log
@@ -229,7 +229,7 @@ export async function PATCH(
   } catch (error) {
     const err = error as Error
     logger.error('Unexpected PATCH error', { message: err.message })
-    return NextResponse.json({ success: false, error: 'Erreur inattendue lors de la mise à jour' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur inattendue lors de la mise à jour' } }, { status: 500 })
   }
 }
 
@@ -246,7 +246,7 @@ export async function DELETE(
 
     if (!isValidUuid(providerId)) {
       return NextResponse.json(
-        { success: false, error: 'Identifiant invalide' },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
@@ -260,7 +260,7 @@ export async function DELETE(
 
     if (error) {
       logger.error('Database delete failed', error)
-      return NextResponse.json({ success: false, error: 'Erreur lors de la suppression' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
     }
 
     try {
@@ -273,6 +273,6 @@ export async function DELETE(
   } catch (error) {
     const err = error as Error
     logger.error('Unexpected DELETE error', { message: err.message })
-    return NextResponse.json({ success: false, error: 'Erreur lors de la suppression' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
   }
 }

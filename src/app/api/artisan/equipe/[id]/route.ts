@@ -33,7 +33,7 @@ export async function PATCH(
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: validation.error.flatten() },
+        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
         { status: 400 }
       )
     }
@@ -50,7 +50,7 @@ export async function PATCH(
 
     if (fetchError || !existing) {
       return NextResponse.json(
-        { error: 'Membre introuvable' },
+        { success: false, error: { message: 'Membre introuvable' } },
         { status: 404 }
       )
     }
@@ -71,7 +71,7 @@ export async function PATCH(
     if (error) {
       logger.error('Error updating team member:', error)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour du membre' },
+        { success: false, error: { message: 'Erreur lors de la mise à jour du membre' } },
         { status: 500 }
       )
     }
@@ -79,7 +79,7 @@ export async function PATCH(
     return NextResponse.json({ member: data })
   } catch (error) {
     logger.error('Equipe PATCH error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 
@@ -101,7 +101,7 @@ export async function DELETE(
 
     if (fetchError || !existing) {
       return NextResponse.json(
-        { error: 'Membre introuvable' },
+        { success: false, error: { message: 'Membre introuvable' } },
         { status: 404 }
       )
     }
@@ -115,7 +115,7 @@ export async function DELETE(
     if (error) {
       logger.error('Error deleting team member:', error)
       return NextResponse.json(
-        { error: 'Erreur lors de la suppression du membre' },
+        { success: false, error: { message: 'Erreur lors de la suppression du membre' } },
         { status: 500 }
       )
     }
@@ -123,6 +123,6 @@ export async function DELETE(
     return new NextResponse(null, { status: 204 })
   } catch (error) {
     logger.error('Equipe DELETE error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

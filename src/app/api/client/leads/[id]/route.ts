@@ -33,7 +33,7 @@ export async function GET(
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
     }
 
     // Fetch the devis_request — RLS ensures client_id = auth.uid()
@@ -45,7 +45,7 @@ export async function GET(
       .single()
 
     if (leadError || !lead) {
-      return NextResponse.json({ error: 'Demande non trouvée' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Demande non trouvée' } }, { status: 404 })
     }
 
     // Use admin client for tables restricted by RLS to providers only
@@ -149,7 +149,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Client lead detail GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
 

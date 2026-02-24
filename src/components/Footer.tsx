@@ -108,7 +108,7 @@ export default function Footer() {
       </div>
 
       {/* SEO Internal Links Section */}
-      <div className="relative border-b border-white/[0.06]">
+      <nav className="relative border-b border-white/[0.06]" aria-label="Liens populaires">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           {/* Desktop: full grid visible */}
           <div className="hidden md:grid md:grid-cols-5 gap-8 lg:gap-12">
@@ -350,7 +350,7 @@ export default function Footer() {
             </details>
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Main Footer */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

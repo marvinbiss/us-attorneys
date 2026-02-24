@@ -36,6 +36,16 @@ export function Modal({
   const modalRef = useRef<HTMLDivElement>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (!isOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [isOpen])
+
   // Focus trap and initial focus
   useEffect(() => {
     if (!isOpen) return
@@ -121,6 +131,7 @@ export function Modal({
         onClick={handleOverlayClick}
       >
         <div
+          ref={modalRef}
           className={clsx(
             'relative w-full bg-white rounded-2xl shadow-2xl',
             'animate-scale-in',

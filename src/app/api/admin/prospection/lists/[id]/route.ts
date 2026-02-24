@@ -34,7 +34,7 @@ export async function GET(
 
     const { data, error } = await supabase
       .from('prospection_lists')
-      .select('*')
+      .select('id, name, description, list_type, filter_criteria, contact_count, created_by, created_at, updated_at')
       .eq('id', id)
       .single()
 

@@ -27,7 +27,7 @@ export async function GET(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ error: 'Aucun profil artisan' }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
     }
 
     // Verify assignment belongs to this provider
@@ -39,7 +39,7 @@ export async function GET(
       .single()
 
     if (!assignment) {
-      return NextResponse.json({ error: 'Lead non trouvé' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Lead non trouvé' } }, { status: 404 })
     }
 
     // Fetch events for this lead (admin client to read lead_events)
@@ -53,12 +53,12 @@ export async function GET(
 
     if (eventsError) {
       logger.error('Lead history error:', eventsError)
-      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
     }
 
     return NextResponse.json({ events: events || [] })
   } catch (error) {
     logger.error('Lead history GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

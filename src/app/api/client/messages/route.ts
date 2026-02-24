@@ -68,7 +68,7 @@ export async function GET(request: Request) {
       // Fetch messages for this conversation
       const { data: messages, error: messagesError } = await supabase
         .from('messages')
-        .select('*')
+        .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
 

@@ -9,6 +9,7 @@ import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/j
 import { hashCode } from '@/lib/seo/location-content'
 import { REVALIDATE } from '@/lib/cache'
 import { SITE_URL } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
@@ -164,7 +165,7 @@ export default async function ServicePage({ params }: PageProps) {
   try {
     service = await getServiceBySlug(serviceSlug)
   } catch (error) {
-    console.error('Service page DB error (service):', error)
+    logger.error('Service page DB error (service):', error)
   }
 
   // Fetch cities, providers and total count independently — failure in one should not block the other
@@ -176,12 +177,12 @@ export default async function ServicePage({ params }: PageProps) {
   if (citiesResult.status === 'fulfilled') {
     topCities = citiesResult.value || []
   } else {
-    console.error('Service page DB error (locations):', citiesResult.reason)
+    logger.error('Service page DB error (locations):', citiesResult.reason)
   }
   if (providersResult.status === 'fulfilled') {
     recentProviders = (providersResult.value || []) as ServiceProvider[]
   } else {
-    console.error('Service page DB error (providers):', providersResult.reason)
+    logger.error('Service page DB error (providers):', providersResult.reason)
   }
   if (countResult.status === 'fulfilled') {
     totalProviderCount = countResult.value

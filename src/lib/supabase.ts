@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
+import { logger } from '@/lib/logger'
 
 /**
  * Detect if we're inside `next build` (static generation phase).
@@ -93,7 +94,7 @@ async function retryWithBackoff<T>(
         throw err
       }
       const delay = baseDelayMs * Math.pow(2, attempt) + Math.random() * 300
-      console.warn(
+      logger.warn(
         `[retryWithBackoff] ${label} failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${Math.round(delay)}ms...`,
       )
       await new Promise((r) => setTimeout(r, delay))
@@ -283,68 +284,68 @@ export async function getProviderBySlug(slug: string) {
 // All 46 services must be mapped here — unmapped services can never show providers
 // on quartier pages, causing them to be permanently noindexed.
 export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
-  // --- Core trades (direct match) ---
-  'plombier': ['plombier'],
-  'electricien': ['electricien'],
-  'chauffagiste': ['chauffagiste'],
-  'menuisier': ['menuisier', 'menuisier-metallique'],
-  'carreleur': ['carreleur'],
-  'couvreur': ['couvreur', 'charpentier'],
-  'macon': ['macon'],
-  'peintre-en-batiment': ['peintre', 'platrier', 'finition'],
-  'peintre': ['peintre', 'platrier', 'finition'],  // alias — redirects to peintre-en-batiment
-  'climaticien': ['isolation', 'chauffagiste'],
-  'serrurier': ['serrurier', 'menuisier-metallique'],
-  'jardinier': ['jardinier', 'paysagiste'],
-  'vitrier': ['vitrier', 'miroitier', 'menuisier'],
-  'cuisiniste': ['cuisiniste', 'installateur-de-cuisine', 'menuisier'],
-  'solier': ['solier', 'poseur-de-parquet', 'moquettiste', 'carreleur'],
-  'nettoyage': ['nettoyage', 'nettoyage-professionnel'],
+  // === Métiers du bâtiment — correspondance directe NAF ===
+  'plombier': ['plombier'],                                        // NAF 43.22A
+  'electricien': ['electricien'],                                  // NAF 43.21A
+  'chauffagiste': ['chauffagiste'],                                // NAF 43.22B
+  'menuisier': ['menuisier'],                                      // NAF 43.32A
+  'carreleur': ['carreleur'],                                      // NAF 43.33Z
+  'couvreur': ['couvreur'],                                        // NAF 43.91B
+  'macon': ['macon'],                                              // NAF 43.99C
+  'peintre-en-batiment': ['peintre', 'peintre-en-batiment'],       // NAF 43.34Z
+  'peintre': ['peintre', 'peintre-en-batiment'],                   // alias → peintre-en-batiment
+  'charpentier': ['charpentier'],                                  // NAF 43.91A
+  'serrurier': ['serrurier'],                                      // NAF 43.32B
+  'vitrier': ['vitrier'],                                          // NAF 43.34Z
+  'climaticien': ['climaticien'],                                  // NAF 43.22B
+  'jardinier': ['jardinier'],                                      // NAF 81.30Z
+  'solier': ['solier'],                                            // NAF 43.39Z
+  'nettoyage': ['nettoyage'],                                      // NAF 81.21Z
 
-  // --- Bâtiment / Gros œuvre (linked to macon, couvreur, charpentier) ---
-  'terrassier': ['terrassier', 'terrassement', 'macon'],
-  'charpentier': ['charpentier', 'couvreur'],
-  'zingueur': ['zingueur', 'couvreur-zingueur', 'couvreur'],
-  'etancheiste': ['etancheiste', 'etancheite', 'couvreur', 'macon'],
-  'facadier': ['facadier', 'facade', 'ravalement', 'peintre', 'macon'],
-  'platrier': ['platrier', 'plaquiste', 'platrerie', 'finition'],
-  'metallier': ['metallier', 'metallerie', 'menuisier-metallique'],
-  'ferronnier': ['ferronnier', 'ferronnerie', 'menuisier-metallique'],
+  // === Bâtiment / Gros œuvre ===
+  'terrassier': ['terrassier'],                                    // NAF 43.12A
+  'zingueur': ['zingueur'],                                        // NAF 43.91B (sous-spécialité couverture)
+  'etancheiste': ['etancheiste'],                                  // NAF 43.99A
+  'facadier': ['facadier'],                                        // NAF 43.34Z + 43.99C
+  'platrier': ['platrier'],                                        // NAF 43.31Z
+  'metallier': ['metallier'],                                      // NAF 43.32B + 25.11Z
+  'ferronnier': ['ferronnier'],                                    // NAF 25.11Z
 
-  // --- Finitions / Aménagement (linked to menuisier, peintre, plombier) ---
-  'poseur-de-parquet': ['poseur-de-parquet', 'parqueteur', 'solier', 'menuisier'],
-  'miroitier': ['miroitier', 'vitrier', 'menuisier'],
-  'storiste': ['storiste', 'store', 'volet', 'menuisier'],
-  'salle-de-bain': ['salle-de-bain', 'installateur-de-salle-de-bain', 'plombier', 'carreleur'],
-  'architecte-interieur': ['architecte-interieur', 'architecte-d-interieur', 'decoration', 'peintre'],
-  'decorateur': ['decorateur', 'decoration', 'peintre-decorateur', 'peintre'],
+  // === Finitions / Aménagement ===
+  'poseur-de-parquet': ['poseur-de-parquet'],                      // NAF 43.33Z
+  'miroitier': ['miroitier'],                                      // NAF 43.34Z
+  'storiste': ['storiste'],                                        // NAF 43.32A
+  'salle-de-bain': ['salle-de-bain'],                              // NAF 43.22A + 43.33Z
+  'architecte-interieur': ['architecte-interieur'],                // NAF 71.11Z
+  'decorateur': ['decorateur'],                                    // NAF 74.10Z
+  'cuisiniste': ['cuisiniste'],                                    // NAF 43.32C + 31.02Z
 
-  // --- Énergie / Chauffage (linked to electricien, chauffagiste, couvreur) ---
-  'domoticien': ['domoticien', 'domotique', 'electricien'],
-  'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffagiste'],
-  'panneaux-solaires': ['panneaux-solaires', 'photovoltaique', 'solaire', 'electricien', 'couvreur'],
-  'isolation-thermique': ['isolation', 'isolation-thermique', 'ite', 'iti', 'macon'],
-  'renovation-energetique': ['renovation-energetique', 'rge', 'isolation', 'chauffagiste', 'macon'],
-  'borne-recharge': ['borne-recharge', 'borne-electrique', 'electricien'],
-  'ramoneur': ['ramoneur', 'ramonage', 'chauffagiste'],
+  // === Énergie / Chauffage ===
+  'domoticien': ['domoticien'],                                    // NAF 43.21A
+  'pompe-a-chaleur': ['pompe-a-chaleur'],                          // NAF 43.22B
+  'panneaux-solaires': ['panneaux-solaires'],                      // NAF 43.21A + 43.22B
+  'isolation-thermique': ['isolation-thermique', 'isolation'],     // NAF 43.29A
+  'renovation-energetique': ['renovation-energetique'],            // NAF 43.29A + 43.22B
+  'borne-recharge': ['borne-recharge'],                            // NAF 43.21A
+  'ramoneur': ['ramoneur'],                                        // NAF 81.29B
 
-  // --- Extérieur (linked to macon, peintre) ---
-  'paysagiste': ['paysagiste', 'jardinier', 'amenagement-exterieur', 'macon'],
-  'pisciniste': ['pisciniste', 'piscine', 'macon', 'plombier'],
+  // === Extérieur ===
+  'paysagiste': ['paysagiste'],                                    // NAF 71.11Z + 81.30Z
+  'pisciniste': ['pisciniste'],                                    // NAF 43.22A
 
-  // --- Sécurité / Technique (linked to electricien) ---
-  'alarme-securite': ['alarme', 'securite', 'videosurveillance', 'alarme-securite', 'electricien'],
-  'antenniste': ['antenniste', 'antenne', 'electricien'],
-  'ascensoriste': ['ascensoriste', 'ascenseur', 'electricien'],
+  // === Sécurité / Technique ===
+  'alarme-securite': ['alarme-securite'],                          // NAF 43.21A
+  'antenniste': ['antenniste'],                                    // NAF 43.21A
+  'ascensoriste': ['ascensoriste'],                                // NAF 43.29B
 
-  // --- Diagnostics / Conseil (linked to macon, electricien) ---
-  'diagnostiqueur': ['diagnostiqueur', 'diagnostic', 'dpe', 'electricien'],
-  'geometre': ['geometre', 'geometre-expert', 'macon'],
+  // === Diagnostics / Conseil ===
+  'diagnostiqueur': ['diagnostiqueur'],                            // NAF 71.20B
+  'geometre': ['geometre'],                                        // NAF 71.12B
 
-  // --- Services spécialisés ---
-  'desinsectisation': ['desinsectisation', 'desinsectiseur', 'nuisibles', 'nettoyage'],
-  'deratisation': ['deratisation', 'deratiseur', 'nuisibles', 'nettoyage'],
-  'demenageur': ['demenageur', 'demenagement'],
+  // === Services spécialisés ===
+  'desinsectisation': ['desinsectisation'],                        // NAF 81.29A
+  'deratisation': ['deratisation'],                                // NAF 81.29A
+  'demenageur': ['demenageur'],                                    // NAF 49.42Z
 }
 
 export async function getProvidersByServiceAndLocation(
@@ -403,7 +404,7 @@ export async function getProvidersByServiceAndLocation(
           .range(offset, offset + limit - 1)
 
         if (directError) {
-          console.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, directError.message)
+          logger.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, { error: directError.message })
         }
 
         if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as ProviderListRow[])
@@ -415,7 +416,7 @@ export async function getProvidersByServiceAndLocation(
   } catch (err) {
     // Re-throw so ISR keeps stale cached page instead of caching empty results.
     // Page component catches this and renders gracefully on first cold visit.
-    console.error(`[getProvidersByServiceAndLocation] FAILED for ${serviceSlug}/${locationSlug}:`, err instanceof Error ? err.message : err)
+    logger.error(`[getProvidersByServiceAndLocation] FAILED for ${serviceSlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
     throw err
   }
 }
@@ -523,7 +524,7 @@ export async function getProvidersByLocation(locationSlug: string) {
       `getProvidersByLocation(${locationSlug})`,
     )
   } catch (err) {
-    console.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, err instanceof Error ? err.message : err)
+    logger.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
     throw err
   }
 }

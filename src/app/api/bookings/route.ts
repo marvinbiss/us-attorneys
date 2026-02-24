@@ -37,7 +37,7 @@ export async function GET(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Parametres invalides',
+          'Paramètres invalides',
           { fields: formatZodErrors(queryValidation.error) }
         ),
         { status: 400 }
@@ -46,6 +46,14 @@ export async function GET(request: Request) {
 
     const { artisanId, date, month } = queryValidation.data
     const supabase = await createClient()
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentification requise'),
+        { status: 401 }
+      )
+    }
 
     // If fetching for a specific month (client view - available slots)
     if (month) {
@@ -65,7 +73,7 @@ export async function GET(request: Request) {
       if (error) {
         logger.error('Database error', error)
         return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recuperation des creneaux'),
+          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des créneaux'),
           { status: 500 }
         )
       }
@@ -107,7 +115,7 @@ export async function GET(request: Request) {
       if (error) {
         logger.error('Database error', error)
         return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recuperation des creneaux'),
+          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des créneaux'),
           { status: 500 }
         )
       }
@@ -130,7 +138,7 @@ export async function GET(request: Request) {
     if (error) {
       logger.error('Database error', error)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recuperation des reservations'),
+        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des réservations'),
         { status: 500 }
       )
     }
@@ -139,7 +147,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Error fetching bookings', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la recuperation des reservations'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la récupération des réservations'),
       { status: 500 }
     )
   }
@@ -157,7 +165,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Donnees de reservation invalides',
+          'Données de réservation invalides',
           { fields: formatZodErrors(validation.errors) }
         ),
         { status: 400 }
@@ -194,7 +202,7 @@ export async function POST(request: Request) {
     if (rpcError) {
       logger.error('Booking RPC error', rpcError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la creation de la reservation'),
+        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la création de la réservation'),
         { status: 500 }
       )
     }
@@ -268,14 +276,14 @@ export async function POST(request: Request) {
           endTime: slot.end_time,
           artisanName: artisanDisplayName,
         },
-        message: 'Reservation confirmee avec succes',
+        message: 'Réservation confirmée avec succès',
       }),
       { status: 201 }
     )
   } catch (error) {
     logger.error('Error creating booking', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la creation de la reservation'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la création de la réservation'),
       { status: 500 }
     )
   }

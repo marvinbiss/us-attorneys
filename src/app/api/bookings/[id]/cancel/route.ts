@@ -16,14 +16,15 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const result = cancelBookingSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -31,17 +32,33 @@ export async function POST(
 
     const supabase = await createClient()
 
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Authentification requise' },
+        { status: 401 }
+      )
+    }
+
     // Fetch booking info
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select('*')
-      .eq('id', params.id)
+      .select('id, client_id, provider_id, status, scheduled_date, client_name, client_email, service_description')
+      .eq('id', id)
       .single()
 
     if (bookingError || !booking) {
       return NextResponse.json(
         { error: 'Réservation introuvable' },
         { status: 404 }
+      )
+    }
+
+    // Verify ownership: only the client or the provider can cancel
+    if (booking.client_id !== user.id && booking.provider_id !== user.id) {
+      return NextResponse.json(
+        { error: 'Vous n\'êtes pas autorisé à annuler cette réservation' },
+        { status: 403 }
       )
     }
 
@@ -73,7 +90,7 @@ export async function POST(
         cancelled_by: cancelledBy,
         cancellation_reason: reason,
       })
-      .eq('id', params.id)
+      .eq('id', id)
 
     if (updateError) throw updateError
 
@@ -97,7 +114,7 @@ export async function POST(
     // Send cancellation notification (non-blocking)
     if (artisan?.email) {
       sendCancellationNotification({
-        bookingId: params.id,
+        bookingId: id,
         clientName: booking.client_name,
         clientEmail: booking.client_email,
         artisanName: artisan.full_name || 'Artisan',
@@ -110,7 +127,7 @@ export async function POST(
         reason,
       }).then(async (result) => {
         await logNotification(supabase, {
-          bookingId: params.id,
+          bookingId: id,
           type: 'cancellation',
           status: result.clientNotification.success ? 'sent' : 'failed',
           recipientEmail: booking.client_email,

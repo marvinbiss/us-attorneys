@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 import { dispatchLead } from './dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
+import { logger } from '@/lib/logger'
 
 const leadSchema = z.object({
   providerId: z.string().min(1).optional(),
@@ -77,7 +78,7 @@ export async function submitLead(
     }).select('id').single()
 
     if (error || !inserted) {
-      console.error('Lead insert error:', error)
+      logger.error('Lead insert error:', error)
       return { success: false, error: 'Erreur lors de l\'envoi. Reessayez.' }
     }
 
@@ -119,13 +120,13 @@ export async function submitLead(
         urgency: data.urgency,
         sourceTable: 'devis_requests',
       }).catch((err) =>
-        console.error('Dispatch failed (non-blocking):', err)
+        logger.error('Dispatch failed (non-blocking):', err)
       )
     }
 
     return { success: true }
   } catch (err) {
-    console.error('Lead action error:', err)
+    logger.error('Lead action error:', err)
     return { success: false, error: 'Erreur serveur. Reessayez.' }
   }
 }

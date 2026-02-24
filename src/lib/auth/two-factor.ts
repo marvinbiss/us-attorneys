@@ -79,16 +79,9 @@ const authenticator = {
   keyuri: (account: string, issuer: string, secret: string) => TOTP.keyuri(account, issuer, secret),
 }
 
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 const APP_NAME = 'ServicesArtisans'
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 export interface TwoFactorSetup {
   secret: string
@@ -105,13 +98,7 @@ export interface TwoFactorStatus {
 }
 
 export class TwoFactorAuthService {
-  private _supabase: ReturnType<typeof getSupabaseAdmin> | null = null
-  private get supabase() {
-    if (!this._supabase) {
-      this._supabase = getSupabaseAdmin()
-    }
-    return this._supabase
-  }
+  private supabase = createAdminClient()
 
   /**
    * Generate a new 2FA secret and QR code for setup
@@ -225,6 +212,21 @@ export class TwoFactorAuthService {
       return false // 2FA not enabled
     }
 
+    // Brute force protection: check if user is currently blocked
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString()
+
+    const { data: blocked } = await this.supabase
+      .from('security_logs')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('event_type', '2fa_blocked')
+      .gte('created_at', fifteenMinutesAgo)
+      .limit(1)
+
+    if (blocked && blocked.length > 0) {
+      throw new Error('Too many failed attempts. Please try again later.')
+    }
+
     // Check if it's a backup code
     if (code.length === 8 && code.includes('-')) {
       return this.verifyBackupCode(userId, code, twoFactor)
@@ -243,6 +245,19 @@ export class TwoFactorAuthService {
       await this.logEvent(userId, '2fa_verified')
     } else {
       await this.logEvent(userId, '2fa_failed')
+
+      // Check recent failures and block if threshold exceeded
+      const { data: recentFailures } = await this.supabase
+        .from('security_logs')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('event_type', '2fa_failed')
+        .gte('created_at', fifteenMinutesAgo)
+
+      if (recentFailures && recentFailures.length >= 5) {
+        await this.logEvent(userId, '2fa_blocked')
+        throw new Error('Too many failed attempts. Please try again later.')
+      }
     }
 
     return isValid
@@ -397,9 +412,12 @@ export class TwoFactorAuthService {
   }
 
   private hashCode(code: string): string {
+    if (!process.env.TWO_FACTOR_SALT) {
+      throw new Error('TWO_FACTOR_SALT environment variable is required')
+    }
     return crypto
       .createHash('sha256')
-      .update(code + (process.env.TWO_FACTOR_SALT || 'default-salt'))
+      .update(code + process.env.TWO_FACTOR_SALT)
       .digest('hex')
   }
 

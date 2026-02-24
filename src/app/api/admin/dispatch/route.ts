@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     if (action === 'reassign') {
       if (!newProviderId) {
-        return NextResponse.json({ error: 'newProviderId requis pour reassign' }, { status: 400 })
+        return NextResponse.json({ success: false, error: { message: 'newProviderId requis pour reassign' } }, { status: 400 })
       }
 
       // Get current assignment
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (!current) {
-        return NextResponse.json({ error: 'Assignment non trouvé' }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Assignment non trouvé' } }, { status: 404 })
       }
 
       // Update assignment to new provider
@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (!currentReplay) {
-        return NextResponse.json({ error: 'Assignment non trouvé' }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Assignment non trouvé' } }, { status: 404 })
       }
 
       const result = await dispatchLead(currentReplay.lead_id, {
@@ -180,12 +180,12 @@ export async function POST(request: NextRequest) {
         { newAssignments: result }
       )
     } else {
-      return NextResponse.json({ error: 'Action invalide' }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Action invalide' } }, { status: 400 })
     }
 
     return NextResponse.json({ success: true, action })
   } catch (error) {
     logger.error('Dispatch POST error', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

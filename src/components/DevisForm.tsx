@@ -270,6 +270,8 @@ export default function DevisForm({
                 id="service"
                 value={formData.service}
                 onChange={(e) => updateField('service', e.target.value)}
+                aria-describedby={errors.service ? 'service-error' : undefined}
+                aria-invalid={!!errors.service}
                 className={`w-full appearance-none rounded-xl border ${
                   errors.service ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                 } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
@@ -284,7 +286,7 @@ export default function DevisForm({
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
             </div>
             {errors.service && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.service}</p>
+              <p id="service-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.service}</p>
             )}
           </div>
 
@@ -310,6 +312,8 @@ export default function DevisForm({
                   // Delay to allow click on suggestion
                   setTimeout(() => setShowVilleSuggestions(false), 200)
                 }}
+                aria-describedby={errors.ville ? 'ville-error' : undefined}
+                aria-invalid={!!errors.ville}
                 className={`w-full rounded-xl border ${
                   errors.ville ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                 } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
@@ -340,7 +344,7 @@ export default function DevisForm({
               )}
             </div>
             {errors.ville && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
+              <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
             )}
           </div>
 
@@ -375,13 +379,15 @@ export default function DevisForm({
               placeholder="Ex : J'ai besoin de refaire la plomberie de ma salle de bain. L'installation date de 20 ans..."
               value={formData.description}
               onChange={(e) => updateField('description', e.target.value)}
+              aria-describedby={errors.description ? 'description-error' : undefined}
+              aria-invalid={!!errors.description}
               className={`w-full rounded-xl border ${
                 errors.description ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
               } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none`}
             />
             <div className="flex justify-between mt-1">
               {errors.description ? (
-                <p className="text-sm text-red-600">{errors.description}</p>
+                <p id="description-error" role="alert" className="text-sm text-red-600">{errors.description}</p>
               ) : (
                 <span />
               )}
@@ -423,7 +429,7 @@ export default function DevisForm({
               ))}
             </div>
             {errors.urgence && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.urgence}</p>
+              <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.urgence}</p>
             )}
           </div>
 
@@ -455,7 +461,7 @@ export default function DevisForm({
               ))}
             </div>
             {errors.budget && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.budget}</p>
+              <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.budget}</p>
             )}
           </div>
 
@@ -500,12 +506,14 @@ export default function DevisForm({
               placeholder="Jean Dupont"
               value={formData.nom}
               onChange={(e) => updateField('nom', e.target.value)}
+              aria-describedby={errors.nom ? 'nom-error' : undefined}
+              aria-invalid={!!errors.nom}
               className={`w-full rounded-xl border ${
                 errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
               } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
             />
             {errors.nom && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
+              <p id="nom-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
             )}
           </div>
 
@@ -521,12 +529,14 @@ export default function DevisForm({
               placeholder="06 12 34 56 78"
               value={formData.telephone}
               onChange={(e) => updateField('telephone', e.target.value)}
+              aria-describedby={errors.telephone ? 'telephone-error' : undefined}
+              aria-invalid={!!errors.telephone}
               className={`w-full rounded-xl border ${
                 errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
               } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
             />
             {errors.telephone && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
+              <p id="telephone-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
             )}
           </div>
 
@@ -542,12 +552,14 @@ export default function DevisForm({
               placeholder="jean.dupont@email.fr"
               value={formData.email}
               onChange={(e) => updateField('email', e.target.value)}
+              aria-describedby={errors.email ? 'email-error' : undefined}
+              aria-invalid={!!errors.email}
               className={`w-full rounded-xl border ${
                 errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
               } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
             />
             {errors.email && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.email}</p>
+              <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.email}</p>
             )}
           </div>
 
@@ -567,12 +579,12 @@ export default function DevisForm({
               </span>
             </label>
             {errors.consentement && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.consentement}</p>
+              <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.consentement}</p>
             )}
           </div>
 
           {submitError && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+            <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
               {submitError}
             </div>
           )}

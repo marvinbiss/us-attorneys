@@ -5,6 +5,13 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const notificationsQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(50).default(20),
+  unread: z.enum(['true', 'false']).default('false'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -14,12 +21,21 @@ export async function GET(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
     }
 
     const url = request.nextUrl
-    const limit = Math.min(50, Math.max(1, parseInt(url.searchParams.get('limit') || '20')))
-    const unreadOnly = url.searchParams.get('unread') === 'true'
+    const parsed = notificationsQuerySchema.safeParse({
+      limit: url.searchParams.get('limit') ?? undefined,
+      unread: url.searchParams.get('unread') ?? undefined,
+    })
+
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+    }
+
+    const limit = parsed.data.limit
+    const unreadOnly = parsed.data.unread === 'true'
 
     let query = supabase
       .from('notifications')
@@ -35,8 +51,8 @@ export async function GET(request: NextRequest) {
     const { data: notifications, error } = await query
 
     if (error) {
-      console.error('Notifications fetch error:', error)
-      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+      logger.error('Notifications fetch error:', error)
+      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
     }
 
     // Count unread
@@ -51,7 +67,7 @@ export async function GET(request: NextRequest) {
       unreadCount: count || 0,
     })
   } catch (error) {
-    console.error('Notifications GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    logger.error('Notifications GET error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

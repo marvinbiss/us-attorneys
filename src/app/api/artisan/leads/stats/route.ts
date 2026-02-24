@@ -23,7 +23,7 @@ export async function GET() {
       .single()
 
     if (!provider) {
-      return NextResponse.json({ error: 'Aucun profil artisan' }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
     }
 
     const adminClient = createAdminClient()
@@ -42,7 +42,7 @@ export async function GET() {
 
     if (assignmentsError) {
       logger.error('Leads stats assignments error:', assignmentsError)
-      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
     }
 
     const all = assignments || []
@@ -60,7 +60,7 @@ export async function GET() {
 
     if (eventsError) {
       logger.error('Leads stats events error:', eventsError)
-      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
     }
 
     const allEvents = events || []
@@ -128,6 +128,6 @@ export async function GET() {
     })
   } catch (error) {
     logger.error('Artisan leads stats GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

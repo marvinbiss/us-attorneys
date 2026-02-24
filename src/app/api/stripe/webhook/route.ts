@@ -2,32 +2,59 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { env } from '@/lib/env'
 import Stripe from 'stripe'
 
-// Lazy create admin client to avoid build-time errors
-let supabaseAdminInstance: SupabaseClient | null = null
+export const dynamic = 'force-dynamic'
 
-function getSupabaseAdmin(): SupabaseClient {
-  if (!supabaseAdminInstance) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-    if (!url || !key) {
-      throw new Error('Supabase environment variables not configured')
-    }
-    supabaseAdminInstance = createClient(url, key)
+/**
+ * Map Stripe subscription status to our DB subscription_status
+ */
+function mapStripeStatus(stripeStatus: Stripe.Subscription.Status): string {
+  switch (stripeStatus) {
+    case 'active':
+    case 'trialing':
+      return 'active'
+    case 'past_due':
+      return 'past_due'
+    case 'canceled':
+    case 'unpaid':
+      return 'canceled'
+    case 'incomplete':
+    case 'incomplete_expired':
+      return 'incomplete'
+    case 'paused':
+      return 'paused'
+    default:
+      return 'inactive'
   }
-  return supabaseAdminInstance
 }
 
-export const dynamic = 'force-dynamic'
+/**
+ * Find a user profile by their Stripe customer ID
+ */
+async function findProfileByCustomerId(customerId: string) {
+  const supabase = createAdminClient()
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, subscription_plan, subscription_status')
+    .eq('stripe_customer_id', customerId)
+    .single()
+
+  if (error || !data) {
+    logger.error(`No profile found for stripe_customer_id=${customerId}`, error)
+    return null
+  }
+  return data
+}
 
 /**
  * IDEMPOTENCY: Check if webhook event was already processed
  * Returns true if event should be skipped (already processed)
  */
 async function checkIdempotency(eventId: string): Promise<boolean> {
-  const supabase = getSupabaseAdmin()
+  const supabase = createAdminClient()
 
   // Try to insert the event - will fail if already exists due to UNIQUE constraint
   const { error } = await supabase
@@ -63,7 +90,7 @@ async function checkIdempotency(eventId: string): Promise<boolean> {
  * Mark webhook event as completed
  */
 async function markEventCompleted(eventId: string, eventType: string): Promise<void> {
-  const supabase = getSupabaseAdmin()
+  const supabase = createAdminClient()
   await supabase
     .from('webhook_events')
     .update({
@@ -77,13 +104,13 @@ async function markEventCompleted(eventId: string, eventType: string): Promise<v
 /**
  * Mark webhook event as failed
  */
-async function markEventFailed(eventId: string, error: string): Promise<void> {
-  const supabase = getSupabaseAdmin()
+async function markEventFailed(eventId: string, errorMsg: string): Promise<void> {
+  const supabase = createAdminClient()
   await supabase
     .from('webhook_events')
     .update({
       status: 'failed',
-      error: error.slice(0, 1000), // Limit error message length
+      error: errorMsg.slice(0, 1000),
       processed_at: new Date().toISOString(),
     })
     .eq('stripe_event_id', eventId)
@@ -102,13 +129,8 @@ export async function POST(request: Request) {
     )
   }
 
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    logger.error('STRIPE_WEBHOOK_SECRET not configured')
-    return NextResponse.json(
-      { error: 'Webhook not configured' },
-      { status: 500 }
-    )
-  }
+  // env.STRIPE_WEBHOOK_SECRET is validated at import time by the env module.
+  // If it were missing, this route would fail to load with a clear error.
 
   let event: Stripe.Event
 
@@ -116,7 +138,7 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET
+      env.STRIPE_WEBHOOK_SECRET
     )
   } catch (error) {
     logger.error('Webhook signature verification failed:', error)
@@ -190,23 +212,197 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const userId = session.metadata?.user_id
   const planId = session.metadata?.plan_id
 
-  if (!userId || !planId) return
+  if (!userId || !planId) {
+    logger.warn('Checkout session missing user_id or plan_id in metadata', {
+      sessionId: session.id,
+    })
+    return
+  }
 
-  logger.info(`Checkout completed for user ${userId}: plan=${planId}, subscription=${session.subscription}`)
+  const customerId = typeof session.customer === 'string'
+    ? session.customer
+    : session.customer?.id ?? null
+
+  const supabase = createAdminClient()
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({
+      subscription_plan: planId,
+      subscription_status: 'active',
+      stripe_customer_id: customerId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', userId)
+
+  if (updateError) {
+    logger.error(`Failed to update profile for user ${userId}`, updateError)
+    throw new Error(`Profile update failed: ${updateError.message}`)
+  }
+
+  await supabase.from('audit_logs').insert({
+    user_id: userId,
+    action: 'subscription.checkout_completed',
+    resource_type: 'profile',
+    resource_id: userId,
+    new_value: {
+      subscription_plan: planId,
+      subscription_status: 'active',
+      stripe_customer_id: customerId,
+      stripe_session_id: session.id,
+    },
+  })
+
+  logger.info(`Checkout completed for user ${userId}: plan=${planId}, customer=${customerId}`)
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  logger.info(`Subscription updated: id=${subscription.id}, customer=${subscription.customer}, status=${subscription.status}`)
+  const customerId = typeof subscription.customer === 'string'
+    ? subscription.customer
+    : subscription.customer.id
+
+  const profile = await findProfileByCustomerId(customerId)
+  if (!profile) return
+
+  const newStatus = mapStripeStatus(subscription.status)
+  const priceId = subscription.items?.data?.[0]?.price?.id ?? null
+  const productId = subscription.items?.data?.[0]?.price?.product
+  const planIdentifier = typeof productId === 'string' ? productId : priceId
+
+  const supabase = createAdminClient()
+
+  const updateData: Record<string, unknown> = {
+    subscription_status: newStatus,
+    updated_at: new Date().toISOString(),
+  }
+
+  if (planIdentifier) {
+    updateData.subscription_plan = planIdentifier
+  }
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update(updateData)
+    .eq('id', profile.id)
+
+  if (updateError) {
+    logger.error(`Failed to update subscription for profile ${profile.id}`, updateError)
+    throw new Error(`Subscription update failed: ${updateError.message}`)
+  }
+
+  logger.info(`Subscription updated for profile ${profile.id}: status=${newStatus}`)
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  logger.info(`Subscription deleted: id=${subscription.id}, customer=${subscription.customer}`)
+  const customerId = typeof subscription.customer === 'string'
+    ? subscription.customer
+    : subscription.customer.id
+
+  const profile = await findProfileByCustomerId(customerId)
+  if (!profile) return
+
+  const supabase = createAdminClient()
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({
+      subscription_plan: 'gratuit',
+      subscription_status: 'canceled',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', profile.id)
+
+  if (updateError) {
+    logger.error(`Failed to cancel subscription for profile ${profile.id}`, updateError)
+    throw new Error(`Subscription deletion failed: ${updateError.message}`)
+  }
+
+  await supabase.from('audit_logs').insert({
+    user_id: profile.id,
+    action: 'subscription.deleted',
+    resource_type: 'profile',
+    resource_id: profile.id,
+    new_value: {
+      subscription_plan: 'gratuit',
+      subscription_status: 'canceled',
+      previous_plan: profile.subscription_plan,
+      stripe_subscription_id: subscription.id,
+    },
+  })
+
+  logger.info(`Subscription deleted for profile ${profile.id}: reverted to gratuit`)
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
-  logger.info(`Invoice payment succeeded: id=${invoice.id}, customer=${invoice.customer}, amount=${invoice.amount_paid}`)
+  const customerId = typeof invoice.customer === 'string'
+    ? invoice.customer
+    : invoice.customer?.id ?? null
+
+  if (!customerId) {
+    logger.warn('Invoice payment succeeded but no customer ID', { invoiceId: invoice.id })
+    return
+  }
+
+  const profile = await findProfileByCustomerId(customerId)
+  if (!profile) return
+
+  const supabase = createAdminClient()
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({
+      subscription_status: 'active',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', profile.id)
+
+  if (updateError) {
+    logger.error(`Failed to activate subscription for profile ${profile.id}`, updateError)
+    throw new Error(`Invoice success update failed: ${updateError.message}`)
+  }
+
+  logger.info(`Invoice payment succeeded for profile ${profile.id}: status set to active`)
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  logger.info(`Invoice payment failed: id=${invoice.id}, customer=${invoice.customer}, amount_due=${invoice.amount_due}`)
+  const customerId = typeof invoice.customer === 'string'
+    ? invoice.customer
+    : invoice.customer?.id ?? null
+
+  if (!customerId) {
+    logger.warn('Invoice payment failed but no customer ID', { invoiceId: invoice.id })
+    return
+  }
+
+  const profile = await findProfileByCustomerId(customerId)
+  if (!profile) return
+
+  const supabase = createAdminClient()
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({
+      subscription_status: 'past_due',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', profile.id)
+
+  if (updateError) {
+    logger.error(`Failed to mark subscription past_due for profile ${profile.id}`, updateError)
+    throw new Error(`Invoice failure update failed: ${updateError.message}`)
+  }
+
+  await supabase.from('audit_logs').insert({
+    user_id: profile.id,
+    action: 'subscription.payment_failed',
+    resource_type: 'profile',
+    resource_id: profile.id,
+    new_value: {
+      subscription_status: 'past_due',
+      stripe_invoice_id: invoice.id,
+      amount_due: invoice.amount_due,
+    },
+  })
+
+  logger.info(`Invoice payment failed for profile ${profile.id}: status set to past_due`)
 }

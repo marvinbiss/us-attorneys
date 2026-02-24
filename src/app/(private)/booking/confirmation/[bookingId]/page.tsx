@@ -45,6 +45,8 @@ export default function BookingConfirmationPage() {
   const [shared, setShared] = useState(false)
 
   useEffect(() => {
+    let confettiTimer: NodeJS.Timeout | undefined
+
     const fetchBooking = async () => {
       try {
         const response = await fetch(`/api/bookings/${bookingId}`)
@@ -53,7 +55,7 @@ export default function BookingConfirmationPage() {
         setBooking(data.booking)
 
         // Trigger confetti on successful load
-        setTimeout(() => {
+        confettiTimer = setTimeout(() => {
           confetti({
             particleCount: 100,
             spread: 70,
@@ -71,6 +73,8 @@ export default function BookingConfirmationPage() {
     if (bookingId) {
       fetchBooking()
     }
+
+    return () => clearTimeout(confettiTimer)
   }, [bookingId])
 
   const handleAddToCalendar = () => {

@@ -4,53 +4,27 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
-import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-// POST request schema
 const exportPostSchema = z.object({
   format: z.enum(['json', 'csv']).optional().default('json'),
 })
-
-// Lazy initialize to avoid build-time errors
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 // POST /api/gdpr/export - Request data export
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
@@ -58,27 +32,29 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = exportPostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
     const { format } = result.data
 
+    const adminSupabase = createAdminClient()
+
     // Check for existing pending request
-    const { data: existingRequest } = await getSupabaseAdmin()
+    const { data: existingRequest } = await adminSupabase
       .from('data_export_requests')
-      .select('*')
+      .select('id, user_id, format, status, completed_at, created_at')
       .eq('user_id', user.id)
       .eq('status', 'pending')
       .single()
 
     if (existingRequest) {
       return NextResponse.json(
-        { error: 'You already have a pending export request', requestId: existingRequest.id },
+        { success: false, error: { message: 'Vous avez déjà une demande d\'export en cours' }, requestId: existingRequest.id },
         { status: 400 }
       )
     }
 
     // Create export request
-    const { data: exportRequest, error } = await getSupabaseAdmin()
+    const { data: exportRequest, error } = await adminSupabase
       .from('data_export_requests')
       .insert({
         user_id: user.id,
@@ -90,17 +66,16 @@ export async function POST(request: Request) {
 
     if (error) throw error
 
-    // In production, this would be handled by a background job
-    // For now, we'll process immediately for small datasets
+    // Process immediately for small datasets
     const exportData = await collectUserData(user.id)
 
     // Update request with data
-    const { error: updateError } = await getSupabaseAdmin()
+    const { error: updateError } = await adminSupabase
       .from('data_export_requests')
       .update({
         status: 'completed',
         completed_at: new Date().toISOString(),
-        download_url: null, // Would be S3/storage URL in production
+        download_url: null,
       })
       .eq('id', exportRequest.id)
 
@@ -110,12 +85,12 @@ export async function POST(request: Request) {
       success: true,
       requestId: exportRequest.id,
       data: exportData,
-      message: 'Your data export is ready',
+      message: 'Votre export de données est prêt',
     })
   } catch (error) {
     logger.error('GDPR export error:', error)
     return NextResponse.json(
-      { error: 'Failed to process export request' },
+      { success: false, error: { message: 'Échec du traitement de la demande d\'export' } },
       { status: 500 }
     )
   }
@@ -124,48 +99,32 @@ export async function POST(request: Request) {
 // GET /api/gdpr/export - Get export status or download
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
       )
     }
 
+    const adminSupabase = createAdminClient()
     const { searchParams } = new URL(request.url)
     const requestId = searchParams.get('requestId')
 
     if (requestId) {
-      // Get specific request
-      const { data: exportRequest } = await getSupabaseAdmin()
+      const { data: exportRequest } = await adminSupabase
         .from('data_export_requests')
-        .select('*')
+        .select('id, user_id, format, status, completed_at, created_at')
         .eq('id', requestId)
         .eq('user_id', user.id)
         .single()
 
       if (!exportRequest) {
         return NextResponse.json(
-          { error: 'Export request not found' },
+          { success: false, error: { message: 'Demande d\'export introuvable' } },
           { status: 404 }
         )
       }
@@ -174,9 +133,9 @@ export async function GET(request: Request) {
     }
 
     // Get all requests for user
-    const { data: requests } = await getSupabaseAdmin()
+    const { data: requests } = await adminSupabase
       .from('data_export_requests')
-      .select('*')
+      .select('id, user_id, format, status, completed_at, created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
@@ -184,7 +143,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('GDPR export status error:', error)
     return NextResponse.json(
-      { error: 'Failed to get export status' },
+      { success: false, error: { message: 'Échec de la récupération du statut d\'export' } },
       { status: 500 }
     )
   }
@@ -192,10 +151,12 @@ export async function GET(request: Request) {
 
 // Collect all user data for export
 async function collectUserData(userId: string) {
-  // Fetch profile first to get user email (needed for reviews written as client)
-  const profileResult = await getSupabaseAdmin()
+  const adminSupabase = createAdminClient()
+
+  // Fetch profile first to get user email
+  const profileResult = await adminSupabase
     .from('profiles')
-    .select('*')
+    .select('id, email, full_name, phone_e164, role, subscription_plan, created_at, updated_at')
     .eq('id', userId)
     .single()
 
@@ -208,36 +169,31 @@ async function collectUserData(userId: string) {
     messagesResult,
     preferencesResult,
   ] = await Promise.all([
-    // Bookings (as client or provider)
-    getSupabaseAdmin()
+    adminSupabase
       .from('bookings')
-      .select('*')
+      .select('id, client_id, provider_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at')
       .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
 
-    // Reviews received: this user is the artisan (reviews.artisan_id → profiles.id)
-    getSupabaseAdmin()
+    adminSupabase
       .from('reviews')
       .select('id, rating, comment, created_at, artisan_id')
       .eq('artisan_id', userId),
 
-    // Reviews written: this user is the client (identified by client_email)
     userEmail
-      ? getSupabaseAdmin()
+      ? adminSupabase
           .from('reviews')
           .select('id, rating, comment, created_at, artisan_id')
           .eq('client_email', userEmail)
       : Promise.resolve({ data: [] }),
 
-    // Messages sent by this user
-    getSupabaseAdmin()
+    adminSupabase
       .from('messages')
-      .select('*')
+      .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
       .eq('sender_id', userId),
 
-    // Preferences
-    getSupabaseAdmin()
+    adminSupabase
       .from('user_preferences')
-      .select('*')
+      .select('id, user_id, created_at')
       .eq('user_id', userId)
       .single(),
   ])

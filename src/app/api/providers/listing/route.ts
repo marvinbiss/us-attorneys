@@ -21,15 +21,19 @@ export async function GET(request: NextRequest) {
   })
 
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Paramètres invalides' }, { status: 400 })
+    return NextResponse.json({ success: false, error: { message: 'Paramètres invalides' } }, { status: 400 })
   }
 
   const { service, location, offset, limit } = parsed.data
 
   try {
     const providers = await getProvidersByServiceAndLocation(service, location, { limit, offset })
-    return NextResponse.json({ providers: providers || [] })
+    return NextResponse.json({ providers: providers || [] }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    })
   } catch {
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

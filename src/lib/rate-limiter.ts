@@ -173,31 +173,84 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
 
 // Rate limit configurations per route type
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  auth: { window: 60 * 1000, max: 10 },      // 10 requests per minute for auth
-  api: { window: 60 * 1000, max: 60 },       // 60 requests per minute for general API
-  booking: { window: 60 * 1000, max: 30 },   // 30 requests per minute for bookings
-  payment: { window: 60 * 1000, max: 10 },   // 10 requests per minute for payments
-  reviews: { window: 60 * 1000, max: 5 },    // 5 requests per minute for reviews
-  devis: { window: 60 * 1000, max: 10 },     // 10 requests per minute for quotes
-  contact: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for contact
-  upload: { window: 60 * 1000, max: 20 },    // 20 uploads per minute
-  search: { window: 60 * 1000, max: 100 },   // 100 searches per minute
-  default: { window: 60 * 1000, max: 100 },  // 100 requests per minute default
+  auth: { window: 60 * 1000, max: 10 },          // 10 requests per minute for auth
+  api: { window: 60 * 1000, max: 60 },           // 60 requests per minute for general API
+  booking: { window: 60 * 1000, max: 30 },       // 30 requests per minute for bookings
+  payment: { window: 60 * 1000, max: 10 },       // 10 requests per minute for payments
+  reviews: { window: 60 * 1000, max: 5 },        // 5 requests per minute for reviews
+  devis: { window: 60 * 1000, max: 10 },         // 10 requests per minute for quotes
+  contact: { window: 300 * 1000, max: 3 },       // 3 requests per 5 minutes for contact
+  upload: { window: 60 * 1000, max: 20 },        // 20 uploads per minute
+  search: { window: 60 * 1000, max: 100 },       // 100 searches per minute
+  gdpr: { window: 300 * 1000, max: 5 },          // 5 requests per 5 minutes for GDPR export/delete
+  newsletter: { window: 300 * 1000, max: 3 },    // 3 requests per 5 minutes for newsletter (sends email)
+  inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for artisan registration (sends emails)
+  ai: { window: 60 * 1000, max: 10 },            // 10 requests per minute for AI generation (expensive)
+  verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for SIRET/entreprise verification (external API)
+  geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
+  webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
+  cron: { window: 60 * 1000, max: 10, failOpen: true },     // 10/min for cron jobs — fail open so cron runs don't fail
+  default: { window: 60 * 1000, max: 100 },      // 100 requests per minute default
 }
 
 /**
  * Get rate limit configuration for a given pathname
+ *
+ * Order matters: more specific prefixes MUST come before generic ones.
+ * e.g. /api/admin/prospection/ai must match before /api/admin
  */
 export function getRateLimitConfig(pathname: string): RateLimitConfig {
+  // Auth — signin, signup, password reset, 2FA, OAuth
   if (pathname.startsWith('/api/auth')) return RATE_LIMITS.auth
+
+  // Payments — Stripe checkout, portal, webhook
   if (pathname.startsWith('/api/payments') || pathname.startsWith('/api/stripe')) return RATE_LIMITS.payment
+
+  // Cron jobs — Vercel cron triggers, must not be blocked
+  if (pathname.startsWith('/api/cron')) return RATE_LIMITS.cron
+
+  // External service webhooks (Resend, Twilio) — high throughput, fail-open
+  if (pathname.startsWith('/api/admin/prospection/webhooks')) return RATE_LIMITS.webhook
+
+  // AI generation — expensive external API calls (Claude, OpenAI)
+  if (pathname.startsWith('/api/admin/prospection/ai')) return RATE_LIMITS.ai
+
+  // Bookings — create, cancel, reschedule
   if (pathname.startsWith('/api/bookings')) return RATE_LIMITS.booking
+
+  // Reviews — create, vote, list
   if (pathname.startsWith('/api/reviews')) return RATE_LIMITS.reviews
+
+  // Quotes / devis — create, list
   if (pathname.startsWith('/api/devis') || pathname.startsWith('/api/artisan/devis')) return RATE_LIMITS.devis
+
+  // Contact form — sends email, unauthenticated
   if (pathname.startsWith('/api/contact')) return RATE_LIMITS.contact
+
+  // GDPR — data export and account deletion (expensive DB operations)
+  if (pathname.startsWith('/api/gdpr')) return RATE_LIMITS.gdpr
+
+  // Newsletter — sends welcome email, unauthenticated
+  if (pathname.startsWith('/api/newsletter')) return RATE_LIMITS.newsletter
+
+  // Artisan registration — sends 2 emails, unauthenticated
+  if (pathname.startsWith('/api/inscription-artisan')) return RATE_LIMITS.inscription
+
+  // SIRET / entreprise verification — external INSEE API calls
+  if (pathname.startsWith('/api/verify')) return RATE_LIMITS.verify
+
+  // Geocoding — external address API calls
+  if (pathname.startsWith('/api/geocode')) return RATE_LIMITS.geocode
+
+  // File uploads (any route containing /upload)
   if (pathname.includes('/upload')) return RATE_LIMITS.upload
-  if (pathname.startsWith('/api/search')) return RATE_LIMITS.search
+
+  // Search and public listing endpoints — scraping prevention
+  if (pathname.startsWith('/api/search') || pathname.startsWith('/api/providers/listing') || pathname.startsWith('/api/providers/by-city')) return RATE_LIMITS.search
+
+  // All other API routes
   if (pathname.startsWith('/api/')) return RATE_LIMITS.api
+
   return RATE_LIMITS.default
 }
 

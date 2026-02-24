@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -17,7 +19,7 @@ export async function POST(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
     }
 
     // Verify user has access to the conversation
@@ -29,7 +31,7 @@ export async function POST(
 
     if (!message) {
       return NextResponse.json(
-        { error: 'Message non trouvé' },
+        { success: false, error: { message: 'Message non trouvé' } },
         { status: 404 }
       )
     }
@@ -50,7 +52,7 @@ export async function POST(
     if (error) {
       logger.error('Error marking message as read', error)
       return NextResponse.json(
-        { error: 'Impossible de marquer comme lu' },
+        { success: false, error: { message: 'Impossible de marquer comme lu' } },
         { status: 500 }
       )
     }
@@ -59,7 +61,7 @@ export async function POST(
   } catch (error) {
     logger.error('Mark as read error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }

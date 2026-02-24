@@ -37,9 +37,10 @@ export function Toast({ toast, onDismiss }: ToastProps) {
 
   useEffect(() => {
     // Trigger enter animation
-    requestAnimationFrame(() => {
+    const frameId = requestAnimationFrame(() => {
       setIsVisible(true)
     })
+    return () => cancelAnimationFrame(frameId)
   }, [])
 
   const handleDismiss = () => {

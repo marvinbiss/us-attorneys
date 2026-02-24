@@ -49,6 +49,12 @@ function makeBuilder(result: { data: unknown; error: unknown }) {
 }
 
 const mockSupabase = {
+  auth: {
+    getUser: vi.fn().mockResolvedValue({
+      data: { user: { id: '550e8400-e29b-41d4-a716-446655440099', email: 'test@example.com' } },
+      error: null,
+    }),
+  },
   from: vi.fn((_table: string) => {
     fromCallCount++
     // First call = main query, second call = profiles lookup

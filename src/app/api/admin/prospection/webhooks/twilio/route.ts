@@ -28,12 +28,12 @@ export async function POST(request: NextRequest) {
     const url = request.url
     if (!verifyTwilioSignature(signature, url, params)) {
       logger.warn('Signature webhook Twilio invalide')
-      return NextResponse.json({ error: 'Signature invalide' }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
     }
 
     const validated = webhookSchema.safeParse(params)
     if (!validated.success) {
-      return NextResponse.json({ error: 'Paramètres manquants ou invalides', details: validated.error.flatten() }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Paramètres manquants ou invalides', details: validated.error.flatten() } }, { status: 400 })
     }
 
     const messageSid = validated.data.MessageSid

@@ -33,7 +33,7 @@ export async function POST(
     // Auth check
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
     }
 
     // Parse body
@@ -41,7 +41,7 @@ export async function POST(
     const result = acceptSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Paramètre quote_id invalide', details: result.error.flatten() },
+        { success: false, error: { message: 'Paramètre quote_id invalide', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -56,11 +56,11 @@ export async function POST(
       .single()
 
     if (leadError || !lead) {
-      return NextResponse.json({ error: 'Demande non trouvée' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Demande non trouvée' } }, { status: 404 })
     }
 
     if (lead.status === 'accepted') {
-      return NextResponse.json({ error: 'Un devis a déjà été accepté pour cette demande' }, { status: 409 })
+      return NextResponse.json({ success: false, error: { message: 'Un devis a déjà été accepté pour cette demande' } }, { status: 409 })
     }
 
     // Use admin client for write operations on quotes (providers-only RLS)
@@ -75,12 +75,12 @@ export async function POST(
       .single()
 
     if (quoteError || !quote) {
-      return NextResponse.json({ error: 'Devis non trouvé pour cette demande' }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Devis non trouvé pour cette demande' } }, { status: 404 })
     }
 
     if (quote.status !== 'pending') {
       return NextResponse.json(
-        { error: `Ce devis ne peut plus être accepté (statut : ${quote.status})` },
+        { success: false, error: { message: `Ce devis ne peut plus être accepté (statut : ${quote.status})` } },
         { status: 409 }
       )
     }
@@ -93,7 +93,7 @@ export async function POST(
 
     if (acceptError) {
       logger.error('Accept quote update error:', acceptError)
-      return NextResponse.json({ error: 'Erreur lors de l\'acceptation du devis' }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de l\'acceptation du devis' } }, { status: 500 })
     }
 
     // 2. Refuse all other pending quotes for this lead
@@ -133,6 +133,6 @@ export async function POST(
     })
   } catch (error) {
     logger.error('Accept quote POST error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }
