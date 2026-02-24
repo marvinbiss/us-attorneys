@@ -207,7 +207,6 @@ export async function POST(request: Request) {
         .from('profiles')
         .update({
           full_name: fullName,
-          phone_e164: phone.replace(/\s/g, ''),
           updated_at: new Date().toISOString(),
         })
         .eq('id', user.id)

@@ -201,7 +201,6 @@ export async function PATCH(request: NextRequest) {
                 id: resolvedUserId,
                 email: claimEmail,
                 full_name: claim.claimant_name || '',
-                phone_e164: claim.claimant_phone || null,
                 role: 'artisan',
                 created_at: now,
                 updated_at: now,
