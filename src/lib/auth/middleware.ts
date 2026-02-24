@@ -10,13 +10,12 @@ import { logger } from '@/lib/logger'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-export type UserRole = 'user' | 'artisan' | 'admin'
+export type UserRole = 'client' | 'artisan' | 'admin'
 
 export interface AuthenticatedUser {
   id: string
   email: string
   role: UserRole
-  artisanId?: string
 }
 
 export interface AuthResult {
@@ -54,11 +53,11 @@ export async function verifyAuth(request: NextRequest): Promise<AuthResult> {
     // Get user role from metadata or profiles table
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, artisan_id')
+      .select('role')
       .eq('id', user.id)
       .single()
 
-    const role = (profile?.role as UserRole) || 'user'
+    const role = (profile?.role as UserRole) || 'client'
 
     return {
       success: true,
@@ -66,7 +65,6 @@ export async function verifyAuth(request: NextRequest): Promise<AuthResult> {
         id: user.id,
         email: user.email || '',
         role,
-        artisanId: profile?.artisan_id,
       },
     }
   } catch (error) {
@@ -119,5 +117,5 @@ export async function requireArtisan(request: NextRequest) {
  * Require authenticated user (any role)
  */
 export async function requireAuth(request: NextRequest) {
-  return requireRole(request, ['user', 'artisan', 'admin'])
+  return requireRole(request, ['client', 'artisan', 'admin'])
 }

@@ -197,8 +197,10 @@ export async function PATCH(
           updates[field] = result.data[field as keyof typeof result.data]
         }
       }
-      // profiles.role is for admin RBAC only (super_admin/admin/moderator/viewer — migration 309)
-      // user_type (artisan vs client) lives in auth user_metadata.is_artisan, already updated above
+      // Sync profiles.role when user_type changes (artisan/client)
+      if (result.data.user_type) {
+        updates.role = result.data.user_type === 'artisan' ? 'artisan' : 'client'
+      }
       updates.updated_at = new Date().toISOString()
 
       await supabase

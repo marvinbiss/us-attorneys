@@ -192,8 +192,21 @@ export async function PATCH(request: NextRequest) {
         )
       }
 
-      // 3. Mark user as artisan in auth metadata
-      // (profiles.role is reserved for admin roles only — see migration 309)
+      // 3. Set profiles.role = 'artisan' (required by middleware + requireArtisan guard)
+      const { error: profileRoleError } = await supabase
+        .from('profiles')
+        .update({ role: 'artisan', updated_at: now })
+        .eq('id', claim.user_id)
+
+      if (profileRoleError) {
+        logger.error('Failed to set profiles.role to artisan', {
+          claimId,
+          userId: claim.user_id,
+          error: profileRoleError,
+        })
+      }
+
+      // 4. Mark user as artisan in auth metadata (belt-and-suspenders)
       await supabase.auth.admin.updateUserById(claim.user_id, {
         user_metadata: { is_artisan: true },
       })

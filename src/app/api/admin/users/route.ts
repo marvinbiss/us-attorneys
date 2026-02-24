@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
             id: authData.user.id,
             email,
             full_name,
-            role: user_type === 'artisan' ? 'artisan' : 'user',
+            role: user_type === 'artisan' ? 'artisan' : 'client',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })
