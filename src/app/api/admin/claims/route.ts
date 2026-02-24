@@ -196,14 +196,24 @@ export async function PATCH(request: NextRequest) {
               resolvedUserId = linkData.user.id
               logger.info('Anonymous claim: found existing auth user via recovery', { claimId, email: claimEmail, userId: resolvedUserId })
 
-              // Ensure profile exists (upsert)
-              await supabase.from('profiles').upsert({
+              // Ensure profile exists (upsert with role)
+              const { error: upsertError } = await supabase.from('profiles').upsert({
                 id: resolvedUserId,
                 email: claimEmail,
                 full_name: claim.claimant_name || '',
                 phone_e164: claim.claimant_phone || null,
+                role: 'artisan',
                 created_at: now,
+                updated_at: now,
               }, { onConflict: 'id' })
+
+              if (upsertError) {
+                logger.error('Failed to upsert profile for existing auth user', { claimId, userId: resolvedUserId, error: upsertError })
+                return NextResponse.json(
+                  { success: false, error: { message: `Erreur création profil: ${upsertError.message}` } },
+                  { status: 500 }
+                )
+              }
             } else {
               logger.error('Failed to create or resolve user for anonymous claim', {
                 claimId,
