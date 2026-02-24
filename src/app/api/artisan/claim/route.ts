@@ -1,12 +1,14 @@
 /**
  * Artisan Claim API
  * POST: Submit a claim request for a provider page (SIRET verification + admin review)
+ * Auth is OPTIONAL — anonymous claims are supported (account created on admin approval)
  */
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -22,16 +24,22 @@ const claimSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient()
-
-    // Auth check
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
+    // Rate limiting (public endpoint — 3 requests per 5 min per IP)
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || request.headers.get('x-real-ip')
+      || request.headers.get('cf-connecting-ip')
+      || 'unknown'
+    const rl = await checkRateLimit(`claim:${ip}`, RATE_LIMITS.inscription)
+    if (!rl.allowed) {
       return NextResponse.json(
-        { error: 'Vous devez être connecté pour revendiquer une fiche' },
-        { status: 401 }
+        { error: 'Trop de demandes. Réessayez dans quelques minutes.' },
+        { status: 429 }
       )
     }
+
+    // Auth is OPTIONAL — try to get user, but don't fail if not logged in
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
     // Validate body
     let body
@@ -55,33 +63,51 @@ export async function POST(request: Request) {
     const { providerId, siret, fullName, email, phone, position } = validation.data
     const adminClient = createAdminClient()
 
-    // Check if user already owns a provider
-    const { data: existingProvider } = await adminClient
-      .from('providers')
-      .select('id, name')
-      .eq('user_id', user.id)
-      .single()
+    // Duplicate checks — different logic for authenticated vs anonymous
+    if (user) {
+      // Authenticated: check if user already owns a provider
+      const { data: existingProvider } = await adminClient
+        .from('providers')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
 
-    if (existingProvider) {
-      return NextResponse.json(
-        { error: 'Vous avez déjà une fiche artisan associée à votre compte' },
-        { status: 409 }
-      )
-    }
+      if (existingProvider) {
+        return NextResponse.json(
+          { error: 'Vous avez déjà une fiche artisan associée à votre compte' },
+          { status: 409 }
+        )
+      }
 
-    // Check if user already has a pending claim (for any provider)
-    const { data: pendingClaims } = await adminClient
-      .from('provider_claims')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('status', 'pending')
-      .limit(1)
+      // Check if user already has a pending claim
+      const { data: pendingClaims } = await adminClient
+        .from('provider_claims')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'pending')
+        .limit(1)
 
-    if (pendingClaims && pendingClaims.length > 0) {
-      return NextResponse.json(
-        { error: 'Vous avez déjà une demande de revendication en cours de validation' },
-        { status: 409 }
-      )
+      if (pendingClaims && pendingClaims.length > 0) {
+        return NextResponse.json(
+          { error: 'Vous avez déjà une demande de revendication en cours de validation' },
+          { status: 409 }
+        )
+      }
+    } else {
+      // Anonymous: check by email if there's already a pending claim
+      const { data: emailPendingClaims } = await adminClient
+        .from('provider_claims')
+        .select('id')
+        .eq('claimant_email', email.trim().toLowerCase())
+        .eq('status', 'pending')
+        .limit(1)
+
+      if (emailPendingClaims && emailPendingClaims.length > 0) {
+        return NextResponse.json(
+          { error: 'Une demande de revendication est déjà en cours avec cet email' },
+          { status: 409 }
+        )
+      }
     }
 
     // Check if this specific provider already has a pending claim from anyone
@@ -113,7 +139,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check if already claimed by someone
     if (provider.user_id) {
       return NextResponse.json(
         { error: 'Cette fiche a déjà été revendiquée par un autre utilisateur' },
@@ -121,7 +146,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check if provider has a SIRET to match against
     if (!provider.siret) {
       return NextResponse.json(
         { error: 'Cette fiche ne contient pas de numéro SIRET. Contactez-nous à support@servicesartisans.fr pour revendiquer cette fiche manuellement.' },
@@ -134,13 +158,11 @@ export async function POST(request: Request) {
     const normalizedStored = provider.siret.replace(/\s/g, '')
 
     if (normalizedInput !== normalizedStored) {
-      // Log failed SIRET attempt for abuse detection
       logger.warn('Claim SIRET mismatch', {
-        userId: user.id,
-        userEmail: user.email,
+        userId: user?.id || 'anonymous',
+        claimantEmail: email,
         providerId,
         providerName: provider.name,
-        // Only log first 9 digits (SIREN) for privacy — last 5 are establishment-specific
         inputSiren: normalizedInput.slice(0, 9),
         storedSiren: normalizedStored.slice(0, 9),
       })
@@ -156,44 +178,44 @@ export async function POST(request: Request) {
       .from('provider_claims')
       .insert({
         provider_id: providerId,
-        user_id: user.id,
+        user_id: user?.id ?? null,
         siret_provided: normalizedInput,
         claimant_name: fullName,
-        claimant_email: email,
+        claimant_email: email.trim().toLowerCase(),
         claimant_phone: phone,
         claimant_position: position,
         status: 'pending',
       })
 
-    // Update user profile with provided contact info
-    await adminClient
-      .from('profiles')
-      .update({
-        full_name: fullName,
-        phone_e164: phone.replace(/\s/g, ''),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', user.id)
-
     if (insertError) {
-      // Handle unique constraint violation (race condition: 2 requests at once)
       if (insertError.code === '23505') {
         return NextResponse.json(
           { error: 'Vous avez déjà soumis une demande pour cette fiche' },
           { status: 409 }
         )
       }
-      logger.error('Claim insert error', { error: insertError, userId: user.id, providerId })
+      logger.error('Claim insert error', { error: insertError, userId: user?.id, providerId })
       return NextResponse.json(
         { error: 'Erreur lors de la soumission de la demande' },
         { status: 500 }
       )
     }
 
-    // Log successful claim submission
+    // Update user profile if authenticated
+    if (user) {
+      await adminClient
+        .from('profiles')
+        .update({
+          full_name: fullName,
+          phone_e164: phone.replace(/\s/g, ''),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id)
+    }
+
     logger.info('Claim submitted', {
-      userId: user.id,
-      userEmail: user.email,
+      userId: user?.id || 'anonymous',
+      claimantEmail: email,
       providerId,
       providerName: provider.name,
     })

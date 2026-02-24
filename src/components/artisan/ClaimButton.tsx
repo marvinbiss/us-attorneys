@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { Shield, Loader2, X, CheckCircle, AlertCircle } from 'lucide-react'
 
 interface ClaimButtonProps {
@@ -11,7 +10,6 @@ interface ClaimButtonProps {
 }
 
 export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonProps) {
-  const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [siret, setSiret] = useState('')
   const [fullName, setFullName] = useState('')
@@ -19,34 +17,25 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   const [phone, setPhone] = useState('')
   const [position, setPosition] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [checkingAuth, setCheckingAuth] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [profileLoaded, setProfileLoaded] = useState(false)
 
-  // Check auth + prefill profile BEFORE opening modal
-  const handleOpenClaim = async () => {
-    setCheckingAuth(true)
-    try {
-      const res = await fetch('/api/auth/me')
-      if (res.status === 401 || !res.ok) {
-        // Not logged in — redirect to login, then back here
-        router.push(`/connexion?redirect=${encodeURIComponent(window.location.pathname)}`)
-        return
-      }
-      const data = await res.json()
-      if (data?.user) {
-        if (data.user.fullName) setFullName(data.user.fullName)
-        if (data.user.email) setEmail(data.user.email)
-        if (data.user.phone) setPhone(data.user.phone)
-      }
-      setShowModal(true)
-    } catch {
-      // Network error — open modal anyway, submit will catch 401
-      setShowModal(true)
-    } finally {
-      setCheckingAuth(false)
-    }
-  }
+  // Best-effort prefill from profile if user is logged in (non-blocking)
+  useEffect(() => {
+    if (!showModal || profileLoaded) return
+    setProfileLoaded(true)
+    fetch('/api/auth/me')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.user) {
+          if (data.user.fullName && !fullName) setFullName(data.user.fullName)
+          if (data.user.email && !email) setEmail(data.user.email)
+          if (data.user.phone && !phone) setPhone(data.user.phone)
+        }
+      })
+      .catch(() => { /* not logged in — that's fine */ })
+  }, [showModal, profileLoaded, fullName, email, phone])
 
   // Format SIRET with spaces for display (XXX XXX XXX XXXXX)
   const formatSiret = (value: string) => {
@@ -118,10 +107,6 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 401) {
-          router.push(`/connexion?redirect=${encodeURIComponent(window.location.pathname)}`)
-          return
-        }
         setError(data.error || 'Erreur lors de la revendication')
         return
       }
@@ -158,15 +143,10 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   return (
     <>
       <button
-        onClick={handleOpenClaim}
-        disabled={checkingAuth}
-        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20 disabled:opacity-70"
+        onClick={() => setShowModal(true)}
+        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"
       >
-        {checkingAuth ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Shield className="w-5 h-5" />
-        )}
+        <Shield className="w-5 h-5" />
         Vous êtes cet artisan ? Revendiquez cette fiche
       </button>
 

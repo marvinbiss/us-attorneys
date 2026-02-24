@@ -260,7 +260,7 @@ export default function AdminClaimsPage() {
                           claimId: claim.id,
                           action: 'approve',
                           providerName: claim.provider?.name || 'Artisan',
-                          userName: claim.user?.full_name || 'Utilisateur',
+                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
                         })}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                       >
@@ -273,7 +273,7 @@ export default function AdminClaimsPage() {
                           claimId: claim.id,
                           action: 'reject',
                           providerName: claim.provider?.name || 'Artisan',
-                          userName: claim.user?.full_name || 'Utilisateur',
+                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
                         })}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
                       >
@@ -320,7 +320,7 @@ export default function AdminClaimsPage() {
         title={actionModal.action === 'approve' ? 'Approuver la revendication' : 'Rejeter la revendication'}
         message={
           actionModal.action === 'approve'
-            ? `Approuver la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche sera attribuée et l'utilisateur deviendra artisan.`
+            ? `Approuver la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche sera attribuée. Si l'artisan n'a pas de compte, un compte sera créé et il recevra un email pour définir son mot de passe.`
             : `Rejeter la revendication de "${actionModal.providerName}" par ${actionModal.userName} ?`
         }
         confirmText={actionModal.action === 'approve' ? 'Approuver' : 'Rejeter'}

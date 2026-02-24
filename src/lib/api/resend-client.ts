@@ -337,6 +337,65 @@ export async function sendPasswordResetEmail(params: {
 }
 
 /**
+ * Send claim approved email (artisan sets password)
+ */
+export async function sendClaimApprovedEmail(params: {
+  to: string
+  name: string
+  providerName: string
+  passwordLink: string
+}): Promise<EmailResult> {
+  const { to, name, providerName, passwordLink } = params
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #f59e0b; margin: 0;">ServicesArtisans</h1>
+  </div>
+
+  <h2 style="color: #333;">Bonne nouvelle, ${name} !</h2>
+
+  <p>Votre demande de revendication pour <strong>${providerName}</strong> a ete approuvee par notre equipe.</p>
+
+  <p>Votre fiche artisan est desormais active. Pour acceder a votre espace et gerer vos leads, definissez votre mot de passe :</p>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="${passwordLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+      Definir mon mot de passe
+    </a>
+  </div>
+
+  <p style="color: #666; font-size: 14px;">
+    Ce lien est valable pendant 24 heures. Apres ce delai, vous pourrez utiliser la fonction "Mot de passe oublie" pour en generer un nouveau.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="color: #999; font-size: 12px; text-align: center;">
+    ServicesArtisans - La plateforme des artisans qualifies<br>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+  </p>
+</body>
+</html>
+  `
+
+  return sendEmail({
+    to,
+    subject: `Votre fiche "${providerName}" a ete validee - ServicesArtisans`,
+    html,
+    tags: [
+      { name: 'type', value: 'claim_approved' },
+      { name: 'provider', value: providerName },
+    ],
+  })
+}
+
+/**
  * Send booking confirmation email
  */
 export async function sendBookingConfirmationEmail(params: {

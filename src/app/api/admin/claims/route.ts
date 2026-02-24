@@ -8,7 +8,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
 import { z } from 'zod'
+import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
 
@@ -124,10 +126,10 @@ export async function PATCH(request: NextRequest) {
     const supabase = createAdminClient()
     const now = new Date().toISOString()
 
-    // Fetch the claim
+    // Fetch the claim (include contact fields for anonymous claims)
     const { data: claim, error: claimError } = await supabase
       .from('provider_claims')
-      .select('id, provider_id, user_id, status')
+      .select('id, provider_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position')
       .eq('id', claimId)
       .single()
 
@@ -146,19 +148,83 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (action === 'approve') {
+      // Resolve the user ID: either from the claim (authenticated) or create account (anonymous)
+      let resolvedUserId = claim.user_id
+      let accountCreated = false
+
+      if (!resolvedUserId) {
+        // Anonymous claim — resolve or create user account
+        const claimEmail = claim.claimant_email?.trim().toLowerCase()
+        if (!claimEmail) {
+          return NextResponse.json(
+            { success: false, error: { message: 'Claim anonyme sans email — impossible de créer le compte' } },
+            { status: 400 }
+          )
+        }
+
+        // Check if a user with this email already exists
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('email', claimEmail)
+          .single()
+
+        if (existingProfile) {
+          resolvedUserId = existingProfile.id
+          logger.info('Anonymous claim: reusing existing user', { claimId, email: claimEmail, userId: resolvedUserId })
+        } else {
+          // Create new account via Supabase admin auth
+          const { data: newUser, error: createUserError } = await supabase.auth.admin.createUser({
+            email: claimEmail,
+            password: crypto.randomUUID(),
+            email_confirm: true,
+            user_metadata: {
+              full_name: claim.claimant_name || '',
+              is_artisan: true,
+            },
+          })
+
+          if (createUserError || !newUser.user) {
+            logger.error('Failed to create user for anonymous claim', {
+              claimId,
+              email: claimEmail,
+              error: createUserError,
+            })
+            return NextResponse.json(
+              { success: false, error: { message: 'Erreur lors de la création du compte artisan' } },
+              { status: 500 }
+            )
+          }
+
+          resolvedUserId = newUser.user.id
+          accountCreated = true
+
+          // Create profile row
+          await supabase.from('profiles').insert({
+            id: resolvedUserId,
+            email: claimEmail,
+            full_name: claim.claimant_name || '',
+            phone_e164: claim.claimant_phone || null,
+            role: 'artisan',
+            created_at: now,
+          })
+
+          logger.info('Anonymous claim: created new user', { claimId, email: claimEmail, userId: resolvedUserId })
+        }
+      }
+
       // 1. Assign the provider to the user atomically: only if user_id IS NULL.
-      // This single UPDATE eliminates the race condition — no separate check needed.
       const { data: updatedProvider, error: providerError } = await supabase
         .from('providers')
         .update({
-          user_id: claim.user_id,
+          user_id: resolvedUserId,
           claimed_at: now,
-          claimed_by: claim.user_id,
+          claimed_by: resolvedUserId,
           updated_at: now,
         })
         .eq('id', claim.provider_id)
         .is('user_id', null)
-        .select('id')
+        .select('id, name')
         .maybeSingle()
 
       if (providerError) {
@@ -169,7 +235,6 @@ export async function PATCH(request: NextRequest) {
       }
 
       if (!updatedProvider) {
-        // No row matched: provider was already claimed by another flow — auto-reject
         await supabase
           .from('provider_claims')
           .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
@@ -181,11 +246,12 @@ export async function PATCH(request: NextRequest) {
         )
       }
 
-      // 2. Update the claim status (provider is now safely assigned)
+      // 2. Update the claim status + link to resolved user
       const { error: updateClaimError } = await supabase
         .from('provider_claims')
         .update({
           status: 'approved',
+          user_id: resolvedUserId,
           reviewed_by: authResult.admin.id,
           reviewed_at: now,
         })
@@ -198,35 +264,71 @@ export async function PATCH(request: NextRequest) {
         )
       }
 
-      // 3. Set profiles.role = 'artisan' (required by middleware + requireArtisan guard)
-      const { error: profileRoleError } = await supabase
+      // 3. Set profiles.role = 'artisan' (skip if already admin/super_admin/moderator)
+      const { data: currentProfile } = await supabase
         .from('profiles')
-        .update({ role: 'artisan', updated_at: now })
-        .eq('id', claim.user_id)
+        .select('role')
+        .eq('id', resolvedUserId)
+        .single()
 
-      if (profileRoleError) {
-        logger.error('Failed to set profiles.role to artisan', {
-          claimId,
-          userId: claim.user_id,
-          error: profileRoleError,
-        })
+      const protectedRoles = ['super_admin', 'admin', 'moderator']
+      if (!currentProfile || !protectedRoles.includes(currentProfile.role)) {
+        await supabase
+          .from('profiles')
+          .update({ role: 'artisan', updated_at: now })
+          .eq('id', resolvedUserId)
       }
 
-      // 4. Mark user as artisan in auth metadata (belt-and-suspenders)
-      await supabase.auth.admin.updateUserById(claim.user_id, {
+      // 4. Mark user as artisan in auth metadata
+      await supabase.auth.admin.updateUserById(resolvedUserId, {
         user_metadata: { is_artisan: true },
       })
+
+      // 5. For anonymous claims: generate recovery link + send email
+      if (!claim.user_id) {
+        const claimEmail = claim.claimant_email!.trim().toLowerCase()
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
+
+        try {
+          const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+            type: 'recovery',
+            email: claimEmail,
+            options: {
+              redirectTo: `${siteUrl}/auth/callback?next=/definir-mot-de-passe`,
+            },
+          })
+
+          if (linkError || !linkData?.properties?.action_link) {
+            logger.error('Failed to generate recovery link', { claimId, error: linkError })
+          } else {
+            await sendClaimApprovedEmail({
+              to: claimEmail,
+              name: claim.claimant_name || 'Artisan',
+              providerName: updatedProvider.name || 'Votre fiche',
+              passwordLink: linkData.properties.action_link,
+            })
+
+            logger.info('Claim approval email sent', { claimId, email: claimEmail, accountCreated })
+          }
+        } catch (emailErr) {
+          // Email failure should not block the approval
+          logger.error('Failed to send claim approval email', { claimId, error: emailErr })
+        }
+      }
 
       logger.info('Claim approved', {
         claimId,
         providerId: claim.provider_id,
-        userId: claim.user_id,
+        userId: resolvedUserId,
         adminId: authResult.admin.id,
+        accountCreated,
       })
 
       return NextResponse.json({
         success: true,
-        message: 'Demande approuvée. La fiche a été attribuée à l\'artisan.',
+        message: accountCreated
+          ? 'Demande approuvée. Un compte a été créé et un email envoyé à l\'artisan.'
+          : 'Demande approuvée. La fiche a été attribuée à l\'artisan.',
       })
     } else {
       // Reject
