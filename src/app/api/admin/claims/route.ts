@@ -337,12 +337,12 @@ export async function PATCH(request: NextRequest) {
             },
           })
 
-          if (linkError || !linkData?.properties?.action_link) {
-            emailStatus = `link_error: ${linkError?.message || 'no action_link returned'}`
+          if (linkError || !linkData?.properties?.hashed_token) {
+            emailStatus = `link_error: ${linkError?.message || 'no hashed_token returned'}`
             logger.error('Failed to generate recovery link', { claimId, error: linkError })
           } else {
-            // Wrap action_link in an intermediate page to prevent email client pre-fetching
-            const safeLink = `${siteUrl}/auth/setup-password?link=${encodeURIComponent(linkData.properties.action_link)}`
+            // Send hashed_token to intermediate page — verifyOtp client-side (avoids email pre-fetch + otp_expired)
+            const safeLink = `${siteUrl}/auth/setup-password?token=${linkData.properties.hashed_token}`
 
             const emailResult = await sendClaimApprovedEmail({
               to: claimEmail,

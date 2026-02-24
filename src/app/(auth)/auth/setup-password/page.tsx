@@ -1,17 +1,21 @@
 'use client'
 
 import { useState } from 'react'
-import { Wrench, ExternalLink, AlertCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Wrench, AlertCircle, Loader2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 export default function SetupPasswordPage() {
-  const [clicked, setClicked] = useState(false)
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // Extract the actual Supabase action link from the query param
-  const link = typeof window !== 'undefined'
-    ? new URLSearchParams(window.location.search).get('link')
+  // Extract the hashed_token from query param
+  const token = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('token')
     : null
 
-  if (!link) {
+  if (!token) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
@@ -26,6 +30,33 @@ export default function SetupPasswordPage() {
     )
   }
 
+  const handleVerify = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const supabase = createClient()
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        token_hash: token,
+        type: 'recovery',
+      })
+
+      if (verifyError) {
+        setError(verifyError.message === 'Token has expired or is invalid'
+          ? 'Ce lien a expiré. Contactez support@servicesartisans.fr pour recevoir un nouveau lien.'
+          : `Erreur : ${verifyError.message}`)
+        setLoading(false)
+        return
+      }
+
+      // Session is now active — redirect to password setup
+      router.push('/definir-mot-de-passe')
+    } catch {
+      setError('Erreur inattendue. Veuillez réessayer.')
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
@@ -38,14 +69,27 @@ export default function SetupPasswordPage() {
         <p className="text-gray-600 mb-6">
           Votre fiche artisan a été validée. Cliquez le bouton ci-dessous pour définir votre mot de passe et accéder à votre espace.
         </p>
-        <a
-          href={link}
-          onClick={() => setClicked(true)}
-          className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold transition-all shadow-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30"
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            {error}
+          </div>
+        )}
+
+        <button
+          onClick={handleVerify}
+          disabled={loading}
+          className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold transition-all shadow-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30 disabled:opacity-60"
         >
-          <ExternalLink className="w-5 h-5" />
-          {clicked ? 'Redirection en cours...' : 'Définir mon mot de passe'}
-        </a>
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Vérification en cours...
+            </>
+          ) : (
+            'Définir mon mot de passe'
+          )}
+        </button>
         <p className="mt-4 text-xs text-gray-400">
           Ce lien expire dans 24 heures.
         </p>
