@@ -196,7 +196,7 @@ export async function POST(request: Request) {
       }
       logger.error('Claim insert error', { error: insertError, userId: user?.id, providerId })
       return NextResponse.json(
-        { error: 'Erreur lors de la soumission de la demande' },
+        { error: 'Erreur lors de la soumission de la demande', debug: { message: insertError.message, code: insertError.code, details: insertError.details } },
         { status: 500 }
       )
     }
@@ -227,7 +227,7 @@ export async function POST(request: Request) {
   } catch (err) {
     logger.error('Claim API unexpected error', { error: err })
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Erreur serveur', debug: String(err) },
       { status: 500 }
     )
   }
