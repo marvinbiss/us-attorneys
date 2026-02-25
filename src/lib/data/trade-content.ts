@@ -1105,6 +1105,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Remise en état après sinistre : 500 à 2 000 €',
       'Nettoyage de façade (kärcher professionnel) : 10 à 25 €/m²',
       'Débarras et nettoyage de locaux : 30 à 50 €/m²',
+      'Entretien régulier de bureaux et locaux professionnels : 15 à 25 €/h',
+      'Nettoyage industriel (entrepôt, atelier, usine) : 3 à 8 €/m²',
     ],
     tips: [
       'Pour un nettoyage de fin de chantier, exigez un cahier des charges précis : lessivage des murs, décapage des sols, nettoyage des vitres (intérieur + extérieur), dégraissage de la cuisine et nettoyage des sanitaires.',
@@ -1112,6 +1114,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour le nettoyage régulier de copropriété, un contrat annuel avec un cahier des charges détaillé (fréquence, surfaces, prestations) est plus économique que des interventions ponctuelles.',
       'Les entreprises de nettoyage à domicile agréées services à la personne (SAP) ouvrent droit à un crédit d\'impôt de 50 % dans la limite de 12 000 € de dépenses par an.',
       'Pour un nettoyage après sinistre (dégât des eaux, incendie), conservez les factures pour votre assurance. La plupart des contrats d\'assurance habitation couvrent ces frais.',
+      'Le crédit d\'impôt SAP de 50 % s\'applique au ménage à domicile dans la limite de 12 000 €/an de dépenses : c\'est l\'un des dispositifs les plus avantageux pour réduire le coût d\'une aide ménagère régulière.',
+      'Un nettoyage régulier préventif coûte en moyenne 3 fois moins cher qu\'un nettoyage curatif intensif : programmez des interventions planifiées plutôt que d\'attendre l\'encrassement complet.',
+      'Pour les contrats de nettoyage récurrent (bureaux, copropriétés), demandez un cahier des charges détaillé précisant les surfaces, les fréquences, les produits utilisés et les critères de contrôle qualité.',
     ],
     faq: [
       {
@@ -1146,6 +1151,14 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Quels produits sont utilisés pour un nettoyage professionnel écologique ?',
         a: 'Les entreprises labellisées Écolabel Européen utilisent des produits biodégradables à base de tensioactifs végétaux, sans phosphates ni solvants chlorés. Les techniques de nettoyage vapeur (150 °C) permettent de désinfecter sans produit chimique. Le microfibre professionnelle réduit la consommation d\'eau de 90 %. Ces solutions écologiques sont particulièrement adaptées aux crèches, écoles et logements avec enfants en bas âge.',
       },
+      {
+        q: 'Quelle est la différence entre nettoyage courant et remise en état ?',
+        a: 'Le nettoyage courant correspond à l\'entretien régulier (dépoussiérage, lavage des sols, désinfection des sanitaires). La remise en état implique un décapage profond, un traitement des surfaces (cristallisation, ponçage) et parfois une rénovation des revêtements. Le coût d\'une remise en état est 2 à 3 fois supérieur à celui d\'un nettoyage classique, car elle mobilise des équipements spécialisés (monobrosse, autolaveuse) et des produits techniques.',
+      },
+      {
+        q: 'Le nettoyage de fin de chantier est-il à la charge de l\'entreprise de travaux ?',
+        a: 'En principe, l\'entreprise de travaux doit livrer un chantier propre et le nettoyage de fin de chantier est inclus dans le marché. Cependant, vérifiez votre contrat de travaux : certaines clauses excluent le nettoyage approfondi (vitres, décapage des sols). Si le contrat est muet sur ce point, l\'article 1792-6 du Code civil impose la livraison d\'un ouvrage en bon état. En cas de litige, conservez des photos avant/après et faites établir un constat.',
+      },
     ],
     emergencyInfo:
       'Nettoyage d\'urgence disponible après sinistre (dégât des eaux, incendie, inondation). Intervention sous 24 à 48h pour la remise en état et le nettoyage post-sinistre. Majoration de +30 à 60 % en dehors des heures ouvrées.',
@@ -1155,6 +1168,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'ISO 14001 (management environnemental)',
       'Écolabel Européen (utilisation de produits écologiques)',
       'CQP Agent de propreté (Certificat de Qualification Professionnelle — INHNI)',
+      'Label AFNOR NF Service Propreté (certification de qualité des prestations de nettoyage)',
+      'Certification MASE (Management de la Sécurité, Santé et Environnement au travail)',
+      'Qualibat 8211 (nettoyage de bâtiment — qualification reconnue dans le secteur du BTP)',
     ],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 5 jours',
   },
@@ -1899,6 +1915,11 @@ export const tradeContent: Record<string, TradeContent> = {
       'Engazonnement (semis ou placage) : 5 à 15 €/m²',
       'Plantation d\'arbres et haies : 30 à 100 €/unité',
       'Système d\'arrosage automatique : 10 à 25 €/m²',
+      'Conception plan de jardin (étude paysagère) : 500 à 2 000 €',
+      'Clôture et portail extérieur : 80 à 200 €/ml',
+      'Éclairage extérieur paysager : 1 000 à 4 000 €',
+      'Enrochement ou muret paysager : 150 à 400 €/m²',
+      'Maçonnerie paysagère (allées, bordures) : 40 à 100 €/m²',
     ],
     tips: [
       'Un paysagiste concepteur (diplôme DPLG ou ENSP) conçoit le projet ; un paysagiste entrepreneur réalise les travaux. Les deux compétences sont parfois réunies chez le même professionnel.',
@@ -1906,6 +1927,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Prévoyez les travaux de plantation entre octobre et mars (période de repos végétatif) pour favoriser la reprise des végétaux et bénéficier de tarifs pépiniéristes plus avantageux.',
       'Intégrez un système d\'arrosage automatique dès la conception du projet : l\'installer après coup coûte 30 à 50 % plus cher car il faut creuser dans un jardin déjà aménagé.',
       'Demandez un plan d\'entretien annuel chiffré : un beau jardin nécessite un suivi régulier (taille, fertilisation, désherbage) dont le coût annuel représente 5 à 10 % de l\'investissement initial.',
+      'Un plan paysager professionnel évite les erreurs de plantation coûteuses à corriger : mauvais espacement, espèces inadaptées au sol ou à l\'exposition.',
+      'Choisissez des plantes adaptées à votre sol et à votre exposition — un paysagiste sait les identifier grâce à une analyse de terrain, ce qui garantit un taux de reprise supérieur à 90 %.',
+      'Prévoyez 10 à 15 % du budget total pour l\'éclairage extérieur : il valorise le jardin même la nuit et renforce la sécurité de votre propriété.',
     ],
     faq: [
       { q: 'Combien coûte l\'aménagement d\'un jardin de 200 m² ?', a: 'Pour un jardin de 200 m² avec terrasse, plantations et engazonnement, comptez 8 000 à 20 000 € selon le niveau de finition. Un projet haut de gamme avec piscine peut atteindre 50 000 €+.' },
@@ -1913,10 +1937,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Faut-il un permis pour des travaux d\'aménagement extérieur ?', a: 'Aucune autorisation n\'est requise pour les plantations et l\'engazonnement. En revanche, une déclaration préalable de travaux est nécessaire pour une terrasse de plus de 20 m² ou surélevée de plus de 60 cm, un mur de clôture dépassant 2 m de hauteur, ou un abri de jardin de plus de 5 m². Un permis de construire s\'impose au-delà de 20 m² de surface de plancher.' },
       { q: 'Quelles plantes choisir pour un jardin facile d\'entretien ?', a: 'Privilégiez les plantes vivaces adaptées à votre zone climatique : lavande, romarin et olivier en climat méditerranéen ; hortensias, érables et graminées en climat océanique. Les couvre-sols (pervenche, lierre, thym rampant) limitent le désherbage. Un paillis minéral ou organique réduit l\'arrosage de 50 % et freine la pousse des mauvaises herbes.' },
       { q: 'Comment estimer le budget d\'entretien annuel d\'un jardin ?', a: 'Pour un jardin de 200 m², comptez 1 000 à 3 000 €/an en entretien professionnel (tonte bimensuelle, taille des haies 2 fois/an, traitement phytosanitaire, nettoyage). Un contrat annuel d\'entretien avec un paysagiste est 20 à 30 % moins cher que des interventions ponctuelles. Le crédit d\'impôt « services à la personne » (50 %) s\'applique pour l\'entretien de jardin chez les particuliers.' },
+      { q: 'Paysagiste ou jardinier : qui contacter ?', a: 'Le paysagiste intervient pour la conception et la création d\'espaces extérieurs (terrasses, massifs, éclairage, arrosage intégré). Le jardinier se charge de l\'entretien courant (tonte, taille, désherbage). Certains professionnels cumulent les deux compétences. Pour un projet d\'aménagement complet, privilégiez un paysagiste qualifié ; pour un entretien régulier, un jardinier suffit (20 à 40 €/h).' },
+      { q: 'Combien coûte un aménagement de jardin complet ?', a: 'Comptez 30 à 80 €/m² pour un jardin simple (engazonnement, quelques plantations, allée). Pour un aménagement haut de gamme incluant terrasse bois ou pierre, plantations structurées et éclairage paysager, le budget monte à 80 à 200 €/m². Un jardin de 300 m² en gamme intermédiaire revient à 15 000 à 30 000 € tout compris.' },
+      { q: 'Faut-il un permis pour aménager son jardin ?', a: 'Non, la plupart des aménagements paysagers (plantations, engazonnement, allées) ne nécessitent aucune autorisation. Cependant, une déclaration préalable est obligatoire pour une construction de plus de 5 m² au sol, un mur ou une clôture de plus de 2 m de haut, une piscine de plus de 10 m², ou un abri de jardin dépassant 20 m². Au-delà de 20 m² de surface de plancher, un permis de construire est requis.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour l\'aménagement paysager. Les projets de création de jardin, terrasse et plantations sont planifiés sur plusieurs semaines. Prenez rendez-vous pour une étude sous 2 semaines.',
-    certifications: ['Diplôme ENSP ou DEP Paysage (titre de paysagiste concepteur)', 'Qualipaysage (certification professionnelle — reconnue par l\'État)', 'Label Écojardin (gestion écologique des espaces verts)', 'Certiphyto (obligatoire si utilisation de produits phytosanitaires)'],
+    certifications: ['Diplôme ENSP ou DEP Paysage (titre de paysagiste concepteur)', 'Qualipaysage (certification professionnelle — reconnue par l\'État)', 'Label Écojardin (gestion écologique et durable des espaces verts)', 'Certiphyto (obligatoire si utilisation de produits phytosanitaires)', 'Qualibat 1131 (voirie et réseaux divers — terrassement paysager)', 'BTS Aménagements paysagers (diplôme de référence pour les techniciens)', 'Assurance décennale (obligatoire pour la maçonnerie paysagère : murets, terrasses, escaliers)', 'Label Jardins de France (réseau d\'excellence des jardins remarquables)'],
     averageResponseTime: 'Étude sous 2 semaines, réalisation 2 à 8 semaines',
   },
 
@@ -1930,6 +1957,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'Piscine hors-sol bois ou acier : 3 000 à 10 000 €',
       'Rénovation de liner : 2 000 à 5 000 €',
       'Mise en sécurité (alarme, barrière, couverture) : 1 000 à 5 000 €',
+      'Installation pompe à chaleur piscine : 2 000 à 5 000 €',
+      'Mise en hivernage complète : 200 à 400 €',
+      'Ouverture de saison (mise en route) : 200 à 350 €',
+      'Installation traitement automatique (électrolyse au sel) : 1 500 à 3 000 €',
     ],
     tips: [
       'La mise en sécurité est obligatoire (loi du 3 janvier 2003) : alarme, barrière, couverture ou abri. Amende de 45 000 € en cas de non-respect.',
@@ -1937,17 +1968,23 @@ export const tradeContent: Record<string, TradeContent> = {
       'Faites réaliser une étude de sol avant de choisir le type de piscine : un terrain argileux ou avec une nappe phréatique haute impose des contraintes de construction qui peuvent doubler le budget.',
       'Comparez les garanties décennales des piscinistes : la structure (béton, coque) doit être couverte 10 ans, mais le liner et les équipements techniques ont des garanties plus courtes (2 à 5 ans).',
       'Pensez à l\'hivernage actif (filtration réduite) plutôt que passif (arrêt total) si vous êtes dans une région où les températures descendent rarement sous 0°C : la remise en route au printemps sera beaucoup plus simple.',
+      'Une couverture isotherme réduit l\'évaporation de 90 % et la consommation de chauffage de 50 % : c\'est l\'investissement le plus rentable pour toute piscine chauffée.',
+      'L\'électrolyse au sel réduit le budget produits chimiques de 70 % par rapport au traitement au chlore classique, tout en offrant une eau plus douce et moins irritante pour la peau et les yeux.',
+      'Faites analyser l\'eau de votre piscine par un professionnel au moins une fois par saison : un pH mal équilibré (hors 7,0 à 7,4) rend le traitement inefficace et accélère l\'usure du liner et des équipements.',
     ],
     faq: [
       { q: 'Faut-il un permis de construire pour une piscine ?', a: 'Pas de formalité pour les piscines de moins de 10 m². Déclaration préalable de travaux pour les piscines de 10 à 100 m². Permis de construire obligatoire au-delà de 100 m² ou pour les piscines couvertes de plus de 1,80 m de hauteur. La taxe d\'aménagement s\'applique à toutes les piscines de plus de 10 m² (200 €/m² en 2025).' },
       { q: 'Piscine coque ou béton : laquelle choisir ?', a: 'La piscine coque polyester est moins chère (15 000 à 25 000 € pour 8×4 m), plus rapide à installer (1 à 2 semaines) et facile d\'entretien, mais les formes et dimensions sont limitées au catalogue du fabricant. La piscine béton (25 000 à 50 000 €) permet toutes les formes et dimensions sur mesure, mais nécessite 2 à 3 mois de travaux. Le béton est plus durable (50 ans+) que la coque (20 à 25 ans).' },
       { q: 'Quel système de traitement d\'eau choisir ?', a: 'Le chlore reste le plus économique (200 à 400 €/an) mais peut irriter la peau et les yeux. L\'électrolyse au sel (1 500 à 3 000 € d\'investissement) est plus confortable et économique sur le long terme. Le traitement UV ou à l\'ozone (2 000 à 4 000 €) réduit drastiquement l\'usage de produits chimiques. Le brome est recommandé pour les piscines chauffées (spa, couverture).' },
-      { q: 'Combien coûte l\'entretien annuel d\'une piscine ?', a: 'Le budget annuel d\'entretien varie de 500 à 1 500 € selon la taille et le système de traitement : produits chimiques (200 à 500 €), électricité pour la filtration (300 à 600 €), remplacement de pièces d\'usure (100 à 300 €), hivernage et mise en route (200 à 400 € si réalisés par un professionnel). Un robot nettoyeur automatique (800 à 2 000 €) réduit le temps d\'entretien manuel.' },
+      { q: 'Combien coûte l\'entretien annuel d\'une piscine ?', a: 'Le budget annuel d\'entretien se situe entre 1 500 et 3 000 € par an pour une piscine enterrée : produits de traitement (300 à 600 €), électricité pour la filtration et le chauffage (300 à 800 €), entretien professionnel régulier (500 à 1 000 €), hivernage et ouverture de saison (400 à 700 € si réalisés par un pisciniste). Un robot nettoyeur automatique (800 à 2 000 €) réduit le temps d\'entretien manuel.' },
       { q: 'Une piscine augmente-t-elle la valeur de mon bien immobilier ?', a: 'Oui, une piscine enterrée bien entretenue peut augmenter la valeur d\'une maison de 5 à 15 % selon la région (davantage dans le sud). En revanche, elle augmente aussi la taxe foncière (via la taxe d\'aménagement de 200 €/m²) et les charges d\'assurance habitation. Dans les régions au nord de la Loire, la plus-value est plus limitée.' },
+      { q: 'Quelle pompe à chaleur choisir pour chauffer sa piscine ?', a: 'Pour une piscine de 8×4 m (environ 50 m³), une pompe à chaleur de 9 à 12 kW suffit (2 000 à 5 000 € pose comprise). Privilégiez un modèle Inverter (modulation de puissance) qui consomme 30 à 40 % d\'énergie en moins qu\'un modèle on/off. Le COP (coefficient de performance) doit être supérieur à 5 pour être rentable. La PAC permet de gagner 5 à 10°C sur la température de l\'eau et d\'allonger la saison de baignade d\'avril à octobre.' },
+      { q: 'Comment bien hiverner sa piscine ?', a: 'L\'hivernage se fait lorsque la température de l\'eau descend sous 12°C. Nettoyez le bassin, ajustez le pH entre 7,0 et 7,4, effectuez un traitement choc, baissez le niveau d\'eau sous les skimmers, purgez les canalisations et le local technique, posez les bouchons d\'hivernage et la couverture. L\'hivernage actif (filtration réduite 2 à 3 h/jour) est recommandé dans les régions au climat doux. Coût professionnel : 200 à 400 €.' },
+      { q: 'Quels sont les dispositifs de sécurité obligatoires pour une piscine ?', a: 'La loi du 3 janvier 2003 impose au moins un des 4 dispositifs de sécurité normalisés pour toute piscine enterrée privée : barrière de protection NF P90-306 (1 000 à 5 000 €), alarme sonore NF P90-307 (200 à 1 000 €), couverture de sécurité NF P90-308 (1 500 à 5 000 €) ou abri de piscine NF P90-309 (5 000 à 30 000 €). Le non-respect est passible d\'une amende de 45 000 €.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la construction de piscine. En cas de fuite de votre piscine existante ou de panne du système de filtration, contactez votre pisciniste pour un diagnostic sous 48h à 1 semaine.',
-    certifications: ['Qualification FPP (Fédération des Professionnels de la Piscine)', 'Label Propiscines', 'Certification NF Piscine'],
+    certifications: ['Qualification FPP (Fédération des Professionnels de la Piscine)', 'Label Propiscines', 'Certification NF Piscine', 'Label QualiPAC (pompe à chaleur piscine)', 'Certification Qualibat piscine (construction et rénovation)', 'NF P90-308 (couverture de sécurité piscine)', 'Assurance décennale obligatoire (structure et étanchéité)', 'Certification AFNOR NF C15-100 (conformité électrique local technique)'],
     averageResponseTime: 'Étude sous 2 semaines, construction 4 à 12 semaines',
   },
 
