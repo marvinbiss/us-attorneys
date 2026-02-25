@@ -1900,6 +1900,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Plan topographique : 500 à 1 500 €',
       'Plan de masse (permis de construire) : 300 à 800 €',
       'Implantation de construction : 500 à 1 500 €',
+      'Division parcellaire (lotissement) : 800 à 2 500 €',
+      'Attestation de surface Carrez : 80 à 150 €',
+      'Implantation de construction (permis de construire) : 500 à 1 500 €',
     ],
     tips: [
       'Seul un géomètre-expert inscrit à l\'Ordre peut réaliser un bornage officiel — les documents produits par un géomètre non inscrit n\'ont pas de valeur juridique.',
@@ -1907,6 +1910,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez un devis détaillé qui distingue les honoraires du géomètre-expert et les frais annexes (déplacement, bornes, publication au cadastre) : les tarifs ne sont pas réglementés et varient du simple au triple.',
       'Pour un projet de construction, faites intervenir le géomètre-expert en amont : le plan topographique et l\'implantation de la construction sont indispensables avant le dépôt du permis de construire.',
       'Conservez précieusement le procès-verbal de bornage : c\'est un document juridique définitif qui ne peut être contesté que par voie judiciaire et qui engage votre voisin autant que vous.',
+      'Vérifiez que votre géomètre est bien inscrit à l\'Ordre des Géomètres-Experts sur le site officiel geometre-expert.fr.',
+      'Pour un bornage, prévenez vos voisins à l\'avance : leur présence est nécessaire pour un bornage amiable, moins coûteux qu\'un bornage judiciaire.',
     ],
     faq: [
       { q: 'Quelle est la différence entre bornage et cadastre ?', a: 'Le bornage fixe les limites réelles de propriété sur le terrain (bornes physiques + procès-verbal). Le cadastre est un document fiscal qui donne les limites indicatives. En cas de contradiction, le bornage prévaut. Le cadastre n\'a pas de valeur juridique pour déterminer les limites de propriété.' },
@@ -1914,10 +1919,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien coûte un bornage de terrain ?', a: 'Le bornage amiable coûte entre 800 et 2 000 € selon la taille du terrain, le nombre de bornes à poser et la complexité (terrain en pente, accès difficile, nombreux voisins). Le bornage judiciaire est plus cher (2 000 à 5 000 €) en raison des frais de procédure. Les honoraires sont libres mais doivent être annoncés par devis préalable.' },
       { q: 'Qu\'est-ce qu\'une division parcellaire ?', a: 'La division parcellaire consiste à diviser un terrain en deux ou plusieurs lots constructibles. Le géomètre-expert réalise le plan de division, dépose le dossier en mairie et procède au bornage des nouveaux lots. Cette opération est obligatoire pour vendre une partie de son terrain. Le coût est de 1 000 à 3 000 € et le délai de 1 à 3 mois.' },
       { q: 'Le géomètre-expert est-il nécessaire pour un permis de construire ?', a: 'Ce n\'est pas une obligation légale, mais le plan topographique et le plan de masse (pièces PCMI 2 et PCMI 3) réalisés par un géomètre-expert sont beaucoup plus précis que ceux faits par un non-professionnel. Pour les projets complexes (terrain en pente, limite de propriété proche), le recours au géomètre est vivement recommandé pour éviter un refus de permis.' },
+      { q: 'Quelle est la différence entre un géomètre-expert et un géomètre-topographe ?', a: 'Le géomètre-expert est inscrit à l\'Ordre (OGE), seul habilité à réaliser un bornage ayant valeur juridique. Le géomètre-topographe réalise des relevés techniques mais ne peut pas établir de documents fonciers opposables aux tiers.' },
+      { q: 'Le bornage est-il obligatoire avant de vendre un terrain ?', a: 'Non obligatoire pour une vente classique, mais fortement recommandé. Il est obligatoire pour la vente d\'un lot de lotissement (loi SRU). Le bornage sécurise la transaction et évite les litiges futurs avec les voisins.' },
+      { q: 'Combien coûte un bornage de terrain ?', a: 'Entre 600 et 2 000 € selon la complexité : nombre de bornes, accessibilité, recherches cadastrales nécessaires. Un bornage contradictoire (avec accord des voisins) est moins cher qu\'un bornage judiciaire.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour les prestations de géomètre-expert. Le bornage, la division parcellaire et les plans topographiques sont des missions planifiées. Prenez rendez-vous pour un devis sous 1 semaine.',
-    certifications: ['Inscription à l\'Ordre des Géomètres-Experts (obligatoire)', 'Diplôme DPLG ou ESGT', 'Assurance RC professionnelle obligatoire'],
+    certifications: ['Inscription à l\'Ordre des Géomètres-Experts (obligatoire)', 'Diplôme DPLG ou ESGT', 'Assurance RC professionnelle obligatoire', 'Inscription à l\'Ordre des Géomètres-Experts (OGE — obligatoire)', 'Assurance responsabilité civile professionnelle décennale'],
     averageResponseTime: 'Devis sous 1 semaine, intervention 2 à 4 semaines',
   },
 
