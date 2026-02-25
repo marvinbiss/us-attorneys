@@ -875,6 +875,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Entretien annuel d\'une climatisation : 100 à 200 €',
       'Recharge de gaz réfrigérant : 200 à 500 €',
       'Installation d\'une pompe à chaleur air-air : 3 000 à 7 000 €',
+      'Remplacement d\'un compresseur de climatisation : 800 à 1 500 €',
+      'Désembouage et nettoyage du circuit frigorifique : 300 à 600 €',
     ],
     tips: [
       'Privilégiez un climaticien certifié RGE et détenteur de l\'attestation de capacité à manipuler les fluides frigorigènes, obligatoire depuis 2015 pour toute intervention sur un circuit frigorifique.',
@@ -882,6 +884,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Le dimensionnement est crucial : une climatisation trop puissante consomme plus et dégrade le confort (cycles courts). Exigez un bilan thermique avant toute installation.',
       'L\'entretien annuel est obligatoire pour les systèmes contenant plus de 2 kg de fluide frigorigène (la plupart des splits). Le carnet d\'entretien doit être tenu à jour.',
       'Attention au bruit : vérifiez le niveau sonore de l\'unité extérieure (en dB(A)) et respectez les distances réglementaires avec le voisinage. L\'installation d\'une unité extérieure en copropriété nécessite souvent l\'accord de l\'assemblée générale.',
+      'Nettoyez les filtres de votre climatisation tous les 2 mois en période d\'utilisation pour maintenir un rendement optimal et une bonne qualité d\'air intérieur.',
+      'Faites vérifier le niveau de fluide frigorigène chaque année par un technicien certifié : une fuite de 10 % réduit les performances de 20 % et augmente la consommation électrique.',
+      'Une clim réversible bien dimensionnée remplace un chauffage d\'appoint dans les régions tempérées et permet de réaliser jusqu\'à 60 % d\'économies par rapport à des convecteurs électriques.',
     ],
     faq: [
       {
@@ -925,6 +930,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'QualiPAC (pompes à chaleur et climatisation réversible)',
       'Qualifroid / Qualiclimafroid (qualification froid et climatisation, accrédité COFRAC)',
       'Qualibat (qualification 5311/5312 génie climatique)',
+      'Qualipac (installation de pompes à chaleur air/air — certification dédiée)',
+      'Agrément préfectoral pour manipulation de fluides frigorigènes catégorie I (circuits de plus de 2 kg)',
+      'Certification NF PAC (performance et fiabilité des pompes à chaleur, délivrée par AFNOR)',
     ],
     averageResponseTime: 'Urgence canicule : délai variable selon disponibilité ; installation sur devis sous 2 à 4 semaines',
   },
@@ -944,6 +952,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Remplacement d\'un plan de travail : 200 à 800 €/ml selon le matériau',
       'Pose seule d\'une cuisine (hors meubles) : 1 500 à 4 000 €',
       'Installation d\'un îlot central : 2 000 à 8 000 €',
+      'Installation d\'un îlot central avec raccordements (eau, électricité, hotte) : 2 000 à 5 000 €',
+      'Remplacement plan de travail (granit, quartz, stratifié) : 200 à 800 €/ml',
     ],
     tips: [
       'Faites réaliser plusieurs plans d\'aménagement avant de vous engager. Un bon cuisiniste propose un plan 3D gratuit et prend en compte vos habitudes culinaires, pas uniquement l\'esthétique.',
@@ -951,6 +961,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Le triangle d\'activité (évier-plaque-réfrigérateur) est la clé d\'une cuisine fonctionnelle : la distance entre chaque point ne doit pas dépasser 2,5 m pour un confort optimal.',
       'Privilégiez les charnières et glissières de marque (Blum, Hettich, Grass) : ce sont les pièces les plus sollicitées et la qualité de la quincaillerie détermine la durabilité de la cuisine.',
       'Demandez la garantie sur les meubles (minimum 5 ans), le plan de travail et la pose. Un cuisiniste sérieux offre un service après-vente et un ajustement des portes après 6 mois d\'utilisation.',
+      'Prévoyez les raccordements électriques et plomberie AVANT la pose de la cuisine — les modifier après coûte 2 à 3 fois plus cher.',
+      'Mesurez le triangle d\'activité (évier-plaque-réfrigérateur) — idéalement 3,5 à 6,5 m de périmètre pour une circulation fluide sans pas inutiles.',
+      'Prévoyez au moins 4 prises électriques au-dessus du plan de travail pour brancher vos appareils du quotidien (bouilloire, robot, grille-pain) sans rallonge.',
     ],
     faq: [
       {
@@ -993,6 +1006,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'NF Ameublement (certification AFNOR/FCBA — sécurité et durabilité du mobilier)',
       'NF Environnement Ameublement (label éco-responsable)',
       'Garantie Meubles de France (fabrication française)',
+      'Qualibat 4131 (agencement de cuisines)',
+      'Label Artisan de confiance (CMA)',
+      'Certification NF Ameublement',
+      'Assurance décennale (obligatoire si modification des réseaux)',
     ],
     averageResponseTime: 'Conception 2 à 3 semaines, fabrication 4 à 8 semaines, pose 3 à 7 jours',
   },
@@ -1179,6 +1196,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Réparation de charpente (remplacement de pièces) : 100 à 250 €/ml',
       'Traitement insecticide/fongicide : 15 à 30 €/m²',
       'Surélévation en ossature bois : 1 200 à 2 000 €/m²',
+      'Traitement charpente par injection (anti-termites/capricornes) : 20 à 40 €/m²',
+      'Surélévation de toiture (rehaussement) : 800 à 1 500 €/m²',
+      'Construction d\'un carport ou auvent en bois : 2 000 à 6 000 €',
     ],
     tips: [
       'Un traitement préventif de la charpente tous les 10 ans prolonge sa durée de vie de plusieurs décennies.',
@@ -1186,6 +1206,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Exigez un diagnostic parasitaire (termites, capricornes) avant toute rénovation de charpente ancienne.',
       'En zone sismique, la charpente doit respecter les règles parasismiques (Eurocode 8). Demandez au charpentier de vérifier la classification de votre commune.',
       'Lors d\'une surélévation en ossature bois, vérifiez que le PLU de votre commune autorise la hauteur supplémentaire et obtenez un permis de construire avant le démarrage des travaux.',
+      'Faites inspecter votre charpente tous les 5 ans pour détecter l\'humidité et les insectes xylophages (termites, capricornes, vrillettes) avant qu\'ils ne causent des dégâts structurels.',
+      'Un traitement préventif de charpente coûte 10 fois moins cher qu\'un traitement curatif : comptez 15 à 30 €/m² en préventif contre 150 à 300 €/m² en curatif avec remplacement de pièces.',
+      'Utilisez du bois classe 3 ou 4 pour les charpentes exposées à l\'humidité (auvents, débords de toit, charpentes en région pluvieuse) : le douglas ou le mélèze résistent naturellement sans traitement chimique.',
     ],
     faq: [
       { q: 'Quelle est la durée de vie d\'une charpente bois ?', a: 'Une charpente bois bien entretenue dure 100 ans et plus. Les charpentes en chêne des bâtiments anciens atteignent souvent 200 à 300 ans. Le principal ennemi est l\'humidité, qui favorise les champignons (mérule) et les insectes xylophages.' },
@@ -1193,10 +1216,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Comment détecter un problème de charpente ?', a: 'Les signes d\'alerte sont : affaissement visible de la toiture, craquements inhabituels, présence de sciure (signe d\'insectes xylophages), taches d\'humidité au plafond, odeur de moisi dans les combles. Au moindre doute, faites intervenir un charpentier pour un diagnostic. Un traitement précoce coûte 15 à 30 €/m², contre 100 à 250 €/ml pour un remplacement de pièce.' },
       { q: 'Quel bois choisir pour une charpente ?', a: 'Le sapin et l\'épicéa (résineux) sont les plus courants et économiques (classe d\'emploi 2). Le chêne est plus noble et résistant mais 2 à 3 fois plus cher. Le douglas offre un excellent compromis : naturellement durable (classe 3), il résiste aux insectes sans traitement chimique. Pour les régions humides, le mélèze est recommandé.' },
       { q: 'Combien coûte l\'aménagement de combles avec modification de charpente ?', a: 'L\'aménagement de combles avec modification de charpente (passage de fermettes en charpente traditionnelle) coûte entre 800 et 1 500 €/m² tout compris (charpente, isolation, plancher, escalier, finitions). Pour des combles de 40 m², prévoyez un budget de 35 000 à 60 000 €. C\'est souvent plus rentable qu\'une extension.' },
+      { q: 'Comment savoir si ma charpente est attaquée par les insectes ?', a: 'Les signes révélateurs sont : sciure fine au sol sous la charpente, petits trous de sortie de 2 à 4 mm dans le bois, bois qui sonne creux lorsque vous le tapotez, et galeries visibles en surface. Certains insectes comme les capricornes émettent un bruit de grignotement audible la nuit. Au moindre doute, faites réaliser un diagnostic par un professionnel certifié (150 à 300 €) qui identifiera l\'espèce et le traitement adapté.' },
+      { q: 'Charpente traditionnelle ou fermette : quelle différence ?', a: 'La charpente traditionnelle est réalisée en bois massif assemblé par tenons-mortaises ou boulonnage. Elle permet l\'aménagement des combles et coûte 80 à 120 €/m². La charpente fermette (industrielle) est constituée de triangles en bois léger reliés par des connecteurs métalliques. Elle est plus économique (50 à 70 €/m²) mais rend les combles perdus, sauf conversion coûteuse. Le choix dépend de votre projet : si vous envisagez d\'aménager les combles, optez pour le traditionnel.' },
+      { q: 'Combien de temps dure une charpente en bois ?', a: 'Une charpente en bois bien entretenue et régulièrement traitée dure 50 à 100 ans sans problème. Les charpentes en chêne de bâtiments historiques dépassent même 200 à 300 ans. La clé de la longévité est l\'entretien : une inspection tous les 5 ans permet de détecter l\'humidité, les champignons (mérule) et les insectes xylophages avant qu\'ils ne fragilisent la structure. Un traitement préventif régulier et une bonne ventilation des combles sont essentiels.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la charpente. En cas de dégât de tempête sur la charpente, contactez d\'abord un couvreur pour un bâchage d\'urgence, puis un charpentier pour le diagnostic et la réparation structurelle.',
-    certifications: ['Qualibat (qualification 2311/2312 charpente bois)', 'CTB-A+ (certification traitement du bois — FCBA)', 'Compagnons du Devoir (formation d\'excellence)', 'RGE (si isolation des combles associée)'],
+    certifications: ['Qualibat (qualification 2311/2312 charpente bois)', 'CTB-A+ (certification traitement du bois — FCBA)', 'Compagnons du Devoir (formation d\'excellence)', 'RGE (si isolation des combles associée)', 'Qualibat 2312 (charpente bois — niveau confirmé)', 'Compagnons du Tour de France (excellence artisanale)', 'Certification CTB-A+ traitement préventif du bois (FCBA)', 'Label RGE (isolation sous rampants de toiture)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 4 semaines',
   },
 
