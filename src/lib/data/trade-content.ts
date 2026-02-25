@@ -183,6 +183,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pose d\'une serrure multipoints : 300 à 800 €',
       'Blindage de porte existante : 800 à 2 000 €',
       'Installation d\'une porte blindée complète : 1 500 à 4 500 €',
+      'Copie de clé standard ou haute sécurité : 5 à 80 € selon le type',
+      'Installation d\'une serrure connectée : 200 à 600 € (fourniture + pose)',
     ],
     tips: [
       'En cas de porte claquée, ne paniquez pas : un serrurier qualifié peut ouvrir sans dégradation dans la majorité des cas. Ne faites jamais appel à un dépanneur trouvé sur un prospectus dans votre boîte aux lettres.',
@@ -190,6 +192,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Méfiez-vous des serruriers qui annoncent des prix très bas par téléphone puis gonflent la facture une fois sur place. Vérifiez les avis en ligne et le numéro SIRET avant d\'appeler.',
       'Privilégiez les serruriers ayant une adresse physique vérifiable (atelier ou magasin). C\'est un gage de sérieux et de recours possible en cas de problème.',
       'Après un cambriolage, faites intervenir la police avant le serrurier. Vous aurez besoin du dépôt de plainte pour votre assurance, et il ne faut pas toucher à la scène.',
+      'Gardez toujours un double de clé chez un voisin de confiance ou dans un boîtier à code sécurisé. Cela vous évitera des frais d\'ouverture de porte en cas d\'oubli.',
+      'Ne laissez jamais la clé sur la porte, même à l\'intérieur : en cas de porte claquée, le serrurier devra percer le cylindre si la clé bloque l\'accès, ce qui augmente considérablement le coût.',
+      'Photographiez le recto de votre carte de propriété de clé (numéro gravé sur la clé ou la carte fournie). Ce numéro permet au serrurier de reproduire votre clé haute sécurité sans démonter la serrure.',
     ],
     faq: [
       {
@@ -232,6 +237,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 4421 serrurerie)',
       'CQP Serrurier-dépanneur (Certificat de Qualification Professionnelle)',
       'Certification FMSD (Serrurier dépanneur-installateur, inscrite au RNCP)',
+      'Certification A2P Service (installateur agréé par le CNPP pour la pose de serrures certifiées)',
+      'Label Serrurier de Confiance (délivré par la Fédération Française des Constructeurs de Serrures)',
+      'Qualification Qualibat 4413 (fermetures industrielles et serrurerie de bâtiment)',
+      'Assurance décennale et responsabilité civile professionnelle obligatoires',
     ],
     averageResponseTime: 'Urgence (porte claquée, effraction) : délai variable selon disponibilité et localisation',
   },
@@ -1802,6 +1811,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Interphone/visiophone : 300 à 1 500 €',
       'Contrôle d\'accès (digicode, badge) : 500 à 2 000 €',
       'Télésurveillance (abonnement) : 20 à 50 €/mois',
+      'Détecteur de mouvement extérieur : 150 à 400 €',
+      'Alarme connectée smartphone (pack maison) : 300 à 1 200 €',
+      'Coffre-fort encastré (pose comprise) : 500 à 2 500 €',
     ],
     tips: [
       'Privilégiez les systèmes certifiés NF A2P (1 à 3 boucliers) — c\'est un gage de fiabilité reconnu par les assurances.',
@@ -1809,6 +1821,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Installez des détecteurs sur tous les points d\'accès vulnérables : porte d\'entrée, baies vitrées, portes de garage et fenêtres du rez-de-chaussée. Un système sous-dimensionné laisse des zones non couvertes.',
       'Pour la vidéosurveillance extérieure, vérifiez la réglementation RGPD : vos caméras ne doivent filmer que votre propriété privée, jamais la voie publique ni le jardin du voisin.',
       'Testez votre alarme au moins une fois par trimestre en déclenchant une alerte test auprès de votre centre de télésurveillance : c\'est la seule façon de vérifier que toute la chaîne fonctionne.',
+      'Placez les détecteurs de mouvement à 2,20 m de hauteur dans les angles de pièce pour une couverture optimale et éviter les déclenchements intempestifs par les animaux domestiques.',
+      'Vérifiez que votre assurance habitation exige ou recommande un type d\'alarme spécifique (NF A2P) : installer le bon modèle dès le départ vous évitera de devoir changer d\'équipement pour être couvert.',
+      'Prévenez votre assureur dès l\'installation de votre alarme pour bénéficier d\'une réduction de prime pouvant aller jusqu\'à 15 % sur votre contrat multirisque habitation.',
     ],
     faq: [
       { q: 'Mon assurance baisse-t-elle avec une alarme ?', a: 'Oui, la plupart des assureurs accordent une réduction de 5 à 15 % sur la prime habitation pour un système d\'alarme certifié NF A2P avec télésurveillance. Certains contrats exigent même une alarme pour couvrir les objets de valeur supérieure à un certain montant.' },
@@ -1816,10 +1831,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on installer une caméra de vidéosurveillance chez soi sans autorisation ?', a: 'Chez un particulier, aucune autorisation n\'est requise tant que les caméras ne filment que votre propriété privée (jardin, entrée, garage). Il est interdit de filmer la voie publique, le trottoir ou la propriété des voisins. En copropriété, l\'installation dans les parties communes nécessite un vote en assemblée générale. Vous devez informer vos visiteurs par un panneau visible.' },
       { q: 'La télésurveillance vaut-elle le coût de l\'abonnement ?', a: 'L\'abonnement de télésurveillance (20 à 50 €/mois) inclut la surveillance 24h/24 par un opérateur qui lève le doute en cas d\'alerte et prévient les forces de l\'ordre si nécessaire. C\'est particulièrement utile si vous vous absentez souvent ou si vous avez une résidence secondaire. Sans télésurveillance, l\'alarme ne fait que sonner localement, ce qui est peu dissuasif en zone isolée.' },
       { q: 'Combien de détecteurs faut-il pour protéger une maison ?', a: 'Pour une maison standard de 100 m² sur un niveau : 1 centrale, 1 détecteur d\'ouverture par porte/fenêtre accessible (6 à 10), 2 à 3 détecteurs de mouvement pour les zones de passage intérieures, 1 sirène extérieure et 2 télécommandes. Comptez 500 à 1 500 € pour un kit complet sans fil certifié NF A2P, hors pose professionnelle (200 à 500 €).' },
+      { q: 'Faut-il un abonnement de télésurveillance ?', a: 'L\'abonnement de télésurveillance (20 à 50 €/mois) n\'est pas obligatoire mais fortement recommandé. Il permet une intervention rapide en cas d\'alerte grâce à un opérateur qui assure la levée de doute vidéo et prévient les forces de l\'ordre si nécessaire. Sans abonnement, l\'alarme se limite à une sirène locale, peu efficace en zone isolée.' },
+      { q: 'Comment dissuader les cambrioleurs efficacement ?', a: 'La combinaison de plusieurs dispositifs est la plus dissuasive : une alarme visible avec sirène extérieure, des caméras apparentes aux points d\'accès, un éclairage à détection de mouvement autour du domicile et un simulateur de présence (lumières et volets programmés). Les statistiques montrent que 80 % des cambrioleurs renoncent face à une alarme visible.' },
+      { q: 'Les détecteurs de fumée interconnectés sont-ils obligatoires ?', a: 'Depuis 2015, au moins un détecteur de fumée (DAAF) est obligatoire par logement. L\'interconnexion n\'est pas imposée par la loi mais est vivement recommandée : lorsqu\'un détecteur se déclenche, tous les autres sonnent simultanément, ce qui est crucial dans les grandes maisons à étages. Comptez 20 à 50 € par détecteur interconnecté sans fil, contre 5 à 15 € pour un modèle autonome.' },
     ],
     emergencyInfo:
       'Intervention d\'urgence pour système d\'alarme en panne, caméra de vidéosurveillance défaillante ou intrusion détectée. Un technicien en sécurité peut intervenir sous 2 à 4 heures pour diagnostiquer et remettre en service votre installation. Majorations : +80 à 120 % la nuit et le week-end.',
-    certifications: ['Certification APSAD (règles de sécurité)', 'Label NF A2P (alarmes)', 'Habilitation CNAPS (agents de sécurité)'],
+    certifications: ['Certification APSAD (Assemblée Plénière des Sociétés d\'Assurance Dommages)', 'Label NF A2P (alarmes anti-intrusion — 1 à 3 boucliers)', 'Habilitation CNAPS (agents de sécurité)', 'Qualification CNPP (Centre National de Prévention et de Protection)', 'Certification NF Service Télésurveillance', 'Qualification Qualifelec (installations électroniques de sécurité)', 'Certification SSI (Système de Sécurité Incendie)', 'Assurance responsabilité civile professionnelle (obligatoire)'],
     averageResponseTime: 'Devis sous 48h, installation sous 1 semaine',
   },
 
