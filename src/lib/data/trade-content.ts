@@ -36,6 +36,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Installation d\'un WC : 200 à 600 € (hors fourniture)',
       'Pose d\'un robinet mitigeur : 80 à 200 € (hors fourniture)',
       'Remplacement d\'un ballon d\'eau chaude : 600 à 2 000 €',
+      'Détection de fuite non destructive (gaz traceur ou caméra thermique) : 150 à 400 €',
+      'Rénovation complète plomberie salle de bain (alimentation + évacuation) : 1 500 à 4 000 €',
     ],
     tips: [
       'Vérifiez que le plombier dispose d\'une assurance responsabilité civile professionnelle et d\'une garantie décennale, obligatoires pour les travaux de plomberie.',
@@ -43,6 +45,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Privilégiez un plombier certifié RGE si vous envisagez des travaux liés au chauffage ou à l\'eau chaude, car cela vous ouvre droit aux aides de l\'État (MaPrimeRenov\', CEE).',
       'En cas d\'urgence, coupez l\'arrivée d\'eau générale avant l\'arrivée du plombier pour limiter les dégâts. Le compteur se trouve souvent dans la cave ou à l\'extérieur.',
       'Méfiez-vous des plombiers qui refusent de donner un devis par écrit ou qui exigent un paiement intégral avant intervention : ce sont des signaux d\'alerte.',
+      'Fermez le robinet d\'arrêt général immédiatement si vous constatez une fuite : un joint qui goutte peut gaspiller jusqu\'à 100 litres d\'eau par jour, soit plus de 35 m³ par an.',
+      'Faites vidanger votre chauffe-eau une fois par an et vérifiez le groupe de sécurité chaque mois pour éviter l\'accumulation de calcaire et prolonger sa durée de vie de 3 à 5 ans.',
+      'Pour un WC suspendu, prévoyez un bâti-support encastré (Geberit ou équivalent) et un mur porteur ou renforcé : le coût total (bâti + cuvette + pose) se situe entre 800 et 2 000 €.',
     ],
     faq: [
       {
@@ -87,6 +92,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualigaz (certificat de conformité gaz)',
       'QualiPAC (pompes à chaleur)',
       'QualiSol (chauffe-eau solaire)',
+      'Agrément ACS (Attestation de Conformité Sanitaire — matériaux en contact avec l\'eau potable)',
+      'Certification Qualipac (installation de pompes à chaleur eau/eau)',
     ],
     averageResponseTime: 'Urgence (fuite, bouchon) : délai variable selon disponibilité ; travaux planifiés sous 1 à 2 semaines',
   },
@@ -260,6 +267,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Désembouage d\'un circuit de chauffage : 400 à 900 €',
       'Remplacement de radiateurs : 300 à 800 € par radiateur (fourniture + pose)',
       'Installation d\'un plancher chauffant : 50 à 100 €/m²',
+      'Installation d\'un thermostat connecté : 150 à 450 € (fourniture + pose)',
+      'Dépannage et remise en service du chauffage central : 150 à 350 € (déplacement + main-d\'œuvre)',
     ],
     tips: [
       'L\'entretien annuel de votre chaudière est obligatoire par la loi (décret du 9 juin 2009). Prévoyez-le à l\'automne, avant la saison de chauffe, pour éviter les pannes en plein hiver.',
@@ -267,6 +276,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Comparez les performances énergétiques (COP pour les pompes à chaleur, rendement pour les chaudières) et pas seulement le prix d\'achat. Une chaudière à condensation consomme 15 à 30 % de moins qu\'une ancienne chaudière non-condensation (plus de 15 ans).',
       'Demandez un bilan thermique complet avant l\'installation d\'un nouveau système de chauffage. Un bon chauffagiste dimensionne l\'installation en fonction de la surface, de l\'isolation et de la zone climatique.',
       'Souscrivez un contrat d\'entretien annuel : il coûte entre 120 et 250 € par an et inclut généralement la visite obligatoire, le dépannage prioritaire et les pièces d\'usure.',
+      'Ne baissez pas le chauffage en dessous de 16 °C la nuit : la relance du matin consomme plus d\'énergie que le maintien d\'une température modérée. L\'ADEME recommande 17 °C dans les chambres et 19 °C dans les pièces de vie.',
+      'Purgez vos radiateurs chaque automne avant la remise en route du chauffage. L\'air emprisonné dans le circuit réduit l\'efficacité de chauffe et peut provoquer des bruits de circulation désagréables.',
+      'Un thermostat connecté (Netatmo, Tado, Honeywell) permet de programmer le chauffage pièce par pièce et de le piloter à distance. L\'économie constatée est de 15 à 25 % sur la facture de chauffage selon l\'ADEME.',
     ],
     faq: [
       {
@@ -545,6 +557,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pose de gouttière en zinc : 40 à 80 €/ml',
       'Nettoyage et démoussage de toiture : 15 à 30 €/m²',
       'Installation de fenêtre de toit (Velux) : 500 à 1 500 € (hors fourniture)',
+      'Réparation de faîtage (scellement ou remplacement) : 40 à 80 €/ml',
+      'Étanchéité toiture terrasse (membrane EPDM ou bitume) : 50 à 120 €/m²',
     ],
     tips: [
       'Faites inspecter votre toiture tous les 5 ans et après chaque épisode de grêlons ou de tempête. Une petite réparation à temps évite un remplacement complet bien plus coûteux.',
@@ -552,6 +566,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Profitez d\'une réfection de toiture pour améliorer l\'isolation : l\'isolation par l\'extérieur (sarking) ou par l\'intérieur permet de réduire les déperditions thermiques de 25 à 30 %. Un couvreur RGE ouvre droit aux aides de l\'État.',
       'Ne montez jamais seul sur un toit pour évaluer les dégâts. La chute de hauteur est la première cause d\'accident mortel dans le bâtiment. Laissez l\'inspection à un professionnel équipé.',
       'Demandez des photos avant/après et un rapport d\'intervention écrit. Certains couvreurs utilisent des drones pour inspecter la toiture sans échafaudage, ce qui réduit les coûts.',
+      'Remplacez rapidement toute tuile cassée ou déplacée : une seule tuile manquante suffit à provoquer des infiltrations qui endommagent la charpente et l\'isolation en quelques semaines.',
+      'Lors d\'une réfection de toiture, faites vérifier l\'état de la charpente en même temps que la couverture : un diagnostic complet évite de devoir rouvrir le toit quelques années plus tard.',
+      'Ne montez jamais sur un toit mouillé, verglacé ou par grand vent : les accidents de toiture représentent plus de 10 % des accidents mortels du BTP en France chaque année.',
     ],
     faq: [
       {
@@ -594,6 +611,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'RGE (obligatoire pour l\'isolation de toiture — aides MaPrimeRénov\')',
       'Compagnons du Devoir (formation d\'excellence)',
       'QualiPV (si pose de panneaux solaires en toiture)',
+      'Certification CSTB (Centre Scientifique et Technique du Bâtiment — avis techniques)',
+      'Qualification Handibat (accessibilité et adaptation du logement)',
+      'Qualibat 3191 (étanchéité de toitures-terrasses)',
+      'Compagnons du Tour de France (formation traditionnelle d\'excellence)',
     ],
     averageResponseTime: 'Urgence (bâchage, fuite) : délai variable selon disponibilité ; travaux de réfection sous 1 à 4 semaines',
   },
