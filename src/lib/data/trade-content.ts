@@ -1931,6 +1931,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Destruction de nid de guêpes/frelons : 80 à 200 €',
       'Traitement anti-moustiques (jardin) : 150 à 400 €',
       'Traitement termites : 1 500 à 4 000 €',
+      'Traitement punaises de lit (appartement T2-T3) : 200 à 500 €',
+      'Destruction nid de guêpes/frelons : 80 à 200 €',
+      'Traitement cafards/blattes (appartement) : 100 à 300 €',
     ],
     tips: [
       'Pour les punaises de lit, un minimum de 2 passages à 15 jours d\'intervalle est nécessaire pour éliminer les œufs qui éclosent après le premier traitement.',
@@ -1938,6 +1941,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Ne tentez jamais de détruire un nid de guêpes ou de frelons vous-même : les piqûres multiples peuvent provoquer un choc anaphylactique mortel, même chez une personne non allergique.',
       'Après un traitement contre les cafards, ne nettoyez pas les zones traitées pendant au moins 15 jours : le produit insecticide continue d\'agir par contact sur les insectes survivants.',
       'Pour prévenir le retour des punaises de lit après traitement, placez des housses anti-punaises sur les matelas et sommiers et inspectez régulièrement les coutures et les recoins du lit.',
+      'Pour les punaises de lit, lavez tout le linge à 60°C minimum et passez l\'aspirateur avant l\'intervention.',
+      'Un traitement thermique (vapeur sèche à 180°C) est plus écologique que les insecticides chimiques.',
+      'Exigez un certificat de traitement : il peut être exigé par votre bailleur ou assurance.',
     ],
     emergencyInfo: 'Pour un nid de guêpes ou frelons dangereux (proximité de passage fréquenté), un désinsectiseur peut intervenir en urgence. Délai variable selon disponibilité. Coût : 100 à 250 €.',
     faq: [
@@ -1946,8 +1952,11 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Comment reconnaître des punaises de lit ?', a: 'Les punaises de lit adultes mesurent 5 à 7 mm, sont ovales, plates et de couleur brun-rougeâtre. Les signes d\'infestation sont : piqûres en ligne ou en grappe sur la peau au réveil, petites taches noires (déjections) sur le matelas et les draps, traces de sang sur les draps, et une odeur douceâtre dans les cas avancés. Elles se cachent dans les coutures des matelas, les fissures du sommier et derrière les têtes de lit.' },
       { q: 'Les produits anti-cafards du commerce sont-ils efficaces ?', a: 'Les gels et pièges vendus en grande surface peuvent traiter une infestation légère (quelques individus). Pour une infestation établie (plusieurs dizaines d\'individus, présence en journée), seul un traitement professionnel avec des biocides à usage restreint (non accessibles au public) garantit une éradication complète. Le coût professionnel (80 à 250 €) est vite amorti face à une infestation qui s\'aggrave.' },
       { q: 'Le propriétaire ou le locataire doit-il payer la désinsectisation ?', a: 'En cas de punaises de lit, la loi Elan (2018) impose au propriétaire de prendre en charge le traitement, sauf si le locataire est à l\'origine de l\'infestation (ce qui est difficile à prouver). Pour les cafards, le propriétaire doit livrer un logement décent exempt de nuisibles. L\'entretien courant (prévention) reste à la charge du locataire. En copropriété, le syndic peut faire traiter les parties communes.' },
+      { q: 'Comment reconnaître une infestation de punaises de lit ?', a: 'Les signes révélateurs sont : des piqûres alignées en rang sur la peau au réveil (bras, jambes, dos), de petites taches de sang sur les draps causées par l\'écrasement des punaises gorgées de sang pendant le sommeil, des points noirs (déjections) sur les coutures du matelas, le sommier et la tête de lit, et dans les cas avancés une odeur douceâtre et musquée caractéristique. Inspectez les recoins du matelas, les plinthes et les prises électriques à l\'aide d\'une lampe torche.' },
+      { q: 'Combien de traitements faut-il pour éliminer les punaises de lit ?', a: 'En traitement chimique (insecticide professionnel), il faut généralement 2 à 3 passages espacés de 15 jours. Le premier passage élimine les punaises adultes et les nymphes, mais les œufs résistent. Les passages suivants ciblent les punaises nouvellement écloses avant qu\'elles ne pondent à leur tour. Le traitement thermique (vapeur sèche ou canon à chaleur à 60°C+) peut éliminer l\'infestation en un seul passage car la chaleur détruit aussi les œufs, mais il coûte 30 à 50 % plus cher.' },
+      { q: 'Le traitement anti-cafards est-il dangereux pour les enfants et animaux ?', a: 'Le gel insecticide (méthode la plus courante) est appliqué en petites gouttes dans les recoins inaccessibles (derrière les meubles, sous l\'évier, dans les charnières) : il présente un risque très faible pour les enfants et les animaux domestiques car les quantités sont infimes et les emplacements hors de portée. En revanche, la fumigation (nébulisation d\'insecticide) nécessite une évacuation temporaire du logement (4 à 6 heures) et une aération complète de 2 heures avant le retour. Dans tous les cas, demandez au technicien la fiche de données de sécurité du produit utilisé.' },
     ],
-    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES'],
+    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES', 'Formation Certibiocide TP18 (insecticides — renouvellement tous les 5 ans)', 'Protocole HACCP pour les locaux alimentaires'],
     averageResponseTime: 'Intervention sous 24 à 48h',
   },
 
