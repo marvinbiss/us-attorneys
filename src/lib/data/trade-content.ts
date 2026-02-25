@@ -106,6 +106,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Remplacement d\'un interrupteur différentiel : 150 à 350 €',
       'Installation d\'un interphone ou visiophone : 300 à 1 200 €',
       'Réfection complète de l\'électricité d\'un appartement (60 m²) : 5 000 à 10 000 €',
+      'Installation d\'un système domotique (éclairage, volets) : 1 500 à 5 000 €',
+      'Pose de volets roulants électriques (par volet) : 400 à 900 €',
     ],
     tips: [
       'Assurez-vous que l\'électricien respecte la norme NF C 15-100, obligatoire pour toute installation électrique en France. Demandez un certificat de conformité Consuel à la fin des travaux.',
@@ -113,6 +115,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Choisissez un électricien certifié IRVE si vous souhaitez installer une borne de recharge pour véhicule électrique : c\'est obligatoire pour bénéficier des aides. Note : le crédit d\'impôt pour borne de recharge a été supprimé au 1er janvier 2026.',
       'Avant toute intervention, vérifiez que l\'électricien possède une habilitation électrique valide (B1, B2 ou BR selon le type de travaux).',
       'Pour des travaux de rénovation énergétique (chauffage électrique performant, VMC), un électricien RGE est indispensable pour obtenir les aides financières de l\'État.',
+      'Coupez toujours le disjoncteur général avant toute intervention sur votre installation électrique, même pour un simple changement de prise ou d\'interrupteur.',
+      'Demandez systématiquement l\'attestation de conformité Consuel après des travaux importants : c\'est votre preuve en cas de sinistre auprès de l\'assurance.',
+      'Conservez le schéma de votre tableau électrique et le plan de câblage : ils facilitent les interventions futures et sont exigés lors de la revente du logement.',
     ],
     faq: [
       {
@@ -157,6 +162,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Habilitation électrique (B1, B2, BR, HC — obligatoire)',
       'Qualibat (qualification 5411/5412 installations électriques)',
       'Consuel (attestation de conformité électrique)',
+      'Habilitation B2V (travaux au voisinage de pièces nues sous tension)',
+      'Certification NF Habitat (installations électriques résidentielles)',
     ],
     averageResponseTime: 'Urgence (panne, court-circuit) : délai variable selon disponibilité ; travaux planifiés sous 1 à 2 semaines',
   },
@@ -725,6 +732,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Survitrage d\'une fenêtre existante : 80 à 150 €/m²',
       'Pose d\'une crédence en verre (cuisine) : 200 à 500 €/m²',
       'Installation d\'une paroi de douche en verre : 400 à 1 200 €',
+      'Pose d\'un vitrage feuilleté de sécurité (anti-effraction) : 200 à 450 €/m²',
+      'Installation d\'un garde-corps en verre (balcon, terrasse) : 250 à 600 €/ml',
     ],
     tips: [
       'En cas de vitre cassée, sécurisez la zone avec du carton ou du ruban adhésif en attendant le vitrier. Ne tentez pas de retirer les morceaux de verre à mains nues.',
@@ -732,6 +741,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez au vitrier de vous fournir le coefficient d\'isolation (Ug) du vitrage proposé. Plus ce chiffre est bas, meilleure est l\'isolation : Ug < 1,1 W/m².K pour du bon double vitrage.',
       'Pour une crédence ou une paroi de douche, exigez du verre sécurit (trempé) conforme à la norme EN 12150 : en cas de casse, il se fragmente en petits morceaux non coupants.',
       'Un vitrier d\'urgence peut intervenir pour sécuriser une vitrine commerciale ou une baie vitrée cassée. Vérifiez que le professionnel propose un service de mise en sécurité provisoire.',
+      'Vérifiez votre contrat multirisque habitation : la garantie bris de glace couvre souvent le remplacement des vitres cassées. Conservez les morceaux et prenez des photos avant nettoyage pour faciliter la déclaration.',
+      'Choisissez un vitrage adapté à l\'orientation de vos fenêtres : vitrage à isolation phonique renforcée côté rue, vitrage à contrôle solaire côté sud et ouest pour limiter la surchauffe en été.',
+      'Après une intervention, vérifiez la qualité de la pose : le mastic ou le joint silicone doit être continu et sans bulle, et le vitrage ne doit présenter aucun jeu dans le châssis.',
     ],
     faq: [
       {
@@ -773,6 +785,11 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 4311/4312 vitrerie-miroiterie)',
       'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)',
       'RGE (pour remplacement de vitrages isolants ouvrant droit aux aides)',
+      'Assurance décennale couvrant les travaux de vitrerie et miroiterie',
+      'Certification NF DTU 39 (pose de vitrages en bâtiment)',
+      'Qualification Qualifelec (si travaux combinés vitrerie-menuiserie aluminium)',
+      'Membre de la Fédération Française des Professionnels du Verre (FFPV)',
+      'Certification EN 12150 (mise en œuvre de verre trempé sécurit)',
     ],
     averageResponseTime: 'Urgence (bris de vitre) : délai variable selon disponibilité ; remplacement définitif sous 24 à 48h',
   },
