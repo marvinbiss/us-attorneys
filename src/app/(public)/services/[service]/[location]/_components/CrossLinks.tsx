@@ -5,6 +5,7 @@ import { getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
 import type { LocationContent } from '@/lib/seo/location-content'
 import type { CommuneData } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType } from '@/types'
+import { GSC_BOOST_PAGES } from '@/lib/seo/gsc-priority-cities'
 
 interface NearbyCity {
   slug: string
@@ -174,6 +175,38 @@ export default function CrossLinks({
                 </div>
               </div>
             )}
+
+            {/* GSC boost links — pages with promising positions */}
+            {(() => {
+              const currentPath = `/services/${serviceSlug}/${locationSlug}`
+              const boostLinks = GSC_BOOST_PAGES
+                .filter(path => path !== currentPath)
+                .slice(0, 3)
+
+              if (boostLinks.length === 0) return null
+
+              return (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
+                  <h3 className="font-semibold text-gray-900 mb-4">À découvrir aussi</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {boostLinks.map((path) => {
+                      const parts = path.split('/')
+                      const svc = parts[2]?.replace(/-/g, ' ') ?? ''
+                      const city = parts[3]?.replace(/-/g, ' ') ?? ''
+                      return (
+                        <Link
+                          key={path}
+                          href={path}
+                          className="inline-flex items-center gap-1 px-3.5 py-2 bg-gray-50 hover:bg-amber-50 text-gray-700 hover:text-amber-800 rounded-full text-sm font-medium border border-gray-100 hover:border-amber-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                        >
+                          {svc} à {city}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })()}
           </div>
         </div>
       </section>

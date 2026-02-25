@@ -23,6 +23,7 @@ import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
 import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
@@ -128,26 +129,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const hasProviders = providerCount > 0
   const svcLower = serviceName.toLowerCase()
+  const naturalTerm = getNaturalTerm(serviceSlug)
 
-  // Varied title patterns to avoid repetitive SERP appearance
-  const titleHash = Math.abs(hashCode(`title-${serviceSlug}-${locationSlug}`))
+  // Unified SEO seed for title + H1 coherence (same seed used in both generateMetadata and page render)
+  const seoHash = Math.abs(hashCode(`seo-${serviceSlug}-${locationSlug}`))
 
-  const titleTemplates = hasProviders
+  const seoPairs = hasProviders
     ? [
-        `${serviceName} à ${locationName} — ${providerCount} artisans`,
-        `${providerCount} ${svcLower}s à ${locationName} — Devis Gratuit`,
-        `${serviceName} ${locationName} : ${providerCount} pros référencés`,
-        `Trouver un ${svcLower} à ${locationName} (${providerCount} pros)`,
-        `${serviceName} à ${locationName} — Comparez ${providerCount} pros`,
+        { title: `${serviceName} à ${locationName} — ${providerCount} artisans vérifiés`, h1: `${serviceName} à ${locationName}` },
+        { title: `${providerCount} ${naturalTerm.plural} à ${locationName} — Devis gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName} : comparez ${providerCount} pros`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
       ]
     : [
-        `${serviceName} à ${locationName} — Devis Gratuit`,
-        `${svcLower} à ${locationName} : Devis en ligne gratuit`,
-        `Trouver un ${svcLower} à ${locationName} — Pros vérifiés`,
-        `${serviceName} ${locationName} — Artisans qualifiés`,
-        `Devis ${svcLower} à ${locationName} — Gratuit`,
+        { title: `${serviceName} à ${locationName} — Devis gratuit`, h1: `${serviceName} à ${locationName}` },
+        { title: `Trouver ${naturalTerm.article} à ${locationName} — Annuaire`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName} — Artisans qualifiés`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
       ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+
+  const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
 
   // Unique meta descriptions with provider count, department and regional context
   const metaVille = getVilleBySlug(locationSlug)
@@ -173,7 +172,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+    robots: { index: providerCount > 0, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
     openGraph: {
       title,
       description,
@@ -361,16 +360,23 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     ? getVillesByDepartement(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
     : []
 
-  // Varied H1 text per service+location combo
-  const h1Hash = Math.abs(hashCode(`h1-${serviceSlug}-${locationSlug}`))
-  const h1Templates = [
-    `${service.name} à ${location.name}`,
-    `${service.name} à ${location.name} — Artisans vérifiés`,
-    `Trouvez un ${service.name.toLowerCase()} à ${location.name}`,
-    `${service.name} à ${location.name} : pros référencés`,
-    `Les meilleurs ${service.name.toLowerCase()}s à ${location.name}`,
-  ]
-  const h1Text = h1Templates[h1Hash % h1Templates.length]
+  // H1 uses same seed as title for coherence (seo- prefix)
+  const providerCount = totalProviderCount
+  const seoHashH1 = Math.abs(hashCode(`seo-${serviceSlug}-${locationSlug}`))
+  const naturalTermH1 = getNaturalTerm(serviceSlug)
+  const hasProvidersH1 = providerCount > 0
+  const h1Variants = hasProvidersH1
+    ? [
+        `${service.name} à ${location.name}`,
+        `Trouvez ${naturalTermH1.article} à ${location.name}`,
+        `${service.name} à ${location.name} — ${providerCount} pros référencés`,
+      ]
+    : [
+        `${service.name} à ${location.name}`,
+        `Trouvez ${naturalTermH1.article} à ${location.name}`,
+        `${service.name} à ${location.name} — Artisans qualifiés`,
+      ]
+  const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 
   return (
     <>

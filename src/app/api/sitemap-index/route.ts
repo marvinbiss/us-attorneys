@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, villes, departements } from '@/lib/data/france'
+import { services, departements } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { getQuartiersByVille } from '@/lib/data/france'
 import { getProblemSlugs } from '@/lib/data/problems'
 
 // Must match the BATCH constants used in sitemap.ts sitemap() handlers
 const BATCH_SIZE = 10_000
 const LARGE_BATCH = 45_000
 const PROVIDER_BATCH_SIZE = 5_000
+// Max provider sitemaps to avoid declaring hundreds of broken sitemaps
+const MAX_PROVIDER_SITEMAPS = 20
 
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
@@ -16,21 +17,18 @@ const PROVIDER_BATCH_SIZE = 5_000
  *
  * This route is rewritten from /sitemap.xml via next.config.js.
  * Keep in sync with generateSitemaps() in src/app/sitemap.ts.
+ *
+ * IMPORTANT: All intent pages (devis, avis, tarifs, urgence, problemes) use
+ * Phase 1 (top 300 cities) to avoid declaring sitemaps that can't be served.
+ * Quartier-level sitemaps are removed entirely.
  */
 export async function GET() {
-  // Compute the same sitemap IDs as generateSitemaps() in sitemap.ts
-  let totalQuartierUrls = 0
-  for (const v of villes) {
-    totalQuartierUrls += (getQuartiersByVille(v.slug)?.length || 0) * services.length
-  }
-  const sqBatchCount = Math.ceil(totalQuartierUrls / BATCH_SIZE)
-
   const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
   const tradeSlugs = getTradesSlugs()
   const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
-  // Phase 1: service × top-300 cities only (conservative crawl budget for new domain).
+  // Phase 1: top-300 cities only (conservative crawl budget for new domain).
   // Must match TOP_CITIES_PHASE1 in sitemap.ts.
   const TOP_CITIES_PHASE1 = 300
 
@@ -40,17 +38,15 @@ export async function GET() {
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `service-cities-${i}`),
     'cities',
     'geo',
-    'quartiers',
-    ...Array.from({ length: sqBatchCount }, (_, i) => `service-quartiers-${i}`),
+    // Quartier & service-quartier sitemaps REMOVED — too granular for new domain
     'devis-services',
-    ...Array.from({ length: Math.ceil(services.length * villes.length / BATCH_SIZE) }, (_, i) => `devis-service-cities-${i}`),
-    ...Array.from({ length: sqBatchCount }, (_, i) => `devis-quartiers-${i}`),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `urgence-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(services.length * villes.length / BATCH_SIZE) }, (_, i) => `tarifs-service-cities-${i}`),
+    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `devis-service-cities-${i}`),
+    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `urgence-service-cities-${i}`),
+    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `tarifs-service-cities-${i}`),
     'avis-services',
-    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
+    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
     'problemes',
-    ...Array.from({ length: Math.ceil(problemSlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `problemes-cities-${i}`),
+    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `problemes-cities-${i}`),
     // dept-services uses LARGE_BATCH (45000) in sitemap()
     ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
     'region-services',
@@ -58,6 +54,7 @@ export async function GET() {
   ]
 
   // Provider sitemaps (DB-dependent, served via /api/sitemap-providers)
+  // Capped to MAX_PROVIDER_SITEMAPS to avoid declaring hundreds of broken sitemaps
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -68,7 +65,7 @@ export async function GET() {
       .eq('noindex', false)
 
     if (!error && count && count > 0) {
-      const batchCount = Math.ceil(count / PROVIDER_BATCH_SIZE)
+      const batchCount = Math.min(Math.ceil(count / PROVIDER_BATCH_SIZE), MAX_PROVIDER_SITEMAPS)
       for (let i = 0; i < batchCount; i++) {
         ids.push(`providers-${i}`)
       }

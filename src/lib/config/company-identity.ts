@@ -58,7 +58,7 @@ export const companyIdentity = {
   },
 
   // Platform status
-  status: (process.env.COMPANY_STATUS as 'pre-launch' | 'launched') || 'pre-launch',
+  status: (process.env.COMPANY_STATUS as 'pre-launch' | 'launched') || 'launched',
 }
 
 /**
