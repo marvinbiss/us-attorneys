@@ -1267,6 +1267,11 @@ export const tradeContent: Record<string, TradeContent> = {
       'Étanchéité de balcon/loggia : 60 à 120 €/m²',
       'Cuvelage de sous-sol : 150 à 300 €/m²',
       'Traitement d\'infiltrations : 50 à 200 €/m²',
+      'Étanchéité toiture terrasse membrane EPDM : 50 à 120 €/m²',
+      'Étanchéité fondations (murs enterrés) : 40 à 80 €/ml',
+      'Étanchéité douche italienne (système d\'étanchéité liquide SPEC) : 300 à 600 €',
+      'Réparation de fissures de façade avec traitement d\'étanchéité : 30 à 60 €/ml',
+      'Pose de drain périphérique : 80 à 150 €/ml',
     ],
     tips: [
       'L\'étanchéité d\'un toit-terrasse doit être contrôlée tous les 5 ans. Un défaut mineur non traité peut entraîner des dommages structurels majeurs.',
@@ -1274,6 +1279,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez un test d\'étanchéité (mise en eau) après les travaux : l\'étanchéiste remplit la terrasse de quelques centimètres d\'eau pendant 48 à 72h pour vérifier l\'absence de fuite.',
       'Coupler l\'étanchéité avec une isolation thermique (toiture chaude) est plus rentable que de faire les deux séparément et ouvre droit aux aides MaPrimeRénov\'.',
       'Vérifiez que l\'étanchéiste possède une garantie décennale spécifique à l\'étanchéité (et pas seulement une garantie généraliste bâtiment) pour être correctement couvert en cas de sinistre.',
+      'Ne négligez jamais l\'étanchéité d\'une douche italienne : c\'est le premier poste de sinistre en assurance habitation. Un défaut d\'étanchéité sous le receveur provoque des dégâts des eaux invisibles pendant des mois.',
+      'Vérifiez l\'étanchéité de votre toiture terrasse après chaque hiver : le gel, la neige et les écarts de température fragilisent les membranes et les relevés d\'étanchéité.',
+      'Un drain périphérique bien posé protège vos fondations pour 30 ans minimum. C\'est un investissement rentable qui évite des travaux de cuvelage beaucoup plus coûteux par la suite.',
     ],
     faq: [
       { q: 'Quelle garantie pour des travaux d\'étanchéité ?', a: 'Les travaux d\'étanchéité sont couverts par la garantie décennale (10 ans). De plus, la plupart des fabricants de membranes offrent une garantie produit de 15 à 25 ans. Exigez les attestations d\'assurance et de garantie fabricant.' },
@@ -1281,10 +1289,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Comment savoir si mon toit-terrasse a un problème d\'étanchéité ?', a: 'Les signes révélateurs sont : traces d\'humidité ou auréoles au plafond de l\'étage inférieur, flaques stagnantes sur la terrasse après 48h sans pluie (défaut de pente), cloquage ou décollement de la membrane, végétation qui pousse dans les joints. Un diagnostic par un étanchéiste professionnel coûte 200 à 500 € et permet de cibler les réparations.' },
       { q: 'Qu\'est-ce qu\'un cuvelage de sous-sol ?', a: 'Le cuvelage est un traitement d\'étanchéité intérieur ou extérieur des murs enterrés pour stopper les infiltrations d\'eau dans un sous-sol. Il combine un enduit d\'imperméabilisation, un drainage périphérique et parfois une pompe de relevage. Le coût varie de 150 à 300 €/m² de surface traitée. C\'est la solution définitive pour un sous-sol humide.' },
       { q: 'Peut-on végétaliser un toit-terrasse étanchéifié ?', a: 'Oui, à condition que la structure porte le surpoids (80 à 150 kg/m² selon le type de végétalisation) et que l\'étanchéité soit anti-racines (membrane bitume avec voile de verre ou EPDM). La végétalisation extensive (sedum) est la plus légère et la moins exigeante en entretien. Elle prolonge la durée de vie de l\'étanchéité en la protégeant des UV.' },
+      { q: 'Quelle membrane choisir pour une toiture terrasse ?', a: 'L\'EPDM (caoutchouc synthétique) offre une durée de vie de 50 ans avec très peu d\'entretien, c\'est le choix premium. Le bitume SBS est moins cher mais dure 20 à 30 ans et nécessite un entretien plus régulier. Le PVC offre un bon rapport qualité-prix avec 25 à 35 ans de durée de vie. Le choix dépend du budget, de la surface et de l\'accessibilité de la terrasse.' },
+      { q: 'Mon sous-sol est humide : faut-il un cuvelage ?', a: 'Si les infiltrations sont latérales (eau qui traverse les murs enterrés), le cuvelage est la solution définitive. Il consiste à créer une chemise étanche à l\'intérieur des murs du sous-sol, combinant enduit d\'imperméabilisation, drainage et parfois pompe de relevage. Le coût varie de 150 à 300 €/m² de surface traitée. Un simple traitement hydrofuge de surface ne suffira pas face à une pression hydrostatique.' },
+      { q: 'L\'étanchéité est-elle couverte par la garantie décennale ?', a: 'Oui, l\'étanchéité fait partie du gros œuvre et relève de la garantie décennale (10 ans). Les sinistres liés à un défaut d\'étanchéité sont d\'ailleurs les plus fréquents en assurance décennale. L\'étanchéiste doit vous remettre son attestation d\'assurance décennale avant le début des travaux. Conservez-la précieusement : elle vous protège pendant 10 ans en cas d\'infiltration.' },
     ],
     emergencyInfo:
       'En cas d\'infiltration d\'eau majeure par la toiture-terrasse ou le sous-sol, un étanchéiste peut réaliser une réparation provisoire d\'urgence pour stopper les dégâts. Disponibilité et délais variables. Majorations : +60 à 100 % en dehors des heures ouvrées.',
-    certifications: ['Qualibat (qualification 1311/1312 étanchéité)', 'Certification ASQUAL (géomembranes et étanchéité)', 'RGE (obligatoire si isolation thermique associée — toiture chaude)'],
+    certifications: ['Qualibat (qualification 1311/1312 étanchéité)', 'Certification ASQUAL (géomembranes et étanchéité)', 'RGE (obligatoire si isolation thermique associée — toiture chaude)', 'Qualibat 3191 (étanchéité toitures-terrasses)', 'Qualibat 3192 (étanchéité façades)', 'Certification CSFE (Chambre Syndicale Française de l\'Étanchéité)', 'Label RGE pour travaux d\'étanchéité couplés à l\'isolation thermique', 'Assurance décennale obligatoire spécifique à l\'étanchéité'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 3 semaines',
   },
 
@@ -1298,6 +1309,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Peinture de façade : 20 à 45 €/m²',
       'Nettoyage haute pression : 10 à 25 €/m²',
       'Traitement anti-mousse et hydrofuge : 15 à 30 €/m²',
+      'Ravalement complet (nettoyage + enduit + peinture) : 40 à 100 €/m²',
+      'Crépi ou enduit décoratif (taloché, gratté, ribbé) : 30 à 60 €/m²',
+      'Reprise de fissures structurelles avec agrafage : 30 à 80 €/ml',
     ],
     tips: [
       'Un ravalement de façade est obligatoire tous les 10 ans dans certaines communes. Renseignez-vous auprès de votre mairie.',
@@ -1305,6 +1319,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Vérifiez les arrêtés municipaux sur les couleurs autorisées pour votre façade : les ABF (Architectes des Bâtiments de France) imposent des teintes spécifiques dans les zones protégées.',
       'Avant un ravalement, faites diagnostiquer les fissures : une fissure structurelle nécessite un traitement des fondations avant toute remise en état de la façade.',
       'Privilégiez les mois de printemps et d\'automne pour le ravalement : les enduits ne doivent pas être appliqués en dessous de 5 °C ni au-dessus de 35 °C.',
+      'Le ravalement est l\'occasion idéale de faire une ITE : l\'échafaudage est déjà en place, ce qui réduit le coût global d\'environ 30 %.',
+      'Un diagnostic façade préalable (500 à 1 000 €) permet d\'identifier les désordres cachés (infiltrations, décollement d\'enduit, carbonatation du béton) et d\'éviter les mauvaises surprises en cours de chantier.',
+      'Vérifiez les obligations communales de ravalement : certaines mairies envoient des mises en demeure avec astreintes financières de 50 à 200 € par jour de retard si les travaux ne sont pas engagés dans le délai imparti.',
     ],
     faq: [
       { q: 'Combien coûte un ravalement de façade pour une maison ?', a: 'Pour une maison de 100 m² de façade, comptez entre 5 000 et 15 000 € selon l\'état du support, le type d\'enduit et la nécessité d\'un échafaudage. Avec ITE, le budget monte à 15 000 à 25 000 € mais les aides peuvent couvrir jusqu\'à 40 %.' },
@@ -1312,10 +1329,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles aides financières pour un ravalement de façade ?', a: 'Un ravalement simple n\'ouvre pas droit aux aides. En revanche, si vous ajoutez une isolation thermique par l\'extérieur (ITE), vous pouvez bénéficier de MaPrimeRénov\' (jusqu\'à 75 €/m²), des CEE (prime énergie), de l\'éco-PTZ et de la TVA à 5,5 %. Certaines communes accordent aussi des subventions pour l\'embellissement des façades.' },
       { q: 'Combien de temps durent les travaux de ravalement ?', a: 'Pour une maison individuelle, le ravalement dure 2 à 4 semaines selon la surface et le type de traitement (nettoyage simple, enduit, ITE). L\'installation de l\'échafaudage prend 1 à 2 jours. Prévoyez que l\'échafaudage restera en place pendant toute la durée du chantier, ce qui peut gêner l\'accès au jardin ou au parking.' },
       { q: 'Quelle différence entre enduit monocouche et enduit traditionnel ?', a: 'L\'enduit monocouche (ou enduit projeté) s\'applique en une seule passe à la machine et coûte 25 à 50 €/m². L\'enduit traditionnel se pose en 3 couches à la main (gobetis, corps d\'enduit, finition) et revient à 40 à 70 €/m². Le traditionnel offre une meilleure durabilité et un rendu plus authentique, mais il est plus long à mettre en œuvre.' },
+      { q: 'Combien coûte une ITE (isolation thermique par l\'extérieur) ?', a: 'L\'ITE coûte entre 120 et 200 €/m² fourniture et pose comprises, selon l\'isolant choisi (polystyrène expansé, laine de roche, fibre de bois) et la finition (enduit mince, bardage). Pour une maison de 100 m² de façade, le budget se situe entre 12 000 et 20 000 €. Les aides MaPrimeRénov\' peuvent atteindre 75 €/m² et les primes CEE 10 à 15 €/m², réduisant significativement le reste à charge.' },
+      { q: 'Faut-il une autorisation pour un ravalement de façade ?', a: 'Oui, une déclaration préalable de travaux est obligatoire dans la plupart des communes (article R421-17-a du Code de l\'urbanisme). En zone protégée (ABF, site classé, AVAP), l\'accord de l\'Architecte des Bâtiments de France est requis, ce qui allonge le délai d\'instruction à 2 mois au lieu d\'1 mois. L\'absence de déclaration expose à une amende pouvant atteindre 6 000 €/m² de surface concernée.' },
+      { q: 'Comment choisir entre un crépi et une peinture de façade ?', a: 'Le crépi (enduit projeté ou taloché) est idéal pour masquer les irrégularités du support et offre une durabilité de 20 à 30 ans pour un coût de 30 à 60 €/m². La peinture de façade (20 à 40 €/m²) convient aux supports déjà en bon état et se renouvelle tous les 10 à 15 ans. Pour une façade très dégradée, l\'enduit est préférable ; pour un simple rafraîchissement, la peinture suffit.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour le ravalement de façade. Les travaux de façade nécessitent un échafaudage et une déclaration préalable en mairie. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
-    certifications: ['Qualibat (qualification 6111/6112 ravalement, 7131/7132 ITE)', 'RGE (obligatoire pour l\'ITE — isolation thermique par l\'extérieur)', 'Certification applicateur Sto, Weber ou Parex-Lanko (partenaires fabricants)'],
+    certifications: ['Qualibat (qualification 6111/6112 ravalement, 7131/7132 ITE)', 'RGE (obligatoire pour l\'ITE — isolation thermique par l\'extérieur)', 'Certification applicateur Sto, Weber ou Parex-Lanko (partenaires fabricants)', 'Qualibat 7131 (ravalement de façade — enduits et peintures)', 'Qualibat 7132 (ITE — isolation thermique par l\'extérieur)', 'NF DTU 42.1 (référentiel peinture de façade — conformité technique)', 'Assurance décennale (obligatoire pour tous travaux de façade et d\'ITE)', 'Certification ACQPA (application de peintures anticorrosion et de protection)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
 
@@ -1391,6 +1411,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Rampe d\'escalier en fer forgé : 200 à 600 €/ml',
       'Table ou mobilier en fer forgé : 500 à 3 000 €',
       'Restauration d\'ouvrages anciens : sur devis',
+      'Fabrication de grille de défense pour fenêtre : 200 à 600 €/fenêtre',
+      'Garde-corps d\'escalier ou de balcon en fer forgé : 150 à 400 €/ml',
+      'Marquise ou auvent en fer forgé : 800 à 3 000 €',
     ],
     tips: [
       'La ferronnerie d\'art est un métier rare — les délais de fabrication sont souvent longs (4 à 8 semaines). Anticipez vos projets.',
@@ -1398,6 +1421,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez à voir le book de réalisations du ferronnier : chaque artisan a un style propre (contemporain, classique, art déco). Assurez-vous que son esthétique correspond à votre projet.',
       'Le fer forgé nécessite un entretien régulier : appliquez une peinture antirouille tous les 5 à 7 ans pour les ouvrages extérieurs afin de préserver l\'aspect et la solidité.',
       'Pour un portail en fer forgé motorisé, prévoyez les gaines électriques dans les piliers avant la pose du portail — les ajouter après est beaucoup plus coûteux.',
+      'La métallisation à chaud (projection de zinc) offre une protection anticorrosion de 20 ans et plus sans entretien, bien supérieure à la simple peinture antirouille.',
+      'Demandez un échantillon de finition (patine, thermolaquage, cirage) avant de valider la commande — le rendu final varie considérablement selon la technique employée.',
+      'Les délais de fabrication en atelier sont de 4 à 8 semaines en moyenne : planifiez votre projet en amont, surtout au printemps quand les carnets de commandes sont pleins.',
     ],
     faq: [
       { q: 'Quelle est la différence entre un ferronnier et un métallier ?', a: 'Le ferronnier travaille principalement le fer forgé à chaud (forge traditionnelle) pour des ouvrages décoratifs et artistiques. Le métallier travaille l\'acier, l\'inox et l\'aluminium à froid (soudure, pliage) pour des ouvrages structurels. En pratique, beaucoup d\'artisans maîtrisent les deux techniques.' },
@@ -1405,10 +1431,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Le fer forgé est-il adapté en bord de mer ?', a: 'Le fer forgé supporte mal les environnements salins sans traitement adapté. Pour le bord de mer, exigez une galvanisation à chaud (immersion dans un bain de zinc à 450 °C) suivie d\'une peinture époxy marine. Ce traitement double le coût de la finition mais garantit 20 à 30 ans de tenue. Alternativement, optez pour de l\'inox 316L ou de l\'aluminium.' },
       { q: 'Peut-on restaurer une rampe ou un portail ancien en fer forgé ?', a: 'Oui, un ferronnier spécialisé en restauration peut décaper, redresser et ressouder des ouvrages anciens. La restauration coûte généralement 30 à 60 % du prix d\'un ouvrage neuf équivalent, tout en préservant le cachet d\'origine. Le ferronnier peut aussi reproduire à l\'identique les éléments manquants (volutes, rosaces). Comptez 4 à 8 semaines de travail en atelier.' },
       { q: 'Le fer forgé est-il plus solide que l\'acier soudé ?', a: 'Le fer forgé traditionnel (travaillé à la forge à 900-1200 °C) offre une structure fibreuse très résistante à la fatigue et aux chocs. L\'acier soudé industriel est plus rigide mais les soudures constituent des points de faiblesse potentiels. Pour un garde-corps ou un portail, les deux techniques offrent une solidité largement suffisante. Le fer forgé se distingue surtout par son esthétique unique.' },
+      { q: 'Fer forgé ou aluminium pour un portail ?', a: 'Le fer forgé est artisanal, durable et noble : chaque portail est unique, avec une durée de vie de 50 ans et plus. En revanche, il nécessite un entretien anticorrosion régulier (tous les 5 à 7 ans). L\'aluminium est léger, sans entretien et résistant à la corrosion, mais son aspect reste industriel et standardisé. Le fer forgé est un choix patrimonial, l\'aluminium un choix pratique.' },
+      { q: 'Combien coûte un garde-corps en fer forgé ?', a: 'Un garde-corps en fer forgé coûte entre 150 et 400 €/ml selon la complexité du motif, pose incluse. Pour un balcon standard de 3 à 4 mètres linéaires, comptez 1 500 à 4 000 € tout compris. Un modèle simple à barreaux droits sera en bas de fourchette, tandis qu\'un ouvrage avec volutes, feuillages ou motifs personnalisés se situera en haut de gamme.' },
+      { q: 'La ferronnerie d\'art est-elle éligible aux aides de l\'État ?', a: 'Les ouvrages purement décoratifs (mobilier, sculptures) ne sont pas éligibles aux aides. En revanche, les grilles de défense pour fenêtres peuvent relever de la sécurisation du logement. Par ailleurs, tous les travaux de ferronnerie en rénovation d\'un logement de plus de 2 ans bénéficient d\'une TVA réduite à 10 % au lieu de 20 %, ce qui représente une économie significative sur des ouvrages coûteux.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la ferronnerie d\'art. Les ouvrages en fer forgé sont fabriqués sur mesure en atelier et nécessitent un délai de fabrication de 4 à 8 semaines. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
-    certifications: ['Label Entreprise du Patrimoine Vivant (EPV — délivré par l\'État)', 'Titre de Maître Artisan en métier d\'art (Chambre de Métiers)', 'Compagnons du Devoir (formation d\'excellence)', 'Qualibat (qualification 4411 métallerie-serrurerie)'],
+    certifications: ['Label Entreprise du Patrimoine Vivant (EPV — délivré par l\'État)', 'Titre de Maître Artisan en métier d\'art (Chambre de Métiers)', 'Compagnons du Devoir (formation d\'excellence)', 'Qualibat (qualification 4411 métallerie-serrurerie)', 'Compagnons du Tour de France (parcours de formation itinérant)', 'Certification soudure EN ISO 9606 (qualification du soudeur)', 'Assurance décennale obligatoire (garantie 10 ans sur les ouvrages structurels)', 'Label Maître Artisan en Métier d\'Art (délivré par la Chambre de Métiers et de l\'Artisanat)'],
     averageResponseTime: 'Devis sous 1 semaine, fabrication 4 à 8 semaines',
   },
 
