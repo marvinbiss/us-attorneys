@@ -323,6 +323,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Laquage de boiseries et portes : 30 à 60 €/m²',
       'Traitement et peinture de volets : 50 à 120 € par volet',
       'Peinture de plafond seul : 18 à 35 €/m²',
+      'Peinture de façade extérieure (hors ravalement complet) : 25 à 50 €/m²',
+      'Enduit de lissage sur murs abîmés : 15 à 30 €/m²',
     ],
     tips: [
       'Un bon peintre commence toujours par une préparation minutieuse des surfaces : lessivage, ponçage, rebouchage des fissures et application d\'une sous-couche. Cette étape représente 60 % du travail et garantit un résultat durable.',
@@ -330,6 +332,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour un ravalement de façade, vérifiez que le peintre possède une garantie décennale, car les travaux extérieurs engagent la responsabilité du professionnel pendant 10 ans.',
       'Le devis doit indiquer le nombre de couches prévues (minimum 2 pour un résultat optimal), le type de finition (mat, satiné, brillant) et si la préparation des supports est incluse.',
       'Privilégiez les peintures à faible émission de COV (Composants Organiques Volatils), identifiées par le label A+ sur l\'étiquette, surtout pour les chambres et les pièces de vie.',
+      'Aérez abondamment la pièce pendant et après les travaux de peinture (au moins 24 à 48 h), même avec des peintures acryliques à l\'eau qui émettent moins de solvants que les glycéro.',
+      'Préparer les murs (rebouchage, ponçage, sous-couche) représente 50 % du résultat final : ne négligez jamais cette étape et vérifiez que le peintre la détaille bien dans son devis.',
+      'Demandez à votre peintre de vous présenter un nuancier RAL ou NCS afin de valider la teinte exacte avant le chantier : l\'écran d\'un téléphone ne restitue pas fidèlement les couleurs.',
     ],
     faq: [
       {
@@ -372,6 +377,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'RGE (obligatoire si ITE — isolation thermique par l\'extérieur)',
       'ACQPA (qualification peinture anticorrosion — ouvrages métalliques)',
       'Compagnons du Devoir (formation d\'excellence)',
+      'Certification AFNOR NF Environnement (peintures et vernis écologiques)',
+      'Label Artisan d\'Art (spécialiste en peinture décorative, faux bois, patines)',
+      'Assurance décennale (obligatoire pour tous travaux de peinture extérieure et ravalement)',
+      'Certification IREF (Institut de Recherche et d\'Études sur la Finition)',
     ],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
@@ -1824,6 +1833,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Raccordement fibre optique intérieur : 100 à 300 €',
       'Amplificateur de signal TNT : 80 à 200 €',
       'Câblage coaxial ou Ethernet : 30 à 60 €/point',
+      'Orientation ou réorientation parabole satellite : 80 à 150 €',
+      'Installation antenne 4G/5G fixe (box extérieure) : 150 à 350 €',
+      'Installation antenne collective immeuble : 500 à 2 000 €',
     ],
     tips: [
       'Depuis 2023, la TNT en Ultra HD (DVB-T2) se déploie progressivement. Vérifiez que votre installation est compatible.',
@@ -1831,6 +1843,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Si vous passez à la fibre optique, faites câbler plusieurs pièces en Ethernet Cat 6 lors de l\'installation : le Wi-Fi reste moins stable que le filaire pour le streaming 4K et le télétravail.',
       'En immeuble collectif, vérifiez si une antenne collective existe avant d\'installer une antenne individuelle — votre syndic peut avoir un contrat couvrant déjà la TNT et le satellite.',
       'Pour les zones de réception difficile, un amplificateur de signal TNT avec filtre 4G/5G évite les interférences causées par les antennes relais de téléphonie mobile à proximité.',
+      'Vérifiez la couverture TNT de votre adresse sur recevoirlatnt.fr avant d\'investir dans une nouvelle antenne : le site indique l\'émetteur le plus proche et les chaînes disponibles.',
+      'Un câble coaxial de qualité (double blindage, type 17 VATC ou PH 100) réduit considérablement les interférences et les pertes de signal, surtout sur les grandes longueurs.',
+      'Une antenne intérieure ne suffit généralement pas au-delà de 20 km de l\'émetteur TNT : privilégiez une antenne extérieure en toiture pour une réception fiable et stable.',
     ],
     faq: [
       { q: 'TNT, satellite ou box internet : que choisir ?', a: 'La TNT est gratuite et couvre 97 % du territoire mais offre moins de chaînes. Le satellite (Canal+, Fransat) offre plus de chaînes mais nécessite une parabole. La box internet ADSL/fibre propose la TV via le réseau internet avec replay et VOD inclus. En zone blanche (pas de fibre ni de bonne couverture TNT), le satellite reste la meilleure option.' },
@@ -1838,10 +1853,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien coûte le raccordement fibre optique intérieur ?', a: 'Le raccordement de la fibre depuis le point de branchement optique (PBO) jusqu\'à la prise terminale optique (PTO) est gratuit et réalisé par l\'opérateur. En revanche, si vous souhaitez plusieurs prises Ethernet dans différentes pièces ou un câblage encastré, un antenniste facture 100 à 300 € par point de desserte, plus le passage de gaines si nécessaire.' },
       { q: 'Faut-il une autorisation pour installer une parabole ?', a: 'En maison individuelle, aucune autorisation n\'est requise sauf en zone protégée (ABF). En copropriété, le règlement peut interdire les paraboles en façade, mais la loi du 2 juillet 1966 garantit le « droit à l\'antenne » : le syndic ne peut pas refuser si aucune antenne collective ne fournit un service équivalent. La parabole doit être discrète et ne pas nuire à l\'esthétique du bâtiment.' },
       { q: 'Mon antenne TNT est-elle compatible avec la nouvelle norme DVB-T2 ?', a: 'L\'antenne elle-même (râteau UHF) est généralement compatible : c\'est le décodeur TNT ou le téléviseur qui doit supporter le DVB-T2/HEVC. Les téléviseurs vendus depuis 2020 intègrent généralement cette norme. Si votre téléviseur est plus ancien, un décodeur TNT HD compatible DVB-T2 coûte 30 à 60 €. Vérifiez sur le site recevoirlatnt.fr.' },
+      { q: 'TNT ou satellite : quel choix pour une bonne réception TV ?', a: 'La TNT est gratuite et ne nécessite aucun abonnement, mais la couverture varie selon votre éloignement de l\'émetteur (environ 97 % du territoire). Le satellite (Astra 19.2° pour Fransat ou Canal+) couvre 100 % du territoire français, y compris les zones blanches, mais peut impliquer un abonnement selon le bouquet choisi. En zone bien couverte, la TNT reste le choix le plus économique.' },
+      { q: 'Peut-on installer une antenne parabolique en copropriété ?', a: 'Oui, la loi du 2 juillet 1966 garantit le « droit à l\'antenne » pour tout occupant d\'un immeuble collectif. Le syndic ne peut pas s\'y opposer si aucune antenne collective ne fournit un service équivalent. Toutefois, le règlement de copropriété peut imposer des contraintes esthétiques : couleur, emplacement discret, fixation non visible depuis la rue. Il est conseillé de notifier le syndic par lettre recommandée avant l\'installation.' },
+      { q: 'Comment améliorer la réception TNT dans une zone mal couverte ?', a: 'Plusieurs solutions existent : installer une antenne directionnelle à gain élevé (type Yagi) orientée précisément vers l\'émetteur, ajouter un amplificateur de signal avec filtre 4G/5G, positionner l\'antenne le plus haut possible sur le toit, et vérifier l\'état du câblage coaxial (remplacer tout câble de plus de 15 ans). Un antenniste peut mesurer le niveau de signal et recommander la meilleure combinaison.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour l\'installation d\'antennes ou de paraboles. Pour une panne de réception TNT ou satellite, un antenniste peut intervenir sous 48h à 1 semaine pour un diagnostic et une réparation.',
-    certifications: ['Titre Professionnel Installateur Antenniste (inscrit au RNCP)', 'Habilitation électrique (obligatoire)', 'Habilitation travail en hauteur (obligatoire pour interventions sur toiture)', 'Formation fibre optique FTTH (raccordement et câblage)'],
+    certifications: ['Titre Professionnel Installateur Antenniste (inscrit au RNCP)', 'Habilitation électrique (obligatoire)', 'Habilitation travail en hauteur (obligatoire pour interventions sur toiture)', 'Formation fibre optique FTTH (raccordement et câblage)', 'Qualification professionnelle antenniste (Chambre des Métiers)', 'Certification ACOME (câblage et connectique)', 'Label Quali\'SAT (installateur satellite agréé)', 'CACES nacelle (interventions en hauteur sur immeubles)'],
     averageResponseTime: 'Intervention sous 48h à 1 semaine',
   },
 
