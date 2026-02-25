@@ -1037,6 +1037,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pose de moquette : 10 à 25 €/m²',
       'Ragréage du sol (mise à niveau) : 15 à 30 €/m²',
       'Pose de sol souple linoléum : 20 à 40 €/m²',
+      'Dépose de l\'ancien revêtement de sol : 5 à 15 €/m²',
+      'Pose de sol amortissant (crèche, salle de sport) : 30 à 60 €/m²',
     ],
     tips: [
       'Le ragréage (mise à niveau du support) est souvent indispensable avant la pose d\'un revêtement de sol. Un sol mal préparé est la première cause de désordres. Ce poste peut représenter 15 à 30 €/m² supplémentaires.',
@@ -1044,6 +1046,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Les sols PVC/vinyle nouvelle génération (LVT - Luxury Vinyl Tiles) offrent un rendu très réaliste (imitation bois, pierre) avec une grande résistance à l\'eau et à l\'usure, idéaux pour les salles de bain et cuisines.',
       'Demandez au solier le classement UPEC du revêtement proposé et vérifiez qu\'il correspond à l\'usage de la pièce : U3 P3 minimum pour une entrée ou un couloir, U2 P2 suffisant pour une chambre.',
       'Prévoyez 5 à 10 % de matériau supplémentaire pour les coupes et les raccords. Pour les poses en diagonale ou dans les pièces en L, cette marge monte à 15 %.',
+      'Le ragréage est indispensable si le sol présente plus de 2 mm de différence de niveau sur 2 mètres : sans cette étape, le revêtement ondulera et se décollera prématurément.',
+      'Un sol vinyle LVT (Luxury Vinyl Tiles) imite parfaitement le bois ou la pierre naturelle pour environ 3 fois moins cher, avec une résistance à l\'eau que le parquet ne peut pas offrir.',
+      'En copropriété, vérifiez le classement acoustique minimum exigé dans le règlement (indice ΔLw) : une sous-couche acoustique adaptée évite les litiges avec les voisins du dessous.',
     ],
     faq: [
       {
@@ -1078,6 +1083,18 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Quelle sous-couche choisir sous un parquet flottant ?',
         a: 'La sous-couche en mousse polyéthylène (2 à 4 €/m²) est l\'option économique de base. La sous-couche en liège (5 à 10 €/m²) offre la meilleure isolation phonique et thermique. La sous-couche en fibre de bois (4 à 8 €/m²) est le choix écologique. Pour un sol sur vide sanitaire ou en rez-de-chaussée, ajoutez un pare-vapeur pour protéger le parquet de l\'humidité.',
       },
+      {
+        q: 'Sol PVC, vinyle ou linoléum : quelle différence ?',
+        a: 'Le PVC et le vinyle sont des matériaux synthétiques à base de polychlorure de vinyle : très résistants à l\'eau, faciles d\'entretien et économiques (15 à 30 €/m² posés). Le linoléum est un revêtement 100 % naturel (huile de lin, résine, farine de bois, jute) : plus cher (30 à 50 €/m²) mais écologique, antibactérien et recyclable. Le linoléum est à privilégier dans les crèches et les établissements de santé.',
+      },
+      {
+        q: 'Un sol souple peut-il être posé sur un plancher chauffant ?',
+        a: 'Oui, à condition de choisir un revêtement compatible dont la résistance thermique ne dépasse pas 0,15 m².K/W. Les sols PVC/vinyle et le linoléum sont généralement compatibles. La moquette épaisse est déconseillée car elle isole trop et réduit l\'efficacité du chauffage. Demandez systématiquement la fiche technique du produit au solier pour vérifier cette valeur.',
+      },
+      {
+        q: 'Combien de temps dure un sol souple ?',
+        a: 'La durée de vie dépend du type de revêtement et de l\'intensité du passage : un sol PVC/vinyle dure 15 à 25 ans, un linoléum 25 à 40 ans grâce à sa composition naturelle très résistante, et une moquette 10 à 15 ans dans une chambre mais seulement 5 à 8 ans dans un couloir ou un bureau à fort passage. Un entretien régulier et adapté prolonge sensiblement la durée de vie.',
+      },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la pose de revêtements de sol. Prenez rendez-vous pour un devis gratuit sous 48h et une intervention planifiée sous 1 à 3 semaines.',
@@ -1086,6 +1103,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 6421 parquets et revêtements en bois)',
       'Titre Professionnel Solier Moquettiste (inscrit au RNCP)',
       'Compagnons du Devoir (formation d\'excellence)',
+      'Qualibat 6231 (revêtements de sols souples collés)',
+      'NF DTU 53.1 (pose de revêtements de sol textiles et moquettes)',
+      'NF DTU 53.2 (pose de revêtements de sol PVC collés)',
+      'Certification UPEC (classement de résistance des locaux et revêtements)',
     ],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
@@ -1373,6 +1394,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'Doublage isolant (plaque + isolant) : 40 à 80 €/m²',
       'Enduit plâtre traditionnel : 25 à 45 €/m²',
       'Staff et corniche décorative : 30 à 100 €/ml',
+      'Pose de plaques de plâtre (BA13) : 25 à 45 €/m²',
+      'Enduit de lissage : 15 à 30 €/m²',
+      'Ratissage murs avant peinture : 10 à 20 €/m²',
+      'Bandes et joints de placo : 8 à 15 €/ml',
     ],
     tips: [
       'Pour les pièces humides (salle de bain, cuisine), exigez des plaques hydrofuges (vertes) et non des plaques standard.',
@@ -1380,6 +1405,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour une isolation acoustique efficace entre deux pièces, demandez une cloison double parement (2 plaques de chaque côté) avec laine minérale de 45 mm minimum dans l\'ossature.',
       'Les plaques de plâtre existent en version coupe-feu (rose, résistance 1 à 2 heures), hydrofuge (verte) et haute dureté (bleue). Choisissez la bonne référence selon l\'usage de la pièce.',
       'Pour un faux-plafond, demandez un plâtrier qui utilise des suspentes anti-vibratiles : elles réduisent considérablement la transmission des bruits d\'impact venant de l\'étage supérieur.',
+      'Le placo phonique (Placo Phonique ou similaire) réduit le bruit de 50 % par rapport au BA13 standard : un investissement rentable pour les chambres et les pièces de vie.',
+      'Prévoyez les boîtiers électriques AVANT la pose des plaques : les découpes après coup fragilisent le placo et compliquent le travail de l\'électricien.',
+      'Un bon plâtrier fait les bandes invisibles dès la première passe. Si vous voyez des surépaisseurs ou des traces de ponçage excessif, c\'est le signe d\'un manque de savoir-faire.',
     ],
     faq: [
       { q: 'Plaque de plâtre ou enduit traditionnel ?', a: 'Les plaques de plâtre (BA13) sont plus rapides à poser et moins chères (30-55 €/m²). L\'enduit traditionnel offre une meilleure inertie thermique et acoustique mais coûte plus cher en main-d\'œuvre. Pour une rénovation, les plaques sont souvent privilégiées ; pour du neuf haut de gamme, l\'enduit traditionnel.' },
@@ -1387,10 +1415,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Comment réparer une fissure dans un plafond en plâtre ?', a: 'Pour une fissure superficielle, grattez la fissure en V, appliquez un calicot (bande à fissure) enduit de MAP ou d\'enduit de lissage. Pour une fissure structurelle (qui s\'ouvre progressivement), faites d\'abord diagnostiquer la cause (mouvement de structure, tassement) avant de réparer le plâtre. Une réparation cosmétique sur une fissure active réapparaîtra en quelques mois.' },
       { q: 'Combien de temps faut-il pour poser un faux-plafond ?', a: 'Un plâtrier expérimenté pose environ 15 à 25 m² de faux-plafond par jour. Pour une maison de 80 m², comptez 4 à 6 jours (ossature + plaques + bandes). Ajoutez 1 à 2 jours pour les finitions (enduit de lissage, ponçage). Les découpes pour spots encastrés et VMC sont incluses dans ce délai.' },
       { q: 'Quelle est la hauteur minimale pour un faux-plafond ?', a: 'La hauteur sous plafond minimale habitable est de 2,20 m selon le Code de la construction. Un faux-plafond standard consomme 5 à 10 cm de hauteur (suspentes + ossature + plaque). Si vous prévoyez des spots encastrés, comptez 10 à 15 cm. Pour un passage de gaines de VMC ou de climatisation, il faudra 20 à 30 cm.' },
+      { q: 'Placo standard ou hydrofuge : lequel choisir ?', a: 'Le BA13 standard (blanc) convient aux pièces sèches (chambres, salon, couloirs). Le BA13H (vert) est hydrofuge et obligatoire dans les pièces humides (salle de bain, cuisine, buanderie). Le BA13I (rose) est ignifuge et recommandé pour les cloisons de chaufferie, les gaines techniques et les locaux à risque incendie. Le surcoût du BA13H par rapport au standard est d\'environ 2 à 3 €/m².' },
+      { q: 'Peut-on accrocher des charges lourdes sur du placo ?', a: 'Avec des chevilles Molly (chevilles à expansion métalliques), vous pouvez suspendre jusqu\'à 30 kg par point de fixation sur du BA13 standard. Pour des charges plus lourdes (meubles de cuisine, téléviseur, ballon d\'eau chaude), utilisez des plaques renforcées type Habito (Placo) qui supportent jusqu\'à 80 kg sans chevilles spéciales. Au-delà, prévoyez des renforts en bois ou en métal dans l\'ossature lors de la pose.' },
+      { q: 'Combien de temps pour monter une cloison placo ?', a: 'Un plâtrier-plaquiste expérimenté monte une cloison simple de 10 m² en une journée (ossature métallique + plaques + vissage). Comptez 2 à 3 jours supplémentaires pour une cloison avec isolation intégrée et finition complète (bandes, enduit de lissage, ponçage). Le temps de séchage des enduits (24 à 48 h entre chaque couche) allonge le planning global.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la plâtrerie. Pour les réparations de cloisons, faux-plafonds ou enduits, prenez rendez-vous pour un devis gratuit sous 48h.',
-    certifications: ['Qualibat (qualification 4111/4112 plâtrerie, cloisons et doublages)', 'Certification Placo Applicateur (partenaire Saint-Gobain)', 'RGE (obligatoire si doublage isolant ouvrant droit aux aides)'],
+    certifications: ['Qualibat (qualification 4111/4112 plâtrerie, cloisons et doublages)', 'Certification Placo Applicateur (partenaire Saint-Gobain)', 'RGE (obligatoire si doublage isolant ouvrant droit aux aides)', 'Qualibat 4121 (plâtrerie — enduits et ouvrages en plâtre)', 'NF DTU 25.41 (cloisons en plaques de plâtre sur ossature métallique)', 'Certification Plaquiste agréé Placo/Saint-Gobain', 'Label RGE (si isolation intégrée aux doublages — accès aux aides CEE et MaPrimeRénov\')', 'Assurance décennale obligatoire (garantie 10 ans sur cloisons, doublages et faux-plafonds)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
 
@@ -1884,6 +1915,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Ramonage de chaudière (conduit fumée) : 70 à 130 €',
       'Débistrage (enlèvement du bistre) : 150 à 400 €',
       'Tubage de conduit : 1 500 à 3 500 €',
+      'Inspection vidéo de conduit de fumée : 100 à 200 €',
+      'Test d\'étanchéité de conduit : 100 à 200 €',
+      'Installation d\'un chapeau de cheminée (aspirateur statique ou anti-refoulement) : 100 à 300 €',
     ],
     tips: [
       'Le ramonage est obligatoire 1 à 2 fois par an selon les communes (vérifiez le règlement sanitaire départemental). Le certificat de ramonage est exigé par votre assurance en cas de sinistre.',
@@ -1891,6 +1925,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Après l\'intervention, exigez un certificat de ramonage portant la date, la nature des travaux et le nom du professionnel : c\'est ce document que votre assureur réclamera en cas de sinistre.',
       'Si votre conduit est ancien (avant 1960) ou fissuré, le ramoneur peut recommander un tubage en inox : c\'est un investissement de 1 500 à 3 500 € qui sécurise l\'installation pour 30 ans.',
       'Pour un poêle à granulés, le ramonage doit inclure le nettoyage du conduit d\'évacuation ET du conduit de raccordement : les deux sont sources d\'encrassement et de risque.',
+      'Conservez le certificat de ramonage pendant au moins 2 ans : c\'est la pièce justificative exigée par votre assureur en cas de sinistre (incendie de cheminée, dégât des eaux lié au conduit).',
+      'Le débistrage est nécessaire dès que le bistre (dépôt dur et brillant) s\'accumule dans le conduit : un simple ramonage mécanique ne l\'élimine pas, il faut une débistreuse rotative.',
+      'Un conduit non tubé construit avant 1960 doit être gainé en inox pour être conforme aux normes DTU 24.1 : sans tubage, les risques de fuite de CO et de feu de cheminée sont multipliés.',
     ],
     faq: [
       { q: 'Que risque-t-on sans ramonage ?', a: 'Sans ramonage, vous risquez un feu de cheminée (bistre inflammable), une intoxication au monoxyde de carbone (CO), et un refus d\'indemnisation par votre assurance en cas d\'incendie. L\'amende pour défaut de ramonage peut atteindre 450 € (contravention de 3e classe).' },
@@ -1898,10 +1935,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelle est la différence entre ramonage mécanique et chimique ?', a: 'Le ramonage mécanique (avec hérisson) est le seul reconnu légalement et par les assurances. Le ramonage chimique (bûches de ramonage) est un complément d\'entretien qui ramollit les dépôts de suie, mais ne remplace jamais le passage d\'un professionnel. Les bûches de ramonage ne donnent pas droit à un certificat.' },
       { q: 'Qu\'est-ce que le bistre et comment le traiter ?', a: 'Le bistre est un dépôt dur et inflammable qui se forme sur les parois du conduit, surtout avec du bois humide ou une combustion lente. Le débistrage nécessite une machine rotative spéciale (débistreuse) et coûte 150 à 400 €. Un ramonage classique ne suffit pas à l\'éliminer. Brûler du bois sec (moins de 20 % d\'humidité) limite sa formation.' },
       { q: 'Comment choisir un bon ramoneur ?', a: 'Vérifiez qu\'il possède une qualification Qualibat 5141 ou une certification équivalente, une assurance responsabilité civile professionnelle et qu\'il remet systématiquement un certificat de ramonage. Privilégiez un professionnel local recommandé par le bouche-à-oreille. Méfiez-vous des offres à moins de 30 € : un ramonage sérieux prend 20 à 40 minutes.' },
+      { q: 'Le ramonage est-il à la charge du locataire ou du propriétaire ?', a: 'Le ramonage est une charge locative : c\'est au locataire de le faire réaliser et de le payer. En revanche, le propriétaire est responsable du bon état du conduit (tubage, étanchéité, conformité). Si le conduit est défaillant, c\'est au propriétaire de financer les travaux de remise en état.' },
+      { q: 'Peut-on ramoner soi-même sa cheminée ?', a: 'Techniquement oui, mais un ramonage par un particulier n\'a aucune valeur légale : seul un professionnel qualifié peut délivrer le certificat de ramonage exigé par les assurances et la réglementation. En cas de sinistre sans certificat professionnel, l\'assureur peut refuser l\'indemnisation.' },
+      { q: 'Combien coûte un ramonage en 2025 ?', a: 'Un ramonage standard de cheminée à foyer ouvert coûte 50 à 90 €. Pour un poêle à bois ou à granulés, comptez 60 à 100 €. Le ramonage d\'un conduit de chaudière gaz ou fioul revient à 50 à 80 €. Le débistrage, plus technique, coûte 200 à 500 € selon l\'état du conduit.' },
     ],
     emergencyInfo:
       'Intervention d\'urgence en cas de feu de cheminée ou de suspicion d\'intoxication au monoxyde de carbone (CO). Appelez les pompiers (18) en premier. Un ramoneur-fumiste peut intervenir sous 2 à 4 heures pour sécuriser le conduit après l\'intervention des secours. Majorations : +80 à 100 % la nuit et le week-end.',
-    certifications: ['Qualibat (qualification 5141 ramonage et entretien de conduits)', 'Titre Professionnel Ramoneur-fumiste (inscrit au RNCP)', 'Compagnons du Devoir (formation d\'excellence)'],
+    certifications: ['Qualibat (qualification 5141 ramonage et entretien de conduits)', 'Titre Professionnel Ramoneur-fumiste (inscrit au RNCP)', 'Compagnons du Devoir (formation d\'excellence)', 'Qualification Qualibat 5142 (ramonage — conduits de fumée)', 'Label Ramoneur certifié ONQR (Organisation Nationale de la Qualification du Ramonage)', 'Certification QUALIRAMONAGE (référentiel qualité métier)', 'Assurance responsabilité civile professionnelle (obligatoire)', 'Habilitation travail en hauteur (interventions sur toiture et souche de cheminée)'],
     averageResponseTime: 'Intervention sous 1 semaine en basse saison, 2 à 3 semaines en automne',
   },
 
