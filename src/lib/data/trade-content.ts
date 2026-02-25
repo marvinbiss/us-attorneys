@@ -2018,6 +2018,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Déménagement T3 longue distance (500 km) : 1 500 à 3 000 €',
       'Déménagement maison (120 m²) : 2 000 à 5 000 €',
       'Garde-meubles : 50 à 200 €/m³/mois',
+      'Monte-meubles / \u00e9l\u00e9vateur ext\u00e9rieur : 200 \u00e0 600 \u20ac la demi-journ\u00e9e',
+      'Emballage complet par le d\u00e9m\u00e9nageur (formule luxe) : +30 \u00e0 50 % du prix de base',
+      'D\u00e9m\u00e9nagement international (Europe) : 3 000 \u00e0 8 000 \u20ac selon volume et destination',
     ],
     tips: [
       'Demandez 3 devis minimum et vérifiez que le déménageur est immatriculé au registre des transporteurs (numéro DREAL).',
@@ -2025,6 +2028,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Faites une visite technique à domicile avec le déménageur avant de signer : c\'est la seule façon d\'obtenir un devis fiable et d\'éviter les mauvaises surprises le jour J (escalier étroit, piano, accès difficile).',
       'Déballez et vérifiez vos cartons dans les 3 jours suivant la livraison : au-delà, il est beaucoup plus difficile de faire jouer la garantie pour les objets endommagés.',
       'Comparez les formules : le déménagement « économique » (vous faites les cartons) coûte 30 à 40 % moins cher que la formule « tout compris » (emballage, transport, déballage).',
+      'Pr\u00e9voyez un carton \u00ab premier jour \u00bb avec draps, serviettes, cafeti\u00e8re, chargeurs et produits d\'hygi\u00e8ne \u2014 vous l\'ouvrirez en premier \u00e0 l\'arriv\u00e9e sans avoir \u00e0 tout d\u00e9baller.',
+      'Photographiez vos branchements (TV, box internet, ordinateur) avant de les d\u00e9connecter : cela facilite grandement la r\u00e9installation dans le nouveau logement.',
+      'Transf\u00e9rez votre contrat d\'\u00e9lectricit\u00e9/gaz 15 jours avant le d\u00e9m\u00e9nagement pour que le nouveau logement soit aliment\u00e9 d\u00e8s votre arriv\u00e9e. Pensez aussi \u00e0 la redirection du courrier (service La Poste, 7,50 \u20ac par mois).',
     ],
     faq: [
       { q: 'Quand réserver son déménageur ?', a: 'Réservez 4 à 6 semaines à l\'avance en période creuse (octobre-mars) et 8 à 12 semaines en période haute (juin-septembre). Les premiers et derniers jours du mois sont les plus demandés. Un déménagement en milieu de mois et en semaine est souvent 20 à 30 % moins cher.' },
@@ -2032,10 +2038,14 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Que faire en cas de casse ou de perte pendant le déménagement ?', a: 'Notez les réserves directement sur le bon de livraison le jour du déménagement (« carton X abîmé », « meuble rayé »). Confirmez par lettre recommandée AR dans les 10 jours. L\'indemnisation dépend de l\'assurance souscrite : la couverture de base rembourse au poids (très peu), tandis que l\'assurance « valeur déclarée » rembourse à la valeur réelle. Conservez les factures d\'achat des objets de valeur.' },
       { q: 'Combien de cartons faut-il pour un déménagement ?', a: 'En moyenne, comptez 20 à 30 cartons pour un studio, 40 à 60 pour un T3 et 80 à 120 pour une maison. La plupart des déménageurs professionnels fournissent les cartons dans le devis (ou les facturent 2 à 5 € pièce). Récupérer des cartons gratuits en supermarché est possible mais vérifiez leur solidité — un carton qui cède peut endommager son contenu.' },
       { q: 'Peut-on déménager ses plantes et son électroménager ?', a: 'Les plantes ne sont pas couvertes par l\'assurance du déménageur et voyagent sous votre responsabilité. Transportez-les vous-même si possible. Pour l\'électroménager, le lave-linge doit être vidangé et ses tambours calés avec les vis de transport. Le réfrigérateur doit être débranché 24h à l\'avance et transporté debout. Le déménageur peut refuser ces appareils s\'ils ne sont pas préparés.' },
+      { q: 'Quelle assurance choisir pour son d\u00e9m\u00e9nagement ?', a: 'L\'assurance \u00ab valeur d\u00e9clar\u00e9e \u00bb (1 \u00e0 2 % de la valeur totale) est recommand\u00e9e. La couverture de base (ad valorem l\u00e9gale) ne rembourse qu\'environ 23 \u20ac/m\u00b3 \u2014 insuffisant pour des meubles ou de l\'\u00e9lectronique. Pour les objets de valeur (\u0153uvres d\'art, instruments), souscrivez une extension \u00ab objets pr\u00e9cieux \u00bb avec inventaire d\u00e9taill\u00e9 et photos avant le d\u00e9part.' },
+      { q: 'Peut-on d\u00e9m\u00e9nager soi-m\u00eame et louer un camion ?', a: 'Oui, la location de camion (20 m\u00b3) co\u00fbte 80 \u00e0 200 \u20ac/jour hors carburant et p\u00e9age. Ajoutez le mat\u00e9riel (couvertures, sangles, diable) et la main-d\'\u0153uvre amicale. Attention : sans assurance pro, vos meubles ne sont pas couverts en cas de casse. Pour un T3 ou plus, le d\u00e9m\u00e9nageur professionnel est souvent plus rentable une fois les risques pris en compte.' },
+      { q: 'Quelles aides financi\u00e8res existent pour un d\u00e9m\u00e9nagement ?', a: 'Action Logement verse jusqu\'\u00e0 1 000 \u20ac (Mobili-Pass) pour les salari\u00e9s du priv\u00e9 mut\u00e9s ou en mobilit\u00e9 professionnelle. La CAF propose une prime de d\u00e9m\u00e9nagement (jusqu\'\u00e0 1 082 \u20ac + 90 \u20ac/enfant) pour les familles de 3 enfants ou plus. Certaines entreprises prennent en charge tout ou partie du d\u00e9m\u00e9nagement lors d\'une mutation.' },
+      { q: 'Comment prot\u00e9ger ses meubles pendant le transport ?', a: 'Utilisez des couvertures de d\u00e9m\u00e9nagement pour les meubles massifs, du papier bulle pour la vaisselle et les objets fragiles, et du film \u00e9tirable pour maintenir les tiroirs et portes ferm\u00e9s. D\u00e9montez les meubles volumineux (armoires, lits) et num\u00e9rotez les pi\u00e8ces avec du ruban adh\u00e9sif. Les cartons \u00ab penderie \u00bb permettent de transporter les v\u00eatements sur cintres sans les froisser.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour le déménagement. Les déménagements nécessitent une visite technique préalable et une planification de 2 à 8 semaines. Prenez rendez-vous pour un devis gratuit sous 48h.',
-    certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service Déménagement', 'Certification ISO 9001 (qualité)'],
+    certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service D\u00e9m\u00e9nagement', 'Certification ISO 9001 (qualit\u00e9)', 'Charte Qualit\u00e9 D\u00e9m\u00e9nagement (FIDI pour l\'international)', 'Assurance responsabilit\u00e9 civile professionnelle', 'Agr\u00e9ment IATA (d\u00e9m\u00e9nagement avec transport a\u00e9rien)'],
     averageResponseTime: 'Devis sous 48h (visite technique), planification 2 à 8 semaines',
   },
 }

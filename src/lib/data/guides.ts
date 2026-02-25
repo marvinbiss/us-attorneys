@@ -726,6 +726,33 @@ export const guides: Guide[] = [
     relatedServices: ['geometre', 'macon', 'architecte-interieur'],
     lastUpdated: '2026-02-25',
   },
+  {
+    slug: 'guide-demenagement-reussir-son-demenagement',
+    title: 'Déménagement : comment bien préparer, choisir son déménageur et maîtriser le budget en 2026',
+    metaDescription: 'Guide complet déménagement 2026 : planning, choix du déménageur, prix au m³, assurance, aides financières et astuces pour un déménagement sans stress.',
+    h1: 'Réussir son déménagement : préparation, choix du déménageur et budget en 2026',
+    category: 'choisir',
+    trade: 'demenageur',
+    readingTime: 12,
+    intro: 'Déménager est une étape importante qui demande une organisation rigoureuse. Du choix du déménageur professionnel au calcul du budget en passant par les aides financières disponibles, ce guide vous accompagne pas à pas pour un déménagement serein et maîtrisé en 2026.',
+    sections: [
+      { title: 'Quand et comment planifier son déménagement ?', content: 'La clé d\'un déménagement réussi est l\'anticipation. Idéalement, commencez les démarches 8 à 12 semaines avant la date prévue. En période haute (juin-septembre), réservez votre déménageur 3 mois à l\'avance. Établissez un rétro-planning : résiliation des contrats (électricité, internet, assurance), redirection du courrier (La Poste, 7,50 €/mois), inscription scolaire, changement d\'adresse auprès des administrations. Choisir un jour en milieu de semaine et en milieu de mois peut réduire le coût de 20 à 30 %.' },
+      { title: 'Comment choisir un déménageur professionnel ?', content: 'Vérifiez trois éléments obligatoires : l\'immatriculation au registre des transporteurs (numéro DREAL), l\'assurance responsabilité civile professionnelle et le respect du devis type réglementaire. Le label NF Service Déménagement est un gage de qualité supplémentaire. Exigez toujours une visite technique à domicile — un devis par téléphone sans voir le volume est rarement fiable. Comparez au moins 3 devis détaillés en vérifiant ce qui est inclus : emballage, démontage/remontage, protection des sols et parties communes.' },
+      { title: 'Prix d\'un déménagement en 2026 : les tarifs par type de logement', content: 'Le prix dépend du volume (en m³), de la distance et de la formule choisie. Un studio (15-20 m³) en local coûte 400 à 800 €, un T3 (30-40 m³) 800 à 1 500 € en local et 1 500 à 3 000 € sur 500 km. Une maison (60-80 m³) revient à 2 000 à 5 000 €. La formule économique (vous faites les cartons) est 30 à 40 % moins chère que la formule tout compris. Le monte-meubles ajoute 200 à 600 € par demi-journée. En Île-de-France, majorez les prix de 15 à 25 % par rapport à la province.' },
+      { title: 'Assurance déménagement : quelle couverture choisir ?', content: 'La responsabilité de base du déménageur (ad valorem légale) ne couvre qu\'environ 23 €/m³ — largement insuffisant pour des meubles ou de l\'électronique. L\'assurance « valeur déclarée » (1 à 2 % de la valeur totale des biens) offre une couverture réelle. Pour les objets précieux (œuvres d\'art, instruments de musique, bijoux), souscrivez une extension spécifique avec inventaire détaillé et photos. Déballez et vérifiez vos cartons dans les 3 jours suivant la livraison : au-delà, les réclamations sont beaucoup plus difficiles à faire aboutir.' },
+      { title: 'Aides financières et déductions pour le déménagement', content: 'Action Logement verse le Mobili-Pass (jusqu\'à 1 000 €) pour les salariés du privé en mobilité professionnelle. La CAF propose une prime de déménagement pour les familles de 3 enfants minimum (1 082 € + 90 €/enfant supplémentaire), sous condition de revenus. Les frais de déménagement liés à une mutation professionnelle sont souvent pris en charge par l\'employeur (négociez avant d\'accepter la mutation). Les auto-entrepreneurs peuvent déduire les frais de déménagement professionnel de leur chiffre d\'affaires.' },
+      { title: 'Astuces pour un déménagement sans stress', content: 'Préparez un carton « premier jour » avec draps, serviettes, cafetière, chargeurs et produits d\'hygiène. Photographiez vos branchements (TV, box internet) avant de les déconnecter. Numérotez chaque carton et inscrivez la pièce de destination — cela accélère le déchargement. Transférez votre contrat d\'électricité/gaz 15 jours avant pour que le nouveau logement soit alimenté à votre arrivée. Enfin, prévoyez de quoi remercier vos déménageurs (boissons, pourboire de 20 à 50 € par personne) : c\'est une pratique courante qui assure un service soigné.' },
+    ],
+    faq: [
+      { q: 'Combien de temps dure un déménagement ?', a: 'Un studio prend 2 à 3 heures, un T3 une demi-journée et une maison une journée complète. Ajoutez le temps de trajet pour les longues distances. Le démontage et remontage des meubles peut ajouter 1 à 2 heures supplémentaires.' },
+      { q: 'Faut-il vider ses meubles avant le déménagement ?', a: 'Oui, videz armoires, commodes et buffets — les déménageurs ne transportent pas les meubles chargés pour éviter la casse et respecter les limites de poids. Seuls les vêtements sur cintres peuvent rester dans des cartons penderie fournis par le déménageur.' },
+      { q: 'Peut-on déménager un dimanche ou un jour férié ?', a: 'C\'est possible mais avec une majoration de 50 à 100 % du tarif. De plus, certaines copropriétés et mairies interdisent les déménagements le dimanche. Vérifiez le règlement de copropriété et les arrêtés municipaux avant de réserver.' },
+      { q: 'Comment transporter des objets fragiles (vaisselle, miroirs) ?', a: 'Emballez chaque pièce de vaisselle individuellement dans du papier bulle ou du papier journal. Les miroirs et tableaux nécessitent des cartons spéciaux avec croisillons en mousse. Placez les objets lourds au fond du carton et les légers au-dessus. Marquez chaque carton fragile sur toutes les faces.' },
+      { q: 'Le déménageur est-il responsable en cas de dommage ?', a: 'Oui, le déménageur est légalement responsable des biens qu\'il transporte (article L.133-1 du Code de commerce). Vous disposez de 10 jours après la livraison pour émettre des réserves par lettre recommandée. Sans assurance valeur déclarée, l\'indemnisation est limitée à 23 €/m³ environ.' },
+    ],
+    relatedServices: ['demenageur', 'nettoyage', 'serrurier', 'electricien'],
+    lastUpdated: '2026-02-25',
+  },
 ]
 
 export function getGuideSlugs(): string[] {

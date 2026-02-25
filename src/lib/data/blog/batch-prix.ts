@@ -965,7 +965,7 @@ export const prixArticles: Record<string, {
     title: "Prix extension maison 2026 : surélévation et agrandissement",
     excerpt: "Quel budget pour agrandir votre maison en 2026 ? Extension latérale, surélévation, véranda : tous les prix au m² pour gagner de l'espace sans déménager.",
     content: [
-      "Votre famille s'agrandit, vous avez besoin d'un bureau pour le télétravail, ou vous rêvez d'une suite parentale avec salle de bain ? Face à la hausse des prix de l'immobilier, l'extension de maison constitue une alternative séduisante au déménagement. Gagner **20 à 40 m² habitables** coûte souvent moins cher qu'acheter plus grand (et sans frais de notaire !). En 2026, les solutions se diversifient. Ce guide vous aide à **chiffrer précisément** votre projet.",
+      "Votre famille s'agrandit, vous avez besoin d'un bureau pour le télétravail, ou vous rêvez d'une suite parentale avec salle de bain ? Face à la hausse des prix de l'immobilier, l'extension de maison constitue une alternative séduisante au [déménagement](/services/demenageur). Gagner **20 à 40 m² habitables** coûte souvent moins cher qu'acheter plus grand (et sans frais de notaire !). En 2026, les solutions se diversifient. Ce guide vous aide à **chiffrer précisément** votre projet.",
 
       "## Extension traditionnelle en parpaing ou brique",
 
@@ -1232,7 +1232,7 @@ export const prixArticles: Record<string, {
 
       ":::tip Conseil pro\nPrévoyez des **gaines supplémentaires** lors de l'installation initiale pour de futures extensions (domotique, borne de recharge véhicule électrique, panneaux solaires). Le surcoût est dérisoire pendant le chantier (5 à 10 € par gaine) mais une reprise ultérieure coûte 10 à 20 fois plus cher.\n:::",
 
-      "1. Définissez précisément vos besoins avant les devis (nombre de prises, circuits spéciaux)\n2. Optez pour des appareillages **Legrand** ou **Schneider** (meilleur rapport qualité-prix français)\n3. Comparez **trois devis minimum** de [électriciens vérifiés](/blog/comment-choisir-electricien-guide)\n4. La TVA à **10 %** s'applique sur les travaux de rénovation électrique\n5. Prévoyez le passage des gaines pour une future **borne de recharge** véhicule électrique",
+      "1. Définissez précisément vos besoins avant les devis (nombre de prises, circuits spéciaux)\n2. Optez pour des appareillages **Legrand** ou **Schneider** (meilleur rapport qualité-prix français)\n3. Comparez **trois devis minimum** de [électriciens vérifiés](/blog/comment-choisir-electricien-guide)\n4. La TVA à **10 %** s'applique sur les travaux de rénovation électrique\n5. Prévoyez le passage des gaines pour une future [borne de recharge](/services/borne-recharge) véhicule électrique",
 
       ":::warning Attention\nToute installation électrique neuve doit obtenir le **certificat de conformité Consuel** (130 – 180 €) avant la mise en service par le fournisseur d'énergie. Sans ce certificat, le raccordement au réseau est impossible. Vérifiez que votre électricien intègre cette démarche dans sa prestation. Pour une rénovation lourde, le Consuel est également obligatoire.\n:::",
 
