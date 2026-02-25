@@ -729,6 +729,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Création de jardin (plantations + engazonnement) : 20 à 50 €/m²',
       'Entretien mensuel d\'un jardin (200 m²) : 100 à 200 €/mois',
       'Abattage d\'arbre avec dessouchage : 400 à 1 500 € selon la taille',
+      'Installation d\'arrosage automatique : 1 500 à 4 000 € (enterré, programmateur inclus)',
+      'Engazonnement (semis ou placage de gazon) : 5 à 15 €/m²',
     ],
     tips: [
       'Les prestations de jardinage à domicile ouvrent droit à un crédit d\'impôt de 50 % dans la limite de 5 000 € de dépenses par an (soit 2 500 € de crédit d\'impôt). Le jardinier doit être déclaré en tant que service à la personne (SAP).',
@@ -736,6 +738,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour l\'élagage d\'arbres de plus de 7 mètres, faites appel à un élagueur-grimpeur certifié CS (Certificat de Spécialisation) taille et soins des arbres. L\'élagage non professionnel peut tuer l\'arbre et engager votre responsabilité.',
       'Vérifiez que le jardinier évacue les déchets verts ou prévoyez ce poste dans le devis. L\'évacuation et le traitement en déchetterie représentent un coût supplémentaire de 50 à 150 € par intervention.',
       'Pour la création d\'un jardin, demandez un plan d\'aménagement tenant compte de l\'exposition, du sol et du climat de votre région. Un jardinier-paysagiste saura choisir des plantes adaptées qui nécessiteront moins d\'entretien.',
+      'Taillez vos haies avant mi-mars et après mi-août pour respecter la période de nidification des oiseaux. La taille est interdite du 15 mars au 31 juillet en zone agricole (arrêté du 24 avril 2015).',
+      'Un arrosage automatique programmé permet d\'économiser environ 30 % d\'eau par rapport à un arrosage manuel, tout en assurant un apport régulier adapté aux besoins réels des plantes.',
+      'L\'élagage courant (branches basses, haies) est à la charge du locataire au titre de l\'entretien courant. En revanche, l\'élagage lourd d\'arbres de grande hauteur ou l\'abattage restent à la charge du propriétaire.',
     ],
     faq: [
       {
@@ -779,6 +784,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'CS Taille et soins des arbres (certificat de spécialisation élagage)',
       'Qualipaysage (certification professionnelle du secteur paysager)',
       'CAPA Travaux Paysagers (diplôme de référence)',
+      'Assurance responsabilité civile professionnelle (obligatoire, couvre les dommages aux biens et aux personnes)',
+      'BP Aménagements Paysagers (brevet professionnel, niveau bac)',
+      'Certification Écocert ou Agriculture Biologique (pour les prestations d\'entretien sans produits chimiques)',
     ],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines selon la saison',
   },
@@ -1380,6 +1388,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Verrière d\'intérieur : 800 à 2 500 €/m²',
       'Porte d\'entrée en acier : 1 500 à 5 000 €',
       'Pergola métallique : 3 000 à 8 000 €',
+      'Structure métallique (mezzanine, extension) : 200 à 400 €/m²',
+      'Portail coulissant motorisé : 2 000 à 6 000 €',
+      'Charpente métallique industrielle : 80 à 150 €/m²',
     ],
     tips: [
       'L\'acier thermolaqué offre le meilleur rapport qualité/prix pour les ouvrages extérieurs. L\'inox est réservé aux environnements corrosifs (bord de mer).',
@@ -1387,6 +1398,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour un garde-corps, vérifiez que le métallier respecte la norme NF P01-012 : hauteur minimale de 1 m, espacement des barreaux de 11 cm maximum et absence de point d\'escalade pour les enfants.',
       'Prévoyez un accès suffisant pour la livraison et la manutention : un escalier métallique ou une verrière arrive souvent en éléments de grande dimension qui nécessitent un passage adapté.',
       'Demandez au métallier de vous fournir une note de calcul pour les ouvrages structurels (escaliers, mezzanines, passerelles) afin de garantir la conformité aux normes de résistance.',
+      'Le thermolaquage (peinture poudre cuite au four à 200 °C) offre une finition 3 fois plus durable que la peinture liquide classique, avec une résistance supérieure aux UV, aux rayures et aux intempéries.',
+      'Une verrière en acier nécessite un traitement antirouille tous les 10 ans environ. Inspectez les joints entre le métal et le vitrage et appliquez un produit anticorrosion dès l\'apparition de points de rouille.',
+      'Demandez un plan 3D avant fabrication pour valider les proportions et l\'intégration dans votre espace — un ouvrage métallique fabriqué sur mesure ne peut pas être modifié une fois soudé.',
     ],
     faq: [
       { q: 'Combien coûte une verrière d\'intérieur ?', a: 'Une verrière atelier sur mesure coûte entre 800 et 2 500 €/m² selon le matériau (acier, aluminium), le type de vitrage (simple, double, feuilleté) et la complexité de la pose. Une verrière standard de 2 m × 1,5 m revient à 2 500 à 5 000 €, pose comprise.' },
@@ -1394,10 +1408,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien coûte un escalier métallique sur mesure ?', a: 'Un escalier droit en acier thermolaqué revient à 3 000 à 6 000 €, un quart-tournant à 5 000 à 8 000 € et un escalier hélicoïdal à 6 000 à 12 000 €. Le prix augmente avec les finitions (marches en bois, verre ou acier), le type de garde-corps et la complexité de la pose. Prévoyez 4 à 6 semaines de fabrication.' },
       { q: 'Une verrière d\'intérieur isole-t-elle du bruit ?', a: 'Avec un simple vitrage (6 mm), l\'isolation acoustique est faible (environ 25 dB). Un double vitrage 4/16/4 atteint 30 à 35 dB, ce qui est acceptable pour séparer une cuisine d\'un salon. Pour une véritable isolation phonique (bureau, chambre), optez pour un vitrage acoustique feuilleté 44.2 qui offre 37 à 42 dB d\'affaiblissement.' },
       { q: 'Faut-il un permis de construire pour une pergola métallique ?', a: 'Une pergola de moins de 5 m² est dispensée de formalités. Entre 5 et 20 m² (ou 40 m² en zone PLU), une déclaration préalable de travaux suffit. Au-delà de 20 m² (ou 40 m²), un permis de construire est nécessaire. En zone protégée (ABF), toute pergola nécessite au minimum une déclaration préalable, quelle que soit la surface.' },
+      { q: 'Peut-on mélanger métal et bois dans un ouvrage ?', a: 'Oui, c\'est une tendance très actuelle en architecture intérieure et extérieure. Le métal apporte la structure et la rigidité, tandis que le bois ajoute chaleur et confort visuel. Les combinaisons les plus populaires sont l\'escalier métal-bois (structure acier + marches en chêne), la mezzanine sur ossature métallique avec plancher bois et le garde-corps acier avec main courante en bois. Prévoyez un budget de 10 à 20 % supérieur à un ouvrage tout métal.' },
+      { q: 'Combien coûte un portail coulissant motorisé en métal ?', a: 'Un portail coulissant motorisé en acier thermolaqué coûte entre 2 000 et 6 000 € tout compris (portail + rail + motorisation + pose). Le prix varie selon la largeur (3 à 5 m), le design (plein, ajouré, à lames) et la motorisation choisie. Prévoyez un massif béton pour le rail de guidage et une alimentation électrique enterrée. Le délai de fabrication est de 3 à 5 semaines.' },
+      { q: 'Qu\'est-ce qu\'une structure métallique pour mezzanine et combien ça coûte ?', a: 'Une mezzanine sur structure métallique consiste en un plancher surélevé porté par des poteaux et des poutres en acier (IPN ou HEA). Le coût se situe entre 200 et 400 €/m² pour la structure seule, hors plancher et finitions. Pour une mezzanine de 15 m², comptez 4 500 à 8 000 € tout compris. Une note de calcul est obligatoire pour valider la portée et le dimensionnement des profilés selon les charges d\'exploitation prévues.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la métallerie. Les ouvrages métalliques (escaliers, garde-corps, verrières) sont fabriqués sur mesure en atelier. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
-    certifications: ['Qualibat (qualification 4411/4412 métallerie-serrurerie)', 'Certification EN 1090 (exécution des structures en acier — marquage CE)', 'Label Artisanat d\'Art (ouvrages décoratifs)', 'ACQPA (qualification peinture anticorrosion — si thermolaquage)'],
+    certifications: ['Qualibat (qualification 4411/4412 métallerie-serrurerie)', 'Certification EN 1090 (exécution des structures en acier — marquage CE)', 'Label Artisanat d\'Art (ouvrages décoratifs)', 'ACQPA (qualification peinture anticorrosion — si thermolaquage)', 'Certification soudure EN ISO 9606 (qualification du soudeur)', 'Qualification CTICM (Centre Technique Industriel de la Construction Métallique)', 'Compagnons du Tour de France (parcours de formation itinérant d\'excellence)', 'Assurance décennale obligatoire (garantie 10 ans sur les ouvrages structurels)'],
     averageResponseTime: 'Devis sous 1 semaine, fabrication 3 à 6 semaines',
   },
 
@@ -1482,6 +1499,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Paroi de douche en verre trempé : 400 à 1 200 €',
       'Vitrine de commerce : 200 à 500 €/m²',
       'Remplacement de double vitrage : 150 à 400 €/m²',
+      'Cloison vitrée ou verrière d\'intérieur : 200 à 500 €/m²',
+      'Remplacement de miroir de salle de bain : 100 à 400 €',
+      'Miroir décoratif biseauté sur mesure : 150 à 500 €/m²',
     ],
     tips: [
       'Pour les parois de douche et garde-corps, le verre trempé securit est obligatoire (norme NF EN 12150).',
@@ -1489,6 +1509,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'En cas de bris de vitrage, sécurisez immédiatement la zone et bâchez l\'ouverture. Un miroitier d\'urgence peut intervenir sous 24 à 48h pour un remplacement provisoire ou définitif.',
       'Pour une crédence en verre, prévoyez les prises de mesure après la pose de la cuisine : les découpes pour les prises électriques et les interrupteurs doivent être millimétrées.',
       'Le verre feuilleté (deux verres collés par un film PVB) est obligatoire pour les garde-corps et les applications en hauteur. En cas de casse, les morceaux restent collés au film, évitant les blessures.',
+      'Un miroir bien placé agrandit visuellement une pièce de 30 % — idéal pour les entrées et les petits salons.',
+      'La crédence en verre laqué est plus hygiénique et facile d\'entretien que le carrelage : pas de joints, nettoyage en un coup d\'éponge.',
+      'Faites toujours prendre les cotes par le miroitier lui-même : 1 mm d\'erreur suffit à rendre un miroir sur mesure inutilisable.',
     ],
     faq: [
       { q: 'Quelle épaisseur de verre pour une crédence ?', a: 'Une crédence de cuisine nécessite un verre trempé de 6 mm minimum (8 mm recommandé pour les grandes surfaces). Le verre laqué est le plus populaire car il offre un large choix de couleurs et se nettoie facilement. Budget : 150 à 350 €/m², pose comprise.' },
@@ -1496,10 +1519,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Verre trempé ou verre feuilleté : lequel choisir ?', a: 'Le verre trempé (securit) est 5 fois plus résistant que le verre ordinaire et se brise en petits morceaux non coupants. Il est obligatoire pour les parois de douche et les tables. Le verre feuilleté (deux verres + film PVB) ne tombe pas en morceaux à la casse : il est obligatoire pour les garde-corps, les toitures vitrées et les vitrines. Certaines applications exigent un verre trempé-feuilleté (cumul des deux propriétés).' },
       { q: 'Un miroitier peut-il intervenir en urgence ?', a: 'Oui, la plupart des miroitiers proposent un service d\'urgence pour les vitrines de commerce cassées, les fenêtres brisées après effraction ou les dégâts de tempête. L\'intervention sous 24h coûte 30 à 50 % de plus qu\'une intervention programmée. En attendant, bâchez l\'ouverture avec une bâche ou du contreplaqué pour sécuriser le local.' },
       { q: 'Comment choisir un miroir pour une salle de bain ?', a: 'Optez pour un miroir avec traitement anti-buée intégré (film chauffant au dos) et bords polis pour résister à l\'humidité. Évitez les miroirs bas de gamme dont le tain (couche réfléchissante) se dégrade rapidement en milieu humide. Un miroir sur mesure avec éclairage LED intégré coûte 200 à 800 € selon les dimensions et les options.' },
+      { q: 'Quelle épaisseur de miroir choisir ?', a: '3 mm convient pour la décoration légère (cadres, petits miroirs décoratifs). 4 à 5 mm est le standard pour une salle de bain ou un miroir mural de taille moyenne. 6 mm et plus est recommandé pour les grands formats (miroir plein pied, miroir mural de plus d\'un mètre) ou les poses lourdes nécessitant une fixation mécanique.' },
+      { q: 'Miroir argenté ou miroir aluminium : quelle différence ?', a: 'Le miroir argenté offre un reflet plus naturel et plus lumineux : c\'est le choix classique pour les salons, les chambres et les entrées. Le miroir aluminium résiste mieux à l\'humidité et à la corrosion : il est adapté aux salles de bain, aux piscines et aux environnements humides. L\'écart de prix est faible (10 à 15 % de plus pour l\'aluminium).' },
+      { q: 'Peut-on poser un miroir sur un mur humide ?', a: 'Oui, à condition d\'utiliser un miroir avec traitement anti-humidité (tain protégé par une couche de cuivre ou d\'aluminium) et une colle spéciale type mastic-miroir neutre (ne pas utiliser de colle acide qui attaque le tain). Évitez le contact direct avec l\'eau : laissez un espace de 5 mm minimum entre le bas du miroir et la surface mouillée (plan de vasque, rebord de baignoire).' },
     ],
     emergencyInfo:
       'Intervention d\'urgence pour vitrine de commerce cassée, miroir brisé ou paroi de douche éclatée. Un miroitier d\'urgence peut sécuriser les lieux et poser un vitrage provisoire selon disponibilité. Majorations : +100 à 150 % la nuit et le week-end.',
-    certifications: ['Qualibat (qualification 4311/4312 vitrerie-miroiterie)', 'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)', 'Certification NF EN 12150 (verres de sécurité trempés)'],
+    certifications: ['Qualibat 4423 (miroiterie)', 'Certification Cekal (vitrages isolants)', 'NF DTU 39 (mise en \u0153uvre des vitrages)', 'Label Artisan verrier', 'Assurance RC professionnelle', 'Qualibat (qualification 4311/4312 vitrerie-miroiterie)', 'Certification NF EN 12150 (verres de sécurité trempés)', 'Certification NF EN 1036 (miroirs argentés)'],
     averageResponseTime: 'Devis sous 48h, fabrication 1 à 3 semaines',
   },
 
