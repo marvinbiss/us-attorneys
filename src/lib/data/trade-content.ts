@@ -2152,6 +2152,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'Plateforme élévatrice PMR : 8 000 à 15 000 €',
       'Contrat de maintenance annuel : 1 500 à 4 000 €',
       'Modernisation d\'ascenseur existant : 10 000 à 30 000 €',
+      'Ascenseur privatif 2 étages (hydraulique ou pneumatique) : 15 000 à 40 000 €',
+      'Monte-escalier tournant sur mesure : 6 000 à 12 000 €',
+      'Mise aux normes ascenseur existant (loi SAE) : 10 000 à 50 000 €',
+      'Dépannage ascenseur bloqué (intervention d\'urgence) : 150 à 400 €',
     ],
     tips: [
       'Le contrat de maintenance est obligatoire (décret du 9 septembre 2004). Comparez les offres : certains contrats incluent les pièces d\'usure, d\'autres non.',
@@ -2159,6 +2163,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Avant de signer un contrat de maintenance, vérifiez s\'il est « à l\'entretien complet » (pièces incluses) ou « à l\'entretien normal » (pièces en supplément) : la différence de coût annuel peut être de 30 à 50 %.',
       'Un ascenseur en copropriété doit faire l\'objet d\'un contrôle technique quinquennal obligatoire par un organisme agréé, indépendamment du contrat de maintenance.',
       'Pour l\'installation d\'un monte-escalier, demandez une démonstration à domicile avant d\'acheter : chaque escalier est différent (courbe, largeur, palier intermédiaire) et le confort d\'utilisation doit être testé in situ.',
+      'Un contrat de maintenance « étendu » (pièces incluses) coûte plus cher qu\'un contrat « normal », mais il évite les mauvaises surprises en cas de remplacement de moteur ou de carte électronique (500 à 3 000 € la pièce).',
+      'La mise aux normes SAE (sécurité des ascenseurs existants) est obligatoire en copropriété : vérifiez que votre syndic a planifié et budgété les travaux, sous peine de responsabilité en cas d\'accident.',
+      'Comparez impérativement les devis de maintenance entre prestataires : les écarts de prix pour un même ascenseur peuvent atteindre 100 % d\'un ascensoriste à l\'autre, sans différence de prestation réelle.',
     ],
     faq: [
       { q: 'Quelles aides pour un monte-escalier ?', a: 'MaPrimeAdapt\' (jusqu\'à 70 % pour les revenus modestes), TVA réduite à 5,5 %, crédit d\'impôt de 25 % (plafonné à 5 000 € pour une personne seule), aides des caisses de retraite et de l\'ANAH. Le reste à charge peut être inférieur à 1 000 € pour un ménage modeste.' },
@@ -2166,10 +2173,13 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Monte-escalier droit ou tournant : quelle différence de prix ?', a: 'Un monte-escalier pour escalier droit coûte 3 500 à 5 000 € car le rail est standard. Pour un escalier tournant ou avec palier, le rail est fabriqué sur mesure, ce qui porte le prix à 6 000 à 12 000 €. L\'installation prend 2 à 4 heures pour un droit et une journée pour un tournant. Les deux types bénéficient des mêmes aides financières.' },
       { q: 'Quel est le coût de maintenance d\'un ascenseur en copropriété ?', a: 'Le contrat de maintenance annuel coûte 1 500 à 4 000 € selon le type d\'ascenseur et le niveau de prestation (normal ou complet). La loi impose un entretien mensuel, un contrôle semestriel de sécurité et un contrôle technique quinquennal par un organisme indépendant (1 000 à 2 000 €). Le budget total annuel pour un ascenseur est de 2 500 à 6 000 €.' },
       { q: 'Quelles sont les normes de sécurité pour un ascenseur ?', a: 'Les ascenseurs doivent respecter la directive européenne 2014/33/UE et la norme NF EN 81-20. Les travaux de modernisation obligatoires (loi SAE de 2003) incluent : porte palière verrouillée, dispositif anti-vandalisme, système de télécommunication en cabine, précision d\'arrêt et d\'horizontalité, et dispositif de protection contre la vitesse excessive.' },
+      { q: 'Combien coûte un ascenseur privatif ?', a: 'Un ascenseur privatif coûte entre 15 000 et 40 000 € selon le nombre d\'étages et la technologie choisie. L\'ascenseur hydraulique est le moins cher (15 000 à 25 000 €) mais nécessite un local technique. L\'ascenseur électrique à gaines (20 000 à 35 000 €) est plus silencieux et économe en énergie. L\'ascenseur pneumatique (25 000 à 40 000 €) ne nécessite ni fosse ni local technique, ce qui réduit considérablement les travaux de gros œuvre. Ajoutez 3 000 à 8 000 € pour les travaux de maçonnerie (trémie, fosse).' },
+      { q: 'Un monte-escalier est-il éligible aux aides financières ?', a: 'Oui, plusieurs dispositifs existent : MaPrimeRénov\' Autonomie (jusqu\'à 4 000 € selon les revenus), crédit d\'impôt de 25 % plafonné à 5 000 € par personne (10 000 € pour un couple), TVA réduite à 5,5 % si le logement a plus de 2 ans, APA (allocation personnalisée d\'autonomie) si perte d\'autonomie GIR 1 à 4, aides des caisses de retraite (CARSAT, MSA) et de l\'ANAH. Le cumul de ces aides peut réduire le reste à charge à moins de 1 000 € pour un ménage modeste.' },
+      { q: 'Quelle est la durée de vie d\'un ascenseur ?', a: 'Un ascenseur bien entretenu dure 25 à 40 ans avant de nécessiter un remplacement complet. Les pièces d\'usure (câbles, poulies, contacts de porte) sont remplacées régulièrement dans le cadre du contrat de maintenance. La modernisation de la cabine (5 000 à 15 000 €) peut prolonger la durée de vie de 10 à 15 ans. Le contrat de maintenance est obligatoire pour les ascenseurs en ERP et en copropriété ; il est vivement recommandé pour les ascenseurs privatifs afin de garantir la sécurité et la longévité de l\'installation.' },
     ],
     emergencyInfo:
       'En cas de personne bloquée dans un ascenseur ou de panne immobilisant la cabine, les sociétés d\'ascenseurs ont l\'obligation réglementaire (décret n° 2004-964) de disposer d\'un service de garde joignable à tout moment. En cas de personne bloquée, appelez également les pompiers (18). Majorations : +100 à 150 % la nuit, le week-end et les jours fériés.',
-    certifications: ['Conformité NF EN 81-20/50 (norme européenne de sécurité des ascenseurs)', 'Habilitation électrique HBT (obligatoire)', 'Certification constructeur agréé (Otis, Schindler, Kone, ThyssenKrupp)', 'Contrôle technique quinquennal obligatoire (organisme agréé)'],
+    certifications: ['Conformité NF EN 81-20/50 (norme européenne de sécurité des ascenseurs)', 'Habilitation électrique HBT (obligatoire)', 'Certification constructeur agréé (Otis, Schindler, Kone, ThyssenKrupp)', 'Contrôle technique quinquennal obligatoire (organisme agréé)', 'Certification APAVE ou Bureau Veritas (contrôle technique réglementaire)', 'Qualibat 5411 (installation et maintenance d\'ascenseurs)', 'Certification ascensoriste agréé (délivrée par les constructeurs)', 'Assurance décennale obligatoire (couvre les vices de construction pendant 10 ans)'],
     averageResponseTime: 'Diagnostic sous 1 semaine, installation 4 à 12 semaines',
   },
 
@@ -2250,7 +2260,7 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour les prestations de géomètre-expert. Le bornage, la division parcellaire et les plans topographiques sont des missions planifiées. Prenez rendez-vous pour un devis sous 1 semaine.',
-    certifications: ['Inscription à l\'Ordre des Géomètres-Experts (obligatoire)', 'Diplôme DPLG ou ESGT', 'Assurance RC professionnelle obligatoire', 'Inscription à l\'Ordre des Géomètres-Experts (OGE — obligatoire)', 'Assurance responsabilité civile professionnelle décennale'],
+    certifications: ['Inscription à l\'Ordre des Géomètres-Experts (obligatoire)', 'Diplôme DPLG ou ESGT', 'Assurance RC professionnelle obligatoire', 'Inscription à l\'Ordre des Géomètres-Experts (OGE — obligatoire)', 'Assurance responsabilité civile professionnelle décennale', 'Certification DPE (diagnostic de performance foncière)', 'Habilitation topographie par drone (photogrammétrie)', 'Certification Qualibat géotechnique (études de sol)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention 2 à 4 semaines',
   },
 
@@ -2289,7 +2299,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien de traitements faut-il pour éliminer les punaises de lit ?', a: 'En traitement chimique (insecticide professionnel), il faut généralement 2 à 3 passages espacés de 15 jours. Le premier passage élimine les punaises adultes et les nymphes, mais les œufs résistent. Les passages suivants ciblent les punaises nouvellement écloses avant qu\'elles ne pondent à leur tour. Le traitement thermique (vapeur sèche ou canon à chaleur à 60°C+) peut éliminer l\'infestation en un seul passage car la chaleur détruit aussi les œufs, mais il coûte 30 à 50 % plus cher.' },
       { q: 'Le traitement anti-cafards est-il dangereux pour les enfants et animaux ?', a: 'Le gel insecticide (méthode la plus courante) est appliqué en petites gouttes dans les recoins inaccessibles (derrière les meubles, sous l\'évier, dans les charnières) : il présente un risque très faible pour les enfants et les animaux domestiques car les quantités sont infimes et les emplacements hors de portée. En revanche, la fumigation (nébulisation d\'insecticide) nécessite une évacuation temporaire du logement (4 à 6 heures) et une aération complète de 2 heures avant le retour. Dans tous les cas, demandez au technicien la fiche de données de sécurité du produit utilisé.' },
     ],
-    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES', 'Formation Certibiocide TP18 (insecticides — renouvellement tous les 5 ans)', 'Protocole HACCP pour les locaux alimentaires'],
+    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES', 'Formation Certibiocide TP18 (insecticides — renouvellement tous les 5 ans)', 'Protocole HACCP pour les locaux alimentaires', 'Certification Certibiocide (obligatoire depuis 2015)', 'Assurance RC professionnelle spécifique nuisibles'],
     averageResponseTime: 'Intervention sous 24 à 48h',
   },
 
@@ -2329,7 +2339,7 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     emergencyInfo:
       'Intervention d\'urgence pour infestation sévère de rats ou souris menaçant la salubrité ou la sécurité (rongement de câbles électriques, contamination alimentaire). Un dératiseur peut intervenir sous 2 à 6 heures en zone urbaine. Majorations : +50 à 80 % en dehors des heures ouvrées.',
-    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES', 'Formation Certibiocide (renouvellement tous les 5 ans)', 'Conformité au règlement européen sur les produits biocides (RPB 528/2012)'],
+    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES', 'Formation Certibiocide (renouvellement tous les 5 ans)', 'Conformité au règlement européen sur les produits biocides (RPB 528/2012)', 'Certification Certibiocide (obligatoire depuis 2015 pour l\'usage de produits biocides)', 'Assurance RC professionnelle spécifique nuisibles'],
     averageResponseTime: 'Intervention sous 24 à 48h',
   },
 
@@ -2370,7 +2380,7 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour le déménagement. Les déménagements nécessitent une visite technique préalable et une planification de 2 à 8 semaines. Prenez rendez-vous pour un devis gratuit sous 48h.',
-    certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service D\u00e9m\u00e9nagement', 'Certification ISO 9001 (qualit\u00e9)', 'Charte Qualit\u00e9 D\u00e9m\u00e9nagement (FIDI pour l\'international)', 'Assurance responsabilit\u00e9 civile professionnelle', 'Agr\u00e9ment IATA (d\u00e9m\u00e9nagement avec transport a\u00e9rien)'],
+    certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service D\u00e9m\u00e9nagement', 'Certification ISO 9001 (qualit\u00e9)', 'Charte Qualit\u00e9 D\u00e9m\u00e9nagement (FIDI pour l\'international)', 'Assurance responsabilit\u00e9 civile professionnelle', 'Agr\u00e9ment IATA (d\u00e9m\u00e9nagement avec transport a\u00e9rien)', 'Label Déménageur Éco-responsable', 'Certification ISO 14001 (management environnemental)'],
     averageResponseTime: 'Devis sous 48h (visite technique), planification 2 à 8 semaines',
   },
 }
