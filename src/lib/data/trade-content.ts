@@ -421,6 +421,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Installation d\'une cuisine aménagée : 1 500 à 5 000 € (pose uniquement)',
       'Création d\'un escalier sur mesure : 3 000 à 10 000 €',
       'Pose de parquet massif ou contrecollé : 30 à 70 €/m² (pose uniquement)',
+      'Menuiserie extérieure (volets battants, portail bois) : 500 à 3 500 € selon dimensions',
+      'Habillage et aménagement de sous-pente : 600 à 2 500 € selon surface et finitions',
     ],
     tips: [
       'Distinguez le menuisier d\'agencement (placards, cuisines, dressings sur mesure) du menuisier poseur (fenêtres, portes, parquet). Choisissez le spécialiste adapté à votre projet pour un résultat optimal.',
@@ -428,6 +430,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez à voir des réalisations précédentes du menuisier, surtout pour du mobilier sur mesure. Les photos de chantiers terminés sont un bon indicateur de la qualité du travail.',
       'Vérifiez que le devis précise l\'essence de bois utilisée (chêne, hêtre, sapin, bois exotique) et son origine. Le label PEFC ou FSC garantit un bois issu de forêts gérées durablement.',
       'Pour des fenêtres ou des volets, comparez les performances thermiques (coefficient Uw en W/m².K) et pas uniquement le prix. Un bon vitrage isolant se rentabilise en économies de chauffage.',
+      'Choisissez du bois certifié PEFC ou FSC pour garantir une provenance durable. Ces labels assurent que le bois est issu de forêts gérées de manière responsable, un argument de qualité pour vos menuiseries.',
+      'Un escalier en bois massif (chêne, hêtre, frêne) se patine naturellement avec le temps et gagne en caractère. Appliquez un vitrificateur mat pour le protéger tout en conservant son aspect naturel.',
+      'Faites poser vos fenêtres par un menuisier certifié RGE pour bénéficier des aides à la rénovation énergétique (MaPrimeRenov\', CEE, éco-PTZ). Sans cette certification, aucune subvention ne sera accordée.',
     ],
     faq: [
       {
@@ -471,6 +476,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Certification NF Fenêtres bois ou NF Fenêtres PVC (FCBA/CSTB)',
       'Compagnons du Devoir (formation d\'excellence)',
       'Label Menuiserie 21 (engagement qualité UFME)',
+      'Certification PEFC/FSC (traçabilité et gestion durable des bois)',
+      'Qualibat 4321 (fabrication de menuiseries et fermetures en bois)',
+      'Label Artisan d\'Art (distinction pour les menuisiers ébénistes d\'exception)',
     ],
     averageResponseTime: 'Devis sous 48h, intervention sous 2 à 4 semaines',
   },
@@ -490,6 +498,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pose de mosaïque : 60 à 100 €/m²',
       'Carrelage d\'une terrasse extérieure : 45 à 80 €/m²',
       'Dépose d\'ancien carrelage + repose : 15 à 30 €/m² supplémentaires',
+      'Ragréage et préparation du sol avant pose : 15 à 25 €/m²',
+      'Pose de carrelage sur plancher chauffant : 50 à 80 €/m² (colle flexible spéciale)',
     ],
     tips: [
       'Le prix de la pose dépend fortement du format des carreaux : les grands formats (60x60, 80x80) et les poses en diagonale ou en décalé coûtent 20 à 40 % plus cher que la pose droite en format standard.',
@@ -497,6 +507,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Prévoyez 10 à 15 % de carrelage supplémentaire pour les coupes et la casse. Pour les grands formats et les poses complexes, cette marge peut monter à 20 %.',
       'Demandez au carreleur son avis sur le type de carrelage adapté à votre usage : classement UPEC pour l\'intérieur (U pour usure, P pour poinçonnement, E pour eau, C pour chimique), et classement R pour l\'antidérapant en extérieur.',
       'Pour une salle de bain, exigez une étanchéité sous carrelage (système SPEC conforme au DTU 52.1). C\'est un travail supplémentaire mais indispensable pour éviter les infiltrations.',
+      'Un calepinage (plan de pose détaillé) réalisé en amont par le carreleur évite les coupes disgracieuses et optimise la répartition des carreaux. Demandez-le systématiquement, surtout pour les grands formats et les motifs complexes.',
+      'Vérifiez la planéité du sol avant la pose : un écart supérieur à 5 mm sous la règle de 2 m nécessite un ragréage. Poser du carrelage sur un sol irrégulier entraîne des surépaisseurs de colle, des risques de fissures et un résultat inesthétique.',
+      'En pièce humide (salle de bain, douche italienne), un joint hydrofuge à base d\'époxy est indispensable. Plus cher qu\'un joint ciment classique (10 à 15 €/m² supplémentaires), il empêche toute infiltration d\'eau et ne noircit pas avec le temps.',
     ],
     faq: [
       {
@@ -538,6 +551,11 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 6321/6322 carrelage et revêtements céramiques)',
       'Certification CSTB (classement UPEC des locaux — Centre Scientifique et Technique du Bâtiment)',
       'Compagnons du Devoir (formation d\'excellence)',
+      'Label Artisan de confiance (Chambre de Métiers et de l\'Artisanat)',
+      'Conformité NF DTU 52.1 (pose de revêtements de sol scellés — sols)',
+      'Conformité NF DTU 52.2 (pose de revêtements muraux scellés — murs)',
+      'Qualibat 6331 (pose de carrelages et revêtements céramiques collés)',
+      'Certification NF UPEC (classement des locaux par le CSTB)',
     ],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
@@ -634,6 +652,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Construction d\'une extension : 1 200 à 2 000 €/m²',
       'Réparation de fissures structurelles : 50 à 200 €/ml',
       'Montage d\'un mur de clôture : 100 à 250 €/ml',
+      'Ravalement de façade (enduit ou crépi) : 30 à 80 €/m²',
+      'Réalisation de fondations (semelle filante) : 150 à 300 €/ml',
     ],
     tips: [
       'Pour toute ouverture dans un mur porteur, exigez une étude structurelle réalisée par un bureau d\'études agréé. Le maçon doit suivre les préconisations de l\'ingénieur et poser une poutre (IPN) dimensionnée pour reprendre les charges.',
@@ -641,6 +661,9 @@ export const tradeContent: Record<string, TradeContent> = {
       'Les travaux de maçonnerie sont soumis à la garantie décennale obligatoire. Demandez une copie de l\'attestation d\'assurance avant le début du chantier et vérifiez qu\'elle couvre le type de travaux prévus.',
       'Pour une extension ou une construction, une déclaration préalable ou un permis de construire est obligatoire selon la surface. En dessous de 20 m², une déclaration suffit ; au-delà, le permis est requis (seuil porté à 40 m² en zone PLU).',
       'Privilégiez les périodes de printemps et d\'automne pour les travaux de maçonnerie : le béton et le mortier nécessitent des températures comprises entre 5 et 30°C pour une prise optimale.',
+      'Faites toujours réaliser une étude de sol (mission G2) avant de couler des fondations. Cette étude détermine la nature du terrain et le type de fondations adapté, évitant les tassements différentiels et les fissures futures. Comptez 1 500 à 3 000 € pour une étude G2.',
+      'Le béton nécessite un temps de séchage (cure) de 28 jours avant de pouvoir supporter sa charge maximale. Ne demandez pas au maçon de construire sur une dalle ou des fondations qui n\'ont pas atteint ce délai, sous peine de compromettre la solidité de l\'ouvrage.',
+      'Avant tout projet d\'agrandissement, consultez le PLU (Plan Local d\'Urbanisme) de votre commune et vérifiez les servitudes d\'urbanisme : coefficient d\'emprise au sol, hauteur maximale, recul par rapport aux limites de propriété et aspect extérieur imposé.',
     ],
     faq: [
       {
@@ -683,6 +706,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'RGE (obligatoire si ITE — isolation thermique par l\'extérieur)',
       'Compagnons du Devoir (formation d\'excellence)',
       'NF Habitat (label qualité construction neuve et rénovation)',
+      'NF DTU 20.1 (norme de référence pour les ouvrages en maçonnerie de petits éléments)',
+      'Compagnons du Tour de France (formation traditionnelle et savoir-faire artisanal)',
+      'Certification Éco Artisan (engagement en performance énergétique et environnementale)',
+      'Certification Handibat (adaptation du logement aux personnes à mobilité réduite)',
     ],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
