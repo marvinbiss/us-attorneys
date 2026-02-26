@@ -8,6 +8,8 @@
 export type BookingEvent =
   | 'page_view'
   | 'artisan_profile_view'
+  | 'phone_reveal'
+  | 'phone_click'
   | 'calendar_opened'
   | 'date_selected'
   | 'slot_selected'
@@ -111,6 +113,24 @@ export const BookingFunnel = {
       artisanName,
       source,
       funnelStep: 1,
+    })
+  },
+
+  // Step 1b: User reveals phone number
+  revealPhone: (artisanId: string, artisanName: string, source: string) => {
+    trackEvent('phone_reveal', {
+      artisanId,
+      artisanName,
+      source,
+    })
+  },
+
+  // Step 1c: User clicks to call
+  clickPhone: (artisanId: string, artisanName: string, source: string) => {
+    trackEvent('phone_click', {
+      artisanId,
+      artisanName,
+      source,
     })
   },
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, Users, Eye, Euro, ChevronRight, Calendar, Loader2, AlertCircle } from 'lucide-react'
+import { FileText, Eye, Phone, PhoneCall, ChevronRight, Calendar, Loader2, AlertCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
@@ -11,9 +11,9 @@ import { getArtisanUrl } from '@/lib/utils'
 
 interface StatsData {
   profileViews: { value: number; change: string }
+  phoneReveals: { value: number; change: string }
+  phoneClicks: { value: number; change: string }
   demandesRecues: { value: number; change: string }
-  devisEnvoyes: { value: number; change: string }
-  clientsSatisfaits: { value: number; change: string }
   unreadMessages: number
 }
 
@@ -94,9 +94,9 @@ export default function DashboardArtisanPage() {
 
   const statsDisplay = [
     { label: 'Vues du profil', value: stats?.profileViews.value || 0, change: stats?.profileViews.change || '+0%', icon: Eye },
+    { label: 'Numéros affichés', value: stats?.phoneReveals.value || 0, change: stats?.phoneReveals.change || '+0%', icon: Phone },
+    { label: 'Appels reçus', value: stats?.phoneClicks.value || 0, change: stats?.phoneClicks.change || '+0%', icon: PhoneCall },
     { label: 'Demandes reçues', value: stats?.demandesRecues.value || 0, change: stats?.demandesRecues.change || '+0%', icon: FileText },
-    { label: 'Devis envoyés', value: stats?.devisEnvoyes.value || 0, change: stats?.devisEnvoyes.change || '+0%', icon: Euro },
-    { label: 'Clients satisfaits', value: stats?.clientsSatisfaits.value || 0, change: stats?.clientsSatisfaits.change || '+0%', icon: Users },
   ]
 
   if (loading) {

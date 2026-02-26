@@ -190,6 +190,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
   cron: { window: 60 * 1000, max: 10, failOpen: true },     // 10/min for cron jobs — fail open so cron runs don't fail
+  analytics: { window: 60 * 1000, max: 120, failOpen: true }, // 120/min for analytics beacons — fail open
   default: { window: 60 * 1000, max: 100 },      // 100 requests per minute default
 }
 
@@ -244,6 +245,9 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
 
   // File uploads (any route containing /upload)
   if (pathname.includes('/upload')) return RATE_LIMITS.upload
+
+  // Analytics beacons — public, high throughput, fail-open
+  if (pathname.startsWith('/api/analytics')) return RATE_LIMITS.analytics
 
   // Search and public listing endpoints — scraping prevention
   if (pathname.startsWith('/api/search') || pathname.startsWith('/api/providers/listing') || pathname.startsWith('/api/providers/by-city')) return RATE_LIMITS.search

@@ -6,6 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -110,6 +111,33 @@ export async function GET(request: Request) {
           .order('created_at', { ascending: false })
       : { data: [] }
 
+    // Query real analytics events for this provider
+    const adminClient = createAdminClient()
+    const providerId = providerForUnread?.id
+    const [profileViewsResult, phoneRevealsResult, phoneClicksResult] = await Promise.all([
+      providerId
+        ? adminClient
+            .from('analytics_events')
+            .select('id', { count: 'exact', head: true })
+            .eq('provider_id', providerId)
+            .eq('event_type', 'artisan_profile_view')
+        : Promise.resolve({ count: 0, error: null }),
+      providerId
+        ? adminClient
+            .from('analytics_events')
+            .select('id', { count: 'exact', head: true })
+            .eq('provider_id', providerId)
+            .eq('event_type', 'phone_reveal')
+        : Promise.resolve({ count: 0, error: null }),
+      providerId
+        ? adminClient
+            .from('analytics_events')
+            .select('id', { count: 'exact', head: true })
+            .eq('provider_id', providerId)
+            .eq('event_type', 'phone_click')
+        : Promise.resolve({ count: 0, error: null }),
+    ])
+
     // Transform bookingsByDay to include day names
     const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
     const bookingsByDayMap = new Map(
@@ -135,9 +163,16 @@ export async function GET(request: Request) {
       : periodRevenue > 0 ? 100 : 0
 
     const stats = {
-      // Legacy format for backward compatibility
       profileViews: {
-        value: 0,
+        value: profileViewsResult.count || 0,
+        change: '+0%',
+      },
+      phoneReveals: {
+        value: phoneRevealsResult.count || 0,
+        change: '+0%',
+      },
+      phoneClicks: {
+        value: phoneClicksResult.count || 0,
         change: '+0%',
       },
       demandesRecues: {
@@ -243,6 +278,33 @@ async function getLegacyStats(
         .order('created_at', { ascending: false })
     : { data: [] }
 
+  // Query real analytics events for this provider
+  const adminClient = createAdminClient()
+  const legacyProviderId = legacyProvider?.id
+  const [legacyProfileViews, legacyPhoneReveals, legacyPhoneClicks] = await Promise.all([
+    legacyProviderId
+      ? adminClient
+          .from('analytics_events')
+          .select('id', { count: 'exact', head: true })
+          .eq('provider_id', legacyProviderId)
+          .eq('event_type', 'artisan_profile_view')
+      : Promise.resolve({ count: 0, error: null }),
+    legacyProviderId
+      ? adminClient
+          .from('analytics_events')
+          .select('id', { count: 'exact', head: true })
+          .eq('provider_id', legacyProviderId)
+          .eq('event_type', 'phone_reveal')
+      : Promise.resolve({ count: 0, error: null }),
+    legacyProviderId
+      ? adminClient
+          .from('analytics_events')
+          .select('id', { count: 'exact', head: true })
+          .eq('provider_id', legacyProviderId)
+          .eq('event_type', 'phone_click')
+      : Promise.resolve({ count: 0, error: null }),
+  ])
+
   // Calculate stats with division-by-zero protection
   const totalDevis = 0 // TODO: re-enable when 'devis' table is reconciled
   const acceptedDevis = 0 // TODO: re-enable when 'devis' table is reconciled
@@ -253,7 +315,15 @@ async function getLegacyStats(
 
   const stats = {
     profileViews: {
-      value: 0,
+      value: legacyProfileViews.count || 0,
+      change: '+0%',
+    },
+    phoneReveals: {
+      value: legacyPhoneReveals.count || 0,
+      change: '+0%',
+    },
+    phoneClicks: {
+      value: legacyPhoneClicks.count || 0,
       change: '+0%',
     },
     demandesRecues: {
