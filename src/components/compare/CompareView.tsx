@@ -49,7 +49,7 @@ function BooleanCell({ value }: { value: boolean | undefined }) {
 
 function RatingCell({ provider }: { provider: CompareProvider }) {
   if (!provider.rating_average) {
-    return <span className="text-gray-400 text-sm">Pas encore not\u00e9</span>
+    return <span className="text-gray-400 text-sm">Pas encore noté</span>
   }
   return (
     <div className="flex items-center justify-center gap-1.5">
@@ -211,7 +211,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
             {/* Verified */}
             <CompareRow
-              label="V\u00e9rifi\u00e9"
+              label="Vérifié"
               icon={<Shield className="w-4 h-4 text-green-500" />}
               providers={compareList}
             >
@@ -222,7 +222,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
             {/* Phone */}
             <CompareRow
-              label="T\u00e9l\u00e9phone"
+              label="Téléphone"
               icon={<Phone className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
@@ -278,9 +278,9 @@ export function CompareView({ onClose }: CompareViewProps) {
           {/* Footer */}
           <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
             <p className="text-xs text-gray-500 text-center">
-              Les informations affich\u00e9es sont fournies par les artisans et
-              v\u00e9rifi\u00e9es lorsque disponibles. Contactez directement
-              chaque artisan pour un devis personnalis\u00e9.
+              Les informations affichées sont fournies par les artisans et
+              vérifiées lorsque disponibles. Contactez directement
+              chaque artisan pour un devis personnalisé.
             </p>
           </div>
         </div>
