@@ -281,7 +281,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       if (!fallback) notFound()
       location = fallback
     } else {
-      location = dbLocation
+      location = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
     }
   } catch {
     const fallback = villeToLocation(locationSlug)

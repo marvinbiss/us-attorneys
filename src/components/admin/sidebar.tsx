@@ -26,12 +26,14 @@ import {
   Megaphone,
   FileEdit,
   BadgeCheck,
+  BarChart3,
   Menu,
   X,
 } from 'lucide-react'
 
 const nav = [
   { name: 'Tableau de bord', href: '/admin', icon: LayoutDashboard },
+  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Système', href: '/admin/systeme', icon: Gauge },
   { name: 'Demandes', href: '/admin/leads', icon: FileText },
   { name: 'Répartition', href: '/admin/dispatch', icon: ArrowRight },
