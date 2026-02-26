@@ -462,13 +462,16 @@ export default async function UrgenceServiceVillePage({
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <a
-              href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              <Phone className="w-6 h-6" />
-              Appeler maintenant
-            </a>
+            <div className="flex flex-col items-center sm:items-start">
+              <a
+                href={PHONE_TEL}
+                className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                <Phone className="w-6 h-6" />
+                Appeler l&apos;assistance
+              </a>
+              <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+            </div>
             <Link
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
@@ -801,13 +804,16 @@ export default async function UrgenceServiceVillePage({
             {villeData.name} sont disponibles selon leurs horaires, y compris parfois les jours fériés.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a
-              href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              <Phone className="w-6 h-6" />
-              Appeler maintenant
-            </a>
+            <div className="flex flex-col items-center">
+              <a
+                href={PHONE_TEL}
+                className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                <Phone className="w-6 h-6" />
+                Appeler l&apos;assistance
+              </a>
+              <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+            </div>
             <Link
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"

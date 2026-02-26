@@ -344,7 +344,7 @@ export default async function ServicePage({ params }: PageProps) {
           {/* CTA */}
           <div className="mt-10">
             <Link
-              href="/devis"
+              href={`/devis/${serviceSlug}`}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Demander un devis gratuit

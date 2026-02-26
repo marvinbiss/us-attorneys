@@ -126,13 +126,19 @@ function ClayFAQSection() {
 }
 
 // ── Main Component ───────────────────────────────────────────────
-export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
+export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews }: Props) {
   const { artisanCount, reviewCount, avgRating, deptCount } = stats
   const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '50 000+'
   const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '12 400'
   const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '4,9'
 
-  const artisans = FEATURED_ARTISANS
+  // Use real top providers from DB when available, fall back to curated list
+  const artisans = topProviders.length >= 3
+    ? topProviders.slice(0, 3).map(p => ({
+        ...p,
+        profileCity: (p.address_city ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+      }))
+    : FEATURED_ARTISANS
   const bigReviews = recentReviews.length >= 3 ? recentReviews.slice(0, 3) : FALLBACK_REVIEWS
   const carouselReviews = recentReviews.length >= 6 ? recentReviews.slice(3) : undefined
 
@@ -205,8 +211,8 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             ))}
           </div>
 
-          {/* Trust pills — hidden on mobile to save space */}
-          <div className="hidden md:flex justify-center gap-2.5 flex-wrap">
+          {/* Trust pills — compact on mobile, full on desktop */}
+          <div className="flex justify-center gap-1.5 md:gap-2.5 flex-wrap">
             {[
               { Icon: ShieldCheck, text: 'SIREN vérifié' },
               { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} avis` },
@@ -214,7 +220,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             ].map(({ Icon: PillIcon, text }) => (
               <div
                 key={text}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white/75"
+                className="inline-flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold text-white/75"
                 style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,.12)' }}
               >
                 <PillIcon className="w-3 h-3 text-clay-400" /> {text}
@@ -222,8 +228,8 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             ))}
           </div>
 
-          {/* Social proof — hidden on mobile to save space */}
-          <div className="hidden md:flex items-center justify-center gap-4 mt-8">
+          {/* Social proof — compact on mobile, full on desktop */}
+          <div className="flex items-center justify-center gap-2.5 md:gap-4 mt-5 md:mt-8">
             <div className="flex">
               {[
                 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=168&h=168&fit=crop&crop=face&q=80',
@@ -236,11 +242,11 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                   alt="Photo d'un client satisfait"
                   width={56}
                   height={56}
-                  className="rounded-full border-2 border-white/20 object-cover -mr-3"
+                  className="w-9 h-9 md:w-14 md:h-14 rounded-full border-2 border-white/20 object-cover -mr-2 md:-mr-3"
                 />
               ))}
             </div>
-            <p className="text-base font-medium text-white/70">
+            <p className="text-xs md:text-base font-medium text-white/70">
               <strong className="text-white/85">Des centaines de clients</strong> trouvent leur artisan chaque semaine
             </p>
           </div>

@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { MapPin, List, Map as MapIcon, Search, ChevronDown } from 'lucide-react'
+import Link from 'next/link'
+import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
 
@@ -270,6 +271,32 @@ export default function ServiceLocationPageClient({
         </div>
       )}
 
+      {/* CTA Banner - Devis above the fold */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 border-b border-blue-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-3 text-white">
+            <div className="hidden sm:flex items-center justify-center w-10 h-10 bg-white/15 rounded-lg">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div className="text-center sm:text-left">
+              <p className="font-heading font-bold text-base sm:text-lg">
+                Recevez 3 devis gratuits de {service.name.toLowerCase()} &agrave; {location.name}
+              </p>
+              <p className="text-blue-100 text-sm hidden sm:block">
+                Comparez les prix et choisissez le meilleur artisan
+              </p>
+            </div>
+          </div>
+          <Link
+            href={`/devis/${serviceSlug || service.slug}/${locationSlug || ''}`}
+            className="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-900/20 hover:bg-blue-50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-sm sm:text-base whitespace-nowrap"
+          >
+            Demander un devis
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
       {/* Main content - Zillow style split view */}
       <div
         className="flex flex-col md:flex-row md:h-[calc(100vh-180px)]"
@@ -281,31 +308,56 @@ export default function ServiceLocationPageClient({
               viewMode === 'split' ? 'w-full md:w-1/2 lg:w-2/5' : 'w-full'
             }`}
           >
-            <ProviderList
-              providers={allProviders}
-              onProviderHover={setSelectedProvider}
-              totalCount={totalCount || allProviders.length}
-              searchQuery={searchQuery}
-              sortOrder={sortOrder}
-              highlightedProviderId={mapHoveredProviderId}
-            />
-            {hasMore && (
-              <div className="p-4 border-t border-gray-100 bg-white sticky bottom-0">
-                <button
-                  onClick={loadMore}
-                  disabled={isLoadingMore}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-clay-50 hover:bg-clay-100 text-clay-600 font-semibold rounded-xl transition-colors disabled:opacity-60"
+            {allProviders.length === 0 ? (
+              /* Empty state when 0 providers */
+              <div className="flex flex-col items-center justify-center text-center px-6 py-16 sm:py-24">
+                <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
+                  <SearchX className="w-8 h-8 text-gray-400" />
+                </div>
+                <h2 className="font-heading text-xl font-bold text-gray-900 mb-2">
+                  Aucun {service.name.toLowerCase()} r&eacute;f&eacute;renc&eacute; &agrave; {location.name} pour le moment
+                </h2>
+                <p className="text-gray-500 max-w-md mb-8">
+                  Demandez un devis et nous rechercherons un professionnel qualifi&eacute; pour vous dans les plus brefs d&eacute;lais.
+                </p>
+                <Link
+                  href={`/devis/${serviceSlug || service.slug}/${locationSlug || ''}`}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-200 text-base"
                 >
-                  {isLoadingMore ? (
-                    <span className="w-4 h-4 border-2 border-clay-400 border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4" />
-                  )}
-                  {isLoadingMore
-                    ? 'Chargement...'
-                    : `Afficher plus (${allProviders.length} / ${totalCount.toLocaleString('fr-FR')})`}
-                </button>
+                  <FileText className="w-5 h-5" />
+                  Demander un devis gratuit
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
               </div>
+            ) : (
+              <>
+                <ProviderList
+                  providers={allProviders}
+                  onProviderHover={setSelectedProvider}
+                  totalCount={totalCount || allProviders.length}
+                  searchQuery={searchQuery}
+                  sortOrder={sortOrder}
+                  highlightedProviderId={mapHoveredProviderId}
+                />
+                {hasMore && (
+                  <div className="p-4 border-t border-gray-100 bg-white sticky bottom-0">
+                    <button
+                      onClick={loadMore}
+                      disabled={isLoadingMore}
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-clay-50 hover:bg-clay-100 text-clay-600 font-semibold rounded-xl transition-colors disabled:opacity-60"
+                    >
+                      {isLoadingMore ? (
+                        <span className="w-4 h-4 border-2 border-clay-400 border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
+                      {isLoadingMore
+                        ? 'Chargement...'
+                        : `Afficher plus (${allProviders.length} / ${totalCount.toLocaleString('fr-FR')})`}
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

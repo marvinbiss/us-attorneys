@@ -191,13 +191,16 @@ export default async function UrgencePage() {
 
           {/* Emergency CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <a
-              href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 hover:shadow-red-400/40 transition-all"
-            >
-              <Phone className="w-6 h-6" />
-              Appeler maintenant
-            </a>
+            <div className="flex flex-col items-center sm:items-start">
+              <a
+                href={PHONE_TEL}
+                className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 hover:shadow-red-400/40 transition-all"
+              >
+                <Phone className="w-6 h-6" />
+                Appeler l&apos;assistance
+              </a>
+              <span className="text-sm text-red-200/70 mt-2">Service de mise en relation</span>
+            </div>
             <Link
               href="/services"
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
@@ -471,13 +474,16 @@ export default async function UrgencePage() {
             Nos artisans référencés sont disponibles selon leurs horaires, y compris parfois les jours fériés pour intervenir rapidement chez vous.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 transition-all"
-            >
-              <Phone className="w-6 h-6" />
-              Appeler maintenant
-            </a>
+            <div className="flex flex-col items-center">
+              <a
+                href={PHONE_TEL}
+                className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 transition-all"
+              >
+                <Phone className="w-6 h-6" />
+                Appeler l&apos;assistance
+              </a>
+              <span className="text-sm text-red-200/70 mt-2">Service de mise en relation</span>
+            </div>
             <Link
               href="/services"
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"

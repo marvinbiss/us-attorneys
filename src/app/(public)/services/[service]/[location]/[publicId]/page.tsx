@@ -566,6 +566,31 @@ export default async function ProviderPage({ params }: PageProps) {
         hasSiret={!!provider.siret}
       />
 
+      {/* ─── DEVIS CTA BANNER ────────────────────────────────── */}
+      <section className="py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-t border-b border-blue-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">
+                Besoin de ce professionnel ?
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Demandez un devis gratuit et sans engagement.
+              </p>
+            </div>
+            <Link
+              href={`/devis/${serviceSlug}/${locationSlug}`}
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap"
+            >
+              Demander un devis gratuit
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
       <section className="py-6 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

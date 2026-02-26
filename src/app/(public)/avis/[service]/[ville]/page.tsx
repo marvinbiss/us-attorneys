@@ -554,6 +554,30 @@ export default async function AvisServiceVillePage({
         </section>
       )}
 
+      {/* ─── EMPTY STATE (no reviews) ──────────────────────── */}
+      {totalReviews === 0 && (
+        <section className="py-12 bg-white border-b">
+          <div className="max-w-3xl mx-auto px-4 text-center">
+            <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Star className="w-8 h-8 text-amber-500" />
+            </div>
+            <h2 className="font-heading text-xl font-bold text-gray-900 mb-2">
+              Aucun avis pour {tradeLower} &agrave; {villeData.name} pour le moment
+            </h2>
+            <p className="text-gray-500 mb-6">
+              Soyez le premier &agrave; partager votre exp&eacute;rience !
+            </p>
+            <Link
+              href={`/services/${service}/${villeSlug}`}
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+            >
+              Trouver un {tradeLower} &agrave; {villeData.name}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* ─── ARTISANS LES MIEUX NOTÉS ───────────────────── */}
       {topProviders.length > 0 && (
         <section className="py-12 bg-white">

@@ -46,7 +46,7 @@ const budgetOptions = [
 const PHONE_REGEX = /^(?:(?:\+33|0033|0)\s?[1-9])(?:[\s.-]?\d{2}){4}$/
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
-  const stepLabels = ['Service', 'Projet', 'Contact']
+  const stepLabels = ['Projet', 'Contact']
   return (
     <div className="flex items-center justify-center mb-8">
       {stepLabels.map((label, i) => {
@@ -104,7 +104,8 @@ export default function DevisForm({
   prefilledCity,
   prefilledCityPostal,
 }: DevisFormProps = {}) {
-  const [step, setStep] = useState(prefilledService && prefilledCity ? 2 : 1)
+  const isPrefilled = !!(prefilledService && prefilledCity)
+  const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
     ...initialFormData,
     ...(prefilledService ? { service: prefilledService } : {}),
@@ -143,22 +144,15 @@ export default function DevisForm({
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.service) newErrors.service = 'Veuillez choisir un service'
     if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
+    if (formData.description && formData.description.length < 10) {
+      newErrors.description = 'Veuillez décrire votre projet (10 caractères minimum)'
+    }
+    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const validateStep2 = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.description || formData.description.length < 20) {
-      newErrors.description = 'Veuillez décrire votre projet (20 caractères minimum)'
-    }
-    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
-    if (!formData.budget) newErrors.budget = 'Veuillez indiquer votre budget'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const validateStep3 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
     if (!formData.telephone.trim()) {
@@ -180,7 +174,6 @@ export default function DevisForm({
 
   const handleNext = () => {
     if (step === 1 && validateStep1()) setStep(2)
-    else if (step === 2 && validateStep2()) setStep(3)
   }
 
   const handlePrev = () => {
@@ -189,7 +182,7 @@ export default function DevisForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validateStep3()) return
+    if (!validateStep2()) return
 
     setSubmitting(true)
     setSubmitError(null)
@@ -238,6 +231,9 @@ export default function DevisForm({
         <p className="text-slate-500 text-lg leading-relaxed max-w-md mx-auto">
           Des artisans qualifiés de votre région vont étudier votre demande et vous contacter.
         </p>
+        <p className="text-slate-400 text-sm mt-3 max-w-md mx-auto">
+          Vous recevrez des réponses sous 24h par email ou téléphone.
+        </p>
       </div>
     )
   }
@@ -250,133 +246,119 @@ export default function DevisForm({
     >
       <StepIndicator currentStep={step} />
 
-      {/* Step 1: Service & Location */}
+      {/* Step 1: Service + City + Project details */}
       {step === 1 && (
         <div className="space-y-6">
           <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-            Quel service recherchez-vous ?
+            {isPrefilled ? 'Détails du projet' : 'Décrivez votre projet'}
           </h3>
           <p className="text-slate-500 text-sm mb-4">
-            Sélectionnez un métier et votre localisation.
+            {isPrefilled
+              ? 'Précisez votre besoin pour recevoir des devis adaptés.'
+              : 'Sélectionnez un service, votre ville et décrivez votre besoin.'}
           </p>
 
-          {/* Service dropdown */}
-          <div>
-            <label htmlFor="service" className="block text-sm font-semibold text-slate-700 mb-2">
-              Type de service <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <select
-                id="service"
-                value={formData.service}
-                onChange={(e) => updateField('service', e.target.value)}
-                aria-describedby={errors.service ? 'service-error' : undefined}
-                aria-invalid={!!errors.service}
-                className={`w-full appearance-none rounded-xl border ${
-                  errors.service ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-              >
-                <option value="">Choisissez un service...</option>
-                {services.map((s) => (
-                  <option key={s.slug} value={s.slug}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-            </div>
-            {errors.service && (
-              <p id="service-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.service}</p>
-            )}
-          </div>
-
-          {/* City input with autocomplete */}
-          <div>
-            <label htmlFor="ville" className="block text-sm font-semibold text-slate-700 mb-2">
-              Ville <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <input
-                id="ville"
-                type="text"
-                autoComplete="off"
-                placeholder="Ex : Paris, Lyon, Marseille..."
-                value={villeQuery}
-                onChange={(e) => {
-                  setVilleQuery(e.target.value)
-                  setShowVilleSuggestions(true)
-                  if (formData.ville) updateField('ville', '')
-                }}
-                onFocus={() => setShowVilleSuggestions(true)}
-                onBlur={() => {
-                  // Delay to allow click on suggestion
-                  setTimeout(() => setShowVilleSuggestions(false), 200)
-                }}
-                aria-describedby={errors.ville ? 'ville-error' : undefined}
-                aria-invalid={!!errors.ville}
-                className={`w-full rounded-xl border ${
-                  errors.ville ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-              />
-              {showVilleSuggestions && filteredVilles.length > 0 && (
-                <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-auto">
-                  {filteredVilles.map((v) => (
-                    <li key={v.slug}>
-                      <button
-                        type="button"
-                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors text-sm"
-                        onMouseDown={(e) => {
-                          e.preventDefault()
-                          updateField('ville', v.name)
-                          setVilleQuery(v.name)
-                          setSelectedVillePostal(v.codePostal)
-                          setShowVilleSuggestions(false)
-                        }}
-                      >
-                        <span className="font-medium text-slate-900">{v.name}</span>
-                        <span className="text-gray-400 ml-2">
-                          ({v.departement}, {v.codePostal})
-                        </span>
-                      </button>
-                    </li>
+          {/* Service dropdown — hidden when pre-filled */}
+          {!isPrefilled && (
+            <div>
+              <label htmlFor="service" className="block text-sm font-semibold text-slate-700 mb-2">
+                Type de service <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  id="service"
+                  value={formData.service}
+                  onChange={(e) => updateField('service', e.target.value)}
+                  aria-describedby={errors.service ? 'service-error' : undefined}
+                  aria-invalid={!!errors.service}
+                  className={`w-full appearance-none rounded-xl border ${
+                    errors.service ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                  } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                >
+                  <option value="">Choisissez un service...</option>
+                  {services.map((s) => (
+                    <option key={s.slug} value={s.slug}>
+                      {s.name}
+                    </option>
                   ))}
-                </ul>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+              {errors.service && (
+                <p id="service-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.service}</p>
               )}
             </div>
-            {errors.ville && (
-              <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
-            )}
-          </div>
+          )}
 
-          <button
-            type="button"
-            onClick={handleNext}
-            className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-          >
-            Suivant <ArrowRight className="w-5 h-5" />
-          </button>
-        </div>
-      )}
-
-      {/* Step 2: Project details */}
-      {step === 2 && (
-        <div className="space-y-6">
-          <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-            Détails du projet
-          </h3>
-          <p className="text-slate-500 text-sm mb-4">
-            Décrivez votre besoin pour recevoir des devis adaptés.
-          </p>
+          {/* City input with autocomplete — hidden when pre-filled */}
+          {!isPrefilled && (
+            <div>
+              <label htmlFor="ville" className="block text-sm font-semibold text-slate-700 mb-2">
+                Ville <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  id="ville"
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Ex : Paris, Lyon, Marseille..."
+                  value={villeQuery}
+                  onChange={(e) => {
+                    setVilleQuery(e.target.value)
+                    setShowVilleSuggestions(true)
+                    if (formData.ville) updateField('ville', '')
+                  }}
+                  onFocus={() => setShowVilleSuggestions(true)}
+                  onBlur={() => {
+                    // Delay to allow click on suggestion
+                    setTimeout(() => setShowVilleSuggestions(false), 200)
+                  }}
+                  aria-describedby={errors.ville ? 'ville-error' : undefined}
+                  aria-invalid={!!errors.ville}
+                  className={`w-full rounded-xl border ${
+                    errors.ville ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                  } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                />
+                {showVilleSuggestions && filteredVilles.length > 0 && (
+                  <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-auto">
+                    {filteredVilles.map((v) => (
+                      <li key={v.slug}>
+                        <button
+                          type="button"
+                          className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors text-sm"
+                          onMouseDown={(e) => {
+                            e.preventDefault()
+                            updateField('ville', v.name)
+                            setVilleQuery(v.name)
+                            setSelectedVillePostal(v.codePostal)
+                            setShowVilleSuggestions(false)
+                          }}
+                        >
+                          <span className="font-medium text-slate-900">{v.name}</span>
+                          <span className="text-gray-400 ml-2">
+                            ({v.departement}, {v.codePostal})
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              {errors.ville && (
+                <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
+              )}
+            </div>
+          )}
 
           {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
-              Décrivez votre projet <span className="text-red-500">*</span>
+              Décrivez votre projet <span className="text-slate-400 font-normal">(optionnel)</span>
             </label>
             <textarea
               id="description"
-              rows={4}
-              placeholder="Ex : J'ai besoin de refaire la plomberie de ma salle de bain. L'installation date de 20 ans..."
+              rows={3}
+              placeholder="Ex : fuite robinet cuisine, remplacement chaudière..."
               value={formData.description}
               onChange={(e) => updateField('description', e.target.value)}
               aria-describedby={errors.description ? 'description-error' : undefined}
@@ -393,10 +375,10 @@ export default function DevisForm({
               )}
               <span
                 className={`text-xs ${
-                  formData.description.length >= 20 ? 'text-green-600' : 'text-gray-400'
+                  formData.description.length >= 10 ? 'text-green-600' : 'text-gray-400'
                 }`}
               >
-                {formData.description.length}/20 caract.
+                {formData.description.length}/10 caract.
               </span>
             </div>
           </div>
@@ -433,10 +415,10 @@ export default function DevisForm({
             )}
           </div>
 
-          {/* Budget */}
+          {/* Budget — optional */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-3">
-              Budget estimé <span className="text-red-500">*</span>
+              Budget estimé <span className="text-slate-400 font-normal">(optionnel)</span>
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {budgetOptions.map((opt) => (
@@ -460,32 +442,20 @@ export default function DevisForm({
                 </label>
               ))}
             </div>
-            {errors.budget && (
-              <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.budget}</p>
-            )}
           </div>
 
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
-            >
-              <ArrowLeft className="w-5 h-5" /> Précédent
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-            >
-              Suivant <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleNext}
+            className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+          >
+            Suivant <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       )}
 
-      {/* Step 3: Contact info */}
-      {step === 3 && (
+      {/* Step 2: Contact info */}
+      {step === 2 && (
         <div className="space-y-6">
           <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
             Vos coordonnées

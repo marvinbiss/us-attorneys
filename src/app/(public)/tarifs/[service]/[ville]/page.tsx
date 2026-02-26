@@ -7,7 +7,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { villes, getVilleBySlug } from '@/lib/data/france'
+import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
 
@@ -241,9 +241,7 @@ export default async function TarifsServiceVillePage({
     },
   }
 
-  const relatedCities = top5Cities
-    .filter((v) => v.slug !== villeSlug)
-    .slice(0, 6)
+  const relatedCities = getNearbyCities(villeSlug, 6)
 
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 6)
 
