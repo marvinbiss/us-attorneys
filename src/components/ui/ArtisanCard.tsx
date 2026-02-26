@@ -7,7 +7,6 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
-import { CompareButton } from '@/components/ui/CompareButton'
 
 interface ArtisanCardProps {
   id: string
@@ -243,13 +242,6 @@ export function ArtisanCard({
             providerName={name}
             size="md"
             className="absolute top-3 right-3 z-10"
-          />
-
-          {/* Bouton comparer */}
-          <CompareButton
-            provider={{ id, name, slug, specialty: profession, address_city: location, is_verified: isVerified, rating_average: rating, review_count: reviewCount }}
-            size="sm"
-            className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
           />
 
           {/* Disponibilité */}

@@ -10,7 +10,6 @@ import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProviderCount } from '@/lib/data/stats'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
-import { CompareProviderWrapper } from '@/components/compare/CompareProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,10 +25,6 @@ const plusJakarta = Plus_Jakarta_Sans({
 })
 
 // Dynamic imports for performance
-const CompareBarClient = dynamic(
-  () => import('@/components/compare/CompareBar').then(mod => ({ default: mod.CompareBar })),
-  { ssr: false }
-)
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
   ssr: false,
 })
@@ -190,7 +185,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
-        <CompareProviderWrapper>
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a
@@ -202,13 +196,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <Header artisanCount={artisanCount} />
           <main id="main-content" className="pb-16 md:pb-0">{children}</main>
           <Footer />
-          <CompareBarClient />
           <MobileBottomNav />
           <ServiceWorkerRegistration />
           <CapacitorInit />
           <CookieConsent />
         </MobileMenuProvider>
-        </CompareProviderWrapper>
       </body>
     </html>
   )

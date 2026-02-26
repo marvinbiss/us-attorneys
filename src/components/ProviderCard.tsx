@@ -3,7 +3,6 @@ import { MapPin, Phone, Star, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
-import { CompareButton } from '@/components/ui/CompareButton'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
 
@@ -130,14 +129,6 @@ export default function ProviderCard({
           SIREN {provider.siret.slice(0, 9)}
         </p>
       )}
-
-      {/* Bouton comparer — désactivé temporairement, à réactiver plus tard */}
-      <div className="mb-3 hidden md:block">
-        <CompareButton
-          provider={{ id: provider.stable_id || provider.id, name: provider.name, slug: provider.slug || '', specialty: provider.specialty, address_city: provider.address_city, address_region: provider.address_region, address_postal_code: provider.address_postal_code, is_verified: provider.is_verified, rating_average: provider.rating_average, review_count: provider.review_count, phone: provider.phone, siret: provider.siret }}
-          size="sm"
-        />
-      </div>
 
       {/* Boutons */}
       <div className="flex gap-3 relative z-20">
