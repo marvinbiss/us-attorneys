@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
@@ -19,8 +19,10 @@ import {
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
 import { ShareButton } from '@/components/ui/ShareButton'
+import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import type { LegacyArtisan } from '@/types/legacy'
+import { BookingFunnel } from '@/lib/analytics/tracking'
 
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
@@ -118,7 +120,14 @@ export default function ArtisanPageClient({
 }: ArtisanPageClientProps) {
   const artisan = initialArtisan
   const reviews = initialReviews
-  const [isFavorite, setIsFavorite] = useState(false)
+  const { isFavorite, toggleFavorite } = useFavorites()
+
+  // Track profile view
+  useEffect(() => {
+    if (artisan) {
+      BookingFunnel.viewProfile(artisanId, artisan.business_name || '', 'profile_page')
+    }
+  }, [artisan, artisanId])
 
   // Not found state
   if (!artisan) {
@@ -130,14 +139,14 @@ export default function ArtisanPageClient({
           className="text-center p-8"
         >
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 font-heading mb-2">Artisan non trouv&eacute;</h1>
+          <h1 className="text-2xl font-bold text-gray-900 font-heading mb-2">Artisan non trouvé</h1>
           <p className="text-slate-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
           <Link
             href="/recherche"
             className="inline-flex items-center gap-2 px-6 py-3 bg-clay-400 text-white rounded-xl font-medium hover:bg-clay-600 transition-colors shadow-md shadow-glow-clay"
           >
             <ArrowLeft className="w-5 h-5" />
-            Retour &agrave; la recherche
+            Retour à la recherche
           </Link>
         </motion.div>
       </div>
@@ -192,16 +201,16 @@ export default function ArtisanPageClient({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsFavorite(!isFavorite)}
+                  onClick={() => toggleFavorite(artisanId)}
                   className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 ${
-                    isFavorite
+                    isFavorite(artisanId)
                       ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
                       : 'bg-gray-50 text-slate-600 border-gray-100 hover:bg-sand-200'
                   }`}
-                  aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-                  aria-pressed={isFavorite}
+                  aria-label={isFavorite(artisanId) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                  aria-pressed={isFavorite(artisanId)}
                 >
-                  <Heart className={`w-4.5 h-4.5 ${isFavorite ? 'fill-current' : ''}`} aria-hidden="true" />
+                  <Heart className={`w-4.5 h-4.5 ${isFavorite(artisanId) ? 'fill-current' : ''}`} aria-hidden="true" />
                 </motion.button>
               </div>
             </div>

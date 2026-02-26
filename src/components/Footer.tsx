@@ -437,21 +437,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/carrieres" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Carrières
-                </Link>
-              </li>
-              <li>
-                <Link href="/presse" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Presse
-                </Link>
-              </li>
-              <li>
-                <Link href="/partenaires" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Partenaires
-                </Link>
-              </li>
-              <li>
                 <Link href="/inscription-artisan" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Devenir partenaire
                 </Link>

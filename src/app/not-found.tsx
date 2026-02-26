@@ -36,6 +36,25 @@ export default function NotFound() {
           </Link>
         </div>
 
+        {/* Search bar */}
+        <form action="/recherche" method="GET" className="mt-8 flex items-center gap-2 max-w-sm mx-auto">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              name="q"
+              placeholder="Rechercher un service..."
+              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Rechercher
+          </button>
+        </form>
+
         {/* Suggestions */}
         <div className="mt-12 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-500 mb-4">

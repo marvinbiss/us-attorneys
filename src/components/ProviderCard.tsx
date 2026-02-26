@@ -7,6 +7,12 @@ import { CompareButton } from '@/components/ui/CompareButton'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
 
+function isValidPhone(phone: string | undefined | null): boolean {
+  if (!phone) return false
+  const digits = phone.replace(/\D/g, '')
+  return digits.length >= 10
+}
+
 interface ProviderCardProps {
   provider: ProviderCardProvider
   isHovered?: boolean
@@ -58,7 +64,7 @@ export default function ProviderCard({
           <div className="flex items-center gap-2">
             <Link
               href={providerUrl}
-              className="text-xl font-bold text-gray-900 hover:text-clay-600 transition-colors duration-200"
+              className="text-xl font-bold text-gray-900 hover:text-clay-600 transition-colors duration-200 truncate"
             >
               {provider.name}
             </Link>
@@ -84,7 +90,7 @@ export default function ProviderCard({
             <p className="text-sm text-slate-500 font-medium mt-0.5">{provider.specialty}</p>
           )}
         </div>
-        {ratingValue && typeof reviewCount === 'number' && reviewCount > 0 && (
+        {ratingValue && typeof reviewCount === 'number' && reviewCount > 0 ? (
           <div className="text-right flex-shrink-0">
             <div className="flex items-center gap-1.5 justify-end">
               <Star className="w-6 h-6 text-amber-500 fill-amber-500 transition-transform duration-300 group-hover/card:scale-110 group-hover/card:animate-[pulseGlow_1.5s_ease-in-out_infinite]" />
@@ -99,6 +105,10 @@ export default function ProviderCard({
               )}
             </div>
           </div>
+        ) : (
+          <span className="flex-shrink-0 inline-flex items-center px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">
+            Nouveau
+          </span>
         )}
       </div>
 
@@ -122,7 +132,7 @@ export default function ProviderCard({
       )}
 
       {/* Bouton comparer — désactivé temporairement, à réactiver plus tard */}
-      <div className="mb-3 hidden">
+      <div className="mb-3 hidden md:block">
         <CompareButton
           provider={{ id: provider.stable_id || provider.id, name: provider.name, slug: provider.slug || '', specialty: provider.specialty, address_city: provider.address_city, address_region: provider.address_region, address_postal_code: provider.address_postal_code, is_verified: provider.is_verified, rating_average: provider.rating_average, review_count: provider.review_count, phone: provider.phone, siret: provider.siret }}
           size="sm"
@@ -137,7 +147,7 @@ export default function ProviderCard({
         >
           Demander un devis
         </Link>
-        {provider.phone && (
+        {isValidPhone(provider.phone) && (
           <a
             href={`tel:${provider.phone}`}
             className="group flex-1 flex items-center justify-center gap-2 py-3 min-h-[48px] border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"

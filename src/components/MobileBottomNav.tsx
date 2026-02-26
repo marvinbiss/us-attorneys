@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Search, FileText, Wrench, BookOpen } from 'lucide-react'
+import { Home, Search, FileText, Wrench, AlertTriangle } from 'lucide-react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 const navItems = [
@@ -10,7 +10,7 @@ const navItems = [
   { href: '/recherche', icon: Search, label: 'Recherche' },
   { href: '/services', icon: Wrench, label: 'Services' },
   { href: '/devis', icon: FileText, label: 'Devis' },
-  { href: '/blog', icon: BookOpen, label: 'Blog' },
+  { href: '/urgence', icon: AlertTriangle, label: 'Urgence' },
 ]
 
 export default function MobileBottomNav() {
@@ -42,7 +42,7 @@ export default function MobileBottomNav() {
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
-              <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
+              <span className={`text-[11px] ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
             </Link>
           )
         })}

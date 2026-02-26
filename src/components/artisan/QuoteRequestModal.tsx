@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, CheckCircle, Loader2, User, Mail, Phone, FileText, MapPin } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
@@ -36,8 +36,49 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
   const [isSuccess, setIsSuccess] = useState(false)
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [serverError, setServerError] = useState<string | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
 
   const displayName = getDisplayName(artisan)
+
+  // Focus trap: Tab cycles through focusable elements inside the modal
+  const handleFocusTrap = useCallback((e: KeyboardEvent) => {
+    if (e.key !== 'Tab' || !modalRef.current) return
+    const focusableEls = modalRef.current.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusableEls.length === 0) return
+    const firstEl = focusableEls[0]
+    const lastEl = focusableEls[focusableEls.length - 1]
+    if (e.shiftKey) {
+      if (document.activeElement === firstEl) {
+        e.preventDefault()
+        lastEl.focus()
+      }
+    } else {
+      if (document.activeElement === lastEl) {
+        e.preventDefault()
+        firstEl.focus()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) return
+    document.addEventListener('keydown', handleFocusTrap)
+    // Focus first focusable element on open
+    const timer = setTimeout(() => {
+      if (modalRef.current) {
+        const first = modalRef.current.querySelector<HTMLElement>(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+        first?.focus()
+      }
+    }, 100)
+    return () => {
+      document.removeEventListener('keydown', handleFocusTrap)
+      clearTimeout(timer)
+    }
+  }, [isOpen, handleFocusTrap])
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
@@ -96,7 +137,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
           setFormData(initialFormData)
           setIsSuccess(false)
           onClose()
-        }, 3000)
+        }, 5000)
       } else {
         setServerError(result.error || 'Erreur lors de l\'envoi')
       }
@@ -129,6 +170,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
           aria-describedby="quote-modal-description"
         >
           <motion.div
+            ref={modalRef}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -177,9 +219,20 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Demande envoyée !
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 mb-4">
                     {displayName} vous répondra dans les meilleurs délais.
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData(initialFormData)
+                      setIsSuccess(false)
+                      onClose()
+                    }}
+                    className="px-6 py-2.5 rounded-xl border-2 border-gray-200 text-slate-700 font-medium hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
+                  >
+                    Fermer
+                  </button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>

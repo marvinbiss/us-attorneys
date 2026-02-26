@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, Shield } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { QuoteRequestModal } from './QuoteRequestModal'
+import { BookingFunnel } from '@/lib/analytics/tracking'
 
 interface ArtisanSidebarProps {
   artisan: LegacyArtisan
@@ -54,8 +55,16 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => showPhone ? handleCall() : setShowPhone(true)}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
+              onClick={() => {
+                if (showPhone) {
+                  BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'sidebar')
+                  handleCall()
+                } else {
+                  BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'sidebar')
+                  setShowPhone(true)
+                }
+              }}
+              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-soft hover:shadow-premium hover:from-stone-900 hover:to-black transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
               aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
@@ -67,7 +76,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowQuoteModal(true)}
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-soft hover:shadow-premium hover:from-stone-900 hover:to-black transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
             aria-label="Ouvrir le formulaire de demande de devis gratuit"
           >
             <MessageCircle className="w-5 h-5" aria-hidden="true" />
@@ -144,7 +153,15 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           {artisan.phone && (
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => { if (showPhone) handleCall(); else setShowPhone(true) }}
+              onClick={() => {
+                if (showPhone) {
+                  BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+                  handleCall()
+                } else {
+                  BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+                  setShowPhone(true)
+                }
+              }}
               className="flex-1 py-3.5 px-4 rounded-xl bg-clay-400 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-glow-clay focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 min-w-0"
               aria-label={showPhone ? `Appeler l'artisan au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >

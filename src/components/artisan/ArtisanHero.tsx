@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
@@ -9,6 +10,7 @@ import {
   VerificationLevelBadge,
   VerifiedBadge,
 } from '@/components/reviews/VerifiedBadge'
+import { BookingFunnel } from '@/lib/analytics/tracking'
 
 interface ArtisanHeroProps {
   artisan: LegacyArtisan
@@ -48,13 +50,14 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
               </div>
               {artisan.is_verified && (
-                <div
-                  className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-br from-clay-400 to-clay-600 text-white p-1.5 rounded-full shadow-lg ring-2 ring-white"
-                  aria-label="Artisan v&eacute;rifi&eacute;"
-                  role="img"
+                <Link
+                  href="/notre-processus-de-verification"
+                  className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-br from-clay-400 to-clay-600 text-white p-1.5 rounded-full shadow-lg ring-2 ring-white hover:ring-clay-200 transition-all"
+                  aria-label="Artisan vérifié - voir le processus de vérification"
+                  title="Voir notre processus de vérification"
                 >
                   <CheckCircle className="w-5 h-5" aria-hidden="true" />
-                </div>
+                </Link>
               )}
             </div>
           </div>
@@ -69,7 +72,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {/* Name & Specialty */}
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight">
               {displayName}
-              <span className="sr-only"> &mdash; {artisan.specialty} &agrave; {artisan.city}</span>
+              <span className="sr-only"> — {artisan.specialty} à {artisan.city}</span>
             </h1>
             <p className="text-lg text-slate-600 mb-3 font-medium">{artisan.specialty}</p>
 
@@ -79,7 +82,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               <span className="font-medium">{artisan.city} ({artisan.postal_code})</span>
               {artisan.intervention_radius_km && (
                 <>
-                  <span className="text-slate-300" aria-hidden="true">&bull;</span>
+                  <span className="text-slate-300" aria-hidden="true">{'\u2022'}</span>
                   <span className="text-slate-400">Rayon : {artisan.intervention_radius_km} km</span>
                 </>
               )}
@@ -91,8 +94,10 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 type="button"
                 onClick={() => {
                   if (showPhone) {
+                    BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'hero')
                     window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
                   } else {
+                    BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'hero')
                     setShowPhone(true)
                   }
                 }}
@@ -132,7 +137,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               {artisan.team_size && artisan.team_size > 1 && (
                 <div className="flex items-center gap-1.5 text-slate-600">
                   <Users className="w-4 h-4 text-slate-400" aria-hidden="true" />
-                  <span>&Eacute;quipe de {artisan.team_size}</span>
+                  <span>Équipe de {artisan.team_size}</span>
                 </div>
               )}
 
@@ -146,20 +151,14 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               {artisan.updated_at && (
                 <div className="flex items-center gap-1.5 text-sm text-slate-500">
                   <Clock className="w-4 h-4 text-clay-400" />
-                  <span>Mis &agrave; jour {new Date(artisan.updated_at).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}</span>
+                  <span>Mis à jour {new Date(artisan.updated_at).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}</span>
                 </div>
               )}
             </div>
 
             {/* Freshness / activity indicator */}
-            {(artisan.review_count > 0 || artisan.member_since || artisan.accepts_new_clients) && (
+            {(artisan.member_since || artisan.accepts_new_clients) && (
               <div className="flex items-center gap-3 flex-wrap mt-3">
-                {artisan.review_count > 0 && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-clay-50 text-clay-700 text-xs font-medium border border-clay-100">
-                    <Star className="w-3 h-3 fill-clay-400 text-clay-400" aria-hidden="true" />
-                    {artisan.review_count} avis client{artisan.review_count > 1 ? 's' : ''} re&ccedil;u{artisan.review_count > 1 ? 's' : ''}
-                  </span>
-                )}
                 {artisan.accepts_new_clients === true && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sand-200 text-stone-700 text-xs font-medium border border-sand-300">
                     <span className="relative flex h-1.5 w-1.5">

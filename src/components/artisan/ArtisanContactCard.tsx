@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Phone, Mail, ExternalLink, FileText, Shield, Star } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
+import { BookingFunnel } from '@/lib/analytics/tracking'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
@@ -75,8 +76,10 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
               type="button"
               onClick={() => {
                 if (showPhone) {
+                  BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'contact_card')
                   window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
                 } else {
+                  BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'contact_card')
                   setShowPhone(true)
                 }
               }}
@@ -121,7 +124,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
         <div className="mt-5 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Vos donn&eacute;es sont prot&eacute;g&eacute;es et ne seront jamais partag&eacute;es</span>
+            <span>Vos données sont protégées et ne seront jamais partagées</span>
           </div>
         </div>
       </div>

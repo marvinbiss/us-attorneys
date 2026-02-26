@@ -44,6 +44,33 @@ export default function InscriptionArtisanPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [stepError, setStepError] = useState('')
+
+  const validateStep = (currentStep: number): boolean => {
+    setStepError('')
+    switch (currentStep) {
+      case 1:
+        if (!formData.entreprise.trim() || !formData.siret.trim() || !formData.metier.trim()) {
+          setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
+          return false
+        }
+        return true
+      case 2:
+        if (!formData.prenom.trim() || !formData.nom.trim() || !formData.email.trim() || !formData.telephone.trim()) {
+          setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
+          return false
+        }
+        return true
+      case 3:
+        if (!formData.adresse.trim() || !formData.ville.trim()) {
+          setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
+          return false
+        }
+        return true
+      default:
+        return true
+    }
+  }
 
   const breadcrumbItems = [
     { label: 'Inscription artisan' }
@@ -183,10 +210,12 @@ export default function InscriptionArtisanPage() {
                         <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="text"
+                          autoComplete="organization"
                           value={formData.entreprise}
                           onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
                           required
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={isLoading}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                           placeholder="Mon Entreprise"
                         />
                       </div>
@@ -232,20 +261,24 @@ export default function InscriptionArtisanPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
                         <input
                           type="text"
+                          autoComplete="given-name"
                           value={formData.prenom}
                           onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
                           required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={isLoading}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
                         <input
                           type="text"
+                          autoComplete="family-name"
                           value={formData.nom}
                           onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                           required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={isLoading}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -255,10 +288,12 @@ export default function InscriptionArtisanPage() {
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="email"
+                          autoComplete="email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={isLoading}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -268,10 +303,12 @@ export default function InscriptionArtisanPage() {
                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="tel"
+                          autoComplete="tel"
                           value={formData.telephone}
                           onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
                           required
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={isLoading}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -288,10 +325,12 @@ export default function InscriptionArtisanPage() {
                         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="text"
+                          autoComplete="street-address"
                           value={formData.adresse}
                           onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
                           required
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={isLoading}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -318,7 +357,8 @@ export default function InscriptionArtisanPage() {
                       <select
                         value={formData.rayonIntervention}
                         onChange={(e) => setFormData({ ...formData, rayonIntervention: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        disabled={isLoading}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                       >
                         <option value="10">10 km</option>
                         <option value="20">20 km</option>
@@ -342,7 +382,8 @@ export default function InscriptionArtisanPage() {
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         rows={3}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        disabled={isLoading}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         placeholder="Décrivez vos services, spécialités..."
                       />
                     </div>
@@ -354,7 +395,8 @@ export default function InscriptionArtisanPage() {
                         type="text"
                         value={formData.experience}
                         onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        disabled={isLoading}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         placeholder="Ex: 15 ans"
                       />
                     </div>
@@ -366,7 +408,8 @@ export default function InscriptionArtisanPage() {
                         type="text"
                         value={formData.certifications}
                         onChange={(e) => setFormData({ ...formData, certifications: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        disabled={isLoading}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         placeholder="RGE, Qualibat, etc."
                       />
                     </div>
@@ -376,6 +419,14 @@ export default function InscriptionArtisanPage() {
                       {' '}et notre{' '}
                       <Link href="/confidentialite" className="underline hover:text-blue-600">politique de confidentialité</Link>.
                     </div>
+                  </div>
+                )}
+
+                {/* Step Validation Error */}
+                {stepError && (
+                  <div className="flex items-center gap-2 p-4 bg-amber-50 text-amber-700 rounded-lg mt-4">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <p>{stepError}</p>
                   </div>
                 )}
 
@@ -404,7 +455,12 @@ export default function InscriptionArtisanPage() {
                   {step < 4 ? (
                     <button
                       type="button"
-                      onClick={() => setStep(step + 1)}
+                      onClick={() => {
+                        if (validateStep(step)) {
+                          setStepError('')
+                          setStep(step + 1)
+                        }
+                      }}
                       className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
                     >
                       Continuer

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown } from 'lucide-react'
 
@@ -234,6 +235,20 @@ export default function DevisForm({
         <p className="text-slate-400 text-sm mt-3 max-w-md mx-auto">
           Vous recevrez des réponses sous 24h par email ou téléphone.
         </p>
+        <div className="flex flex-col sm:flex-row gap-3 mt-8 max-w-md mx-auto">
+          <Link
+            href="/services"
+            className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+          >
+            Trouver d&apos;autres artisans
+          </Link>
+          <Link
+            href="/"
+            className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+          >
+            Retour à l&apos;accueil
+          </Link>
+        </div>
       </div>
     )
   }
@@ -373,13 +388,15 @@ export default function DevisForm({
               ) : (
                 <span />
               )}
-              <span
-                className={`text-xs ${
-                  formData.description.length >= 10 ? 'text-green-600' : 'text-gray-400'
-                }`}
-              >
-                {formData.description.length}/10 caract.
-              </span>
+              {formData.description.length > 0 && (
+                <span
+                  className={`text-xs ${
+                    formData.description.length >= 10 ? 'text-green-600' : 'text-gray-400'
+                  }`}
+                >
+                  {formData.description.length}/10 caract.
+                </span>
+              )}
             </div>
           </div>
 
