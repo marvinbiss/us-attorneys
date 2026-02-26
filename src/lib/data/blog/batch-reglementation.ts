@@ -38,7 +38,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'tva-reduite-travaux-renovation-guide': {
-    title: 'TVA réduite pour travaux : 5,5 %, 10 % ou 20 % ?',
+    title: 'TVA Travaux : 5,5 %, 10 % ou 20 % ?',
     excerpt: 'Le taux de TVA applicable à vos travaux dépend de la nature des interventions et de l\'ancienneté du logement. Décryptage des règles en vigueur en 2026.',
     content: [
       "La TVA représente une part significative du coût de vos travaux. Selon le type d'intervention et l'âge du logement, vous pouvez bénéficier de taux réduits avantageux. Ce guide fait le point sur les règles applicables en 2026, conformément aux articles 278-0 bis A, 279-0 bis et 278 du Code général des impôts (CGI).",
@@ -62,7 +62,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'permis-construire-declaration-prealable-guide': {
-    title: 'Permis de construire ou déclaration préalable : que choisir ?',
+    title: 'Permis ou Déclaration Préalable ?',
     excerpt: 'Selon la nature et l\'ampleur de vos travaux, vous devez déposer un permis de construire ou une simple déclaration préalable. Voici comment faire le bon choix.',
     content: [
       "Avant de lancer vos travaux, une question administrative cruciale se pose : faut-il un permis de construire (PC) ou une déclaration préalable de travaux (DP) ? Le Code de l'urbanisme (articles R.421-1 à R.421-17) définit précisément les seuils. Se tromper de procédure expose à des sanctions pouvant aller jusqu'à la démolition de l'ouvrage.",
@@ -108,7 +108,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'eco-pret-taux-zero-guide-complet-2026': {
-    title: 'Éco-prêt à taux zéro 2026 : conditions et montants',
+    title: 'Éco-PTZ 2026 : Conditions et Montants',
     excerpt: 'L\'éco-PTZ permet d\'emprunter jusqu\'à 50 000 € sans intérêts pour financer vos travaux de rénovation énergétique. Conditions, plafonds et démarches en 2026.',
     content: [
       "L'éco-prêt à taux zéro (éco-PTZ) est un prêt sans intérêts, accordé sans condition de revenus, destiné à financer des travaux de rénovation énergétique. Prévu par les articles 244 quater U du CGI et R.319-1 du Code de la construction, il a été prolongé jusqu'au 31 décembre 2027.",
@@ -131,7 +131,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'audit-energetique-dpe-obligations-2026': {
-    title: 'Audit énergétique et DPE : obligations en 2026',
+    title: 'Audit et DPE : Obligations 2026',
     excerpt: 'DPE obligatoire, audit énergétique pour les passoires thermiques, calendrier d\'interdiction de location : le point complet sur vos obligations en 2026.',
     content: [
       "Le Diagnostic de Performance Énergétique (DPE) et l'audit énergétique sont au cœur de la politique de rénovation énergétique en France. La loi Climat et Résilience du 22 août 2021 a considérablement renforcé leurs implications, créant de nouvelles obligations pour les propriétaires.",
@@ -154,7 +154,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'reglementation-thermique-re2020-impact': {
-    title: 'RE2020 : impact sur la construction et la rénovation',
+    title: 'RE2020 : Impact Construction et Rénovation',
     excerpt: 'La Réglementation Environnementale 2020 transforme les exigences de construction neuve. Découvrez ses impacts concrets sur vos projets et les matériaux à privilégier.',
     content: [
       "Entrée en vigueur le 1er janvier 2022, la RE2020 (décret n° 2021-1004) remplace la RT2012 et marque un tournant majeur dans la construction française. Pour la première fois, la réglementation intègre l'empreinte carbone des bâtiments sur l'ensemble de leur cycle de vie.",
@@ -200,7 +200,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'reception-travaux-proces-verbal-reserves': {
-    title: 'Réception des travaux : procès-verbal et réserves',
+    title: 'Réception Travaux : PV et Réserves',
     excerpt: 'La réception des travaux est une étape juridique décisive. Voici comment rédiger le procès-verbal, formuler des réserves et protéger vos intérêts.',
     content: [
       "La réception des travaux est définie par l'article 1792-6 du Code civil comme l'acte par lequel le maître de l'ouvrage déclare accepter l'ouvrage avec ou sans réserves. C'est le moment le plus important de votre chantier sur le plan juridique.",
@@ -232,7 +232,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'litige-artisan-recours-mediation-justice': {
-    title: 'Litige avec un artisan : recours, médiation et justice',
+    title: 'Litige Artisan : Recours et Médiation',
     excerpt: 'Travaux mal réalisés, retards, surfacturation ? Découvrez les étapes à suivre pour résoudre un litige avec un artisan, de la médiation au tribunal.',
     content: [
       "Malgré toutes les précautions, un litige peut survenir avec un artisan — [plombier](/services/plombier), électricien ou maçon — : malfaçons, retards importants, abandon de chantier, surfacturation. La loi offre plusieurs voies de recours, de la résolution amiable à l'action en justice.",
@@ -321,7 +321,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'diagnostic-immobilier-obligatoire-liste': {
-    title: 'Diagnostics immobiliers obligatoires : la liste complète',
+    title: 'Diagnostics Immobiliers : Liste Complète',
     excerpt: 'DPE, amiante, plomb, électricité, gaz, termites... Quels diagnostics sont obligatoires pour vendre ou louer en 2026 ? Liste complète et tarifs.',
     content: [
       "Avant de vendre ou de louer un bien immobilier, le propriétaire doit constituer un Dossier de Diagnostics Techniques (DDT) réalisé par un [diagnostiqueur](/services/diagnostiqueur) certifié. Les articles L.271-4 à L.271-6 du Code de la construction et de l'habitation définissent ces obligations. Voici la liste complète pour 2026.",
@@ -347,7 +347,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'amiante-plomb-diagnostic-avant-travaux': {
-    title: 'Amiante et plomb : diagnostics obligatoires avant travaux',
+    title: 'Amiante et Plomb : Diagnostics Travaux',
     excerpt: 'Avant d\'entamer des travaux dans un bâtiment ancien, les diagnostics amiante et plomb sont obligatoires. Procédures, coûts et obligations de chacun.',
     content: [
       "L'amiante et le plomb sont deux substances dangereuses encore présentes dans de nombreux bâtiments français. Avant tous travaux de rénovation, des diagnostics spécifiques sont obligatoires pour protéger les occupants et les travailleurs.",
@@ -374,7 +374,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'accessibilite-pmr-logement-normes': {
-    title: 'Accessibilité PMR : normes et aides pour adapter son logement',
+    title: 'Accessibilité PMR : Normes et Aides',
     excerpt: 'Adapter un logement pour une personne à mobilité réduite implique de respecter des normes précises. Découvrez les travaux nécessaires et les aides disponibles en 2026.',
     content: [
       "L'adaptation du logement aux personnes à mobilité réduite (PMR) est un enjeu majeur dans une société vieillissante. La loi du 11 février 2005 pour l'égalité des droits et des chances a posé les bases de l'accessibilité universelle.",
@@ -401,7 +401,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'reglementation-ravalement-facade-obligations': {
-    title: 'Ravalement de façade : obligations légales et délais',
+    title: 'Ravalement Façade : Obligations Légales',
     excerpt: 'Le ravalement de façade est une obligation légale dans de nombreuses communes. Délais, sanctions, autorisations et aides : tout ce que vous devez savoir.',
     content: [
       "Le ravalement de façade n'est pas qu'une question d'esthétique : c'est une obligation légale inscrite dans le Code de la construction et de l'habitation (article L.132-1). De nombreuses communes imposent un ravalement périodique.",
@@ -456,7 +456,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'aides-renovation-2026-cumul-guide': {
-    title: 'Cumuler les aides rénovation en 2026 : le guide stratégique',
+    title: 'Cumuler les Aides Rénovation 2026',
     excerpt: 'MaPrimeRénov\', CEE, éco-PTZ, TVA réduite, aides locales... En 2026, le cumul des aides peut couvrir jusqu\'à 80 % du coût de vos travaux. Stratégie optimale.',
     content: [
       "La France dispose d'un arsenal d'aides à la rénovation énergétique parmi les plus généreux d'Europe. La bonne nouvelle : la plupart sont cumulables. La mauvaise : les règles de cumul sont complexes. Ce guide vous donne la stratégie optimale pour maximiser votre financement.",
@@ -485,7 +485,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'contrat-travaux-clauses-essentielles': {
-    title: 'Contrat de travaux : les clauses essentielles à vérifier',
+    title: 'Contrat Travaux : Clauses Essentielles',
     excerpt: 'Un contrat de travaux bien rédigé vous protège en cas de litige. Découvrez les clauses indispensables à vérifier avant de signer, et celles à ajouter.',
     content: [
       "Le contrat de travaux est le document qui encadre juridiquement la relation entre le maître d'ouvrage et l'artisan, qu'il s'agisse d'un [plombier](/services/plombier), d'un [maçon](/services/macon) ou de tout autre professionnel du bâtiment. Bien que le Code civil n'impose pas de formalisme particulier pour les marchés privés, un contrat écrit et détaillé est votre meilleure protection.",

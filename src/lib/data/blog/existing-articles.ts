@@ -2,7 +2,7 @@ import type { BlogArticle } from './articles'
 
 export const existingArticles: Record<string, BlogArticle> = {
   'comment-choisir-son-plombier': {
-    title: 'Comment choisir son plombier : le guide complet',
+    title: 'Choisir son Plombier : Le Guide',
     excerpt: 'Tous nos conseils pour trouver un plombier de confiance et éviter les arnaques. Vérifications, devis, assurances : tout ce qu\'il faut savoir avant de faire appel à un professionnel.',
     content: [
       "Choisir un plombier peut sembler simple, mais c'est une décision qui mérite une réflexion approfondie. Selon la Fédération française du bâtiment, plus de 15 % des litiges dans le secteur du BTP concernent la plomberie. Un mauvais choix peut entraîner des réparations coûteuses, des fuites persistantes ou même des dégâts des eaux dont la facture moyenne s'élève à 2 400 euros selon les assureurs. Voici notre guide complet pour vous aider à faire le bon choix et trouver un [plombier fiable](/services/plombier) dès la première fois.",
@@ -30,7 +30,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'renovation-energetique-aides-2026': {
-    title: 'Rénovation énergétique : toutes les aides en 2026',
+    title: 'Aides Rénovation Énergétique 2026',
     excerpt: 'MaPrimeRénov\', CEE, éco-PTZ... Tour d\'horizon complet des aides financières pour financer vos travaux de rénovation énergétique en 2026, avec les montants actualisés et les conditions d\'éligibilité.',
     content: [
       "La rénovation énergétique est plus que jamais au cœur des préoccupations des Français. Avec la hausse continue des prix de l'énergie — le tarif réglementé de l'électricité a augmenté de plus de 40 % entre 2022 et 2025 — et le renforcement des obligations liées au [DPE (Diagnostic de Performance Énergétique)](/blog/audit-energetique-dpe-obligations-2026), rénover son logement est devenu une nécessité économique et environnementale. Bonne nouvelle : en 2026, un arsenal d'aides financières permet de couvrir jusqu'à 80 % du coût des travaux pour les ménages les plus modestes, notamment pour l'[isolation thermique](/services/isolation-thermique) ou l'installation d'une [pompe à chaleur](/services/pompe-a-chaleur). Voici un tour d'horizon complet pour ne manquer aucune opportunité.",
@@ -80,7 +80,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'devis-travaux-comprendre': {
-    title: 'Comment lire et comprendre un devis de travaux',
+    title: 'Lire et Comprendre un Devis Travaux',
     excerpt: 'Les éléments essentiels à vérifier avant de signer un devis pour éviter les mauvaises surprises. Mentions obligatoires, pièges à éviter et conseils de négociation.',
     content: [
       "Un devis de travaux est un document essentiel qui engage juridiquement les deux parties une fois signé. Pourtant, selon une enquête de l'UFC-Que Choisir, plus de 40 % des particuliers signent un devis sans en vérifier toutes les mentions. Résultat : surfacturations, travaux incomplets ou litiges coûteux. Savoir lire et comprendre un devis est crucial pour protéger vos intérêts et maîtriser votre budget, que vous fassiez appel à un [plombier](/services/plombier) ou à tout autre artisan.",
@@ -131,7 +131,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'electricite-normes-securite': {
-    title: 'Électricité : les normes de sécurité à connaître',
+    title: 'Normes Électriques : Sécurité',
     excerpt: 'NF C 15-100, mise aux normes, diagnostic... Tout ce qu\'il faut savoir sur l\'électricité de votre logement pour garantir la sécurité de votre famille.',
     content: [
       "L'électricité est un domaine où la sécurité est primordiale. Selon l'Observatoire National de la Sécurité Électrique (ONSE), les installations électriques défaillantes sont responsables de plus de 50 000 incendies domestiques chaque année en France, causant chaque année de nombreux blessés et décès (Baromètre ONSE). Un tiers des logements français présente au moins une anomalie électrique. Comprendre les normes en vigueur est essentiel pour protéger votre famille et votre patrimoine.",
@@ -155,7 +155,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'peinture-interieure-conseils': {
-    title: 'Réussir sa peinture intérieure : nos conseils',
+    title: 'Peinture Intérieure : Nos Conseils',
     excerpt: 'Préparation, choix des couleurs, techniques d\'application... Tous les secrets d\'une peinture réussie pour transformer vos pièces comme un professionnel.',
     content: [
       "La peinture est l'un des travaux de rénovation les plus courants et les plus transformateurs. Bien réalisée, elle peut métamorphoser une pièce en quelques jours pour un budget maîtrisé. Selon les professionnels du bâtiment, 80 % de la réussite d'une peinture dépend de la préparation des surfaces. Voici nos conseils complets pour un résultat professionnel, que vous fassiez appel à un [peintre qualifié](/services/peintre-en-batiment) ou que vous vous lanciez en auto-rénovation.",
@@ -179,7 +179,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'chauffage-solution-economique': {
-    title: 'Quel chauffage choisir pour faire des économies ?',
+    title: 'Quel Chauffage pour des Économies ?',
     excerpt: 'Pompe à chaleur, poêle à granulés, chaudière... Comparatif complet des solutions de chauffage les plus économiques en 2026, avec coûts d\'installation et de fonctionnement.',
     content: [
       "Le chauffage représente en moyenne 66 % de la consommation énergétique d'un logement français, soit environ 1 700 euros par an pour une maison de 100 m² mal isolée. Bien choisir son système de chauffage est donc essentiel pour maîtriser son budget et réduire son empreinte carbone. En 2026, plusieurs solutions performantes s'offrent à vous, chacune avec ses avantages et ses contraintes. Faites appel à un [chauffagiste qualifié](/services/chauffagiste) pour un diagnostic adapté à votre logement.",
@@ -203,7 +203,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'combien-coute-un-plombier-tarifs-devis': {
-    title: 'Combien coûte un plombier en 2026 ? Tarifs et devis',
+    title: 'Prix Plombier 2026 : Tarifs et Devis',
     excerpt: 'Prix horaire, tarif d\'intervention, coût des réparations courantes... Tous les tarifs plomberie à connaître avant de demander un devis en 2026.',
     content: [
       "Le coût d'un plombier varie considérablement selon le type d'intervention, l'urgence, la région et la complexité des travaux. Avant de faire appel à un professionnel, il est essentiel de connaître les tarifs du marché pour [comparer efficacement les devis](/blog/devis-travaux-comment-comparer-choisir) et éviter les mauvaises surprises. Voici le guide complet des tarifs plomberie en 2026, régulièrement mis à jour. Trouvez un [plombier de confiance](/services/plombier) près de chez vous pour obtenir un devis gratuit.",
@@ -227,7 +227,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'trouver-artisan-verifie-siren': {
-    title: 'Trouver un artisan vérifié : pourquoi le SIREN compte',
+    title: 'Artisan Vérifié : Pourquoi le SIREN ?',
     excerpt: 'Numéro SIREN, assurance décennale, qualifications... Les vérifications indispensables avant de faire appel à un artisan pour protéger votre projet de travaux.',
     content: [
       "Faire appel à un artisan non vérifié peut avoir des conséquences graves : travaux mal réalisés, absence de garantie, recours impossible en cas de litige. Selon la DGCCRF, plus de 10 000 signalements de pratiques frauduleuses dans le secteur du bâtiment sont enregistrés chaque année en France. Le numéro SIREN est votre première protection pour vérifier le sérieux d'un professionnel, qu'il s'agisse d'un [plombier](/services/plombier) ou d'un [électricien](/services/electricien).",
@@ -298,7 +298,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'prix-plombier-2026-tarifs-horaires': {
-    title: 'Prix plombier 2026 : tarifs horaires et coût des interventions',
+    title: 'Prix Plombier 2026 : Tarifs Horaires',
     excerpt: 'Tarif horaire moyen, coût d\'un dépannage, prix des installations... Tous les tarifs plomberie actualisés pour 2026.',
     content: [
       "Les tarifs des plombiers évoluent chaque année en fonction de l'inflation, du coût des matériaux et de la demande. En 2026, les prix restent stables par rapport à 2025, avec une légère hausse de 2 à 3 % sur la main-d'œuvre. Voici le guide complet et actualisé des prix de plomberie pour vous aider à estimer votre budget et [comparer efficacement les devis](/blog/devis-travaux-comment-comparer-choisir). Trouvez un [plombier qualifié](/services/plombier) près de chez vous.",
@@ -322,7 +322,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'aide-maprimerenov-2026-montants-conditions': {
-    title: 'Aide MaPrimeRénov\' 2026 : montants, conditions et démarches',
+    title: 'MaPrimeRénov\' 2026 : Montants et Aides',
     excerpt: 'Montants actualisés, conditions d\'éligibilité, étapes de la demande... Le guide complet pour obtenir MaPrimeRénov\' en 2026 et maximiser vos aides.',
     content: [
       "MaPrimeRénov' est l'aide phare du gouvernement pour la rénovation énergétique. En 2026, les barèmes ont été révisés pour encourager les rénovations globales plutôt que les travaux isolés. Avec un budget national de plus de 4 milliards d'euros, cette aide permet de financer jusqu'à 80 % du coût des travaux pour les ménages très modestes (profil Bleu), que ce soit pour l'[isolation thermique](/services/isolation-thermique) ou l'installation d'une [pompe à chaleur](/services/pompe-a-chaleur). Voici le guide complet pour en bénéficier.",
@@ -345,7 +345,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'comment-verifier-artisan-avant-engager': {
-    title: 'Comment vérifier un artisan avant de l\'engager ?',
+    title: 'Vérifier un Artisan avant de l\'Engager',
     excerpt: 'SIRET, assurance décennale, qualifications... Les vérifications indispensables pour éviter les mauvaises surprises et s\'assurer du sérieux d\'un professionnel.',
     content: [
       "Engager un artisan sans vérification préalable est un risque majeur. Selon le Médiateur de la consommation dans le bâtiment, les litiges avec les artisans représentent plus de 25 % des saisines. La plupart auraient pu être évités par de simples vérifications en amont. Voici les étapes essentielles pour s'assurer du sérieux d'un professionnel avant de lui confier vos travaux, qu'il s'agisse d'un [plombier](/services/plombier) ou d'un [chauffagiste](/services/chauffagiste).",
@@ -368,7 +368,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'travaux-renovation-energetique-par-ou-commencer': {
-    title: 'Travaux de rénovation énergétique : par où commencer ?',
+    title: 'Rénovation Énergétique : Par Où Commencer',
     excerpt: 'Isolation, chauffage, ventilation... Découvrez l\'ordre optimal des travaux de rénovation énergétique pour maximiser les économies et les aides financières.',
     content: [
       "La rénovation énergétique est un investissement rentable : selon l'ADEME, elle permet de réduire la facture énergétique de 40 à 60 % et de valoriser le bien de 5 à 15 %. Mais l'ordre des travaux est déterminant pour maximiser les économies et éviter les dépenses inutiles. Commencez par l'[isolation thermique](/services/isolation-thermique), puis passez à la [rénovation énergétique](/services/renovation-energetique) globale. Voici la marche à suivre, étape par étape.",
@@ -390,7 +390,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'devis-travaux-comment-comparer-choisir': {
-    title: 'Devis travaux : comment comparer et choisir ?',
+    title: 'Devis Travaux : Comparer et Choisir',
     excerpt: 'Mentions obligatoires, pièges à éviter, critères de comparaison... Apprenez à analyser un devis comme un professionnel pour faire le meilleur choix.',
     content: [
       "Comparer des devis de travaux ne se résume pas à regarder le prix total. Selon les professionnels du bâtiment, le devis le moins cher est rarement le meilleur choix : il cache souvent des prestations manquantes, des matériaux bas de gamme ou des délais irréalistes. Voici une méthode rigoureuse pour analyser et comparer efficacement vos devis, que vous cherchiez un [plombier](/services/plombier) ou un [électricien](/services/electricien).",
@@ -413,7 +413,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   '10-arnaques-courantes-batiment': {
-    title: 'Les 10 arnaques les plus courantes dans le bâtiment',
+    title: '10 Arnaques Courantes dans le Bâtiment',
     excerpt: 'Faux artisans, devis gonflés, travaux fantômes... Découvrez les arnaques les plus fréquentes dans le secteur du bâtiment et comment vous en protéger efficacement.',
     content: [
       "Le secteur du bâtiment est malheureusement un terrain propice aux arnaques. La DGCCRF enregistre chaque année plus de 10 000 signalements dans ce secteur, et les pertes financières pour les victimes peuvent atteindre plusieurs dizaines de milliers d'euros. Voici les 10 arnaques les plus courantes et les moyens concrets de les éviter. Privilégiez toujours des artisans vérifiés, comme un [plombier référencé](/services/plombier) sur notre plateforme.",
@@ -435,7 +435,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'prix-electricien-2026-tarifs-travaux': {
-    title: 'Prix électricien 2026 : tarifs et coût des travaux',
+    title: 'Prix Électricien 2026 : Tarifs Travaux',
     excerpt: 'Mise aux normes, installation, dépannage... Tous les prix des travaux d\'électricité en 2026 pour estimer votre budget et comparer les devis.',
     content: [
       "Les travaux d'électricité sont parmi les plus techniques et les plus réglementés du bâtiment. Ils doivent obligatoirement être réalisés dans le respect de la [norme NF C 15-100](/blog/electricite-normes-securite) et, pour les installations neuves ou entièrement rénovées, validés par un contrôle Consuel. Voici le guide complet des prix d'un électricien en 2026. Trouvez un [électricien qualifié](/services/electricien) près de chez vous pour un devis gratuit.",
@@ -458,7 +458,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'prix-peintre-batiment-2026-guide-complet': {
-    title: 'Prix peintre en bâtiment 2026 : guide complet',
+    title: 'Prix Peintre Bâtiment 2026 : Tarifs',
     excerpt: 'Prix au m², coût par pièce, tarifs spéciaux façade... Le guide complet des prix de peinture en 2026 pour estimer votre budget avec précision.',
     content: [
       "Les prix de peinture varient considérablement selon le type de surface, la qualité de la peinture, l'état des murs et la région. Un écart de 1 à 3 est courant entre un devis d'entrée de gamme et une prestation haut de gamme. Voici les tarifs actualisés pour 2026, pour vous aider à [comparer les devis](/blog/devis-travaux-comment-comparer-choisir) en toute connaissance de cause. Trouvez un [peintre en bâtiment](/services/peintre-en-batiment) qualifié pour vos travaux.",
@@ -481,7 +481,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'garantie-decennale-tout-savoir': {
-    title: 'Garantie décennale : tout ce qu\'il faut savoir',
+    title: 'Garantie Décennale : Ce qu\'il Faut Savoir',
     excerpt: 'Durée, couverture, recours... La garantie décennale expliquée simplement pour protéger votre investissement immobilier pendant 10 ans.',
     content: [
       "La garantie décennale est une protection essentielle pour tout propriétaire qui fait réaliser des travaux de construction ou de rénovation importante. Instituée par la loi Spinetta du 4 janvier 1978, elle constitue l'un des piliers du droit de la construction en France. Pourtant, selon les assureurs, près de 30 % des sinistres décennaux ne sont jamais déclarés par méconnaissance. Voici tout ce que vous devez savoir pour protéger votre investissement, que vos travaux soient confiés à un [couvreur](/services/couvreur) ou à un [plombier](/services/plombier).",
@@ -504,7 +504,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'comment-choisir-cuisine-equipee-guide': {
-    title: 'Comment choisir sa cuisine équipée : guide complet',
+    title: 'Cuisine Équipée : Guide de Choix',
     excerpt: 'Matériaux, agencement, budget, erreurs à éviter... Tout pour réussir le choix de votre cuisine équipée et optimiser votre espace.',
     content: [
       "La cuisine est la pièce la plus technique d'un logement et l'une des plus coûteuses à aménager. Son aménagement mérite une réflexion approfondie pour combiner fonctionnalité, esthétique et durabilité. Les Français y consacrent en moyenne 6 500 euros, mais les budgets s'échelonnent de 3 000 à plus de 25 000 euros selon les choix. Voici le guide complet pour faire les bons choix. Faites appel à un [cuisiniste professionnel](/services/cuisiniste) pour un accompagnement personnalisé.",
@@ -527,7 +527,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'isolation-thermique-meilleures-solutions-2026': {
-    title: 'Isolation thermique : les meilleures solutions en 2026',
+    title: 'Isolation Thermique 2026 : Solutions',
     excerpt: 'Combles, murs, sols... Comparatif détaillé des matériaux et techniques d\'isolation thermique pour choisir la solution la plus adaptée à votre logement.',
     content: [
       "L'isolation thermique est le premier investissement à réaliser pour réduire votre facture énergétique. En 2026, les solutions sont nombreuses et les [aides financières](/blog/renovation-energetique-aides-2026) généreuses. Mais face à la diversité des matériaux et des techniques, comment choisir la solution la plus adaptée à votre logement ? Faites appel à un spécialiste de l'[isolation thermique](/services/isolation-thermique) pour un diagnostic précis. Voici le comparatif complet.",
@@ -550,7 +550,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'prix-couvreur-2026-cout-refection-toiture': {
-    title: 'Prix couvreur 2026 : coût réfection toiture',
+    title: 'Prix Couvreur 2026 : Réfection Toiture',
     excerpt: 'Réfection complète, réparation de fuite, démoussage... Tous les tarifs couverture et toiture en 2026 pour anticiper votre budget.',
     content: [
       "La toiture est un élément essentiel de votre habitation qui protège l'ensemble de la structure. Son entretien et sa rénovation par un [couvreur professionnel](/services/couvreur) représentent un budget important qu'il faut anticiper. Une toiture mal entretenue entraîne des infiltrations qui peuvent endommager la charpente, l'isolation et les finitions intérieures, avec des réparations pouvant atteindre 20 000 à 50 000 euros dans les cas graves.",
@@ -573,7 +573,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'renovation-salle-de-bain-budget-etapes': {
-    title: 'Rénovation salle de bain : budget et étapes',
+    title: 'Salle de Bain : Budget et Étapes',
     excerpt: 'Coût moyen, planning des travaux, choix des matériaux... Le guide complet pour rénover votre salle de bain avec le bon budget et dans le bon ordre.',
     content: [
       "La rénovation d'une salle de bain est un projet qui améliore à la fois votre confort quotidien et la valeur de votre bien immobilier (plus-value estimée de 5 à 10 %). C'est aussi l'un des projets les plus techniques, impliquant [plomberie](/services/plombier), électricité, étanchéité et finitions. Confiez votre projet à un spécialiste de la [salle de bain](/services/salle-de-bain) pour un résultat garanti. Voici comment bien le préparer pour éviter les surcoûts et les mauvaises surprises.",
@@ -596,7 +596,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026': {
-    title: 'Chauffage : pompe à chaleur vs chaudière gaz en 2026',
+    title: 'PAC vs Chaudière Gaz 2026 : Comparatif',
     excerpt: 'Coût d\'installation, consommation, aides disponibles... Comparatif complet et objectif pour choisir entre pompe à chaleur et chaudière gaz.',
     content: [
       "Le choix du système de chauffage est crucial pour votre confort et votre budget sur le long terme. En 2026, la pompe à chaleur et la chaudière gaz à condensation restent les deux options les plus courantes en rénovation. Mais le contexte réglementaire et économique évolue rapidement. Voici un comparatif objectif pour faire le choix le plus adapté à votre situation. Consultez un [chauffagiste](/services/chauffagiste) ou un installateur de [pompe à chaleur](/services/pompe-a-chaleur) pour un devis personnalisé.",
@@ -618,7 +618,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'droits-obligations-travaux-chez-soi': {
-    title: 'Droits et obligations lors de travaux chez soi',
+    title: 'Droits et Obligations : Travaux Maison',
     excerpt: 'Autorisations, horaires, nuisances, responsabilités... Tout savoir sur le cadre légal des travaux à domicile pour éviter les conflits et les sanctions.',
     content: [
       "Réaliser des travaux chez soi implique de respecter certaines règles légales qui protègent à la fois le propriétaire, les artisans et le voisinage. Méconnaître ces obligations peut entraîner des amendes, des arrêts de chantier ou des conflits de voisinage coûteux. Voici un guide complet pour connaître vos droits et obligations, que vous fassiez appel à un [électricien](/services/electricien) ou à un [plombier](/services/plombier).",
