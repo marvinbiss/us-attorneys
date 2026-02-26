@@ -4,6 +4,9 @@ import { metiersArticles } from './batch-metiers'
 import { projetsArticles } from './batch-projets'
 import { conseilsArticles } from './batch-conseils'
 import { reglementationArticles } from './batch-reglementation'
+import { seoBoost1Articles } from './batch-seo-boost1'
+import { batchSeoBoost2Articles } from './batch-seo-boost2'
+import { batchSeoBoost3Articles } from './batch-seo-boost3'
 
 export interface BlogArticle {
   title: string
@@ -29,6 +32,9 @@ export const allArticles: Record<string, BlogArticle> = {
   ...projetsArticles,
   ...conseilsArticles,
   ...reglementationArticles,
+  ...seoBoost1Articles,
+  ...batchSeoBoost2Articles,
+  ...batchSeoBoost3Articles,
 }
 
 /** All slugs for generateStaticParams */
