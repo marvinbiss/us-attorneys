@@ -129,8 +129,10 @@ export async function POST(request: Request) {
     )
   }
 
-  // env.STRIPE_WEBHOOK_SECRET is validated at import time by the env module.
-  // If it were missing, this route would fail to load with a clear error.
+  if (!env.STRIPE_WEBHOOK_SECRET) {
+    logger.error('STRIPE_WEBHOOK_SECRET is not configured')
+    return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
+  }
 
   let event: Stripe.Event
 

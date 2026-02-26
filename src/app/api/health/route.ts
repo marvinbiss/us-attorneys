@@ -35,8 +35,11 @@ export async function GET() {
     overallStatus = 'down'
   }
 
-  // Check Stripe config (already validated by env module, but check format)
-  checks.stripe = { status: 'ok' }
+  // Check Stripe config
+  checks.stripe = env.STRIPE_SECRET_KEY
+    ? { status: 'ok' }
+    : { status: 'degraded', error: 'Stripe keys not configured' }
+  if (!env.STRIPE_SECRET_KEY && overallStatus === 'ok') overallStatus = 'degraded'
 
   // Check Redis (optional)
   if (env.UPSTASH_REDIS_REST_URL) {

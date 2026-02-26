@@ -125,7 +125,7 @@ export default function BookingPayment({
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-4">
         En procédant au paiement, vous acceptez nos{' '}
-        <a href="/conditions" className="text-blue-600 hover:underline">
+        <a href="/cgv" className="text-blue-600 hover:underline">
           conditions générales
         </a>{' '}
         et notre{' '}
