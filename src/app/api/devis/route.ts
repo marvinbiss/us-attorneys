@@ -125,7 +125,7 @@ export async function POST(request: Request) {
 
     // Log 'created' event — triggers "Demande bien reçue" notification to client
     if (lead) {
-      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch(() => {})
+      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
     }
 
     // Dispatch to eligible artisans
@@ -143,17 +143,20 @@ export async function POST(request: Request) {
         postalCode: data.codePostal,
         urgency: urgencyMap[data.urgency] || 'normal',
         sourceTable: 'devis_requests',
-      }).catch(() => [])
+      }).catch((err) => {
+        logger.error('Failed to dispatch lead', err)
+        return []
+      })
       if (assignedProviders.length > 0) {
-        logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch(() => {})
+        logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch((err) => logger.error('Failed to log lead dispatched event', err))
       }
     }
 
-    // Send both confirmation emails in parallel
+    // Send both confirmation emails in parallel (use allSettled so one failure doesn't block the other)
     const resend = getResend()
     const fromEmail = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
 
-    await Promise.all([
+    const emailResults = await Promise.allSettled([
       // Confirmation to client
       resend.emails.send({
         from: fromEmail,
@@ -202,6 +205,14 @@ export async function POST(request: Request) {
         `,
       }),
     ])
+
+    // Log any email failures (devis is already saved in DB, so we still return success)
+    const emailLabels = ['client confirmation', 'admin notification']
+    emailResults.forEach((result, i) => {
+      if (result.status === 'rejected') {
+        logger.error(`Failed to send ${emailLabels[i]} email`, result.reason)
+      }
+    })
 
     return NextResponse.json({
       success: true,

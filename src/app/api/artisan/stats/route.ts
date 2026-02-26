@@ -91,12 +91,14 @@ export async function GET(request: Request) {
       .is('read_at', null)
 
     // Fetch recent demandes scoped to this provider via lead_assignments
-    const { data: recentAssignments } = await supabase
-      .from('lead_assignments')
-      .select('lead_id')
-      .eq('provider_id', providerForUnread?.id)
-      .order('assigned_at', { ascending: false })
-      .limit(5)
+    const { data: recentAssignments } = providerForUnread
+      ? await supabase
+          .from('lead_assignments')
+          .select('lead_id')
+          .eq('provider_id', providerForUnread.id)
+          .order('assigned_at', { ascending: false })
+          .limit(5)
+      : { data: [] }
 
     const recentLeadIds = (recentAssignments || []).map((a: { lead_id: string }) => a.lead_id)
 
@@ -222,12 +224,14 @@ async function getLegacyStats(
   ])
 
   // Fetch recent demandes scoped to this provider via lead_assignments
-  const { data: legacyRecentAssignments } = await supabase
-    .from('lead_assignments')
-    .select('lead_id')
-    .eq('provider_id', legacyProvider?.id)
-    .order('assigned_at', { ascending: false })
-    .limit(5)
+  const { data: legacyRecentAssignments } = legacyProvider
+    ? await supabase
+        .from('lead_assignments')
+        .select('lead_id')
+        .eq('provider_id', legacyProvider.id)
+        .order('assigned_at', { ascending: false })
+        .limit(5)
+    : { data: [] }
 
   const legacyRecentLeadIds = (legacyRecentAssignments || []).map((a: { lead_id: string }) => a.lead_id)
 
