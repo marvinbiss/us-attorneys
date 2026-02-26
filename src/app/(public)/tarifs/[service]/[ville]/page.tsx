@@ -9,6 +9,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { hashCode } from '@/lib/seo/location-content'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -109,9 +110,28 @@ export async function generateMetadata({
   const multiplier = getRegionalMultiplier(villeData.region)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
+  const unit = trade.priceRange.unit
+  const dept = villeData.departement
 
-  const title = `Tarifs ${tradeLower} \u00E0 ${villeData.name} 2026 — Prix et devis`
-  const description = `Prix ${tradeLower} \u00E0 ${villeData.name} en 2026 : ${minPrice} \u00E0 ${maxPrice} ${trade.priceRange.unit}. Tarifs locaux, facteurs de prix et devis gratuit.`
+  const titleHash = Math.abs(hashCode(`tarif-title-${service}-${villeSlug}`))
+  const titleTemplates = [
+    `Tarif ${tradeLower} \u00E0 ${villeData.name} : guide des prix 2026`,
+    `Prix ${tradeLower} \u00E0 ${villeData.name} en 2026 : tarifs et devis`,
+    `Tarif ${tradeLower} ${villeData.name} (${dept}) : grille des prix 2026`,
+    `${trade.name} \u00E0 ${villeData.name} : tarifs 2026 et devis gratuit`,
+    `Combien co\u00FBte un ${tradeLower} \u00E0 ${villeData.name} ? Prix 2026`,
+  ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  const descHash = Math.abs(hashCode(`tarif-desc-${service}-${villeSlug}`))
+  const descTemplates = [
+    `Prix ${tradeLower} \u00E0 ${villeData.name} en 2026 : ${minPrice}\u2013${maxPrice} ${unit}. Tarifs locaux, facteurs de prix et devis gratuit.`,
+    `Tarif ${tradeLower} \u00E0 ${villeData.name} (${dept}) : de ${minPrice} \u00E0 ${maxPrice} ${unit}. Comparez les artisans et demandez un devis.`,
+    `Quel est le prix d\u2019un ${tradeLower} \u00E0 ${villeData.name} ? De ${minPrice} \u00E0 ${maxPrice} ${unit} en 2026. Guide complet et devis gratuit.`,
+    `Guide des tarifs ${tradeLower} \u00E0 ${villeData.name} en 2026. Prix moyen : ${minPrice}\u2013${maxPrice} ${unit}. Conseils et devis sans engagement.`,
+    `Tarifs ${tradeLower} ${villeData.name} en 2026 : ${minPrice} \u00E0 ${maxPrice} ${unit}. D\u00E9couvrez les prix locaux et obtenez un devis gratuit.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const canonicalUrl = `${SITE_URL}/tarifs/${service}/${villeSlug}`
 
@@ -249,7 +269,17 @@ export default async function TarifsServiceVillePage({
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-              Tarifs {tradeLower} {'\u00E0'} {villeData.name} en 2026
+              {(() => {
+                const h1Hash = Math.abs(hashCode(`tarif-h1-${service}-${villeSlug}`))
+                const h1Templates = [
+                  `Tarifs ${tradeLower} \u00E0 ${villeData.name} en 2026`,
+                  `Prix ${tradeLower} \u00E0 ${villeData.name} : guide des tarifs 2026`,
+                  `Combien co\u00FBte un ${tradeLower} \u00E0 ${villeData.name}\u00A0?`,
+                  `${trade.name} \u00E0 ${villeData.name} : tarifs et prix 2026`,
+                  `Guide des tarifs ${tradeLower} \u00E0 ${villeData.name}`,
+                ]
+                return h1Templates[h1Hash % h1Templates.length]
+              })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
               Prix {tradeLower} {'\u00E0'} {villeData.name} ({villeData.departement}) :
