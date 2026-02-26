@@ -3,7 +3,7 @@
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Loader2 } from 'lucide-react'
 import { getArtisanUrl } from '@/lib/utils'
@@ -64,6 +64,13 @@ export default function GeographicMap({
   }, [])
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const clusterGroupRef = useRef<any>(null)
+
+  // Store individual markers for highlight updates without recreating the cluster
+  const markersMapRef = useRef(new Map<string, import('leaflet').Marker>())
+
+  // Stable refs for callbacks — avoids them being effect dependencies
+  const onMarkerHoverRef = useRef(onMarkerHover)
+  useEffect(() => { onMarkerHoverRef.current = onMarkerHover }, [onMarkerHover])
 
   // Marker icon cache
   const markerIconCache = useRef(new Map<string, import('leaflet').DivIcon>())
@@ -161,7 +168,19 @@ export default function GeographicMap({
     markerIconCache.current.clear()
   }, [_L])
 
+  // Stable provider list for marker effect (avoids re-creating cluster on every render)
+  const validProviders = useMemo(() =>
+    providers.filter(p =>
+      p.latitude && p.longitude &&
+      !isNaN(p.latitude) && !isNaN(p.longitude) &&
+      p.latitude >= -90 && p.latitude <= 90 &&
+      p.longitude >= -180 && p.longitude <= 180
+    ),
+    [providers]
+  )
+
   // Imperatively manage the MarkerClusterGroup
+  // Only re-runs when the actual provider data or map instance changes — NOT on highlight/hover
   useEffect(() => {
     const map = mapRef.current
     if (!map || !_L) return
@@ -171,13 +190,7 @@ export default function GeographicMap({
       map.removeLayer(clusterGroupRef.current)
       clusterGroupRef.current = null
     }
-
-    const validProviders = providers.filter(p =>
-      p.latitude && p.longitude &&
-      !isNaN(p.latitude) && !isNaN(p.longitude) &&
-      p.latitude >= -90 && p.latitude <= 90 &&
-      p.longitude >= -180 && p.longitude <= 180
-    )
+    markersMapRef.current.clear()
 
     if (validProviders.length === 0) return
 
@@ -209,15 +222,14 @@ export default function GeographicMap({
 
     for (const provider of validProviders) {
       const isVerified = provider.is_verified ?? false
-      const isHighlighted = provider.id === highlightedProviderId
-      const icon = getMarkerIcon(isVerified, isHighlighted)
+      const icon = getMarkerIcon(isVerified, false)
       if (!icon) continue
 
       const marker = _L.marker([provider.latitude, provider.longitude], { icon })
 
-      // Hover events for bidirectional sync
-      marker.on('mouseover', () => onMarkerHover?.(provider.id))
-      marker.on('mouseout', () => onMarkerHover?.(null))
+      // Hover events — use ref so callback changes don't recreate cluster
+      marker.on('mouseover', () => onMarkerHoverRef.current?.(provider.id))
+      marker.on('mouseout', () => onMarkerHoverRef.current?.(null))
 
       // Popup content
       const ratingHtml = (provider.rating_average && provider.rating_average > 0 && provider.review_count && provider.review_count > 0)
@@ -263,6 +275,7 @@ export default function GeographicMap({
 
       marker.bindPopup(popupHtml, { maxWidth: 320, minWidth: 280, className: 'custom-popup' })
       clusterGroup.addLayer(marker)
+      markersMapRef.current.set(provider.id, marker)
     }
 
     map.addLayer(clusterGroup)
@@ -273,9 +286,23 @@ export default function GeographicMap({
         map.removeLayer(clusterGroupRef.current)
         clusterGroupRef.current = null
       }
+      markersMapRef.current.clear()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_L, providers, highlightedProviderId, onMarkerHover, mapInstance])
+  }, [_L, validProviders, mapInstance])
+
+  // Update highlighted marker icon without destroying the cluster/popups
+  useEffect(() => {
+    if (!_L) return
+    markersMapRef.current.forEach((marker, id) => {
+      const provider = validProviders.find(p => p.id === id)
+      if (!provider) return
+      const isVerified = provider.is_verified ?? false
+      const isHighlighted = id === highlightedProviderId
+      const icon = getMarkerIcon(isVerified, isHighlighted)
+      if (icon) marker.setIcon(icon)
+    })
+  }, [highlightedProviderId, _L, validProviders, getMarkerIcon])
 
   // Handle "Rechercher dans cette zone" click
   const handleSearchArea = useCallback(() => {

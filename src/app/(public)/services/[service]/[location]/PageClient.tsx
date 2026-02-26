@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -113,6 +113,24 @@ export default function ServiceLocationPageClient({
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  // Memoize providers for the map — avoids recreating the cluster on every render
+  const mapProviders = useMemo(() => allProviders.map(p => ({
+    id: p.id,
+    name: p.name || '',
+    stable_id: p.stable_id ?? undefined,
+    slug: p.slug,
+    latitude: p.latitude || 0,
+    longitude: p.longitude || 0,
+    rating_average: p.rating_average,
+    review_count: p.review_count,
+    specialty: p.specialty,
+    address_city: p.address_city,
+    is_verified: p.is_verified || false,
+    phone: p.phone,
+    address_street: p.address_street,
+    address_postal_code: p.address_postal_code,
+  })), [allProviders])
 
   // Default center: location coordinates → provider average → France fallback
   let computedLat = location.latitude
@@ -384,22 +402,7 @@ export default function ServiceLocationPageClient({
               centerLat={mapCenter[0]}
               centerLng={mapCenter[1]}
               zoom={mapZoom}
-              providers={allProviders.map(p => ({
-                id: p.id,
-                name: p.name || '',
-                stable_id: p.stable_id ?? undefined,
-                slug: p.slug,
-                latitude: p.latitude || 0,
-                longitude: p.longitude || 0,
-                rating_average: p.rating_average,
-                review_count: p.review_count,
-                specialty: p.specialty,
-                address_city: p.address_city,
-                is_verified: p.is_verified || false,
-                phone: p.phone,
-                address_street: p.address_street,
-                address_postal_code: p.address_postal_code
-              }))}
+              providers={mapProviders}
               highlightedProviderId={selectedProvider?.id}
               locationName={location.name}
               height="100%"
