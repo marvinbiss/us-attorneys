@@ -139,14 +139,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         { title: `${serviceName} à ${locationName} — ${providerCount} pros vérifiés`, h1: `${serviceName} à ${locationName}` },
         { title: `${providerCount} ${naturalTerm.plural} à ${locationName} — Annuaire`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
         { title: `${serviceName} ${locationName} : pros certifiés SIREN`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
-        { title: `${serviceName} à ${locationName} (${departmentCode})`, h1: `${serviceName} à ${locationName} (${departmentCode})` },
+        { title: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
         { title: `Annuaire ${svcLower} à ${locationName} — Comparez`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
     : [
         { title: `${serviceName} à ${locationName} — Annuaire`, h1: `${serviceName} à ${locationName}` },
         { title: `Trouver ${naturalTerm.article} à ${locationName}`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
         { title: `${serviceName} ${locationName} : pros certifiés SIREN`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
-        { title: `${serviceName} à ${locationName} (${departmentCode})`, h1: `${serviceName} à ${locationName} (${departmentCode})` },
+        { title: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
         { title: `Annuaire ${svcLower} à ${locationName}`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
 
@@ -156,20 +156,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const metaVille = getVilleBySlug(locationSlug)
   const metaRegion = metaVille?.region || ''
   const descHash = Math.abs(hashCode(`desc-${serviceSlug}-${locationSlug}`))
+  const deptLabel = departmentName || departmentCode
   const descTemplates = hasProviders
     ? [
-        `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName} (${departmentName || departmentCode}). Devis gratuit en ${metaRegion || 'France'}.`,
-        `${providerCount} ${svcLower}s vérifiés à ${locationName}, ${departmentName || departmentCode}. Comparez les profils et demandez un devis gratuit.`,
+        `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Devis gratuit en ${metaRegion || 'France'}.`,
+        `${providerCount} ${svcLower}s vérifiés à ${locationName}${deptLabel ? `, ${deptLabel}` : ''}. Comparez les profils et demandez un devis gratuit.`,
         `Trouvez le meilleur ${svcLower} à ${locationName} parmi ${providerCount} professionnels référencés. ${metaRegion || 'France'}, devis gratuit.`,
-        `${locationName} (${departmentCode}) : ${providerCount} ${svcLower}s référencés SIREN. Tarifs, avis et devis gratuit en ${metaRegion || 'France'}.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés dans le ${departmentName || departmentCode}. Comparez et obtenez un devis.`,
+        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s référencés SIREN. Tarifs, avis et devis gratuit en ${metaRegion || 'France'}.`,
+        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés${deptLabel ? ` dans le ${deptLabel}` : ''}. Comparez et obtenez un devis.`,
       ]
     : [
-        `Trouvez un ${svcLower} qualifié à ${locationName} (${departmentName || departmentCode}), ${metaRegion}. Artisans vérifiés SIREN, devis gratuit.`,
-        `${svcLower} à ${locationName} (${departmentCode}) : artisans référencés en ${metaRegion || 'France'}. Devis gratuit et sans engagement.`,
-        `Besoin d'un ${svcLower} à ${locationName}, ${departmentName || departmentCode} ? Consultez notre annuaire d'artisans vérifiés. Devis gratuit.`,
+        `Trouvez un ${svcLower} qualifié à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${metaRegion ? `, ${metaRegion}` : ''}. Artisans vérifiés SIREN, devis gratuit.`,
+        `${svcLower} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans référencés en ${metaRegion || 'France'}. Devis gratuit et sans engagement.`,
+        `Besoin d'un ${svcLower} à ${locationName}${deptLabel ? `, ${deptLabel}` : ''} ? Consultez notre annuaire d'artisans vérifiés. Devis gratuit.`,
         `Annuaire ${svcLower} à ${locationName} en ${metaRegion || 'France'}. Professionnels vérifiés SIREN, devis gratuit et immédiat.`,
-        `${locationName}, ${metaRegion} : trouvez un ${svcLower} de confiance. Artisans référencés par SIREN. Demandez votre devis.`,
+        `${locationName}${metaRegion ? `, ${metaRegion}` : ''} : trouvez un ${svcLower} de confiance. Artisans référencés par SIREN. Demandez votre devis.`,
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -374,14 +375,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         `${service.name} à ${location.name}`,
         `Trouvez ${naturalTermH1.article} à ${location.name}`,
         `${service.name} à ${location.name} — ${providerCount} pros référencés`,
-        `${service.name} à ${location.name} (${location.department_code || ''})`,
+        `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
         `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
       ]
     : [
         `${service.name} à ${location.name}`,
         `Trouvez ${naturalTermH1.article} à ${location.name}`,
         `${service.name} à ${location.name} — Artisans qualifiés`,
-        `${service.name} à ${location.name} (${location.department_code || ''})`,
+        `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
         `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
       ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]

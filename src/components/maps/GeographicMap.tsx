@@ -4,21 +4,10 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import dynamic from 'next/dynamic'
+import { MapContainer, TileLayer } from 'react-leaflet'
 import { Loader2 } from 'lucide-react'
 import { getArtisanUrl } from '@/lib/utils'
 import './map-styles.css'
-
-// Dynamic imports for Leaflet (React components)
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-)
-// Marker and Popup are managed imperatively via leaflet.markercluster
 
 interface Provider {
   id: string

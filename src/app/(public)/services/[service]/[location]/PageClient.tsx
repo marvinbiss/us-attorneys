@@ -114,12 +114,21 @@ export default function ServiceLocationPageClient({
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Default center (France) or location coordinates
+  // Default center: location coordinates → provider average → France fallback
+  let computedLat = location.latitude
+  let computedLng = location.longitude
+  if (!computedLat || !computedLng) {
+    const withCoords = allProviders.filter(p => p.latitude && p.longitude)
+    if (withCoords.length > 0) {
+      computedLat = withCoords.reduce((sum, p) => sum + p.latitude!, 0) / withCoords.length
+      computedLng = withCoords.reduce((sum, p) => sum + p.longitude!, 0) / withCoords.length
+    }
+  }
   const mapCenter: [number, number] = [
-    location.latitude || 46.603354,
-    location.longitude || 1.888334,
+    computedLat || 46.603354,
+    computedLng || 1.888334,
   ]
-  const mapZoom = location.latitude ? 12 : 6
+  const mapZoom = computedLat ? 12 : 6
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -280,7 +289,7 @@ export default function ServiceLocationPageClient({
             </div>
             <div className="text-center sm:text-left">
               <p className="font-heading font-bold text-base sm:text-lg">
-                Recevez 3 devis gratuits de {service.name.toLowerCase()} &agrave; {location.name}
+                Recevez jusqu&apos;&agrave; 3 devis gratuits de {service.name.toLowerCase()} &agrave; {location.name}
               </p>
               <p className="text-blue-100 text-sm hidden sm:block">
                 Comparez les prix et choisissez le meilleur artisan
