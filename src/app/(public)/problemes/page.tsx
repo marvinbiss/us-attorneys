@@ -8,12 +8,12 @@ import { SITE_URL } from '@/lib/seo/config'
 import problems from '@/lib/data/problems'
 
 export const metadata: Metadata = {
-  title: 'Problèmes courants — Diagnostic et solutions',
+  title: 'Problèmes Courants — Solutions',
   description: 'Identifiez votre problème (fuite d’eau, panne électrique, serrure bloquée…) et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et mise en relation avec des artisans référencés.',
   alternates: { canonical: `${SITE_URL}/problemes` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Problèmes courants — Diagnostic et solutions',
+    title: 'Problèmes Courants — Solutions',
     description: 'Identifiez votre problème et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et artisans référencés.',
     url: `${SITE_URL}/problemes`,
     type: 'website',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Problèmes courants — Diagnostic et solutions',
+    title: 'Problèmes Courants — Solutions',
     description: 'Identifiez votre problème et trouvez la solution adaptée avec nos artisans référencés.',
     images: [`${SITE_URL}/opengraph-image`],
   },

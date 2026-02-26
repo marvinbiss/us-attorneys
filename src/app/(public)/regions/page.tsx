@@ -8,11 +8,11 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'Artisans par région — 18 régions de France',
+  title: 'Artisans par Région — 18 Régions',
   description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
   alternates: { canonical: `${SITE_URL}/regions` },
   openGraph: {
-    title: 'Artisans par région — 18 régions de France',
+    title: 'Artisans par Région — 18 Régions',
     description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
     url: `${SITE_URL}/regions`,
     type: 'website',

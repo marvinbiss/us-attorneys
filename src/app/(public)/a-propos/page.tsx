@@ -13,7 +13,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'À propos — Annuaire des artisans référencés en France',
+  title: 'À propos de ServicesArtisans',
   description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
   alternates: {
     canonical: `${SITE_URL}/a-propos`,

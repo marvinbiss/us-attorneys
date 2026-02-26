@@ -11,12 +11,12 @@ import { villes } from '@/lib/data/france'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Urgence artisan soir & week-end — Plombier, Serrurier',
+  title: 'Urgence Artisan — Soir & Week-end',
   description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles selon les artisans de votre secteur partout en France. Intervention rapide, devis gratuit, artisans référencés.',
   alternates: { canonical: `${SITE_URL}/urgence` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Urgence artisan soir & week-end — Intervention rapide partout en France',
+    title: 'Urgence Artisan — Soir & Week-end',
     description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur. Intervention rapide, devis gratuit, artisans référencés.',
     url: `${SITE_URL}/urgence`,
     type: 'website',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgence artisan soir & week-end — Intervention rapide partout en France',
+    title: 'Urgence Artisan — Soir & Week-end',
     description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur. Intervention rapide, devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },

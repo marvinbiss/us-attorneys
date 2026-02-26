@@ -13,7 +13,7 @@ export const prixArticles: Record<string, {
   faq?: { question: string; answer: string }[]
 }> = {
   "prix-serrurier-2026-tarifs-interventions": {
-    title: "Prix serrurier 2026 : tarifs et coût des interventions",
+    title: "Prix Serrurier 2026 : Tarifs Détaillés",
     excerpt: "Découvrez les tarifs actualisés des serruriers en 2026. Ouverture de porte, changement de serrure, blindage : tous les prix détaillés pour éviter les mauvaises surprises.",
     content: [
       "Vous êtes devant votre porte, les clés sont restées à l'intérieur, et il est 22 heures un samedi soir. Le stress monte, et votre premier réflexe est de chercher « serrurier urgence » sur votre téléphone. C'est exactement dans ces moments-là que les arnaques prospèrent : des factures de 800 à 1 500 € pour une simple ouverture de porte ne sont pas rares. En France, la DGCCRF estime que la serrurerie est l'un des secteurs les plus touchés par les pratiques commerciales déloyales. Ce guide complet vous arme avec les **vrais prix du marché** en 2026, pour que vous ne soyez plus jamais pris au dépourvu. Pour trouver un [serrurier de confiance près de chez vous](/services/serrurier), consultez notre annuaire vérifié.",
@@ -120,7 +120,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-chauffagiste-2026-installation-entretien": {
-    title: "Prix chauffagiste 2026 : installation et entretien",
+    title: "Prix Chauffagiste 2026 : Tarifs",
     excerpt: "Tous les tarifs des chauffagistes en 2026 : installation de chaudière, entretien annuel, dépannage, pompe à chaleur. Comparez les prix et trouvez le meilleur rapport qualité-prix.",
     content: [
       "Votre facture de chauffage vous semble exorbitante ? Vous n'êtes pas seul : le chauffage représente en moyenne **60 % de la facture énergétique** des ménages français, soit 1 500 à 2 500 € par an pour une maison de 100 m² mal isolée. Le choix du bon système et du bon professionnel pour l'installer constitue un enjeu financier majeur. En 2026, le marché est en pleine mutation avec la montée en puissance des pompes à chaleur, l'interdiction des chaudières fioul dans le neuf et le déclin progressif du gaz. Ce guide vous détaille les tarifs actualisés pour toutes les prestations d'un chauffagiste, et vous montre comment réduire la facture grâce aux aides de l'État. Trouvez un [chauffagiste qualifié près de chez vous](/services/chauffagiste) pour obtenir un devis personnalisé.",
@@ -217,7 +217,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-menuisier-2026-tarifs-travaux": {
-    title: "Prix menuisier 2026 : tarifs et coût des travaux",
+    title: "Prix Menuisier 2026 : Tarifs Travaux",
     excerpt: "Tarifs détaillés des menuisiers en 2026 : portes, fenêtres, escaliers, placards sur mesure. Tous les prix pour budgéter vos projets.",
     content: [
       "Vous souhaitez remplacer vos fenêtres vieillissantes, installer un escalier sur mesure ou aménager un dressing fonctionnel ? La menuiserie est un poste de dépenses souvent sous-estimé, avec des écarts de prix qui peuvent aller du simple au quintuple selon les matériaux et le niveau de finition. En 2026, le marché reste dynamique, porté par la rénovation énergétique (remplacement de fenêtres) et la demande croissante d'agencements sur mesure qui optimisent chaque mètre carré. Ce guide complet vous donne les **vrais tarifs** pratiqués pour chaque type de prestation. Comparez les tarifs de [menuisiers qualifiés dans votre ville](/services/menuisier).",
@@ -478,7 +478,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-jardinier-paysagiste-2026": {
-    title: "Prix jardinier paysagiste 2026 : entretien et aménagement",
+    title: "Prix Jardinier Paysagiste 2026 : Tarifs",
     excerpt: "Tarifs des jardiniers et paysagistes en 2026 : entretien de jardin, création d'espaces verts, élagage, tonte. Tous les prix pour un extérieur soigné.",
     content: [
       "Votre jardin ressemble plus à une jungle qu'à un espace de détente ? Vous rêvez d'une terrasse paysagée, d'un potager structuré ou simplement d'une pelouse impeccable ? Un jardin bien entretenu valorise votre patrimoine immobilier de **5 à 20 %** selon les professionnels de l'immobilier. Mais entre un simple entretien et un aménagement paysager complet, les tarifs varient du simple au décuple. Ce guide 2026 vous donne toutes les clés pour **budgéter précisément vos travaux d'extérieur** et profiter du crédit d'impôt de 50 %. Comparez les devis de [jardiniers et paysagistes près de chez vous](/services/jardinier).",
@@ -564,7 +564,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-vitrier-2026-remplacement-vitrage": {
-    title: "Prix vitrier 2026 : remplacement de vitrage",
+    title: "Prix Vitrier 2026 : Tarifs Vitrage",
     excerpt: "Tarifs des vitriers en 2026 : remplacement de vitre, double vitrage, vitrine commerciale, miroir sur mesure. Tous les prix pour vos travaux de vitrerie.",
     content: [
       "Une vitre brisée par un ballon de football, une tentative d'effraction qui a fissuré votre double vitrage, ou simplement des fenêtres anciennes qui laissent passer le froid : les raisons de faire appel à un vitrier sont nombreuses. Mais combien cela coûte-t-il réellement ? En 2026, le marché de la vitrerie est porté par les exigences croissantes en matière d'isolation thermique et acoustique, avec des technologies de vitrage toujours plus performantes. Ce guide complet vous donne les **prix réels** pour chaque type d'intervention, de l'urgence au projet de rénovation énergétique. Trouvez un [vitrier qualifié dans votre ville](/services/vitrier) pour un devis rapide.",
@@ -640,7 +640,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-climaticien-2026-installation-entretien": {
-    title: "Prix climaticien 2026 : installation et entretien",
+    title: "Prix Climaticien 2026 : Tarifs",
     excerpt: "Tarifs des climaticiens en 2026 : installation de climatisation réversible, gainable, entretien annuel. Guide complet pour rafraîchir votre logement au meilleur prix.",
     content: [
       "L'été 2025 a battu de nouveaux records de température en France, avec des pics à plus de 42°C dans le sud-ouest. Résultat : les ventes de climatiseurs ont explosé de 35 % et les délais d'installation ont dépassé 3 mois en pleine canicule. Avec des étés de plus en plus chauds et des épisodes caniculaires récurrents, la climatisation n'est plus un luxe mais une **nécessité** pour de nombreux foyers. Ce guide vous donne les prix 2026 pour **anticiper votre projet** et éviter l'urgence estivale. Trouvez dès maintenant un [climaticien certifié près de chez vous](/services/climaticien).",
@@ -706,7 +706,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-cuisiniste-2026-pose-cuisine": {
-    title: "Prix cuisiniste 2026 : pose de cuisine équipée",
+    title: "Prix Cuisiniste 2026 : Cuisine Équipée",
     excerpt: "Combien coûte une cuisine équipée en 2026 ? Du premier prix au haut de gamme, découvrez les tarifs des cuisinistes pour la fourniture et la pose complète.",
     content: [
       "La cuisine est la pièce que vous utilisez 3 à 5 heures par jour, tous les jours. C'est aussi celle dont la rénovation génère le **meilleur retour sur investissement** : une cuisine refaite augmente la valeur d'un bien de 10 à 15 % selon les agents immobiliers. Mais entre une cuisine en kit à 3 000 € et un aménagement sur mesure à 40 000 €, comment s'y retrouver ? En 2026, les prix varient considérablement selon le niveau de gamme, les matériaux et la complexité de l'installation. Ce guide vous aide à **budgéter chaque poste** avec précision. Consultez notre annuaire de [cuisinistes professionnels](/services/cuisiniste) pour comparer les offres.",
@@ -902,7 +902,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-renovation-appartement-2026-budget": {
-    title: "Prix rénovation appartement 2026 : budget complet",
+    title: "Prix Rénovation Appartement 2026",
     excerpt: "Quel budget prévoir pour rénover un appartement en 2026 ? Du rafraîchissement au projet de rénovation complète, tous les prix au m² détaillés poste par poste.",
     content: [
       "Vous venez d'acquérir un appartement à rénover et vous vous demandez combien cela va coûter ? Ou vous vivez dans un logement vieillissant dont l'électricité n'est plus aux normes et la salle de bain date des années 80 ? Rénover un appartement est un projet ambitieux dont le budget peut varier de **200 à 2 500 €/m²** selon l'ampleur des travaux. En 2026, les coûts restent soutenus par la hausse des matériaux et de la main-d'œuvre qualifiée, mais les **aides financières** permettent de réduire significativement la facture. Ce guide vous donne les clés pour estimer votre budget avec précision, poste par poste.",
@@ -962,7 +962,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-extension-maison-2026": {
-    title: "Prix extension maison 2026 : surélévation et agrandissement",
+    title: "Prix Extension Maison 2026 : Tarifs",
     excerpt: "Quel budget pour agrandir votre maison en 2026 ? Extension latérale, surélévation, véranda : tous les prix au m² pour gagner de l'espace sans déménager.",
     content: [
       "Votre famille s'agrandit, vous avez besoin d'un bureau pour le télétravail, ou vous rêvez d'une suite parentale avec salle de bain ? Face à la hausse des prix de l'immobilier, l'extension de maison constitue une alternative séduisante au [déménagement](/services/demenageur). Gagner **20 à 40 m² habitables** coûte souvent moins cher qu'acheter plus grand (et sans frais de notaire !). En 2026, les solutions se diversifient. Ce guide vous aide à **chiffrer précisément** votre projet.",
@@ -1074,7 +1074,7 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-terrasse-exterieure-2026": {
-    title: "Prix terrasse extérieure 2026 : bois, béton, carrelage",
+    title: "Prix Terrasse Extérieure 2026 : Tarifs",
     excerpt: "Quel budget pour créer une terrasse en 2026 ? Bois, composite, béton, pierre naturelle, carrelage : comparez les prix au m² de chaque matériau avec la pose.",
     content: [
       "Une terrasse bien conçue peut augmenter la surface habitable perçue de **20 à 30 %** et valoriser votre bien de **3 à 10 %** selon la région et le type de bien (source : Notaires de France). Mais entre le pin traité à 40 €/m² et la pierre naturelle à 250 €/m², les écarts de prix sont considérables. En 2026, les options de matériaux sont plus nombreuses que jamais. Ce guide compare objectivement **chaque solution** pour vous aider à faire le meilleur choix selon votre budget, votre climat et vos goûts. Consultez un [paysagiste professionnel](/services/paysagiste) pour concevoir un projet harmonieux.",

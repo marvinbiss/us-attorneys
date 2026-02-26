@@ -96,6 +96,11 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
+function truncateTitle(title: string, maxLen = 42): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -115,13 +120,13 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`tarif-title-${service}-${villeSlug}`))
   const titleTemplates = [
-    `Tarif ${tradeLower} \u00E0 ${villeData.name} : guide des prix 2026`,
-    `Prix ${tradeLower} \u00E0 ${villeData.name} en 2026 : tarifs et devis`,
-    `Tarif ${tradeLower} ${villeData.name} (${dept}) : grille des prix 2026`,
-    `${trade.name} \u00E0 ${villeData.name} : tarifs 2026 et devis gratuit`,
-    `Combien co\u00FBte un ${tradeLower} \u00E0 ${villeData.name} ? Prix 2026`,
+    `Prix ${tradeLower} ${villeData.name} 2026`,
+    `Tarif ${tradeLower} \u00e0 ${villeData.name} 2026`,
+    `Tarifs ${tradeLower} ${villeData.name}`,
+    `Prix ${tradeLower} \u00e0 ${villeData.name}`,
+    `Co\u00fbt ${tradeLower} ${villeData.name} 2026`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}-${villeSlug}`))
   const descTemplates = [

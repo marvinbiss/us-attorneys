@@ -2,7 +2,7 @@ import type { BlogArticle } from './articles'
 
 export const batchSeoBoost3Articles: Record<string, BlogArticle> = {
   'eco-ptz-2026-pret-taux-zero-renovation': {
-    title: 'Éco-PTZ 2026 : tout savoir sur le prêt à taux zéro pour la rénovation',
+    title: 'Éco-PTZ 2026 : Prêt à Taux Zéro Travaux',
     excerpt: 'L\'éco-prêt à taux zéro vous permet d\'emprunter jusqu\'à 50 000 € sans intérêts pour rénover votre logement. Montants, travaux éligibles, banques partenaires, cumul MaPrimeRénov\' : guide complet 2026.',
     content: [
       "L\'éco-PTZ (prêt à taux zéro) est l\'un des dispositifs les plus avantageux pour financer la rénovation énergétique de votre logement. En 2026, ce prêt sans intérêts permet d\'emprunter jusqu\'à **50 000 €** et peut être cumulé avec MaPrimeRénov\' et les Certificats d\'Économies d\'Énergie (CEE). Contrairement à d\'autres aides, il n\'est soumis à **aucune condition de revenus**, ce qui le rend accessible à tous les propriétaires. Prolongé jusqu\'au 31 décembre 2027, il couvre un large spectre de travaux d\'[isolation thermique](/services/isolation-thermique), de [chauffage](/services/chauffage) et de rénovation globale. Voici tout ce que vous devez savoir pour en bénéficier en 2026.",
@@ -55,7 +55,7 @@ export const batchSeoBoost3Articles: Record<string, BlogArticle> = {
   },
 
   'renovation-energetique-par-ou-commencer': {
-    title: 'Rénovation énergétique : par où commencer ? Guide étape par étape',
+    title: 'Rénovation Énergétique : Par Où Commencer',
     excerpt: 'Audit énergétique, isolation, chauffage, ventilation... Découvrez comment aborder votre rénovation énergétique dans le bon ordre pour maximiser les économies et les aides disponibles en 2026.',
     content: [
       "Vous souhaitez rénover votre logement pour réduire vos factures d\'énergie, améliorer votre confort et valoriser votre patrimoine ? Excellente décision. Mais face à la multitude de travaux possibles — isolation, pompe à chaleur, VMC, panneaux solaires... — il est facile de se sentir dépassé. La bonne nouvelle : il existe un ordre logique et rentable pour aborder la rénovation énergétique. Suivre cette séquence vous permettra de maximiser les économies d\'énergie, d\'optimiser les aides disponibles et d\'éviter les erreurs coûteuses. En France, l\'Agence de la transition écologique (ADEME) estime qu\'une rénovation bien menée peut réduire la facture de chauffage de **50 à 70 %**. Voici le guide étape par étape pour réussir votre projet de [rénovation énergétique](/services/isolation-thermique).",
@@ -108,7 +108,7 @@ export const batchSeoBoost3Articles: Record<string, BlogArticle> = {
   },
 
   'prix-toiture-2026-refection-reparation-materiaux': {
-    title: 'Prix toiture 2026 : réfection, réparation et matériaux au m²',
+    title: 'Prix Toiture 2026 : Réfection et Tarifs',
     excerpt: 'Tuiles, ardoises, zinc, bac acier... Découvrez tous les prix de la toiture en 2026, de la réfection complète à la simple réparation, avec les coûts au m² par matériau et les aides disponibles.',
     content: [
       "La toiture représente l\'un des postes de travaux les plus importants d\'une maison. Une réfection complète peut coûter de **5 000 à 30 000 €** selon la superficie et les matériaux choisis. En France, le CAPEB (Confédération de l\'Artisanat et des Petites Entreprises du Bâtiment) estime que plus de 3 millions de toitures nécessitent une rénovation avant 2030. Que vous envisagiez une réfection complète, une réparation ponctuelle ou un remplacement de matériaux, ce guide vous donne tous les **prix actualisés 2026** pour budgéter votre projet en toute transparence. Consultez également notre annuaire de [couvreurs qualifiés](/services/couvreur) pour obtenir des devis gratuits.",
@@ -159,7 +159,7 @@ export const batchSeoBoost3Articles: Record<string, BlogArticle> = {
   },
 
   'normes-electriques-2026-nfc-15-100-guide': {
-    title: 'Normes électriques 2026 : guide complet NF C 15-100 pour particuliers',
+    title: 'Normes NF C 15-100 : Guide Complet 2026',
     excerpt: 'La norme NF C 15-100 régit toutes les installations électriques des logements en France. Tableau électrique, prises, salle de bain, cuisines : tout comprendre pour être en conformité en 2026.',
     content: [
       "La norme **NF C 15-100** est la référence réglementaire qui encadre toutes les installations électriques des logements en France. Mise à jour régulièrement depuis sa première publication en 1991, elle définit les exigences minimales de sécurité pour les circuits électriques résidentiels. En 2026, une installation non conforme peut entraîner des risques d\'incendie, d\'électrocution et des problèmes pour votre assurance habitation — voire pour la vente ou la location de votre bien. Selon le Syndicat des professionnels du diagnostic immobilier, plus de **7 millions de logements** en France présentent des anomalies électriques. Ce guide complet vous explique les exigences essentielles, les coûts de mise aux normes et les cas où elle est obligatoire.",
@@ -212,7 +212,7 @@ export const batchSeoBoost3Articles: Record<string, BlogArticle> = {
   },
 
   'fuite-eau-urgence-guide-complet-gestes-couts': {
-    title: 'Fuite d\'eau : guide d\'urgence complet (gestes, coûts, assurance)',
+    title: 'Fuite d\'Eau : Gestes d\'Urgence et Coûts',
     excerpt: 'Fuite d\'eau chez vous ? Découvrez les 5 gestes immédiats, comment couper l\'eau, les coûts de dépannage, comment déclarer à votre assurance et prévenir les fuites futures.',
     content: [
       "Une fuite d\'eau peut rapidement devenir un désastre si les bons gestes ne sont pas adoptés immédiatement. En France, les dégâts des eaux représentent le **sinistre le plus fréquent** en assurance habitation : selon la Fédération Française de l\'Assurance, plus de **1,2 million de déclarations** de dégâts des eaux sont enregistrées chaque année, pour un coût moyen de **2 400 €** par sinistre. Qu\'il s\'agisse d\'une fuite visible sous l\'évier, d\'une infiltration par la toiture ou d\'une rupture de canalisation, agir vite et bien est essentiel pour limiter les dégâts. Ce guide complet vous donne tous les outils pour gérer une fuite d\'eau de A à Z : les gestes d\'urgence, les coûts de dépannage, la procédure d\'assurance et la prévention. Retrouvez également notre annuaire de [plombiers de garde disponibles 24h/24](/services/plombier).",

@@ -28,12 +28,12 @@ const hubFaq = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Guides pratiques — Travaux, artisans et rénovation',
+  title: 'Guides Travaux et Rénovation',
   description: 'Guides complets pour vos travaux : choisir un artisan, entretien, réglementation, économies et urgences. Conseils d\'experts, tarifs et aides financières.',
   alternates: { canonical: `${SITE_URL}/guides` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Guides pratiques — Travaux et rénovation',
+    title: 'Guides Travaux et Rénovation',
     description: `${guides.length} guides pratiques pour vos travaux : artisans, entretien, normes, économies et urgences.`,
     type: 'website',
     url: `${SITE_URL}/guides`,

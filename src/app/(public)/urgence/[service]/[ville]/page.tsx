@@ -157,7 +157,7 @@ export function generateStaticParams() {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 55): string {
+function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }

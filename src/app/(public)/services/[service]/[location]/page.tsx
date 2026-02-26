@@ -79,8 +79,8 @@ interface PageProps {
   }>
 }
 
-/** Truncate title to ~55 chars to leave room for " | ServicesArtisans" suffix (total ~75, Google shows ~60 of page title) */
-function truncateTitle(title: string, maxLen = 55): string {
+/** Truncate title to ~42 chars to leave room for " | ServicesArtisans" suffix (18 chars → total ~60, Google's display limit) */
+function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
@@ -136,20 +136,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `${serviceName} à ${locationName} — ${providerCount} artisans vérifiés`, h1: `${serviceName} à ${locationName}` },
-        { title: `${providerCount} ${naturalTerm.plural} à ${locationName} — Devis gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName} : comparez ${providerCount} pros`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
-        { title: `${serviceName} à ${locationName} : tarifs, avis et devis gratuit`, h1: `${serviceName} à ${locationName} : tarifs, avis et devis` },
-        { title: `Les meilleurs ${naturalTerm.plural} à ${locationName} — Avis vérifiés`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
-        { title: `${serviceName} ${locationName} (${departmentCode}) — Annuaire et devis`, h1: `Votre ${svcLower} à ${locationName} : intervention rapide` },
+        { title: `${serviceName} à ${locationName} — ${providerCount} pros vérifiés`, h1: `${serviceName} à ${locationName}` },
+        { title: `${providerCount} ${naturalTerm.plural} à ${locationName} — Annuaire`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName} : pros certifiés SIREN`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
+        { title: `${serviceName} à ${locationName} (${departmentCode})`, h1: `${serviceName} à ${locationName} (${departmentCode})` },
+        { title: `Annuaire ${svcLower} à ${locationName} — Comparez`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
     : [
-        { title: `${serviceName} à ${locationName} — Devis gratuit`, h1: `${serviceName} à ${locationName}` },
-        { title: `Trouver ${naturalTerm.article} à ${locationName} — Annuaire`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName} — Artisans qualifiés`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
-        { title: `${serviceName} à ${locationName} : tarifs et devis gratuit`, h1: `${serviceName} à ${locationName} : trouvez un artisan de confiance` },
-        { title: `Les meilleurs ${naturalTerm.plural} à ${locationName} — Annuaire`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
-        { title: `${serviceName} ${locationName} (${departmentCode}) — Artisans vérifiés`, h1: `Votre ${svcLower} à ${locationName} : artisans vérifiés` },
+        { title: `${serviceName} à ${locationName} — Annuaire`, h1: `${serviceName} à ${locationName}` },
+        { title: `Trouver ${naturalTerm.article} à ${locationName}`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName} : pros certifiés SIREN`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
+        { title: `${serviceName} à ${locationName} (${departmentCode})`, h1: `${serviceName} à ${locationName} (${departmentCode})` },
+        { title: `Annuaire ${svcLower} à ${locationName}`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
@@ -370,24 +368,21 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   const providerCount = totalProviderCount
   const seoHashH1 = Math.abs(hashCode(`seo-${serviceSlug}-${locationSlug}`))
   const naturalTermH1 = getNaturalTerm(serviceSlug)
-  const svcLowerH1 = service.name.toLowerCase()
   const hasProvidersH1 = providerCount > 0
   const h1Variants = hasProvidersH1
     ? [
         `${service.name} à ${location.name}`,
         `Trouvez ${naturalTermH1.article} à ${location.name}`,
         `${service.name} à ${location.name} — ${providerCount} pros référencés`,
-        `${service.name} à ${location.name} : tarifs, avis et devis`,
+        `${service.name} à ${location.name} (${location.department_code || ''})`,
         `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
-        `Votre ${svcLowerH1} à ${location.name} : intervention rapide`,
       ]
     : [
         `${service.name} à ${location.name}`,
         `Trouvez ${naturalTermH1.article} à ${location.name}`,
         `${service.name} à ${location.name} — Artisans qualifiés`,
-        `${service.name} à ${location.name} : trouvez un artisan de confiance`,
+        `${service.name} à ${location.name} (${location.department_code || ''})`,
         `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
-        `Votre ${svcLowerH1} à ${location.name} : artisans vérifiés`,
       ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 

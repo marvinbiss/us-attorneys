@@ -2,7 +2,7 @@ import type { BlogArticle } from './articles'
 
 export const batchSeoBoost2Articles: Record<string, BlogArticle> = {
   'dpe-diagnostic-performance-energetique-tout-savoir': {
-    title: 'DPE 2026 : tout savoir sur le diagnostic de performance énergétique',
+    title: 'DPE 2026 : Diagnostic de Performance',
     excerpt: 'Définition, méthode de calcul, échelle A→G, coûts, interdictions de location et impact sur la valeur du bien : tout ce que propriétaires et locataires doivent savoir sur le DPE en 2026.',
     content: [
       "Le diagnostic de performance énergétique (DPE) est devenu l\'un des documents les plus scrutés dans toute transaction immobilière. Depuis la réforme du 1er juillet 2021, il est opposable juridiquement — une première — et ses conséquences sur la mise en location ou la vente d\'un bien sont de plus en plus lourdes. En 2025, les logements classés G sont devenus impropres à la location, et l\'agenda se resserre pour les F et les E. Voici le guide le plus complet pour comprendre le DPE, l\'anticiper et protéger la valeur de votre patrimoine.",
@@ -55,7 +55,7 @@ export const batchSeoBoost2Articles: Record<string, BlogArticle> = {
   },
 
   'devis-travaux-comprendre-comparer-negocier': {
-    title: 'Devis travaux : comprendre, comparer et négocier comme un pro',
+    title: 'Devis Travaux : Comparer et Négocier',
     excerpt: 'Mentions obligatoires, lecture ligne par ligne, distinction HT/TTC/TVA, méthode pour comparer 3 devis, techniques de négociation et droits en cas de dépassement : le guide complet du devis travaux.',
     content: [
       "Un devis travaux mal lu, c\'est la garantie de mauvaises surprises. Selon l\'UFC-Que Choisir, plus de 40 % des litiges entre particuliers et artisans concernent des désaccords sur le prix final ou le contenu des prestations. Pourtant, le devis est un document qui vous protège pleinement — à condition de savoir le décrypter, le comparer et, le cas échéant, le négocier. Ce guide vous donne toutes les clés pour aborder vos prochains travaux en position de force.",
@@ -106,7 +106,7 @@ export const batchSeoBoost2Articles: Record<string, BlogArticle> = {
   },
 
   'renovation-salle-de-bain-guide-complet-prix-2026': {
-    title: 'Rénovation salle de bain 2026 : guide complet, prix et étapes',
+    title: 'Rénovation Salle de Bain 2026 : Prix',
     excerpt: 'Budgets par gamme, planning des travaux, plomberie, électricité NF C 15-100, revêtements, sanitaires, VMC : tout ce qu\'il faut savoir pour rénover sa salle de bain en 2026 sans mauvaises surprises.',
     content: [
       "La salle de bain est l\'une des pièces les plus complexes à rénover. Elle concentre trois corps de métier (plombier, électricien, carreleur), des contraintes réglementaires spécifiques (volumes électriques NF C 15-100) et des travaux humides qui requièrent une étanchéité irréprochable. Selon la Fédération Française du Bâtiment, la rénovation de salle de bain représente le deuxième poste de dépenses le plus courant chez les particuliers, après la cuisine. En 2026, les prix ont évolué avec l\'inflation des matières premières et la tension sur les artisans qualifiés. Voici le guide le plus complet pour piloter votre projet de A à Z.",
@@ -159,7 +159,7 @@ export const batchSeoBoost2Articles: Record<string, BlogArticle> = {
   },
 
   'entretien-maison-calendrier-annuel-checklist': {
-    title: 'Entretien maison : calendrier annuel et checklist complète 2026',
+    title: 'Entretien Maison : Checklist Annuelle 2026',
     excerpt: 'Mois par mois et saison par saison, retrouvez toutes les interventions d\'entretien indispensables pour préserver votre maison : chaudière, toiture, gouttières, ramonage, VMC, et budget prévisionnel annuel.',
     content: [
       "Un logement bien entretenu, c\'est un patrimoine qui se valorise et des dépenses de réparation divisées par deux. Selon l\'Agence Nationale de l\'Habitat (ANAH), les propriétaires qui suivent un programme d\'entretien régulier dépensent en moyenne **1 200 à 2 000 €/an** contre **3 500 à 6 000 €/an** pour ceux qui attendent les pannes et dégradations. Pourtant, 63 % des propriétaires avouent ne pas avoir de planning d\'entretien structuré (sondage IFOP 2024). Ce guide vous donne le calendrier complet, mois par mois, pour ne rien oublier.",
@@ -210,7 +210,7 @@ export const batchSeoBoost2Articles: Record<string, BlogArticle> = {
   },
 
   'arnaques-artisans-reconnaitre-eviter-recours': {
-    title: 'Arnaques artisans : comment les reconnaître, les éviter et agir',
+    title: 'Arnaques Artisans : Reconnaître et Éviter',
     excerpt: 'Démarchage abusif, faux artisans, surfacturation, isolation 1€ frauduleuse... Découvrez les 10 arnaques les plus fréquentes, les red flags à repérer, vos droits et tous les recours disponibles pour vous protéger.',
     content: [
       "Chaque année, la Direction Générale de la Concurrence, de la Consommation et de la Répression des Fraudes (DGCCRF) reçoit plus de **80 000 signalements** liés à des litiges avec des artisans. Entre faux artisans sans assurance, escroqueries à l\'isolation 1 euro, devis oraux et surfacturations, les pratiques frauduleuses se sont sophistiquées. Connaître les arnaques les plus courantes, savoir les reconnaître avant de signer et connaître ses droits en cas de problème : c\'est le meilleur moyen d\'éviter de figurer parmi les victimes.",

@@ -343,7 +343,7 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
   }
 }
 
-function truncateTitle(title: string, maxLen = 55): string {
+function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
@@ -428,7 +428,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       specialty: provider.specialty,
       city: realCity,
     })
-    const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}`)
+    const ratingStr = provider.rating_average && Number(provider.rating_average) >= 1
+      ? ` ${Number(provider.rating_average).toFixed(1)}\u2605`
+      : ''
+    const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}${ratingStr}`)
 
     const descParts: string[] = []
     descParts.push(`${displayName}, ${serviceName.toLowerCase()} à ${realCity}`)

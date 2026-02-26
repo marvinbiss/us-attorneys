@@ -71,7 +71,7 @@ function getClimatLabel(zone: string | null): string {
   return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }

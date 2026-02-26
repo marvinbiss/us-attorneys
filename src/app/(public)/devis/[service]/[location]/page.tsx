@@ -75,6 +75,11 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
+function truncateTitle(title: string, maxLen = 42): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -94,13 +99,13 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`devis-loc-title-${service}-${location}`))
   const titleTemplates = [
-    `Devis ${tradeLower} à ${villeData.name} — Gratuit`,
-    `Devis gratuit ${tradeLower} ${villeData.name} 2026`,
-    `${trade.name} à ${villeData.name} : devis gratuit`,
-    `Devis ${tradeLower} ${villeData.name} — Comparez`,
-    `Devis ${tradeLower} ${villeData.name} (${dept}) : gratuit et sans engagement`,
+    `Devis ${tradeLower} ${villeData.name} gratuit`,
+    `Devis ${tradeLower} ${villeData.name} 2026`,
+    `Devis gratuit ${tradeLower} ${villeData.name}`,
+    `Devis ${tradeLower} \u00e0 ${villeData.name}`,
+    `Comparez 3 devis ${tradeLower} ${villeData.name}`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`devis-loc-desc-${service}-${location}`))
   const descTemplates = [

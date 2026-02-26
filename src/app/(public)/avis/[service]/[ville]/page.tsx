@@ -149,6 +149,11 @@ function getClimatLabel(zone: string | null): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
+function truncateTitle(title: string, maxLen = 42): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -166,13 +171,13 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
   const titleTemplates = [
-    `Avis ${tradeLower} à ${villeData.name} — Artisans de confiance`,
-    `Choisir un ${tradeLower} à ${villeData.name} — Avis et recommandations`,
-    `${trade.name} à ${villeData.name} : avis clients et tarifs indicatifs`,
-    `Trouver un bon ${tradeLower} à ${villeData.name} — Avis vérifiés`,
-    `Avis et recommandations ${tradeLower} à ${villeData.name}`,
+    `Avis ${tradeLower} ${villeData.name}`,
+    `Avis ${tradeLower} \u00e0 ${villeData.name}`,
+    `${trade.name} ${villeData.name} : avis clients`,
+    `Avis ${tradeLower} ${villeData.name} 2026`,
+    `Choisir un ${tradeLower} ${villeData.name}`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`avis-loc-desc-${service}-${ville}`))
   const dept = villeData.departement

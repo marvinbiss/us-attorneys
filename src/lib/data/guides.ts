@@ -16,7 +16,7 @@ export interface Guide {
 export const guides: Guide[] = [
   {
     slug: 'combien-coute-un-plombier',
-    title: 'Combien coûte un plombier ? Tarifs et prix 2025',
+    title: 'Prix Plombier 2026 : Tarifs et Devis',
     metaDescription: 'Prix d\'un plombier en 2025 : de 60 à 120 €/h. Tarifs pour débouchage, fuite, installation. Devis gratuit en ligne.',
     h1: 'Combien coûte un plombier en 2025 ?',
     category: 'economiser',
@@ -43,7 +43,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'combien-coute-un-electricien',
-    title: 'Prix d\'un électricien en 2025 : tarifs et devis',
+    title: 'Prix Électricien 2026 : Tarifs et Devis',
     metaDescription: 'Tarifs d\'un électricien en 2025 : 60–100 €/h. Tableau de prix pour mise aux normes, tableau électrique, dépannage. Devis gratuit.',
     h1: 'Combien coûte un électricien en 2025 ?',
     category: 'economiser',
@@ -70,7 +70,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'prix-renovation-salle-de-bain',
-    title: 'Prix rénovation salle de bain 2025 : budget complet',
+    title: 'Rénovation Salle de Bain 2026 : Prix',
     metaDescription: 'Budget rénovation salle de bain : 3 000 € (partielle) à 15 000 € (complète). Guide des tarifs par poste : plomberie, carrelage, sanitaires.',
     h1: 'Prix d\'une rénovation salle de bain en 2025',
     category: 'economiser',
@@ -97,7 +97,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'tarif-isolation-thermique',
-    title: 'Prix isolation thermique 2025 : combles, murs, sols',
+    title: 'Prix Isolation Thermique 2026 : Guide',
     metaDescription: 'Tarifs isolation thermique 2025 : combles perdus de 20 à 50 €/m², ITE de 100 à 250 €/m². Aides MaPrimeRénov\' disponibles.',
     h1: 'Prix de l\'isolation thermique en 2025',
     category: 'economiser',
@@ -124,7 +124,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'cout-installation-chaudiere',
-    title: 'Prix installation chaudière 2025 : gaz, fioul, condensation',
+    title: 'Prix Chaudière 2026 : Installation',
     metaDescription: 'Tarifs installation chaudière 2025 : condensation gaz 2 500–5 000 €. Aides disponibles, économisez jusqu\'à 50 %.',
     h1: 'Combien coûte l\'installation d\'une chaudière en 2025 ?',
     category: 'economiser',
@@ -151,7 +151,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'prix-renovation-energetique',
-    title: 'Prix d\'une rénovation énergétique 2025 : budget global',
+    title: 'Rénovation Énergétique 2026 : Prix',
     metaDescription: 'Budget rénovation énergétique : 15 000–80 000 €. Aides MaPrimeRénov\', CEE, éco-PTZ : reste à charge sous 10 000 € pour ménages modestes.',
     h1: 'Quel budget pour une rénovation énergétique en 2025 ?',
     category: 'economiser',
@@ -178,7 +178,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'tarif-pompe-a-chaleur',
-    title: 'Prix d\'une pompe à chaleur 2025 : air/eau, air/air',
+    title: 'Prix Pompe à Chaleur 2026 : Guide',
     metaDescription: 'Tarif PAC 2025 : air/eau 8 000–15 000 €, air/air 2 500–6 000 €. MaPrimeRénov\' jusqu\'à 10 000 €. Devis gratuit.',
     h1: 'Combien coûte une pompe à chaleur en 2025 ?',
     category: 'economiser',
@@ -205,7 +205,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'cout-installation-panneaux-solaires',
-    title: 'Prix installation panneaux solaires 2025 : photovoltaïque',
+    title: 'Prix Panneaux Solaires 2026 : Guide',
     metaDescription: 'Prix panneaux solaires 2025 : 8 000–15 000 € pour 6 kWc. Prime autoconsommation, TVA 10 %. Retour sur investissement 8–12 ans.',
     h1: 'Combien coûte l\'installation de panneaux solaires en 2025 ?',
     category: 'economiser',
@@ -232,7 +232,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'comment-choisir-artisan-qualifie',
-    title: 'Comment choisir un artisan qualifié : 7 critères essentiels',
+    title: 'Choisir un Artisan Qualifié : 7 Critères',
     metaDescription: 'Comment trouver un artisan de confiance ? Certifications, assurances, devis, avis clients. Guide complet pour éviter les arnaques.',
     h1: 'Comment choisir un artisan qualifié en 2025 ?',
     category: 'choisir',
@@ -263,7 +263,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'comment-obtenir-devis-travaux',
-    title: 'Comment obtenir un devis travaux : guide pratique',
+    title: 'Obtenir un Devis Travaux : Guide Pratique',
     metaDescription: 'Comment demander et comparer des devis travaux ? Préparer sa demande, analyser les offres, éviter les pièges. Guide pratique 2025.',
     h1: 'Comment obtenir un bon devis travaux ?',
     category: 'choisir',
@@ -294,7 +294,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'artisan-rge-comment-verifier',
-    title: 'Artisan RGE : comment vérifier la certification ? Guide 2025',
+    title: 'Artisan RGE : Vérifier sa Certification',
     metaDescription: 'Comment vérifier qu\'un artisan est certifié RGE ? Annuaire France Rénov\', labels (Qualibat, QualiPAC, Qualifelec), conditions MaPrimeRénov\'.',
     h1: 'Comment vérifier qu\'un artisan est certifié RGE ?',
     category: 'choisir',
@@ -320,7 +320,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'assurance-decennale-garantie',
-    title: 'Garantie décennale : tout savoir en 2025',
+    title: 'Garantie Décennale : Tout Savoir 2026',
     metaDescription: 'La garantie décennale protège votre bien 10 ans. Qui en bénéficie, quels travaux couvre-t-elle, comment la mettre en œuvre ? Guide complet.',
     h1: 'Tout savoir sur la garantie décennale des artisans',
     category: 'choisir',
@@ -351,7 +351,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'aides-renovation-energetique-2025',
-    title: 'Aides rénovation énergétique 2025 : MaPrimeRénov\', CEE, éco-PTZ',
+    title: 'Aides Rénovation 2026 : MaPrimeRénov\'',
     metaDescription: 'Toutes les aides rénovation énergétique 2025 : MaPrimeRénov\', CEE, éco-PTZ, TVA réduite. Jusqu\'à 90 % des travaux couverts pour les ménages modestes.',
     h1: 'Guide complet des aides à la rénovation énergétique 2025',
     category: 'economiser',
@@ -378,7 +378,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'prime-cee-comment-obtenir',
-    title: 'Prime énergie CEE 2025 : comment en bénéficier ?',
+    title: 'Prime CEE 2026 : Comment en Profiter ?',
     metaDescription: 'Les CEE offrent des primes de 500 à 5 000 € pour vos travaux. Sans conditions de revenus, cumulables avec MaPrimeRénov\'.',
     h1: 'Comment obtenir la prime CEE en 2025 ?',
     category: 'economiser',
@@ -404,7 +404,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'que-faire-fuite-eau-urgence',
-    title: 'Fuite d\'eau : que faire en urgence ? Guide étape par étape',
+    title: 'Fuite d\'Eau : Que Faire en Urgence ?',
     metaDescription: 'Fuite d\'eau chez vous ? Couper l\'eau, localiser la fuite, limiter les dégâts. Quand appeler un plombier en urgence ? Guide complet.',
     h1: 'Fuite d\'eau : que faire en urgence ?',
     category: 'urgence',
@@ -431,7 +431,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'panne-chaudiere-que-faire',
-    title: 'Panne de chaudière en hiver : que faire ? Guide urgence',
+    title: 'Panne de Chaudière : Que Faire ?',
     metaDescription: 'Chaudière en panne en hiver ? Vérifiez ces points avant d\'appeler : pression, vanne gaz, code erreur. Guide de dépannage chauffage.',
     h1: 'Que faire en cas de panne de chaudière en hiver ?',
     category: 'urgence',
@@ -462,7 +462,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'coupure-electricite-que-faire',
-    title: 'Coupure d\'électricité : que faire ? Dépannage électrique',
+    title: 'Coupure Électricité : Dépannage Rapide',
     metaDescription: 'Panne d\'électricité chez vous ? Tableau électrique, compteur Linky, voisins. Guide pour identifier la panne et contacter le bon interlocuteur.',
     h1: 'Coupure d\'électricité : diagnostic et solutions',
     category: 'urgence',
@@ -491,7 +491,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'porte-bloquee-serrurerie',
-    title: 'Porte bloquée : que faire ? Serrurier d\'urgence sans arnaque',
+    title: 'Porte Bloquée : Serrurier sans Arnaque',
     metaDescription: 'Porte claquée ou serrure bloquée ? Solutions avant d\'appeler, comment choisir un serrurier fiable, prix d\'une ouverture et risques d\'arnaque.',
     h1: 'Porte bloquée : solutions et serrurier d\'urgence',
     category: 'urgence',
@@ -520,7 +520,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'infiltration-toiture-urgence',
-    title: 'Infiltration toiture : que faire en urgence ? Guide couvreur',
+    title: 'Infiltration Toiture : Guide d\'Urgence',
     metaDescription: 'Infiltration d\'eau par la toiture ? Protégez l\'intérieur, localisez la fuite, appelez un couvreur. Coût des réparations et couverture assurance.',
     h1: 'Infiltration toiture : urgence et solutions',
     category: 'urgence',
@@ -549,7 +549,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-renovation-appartement',
-    title: 'Guide rénovation appartement 2025 : étapes et budget',
+    title: 'Rénovation Appartement 2026 : Budget',
     metaDescription: 'Comment rénover son appartement ? Étapes, budget (5 000–80 000 €), artisans à contacter, aides disponibles. Guide complet de la peinture à la rénovation totale.',
     h1: 'Guide complet pour la rénovation d\'un appartement',
     category: 'entretien',
@@ -575,7 +575,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'refection-toiture-guide',
-    title: 'Réfection de toiture : guide complet prix et conseils 2025',
+    title: 'Réfection Toiture 2026 : Prix et Conseils',
     metaDescription: 'Guide réfection toiture : matériaux, prix au m², choisir un couvreur, aides disponibles. De la réparation à la rénovation complète.',
     h1: 'Réfection de toiture : guide complet 2025',
     category: 'entretien',
@@ -602,7 +602,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'installation-climatisation-guide',
-    title: 'Installation climatisation : guide prix et conseils 2025',
+    title: 'Climatisation 2026 : Prix et Installation',
     metaDescription: 'Choisir et installer une climatisation réversible en 2025 : prix mono-split et multi-split, marques, consommation et entretien.',
     h1: 'Guide complet pour l\'installation d\'une climatisation en 2025',
     category: 'entretien',
@@ -629,7 +629,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'renovation-cuisine-guide',
-    title: 'Rénovation cuisine : budget, étapes et conseils 2025',
+    title: 'Rénovation Cuisine 2026 : Coûts et Étapes',
     metaDescription: 'Rénover sa cuisine : 3 000 à 25 000 € selon l\'étendue. Guide travaux par poste, ordre d\'intervention des artisans, conseils budget.',
     h1: 'Guide complet pour rénover sa cuisine en 2025',
     category: 'entretien',
@@ -656,7 +656,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'prix-carrelage-pose',
-    title: 'Prix du carrelage et de la pose en 2025 : tarifs au m²',
+    title: 'Prix Carrelage et Pose 2026 : Tarifs m²',
     metaDescription: 'Prix carrelage 2025 : fourniture 5–200 €/m², pose 20–60 €/m². Guide complet par type de surface et conseils pour réduire les coûts.',
     h1: 'Prix du carrelage et de la pose en 2025',
     category: 'economiser',
@@ -683,7 +683,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'tarif-peinture-interieure',
-    title: 'Prix peinture intérieure 2025 : tarifs au m² par type de surface',
+    title: 'Prix Peinture Intérieure 2026 : Tarifs m²',
     metaDescription: 'Tarifs peinture intérieure 2025 : 20–50 €/m² selon la surface et la préparation. Murs, plafonds, boiseries : guide complet des prix.',
     h1: 'Combien coûte la peinture intérieure en 2025 ?',
     category: 'economiser',
@@ -710,7 +710,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'cout-maconnerie-travaux',
-    title: 'Prix maçonnerie 2025 : tarifs par type de travaux',
+    title: 'Prix Maçonnerie 2026 : Tarifs par Travaux',
     metaDescription: 'Tarifs maçonnerie 2025 : démolition, extension, cloisons, enduits. De 50 à 400 €/m² selon les travaux. Artisan qualifié Qualibat.',
     h1: 'Combien coûtent les travaux de maçonnerie en 2025 ?',
     category: 'economiser',
@@ -737,7 +737,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'tarif-menuiserie-fenetres',
-    title: 'Prix fenêtres et menuiserie 2025 : PVC, alu, bois',
+    title: 'Prix Fenêtres 2026 : PVC, Alu, Bois',
     metaDescription: 'Tarifs fenêtres 2025 : PVC 400–800 €, aluminium 700–1 500 €, bois 600–1 800 €. Prix de pose, aides CEE. Devis gratuit.',
     h1: 'Combien coûte le remplacement des fenêtres en 2025 ?',
     category: 'economiser',
@@ -764,7 +764,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'prix-jardin-amenagement',
-    title: 'Prix aménagement jardin 2025 : terrasse, clôture, gazon',
+    title: 'Prix Aménagement Jardin 2026 : Tarifs',
     metaDescription: 'Tarifs aménagement jardin 2025 : terrasse bois 60–150 €/m², clôture 30–120 €/ml, gazon semé 5–20 €/m². Devis paysagiste gratuit.',
     h1: 'Combien coûte l\'aménagement d\'un jardin en 2025 ?',
     category: 'economiser',
@@ -791,7 +791,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'permis-construire-quand',
-    title: 'Permis de construire ou déclaration préalable : quand en avez-vous besoin ?',
+    title: 'Permis de Construire ou Déclaration ?',
     metaDescription: 'Permis de construire obligatoire au-delà de 20 m² (40 m² en zone urbaine). Déclaration préalable pour petits travaux. Seuils et démarches 2025.',
     h1: 'Permis de construire ou déclaration préalable : ce qu\'il faut savoir',
     category: 'choisir',
@@ -819,7 +819,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-deratisation-maison',
-    title: 'Dératisation maison : prix, méthodes et obligations en 2026',
+    title: 'Dératisation : Prix et Méthodes 2026',
     metaDescription: 'Guide complet dératisation : coût moyen (80 à 300 €), méthodes professionnelles, obligations légales et conseils pour éliminer rats et souris durablement.',
     h1: 'Guide complet de la dératisation en 2026',
     category: 'choisir',
@@ -846,7 +846,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-desinsectisation-punaises-cafards',
-    title: 'D\u00e9sinsectisation : punaises de lit, cafards, gu\u00eapes \u2014 prix et solutions 2026',
+    title: 'D\u00e9sinsectisation 2026 : Prix et Solutions',
     metaDescription: 'Guide complet d\u00e9sinsectisation : prix (80 \u00e0 500 \u20ac), traitements punaises de lit, cafards, gu\u00eapes. M\u00e9thodes pro, d\u00e9lais et garanties.',
     h1: 'Guide d\u00e9sinsectisation 2026 : punaises, cafards, gu\u00eapes',
     category: 'choisir',
@@ -873,7 +873,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-geometre-expert-bornage-division',
-    title: 'G\u00e9om\u00e8tre-expert : bornage, division parcellaire et prix en 2026',
+    title: 'G\u00e9om\u00e8tre-Expert 2026 : Bornage et Prix',
     metaDescription: 'Guide g\u00e9om\u00e8tre-expert : prix bornage (600-2000 \u20ac), division parcellaire, permis de construire. Quand faire appel \u00e0 un g\u00e9om\u00e8tre et comment choisir.',
     h1: 'Guide du g\u00e9om\u00e8tre-expert : bornage, division et permis de construire',
     category: 'choisir',
@@ -900,7 +900,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-demenagement-reussir-son-demenagement',
-    title: 'Déménagement : comment bien préparer, choisir son déménageur et maîtriser le budget en 2026',
+    title: 'Déménagement 2026 : Préparer et Budgéter',
     metaDescription: 'Guide complet déménagement 2026 : planning, choix du déménageur, prix au m³, assurance, aides financières et astuces pour un déménagement sans stress.',
     h1: 'Réussir son déménagement : préparation, choix du déménageur et budget en 2026',
     category: 'choisir',
@@ -927,7 +927,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-renovation-electrique-maison',
-    title: 'R\u00e9novation \u00e9lectrique : mise aux normes, prix et \u00e9tapes en 2026',
+    title: 'R\u00e9novation \u00c9lectrique 2026 : Prix',
     metaDescription: 'Guide r\u00e9novation \u00e9lectrique 2026 : diagnostic, mise aux normes NF C 15-100, prix par type de logement, aides financi\u00e8res et choix de l\'\u00e9lectricien.',
     h1: 'R\u00e9novation \u00e9lectrique : guide complet pour la mise aux normes de votre installation',
     category: 'choisir',
@@ -954,7 +954,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-peinture-interieure-preparer-choisir',
-    title: 'Peinture int\u00e9rieure : pr\u00e9parer ses murs, choisir la bonne peinture et trouver un peintre en 2026',
+    title: 'Peinture Int\u00e9rieure 2026 : Conseils',
     metaDescription: 'Guide peinture int\u00e9rieure 2026 : pr\u00e9paration des murs, types de peinture (mate, satin\u00e9e, brillante), prix au m\u00b2 et conseils pour choisir un peintre professionnel.',
     h1: 'Peinture int\u00e9rieure : guide complet pr\u00e9paration, choix des peintures et s\u00e9lection du peintre',
     category: 'choisir',
@@ -981,7 +981,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-alarme-maison-securite',
-    title: 'Alarme maison : choisir, installer et prot\u00e9ger son logement en 2026',
+    title: 'Alarme Maison 2026 : Choix et Installation',
     metaDescription: 'Guide alarme maison 2026 : comparatif filaire vs sans fil, vid\u00e9osurveillance, t\u00e9l\u00e9surveillance, prix d\'installation et r\u00e9glementation.',
     h1: 'Alarme maison : guide complet pour s\u00e9curiser votre logement',
     category: 'choisir',
@@ -1008,7 +1008,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-entretien-chauffage-economies',
-    title: 'Entretien chauffage : obligations, bonnes pratiques et \u00e9conomies d\'\u00e9nergie en 2026',
+    title: 'Entretien Chauffage 2026 : Obligations',
     metaDescription: 'Guide entretien chauffage 2026 : entretien chaudi\u00e8re obligatoire, purge radiateurs, thermostat connect\u00e9, d\u00e9sembouage et astuces pour \u00e9conomiser jusqu\'\u00e0 25 % sur sa facture.',
     h1: 'Entretien du chauffage : guide complet pour r\u00e9duire sa facture et respecter la r\u00e9glementation',
     category: 'entretien',
@@ -1035,7 +1035,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'guide-menuisier-choisir-fenetres-portes',
-    title: 'Menuisier : comment choisir ses fen\u00eatres, portes et boiseries en 2026',
+    title: 'Menuisier 2026 : Fen\u00eatres, Portes et Bois',
     metaDescription: 'Guide menuisier 2026 : comparatif bois, PVC et aluminium pour fen\u00eatres et portes, performances thermiques, prix et aides financi\u00e8res pour le remplacement.',
     h1: 'Choisir un menuisier : guide des mat\u00e9riaux, performances et prix pour vos fen\u00eatres et portes',
     category: 'choisir',
@@ -1063,7 +1063,7 @@ export const guides: Guide[] = [
   // --- Iteration 1: New guides (reglementation, comparaison, saisonnier, aides) ---
 {
     slug: 'maprimerenov-guide-complet-2026',
-    title: 'MaPrimeR\u00E9nov\u2019 2026 : guide complet des aides \u00E0 la r\u00E9novation',
+    title: 'MaPrimeR\u00E9nov\u2019 2026 : Aides \u00E0 la R\u00E9novation',
     metaDescription: 'MaPrimeR\u00E9nov\u2019 2026 : montants, plafonds de revenus, travaux \u00E9ligibles, d\u00E9marches. Jusqu\u2019\u00E0 90 % de prise en charge pour les m\u00E9nages modestes.',
     h1: 'MaPrimeR\u00E9nov\u2019 2026 : le guide complet pour financer vos travaux',
     category: 'reglementation' as const,
@@ -1091,7 +1091,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'dpe-diagnostic-performance-energetique',
-    title: 'DPE 2026 : tout savoir sur le diagnostic de performance \u00E9nerg\u00E9tique',
+    title: 'DPE 2026 : Diagnostic de Performance',
     metaDescription: 'DPE obligatoire en 2026 : \u00E9chelle A \u00E0 G, co\u00FBt, calendrier d\u2019interdiction de location des passoires thermiques. Guide complet.',
     h1: 'DPE : tout savoir sur le diagnostic de performance \u00E9nerg\u00E9tique',
     category: 'reglementation' as const,
@@ -1118,7 +1118,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'normes-electriques-nfc-15-100',
-    title: 'Normes \u00E9lectriques NF C 15-100 : guide simplifi\u00E9 2026',
+    title: 'Normes NF C 15-100 : Guide Simplifi\u00E9 2026',
     metaDescription: 'Norme NF C 15-100 en 2026 : exigences par pi\u00E8ce, nombre de prises, protection diff\u00E9rentielle, co\u00FBt de mise aux normes. Guide complet.',
     h1: 'Normes \u00E9lectriques NF C 15-100 : guide simplifi\u00E9',
     category: 'reglementation' as const,
@@ -1146,7 +1146,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'garantie-decennale-assurance-artisan',
-    title: 'Garantie d\u00E9cennale 2026 : ce que tout particulier doit savoir',
+    title: 'Garantie D\u00E9cennale 2026 : Guide Pratique',
     metaDescription: 'Garantie d\u00E9cennale : dur\u00E9e, travaux couverts, v\u00E9rification d\u2019attestation, recours en cas de sinistre. Guide complet pour particuliers.',
     h1: 'Garantie d\u00E9cennale : ce que tout particulier doit savoir',
     category: 'reglementation' as const,
@@ -1173,7 +1173,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'rge-certification-artisan-reconnu-garant-environnement',
-    title: 'RGE 2026 : comprendre la certification Reconnu Garant de l\u2019Environnement',
+    title: 'Certification RGE 2026 : Le Guide',
     metaDescription: 'Certification RGE : labels, v\u00E9rification sur l\u2019annuaire FAIRE, lien avec MaPrimeR\u00E9nov\u2019, dur\u00E9e de validit\u00E9. Guide complet 2026.',
     h1: 'RGE : comprendre la certification Reconnu Garant de l\u2019Environnement',
     category: 'reglementation' as const,
@@ -1200,7 +1200,7 @@ export const guides: Guide[] = [
   },
 {
     slug: 'pompe-a-chaleur-vs-chaudiere-gaz',
-    title: 'Pompe \u00E0 chaleur vs chaudi\u00E8re gaz : comparatif complet 2026',
+    title: 'PAC vs Chaudi\u00E8re Gaz : Comparatif 2026',
     metaDescription: 'PAC vs chaudi\u00E8re gaz 2026 : co\u00FBts, aides, COP, confort. Comparatif d\u00E9taill\u00E9 pour choisir le meilleur syst\u00E8me de chauffage selon votre logement.',
     h1: 'Pompe \u00E0 chaleur vs chaudi\u00E8re gaz : quel chauffage choisir en 2026 ?',
     category: 'choisir' as const,
@@ -1229,7 +1229,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'isolation-interieure-vs-exterieure',
-    title: 'Isolation par l\u2019int\u00E9rieur vs par l\u2019ext\u00E9rieur : avantages, prix, aides 2026',
+    title: 'Isolation Int\u00E9rieure vs Ext\u00E9rieure 2026',
     metaDescription: 'ITI vs ITE 2026 : prix au m\u00B2, performance thermique, aides MaPrimeR\u00E9nov\u2019. Comparatif complet pour choisir la meilleure isolation de votre maison.',
     h1: 'Isolation int\u00E9rieure (ITI) vs ext\u00E9rieure (ITE) : comment choisir en 2026 ?',
     category: 'choisir' as const,
@@ -1257,7 +1257,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'fenetre-pvc-vs-aluminium-vs-bois',
-    title: 'Fen\u00EAtre PVC vs aluminium vs bois : guide de choix 2026',
+    title: 'Fen\u00EAtre PVC vs Alu vs Bois : Choix 2026',
     metaDescription: 'PVC, aluminium ou bois : quelle fen\u00EAtre choisir en 2026 ? Comparatif prix, isolation Uw, entretien et durabilit\u00E9. Guide complet avec tableau r\u00E9capitulatif.',
     h1: 'Fen\u00EAtre PVC vs aluminium vs bois : comparatif et guide de choix 2026',
     category: 'choisir' as const,
@@ -1285,7 +1285,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'carrelage-vs-parquet-vs-vinyle',
-    title: 'Sol carrelage vs parquet vs vinyle : quel rev\u00EAtement choisir en 2026 ?',
+    title: 'Sol : Carrelage vs Parquet vs Vinyle 2026',
     metaDescription: 'Carrelage, parquet ou vinyle : comparatif prix au m\u00B2, durabilit\u00E9, entretien, chauffage au sol. Guide de choix complet pour chaque pi\u00E8ce de la maison.',
     h1: 'Carrelage vs parquet vs vinyle : quel rev\u00EAtement de sol choisir ?',
     category: 'choisir' as const,
@@ -1313,7 +1313,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'renovation-partielle-vs-globale',
-    title: 'R\u00E9novation partielle vs globale : comment choisir la bonne approche en 2026',
+    title: 'R\u00E9novation Partielle vs Globale 2026',
     metaDescription: 'R\u00E9novation partielle ou globale 2026 : co\u00FBts, gains DPE, aides MaPrimeR\u00E9nov\u2019 R\u00E9novation d\u2019Ampleur. Guide complet pour choisir selon votre logement.',
     h1: 'R\u00E9novation partielle vs globale : quelle approche pour votre logement en 2026 ?',
     category: 'choisir' as const,
@@ -1343,7 +1343,7 @@ export const guides: Guide[] = [
 // === GUIDE 1: Pr\u00E9parer sa maison pour l\u2019hiver ===
   {
     slug: 'preparer-maison-hiver-checklist',
-    title: 'Pr\u00E9parer sa maison pour l\u2019hiver : checklist compl\u00E8te 2026',
+    title: 'Pr\u00E9parer sa Maison pour l\u2019Hiver 2026',
     metaDescription: 'Checklist compl\u00E8te pour pr\u00E9parer votre maison avant l\u2019hiver : chauffage, isolation, plomberie, toiture, ramonage. \u00C9vitez les pannes et r\u00E9duisez vos factures.',
     h1: 'Pr\u00E9parer sa maison pour l\u2019hiver : la checklist compl\u00E8te',
     category: 'entretien' as const,
@@ -1397,7 +1397,7 @@ export const guides: Guide[] = [
   // === GUIDE 2: Entretien annuel chaudi\u00E8re ===
   {
     slug: 'entretien-annuel-chaudiere-obligations',
-    title: 'Entretien annuel chaudi\u00E8re : obligations, prix et conseils 2026',
+    title: 'Entretien Chaudi\u00E8re 2026 : Obligations',
     metaDescription: 'Entretien chaudi\u00E8re obligatoire : d\u00E9cret 2009, prix 80\u2013200 \u20AC, attestation, impact sur l\u2019assurance. Conseils pour choisir un chauffagiste.',
     h1: 'Entretien annuel de la chaudi\u00E8re : obligations, prix et conseils 2026',
     category: 'entretien' as const,
@@ -1448,7 +1448,7 @@ export const guides: Guide[] = [
   // === GUIDE 3: \u00C9co-PTZ 2026 ===
   {
     slug: 'eco-ptz-pret-taux-zero-travaux-2026',
-    title: '\u00C9co-PTZ 2026 : comment obtenir un pr\u00EAt \u00E0 taux z\u00E9ro pour vos travaux',
+    title: '\u00C9co-PTZ 2026 : Pr\u00EAt \u00E0 Taux Z\u00E9ro Travaux',
     metaDescription: '\u00C9co-PTZ 2026 : jusqu\u2019\u00E0 50 000 \u20AC sans int\u00E9r\u00EAts pour vos travaux. Conditions, montants, d\u00E9marches, cumul MaPrimeR\u00E9nov\u2019. Guide complet.',
     h1: '\u00C9co-PTZ 2026 : obtenir un pr\u00EAt \u00E0 taux z\u00E9ro pour vos travaux de r\u00E9novation',
     category: 'economiser' as const,
@@ -1498,7 +1498,7 @@ export const guides: Guide[] = [
   // === GUIDE 4: Primes CEE ===
   {
     slug: 'primes-cee-certificats-economies-energie',
-    title: 'Primes CEE : guide complet des certificats d\u2019\u00E9conomies d\u2019\u00E9nergie 2026',
+    title: 'Primes CEE 2026 : Guide des Certificats',
     metaDescription: 'Primes CEE 2026 : montants par travaux, d\u00E9marches, pi\u00E8ges \u00E0 \u00E9viter, cumul MaPrimeR\u00E9nov\u2019. Jusqu\u2019\u00E0 4 000 \u20AC pour une PAC air/eau.',
     h1: 'Primes CEE : guide complet des certificats d\u2019\u00E9conomies d\u2019\u00E9nergie',
     category: 'economiser' as const,
@@ -1548,7 +1548,7 @@ export const guides: Guide[] = [
   // === GUIDE 5: Travaux de printemps et d\u2019\u00E9t\u00E9 ===
   {
     slug: 'travaux-printemps-ete-planifier',
-    title: 'Travaux de printemps et d\u2019\u00E9t\u00E9 : quoi planifier et quand commencer 2026',
+    title: 'Travaux Printemps 2026 : Planifier et Agir',
     metaDescription: 'Quels travaux faire au printemps et en \u00E9t\u00E9 ? Fa\u00E7ade, toiture, terrasse, PAC, piscine. Planning mois par mois et conseils pour r\u00E9server votre artisan.',
     h1: 'Travaux de printemps et d\u2019\u00E9t\u00E9 : quoi planifier et quand commencer',
     category: 'entretien' as const,

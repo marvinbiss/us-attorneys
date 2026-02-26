@@ -11,11 +11,11 @@ import { getProviderCount, formatProviderCount } from '@/lib/data/stats'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisans par département — 101 départements',
+  title: 'Artisans par Département — 101 Dép.',
   description: 'Annuaire d\'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous. Devis gratuits, sans engagement.',
   alternates: { canonical: `${SITE_URL}/departements` },
   openGraph: {
-    title: 'Artisans par département — 101 départements',
+    title: 'Artisans par Département — 101 Dép.',
     description: 'Annuaire d\'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous.',
     url: `${SITE_URL}/departements`,
     type: 'website',

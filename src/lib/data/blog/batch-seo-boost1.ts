@@ -2,7 +2,7 @@ import type { BlogArticle } from './articles'
 
 export const seoBoost1Articles: Record<string, BlogArticle> = {
   'maprimerenov-2026-guide-complet-aides-renovation': {
-    title: "MaPrimeRénov' 2026 : guide complet des aides à la rénovation énergétique",
+    title: "MaPrimeRénov' 2026 : Aides Rénovation",
     excerpt: "Montants, conditions d\'éligibilité, démarches pas à pas : tout ce qu\'il faut savoir sur MaPrimeRénov\' en 2026. Profils bleu, jaune, violet, rose, Rénovation d\'Ampleur — maximisez vos aides.",
     image: '/images/blog/maprimerenov-2026-guide-complet-aides-renovation.webp',
     author: 'ServicesArtisans',
@@ -79,7 +79,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   },
 
   'comment-choisir-artisan-confiance-guide-2026': {
-    title: "Comment choisir un artisan de confiance : le guide ultime 2026",
+    title: "Choisir un Artisan de Confiance 2026",
     excerpt: "Les 10 critères essentiels pour ne jamais se tromper d\'artisan : vérification du SIRET, assurance décennale, devis, red flags et recours en cas de litige. Le guide complet pour particuliers.",
     image: '/images/blog/comment-choisir-artisan-confiance-guide-2026.webp',
     author: 'ServicesArtisans',
@@ -156,7 +156,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   },
 
   'prix-renovation-maison-2026-budget-complet': {
-    title: "Prix rénovation maison en 2026 : budget complet par type de travaux",
+    title: "Prix Rénovation Maison 2026 : Budget",
     excerpt: "Combien coûte une rénovation maison en 2026 ? Du rafraîchissement à la rénovation lourde : tous les prix au m², par pièce et par corps de métier, avec les aides déductibles.",
     image: '/images/blog/prix-renovation-maison-2026-budget-complet.webp',
     author: 'ServicesArtisans',
@@ -233,7 +233,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   },
 
   'pompe-a-chaleur-guide-complet-2026': {
-    title: "Pompe à chaleur en 2026 : guide complet (types, prix, aides, installation)",
+    title: "Pompe à Chaleur 2026 : Prix et Aides",
     excerpt: "Tout savoir sur les pompes à chaleur en 2026 : différences air-air, air-eau, géothermique ; prix d\'installation ; aides MaPrimeRénov\' + CEE ; COP, dimensionnement et entretien.",
     image: '/images/blog/pompe-a-chaleur-guide-complet-2026.webp',
     author: 'ServicesArtisans',
@@ -306,7 +306,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   },
 
   'isolation-maison-guide-complet-materiaux-prix-aides': {
-    title: "Isolation maison : guide complet des matériaux, prix et aides 2026",
+    title: "Isolation Maison 2026 : Prix et Aides",
     excerpt: "Isolation des combles, murs, plancher bas, fenêtres : comparatif complet des matériaux isolants, prix au m² et aides MaPrimeRénov\' + CEE disponibles en 2026.",
     image: '/images/blog/isolation-maison-guide-complet-materiaux-prix-aides.webp',
     author: 'ServicesArtisans',

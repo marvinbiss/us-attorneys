@@ -14,7 +14,7 @@ export const revalidate = 86400 // 24h
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export const metadata: Metadata = {
-  title: 'Avis artisans — Trouvez un professionnel de confiance',
+  title: 'Avis Artisans — Choisir un Pro Fiable',
   description:
     'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, électricien, serrurier… Comparez les profils et les avis vérifiés.',
   alternates: {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Avis artisans — Trouvez un professionnel de confiance',
+    title: 'Avis Artisans — Choisir un Pro Fiable',
     description:
       'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, électricien, serrurier… Comparez les profils et les avis vérifiés.',
     url: `${SITE_URL}/avis`,
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Avis artisans — Trouvez un professionnel de confiance',
+    title: 'Avis Artisans — Choisir un Pro Fiable',
     description:
       'Consultez les avis et recommandations pour choisir le bon artisan. Comparez les profils et les avis vérifiés.',
     images: [`${SITE_URL}/opengraph-image`],

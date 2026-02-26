@@ -12,13 +12,13 @@ import { resolveProviderCities } from '@/lib/insee-resolver'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Annuaire des artisans en France — Professionnels référencés SIREN',
+  title: 'Annuaire Artisans France — SIREN Vérifiés',
   description:
     'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
   alternates: { canonical: `${SITE_URL}/artisans` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Annuaire des artisans en France — Professionnels référencés',
+    title: 'Annuaire Artisans France — SIREN Vérifiés',
     description: 'Trouvez un artisan qualifié parmi les professionnels référencés en France. Données SIREN officielles.',
     url: `${SITE_URL}/artisans`,
     siteName: 'ServicesArtisans',

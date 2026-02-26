@@ -39,6 +39,11 @@ export const dynamicParams = true
 // Metadata
 // ---------------------------------------------------------------------------
 
+function truncateTitle(title: string, maxLen = 42): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -58,13 +63,13 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`devis-q-title-${service}-${location}-${quartier}`))
   const titleTemplates = [
-    `Devis ${tradeLower} à ${quartierName}, ${ville.name} — Gratuit`,
-    `Devis gratuit ${tradeLower} — ${quartierName}, ${ville.name}`,
-    `${trade.name} à ${quartierName} (${ville.name}) : devis gratuit`,
-    `Devis ${tradeLower} ${quartierName} ${ville.name} 2026`,
-    `${quartierName}, ${ville.name} : devis ${tradeLower} gratuit`,
+    `Devis ${tradeLower} ${quartierName} ${ville.name}`,
+    `Devis ${tradeLower} ${quartierName} gratuit`,
+    `Devis gratuit ${tradeLower} ${quartierName}`,
+    `Devis ${tradeLower} ${quartierName} 2026`,
+    `${quartierName} : devis ${tradeLower} gratuit`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const description = `Devis ${tradeLower} à ${quartierName}, ${ville.name} : ${minPrice}–${maxPrice} ${unit}. Comparez jusqu’à 3 artisans. Gratuit, sans engagement.`
 
