@@ -199,7 +199,15 @@ export async function generateMetadata({
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const description = `Urgence ${tradeLower} à ${villeData.name} : intervention rapide, y compris le week-end. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`
+  const descHash = Math.abs(hashCode(`urgence-ville-desc-${service}-${villeSlug}`))
+  const descTemplates = [
+    `Urgence ${tradeLower} à ${villeData.name} : intervention rapide, y compris le week-end. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`,
+    `Dépannage ${tradeLower} urgent à ${villeData.name} : disponible soir et week-end. ${trade.averageResponseTime}. Artisans vérifiés.`,
+    `${trade.name} d'urgence à ${villeData.name} : intervention rapide 7j/7. Professionnels référencés à proximité. Devis gratuit.`,
+    `Besoin d'un ${tradeLower} en urgence à ${villeData.name}\u00A0? Intervention rapide, soir et week-end. ${trade.averageResponseTime}.`,
+    `Urgence ${tradeLower} ${villeData.name} : artisans disponibles pour intervention immédiate. ${trade.averageResponseTime}. Devis gratuit.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`

@@ -174,7 +174,16 @@ export async function generateMetadata({
   ]
   const title = titleTemplates[titleHash % titleTemplates.length]
 
-  const description = `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`
+  const descHash = Math.abs(hashCode(`avis-loc-desc-${service}-${ville}`))
+  const dept = villeData.departement
+  const descTemplates = [
+    `Avis ${tradeLower} à ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`,
+    `Choisir un ${tradeLower} à ${villeData.name} (${dept}) : avis clients, notes et recommandations. Artisans vérifiés, devis gratuit.`,
+    `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}). Guide 2026.`,
+    `Les meilleurs ${tradeLower}s à ${villeData.name} selon les avis clients. Prix local : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.`,
+    `Avis et recommandations ${tradeLower} à ${villeData.name} (${dept}). Trouvez un artisan de confiance parmi les professionnels vérifiés.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`

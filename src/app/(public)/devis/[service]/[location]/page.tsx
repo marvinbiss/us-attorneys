@@ -90,16 +90,27 @@ export async function generateMetadata({
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
+  const dept = villeData.departement
+
   const titleHash = Math.abs(hashCode(`devis-loc-title-${service}-${location}`))
   const titleTemplates = [
     `Devis ${tradeLower} à ${villeData.name} — Gratuit`,
     `Devis gratuit ${tradeLower} ${villeData.name} 2026`,
     `${trade.name} à ${villeData.name} : devis gratuit`,
     `Devis ${tradeLower} ${villeData.name} — Comparez`,
+    `Devis ${tradeLower} ${villeData.name} (${dept}) : gratuit et sans engagement`,
   ]
   const title = titleTemplates[titleHash % titleTemplates.length]
 
-  const description = `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.`
+  const descHash = Math.abs(hashCode(`devis-loc-desc-${service}-${location}`))
+  const descTemplates = [
+    `Devis ${tradeLower} à ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Comparez jusqu\u2019à 3 artisans référencés. 100\u00A0% gratuit, sans engagement.`,
+    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Réponse sous 24h.`,
+    `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
+    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}) et choisissez le meilleur artisan. Gratuit.`,
+    `Besoin d\u2019un ${tradeLower} à ${villeData.name}\u00A0? Recevez jusqu\u2019à 3 devis gratuits d\u2019artisans vérifiés dans le ${dept}.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}`
