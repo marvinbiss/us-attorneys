@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Mail, Send, CheckCircle, Clock, MessageSquare, ArrowRight, Loader2, AlertCircle } from 'lucide-react'
+import { Mail, Send, CheckCircle, Clock, MessageSquare, ArrowRight, Loader2, AlertCircle, Phone } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
@@ -126,6 +126,18 @@ export default function ContactPageClient() {
                   </div>
                 </div>
 
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Téléphone</h3>
+                    <a href="tel:+33651858930" className="text-blue-600 hover:text-blue-700 font-medium">
+                      06 51 85 89 30
+                    </a>
+                  </div>
+                </div>
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">

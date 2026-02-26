@@ -30,7 +30,7 @@ export const companyIdentity = {
   rcs: process.env.COMPANY_RCS || null,
   tvaIntracom: process.env.COMPANY_TVA || null,
   address: process.env.COMPANY_ADDRESS || null,
-  phone: process.env.COMPANY_PHONE || null,
+  phone: process.env.COMPANY_PHONE || '06 51 85 89 30',
   directeurPublication: process.env.COMPANY_DIRECTEUR_PUBLICATION || null,
   foundingDate: process.env.COMPANY_FOUNDING_DATE || null,
 

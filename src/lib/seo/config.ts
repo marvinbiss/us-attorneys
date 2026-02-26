@@ -1,7 +1,7 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr').trim().replace(/\/+$/, '')
 export const SITE_NAME = 'ServicesArtisans'
-export const PHONE_NUMBER = '01 76 34 00 00'
-export const PHONE_TEL = 'tel:+33176340000'
+export const PHONE_NUMBER = '06 51 85 89 30'
+export const PHONE_TEL = 'tel:+33651858930'
 
 // SEO configuration object
 export const defaultSEOConfig = {
