@@ -380,7 +380,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'installer-climatisation-maison-guide': {
-    title: 'Climatisation : Guide d'Installation',
+    title: 'Climatisation : Guide d\'Installation',
     excerpt: 'Split, multisplit, gainable ou réversible : comparez les systèmes de climatisation, leurs coûts et les aides disponibles.',
     content: [
       "Avec des étés de plus en plus chauds, la climatisation n\'est plus un luxe mais une nécessité dans de nombreuses régions françaises. Le marché propose des solutions adaptées à tous les budgets et à toutes les configurations de logement. Trouvez un [climaticien certifié](/services/climaticien) pour un dimensionnement adapté.",

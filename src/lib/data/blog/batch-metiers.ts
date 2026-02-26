@@ -497,7 +497,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "metier-electricien-formations-certifications": {
-    title: "Le métier d'électricien : formations et certifications",
+    title: "Métier Électricien : Formations",
     excerpt: "Du CAP au BTS, de Qualifelec au label RGE : parcours de formation, certifications et perspectives de carrière pour les électriciens.",
     content: [
       "L'électricien est un artisan incontournable du bâtiment, dont le rôle ne cesse de s'élargir avec la transition énergétique, la domotique et l'électromobilité. Bornes de recharge, panneaux photovoltaïques, installation d'antennes par un [antenniste](/services/antenniste), systèmes de gestion intelligente de l'énergie : le métier se transforme en profondeur. Tour d'horizon complet. Si vous cherchez un professionnel, consultez notre annuaire d'[électriciens certifiés](/services/electricien).",
@@ -665,7 +665,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "metier-chauffagiste-pompe-chaleur": {
-    title: "Le métier de chauffagiste à l'ère de la pompe à chaleur",
+    title: "Métier Chauffagiste : Ère de la PAC",
     excerpt: "Formations, certifications QualiPAC et RGE, nouvelles compétences : comment le métier de chauffagiste se transforme avec la transition énergétique.",
     content: [
       "Le chauffagiste vit une révolution. L'interdiction des chaudières fioul et gaz dans le neuf, la montée en puissance des pompes à chaleur et l'essor du solaire thermique transforment radicalement ce métier. Le chauffagiste d'aujourd'hui est un technicien du génie climatique, maîtrisant aussi bien les systèmes traditionnels que les technologies de demain. Trouvez un [chauffagiste qualifié](/services/chauffagiste) ou un [spécialiste pompe à chaleur](/services/pompe-a-chaleur) près de chez vous.",
