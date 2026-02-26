@@ -65,7 +65,14 @@ export default function GeographicMap({
   const [mapReady, setMapReady] = useState(false)
   const [_L, setL] = useState<typeof import('leaflet') | null>(null)
   const mapRef = useRef<import('leaflet').Map | null>(null)
+  const [mapInstance, setMapInstance] = useState<import('leaflet').Map | null>(null)
   const [mapMoved, setMapMoved] = useState(false)
+
+  // Callback ref to detect when MapContainer actually mounts
+  const mapCallbackRef = useCallback((node: import('leaflet').Map | null) => {
+    mapRef.current = node
+    setMapInstance(node)
+  }, [])
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const clusterGroupRef = useRef<any>(null)
 
@@ -96,7 +103,7 @@ export default function GeographicMap({
     }
     map.on('moveend', handler)
     return () => { map.off('moveend', handler) }
-  }, [mapReady])
+  }, [mapReady, mapInstance])
 
   // Pan to highlighted provider when it changes
   useEffect(() => {
@@ -279,7 +286,7 @@ export default function GeographicMap({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_L, providers, highlightedProviderId, onMarkerHover])
+  }, [_L, providers, highlightedProviderId, onMarkerHover, mapInstance])
 
   // Handle "Rechercher dans cette zone" click
   const handleSearchArea = useCallback(() => {
@@ -306,7 +313,7 @@ export default function GeographicMap({
   return (
     <div className={`relative rounded-xl overflow-hidden ${className}`} style={{ height }}>
       <MapContainer
-        ref={mapRef}
+        ref={mapCallbackRef}
         center={[centerLat, centerLng]}
         zoom={zoom}
         style={{ height: '100%', width: '100%' }}

@@ -193,13 +193,25 @@ export async function getLocationBySlug(slug: string) {
     const data = await retryWithBackoff(
       async () => {
         const { data, error } = await supabase
-          .from('locations')
-          .select('id, name, slug, postal_code, population, department, region, is_active')
+          .from('communes')
+          .select('code_insee, name, slug, code_postal, population, departement_code, departement_name, region_name, latitude, longitude')
           .eq('slug', slug)
+          .limit(1)
           .single()
 
         if (error || !data) throw error || new Error('Location not found')
-        return data
+        return {
+          id: data.code_insee,
+          name: data.name,
+          slug: data.slug,
+          postal_code: data.code_postal,
+          population: data.population,
+          department_code: data.departement_code,
+          department_name: data.departement_name,
+          region_name: data.region_name,
+          latitude: data.latitude,
+          longitude: data.longitude,
+        }
       },
       `getLocationBySlug(${slug})`,
     )
