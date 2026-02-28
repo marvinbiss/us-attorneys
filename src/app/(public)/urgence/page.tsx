@@ -401,7 +401,7 @@ export default async function UrgencePage() {
                   {urgencyServices.map((service) => (
                     <Link
                       key={`${service.slug}-${ville.slug}`}
-                      href={`/services/${service.slug}/${ville.slug}`}
+                      href={`/urgence/${service.slug}/${ville.slug}`}
                       className="text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors border border-gray-100"
                     >
                       {service.name.split(' ')[0]} à {ville.name}

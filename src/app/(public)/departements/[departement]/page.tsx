@@ -485,7 +485,7 @@ export default async function DepartementPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
-                {services.slice(0, 8).map((s) => (
+                {orderedServices.slice(0, 8).map((s) => (
                   <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
@@ -539,6 +539,18 @@ export default async function DepartementPage({ params }: PageProps) {
                   <ChevronRight className="w-3 h-3" />Comment ça marche
                 </Link>
               </div>
+            </div>
+          </div>
+
+          {/* Dept × Service cross-links */}
+          <div className="mt-10">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services dans le {dept.name}</h3>
+            <div className="flex flex-wrap gap-2">
+              {orderedServices.slice(0, 10).map((s) => (
+                <Link key={`dept-svc-${s.slug}`} href={`/departements/${dept.slug}/${s.slug}`} className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 hover:text-indigo-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-indigo-100 hover:border-indigo-200">
+                  {s.name} dans le {dept.code}
+                </Link>
+              ))}
             </div>
           </div>
 

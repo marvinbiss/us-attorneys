@@ -133,6 +133,14 @@ export default function ArtisanInternalLinks({
                   Artisans dans {departmentName || dept.name} ({dept.code})
                 </Link>
               )}
+              {dept && (
+                <Link
+                  href={`/departements/${dept.slug}/${serviceSlug}`}
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                >
+                  {serviceName} dans le {dept.code}
+                </Link>
+              )}
               <Link
                 href={`/villes/${locationSlug}`}
                 className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"

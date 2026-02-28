@@ -362,6 +362,7 @@ export default function ProblemesPage() {
               <div className="space-y-2">
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Comment ça marche</Link>
                 <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Guide des tarifs</Link>
+                <Link href="/outils/diagnostic" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Diagnostic en ligne</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">FAQ</Link>
                 <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Processus de vérification</Link>
               </div>

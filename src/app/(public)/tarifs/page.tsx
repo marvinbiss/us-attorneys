@@ -450,6 +450,9 @@ export default async function TarifsPage() {
                   <Link href="/avis" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Avis clients
                   </Link>
+                  <Link href="/outils/calculateur-prix" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" /> Calculateur de prix
+                  </Link>
                 </div>
               </div>
             </div>
