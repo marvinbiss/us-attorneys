@@ -81,21 +81,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`hub-title-${serviceSlug}`))
   const titleTemplates = [
-    `${serviceName} en France — Annuaire & Devis Gratuit 2026`,
-    `Trouver un ${svcLower} : annuaire et devis gratuit 2026`,
-    `${serviceName} — Comparez les artisans en France`,
-    `Annuaire ${svcLower} France : devis gratuit 2026`,
+    `${serviceName} en France — Devis Gratuit 2026`,
+    `${serviceName} : tarifs et devis gratuit 2026`,
+    `${serviceName} France — Artisans vérifiés`,
+    `${serviceName} — Comparez les artisans 2026`,
     `${serviceName} en France — Artisans qualifiés`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${svcLower} parmi nos artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. ${departements.length} départements couverts.`,
-    `Comparez les ${svcLower}s en France : tarifs, avis, certifications. Devis gratuit et sans engagement. ${departements.length} départements.`,
-    `Annuaire de ${svcLower}s vérifiés par SIREN en France. Prix, FAQ et conseils d'experts. Devis gratuit.`,
-    `Besoin d'un ${svcLower} ? Consultez notre annuaire national : tarifs indicatifs, artisans référencés, devis gratuit en ligne.`,
-    `Guide complet du ${svcLower} en France : prix 2026, conseils, certifications requises. Comparez et demandez un devis.`,
+    `Trouvez un ${svcLower} qualifié parmi nos artisans vérifiés SIREN. Tarifs, avis et devis gratuit dans ${departements.length} départements.`,
+    `Comparez les ${svcLower}s en France : tarifs, avis et certifications. Devis gratuit, sans engagement.`,
+    `Annuaire de ${svcLower}s vérifiés par SIREN en France. Prix, conseils d'experts et devis gratuit.`,
+    `Besoin d'un ${svcLower} ? Annuaire national : tarifs indicatifs, artisans référencés, devis gratuit en ligne.`,
+    `${serviceName} en France 2026 : prix, conseils, certifications. Comparez les artisans et demandez un devis gratuit.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 

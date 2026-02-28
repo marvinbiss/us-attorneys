@@ -50,10 +50,10 @@ export async function generateMetadata({
   const titleHash = Math.abs(hashCode(`avis-title-${service}`))
   const titleTemplates = [
     `Avis ${tradeLower} — Comment bien choisir`,
-    `Choisir un bon ${tradeLower} — Avis et conseils`,
-    `Avis et recommandations ${tradeLower}`,
-    `${trade.name} : avis, tarifs et conseils pour bien choisir`,
-    `Trouver un ${tradeLower} de confiance — Avis vérifiés`,
+    `Avis ${tradeLower} : conseils et tarifs`,
+    `Avis ${tradeLower} vérifiés — Guide`,
+    `${trade.name} : avis et recommandations`,
+    `Avis ${tradeLower} de confiance — Comparez`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

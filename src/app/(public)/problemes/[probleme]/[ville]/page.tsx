@@ -92,10 +92,10 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`probleme-ville-title-${probleme}-${ville}`))
   const titleTemplates = [
-    `${problem.name} à ${villeData.name} — Solutions`,
-    `${problem.name} ${villeData.name} : diagnostic et coûts`,
-    `Résoudre ${problem.name.toLowerCase()} à ${villeData.name}`,
-    `${problem.name} à ${villeData.name} — Artisans`,
+    `${problem.name} ${villeData.name} — Solutions`,
+    `${problem.name} à ${villeData.name} : coûts`,
+    `${problem.name} ${villeData.name} — Artisans`,
+    `${problem.name} ${villeData.name} — Diagnostic`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

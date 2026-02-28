@@ -51,16 +51,13 @@ export async function generateMetadata({ params }: { params: Promise<{ probleme:
   const problem = getProblemBySlug(probleme)
   if (!problem) return {}
 
-  const trade = tradeContent[problem.primaryService]
-  const tradeName = trade?.name ?? problem.primaryService
-
   const titleHash = Math.abs(hashCode(`probleme-title-${probleme}`))
   const titleTemplates = [
     `${problem.name} — Diagnostic et solutions`,
-    `${problem.name} : que faire ? Conseils et coûts`,
-    `Résoudre un problème de ${problem.name.toLowerCase()}`,
-    `${problem.name} — Guide complet ${tradeName.toLowerCase()}`,
-    `${problem.name} : symptômes, coûts et solutions`,
+    `${problem.name} : que faire ? Coûts 2026`,
+    `${problem.name} — Guide et tarifs`,
+    `${problem.name} : solutions et artisans`,
+    `${problem.name} — Coûts et conseils`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

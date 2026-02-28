@@ -38,11 +38,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
   const titleTemplates = [
-    `Artisans en ${dept.name} (${dept.code})`,
-    `Trouver un artisan dans le ${dept.code}`,
-    `${dept.name} : artisans qualifiés par ville`,
-    `Artisans du ${dept.name} — Devis gratuit`,
-    `${dept.name} (${dept.code}), ${dept.region}`,
+    `Artisans ${dept.name} (${dept.code}) — Devis`,
+    `Artisan ${dept.name} — Devis Gratuit`,
+    `${dept.name} : artisans qualifiés — Devis`,
+    `Artisans ${dept.name} — Comparez les pros`,
+    `${dept.name} (${dept.code}) — Annuaire artisans`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

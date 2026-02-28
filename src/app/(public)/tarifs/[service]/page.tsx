@@ -44,11 +44,11 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const titleHash = Math.abs(hashCode(`tarif-title-${service}`))
   const titleTemplates = [
-    `Tarifs ${tradeLower} 2026 : prix et devis`,
-    `Prix ${tradeLower} 2026 — Guide complet`,
-    `Combien coûte un ${tradeLower} en 2026 ?`,
-    `Tarifs ${tradeLower} : prix horaire et devis`,
-    `Guide des prix ${tradeLower} 2026`,
+    `Prix ${tradeLower} 2026 — Tarifs détaillés`,
+    `Prix ${tradeLower} 2026 : guide complet`,
+    `Tarif ${tradeLower} 2026 : grille des prix`,
+    `Prix ${tradeLower} : combien ça coûte ?`,
+    `Tarifs ${tradeLower} 2026 — Barème et devis`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

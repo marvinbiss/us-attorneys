@@ -114,18 +114,19 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const trade = tradeContent[service]
   if (!trade) return {}
 
+  const tradeLower = trade.name.toLowerCase()
+
   const titleHash = Math.abs(hashCode(`urgence-title-${service}`))
   const titleTemplates = [
-    `${trade.name} urgence soir & week-end — Trouvez rapidement un professionnel`,
-    `Urgence ${trade.name.toLowerCase()} : intervention rapide y compris le week-end`,
-    `${trade.name} d'urgence — Dépannage soir & week-end`,
-    `Dépannage ${trade.name.toLowerCase()} urgent partout en France`,
-    `${trade.name} urgence — ${trade.averageResponseTime}`,
+    `${trade.name} urgence — Intervention rapide`,
+    `${trade.name} d'urgence — Soir & week-end`,
+    `Urgence ${tradeLower} — Dépannage rapide`,
+    `${trade.name} urgence — Devis gratuit`,
+    `Dépannage ${tradeLower} urgent — 24h/24`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`urgence-desc-${service}`))
-  const tradeLower = trade.name.toLowerCase()
   const descTemplates = [
     `Besoin d'un ${tradeLower} en urgence ? Disponible selon les artisans de votre secteur partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
     `${trade.name} urgence : dépannage rapide jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,

@@ -191,11 +191,11 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`urgence-ville-title-${service}-${villeSlug}`))
   const titleTemplates = [
-    `Urgence ${tradeLower} à ${villeData.name} — soir & week-end`,
-    `Dépannage ${tradeLower} urgent à ${villeData.name}`,
-    `${trade.name} urgence ${villeData.name} — y compris le week-end`,
-    `${trade.name} d'urgence à ${villeData.name} soir & week-end`,
-    `Urgence ${tradeLower} ${villeData.name} : intervention rapide`,
+    `${trade.name} urgence ${villeData.name}`,
+    `${trade.name} d'urgence à ${villeData.name}`,
+    `Urgence ${tradeLower} ${villeData.name}`,
+    `Dépannage ${tradeLower} ${villeData.name}`,
+    `${trade.name} urgence ${villeData.name} (${villeData.departementCode})`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

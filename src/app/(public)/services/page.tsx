@@ -26,14 +26,14 @@ const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: '50 Métiers Artisans — Devis Gratuit',
-  description: `Annuaire d'artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et ${staticServicesList.length} métiers. Devis gratuits dans 101 départements.`,
+  title: 'Tous les Métiers Artisans — Devis Gratuit',
+  description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
   alternates: {
     canonical: `${SITE_URL}/services`,
   },
   openGraph: {
-    title: '50 Métiers Artisans — Devis Gratuit',
-    description: `${staticServicesList.length} métiers du bâtiment, Des artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.`,
+    title: 'Tous les Métiers Artisans — Devis Gratuit',
+    description: `${staticServicesList.length} métiers du bâtiment. Artisans référencés dans 101 départements. Trouvez un professionnel qualifié, devis gratuit.`,
     url: `${SITE_URL}/services`,
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
   },
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '50 Métiers Artisans — Devis Gratuit',
-    description: `Annuaire d'artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et ${staticServicesList.length} métiers. Devis gratuits dans 101 départements.`,
+    title: 'Tous les Métiers Artisans — Devis Gratuit',
+    description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
   },
 }
 

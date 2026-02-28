@@ -7,22 +7,22 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'Blog Artisanat & Travaux',
+  title: 'Blog Travaux & Artisanat — Conseils 2026',
   description: `Conseils, guides et actualités sur l'artisanat, les travaux de rénovation, les prix et la réglementation. ${allArticlesMeta.length}+ articles par des experts.`,
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: 'Blog Artisanat & Travaux',
-    description: 'Conseils, guides et actualités sur l\'artisanat et les travaux de rénovation.',
+    title: 'Blog Travaux & Artisanat — Conseils 2026',
+    description: 'Conseils, guides et actualités sur les travaux de rénovation et l\'artisanat.',
     url: `${SITE_URL}/blog`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Blog artisanat et travaux' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Blog travaux et artisanat' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog Artisanat & Travaux',
-    description: 'Conseils, guides et actualités sur l\'artisanat et les travaux de rénovation.',
+    title: 'Blog Travaux & Artisanat — Conseils 2026',
+    description: 'Conseils, guides et actualités sur les travaux de rénovation et l\'artisanat.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

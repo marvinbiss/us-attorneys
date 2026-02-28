@@ -15,9 +15,9 @@ export const revalidate = 86400 // 24h
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export const metadata: Metadata = {
-  title: 'Avis Artisans — Choisir un Pro Fiable',
+  title: 'Avis Artisans Vérifiés — Choisir un Pro',
   description:
-    'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, électricien, serrurier… Comparez les profils et les avis vérifiés.',
+    'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
   alternates: {
     canonical: `${SITE_URL}/avis`,
   },
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Avis Artisans — Choisir un Pro Fiable',
+    title: 'Avis Artisans Vérifiés — Choisir un Pro',
     description:
-      'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, électricien, serrurier… Comparez les profils et les avis vérifiés.',
+      'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
     url: `${SITE_URL}/avis`,
     type: 'website',
     images: [
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Avis Artisans — Choisir un Pro Fiable',
+    title: 'Avis Artisans Vérifiés — Choisir un Pro',
     description:
-      'Consultez les avis et recommandations pour choisir le bon artisan. Comparez les profils et les avis vérifiés.',
+      'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

@@ -12,9 +12,9 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
 
 export const metadata: Metadata = {
-  title: 'Demander un devis gratuit',
+  title: 'Devis Artisan Gratuit — Comparez les Offres',
   description:
-    "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
+    "Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. Jusqu'à 3 devis en 24h. 100% gratuit, sans engagement.",
   alternates: {
     canonical: `${SITE_URL}/devis`,
   },
@@ -26,16 +26,16 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Demander un devis gratuit',
-    description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
+    title: 'Devis Artisan Gratuit — Comparez les Offres',
+    description: "Demandez un devis artisan gratuit. Jusqu'à 3 devis d'artisans vérifiés en 24h. 100% gratuit, sans engagement.",
     url: `${SITE_URL}/devis`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Demander un devis gratuit',
-    description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés.",
+    title: 'Devis Artisan Gratuit — Comparez les Offres',
+    description: "Demandez un devis artisan gratuit. Jusqu'à 3 devis d'artisans vérifiés en 24h.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

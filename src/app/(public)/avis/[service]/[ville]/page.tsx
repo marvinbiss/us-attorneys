@@ -172,10 +172,10 @@ export async function generateMetadata({
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
   const titleTemplates = [
     `Avis ${tradeLower} ${villeData.name}`,
-    `Avis ${tradeLower} \u00e0 ${villeData.name}`,
-    `${trade.name} ${villeData.name} : avis clients`,
+    `Avis ${tradeLower} \u00e0 ${villeData.name} — Guide`,
+    `Avis ${tradeLower} ${villeData.name} : notes`,
     `Avis ${tradeLower} ${villeData.name} 2026`,
-    `Choisir un ${tradeLower} ${villeData.name}`,
+    `Avis ${tradeLower} ${villeData.name} — Comparez`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

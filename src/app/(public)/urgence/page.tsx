@@ -10,21 +10,21 @@ import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { villes, services } from '@/lib/data/france'
 
 export const metadata: Metadata = {
-  title: 'Urgence Artisan — Soir & Week-end',
-  description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles selon les artisans de votre secteur partout en France. Intervention rapide, devis gratuit, artisans référencés.',
+  title: 'Artisan Urgence — Dépannage Soir & Week-end',
+  description: 'Artisan en urgence : plombier, électricien, serrurier. Dépannage soir et week-end partout en France. Devis gratuit, artisans vérifiés SIREN.',
   alternates: { canonical: `${SITE_URL}/urgence` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Urgence Artisan — Soir & Week-end',
-    description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur. Intervention rapide, devis gratuit, artisans référencés.',
+    title: 'Artisan Urgence — Dépannage Soir & Week-end',
+    description: 'Plombier, électricien, serrurier en urgence. Dépannage soir et week-end. Devis gratuit, artisans vérifiés.',
     url: `${SITE_URL}/urgence`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Urgence artisan' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgence Artisan — Soir & Week-end',
-    description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur. Intervention rapide, devis gratuit.',
+    title: 'Artisan Urgence — Dépannage Soir & Week-end',
+    description: 'Plombier, électricien, serrurier en urgence. Dépannage soir et week-end. Devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

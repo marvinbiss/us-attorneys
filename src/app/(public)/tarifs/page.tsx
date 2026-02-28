@@ -12,8 +12,8 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'Tarifs artisans 2026 — Guide complet des prix',
-  description: 'Guide complet des tarifs artisans en 2026 : prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix pour mieux estimer votre budget travaux.',
+  title: 'Prix Artisans 2026 — Tarifs et Barèmes',
+  description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon et tous les métiers du bâtiment. Grille tarifaire complète pour estimer votre budget.',
   alternates: {
     canonical: `${SITE_URL}/tarifs`,
   },
@@ -25,16 +25,16 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Tarifs artisans 2026 — Guide complet des prix',
-    description: 'Prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix.',
+    title: 'Prix Artisans 2026 — Tarifs et Barèmes',
+    description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon. Grille tarifaire complète.',
     url: `${SITE_URL}/tarifs`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tarifs artisans 2026 — Guide complet des prix',
-    description: 'Prix plombier, électricien, peintre, couvreur et tous les corps de métier.',
+    title: 'Prix Artisans 2026 — Tarifs et Barèmes',
+    description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon. Grille tarifaire complète.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

@@ -33,10 +33,10 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const titleHash = Math.abs(hashCode(`devis-title-${service}`))
   const titleTemplates = [
     `Devis ${tradeLower} gratuit 2026 — Comparez`,
-    `Devis ${tradeLower} en ligne — Gratuit`,
-    `Devis gratuit ${tradeLower} 2026`,
-    `Comparez les devis ${tradeLower} 2026`,
-    `${trade.name} : devis gratuit en ligne`,
+    `Devis ${tradeLower} en ligne — Gratuit 2026`,
+    `Devis ${tradeLower} gratuit — Artisans vérifiés`,
+    `Devis ${tradeLower} 2026 : comparez les prix`,
+    `Devis ${tradeLower} : gratuit et sans engagement`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

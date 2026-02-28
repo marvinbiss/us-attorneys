@@ -16,24 +16,23 @@ export const revalidate = 3600 // Rafraîchit les stats toutes les heures
 export async function generateMetadata(): Promise<Metadata> {
   const { artisanCount: count } = await getSiteStats()
   const countStr = count > 0 ? `${formatProviderCount(count)}+` : 'Des milliers d\''
-  return {
-    title: `ServicesArtisans — ${countStr} artisans référencés en France`,
-    description:
-      `Annuaire d'artisans de France basé sur les données SIREN officielles. ${countStr} professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.`,
+  const absoluteTitle = `Artisans de France — ${countStr} Pros Vérifiés | ServicesArtisans`
+    const metaDescription = `Trouvez un artisan qualifié parmi ${countStr} professionnels vérifiés SIREN. Plombier, électricien, serrurier : 101 départements couverts. Devis gratuit.`
+    return {
+    title: { absolute: absoluteTitle },
+    description: metaDescription,
     alternates: { canonical: SITE_URL },
     openGraph: {
-      title: `ServicesArtisans — ${countStr} artisans référencés en France`,
-      description:
-        `Annuaire d'artisans de France basé sur les données SIREN officielles. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
+      title: absoluteTitle,
+      description: metaDescription,
       type: 'website',
       url: SITE_URL,
       images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `ServicesArtisans — ${countStr} artisans référencés en France`,
-      description:
-        `Annuaire d'artisans de France basé sur les données SIREN officielles. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
+      title: absoluteTitle,
+      description: metaDescription,
       images: [`${SITE_URL}/opengraph-image`],
     },
   }

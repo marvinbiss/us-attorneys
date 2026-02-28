@@ -136,41 +136,39 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `${serviceName} à ${locationName} — ${providerCount} pros vérifiés`, h1: `${serviceName} à ${locationName}` },
-        { title: `${providerCount} ${naturalTerm.plural} à ${locationName} — Annuaire`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName} : pros certifiés SIREN`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
-        { title: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `Annuaire ${svcLower} à ${locationName} — Comparez`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${serviceName} ${locationName} — ${providerCount} artisans`, h1: `${serviceName} à ${locationName}` },
+        { title: `${serviceName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
+        { title: `${serviceName} à ${locationName} — Comparez`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${serviceName} ${locationName} : avis et devis`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
     : [
-        { title: `${serviceName} à ${locationName} — Annuaire`, h1: `${serviceName} à ${locationName}` },
-        { title: `Trouver ${naturalTerm.article} à ${locationName}`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName} : pros certifiés SIREN`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
-        { title: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `Annuaire ${svcLower} à ${locationName}`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${serviceName} ${locationName} — Annuaire`, h1: `${serviceName} à ${locationName}` },
+        { title: `${serviceName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
+        { title: `${serviceName} à ${locationName} — Artisans`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${serviceName} ${locationName} : annuaire`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
 
   // Unique meta descriptions with provider count, department and regional context
-  const metaVille = getVilleBySlug(locationSlug)
-  const metaRegion = metaVille?.region || ''
   const descHash = Math.abs(hashCode(`desc-${serviceSlug}-${locationSlug}`))
   const deptLabel = departmentName || departmentCode
   const descTemplates = hasProviders
     ? [
-        `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Devis gratuit en ${metaRegion || 'France'}.`,
-        `${providerCount} ${svcLower}s vérifiés à ${locationName}${deptLabel ? `, ${deptLabel}` : ''}. Comparez les profils et demandez un devis gratuit.`,
-        `Trouvez le meilleur ${svcLower} à ${locationName} parmi ${providerCount} professionnels référencés. ${metaRegion || 'France'}, devis gratuit.`,
-        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s référencés SIREN. Tarifs, avis et devis gratuit en ${metaRegion || 'France'}.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés${deptLabel ? ` dans le ${deptLabel}` : ''}. Comparez et obtenez un devis.`,
+        `${providerCount} ${svcLower}s vérifiés SIREN à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Comparez les profils, tarifs et avis. Devis gratuit.`,
+        `${serviceName} à ${locationName} : ${providerCount} artisans référencés. Comparez et demandez un devis gratuit, sans engagement.`,
+        `Trouvez le meilleur ${svcLower} à ${locationName} parmi ${providerCount} pros vérifiés. Tarifs, avis et devis gratuit.`,
+        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s vérifiés SIREN. Tarifs, avis et devis gratuit.`,
+        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés. Devis gratuit et réponse rapide.`,
       ]
     : [
-        `Trouvez un ${svcLower} qualifié à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${metaRegion ? `, ${metaRegion}` : ''}. Artisans vérifiés SIREN, devis gratuit.`,
-        `${svcLower} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans référencés en ${metaRegion || 'France'}. Devis gratuit et sans engagement.`,
-        `Besoin d'un ${svcLower} à ${locationName}${deptLabel ? `, ${deptLabel}` : ''} ? Consultez notre annuaire d'artisans vérifiés. Devis gratuit.`,
-        `Annuaire ${svcLower} à ${locationName} en ${metaRegion || 'France'}. Professionnels vérifiés SIREN, devis gratuit et immédiat.`,
-        `${locationName}${metaRegion ? `, ${metaRegion}` : ''} : trouvez un ${svcLower} de confiance. Artisans référencés par SIREN. Demandez votre devis.`,
+        `Trouvez un ${svcLower} qualifié à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Artisans vérifiés SIREN. Devis gratuit.`,
+        `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans référencés. Devis gratuit, sans engagement.`,
+        `Besoin d'un ${svcLower} à ${locationName} ? Annuaire d'artisans vérifiés. Devis gratuit.`,
+        `${serviceName} à ${locationName}. Professionnels vérifiés SIREN. Devis gratuit et immédiat.`,
+        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance. Artisans référencés SIREN. Devis gratuit.`,
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
