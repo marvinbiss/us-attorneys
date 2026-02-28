@@ -192,7 +192,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [getServiceImage(serviceSlug).src],
     },
     alternates: {
-      canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+      canonical: providerCount > 0
+        ? `${SITE_URL}/services/${serviceSlug}/${locationSlug}`
+        : `${SITE_URL}/services/${serviceSlug}`,
     },
   }
 }
@@ -308,6 +310,25 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     // Commune table may not exist yet — continue without data
   }
 
+  // Count recent devis requests for freshness signal
+  let recentDevisCount = 0
+  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      const { count } = await supabase
+        .from('devis_requests')
+        .select('*', { count: 'exact', head: true })
+        .ilike('city', location.name)
+        .gte('created_at', thirtyDaysAgo.toISOString())
+      recentDevisCount = count ?? 0
+    } catch {
+      recentDevisCount = 0
+    }
+  }
+
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
   const ville = getVilleBySlug(locationSlug)
   const locationContent = ville
@@ -418,6 +439,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         totalCount={totalProviderCount}
         serviceSlug={serviceSlug}
         locationSlug={locationSlug}
+        recentDevisCount={recentDevisCount}
       />
 
       <SeoContent

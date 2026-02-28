@@ -31,6 +31,7 @@ interface ServiceLocationPageClientProps {
   totalCount?: number
   serviceSlug?: string
   locationSlug?: string
+  recentDevisCount?: number
 }
 
 export default function ServiceLocationPageClient({
@@ -41,6 +42,7 @@ export default function ServiceLocationPageClient({
   totalCount = 0,
   serviceSlug,
   locationSlug,
+  recentDevisCount = 0,
 }: ServiceLocationPageClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -166,6 +168,12 @@ export default function ServiceLocationPageClient({
                     ? `${location.department_name}${location.department_code ? ` (${location.department_code})` : ''}`
                     : location.postal_code}
                 </p>
+              )}
+              {recentDevisCount > 0 && (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-medium mt-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  {recentDevisCount} devis demand{'\u00e9'}{recentDevisCount > 1 ? 's' : ''} ce mois-ci
+                </div>
               )}
             </div>
 
