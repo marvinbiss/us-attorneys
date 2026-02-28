@@ -576,7 +576,7 @@ export const conseilsArticles: Record<string, {
     category: 'Guides',
     tags: ['isolation phonique', 'bruit', 'acoustique', 'fenêtres', 'voisinage'],
     authorBio: 'Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.',
-    updatedDate: '2026-02-10',
+    updatedDate: '2026-02-20',
     faq: [
       { question: 'Quelle est la solution la plus efficace contre le bruit des voisins ?', answer: 'La contre-cloison sur ossature métallique désolidarisée est la solution la plus performante pour les murs mitoyens, avec un gain de 15 à 20 dB (division par 3 à 4 du bruit perçu). Coût : 60 à 120 €/m² posé. Pour les bruits de pas venant du dessus, un faux plafond sur suspentes anti-vibratiles offre un gain de 10 à 15 dB.' },
       { question: 'Les fenêtres double vitrage isolent-elles du bruit ?', answer: 'Oui, un double vitrage acoustique asymétrique (4/16/10 mm) réduit le bruit extérieur de 35 à 40 dB, contre seulement 20 à 25 dB pour un simple vitrage. Comptez 300 à 800 euros par fenêtre fournie et posée. Le triple vitrage n\'apporte pas forcément un gain acoustique supérieur.' },
@@ -607,7 +607,7 @@ export const conseilsArticles: Record<string, {
     category: 'Sécurité',
     tags: ['sécurité', 'cambriolage', 'alarme', 'serrure', 'vidéosurveillance'],
     authorBio: 'Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.',
-    updatedDate: '2026-02-10',
+    updatedDate: '2026-02-22',
     faq: [
       { question: 'Quel est le moyen le plus efficace pour protéger sa maison des cambriolages ?', answer: 'Une combinaison de mesures est la plus efficace : une porte blindée A2P avec serrure multipoints, une alarme certifiée NF A2P avec sirène extérieure visible (réduit le risque de 60 à 80 %), un éclairage extérieur à détection de mouvement et des volets roulants renforcés. La visibilité des dispositifs de sécurité est le premier facteur dissuasif.' },
       { question: 'Combien coûte un système d\'alarme pour une maison ?', answer: 'Un système filaire professionnel coûte 1 000 à 3 000 euros. Un système sans fil coûte 500 à 2 000 euros. La télésurveillance (centre d\'appel 24/7) ajoute 20 à 40 euros par mois. Pour une protection complète (alarme + caméras + détecteurs), prévoyez 2 000 à 5 000 euros.' },
