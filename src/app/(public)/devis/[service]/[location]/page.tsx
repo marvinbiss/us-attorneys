@@ -185,6 +185,26 @@ export default async function DevisServiceLocationPage({
 
   const tradeLower = trade.name.toLowerCase()
 
+  // Count recent devis requests for freshness signal
+  let recentDevisCount = 0
+  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      const { count } = await supabase
+        .from('devis_requests')
+        .select('*', { count: 'exact', head: true })
+        .ilike('city', villeData.name)
+        .ilike('service_name', trade.name)
+        .gte('created_at', thirtyDaysAgo.toISOString())
+      recentDevisCount = count ?? 0
+    } catch {
+      recentDevisCount = 0
+    }
+  }
+
   // Schemas
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -279,6 +299,12 @@ export default async function DevisServiceLocationPage({
               Comparez jusqu&apos;à 3 devis de {tradeLower}s à {villeData.name} ({villeData.departement}).
               Prix local : {minPrice} à {maxPrice} {trade.priceRange.unit}.
             </p>
+            {recentDevisCount > 0 && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-medium mt-4">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                {recentDevisCount} devis demandé{recentDevisCount > 1 ? 's' : ''} ce mois-ci
+              </div>
+            )}
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />

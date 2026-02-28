@@ -217,6 +217,7 @@ export default async function TarifsServiceVillePage({
     }))
   )
 
+  const offerCount = commune?.nb_entreprises_artisanales
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -240,8 +241,39 @@ export default async function TarifsServiceVillePage({
       priceCurrency: 'EUR',
       lowPrice: minPrice,
       highPrice: maxPrice,
-      offerCount: commune?.nb_entreprises_artisanales ?? undefined,
+      ...(offerCount ? { offerCount } : {}),
     },
+  }
+
+  const pricingItemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Tarifs ${trade.name} \u00E0 ${villeData.name}`,
+    description: `Liste des prestations et prix indicatifs pour ${trade.name} \u00E0 ${villeData.name}`,
+    numberOfItems: trade.commonTasks.length,
+    itemListElement: trade.commonTasks.map((task, i) => {
+      const parts = task.split(':')
+      const name = parts[0].trim()
+      const priceStr = parts.slice(1).join(':').trim()
+      const priceMatch = priceStr.match(/(\d+)/)
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Offer',
+          name,
+          ...(priceMatch ? {
+            priceSpecification: {
+              '@type': 'PriceSpecification',
+              price: priceMatch[1],
+              priceCurrency: 'EUR',
+            }
+          } : {}),
+          description: task,
+          availability: 'https://schema.org/InStock',
+        }
+      }
+    })
   }
 
   const relatedCities = getNearbyCities(villeSlug, 6)
@@ -250,7 +282,7 @@ export default async function TarifsServiceVillePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, localBusinessSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, localBusinessSchema, pricingItemListSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">

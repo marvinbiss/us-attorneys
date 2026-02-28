@@ -145,15 +145,45 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       priceCurrency: 'EUR',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
-      offerCount: undefined,
     },
+  }
+
+  const pricingItemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Tarifs ${trade.name} en France`,
+    description: `Liste des prestations et prix indicatifs pour ${trade.name}`,
+    numberOfItems: trade.commonTasks.length,
+    itemListElement: trade.commonTasks.map((task, i) => {
+      const parts = task.split(':')
+      const name = parts[0].trim()
+      const priceStr = parts.slice(1).join(':').trim()
+      const priceMatch = priceStr.match(/(\d+)/)
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Offer',
+          name,
+          ...(priceMatch ? {
+            priceSpecification: {
+              '@type': 'PriceSpecification',
+              price: priceMatch[1],
+              priceCurrency: 'EUR',
+            }
+          } : {}),
+          description: task,
+          availability: 'https://schema.org/InStock',
+        }
+      }
+    })
   }
 
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -231,15 +261,28 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Détail des prestations courantes
           </h2>
-          <div className="space-y-4">
-            {trade.commonTasks.map((task, i) => (
-              <div key={i} className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5 hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Euro className="w-4 h-4 text-blue-600" />
-                </div>
-                <span className="text-gray-800">{task}</span>
-              </div>
-            ))}
+          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-5 py-3.5 text-sm font-semibold text-gray-700">Prestation</th>
+                  <th className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">Prix indicatif</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trade.commonTasks.map((task, i) => {
+                  const colonIndex = task.indexOf(':')
+                  const name = colonIndex !== -1 ? task.slice(0, colonIndex).trim() : task.trim()
+                  const price = colonIndex !== -1 ? task.slice(colonIndex + 1).trim() : 'Sur devis'
+                  return (
+                    <tr key={i} className={`hover:bg-blue-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                      <td className="px-5 py-4 text-gray-800 text-sm border-t border-gray-100">{name}</td>
+                      <td className="px-5 py-4 text-gray-900 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap">{price}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
