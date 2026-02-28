@@ -33,7 +33,6 @@ const informationLinks = [
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
   { name: 'Avis artisans', href: '/avis' },
-  { name: 'Guides pratiques', href: '/guides' },
   { name: 'CGV', href: '/cgv' },
   { name: 'Mentions légales', href: '/mentions-legales' },
   { name: 'Confidentialité', href: '/confidentialite' },

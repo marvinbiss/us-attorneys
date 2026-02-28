@@ -438,8 +438,8 @@ export default async function TarifsPage() {
                   <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Toutes les régions
                   </Link>
-                  <Link href="/guides" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Guides pratiques
+                  <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" /> Blog
                   </Link>
                   <Link href="/devis" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Demander un devis

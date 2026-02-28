@@ -454,9 +454,9 @@ export default async function DevisPage() {
                   <ChevronRight className="w-3 h-3" />
                   Toutes les r&eacute;gions
                 </Link>
-                <Link href="/guides" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Guides pratiques
+                  Blog
                 </Link>
                 <Link href="/tarifs" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />

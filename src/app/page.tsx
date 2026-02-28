@@ -144,7 +144,6 @@ export default async function HomePage() {
             <Link href="/avis" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Avis artisans</Link>
             <Link href="/tarifs" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Tarifs artisans</Link>
             <Link href="/urgence" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Urgence artisan</Link>
-            <Link href="/guides" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Guides pratiques</Link>
             <Link href="/blog" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Blog</Link>
             <Link href="/problemes" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Problèmes courants</Link>
           </div>

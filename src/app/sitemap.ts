@@ -4,7 +4,6 @@ import { services, villes, departements, regions, getQuartiersByVille } from '@/
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
-import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 // Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
@@ -48,7 +47,6 @@ export async function generateSitemaps() {
       (_, i) => ({ id: `dept-services-${i}` })
     ),
     { id: 'region-services' },
-    { id: 'guides' },
   ]
 
   // Provider sitemaps are served dynamically via /api/sitemap-providers
@@ -378,14 +376,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     )
   }
 
-  // ── Guides hub + individual pages ───────────────────────────────────
-  if (id === 'guides') {
-    const guideSlugs = getGuideSlugs()
-    return [
-      { url: `${SITE_URL}/guides` },
-      ...guideSlugs.map(slug => ({ url: `${SITE_URL}/guides/${slug}` })),
-    ]
-  }
 
   // Provider sitemaps are served via /api/sitemap-providers (dynamic API route).
   // Requests to /sitemap/providers-*.xml are rewritten by next.config.js.

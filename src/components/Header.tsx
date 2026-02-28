@@ -451,7 +451,6 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                   <Link href="/avis" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
                   <Link href="/tarifs" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
-                  <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides pratiques</Link>
                   <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
                 </div>
               )}
@@ -1083,14 +1082,6 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 >
                   <Layers className="w-4 h-4 text-blue-500" />
                   <span className="font-medium text-sm text-slate-700">Tarifs</span>
-                </Link>
-                <Link
-                  href="/guides"
-                  className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <ShieldCheck className="w-4 h-4 text-green-500" />
-                  <span className="font-medium text-sm text-slate-700">Guides</span>
                 </Link>
                 <Link
                   href="/blog"
