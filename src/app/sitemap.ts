@@ -1,11 +1,15 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, villes, departements, regions, getQuartiersByVille } from '@/lib/data/france'
+import { services, villes, departements, regions } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
+// Return 404 for sitemap IDs not in generateSitemaps() — prevents ghost sitemaps
+// from returning empty-but-valid XML that Google keeps crawling forever.
+export const dynamicParams = false
+
 // Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
 const STATIC_BATCH = 10_000
 
@@ -137,22 +141,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return allUrls.slice(offset, offset + BATCH)
   }
 
-  // ── Service + city — Phase 2: remaining cities (not registered yet) ──
-  if (id.startsWith('service-cities-extended-')) {
-    const batchIndex = parseInt(id.replace('service-cities-extended-', ''), 10)
-    const BATCH = 45000
-    const offset = batchIndex * BATCH
-
-    const phase2Cities = villes.slice(TOP_CITIES_PHASE1)
-    const allUrls: MetadataRoute.Sitemap = []
-    for (const service of services) {
-      for (const ville of phase2Cities) {
-        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}` })
-      }
-    }
-
-    return allUrls.slice(offset, offset + BATCH)
-  }
 
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
@@ -188,37 +176,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
   }
 
-  // ── Quartier pages ─────────────────────────────────────────────────
-  if (id === 'quartiers') {
-    return villes.flatMap(ville =>
-      getQuartiersByVille(ville.slug).map(q => ({
-        url: `${SITE_URL}/villes/${ville.slug}/${q.slug}`,
-      }))
-    )
-  }
-
-  // ── Service × Quartier pages ────────────────────────────────────────
-  if (id.startsWith('service-quartiers-')) {
-    const batchIndex = parseInt(id.replace('service-quartiers-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const svc of services) {
-      for (const ville of villes) {
-        const quartiers = getQuartiersByVille(ville.slug)
-        for (const q of quartiers) {
-          if (count >= end) break outer
-          if (count >= start) result.push({ url: `${SITE_URL}/services/${svc.slug}/${ville.slug}/${q.slug}` })
-          count++
-        }
-      }
-    }
-
-    return result
-  }
 
   // ── Devis service hub pages ─────────────────────────────────────────
   if (id === 'devis-services') {
