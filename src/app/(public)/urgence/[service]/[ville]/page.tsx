@@ -876,6 +876,27 @@ export default async function UrgenceServiceVillePage({
         </div>
       </section>
 
+      {/* Cross-intent navigation */}
+      <section className="py-8 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Voir aussi</h2>
+          <div className="flex flex-wrap gap-3">
+            <Link href={`/devis/${service}/${villeSlug}`} className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors">
+              Devis {tradeLower} à {villeData.name}
+            </Link>
+            <Link href={`/avis/${service}/${villeSlug}`} className="px-4 py-2 bg-blue-50 text-blue-800 rounded-lg text-sm font-medium border border-blue-100 hover:border-blue-200 transition-colors">
+              Avis {tradeLower} à {villeData.name}
+            </Link>
+            <Link href={`/tarifs/${service}/${villeSlug}`} className="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-colors">
+              Tarifs {tradeLower} à {villeData.name}
+            </Link>
+            <Link href={`/services/${service}/${villeSlug}`} className="px-4 py-2 bg-gray-50 text-gray-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-gray-300 transition-colors">
+              {trade.name} à {villeData.name}
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ─── VOIR AUSSI ────────────────────────────────────── */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

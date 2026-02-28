@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Phone, CheckCircle, Clock } from 'lucide-react'
+import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface ProviderCardProps {
   provider: {
@@ -56,6 +57,9 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
                 alt={provider.name}
                 fill
                 className="object-cover"
+                sizes="64px"
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">

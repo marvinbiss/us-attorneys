@@ -35,6 +35,12 @@ const informationLinks = [
   { name: 'Confidentialité', href: '/confidentialite' },
 ]
 
+// Legal/non-SEO pages — rel="nofollow" to preserve PageRank for money pages
+const nofollowPaths = new Set([
+  '/faq', '/cgv', '/mentions-legales', '/confidentialite',
+  '/accessibilite', '/politique-avis', '/mediation',
+])
+
 export default function Footer() {
   return (
     <footer className="relative bg-gray-950 text-gray-400" role="contentinfo">
@@ -413,7 +419,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               {informationLinks.slice(0, 6).map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  <Link href={link.href} {...(nofollowPaths.has(link.href) ? { rel: 'nofollow' } : {})} className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                     {link.name}
                   </Link>
                 </li>
@@ -447,12 +453,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/politique-avis" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/politique-avis" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Politique des avis
                 </Link>
               </li>
               <li>
-                <Link href="/mediation" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/mediation" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Médiation
                 </Link>
               </li>
@@ -464,22 +470,22 @@ export default function Footer() {
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Juridique</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/mentions-legales" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/mentions-legales" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Mentions légales
                 </Link>
               </li>
               <li>
-                <Link href="/cgv" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/cgv" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   CGV
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialite" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/confidentialite" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Confidentialité
                 </Link>
               </li>
               <li>
-                <Link href="/accessibilite" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/accessibilite" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Accessibilité
                 </Link>
               </li>
@@ -540,19 +546,19 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} <span className="text-gray-400 font-medium">ServicesArtisans</span>. Tous droits réservés.
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-gray-500">
-              <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/mentions-legales" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 Mentions légales
               </Link>
-              <Link href="/confidentialite" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/confidentialite" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 Confidentialité
               </Link>
-              <Link href="/cgv" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/cgv" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 CGV
               </Link>
-              <Link href="/accessibilite" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/accessibilite" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 Accessibilité
               </Link>
-              <Link href="/faq" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/faq" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 FAQ
               </Link>
               <Link href="/contact" className="hover:text-white transition-colors duration-200 py-1.5">

@@ -155,22 +155,33 @@ export function getServiceSchema(service: {
   }
 }
 
-// Schema.org BreadcrumbList
+// Schema.org BreadcrumbList — Google-compliant format
+// Last item = current page (no `item`), others use WebPage object with @id
 export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      item: `${SITE_URL}${item.url}`,
-    })),
+    itemListElement: items.map((item, index) => {
+      const isLast = index === items.length - 1
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        ...(!isLast && {
+          item: {
+            '@type': 'WebPage',
+            '@id': `${SITE_URL}${item.url}`,
+            name: item.name,
+          },
+        }),
+      }
+    }),
   }
 }
 
 // Schema.org FAQPage
-export function getFAQSchema(faqs: { question: string; answer: string }[]) {
+export function getFAQSchema(faqs: { question: string; answer: string }[]): Record<string, unknown> | null {
+  if (!faqs || faqs.length === 0) return null
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -236,45 +247,6 @@ export function getHowToSchema(steps: { name: string; text: string; image?: stri
       text: step.text,
       image: step.image,
     })),
-  }
-}
-
-// Schema.org Reservation (for booking confirmation)
-export function getReservationSchema(booking: {
-  bookingId: string
-  clientName: string
-  clientEmail: string
-  artisanName: string
-  serviceName: string
-  date: string
-  startTime: string
-  endTime: string
-  status: 'confirmed' | 'cancelled' | 'completed'
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ServiceReservation',
-    reservationId: booking.bookingId,
-    reservationStatus: booking.status === 'confirmed'
-      ? 'https://schema.org/ReservationConfirmed'
-      : booking.status === 'cancelled'
-      ? 'https://schema.org/ReservationCancelled'
-      : 'https://schema.org/ReservationConfirmed',
-    underName: {
-      '@type': 'Person',
-      name: booking.clientName,
-      email: booking.clientEmail,
-    },
-    provider: {
-      '@type': 'LocalBusiness',
-      name: booking.artisanName,
-    },
-    reservationFor: {
-      '@type': 'Service',
-      name: booking.serviceName,
-    },
-    startTime: `${booking.date}T${booking.startTime}:00`,
-    endTime: `${booking.date}T${booking.endTime}:00`,
   }
 }
 
@@ -405,10 +377,10 @@ export function getProfessionalServiceSchema(artisan: {
     aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
       ? {
           '@type': 'AggregateRating',
-          ratingValue: artisan.rating.toFixed(1),
+          ratingValue: Number(artisan.rating.toFixed(1)),
           reviewCount: artisan.reviewCount,
-          bestRating: '5',
-          worstRating: '1',
+          bestRating: 5,
+          worstRating: 1,
         }
       : undefined,
     hasOfferCatalog: {

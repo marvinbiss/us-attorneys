@@ -14,6 +14,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_URL}/carrieres`,
   },
+  openGraph: {
+    title: 'Carrières — Rejoignez notre équipe',
+    description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
+    url: `${SITE_URL}/carrieres`,
+    siteName: 'ServicesArtisans',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Carrières — Rejoignez notre équipe',
+    description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
+  },
   // robots inherited from layout.tsx (noindex for pre-launch)
 }
 

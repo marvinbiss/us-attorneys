@@ -388,7 +388,6 @@ export default async function ServicePage({ params }: PageProps) {
           {Object.keys(citiesByRegion).length > 0 && (
             <div className="space-y-8">
               {Object.entries(citiesByRegion)
-                .slice(0, 6)
                 .map(([region, cities]) => (
                   <div key={region}>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -424,7 +423,7 @@ export default async function ServicePage({ params }: PageProps) {
             {service.name} par département
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {departements.slice(0, 30).map((dept) => {
+            {departements.map((dept) => {
               const deptVilles = getVillesByDepartement(dept.code)
               if (deptVilles.length === 0) return null
               return (
@@ -744,6 +743,51 @@ export default async function ServicePage({ params }: PageProps) {
             </div>
             <div>
               <PopularCitiesLinks showTitle={true} limit={8} />
+            </div>
+          </div>
+          {/* Intent variants — devis, avis, tarifs by city */}
+          <div className="mt-8 grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Devis {service.name.toLowerCase()} par ville</h3>
+              <div className="flex flex-wrap gap-2">
+                {topCities?.slice(0, 12).map((city) => (
+                  <Link
+                    key={`devis-${city.slug}`}
+                    href={`/devis/${serviceSlug}/${city.slug}`}
+                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Avis {service.name.toLowerCase()} par ville</h3>
+              <div className="flex flex-wrap gap-2">
+                {topCities?.slice(0, 12).map((city) => (
+                  <Link
+                    key={`avis-${city.slug}`}
+                    href={`/avis/${serviceSlug}/${city.slug}`}
+                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Tarifs {service.name.toLowerCase()} par ville</h3>
+              <div className="flex flex-wrap gap-2">
+                {topCities?.slice(0, 12).map((city) => (
+                  <Link
+                    key={`tarifs-${city.slug}`}
+                    href={`/tarifs/${serviceSlug}/${city.slug}`}
+                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>

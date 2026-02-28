@@ -1,14 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Phone, Zap, Shield, Clock, MapPin, ArrowRight, Star, CheckCircle, AlertTriangle, Wrench, Key } from 'lucide-react'
+import { Phone, Zap, Shield, Clock, MapPin, ArrowRight, Star, CheckCircle, AlertTriangle, Wrench, Key, ChevronRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
-import { villes } from '@/lib/data/france'
-import { PopularCitiesLinks } from '@/components/InternalLinks'
+import { villes, services } from '@/lib/data/france'
 
 export const metadata: Metadata = {
   title: 'Urgence Artisan — Soir & Week-end',
@@ -495,30 +494,97 @@ export default async function UrgencePage() {
         </div>
       </section>
 
-      {/* SEO Links */}
-      <section className="py-12 bg-white">
+      {/* Section A: Urgence par métier et ville — Service×City matrix */}
+      <section className="py-12 border-t bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Urgence par métier et ville</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.slice(0, 8).map((service) => (
+              <div key={service.slug}>
+                <h3 className="font-semibold text-gray-900 mb-3">Urgence {service.name.toLowerCase()}</h3>
+                <div className="space-y-1.5">
+                  {villes.slice(0, 6).map((ville) => (
+                    <Link key={ville.slug} href={`/urgence/${service.slug}/${ville.slug}`}
+                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" /> {ville.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section B: Cross-intent "Voir aussi" */}
+      <section className="py-12 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Voir aussi</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Devis */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Services d&apos;urgence</h3>
-              <div className="space-y-2">
-                {urgencyServices.map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
-                    {s.name} partout en France
+              <h3 className="font-semibold text-gray-900 mb-3">Demander un devis</h3>
+              <div className="space-y-1.5">
+                {services.slice(0, 10).map((s) => (
+                  <Link key={s.slug} href={`/devis/${s.slug}`}
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
                   </Link>
                 ))}
               </div>
             </div>
-            <PopularCitiesLinks showTitle={true} limit={6} />
+            {/* Avis */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Informations utiles</h3>
-              <div className="space-y-2">
-                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Comment ça marche</Link>
-                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Tarifs des artisans</Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Questions fréquentes</Link>
-                <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Processus de vérification</Link>
-                <Link href="/blog/urgence-plomberie-que-faire" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Urgence plomberie : que faire ?</Link>
+              <h3 className="font-semibold text-gray-900 mb-3">Avis clients</h3>
+              <div className="space-y-1.5">
+                {services.slice(0, 10).map((s) => (
+                  <Link key={s.slug} href={`/avis/${s.slug}`}
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" /> Avis {s.name.toLowerCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            {/* Tarifs */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Tarifs artisans</h3>
+              <div className="space-y-1.5">
+                {services.slice(0, 10).map((s) => (
+                  <Link key={s.slug} href={`/tarifs/${s.slug}`}
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" /> Tarifs {s.name.toLowerCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            {/* Navigation */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Navigation</h3>
+              <div className="space-y-1.5">
+                <Link href="/services" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Tous les services
+                </Link>
+                <Link href="/villes" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Toutes les villes
+                </Link>
+                <Link href="/departements" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Tous les départements
+                </Link>
+                <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Toutes les régions
+                </Link>
+                <Link href="/guides" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Guides pratiques
+                </Link>
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Demander un devis
+                </Link>
+                <Link href="/tarifs" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Tarifs artisans
+                </Link>
+                <Link href="/avis" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" /> Avis clients
+                </Link>
               </div>
             </div>
           </div>

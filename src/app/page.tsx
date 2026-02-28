@@ -73,9 +73,10 @@ export default async function HomePage() {
   })
   const aggregateRatingSchema = {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
+    '@type': 'Service',
     name: 'ServicesArtisans',
     url: SITE_URL,
+    serviceType: 'Annuaire d\'artisans',
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: homepageData.avgRating,
@@ -91,7 +92,7 @@ export default async function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([faqSchema, itemListSchema, aggregateRatingSchema])
+          __html: JSON.stringify([faqSchema, itemListSchema, aggregateRatingSchema].filter(Boolean))
             .replace(/</g, '\\u003c')
             .replace(/>/g, '\\u003e')
             .replace(/&/g, '\\u0026'),

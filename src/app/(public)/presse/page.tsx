@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -11,6 +12,21 @@ export const metadata: Metadata = {
   title: 'Espace presse',
   description: 'Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l\'annuaire d\'artisans référencés SIREN en France.',
   robots: { index: false, follow: true },
+  alternates: {
+    canonical: `${SITE_URL}/presse`,
+  },
+  openGraph: {
+    title: 'Espace presse',
+    description: 'Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l\'annuaire d\'artisans référencés SIREN en France.',
+    url: `${SITE_URL}/presse`,
+    siteName: 'ServicesArtisans',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Espace presse',
+    description: 'Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l\'annuaire d\'artisans référencés SIREN en France.',
+  },
 }
 
 export default async function PressePage() {

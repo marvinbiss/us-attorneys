@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Sparkles, ChevronRight, Loader2 } from 'lucide-react'
 import { cn, getArtisanUrl } from '@/lib/utils'
+import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface SimilarArtisan {
   id: string
@@ -110,6 +111,8 @@ export function SimilarArtisans({
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"
+                    placeholder="blur"
+                    blurDataURL={BLUR_PLACEHOLDER}
                   />
                 ) : (
                   <span className="text-lg font-medium text-gray-500 dark:text-gray-400">

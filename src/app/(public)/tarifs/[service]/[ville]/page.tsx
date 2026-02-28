@@ -10,6 +10,7 @@ import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
+import { getServiceImage } from '@/lib/data/images'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -168,11 +169,13 @@ export async function generateMetadata({
       description,
       url: canonicalUrl,
       type: 'website',
+      images: [{ url: getServiceImage(service).src, width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [getServiceImage(service).src],
     },
   }
 }
@@ -544,6 +547,27 @@ export default async function TarifsServiceVillePage({
                 </Link>
               )
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Cross-intent navigation */}
+      <section className="py-8 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Voir aussi</h2>
+          <div className="flex flex-wrap gap-3">
+            <Link href={`/devis/${service}/${villeSlug}`} className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors">
+              Devis {tradeLower} {'\u00E0'} {villeData.name}
+            </Link>
+            <Link href={`/avis/${service}/${villeSlug}`} className="px-4 py-2 bg-blue-50 text-blue-800 rounded-lg text-sm font-medium border border-blue-100 hover:border-blue-200 transition-colors">
+              Avis {tradeLower} {'\u00E0'} {villeData.name}
+            </Link>
+            <Link href={`/urgence/${service}/${villeSlug}`} className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors">
+              Urgence {tradeLower} {'\u00E0'} {villeData.name}
+            </Link>
+            <Link href={`/services/${service}/${villeSlug}`} className="px-4 py-2 bg-gray-50 text-gray-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-gray-300 transition-colors">
+              {trade.name} {'\u00E0'} {villeData.name}
+            </Link>
           </div>
         </div>
       </section>

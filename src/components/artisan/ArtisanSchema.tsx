@@ -126,7 +126,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
         '@type': 'Person',
         name: r.author,
       },
-      datePublished: r.dateISO || r.date,
+      ...(r.dateISO || r.date ? { datePublished: r.dateISO || r.date } : {}),
       reviewRating: {
         '@type': 'Rating',
         ratingValue: r.rating,
@@ -134,6 +134,11 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
         worstRating: 1,
       },
       reviewBody: r.comment,
+      itemReviewed: {
+        '@type': 'LocalBusiness',
+        '@id': `${artisanUrl}#business`,
+        name: displayName,
+      },
     })),
 
     ...(artisan.service_prices.length > 0 && {
@@ -246,12 +251,21 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: breadcrumbItems.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      ...(item.item && { item: item.item }),
-    })),
+    itemListElement: breadcrumbItems.map((item, index) => {
+      const isLast = index === breadcrumbItems.length - 1
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        ...(!isLast && item.item ? {
+          item: {
+            '@type': 'WebPage',
+            '@id': item.item,
+            name: item.name,
+          },
+        } : {}),
+      }
+    }),
   }
 
   // ProfilePage Schema (wraps the artisan profile)

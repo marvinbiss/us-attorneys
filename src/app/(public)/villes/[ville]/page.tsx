@@ -10,6 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
+import { getCommuneBySlug } from '@/lib/data/commune-data'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -37,6 +38,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityImage = getCityImage(villeSlug)
   const metaContent = generateVilleContent(ville)
 
+  // Fetch provider count from communes table to detect thin-content pages
+  let providerCount = 0
+  try {
+    const commune = await getCommuneBySlug(villeSlug)
+    providerCount = commune?.provider_count ?? 0
+  } catch {
+    providerCount = 0 // conservative: noindex when DB is down
+  }
+
   const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
   const titleTemplates = [
     `Artisans à ${ville.name} (${ville.departementCode})`,
@@ -60,6 +70,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: providerCount === 0 ? { index: false, follow: true } : undefined,
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -557,6 +568,54 @@ export default async function VillePage({ params }: PageProps) {
                   <ChevronRight className="w-3 h-3" />
                   Devis serrurier à {ville.name}
                 </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Intent variant links — devis, avis, tarifs, urgence */}
+          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Devis à {ville.name}</h3>
+              <div className="space-y-1.5">
+                {orderedServices.slice(0, 15).map((s) => (
+                  <Link key={`devis-${s.slug}`} href={`/devis/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    Devis {s.name.toLowerCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Avis à {ville.name}</h3>
+              <div className="space-y-1.5">
+                {orderedServices.slice(0, 15).map((s) => (
+                  <Link key={`avis-${s.slug}`} href={`/avis/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    Avis {s.name.toLowerCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Tarifs à {ville.name}</h3>
+              <div className="space-y-1.5">
+                {orderedServices.slice(0, 15).map((s) => (
+                  <Link key={`tarifs-${s.slug}`} href={`/tarifs/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    Tarifs {s.name.toLowerCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Urgence à {ville.name}</h3>
+              <div className="space-y-1.5">
+                {orderedServices.slice(0, 15).map((s) => (
+                  <Link key={`urgence-${s.slug}`} href={`/urgence/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    {s.name} urgence
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

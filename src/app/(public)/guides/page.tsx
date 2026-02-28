@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     type: 'website',
     url: `${SITE_URL}/guides`,
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Guides Travaux et Rénovation',
+    description: 'Guides complets pour vos travaux : choisir un artisan, entretien, réglementation, économies et urgences. Conseils d\'experts, tarifs et aides financières.',
+  },
 }
 
 export default function GuidesHubPage() {

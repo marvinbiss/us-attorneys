@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -11,6 +12,21 @@ export const metadata: Metadata = {
   title: 'Nos partenaires',
   description: 'Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d\'artisans de France.',
   robots: { index: false, follow: true },
+  alternates: {
+    canonical: `${SITE_URL}/partenaires`,
+  },
+  openGraph: {
+    title: 'Nos partenaires',
+    description: 'Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d\'artisans de France.',
+    url: `${SITE_URL}/partenaires`,
+    siteName: 'ServicesArtisans',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nos partenaires',
+    description: 'Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d\'artisans de France.',
+  },
 }
 
 export default async function PartenairesPage() {

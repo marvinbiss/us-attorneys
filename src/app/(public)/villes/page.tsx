@@ -18,6 +18,11 @@ export const metadata: Metadata = {
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par ville' }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Artisans par ville — Des milliers de professionnels',
+    description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Des milliers de professionnels dans 101 départements. Devis gratuits, sans engagement.`,
+  },
 }
 
 // Group villes by region

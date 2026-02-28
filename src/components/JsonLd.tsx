@@ -1,5 +1,5 @@
 interface JsonLdProps {
-  data: Record<string, unknown> | Record<string, unknown>[]
+  data: Record<string, unknown> | (Record<string, unknown> | null | undefined)[]
   nonce?: string
 }
 
@@ -12,7 +12,7 @@ function safeJsonStringify(data: unknown): string {
 }
 
 export default function JsonLd({ data, nonce }: JsonLdProps) {
-  const jsonLdArray = Array.isArray(data) ? data : [data]
+  const jsonLdArray = (Array.isArray(data) ? data : [data]).filter(Boolean)
 
   return (
     <>

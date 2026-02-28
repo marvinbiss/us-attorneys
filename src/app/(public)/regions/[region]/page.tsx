@@ -64,6 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: artisanCount === 0 ? { index: false, follow: true } : undefined,
     alternates: { canonical: `${SITE_URL}/regions/${regionSlug}` },
     openGraph: {
       locale: 'fr_FR',
@@ -377,7 +378,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {allCities.slice(0, 6).map((city) => (
+            {allCities.slice(0, 12).map((city) => (
               <div key={city.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
                 <h3 className="font-heading font-semibold text-slate-900 mb-4">Artisans à {city.name}</h3>
                 <div className="flex flex-wrap gap-2">
@@ -515,6 +516,49 @@ export default async function RegionPage({ params }: PageProps) {
               <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
+            </div>
+          </div>
+
+          {/* Intent variant links — devis, avis, tarifs */}
+          <div className="mt-10 grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Devis en {region.name}</h3>
+              <div className="space-y-1.5">
+                {allCities.slice(0, 6).flatMap((city) =>
+                  allServices.slice(0, 5).map((s) => (
+                    <Link key={`devis-${s.slug}-${city.slug}`} href={`/devis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" />
+                      Devis {s.name.toLowerCase()} à {city.name}
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Avis en {region.name}</h3>
+              <div className="space-y-1.5">
+                {allCities.slice(0, 6).flatMap((city) =>
+                  allServices.slice(0, 5).map((s) => (
+                    <Link key={`avis-${s.slug}-${city.slug}`} href={`/avis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" />
+                      Avis {s.name.toLowerCase()} à {city.name}
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Tarifs en {region.name}</h3>
+              <div className="space-y-1.5">
+                {allCities.slice(0, 6).flatMap((city) =>
+                  allServices.slice(0, 5).map((s) => (
+                    <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/tarifs/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" />
+                      Tarifs {s.name.toLowerCase()} à {city.name}
+                    </Link>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

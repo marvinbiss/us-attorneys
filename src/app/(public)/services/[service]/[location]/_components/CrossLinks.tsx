@@ -139,6 +139,9 @@ export default function CrossLinks({
                 <Link href={`/tarifs/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-all">
                   Tarifs {service.name.toLowerCase()} à {location.name}
                 </Link>
+                <Link href={`/urgence/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-red-50 hover:bg-red-100 text-red-800 rounded-xl text-sm font-medium border border-red-100 hover:border-red-200 transition-all">
+                  {service.name} urgence à {location.name}
+                </Link>
               </div>
             </div>
 

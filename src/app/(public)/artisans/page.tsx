@@ -24,6 +24,11 @@ export const metadata: Metadata = {
     siteName: 'ServicesArtisans',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Annuaire Artisans France — SIREN Vérifiés',
+    description: 'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
+  },
 }
 
 // Direct Supabase query — bypasses IS_BUILD since page is force-dynamic

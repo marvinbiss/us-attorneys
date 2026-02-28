@@ -20,7 +20,7 @@ const inter = Inter({
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-heading',
-  display: 'swap',
+  display: 'optional',
   weight: ['500', '600', '700', '800'],
 })
 
@@ -59,11 +59,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ServicesArtisans — Annuaire d\'artisans référencés en France',
+    default: 'ServicesArtisans — Annuaire d\'artisans en France',
     template: '%s | ServicesArtisans',
   },
   description:
-    'Annuaire d\'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
+    'Annuaire d\'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.',
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
   appleWebApp: {
@@ -164,6 +164,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               .replace(/&/g, '\\u0026'),
           }}
         />
+
+        {/* Preconnect for Google Tag Manager & Analytics */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         {/* Preconnect for Supabase backend */}
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />

@@ -5,13 +5,14 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Grid3X3 } from 'lucide-react'
 import { Artisan } from './types'
+import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface ArtisanPhotoGridProps {
   artisan: Artisan
 }
 
-// Blur placeholder for images
-const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k='
+// Use shared BLUR_PLACEHOLDER from images.ts
+const BLUR_DATA_URL = BLUR_PLACEHOLDER
 
 export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)

@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 
 const PRIVATE_DISALLOW = [
+  // Immutable static assets (1-year cache headers) — no need for Google to crawl
+  '/_next/static/',
   // Private/auth routes
   '/admin/',
   '/api/',

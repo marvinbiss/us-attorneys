@@ -269,7 +269,7 @@ export default async function AvisServicePage({
       review: serviceStats.reviews.slice(0, 3).map(r => ({
         '@type': 'Review',
         author: { '@type': 'Person', name: r.client_name || 'Client vérifié' },
-        reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+        reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
         reviewBody: r.comment,
         datePublished: r.created_at?.split('T')[0],
       })),

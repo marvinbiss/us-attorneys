@@ -44,6 +44,11 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: '50 Métiers Artisans — Devis Gratuit',
+    description: `Annuaire d'artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et ${staticServicesList.length} métiers. Devis gratuits dans 101 départements.`,
+  },
 }
 
 const allServices = [

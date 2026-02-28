@@ -326,7 +326,7 @@ export async function PATCH(request: NextRequest) {
       let emailStatus = 'skipped'
       if (!claim.user_id) {
         const claimEmail = claim.claimant_email!.trim().toLowerCase()
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
         try {
           const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({

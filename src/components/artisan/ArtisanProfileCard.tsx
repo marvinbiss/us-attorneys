@@ -20,6 +20,7 @@ import {
   ThumbsUp,
 } from 'lucide-react'
 import { getArtisanUrl } from '@/lib/utils'
+import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface ArtisanProfileCardProps {
   id: string
@@ -101,6 +102,8 @@ export function ArtisanProfileCard({
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
               onError={() => setImageError(true)}
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -140,6 +143,8 @@ export function ArtisanProfileCard({
                     className="object-cover"
                     sizes="96px"
                     onError={() => setImageError(true)}
+                    placeholder="blur"
+                    blurDataURL={BLUR_PLACEHOLDER}
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center">
@@ -308,6 +313,8 @@ export function ArtisanProfileCard({
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 640px) 100vw, 224px"
                 onError={() => setImageError(true)}
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center">
@@ -447,6 +454,8 @@ export function ArtisanProfileCard({
               className="object-cover"
               sizes="48px"
               onError={() => setImageError(true)}
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center">
@@ -492,6 +501,8 @@ export function ArtisanProfileCard({
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               onError={() => setImageError(true)}
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-clay-400 via-clay-500 to-clay-600 flex items-center justify-center">
