@@ -97,7 +97,7 @@ interface PopularCity { name: string; slug: string }
 interface MetroRegion { slug: string; name: string; departments: { name: string; code: string; slug: string }[] }
 interface DomTomRegion { slug: string; name: string; departments?: { name: string; code: string; slug: string }[] }
 
-type MenuType = 'services' | 'villes' | 'regions' | null
+type MenuType = 'services' | 'villes' | 'regions' | 'plus' | null
 type MobileAccordion = 'services' | 'villes' | 'regions' | null
 
 export default function Header({ artisanCount = 0 }: { artisanCount?: number }) {
@@ -425,31 +425,37 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
               </button>
             </div>
 
-            {/* Liens directs SEO */}
-            <Link
-              href="/avis"
-              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+            {/* Plus dropdown — Avis, Tarifs, Guides, Blog */}
+            <div
+              className="relative"
+              onMouseEnter={() => openMenuOnHover('plus')}
+              onMouseLeave={closeMenusWithDelay}
             >
-              Avis
-            </Link>
-            <Link
-              href="/tarifs"
-              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
-            >
-              Tarifs
-            </Link>
-            <Link
-              href="/guides"
-              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
-            >
-              Guides
-            </Link>
-            <Link
-              href="/blog"
-              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
-            >
-              Blog
-            </Link>
+              <button
+                type="button"
+                onClick={() => toggleMenu('plus')}
+                aria-expanded={openMenu === 'plus'}
+                aria-haspopup="true"
+                className={cn(
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
+                  openMenu === 'plus'
+                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                )}
+              >
+                Plus
+                <ChevronDown className={cn('w-4 h-4 transition-transform duration-300', openMenu === 'plus' && 'rotate-180')} />
+              </button>
+              {openMenu === 'plus' && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                  <Link href="/avis" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
+                  <Link href="/tarifs" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
+                  <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides pratiques</Link>
+                  <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
+                </div>
+              )}
+            </div>
 
             {/* Favoris */}
             <Link
