@@ -3,7 +3,7 @@ import type { BlogArticle } from './articles'
 export const seoBoost1Articles: Record<string, BlogArticle> = {
   'maprimerenov-2026-guide-complet-aides-renovation': {
     title: "MaPrimeRénov' 2026 : Aides Rénovation",
-    excerpt: "Montants, conditions d\'éligibilité, démarches pas à pas : tout ce qu\'il faut savoir sur MaPrimeRénov\' en 2026. Profils bleu, jaune, violet, rose, Rénovation d\'Ampleur — maximisez vos aides.",
+    excerpt: "Montants, conditions d\'éligibilité, démarches : tout savoir sur MaPrimeRénov\' 2026. Profils bleu, jaune, violet, rose. Comparez.",
     image: '/images/blog/maprimerenov-2026-guide-complet-aides-renovation.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -80,7 +80,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
 
   'comment-choisir-artisan-confiance-guide-2026': {
     title: "Choisir un Artisan de Confiance 2026",
-    excerpt: "Les 10 critères essentiels pour ne jamais se tromper d\'artisan : vérification du SIRET, assurance décennale, devis, red flags et recours en cas de litige. Le guide complet pour particuliers.",
+    excerpt: "Les 10 critères pour ne jamais se tromper d\'artisan : SIRET, assurance décennale, devis, red flags et recours en cas de litige. Devis gratuit.",
     image: '/images/blog/comment-choisir-artisan-confiance-guide-2026.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -157,7 +157,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
 
   'prix-renovation-maison-2026-budget-complet': {
     title: "Prix Rénovation Maison 2026 : Budget",
-    excerpt: "Combien coûte une rénovation maison en 2026 ? Du rafraîchissement à la rénovation lourde : tous les prix au m², par pièce et par corps de métier, avec les aides déductibles.",
+    excerpt: "Combien coûte une rénovation maison en 2026 ? Prix au m², par pièce et par corps de métier, avec les aides déductibles. Devis gratuit.",
     image: '/images/blog/prix-renovation-maison-2026-budget-complet.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -234,7 +234,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
 
   'pompe-a-chaleur-guide-complet-2026': {
     title: "Pompe à Chaleur 2026 : Prix et Aides",
-    excerpt: "Tout savoir sur les pompes à chaleur en 2026 : différences air-air, air-eau, géothermique ; prix d\'installation ; aides MaPrimeRénov\' + CEE ; COP, dimensionnement et entretien.",
+    excerpt: "Pompes à chaleur 2026 : air-air, air-eau, géothermique. Prix d\'installation, aides MaPrimeRénov\' + CEE, COP et entretien. Comparez.",
     image: '/images/blog/pompe-a-chaleur-guide-complet-2026.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -307,7 +307,7 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
 
   'isolation-maison-guide-complet-materiaux-prix-aides': {
     title: "Isolation Maison 2026 : Prix et Aides",
-    excerpt: "Isolation des combles, murs, plancher bas, fenêtres : comparatif complet des matériaux isolants, prix au m² et aides MaPrimeRénov\' + CEE disponibles en 2026.",
+    excerpt: "Isolation combles, murs, plancher bas, fenêtres : comparatif des matériaux, prix au m² et aides MaPrimeRénov\' + CEE en 2026. Comparez.",
     image: '/images/blog/isolation-maison-guide-complet-materiaux-prix-aides.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",

@@ -13,8 +13,8 @@ export const reglementationArticles: Record<string, {
   faq?: { question: string; answer: string }[]
 }> = {
   'assurance-dommages-ouvrage-guide-complet': {
-    title: 'Assurance dommages-ouvrage : guide complet',
-    excerpt: 'Obligatoire pour tout maître d\'ouvrage, l\'assurance dommages-ouvrage garantit une réparation rapide des désordres. Découvrez son fonctionnement, son coût et les pièges à éviter.',
+    title: 'Assurance Dommages-Ouvrage : Guide 2026',
+    excerpt: 'Obligatoire pour tout maître d\'ouvrage, l\'assurance dommages-ouvrage garantit une réparation rapide des désordres. Fonctionnement, coût et pièges.',
     content: [
       "L'assurance dommages-ouvrage (DO) est l'une des protections les plus importantes — et les plus méconnues — du particulier qui fait construire ou rénover. Instituée par la loi Spinetta du 4 janvier 1978 (articles L.242-1 et suivants du Code des assurances), elle permet d'obtenir la réparation des désordres relevant de la garantie décennale, sans attendre qu'un tribunal désigne un responsable.",
       "## Qui doit souscrire une dommages-ouvrage ?\n\nL'article L.242-1 du Code des assurances impose la souscription à tout maître d'ouvrage : particulier, promoteur, SCI, syndicat de copropriété. Si vous faites construire une maison, une extension de plus de 20 m² ou des travaux de gros œuvre réalisés par un [maçon](/services/macon) ou tout autre corps de métier, vous devez impérativement souscrire avant l'ouverture du chantier.\n\n:::warning Attention\nLe défaut de souscription est sanctionné pénalement par une amende de 75 000 € (article L.243-3 du Code des assurances). En cas de revente dans les 10 ans, l'absence de DO engage votre responsabilité vis-à-vis de l'acquéreur qui pourra demander une réduction de prix.\n:::",
@@ -85,7 +85,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'certificats-economies-energie-cee-guide': {
-    title: 'Certificats d\'économies d\'énergie (CEE) : comment en profiter',
+    title: 'CEE : Certificats d\'Économies d\'Énergie 2026',
     excerpt: 'Les CEE vous permettent de financer une partie de vos travaux de rénovation énergétique grâce aux primes versées par les fournisseurs d\'énergie. Mode d\'emploi complet.',
     content: [
       "Le dispositif des Certificats d'Économies d'Énergie (CEE), instauré par la loi POPE du 13 juillet 2005 (articles L.221-1 et suivants du Code de l'énergie), oblige les fournisseurs d'énergie (EDF, Engie, TotalEnergies) à promouvoir l'efficacité énergétique. Concrètement, ils financent une partie de vos travaux via des primes, des bons d'achat ou des prêts bonifiés.",
@@ -177,7 +177,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'responsabilite-artisan-maitre-ouvrage': {
-    title: 'Responsabilité artisan et maître d\'ouvrage : qui est responsable ?',
+    title: 'Responsabilité Artisan : Qui Paie Quoi ?',
     excerpt: 'Garantie de parfait achèvement, garantie biennale, décennale : les responsabilités de l\'artisan et du maître d\'ouvrage sont encadrées par la loi. Explications.',
     content: [
       "Le régime de responsabilité des constructeurs, codifié aux articles 1792 et suivants du Code civil, est l'un des plus protecteurs d'Europe pour le maître d'ouvrage. Comprendre qui est responsable de quoi est essentiel avant, pendant et après vos travaux.",
@@ -263,7 +263,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'label-rge-artisan-travaux-energetiques': {
-    title: 'Label RGE : pourquoi c\'est indispensable pour vos travaux',
+    title: 'Label RGE : Pourquoi C\'est Indispensable',
     excerpt: 'Le label RGE conditionne l\'accès aux aides financières. Décryptage de ce label et de ses implications pour vos projets de rénovation énergétique.',
     content: [
       "Le label RGE (Reconnu Garant de l'Environnement) est une qualification délivrée aux artisans — spécialistes en [isolation thermique](/services/isolation-thermique), installateurs de [pompe à chaleur](/services/pompe-a-chaleur) et autres — qui respectent des critères de compétence pour les travaux de rénovation énergétique. Depuis 2014, faire appel à un artisan RGE est obligatoire pour bénéficier des aides publiques.",
@@ -292,7 +292,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'qualibat-qualifelec-certifications-batiment': {
-    title: 'Qualibat, Qualifelec, Qualit\'EnR : comprendre les certifications',
+    title: 'Qualibat, Qualifelec, Qualit\'EnR : Guide',
     excerpt: 'Qualibat, Qualifelec, Qualit\'EnR, Qualigaz... Le monde des certifications du bâtiment est complexe. Décryptage pour y voir clair et choisir le bon artisan.',
     content: [
       "Les certifications et qualifications professionnelles du bâtiment sont un gage de compétence technique. Mais entre Qualibat, Qualifelec, Qualit'EnR et les dizaines de mentions existantes, il est facile de s'y perdre. Ce guide vous aide à décrypter l'essentiel.",
@@ -321,7 +321,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'diagnostic-immobilier-obligatoire-liste': {
-    title: 'Diagnostics Immobiliers : Liste Complète',
+    title: 'Diagnostics Immobiliers 2026 : Liste',
     excerpt: 'DPE, amiante, plomb, électricité, gaz, termites... Quels diagnostics sont obligatoires pour vendre ou louer en 2026 ? Liste complète et tarifs.',
     content: [
       "Avant de vendre ou de louer un bien immobilier, le propriétaire doit constituer un Dossier de Diagnostics Techniques (DDT) réalisé par un [diagnostiqueur](/services/diagnostiqueur) certifié. Les articles L.271-4 à L.271-6 du Code de la construction et de l'habitation définissent ces obligations. Voici la liste complète pour 2026.",
@@ -374,8 +374,8 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'accessibilite-pmr-logement-normes': {
-    title: 'Accessibilité PMR : Normes et Aides',
-    excerpt: 'Adapter un logement pour une personne à mobilité réduite implique de respecter des normes précises. Découvrez les travaux nécessaires et les aides disponibles en 2026.',
+    title: 'Accessibilité PMR 2026 : Normes et Aides',
+    excerpt: 'Adapter un logement pour une personne à mobilité réduite : normes à respecter, travaux nécessaires et aides disponibles en 2026.',
     content: [
       "L'adaptation du logement aux personnes à mobilité réduite (PMR) est un enjeu majeur dans une société vieillissante. La loi du 11 février 2005 pour l'égalité des droits et des chances a posé les bases de l'accessibilité universelle.",
       "## Les normes d'accessibilité en logement\n\nLa norme NF P 99-611 définit :\n\n- Largeur de portes de 90 cm minimum\n- Couloirs de 120 cm de large\n- Absence de ressaut supérieur à 2 cm\n- Douche de plain-pied sans seuil\n- WC avec aire de manœuvre de 150 cm de diamètre\n- Revêtements antidérapants",
@@ -429,7 +429,7 @@ export const reglementationArticles: Record<string, {
     ],
   },
   'urbanisme-regles-construction-extension': {
-    title: 'Règles d\'urbanisme : construire et agrandir en toute légalité',
+    title: 'Règles d\'Urbanisme : Construire Légalement',
     excerpt: 'PLU, emprise au sol, hauteur maximale... Les règles d\'urbanisme encadrent strictement vos projets de construction et d\'extension. Le guide pour ne rien oublier.',
     content: [
       "Avant de construire ou d'agrandir, vous devez connaître les règles d'urbanisme applicables. Le Plan Local d'Urbanisme (PLU), prévu par les articles L.151-1 et suivants du Code de l'urbanisme, fixe les règles de constructibilité de chaque parcelle.",

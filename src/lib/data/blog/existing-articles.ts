@@ -2,8 +2,8 @@ import type { BlogArticle } from './articles'
 
 export const existingArticles: Record<string, BlogArticle> = {
   'comment-choisir-son-plombier': {
-    title: 'Choisir son Plombier : Le Guide',
-    excerpt: 'Tous nos conseils pour trouver un plombier de confiance et éviter les arnaques. Vérifications, devis, assurances : tout ce qu\'il faut savoir avant de faire appel à un professionnel.',
+    title: 'Choisir son Plombier : Guide 2026',
+    excerpt: 'Trouvez un plombier de confiance : vérifications, devis, assurances. Tout savoir pour éviter les arnaques. Devis gratuit.',
     content: [
       "Choisir un plombier peut sembler simple, mais c'est une décision qui mérite une réflexion approfondie. Selon la Fédération française du bâtiment, plus de 15 % des litiges dans le secteur du BTP concernent la plomberie. Un mauvais choix peut entraîner des réparations coûteuses, des fuites persistantes ou même des dégâts des eaux dont la facture moyenne s'élève à 2 400 euros selon les assureurs. Voici notre guide complet pour vous aider à faire le bon choix et trouver un [plombier fiable](/services/plombier) dès la première fois.",
       "## 1. Vérifiez les qualifications et certifications\n\n### Le minimum indispensable\n\nUn plombier professionnel doit posséder certaines certifications et qualifications attestant de son savoir-faire. Au minimum, il doit être titulaire d'un CAP Installateur sanitaire ou d'un CAP Installateur thermique, voire d'un BP (Brevet Professionnel) ou d'un BTS Fluides, Énergies, Domotique.\n\n### Les labels de qualité\n\nRecherchez les labels suivants :\n\n- **RGE** (Reconnu Garant de l'Environnement) : indispensable si vous envisagez des travaux liés à l'énergie, comme l'installation d'un [chauffe-eau thermodynamique](/blog/chauffage-solution-economique) ou d'une pompe à chaleur\n- **Qualibat** : certification attestant des compétences techniques de l'entreprise\n- **NF** : label de conformité aux normes françaises\n\n:::tip Conseil pro\nVérifiez la validité des certifications directement sur les sites officiels : qualibat.com pour Qualibat et france-renov.gouv.fr pour le label RGE. Un certificat expiré n'a aucune valeur.\n:::",
@@ -31,7 +31,7 @@ export const existingArticles: Record<string, BlogArticle> = {
   },
   'renovation-energetique-aides-2026': {
     title: 'Aides Rénovation Énergétique 2026',
-    excerpt: 'MaPrimeRénov\', CEE, éco-PTZ... Tour d\'horizon complet des aides financières pour financer vos travaux de rénovation énergétique en 2026, avec les montants actualisés et les conditions d\'éligibilité.',
+    excerpt: 'MaPrimeRénov\', CEE, éco-PTZ... Toutes les aides pour financer vos travaux de rénovation énergétique en 2026. Montants et conditions.',
     content: [
       "La rénovation énergétique est plus que jamais au cœur des préoccupations des Français. Avec la hausse continue des prix de l'énergie — le tarif réglementé de l'électricité a augmenté de plus de 40 % entre 2022 et 2025 — et le renforcement des obligations liées au [DPE (Diagnostic de Performance Énergétique)](/blog/audit-energetique-dpe-obligations-2026), rénover son logement est devenu une nécessité économique et environnementale. Bonne nouvelle : en 2026, un arsenal d'aides financières permet de couvrir jusqu'à 80 % du coût des travaux pour les ménages les plus modestes, notamment pour l'[isolation thermique](/services/isolation-thermique) ou l'installation d'une [pompe à chaleur](/services/pompe-a-chaleur). Voici un tour d'horizon complet pour ne manquer aucune opportunité.",
       "## MaPrimeRénov' : l'aide phare de l'État\n\n### Principe et fonctionnement\n\nMaPrimeRénov' est la principale aide de l'État pour la rénovation énergétique. Gérée par l'Agence Nationale de l'Habitat (ANAH), elle est accessible à tous les propriétaires, qu'ils soient occupants ou bailleurs, sans condition de revenus. Le montant de l'aide dépend de votre catégorie de revenus et du type de travaux réalisés.\n\n### Les quatre catégories de revenus\n\nLes ménages sont classés en quatre catégories, déterminées par le revenu fiscal de référence :\n\n- **Bleu** (très modestes) : aides maximales, jusqu'à 80 % du coût des travaux\n- **Jaune** (modestes) : aides importantes, jusqu'à 75 %\n- **Violet** (intermédiaires) : aides significatives, jusqu'à 60 %\n- **Rose** (aisés) : aides réduites mais toujours disponibles, jusqu'à 40 %\n\n### Les deux parcours MaPrimeRénov'\n\nDepuis 2024, MaPrimeRénov' se décline en deux parcours :\n\n1. **Parcours par geste** : pour un ou deux travaux ciblés (isolation, changement de chauffage)\n2. **Parcours accompagné** : pour une rénovation globale visant un gain d'au moins 2 classes DPE\n\n:::tip Conseil pro\nLe Parcours accompagné est plus avantageux financièrement. Pour une maison classée F passant en C, l'aide peut atteindre 32 000 € pour les ménages très modestes (profil Bleu, depuis septembre 2025). Un Accompagnateur Rénov' agréé est obligatoire pour ce parcours.\n:::\n\n:::budget\n| Travaux | Aide MaPrimeRénov' (ménage modeste) |\n| Isolation des combles | 25 €/m² |\n| Isolation des murs (ITE) | 75 €/m² |\n| Pompe à chaleur air-eau | 5 000 € |\n| Chaudière biomasse | 7 000 € |\n| Fenêtres double vitrage | 100 €/fenêtre |\n| VMC double flux | 2 500 € |\n:::",
@@ -56,7 +56,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'tendances-salle-de-bain-2026': {
-    title: 'Les tendances salle de bain en 2026',
+    title: 'Salle de Bain : Tendances 2026',
     excerpt: 'Couleurs, matériaux, équipements innovants... Découvrez les tendances qui transforment la salle de bain en un véritable espace de bien-être cette année.',
     content: [
       "La salle de bain est devenue un véritable espace de bien-être, dépassant largement sa fonction utilitaire d'antan. Les Français y consacrent en moyenne 6 000 à 12 000 euros lors d'une [rénovation complète](/blog/renovation-salle-de-bain-budget-etapes), et les tendances 2026 reflètent cette exigence croissante de confort et d'esthétique. Entre matériaux naturels, technologies connectées et design biophilique, voici les grandes orientations qui marqueront cette année. Pour concrétiser votre projet, faites appel à un spécialiste de la [rénovation de salle de bain](/services/salle-de-bain).",
@@ -80,8 +80,8 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'devis-travaux-comprendre': {
-    title: 'Lire et Comprendre un Devis Travaux',
-    excerpt: 'Les éléments essentiels à vérifier avant de signer un devis pour éviter les mauvaises surprises. Mentions obligatoires, pièges à éviter et conseils de négociation.',
+    title: 'Devis Travaux : Comprendre et Comparer',
+    excerpt: 'Mentions obligatoires, pièges à éviter, conseils de négociation. Tout vérifier avant de signer un devis. Comparez les prix.',
     content: [
       "Un devis de travaux est un document essentiel qui engage juridiquement les deux parties une fois signé. Pourtant, selon une enquête de l'UFC-Que Choisir, plus de 40 % des particuliers signent un devis sans en vérifier toutes les mentions. Résultat : surfacturations, travaux incomplets ou litiges coûteux. Savoir lire et comprendre un devis est crucial pour protéger vos intérêts et maîtriser votre budget, que vous fassiez appel à un [plombier](/services/plombier) ou à tout autre artisan.",
       "## Les mentions obligatoires d'un devis\n\n### Ce que dit la loi\n\nSelon l'arrêté du 24 janvier 2017, un devis de travaux doit comporter des mentions obligatoires. L'absence de l'une d'entre elles est un signal d'alerte.\n\n### La liste complète\n\n1. **La date d'établissement** du devis\n2. **Les coordonnées complètes** de l'artisan : nom, adresse, téléphone, email\n3. **Le numéro SIRET** de l'entreprise (14 chiffres)\n4. **L'assurance professionnelle** : nom de l'assureur, numéro de police\n5. **Le détail précis des prestations** : nature, quantité, prix unitaire\n6. **Le prix des matériaux** : désignation, marque, référence, quantité\n7. **Le coût de la main-d'œuvre** : tarif horaire ou forfait\n8. **Le montant total HT et TTC** avec indication du taux de TVA\n9. **La durée de validité** du devis\n10. **Les conditions de paiement** : échéancier, acompte, solde\n11. **La durée estimée des travaux**\n\n:::warning Attention\nUn devis sans numéro SIRET est un signal d'alerte majeur. Cela peut signifier que l'artisan travaille au noir. Vérifiez toujours le SIRET sur [ServicesArtisans](/blog/trouver-artisan-verifie-siren) ou sur sirene.fr.\n:::",
@@ -106,7 +106,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'isolation-thermique-guide': {
-    title: 'Guide complet de l\'isolation thermique',
+    title: 'Isolation Thermique : Guide Complet 2026',
     excerpt: 'Tout savoir sur l\'isolation de votre maison : techniques, matériaux, performances et économies à la clé. Le guide pour réduire votre facture énergétique.',
     content: [
       "L'isolation thermique est le premier levier pour réduire votre facture énergétique. Un logement bien isolé peut diminuer votre consommation de chauffage de 25 à 30 %, soit une économie de 400 à 700 euros par an pour une maison de 100 m². Avec la hausse des prix de l'énergie et les nouvelles obligations du [DPE](/blog/audit-energetique-dpe-obligations-2026), isoler son logement est devenu un investissement incontournable. Voici le guide complet pour comprendre les différentes techniques et faire les bons choix. Trouvez un professionnel certifié en [isolation thermique](/services/isolation-thermique) pour un accompagnement sur mesure.",
@@ -131,7 +131,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'electricite-normes-securite': {
-    title: 'Normes Électriques : Sécurité',
+    title: 'Normes Électriques 2026 : Sécurité',
     excerpt: 'NF C 15-100, mise aux normes, diagnostic... Tout ce qu\'il faut savoir sur l\'électricité de votre logement pour garantir la sécurité de votre famille.',
     content: [
       "L'électricité est un domaine où la sécurité est primordiale. Selon l'Observatoire National de la Sécurité Électrique (ONSE), les installations électriques défaillantes sont responsables de plus de 50 000 incendies domestiques chaque année en France, causant chaque année de nombreux blessés et décès (Baromètre ONSE). Un tiers des logements français présente au moins une anomalie électrique. Comprendre les normes en vigueur est essentiel pour protéger votre famille et votre patrimoine.",
@@ -155,7 +155,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'peinture-interieure-conseils': {
-    title: 'Peinture Intérieure : Nos Conseils',
+    title: 'Peinture Intérieure : Conseils 2026',
     excerpt: 'Préparation, choix des couleurs, techniques d\'application... Tous les secrets d\'une peinture réussie pour transformer vos pièces comme un professionnel.',
     content: [
       "La peinture est l'un des travaux de rénovation les plus courants et les plus transformateurs. Bien réalisée, elle peut métamorphoser une pièce en quelques jours pour un budget maîtrisé. Selon les professionnels du bâtiment, 80 % de la réussite d'une peinture dépend de la préparation des surfaces. Voici nos conseils complets pour un résultat professionnel, que vous fassiez appel à un [peintre qualifié](/services/peintre-en-batiment) ou que vous vous lanciez en auto-rénovation.",
@@ -179,8 +179,8 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'chauffage-solution-economique': {
-    title: 'Quel Chauffage pour des Économies ?',
-    excerpt: 'Pompe à chaleur, poêle à granulés, chaudière... Comparatif complet des solutions de chauffage les plus économiques en 2026, avec coûts d\'installation et de fonctionnement.',
+    title: 'Chauffage Économique : Guide 2026',
+    excerpt: 'Pompe à chaleur, poêle à granulés, chaudière... Comparatif des solutions de chauffage économiques en 2026 avec coûts d\'installation. Devis gratuit.',
     content: [
       "Le chauffage représente en moyenne 66 % de la consommation énergétique d'un logement français, soit environ 1 700 euros par an pour une maison de 100 m² mal isolée. Bien choisir son système de chauffage est donc essentiel pour maîtriser son budget et réduire son empreinte carbone. En 2026, plusieurs solutions performantes s'offrent à vous, chacune avec ses avantages et ses contraintes. Faites appel à un [chauffagiste qualifié](/services/chauffagiste) pour un diagnostic adapté à votre logement.",
       "## La pompe à chaleur air-eau : la championne de l'efficacité\n\n### Principe et performance\n\nAvec un COP (Coefficient de Performance) moyen de 3 à 4, la [pompe à chaleur](/services/pompe-a-chaleur) air-eau produit 3 à 4 kWh de chaleur pour chaque kWh d'électricité consommé. C'est l'une des solutions les plus économiques à l'usage, malgré un investissement initial élevé.\n\n### Avantages et inconvénients\n\n- **Coût d'installation** : 8 000 à 16 000 €\n- **Coût annuel de fonctionnement** : 500 à 900 € pour 100 m²\n- **Durée de vie** : 15 à 20 ans\n- **Éligible à MaPrimeRénov'** : jusqu'à 5 000 € d'aide\n- **Inconvénient** : performances réduites par grand froid (en dessous de -7 °C), nuisance sonore de l'unité extérieure\n\nPour un comparatif détaillé, consultez notre article [Pompe à chaleur vs chaudière gaz](/blog/chauffage-pompe-chaleur-vs-chaudiere-gaz-2026).\n\n:::tip Conseil pro\nDimensionnez correctement votre PAC : une pompe à chaleur surdimensionnée effectuera des cycles courts qui usent le compresseur et augmentent la consommation. Faites réaliser une étude thermique préalable par un bureau d'études.\n:::",
@@ -228,7 +228,7 @@ export const existingArticles: Record<string, BlogArticle> = {
   },
   'trouver-artisan-verifie-siren': {
     title: 'Artisan Vérifié : Pourquoi le SIREN ?',
-    excerpt: 'Numéro SIREN, assurance décennale, qualifications... Les vérifications indispensables avant de faire appel à un artisan pour protéger votre projet de travaux.',
+    excerpt: 'Numéro SIREN, assurance décennale, qualifications... Les vérifications indispensables avant de faire appel à un artisan. Devis gratuit.',
     content: [
       "Faire appel à un artisan non vérifié peut avoir des conséquences graves : travaux mal réalisés, absence de garantie, recours impossible en cas de litige. Selon la DGCCRF, plus de 10 000 signalements de pratiques frauduleuses dans le secteur du bâtiment sont enregistrés chaque année en France. Le numéro SIREN est votre première protection pour vérifier le sérieux d'un professionnel, qu'il s'agisse d'un [plombier](/services/plombier) ou d'un [électricien](/services/electricien).",
       "## Qu'est-ce que le numéro SIREN ?\n\n### Un identifiant unique\n\nLe SIREN (Système d'Identification du Répertoire des Entreprises) est un identifiant unique de 9 chiffres attribué par l'INSEE à chaque entreprise lors de sa création. Le SIRET (14 chiffres) ajoute un identifiant d'établissement au SIREN. Ces numéros permettent de vérifier :\n\n- L'existence légale de l'entreprise\n- Son statut d'activité (en activité, radiée, en liquidation)\n- Sa date de création\n- Son code APE (activité principale exercée)\n- Son adresse officielle\n\n### Pourquoi c'est essentiel\n\nUn artisan sans SIREN est un artisan qui travaille au noir. Cela signifie :\n\n- **Aucune assurance** : pas de RC Pro, pas de garantie décennale\n- **Aucun recours** : en cas de malfaçon, impossible de faire jouer les garanties\n- **Risques légaux** : le client qui fait appel sciemment à un travailleur non déclaré s'expose à des sanctions fiscales\n\n:::warning Attention\nFaire appel à un artisan non déclaré vous expose à une amende de 45 000 € et 3 ans d'emprisonnement pour travail dissimulé (article L.8224-1 du Code du travail). En cas d'accident sur le chantier, votre responsabilité peut être engagée.\n:::",
@@ -251,7 +251,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'renovation-maison-par-ou-commencer': {
-    title: 'Rénovation maison : par où commencer ?',
+    title: 'Rénovation Maison : Par Où Commencer ?',
     excerpt: 'Ordre des travaux, budget prévisionnel, choix des artisans... Le guide étape par étape pour réussir la rénovation de votre maison sans stress ni surcoûts.',
     content: [
       "Rénover une maison est un projet excitant mais complexe qui nécessite une planification rigoureuse. Selon la FFB (Fédération Française du Bâtiment), 30 % des chantiers de rénovation connaissent des dépassements de budget, souvent liés à un mauvais ordonnancement des travaux. Suivre le bon ordre est essentiel pour éviter les reprises coûteuses et les retards. Voici le guide étape par étape pour mener votre rénovation avec sérénité, de la [rénovation énergétique](/services/renovation-energetique) aux finitions.",
@@ -274,8 +274,8 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'artisan-pas-cher-attention-arnaques': {
-    title: 'Artisan pas cher : attention aux arnaques',
-    excerpt: 'Devis anormalement bas, travaux bâclés, faux artisans... Comment repérer les arnaques et protéger votre projet de travaux. Les signaux d\'alerte et les réflexes à adopter.',
+    title: 'Artisan Pas Cher : Attention aux Arnaques',
+    excerpt: 'Devis anormalement bas, travaux bâclés, faux artisans... Comment repérer les arnaques et protéger votre projet. Comparez les prix.',
     content: [
       "Un devis anormalement bas doit toujours éveiller votre méfiance. Selon la DGCCRF, le secteur du bâtiment concentre chaque année plus de 10 000 plaintes de consommateurs pour pratiques commerciales trompeuses. Les arnaques vont du simple devis gonflé au faux artisan qui disparaît avec l'acompte. Voici les principaux signaux d'alerte et les réflexes à adopter pour protéger votre projet et votre portefeuille. Privilégiez des professionnels vérifiés, comme un [plombier certifié](/services/plombier) référencé sur notre plateforme.",
       "## Les signaux d'alerte à connaître\n\n### Les indices qui doivent vous alerter\n\n- **Devis sans mention de SIRET** : un professionnel légitime a toujours un numéro SIRET. Vérifiez-le sur [ServicesArtisans](/blog/trouver-artisan-verifie-siren) ou sirene.fr\n- **Prix très en dessous du marché** : un prix 30 % inférieur à la concurrence cache souvent une arnaque ou du travail bâclé\n- **Demande d'acompte élevé en espèces** : un acompte supérieur à 30 % et/ou un paiement en espèces sont des signaux d'alerte majeurs\n- **Absence de contrat écrit** : tout engagement doit faire l'objet d'un [devis signé](/blog/devis-travaux-comprendre)\n- **Urgence artificielle** : « cette offre est valable uniquement aujourd'hui » est une technique de manipulation classique\n- **Pas d'adresse physique** : uniquement un numéro de portable, pas de local professionnel\n\n:::warning Attention\nLes arnaques à l'isolation à 1 euro, aux panneaux solaires gratuits ou à l'audit énergétique offert persistent malgré les alertes. Ces dispositifs ont été supprimés ou profondément modifiés. Tout démarchage en leur nom est frauduleux.\n:::",
@@ -345,8 +345,8 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'comment-verifier-artisan-avant-engager': {
-    title: 'Vérifier un Artisan avant de l\'Engager',
-    excerpt: 'SIRET, assurance décennale, qualifications... Les vérifications indispensables pour éviter les mauvaises surprises et s\'assurer du sérieux d\'un professionnel.',
+    title: 'Vérifier un Artisan : Guide 2026',
+    excerpt: 'SIRET, assurance décennale, qualifications... Les vérifications indispensables pour éviter les mauvaises surprises. Devis gratuit.',
     content: [
       "Engager un artisan sans vérification préalable est un risque majeur. Selon le Médiateur de la consommation dans le bâtiment, les litiges avec les artisans représentent plus de 25 % des saisines. La plupart auraient pu être évités par de simples vérifications en amont. Voici les étapes essentielles pour s'assurer du sérieux d'un professionnel avant de lui confier vos travaux, qu'il s'agisse d'un [plombier](/services/plombier) ou d'un [chauffagiste](/services/chauffagiste).",
       "## Vérifiez le numéro SIRET\n\n### La première vérification\n\nLe SIRET est la carte d'identité de l'entreprise. Vérifiez-le sur ServicesArtisans ou sur le site de l'INSEE (sirene.fr). Il confirme que l'entreprise est bien immatriculée et en activité.\n\n### Ce que révèle le SIRET\n\n- **Existence légale** de l'entreprise\n- **Code APE** : l'activité déclarée correspond-elle au métier exercé ?\n- **Date de création** : une entreprise trop récente (moins de 2 ans) présente un risque supérieur\n- **Statut** : en activité, en liquidation, radiée\n\nPour en savoir plus sur l'importance du SIREN, consultez notre article dédié : [Trouver un artisan vérifié](/blog/trouver-artisan-verifie-siren).\n\n:::warning Attention\nUn artisan peut avoir un SIRET valide mais exercer une activité différente de celle déclarée. Vérifiez que le code APE (activité principale) correspond bien au métier pour lequel vous le sollicitez.\n:::",
@@ -368,7 +368,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'travaux-renovation-energetique-par-ou-commencer': {
-    title: 'Rénovation Énergétique : Par Où Commencer',
+    title: 'Rénovation Énergétique : Guide 2026',
     excerpt: 'Isolation, chauffage, ventilation... Découvrez l\'ordre optimal des travaux de rénovation énergétique pour maximiser les économies et les aides financières.',
     content: [
       "La rénovation énergétique est un investissement rentable : selon l'ADEME, elle permet de réduire la facture énergétique de 40 à 60 % et de valoriser le bien de 5 à 15 %. Mais l'ordre des travaux est déterminant pour maximiser les économies et éviter les dépenses inutiles. Commencez par l'[isolation thermique](/services/isolation-thermique), puis passez à la [rénovation énergétique](/services/renovation-energetique) globale. Voici la marche à suivre, étape par étape.",
@@ -413,8 +413,8 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   '10-arnaques-courantes-batiment': {
-    title: '10 Arnaques Courantes dans le Bâtiment',
-    excerpt: 'Faux artisans, devis gonflés, travaux fantômes... Découvrez les arnaques les plus fréquentes dans le secteur du bâtiment et comment vous en protéger efficacement.',
+    title: 'Arnaques Bâtiment : 10 Pièges à Éviter',
+    excerpt: 'Faux artisans, devis gonflés, travaux fantômes... Les 10 arnaques les plus fréquentes dans le bâtiment et comment vous en protéger.',
     content: [
       "Le secteur du bâtiment est malheureusement un terrain propice aux arnaques. La DGCCRF enregistre chaque année plus de 10 000 signalements dans ce secteur, et les pertes financières pour les victimes peuvent atteindre plusieurs dizaines de milliers d'euros. Voici les 10 arnaques les plus courantes et les moyens concrets de les éviter. Privilégiez toujours des artisans vérifiés, comme un [plombier référencé](/services/plombier) sur notre plateforme.",
       "## 1. Le faux artisan sans SIRET\n\n### Le risque\n\nCertains individus se présentent comme artisans sans être immatriculés au Registre des Métiers. Sans SIRET, pas d'assurance, pas de garantie décennale, pas de recours en cas de problème.\n\n### La protection\n\nVérifiez toujours le SIRET avant de signer un devis sur [ServicesArtisans](/blog/trouver-artisan-verifie-siren) ou sur sirene.fr.\n\n## 2. L'isolation à 1 euro (supprimée)\n\n### Le risque\n\nCe dispositif a été supprimé en 2021. Tout démarchage téléphonique ou à domicile en son nom est une arnaque. Les escrocs récupèrent vos données personnelles et bancaires.\n\n### La protection\n\nRaccrochez immédiatement et ne communiquez jamais vos coordonnées bancaires par téléphone.\n\n## 3. Le devis gonflé après l'acompte\n\n### Le risque\n\nL'artisan demande un acompte conséquent puis annonce des surcoûts imprévus : « on a découvert un problème caché ». Le chantier est en otage.\n\n### La protection\n\nLimitez toujours l'acompte à 30 % maximum. Exigez un avenant écrit et signé pour tout supplément. Consultez notre guide sur les [clauses du contrat de travaux](/blog/contrat-travaux-clauses-essentielles).\n\n:::warning Attention\nNe payez jamais un supplément sans devis complémentaire écrit et signé. L'artisan ne peut pas modifier unilatéralement le prix convenu dans le devis initial.\n:::",
@@ -481,7 +481,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'garantie-decennale-tout-savoir': {
-    title: 'Garantie Décennale : Ce qu\'il Faut Savoir',
+    title: 'Garantie Décennale : Guide Complet 2026',
     excerpt: 'Durée, couverture, recours... La garantie décennale expliquée simplement pour protéger votre investissement immobilier pendant 10 ans.',
     content: [
       "La garantie décennale est une protection essentielle pour tout propriétaire qui fait réaliser des travaux de construction ou de rénovation importante. Instituée par la loi Spinetta du 4 janvier 1978, elle constitue l'un des piliers du droit de la construction en France. Pourtant, selon les assureurs, près de 30 % des sinistres décennaux ne sont jamais déclarés par méconnaissance. Voici tout ce que vous devez savoir pour protéger votre investissement, que vos travaux soient confiés à un [couvreur](/services/couvreur) ou à un [plombier](/services/plombier).",
@@ -504,7 +504,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'comment-choisir-cuisine-equipee-guide': {
-    title: 'Cuisine Équipée : Guide de Choix',
+    title: 'Cuisine Équipée : Guide de Choix 2026',
     excerpt: 'Matériaux, agencement, budget, erreurs à éviter... Tout pour réussir le choix de votre cuisine équipée et optimiser votre espace.',
     content: [
       "La cuisine est la pièce la plus technique d'un logement et l'une des plus coûteuses à aménager. Son aménagement mérite une réflexion approfondie pour combiner fonctionnalité, esthétique et durabilité. Les Français y consacrent en moyenne 6 500 euros, mais les budgets s'échelonnent de 3 000 à plus de 25 000 euros selon les choix. Voici le guide complet pour faire les bons choix. Faites appel à un [cuisiniste professionnel](/services/cuisiniste) pour un accompagnement personnalisé.",
@@ -573,7 +573,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'renovation-salle-de-bain-budget-etapes': {
-    title: 'Salle de Bain : Budget et Étapes',
+    title: 'Salle de Bain : Budget et Étapes 2026',
     excerpt: 'Coût moyen, planning des travaux, choix des matériaux... Le guide complet pour rénover votre salle de bain avec le bon budget et dans le bon ordre.',
     content: [
       "La rénovation d'une salle de bain est un projet qui améliore à la fois votre confort quotidien et la valeur de votre bien immobilier (plus-value estimée de 5 à 10 %). C'est aussi l'un des projets les plus techniques, impliquant [plomberie](/services/plombier), électricité, étanchéité et finitions. Confiez votre projet à un spécialiste de la [salle de bain](/services/salle-de-bain) pour un résultat garanti. Voici comment bien le préparer pour éviter les surcoûts et les mauvaises surprises.",
@@ -618,7 +618,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     ],
   },
   'droits-obligations-travaux-chez-soi': {
-    title: 'Droits et Obligations : Travaux Maison',
+    title: 'Droits et Obligations : Travaux 2026',
     excerpt: 'Autorisations, horaires, nuisances, responsabilités... Tout savoir sur le cadre légal des travaux à domicile pour éviter les conflits et les sanctions.',
     content: [
       "Réaliser des travaux chez soi implique de respecter certaines règles légales qui protègent à la fois le propriétaire, les artisans et le voisinage. Méconnaître ces obligations peut entraîner des amendes, des arrêts de chantier ou des conflits de voisinage coûteux. Voici un guide complet pour connaître vos droits et obligations, que vous fassiez appel à un [électricien](/services/electricien) ou à un [plombier](/services/plombier).",

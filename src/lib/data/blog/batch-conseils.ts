@@ -13,8 +13,8 @@ export const conseilsArticles: Record<string, {
   faq?: { question: string; answer: string }[]
 }> = {
   'entretien-annuel-maison-checklist-complete': {
-    title: 'Entretien Maison : Checklist Complète',
-    excerpt: 'Découvrez la liste exhaustive des vérifications et travaux d\'entretien à réaliser chaque année pour préserver votre maison en parfait état et éviter les mauvaises surprises.',
+    title: 'Entretien Maison 2026 : Checklist',
+    excerpt: 'Liste exhaustive des vérifications et travaux d\'entretien à réaliser chaque année pour préserver votre maison en parfait état. Devis gratuit.',
     content: [
       'Entretenir sa maison régulièrement, c\'est comme faire la révision de sa voiture : cela évite les pannes coûteuses. Selon la FNAIM, un défaut d\'entretien peut entraîner une **dépréciation de 15 à 20 %** de la valeur d\'un bien immobilier en seulement dix ans. Chaque année, des milliers de propriétaires découvrent trop tard des dégâts qui auraient pu être évités par un simple contrôle régulier. Voici la checklist complète, poste par poste, pour ne rien oublier et préserver la valeur de votre patrimoine. Trouvez un [couvreur](/services/couvreur) ou un [plombier](/services/plombier) pour les vérifications techniques.',
 
@@ -58,8 +58,8 @@ export const conseilsArticles: Record<string, {
   },
 
   'preparer-maison-hiver-guide-complet': {
-    title: 'Préparer sa maison pour l\'hiver : guide complet',
-    excerpt: 'De l\'isolation à la plomberie en passant par le chauffage, tous les gestes essentiels pour protéger votre habitat du froid et éviter les dégâts liés au gel.',
+    title: 'Préparer sa Maison pour l\'Hiver : Guide',
+    excerpt: 'De l\'isolation à la plomberie en passant par le chauffage, tous les gestes essentiels pour protéger votre habitat du froid et du gel.',
     content: [
       'Chaque année, les températures négatives causent des milliers de sinistres en France. Les dégâts des eaux liés au gel représentent à eux seuls plus de **600 millions d\'euros de dommages par an** selon la Fédération française de l\'assurance. Préparer sa maison avant l\'arrivée de l\'hiver n\'est pas un luxe, c\'est une nécessité. Ce guide détaille, poste par poste, les actions à mener dès le mois de septembre pour aborder sereinement la saison froide. Pensez à contacter un [chauffagiste](/services/chauffagiste) pour l\'entretien de votre chaudière avant l\'hiver.',
 
@@ -100,8 +100,8 @@ export const conseilsArticles: Record<string, {
   },
 
   'travaux-printemps-liste-priorites': {
-    title: 'Travaux de Printemps : Priorités',
-    excerpt: 'Le retour des beaux jours est le moment idéal pour inspecter, réparer et embellir votre maison. Voici les travaux à prioriser pour un habitat en pleine forme.',
+    title: 'Travaux de Printemps 2026 : Priorités',
+    excerpt: 'Le retour des beaux jours est le moment idéal pour inspecter, réparer et embellir votre maison. Travaux à prioriser. Devis gratuit.',
     content: [
       'Après les rigueurs de l\'hiver, le printemps est la saison idéale pour dresser un bilan de santé de votre habitation. Les artisans sont généralement **plus disponibles en mars-avril** qu\'en pleine saison estivale, et les conditions météorologiques se prêtent à de nombreux travaux extérieurs. C\'est aussi le moment stratégique pour planifier les gros chantiers de l\'été. Voici la liste complète des priorités, classées par ordre d\'urgence. C\'est le moment de faire appel à un [peintre en bâtiment](/services/peintre-en-batiment) ou un [jardinier](/services/jardinier) avant la haute saison.',
 
@@ -142,8 +142,8 @@ export const conseilsArticles: Record<string, {
   },
 
   'canicule-adapter-logement-solutions': {
-    title: 'Canicule : Adapter son Logement',
-    excerpt: 'Stores, isolation, ventilation, climatisation : toutes les solutions pour maintenir votre logement frais pendant les épisodes de canicule, du geste simple à la rénovation.',
+    title: 'Canicule 2026 : Adapter son Logement',
+    excerpt: 'Stores, isolation, ventilation, climatisation : toutes les solutions pour garder votre logement frais pendant la canicule. Devis gratuit.',
     content: [
       'Avec le réchauffement climatique, les épisodes de canicule se multiplient en France. Entre 2000 et 2025, le nombre de jours de canicule a **significativement augmenté** sur le territoire (source : Météo-France). L\'été 2023 a battu tous les records avec des températures dépassant 45 °C dans le sud de la France. Adapter son logement n\'est plus une option, c\'est un **impératif de confort et de santé**, en particulier pour les personnes âgées, les enfants en bas âge et les personnes souffrant de maladies chroniques. Consultez un [climaticien](/services/climaticien) pour une solution adaptée à votre logement.',
 
@@ -182,8 +182,8 @@ export const conseilsArticles: Record<string, {
   },
 
   'travaux-avant-vendre-maison-rentables': {
-    title: 'Travaux avant de Vendre sa Maison',
-    excerpt: 'Identifiez les travaux les plus rentables pour valoriser votre bien immobilier avant la mise en vente : de la peinture à la rénovation énergétique, les investissements qui rapportent.',
+    title: 'Travaux avant de Vendre sa Maison 2026',
+    excerpt: 'Identifiez les travaux rentables pour valoriser votre bien avant la vente : peinture, rénovation énergétique et investissements gagnants.',
     content: [
       'Tous les travaux ne se valent pas lorsqu\'il s\'agit de valoriser un bien avant la vente. Certains offrent un retour sur investissement de **200 à 300 %**, d\'autres s\'avèrent coûteux sans impact significatif sur le prix de vente. En 2026, le marché immobilier est plus exigeant que jamais : les acheteurs scrutent le DPE, négocient au moindre défaut visible et comparent en ligne avant de se déplacer. Voici les travaux à privilégier selon les professionnels de l\'immobilier. Un [peintre en bâtiment](/services/peintre-en-batiment) pour un rafraîchissement est souvent le meilleur investissement.',
 
@@ -224,7 +224,7 @@ export const conseilsArticles: Record<string, {
   },
 
   'travaux-copropriete-guide-regles': {
-    title: 'Travaux Copropriété : Règles et Droits',
+    title: 'Travaux Copropriété 2026 : Règles',
     excerpt: 'Quels travaux pouvez-vous réaliser librement dans votre appartement ? Lesquels nécessitent l\'accord de la copropriété ? Tout ce qu\'il faut savoir pour éviter les conflits.',
     content: [
       'Vivre en copropriété implique de respecter des règles précises en matière de travaux. Entre les parties privatives et les parties communes, la frontière n\'est pas toujours claire. Chaque année, des milliers de litiges opposent des copropriétaires ayant entrepris des travaux sans autorisation. La loi du 10 juillet 1965, modifiée à plusieurs reprises, encadre strictement ces situations. Voici le guide complet pour y voir clair et éviter les conflits. Consultez un [architecte d\'intérieur](/services/architecte-interieur) pour vos projets en copropriété.',
@@ -265,7 +265,7 @@ export const conseilsArticles: Record<string, {
 
   'humidite-moisissure-maison-solutions': {
     title: 'Humidité et Moisissures : Solutions',
-    excerpt: 'Condensation, infiltrations, remontées capillaires : identifiez l\'origine de l\'humidité dans votre logement et découvrez les solutions adaptées pour un traitement durable.',
+    excerpt: 'Condensation, infiltrations, remontées capillaires : identifiez l\'origine de l\'humidité et découvrez les solutions pour un traitement durable.',
     content: [
       'L\'humidité touche près de **20 % des logements en France** selon l\'Observatoire de la qualité de l\'air intérieur (OQAI). Au-delà de l\'inconvénient esthétique (taches, décollements, odeurs), elle dégrade la structure du bâtiment et représente un **risque sanitaire sérieux** : allergies, asthme, infections respiratoires. Comprendre l\'origine du problème est la clé d\'un traitement efficace et durable. Faites appel à un [plombier](/services/plombier) pour diagnostiquer d\'éventuelles fuites ou à un [façadier](/services/facadier) pour les infiltrations de façade.',
 
@@ -335,7 +335,7 @@ export const conseilsArticles: Record<string, {
   },
 
   'travaux-locataire-proprietaire-qui-paye': {
-    title: 'Locataire vs Propriétaire : Qui Paye ?',
+    title: 'Locataire vs Propriétaire 2026 : Qui Paye ?',
     excerpt: 'Réparations locatives, gros travaux, vétusté : démêlez les responsabilités financières entre locataire et propriétaire pour éviter les litiges.',
     content: [
       'La répartition des charges de travaux entre locataire et propriétaire est une source inépuisable de conflits. Selon l\'ANIL, c\'est le premier motif de saisine des commissions départementales de conciliation. Pourtant, la loi est claire : voici ce que dit le décret du 26 août 1987 et la loi du 6 juillet 1989. Pour les travaux courants, trouvez un [plombier](/services/plombier) ou un [électricien](/services/electricien) qualifié.',
@@ -366,7 +366,7 @@ export const conseilsArticles: Record<string, {
   },
 
   'economiser-facture-energie-astuces': {
-    title: '15 astuces pour réduire sa facture d\'énergie',
+    title: '15 Astuces pour Réduire sa Facture Énergie',
     excerpt: 'Des gestes simples aux investissements rentables, découvrez 15 astuces concrètes et chiffrées pour réduire votre facture énergétique de 20 à 50 %.',
     content: [
       'La facture énergétique moyenne d\'un ménage français s\'élève à environ 2 800 euros par an selon le ministère de la Transition énergétique. Avec la hausse des prix de l\'énergie, ce montant ne cesse d\'augmenter. Voici 15 astuces classées par ordre de rentabilité pour alléger significativement votre facture. Pensez aussi à consulter un [spécialiste en rénovation énergétique](/services/renovation-energetique) pour un bilan complet.',
@@ -400,7 +400,7 @@ export const conseilsArticles: Record<string, {
   },
 
   'domotique-maison-connectee-guide-debutant': {
-    title: 'Domotique : Guide Maison Connectée',
+    title: 'Domotique 2026 : Guide Maison Connectée',
     excerpt: 'De l\'éclairage intelligent au thermostat connecté, découvrez comment transformer votre habitat en maison connectée sans être un expert en technologie.',
     content: [
       'La maison connectée n\'est plus un fantasme de science-fiction. En 2025, plus de 40 % des foyers français possèdent au moins un objet connecté pour la maison. Mais entre les assistants vocaux, les protocoles de communication et la multitude de produits, il est facile de s\'y perdre. Ce guide vous accompagne pas à pas. Faites appel à un [domoticien](/services/domoticien) pour une installation professionnelle.',
@@ -431,7 +431,7 @@ export const conseilsArticles: Record<string, {
   },
 
   'materiaux-ecologiques-construction-guide': {
-    title: 'Matériaux Écologiques : Le Guide',
+    title: 'Matériaux Écologiques 2026 : Guide',
     excerpt: 'Bois, chanvre, paille, terre crue : découvrez les matériaux écologiques qui révolutionnent la construction et la rénovation, leurs avantages et leurs limites.',
     content: [
       'Face à l\'urgence climatique, le secteur du bâtiment, responsable de 23 % des émissions de CO2 en France, doit se réinventer. Les matériaux écologiques offrent une alternative crédible aux matériaux conventionnels, avec des performances thermiques souvent supérieures et un impact environnemental considérablement réduit. Consultez un [spécialiste en isolation thermique](/services/isolation-thermique) pour vos projets éco-responsables.',
@@ -525,7 +525,7 @@ export const conseilsArticles: Record<string, {
 
   'nuisibles-maison-prevention-traitement': {
     title: 'Nuisibles : Prévention et Traitement',
-    excerpt: 'Termites, cafards, souris, punaises de lit : identifiez les nuisibles qui menacent votre logement et découvrez les méthodes de prévention et de traitement efficaces.',
+    excerpt: 'Termites, cafards, souris, punaises de lit : identifiez les nuisibles et découvrez les méthodes de prévention et traitement efficaces.',
     content: [
       'Les nuisibles ne sont pas qu\'une question de confort : certains menacent la structure même de votre maison (termites, capricornes), tandis que d\'autres représentent un risque sanitaire (cafards, rongeurs, punaises de lit). La France connaît une recrudescence de certains nuisibles, en partie liée au réchauffement climatique et à l\'urbanisation croissante. Contactez un [spécialiste en désinsectisation](/services/desinsectisation) ou en [dératisation](/services/deratisation) pour un traitement efficace.',
       '## Termites : la menace silencieuse\n\nLes termites souterrains touchent 54 départements français (zones d\'alerte). Ils dévorent le bois de l\'intérieur, rendant la détection tardive. Un diagnostic termites est obligatoire avant la vente dans les zones concernées. Le traitement curatif par pièges-appâts coûte entre 1 500 et 4 000 euros, le traitement par barrière chimique entre 2 000 et 6 000 euros.',
@@ -555,7 +555,7 @@ export const conseilsArticles: Record<string, {
 
   'bruit-isolation-phonique-solutions': {
     title: 'Isolation Phonique : Contre le Bruit',
-    excerpt: 'Bruits aériens, bruits d\'impact, nuisances extérieures : toutes les solutions d\'isolation acoustique pour retrouver le calme chez soi, du simple rideau à la contre-cloison.',
+    excerpt: 'Bruits aériens, bruits d\'impact, nuisances extérieures : toutes les solutions d\'isolation acoustique pour retrouver le calme chez soi. Devis gratuit.',
     content: [
       'Le bruit est la première source de nuisance pour les Français selon l\'ADEME. Près de 25 millions de personnes se déclarent gênées par le bruit à leur domicile. Au-delà de l\'inconfort, l\'exposition chronique au bruit provoque stress, troubles du sommeil et problèmes cardiovasculaires. Heureusement, des solutions existent pour chaque situation. Consultez un [plâtrier](/services/platrier) ou un [spécialiste en isolation](/services/isolation-thermique) pour un diagnostic acoustique.',
       '## Comprendre les types de bruit\n\nLes bruits aériens (voix, musique, télévision) se propagent par l\'air et traversent les parois. Les bruits d\'impact (pas, chutes d\'objets) se transmettent par la structure du bâtiment. Les bruits d\'équipements (chaudière, [ascenseur](/services/ascensoriste), VMC) combinent les deux modes de propagation. Chaque type de bruit appelle une solution différente.',
@@ -586,7 +586,7 @@ export const conseilsArticles: Record<string, {
 
   'securiser-maison-cambriolage-solutions': {
     title: 'Sécuriser sa Maison : Anti-Cambriolage',
-    excerpt: 'Serrures, alarmes, éclairage, habitudes : toutes les solutions pour dissuader les cambrioleurs et protéger efficacement votre domicile, du geste simple à l\'installation professionnelle.',
+    excerpt: 'Serrures, alarmes, éclairage, habitudes : toutes les solutions pour dissuader les cambrioleurs et protéger votre domicile. Devis gratuit.',
     content: [
       'En France, près de 230 000 cambriolages sont commis chaque année selon le ministère de l\'Intérieur. Dans 80 % des cas, le cambrioleur pénètre par la porte d\'entrée ou une fenêtre du rez-de-chaussée. La bonne nouvelle : dans 30 % des tentatives, le voleur renonce face à un système de protection visible. Faites appel à un [serrurier](/services/serrurier) pour sécuriser votre porte et à un [spécialiste alarme et sécurité](/services/alarme-securite) pour une protection complète.',
       '## La porte d\'entrée : votre premier rempart\n\nUne porte blindée certifiée A2P BP1 résiste cinq minutes à une tentative d\'effraction (suffisant pour dissuader 90 % des cambrioleurs). Coût : 1 500 à 4 000 euros pose comprise. Alternative économique : le blindage de votre porte existante (800 à 1 500 euros). Complétez avec une serrure multipoints certifiée A2P (200 à 800 euros selon le nombre d\'étoiles).',

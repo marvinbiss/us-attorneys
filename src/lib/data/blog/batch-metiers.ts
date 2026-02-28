@@ -13,8 +13,8 @@ export const metiersArticles: Record<string, {
   faq?: { question: string; answer: string }[]
 }> = {
   "comment-choisir-electricien-guide": {
-    title: "Choisir son Électricien : Le Guide",
-    excerpt: "Qualifications, certifications, devis, assurances... Tous les critères pour trouver un électricien fiable et compétent pour vos travaux.",
+    title: "Choisir son Électricien 2026 : Guide",
+    excerpt: "Qualifications, certifications, assurances : tous les critères pour trouver un électricien fiable et compétent. Devis gratuit.",
     content: [
       "L'électricité est un domaine où l'approximation n'a pas sa place. Chaque année en France, **50 000 incendies** sont d'origine électrique et **3 000 personnes** sont victimes d'électrisation. Une installation mal réalisée met en danger votre famille et votre patrimoine. Choisir le bon électricien est donc une décision capitale, que vous envisagiez une mise aux normes, une rénovation complète ou une simple intervention de dépannage. Ce guide vous donne **toutes les clés** pour faire le bon choix et éviter les mauvaises surprises. Consultez notre annuaire d'[électriciens vérifiés près de chez vous](/services/electricien).",
       "## Vérifiez les qualifications et certifications",
@@ -51,8 +51,8 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-serrurier-conseils": {
-    title: "Choisir son Serrurier : Conseils Clés",
-    excerpt: "Porte claquée, serrure bloquée, effraction... Comment trouver un serrurier honnête et éviter les arnaques, surtout en situation d'urgence.",
+    title: "Choisir son Serrurier 2026 : Conseils",
+    excerpt: "Porte claquée, serrure bloquée, effraction : comment trouver un serrurier honnête et éviter les arnaques en urgence. Comparez.",
     content: [
       "La serrurerie est l'un des secteurs de l'artisanat les plus exposés aux arnaques. En situation d'urgence — porte claquée, clé cassée dans la serrure, cambriolage — le stress pousse à appeler le premier numéro trouvé sur internet, souvent à des tarifs astronomiques. Ce guide vous arme pour faire le bon choix, même dans l'urgence. Commencez par identifier un [serrurier de confiance](/services/serrurier) dès maintenant.",
       "## Anticipez : trouvez votre serrurier avant l'urgence",
@@ -89,7 +89,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-chauffagiste-guide": {
-    title: "Choisir son Chauffagiste : Guide",
+    title: "Choisir son Chauffagiste 2026 : Guide",
     excerpt: "Installation, entretien, dépannage de chaudière ou pompe à chaleur : les critères pour sélectionner un chauffagiste qualifié et fiable.",
     content: [
       "Le choix d'un chauffagiste est déterminant pour votre confort thermique et votre facture énergétique. Qu'il s'agisse d'installer une pompe à chaleur, de remplacer une chaudière vieillissante ou d'assurer l'entretien annuel obligatoire, un professionnel compétent fait toute la différence. Trouvez un [chauffagiste certifié RGE](/services/chauffagiste) sur notre annuaire.",
@@ -126,7 +126,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-menuisier-guide": {
-    title: "Choisir son Menuisier : Critères Clés",
+    title: "Choisir son Menuisier 2026 : Critères",
     excerpt: "Fenêtres, portes, escaliers, agencement sur mesure... Les clés pour sélectionner un menuisier compétent, du bois à l'aluminium.",
     content: [
       "Le menuisier est l'artisan de la précision et du détail. Qu'il travaille le bois, l'aluminium ou le PVC, il façonne les éléments qui structurent votre intérieur et conditionnent l'isolation de votre logement. Fenêtres, portes, escaliers, placards sur mesure : le choix du bon menuisier a un impact direct sur votre confort quotidien et la valeur de votre bien. Consultez notre annuaire de [menuisiers qualifiés](/services/menuisier) pour comparer les profils.",
@@ -163,8 +163,8 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-carreleur-guide": {
-    title: "Comment choisir son carreleur : le guide",
-    excerpt: "Pose de carrelage sol et mural, faïence, mosaïque : les critères pour trouver un carreleur minutieux et professionnel.",
+    title: "Choisir son Carreleur 2026 : Guide",
+    excerpt: "Pose de carrelage sol et mural, faïence, mosaïque : les critères pour trouver un carreleur minutieux et professionnel. Devis gratuit.",
     content: [
       "Le carrelage est un revêtement exigeant qui ne pardonne pas l'à-peu-près. Une pose mal réalisée se voit immédiatement : joints irréguliers, carreaux décalés, planéité insuffisante. Le choix du carreleur est donc crucial pour un résultat esthétique et durable. Voici les critères à examiner attentivement. Comparez les profils de [carreleurs professionnels](/services/carreleur) sur notre annuaire.",
       "## Les qualifications professionnelles",
@@ -202,8 +202,8 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-macon-guide": {
-    title: "Choisir son Maçon : Bons Réflexes",
-    excerpt: "Construction, extension, rénovation de structure : les critères essentiels pour sélectionner un maçon compétent et bien assuré.",
+    title: "Choisir son Maçon 2026 : Bons Réflexes",
+    excerpt: "Construction, extension, rénovation de structure : les critères essentiels pour sélectionner un maçon compétent et assuré. Devis gratuit.",
     content: [
       "Le maçon est l'artisan des fondations, au sens propre comme au figuré. C'est lui qui pose les bases de votre projet de construction ou de rénovation. Une erreur de maçonnerie peut avoir des conséquences dramatiques et extrêmement coûteuses : fissures structurelles, problèmes d'humidité, affaissement. Le choix de ce professionnel mérite une attention toute particulière. Trouvez un [maçon qualifié et assuré](/services/macon) sur notre annuaire.",
       "## Les qualifications et l'assurance décennale",
@@ -237,7 +237,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-couvreur-guide": {
-    title: "Choisir son Couvreur : Le Guide",
+    title: "Choisir son Couvreur 2026 : Guide",
     excerpt: "Réfection de toiture, réparation de fuite, démoussage : comment sélectionner un couvreur qualifié et éviter les mauvaises surprises.",
     content: [
       "La toiture est le premier rempart de votre habitation contre les intempéries. Son entretien et sa réparation exigent un savoir-faire spécifique et un respect strict des règles de sécurité. Le choix d'un couvreur compétent conditionne la longévité de votre toit et la protection de l'ensemble de votre logement. Consultez notre annuaire de [couvreurs vérifiés](/services/couvreur) pour trouver un professionnel sérieux.",
@@ -274,8 +274,8 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-jardinier-paysagiste": {
-    title: "Comment choisir son jardinier paysagiste",
-    excerpt: "Création de jardin, entretien, élagage, aménagement paysager : les critères pour trouver le bon professionnel des espaces verts.",
+    title: "Choisir son Jardinier Paysagiste 2026",
+    excerpt: "Création de jardin, entretien, élagage, aménagement paysager : les critères pour trouver le bon professionnel. Devis gratuit.",
     content: [
       "Le jardinier paysagiste est bien plus qu'un simple tondeur de gazon. C'est un professionnel qui conçoit, aménage et entretient vos espaces extérieurs en tenant compte du sol, du climat, de l'exposition et de vos goûts. Bien choisi, il transforme votre jardin en un véritable prolongement de votre habitation. Trouvez un [jardinier](/services/jardinier) ou un [paysagiste](/services/paysagiste) de confiance près de chez vous.",
       "## Jardinier ou paysagiste : quelle différence ?",
@@ -311,7 +311,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-vitrier-guide": {
-    title: "Choisir son Vitrier : Guide Pratique",
+    title: "Choisir son Vitrier 2026 : Guide",
     excerpt: "Bris de glace, remplacement de vitrage, double vitrage : comment trouver un vitrier compétent, même en situation d'urgence.",
     content: [
       "Qu'il s'agisse d'un bris de glace accidentel, d'une tentative d'effraction ou du remplacement de vos simples vitrages par du double vitrage performant, le vitrier est un artisan spécialisé dont l'intervention demande précision et rapidité. Comme pour la serrurerie, les situations d'urgence rendent le choix plus difficile. Identifiez un [vitrier de confiance](/services/vitrier) dès maintenant.",
@@ -348,7 +348,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-climaticien-guide": {
-    title: "Choisir son Climaticien : Conseils",
+    title: "Choisir son Climaticien 2026 : Conseils",
     excerpt: "Climatisation réversible, PAC air-air, entretien frigorifique : les critères pour choisir un climaticien certifié et compétent.",
     content: [
       "Avec le réchauffement climatique, la climatisation n'est plus un luxe mais une nécessité dans de nombreuses régions françaises. Le choix du climaticien est déterminant : une installation mal dimensionnée ou mal posée entraîne surconsommation, bruit excessif et pannes récurrentes. Voici comment sélectionner le bon professionnel. Consultez notre annuaire de [climaticiens certifiés](/services/climaticien).",
@@ -383,7 +383,7 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-cuisiniste-guide": {
-    title: "Choisir son Cuisiniste : Guide Complet",
+    title: "Choisir son Cuisiniste 2026 : Guide",
     excerpt: "Conception 3D, choix des matériaux, pose professionnelle : tous les critères pour choisir un cuisiniste qui transformera votre projet en réalité.",
     content: [
       "La cuisine est la pièce la plus technique et souvent la plus coûteuse à aménager dans un logement. Elle combine plomberie, électricité, ventilation, menuiserie et carrelage. Le choix du cuisiniste — qu'il s'agisse d'un indépendant, d'une enseigne spécialisée ou d'un artisan menuisier — a un impact majeur sur le résultat final et votre satisfaction au quotidien. Comparez les [cuisinistes professionnels](/services/cuisiniste) de votre région.",
@@ -420,8 +420,8 @@ export const metiersArticles: Record<string, {
     ]
   },
   "comment-choisir-entreprise-nettoyage": {
-    title: "Nettoyage Pro : Comment Bien Choisir",
-    excerpt: "Nettoyage de locaux, fin de chantier, copropriété : les critères pour sélectionner une entreprise de nettoyage fiable et efficace.",
+    title: "Nettoyage Pro : Bien Choisir 2026",
+    excerpt: "Nettoyage de locaux, fin de chantier, copropriété : les critères pour sélectionner une entreprise de nettoyage fiable. Comparez.",
     content: [
       "Que ce soit pour l'entretien régulier de locaux professionnels, un nettoyage de fin de chantier ou l'entretien des parties communes d'une copropriété, le choix d'une entreprise de nettoyage compétente garantit un résultat impeccable et une relation de confiance sur la durée. Trouvez une [entreprise de nettoyage professionnelle](/services/nettoyage) sur notre annuaire.",
       "## Les certifications et agréments",
@@ -582,7 +582,7 @@ export const metiersArticles: Record<string, {
   },
   "metier-couvreur-risques-reglementation": {
     title: "Métier Couvreur : Risques et Règles",
-    excerpt: "Formation, sécurité en hauteur, réglementation thermique : tout savoir sur le métier de couvreur, l'un des plus techniques et des plus exposés du bâtiment.",
+    excerpt: "Formation, sécurité en hauteur, réglementation thermique : tout savoir sur le métier de couvreur, l'un des plus exposés du bâtiment.",
     content: [
       "Le couvreur est le gardien de l'étanchéité de nos habitations. Perché sur les toits par tous les temps, il pose, répare et entretient la couverture qui protège les bâtiments des intempéries. C'est aussi l'un des métiers les plus dangereux du bâtiment, soumis à une réglementation stricte en matière de sécurité. Consultez notre annuaire de [couvreurs professionnels](/services/couvreur).",
       "## Les formations initiales",

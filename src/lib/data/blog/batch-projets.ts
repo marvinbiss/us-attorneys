@@ -13,8 +13,8 @@ export const projetsArticles: Record<string, {
   faq?: { question: string; answer: string }[]
 }> = {
   'renover-cuisine-guide-complet-etapes': {
-    title: 'Rénover sa Cuisine : Guide par Étapes',
-    excerpt: 'De la conception à la réception des travaux, toutes les étapes pour réussir la rénovation de votre cuisine sans mauvaise surprise.',
+    title: 'Rénover sa Cuisine 2026 : Guide Étapes',
+    excerpt: 'De la conception à la réception des travaux, toutes les étapes pour réussir la rénovation de votre cuisine. Devis gratuit.',
     content: [
       "La cuisine est le coeur de la maison. Sa rénovation est l\'un des projets les plus valorisants pour un logement, mais aussi l\'un des plus complexes à orchestrer. Entre la plomberie, l\'électricité, l\'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/services/cuisiniste) pour concevoir votre projet.",
       "## 1. Définir le projet et le budget",
@@ -54,8 +54,8 @@ export const projetsArticles: Record<string, {
     ]
   },
   'refaire-toiture-guide-proprietaire': {
-    title: 'Refaire sa Toiture : Guide Propriétaire',
-    excerpt: 'Diagnostic, choix des matériaux, budget détaillé et aides financières : tout ce qu\'il faut savoir avant de refaire sa toiture.',
+    title: 'Refaire sa Toiture 2026 : Guide',
+    excerpt: 'Diagnostic, choix des matériaux, budget détaillé et aides financières : tout savoir avant de refaire sa toiture. Devis gratuit.',
     content: [
       "La toiture est le premier rempart de votre maison contre les intempéries. Une couverture vieillissante entraîne infiltrations, déperditions thermiques et dévalorisation du bien. Refaire sa toiture est un investissement majeur qu\'il convient de planifier avec soin. Consultez un [couvreur qualifié](/services/couvreur) pour un diagnostic précis.",
       "## 1. Diagnostiquer l\'état de la toiture",
@@ -93,8 +93,8 @@ export const projetsArticles: Record<string, {
     ]
   },
   'amenager-combles-guide-habitables': {
-    title: 'Aménager ses Combles : Guide Complet',
-    excerpt: 'Faisabilité, isolation, plancher, lumière et budget : le guide complet pour aménager vos combles en surface habitable.',
+    title: 'Aménager ses Combles 2026 : Guide',
+    excerpt: 'Faisabilité, isolation, plancher, lumière et budget : le guide complet pour aménager vos combles en surface habitable. Devis gratuit.',
     content: [
       "L\'aménagement des combles est la solution la plus rentable pour gagner de la surface habitable sans agrandir l\'emprise au sol de la maison. Un projet bien mené peut ajouter 20 à 50 m² à votre logement et valoriser votre bien de 15 à 20 %. Faites appel à un [charpentier](/services/charpentier) pour évaluer votre charpente.",
       "## 1. Vérifier la faisabilité",
@@ -135,8 +135,8 @@ export const projetsArticles: Record<string, {
     ]
   },
   'installer-pompe-chaleur-air-eau-guide': {
-    title: 'Pompe à Chaleur Air-Eau : Installation',
-    excerpt: 'Fonctionnement, dimensionnement, coût d\'installation et aides financières : tout savoir avant d\'installer une PAC air-eau.',
+    title: 'Pompe à Chaleur Air-Eau 2026 : Guide',
+    excerpt: 'Fonctionnement, dimensionnement, coût d\'installation et aides financières : tout savoir avant d\'installer une PAC air-eau. Comparez.',
     content: [
       "La pompe à chaleur (PAC) air-eau est devenue la solution de chauffage la plus plébiscitée en France. Elle capte les calories de l\'air extérieur pour chauffer l\'eau de votre circuit de chauffage, avec un rendement trois à cinq fois supérieur à celui d\'un radiateur électrique. En 2026, les aides financières rendent cet investissement particulièrement attractif. Trouvez un [spécialiste pompe à chaleur](/services/pompe-a-chaleur) certifié RGE.",
       "## 1. Comprendre le fonctionnement",
@@ -217,7 +217,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'creer-salle-de-bain-sous-combles': {
-    title: 'Salle de Bain sous Combles : Budget',
+    title: 'Salle de Bain sous Combles 2026 : Prix',
     excerpt: 'Contraintes techniques, choix des équipements, étanchéité et budget : tout savoir pour créer une salle de bain fonctionnelle sous les toits.',
     content: [
       "Créer une salle de bain sous les combles est l\'un des projets les plus demandés lors d\'un aménagement de combles. C\'est aussi l\'un des plus exigeants sur le plan technique : la pente du toit, l\'évacuation des eaux usées et l\'étanchéité imposent des solutions spécifiques. Faites appel à un [plombier qualifié](/services/plombier) et un [spécialiste salle de bain](/services/salle-de-bain) pour ce type de projet.",
@@ -257,7 +257,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'agrandir-maison-extension-guide': {
-    title: 'Agrandir sa Maison : Les Options',
+    title: 'Agrandir sa Maison 2026 : Les Options',
     excerpt: 'Comparez les trois solutions pour gagner de la surface : extension latérale, surélévation et véranda. Budget, démarches et conseils.',
     content: [
       "Quand la famille s\'agrandit ou que les besoins évoluent, l\'agrandissement de la maison est souvent préférable à un [déménagement](/services/demenageur). Trois solutions s\'offrent à vous : l\'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/services/macon) pour évaluer la faisabilité.",
@@ -300,7 +300,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'renover-facade-ravalement-guide': {
-    title: 'Ravalement Façade : Types et Budget',
+    title: 'Ravalement Façade 2026 : Types et Prix',
     excerpt: 'Ravalement obligatoire, techniques de nettoyage, enduits et peintures : le guide complet pour redonner vie à votre façade.',
     content: [
       "Le ravalement de façade est une obligation légale dans de nombreuses communes (tous les dix ans à Paris). Au-delà de l\'esthétique, une façade en bon état protège la structure du bâtiment contre les infiltrations et améliore l\'isolation thermique du logement. Faites appel à un [façadier professionnel](/services/facadier) pour votre projet.",
@@ -340,8 +340,8 @@ export const projetsArticles: Record<string, {
     ]
   },
   'amenager-terrasse-exterieure-guide': {
-    title: 'Terrasse Extérieure : Matériaux et Prix',
-    excerpt: 'Bois, composite, pierre, carrelage : comparez les matériaux et découvrez les étapes pour créer la terrasse de vos rêves.',
+    title: 'Terrasse Extérieure 2026 : Prix',
+    excerpt: 'Bois, composite, pierre, carrelage : comparez les matériaux et découvrez les étapes pour créer la terrasse de vos rêves. Devis gratuit.',
     content: [
       "La terrasse extérieure prolonge l\'espace de vie de la maison et constitue un véritable atout pour la qualité de vie comme pour la valeur du bien. Encore faut-il choisir le bon matériau et respecter les règles de construction pour une terrasse durable et esthétique. Consultez un [paysagiste](/services/paysagiste) pour la conception de votre projet.",
       "## 1. Définir le projet",
@@ -380,7 +380,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'installer-climatisation-maison-guide': {
-    title: 'Climatisation : Guide d\'Installation',
+    title: 'Climatisation 2026 : Guide Installation',
     excerpt: 'Split, multisplit, gainable ou réversible : comparez les systèmes de climatisation, leurs coûts et les aides disponibles.',
     content: [
       "Avec des étés de plus en plus chauds, la climatisation n\'est plus un luxe mais une nécessité dans de nombreuses régions françaises. Le marché propose des solutions adaptées à tous les budgets et à toutes les configurations de logement. Trouvez un [climaticien certifié](/services/climaticien) pour un dimensionnement adapté.",
@@ -420,7 +420,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'refaire-electricite-maison-ancienne': {
-    title: 'Électricité Maison Ancienne : Étapes',
+    title: 'Électricité Maison Ancienne 2026',
     excerpt: 'Diagnostic, mise aux normes NF C 15-100, budget par poste et déroulement du chantier : le guide pour rénover votre installation électrique.',
     content: [
       "En France, sept millions de logements présentent une installation électrique vétuste ou dangereuse. Si votre maison date d\'avant 1990 et n\'a jamais été rénovée électriquement, une mise aux normes s\'impose. C\'est un impératif de sécurité autant qu\'un investissement pour le confort et la valeur du bien. Faites appel à un [électricien certifié](/services/electricien) pour ce type de travaux.",
@@ -462,7 +462,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'refaire-plomberie-maison-ancienne': {
-    title: 'Plomberie Maison Ancienne : Guide',
+    title: 'Plomberie Maison Ancienne 2026 : Guide',
     excerpt: 'Diagnostic des canalisations, remplacement des tuyaux en plomb, budget par poste et étapes du chantier de rénovation plomberie.',
     content: [
       "Les canalisations en plomb, les tuyaux en acier galvanisé rouillé ou les joints en fibrociment sont autant de signaux indiquant qu\'une rénovation de la plomberie est nécessaire. Dans une maison d\'avant 1970, la reprise complète des réseaux d\'eau est souvent incontournable pour garantir la salubrité et le confort. Consultez un [plombier professionnel](/services/plombier) pour un diagnostic complet.",
@@ -504,7 +504,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'poser-carrelage-guide-complet-techniques': {
-    title: 'Poser du Carrelage : Guide Technique',
+    title: 'Poser du Carrelage 2026 : Guide',
     excerpt: 'Pose droite, diagonale, décalée ou en chevrons : maîtrisez les techniques de pose et évitez les erreurs les plus courantes.',
     content: [
       "Le carrelage est le revêtement le plus résistant et le plus hygiénique pour les sols et les murs. Sa pose demande rigueur et méthode : un carrelage mal posé se fissure, se décolle et vieillit prématurément. Ce guide vous accompagne étape par étape, que vous fassiez appel à un [carreleur professionnel](/services/carreleur) ou que vous posiez vous-même.",
@@ -546,7 +546,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'installer-parquet-massif-contrecolle-guide': {
-    title: 'Parquet : Massif, Contrecollé, Stratifié',
+    title: 'Parquet 2026 : Massif ou Stratifié ?',
     excerpt: 'Comparez les trois types de parquet, leurs techniques de pose et leurs budgets pour faire le choix adapté à votre logement.',
     content: [
       "Le parquet reste le revêtement de sol préféré des Français. Chaleureux, durable et valorisant pour le bien immobilier, il se décline en trois grandes familles qui répondent à des besoins et des budgets très différents. Ce guide vous aide à faire le bon choix et à comprendre les techniques de pose. Trouvez un [poseur de parquet](/services/poseur-de-parquet) qualifié pour un résultat impeccable.",
@@ -590,7 +590,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'construire-garage-guide-permis-budget': {
-    title: 'Construire un Garage : Budget et Étapes',
+    title: 'Construire un Garage 2026 : Budget',
     excerpt: 'Garage accolé ou indépendant, démarches d\'urbanisme, fondations et budget détaillé : le guide complet pour votre projet de garage.',
     content: [
       "Le garage protège votre véhicule, augmente l\'espace de rangement et valorise votre propriété de 5 à 10 %. C\'est un projet de construction à part entière qui nécessite des fondations solides, des démarches administratives et un budget bien défini. Faites appel à un [maçon](/services/macon) pour la construction du gros oeuvre.",
@@ -634,7 +634,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'amenager-jardin-paysagiste-guide': {
-    title: 'Jardin Paysagiste : Idées et Budget',
+    title: 'Jardin Paysagiste 2026 : Idées et Prix',
     excerpt: 'Conception paysagère, choix des végétaux, éclairage et arrosage automatique : le guide pour transformer votre jardin avec un professionnel.',
     content: [
       "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d\'un aménagement paysager réussi. Trouvez un [paysagiste qualifié](/services/paysagiste) ou un [jardinier](/services/jardinier) près de chez vous.",
@@ -676,8 +676,8 @@ export const projetsArticles: Record<string, {
     ]
   },
   'installer-portail-automatique-guide': {
-    title: 'Portail Automatique : Achat et Pose',
-    excerpt: 'Battant ou coulissant, motorisation, matériaux et budget : tout savoir pour choisir et installer un portail automatique.',
+    title: 'Portail Automatique 2026 : Achat et Pose',
+    excerpt: 'Battant ou coulissant, motorisation, matériaux et budget : tout savoir pour choisir et installer un portail automatique. Devis gratuit.',
     content: [
       "Le portail automatique allie confort, sécurité et esthétique. Il valorise l\'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/services/metallier) pour une réalisation sur mesure.",
       "## 1. Battant ou coulissant : le bon choix",
@@ -718,7 +718,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'remplacer-fenetres-guide-performances': {
-    title: 'Remplacer ses Fenêtres : Économies',
+    title: 'Remplacer ses Fenêtres 2026 : Économies',
     excerpt: 'Double ou triple vitrage, matériaux de menuiserie, aides financières et retour sur investissement : le guide pour changer vos fenêtres.',
     content: [
       "Les fenêtres représentent 10 à 15 % des déperditions thermiques d\'un logement. Le remplacement de fenêtres simple vitrage par du double ou triple vitrage réduit considérablement les pertes de chaleur, améliore le confort acoustique et valorise le bien immobilier. Comparez les devis de [menuisiers qualifiés](/services/menuisier) pour votre remplacement de fenêtres.",
@@ -761,7 +761,7 @@ export const projetsArticles: Record<string, {
     ]
   },
   'installer-vmc-ventilation-guide': {
-    title: 'VMC : Guide Ventilation et Qualité Air',
+    title: 'VMC 2026 : Ventilation et Qualité Air',
     excerpt: 'Simple flux, double flux ou hygroréglable : choisissez la VMC adaptée à votre logement pour un air sain et des économies d\'énergie.',
     content: [
       "La ventilation mécanique contrôlée (VMC) est indispensable pour renouveler l\'air intérieur, évacuer l\'humidité et les polluants, et préserver la santé des occupants comme la structure du bâtiment. Un logement mal ventilé favorise les moisissures, les acariens et la dégradation des matériaux. Faites appel à un [électricien](/services/electricien) ou un [climaticien](/services/climaticien) pour l\'installation.",
