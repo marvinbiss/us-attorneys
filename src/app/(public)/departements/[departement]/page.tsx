@@ -586,6 +586,20 @@ export default async function DepartementPage({ params }: PageProps) {
               </div>
             </div>
           )}
+          {villesDuDepartement.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Urgences dans le {dept.name}</h3>
+              <div className="flex flex-wrap gap-2">
+                {villesDuDepartement.slice(0, 6).flatMap((ville) =>
+                  orderedServices.slice(0, 5).map((s) => (
+                    <Link key={`urgence-${s.slug}-${ville.slug}`} href={`/urgence/${s.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
+                      Urgence {s.name.toLowerCase()} à {ville.name}
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

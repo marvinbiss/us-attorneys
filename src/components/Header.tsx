@@ -425,6 +425,32 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
               </button>
             </div>
 
+            {/* Liens directs SEO */}
+            <Link
+              href="/avis"
+              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+            >
+              Avis
+            </Link>
+            <Link
+              href="/tarifs"
+              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+            >
+              Tarifs
+            </Link>
+            <Link
+              href="/guides"
+              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+            >
+              Guides
+            </Link>
+            <Link
+              href="/blog"
+              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+            >
+              Blog
+            </Link>
+
             {/* Favoris */}
             <Link
               href="/mes-favoris"
@@ -1032,6 +1058,42 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                     </Link>
                   </div>
                 )}
+              </div>
+
+              {/* Liens directs SEO */}
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/avis"
+                  className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Star className="w-4 h-4 text-amber-500" />
+                  <span className="font-medium text-sm text-slate-700">Avis</span>
+                </Link>
+                <Link
+                  href="/tarifs"
+                  className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Layers className="w-4 h-4 text-blue-500" />
+                  <span className="font-medium text-sm text-slate-700">Tarifs</span>
+                </Link>
+                <Link
+                  href="/guides"
+                  className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <ShieldCheck className="w-4 h-4 text-green-500" />
+                  <span className="font-medium text-sm text-slate-700">Guides</span>
+                </Link>
+                <Link
+                  href="/blog"
+                  className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Sparkles className="w-4 h-4 text-purple-500" />
+                  <span className="font-medium text-sm text-slate-700">Blog</span>
+                </Link>
               </div>
 
               {/* CTAs */}

@@ -26,7 +26,10 @@ export const metadata: Metadata = {
     title: 'Carrières — Rejoignez notre équipe',
     description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
   },
-  // robots inherited from layout.tsx (noindex for pre-launch)
+  robots: {
+    index: false,
+    follow: true,
+  },
 }
 
 export default async function CarrieresPage() {

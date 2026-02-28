@@ -31,6 +31,7 @@ const nextConfig = {
       '@supabase/supabase-js',
       'date-fns',
       'zod',
+      'framer-motion',
     ],
   },
 

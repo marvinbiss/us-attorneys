@@ -18,6 +18,11 @@ export const metadata: Metadata = {
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par région' }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Artisans par Région — 18 Régions',
+    description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+  },
 }
 
 export default async function RegionsIndexPage() {

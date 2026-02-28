@@ -20,6 +20,8 @@ const outilsLinks = [
   { name: 'Diagnostic artisan', href: '/outils/diagnostic' },
   { name: 'Carte des artisans', href: '/carte-artisans' },
   { name: 'Tarifs artisans', href: '/tarifs' },
+  { name: 'Demander un devis', href: '/devis' },
+  { name: 'Urgence artisan', href: '/urgence' },
   { name: 'Widget pour artisans', href: '/widget' },
 ]
 
@@ -29,7 +31,8 @@ const informationLinks = [
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Tarifs artisans', href: '/tarifs' },
+  { name: 'Avis artisans', href: '/avis' },
+  { name: 'Guides pratiques', href: '/guides' },
   { name: 'CGV', href: '/cgv' },
   { name: 'Mentions légales', href: '/mentions-legales' },
   { name: 'Confidentialité', href: '/confidentialite' },

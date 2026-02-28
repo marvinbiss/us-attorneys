@@ -71,20 +71,22 @@ export default async function HomePage() {
       position: i + 1,
     })),
   })
-  const aggregateRatingSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'ServicesArtisans',
-    url: SITE_URL,
-    serviceType: 'Annuaire d\'artisans',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: homepageData.avgRating,
-      reviewCount: homepageData.reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-  }
+  const aggregateRatingSchema = homepageData.reviewCount > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: 'ServicesArtisans',
+        url: SITE_URL,
+        serviceType: 'Annuaire d\'artisans',
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: homepageData.avgRating,
+          reviewCount: homepageData.reviewCount,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      }
+    : null
 
   return (
     <div className="min-h-screen">

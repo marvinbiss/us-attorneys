@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { getFAQSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { faqItems } from '@/lib/data/faq-data'
 
 export const metadata: Metadata = {
   title: 'FAQ - Questions fréquentes | ServicesArtisans',
@@ -29,7 +28,6 @@ export default function FAQLayout({
 }: {
   children: React.ReactNode
 }) {
-  const faqSchema = getFAQSchema(faqItems)
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'FAQ', url: '/faq' },
@@ -37,7 +35,7 @@ export default function FAQLayout({
 
   return (
     <>
-      <JsonLd data={[faqSchema, breadcrumbSchema]} />
+      <JsonLd data={breadcrumbSchema} />
       {children}
     </>
   )

@@ -188,7 +188,7 @@ export default async function ConfidentialitePage() {
             <p>
               Certaines de nos données peuvent être hébergées en dehors de l'Union Européenne
               (notamment aux États-Unis). Dans ce cas, nous nous assurons que des garanties
-              appropriées sont en place (clauses contractuelles types, certification Privacy Shield).
+              appropriées sont en place (clauses contractuelles types, cadre de protection des données UE-États-Unis (EU-US Data Privacy Framework)).
             </p>
 
             <h2>10. Modifications</h2>

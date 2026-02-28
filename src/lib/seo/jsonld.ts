@@ -66,58 +66,6 @@ export function getWebsiteSchema() {
   }
 }
 
-// Schema.org LocalBusiness for artisans
-export function getLocalBusinessSchema(artisan: {
-  name: string
-  description: string
-  address: string
-  city: string
-  postalCode: string
-  phone?: string
-  rating?: number
-  reviewCount?: number
-  services: string[]
-  priceRange?: string
-  url?: string
-  image?: string
-}) {
-  const canonicalUrl = artisan.url || SITE_URL
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    '@id': `${canonicalUrl}#business`,
-    name: artisan.name,
-    description: artisan.description,
-    url: canonicalUrl,
-    ...(artisan.image ? { image: artisan.image } : {}),
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: artisan.address,
-      addressLocality: artisan.city,
-      postalCode: artisan.postalCode,
-      addressCountry: 'FR',
-    },
-    telephone: artisan.phone,
-    ...(artisan.priceRange ? { priceRange: artisan.priceRange } : {}),
-    aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
-      ? {
-          '@type': 'AggregateRating',
-          ratingValue: artisan.rating,
-          reviewCount: artisan.reviewCount,
-          bestRating: 5,
-          worstRating: 1,
-        }
-      : undefined,
-    makesOffer: artisan.services.map((service) => ({
-      '@type': 'Offer',
-      itemOffered: {
-        '@type': 'Service',
-        name: service,
-      },
-    })),
-  }
-}
-
 // Schema.org Service
 export function getServiceSchema(service: {
   name: string
@@ -193,43 +141,6 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]): Reco
         text: faq.answer,
       },
     })),
-    speakable: {
-      '@type': 'SpeakableSpecification',
-      cssSelector: ['.faq-answer'],
-    },
-  }
-}
-
-// Schema.org Review
-export function getReviewSchema(review: {
-  author: string
-  rating: number
-  reviewBody: string
-  datePublished: string
-  itemReviewed: {
-    name: string
-    type: 'LocalBusiness' | 'Service'
-  }
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Review',
-    author: {
-      '@type': 'Person',
-      name: review.author,
-    },
-    reviewRating: {
-      '@type': 'Rating',
-      ratingValue: review.rating,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    reviewBody: review.reviewBody,
-    datePublished: review.datePublished,
-    itemReviewed: {
-      '@type': review.itemReviewed.type,
-      name: review.itemReviewed.name,
-    },
   }
 }
 
@@ -284,6 +195,8 @@ export function getItemListSchema(params: {
             '@type': 'AggregateRating',
             ratingValue: item.rating,
             reviewCount: item.reviewCount,
+            bestRating: 5,
+            worstRating: 1,
           },
         }),
       },

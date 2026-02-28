@@ -6,6 +6,7 @@ import { ClayReviewsCarousel } from './ClayReviewsCarousel'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { formatProviderCount, type SiteStats, type HomepageProvider, type HomepageReview } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
+import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface Props {
   stats: SiteStats
@@ -242,6 +243,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   alt="Photo d'un client satisfait"
                   width={56}
                   height={56}
+                  placeholder="blur"
+                  blurDataURL={BLUR_PLACEHOLDER}
                   className="w-9 h-9 md:w-14 md:h-14 rounded-full border-2 border-white/20 object-cover -mr-2 md:-mr-3"
                 />
               ))}
@@ -352,6 +355,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                           alt=""
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
+                          placeholder="blur"
+                          blurDataURL={BLUR_PLACEHOLDER}
                           className="object-cover"
                         />
                         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))' }} />
@@ -470,6 +475,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         alt={rv.client_name || 'Client vérifié'}
                         width={40}
                         height={40}
+                        placeholder="blur"
+                        blurDataURL={BLUR_PLACEHOLDER}
                         className="rounded-full object-cover"
                         style={{ border: '2px solid rgba(255,255,255,.1)' }}
                       />
@@ -502,6 +509,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               alt=""
               fill
               sizes="100vw"
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
               className="object-cover"
             />
           </div>

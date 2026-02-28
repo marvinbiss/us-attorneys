@@ -103,6 +103,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                   src={provider.image_url}
                   alt={provider.name}
                   fill
+                  sizes="128px"
                   className="object-cover"
                 />
               ) : (

@@ -21,6 +21,11 @@ export const metadata: Metadata = {
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par département' }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Artisans par Département — 101 Dép.',
+    description: 'Annuaire d\'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous.',
+  },
 }
 
 const deptsByRegion = departements.reduce((acc, dept) => {

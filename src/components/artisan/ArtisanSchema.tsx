@@ -15,12 +15,16 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
   // Organization Schema for ServicesArtisans platform
   const organizationSchema = {
-    '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${baseUrl}#organization`,
     name: 'ServicesArtisans',
     url: baseUrl,
-    logo: `${baseUrl}/icon.svg`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${baseUrl}/icons/icon-512x512.png`,
+      width: 512,
+      height: 512,
+    },
     description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France',
     contactPoint: {
       '@type': 'ContactPoint',
@@ -35,7 +39,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
   // Individual Service Schemas for each service offered
   const serviceSchemas = artisan.service_prices.map((service, index) => ({
-    '@context': 'https://schema.org',
     '@type': 'Service',
     '@id': `${artisanUrl}#service-${index}`,
     name: service.name,
@@ -76,7 +79,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     : 'HomeAndConstructionBusiness'
 
   const localBusinessSchema = {
-    '@context': 'https://schema.org',
     '@type': ['LocalBusiness', businessType],
     '@id': `${artisanUrl}#business`,
     name: displayName,
@@ -114,7 +116,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
     aggregateRating: reviews.length > 0 ? {
       '@type': 'AggregateRating',
-      ratingValue: (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
+      ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
       reviewCount: reviews.length,
       bestRating: 5,
       worstRating: 1,
@@ -224,7 +226,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
   // FAQPage Schema
   const faqSchema = artisan.faq && artisan.faq.length > 0 ? {
-    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: artisan.faq.map(faq => ({
       '@type': 'Question',
@@ -249,7 +250,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
   ]
 
   const breadcrumbSchema = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: breadcrumbItems.map((item, index) => {
       const isLast = index === breadcrumbItems.length - 1
