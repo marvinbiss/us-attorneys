@@ -340,7 +340,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
           </Link>
 
           {/* Quick Search - Combined single-field search */}
-          <div className="hidden md:flex flex-1 max-w-xl mx-4 lg:mx-8">
+          <div className="hidden md:flex flex-1 min-w-[220px] max-w-xl mx-4 lg:mx-8">
             {mounted ? (
               <QuickSearch />
             ) : (
@@ -363,7 +363,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-expanded={openMenu === 'services'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1 px-3 py-2 rounded-xl font-medium text-[0.85rem] transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'services'
                     ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
@@ -388,7 +388,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-expanded={openMenu === 'villes'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1 px-3 py-2 rounded-xl font-medium text-[0.85rem] transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'villes'
                     ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
@@ -413,7 +413,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-expanded={openMenu === 'regions'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1 px-3 py-2 rounded-xl font-medium text-[0.85rem] transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'regions'
                     ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
@@ -437,7 +437,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-expanded={openMenu === 'plus'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1 px-3 py-2 rounded-xl font-medium text-[0.85rem] transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'plus'
                     ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
@@ -474,7 +474,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/connexion"
-              className="relative text-gray-600 hover:text-clay-400 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.85rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
@@ -492,7 +492,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/devis"
-              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="ml-2 px-4 py-2 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Devis gratuit
             </Link>
