@@ -99,9 +99,9 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
     address: {
       '@type': 'PostalAddress',
-      streetAddress: artisan.address || '',
+      ...(artisan.address ? { streetAddress: artisan.address } : {}),
       addressLocality: artisan.city,
-      addressRegion: artisan.region || artisan.department || '',
+      ...(artisan.region || artisan.department ? { addressRegion: artisan.region || artisan.department } : {}),
       postalCode: artisan.postal_code,
       addressCountry: 'FR',
     },
@@ -114,34 +114,38 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       },
     }),
 
-    aggregateRating: reviews.length > 0 ? {
-      '@type': 'AggregateRating',
-      ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
-      reviewCount: reviews.length,
-      bestRating: 5,
-      worstRating: 1,
-    } : undefined,
-
-    review: reviews.filter(r => r.comment && r.comment.trim().length > 0).slice(0, 5).map(r => ({
-      '@type': 'Review',
-      author: {
-        '@type': 'Person',
-        name: r.author,
-      },
-      ...(r.dateISO || r.date ? { datePublished: r.dateISO || r.date } : {}),
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: r.rating,
+    ...(reviews.length > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
+        reviewCount: reviews.length,
         bestRating: 5,
         worstRating: 1,
       },
-      reviewBody: r.comment,
-      itemReviewed: {
-        '@type': 'LocalBusiness',
-        '@id': `${artisanUrl}#business`,
-        name: displayName,
-      },
-    })),
+    } : {}),
+
+    ...((() => {
+      const validReviews = reviews.filter(r => r.comment && r.comment.trim().length > 0).slice(0, 5)
+      return validReviews.length > 0 ? {
+        review: validReviews.map(r => ({
+          '@type': 'Review',
+          author: { '@type': 'Person', name: r.author },
+          ...(r.dateISO || r.date ? { datePublished: r.dateISO || r.date } : {}),
+          reviewRating: {
+            '@type': 'Rating',
+            ratingValue: r.rating,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          reviewBody: r.comment,
+          itemReviewed: {
+            '@type': 'LocalBusiness',
+            '@id': `${artisanUrl}#business`,
+            name: displayName,
+          },
+        })),
+      } : {}
+    })()),
 
     ...(artisan.service_prices.length > 0 && {
       hasOfferCatalog: {

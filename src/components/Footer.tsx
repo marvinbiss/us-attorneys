@@ -22,6 +22,7 @@ const outilsLinks = [
   { name: 'Tarifs artisans', href: '/tarifs' },
   { name: 'Demander un devis', href: '/devis' },
   { name: 'Urgence artisan', href: '/urgence' },
+  { name: 'Problèmes courants', href: '/problemes' },
   { name: 'Widget pour artisans', href: '/widget' },
 ]
 
@@ -463,6 +464,21 @@ export default function Footer() {
               <li>
                 <Link href="/mediation" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Médiation
+                </Link>
+              </li>
+              <li>
+                <Link href="/presse" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Espace presse
+                </Link>
+              </li>
+              <li>
+                <Link href="/carrieres" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Carrières
+                </Link>
+              </li>
+              <li>
+                <Link href="/partenaires" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Partenaires
                 </Link>
               </li>
             </ul>

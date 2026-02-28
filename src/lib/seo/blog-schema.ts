@@ -110,10 +110,6 @@ export function getBlogArticleSchema(article: {
     articleSection: article.category,
     keywords: article.tags.join(', '),
     inLanguage: 'fr-FR',
-    speakable: {
-      '@type': 'SpeakableSpecification',
-      cssSelector: ['.article-excerpt', '.article-faq'],
-    },
   })
 
   // FAQ schema (only if we have at least 2 FAQ items)

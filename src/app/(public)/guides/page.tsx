@@ -37,11 +37,13 @@ export const metadata: Metadata = {
     description: `${guides.length} guides pratiques pour vos travaux : artisans, entretien, normes, économies et urgences.`,
     type: 'website',
     url: `${SITE_URL}/guides`,
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Guides pratiques' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Guides Travaux et Rénovation',
     description: 'Guides complets pour vos travaux : choisir un artisan, entretien, réglementation, économies et urgences. Conseils d\'experts, tarifs et aides financières.',
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

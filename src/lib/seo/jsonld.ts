@@ -220,12 +220,12 @@ export function getPlaceSchema(city: {
     url: `${SITE_URL}/villes/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
-    containedInPlace: city.region
-      ? {
-          '@type': 'AdministrativeArea',
-          name: city.region,
-        }
-      : undefined,
+    ...(city.region ? {
+      containedInPlace: {
+        '@type': 'AdministrativeArea',
+        name: city.region,
+      },
+    } : {}),
   }
 }
 
@@ -281,21 +281,21 @@ export function getProfessionalServiceSchema(artisan: {
     address: {
       '@type': 'PostalAddress',
       addressLocality: artisan.city,
-      postalCode: artisan.postalCode || '',
+      ...(artisan.postalCode ? { postalCode: artisan.postalCode } : {}),
       addressCountry: 'FR',
     },
-    telephone: artisan.phone,
-    email: artisan.email,
+    ...(artisan.phone ? { telephone: artisan.phone } : {}),
+    ...(artisan.email ? { email: artisan.email } : {}),
     ...(artisan.priceRange ? { priceRange: artisan.priceRange } : {}),
-    aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
-      ? {
-          '@type': 'AggregateRating',
-          ratingValue: Number(artisan.rating.toFixed(1)),
-          reviewCount: artisan.reviewCount,
-          bestRating: 5,
-          worstRating: 1,
-        }
-      : undefined,
+    ...((artisan.rating && artisan.reviewCount && artisan.reviewCount > 0) ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Number(artisan.rating.toFixed(1)),
+        reviewCount: artisan.reviewCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    } : {}),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Services proposés',

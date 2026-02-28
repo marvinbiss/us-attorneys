@@ -67,7 +67,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
       headline: a.title,
       url: `${SITE_URL}/blog/${a.slug}`,
       datePublished: a.date,
-      author: { '@type': 'Person', name: allArticles[a.slug]?.author || 'ServicesArtisans' },
+      author: (() => {
+        const authorName = allArticles[a.slug]?.author || 'ServicesArtisans'
+        return authorName === 'ServicesArtisans'
+          ? { '@type': 'Organization', name: authorName, '@id': `${SITE_URL}#organization` }
+          : { '@type': 'Person', name: authorName }
+      })(),
     })),
   }
 
