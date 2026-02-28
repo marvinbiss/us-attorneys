@@ -50,7 +50,6 @@ export async function GET() {
     // dept-services uses LARGE_BATCH (45000) in sitemap()
     ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
     'region-services',
-    'guides',
   ]
 
   // Provider sitemaps (DB-dependent, served via /api/sitemap-providers)
