@@ -116,11 +116,7 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
         position: index + 1,
         name: item.name,
         ...(!isLast && {
-          item: {
-            '@type': 'WebPage',
-            '@id': `${SITE_URL}${item.url}`,
-            name: item.name,
-          },
+          item: `${SITE_URL}${item.url}`,
         }),
       }
     }),
