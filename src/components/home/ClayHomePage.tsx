@@ -129,9 +129,9 @@ function ClayFAQSection() {
 // ── Main Component ───────────────────────────────────────────────
 export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews }: Props) {
   const { artisanCount, reviewCount, avgRating, deptCount } = stats
-  const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '50 000+'
-  const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '12 400'
-  const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '4,9'
+  const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '—'
+  const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '—'
+  const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '—'
 
   // Use real top providers from DB when available, fall back to curated list
   const artisans = topProviders.length >= 3

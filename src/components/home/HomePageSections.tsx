@@ -36,16 +36,16 @@ const staggerItem = {
 // ─── SERVICES SHOWCASE → BENTO GRID ─────────────────────────────
 
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '35 200+', desc: 'Fuite, robinetterie, chauffe-eau, canalisation' },
-  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', count: '32 400+', desc: 'Installation, dépannage, mise aux normes' },
-  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '8 500+', desc: 'Ouverture, blindage, serrures' },
-  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-blue-600 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '28 100+', desc: 'Chaudière, pompe à chaleur, radiateur' },
-  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '26 800+', desc: 'Intérieur, extérieur, ravalement' },
-  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', count: '24 300+', desc: 'Fenêtres, portes, agencement' },
-  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-blue-500 to-indigo-500', bg: 'bg-blue-50', text: 'text-blue-600', count: '18 600+', desc: 'Sol, mur, salle de bain' },
-  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50', text: 'text-indigo-600', count: '15 400+', desc: 'Toiture, zinguerie, charpente' },
-  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-slate-600 to-slate-700', bg: 'bg-slate-100', text: 'text-slate-600', count: '30 200+', desc: 'Gros œuvre, extension, rénovation' },
-  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '22 100+', desc: 'Entretien, élagage, aménagement' },
+  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Fuite, robinetterie, chauffe-eau, canalisation' },
+  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', desc: 'Installation, dépannage, mise aux normes' },
+  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Ouverture, blindage, serrures' },
+  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-blue-600 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Chaudière, pompe à chaleur, radiateur' },
+  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Intérieur, extérieur, ravalement' },
+  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', desc: 'Fenêtres, portes, agencement' },
+  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-blue-500 to-indigo-500', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Sol, mur, salle de bain' },
+  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50', text: 'text-indigo-600', desc: 'Toiture, zinguerie, charpente' },
+  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-slate-600 to-slate-700', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Gros œuvre, extension, rénovation' },
+  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Entretien, élagage, aménagement' },
 ]
 
 export function ServicesShowcase() {
@@ -103,9 +103,7 @@ export function ServicesShowcase() {
                         <span className="font-heading font-bold text-xl text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                           {service.name}
                         </span>
-                        <span className="text-xs font-medium text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">
-                          {service.count}
-                        </span>
+                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-400 transition-colors" />
                       </div>
                       <p className="text-slate-600 text-sm leading-relaxed">{service.desc}</p>
                     </div>
@@ -142,7 +140,7 @@ export function ServicesShowcase() {
                     <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 text-center mb-1">
                       {service.name}
                     </span>
-                    <span className="text-xs text-slate-400 mb-3">{service.count} artisans</span>
+                    <span className="text-xs text-slate-400 mb-3">{service.desc}</span>
                     <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300" />
                   </Link>
                 </motion.div>
@@ -167,7 +165,7 @@ export function ServicesShowcase() {
                       <span className="font-semibold text-sm text-slate-900 group-hover:text-blue-600 transition-colors duration-300 block">
                         {service.name}
                       </span>
-                      <span className="text-xs text-slate-400">{service.count}</span>
+                      <span className="text-xs text-slate-400">{service.desc}</span>
                     </div>
                     <ArrowRight className="w-4 h-4 text-slate-200 opacity-40 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-blue-400 transition-all duration-300 shrink-0" />
                   </Link>

@@ -105,7 +105,7 @@ const verificationSteps = [
 const commitments = [
   {
     title: 'Zéro information inventée',
-    description: 'Aucun faux avis, aucune fausse statistique, aucun faux profil d\'artisan sur la plateforme.',
+    description: 'Toutes les données proviennent des registres officiels SIREN. Aucun profil inventé sur la plateforme.',
   },
   {
     title: 'Données protégées',

@@ -91,6 +91,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
   }
 
+  // Redirect legacy/mistyped URLs → correct paths (301 permanent)
+  const legacyRedirects: Record<string, string> = {
+    '/problemes-courants': '/problemes',
+    '/outils/diagnostic-artisan': '/outils/diagnostic',
+  }
+  if (legacyRedirects[pathname]) {
+    const host = request.headers.get('host') || 'servicesartisans.fr'
+    return NextResponse.redirect(`https://${host}${legacyRedirects[pathname]}${request.nextUrl.search}`, 301)
+  }
+
   // URL canonicalization
   const canonicalUrl = getCanonicalRedirect(request)
   if (canonicalUrl && process.env.NODE_ENV === 'production') {

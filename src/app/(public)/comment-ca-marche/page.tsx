@@ -99,8 +99,8 @@ const trustReasons = [
   },
   {
     icon: FileText,
-    title: 'Pas de faux avis, uniquement des données officielles',
-    description: 'Contrairement aux sites avec des avis manipulables, nous affichons uniquement des données vérifiables issues des registres officiels de l\'État français.',
+    title: 'Données officielles vérifiables',
+    description: 'Nous affichons uniquement des données vérifiables issues des registres officiels de l\'État français (API SIREN, INSEE).',
   },
 ]
 
