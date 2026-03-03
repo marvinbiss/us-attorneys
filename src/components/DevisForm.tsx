@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface FormData {
   service: string
@@ -167,14 +168,20 @@ export default function DevisForm({
       newErrors.email = 'Veuillez entrer une adresse e-mail valide'
     }
     if (!formData.consentement) {
-      newErrors.consentement = 'Veuillez accepter d’être contacté par des artisans'
+      newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const handleNext = () => {
-    if (step === 1 && validateStep1()) setStep(2)
+    if (step === 1 && validateStep1()) {
+      trackEvent('form_started', {
+        service: formData.service || '',
+        source: 'devis_form',
+      })
+      setStep(2)
+    }
   }
 
   const handlePrev = () => {
@@ -207,9 +214,16 @@ export default function DevisForm({
 
       if (!res.ok) {
         const body = await res.json().catch(() => null)
-        throw new Error(body?.error || 'Erreur lors de l’envoi')
+        throw new Error(body?.error || "Erreur lors de l'envoi")
       }
 
+      trackEvent('devis_submitted', {
+        service: formData.service || '',
+        city: formData.ville || '',
+        postalCode: selectedVillePostal || '',
+        urgency: formData.urgence || '',
+        source: 'devis_form',
+      })
       setSubmitted(true)
     } catch (err) {
       setSubmitError(

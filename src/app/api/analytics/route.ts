@@ -23,6 +23,23 @@ const ALLOWED_EVENTS = [
   'phone_reveal',
   'phone_click',
   'page_view',
+  'calendar_opened',
+  'date_selected',
+  'slot_selected',
+  'form_started',
+  'form_completed',
+  'booking_initiated',
+  'booking_completed',
+  'booking_cancelled',
+  'booking_rescheduled',
+  'payment_started',
+  'payment_completed',
+  'payment_failed',
+  'review_submitted',
+  'waitlist_joined',
+  'reminder_sent',
+  'reminder_clicked',
+  'devis_submitted',
 ] as const
 
 const analyticsSchema = z.object({
@@ -73,8 +90,9 @@ export async function POST(request: Request) {
 
     const { event, properties, sessionId, visitorId } = validation.data
 
-    // For artisan events, artisanId is required
-    if (event !== 'page_view' && !properties.artisanId) {
+    // For artisan-specific events, artisanId is required
+    const ARTISAN_EVENTS = ['artisan_profile_view', 'phone_reveal', 'phone_click']
+    if (ARTISAN_EVENTS.includes(event) && !properties.artisanId) {
       return new NextResponse(null, { status: 400 })
     }
 

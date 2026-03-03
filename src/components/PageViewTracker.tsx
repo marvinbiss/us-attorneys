@@ -57,14 +57,6 @@ export default function PageViewTracker() {
       } catch {
         // Silent failure — analytics should never break the app
       }
-
-      // Forward to GA4 if available
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'page_view', {
-          page_path: pathname,
-          page_title: document.title,
-        })
-      }
     }, 0)
 
     return () => clearTimeout(timer)

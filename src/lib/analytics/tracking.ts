@@ -28,6 +28,7 @@ export type BookingEvent =
   | 'waitlist_joined'
   | 'reminder_sent'
   | 'reminder_clicked'
+  | 'devis_submitted'
 
 export interface TrackingData {
   event: BookingEvent
@@ -79,7 +80,7 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
 
   // Also send to Google Analytics if available
   if (typeof window.gtag === 'function') {
-    window.gtag('event', event, properties)
+    window.gtag('event', event, data.properties)
   }
 
   // Debug logging in development
@@ -93,7 +94,15 @@ async function sendToAnalytics(data: TrackingData) {
   try {
     // Use sendBeacon for reliability (doesn't block page unload)
     if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/analytics', JSON.stringify(data))
+      const sent = navigator.sendBeacon('/api/analytics', JSON.stringify(data))
+      if (!sent) {
+        fetch('/api/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          keepalive: true,
+        }).catch(() => {})
+      }
     } else {
       // Fallback to fetch
       fetch('/api/analytics', {
