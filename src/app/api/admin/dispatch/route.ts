@@ -10,6 +10,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 const actionBodySchema = z.object({
@@ -187,5 +188,48 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Dispatch POST error', error)
     return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+  }
+}
+
+// DELETE - Supprimer une assignation
+export async function DELETE(request: NextRequest) {
+  const auth = await requirePermission('services', 'delete')
+  if (!auth.success || !auth.admin) return auth.error!
+
+  try {
+    const body = await request.json()
+    const id = body?.id
+
+    if (!id || !isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
+
+    const supabase = createAdminClient()
+
+    const { error } = await supabase
+      .from('lead_assignments')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      logger.error('Dispatch assignment delete error', error)
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la suppression' } },
+        { status: 500 }
+      )
+    }
+
+    await logAdminAction(auth.admin.id, 'dispatch_assignment_deleted', 'lead_assignment', id)
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    logger.error('Dispatch assignment delete error', error)
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

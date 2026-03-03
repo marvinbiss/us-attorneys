@@ -17,10 +17,12 @@ import {
   Euro,
   Hammer,
   Send,
+  Trash2,
+  Loader2,
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
-import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface DevisRequest {
   id: string
@@ -89,6 +91,8 @@ export default function AdminDevisPage() {
   const [status, setStatus] = useState<typeof STATUS_FILTERS[number]>('all')
   const [page, setPage] = useState(1)
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   const url = `/api/admin/quotes?page=${page}&limit=20&status=${status}&search=${encodeURIComponent(search)}`
   const { data, isLoading, error, mutate } = useAdminFetch<DevisResponse>(url)
@@ -110,6 +114,23 @@ export default function AdminDevisPage() {
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id)
+  }
+
+  const handleDelete = async (id: string) => {
+    setDeletingId(id)
+    try {
+      await adminMutate('/api/admin/quotes', {
+        method: 'DELETE',
+        body: { id },
+      })
+      setConfirmDeleteId(null)
+      setExpandedId(null)
+      mutate()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Erreur lors de la suppression')
+    } finally {
+      setDeletingId(null)
+    }
   }
 
   return (
@@ -364,8 +385,41 @@ export default function AdminDevisPage() {
                             </div>
                           </div>
 
-                          {/* ID for reference */}
-                          <p className="mt-3 text-xs text-gray-400 font-mono">ID: {demande.id}</p>
+                          {/* ID + Delete */}
+                          <div className="mt-4 flex items-center justify-between">
+                            <p className="text-xs text-gray-400 font-mono">ID: {demande.id}</p>
+                            {confirmDeleteId === demande.id ? (
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-red-600 font-medium">Supprimer cette demande ?</span>
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleDelete(demande.id) }}
+                                  disabled={deletingId === demande.id}
+                                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                >
+                                  {deletingId === demande.id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="w-3 h-3" />
+                                  )}
+                                  Confirmer
+                                </button>
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(null) }}
+                                  className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                >
+                                  Annuler
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(demande.id) }}
+                                className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                Supprimer
+                              </button>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>

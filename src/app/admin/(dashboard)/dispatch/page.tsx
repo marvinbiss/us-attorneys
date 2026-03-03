@@ -10,6 +10,7 @@ import {
   Eye,
   Send,
   Inbox,
+  Trash2,
 } from 'lucide-react'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
@@ -58,6 +59,7 @@ export default function AdminDispatchPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [mutationError, setMutationError] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   const params = new URLSearchParams({ page: String(page) })
   if (statusFilter !== 'all') params.set('status', statusFilter)
@@ -76,6 +78,23 @@ export default function AdminDispatchPage() {
         method: 'POST',
         body: { action: 'replay', assignmentId },
       })
+      mutate()
+    } catch (err) {
+      setMutationError(err instanceof Error ? err.message : 'Erreur')
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    setActionLoading(id)
+    try {
+      setMutationError(null)
+      await adminMutate('/api/admin/dispatch', {
+        method: 'DELETE',
+        body: { id },
+      })
+      setConfirmDeleteId(null)
       mutate()
     } catch (err) {
       setMutationError(err instanceof Error ? err.message : 'Erreur')
@@ -220,20 +239,51 @@ export default function AdminDispatchPage() {
                               : <span className="text-gray-300">—</span>}
                           </td>
                           <td className="px-4 py-3">
-                            {a.status === 'pending' && (
-                              <button
-                                onClick={() => handleReplay(a.id)}
-                                disabled={actionLoading === a.id}
-                                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
-                              >
-                                {actionLoading === a.id ? (
-                                  <Loader2 className="w-3 h-3 animate-spin" />
-                                ) : (
-                                  <RefreshCw className="w-3 h-3" />
-                                )}
-                                Relancer
-                              </button>
-                            )}
+                            <div className="flex items-center gap-1.5">
+                              {a.status === 'pending' && (
+                                <button
+                                  onClick={() => handleReplay(a.id)}
+                                  disabled={actionLoading === a.id}
+                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                                >
+                                  {actionLoading === a.id && confirmDeleteId !== a.id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <RefreshCw className="w-3 h-3" />
+                                  )}
+                                  Relancer
+                                </button>
+                              )}
+                              {confirmDeleteId === a.id ? (
+                                <>
+                                  <button
+                                    onClick={() => handleDelete(a.id)}
+                                    disabled={actionLoading === a.id}
+                                    className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                  >
+                                    {actionLoading === a.id ? (
+                                      <Loader2 className="w-3 h-3 animate-spin" />
+                                    ) : (
+                                      <Trash2 className="w-3 h-3" />
+                                    )}
+                                    Confirmer
+                                  </button>
+                                  <button
+                                    onClick={() => setConfirmDeleteId(null)}
+                                    className="px-2.5 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                  >
+                                    Annuler
+                                  </button>
+                                </>
+                              ) : (
+                                <button
+                                  onClick={() => setConfirmDeleteId(a.id)}
+                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       )

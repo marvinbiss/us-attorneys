@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
-import { sanitizeSearchQuery } from '@/lib/sanitize'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { sanitizeSearchQuery, isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -121,6 +121,58 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin devis requests list error', error)
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE - Supprimer une demande de devis
+export async function DELETE(request: NextRequest) {
+  try {
+    const authResult = await requirePermission('services', 'delete')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
+    const body = await request.json()
+    const id = body?.id
+
+    if (!id || !isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
+
+    const supabase = createAdminClient()
+
+    // Delete related lead_assignments first (FK-free polymorphic link)
+    await supabase
+      .from('lead_assignments')
+      .delete()
+      .eq('lead_id', id)
+
+    // Delete the devis_request
+    const { error } = await supabase
+      .from('devis_requests')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      logger.error('Devis request delete error', error)
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la suppression' } },
+        { status: 500 }
+      )
+    }
+
+    await logAdminAction(authResult.admin.id, 'devis_request_deleted', 'devis_request', id)
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    logger.error('Devis request delete error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
