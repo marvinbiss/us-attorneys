@@ -116,8 +116,8 @@ export async function uploadFile(
           .getPublicUrl(thumbnailPath)
         result.thumbnailUrl = thumbUrlData.publicUrl
       }
-    } catch (e) {
-      console.warn('Failed to generate thumbnail:', e)
+    } catch (error: unknown) {
+      console.warn('Failed to generate thumbnail:', error)
     }
   }
 
@@ -125,8 +125,8 @@ export async function uploadFile(
   if (file.type.startsWith('video/')) {
     try {
       result.duration = await getVideoDuration(file)
-    } catch (e) {
-      console.warn('Failed to get video duration:', e)
+    } catch (error: unknown) {
+      console.warn('Failed to get video duration:', error)
     }
   }
 

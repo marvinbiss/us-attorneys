@@ -72,8 +72,8 @@ async function getRecentProviders(limit = 50) {
       count: totalCount,
       error: null,
     }
-  } catch (e) {
-    return { providers: [], count: 0, error: `Exception: ${e instanceof Error ? e.message : String(e)}` }
+  } catch (error: unknown) {
+    return { providers: [], count: 0, error: `Exception: ${error instanceof Error ? error.message : String(error)}` }
   }
 }
 

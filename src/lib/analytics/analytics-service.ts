@@ -277,16 +277,35 @@ export class AnalyticsService {
     const quotes = quotesResult.data || []
     const profileViews = profileViewsResult.count || 0
 
+    // Single-pass aggregation over bookings
     const totalBookings = bookings.length
-    const completedBookings = bookings.filter(
-      (b) => b.status === 'completed'
-    ).length
-    const cancelledBookings = bookings.filter(
-      (b) => b.status === 'cancelled'
-    ).length
-    const totalRevenue = bookings
-      .filter((b) => b.status === 'completed')
-      .reduce((sum, b) => sum + (b.total_price || 0), 0)
+    const bookingAgg = bookings.reduce(
+      (acc, b) => {
+        const service = (b.service_type as string) || 'Autre'
+        acc.serviceCount[service] = (acc.serviceCount[service] || 0) + 1
+
+        if (b.status === 'completed') {
+          acc.completedBookings++
+          acc.totalRevenue += b.total_price || 0
+        } else if (b.status === 'cancelled') {
+          acc.cancelledBookings++
+        }
+
+        return acc
+      },
+      {
+        completedBookings: 0,
+        cancelledBookings: 0,
+        totalRevenue: 0,
+        serviceCount: {} as Record<string, number>,
+      }
+    )
+    const { completedBookings, cancelledBookings, totalRevenue } = bookingAgg
+
+    const topServices = Object.entries(bookingAgg.serviceCount)
+      .map(([service, count]) => ({ service, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
 
     const totalReviews = reviews.length
     const averageRating =
@@ -304,17 +323,6 @@ export class AnalyticsService {
     // Bookings by month
     const bookingsByMonth = this.groupBookingsByMonth(bookings)
     const revenueByMonth = this.groupRevenueByMonth(bookings)
-
-    // Top services from bookings
-    const serviceCount: Record<string, number> = {}
-    bookings.forEach((b) => {
-      const service = (b.service_type as string) || 'Autre'
-      serviceCount[service] = (serviceCount[service] || 0) + 1
-    })
-    const topServices = Object.entries(serviceCount)
-      .map(([service, count]) => ({ service, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
 
     return {
       totalBookings,
