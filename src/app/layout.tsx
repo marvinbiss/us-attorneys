@@ -44,6 +44,9 @@ const WebVitals = dynamic(
   () => import('@/components/WebVitals').then(mod => ({ default: mod.WebVitals })),
   { ssr: false }
 )
+const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
+  ssr: false,
+})
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -189,6 +192,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
+        <PageViewTracker />
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a

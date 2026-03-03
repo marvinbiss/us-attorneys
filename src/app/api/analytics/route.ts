@@ -2,7 +2,11 @@
  * Analytics Event Ingestion API
  * POST /api/analytics
  * Receives events from client-side tracking (sendBeacon / fetch)
- * Stores in analytics_events table for artisan dashboard reporting
+ * Stores in analytics_events table for admin dashboard reporting
+ *
+ * Supported events:
+ * - artisan_profile_view, phone_reveal, phone_click (artisan interactions)
+ * - page_view (page navigation tracking with visitor_id)
  */
 
 import { NextResponse } from 'next/server'
@@ -14,12 +18,17 @@ import { createHash } from 'crypto'
 
 export const dynamic = 'force-dynamic'
 
-const ALLOWED_EVENTS = ['artisan_profile_view', 'phone_reveal', 'phone_click'] as const
+const ALLOWED_EVENTS = [
+  'artisan_profile_view',
+  'phone_reveal',
+  'phone_click',
+  'page_view',
+] as const
 
 const analyticsSchema = z.object({
   event: z.enum(ALLOWED_EVENTS),
   properties: z.object({
-    artisanId: z.string().uuid(),
+    artisanId: z.string().uuid().optional(),
     artisanName: z.string().max(200).optional(),
     source: z.string().max(50).optional(),
     url: z.string().max(2000).optional(),
@@ -27,8 +36,11 @@ const analyticsSchema = z.object({
     userAgent: z.string().max(500).optional(),
     screenSize: z.string().max(20).optional(),
     timestamp: z.string().optional(),
+    page_path: z.string().max(500).optional(),
+    title: z.string().max(500).optional(),
   }).passthrough(),
   sessionId: z.string().max(100).optional(),
+  visitorId: z.string().max(100).optional(),
   timestamp: z.string().optional(),
 })
 
@@ -59,7 +71,12 @@ export async function POST(request: Request) {
       return new NextResponse(null, { status: 400 })
     }
 
-    const { event, properties, sessionId } = validation.data
+    const { event, properties, sessionId, visitorId } = validation.data
+
+    // For artisan events, artisanId is required
+    if (event !== 'page_view' && !properties.artisanId) {
+      return new NextResponse(null, { status: 400 })
+    }
 
     // Hash IP for dedup (RGPD: no raw IP stored)
     const ipHash = createHash('sha256')
@@ -68,18 +85,34 @@ export async function POST(request: Request) {
       .substring(0, 16)
 
     const supabase = createAdminClient()
-    const { error } = await supabase.from('analytics_events').insert({
+
+    // Build insert data based on event type
+    const insertData: Record<string, unknown> = {
       event_type: event,
-      provider_id: properties.artisanId,
       session_id: sessionId || null,
-      source: properties.source || null,
+      visitor_id: visitorId || null,
       ip_hash: ipHash,
-      metadata: {
+    }
+
+    if (event === 'page_view') {
+      insertData.page_path = properties.page_path || null
+      insertData.source = properties.referrer || null
+      insertData.metadata = {
+        title: properties.title,
+        url: properties.url,
+        screenSize: properties.screenSize,
+      }
+    } else {
+      insertData.provider_id = properties.artisanId
+      insertData.source = properties.source || null
+      insertData.metadata = {
         artisanName: properties.artisanName,
         url: properties.url,
         referrer: properties.referrer,
-      },
-    })
+      }
+    }
+
+    const { error } = await supabase.from('analytics_events').insert(insertData)
 
     if (error) {
       logger.error('Analytics insert error', error)

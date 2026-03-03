@@ -46,32 +46,35 @@ export async function GET(request: Request) {
 
     // Parallel: current events, previous events, recent activity feed
     const [currentResult, prevResult, recentResult] = await Promise.all([
-      // Current period events with provider info
+      // Current period events with provider info (exclude page_view — handled by /visitors endpoint)
       (() => {
         let q = supabase
           .from('analytics_events')
           .select('provider_id, event_type, created_at, source, providers!inner(name, address_city, slug, stable_id, specialty)')
+          .neq('event_type', 'page_view')
         if (dateFilter) q = q.gte('created_at', dateFilter)
         return q.order('created_at', { ascending: false })
       })(),
 
-      // Previous period for trends
+      // Previous period for trends (exclude page_view)
       prevStart && prevEnd
         ? (() => {
             const q = supabase
               .from('analytics_events')
               .select('event_type')
+              .neq('event_type', 'page_view')
               .gte('created_at', prevStart!)
               .lt('created_at', prevEnd!)
             return q
           })()
         : Promise.resolve({ data: null, error: null }),
 
-      // Recent 50 events for activity feed
+      // Recent 100 events for activity feed (exclude page_view)
       (() => {
         let q = supabase
           .from('analytics_events')
           .select('id, provider_id, event_type, source, created_at, metadata, providers!inner(name, address_city, slug, stable_id, specialty)')
+          .neq('event_type', 'page_view')
           .order('created_at', { ascending: false })
           .limit(100)
         if (dateFilter) q = q.gte('created_at', dateFilter)

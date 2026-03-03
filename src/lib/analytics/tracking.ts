@@ -4,6 +4,8 @@
  * Based on best practices from Calendly, Acuity, and Booksy
  */
 
+import { getVisitorId } from './visitor'
+
 // Event types for booking funnel
 export type BookingEvent =
   | 'page_view'
@@ -32,6 +34,7 @@ export interface TrackingData {
   properties?: Record<string, unknown>
   userId?: string
   sessionId?: string
+  visitorId?: string
   timestamp?: string
 }
 
@@ -67,6 +70,7 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
       timestamp: new Date().toISOString(),
     },
     sessionId: getSessionId(),
+    visitorId: getVisitorId(),
     timestamp: new Date().toISOString(),
   }
 
