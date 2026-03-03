@@ -111,9 +111,9 @@ const RANGES = [
 ]
 
 const EVENT_CONFIG = {
-  artisan_profile_view: { label: 'a consult\u00e9 le profil de', color: 'text-blue-600', bg: 'bg-blue-50', icon: Eye },
-  phone_reveal: { label: 'a affich\u00e9 le num\u00e9ro de', color: 'text-amber-600', bg: 'bg-amber-50', icon: Phone },
-  phone_click: { label: 'a appel\u00e9', color: 'text-green-600', bg: 'bg-green-50', icon: PhoneCall },
+  artisan_profile_view: { label: 'a consulté le profil de', color: 'text-blue-600', bg: 'bg-blue-50', icon: Eye },
+  phone_reveal: { label: 'a affiché le numéro de', color: 'text-amber-600', bg: 'bg-amber-50', icon: Phone },
+  phone_click: { label: 'a appelé', color: 'text-green-600', bg: 'bg-green-50', icon: PhoneCall },
 } as const
 
 type TabType = 'table' | 'feed' | 'audience' | 'parcours'
@@ -175,7 +175,7 @@ function PaginationControls({ page, totalPages, onPageChange }: {
           disabled={page <= 1}
           className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Pr\u00e9c\u00e9dent
+          Précédent
         </button>
         <button
           onClick={() => onPageChange(page + 1)}
@@ -247,10 +247,10 @@ export default function AnalyticsPage() {
             <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
           </div>
           <p className="text-sm text-gray-500 ml-12">
-            {totalEvents.toLocaleString('fr-FR')} \u00e9v\u00e9nement{totalEvents > 1 ? 's' : ''} enregistr\u00e9{totalEvents > 1 ? 's' : ''}
+            {totalEvents.toLocaleString('fr-FR')} événement{totalEvents > 1 ? 's' : ''} enregistré{totalEvents > 1 ? 's' : ''}
             {visitorData?.success && (
               <span className="ml-2">
-                \u00b7 {visitorData.totals.uniqueVisitors.toLocaleString('fr-FR')} visiteur{visitorData.totals.uniqueVisitors > 1 ? 's' : ''} unique{visitorData.totals.uniqueVisitors > 1 ? 's' : ''}
+                · {visitorData.totals.uniqueVisitors.toLocaleString('fr-FR')} visiteur{visitorData.totals.uniqueVisitors > 1 ? 's' : ''} unique{visitorData.totals.uniqueVisitors > 1 ? 's' : ''}
               </span>
             )}
           </p>
@@ -302,14 +302,14 @@ export default function AnalyticsPage() {
               color="blue"
             />
             <KpiCard
-              label="Num\u00e9ros affich\u00e9s"
+              label="Numéros affichés"
               value={data.totals.reveals}
               trend={data.trends.reveals}
               icon={<Phone className="w-5 h-5" />}
               color="amber"
             />
             <KpiCard
-              label="Appels d\u00e9clench\u00e9s"
+              label="Appels déclenchés"
               value={data.totals.clicks}
               trend={data.trends.clicks}
               icon={<PhoneCall className="w-5 h-5" />}
@@ -322,12 +322,12 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Activity className="w-4 h-4 text-gray-400" />
-                <h3 className="text-sm font-semibold text-gray-700">Activit\u00e9 quotidienne</h3>
+                <h3 className="text-sm font-semibold text-gray-700">Activité quotidienne</h3>
               </div>
               <MiniChart data={data.chartData} />
               <div className="flex items-center gap-6 mt-3 text-xs text-gray-400">
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-400" /> Vues</span>
-                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400" /> Num\u00e9ros</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400" /> Numéros</span>
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-green-500" /> Appels</span>
               </div>
             </div>
@@ -338,7 +338,7 @@ export default function AnalyticsPage() {
             <div className="flex bg-gray-100/80 rounded-lg p-0.5 border border-gray-200/50">
               {([
                 { key: 'table' as const, label: 'Par artisan', icon: Search },
-                { key: 'feed' as const, label: 'Activit\u00e9', icon: Activity },
+                { key: 'feed' as const, label: 'Activité', icon: Activity },
                 { key: 'audience' as const, label: 'Audience', icon: Users },
                 { key: 'parcours' as const, label: 'Parcours', icon: Navigation },
               ]).map(({ key, label }) => (
@@ -393,7 +393,7 @@ export default function AnalyticsPage() {
             visitorLoading && !visitorData ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3">
                 <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
-                <p className="text-sm text-gray-400">Chargement des donn\u00e9es visiteurs...</p>
+                <p className="text-sm text-gray-400">Chargement des données visiteurs...</p>
               </div>
             ) : visitorData?.success ? (
               <AudiencePanel
@@ -404,8 +404,8 @@ export default function AnalyticsPage() {
             ) : (
               <div className="bg-gray-50 rounded-xl p-12 text-center">
                 <Users className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                <p className="text-gray-500 font-medium">Aucune donn\u00e9e visiteur disponible</p>
-                <p className="text-sm text-gray-400 mt-1">Les donn\u00e9es appara\u00eetront d\u00e8s que des visiteurs navigueront sur le site.</p>
+                <p className="text-gray-500 font-medium">Aucune donnée visiteur disponible</p>
+                <p className="text-sm text-gray-400 mt-1">Les données apparaîtront dès que des visiteurs navigueront sur le site.</p>
               </div>
             )
           )}
@@ -427,7 +427,7 @@ export default function AnalyticsPage() {
               <div className="bg-gray-50 rounded-xl p-12 text-center">
                 <Navigation className="w-10 h-10 mx-auto mb-3 text-gray-300" />
                 <p className="text-gray-500 font-medium">Aucun parcours disponible</p>
-                <p className="text-sm text-gray-400 mt-1">Les parcours multi-pages appara\u00eetront ici.</p>
+                <p className="text-sm text-gray-400 mt-1">Les parcours multi-pages apparaîtront ici.</p>
               </div>
             )
           )}
@@ -530,13 +530,13 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
         <div className="px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-gray-400" />
-            <h3 className="text-sm font-semibold text-gray-700">Pages les plus visit\u00e9es</h3>
+            <h3 className="text-sm font-semibold text-gray-700">Pages les plus visitées</h3>
           </div>
         </div>
         {data.topPages.length === 0 ? (
           <div className="px-6 py-12 text-center text-gray-400">
             <FileText className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-            <p className="text-sm">Aucune page vue enregistr\u00e9e</p>
+            <p className="text-sm">Aucune page vue enregistrée</p>
           </div>
         ) : (
           <>
@@ -613,7 +613,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
       <div className="bg-gray-50 rounded-xl p-12 text-center">
         <Navigation className="w-10 h-10 mx-auto mb-3 text-gray-300" />
         <p className="text-gray-500 font-medium">Aucun parcours multi-pages</p>
-        <p className="text-sm text-gray-400 mt-1">Les parcours avec 2+ pages appara\u00eetront ici.</p>
+        <p className="text-sm text-gray-400 mt-1">Les parcours avec 2+ pages apparaîtront ici.</p>
       </div>
     )
   }
@@ -626,7 +626,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
       <div className="flex items-center gap-2 mb-2">
         <Navigation className="w-4 h-4 text-gray-400" />
         <h3 className="text-sm font-semibold text-gray-700">
-          {sessions.length} parcours multi-pages r\u00e9cents
+          {sessions.length} parcours multi-pages récents
         </h3>
       </div>
 
@@ -707,8 +707,8 @@ function ArtisanTable({ providers, page, onPageChange }: {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-16 text-center text-gray-400">
           <Search className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-          <p className="font-medium">Aucun r\u00e9sultat</p>
-          <p className="text-sm mt-1">Essayez une autre recherche ou p\u00e9riode</p>
+          <p className="font-medium">Aucun résultat</p>
+          <p className="text-sm mt-1">Essayez une autre recherche ou période</p>
         </div>
       </div>
     )
@@ -725,10 +725,10 @@ function ArtisanTable({ providers, page, onPageChange }: {
             <tr className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-100">
               <th className="px-6 py-4">Artisan</th>
               <th className="px-4 py-4 text-center">Vues</th>
-              <th className="px-4 py-4 text-center">Num\u00e9ros</th>
+              <th className="px-4 py-4 text-center">Numéros</th>
               <th className="px-4 py-4 text-center">Appels</th>
               <th className="px-4 py-4 text-center">Conversion</th>
-              <th className="px-4 py-4 text-right">Derni\u00e8re activit\u00e9</th>
+              <th className="px-4 py-4 text-right">Dernière activité</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
@@ -761,7 +761,7 @@ function ArtisanTable({ providers, page, onPageChange }: {
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <MapPin className="w-3 h-3 text-gray-300" />
                           <span className="text-xs text-gray-400 truncate max-w-[180px]">
-                            {p.specialty}{p.city ? ` \u2014 ${p.city}` : ''}
+                            {p.specialty}{p.city ? ` — ${p.city}` : ''}
                           </span>
                         </div>
                       </div>
@@ -813,7 +813,7 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-16 text-center text-gray-400">
           <Clock className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-          <p className="font-medium">Aucune activit\u00e9 r\u00e9cente</p>
+          <p className="font-medium">Aucune activité récente</p>
         </div>
       </div>
     )
@@ -1004,7 +1004,7 @@ function VisitorChart({ data }: { data: VisitorChartPoint[] }) {
   if (data.length < 2) {
     return (
       <div className="h-20 flex items-center justify-center text-sm text-gray-400">
-        Pas assez de donn\u00e9es pour afficher le graphique
+        Pas assez de données pour afficher le graphique
       </div>
     )
   }
