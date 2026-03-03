@@ -1,6 +1,6 @@
 /**
  * Admin Analytics API — World-class analytics endpoint
- * GET /api/admin/analytics?range=7d|30d|90d|all&search=...
+ * GET /api/admin/analytics?range=7d|30d|90d|all&search=...&feedPage=1
  */
 
 import { NextResponse } from 'next/server'
@@ -9,6 +9,8 @@ import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
+
+const FEED_PER_PAGE = 50
 
 export async function GET(request: Request) {
   try {
@@ -20,6 +22,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const range = searchParams.get('range') || '30d'
     const search = searchParams.get('search')?.trim().toLowerCase() || ''
+    const feedPage = Math.max(1, parseInt(searchParams.get('feedPage') || '1', 10) || 1)
 
     // Date filter
     let dateFilter: string | null = null
@@ -44,8 +47,9 @@ export async function GET(request: Request) {
 
     const supabase = createAdminClient()
 
-    // Parallel: current events, previous events, recent activity feed
-    const [currentResult, prevResult, recentResult] = await Promise.all([
+    // Parallel: current events, previous events, paginated activity feed, feed total count
+    const feedOffset = (feedPage - 1) * FEED_PER_PAGE
+    const [currentResult, prevResult, recentResult, countResult] = await Promise.all([
       // Current period events with provider info (exclude page_view — handled by /visitors endpoint)
       (() => {
         let q = supabase
@@ -69,14 +73,24 @@ export async function GET(request: Request) {
           })()
         : Promise.resolve({ data: null, error: null }),
 
-      // Recent 100 events for activity feed (exclude page_view)
+      // Paginated activity feed (exclude page_view)
       (() => {
         let q = supabase
           .from('analytics_events')
           .select('id, provider_id, event_type, source, created_at, metadata, providers!inner(name, address_city, slug, stable_id, specialty)')
           .neq('event_type', 'page_view')
           .order('created_at', { ascending: false })
-          .limit(100)
+          .range(feedOffset, feedOffset + FEED_PER_PAGE - 1)
+        if (dateFilter) q = q.gte('created_at', dateFilter)
+        return q
+      })(),
+
+      // Total count of events for feed pagination
+      (() => {
+        let q = supabase
+          .from('analytics_events')
+          .select('id', { count: 'exact', head: true })
+          .neq('event_type', 'page_view')
         if (dateFilter) q = q.gte('created_at', dateFilter)
         return q
       })(),
@@ -188,10 +202,8 @@ export async function GET(request: Request) {
       )
     }
 
-    providers = providers.slice(0, 50)
-
     // Recent activity feed
-    const recentEvents = (recentResult.data || []).slice(0, 50).map(e => {
+    const recentEvents = (recentResult.data || []).map(e => {
       const p = e.providers as unknown as ProviderInfo
       const meta = e.metadata as Record<string, string> | null
       return {
@@ -215,6 +227,9 @@ export async function GET(request: Request) {
       chartData,
       providers,
       recentEvents,
+      eventTotal: countResult.count || 0,
+      feedPage,
+      feedPerPage: FEED_PER_PAGE,
     })
   } catch (error) {
     logger.error('Admin analytics error:', error)

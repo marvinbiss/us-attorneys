@@ -176,7 +176,6 @@ export async function GET(request: Request) {
         uniqueVisitors: data.visitors.size,
       }))
       .sort((a, b) => b.views - a.views)
-      .slice(0, 30)
 
     // ── Sessions (pages per session + avg) ─────────────────────
 
@@ -208,7 +207,6 @@ export async function GET(request: Request) {
         const lastB = b.pages[b.pages.length - 1].time
         return lastB.localeCompare(lastA)
       })
-      .slice(0, 20)
       .map(([sessionId, s]) => ({
         sessionId: sessionId.substring(0, 16),
         visitorId: s.visitorId.substring(0, 12),
