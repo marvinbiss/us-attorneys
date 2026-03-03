@@ -28,41 +28,46 @@ export default function PageViewTracker() {
     // Don't track admin or private pages
     if (pathname.startsWith('/admin') || pathname.startsWith('/espace-')) return
 
-    const data = {
-      event: 'page_view',
-      properties: {
-        page_path: pathname,
-        url: window.location.href,
-        referrer: document.referrer,
-        title: document.title,
-        screenSize: `${window.innerWidth}x${window.innerHeight}`,
-      },
-      sessionId: getSessionId(),
-      visitorId: getVisitorId(),
-    }
+    // Defer to let Next.js update document.title before capturing it
+    const timer = setTimeout(() => {
+      const data = {
+        event: 'page_view',
+        properties: {
+          page_path: pathname,
+          url: window.location.href,
+          referrer: document.referrer,
+          title: document.title,
+          screenSize: `${window.innerWidth}x${window.innerHeight}`,
+        },
+        sessionId: getSessionId(),
+        visitorId: getVisitorId(),
+      }
 
-    try {
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon('/api/analytics', JSON.stringify(data))
-      } else {
-        fetch('/api/analytics', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-          keepalive: true,
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/analytics', JSON.stringify(data))
+        } else {
+          fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+            keepalive: true,
+          })
+        }
+      } catch {
+        // Silent failure — analytics should never break the app
+      }
+
+      // Forward to GA4 if available
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'page_view', {
+          page_path: pathname,
+          page_title: document.title,
         })
       }
-    } catch {
-      // Silent failure — analytics should never break the app
-    }
+    }, 0)
 
-    // Forward to GA4 if available
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'page_view', {
-        page_path: pathname,
-        page_title: document.title,
-      })
-    }
+    return () => clearTimeout(timer)
   }, [pathname])
 
   return null

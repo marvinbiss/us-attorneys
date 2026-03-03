@@ -432,9 +432,9 @@ function AudiencePanel({ data }: { data: VisitorData }) {
           </div>
         </div>
         {viewMode === 'daily' ? (
-          <VisitorChart data={data.dailyChart} xKey="date" />
+          <VisitorChart data={data.dailyChart} />
         ) : (
-          <VisitorChart data={data.weeklyChart.map(w => ({ date: w.week, visitors: w.visitors, pageViews: w.pageViews }))} xKey="date" />
+          <VisitorChart data={data.weeklyChart.map(w => ({ date: w.week, visitors: w.visitors, pageViews: w.pageViews }))} />
         )}
         <div className="flex items-center gap-6 mt-3 text-xs text-gray-400">
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-400" /> Visiteurs uniques</span>
@@ -868,7 +868,7 @@ function MiniChart({ data }: { data: ChartPoint[] }) {
   )
 }
 
-function VisitorChart({ data }: { data: VisitorChartPoint[]; xKey: string }) {
+function VisitorChart({ data }: { data: VisitorChartPoint[] }) {
   if (data.length < 2) {
     return (
       <div className="h-20 flex items-center justify-center text-sm text-gray-400">

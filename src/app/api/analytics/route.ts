@@ -38,7 +38,7 @@ const analyticsSchema = z.object({
     timestamp: z.string().optional(),
     page_path: z.string().max(500).optional(),
     title: z.string().max(500).optional(),
-  }).passthrough(),
+  }),
   sessionId: z.string().max(100).optional(),
   visitorId: z.string().max(100).optional(),
   timestamp: z.string().optional(),

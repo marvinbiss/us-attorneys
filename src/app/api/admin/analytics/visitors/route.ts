@@ -30,7 +30,11 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const range = searchParams.get('range') || '30d'
+    const ALLOWED_RANGES = ['7d', '30d', '90d', 'all'] as const
+    const rangeParam = searchParams.get('range')
+    const range = ALLOWED_RANGES.includes(rangeParam as typeof ALLOWED_RANGES[number])
+      ? rangeParam!
+      : '30d'
 
     // Date filter
     const now = Date.now()
@@ -63,7 +67,7 @@ export async function GET(request: Request) {
           .select('visitor_id, ip_hash, session_id, page_path, metadata, created_at')
           .eq('event_type', 'page_view')
           .order('created_at', { ascending: true })
-          .limit(5000)
+          .limit(1000)
         if (dateFilter) q = q.gte('created_at', dateFilter)
         return q
       })(),
@@ -75,7 +79,7 @@ export async function GET(request: Request) {
             .eq('event_type', 'page_view')
             .gte('created_at', prevStart)
             .lt('created_at', prevEnd)
-            .limit(5000)
+            .limit(1000)
         : Promise.resolve({ data: null, error: null }),
     ])
 
@@ -92,8 +96,8 @@ export async function GET(request: Request) {
 
     // ── Unique visitors ────────────────────────────────────────
 
-    const getVisitorKey = (e: { visitor_id: string | null; ip_hash: string | null }) =>
-      e.visitor_id || e.ip_hash || 'anonymous'
+    const getVisitorKey = (e: { visitor_id: string | null; ip_hash: string | null; session_id?: string | null }) =>
+      e.visitor_id || e.ip_hash || e.session_id || 'anonymous'
 
     const allVisitors = new Set(events.map(getVisitorKey))
     const prevVisitors = new Set(prevEvents.map(getVisitorKey))
@@ -220,8 +224,12 @@ export async function GET(request: Request) {
       return Math.round(((current - previous) / previous) * 100)
     }
 
+    // If we hit exactly the limit, data may be incomplete
+    const truncated = events.length >= 1000
+
     return NextResponse.json({
       success: true,
+      truncated,
       totals: {
         uniqueVisitors,
         totalPageViews: events.length,
