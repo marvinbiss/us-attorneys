@@ -129,8 +129,7 @@ export default function CalendrierPage() {
     serviceRadius: 'Paris et petite couronne (20km)',
   })
 
-  const paidPlans: Array<'gratuit' | 'pro' | 'premium'> = ['pro', 'premium']
-  const hasCalendarAccess = profile ? paidPlans.includes(profile.subscription_plan) : false
+  const hasCalendarAccess = true // All features are free
 
   // Fetch user profile and subscription via API routes
   useEffect(() => {
@@ -557,7 +556,7 @@ export default function CalendrierPage() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Euro className="w-5 h-5" />
-                Abonnement
+                Mon compte
               </Link>
               <LogoutButton />
             </nav>

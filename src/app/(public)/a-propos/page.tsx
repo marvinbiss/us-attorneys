@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Shield, Search, CreditCard, Lock, Eye, ArrowRight, Database } from 'lucide-react'
+import { Shield, Search, Lock, Eye, ArrowRight, Database } from 'lucide-react'
 import { pageImages, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -113,7 +113,7 @@ const commitments = [
   },
   {
     title: 'Transparence tarifaire',
-    description: 'Service gratuit pour les particuliers. Tarifs artisans publics sur notre page dédiée.',
+    description: 'Service entièrement gratuit pour tous les utilisateurs, particuliers comme artisans.',
   },
   {
     title: 'Pas de revente de données',
@@ -298,32 +298,23 @@ export default async function AProposPage() {
                   <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold">Gratuit pour les particuliers</p>
-                    <p className="text-blue-100 text-sm">Recherche d'artisans, demandes de devis, comparaison : tout est gratuit.</p>
+                    <p className="text-blue-100 text-sm">Recherche d&apos;artisans, demandes de devis, comparaison : tout est gratuit.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CreditCard className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
+                  <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold">Abonnements pour les artisans</p>
-                    <p className="text-blue-100 text-sm">Les artisans s'abonnent pour recevoir des demandes de devis qualifiées.</p>
+                    <p className="font-semibold">Gratuit pour les artisans</p>
+                    <p className="text-blue-100 text-sm">Les artisans peuvent créer leur profil et recevoir des demandes de devis gratuitement.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Lock className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold">Aucune revente de données</p>
-                    <p className="text-blue-100 text-sm">Vos données personnelles ne sont jamais vendues. Notre seul revenu provient des abonnements artisans.</p>
+                    <p className="text-blue-100 text-sm">Vos données personnelles ne sont jamais vendues à des tiers.</p>
                   </div>
                 </div>
-              </div>
-              <div className="mt-6 pt-6 border-t border-blue-400/30">
-                <Link
-                  href="/tarifs"
-                  className="inline-flex items-center gap-2 text-white font-semibold hover:underline"
-                >
-                  Voir les tarifs artisans
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
               </div>
               </div>
             </div>

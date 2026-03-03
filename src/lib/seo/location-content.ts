@@ -1685,7 +1685,7 @@ const ERA_TIPS: Record<BuildingEra, ((q: string, v: string) => string)[]> = {
 const FAQ_POOL: { q: (n: string, v: string) => string; a: (n: string, v: string, dep: string, code: string, era: string, issues: string[]) => string }[] = [
   {
     q: (n, v) => `Quels artisans interviennent à ${n}, ${v} ?`,
-    a: (n, v, dep, code) => `Notre annuaire référence des artisans dans 15 corps de métier intervenant dans le quartier ${n} à ${v} (${code}) : plombiers, électriciens, serruriers, chauffagistes, peintres, menuisiers, couvreurs, maçons et plus. Tous sont identifiés à partir des données SIREN du ${dep}.`,
+    a: (n, v, dep, code) => `Notre annuaire référence des artisans dans plus de 40 corps de métier intervenant dans le quartier ${n} à ${v} (${code}) : plombiers, électriciens, serruriers, chauffagistes, peintres, menuisiers, couvreurs, maçons et plus. Tous sont identifiés à partir des données SIREN du ${dep}.`,
   },
   {
     q: (n) => `Comment obtenir un devis gratuit à ${n} ?`,

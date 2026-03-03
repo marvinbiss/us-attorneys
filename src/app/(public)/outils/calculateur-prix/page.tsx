@@ -65,7 +65,7 @@ export default function CalculateurPrixPage() {
         '@type': 'HowToStep',
         position: 1,
         name: 'Choisissez un m\u00e9tier',
-        text: 'S\u00e9lectionnez le type d\u2019artisan dont vous avez besoin parmi 15 corps de m\u00e9tier : plombier, \u00e9lectricien, serrurier, chauffagiste, peintre, etc.',
+        text: 'S\u00e9lectionnez le type d\u2019artisan dont vous avez besoin parmi 10 corps de m\u00e9tier : plombier, \u00e9lectricien, serrurier, chauffagiste, peintre, etc.',
       },
       {
         '@type': 'HowToStep',
@@ -192,7 +192,7 @@ export default function CalculateurPrixPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Choisissez un m&eacute;tier</h3>
                 <p className="text-gray-600 text-sm">
-                  S&eacute;lectionnez parmi 15 corps de m&eacute;tier : plombier, &eacute;lectricien, serrurier, peintre et plus.
+                  S&eacute;lectionnez parmi 10 corps de m&eacute;tier : plombier, &eacute;lectricien, serrurier, peintre et plus.
                 </p>
               </div>
               <div className="text-center p-6">

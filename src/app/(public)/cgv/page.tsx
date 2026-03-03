@@ -108,9 +108,9 @@ export default async function CGVPage() {
               <li>Comparer les offres reçues</li>
             </ul>
 
-            <h2>3. Gratuité pour les particuliers</h2>
+            <h2>3. Gratuité du service</h2>
             <p>
-              L'utilisation de la plateforme est <strong>entièrement gratuite</strong> pour les particuliers.
+              L'utilisation de la plateforme est <strong>entièrement gratuite</strong> pour les particuliers et les artisans.
               Les demandes de devis sont gratuites et sans engagement.
             </p>
 

@@ -124,7 +124,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
         <div className="mt-5 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Vos données sont protégées et ne seront jamais partagées</span>
+            <span>Vos données sont protégées conformément au RGPD</span>
           </div>
         </div>
       </div>

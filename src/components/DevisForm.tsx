@@ -562,7 +562,7 @@ export default function DevisForm({
               <span className="text-sm text-slate-600 leading-relaxed">
                 J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
                 en lien avec ma demande.{' '}
-                <span className="text-gray-400">Vos données restent confidentielles.</span>
+                <span className="text-gray-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
               </span>
             </label>
             {errors.consentement && (

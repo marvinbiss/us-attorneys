@@ -42,7 +42,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Électricité", "Conseils", "Artisans"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelles certifications doit avoir un bon électricien ?", answer: "Un bon électricien doit détenir au minimum une habilitation électrique à jour. La certification Qualifelec est le label de référence attestant de la maîtrise des normes. Le label RGE est indispensable pour les travaux liés aux énergies renouvelables (panneaux solaires, bornes de recharge) et pour bénéficier des aides de l'État." },
       { question: "Comment vérifier l'assurance décennale d'un électricien ?", answer: "Demandez l'attestation d'assurance décennale avant la signature du devis. Vérifiez sa date de validité, les activités couvertes (électricité, domotique) et le nom de l'entreprise. Vous pouvez contacter directement l'assureur pour confirmer la validité. La garantie décennale est obligatoire pour tous les travaux d'électricité intégrés au bâti." },
@@ -80,7 +80,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Serrurerie", "Conseils", "Urgence"],
     authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Comment trouver un serrurier honnête en urgence ?", answer: "Le meilleur moyen est de repérer un serrurier de confiance avant d'en avoir besoin. Consultez les avis vérifiés sur ServicesArtisans, demandez des recommandations à votre entourage, et enregistrez les coordonnées dans votre téléphone. En urgence, appelez directement ce contact plutôt que de chercher sur internet." },
       { question: "Un serrurier peut-il refuser de fournir un devis ?", answer: "Non, depuis 2017, la loi impose aux serruriers de fournir un devis écrit avant toute intervention dépassant 150 € TTC. Le devis doit détailler les prestations, la main-d'œuvre, le coût des pièces et le montant total TTC. Un serrurier qui refuse de fournir un devis est en infraction." },
@@ -118,7 +118,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Chauffage", "Conseils", "Énergie"],
     authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Pourquoi le label RGE est-il si important pour un chauffagiste ?", answer: "Le label RGE est obligatoire pour que vos travaux soient éligibles aux aides financières (MaPrimeRénov', CEE, éco-PTZ). Sans artisan RGE, vous perdez des milliers d'euros d'aides. Le label atteste aussi d'une formation spécifique et de la maîtrise des équipements modernes (PAC, solaire thermique)." },
       { question: "Qu'est-ce qu'un bilan thermique et est-il obligatoire ?", answer: "Le bilan thermique évalue les besoins en chauffage de votre logement en tenant compte de la surface, l'isolation, l'exposition et la zone climatique. Il n'est pas légalement obligatoire mais est indispensable pour un dimensionnement correct de l'équipement. Un chauffagiste sérieux le réalise systématiquement (gratuit ou 200 – 500 €)." },
@@ -155,7 +155,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Menuiserie", "Conseils", "Rénovation"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Comment choisir entre un menuisier bois, alu ou PVC ?", answer: "Le bois offre esthétique noble et excellentes performances thermiques mais demande un entretien. L'aluminium est robuste et contemporain, idéal pour les grandes baies. Le PVC est le choix économique avec un bon rapport qualité-prix et zéro entretien. Un bon menuisier vous conseille le matériau adapté à votre projet, budget et style." },
       { question: "Le label RGE est-il nécessaire pour un menuisier ?", answer: "Le label RGE est indispensable si vous souhaitez bénéficier des aides à la rénovation énergétique (MaPrimeRénov', CEE, TVA 5,5 %) pour le remplacement de fenêtres. Pour les travaux intérieurs (escaliers, placards), le RGE n'est pas nécessaire mais la certification Qualibat reste un gage de compétence." },
@@ -194,7 +194,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Carrelage", "Conseils", "Rénovation"],
     authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelles qualifications doit avoir un bon carreleur ?", answer: "Un carreleur qualifié détient un CAP Carreleur-mosaïste ou un BP dans la même spécialité. La certification Qualibat en carrelage est un gage supplémentaire. Pour les travaux en pièces humides, vérifiez qu'il maîtrise les systèmes d'étanchéité sous carrelage (SPEC) conformes au DTU 52.2." },
       { question: "Pourquoi le double encollage est-il important pour les grands formats ?", answer: "Le double encollage (colle sur le support ET sur le carreau) est obligatoire selon le DTU 52.2 pour les formats supérieurs à 30×30 cm. Sans double encollage, des poches d'air se forment sous le carreau, provoquant des sonneux (carreaux creux) et des décollements prématurés. Cette exigence concerne donc la très grande majorité des carrelages posés aujourd'hui." },
@@ -229,7 +229,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Maçonnerie", "Conseils", "Construction"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "L'étude de sol est-elle obligatoire avant de construire ?", answer: "Depuis la loi Élan de 2018, l'étude géotechnique est obligatoire pour les maisons individuelles dans les zones exposées au retrait-gonflement des argiles (environ 50 % du territoire). Même hors zone à risque, elle est fortement recommandée. Son coût (800 – 2 000 €) est modeste comparé aux conséquences d'un mauvais dimensionnement des fondations." },
       { question: "Comment vérifier l'assurance décennale d'un maçon ?", answer: "Demandez l'attestation avant signature du devis. Vérifiez la date de validité, les activités couvertes (maçonnerie, gros œuvre, béton armé) et le nom de l'entreprise. Contactez directement l'assureur en cas de doute. La décennale est absolument impérative pour tout travail de maçonnerie." },
@@ -266,7 +266,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Couverture", "Conseils", "Toiture"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Comment reconnaître un couvreur sérieux ?", answer: "Un couvreur sérieux détient un CAP Couvreur, est certifié Qualibat, dispose d'une garantie décennale valide, monte sur le toit pour le diagnostic (jamais de devis depuis le sol), respecte les règles de sécurité (harnais, échafaudage), et ne fait jamais de démarchage au porte-à-porte." },
       { question: "Que faire en cas de fuite de toiture urgente ?", answer: "Placez des récipients sous la fuite, bâchez la zone extérieure si c'est accessible en sécurité, contactez un couvreur en urgence et prévenez votre assurance habitation (dégât des eaux). Ne montez jamais sur le toit vous-même. Un couvreur sérieux intervient sous 24 à 48 heures." },
@@ -303,7 +303,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Jardin", "Conseils", "Paysagisme"],
     authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle est la différence entre un jardinier et un paysagiste ?", answer: "Le jardinier réalise les travaux d'entretien (tonte, taille, désherbage). Le paysagiste conçoit et réalise des aménagements élaborés (création de jardins, terrasses, allées, systèmes d'arrosage). Certains professionnels cumulent les deux compétences. Identifiez clairement votre besoin avant de chercher." },
       { question: "Le crédit d'impôt s'applique-t-il aux travaux de paysagisme ?", answer: "Non, le crédit d'impôt de 50 % s'applique uniquement aux petits travaux d'entretien (tonte, taille, désherbage, ramassage de feuilles) réalisés par un professionnel agréé services à la personne. Les travaux de création paysagère ne sont pas éligibles." },
@@ -340,7 +340,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Vitrerie", "Conseils", "Urgence"],
     authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Comment choisir un vitrier en urgence ?", answer: "Idéalement, identifiez un vitrier avant l'urgence via ServicesArtisans. En cas de bris, sécurisez d'abord la zone et protégez l'ouverture. Appelez votre contact de confiance plutôt que le premier résultat Google. Exigez un devis avec le type de vitrage, les dimensions et le coefficient Ug." },
       { question: "Le double vitrage VIR vaut-il le surcoût ?", answer: "Oui, le VIR (Vitrage à Isolation Renforcée) avec gaz argon offre une isolation 30 à 50 % supérieure au double vitrage standard pour un surcoût de 30 à 50 %. C'est le standard pour toute rénovation énergétique et il est nécessaire pour bénéficier des aides (Uw ≤ 1,3 W/m².K)." },
@@ -375,7 +375,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Climatisation", "Conseils", "Énergie"],
     authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Qu'est-ce que l'attestation de capacité pour les fluides frigorigènes ?", answer: "C'est un document obligatoire prouvant que le professionnel est habilité à manipuler les fluides frigorigènes (gaz utilisés dans les climatiseurs et PAC). Elle est délivrée par un organisme agréé après vérification des compétences et de l'équipement. Sans cette attestation, l'installation est illégale." },
       { question: "Pourquoi un bilan thermique est-il nécessaire avant d'installer une climatisation ?", answer: "Le bilan thermique détermine la puissance exacte nécessaire en tenant compte de la surface, l'isolation, l'exposition, le nombre d'occupants et la zone climatique. Un système sous-dimensionné tournera en permanence sans atteindre la température souhaitée ; surdimensionné, il consommera plus et s'usera prématurément." },
@@ -412,7 +412,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Cuisine", "Conseils", "Aménagement"],
     authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Cuisiniste indépendant ou grande enseigne : que choisir ?", answer: "Les grandes enseignes offrent un large choix et des outils 3D performants, mais la pose est souvent sous-traitée. Le cuisiniste indépendant propose un accompagnement personnalisé et maîtrise mieux la pose. L'artisan menuisier réalise du sur-mesure intégral. Le choix dépend de votre budget et de vos exigences de personnalisation." },
       { question: "Que vérifier à la réception d'une cuisine ?", answer: "Vérifiez que les façades sont alignées, que les tiroirs coulissent sans accrocher, que les joints d'étanchéité sont impeccables, que l'électroménager fonctionne, que les écoulements sont corrects, et que le plan de travail est parfaitement de niveau. Notez toutes les réserves sur le bon de réception." },
@@ -449,7 +449,7 @@ export const metiersArticles: Record<string, {
     category: "Conseils",
     tags: ["Nettoyage", "Conseils", "Professionnel"],
     authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Comment vérifier qu'une entreprise de nettoyage est sérieuse ?", answer: "Vérifiez la certification Qualipropre, l'attestation de vigilance URSSAF (prouvant le respect des obligations sociales), l'assurance RC professionnelle, et les avis clients. Demandez le taux de rotation du personnel (un taux élevé est synonyme de qualité instable) et les procédures de contrôle qualité." },
       { question: "Que doit contenir un devis de nettoyage professionnel ?", answer: "Un devis complet détaille : le nombre d'heures par intervention, le nombre d'agents, les produits et matériels utilisés, la fréquence des prestations spéciales, les conditions de remplacement en cas d'absence, les assurances, et les conditions de résiliation du contrat." },
@@ -489,7 +489,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Plomberie", "Formation", "Métier"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir plombier ?", answer: "Le parcours classique débute par un CAP Monteur en installations sanitaires (2 ans après la 3e). Le BP Monteur en installations du génie climatique et sanitaire approfondit la formation. Le Bac Pro TISEC offre un cursus de 3 ans plus large. Des formations accélérées (6-12 mois) existent aussi pour la reconversion professionnelle." },
       { question: "Quel est le salaire d'un plombier en 2026 ?", answer: "Un plombier débutant salarié gagne 1 600 à 1 900 € net/mois. Avec l'expérience et les spécialisations : 2 500 à 3 200 € net. En tant qu'artisan indépendant : 3 000 à 5 000 € net/mois, voire davantage en Île-de-France. Les spécialisations en PAC et énergie renouvelable tirent les revenus vers le haut." },
@@ -531,7 +531,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Électricité", "Formation", "Métier"],
     authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir électricien ?", answer: "Le CAP Électricien (2 ans après la 3e) est la base. Le BP Électricien approfondit en 2 ans. Le Bac Pro MELEC inclut la domotique en 3 ans. Le BTS Électrotechnique ouvre l'accès à des postes de technicien supérieur. Des formations accélérées (6-10 mois) existent pour la reconversion." },
       { question: "Quel est le salaire d'un électricien en 2026 ?", answer: "Débutant salarié : 1 600 – 1 800 € net/mois. Avec expérience et qualifications : 2 200 – 3 000 € net. En indépendant spécialisé (photovoltaïque, IRVE, domotique) : 3 500 – 5 500 € net/mois. Les spécialisations en énergies renouvelables et mobilité électrique offrent les meilleures rémunérations." },
@@ -573,7 +573,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Maçonnerie", "Formation", "Métier"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir maçon ?", answer: "Le CAP Maçon (2 ans) enseigne les techniques de base. Le BP Maçon approfondit l'organisation de chantier. Le Bac Pro TB ORGO offre une vision plus large en 3 ans. Des spécialisations existent : tailleur de pierre, coffreur-bancheur, éco-construction. La reconversion est possible via des formations accélérées (6-10 mois)." },
       { question: "Quel est le salaire d'un maçon en 2026 ?", answer: "Débutant salarié : 1 600 – 1 800 € net/mois. Chef d'équipe : 2 200 – 2 800 € net. Artisan indépendant : 2 500 – 4 500 € net/mois. Les spécialisations en taille de pierre ou éco-construction permettent de pratiquer des tarifs plus élevés." },
@@ -615,7 +615,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Couverture", "Formation", "Sécurité"],
     authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Le métier de couvreur est-il dangereux ?", answer: "Oui, c'est l'un des métiers les plus dangereux du bâtiment. Les chutes de hauteur sont la première cause d'accidents graves et mortels dans le BTP. Le décret n° 2004-924 impose des protections collectives (garde-corps, filets, échafaudages) et individuelles (harnais). Un couvreur qui monte sans protection n'est pas un professionnel." },
       { question: "Quel salaire pour un couvreur en 2026 ?", answer: "Débutant : 1 600 – 1 900 € net/mois. Confirmé : 2 200 – 2 800 € net. À son compte : 3 000 – 5 000 € net/mois. La spécialisation en ardoise ou en restauration patrimoniale justifie des tarifs plus élevés. Le Meilleur Ouvrier de France (MOF) en couverture est la consécration suprême." },
@@ -657,7 +657,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Menuiserie", "Formation", "Métier"],
     authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir menuisier ?", answer: "Le CAP Menuisier-fabricant (atelier) ou Menuisier-installateur (pose) sont les bases. Le BP Menuisier approfondit les compétences. Le Bac Pro Technicien menuisier-agenceur inclut la CAO. Le BMA Ébénisterie est la voie royale pour le bois massif. Les Compagnons du Devoir proposent une formation d'excellence (6 ans avec Tour de France)." },
       { question: "Quel salaire pour un menuisier en 2026 ?", answer: "Débutant : 1 600 – 1 800 € net/mois. Confirmé spécialisé : 2 200 – 2 800 € net. En indépendant : 2 500 – 4 500 € net/mois. Le menuisier-agenceur maîtrisant conception 3D, fabrication et pose est un profil très recherché avec des revenus en conséquence." },
@@ -699,7 +699,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Chauffage", "Formation", "Pompe à chaleur"],
     authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Comment devenir chauffagiste spécialisé PAC ?", answer: "La base est le CAP Monteur en installations thermiques, complété par le BP ou le Bac Pro TISEC. Pour se spécialiser en PAC, la certification QualiPAC est indispensable, ainsi que l'attestation de capacité pour les fluides frigorigènes. Des formations continues sont proposées par les fabricants (Daikin, Atlantic, Mitsubishi)." },
       { question: "Quel est le salaire d'un chauffagiste en 2026 ?", answer: "Débutant : 1 700 – 2 000 € net/mois. Technicien QualiPAC/RGE : 2 500 – 3 200 € net. En indépendant : 4 000 – 6 000 € net/mois grâce à la forte demande en PAC. La transition énergétique crée une demande massive qui tire les revenus vers le haut." },
@@ -741,7 +741,7 @@ export const metiersArticles: Record<string, {
     category: "Fiches métier",
     tags: ["Peinture", "Formation", "Métier"],
     authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
-    updatedDate: "2025-01-15",
+    updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir peintre en bâtiment ?", answer: "Le CAP Peintre applicateur de revêtements (2 ans) est la base. Le BP approfondit les techniques décoratives. Le Bac Pro Aménagement et finition offre une vision large des métiers de la finition. La mention complémentaire Peinture décoration permet de se spécialiser rapidement après le CAP." },
       { question: "Quel est le salaire d'un peintre en bâtiment en 2026 ?", answer: "Débutant : 1 550 – 1 750 € net/mois. Avec expérience : 1 900 – 2 500 € net. Décorateurs spécialisés ou ravaleurs expérimentés : +2 800 € net. En indépendant : 2 500 – 4 000 € net/mois. Le MOF en peinture décoration est la plus haute distinction." },

@@ -74,7 +74,7 @@ const faqItems = [
   {
     question: 'Le service est-il vraiment gratuit ?',
     answer:
-      'Oui, la demande de devis est 100 % gratuite et sans aucun engagement. Vous ne payez rien pour recevoir les propositions des artisans. Ce sont les professionnels qui financent le service.',
+      'Oui, la demande de devis est 100 % gratuite et sans aucun engagement. Vous ne payez rien pour recevoir les propositions des artisans.',
   },
   {
     question: 'Combien de devis vais-je recevoir ?',

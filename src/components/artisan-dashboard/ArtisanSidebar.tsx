@@ -131,7 +131,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
           }`}
         >
           <Euro className="w-5 h-5" />
-          Abonnement
+          Mon compte
         </Link>
         <LogoutButton />
       </nav>
