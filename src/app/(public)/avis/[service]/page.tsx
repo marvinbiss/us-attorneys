@@ -239,25 +239,15 @@ export default async function AvisServicePage({
 
   const serviceSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: `Avis ${trade.name} en France`,
+    '@type': 'LocalBusiness',
+    name: `${trade.name} en France`,
     description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans référencés.`,
-    provider: {
-      '@type': 'Organization',
-      name: 'ServicesArtisans',
-      url: SITE_URL,
-    },
+    url: `${SITE_URL}/avis/${service}`,
     areaServed: {
       '@type': 'Country',
       name: 'France',
     },
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'EUR',
-      lowPrice: trade.priceRange.min,
-      highPrice: trade.priceRange.max,
-      offerCount: serviceStats.providers.length > 0 ? serviceStats.providers.length : undefined,
-    },
+    priceRange: `${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
     ...(serviceStats.totalReviews > 0 ? {
       aggregateRating: {
         '@type': 'AggregateRating',

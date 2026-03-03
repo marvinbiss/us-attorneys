@@ -339,14 +339,10 @@ export default async function AvisServiceVillePage({
 
   const serviceSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: `Avis ${trade.name} à ${villeData.name}`,
+    '@type': 'LocalBusiness',
+    name: `${trade.name} à ${villeData.name}`,
     description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance à ${villeData.name} (${villeData.departement}). Prix : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
-    provider: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    url: `${SITE_URL}/avis/${service}/${villeSlug}`,
     areaServed: {
       '@type': 'City',
       name: villeData.name,
@@ -355,13 +351,7 @@ export default async function AvisServiceVillePage({
         name: villeData.region,
       },
     },
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'EUR',
-      lowPrice: minPrice,
-      highPrice: maxPrice,
-      offerCount: commune?.nb_entreprises_artisanales ?? undefined,
-    },
+    priceRange: `${minPrice}–${maxPrice} ${trade.priceRange.unit}`,
     ...(totalReviews > 0 ? {
       aggregateRating: {
         '@type': 'AggregateRating',
@@ -376,10 +366,6 @@ export default async function AvisServiceVillePage({
         reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
         reviewBody: r.comment,
         ...(r.created_at ? { datePublished: r.created_at.split('T')[0] } : {}),
-        itemReviewed: {
-          '@type': 'Service',
-          name: `${trade.name} à ${villeData.name}`,
-        },
       })),
     } : {}),
   }

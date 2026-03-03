@@ -74,10 +74,10 @@ export default async function HomePage() {
   const aggregateRatingSchema = homepageData.reviewCount > 0
     ? {
         '@context': 'https://schema.org',
-        '@type': 'Service',
+        '@type': 'Organization',
         name: 'ServicesArtisans',
         url: SITE_URL,
-        serviceType: 'Annuaire d\'artisans',
+        description: 'Annuaire d\'artisans en France',
         aggregateRating: {
           '@type': 'AggregateRating',
           ratingValue: homepageData.avgRating,
