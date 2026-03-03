@@ -296,7 +296,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <p className="text-gray-500 text-sm text-center mb-8">
             Les prix {trade.name.toLowerCase()} varient selon la région. Voici une estimation ajustée.
           </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {REGIONAL_PRICING.map((r) => {
               const adjustedMin = Math.round(trade.priceRange.min * r.multiplier)
               const adjustedMax = Math.round(trade.priceRange.max * r.multiplier)
@@ -403,7 +403,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Trouver un {trade.name.toLowerCase()} près de chez vous
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             {topCities.map((ville) => (
               <Link
                 key={ville.slug}

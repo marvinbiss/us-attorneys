@@ -239,7 +239,7 @@ export default function DashboardArtisanPage() {
                           <h3 className="font-medium text-gray-900">
                             {demande.service_name}
                           </h3>
-                          <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-gray-500">
                             <span>{demande.client_name}</span>
                             <span>{demande.city || 'Non précisé'}</span>
                             <span className="flex items-center gap-1">

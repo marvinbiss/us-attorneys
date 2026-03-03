@@ -296,7 +296,7 @@ export default async function DevisPage() {
               S&eacute;lectionnez un m&eacute;tier pour obtenir un devis adapt&eacute; &agrave; votre projet.
             </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {Object.entries(tradeContent).map(([slug, trade]) => (
               <Link
                 key={slug}

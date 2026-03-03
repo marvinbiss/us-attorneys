@@ -505,7 +505,7 @@ export default function CalendrierPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
+        <div className="grid lg:grid-cols-4 gap-4 lg:gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
@@ -650,10 +650,10 @@ export default function CalendrierPage() {
               )}
 
               {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-px sm:gap-1">
                 {/* Day headers */}
                 {dayNames.map(day => (
-                  <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                  <div key={day} className="text-center text-xs sm:text-sm font-medium text-gray-500 py-1 sm:py-2">
                     {day}
                   </div>
                 ))}
@@ -704,7 +704,7 @@ export default function CalendrierPage() {
               </div>
 
               {/* Legend */}
-              <div className="flex items-center gap-6 mt-4 pt-4 border-t text-sm">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-6 mt-4 pt-4 border-t text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                   <span className="text-gray-600">Disponible</span>
@@ -846,17 +846,17 @@ export default function CalendrierPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div className="text-3xl font-bold text-blue-600">{stats.monthlyBookings}</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.monthlyBookings}</div>
                 <div className="text-sm text-gray-500">RDV ce mois</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div className="text-3xl font-bold text-green-600">{stats.fillRate}%</div>
+              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-green-600">{stats.fillRate}%</div>
                 <div className="text-sm text-gray-500">Taux de remplissage</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div className="text-3xl font-bold text-yellow-600">{stats.avgRating || '-'}</div>
+              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.avgRating || '-'}</div>
                 <div className="text-sm text-gray-500">Note moyenne</div>
               </div>
             </div>

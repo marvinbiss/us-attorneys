@@ -202,14 +202,14 @@ export default function MessagesArtisanPage() {
           {/* Messages */}
           <div className="lg:col-span-3">
             {loading ? (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[400px] sm:h-[600px] flex items-center justify-center">
                 <div>
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
                   <p className="text-gray-600">Chargement des messages...</p>
                 </div>
               </div>
             ) : conversations.length === 0 ? (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[400px] sm:h-[600px] flex items-center justify-center">
                 <div>
                   <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                   <h3 className="font-medium text-gray-900 mb-2">Aucune conversation</h3>
@@ -217,9 +217,9 @@ export default function MessagesArtisanPage() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden h-[600px] flex">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden h-[70vh] sm:h-[600px] flex flex-col sm:flex-row">
                 {/* Conversations list */}
-                <div className="w-1/3 border-r">
+                <div className="sm:w-1/3 border-b sm:border-b-0 sm:border-r max-h-[35vh] sm:max-h-none">
                   <div className="p-4 border-b">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -298,7 +298,7 @@ export default function MessagesArtisanPage() {
                               className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                             >
                               <div
-                                className={`max-w-[70%] rounded-2xl px-4 py-2 ${
+                                className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2 ${
                                   isOwnMessage
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-gray-100 text-gray-900'

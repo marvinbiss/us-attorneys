@@ -142,7 +142,7 @@ export default function AdminToolsPage() {
             Activer / Désactiver un artisan
           </h2>
 
-          <div className="flex gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <input
               type="text"
               value={providerId}
@@ -215,7 +215,7 @@ export default function AdminToolsPage() {
           <p className="text-sm text-gray-500 mb-4">
             Relance le round-robin pour une assignation existante. Un nouvel artisan sera sélectionné automatiquement.
           </p>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={assignmentId}

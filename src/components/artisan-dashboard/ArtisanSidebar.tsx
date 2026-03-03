@@ -28,15 +28,15 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
 
   return (
     <div className="lg:col-span-1">
-      <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
+      <nav className="bg-white rounded-xl shadow-sm p-2 sm:p-4 space-y-0.5 sm:space-y-1">
         {/* Notifications */}
         <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-gray-100">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
+          <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
           <NotificationBell userId={userId} />
         </div>
         <Link
           href="/espace-artisan/dashboard"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'dashboard' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -45,7 +45,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/leads"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'leads' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -54,7 +54,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/demandes-recues"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'demandes-recues' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -66,7 +66,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/calendrier"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'calendrier' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -78,7 +78,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/messages"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'messages' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -90,7 +90,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/portfolio"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'portfolio' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -99,7 +99,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/statistiques"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'statistiques' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -108,7 +108,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/avis-recus"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'avis-recus' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -117,7 +117,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/profil"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'profil' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -126,7 +126,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         </Link>
         <Link
           href="/espace-artisan/abonnement"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+          className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg ${
             activePage === 'abonnement' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -150,12 +150,12 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
       )}
 
       {/* Quick links */}
-      <div className="mt-4">
+      <div className="mt-4 hidden lg:block">
         <QuickSiteLinks />
       </div>
 
       {/* Additional links */}
-      <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+      <div className="bg-white rounded-xl shadow-sm p-4 mt-4 hidden lg:block">
         <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
         <div className="space-y-2 text-sm">
           <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">

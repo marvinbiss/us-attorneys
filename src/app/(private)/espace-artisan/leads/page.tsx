@@ -172,7 +172,7 @@ export default function ArtisanLeadsInbox() {
 
       <div className="max-w-5xl mx-auto px-4 py-6">
         {/* Quick stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <StatCard
             title="Total reçus"
             value={statusCounts.all}

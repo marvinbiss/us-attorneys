@@ -239,7 +239,7 @@ export default function AdminProvidersPage() {
               )}
 
               <div className="overflow-x-auto relative">
-                <table className="w-full min-w-[900px]" aria-label="Liste des artisans">
+                <table className="w-full min-w-[500px] sm:min-w-[900px]" aria-label="Liste des artisans">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">

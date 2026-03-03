@@ -168,7 +168,7 @@ export default function AdminReviewsPage() {
             displayReviews.map((review) => (
               <div key={review.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start gap-4">
+                  <div className="flex flex-col sm:flex-row items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
                       <User className="w-6 h-6 text-gray-400" />
                     </div>

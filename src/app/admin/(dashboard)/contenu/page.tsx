@@ -210,7 +210,7 @@ export default function AdminContenuPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[700px]" aria-label="Liste des pages CMS">
+                <table className="w-full min-w-[400px] sm:min-w-[700px]" aria-label="Liste des pages CMS">
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-50">
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">

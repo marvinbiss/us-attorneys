@@ -201,7 +201,7 @@ export default function AdminArtisanDetailPage() {
             Retour à la liste
           </button>
 
-          <div className="flex items-start justify-between">
+          <div className="flex flex-wrap items-start justify-between">
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold text-gray-900">
@@ -254,7 +254,7 @@ export default function AdminArtisanDetailPage() {
             {/* Contact Info */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations de contact</h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-gray-400" />
                   <div>

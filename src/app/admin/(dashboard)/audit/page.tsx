@@ -196,7 +196,7 @@ export default function AdminAuditPage() {
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
             title="Événements leads"
             value={totalEventsAll}
@@ -281,7 +281,7 @@ export default function AdminAuditPage() {
             ) : (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[700px] text-sm" aria-label="Événements des leads">
+                  <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Événements des leads">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
@@ -436,7 +436,7 @@ export default function AdminAuditPage() {
               ) : (
                 <>
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[700px] text-sm" aria-label="Logs d'audit administrateur">
+                    <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Logs d'audit administrateur">
                       <thead>
                         <tr className="border-b border-gray-100 bg-gray-50/50">
                           <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>

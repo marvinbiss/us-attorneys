@@ -151,7 +151,7 @@ export default function AdminLeadsPage() {
         </div>
 
         {/* KPI cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
             title="Total leads"
             value={stats.totalLeads}
@@ -189,7 +189,7 @@ export default function AdminLeadsPage() {
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
                   placeholder="Paris"
                 />
               </div>
@@ -202,7 +202,7 @@ export default function AdminLeadsPage() {
                   type="text"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
                   placeholder="Plombier"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function AdminLeadsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-48"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-48"
                   placeholder="Nom, service..."
                 />
               </div>
@@ -283,7 +283,7 @@ export default function AdminLeadsPage() {
             {tab === 'leads' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[800px] text-sm" aria-label="Liste des leads">
+                  <table className="w-full min-w-[400px] sm:min-w-[800px] text-sm" aria-label="Liste des leads">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
@@ -376,7 +376,7 @@ export default function AdminLeadsPage() {
             {tab === 'artisans' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[600px] text-sm" aria-label="Liste des artisans pour le dispatch">
+                  <table className="w-full min-w-[400px] sm:min-w-[600px] text-sm" aria-label="Liste des artisans pour le dispatch">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>

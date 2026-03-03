@@ -165,22 +165,22 @@ function PaginationControls({ page, totalPages, onPageChange }: {
 }) {
   if (totalPages <= 1) return null
   return (
-    <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
-      <p className="text-sm text-gray-400">
+    <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-t border-gray-100">
+      <p className="text-xs sm:text-sm text-gray-400">
         Page {page} sur {totalPages}
       </p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
-          className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Précédent
         </button>
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
-          className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Suivant
         </button>
@@ -345,7 +345,7 @@ export default function AnalyticsPage() {
                 <button
                   key={key}
                   onClick={() => setTab(key)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all ${
                     tab === key ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -362,7 +362,7 @@ export default function AnalyticsPage() {
                   placeholder="Rechercher un artisan..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 w-64 bg-white"
+                  className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 w-full sm:w-64 bg-white"
                 />
               </div>
             )}
@@ -452,7 +452,7 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
   return (
     <div className="space-y-6">
       {/* Visitor KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           label="Visiteurs uniques"
           value={data.totals.uniqueVisitors}
@@ -541,13 +541,13 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[500px]">
                 <thead>
                   <tr className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-100">
-                    <th className="px-6 py-3">#</th>
-                    <th className="px-4 py-3">Page</th>
-                    <th className="px-4 py-3 text-right">Pages vues</th>
-                    <th className="px-4 py-3 text-right">Visiteurs uniques</th>
+                    <th className="px-3 sm:px-6 py-3">#</th>
+                    <th className="px-2 sm:px-4 py-3">Page</th>
+                    <th className="px-2 sm:px-4 py-3 text-right">Pages vues</th>
+                    <th className="px-2 sm:px-4 py-3 text-right">Visiteurs uniques</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -558,10 +558,10 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
 
                     return (
                       <tr key={page.path} className="group hover:bg-indigo-50/30 transition-colors">
-                        <td className="px-6 py-3">
+                        <td className="px-3 sm:px-6 py-3">
                           <span className="text-xs font-bold text-gray-400">{rowIndex + 1}</span>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-2 sm:px-4 py-3">
                           <div className="relative">
                             <div
                               className="absolute inset-y-0 left-0 bg-indigo-50 rounded"
@@ -572,15 +572,15 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
                               target="_blank"
                               className="relative text-sm font-mono text-gray-700 hover:text-indigo-600 transition-colors flex items-center gap-1.5"
                             >
-                              <span className="truncate max-w-[400px]">{page.path}</span>
+                              <span className="truncate max-w-[200px] sm:max-w-[400px]">{page.path}</span>
                               <ExternalLink className="w-3 h-3 text-gray-300 group-hover:text-indigo-400 flex-shrink-0" />
                             </Link>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-right">
+                        <td className="px-2 sm:px-4 py-3 text-right">
                           <span className="text-sm font-bold text-gray-900">{page.views.toLocaleString('fr-FR')}</span>
                         </td>
-                        <td className="px-4 py-3 text-right">
+                        <td className="px-2 sm:px-4 py-3 text-right">
                           <span className="text-sm font-semibold text-indigo-600">{page.uniqueVisitors.toLocaleString('fr-FR')}</span>
                         </td>
                       </tr>
@@ -636,7 +636,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
           className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-indigo-200 transition-colors"
         >
           {/* Session header */}
-          <div className="px-5 py-3 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+          <div className="px-3 sm:px-5 py-3 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center">
                 <Users className="w-4 h-4 text-indigo-600" />
@@ -657,7 +657,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
           </div>
 
           {/* Page journey */}
-          <div className="px-5 py-3">
+          <div className="px-3 sm:px-5 py-3">
             <div className="flex flex-wrap items-center gap-2">
               {session.pages.map((pg, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -720,15 +720,15 @@ function ArtisanTable({ providers, page, onPageChange }: {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full min-w-[640px]">
           <thead>
             <tr className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-100">
-              <th className="px-6 py-4">Artisan</th>
-              <th className="px-4 py-4 text-center">Vues</th>
-              <th className="px-4 py-4 text-center">Numéros</th>
-              <th className="px-4 py-4 text-center">Appels</th>
-              <th className="px-4 py-4 text-center">Conversion</th>
-              <th className="px-4 py-4 text-right">Dernière activité</th>
+              <th className="px-3 sm:px-6 py-3 sm:py-4">Artisan</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Vues</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Numéros</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Appels</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Conversion</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-right">Dernière activité</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
@@ -740,7 +740,7 @@ function ArtisanTable({ providers, page, onPageChange }: {
 
               return (
                 <tr key={p.id} className="group hover:bg-blue-50/30 transition-colors">
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
                     <div className="flex items-center gap-3">
                       <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-sm font-bold text-gray-500 group-hover:from-blue-100 group-hover:to-blue-200 group-hover:text-blue-600 transition-colors">
                         {rowIndex + 1}
@@ -767,19 +767,19 @@ function ArtisanTable({ providers, page, onPageChange }: {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-2 sm:px-4 py-3 sm:py-4 text-center">
                     <MetricCell value={p.views} total={total} color="blue" />
                   </td>
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-2 sm:px-4 py-3 sm:py-4 text-center">
                     <MetricCell value={p.reveals} total={total} color="amber" />
                   </td>
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-2 sm:px-4 py-3 sm:py-4 text-center">
                     <MetricCell value={p.clicks} total={total} color="green" />
                   </td>
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-2 sm:px-4 py-3 sm:py-4 text-center">
                     <ConversionBadge rate={convRate} />
                   </td>
-                  <td className="px-4 py-4 text-right">
+                  <td className="px-2 sm:px-4 py-3 sm:py-4 text-right">
                     <span className="text-xs text-gray-400" title={formatDate(p.lastActivity)}>
                       {formatRelativeDate(p.lastActivity)}
                     </span>
@@ -836,7 +836,7 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
           })
 
           return (
-            <div key={event.id} className="flex items-start gap-4 px-6 py-4 hover:bg-gray-50/50 transition-colors">
+            <div key={event.id} className="flex items-start gap-4 px-3 sm:px-6 py-4 hover:bg-gray-50/50 transition-colors">
               <div className={`flex-shrink-0 w-9 h-9 rounded-full ${config.bg} flex items-center justify-center mt-0.5`}>
                 <Icon className={`w-4 h-4 ${config.color}`} />
               </div>

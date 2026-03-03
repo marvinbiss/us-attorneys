@@ -214,7 +214,7 @@ export default function StatistiquesPage() {
               <BarChart3 className="w-5 h-5 text-blue-600" />
               Réservations par jour
             </h3>
-            <div className="flex items-end justify-between h-40">
+            <div className="flex items-end justify-between h-32 sm:h-40">
               {stats.bookingsByDay.map((day) => {
                 const maxCount = Math.max(...stats.bookingsByDay.map(d => d.count), 1)
                 const height = (day.count / maxCount) * 100
@@ -238,7 +238,7 @@ export default function StatistiquesPage() {
               <TrendingUp className="w-5 h-5 text-green-600" />
               Evolution mensuelle
             </h3>
-            <div className="flex items-end justify-between h-40">
+            <div className="flex items-end justify-between h-32 sm:h-40">
               {stats.bookingsByMonth.map((month, i) => {
                 const maxCount = Math.max(...stats.bookingsByMonth.map(m => m.count), 1)
                 const height = (month.count / maxCount) * 100

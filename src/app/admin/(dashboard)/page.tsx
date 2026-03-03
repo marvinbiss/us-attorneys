@@ -178,7 +178,7 @@ export default function AdminDashboard() {
               </div>
             ) : (
               <div className="text-center py-2">
-                <p className="text-4xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-4xl font-bold text-gray-900">
                   {data?.stats?.averageRating ?? 0}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">Note moyenne</p>

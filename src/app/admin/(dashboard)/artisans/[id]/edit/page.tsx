@@ -296,7 +296,7 @@ export default function EditArtisanPage() {
               Informations générales
             </h2>
             <div className="grid gap-4">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
                     Nom complet
@@ -330,7 +330,7 @@ export default function EditArtisanPage() {
                   />
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     <Mail className="w-4 h-4 inline mr-1" />
@@ -431,7 +431,7 @@ export default function EditArtisanPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="address_postal_code" className="block text-sm font-medium text-gray-700 mb-1">
                     Code postal
@@ -489,7 +489,7 @@ export default function EditArtisanPage() {
               Statut
             </h2>
             <div className="grid gap-4">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Vérifié

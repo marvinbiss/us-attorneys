@@ -330,7 +330,7 @@ export default async function AProposPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
                 L&apos;annuaire en chiffres
               </h2>
-              <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto">
                 <div>
                   <div className="text-3xl font-bold text-blue-600">
                     {stats.artisanCount.toLocaleString('fr-FR')}

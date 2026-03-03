@@ -551,7 +551,7 @@ export default async function TarifsServiceVillePage({
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Tarifs {tradeLower} dans d&apos;autres villes
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
             {relatedCities.map((v) => (
               <Link
                 key={v.slug}

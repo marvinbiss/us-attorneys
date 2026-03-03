@@ -114,7 +114,7 @@ export default function AdminDispatchPage() {
         </div>
 
         {/* KPI cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
             title="Total assignations"
             value={data?.stats.total || 0}
@@ -164,7 +164,7 @@ export default function AdminDispatchPage() {
         ) : data ? (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[700px] text-sm" aria-label="Liste des assignations de dispatch">
+              <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Liste des assignations de dispatch">
                 <thead>
                   <tr className="border-b border-gray-100 bg-gray-50/50">
                     <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead</th>

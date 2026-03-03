@@ -133,7 +133,7 @@ export default async function ArtisansPage() {
       {count > 0 && (
         <section className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 text-center">
               <div>
                 <div className="text-2xl md:text-3xl font-bold text-slate-900">{count.toLocaleString('fr-FR')}</div>
                 <div className="text-sm text-slate-500 mt-1">Artisans référencés</div>

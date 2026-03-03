@@ -114,7 +114,7 @@ export default function AdminJournalPage() {
           <>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[700px] text-sm" aria-label="Journal des actions administrateur">
+                <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Journal des actions administrateur">
                   <thead>
                     <tr className="border-b border-gray-100 text-left text-gray-500">
                       <th scope="col" className="px-4 py-3 font-medium">Date</th>

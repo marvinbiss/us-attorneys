@@ -454,7 +454,7 @@ function NumberField({ label, value, onChange, min, max, step, description }: {
           max={max}
           step={step || 1}
           aria-label={label}
-          className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
+          className="w-full sm:w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
         />
       </div>
     </div>
@@ -537,7 +537,7 @@ function WeightSlider({ label, value, onChange, color }: {
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value) || 0)}
           aria-label={`${label} (valeur)`}
-          className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-lg text-center"
+          className="w-full sm:w-16 px-2 py-1 text-sm border border-gray-300 rounded-lg text-center"
         />
       </div>
     </div>
@@ -569,7 +569,7 @@ function MultiplierCard({ label, value, onChange, color }: {
         max={5}
         step={0.25}
         aria-label={`Multiplicateur ${label}`}
-        className="w-20 mx-auto px-2 py-1 text-center text-lg font-bold border border-gray-300 rounded-lg"
+        className="w-full sm:w-20 mx-auto px-2 py-1 text-center text-lg font-bold border border-gray-300 rounded-lg"
       />
       <p className="text-xs text-gray-400 mt-1">x multiplicateur</p>
     </div>
