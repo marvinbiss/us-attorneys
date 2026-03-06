@@ -13,6 +13,27 @@ import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
+const BATCH_SIZE = 1000
+
+/**
+ * Fetch all rows by paginating in batches (Supabase PostgREST caps at 1000).
+ */
+async function fetchAllBatched<T>(
+  buildQuery: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>
+): Promise<T[]> {
+  const all: T[] = []
+  let offset = 0
+  while (true) {
+    const { data, error } = await buildQuery(offset, offset + BATCH_SIZE - 1)
+    if (error) throw error
+    if (!data || data.length === 0) break
+    all.push(...data)
+    if (data.length < BATCH_SIZE) break
+    offset += BATCH_SIZE
+  }
+  return all
+}
+
 interface PageViewEvent {
   visitor_id: string | null
   ip_hash: string | null
@@ -58,42 +79,32 @@ export async function GET(request: Request) {
     }
 
     const supabase = createAdminClient()
-    const AGGREGATION_LIMIT = 50000
 
-    // Parallel queries: current page_views, previous page_views
-    const [currentResult, prevResult] = await Promise.all([
-      (() => {
+    // Fetch all page_view events by paginating in batches (PostgREST caps at 1000)
+    const [events, prevEvents] = await Promise.all([
+      fetchAllBatched<PageViewEvent>((from, to) => {
         let q = supabase
           .from('analytics_events')
           .select('visitor_id, ip_hash, session_id, page_path, metadata, created_at')
           .eq('event_type', 'page_view')
           .order('created_at', { ascending: true })
-          .limit(AGGREGATION_LIMIT)
+          .range(from, to)
         if (dateFilter) q = q.gte('created_at', dateFilter)
         return q
-      })(),
+      }),
 
       prevStart && prevEnd
-        ? supabase
-            .from('analytics_events')
-            .select('visitor_id, ip_hash')
-            .eq('event_type', 'page_view')
-            .gte('created_at', prevStart)
-            .lt('created_at', prevEnd)
-            .limit(AGGREGATION_LIMIT)
-        : Promise.resolve({ data: null, error: null }),
+        ? fetchAllBatched<{ visitor_id: string | null; ip_hash: string | null }>((from, to) =>
+            supabase
+              .from('analytics_events')
+              .select('visitor_id, ip_hash')
+              .eq('event_type', 'page_view')
+              .gte('created_at', prevStart!)
+              .lt('created_at', prevEnd!)
+              .range(from, to)
+          )
+        : Promise.resolve([]),
     ])
-
-    if (currentResult.error) {
-      logger.error('Visitor analytics query error', currentResult.error)
-      return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors du chargement' } },
-        { status: 500 }
-      )
-    }
-
-    const events = (currentResult.data || []) as PageViewEvent[]
-    const prevEvents = (prevResult.data || []) as Array<{ visitor_id: string | null; ip_hash: string | null }>
 
     // ── Unique visitors ────────────────────────────────────────
 
@@ -223,12 +234,8 @@ export async function GET(request: Request) {
       return Math.round(((current - previous) / previous) * 100)
     }
 
-    // If we hit exactly the limit, data may be incomplete
-    const truncated = events.length >= AGGREGATION_LIMIT
-
     return NextResponse.json({
       success: true,
-      truncated,
       totals: {
         uniqueVisitors,
         totalPageViews: events.length,

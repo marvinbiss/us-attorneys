@@ -11,6 +11,27 @@ import { logger } from '@/lib/logger'
 export const dynamic = 'force-dynamic'
 
 const FEED_PER_PAGE = 50
+const BATCH_SIZE = 1000 // Supabase PostgREST max-rows default
+
+/**
+ * Fetch all rows from a query by paginating in batches of BATCH_SIZE.
+ * Supabase caps each request at 1000 rows (PostgREST max-rows).
+ */
+async function fetchAllBatched<T>(
+  buildQuery: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>
+): Promise<T[]> {
+  const all: T[] = []
+  let offset = 0
+  while (true) {
+    const { data, error } = await buildQuery(offset, offset + BATCH_SIZE - 1)
+    if (error) throw error
+    if (!data || data.length === 0) break
+    all.push(...data)
+    if (data.length < BATCH_SIZE) break // last page
+    offset += BATCH_SIZE
+  }
+  return all
+}
 
 export async function GET(request: Request) {
   try {
@@ -47,34 +68,34 @@ export async function GET(request: Request) {
 
     const supabase = createAdminClient()
 
-    // Parallel: current events, previous events, paginated activity feed, feed total count
-    // Supabase default limit is 1000 rows — we set a high limit for aggregation queries
-    const AGGREGATION_LIMIT = 50000
+    // Fetch all events by paginating in batches (Supabase caps at 1000 rows per request)
     const feedOffset = (feedPage - 1) * FEED_PER_PAGE
-    const [currentResult, prevResult, recentResult, countResult] = await Promise.all([
-      // Current period events with provider info (exclude page_view — handled by /visitors endpoint)
-      (() => {
+
+    const [events, prevEvents, recentResult, countResult] = await Promise.all([
+      // Current period events with provider info (exclude page_view)
+      fetchAllBatched((from, to) => {
         let q = supabase
           .from('analytics_events')
           .select('provider_id, event_type, created_at, source, providers!inner(name, address_city, slug, stable_id, specialty)')
           .neq('event_type', 'page_view')
+          .order('created_at', { ascending: false })
+          .range(from, to)
         if (dateFilter) q = q.gte('created_at', dateFilter)
-        return q.order('created_at', { ascending: false }).limit(AGGREGATION_LIMIT)
-      })(),
+        return q
+      }),
 
       // Previous period for trends (exclude page_view)
       prevStart && prevEnd
-        ? (() => {
-            const q = supabase
+        ? fetchAllBatched((from, to) =>
+            supabase
               .from('analytics_events')
               .select('event_type')
               .neq('event_type', 'page_view')
               .gte('created_at', prevStart!)
               .lt('created_at', prevEnd!)
-              .limit(AGGREGATION_LIMIT)
-            return q
-          })()
-        : Promise.resolve({ data: null, error: null }),
+              .range(from, to)
+          )
+        : Promise.resolve([]),
 
       // Paginated activity feed (exclude page_view)
       (() => {
@@ -98,17 +119,6 @@ export async function GET(request: Request) {
         return q
       })(),
     ])
-
-    if (currentResult.error) {
-      logger.error('Analytics current events error', currentResult.error)
-      return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors du chargement' } },
-        { status: 500 }
-      )
-    }
-
-    const events = currentResult.data || []
-    const prevEvents = prevResult.data || []
 
     // Current totals
     const totals = {
