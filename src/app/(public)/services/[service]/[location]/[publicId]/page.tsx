@@ -261,9 +261,10 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 
     let query = supabase
       .from('providers')
-      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified')
+      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified, phone')
       .eq('is_active', true)
       .neq('id', providerId)
+      .order('phone', { ascending: false, nullsFirst: false })
       .order('rating_average', { ascending: false, nullsFirst: false })
       .limit(8)
 

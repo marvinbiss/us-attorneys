@@ -47,6 +47,7 @@ async function getRecentProviders(limit = 50) {
       .from('providers')
       .select('id, stable_id, name, slug, specialty, address_street, address_postal_code, address_city, address_region, is_verified, is_active, phone, siret, rating_average, review_count')
       .eq('is_active', true)
+      .order('phone', { ascending: false, nullsFirst: false })
       .order('is_verified', { ascending: false })
       .limit(limit)
 
