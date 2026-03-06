@@ -334,7 +334,7 @@ export default function ServiceLocationPageClient({
 
       {/* Main content - Zillow style split view */}
       <div
-        className="flex flex-col md:flex-row md:h-[calc(100vh-180px)]"
+        className={`flex flex-col md:flex-row md:h-[calc(100vh-180px)] ${viewMode === 'map' ? 'h-[calc(100vh-200px)]' : ''}`}
       >
         {/* Provider List */}
         {(viewMode === 'split' || viewMode === 'list') && (
@@ -400,10 +400,10 @@ export default function ServiceLocationPageClient({
         {/* Map */}
         {(viewMode === 'split' || viewMode === 'map') && (
           <div
-            className={`min-h-[400px] ${
+            className={`${
               viewMode === 'split'
                 ? 'hidden md:block md:w-1/2 lg:w-3/5'
-                : 'w-full'
+                : 'w-full h-[calc(100vh-200px)] md:h-auto'
             }`}
           >
             <GeographicMap
