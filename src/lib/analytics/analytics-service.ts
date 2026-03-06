@@ -157,7 +157,7 @@ export class AnalyticsService {
     ] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('providers').select('id', { count: 'exact', head: true }),
-      supabase.from('bookings').select('id, total_price, status, created_at').limit(1000),
+      supabase.from('bookings').select('id, total_price, status, created_at').limit(50000),
       supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
@@ -253,17 +253,17 @@ export class AnalyticsService {
           .from('bookings')
           .select('id, status, total_price, created_at, service_type')
           .eq('provider_id', providerId)
-          .limit(1000),
+          .limit(50000),
         supabase
           .from('reviews')
           .select('rating')
           .eq('provider_id', providerId)
-          .limit(1000),
+          .limit(50000),
         supabase
           .from('quotes')
           .select('id, status')
           .eq('provider_id', providerId)
-          .limit(1000),
+          .limit(50000),
         // Use count query instead of fetching all rows just to count them
         supabase
           .from('analytics_events')

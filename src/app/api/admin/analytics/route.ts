@@ -48,6 +48,8 @@ export async function GET(request: Request) {
     const supabase = createAdminClient()
 
     // Parallel: current events, previous events, paginated activity feed, feed total count
+    // Supabase default limit is 1000 rows — we set a high limit for aggregation queries
+    const AGGREGATION_LIMIT = 50000
     const feedOffset = (feedPage - 1) * FEED_PER_PAGE
     const [currentResult, prevResult, recentResult, countResult] = await Promise.all([
       // Current period events with provider info (exclude page_view — handled by /visitors endpoint)
@@ -57,7 +59,7 @@ export async function GET(request: Request) {
           .select('provider_id, event_type, created_at, source, providers!inner(name, address_city, slug, stable_id, specialty)')
           .neq('event_type', 'page_view')
         if (dateFilter) q = q.gte('created_at', dateFilter)
-        return q.order('created_at', { ascending: false })
+        return q.order('created_at', { ascending: false }).limit(AGGREGATION_LIMIT)
       })(),
 
       // Previous period for trends (exclude page_view)
@@ -69,6 +71,7 @@ export async function GET(request: Request) {
               .neq('event_type', 'page_view')
               .gte('created_at', prevStart!)
               .lt('created_at', prevEnd!)
+              .limit(AGGREGATION_LIMIT)
             return q
           })()
         : Promise.resolve({ data: null, error: null }),

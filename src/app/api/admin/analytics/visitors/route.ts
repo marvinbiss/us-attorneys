@@ -58,6 +58,7 @@ export async function GET(request: Request) {
     }
 
     const supabase = createAdminClient()
+    const AGGREGATION_LIMIT = 50000
 
     // Parallel queries: current page_views, previous page_views
     const [currentResult, prevResult] = await Promise.all([
@@ -67,7 +68,7 @@ export async function GET(request: Request) {
           .select('visitor_id, ip_hash, session_id, page_path, metadata, created_at')
           .eq('event_type', 'page_view')
           .order('created_at', { ascending: true })
-          .limit(1000)
+          .limit(AGGREGATION_LIMIT)
         if (dateFilter) q = q.gte('created_at', dateFilter)
         return q
       })(),
@@ -79,7 +80,7 @@ export async function GET(request: Request) {
             .eq('event_type', 'page_view')
             .gte('created_at', prevStart)
             .lt('created_at', prevEnd)
-            .limit(1000)
+            .limit(AGGREGATION_LIMIT)
         : Promise.resolve({ data: null, error: null }),
     ])
 
@@ -223,7 +224,7 @@ export async function GET(request: Request) {
     }
 
     // If we hit exactly the limit, data may be incomplete
-    const truncated = events.length >= 1000
+    const truncated = events.length >= AGGREGATION_LIMIT
 
     return NextResponse.json({
       success: true,
