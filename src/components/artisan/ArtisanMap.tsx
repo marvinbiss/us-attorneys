@@ -1,8 +1,18 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { MapPin, Navigation, ExternalLink } from 'lucide-react'
+import { MapPin, Navigation, ExternalLink, Loader2 } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
+
+const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-gray-100 rounded-xl flex items-center justify-center" style={{ height: '280px' }}>
+      <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+    </div>
+  ),
+})
 
 interface ArtisanMapProps {
   artisan: LegacyArtisan
@@ -19,20 +29,24 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
     return null
   }
 
-  // OSM embed — only when we have precise GPS coordinates (no API key required)
-  let mapSrc: string | null = null
-  if (hasCoordinates) {
-    mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude! - 0.08},${artisan.latitude! - 0.05},${artisan.longitude! + 0.08},${artisan.latitude! + 0.05}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`
-  }
-
   // Google Maps search link — used as CTA when no GPS coordinates are available
-  // (the old `?output=embed` format no longer works without an API key)
   const mapsQuery = artisan.address
     ? `${artisan.address}, ${artisan.postal_code} ${artisan.city}, France`
     : artisan.postal_code
     ? `${artisan.city} ${artisan.postal_code} France`
     : `${artisan.city} France`
   const mapsLink = `https://www.google.com/maps/search/${encodeURIComponent(mapsQuery)}`
+
+  // Provider marker for the map
+  const mapProvider = hasCoordinates ? [{
+    id: 'artisan',
+    name: artisan.business_name || `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || '',
+    latitude: artisan.latitude!,
+    longitude: artisan.longitude!,
+    specialty: artisan.specialty,
+    address_city: artisan.city,
+    is_verified: artisan.is_verified || false,
+  }] : []
 
   return (
     <motion.div
@@ -46,23 +60,20 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         Zone d&apos;intervention
       </h2>
 
-      {/* Precise OSM map when GPS coordinates are available */}
-      {mapSrc ? (
-        <div className="rounded-xl overflow-hidden bg-gray-100 mb-4" style={{ height: '280px' }}>
-          <iframe
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            src={mapSrc}
-            title={`Carte de localisation de l'artisan à ${artisan.city}`}
-            aria-label={`Carte montrant la zone d'intervention autour de ${artisan.city}`}
-            allowFullScreen
+      {/* Leaflet map when GPS coordinates are available */}
+      {hasCoordinates ? (
+        <div className="rounded-xl overflow-hidden mb-4">
+          <GeographicMap
+            centerLat={artisan.latitude!}
+            centerLng={artisan.longitude!}
+            zoom={14}
+            providers={mapProvider}
+            locationName={artisan.city}
+            height="280px"
           />
         </div>
       ) : hasCity ? (
-        /* No GPS coordinates — show a styled Google Maps link instead of a broken embed */
+        /* No GPS coordinates — show a styled Google Maps link */
         <a
           href={mapsLink}
           target="_blank"
