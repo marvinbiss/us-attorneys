@@ -205,8 +205,7 @@ export async function generateMetadata({
         .from('providers')
         .select('id', { count: 'exact', head: true })
         .eq('is_active', true)
-        .eq('address_city', villeData.name)
-        .limit(1)
+        .in('address_city', getCityValues(villeData.name))
       providerCount = count ?? 0
     } catch {
       providerCount = 1

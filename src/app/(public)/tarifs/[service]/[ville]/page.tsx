@@ -11,6 +11,7 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
+import { getCityValues } from '@/lib/insee-resolver'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -150,8 +151,7 @@ export async function generateMetadata({
         .from('providers')
         .select('id', { count: 'exact', head: true })
         .eq('is_active', true)
-        .eq('address_city', villeData.name)
-        .limit(1)
+        .in('address_city', getCityValues(villeData.name))
       providerCount = count ?? 0
     } catch {
       providerCount = 1
