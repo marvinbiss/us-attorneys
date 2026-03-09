@@ -1,36 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { submitToIndexNow } from '@/lib/seo/indexnow'
+import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 
-const submitSchema = z.object({
-  urls: z.array(z.string().max(500)).min(1).max(10000),
-  secret: z.string(),
-})
+const INDEXNOW_KEY = '55e191c6b56d89e07bbf8fcba3552fcd'
 
-export async function POST(request: NextRequest) {
+/**
+ * POST /api/indexnow — Submit URLs to IndexNow (Bing, Yandex, etc.)
+ * Called by the sitemap health cron or manually after deploys.
+ */
+export async function POST(request: Request) {
+  // Verify this is an internal call (simple auth check)
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const body = await request.json().catch(() => null)
+  const urls: string[] = body?.urls || []
+
+  if (urls.length === 0) {
+    return NextResponse.json({ error: 'No URLs provided' }, { status: 400 })
+  }
+
+  // IndexNow API - submit to Bing (which shares with Yandex, Seznam, etc.)
+  const payload = {
+    host: 'servicesartisans.fr',
+    key: INDEXNOW_KEY,
+    keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
+    urlList: urls.slice(0, 10000), // IndexNow limit: 10K URLs per request
+  }
+
   try {
-    const body = await request.json()
-    const result = submitSchema.safeParse(body)
-
-    if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Paramètres invalides' } }, { status: 400 })
-    }
-
-    if (result.data.secret !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
-    }
-
-    const indexResult = await submitToIndexNow(result.data.urls)
+    const response = await fetch('https://api.indexnow.org/indexnow', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(payload),
+    })
 
     return NextResponse.json({
-      success: indexResult.success,
-      submitted: indexResult.submitted,
-      now: Date.now(),
+      status: response.status,
+      submitted: urls.length,
+      message: response.status === 200 ? 'URLs submitted successfully' : 'Submission acknowledged',
     })
-  } catch (err) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la soumission IndexNow', details: err instanceof Error ? err.message : String(err) } },
-      { status: 500 }
-    )
+  } catch {
+    return NextResponse.json({ error: 'IndexNow API error' }, { status: 502 })
   }
 }
