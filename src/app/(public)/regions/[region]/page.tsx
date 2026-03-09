@@ -64,7 +64,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    robots: artisanCount === 0 ? { index: false, follow: true } : undefined,
+    // Hub pages are always indexed — rich geographic content has value even with 0 providers
+    robots: { index: true, follow: true },
     alternates: { canonical: `${SITE_URL}/regions/${regionSlug}` },
     openGraph: {
       locale: 'fr_FR',

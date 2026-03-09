@@ -10,7 +10,6 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
-import { getCommuneBySlug } from '@/lib/data/commune-data'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -38,15 +37,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityImage = getCityImage(villeSlug)
   const metaContent = generateVilleContent(ville)
 
-  // Fetch provider count from communes table to detect thin-content pages
-  // Fail open: default to indexed. ISR will correct with real DB data.
-  let providerCount = 1
-  try {
-    const commune = await getCommuneBySlug(villeSlug)
-    providerCount = commune?.provider_count ?? 1
-  } catch {
-    providerCount = 1 // Fail open: default to indexed. ISR will correct with real DB data.
-  }
 
   const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
   const titleTemplates = [
@@ -71,7 +61,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    robots: providerCount === 0 ? { index: false, follow: true } : undefined,
+    // Hub pages are always indexed — rich geographic content has value even with 0 providers
+    robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,

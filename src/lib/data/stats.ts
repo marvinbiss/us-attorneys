@@ -5,6 +5,8 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+
 /** Nombre total d'artisans actifs dans la base */
 export async function getProviderCount(): Promise<number> {
   try {
@@ -20,8 +22,9 @@ export async function getProviderCount(): Promise<number> {
 }
 
 /** Nombre d'artisans actifs dans une région (par nom de région) */
-// Fail open: default to indexed. ISR will correct with real DB data.
 export async function getProviderCountByRegion(regionName: string): Promise<number> {
+  // Fail open at build: default to indexed. ISR will correct with real DB data.
+  if (IS_BUILD) return 1
   try {
     const supabase = createAdminClient()
     const { count } = await supabase
@@ -36,8 +39,9 @@ export async function getProviderCountByRegion(regionName: string): Promise<numb
 }
 
 /** Nombre d'artisans actifs dans un département (par nom de département) */
-// Fail open: default to indexed. ISR will correct with real DB data.
 export async function getProviderCountByDepartment(deptName: string): Promise<number> {
+  // Fail open at build: default to indexed. ISR will correct with real DB data.
+  if (IS_BUILD) return 1
   try {
     const supabase = createAdminClient()
     const { count } = await supabase
@@ -88,8 +92,6 @@ export interface HomepageData extends SiteStats {
   topProviders: HomepageProvider[]
   recentReviews: HomepageReview[]
 }
-
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 /** Toutes les stats du site en un seul appel (pour la homepage) */
 export async function getSiteStats(): Promise<SiteStats> {
