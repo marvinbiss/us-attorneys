@@ -4,8 +4,19 @@ import { services, villes } from '@/lib/data/france'
 import { tradeContent } from '@/lib/data/trade-content'
 import inseeCommunes from '@/lib/data/insee-communes.json'
 
+export const maxDuration = 60
+
 const PROVIDER_BATCH_SIZE = 5_000
-const PAGE_SIZE = 1000
+
+/** Escape XML special characters in sitemap URLs to prevent invalid XML */
+function escapeXml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
 
 const specialtyToSlug: Record<string, string> = {
   'plombier': 'plombier',
@@ -142,16 +153,6 @@ for (const key of Object.keys(tradeContent)) {
   }
 }
 
-type ProviderRow = {
-  id: string
-  name: string | null
-  slug: string | null
-  stable_id: string | null
-  specialty: string | null
-  address_city: string | null
-  updated_at: string | null
-}
-
 /**
  * Dynamic API route for provider sitemaps.
  * Serves /sitemap/providers-{id}.xml via next.config.js rewrite.
@@ -177,27 +178,19 @@ export async function GET(request: NextRequest) {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    let allProviders: ProviderRow[] = []
-    let from = offset
-    const limit = offset + PROVIDER_BATCH_SIZE
+    const { data: allProviders, error } = await supabase
+      .from('providers')
+      .select('id, name, slug, stable_id, specialty, address_city, updated_at')
+      .eq('is_active', true)
+      .eq('noindex', false)
+      .order('updated_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(offset, offset + PROVIDER_BATCH_SIZE - 1)
 
-    while (from < limit) {
-      const { data, error } = await supabase
-        .from('providers')
-        .select('id, name, slug, stable_id, specialty, address_city, updated_at')
-        .eq('is_active', true)
-        .eq('noindex', false)
-        .order('updated_at', { ascending: false })
-        .range(from, Math.min(from + PAGE_SIZE - 1, limit - 1))
+    if (error) throw error
 
-      if (error || !data || data.length === 0) break
-      allProviders = allProviders.concat(data)
-      if (data.length < PAGE_SIZE) break
-      from += PAGE_SIZE
-    }
-
-    const urls = allProviders
-      .filter((p) => p.name && p.specialty && p.address_city)
+    const urls = (allProviders || [])
+      .filter((p) => p.name?.trim() && p.specialty?.trim() && p.address_city?.trim())
       .map((p) => {
         const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
         const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
@@ -212,7 +205,8 @@ export async function GET(request: NextRequest) {
         if (!serviceSlug || !locationSlug || !publicId) return null
 
         const lastmod = p.updated_at ? new Date(p.updated_at).toISOString().split('T')[0] : undefined
-        return `  <url><loc>${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
+        const loc = escapeXml(`${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`)
+        return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
       })
       .filter((entry): entry is string => entry !== null)
 

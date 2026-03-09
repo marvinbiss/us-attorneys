@@ -92,7 +92,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   let locationName = ''
   let departmentCode = ''
   let departmentName = ''
-  let providerCount = 0
+  // Fail open: default to indexed. ISR will correct if truly 0 providers.
+  let providerCount = 1
 
   try {
     const [service, location, count] = await Promise.all([
@@ -120,7 +121,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       departmentCode = ville.departementCode
       departmentName = ville.departement
     }
-    providerCount = 0 // conservative: noindex when DB is down
+    providerCount = 1 // Fail open: default to indexed. ISR will correct if truly 0 providers.
   }
 
   if (!serviceName || !locationName) {
@@ -190,9 +191,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [getServiceImage(serviceSlug).src],
     },
     alternates: {
-      canonical: providerCount > 0
-        ? `${SITE_URL}/services/${serviceSlug}/${locationSlug}`
-        : `${SITE_URL}/services/${serviceSlug}`,
+      // Always self-referencing: if noindex, canonical is irrelevant; if indexed, it must point to self
+      canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
     },
   }
 }

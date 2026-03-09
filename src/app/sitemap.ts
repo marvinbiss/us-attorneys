@@ -10,8 +10,12 @@ import { allArticles } from '@/lib/data/blog/articles'
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
 
+// Use build date as lastModified for static hub pages — signals freshness to Google
+const BUILD_DATE = new Date().toISOString().split('T')[0]
+
 // Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
 const STATIC_BATCH = 10_000
+const LARGE_BATCH = 45_000
 
 // Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
 // Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
@@ -26,7 +30,7 @@ export async function generateSitemaps() {
   // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
   // ALL intent pages (devis, avis, tarifs, urgence, problemes) also use Phase 1 cities.
   // Quartier-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
-  const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / 45000)
+  const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
   const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
   const avisServiceSlugs = Object.keys(tradeContent)
@@ -47,7 +51,7 @@ export async function generateSitemaps() {
     { id: 'problemes' },
     ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `problemes-cities-${i}` })),
     ...Array.from(
-      { length: Math.ceil(departements.length * getTradesSlugs().length / 45000) },
+      { length: Math.ceil(departements.length * getTradesSlugs().length / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
     ),
     { id: 'region-services' },
@@ -66,25 +70,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Static pages + services ─────────────────────────────────────────
   if (id === 'static') {
     const homepage: MetadataRoute.Sitemap = [
-      { url: SITE_URL },
+      { url: SITE_URL, lastModified: BUILD_DATE },
     ]
 
     const staticPages: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/a-propos` },
-      { url: `${SITE_URL}/contact` },
-      { url: `${SITE_URL}/blog` },
-      { url: `${SITE_URL}/faq` },
-      { url: `${SITE_URL}/comment-ca-marche` },
-      { url: `${SITE_URL}/tarifs` },
-      { url: `${SITE_URL}/urgence` },
-      { url: `${SITE_URL}/devis` },
-      { url: `${SITE_URL}/notre-processus-de-verification` },
-      { url: `${SITE_URL}/politique-avis` },
-      { url: `${SITE_URL}/mediation` },
-      { url: `${SITE_URL}/outils/calculateur-prix` },
-      { url: `${SITE_URL}/outils/diagnostic` },
-      { url: `${SITE_URL}/carte-artisans` },
-      { url: `${SITE_URL}/artisans` },
+      { url: `${SITE_URL}/a-propos`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/contact`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/blog`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/comment-ca-marche`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/tarifs`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/urgence`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/devis`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/politique-avis`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/mediation`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/artisans`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/recherche`, lastModified: BUILD_DATE },
     ]
 
     // Blog articles — lastModified réel (seul contenu avec vraie date vérifiable)
@@ -97,20 +102,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     })
 
     const servicesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/services` },
+      { url: `${SITE_URL}/services`, lastModified: BUILD_DATE },
     ]
 
     const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
       url: `${SITE_URL}/services/${service.slug}`,
+      lastModified: BUILD_DATE,
     }))
 
     const emergencySlugs = Object.keys(tradeContent).filter((s) => tradeContent[s].emergencyInfo)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
+      lastModified: BUILD_DATE,
     }))
 
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/tarifs/${slug}`,
+      lastModified: BUILD_DATE,
     }))
 
     return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
@@ -119,7 +127,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Service + city — Phase 1: top 300 cities ────────────────────────
   if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
-    const BATCH = 45000
+    const BATCH = LARGE_BATCH
     const offset = batchIndex * BATCH
 
     // Merge top cities by population + GSC priority cities (deduplicated)
@@ -181,6 +189,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'devis-services') {
     return Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/devis/${slug}`,
+      lastModified: BUILD_DATE,
     }))
   }
 
@@ -252,8 +261,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'avis-services') {
     const tradeSlugs = Object.keys(tradeContent)
     return [
-      { url: `${SITE_URL}/avis` },
-      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}` })),
+      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE },
+      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}`, lastModified: BUILD_DATE })),
     ]
   }
 
@@ -283,8 +292,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'problemes') {
     const problemSlugs = getProblemSlugs()
     return [
-      { url: `${SITE_URL}/problemes` },
-      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}` })),
+      { url: `${SITE_URL}/problemes`, lastModified: BUILD_DATE },
+      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}`, lastModified: BUILD_DATE })),
     ]
   }
 
@@ -320,7 +329,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}` })
       }
     }
-    return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
+    return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
   }
 
   // ── Region × service pages ──────────────────────────────────────────

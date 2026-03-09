@@ -442,7 +442,9 @@ export async function hasProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
 ): Promise<boolean> {
-  if (IS_BUILD) return false // Conservative: noindex during build, ISR will update
+  // Fail open: assume providers exist during build so pages are indexed by default.
+  // ISR will correct to noindex if truly 0 providers on first revalidation.
+  if (IS_BUILD) return true
   try {
     return await retryWithBackoff(
       async () => {
@@ -475,13 +477,16 @@ export async function hasProvidersByServiceAndLocation(
 /**
  * Return the count of providers for a service+location combo.
  * Uses head:true + count:exact to avoid fetching rows — lightweight.
- * Returns 0 during build or on failure.
+ * Fail open: returns 1 during build so pages are indexed by default.
+ * ISR will correct with the real count on first revalidation.
  */
 export async function getProviderCountByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
 ): Promise<number> {
-  if (IS_BUILD) return 0
+  // Fail open: default to 1 during build so pages are indexed (not noindexed).
+  // ISR will correct with the real DB count on first revalidation.
+  if (IS_BUILD) return 1
   try {
     return await retryWithBackoff(
       async () => {

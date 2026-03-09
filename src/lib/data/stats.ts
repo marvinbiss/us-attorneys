@@ -20,6 +20,7 @@ export async function getProviderCount(): Promise<number> {
 }
 
 /** Nombre d'artisans actifs dans une région (par nom de région) */
+// Fail open: default to indexed. ISR will correct with real DB data.
 export async function getProviderCountByRegion(regionName: string): Promise<number> {
   try {
     const supabase = createAdminClient()
@@ -30,11 +31,12 @@ export async function getProviderCountByRegion(regionName: string): Promise<numb
       .eq('address_region', regionName)
     return count ?? 0
   } catch {
-    return 0
+    return 1 // Fail open: default to indexed. ISR will correct with real DB data.
   }
 }
 
 /** Nombre d'artisans actifs dans un département (par nom de département) */
+// Fail open: default to indexed. ISR will correct with real DB data.
 export async function getProviderCountByDepartment(deptName: string): Promise<number> {
   try {
     const supabase = createAdminClient()
@@ -45,7 +47,7 @@ export async function getProviderCountByDepartment(deptName: string): Promise<nu
       .eq('address_department', deptName)
     return count ?? 0
   } catch {
-    return 0
+    return 1 // Fail open: default to indexed. ISR will correct with real DB data.
   }
 }
 

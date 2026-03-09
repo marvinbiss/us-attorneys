@@ -39,12 +39,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const metaContent = generateVilleContent(ville)
 
   // Fetch provider count from communes table to detect thin-content pages
-  let providerCount = 0
+  // Fail open: default to indexed. ISR will correct with real DB data.
+  let providerCount = 1
   try {
     const commune = await getCommuneBySlug(villeSlug)
-    providerCount = commune?.provider_count ?? 0
+    providerCount = commune?.provider_count ?? 1
   } catch {
-    providerCount = 0 // conservative: noindex when DB is down
+    providerCount = 1 // Fail open: default to indexed. ISR will correct with real DB data.
   }
 
   const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
