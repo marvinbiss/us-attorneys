@@ -199,6 +199,7 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 - **Jamais** de canonical conditionnel — toujours self-referencing
 - **Toujours** `escapeXml()` sur les données dynamiques dans les sitemaps XML
 - **Toujours** `stale-while-revalidate=86400` sur les cache headers des sitemaps
+- **Hub pages géo** (villes, départements, régions) : **toujours indexées** — contenu riche même avec 0 providers
 - Pages avec noindex intentionnel : `/accessibilite`, `/carrieres`, `/cgv`, `/confidentialite`, `/mentions-legales`, `/partenaires`, `/presse`, `/mes-favoris`, `/plan-du-site`
 
 ---
