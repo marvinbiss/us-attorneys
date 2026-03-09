@@ -11,7 +11,6 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
-import { getCityValues } from '@/lib/insee-resolver'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -142,27 +141,11 @@ export async function generateMetadata({
 
   const canonicalUrl = `${SITE_URL}/tarifs/${service}/${villeSlug}`
 
-  let providerCount = 1
-  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
-    try {
-      const { createAdminClient } = await import('@/lib/supabase/admin')
-      const supabase = createAdminClient()
-      const { count } = await supabase
-        .from('providers')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .in('address_city', getCityValues(villeData.name))
-      providerCount = count ?? 0
-    } catch {
-      providerCount = 1
-    }
-  }
-
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
+    robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,

@@ -193,30 +193,11 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
-  // noindex when no real providers exist for this city.
-  // Allows Google to re-index later if providers appear.
-  // Fail open (providerCount=1) when DB is down to avoid false noindex.
-  let providerCount = 1
-  if (!IS_BUILD) {
-    try {
-      const { createAdminClient } = await import('@/lib/supabase/admin')
-      const supabase = createAdminClient()
-      const { count } = await supabase
-        .from('providers')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .in('address_city', getCityValues(villeData.name))
-      providerCount = count ?? 0
-    } catch {
-      providerCount = 1
-    }
-  }
-
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
+    robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,

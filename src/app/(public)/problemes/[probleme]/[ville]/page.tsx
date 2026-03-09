@@ -105,29 +105,11 @@ export async function generateMetadata({
 
   const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} \u20ac. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.`
 
-  // noindex when no real providers exist for this city
-  let providerCount = 1
-  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
-    try {
-      const { createAdminClient } = await import('@/lib/supabase/admin')
-      const supabase = createAdminClient()
-      const { count } = await supabase
-        .from('providers')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .eq('address_city', villeData.name)
-        .limit(1)
-      providerCount = count ?? 0
-    } catch {
-      providerCount = 1
-    }
-  }
-
   return {
     title,
     description,
     alternates: { canonical: `${SITE_URL}/problemes/${probleme}/${ville}` },
-    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
+    robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,
