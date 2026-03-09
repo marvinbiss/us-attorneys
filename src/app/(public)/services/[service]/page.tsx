@@ -12,7 +12,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
-import { popularServices } from '@/lib/constants/navigation'
+import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
@@ -725,20 +725,23 @@ export default async function ServicePage({ params }: PageProps) {
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">Voir aussi</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Autres services artisanaux</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Services connexes</h3>
               <div className="flex flex-wrap gap-2">
-                {popularServices
-                  .filter(s => s.slug !== serviceSlug)
+                {(relatedServices[serviceSlug] || popularServices.filter(s => s.slug !== serviceSlug).map(s => s.slug))
                   .slice(0, 6)
-                  .map((s) => (
-                    <Link
-                      key={s.slug}
-                      href={`/services/${s.slug}`}
-                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
-                    >
-                      {s.name}
-                    </Link>
-                  ))}
+                  .map((slug) => {
+                    const svc = staticServicesList.find(s => s.slug === slug)
+                    if (!svc) return null
+                    return (
+                      <Link
+                        key={slug}
+                        href={`/services/${slug}`}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                      >
+                        {svc.name}
+                      </Link>
+                    )
+                  })}
               </div>
               <h3 className="font-semibold text-gray-900 mb-4 mt-6">Outils pratiques</h3>
               <div className="flex flex-wrap gap-2">
