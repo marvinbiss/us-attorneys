@@ -154,6 +154,53 @@ Plan de domination SEO complet dans `SEO-DOMINATION-PLAN.md` à la racine du pro
 - Cible : 1.5M+ pages via 47 métiers x 13 680 lieux x 5 intents
 - Lire ce fichier avant tout travail SEO
 
+### Sitemap
+
+Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + news).
+
+| Fichier | Rôle |
+|---------|------|
+| `src/app/sitemap.ts` | Génération des 17 sitemaps statiques via `generateSitemaps()` |
+| `src/app/api/sitemap-index/route.ts` | Index `/sitemap.xml` (workaround Next.js 14.2) |
+| `src/app/api/sitemap-providers/route.ts` | Sitemaps providers dynamiques (DB, `maxDuration=60`) |
+| `src/app/image-sitemap.xml/route.ts` | Sitemap images Google |
+| `src/app/news-sitemap.xml/route.ts` | Sitemap Google News (articles < 48h) |
+| `src/app/robots.ts` | robots.txt dynamique (déclare les 3 sitemaps) |
+
+**Constantes clés** (doivent rester synchronisées entre `sitemap.ts` et `sitemap-index/route.ts`) :
+- `TOP_CITIES_PHASE1 = 300` — nombre de villes soumises (Phase 1 conservatrice)
+- `STATIC_BATCH = 10_000` — taille batch pages d'intention
+- `LARGE_BATCH = 45_000` — taille batch service×ville et dept×service
+- `PROVIDER_BATCH_SIZE = 5_000` — taille batch providers
+- `MAX_PROVIDER_SITEMAPS = 20` — cap pour éviter les sitemaps fantômes
+
+**Rewrites** (`next.config.js`) :
+- `/sitemap.xml` → `/api/sitemap-index`
+- `/sitemap/providers-:id.xml` → `/api/sitemap-providers?id=:id`
+
+**Stratégie noindex** : Toutes les pages publiques utilisent **fail-open** (`providerCount = 1` par défaut). Si la DB est down ou pendant le build, les pages restent indexées. L'ISR corrige avec la vraie valeur.
+
+**Migration 348** : Index couvrant `idx_providers_sitemap_v2` — sert la requête provider sitemap entièrement depuis l'index (zero heap fetch).
+
+### IndexNow
+
+- Clé : `55e191c6b56d89e07bbf8fcba3552fcd` (fichier de vérification dans `/public/`)
+- `POST /api/indexnow` — soumission d'URLs à Bing/Yandex
+- Cron quotidien `/api/cron/indexnow-submit` — soumet ~212 URLs stratégiques
+
+### Monitoring
+
+- Cron quotidien `/api/cron/sitemap-health` — vérifie les 39 sitemaps (HTTP 200 + XML valide)
+- Logs structurés visibles dans Vercel → onglet Logs
+
+### Règles SEO critiques
+
+- **Jamais** mettre une page noindex dans le sitemap (contradiction)
+- **Jamais** de canonical conditionnel — toujours self-referencing
+- **Toujours** `escapeXml()` sur les données dynamiques dans les sitemaps XML
+- **Toujours** `stale-while-revalidate=86400` sur les cache headers des sitemaps
+- Pages avec noindex intentionnel : `/accessibilite`, `/carrieres`, `/cgv`, `/confidentialite`, `/mentions-legales`, `/partenaires`, `/presse`, `/mes-favoris`, `/plan-du-site`
+
 ---
 
 ## Environnement
@@ -162,4 +209,5 @@ Variables requises (voir `.env.example`) :
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ADMIN_EMAILS` (liste séparée par virgules)
+- `CRON_SECRET` (authentification des crons Vercel, dont sitemap-health et indexnow-submit)
 - Variables Stripe, Resend, Twilio, etc. selon les features
