@@ -32,19 +32,27 @@ const faqItems = [
   },
   {
     question: "Le badge ralentit-il mon site ?",
-    answer: "Non, le badge est une simple image SVG de moins de 2 Ko. Il se charge instantanement et n'utilise aucun JavaScript, cookie ni tracker. C'est l'un des formats les plus legers possibles.",
+    answer: "Non, le badge est une simple image SVG de moins de 3 Ko. Il se charge instantanement et n'utilise aucun JavaScript, cookie ni tracker. C'est l'un des formats les plus legers possibles.",
   },
   {
     question: "Puis-je personnaliser le badge ?",
-    answer: "Oui, vous pouvez choisir entre 3 styles (Clair, Sombre, Minimal) et personnaliser votre nom et votre metier. Le badge s'adapte automatiquement a vos informations.",
+    answer: "Oui, vous pouvez choisir entre 3 styles (Clair, Sombre, Minimal). Si votre entreprise est referencee sur ServicesArtisans, le badge affiche automatiquement votre note, vos avis et votre statut de verification en temps reel.",
   },
   {
     question: "Comment ca marche sur WordPress ?",
     answer: "Copiez le code HTML genere, puis collez-le dans un bloc \"HTML personnalise\" sur votre page ou dans un widget de la barre laterale. C'est compatible avec Elementor, Divi, Gutenberg et tous les constructeurs de pages.",
   },
   {
+    question: "Le badge ameliore-t-il mon referencement Google ?",
+    answer: "Oui. Le badge inclut un lien vers votre fiche artisan sur ServicesArtisans.fr, ce qui constitue un backlink de qualite. C'est bon pour votre SEO et ca renforce votre presence en ligne.",
+  },
+  {
+    question: "Les donnees du badge se mettent-elles a jour ?",
+    answer: "Oui, si vous utilisez le badge dynamique (via \"Trouver ma fiche\"), votre note moyenne, nombre d'avis et statut de verification se mettent a jour automatiquement toutes les 24 heures.",
+  },
+  {
     question: "Que se passe-t-il si je desactive mon compte ?",
-    answer: `Le badge continuera d'afficher les informations configurees au moment de la generation. Il restera visible sur votre site tant que vous ne retirez pas le code HTML. Vous pouvez le supprimer a tout moment.`,
+    answer: `Le badge continuera d'afficher les dernieres informations connues. Il restera visible sur votre site tant que vous ne retirez pas le code HTML. Vous pouvez le supprimer a tout moment.`,
   },
 ]
 
