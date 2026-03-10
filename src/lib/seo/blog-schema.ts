@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/seo/config'
+import { getAuthorByName } from '@/lib/data/authors'
 
 interface FAQItem {
   question: string
@@ -91,11 +92,34 @@ export function getBlogArticleSchema(article: {
     headline: article.title,
     description: article.excerpt,
     image: articleImage,
-    author: {
-      '@type': article.author === 'ServicesArtisans' ? 'Organization' : 'Person',
-      name: article.author,
-      ...(article.author === 'ServicesArtisans' ? { '@id': `${SITE_URL}#organization` } : {}),
-    },
+    author: (() => {
+      if (article.author === 'ServicesArtisans') {
+        return {
+          '@type': 'Organization' as const,
+          name: 'ServicesArtisans',
+          '@id': `${SITE_URL}#organization`,
+        }
+      }
+      const authorProfile = getAuthorByName(article.author)
+      if (authorProfile) {
+        return {
+          '@type': 'Person' as const,
+          name: authorProfile.name,
+          jobTitle: authorProfile.role,
+          description: authorProfile.bio,
+          knowsAbout: authorProfile.expertise,
+          hasCredential: authorProfile.certifications.map(cert => ({
+            '@type': 'EducationalOccupationalCredential' as const,
+            credentialCategory: 'certification',
+            name: cert,
+          })),
+        }
+      }
+      return {
+        '@type': 'Person' as const,
+        name: article.author,
+      }
+    })(),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

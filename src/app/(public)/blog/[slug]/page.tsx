@@ -2,8 +2,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { Calendar, User, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
+import { Calendar, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
+import { getAuthorByName } from '@/lib/data/authors'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
@@ -679,35 +680,49 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {article.title}
         </h1>
 
-        {/* Meta */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-500 text-sm sm:text-base mb-8 sm:mb-10 max-w-3xl mx-auto">
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4" />
-            {article.author}
-          </div>
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" />
-            {new Date(article.date).toLocaleDateString('fr-FR', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            })}
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            {article.readTime} de lecture
-          </div>
-          {article.updatedDate && (
-            <div className="flex items-center gap-2 text-emerald-600">
-              <Clock className="w-4 h-4" />
-              Mis à jour le {new Date(article.updatedDate).toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              })}
+        {/* Byline with author avatar */}
+        {(() => {
+          const authorProfile = getAuthorByName(article.author)
+          const initials = article.author.split(' ').map(n => n[0]).join('')
+          const gradient = getAuthorGradient(article.author)
+          return (
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-500 text-sm sm:text-base mb-8 sm:mb-10 max-w-3xl mx-auto">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+                  {initials}
+                </div>
+                <div>
+                  <span className="text-gray-900 font-semibold">{article.author}</span>
+                  {authorProfile && (
+                    <span className="block text-xs text-gray-400">{authorProfile.role}</span>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                {new Date(article.date).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                })}
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                {article.readTime} de lecture
+              </div>
+              {article.updatedDate && (
+                <div className="flex items-center gap-2 text-emerald-600">
+                  <Clock className="w-4 h-4" />
+                  Mis à jour le {new Date(article.updatedDate).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          )
+        })()}
 
         {/* Article Hero Image */}
         {(() => {
@@ -963,23 +978,73 @@ export default async function BlogArticlePage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Author Box */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-10">
-            <div className="flex items-center gap-4">
-              <div className={`w-16 h-16 bg-gradient-to-br ${getAuthorGradient(article.author)} rounded-full flex items-center justify-center shadow-md`}>
-                <User className="w-8 h-8 text-white" />
+          {/* Author Box — Enhanced E-E-A-T */}
+          {(() => {
+            const authorProfile = getAuthorByName(article.author)
+            const initials = article.author.split(' ').map(n => n[0]).join('')
+            const gradient = getAuthorGradient(article.author)
+            return (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mt-10">
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md flex-shrink-0`}>
+                    {initials}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-gray-900 text-lg">{article.author}</h3>
+                    {authorProfile && (
+                      <p className="text-amber-700 text-sm font-medium mb-2">{authorProfile.role}</p>
+                    )}
+                    <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                      {authorProfile
+                        ? authorProfile.bio
+                        : (article.authorBio || "Expert en artisanat et batiment chez ServicesArtisans. Nos contenus sont rediges en collaboration avec des professionnels du secteur et verifies pour leur exactitude technique.")}
+                    </p>
+                    {authorProfile && (
+                      <>
+                        {/* Expertise tags */}
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {authorProfile.expertise.map((exp) => (
+                            <span key={exp} className="bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full text-xs font-medium">
+                              {exp}
+                            </span>
+                          ))}
+                        </div>
+                        {/* Certifications */}
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {authorProfile.certifications.map((cert) => (
+                            <span key={cert} className="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
+                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              {cert}
+                            </span>
+                          ))}
+                        </div>
+                        {/* Experience + link */}
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            {authorProfile.yearsExperience} ans d&apos;experience
+                          </span>
+                          <Link
+                            href={`/blog?author=${encodeURIComponent(article.author.toLowerCase())}`}
+                            className="text-amber-600 hover:text-amber-700 font-medium hover:underline"
+                          >
+                            Voir tous les articles de {article.author.split(' ')[0]}
+                          </Link>
+                        </div>
+                      </>
+                    )}
+                    {!authorProfile && (
+                      <p className="text-gray-400 text-xs mt-1">
+                        Contenu verifie par des artisans professionnels
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-gray-900">{article.author}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {article.authorBio || 'Expert en artisanat et bâtiment chez ServicesArtisans. Nos contenus sont rédigés en collaboration avec des professionnels du secteur et vérifiés pour leur exactitude technique.'}
-                </p>
-                <p className="text-gray-400 text-xs mt-1">
-                  Contenu vérifié par des artisans professionnels
-                </p>
-              </div>
-            </div>
-          </div>
+            )
+          })()}
 
           {/* Editorial transparency */}
           <div className="bg-gray-50 rounded-xl p-4 mt-6 border border-gray-100">

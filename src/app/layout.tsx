@@ -16,13 +16,15 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  adjustFontFallback: true,
 })
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-heading',
-  display: 'optional',
+  display: 'swap',
   weight: ['500', '600', '700', '800'],
+  adjustFontFallback: true,
 })
 
 // Dynamic imports for performance

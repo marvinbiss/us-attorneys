@@ -80,6 +80,8 @@ export function ClayReviewsCarousel({ reviews }: Props) {
                 alt={review.client_name || 'Client vérifié'}
                 width={36}
                 height={36}
+                sizes="36px"
+                loading="lazy"
                 className="rounded-full object-cover shrink-0"
                 style={{ border: '2px solid rgba(255,255,255,.15)' }}
               />

@@ -243,6 +243,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   alt="Photo d'un client satisfait"
                   width={56}
                   height={56}
+                  sizes="(max-width: 768px) 36px, 56px"
                   placeholder="blur"
                   blurDataURL={BLUR_PLACEHOLDER}
                   className="w-9 h-9 md:w-14 md:h-14 rounded-full border-2 border-white/20 object-cover -mr-2 md:-mr-3"
@@ -354,6 +355,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                           src={bgImage}
                           alt=""
                           fill
+                          loading="lazy"
                           sizes="(max-width: 768px) 100vw, 33vw"
                           placeholder="blur"
                           blurDataURL={BLUR_PLACEHOLDER}
@@ -475,6 +477,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         alt={rv.client_name || 'Client vérifié'}
                         width={40}
                         height={40}
+                        sizes="40px"
                         placeholder="blur"
                         blurDataURL={BLUR_PLACEHOLDER}
                         className="rounded-full object-cover"
@@ -508,6 +511,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
               alt=""
               fill
+              loading="lazy"
               sizes="100vw"
               placeholder="blur"
               blurDataURL={BLUR_PLACEHOLDER}

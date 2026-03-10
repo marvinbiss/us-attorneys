@@ -417,16 +417,15 @@ button {
   touch-action: manipulation;
 }
 
-/* Smooth transitions for all interactive elements */
-a, button, input, select, textarea, [role="button"] {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
+/* Smooth transitions for interactive elements (links and buttons only, not form inputs — avoids INP penalty) */
+a, button, [role="button"] {
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-/* Prevent layout shifts + smooth image loading */
+/* Prevent layout shifts */
 img {
   max-width: 100%;
   height: auto;
-  transition: opacity 0.3s ease;
 }
 
 /* Smooth font rendering */
@@ -446,6 +445,18 @@ img {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* ===========================================
+   CONTENT-VISIBILITY — Skip rendering of
+   off-screen content until scrolled into view.
+   Reduces initial rendering work (CLS-safe
+   because contain-intrinsic-size is specified).
+   =========================================== */
+
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 /* ===========================================
@@ -509,17 +520,10 @@ img {
   color: inherit;
 }
 
-/* Page entrance animation */
-@keyframes pageIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (min-width: 768px) {
-  main {
-    animation: pageIn 0.4s ease-out;
-  }
-}
+/* Page entrance animation — disabled to avoid LCP delay.
+   The opacity:0 start frame blocks Largest Contentful Paint
+   until the animation completes. Use ScrollReveal for
+   below-fold section animations instead. */
 
 /* Reviews carousel — infinite scroll */
 @keyframes scroll-carousel {

@@ -109,7 +109,7 @@ export default async function HomePage() {
       />
 
       {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
-      <section className="py-16 bg-sand-200">
+      <section className="py-16 bg-sand-200 cv-auto">
         <div className="max-w-6xl mx-auto px-4">
           <GeographicSectionWrapper>
             <div className="text-center mb-10">
@@ -144,7 +144,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── POPULAR LINKS (SEO) ──────────────────────────────── */}
-      <section className="py-16 bg-slate-50 border-t border-slate-100">
+      <section className="py-16 bg-slate-50 border-t border-slate-100 cv-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-12">
             <PopularServicesLinks showTitle limit={8} />

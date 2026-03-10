@@ -108,8 +108,8 @@ export default function Footer() {
                 <CreditCard className="w-6 h-6 text-clay-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Données officielles</p>
-                <p className="text-gray-500 text-xs mt-0.5">API gouvernementale</p>
+                <p className="text-white font-semibold text-sm">Devis gratuit</p>
+                <p className="text-gray-500 text-xs mt-0.5">Sans engagement</p>
               </div>
             </div>
           </div>
@@ -562,6 +562,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-gray-500">
               &copy; {new Date().getFullYear()} <span className="text-gray-400 font-medium">ServicesArtisans</span>. Tous droits réservés.
+              <span className="hidden sm:inline"> &mdash; Données mises à jour en {new Date().getFullYear()}</span>
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-gray-500">
               <Link href="/mentions-legales" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
