@@ -325,6 +325,85 @@ export function getProfessionalServiceSchema(artisan: {
   }
 }
 
+// Schema.org Product + AggregateOffer (rich snippets with prices in SERP)
+export function getServicePricingSchema(params: {
+  serviceName: string
+  serviceSlug: string
+  description: string
+  lowPrice: number
+  highPrice: number
+  priceCurrency?: string
+  priceUnit?: string
+  offerCount?: number
+  ratingValue?: number
+  reviewCount?: number
+  location?: string
+  url: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: params.location
+      ? `${params.serviceName} à ${params.location} — Tarifs`
+      : `${params.serviceName} — Tarifs France`,
+    description: params.description,
+    url: params.url,
+    brand: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      lowPrice: params.lowPrice,
+      highPrice: params.highPrice,
+      priceCurrency: params.priceCurrency || 'EUR',
+      ...(params.priceUnit && { unitText: params.priceUnit }),
+      ...(params.offerCount && { offerCount: params.offerCount }),
+      availability: 'https://schema.org/InStock',
+    },
+    ...(params.ratingValue && params.reviewCount && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: params.ratingValue,
+        reviewCount: params.reviewCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
+  }
+}
+
+// Schema.org Offer for individual service tasks with price specifications
+export function getTaskOfferSchema(params: {
+  taskName: string
+  lowPrice: number
+  highPrice: number
+  priceCurrency?: string
+  serviceName: string
+  url: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Service',
+      name: params.taskName,
+      provider: {
+        '@type': 'Organization',
+        name: 'ServicesArtisans',
+      },
+    },
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      minPrice: params.lowPrice,
+      maxPrice: params.highPrice,
+      priceCurrency: params.priceCurrency || 'EUR',
+    },
+    url: params.url,
+    availability: 'https://schema.org/InStock',
+  }
+}
+
 // Schema.org SpeakableSpecification (voice AI optimization)
 export function getSpeakableSchema(params: {
   url: string

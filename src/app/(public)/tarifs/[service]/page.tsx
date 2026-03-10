@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
@@ -12,6 +12,7 @@ import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 
 const tradeSlugs = getTradesSlugs()
 
@@ -179,6 +180,16 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     })
   }
 
+  const pricingSchema = getServicePricingSchema({
+    serviceName: trade.name,
+    serviceSlug: service,
+    description: `Tarifs ${trade.name} en France : ${trade.priceRange.min}-${trade.priceRange.max} ${trade.priceRange.unit}. Grille tarifaire complète et prix des interventions courantes.`,
+    lowPrice: trade.priceRange.min,
+    highPrice: trade.priceRange.max,
+    priceUnit: trade.priceRange.unit,
+    url: `${SITE_URL}/tarifs/${service}`,
+  })
+
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -196,11 +207,16 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     },
   }
 
+  const speakableSchema = getSpeakableSchema({
+    url: `${SITE_URL}/tarifs/${service}`,
+    title: `Tarifs ${trade.name.toLowerCase()} en France`,
+  })
+
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, collectionPageSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingSchema, pricingItemListSchema, collectionPageSchema, speakableSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -274,6 +290,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse
             </p>
           </div>
+
+          <SpeakableAnswerBox
+            answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join('. ')}. Prix constat\u00E9s aupr\u00E8s de 940 000+ artisans r\u00E9f\u00E9renc\u00E9s.`}
+          />
 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Détail des prestations courantes

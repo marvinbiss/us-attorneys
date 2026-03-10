@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { REVALIDATE } from '@/lib/cache'
 import { SITE_URL } from '@/lib/seo/config'
@@ -19,6 +19,7 @@ import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
@@ -245,10 +246,15 @@ export default async function ServicePage({ params }: PageProps) {
     ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a })))
     : null
 
+  const speakableSchema = getSpeakableSchema({
+    url: `${SITE_URL}/services/${serviceSlug}`,
+    title: h1Text,
+  })
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* JSON-LD */}
-      <JsonLd data={faqSchema ? [serviceSchema, breadcrumbSchema, faqSchema] : [serviceSchema, breadcrumbSchema]} />
+      <JsonLd data={faqSchema ? [serviceSchema, breadcrumbSchema, faqSchema, speakableSchema] : [serviceSchema, breadcrumbSchema, speakableSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -354,6 +360,15 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Speakable Answer Box */}
+      {trade && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+          <SpeakableAnswerBox
+            answer={`${trade.name} en France : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans r\u00E9f\u00E9renc\u00E9s et v\u00E9rifi\u00E9s SIREN dans ${topCities?.length || 0}+ villes. Devis gratuit, donn\u00E9es officielles INSEE.`}
+          />
+        </div>
+      )}
 
       {/* Search by city */}
       <section className="py-12">

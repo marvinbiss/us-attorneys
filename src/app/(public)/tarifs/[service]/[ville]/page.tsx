@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
@@ -14,6 +14,7 @@ import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
+import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -232,6 +233,18 @@ export default async function TarifsServiceVillePage({
     },
   }
 
+  const pricingSchema = getServicePricingSchema({
+    serviceName: trade.name,
+    serviceSlug: service,
+    description: `Tarifs ${trade.name} à ${villeData.name} : ${minPrice}-${maxPrice} ${trade.priceRange.unit}. Prix ajustés pour la région ${villeData.region}.`,
+    lowPrice: minPrice,
+    highPrice: maxPrice,
+    priceUnit: trade.priceRange.unit,
+    offerCount: commune?.nb_entreprises_artisanales ?? undefined,
+    location: villeData.name,
+    url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
+  })
+
   const pricingItemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -263,6 +276,11 @@ export default async function TarifsServiceVillePage({
     })
   }
 
+  const speakableSchema = getSpeakableSchema({
+    url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
+    title: `Tarifs ${tradeLower} \u00E0 ${villeData.name}`,
+  })
+
   const relatedCities = getNearbyCities(villeSlug, 6)
 
   const relatedSlugs = relatedServices[service] || []
@@ -272,7 +290,7 @@ export default async function TarifsServiceVillePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingSchema, pricingItemListSchema, speakableSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -473,6 +491,13 @@ export default async function TarifsServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
       />
+
+      {/* Speakable Answer Box */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <SpeakableAnswerBox
+          answer={`${trade.name} \u00E0 ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit} (prix ajust\u00E9 r\u00E9gion ${villeData.region}). Prestations courantes : ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join(', ')}. ${commune?.nb_entreprises_artisanales ? `${commune.nb_entreprises_artisanales} entreprises artisanales dans la commune.` : ''}`}
+        />
+      </div>
 
       {/* Conseils */}
       <section className="py-16 bg-white">

@@ -12,7 +12,7 @@ import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
 import CrossLinks from './_components/CrossLinks'
 
-import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { REVALIDATE } from '@/lib/cache'
@@ -27,6 +27,7 @@ import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
 import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
+import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -469,6 +470,12 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 
+  const speakableSchema = getSpeakableSchema({
+    url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+    title: h1Text,
+  })
+  jsonLdSchemas.push(speakableSchema)
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -502,6 +509,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         locationSlug={locationSlug}
         recentDevisCount={recentDevisCount}
       />
+
+      {trade && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+          <SpeakableAnswerBox
+            answer={`${trade.name} \u00E0 ${location.name} : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount} artisans v\u00E9rifi\u00E9s SIREN disponibles dans le ${location.department_code}. D\u00E9lai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
+          />
+        </div>
+      )}
 
       <SeoContent
         locationContent={locationContent}
