@@ -1,6 +1,6 @@
 /**
  * Données des questions fréquentes pour les pages /questions/
- * 55 questions avec réponses optimisées pour les featured snippets Google.
+ * 65 questions avec réponses optimisées pour les featured snippets Google.
  */
 
 export type QuestionCategory = "prix" | "choix" | "urgence" | "reglementation" | "diy"
@@ -833,6 +833,150 @@ export const questions: Question[] = [
     category: "urgence",
     relatedService: "chauffagiste",
     tags: ["fuite de gaz", "urgence", "sécurité", "GrDF", "évacuation"],
+  },
+
+  // ============================================================
+  // AJOUT 10 QUESTIONS — Keyword gaps (mars 2026)
+  // ============================================================
+  {
+    slug: "permis-construire-quand-necessaire",
+    question: "Quand faut-il un permis de construire ?",
+    shortAnswer: "Un permis de construire est obligatoire pour toute construction de plus de 20 m² de surface de plancher (ou 40 m² en zone urbaine avec PLU). Les extensions, surélévations et changements de destination importants sont également concernés.",
+    detailedAnswer: [
+      "Le permis de construire est exigé dès que la surface de plancher créée dépasse 20 m². En zone urbaine couverte par un Plan Local d\"Urbanisme (PLU), ce seuil est relevé à 40 m² pour les extensions d\"un bâtiment existant, à condition que la surface totale après travaux ne dépasse pas 150 m².",
+      "Au-delà de 150 m² de surface totale, le recours à un architecte est obligatoire. Cela concerne aussi les constructions neuves dès le premier mètre carré de surface de plancher. Les travaux modifiant la structure porteuse ou la façade d\"un bâtiment classé nécessitent également un permis.",
+      "Les délais d\"instruction sont de 2 mois pour une maison individuelle et de 3 mois pour les autres projets. En secteur protégé (ABF, monuments historiques), ajoutez 1 mois supplémentaire. Le permis est valable 3 ans, prorogeable deux fois 1 an.",
+      "Commencer des travaux sans permis expose à une amende de 1 200 à 6 000 €/m² construit et à une obligation de démolition. Faites vérifier votre projet par un maçon ou un architecte avant de déposer le dossier en mairie. La consultation du PLU est gratuite et accessible en ligne sur le géoportail de l\"urbanisme."
+    ],
+    category: "reglementation",
+    relatedService: "macon",
+    tags: ["permis de construire", "urbanisme", "réglementation", "PLU", "surface"],
+  },
+  {
+    slug: "declaration-prealable-travaux-quand",
+    question: "Quand faut-il une déclaration préalable de travaux ?",
+    shortAnswer: "Une déclaration préalable (DP) est requise pour les travaux créant entre 5 et 20 m² de surface (40 m² en zone PLU), les modifications de façade, les changements de fenêtres, les ravalement et les clôtures. Le délai d\"instruction est d\"un mois.",
+    detailedAnswer: [
+      "La déclaration préalable de travaux est une autorisation d\"urbanisme simplifiée, nécessaire pour les travaux de petite envergure. Elle concerne les constructions nouvelles créant entre 5 et 20 m² de surface de plancher (ou 40 m² en zone PLU), les modifications de l\"aspect extérieur (ravalement, changement de fenêtres, volets, toiture) et les changements de destination sans modification de structure.",
+      "Le formulaire Cerfa n°13703 est à déposer en mairie en 2 exemplaires (4 en secteur protégé). Les pièces obligatoires incluent un plan de situation, un plan de masse, un plan en coupe, une notice descriptive et des photos. La mairie dispose d\"un mois pour instruire la demande (2 mois en secteur ABF).",
+      "L\"absence de réponse dans le délai vaut accord tacite (non-opposition). Cependant, demandez toujours un certificat de non-opposition pour sécuriser votre situation. Affichez la déclaration sur le terrain pendant toute la durée des travaux et au minimum 2 mois après achèvement.",
+      "Les travaux dispensés de toute formalité sont ceux créant moins de 5 m² de surface, les constructions temporaires de moins de 3 mois et les piscines de moins de 10 m². En copropriété, la DP ne dispense pas de l\"accord du syndic. Consultez un maçon ou un architecte en cas de doute sur la démarche applicable."
+    ],
+    category: "reglementation",
+    relatedService: "macon",
+    tags: ["déclaration préalable", "urbanisme", "travaux", "mairie", "Cerfa"],
+  },
+  {
+    slug: "comment-deboucher-wc-sans-ventouse",
+    question: "Comment déboucher un WC sans ventouse ?",
+    shortAnswer: "Sans ventouse, versez un mélange d\"eau bouillante et de liquide vaisselle dans la cuvette, laissez agir 15 min puis tirez la chasse. Alternatives : bicarbonate + vinaigre blanc, cintre métallique déplié, ou bouteille en plastique découpée comme piston.",
+    detailedAnswer: [
+      "La méthode la plus simple consiste à verser un demi-flacon de liquide vaisselle dans la cuvette, puis à ajouter lentement 2 à 3 litres d\"eau très chaude (pas bouillante pour ne pas fissurer la porcelaine). Le liquide vaisselle lubrifie le bouchon tandis que la chaleur dissout les graisses. Attendez 15 à 20 minutes puis tirez la chasse d\"eau.",
+      "Le mélange bicarbonate de soude et vinaigre blanc est une alternative efficace. Versez un demi-verre de bicarbonate dans la cuvette, ajoutez un verre de vinaigre blanc et laissez la réaction chimique agir pendant 30 minutes. La mousse effervescente décompose les matières organiques. Complétez avec de l\"eau chaude et tirez la chasse.",
+      "Pour un bouchon plus tenace, fabriquez un piston de fortune avec une bouteille en plastique de 1,5 L : découpez le fond, gardez le bouchon vissé, et utilisez-la comme une ventouse en effectuant des mouvements de va-et-vient énergiques dans la cuvette. Un cintre métallique déplié peut aussi servir à casser un bouchon solide, mais procédez avec précaution pour ne pas rayer l\"émail.",
+      "Si le bouchon résiste à toutes ces méthodes, il se situe probablement dans la canalisation principale et nécessite l\"intervention d\"un plombier avec un furet professionnel ou un hydrocureur. Comptez 100 à 300 € pour un débouchage mécanique. Pour prévenir les bouchons, ne jetez jamais de lingettes, cotons-tiges ou serviettes hygiéniques dans les WC."
+    ],
+    category: "diy",
+    relatedService: "plombier",
+    tags: ["WC", "débouchage", "DIY", "astuces", "plomberie"],
+  },
+  {
+    slug: "prix-renovation-electrique-appartement",
+    question: "Combien coûte une rénovation électrique complète ?",
+    shortAnswer: "Une rénovation électrique complète coûte entre 80 et 150 €/m² selon l\"état de l\"installation existante. Pour un appartement de 70 m², comptez 6 000 à 12 000 € TTC, incluant tableau, câblage, prises, interrupteurs et mise aux normes NF C 15-100.",
+    detailedAnswer: [
+      "Le coût d\"une rénovation électrique complète dépend de la surface du logement, de l\"état de l\"installation existante et du niveau de prestation souhaité. En moyenne, comptez 80 à 120 €/m² pour une mise aux normes standard et 120 à 150 €/m² si l\"installation est vétuste (câbles en tissu, absence de terre, tableau à fusibles porcelaine).",
+      "Les principaux postes de dépense sont : le tableau électrique (800 à 2 500 € selon le nombre de rangées), le câblage complet (30 à 50 €/m²), les prises et interrupteurs (15 à 40 € pièce posée) et la mise à la terre (500 à 1 500 €). Ajoutez 500 à 1 000 € pour le passage Consuel obligatoire en rénovation lourde.",
+      "La norme NF C 15-100 impose un nombre minimum de prises par pièce (5 dans le séjour, 3 dans les chambres), des circuits dédiés pour les gros appareils (four, lave-linge, plaques), un dispositif différentiel 30 mA et un ETEL (Espace Technique Électrique du Logement). Le non-respect de cette norme rend l\"installation non-conforme et peut poser des problèmes à la revente.",
+      "La TVA est à 10 % pour les logements de plus de 2 ans. Pour réduire la facture, regroupez la rénovation électrique avec d\"autres travaux (peinture, plomberie). Choisissez un électricien certifié Qualifelec et demandez l\"attestation de conformité Consuel en fin de chantier. Comparez au moins 3 devis détaillés poste par poste."
+    ],
+    category: "prix",
+    relatedService: "electricien",
+    tags: ["rénovation électrique", "prix", "NF C 15-100", "mise aux normes", "électricien"],
+  },
+  {
+    slug: "chauffe-eau-thermodynamique-ou-electrique",
+    question: "Chauffe-eau thermodynamique ou électrique : lequel choisir ?",
+    shortAnswer: "Le chauffe-eau thermodynamique consomme 3 fois moins d\"énergie qu\"un cumulus électrique classique, mais coûte 2 500 à 4 500 € contre 500 à 1 500 €. Il est rentabilisé en 4 à 6 ans grâce aux économies sur la facture et aux aides MaPrimeRénov\".",
+    detailedAnswer: [
+      "Le chauffe-eau électrique à accumulation (cumulus) reste le choix le plus répandu grâce à son prix d\"achat bas (500 à 1 500 € posé) et sa simplicité d\"installation. Il chauffe l\"eau par une résistance électrique et fonctionne généralement en heures creuses pour limiter le coût. Sa durée de vie est de 10 à 15 ans.",
+      "Le chauffe-eau thermodynamique (CET) utilise une pompe à chaleur intégrée pour capter les calories de l\"air ambiant. Son COP (coefficient de performance) de 2,5 à 3,5 signifie qu\"il produit 2,5 à 3,5 kWh de chaleur pour 1 kWh d\"électricité consommé. Résultat : une facture d\"eau chaude divisée par 3, soit 100 à 150 € d\"économie par an pour un foyer de 4 personnes.",
+      "Le CET nécessite une pièce non chauffée d\"au moins 10 m³ (garage, cellier, buanderie) car il refroidit l\"air ambiant de 3 à 5°C. Il est légèrement plus bruyant qu\"un cumulus classique (40 à 50 dB). Son coût d\"achat (2 500 à 4 500 € posé) est partiellement compensé par MaPrimeRénov\" (jusqu\"à 1 200 €) et les CEE (100 à 300 €).",
+      "Pour un logement neuf (RE2020), le CET est quasiment obligatoire pour respecter les exigences énergétiques. En rénovation, il est pertinent si vous avez une pièce adaptée et une consommation d\"eau chaude suffisante (3+ personnes). Pour un studio ou un T2 avec 1-2 occupants, le cumulus classique reste souvent plus rentable."
+    ],
+    category: "choix",
+    relatedService: "plombier",
+    tags: ["chauffe-eau", "thermodynamique", "cumulus", "économie énergie", "MaPrimeRénov"],
+  },
+  {
+    slug: "pompe-chaleur-air-eau-ou-air-air",
+    question: "PAC air-eau ou air-air : quelle différence ?",
+    shortAnswer: "La PAC air-eau chauffe un circuit d\"eau (radiateurs, plancher chauffant) et produit l\"eau chaude sanitaire. La PAC air-air diffuse de l\"air chaud via des splits et sert aussi de climatisation. La PAC air-eau est éligible aux aides MaPrimeRénov\", pas la PAC air-air.",
+    detailedAnswer: [
+      "La pompe à chaleur air-eau capte les calories de l\"air extérieur et les transfère à un circuit d\"eau. Elle alimente les radiateurs existants (basse température de préférence), un plancher chauffant et peut produire l\"eau chaude sanitaire. Son coût installé va de 10 000 à 18 000 € et elle est éligible à MaPrimeRénov\" (jusqu\"à 5 000 €) et aux CEE.",
+      "La pompe à chaleur air-air (aussi appelée climatisation réversible) capte les calories de l\"air extérieur et les diffuse directement sous forme d\"air chaud via des unités intérieures (splits muraux ou gainable). En été, elle inverse le cycle pour rafraîchir. Son coût est de 3 000 à 8 000 € pour un système multi-split. Elle n\"est pas éligible à MaPrimeRénov\".",
+      "En termes de performance, les deux technologies ont un COP similaire (3 à 4). Cependant, la PAC air-eau offre un confort thermique supérieur grâce à la chaleur douce et homogène du plancher chauffant ou des radiateurs basse température. La PAC air-air peut créer des courants d\"air et des écarts de température entre les pièces.",
+      "Le choix dépend de votre situation. Si vous avez des radiateurs à eau ou un plancher chauffant, la PAC air-eau est le choix logique. Si vous êtes en tout-électrique avec des convecteurs et que vous souhaitez aussi la climatisation, la PAC air-air est plus économique à installer. Dans tous les cas, faites appel à un installateur certifié RGE QualiPAC."
+    ],
+    category: "choix",
+    relatedService: "pompe-a-chaleur",
+    tags: ["pompe à chaleur", "PAC air-eau", "PAC air-air", "chauffage", "climatisation"],
+  },
+  {
+    slug: "depannage-plomberie-nuit-weekend",
+    question: "Dépannage plomberie nuit et week-end : quel tarif ?",
+    shortAnswer: "Un dépannage plomberie de nuit ou le week-end coûte 150 à 500 € selon l\"intervention. Les majorations sont de 50 à 100 % par rapport au tarif normal. Exigez un devis écrit avant toute intervention et méfiez-vous des tarifs excessifs pratiqués par certains dépanneurs.",
+    detailedAnswer: [
+      "Les plombiers appliquent des majorations légales en dehors des heures ouvrables. Le soir (après 19h) et le samedi après-midi, la majoration est généralement de 25 à 50 %. La nuit (après 22h), le dimanche et les jours fériés, elle atteint 50 à 100 %. Un déplacement d\"urgence de nuit coûte 80 à 150 € avant même le début de l\"intervention.",
+      "Les tarifs courants en urgence : débouchage de canalisation (200 à 450 €), réparation de fuite (150 à 400 €), remplacement de robinet d\"arrêt (180 à 350 €), dégorgement de WC (150 à 350 €). Ces prix incluent le déplacement et la main-d\"œuvre mais pas toujours les pièces détachées.",
+      "Attention aux arnaques fréquentes dans le dépannage d\"urgence. Méfiez-vous des numéros surtaxés, des tarifs annoncés par téléphone sans rapport avec la facture finale, et des « forfaits recherche de panne » facturés plusieurs centaines d\"euros. Un plombier sérieux vous fournit un devis écrit avant de commencer et ne vous pousse jamais à signer sous pression.",
+      "En cas d\"urgence la nuit, commencez par couper l\"arrivée d\"eau au robinet général (sous l\"évier ou au compteur) pour limiter les dégâts. Si la fuite est maîtrisée, vous pouvez attendre le lendemain pour appeler un plombier aux tarifs normaux. Gardez le numéro d\"un plombier de confiance recommandé par votre entourage plutôt que de chercher en urgence sur Internet."
+    ],
+    category: "prix",
+    relatedService: "plombier",
+    tags: ["dépannage", "urgence", "plombier", "tarif nuit", "week-end"],
+  },
+  {
+    slug: "renovation-cuisine-combien-temps",
+    question: "Combien de temps dure une rénovation de cuisine ?",
+    shortAnswer: "Une rénovation de cuisine complète dure 3 à 6 semaines en moyenne. Un simple remplacement de meubles prend 1 à 2 semaines. Les délais les plus longs concernent la commande des meubles sur mesure (4 à 8 semaines) et les travaux de plomberie/électricité.",
+    detailedAnswer: [
+      "La durée d\"une rénovation de cuisine dépend de l\"ampleur des travaux. Un rafraîchissement simple (peinture, crédence, remplacement de l\"électroménager) prend 3 à 5 jours. Le remplacement complet des meubles avec réutilisation des arrivées d\"eau et prises existantes nécessite 1 à 2 semaines de pose.",
+      "Pour une rénovation complète incluant la modification des réseaux (déplacement de l\"évier, ajout d\"un lave-vaisselle, création de prises supplémentaires), comptez 3 à 6 semaines de travaux. Le planning type : 1 semaine de démolition et préparation, 1 semaine de plomberie et électricité, 1 semaine de carrelage et peinture, puis 1 à 2 semaines de pose des meubles et finitions.",
+      "Le délai le plus long est souvent la fabrication des meubles. Les cuisines sur mesure nécessitent 4 à 8 semaines de fabrication après la commande. Les cuisines en kit (Ikea, Leroy Merlin) sont disponibles sous 1 à 2 semaines. Prévoyez la commande bien en avance et validez les mesures avec le cuisiniste avant le lancement.",
+      "Pour minimiser la gêne, installez un coin cuisine provisoire (plaque portable, micro-ondes, réfrigérateur) dans une autre pièce. Coordonnez les différents corps de métier (plombier, électricien, carreleur, cuisiniste) en amont pour éviter les temps morts. Un maître d\"œuvre ou un cuisiniste sérieux gère cette coordination pour vous."
+    ],
+    category: "prix",
+    relatedService: "cuisiniste",
+    tags: ["rénovation cuisine", "durée travaux", "planning", "cuisiniste", "délai"],
+  },
+  {
+    slug: "difference-devis-facture",
+    question: "Quelle différence entre un devis et une facture ?",
+    shortAnswer: "Le devis est un document précontractuel décrivant les travaux et leur prix avant exécution. La facture est le document comptable émis après réalisation des travaux. Le devis signé vaut contrat et engage les deux parties sur le prix et les prestations.",
+    detailedAnswer: [
+      "Le devis est une proposition commerciale détaillée qui engage l\"artisan sur un prix et des prestations. Il doit mentionner obligatoirement : la date, l\"identité de l\"entreprise (SIRET, assurance), la description détaillée des travaux, le prix unitaire et total HT et TTC, le taux de TVA, la durée de validité de l\"offre et les conditions de paiement. Un devis signé par le client vaut contrat.",
+      "La facture est un document comptable émis après l\"exécution des travaux. Elle reprend les éléments du devis et ajoute la date d\"exécution, le numéro de facture et les éventuels acomptes déjà versés. La facture doit correspondre au devis signé : l\"artisan ne peut pas facturer plus que le montant du devis sauf si un avenant a été signé pour des travaux supplémentaires.",
+      "Un devis est obligatoire pour les travaux de dépannage, réparation et entretien dans le bâtiment dès que le montant estimé dépasse 150 € TTC (arrêté du 24 janvier 2017). En dessous de ce seuil, l\"artisan doit quand même informer le client du prix avant intervention. Les devis sont gratuits sauf mention préalable du contraire (visite technique facturée par exemple).",
+      "Conservez vos devis signés et factures pendant au moins 10 ans (garantie décennale). En cas de litige, le devis signé fait foi : si l\"artisan a facturé plus que le devis sans avenant, vous pouvez contester. En cas de désaccord, saisissez le médiateur de la consommation dont les coordonnées doivent figurer sur la facture."
+    ],
+    category: "reglementation",
+    relatedService: "macon",
+    tags: ["devis", "facture", "réglementation", "contrat", "artisan"],
+  },
+  {
+    slug: "climatisation-reversible-avantages",
+    question: "Quels sont les avantages d\"une climatisation réversible ?",
+    shortAnswer: "La climatisation réversible chauffe en hiver et rafraîchit en été avec un seul appareil. Son COP de 3 à 4 signifie qu\"elle produit 3 à 4 kWh de chaleur pour 1 kWh d\"électricité consommé, soit 60 à 70 % d\"économies par rapport à un radiateur électrique.",
+    detailedAnswer: [
+      "La climatisation réversible (pompe à chaleur air-air) est un système 2-en-1 qui assure le chauffage en hiver et la climatisation en été. En mode chauffage, elle capte les calories de l\"air extérieur (même par 0°C) et les restitue à l\"intérieur. En mode froid, elle inverse le cycle pour évacuer la chaleur intérieure vers l\"extérieur.",
+      "L\"avantage économique est majeur : avec un COP de 3 à 4, la clim réversible consomme 3 à 4 fois moins d\"électricité qu\"un convecteur pour la même quantité de chaleur produite. Pour un logement de 80 m² chauffé par des radiateurs électriques classiques (2 000 €/an), le passage à une PAC air-air réduit la facture à 600-800 €/an.",
+      "L\"installation d\"un système multi-split (une unité extérieure + 3 à 5 unités intérieures) coûte 4 000 à 10 000 € selon la puissance et le nombre de pièces. Les modèles gainables (invisibles, intégrés dans les faux plafonds) sont plus esthétiques mais plus chers (8 000 à 15 000 €). L\"entretien annuel obligatoire coûte 120 à 200 €.",
+      "Les inconvénients à connaître : un léger bruit du groupe extérieur (à éloigner des chambres et des voisins), une baisse de performance sous -7°C (un chauffage d\"appoint peut être nécessaire), et l\"utilisation de fluides frigorigènes réglementés. Le confort est excellent avec les modèles Inverter récents qui ajustent la puissance en continu et filtrent l\"air (anti-allergènes, déshumidification)."
+    ],
+    category: "choix",
+    relatedService: "climaticien",
+    tags: ["climatisation réversible", "PAC air-air", "chauffage", "économies", "confort"],
   },
 ]
 

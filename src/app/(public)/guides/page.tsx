@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper } from "lucide-react"
+import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2 } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
@@ -24,13 +24,58 @@ export const metadata: Metadata = {
 
 const guides = [
   {
-    title: "MaPrimeRénov' 2026 : Guide Complet",
+    title: "MaPrimeRénov 2026 : Guide Complet",
     description:
       "Tout savoir sur MaPrimeRénov en 2026 : montants, conditions, parcours accompagné et par geste, barèmes de revenus et démarches.",
     href: "/guides/maprimerenov-2026",
     icon: Euro,
-    badge: "Nouveau",
+    badge: "Populaire",
     badgeColor: "bg-green-100 text-green-800",
+  },
+  {
+    title: "Aides Rénovation Énergétique 2026",
+    description:
+      "Toutes les aides financières pour vos travaux de rénovation énergétique : MaPrimeRénov, CEE, éco-PTZ, TVA réduite et aides locales.",
+    href: "/guides/aides-renovation-2026",
+    icon: Building2,
+    badge: undefined,
+    badgeColor: "",
+  },
+  {
+    title: "Artisan RGE : Vérifier et Trouver un Certifié",
+    description:
+      "Comment vérifier la certification RGE, pourquoi choisir un artisan RGE et où trouver un professionnel certifié près de chez vous.",
+    href: "/guides/artisan-rge",
+    icon: ShieldCheck,
+    badge: undefined,
+    badgeColor: "",
+  },
+  {
+    title: "Permis de Construire 2026",
+    description:
+      "Quand le permis de construire est obligatoire (>20 m², >40 m² en zone PLU), documents requis, délais et cas spéciaux.",
+    href: "/guides/permis-construire",
+    icon: Scale,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Normes Électriques NF C 15-100",
+    description:
+      "Guide de la norme NF C 15-100 : nombre de prises par pièce, protection des circuits, zones salle de bain et mise aux normes.",
+    href: "/guides/normes-electriques",
+    icon: Zap,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Déclaration Préalable de Travaux",
+    description:
+      "Quand la déclaration préalable est nécessaire, formulaire Cerfa 13703, délai d\"instruction d\"un mois et accord tacite.",
+    href: "/guides/declaration-prealable-travaux",
+    icon: FileText,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
   },
 ]
 

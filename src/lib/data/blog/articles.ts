@@ -17,6 +17,9 @@ import { inspirationArticles } from './batch-inspiration'
 import { diyArticles } from './batch-diy'
 import { energieArticles } from './batch-energie-2026'
 import { renovationArticles } from './batch-renovation-2026'
+import { produitsArticles } from './batch-produits-materiaux'
+import { tutorielsDiy2Articles } from './batch-tutoriels-diy-2'
+import { tutorielsDiyArticles } from './batch-tutoriels-diy'
 
 export interface BlogArticle {
   title: string
@@ -55,6 +58,9 @@ export const allArticles: Record<string, BlogArticle> = {
   ...diyArticles,
   ...energieArticles,
   ...renovationArticles,
+  ...produitsArticles,
+  ...tutorielsDiy2Articles,
+  ...tutorielsDiyArticles,
 }
 
 /** All slugs for generateStaticParams */
