@@ -10,7 +10,7 @@ import {
   ArrowUpDown, ClipboardCheck, Bug, Truck
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
-import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getOrganizationSchema, getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -232,10 +232,25 @@ export default async function ServicesPage() {
 
   const organizationSchema = getOrganizationSchema()
 
+  // ItemList schema: flat list of all services with their URLs
+  const allServiceItems = allServices.flatMap((category) =>
+    category.services.filter((s) => validServiceSlugs.has(s.slug))
+  )
+  const itemListSchema = getItemListSchema({
+    name: 'Tous les métiers artisans',
+    description: `${allServiceItems.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements.`,
+    url: '/services',
+    items: allServiceItems.map((s, index) => ({
+      name: s.name,
+      url: `/services/${s.slug}`,
+      position: index + 1,
+    })),
+  })
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* JSON-LD */}
-      <JsonLd data={[breadcrumbSchema, organizationSchema]} />
+      <JsonLd data={[breadcrumbSchema, organizationSchema, itemListSchema]} />
 
       {/* Premium Hero */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20 overflow-hidden">

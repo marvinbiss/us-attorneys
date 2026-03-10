@@ -140,13 +140,16 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]): Reco
   }
 }
 
-// Schema.org HowTo (for "Comment ça marche" page)
-export function getHowToSchema(steps: { name: string; text: string; image?: string }[]) {
+// Schema.org HowTo (for "Comment ça marche" page and problem pages)
+export function getHowToSchema(
+  steps: { name: string; text: string; image?: string }[],
+  options?: { name?: string; description?: string }
+) {
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: 'Comment trouver un artisan sur ServicesArtisans',
-    description: 'Guide étape par étape pour trouver et contacter un artisan qualifié.',
+    name: options?.name ?? 'Comment trouver un artisan sur ServicesArtisans',
+    description: options?.description ?? 'Guide étape par étape pour trouver et contacter un artisan qualifié.',
     step: steps.map((step, index) => ({
       '@type': 'HowToStep',
       position: index + 1,

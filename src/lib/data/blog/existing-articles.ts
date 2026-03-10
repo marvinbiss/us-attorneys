@@ -28,6 +28,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Un plombier peut-il refuser de fournir un devis ?', answer: 'Non. Depuis le décret du 28 août 2015, tout professionnel doit remettre un devis gratuit pour les travaux dont le montant estimé dépasse 150 €. Pour les dépannages urgents, un ordre de réparation peut remplacer le devis, mais le montant doit être annoncé au préalable.' },
       { question: 'Que faire si le plombier ne respecte pas le devis signé ?', answer: 'Le devis signé a valeur de contrat. En cas de surfacturation, adressez une réclamation par lettre recommandée. Si le litige persiste, vous pouvez saisir le médiateur de la consommation, puis le tribunal judiciaire. Conservez tous les documents (devis, factures, échanges écrits).' },
     ],
+    keyTakeaways: [
+      "Vérifiez le SIRET, l'assurance décennale et les certifications (Qualibat, RGE) avant de signer un devis.",
+      "Comparez au minimum trois devis détaillés pour des prestations identiques afin d'éviter les surcoûts.",
+      "Méfiez-vous des prix anormalement bas et des plombiers qui refusent de fournir un devis écrit.",
+      "Privilégiez un plombier recommandé par votre entourage ou vérifié sur un annuaire de confiance."
+    ],
   },
   'renovation-energetique-aides-2026': {
     title: 'Aides Rénovation Énergétique 2026',
@@ -54,6 +60,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quels sont les travaux les plus rentables en rénovation énergétique ?', answer: 'L\'isolation des combles offre le meilleur rapport coût/économies : pour un investissement de 20 à 50 €/m², vous pouvez réduire vos déperditions thermiques de 25 à 30 %. Le remplacement d\'une vieille chaudière par une pompe à chaleur divise par 3 la facture de chauffage.' },
       { question: 'Combien de temps faut-il pour obtenir MaPrimeRénov\' ?', answer: 'Le délai d\'instruction est de 2 à 4 semaines pour le Parcours par geste et de 4 à 8 semaines pour le Parcours accompagné. Ne commencez jamais les travaux avant d\'avoir reçu la notification d\'accord.' },
     ],
+    keyTakeaways: [
+      "MaPrimeRénov' peut couvrir jusqu'à 90 % du coût des travaux pour les ménages très modestes en 2026.",
+      "Les aides sont cumulables : MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales.",
+      "Un artisan certifié RGE est obligatoire pour bénéficier de toutes les aides à la rénovation énergétique.",
+      "Inscrivez-vous aux CEE avant la signature du devis, sans quoi votre demande sera refusée."
+    ],
   },
   'tendances-salle-de-bain-2026': {
     title: 'Salle de Bain : Tendances 2026',
@@ -77,6 +89,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quel budget prévoir pour une salle de bain tendance en 2026 ?', answer: 'Pour une rénovation complète intégrant les tendances actuelles, prévoyez entre 8 000 et 15 000 € pour une salle de bain de 5 à 8 m². Ce budget comprend la dépose, la plomberie, le carrelage, les sanitaires et les finitions.' },
       { question: 'Le travertin est-il adapté à la salle de bain ?', answer: 'Oui, à condition de le traiter avec un hydrofuge adapté. Le travertin est une pierre calcaire naturellement poreuse qui nécessite un traitement d\'imprégnation initial puis un entretien régulier.' },
       { question: 'La douche à l\'italienne nécessite-t-elle un sol spécifique ?', answer: 'Oui, elle nécessite une chape avec une pente de 1 à 2 % vers l\'évacuation et une étanchéité renforcée (système SPEC ou membrane). Vérifiez que la dalle permet l\'encastrement du receveur.' },
+    ],
+    keyTakeaways: [
+      "La douche à l'italienne et les matériaux naturels dominent les tendances 2026.",
+      "Le carrelage grand format et les couleurs terracotta ou vert sauge sont les choix les plus populaires.",
+      "Les meubles suspendus et les robinetteries encastrées apportent une touche épurée et moderne.",
+      "Prévoyez un budget de 5 000 à 15 000 € pour une rénovation complète selon les finitions choisies."
     ],
   },
   'devis-travaux-comprendre': {
@@ -104,6 +122,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Peut-on annuler un devis après l\'avoir signé ?', answer: 'Si le devis a été signé à votre domicile (démarchage), vous disposez d\'un délai de rétractation de 14 jours. Sinon, l\'annulation constitue une rupture de contrat.' },
       { question: 'Un devis gratuit engage-t-il à quelque chose ?', answer: 'Non, un devis gratuit n\'engage à rien tant qu\'il n\'est pas signé. Depuis 2017, les devis pour travaux de plus de 150 € doivent être gratuits.' },
     ],
+    keyTakeaways: [
+      "Un devis doit détailler chaque poste : main-d'œuvre, fournitures, TVA, délais et conditions de paiement.",
+      "Ne versez jamais plus de 30 % d'acompte à la signature du devis.",
+      "Comparez au moins trois devis en vérifiant que le périmètre des travaux est identique.",
+      "Un devis signé a valeur de contrat : conservez-le précieusement pendant toute la durée des garanties."
+    ],
   },
   'isolation-thermique-guide': {
     title: 'Isolation Thermique : Guide Complet 2026',
@@ -129,6 +153,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Faut-il un artisan RGE pour l\'isolation ?', answer: 'Oui, obligatoirement si vous souhaitez bénéficier des aides (MaPrimeRénov\', CEE, TVA 5,5 %). Même sans aides, un artisan RGE garantit une mise en œuvre conforme aux règles de l\'art et aux DTU en vigueur.' },
       { question: 'Quelle épaisseur d\'isolant pour les combles ?', answer: 'Pour atteindre la résistance thermique R = 7 recommandée, comptez environ 30 cm de laine de verre, 28 cm de ouate de cellulose ou 32 cm de fibre de bois. L\'épaisseur dépend du lambda (conductivité thermique) de l\'isolant choisi.' },
     ],
+    keyTakeaways: [
+      "L'isolation des combles est le geste le plus rentable : jusqu'à 30 % d'économies sur le chauffage.",
+      "Les aides MaPrimeRénov' et CEE peuvent couvrir 50 à 80 % du coût de l'isolation.",
+      "La résistance thermique minimale recommandée est R ≥ 7 m².K/W pour les combles et R ≥ 3,7 pour les murs.",
+      "Faites appel à un artisan RGE pour bénéficier des aides et garantir une pose conforme aux DTU."
+    ],
   },
   'electricite-normes-securite': {
     title: 'Normes Électriques 2026 : Sécurité',
@@ -152,6 +182,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Est-il obligatoire de mettre aux normes une installation ancienne ?', answer: 'Non, la mise aux normes n\'est pas obligatoire pour les installations existantes, sauf en cas de rénovation lourde. Cependant, en cas d\'accident, le propriétaire peut être tenu responsable si l\'installation n\'est pas conforme.' },
       { question: 'Combien de temps dure une mise aux normes électrique ?', answer: 'Comptez 2 à 3 jours pour un appartement et 4 à 7 jours pour une maison. La durée dépend de l\'étendue des travaux et de l\'accessibilité des gaines. Prévoyez de ne pas occuper le logement pendant les travaux.' },
       { question: 'La mise aux normes électrique bénéficie-t-elle d\'aides ?', answer: 'La mise aux normes bénéficie de la TVA à 10 % dans les logements de plus de 2 ans. Si les travaux intègrent une dimension énergétique (éclairage LED, domotique), certains postes peuvent bénéficier de la TVA à 5,5 %.' },
+    ],
+    keyTakeaways: [
+      "La norme NF C 15-100 est le cadre réglementaire de toute installation électrique résidentielle en France.",
+      "Un diagnostic électrique est obligatoire pour les installations de plus de 15 ans lors d'une vente ou location.",
+      "L'installation d'un disjoncteur différentiel 30 mA est obligatoire pour protéger les personnes.",
+      "Faites toujours appel à un électricien certifié Qualifelec pour les travaux touchant au tableau électrique."
     ],
   },
   'peinture-interieure-conseils': {
@@ -177,6 +213,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quelle peinture choisir pour une chambre d\'enfant ?', answer: 'Optez pour une peinture acrylique à faible teneur en COV (composés organiques volatils), certifiée A+ pour les émissions dans l\'air intérieur. Les peintures biosourcées ou à base de résines végétales sont idéales.' },
       { question: 'Combien de temps faut-il pour peindre une pièce ?', answer: 'Pour un professionnel, comptez 1 jour pour une chambre de 12 m² (préparation + 2 couches) et 2 jours pour un séjour de 25 m². En auto-rénovation, doublez ces durées.' },
     ],
+    keyTakeaways: [
+      "Préparez soigneusement les supports (ponçage, enduit, sous-couche) pour un résultat professionnel durable.",
+      "Comptez 20 à 40 €/m² pour une peinture professionnelle, fournitures et main-d'œuvre comprises.",
+      "Les peintures acryliques (phase aqueuse) sont privilégiées pour leur faible émission de COV.",
+      "Prévoyez deux couches minimum et respectez les temps de séchage entre chaque couche."
+    ],
   },
   'chauffage-solution-economique': {
     title: 'Chauffage Économique : Guide 2026',
@@ -200,6 +242,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quel est le chauffage le plus économique en 2026 ?', answer: 'En coût de fonctionnement, le poêle à granulés et la pompe à chaleur air-eau sont les plus économiques (500-900 €/an pour 100 m²). En coût global (installation + fonctionnement sur 15 ans), la PAC air-eau est généralement la plus avantageuse grâce aux aides.' },
       { question: 'Peut-on remplacer une chaudière gaz par une pompe à chaleur ?', answer: 'Oui, c\'est même le remplacement le plus courant. La PAC air-eau se raccorde au circuit de radiateurs existant. Si vos radiateurs sont dimensionnés pour de la haute température (vieille chaudière), optez pour une PAC haute température ou envisagez de changer les radiateurs.' },
       { question: 'Le poêle à granulés peut-il chauffer toute une maison ?', answer: 'Un poêle à granulés de 8 à 12 kW peut chauffer une maison bien isolée de 80 à 120 m² en pièce principale. N\'oubliez pas le [ramonage obligatoire](/services/ramoneur) du conduit d\'évacuation deux fois par an. Pour les pièces éloignées, il faudra un système de distribution d\'air chaud (gainable) ou un chauffage d\'appoint.' },
+    ],
+    keyTakeaways: [
+      "La pompe à chaleur air-eau offre le meilleur rapport performance/prix avec un COP de 3 à 5.",
+      "Les aides cumulées (MaPrimeRénov' + CEE) peuvent réduire de 40 à 70 % le coût d'une PAC.",
+      "L'entretien annuel du système de chauffage est obligatoire et prolonge sa durée de vie de 3 à 5 ans.",
+      "Un bilan thermique préalable est indispensable pour dimensionner correctement l'installation."
     ],
   },
   'combien-coute-un-plombier-tarifs-devis': {
@@ -225,6 +273,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Comment éviter les arnaques sur les tarifs de plomberie ?', answer: 'Vérifiez le SIRET de l\'artisan, demandez un devis écrit avant toute intervention, comparez plusieurs offres et méfiez-vous des tarifs anormalement bas ou élevés. Ne faites jamais appel à un plombier trouvé par démarchage téléphonique.' },
       { question: 'Les tarifs plomberie incluent-ils les fournitures ?', answer: 'Cela dépend du devis. Certains plombiers facturent la main-d\'œuvre et les fournitures séparément, d\'autres proposent un forfait tout compris. Vérifiez systématiquement ce point dans le devis.' },
     ],
+    keyTakeaways: [
+      "Le taux horaire d'un plombier se situe entre 40 et 70 € HT en province et 55 à 90 € en Île-de-France.",
+      "Les majorations pour interventions d'urgence, soir et week-end peuvent atteindre 50 à 100 % du tarif.",
+      "Exigez toujours un devis écrit avant intervention, obligatoire au-delà de 150 € TTC.",
+      "Un dépannage simple (fuite, débouchage) coûte en moyenne 100 à 300 € hors pièces."
+    ],
   },
   'trouver-artisan-verifie-siren': {
     title: 'Artisan Vérifié : Pourquoi le SIREN ?',
@@ -249,6 +303,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Que faire si le SIREN de l\'artisan est invalide ?', answer: 'Si la recherche du SIREN ne donne aucun résultat ou indique une entreprise radiée, ne faites pas appel à cet artisan. Signalez-le éventuellement à la DGCCRF et cherchez un professionnel vérifié.' },
       { question: 'Le SIREN garantit-il la qualité des travaux ?', answer: 'Non, le SIREN confirme uniquement l\'existence légale de l\'entreprise. Pour évaluer la qualité, vérifiez également les certifications (Qualibat, RGE), les avis clients et les références de chantiers similaires.' },
     ],
+    keyTakeaways: [
+      "Vérifiez le SIREN/SIRET de l'artisan sur societe.com ou infogreffe.fr avant de signer un devis.",
+      "Un artisan sans numéro SIRET valide exerce illégalement et ne peut pas fournir de facture conforme.",
+      "L'inscription au Répertoire des métiers est obligatoire pour exercer une activité artisanale en France.",
+      "Contrôlez également la validité de l'assurance décennale et de la RC professionnelle."
+    ],
   },
   'renovation-maison-par-ou-commencer': {
     title: 'Rénovation Maison : Par Où Commencer ?',
@@ -271,6 +331,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quel budget prévoir pour rénover une maison ?', answer: 'Le budget dépend de l\'ampleur des travaux : 500-800 €/m² pour une rénovation légère (peinture, sols, électricité), 800-1 500 €/m² pour une rénovation complète, 1 500-2 500 €/m² pour une rénovation lourde avec gros œuvre. Prévoyez toujours 10-15 % de marge pour les imprévus.' },
       { question: 'Faut-il un architecte pour rénover une maison ?', answer: 'Un architecte est obligatoire si la surface totale après travaux dépasse 150 m². En dessous, il n\'est pas obligatoire mais fortement recommandé pour les rénovations complexes. Un maître d\'œuvre peut être une alternative plus économique.' },
       { question: 'Combien de temps dure une rénovation complète ?', answer: 'Comptez 4 à 6 mois pour une rénovation standard d\'une maison de 100 m² et 8 à 12 mois pour une rénovation lourde. Les délais dépendent de la disponibilité des artisans et de la complexité des travaux.' },
+    ],
+    keyTakeaways: [
+      "Commencez par un diagnostic global (structure, isolation, électricité, plomberie) avant tout travail.",
+      "Respectez l'ordre logique des travaux : gros œuvre, isolation, menuiseries, puis second œuvre et finitions.",
+      "Prévoyez une marge de 10 à 15 % sur le budget total pour les imprévus de chantier.",
+      "Un maître d'œuvre coordonne les corps de métier et évite les erreurs de séquencement coûteuses."
     ],
   },
   'artisan-pas-cher-attention-arnaques': {
@@ -296,6 +362,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Que faire si j\'ai déjà versé un acompte à un artisan suspect ?', answer: 'Envoyez immédiatement une lettre recommandée de mise en demeure exigeant le remboursement ou l\'exécution des travaux. Si le contrat a été signé à domicile, exercez votre droit de rétractation sous 14 jours. Portez plainte en parallèle.' },
       { question: 'Le démarchage à domicile est-il interdit pour les artisans ?', answer: 'Le démarchage n\'est pas interdit en soi, mais il est encadré. Le démarchage téléphonique pour la rénovation énergétique est interdit depuis 2020. Pour le démarchage physique, un délai de rétractation de 14 jours s\'applique et aucun paiement ne peut être perçu pendant les 7 premiers jours.' },
     ],
+    keyTakeaways: [
+      "Un prix anormalement bas cache souvent un travail dissimulé, des matériaux de mauvaise qualité ou une absence d'assurance.",
+      "Vérifiez systématiquement le SIRET, l'assurance décennale et les avis clients avant de vous engager.",
+      "Les arnaques les plus courantes : devis vague, paiement intégral d'avance, pas de facture détaillée.",
+      "Un artisan sérieux accepte toujours de fournir un devis détaillé et des références vérifiables."
+    ],
   },
   'prix-plombier-2026-tarifs-horaires': {
     title: 'Prix Plombier 2026 : Tarifs Horaires',
@@ -320,6 +392,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Un plombier peut-il facturer le déplacement même sans intervention ?', answer: 'Oui, si cela a été convenu au préalable. Pour un dépannage d\'urgence, le forfait déplacement (30-80 €) est généralement dû même si l\'intervention n\'est pas réalisée.' },
       { question: 'Les prix sont-ils plus élevés en copropriété ?', answer: 'Les tarifs de main-d\'œuvre sont identiques, mais les interventions en copropriété peuvent être plus complexes (accès aux colonnes montantes, coordination avec le syndic) et donc plus longues.' },
     ],
+    keyTakeaways: [
+      "Le tarif horaire d'un plombier en 2026 est de 40 à 70 € HT en province et 55 à 90 € en Île-de-France.",
+      "Les interventions d'urgence (soir, week-end, jours fériés) subissent des majorations de 50 à 100 %.",
+      "Le remplacement d'un chauffe-eau coûte entre 800 et 2 500 € pose comprise selon le modèle.",
+      "Comparez au moins trois devis et vérifiez la certification RGE pour les travaux ouvrant droit aux aides."
+    ],
   },
   'aide-maprimerenov-2026-montants-conditions': {
     title: 'MaPrimeRénov\' 2026 : Montants et Aides',
@@ -342,6 +420,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'MaPrimeRénov\' est-elle cumulable avec les CEE ?', answer: 'Oui, MaPrimeRénov\' est parfaitement cumulable avec les CEE, l\'éco-PTZ, la TVA à 5,5 % et les aides locales. Le total des aides ne peut pas dépasser le coût TTC des travaux.' },
       { question: 'Combien de temps faut-il pour recevoir MaPrimeRénov\' ?', answer: 'Le délai d\'instruction est de 2 à 4 semaines (Parcours par geste) ou 4 à 8 semaines (Parcours accompagné). Le versement intervient 2 à 4 semaines après l\'envoi de la facture.' },
       { question: 'Peut-on faire la demande après avoir commencé les travaux ?', answer: 'Non, le dossier doit être déposé et l\'accord reçu AVANT le début des travaux. Un chantier démarré prématurément entraîne un rejet automatique.' },
+    ],
+    keyTakeaways: [
+      "MaPrimeRénov' finance jusqu'à 90 % des travaux pour les ménages très modestes (profil Bleu).",
+      "Quatre profils de revenus déterminent le montant de l'aide : Bleu, Jaune, Violet et Rose.",
+      "Le Parcours accompagné avec un Accompagnateur Rénov' offre les montants les plus élevés.",
+      "Les travaux doivent être réalisés par un artisan RGE et le logement doit avoir plus de 15 ans."
     ],
   },
   'comment-verifier-artisan-avant-engager': {
@@ -366,6 +450,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Que faire si l\'artisan refuse de fournir son attestation d\'assurance ?', answer: 'Ne l\'engagez pas. Le refus de fournir une attestation d\'assurance est un signal d\'alerte majeur. Un professionnel sérieux et assuré n\'a aucune raison de refuser cette demande.' },
       { question: 'Les avis en ligne sont-ils fiables ?', answer: 'La fiabilité varie selon les plateformes. Sur ServicesArtisans, les avis sont publiés uniquement après vérification de l\'intervention. Les avis Google sont moins contrôlés. Croisez toujours plusieurs sources.' },
     ],
+    keyTakeaways: [
+      "Vérifiez le SIRET sur societe.com, l'inscription au Répertoire des métiers et l'assurance décennale.",
+      "Consultez les avis clients sur plusieurs plateformes et demandez des références de chantiers récents.",
+      "Un artisan sérieux fournit spontanément ses attestations d'assurance et son numéro de qualification.",
+      "Méfiez-vous du démarchage téléphonique et des offres trop belles pour être vraies."
+    ],
   },
   'travaux-renovation-energetique-par-ou-commencer': {
     title: 'Rénovation Énergétique : Guide 2026',
@@ -387,6 +477,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Faut-il isoler avant de changer le chauffage ?', answer: 'Oui, c\'est la règle d\'or. L\'isolation réduit les besoins en chauffage, ce qui permet de dimensionner un système moins puissant et moins coûteux. Inverser l\'ordre conduit à un surdimensionnement du chauffage.' },
       { question: 'Quel est le retour sur investissement d\'une rénovation énergétique ?', answer: 'Le retour sur investissement dépend des travaux et des aides obtenues. En moyenne, une rénovation globale est amortie en 8 à 15 ans grâce aux économies d\'énergie. Avec les aides (MaPrimeRénov\', CEE), le retour peut descendre à 3-5 ans.' },
       { question: 'La rénovation énergétique augmente-t-elle la valeur du bien ?', answer: 'Oui, de 5 à 15 % selon les études. Un logement bien classé au DPE (A ou B) se vend plus facilement et à un prix supérieur. À l\'inverse, les passoires thermiques (F, G) subissent une décote de 10 à 20 %.' },
+    ],
+    keyTakeaways: [
+      "Commencez par un audit énergétique pour identifier les travaux prioritaires et leur impact.",
+      "L'isolation (combles, murs, fenêtres) doit précéder le remplacement du système de chauffage.",
+      "Les aides MaPrimeRénov' Parcours accompagné financent jusqu'à 80 % des rénovations globales.",
+      "Un gain énergétique d'au moins 55 % débloque les primes les plus élevées."
     ],
   },
   'devis-travaux-comment-comparer-choisir': {
@@ -411,6 +507,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Un devis gratuit engage-t-il l\'artisan ?', answer: 'Un devis non signé n\'engage ni l\'artisan ni le client. En revanche, une fois signé par les deux parties, il a valeur de contrat et engage les deux parties sur le contenu et le prix.' },
       { question: 'Peut-on négocier un devis de travaux ?', answer: 'Oui, la négociation est courante et acceptée dans le bâtiment. Les leviers les plus efficaces : regrouper les travaux, proposer un calendrier flexible, fournir soi-même les matériaux, ou payer rapidement.' },
     ],
+    keyTakeaways: [
+      "Comparez les devis sur des bases identiques : même périmètre de travaux, mêmes matériaux, mêmes prestations.",
+      "Le devis le moins cher n'est pas toujours le meilleur : vérifiez les qualifications et les assurances.",
+      "Un bon devis détaille chaque poste avec prix unitaires, quantités et marques des matériaux.",
+      "Négociez les conditions de paiement : acompte limité à 30 % et solde à la réception des travaux."
+    ],
   },
   '10-arnaques-courantes-batiment': {
     title: 'Arnaques Bâtiment : 10 Pièges à Éviter',
@@ -432,6 +534,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Que faire si j\'ai été victime d\'une arnaque ?', answer: 'Portez plainte immédiatement (police ou gendarmerie), signalez sur signal.conso.gouv.fr, contactez votre assurance habitation et consultez une association de consommateurs (UFC-Que Choisir, CLCV).' },
       { question: 'Comment reconnaître un faux devis ?', answer: 'Un faux devis est souvent vague (pas de détail des prestations), sans SIRET, sans mention d\'assurance, avec un prix anormalement bas et des conditions de paiement abusives (acompte > 50 %, espèces).' },
       { question: 'Le démarchage à domicile est-il interdit ?', answer: 'Non, mais il est encadré : délai de rétractation de 14 jours, interdiction de percevoir un paiement pendant 7 jours. Le démarchage téléphonique pour la rénovation énergétique est interdit depuis 2020.' },
+    ],
+    keyTakeaways: [
+      "Les arnaques les plus fréquentes : démarchage abusif, devis vagues, paiement intégral d'avance et travail dissimulé.",
+      "Ne laissez jamais un inconnu monter sur votre toit pour une « inspection gratuite ».",
+      "Vérifiez systématiquement le SIRET, l'assurance décennale et les qualifications avant de signer.",
+      "Signalez les pratiques abusives à la DGCCRF et consultez une association de consommateurs."
     ],
   },
   'prix-electricien-2026-tarifs-travaux': {
@@ -456,6 +564,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Combien coûte l\'installation d\'une borne de recharge ?', answer: 'Comptez 800 à 2 000 € tout compris (fourniture + pose). Un crédit d\'impôt de 300 € est disponible (75 % du coût, plafonné à 300 €). La borne doit être installée par un électricien certifié IRVE.' },
       { question: 'Faut-il un certificat Consuel pour changer un tableau ?', answer: 'Le Consuel est obligatoire pour les installations neuves et les rénovations complètes. Un simple remplacement de tableau dans une installation existante ne nécessite pas de Consuel, mais l\'électricien doit fournir une attestation de conformité.' },
     ],
+    keyTakeaways: [
+      "Le tarif horaire d'un électricien est de 40 à 65 € HT en province et 55 à 85 € en Île-de-France.",
+      "La mise aux normes complète d'un tableau électrique coûte entre 800 et 2 000 € selon la complexité.",
+      "Les travaux d'électricité liés à l'énergie (panneaux solaires, bornes) nécessitent un artisan RGE.",
+      "Le certificat Consuel est obligatoire après toute installation neuve ou rénovation lourde."
+    ],
   },
   'prix-peintre-batiment-2026-guide-complet': {
     title: 'Prix Peintre Bâtiment 2026 : Tarifs',
@@ -478,6 +592,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quel est le prix moyen pour repeindre un appartement ?', answer: 'Pour un appartement de 60 m² (3 pièces), comptez 2 500 à 5 000 € pour une peinture professionnelle complète (murs + plafonds). Le prix dépend de l\'état des murs et de la qualité de la peinture choisie.' },
       { question: 'Faut-il toujours appliquer une sous-couche ?', answer: 'Oui, sauf si vous repeignez dans une teinte très proche sur un mur en bon état. La sous-couche améliore l\'adhérence, uniformise l\'absorption et réduit le nombre de couches de finition nécessaires.' },
       { question: 'La peinture de façade est-elle soumise à autorisation ?', answer: 'Oui, un ravalement ou un changement de couleur de façade nécessite une déclaration préalable de travaux en mairie. En zone ABF, l\'accord de l\'Architecte des Bâtiments de France est requis.' },
+    ],
+    keyTakeaways: [
+      "Le prix d'un peintre professionnel se situe entre 20 et 45 €/m² selon la complexité et la finition.",
+      "La préparation des supports représente 50 à 70 % du temps total et conditionne la qualité du résultat.",
+      "Les peintures écologiques (faible COV, labels NF Environnement) sont au même prix que les standards.",
+      "Comptez 2 à 3 jours pour une pièce de 20 m² avec préparation, sous-couche et deux couches de finition."
     ],
   },
   'garantie-decennale-tout-savoir': {
@@ -502,6 +622,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Que faire si l\'artisan a cessé son activité ?', answer: 'La garantie décennale survit à la cessation d\'activité. Contactez directement l\'assureur mentionné sur l\'attestation. Si vous ne retrouvez pas l\'assureur, le Bureau Central de Tarification (BCT) peut vous aider.' },
       { question: 'La garantie décennale couvre-t-elle les travaux de peinture ?', answer: 'Non, la peinture relève de la garantie de parfait achèvement (1 an). La garantie décennale couvre uniquement les dommages compromettant la solidité de l\'ouvrage ou le rendant impropre à sa destination.' },
     ],
+    keyTakeaways: [
+      "La garantie décennale couvre pendant 10 ans les dommages compromettant la solidité de l'ouvrage.",
+      "L'artisan est présumé responsable : c'est à lui de prouver qu'il n'est pas en faute.",
+      "Exigez l'attestation d'assurance décennale avant la signature du devis et vérifiez sa validité.",
+      "La réception des travaux est le point de départ des 10 ans de garantie décennale."
+    ],
   },
   'comment-choisir-cuisine-equipee-guide': {
     title: 'Cuisine Équipée : Guide de Choix 2026',
@@ -524,6 +650,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Vaut-il mieux une cuisine sur mesure ou en kit ?', answer: 'Pour les petits budgets et les cuisines aux dimensions standards, le kit peut suffire. Pour les espaces atypiques, les matériaux nobles ou une ergonomie optimale, le sur mesure est préférable. Comparez toujours les devis complets (pose incluse).' },
       { question: 'Quelle hauteur pour le plan de travail ?', answer: 'La hauteur standard est de 85-90 cm, mais l\'idéal est de l\'adapter à votre taille : le plan doit arriver à la hauteur de vos coudes fléchis à 90°. Pour une cuisine partagée, 87 cm est un bon compromis.' },
       { question: 'Combien de temps pour installer une cuisine ?', answer: 'Comptez 2 à 4 jours pour la pose d\'une cuisine standard par un professionnel, et 1 à 2 jours supplémentaires pour les raccordements plomberie et électricité.' },
+    ],
+    keyTakeaways: [
+      "L'ergonomie d'une cuisine repose sur le triangle d'activité (stockage, lavage, cuisson) de 7 m maximum.",
+      "Comparez les devis poste par poste : mobilier, électroménager, pose et travaux annexes.",
+      "Les grandes enseignes sous-traitent souvent la pose : renseignez-vous sur le poseur réel.",
+      "Ne versez jamais plus de 30 à 40 % d'acompte et inspectez minutieusement à la réception."
     ],
   },
   'isolation-thermique-meilleures-solutions-2026': {
@@ -548,6 +680,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'L\'isolation par l\'extérieur nécessite-t-elle une autorisation ?', answer: 'Oui, l\'ITE modifie l\'aspect extérieur du bâtiment et nécessite une déclaration préalable de travaux. En zone ABF, l\'accord de l\'Architecte des Bâtiments de France est requis.' },
       { question: 'Combien d\'années pour rentabiliser l\'isolation ?', answer: 'L\'isolation des combles est rentabilisée en 3-5 ans, l\'ITI en 5-8 ans, l\'ITE en 8-12 ans. Avec les aides financières (MaPrimeRénov\', CEE), ces délais peuvent être réduits de moitié.' },
     ],
+    keyTakeaways: [
+      "L'isolation des combles perdus est le geste le plus rentable : 20 à 50 €/m² pour 25 à 30 % d'économies.",
+      "L'ITE (Isolation Thermique par l'Extérieur) supprime les ponts thermiques mais coûte 100 à 200 €/m².",
+      "Les isolants biosourcés (fibre de bois, ouate de cellulose) offrent un excellent confort d'été.",
+      "Les aides cumulées (MaPrimeRénov' + CEE + TVA 5,5 %) couvrent 40 à 80 % du coût selon les revenus."
+    ],
   },
   'prix-couvreur-2026-cout-refection-toiture': {
     title: 'Prix Couvreur 2026 : Réfection Toiture',
@@ -570,6 +708,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Quelle est la durée de vie d\'une toiture ?', answer: 'Tuiles terre cuite : 50-100 ans. Ardoise naturelle : 75-100 ans. Zinc : 50-80 ans. Bac acier : 30-50 ans. Ces durées supposent un entretien régulier (démoussage, remplacement des éléments dégradés).' },
       { question: 'Faut-il une autorisation pour refaire sa toiture ?', answer: 'Une réfection à l\'identique (même matériau, même couleur) ne nécessite généralement pas d\'autorisation. Un changement de matériau ou de couleur nécessite une déclaration préalable. En zone ABF, l\'accord de l\'ABF est toujours requis.' },
       { question: 'La réfection de toiture bénéficie-t-elle d\'aides ?', answer: 'La réfection seule ne bénéficie pas d\'aides. En revanche, si elle s\'accompagne d\'une isolation (sarking), vous pouvez obtenir MaPrimeRénov\', les CEE et la TVA à 5,5 % sur la partie isolation.' },
+    ],
+    keyTakeaways: [
+      "La réfection complète d'une toiture coûte entre 100 et 250 €/m² selon le matériau et la complexité.",
+      "Le démoussage et l'entretien préventif (15 à 30 €/m²) prolongent la durée de vie de la couverture.",
+      "Les travaux de couverture sont soumis à la garantie décennale obligatoire.",
+      "L'écran sous-toiture HPV est désormais une bonne pratique systématique pour toute réfection."
     ],
   },
   'renovation-salle-de-bain-budget-etapes': {
@@ -594,6 +738,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Peut-on rénover sa salle de bain soi-même ?', answer: 'La peinture et le petit mobilier sont accessibles en auto-rénovation. En revanche, la plomberie, l\'électricité (normes de sécurité strictes) et l\'étanchéité doivent être réalisées par des professionnels qualifiés.' },
       { question: 'La rénovation de salle de bain bénéficie-t-elle d\'aides ?', answer: 'Les travaux courants bénéficient de la TVA à 10 %. Si la rénovation inclut l\'adaptation PMR (remplacement baignoire par douche pour personnes âgées), MaPrimeAdapt\' peut financer jusqu\'à 70 % des travaux.' },
     ],
+    keyTakeaways: [
+      "Le budget moyen d'une rénovation complète de salle de bain se situe entre 5 000 et 15 000 €.",
+      "L'étanchéité (système SPEC) est l'étape la plus critique : une fuite invisible cause des dégâts majeurs.",
+      "La ventilation (VMC) est obligatoire et essentielle pour éviter l'humidité et les moisissures.",
+      "Prévoyez 2 à 4 semaines de travaux et coordonnez plombier, électricien et carreleur."
+    ],
   },
   'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026': {
     title: 'PAC vs Chaudière Gaz 2026 : Comparatif',
@@ -615,6 +765,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'La PAC fonctionne-t-elle par grand froid ?', answer: 'Les PAC modernes fonctionnent jusqu\'à -15 à -25 °C selon les modèles. Cependant, leur rendement diminue en dessous de -7 °C. Dans les régions très froides, un appoint électrique intégré prend le relais.' },
       { question: 'Peut-on garder les radiateurs existants avec une PAC ?', answer: 'Oui, si vous choisissez une PAC haute température (65-70 °C). Les PAC basse température (35-45 °C) nécessitent des radiateurs surdimensionnés ou un plancher chauffant.' },
       { question: 'L\'installation d\'une PAC est-elle bruyante pour les voisins ?', answer: 'L\'unité extérieure émet environ 45-55 dB. La réglementation impose un respect des seuils de bruit au voisinage. Placez l\'unité à distance des chambres des voisins et sur des plots anti-vibrations.' },
+    ],
+    keyTakeaways: [
+      "La PAC air-eau consomme 3 à 5 fois moins d'énergie qu'une chaudière gaz pour le même confort.",
+      "Les aides MaPrimeRénov' + CEE peuvent réduire de 40 à 70 % le coût d'installation d'une PAC.",
+      "La chaudière gaz est interdite dans le neuf depuis 2022 (RE2020) et n'est plus subventionnée.",
+      "Le COP (coefficient de performance) d'une PAC de qualité est de 3 à 5 selon les conditions climatiques."
     ],
   },
   'droits-obligations-travaux-chez-soi': {
@@ -638,6 +794,12 @@ export const existingArticles: Record<string, BlogArticle> = {
       { question: 'Peut-on faire des travaux le dimanche ?', answer: 'Les travaux bruyants sont interdits le dimanche et les jours fériés dans la plupart des communes. Les travaux silencieux (peinture, papier peint) sont tolérés. Vérifiez l\'arrêté municipal de votre commune.' },
       { question: 'Faut-il prévenir les voisins avant des travaux ?', answer: 'Ce n\'est pas une obligation légale en maison individuelle, mais c\'est fortement recommandé pour maintenir de bonnes relations de voisinage. En copropriété, c\'est une obligation du règlement de copropriété.' },
       { question: 'Qui est responsable si un artisan endommage la propriété d\'un voisin ?', answer: 'L\'artisan est responsable via son assurance RC professionnelle. Cependant, le maître d\'ouvrage (vous) peut être mis en cause si vous avez choisi un artisan non assuré. Vérifiez toujours les assurances avant les travaux.' },
+    ],
+    keyTakeaways: [
+      "Les travaux doivent respecter le PLU, les règles de copropriété et les droits des voisins.",
+      "Le bruit de chantier est autorisé en semaine de 8 h à 20 h et le samedi de 8 h à 12 h.",
+      "Une déclaration préalable ou un permis de construire est requis selon l'ampleur des travaux.",
+      "En copropriété, les travaux touchant les parties communes nécessitent un vote en assemblée générale."
     ],
   },
 }

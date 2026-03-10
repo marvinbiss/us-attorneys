@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { AlertTriangle, ArrowRight, Shield, Clock, Euro, MapPin, ChevronDown, Lightbulb, ListChecks, Eye, Users, Thermometer, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -190,6 +190,22 @@ export default async function ProblemeVillePage({
 
   const faqSchema = getFAQSchema(allFaq)
 
+  // HowTo schema: symptoms as diagnostic steps + immediate actions as resolution steps
+  const howToSteps = [
+    ...problem.symptoms.map((symptom, i) => ({
+      name: `Symptôme ${i + 1}`,
+      text: symptom,
+    })),
+    ...problem.immediateActions.map((action, i) => ({
+      name: `Action ${i + 1}`,
+      text: action,
+    })),
+  ]
+  const howToSchema = getHowToSchema(howToSteps, {
+    name: `Que faire en cas de ${problem.name.toLowerCase()} à ${villeData.name}`,
+    description: `Diagnostic et actions immédiates pour résoudre un problème de ${problem.name.toLowerCase()} à ${villeData.name}. ${problem.symptoms.length} symptômes à identifier et ${problem.immediateActions.length} actions d'urgence.`,
+  })
+
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -218,7 +234,7 @@ export default async function ProblemeVillePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, howToSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -276,6 +292,13 @@ export default async function ProblemeVillePage({
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               {tradeName} urgence à {villeData.name}
+            </Link>
+            <Link
+              href={`/services/${problem.primaryService}/${ville}`}
+              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
+            >
+              <MapPin className="w-5 h-5" />
+              Trouver un {tradeName.toLowerCase()} à {villeData.name}
             </Link>
           </div>
         </div>

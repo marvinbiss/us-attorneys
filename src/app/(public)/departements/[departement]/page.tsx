@@ -11,6 +11,7 @@ import { getProviderCountByDepartment, formatProviderCount } from '@/lib/data/st
 import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
+import problems from '@/lib/data/problems'
 
 export function generateStaticParams() {
   return departements.map((dept) => ({ departement: dept.slug }))
@@ -607,6 +608,20 @@ export default async function DepartementPage({ params }: PageProps) {
                   orderedServices.slice(0, 5).map((s) => (
                     <Link key={`urgence-${s.slug}-${ville.slug}`} href={`/urgence/${s.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
                       Urgence {s.name.toLowerCase()} à {ville.name}
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+          {villesDuDepartement.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Problèmes courants dans le {dept.name}</h3>
+              <div className="flex flex-wrap gap-2">
+                {villesDuDepartement.slice(0, 4).flatMap((ville) =>
+                  problems.slice(0, 6).map((p) => (
+                    <Link key={`prob-${p.slug}-${ville.slug}`} href={`/problemes/${p.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
+                      {p.name} à {ville.name}
                     </Link>
                   ))
                 )}

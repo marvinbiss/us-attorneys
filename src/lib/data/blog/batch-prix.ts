@@ -11,6 +11,7 @@ export const prixArticles: Record<string, {
   authorBio?: string
   updatedDate?: string
   faq?: { question: string; answer: string }[]
+  keyTakeaways?: string[]
 }> = {
   "prix-serrurier-2026-tarifs-interventions": {
     title: "Prix Serrurier 2026 : Tarifs Détaillés",
@@ -117,6 +118,12 @@ export const prixArticles: Record<string, {
       { question: "Quelle est la différence entre une serrure A2P* et A2P*** ?", answer: "La certification A2P classe les serrures selon leur résistance à l'effraction testée en laboratoire par le CNPP. A2P* résiste 5 minutes, A2P** résiste 10 minutes, et A2P*** résiste 15 minutes. Le prix varie de 80 € (A2P*) à 250 € (A2P***) pour le cylindre seul." },
       { question: "Mon assurance prend-elle en charge l'intervention d'un serrurier ?", answer: "La plupart des contrats multirisques habitation couvrent l'ouverture de porte après perte de clés et le remplacement de serrure après effraction ou tentative d'effraction. Vérifiez les conditions et la franchise de votre contrat (généralement 50 à 150 €). Conservez la facture du serrurier pour le remboursement." },
       { question: "Faut-il choisir un blindage de porte ou un bloc-porte blindé ?", answer: "Le blindage à plat (600 – 1 200 €) est idéal si votre porte et son bâti sont en bon état : il offre un bon niveau de sécurité à moindre coût. Le bloc-porte blindé (1 500 – 5 000 €+) est recommandé si la porte est vétuste ou si vous souhaitez le niveau de protection maximal (certification A2P BP2 ou BP3)." }
+    ],
+    keyTakeaways: [
+      "L'ouverture de porte simple coûte 80 à 150 € en journée, avec majoration de 50 à 100 % le soir/week-end.",
+      "Le blindage d'une porte existante revient entre 600 et 1 200 €, alternative économique au bloc-porte blindé.",
+      "Exigez toujours un devis écrit avant intervention, obligatoire au-delà de 150 € TTC depuis 2017.",
+      "Investir dans une serrure A2P certifiée réduit le risque de cambriolage et la prime d'assurance."
     ]
   },
   "prix-chauffagiste-2026-installation-entretien": {
@@ -214,6 +221,12 @@ export const prixArticles: Record<string, {
       { question: "L'entretien annuel de la chaudière est-il vraiment obligatoire ?", answer: "Oui, l'entretien annuel est obligatoire pour toutes les chaudières (gaz, fioul, bois) depuis le décret du 9 juin 2009. Pour les PAC contenant plus de 2 kg de fluide frigorigène, un contrôle d'étanchéité est également obligatoire depuis 2020. Le défaut d'entretien peut entraîner la perte de la garantie constructeur et, en cas de sinistre, le refus d'indemnisation par l'assurance." },
       { question: "Quelles aides pour remplacer une chaudière fioul en 2026 ?", answer: "Le remplacement d'une chaudière fioul par une PAC est fortement subventionné : MaPrimeRénov' jusqu'à 5 000 € (PAC air-eau) ou 10 000 € (PAC géothermique), prime CEE de 500 à 4 000 €, prime « coup de pouce chauffage » et éco-PTZ jusqu'à 50 000 €. Selon vos revenus, le reste à charge peut être inférieur à 30 % du coût total." },
       { question: "Combien coûte un dépannage de chaudière en urgence ?", answer: "Un dépannage en journée (hors pièces) coûte 100 à 250 €. En urgence (soir, week-end, jour férié), la majoration de 50 à 100 % porte le tarif à 200 – 500 €. À cela s'ajoutent les pièces détachées si nécessaire. Un contrat d'entretien (150 – 300 €/an) offre généralement une intervention prioritaire incluse." }
+    ],
+    keyTakeaways: [
+      "Une PAC air-eau coûte 8 000 à 16 000 € TTC posée, avec un reste à charge de 3 000 à 8 000 € après aides.",
+      "L'entretien annuel est obligatoire : 90 à 180 € pour une chaudière, 150 à 250 € pour une PAC.",
+      "Les aides cumulées (MaPrimeRénov' + CEE + éco-PTZ) couvrent jusqu'à 70 % du coût d'installation.",
+      "Méfiez-vous des offres « PAC à 1 € » et du démarchage téléphonique : un artisan sérieux ne démarche jamais."
     ]
   },
   "prix-menuisier-2026-tarifs-travaux": {
@@ -300,6 +313,12 @@ export const prixArticles: Record<string, {
       { question: "Quel est le meilleur matériau pour des fenêtres ?", answer: "Le PVC offre le meilleur rapport qualité-prix avec d'excellentes performances thermiques et zéro entretien. L'aluminium est idéal pour les grandes baies vitrées grâce à ses profils fins. Le bois est le matériau le plus noble avec la meilleure isolation naturelle, mais demande un entretien tous les 5 à 10 ans. Le mixte bois-alu combine les avantages des deux." },
       { question: "Combien de temps faut-il pour un escalier sur mesure ?", answer: "Comptez 3 à 6 semaines de fabrication en atelier après la prise de cotes, puis 2 à 5 jours de pose sur site. Un escalier hélicoïdal ou un modèle complexe peut nécessiter 6 à 8 semaines de fabrication. Prévoyez un délai total de 2 à 3 mois entre la commande et la fin de la pose." },
       { question: "Le menuisier peut-il bénéficier de la TVA à 5,5 % ?", answer: "La TVA à 5,5 % s'applique uniquement aux travaux d'amélioration de la performance énergétique dans les logements de plus de 2 ans : remplacement de fenêtres (Uw ≤ 1,3 W/m².K), portes d'entrée donnant sur l'extérieur (Ud ≤ 1,7 W/m².K) et volets isolants. Les autres travaux de menuiserie bénéficient de la TVA à 10 % en rénovation." }
+    ],
+    keyTakeaways: [
+      "Le tarif horaire d'un menuisier est de 35 à 60 € HT en province et 50 à 80 € en Île-de-France.",
+      "Le remplacement d'une fenêtre PVC standard coûte 350 à 700 € pose comprise.",
+      "Un escalier sur mesure en bois coûte de 2 000 € (droit, sapin) à 15 000 € (hélicoïdal, chêne massif).",
+      "Exigez le coefficient Uw sur le devis des fenêtres : Uw ≤ 1,3 est requis pour les aides MaPrimeRénov'."
     ]
   },
   "prix-carreleur-2026-pose-fourniture": {
@@ -385,6 +404,12 @@ export const prixArticles: Record<string, {
       { question: "Faut-il obligatoirement faire un ragréage avant de poser du carrelage ?", answer: "Le ragréage est nécessaire si le support présente des irrégularités supérieures à 3 mm sous la règle de 2 mètres (tolérance du DTU 52.2). Sur un support neuf et bien réalisé, il peut être évité. Sur un ancien carrelage ou un support irrégulier, il est indispensable pour garantir la tenue du nouveau carrelage." },
       { question: "Peut-on poser du carrelage sur un ancien carrelage ?", answer: "Oui, à condition que l'ancien carrelage soit parfaitement adhérent, plan et propre. Il faut utiliser une colle spéciale « carrelage sur carrelage » et appliquer un primaire d'accrochage. Cette solution évite le coût de la dépose (10 – 25 €/m²) mais augmente légèrement l'épaisseur du sol (attention aux seuils de porte et aux hauteurs sous plafond)." },
       { question: "Quel est le meilleur carrelage pour une salle de bain ?", answer: "Le grès cérame est le meilleur choix pour une salle de bain : il est imperméable (absorption d'eau < 0,5 %), très résistant, facile d'entretien et disponible dans une grande variété de finitions. Choisissez un carrelage avec une résistance au glissement R10 minimum pour le sol. Pour les murs, la faïence classique offre un excellent rapport qualité-prix." }
+    ],
+    keyTakeaways: [
+      "La pose de carrelage coûte entre 30 et 80 €/m² (main-d'œuvre seule) selon le format et la technique.",
+      "Le double encollage est obligatoire pour les carreaux de plus de 30 x 30 cm (DTU 52.2).",
+      "La réalisation d'une douche à l'italienne (2 500 à 5 000 €) requiert une étanchéité SPEC irréprochable.",
+      "La préparation du support (ragréage, primaire) est incluse dans un devis sérieux et conditionne le résultat."
     ]
   },
   "prix-macon-2026-gros-oeuvre-renovation": {
@@ -475,6 +500,12 @@ export const prixArticles: Record<string, {
       { question: "L'étude de sol est-elle obligatoire avant de construire ?", answer: "Oui, depuis la loi Élan de 2018, l'étude géotechnique est obligatoire pour les maisons individuelles dans les zones exposées au retrait-gonflement des argiles (environ 50 % du territoire). Même hors zone à risque, elle est fortement recommandée. Son coût (800 – 2 000 €) est modeste comparé aux conséquences d'un mauvais dimensionnement des fondations." },
       { question: "Quelle est la différence entre un permis de construire et une déclaration préalable ?", answer: "La déclaration préalable suffit pour les travaux créant moins de 20 m² de surface (40 m² en zone PLU). Au-delà, un permis de construire est obligatoire. Si la surface totale après travaux dépasse 150 m², vous devez faire appel à un architecte. Le délai d'instruction est de 1 mois pour une déclaration et de 2 à 3 mois pour un permis." },
       { question: "Peut-on couler du béton en hiver ?", answer: "Oui, mais avec des précautions. Le béton ne doit pas être coulé par des températures inférieures à 5°C sans protection. Les solutions : adjuvant accélérateur de prise, bâche isolante sur le béton frais, chauffage du coffrage. Un maçon sérieux adapte son planning à la météo et intègre ces contraintes dans son devis." }
+    ],
+    keyTakeaways: [
+      "Le tarif horaire d'un maçon est de 40 à 65 € HT en province et 55 à 85 € en Île-de-France.",
+      "Les fondations représentent 10 à 15 % du budget total d'une construction et ne doivent jamais être sous-estimées.",
+      "L'étude de sol géotechnique (800 à 2 000 €) est obligatoire dans les zones argileuses depuis la loi Élan.",
+      "La garantie décennale est impérative pour tout travail de maçonnerie : exigez l'attestation avant de signer."
     ]
   },
   "prix-jardinier-paysagiste-2026": {
@@ -561,6 +592,12 @@ export const prixArticles: Record<string, {
       { question: "Le crédit d'impôt s'applique-t-il à tous les travaux de jardinage ?", answer: "Non, le crédit d'impôt de 50 % s'applique uniquement aux petits travaux d'entretien : tonte, taille de haies, désherbage, ramassage de feuilles, débroussaillage. Les travaux de création (aménagement paysager, plantation de haies neuves, installation d'arrosage) ne sont pas éligibles. Le prestataire doit être agréé services à la personne." },
       { question: "Quel budget pour un aménagement paysager complet ?", answer: "Un aménagement paysager complet (conception, terrassement, plantations, arrosage automatique, éclairage) coûte entre 50 et 150 €/m². Pour un jardin de 200 m², prévoyez 10 000 à 30 000 €. Un plan de conception seul par un paysagiste coûte 500 à 2 500 €." },
       { question: "Faut-il une autorisation pour abattre un arbre dans son jardin ?", answer: "En principe, vous êtes libre d'abattre un arbre dans votre jardin. Cependant, vérifiez le PLU de votre commune : certains arbres peuvent être classés (Espaces Boisés Classés) ou protégés par un arrêté municipal. En zone ABF (secteur sauvegardé), une autorisation est nécessaire. Pour les arbres en limite de propriété, le Code civil impose que l'arbre soit à plus de 2 m de la clôture s'il dépasse 2 m de hauteur." }
+    ],
+    keyTakeaways: [
+      "La tonte de pelouse coûte 0,15 à 0,50 €/m² et la taille de haie 15 à 35 € par mètre linéaire.",
+      "Un aménagement paysager complet revient entre 50 et 150 €/m² selon la complexité du projet.",
+      "L'entretien de jardin ouvre droit à un crédit d'impôt de 50 % (services à la personne, plafond 5 000 €).",
+      "L'élagage d'arbres de grande hauteur doit être confié à un professionnel titulaire du CS Taille et soins."
     ]
   },
   "prix-vitrier-2026-remplacement-vitrage": {
@@ -637,6 +674,12 @@ export const prixArticles: Record<string, {
       { question: "Mon assurance couvre-t-elle le bris de glace ?", answer: "La plupart des contrats multirisques habitation incluent une garantie bris de glace couvrant les vitres, doubles vitrages, miroirs fixes, plaques de cuisson vitrocéramiques et parfois les panneaux solaires. La franchise est généralement de 50 à 150 €. Déclarez le sinistre dans les 5 jours ouvrés, conservez les débris et prenez des photos." },
       { question: "Quelle différence entre double vitrage standard et VIR ?", answer: "Le double vitrage standard (4/16/4) a un coefficient Ug d'environ 1,1 W/m².K. Le VIR (Vitrage à Isolation Renforcée) utilise une couche basse émissivité sur l'un des verres et du gaz argon dans la lame d'air, atteignant un Ug de 1,0 W/m².K ou moins. Le VIR coûte 30 à 50 % de plus mais offre une isolation nettement supérieure." },
       { question: "Le vitrage de sécurité est-il obligatoire quelque part ?", answer: "Oui, le verre feuilleté de sécurité est obligatoire pour les garde-corps vitrés, les allèges de fenêtres basses (moins de 90 cm du sol), les verrières de toiture, les portes vitrées des ERP (établissements recevant du public) et les vitrines de commerces en rez-de-chaussée. Il retient les éclats en cas de bris et empêche la chute des personnes." }
+    ],
+    keyTakeaways: [
+      "Le double vitrage standard coûte 80 à 150 €/m² et le VIR (isolation renforcée) 120 à 200 €/m².",
+      "Le remplacement de vitrage en urgence entraîne un supplément de 50 à 100 € pour le déplacement.",
+      "L'assurance habitation couvre généralement le bris de glace : déclarez le sinistre sous 5 jours ouvrés.",
+      "Exigez le coefficient Ug sur le devis pour vérifier la performance thermique du vitrage proposé."
     ]
   },
   "prix-climaticien-2026-installation-entretien": {
@@ -703,6 +746,12 @@ export const prixArticles: Record<string, {
       { question: "L'entretien de la climatisation est-il obligatoire ?", answer: "Oui, l'entretien est obligatoire pour les systèmes contenant plus de 2 kg de fluide frigorigène (la plupart des installations domestiques). Un contrôle d'étanchéité du circuit frigorifique doit être réalisé régulièrement. Le nettoyage des filtres est recommandé tous les 15 jours en période d'utilisation intensive." },
       { question: "Faut-il une autorisation pour installer une climatisation en copropriété ?", answer: "Oui, l'installation d'une unité extérieure sur une façade ou un balcon nécessite l'accord de l'assemblée générale des copropriétaires (majorité absolue, article 25). Certains règlements de copropriété interdisent totalement les unités en façade. Vérifiez également les réglementations municipales sur le bruit." },
       { question: "Quelle est la différence entre SEER et SCOP ?", answer: "Le SEER (Seasonal Energy Efficiency Ratio) mesure l'efficacité en mode froid : un SEER de 6 signifie que l'appareil produit 6 kWh de froid pour 1 kWh d'électricité. Le SCOP (Seasonal Coefficient of Performance) mesure l'efficacité en mode chauffage. Plus ces valeurs sont élevées, plus l'appareil est économe. Visez un SEER > 6 et un SCOP > 4." }
+    ],
+    keyTakeaways: [
+      "Une climatisation réversible (PAC air-air) coûte 3 000 à 8 000 € selon le nombre de splits.",
+      "L'entretien annuel (100 à 200 €) est obligatoire pour les systèmes contenant plus de 2 kg de fluide.",
+      "Le dimensionnement par bilan thermique est indispensable pour éviter surconsommation et inconfort.",
+      "Vérifiez l'attestation de capacité fluides frigorigènes de l'installateur avant toute intervention."
     ]
   },
   "prix-cuisiniste-2026-pose-cuisine": {
@@ -772,6 +821,12 @@ export const prixArticles: Record<string, {
       { question: "Vaut-il mieux acheter chez un cuisiniste ou en grande surface ?", answer: "Les grandes surfaces de bricolage offrent les prix les plus bas (entrée et milieu de gamme) avec des cuisines en kit. Les grandes enseignes spécialisées (Schmidt, Mobalpa, SoCoo'c) proposent un meilleur accompagnement et une pose intégrée. Le cuisiniste indépendant ou l'artisan menuisier offrent du sur-mesure et un suivi personnalisé, mais à un budget supérieur." },
       { question: "Combien de temps dure la pose d'une cuisine ?", answer: "La pose d'une cuisine standard prend 2 à 5 jours ouvrés. Si des travaux de plomberie, d'électricité ou de carrelage sont nécessaires, comptez 1 à 3 semaines au total. Le délai entre la commande et la livraison du mobilier est de 4 à 8 semaines en moyenne." },
       { question: "Peut-on ne remplacer que les façades de cuisine ?", answer: "Oui, si les caissons (corps des meubles) sont en bon état, le remplacement des seules façades permet de transformer l'aspect de votre cuisine pour 40 à 60 % du prix d'une cuisine neuve. Comptez 80 à 250 € par façade selon le matériau et la taille. C'est la solution la plus économique pour un relooking complet." }
+    ],
+    keyTakeaways: [
+      "Une cuisine équipée complète coûte de 5 000 € (entrée de gamme) à 25 000 €+ (haut de gamme).",
+      "La pose professionnelle représente 10 à 20 % du budget total et conditionne le résultat final.",
+      "Le plan de travail en quartz (200 à 500 €/ml) offre le meilleur rapport durabilité/esthétique.",
+      "Ne versez jamais plus de 30 à 40 % d'acompte et inspectez chaque élément à la réception."
     ]
   },
   "prix-solier-revetement-sol-2026": {
@@ -841,6 +896,12 @@ export const prixArticles: Record<string, {
       { question: "Peut-on poser du parquet sur un plancher chauffant ?", answer: "Oui, mais uniquement en pose collée (jamais flottante). Le parquet doit avoir une résistance thermique inférieure à 0,15 m².K/W. Le contrecollé (épaisseur 14-15 mm avec couche d'usure de 3-4 mm) est le plus adapté. Le parquet massif épais est déconseillé car il réduit l'efficacité du chauffage. Le vinyle LVT et le carrelage sont les plus performants sur plancher chauffant." },
       { question: "Combien coûte la rénovation d'un parquet ancien ?", answer: "Le ponçage et la vitrification d'un parquet ancien coûtent entre 25 et 50 €/m². Si le parquet nécessite des réparations (remplacement de lames, rebouchage de trous), ajoutez 10 à 30 €/m². Pour un appartement de 60 m², le budget de rénovation du parquet se situe entre 1 500 et 4 800 €. C'est souvent plus économique et plus valorisant que la pose d'un nouveau revêtement." },
       { question: "Le béton ciré est-il adapté à une salle de bain ?", answer: "Le béton ciré peut être posé en salle de bain à condition d'appliquer un traitement hydrofuge et un vernis de protection adaptés. Cependant, il nécessite un entretien régulier (cire tous les 6 à 12 mois) et reste sensible aux produits acides. Pour une douche à l'italienne, le carrelage reste plus fiable à long terme." }
+    ],
+    keyTakeaways: [
+      "Le parquet massif coûte 40 à 120 €/m² posé, le stratifié 15 à 40 €/m² et le vinyle LVT 25 à 60 €/m².",
+      "La pose collée est recommandée sur plancher chauffant ; la pose flottante pour les rénovations rapides.",
+      "Le ragréage du support (10 à 25 €/m²) est indispensable pour un résultat de pose impeccable.",
+      "Le parquet contrecollé offre le meilleur compromis entre esthétique bois et facilité de pose."
     ]
   },
   "prix-nettoyage-professionnel-2026": {
@@ -899,6 +960,12 @@ export const prixArticles: Record<string, {
       { question: "Combien coûte un ménage à domicile avec le crédit d'impôt ?", answer: "Un ménage de 3 heures coûte 60 à 135 € en province. Grâce au crédit d'impôt de 50 % (services à la personne), le coût effectif descend à 30 – 68 €. Ce crédit s'applique dans la limite de 12 000 € de dépenses annuelles et est accessible à tous les contribuables, même non imposables." },
       { question: "Quel est le prix d'un nettoyage de fin de chantier ?", answer: "Le nettoyage après travaux coûte entre 3 et 8 €/m² selon le degré de salissure. Pour un appartement de 70 m² : 210 à 560 €. Ce prix inclut le dépoussiérage, le nettoyage des vitres, le lessivage des sols et l'évacuation des résidus. Les chantiers très poussiéreux (plâtrerie, ponçage) sont facturés dans le haut de la fourchette." },
       { question: "Comment choisir une entreprise de nettoyage fiable ?", answer: "Vérifiez la certification Qualipropre, l'attestation de vigilance URSSAF (preuve que l'entreprise est à jour de ses cotisations sociales), l'assurance RC professionnelle et les avis clients. Demandez un devis détaillé précisant le nombre d'heures, la fréquence et les prestations incluses. Méfiez-vous des tarifs anormalement bas." }
+    ],
+    keyTakeaways: [
+      "Le nettoyage de bureaux coûte 15 à 25 €/heure et le nettoyage de fin de chantier 3 à 8 €/m².",
+      "La certification Qualipropre est le label de référence pour les entreprises de nettoyage professionnel.",
+      "Rédigez un cahier des charges précis pour obtenir des devis comparables et un résultat conforme.",
+      "Exigez l'attestation de vigilance URSSAF pour vous protéger du risque de travail dissimulé."
     ]
   },
   "prix-renovation-appartement-2026-budget": {
@@ -959,6 +1026,12 @@ export const prixArticles: Record<string, {
       { question: "Quelles aides pour rénover un appartement ancien ?", answer: "MaPrimeRénov' couvre les travaux d'isolation et de chauffage (jusqu'à 20 000 €). L'éco-PTZ finance jusqu'à 50 000 € sans intérêts. Les CEE apportent des primes complémentaires. La TVA est réduite à 10 % (5,5 % pour les travaux énergétiques). Ces aides sont cumulables et conditionnées au recours à un artisan RGE." },
       { question: "Faut-il faire appel à un architecte pour rénover ?", answer: "Un architecte d'intérieur n'est pas obligatoire mais fortement recommandé pour les rénovations lourdes (budget supérieur à 50 000 €). Ses honoraires (8 à 15 % du montant des travaux) sont compensés par une meilleure conception, une coordination efficace des corps de métier et la maîtrise du budget. Il peut aussi vous aider à obtenir les autorisations nécessaires." },
       { question: "Combien de temps dure une rénovation d'appartement ?", answer: "Rénovation légère : 2 à 4 semaines. Rénovation intermédiaire : 1 à 3 mois. Rénovation lourde : 3 à 6 mois. Ajoutez 1 à 2 mois pour la conception et la consultation des entreprises. Les retards de livraison de matériaux et les imprévus techniques peuvent allonger ces délais de 2 à 4 semaines." }
+    ],
+    keyTakeaways: [
+      "Une rénovation complète coûte 500 à 1 200 €/m² selon le niveau de finition et l'état initial.",
+      "L'ordre des travaux est crucial : démolition, gros œuvre, plomberie/électricité, revêtements, finitions.",
+      "Prévoyez une marge de 10 à 15 % sur le budget total pour les imprévus et surprises de chantier.",
+      "Un maître d'œuvre (8 à 12 % du budget) coordonne les corps de métier et sécurise le chantier."
     ]
   },
   "prix-extension-maison-2026": {
@@ -1025,6 +1098,12 @@ export const prixArticles: Record<string, {
       { question: "Faut-il un permis de construire pour une extension ?", answer: "Une extension inférieure à 20 m² (40 m² en zone PLU avec plan local d'urbanisme) nécessite une simple déclaration préalable. Au-delà, un permis de construire est obligatoire. Si la surface totale après travaux dépasse 150 m², le recours à un architecte est obligatoire." },
       { question: "Quelle est la solution d'extension la plus économique ?", answer: "L'aménagement de combles existants est la solution la plus économique (600 – 1 500 €/m²) car la structure est déjà en place. Ensuite vient la véranda aluminium (1 000 – 2 500 €/m²). L'extension traditionnelle en parpaing (1 200 – 2 200 €/m²) offre le meilleur rapport espace/prix pour les extensions latérales." },
       { question: "Extension bois ou maçonnerie : que choisir ?", answer: "L'ossature bois est plus rapide (4-8 semaines vs 3-5 mois), offre une meilleure isolation thermique naturelle et un chantier plus propre. La maçonnerie est 10-15 % moins chère, mieux maîtrisée par les artisans locaux et offre une meilleure inertie thermique. Le choix dépend de votre budget, du délai souhaité et du style architectural de votre maison." }
+    ],
+    keyTakeaways: [
+      "Une extension coûte 1 200 à 3 000 €/m² selon la technique : parpaing, ossature bois ou verre.",
+      "Le permis de construire est obligatoire au-delà de 40 m² en zone PLU urbaine.",
+      "L'extension en ossature bois offre un chantier rapide (4 à 8 semaines) et un bon bilan thermique.",
+      "L'architecte est obligatoire si la surface totale de la maison dépasse 150 m² après extension."
     ]
   },
   "prix-ravalement-facade-2026": {
@@ -1071,6 +1150,12 @@ export const prixArticles: Record<string, {
       { question: "Le ravalement de façade est-il obligatoire ?", answer: "Oui, la loi impose de maintenir les façades en bon état. Certaines communes (notamment Paris) exigent un ravalement tous les 10 ans et peuvent mettre en demeure les propriétaires défaillants. En copropriété, le ravalement est voté en assemblée générale. Le non-respect de cette obligation peut entraîner des pénalités." },
       { question: "Quelles aides pour un ravalement avec isolation par l'extérieur ?", answer: "L'ITE est éligible à MaPrimeRénov' (jusqu'à 75 €/m²), aux CEE (10 à 25 €/m²), à l'éco-PTZ et à la TVA à 5,5 %. Certaines communes proposent des aides complémentaires. Ces aides combinées peuvent couvrir 40 à 60 % du coût total. Condition : artisan certifié RGE obligatoire." },
       { question: "Faut-il profiter d'un ravalement pour isoler ?", answer: "Absolument. Le surcoût de l'ITE lors d'un ravalement est bien inférieur à une ITE réalisée seule, car l'échafaudage est déjà en place (économie de 15 à 30 €/m²). De plus, les aides financières couvrent une grande partie du surcoût. L'ITE réduit les déperditions thermiques de 25 à 40 % et valorise votre bien." }
+    ],
+    keyTakeaways: [
+      "Le ravalement simple (nettoyage + peinture) coûte 30 à 60 €/m², avec ITE 100 à 200 €/m².",
+      "L'obligation d'isolation s'impose lors d'un ravalement touchant plus de 50 % de la façade.",
+      "Les aides MaPrimeRénov' et CEE sont disponibles si le ravalement inclut une isolation par l'extérieur.",
+      "En copropriété, le ravalement est voté en AG et les charges sont réparties selon les tantièmes."
     ]
   },
   "prix-terrasse-exterieure-2026": {
@@ -1114,6 +1199,12 @@ export const prixArticles: Record<string, {
       { question: "Quel est le meilleur matériau pour une terrasse en 2026 ?", answer: "Le composite coextrudé offre le meilleur compromis : esthétique proche du bois, aucun entretien, durée de vie de 25-30 ans, résistant aux UV et aux taches. Le bois exotique (ipé, cumaru) est le plus noble et le plus durable (40 ans+) mais demande un entretien annuel. Le grès cérame sur plots est idéal pour un aspect minéral sans entretien." },
       { question: "Faut-il une dalle béton pour poser une terrasse ?", answer: "Non, la pose sur plots permet de s'en passer : elle fonctionne sur tout support stable (terre compactée, gravier, ancienne dalle). Les plots rattrapent les pentes et irrégularités. Cette technique convient au bois, au composite et aux dalles céramiques. Elle est 50 à 100 €/m² moins chère qu'une pose sur dalle." },
       { question: "Combien coûte une terrasse de 30 m² ?", answer: "Pour 30 m² de terrasse : pin traité = 1 200 – 2 400 €, composite milieu de gamme = 2 400 – 5 400 €, bois exotique = 3 000 – 6 000 €, pierre naturelle = 2 400 – 7 500 €. Ces prix incluent la fourniture et la pose, mais pas le terrassement ni la dalle béton si nécessaire." }
+    ],
+    keyTakeaways: [
+      "Une terrasse en bois coûte 80 à 200 €/m², en composite 100 à 250 €/m², en dalles 50 à 150 €/m².",
+      "La pente d'écoulement (1 à 2 %) et le drainage sont essentiels pour la durabilité de la terrasse.",
+      "Une terrasse surélevée de plus de 60 cm ou de plus de 20 m² nécessite une déclaration préalable.",
+      "Les bois européens traités (pin, mélèze) offrent un bon rapport qualité-prix pour les terrasses."
     ]
   },
   "prix-cloture-portail-2026": {
@@ -1159,6 +1250,12 @@ export const prixArticles: Record<string, {
       { question: "Combien coûte une clôture au mètre linéaire en 2026 ?", answer: "Les prix varient selon le matériau : grillage simple torsion 15 – 30 €/ml, grillage rigide 30 – 70 €/ml, PVC 60 – 150 €/ml, bois 50 – 200 €/ml, composite 100 – 300 €/ml, aluminium 100 – 300 €/ml, fer forgé 200 – 600 €/ml. Ces prix incluent la fourniture, les poteaux et la pose." },
       { question: "Faut-il une autorisation pour poser une clôture ?", answer: "En principe, aucune autorisation n'est nécessaire si votre clôture respecte le PLU (hauteur, matériaux, couleurs). En lotissement, le cahier des charges peut imposer des contraintes supplémentaires. En zone ABF (secteur sauvegardé), une déclaration préalable est nécessaire. Renseignez-vous en mairie avant de commencer." },
       { question: "Quel est le prix d'un portail motorisé en aluminium ?", answer: "Un portail battant en aluminium motorisé coûte entre 2 000 et 6 000 € posé, un coulissant motorisé entre 2 500 et 7 000 €. La motorisation seule représente 500 à 2 000 € selon le type (vérins, bras articulés, rail au sol). L'alimentation électrique et le raccordement ajoutent 200 à 500 €." }
+    ],
+    keyTakeaways: [
+      "Une clôture en grillage coûte 20 à 50 €/ml posée, en panneaux rigides 40 à 80 €/ml.",
+      "Un portail motorisé en aluminium coûte 2 000 à 6 000 € pose comprise selon les dimensions.",
+      "La clôture ne nécessite pas de déclaration préalable sauf en zone protégée ou si le PLU l'impose.",
+      "La motorisation doit respecter la norme NF EN 13241 avec dispositifs anti-écrasement obligatoires."
     ]
   },
   "prix-fenetre-double-vitrage-2026": {
@@ -1205,6 +1302,12 @@ export const prixArticles: Record<string, {
       { question: "PVC, aluminium ou bois : quel matériau choisir pour ses fenêtres ?", answer: "Le PVC est le meilleur rapport qualité-prix (excellente isolation, zéro entretien, prix modéré). L'aluminium convient aux grandes baies vitrées grâce à ses profils fins et sa résistance structurelle. Le bois offre la meilleure isolation naturelle et une esthétique noble, mais demande un entretien périodique. Le mixte bois-alu combine les avantages des deux." },
       { question: "Le triple vitrage vaut-il le surcoût ?", answer: "Le triple vitrage (50 à 100 € de plus par fenêtre) se justifie pour les façades nord dans les régions froides (est, montagne) et les maisons passives. Pour les autres orientations et les régions tempérées, le double vitrage VIR offre un excellent compromis performance/prix. Le triple vitrage réduit aussi les apports solaires gratuits en hiver, ce qui peut être contre-productif sur les façades sud." },
       { question: "Quelles aides pour changer ses fenêtres en 2026 ?", answer: "MaPrimeRénov' accorde 40 à 100 € par fenêtre (simple vers double vitrage performant). Les CEE ajoutent 30 à 80 € par fenêtre. La TVA est à 5,5 % si Uw ≤ 1,3 W/m².K. L'éco-PTZ finance jusqu'à 50 000 € à taux zéro. Condition : artisan certifié RGE obligatoire." }
+    ],
+    keyTakeaways: [
+      "Une fenêtre PVC double vitrage coûte 350 à 700 € posée, aluminium 500 à 1 100 €, bois 600 à 1 300 €.",
+      "Le coefficient Uw ≤ 1,3 W/m².K est requis pour bénéficier de MaPrimeRénov' et de la TVA à 5,5 %.",
+      "La dépose totale (retrait complet du bâti ancien) offre de meilleures performances que la rénovation.",
+      "Les fenêtres mixtes bois-aluminium (700 à 1 500 €) offrent le meilleur des deux matériaux."
     ]
   },
   "prix-installation-electrique-neuve-2026": {
@@ -1253,6 +1356,12 @@ export const prixArticles: Record<string, {
       { question: "Quel budget pour installer des panneaux solaires en 2026 ?", answer: "Une installation photovoltaïque en autoconsommation de 3 kWc (8-10 panneaux) coûte 7 000 à 14 000 € TTC. La prime à l'autoconsommation est de 260 à 500 €/kWc. Le retour sur investissement est de 8 à 12 ans. Une installation de 6 kWc coûte 12 000 à 22 000 € et convient aux grandes maisons." },
       { question: "La domotique est-elle rentable ?", answer: "Un système domotique filaire (KNX, Legrand) coûte 5 000 à 20 000 € pour 100 m². Un système sans fil (Zigbee, Z-Wave) est plus abordable : 1 000 à 5 000 €. La domotique permet des économies d'énergie de 10 à 15 % grâce à la gestion intelligente du chauffage, de l'éclairage et des volets (source : ADEME). Le retour sur investissement est de 5 à 10 ans pour les systèmes sans fil." },
       { question: "Le certificat Consuel est-il obligatoire ?", answer: "Oui, le Consuel est obligatoire pour toute installation électrique neuve et pour les rénovations lourdes (remplacement complet du tableau et du câblage). Il coûte 130 à 180 € et doit être obtenu avant la mise en service par le fournisseur d'énergie. L'électricien prépare le dossier et soumet l'installation au contrôle." }
+    ],
+    keyTakeaways: [
+      "L'installation électrique complète d'une maison neuve coûte entre 80 et 120 €/m² selon la surface.",
+      "La norme NF C 15-100 définit les équipements minimaux par pièce et le dimensionnement du tableau.",
+      "Le certificat Consuel est obligatoire avant la mise en service par le fournisseur d'énergie.",
+      "Prévoyez des circuits dédiés pour les équipements gourmands : plaque, four, lave-linge, VMC."
     ]
   },
   "prix-salle-de-bain-complete-2026": {
@@ -1301,6 +1410,12 @@ export const prixArticles: Record<string, {
       { question: "Combien coûte une douche à l'italienne ?", answer: "Une douche à l'italienne complète (receveur extra-plat, paroi en verre, mitigeur thermostatique, carrelage, étanchéité SPEC) coûte entre 2 000 et 6 000 € selon les finitions. La version entrée de gamme (receveur à poser, paroi basique) revient à 1 000 – 2 000 €. Le surcoût par rapport à une douche classique est de 500 à 2 000 €." },
       { question: "Faut-il une VMC dans une salle de bain ?", answer: "La ventilation est indispensable en salle de bain pour évacuer l'humidité et prévenir les moisissures. Une VMC simple flux hygroréglable coûte 300 à 600 € posée. Une VMC double flux (plus performante mais plus chère) coûte 2 000 à 5 000 €. À défaut de VMC, une fenêtre ou un extracteur d'air (100 – 300 €) est le minimum." },
       { question: "Peut-on installer un plancher chauffant dans une salle de bain ?", answer: "Oui, le plancher chauffant électrique est idéal en salle de bain : confort au pied, séchage rapide du sol, faible épaisseur (3-5 mm). Le coût est de 40 à 80 €/m² pose comprise. Il faut prévoir le carrelage compatible (pas de parquet ni de vinyle épais). La consommation est modeste pour une petite surface (5-8 m²) : environ 30 à 50 €/an." }
+    ],
+    keyTakeaways: [
+      "Une salle de bain complète coûte 5 000 à 15 000 € pour une rénovation standard, jusqu'à 25 000 € en haut de gamme.",
+      "L'étanchéité (système SPEC) est l'élément le plus critique et doit être réalisée par un professionnel.",
+      "La ventilation (VMC) est obligatoire et essentielle pour éviter l'humidité et les moisissures.",
+      "Coordonnez plombier, électricien et carreleur pour respecter l'ordre des interventions et éviter les reprises."
     ]
   },
 }

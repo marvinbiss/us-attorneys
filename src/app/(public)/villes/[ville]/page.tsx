@@ -10,6 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
+import problems from '@/lib/data/problems'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -564,8 +565,8 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Intent variant links — devis, avis, tarifs, urgence */}
-          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Intent variant links — devis, avis, tarifs, urgence, problèmes */}
+          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-5 gap-8">
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Devis à {ville.name}</h3>
               <div className="space-y-1.5">
@@ -606,6 +607,17 @@ export default async function VillePage({ params }: PageProps) {
                   <Link key={`urgence-${s.slug}`} href={`/urgence/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} urgence
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Problèmes à {ville.name}</h3>
+              <div className="space-y-1.5">
+                {problems.slice(0, 15).map((p) => (
+                  <Link key={`prob-${p.slug}`} href={`/problemes/${p.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-orange-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    {p.name}
                   </Link>
                 ))}
               </div>

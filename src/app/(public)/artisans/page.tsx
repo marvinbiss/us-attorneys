@@ -3,6 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
@@ -88,8 +90,14 @@ export default async function ArtisansPage() {
     { label: 'Artisans' },
   ]
 
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Artisans', url: '/artisans' },
+  ])
+
   return (
     <>
+      <JsonLd data={breadcrumbSchema} />
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}

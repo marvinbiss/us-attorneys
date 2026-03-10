@@ -11,6 +11,7 @@ export const conseilsArticles: Record<string, {
   authorBio?: string
   updatedDate?: string
   faq?: { question: string; answer: string }[]
+  keyTakeaways?: string[]
 }> = {
   'entretien-annuel-maison-checklist-complete': {
     title: 'Entretien Maison 2026 : Checklist',
@@ -54,6 +55,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Comment détecter une fuite d\'eau invisible ?', answer: 'Relevez votre compteur d\'eau le soir avant de vous coucher et comparez avec le relevé du lendemain matin sans avoir consommé d\'eau. Si le compteur a tourné, vous avez une fuite. Vous pouvez aussi surveiller votre facture d\'eau : une augmentation inexpliquée est un signal d\'alerte.' },
       { question: 'Quand faut-il faire inspecter sa toiture ?', answer: 'Inspectez votre toiture au moins une fois par an, idéalement au printemps après les rigueurs de l\'hiver, et à l\'automne après la chute des feuilles. Après un épisode de tempête ou de grêle, une inspection supplémentaire est recommandée.' },
       { question: 'Quels travaux d\'entretien peut-on faire soi-même ?', answer: 'Vous pouvez réaliser vous-même la purge des radiateurs, le nettoyage des bouches de VMC, le remplacement des joints de fenêtres, le graissage des serrures, le nettoyage des gouttières accessibles et le test des disjoncteurs différentiels. En revanche, l\'entretien de la chaudière, le diagnostic électrique et le traitement de charpente nécessitent un professionnel.' }
+    ],
+    keyTakeaways: [
+      "Un entretien régulier prévient les réparations coûteuses et préserve la valeur de votre bien.",
+      "Vérifiez chaque année la toiture, les gouttières, la chaudière et les joints d'étanchéité.",
+      "L'entretien annuel de la chaudière est obligatoire et coûte entre 90 et 180 € selon l'équipement.",
+      "Planifiez les interventions saisonnières : toiture au printemps, chauffage à l'automne."
     ]
   },
 
@@ -96,6 +103,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Quand faut-il commencer à préparer sa maison pour l\'hiver ?', answer: 'Dès septembre pour la révision de la chaudière et la commande de combustible. Octobre est le mois idéal pour nettoyer les gouttières, inspecter la toiture et purger les radiateurs. En novembre, isolez les canalisations et protégez le jardin.' },
       { question: 'Comment savoir si mes gouttières sont obstruées ?', answer: 'Lors d\'une pluie, observez si l\'eau déborde au niveau des gouttières au lieu de s\'écouler par les descentes. Vous pouvez aussi verser un seau d\'eau dans la gouttière et vérifier qu\'elle s\'écoule normalement jusqu\'en bas de la descente.' },
       { question: 'Le détecteur de monoxyde de carbone est-il obligatoire ?', answer: 'Il n\'est pas encore obligatoire en France, contrairement au détecteur de fumée (obligatoire depuis 2015). Cependant, il est très fortement recommandé si vous disposez d\'un appareil de chauffage à combustion (chaudière gaz ou fioul, poêle à bois, cheminée). Son coût est modique : 20 à 50 euros.' }
+    ],
+    keyTakeaways: [
+      "Purgez les radiateurs, vérifiez l'isolation et faites entretenir la chaudière avant les premiers froids.",
+      "Protégez les canalisations extérieures du gel en les isolant ou en les vidangeant.",
+      "Vérifiez les joints de fenêtres et les seuils de porte pour limiter les déperditions thermiques.",
+      "Un entretien préventif coûte bien moins cher qu'une réparation d'urgence en plein hiver."
     ]
   },
 
@@ -138,6 +151,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Est-ce le bon moment pour refaire sa façade au printemps ?', answer: 'Oui, le printemps offre les conditions idéales pour un ravalement : températures douces entre 10 et 25 °C et humidité modérée. Évitez les jours de pluie et de gel. C\'est aussi la période où les artisans sont le plus disponibles avant la haute saison estivale.' },
       { question: 'Faut-il une autorisation pour construire une terrasse au printemps ?', answer: 'Cela dépend de la surface et de la hauteur. Une terrasse de plain-pied de moins de 20 m² ne nécessite aucune formalité. Au-delà de 20 m² ou si elle est surélevée de plus de 60 cm, une déclaration préalable ou un permis de construire est nécessaire. Consultez le PLU de votre commune.' },
       { question: 'Comment préparer sa climatisation pour l\'été ?', answer: 'Nettoyez ou remplacez les filtres des unités intérieures, vérifiez l\'état de l\'unité extérieure (absence de feuilles et débris), et faites contrôler le niveau de fluide frigorigène par un professionnel certifié. Un entretien printanier permet de gagner 15 à 20 % d\'efficacité énergétique.' }
+    ],
+    keyTakeaways: [
+      "Le printemps est la saison idéale pour inspecter la toiture, la façade et les extérieurs après l'hiver.",
+      "Profitez des beaux jours pour les travaux de peinture extérieure, ravalement et aménagement de jardin.",
+      "Les artisans sont plus disponibles au printemps qu'en été : anticipez vos devis dès mars.",
+      "Vérifiez l'état des gouttières, des descentes pluviales et du système de drainage."
     ]
   },
 
@@ -178,6 +197,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Quel isolant choisir pour le confort d\'été ?', answer: 'Privilégiez les isolants à fort déphasage thermique : la fibre de bois (10 à 12 heures), la ouate de cellulose (8 à 10 heures) ou le liège (10 à 12 heures). La laine de verre, très efficace en hiver, n\'offre qu\'un déphasage de 4 à 5 heures et protège moins bien contre la chaleur estivale.' },
       { question: 'Les stores extérieurs sont-ils vraiment plus efficaces que les stores intérieurs ?', answer: 'Oui, les stores extérieurs bloquent le rayonnement solaire avant qu\'il ne traverse le vitrage. Ils sont trois fois plus efficaces que les stores intérieurs. Un store banne réduit l\'apport solaire de 60 à 90 %, tandis qu\'un store intérieur ne réduit que 20 à 30 % de l\'apport thermique.' },
       { question: 'Combien coûte l\'installation d\'une climatisation pour une maison ?', answer: 'Pour une pièce, un monosplit coûte 1 500 à 3 000 euros posé. Pour climatiser plusieurs pièces, un multisplit revient à 3 500 à 8 000 euros. Un système gainable (invisible) pour toute la maison coûte 5 000 à 12 000 euros. Privilégiez un modèle réversible pour l\'utiliser aussi en chauffage l\'hiver.' }
+    ],
+    keyTakeaways: [
+      "Les protections solaires extérieures (volets, stores, brise-soleil) sont 3 fois plus efficaces que les rideaux intérieurs.",
+      "L'isolation de la toiture est le geste le plus efficace pour limiter la surchauffe estivale.",
+      "La VMC double flux et la surventilation nocturne réduisent la température intérieure de 3 à 5 °C.",
+      "La climatisation réversible (PAC air-air) est éligible aux CEE et offre chauffage + rafraîchissement."
     ]
   },
 
@@ -220,6 +245,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Faut-il améliorer le DPE avant de vendre ?', answer: 'Oui, c\'est souvent très rentable. Un bien classé D ou E subit une décote de 5 à 15 % par rapport à un bien classé B ou C. L\'isolation des combles et le remplacement d\'une vieille chaudière permettent de gagner une à deux classes, et les aides financières peuvent couvrir jusqu\'à 70 % du coût des travaux.' },
       { question: 'Combien coûte le home staging ?', answer: 'Le home staging coûte en moyenne 1 à 2 % du prix de vente du bien. Pour un appartement vendu 250 000 euros, comptez 2 500 à 5 000 euros. Le résultat est probant : le bien se vend en moyenne 30 jours plus vite et au prix demandé dans 80 % des cas.' },
       { question: 'Peut-on masquer des défauts avant la vente ?', answer: 'Non, masquer un défaut structurel (fissure, humidité, problème de fondation) avec un simple coup de peinture constitue un vice caché au sens de l\'article 1641 du Code civil. L\'acheteur dispose de 2 ans à compter de la découverte du vice pour agir (art. 1648 CC), et peut exiger l\'annulation de la vente ou une réduction du prix.' }
+    ],
+    keyTakeaways: [
+      "Un rafraîchissement peinture et la mise aux normes électriques offrent le meilleur retour sur investissement.",
+      "Les travaux de rénovation énergétique (DPE amélioré) augmentent significativement le prix de vente.",
+      "Concentrez-vous sur la cuisine, la salle de bain et les façades : ce sont les postes les plus visibles.",
+      "Un home staging professionnel (1 500 à 5 000 €) accélère la vente et augmente le prix de 5 à 15 %."
     ]
   },
 
@@ -260,6 +291,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Quels travaux peut-on faire librement dans un appartement en copropriété ?', answer: 'Vous pouvez réaliser sans autorisation : peinture, papier peint, remplacement de revêtements de sol (sous réserve du respect des normes acoustiques), changement de sanitaires, aménagement de placards et remplacement d\'équipements de cuisine, à condition de ne pas toucher aux parties communes ni modifier l\'aspect extérieur.' },
       { question: 'Quels sont les horaires autorisés pour les travaux en copropriété ?', answer: 'En règle générale : du lundi au vendredi de 8 h à 12 h et de 14 h à 19 h 30, le samedi de 9 h à 12 h et de 15 h à 19 h. Les travaux bruyants sont interdits le dimanche et les jours fériés. Vérifiez le règlement de copropriété et les arrêtés municipaux qui peuvent être plus restrictifs.' },
       { question: 'Que risque-t-on si on fait des travaux sans autorisation en copropriété ?', answer: 'Le syndicat des copropriétaires peut exiger la remise en état à vos frais, avec un délai de prescription de dix ans. Les frais de procédure judiciaire s\'ajoutent au coût de la remise en état. Les tribunaux sont quasi systématiquement favorables à la copropriété.' }
+    ],
+    keyTakeaways: [
+      "Les travaux touchant les parties communes nécessitent un vote en AG à la majorité de l'article 25.",
+      "Les travaux privatifs ne doivent pas affecter la structure, l'étanchéité ou l'aspect extérieur de l'immeuble.",
+      "Prévenez le syndic et les voisins avant tout chantier bruyant pour éviter les conflits.",
+      "Vérifiez le règlement de copropriété avant de modifier les sols, les murs porteurs ou les canalisations."
     ]
   },
 
@@ -300,6 +337,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Les moisissures dans la maison sont-elles dangereuses pour la santé ?', answer: 'Oui, les moisissures libèrent des spores et des mycotoxines nocives. Selon l\'OMS (2009), l\'exposition aux moisissures est associée à un risque accru d\'asthme chez l\'enfant (environ +40 % selon les études épidémiologiques) et à une augmentation des infections respiratoires. Les personnes immunodéprimées, les enfants et les personnes âgées sont particulièrement vulnérables.' },
       { question: 'Combien coûte un traitement contre l\'humidité ?', answer: 'Le coût dépend de la cause : une VMC hygroréglable coûte 1 500 à 3 000 euros, une injection de résine contre les remontées capillaires revient à 50 à 150 euros par mètre linéaire, et un traitement global peut aller de 3 000 à 15 000 euros selon l\'ampleur du problème.' },
       { question: 'Comment nettoyer les moisissures sur un mur ?', answer: 'Portez un masque FFP2 et des gants, aérez la pièce, puis nettoyez avec du vinaigre blanc pur ou de l\'eau de Javel diluée (1 volume pour 9 d\'eau). Laissez agir 15 minutes, rincez et séchez. Appliquez ensuite une peinture antifongique. Pour les surfaces supérieures à 1 m², faites appel à un professionnel.' }
+    ],
+    keyTakeaways: [
+      "L'humidité provient de trois sources : infiltrations, remontées capillaires et condensation intérieure.",
+      "Une VMC fonctionnelle et un taux d'humidité maintenu entre 40 et 60 % préviennent les moisissures.",
+      "Traitez la cause avant les symptômes : une peinture anti-moisissure ne résout pas un problème d'infiltration.",
+      "Les dégâts d'humidité non traités déprécient un bien immobilier de 10 à 20 %."
     ]
   },
 
@@ -331,6 +374,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Combien coûte un dépannage en urgence ?', answer: 'Un serrurier pour une ouverture de porte simple coûte 80 à 150 euros en journée, 150 à 250 euros le soir. Un plombier pour une fuite urgente facture 100 à 200 euros en journée. Les majorations autorisées sont de 25 à 50 % le soir et de 50 à 100 % le dimanche et jours fériés.' },
       { question: 'Comment éviter les arnaques lors d\'un dépannage en urgence ?', answer: 'Privilégiez les artisans locaux avec une adresse physique vérifiable. Évitez les numéros surtaxés en 08. Demandez systématiquement un devis écrit avant toute intervention. Ne payez jamais en espèces et exigez une facture détaillée. Vous disposez d\'un délai de rétractation de 14 jours pour les contrats conclus hors établissement.' },
       { question: 'Quels gestes d\'urgence connaître dans sa maison ?', answer: 'Localisez et apprenez à utiliser votre robinet d\'arrêt d\'eau général, votre disjoncteur électrique et votre vanne de gaz. Sachez déboucher un siphon et remplacer un fusible. Ces gestes basiques peuvent vous éviter un dépannage coûteux dans 30 % des cas.' }
+    ],
+    keyTakeaways: [
+      "Identifiez un artisan de confiance pour chaque corps de métier avant la situation d'urgence.",
+      "Coupez l'eau, le gaz ou l'électricité selon la nature de l'urgence avant d'appeler un artisan.",
+      "Exigez un devis écrit même en urgence : c'est obligatoire au-delà de 150 € TTC.",
+      "Votre assurance habitation couvre souvent le dépannage d'urgence : vérifiez votre contrat."
     ]
   },
 
@@ -362,6 +411,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Qui doit payer l\'entretien de la chaudière : le locataire ou le propriétaire ?', answer: 'L\'entretien annuel de la chaudière est à la charge du locataire (80 à 180 euros). En revanche, le remplacement de la chaudière en cas de panne irréparable incombe au propriétaire, sauf si la panne est due à un défaut d\'entretien du locataire.' },
       { question: 'Le propriétaire peut-il obliger le locataire à faire des travaux ?', answer: 'Le propriétaire peut exiger du locataire qu\'il effectue les réparations locatives définies par le décret du 26 août 1987 (remplacement de joints, entretien de la robinetterie, entretien de la chaudière, etc.). En cas de refus, il peut retenir le montant sur le dépôt de garantie à la sortie.' },
       { question: 'Qu\'est-ce que la vétusté et comment est-elle calculée ?', answer: 'La vétusté est l\'usure normale d\'un équipement liée au temps. Depuis la loi ALUR de 2014, une grille de vétusté peut être annexée au bail. Par exemple, une peinture a une durée de vie de 7 à 10 ans : au-delà, sa dégradation est considérée comme normale et ne peut pas être imputée au locataire.' }
+    ],
+    keyTakeaways: [
+      "Le locataire prend en charge l'entretien courant et les menues réparations (décret du 26 août 1987).",
+      "Le propriétaire est responsable des gros travaux : toiture, chaudière, mise aux normes, structure.",
+      "Le remplacement d'un équipement vétuste (chauffe-eau, volets) incombe au propriétaire.",
+      "En cas de désaccord, la commission départementale de conciliation peut être saisie gratuitement."
     ]
   },
 
@@ -396,6 +451,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Combien peut-on économiser sur sa facture d\'énergie ?', answer: 'En combinant les gestes gratuits (réglage du chauffage, suppression des veilles) et les investissements rentables (thermostat connecté, isolation des combles, LED), une famille peut réduire sa facture énergétique de 800 à 1 400 euros par an. Les gestes gratuits seuls représentent déjà 300 à 500 euros d\'économie.' },
       { question: 'Quel est le meilleur investissement pour réduire sa facture de chauffage ?', answer: 'L\'isolation des combles perdus offre le meilleur retour sur investissement : pour 3 000 euros (100 m² à 20-50 €/m²), vous économisez 25 à 30 % sur la facture de chauffage, soit un amortissement en 3 à 4 ans. Le thermostat connecté (150-400 €) s\'amortit en moins d\'un an.' },
       { question: 'Les appareils en veille consomment-ils vraiment beaucoup ?', answer: 'Oui, les appareils en veille représentent 10 à 15 % de la consommation électrique d\'un foyer, soit 300 à 500 kWh par an (80 à 130 euros). Les principaux responsables sont la box internet, le décodeur TV, les consoles de jeux et les chargeurs branchés à vide.' }
+    ],
+    keyTakeaways: [
+      "L'isolation et le remplacement du chauffage sont les deux leviers les plus puissants d'économie d'énergie.",
+      "Un thermostat programmable réduit la consommation de 8 à 15 % en régulant la température pièce par pièce.",
+      "Les éco-gestes quotidiens (réduire de 1 °C, éteindre les veilles) économisent 5 à 10 % sur la facture.",
+      "Un audit énergétique (150 à 500 €) identifie les travaux prioritaires et leur retour sur investissement."
     ]
   },
 
@@ -427,6 +488,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Combien coûte une maison connectée ?', answer: 'Un équipement de base (thermostat connecté, éclairage intelligent, enceinte) coûte 500 à 1 000 euros. Un équipement complet (ajout sécurité, volets motorisés, électroménager connecté) revient à 2 000 à 5 000 euros. La stratégie la plus raisonnable est un équipement progressif sur 2 à 3 ans.' },
       { question: 'Quel protocole domotique choisir en 2026 ?', answer: 'Privilégiez les appareils compatibles Matter, le nouveau standard universel qui assure l\'interopérabilité entre toutes les marques. Le Wi-Fi convient pour les gros appareils (caméras, thermostats), le Zigbee pour les capteurs et ampoules (basse consommation).' },
       { question: 'La domotique permet-elle vraiment d\'économiser de l\'énergie ?', answer: 'Oui, un thermostat intelligent permet d\'économiser 10 à 15 % sur la facture de chauffage (source : ADEME). L\'éclairage connecté avec variation d\'intensité génère 20 à 30 % d\'économies sur l\'éclairage. La fermeture automatique des volets réduit aussi les déperditions thermiques.' }
+    ],
+    keyTakeaways: [
+      "La domotique permet de piloter chauffage, éclairage, volets et sécurité depuis un smartphone.",
+      "Un thermostat connecté (200 à 400 €) est le premier investissement domotique recommandé.",
+      "Privilégiez un protocole ouvert (Zigbee, Z-Wave, Matter) pour éviter la dépendance à un seul fabricant.",
+      "L'installation complète d'un système domotique coûte entre 2 000 et 10 000 € selon le périmètre."
     ]
   },
 
@@ -458,6 +525,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Les matériaux écologiques coûtent-ils plus cher ?', answer: 'En moyenne, le surcoût est de 10 à 25 % par rapport aux matériaux conventionnels. Cependant, les aides financières (MaPrimeRénov\', CEE, éco-PTZ) sont accessibles pour les matériaux biosourcés posés par un artisan RGE, ce qui réduit considérablement l\'écart.' },
       { question: 'La construction en paille est-elle fiable ?', answer: 'Oui, la construction en bottes de paille est reconnue par les règles professionnelles depuis 2012. Elle offre d\'excellentes performances thermiques (conductivité de 0,052 W/m.K pour 37 cm d\'épaisseur) et le coût de l\'isolant est dérisoire (2 à 5 euros la botte). La technique est éprouvée sur des centaines de constructions en France.' },
       { question: 'Quel isolant écologique choisir pour les combles ?', answer: 'La ouate de cellulose (fabriquée à partir de journaux recyclés) offre le meilleur rapport performance-prix pour les combles perdus (20 à 35 €/m²). Pour les rampants, la fibre de bois est idéale grâce à son excellent déphasage thermique (confort d\'été). Le chanvre et le liège sont aussi d\'excellentes options.' }
+    ],
+    keyTakeaways: [
+      "Les matériaux biosourcés (bois, chanvre, paille, ouate de cellulose) réduisent l'empreinte carbone du bâtiment.",
+      "Le bois de construction stocke du carbone et bénéficie d'un traitement favorable dans la RE2020.",
+      "Les isolants naturels offrent un meilleur confort d'été grâce à leur déphasage thermique élevé.",
+      "Le surcoût des matériaux écologiques (5 à 15 %) est compensé par les économies d'énergie à long terme."
     ]
   },
 
@@ -489,6 +562,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Quelle est la durée de vie d\'une étanchéité de toiture terrasse ?', answer: 'Cela dépend du matériau : le bitume dure 20 à 30 ans, la membrane EPDM (caoutchouc) jusqu\'à 50 ans, la membrane PVC 25 à 35 ans, et la résine liquide (SEL) 10 à 20 ans. Un entretien régulier (deux inspections par an) prolonge significativement la durée de vie.' },
       { question: 'Combien coûte la réfection d\'une toiture terrasse ?', answer: 'Le coût varie selon la technique : bitume soudé 40 à 80 €/m², membrane EPDM 50 à 100 €/m², membrane PVC 45 à 90 €/m², résine liquide 60 à 120 €/m². Pour une terrasse de 50 m², comptez 2 000 à 6 000 euros hors isolation.' },
       { question: 'La toiture végétalisée est-elle une bonne solution d\'étanchéité ?', answer: 'La végétalisation extensive (sédums) protège la membrane des UV et des chocs thermiques, doublant sa durée de vie. Elle retient 50 à 80 % des eaux de pluie. Le surcoût est de 40 à 100 €/m², mais la structure doit supporter la charge supplémentaire de 80 à 150 kg/m².' }
+    ],
+    keyTakeaways: [
+      "L'étanchéité d'une toiture terrasse nécessite une membrane bitumineuse, EPDM ou PVC posée par un professionnel.",
+      "L'entretien biannuel (nettoyage des évacuations, vérification de la membrane) prévient les infiltrations.",
+      "La durée de vie d'une étanchéité bien posée est de 20 à 30 ans selon le matériau choisi.",
+      "La réfection d'étanchéité coûte entre 40 et 120 €/m² et relève de la garantie décennale."
     ]
   },
 
@@ -520,6 +599,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Peut-on isoler une maison en pierre par l\'intérieur ?', answer: 'Oui, mais uniquement avec des matériaux perspirants : fibre de bois, liège, chanvre, laine de mouton. Il faut proscrire absolument le polystyrène et la laine de verre avec pare-vapeur, qui piègent l\'humidité dans le mur et peuvent provoquer des dégradations irréversibles.' },
       { question: 'Combien coûte la rénovation d\'une maison en pierre ?', answer: 'En moyenne, comptez 1 200 à 2 500 euros le mètre carré pour une rénovation complète. Prévoyez une marge de 15 à 20 % pour les imprévus, quasi inévitables dans l\'ancien. Échelonnez les travaux par priorité : structure et couverture d\'abord, puis humidité et isolation, enfin finitions.' },
       { question: 'Pourquoi ne faut-il pas utiliser de ciment sur une maison en pierre ?', answer: 'Le ciment est trop rigide et imperméable pour le bâti ancien. Il empêche le mur de respirer (évacuation de l\'humidité par capillarité), ce qui provoque des concentrations d\'humidité, des éclats de pierre et des dégradations structurelles. Utilisez exclusivement des mortiers et enduits à la chaux.' }
+    ],
+    keyTakeaways: [
+      "Le respect des matériaux d'origine (chaux, pierre, enduits respirants) est essentiel pour préserver le bâti.",
+      "N'utilisez jamais de ciment sur des murs en pierre : il emprisonne l'humidité et dégrade la maçonnerie.",
+      "L'isolation par l'intérieur avec des matériaux perspirants (fibre de bois, chaux-chanvre) est privilégiée.",
+      "Un diagnostic structurel préalable identifie les pathologies et oriente les travaux de restauration."
     ]
   },
 
@@ -550,6 +635,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Comment savoir si ma maison est infestée de termites ?', answer: 'Les signes révélateurs sont : du bois qui sonne creux en tapotant, des galeries terreuses le long des murs, de la sciure fine au pied des boiseries, ou des essaimages (envols de termites ailés) au printemps. Un diagnostic termites par un professionnel certifié coûte 100 à 300 euros.' },
       { question: 'Le traitement des punaises de lit est-il efficace ?', answer: 'Oui, à condition de faire appel à un professionnel qui combine le passage vapeur haute température (180 °C) et un insecticide ciblé. Deux à trois passages espacés de 15 jours sont nécessaires. Coût : 300 à 800 euros par pièce. Les traitements faits soi-même sont rarement suffisants.' },
       { question: 'La mérule est-elle dangereuse pour la structure de la maison ?', answer: 'Oui, la mérule est le champignon le plus destructeur du bâtiment. Elle dévore le bois en milieu humide et confiné, peut traverser les murs de maçonnerie et progresser de plusieurs centimètres par semaine. Le traitement est lourd et coûteux (5 000 à 30 000 euros) mais indispensable pour sauver la structure.' }
+    ],
+    keyTakeaways: [
+      "La prévention (étanchéité des ouvertures, propreté, gestion des déchets) est plus efficace que le traitement curatif.",
+      "Faites appel à un professionnel certifié pour les infestations de termites, mérules ou nuisibles de santé publique.",
+      "Le traitement des termites est obligatoire dans les zones délimitées par arrêté préfectoral.",
+      "Un traitement anti-termites coûte entre 1 500 et 5 000 € selon la surface et la technique utilisée."
     ]
   },
 
@@ -581,6 +672,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Quelle est la solution la plus efficace contre le bruit des voisins ?', answer: 'La contre-cloison sur ossature métallique désolidarisée est la solution la plus performante pour les murs mitoyens, avec un gain de 15 à 20 dB (division par 3 à 4 du bruit perçu). Coût : 60 à 120 €/m² posé. Pour les bruits de pas venant du dessus, un faux plafond sur suspentes anti-vibratiles offre un gain de 10 à 15 dB.' },
       { question: 'Les fenêtres double vitrage isolent-elles du bruit ?', answer: 'Oui, un double vitrage acoustique asymétrique (4/16/10 mm) réduit le bruit extérieur de 35 à 40 dB, contre seulement 20 à 25 dB pour un simple vitrage. Comptez 300 à 800 euros par fenêtre fournie et posée. Le triple vitrage n\'apporte pas forcément un gain acoustique supérieur.' },
       { question: 'Combien coûte l\'isolation phonique d\'un appartement ?', answer: 'Pour un mur mitoyen, comptez 60 à 120 €/m² pour une contre-cloison. Pour un plafond, 80 à 150 €/m² pour un faux plafond acoustique. Pour les fenêtres, 300 à 800 € par fenêtre. Une porte acoustique coûte 300 à 800 €. Un diagnostic acoustique préalable (300 à 800 €) permet de cibler les interventions les plus rentables.' }
+    ],
+    keyTakeaways: [
+      "L'isolation phonique agit sur trois types de bruits : aériens (voix, TV), solidiens (impacts) et d'équipements.",
+      "Le doublage des murs avec un complexe masse-ressort-masse réduit les bruits aériens de 10 à 20 dB.",
+      "Un sol flottant avec sous-couche acoustique atténue les bruits d'impact de 15 à 25 dB.",
+      "L'affaiblissement acoustique minimal recommandé est de 53 dB entre logements (NRA)."
     ]
   },
 
@@ -612,6 +709,12 @@ export const conseilsArticles: Record<string, {
       { question: 'Quel est le moyen le plus efficace pour protéger sa maison des cambriolages ?', answer: 'Une combinaison de mesures est la plus efficace : une porte blindée A2P avec serrure multipoints, une alarme certifiée NF A2P avec sirène extérieure visible (réduit le risque de 60 à 80 %), un éclairage extérieur à détection de mouvement et des volets roulants renforcés. La visibilité des dispositifs de sécurité est le premier facteur dissuasif.' },
       { question: 'Combien coûte un système d\'alarme pour une maison ?', answer: 'Un système filaire professionnel coûte 1 000 à 3 000 euros. Un système sans fil coûte 500 à 2 000 euros. La télésurveillance (centre d\'appel 24/7) ajoute 20 à 40 euros par mois. Pour une protection complète (alarme + caméras + détecteurs), prévoyez 2 000 à 5 000 euros.' },
       { question: 'A-t-on le droit d\'installer des caméras de vidéosurveillance chez soi ?', answer: 'Oui, vous pouvez filmer votre propriété privée (jardin, entrée, garage). En revanche, il est interdit de filmer la voie publique ou les propriétés voisines. Les images doivent être sécurisées et ne peuvent être conservées que 30 jours maximum. Informez les visiteurs par un panneau visible.' }
+    ],
+    keyTakeaways: [
+      "Une serrure certifiée A2P et une porte renforcée sont les premières protections contre le cambriolage.",
+      "Les systèmes d'alarme connectés et la vidéosurveillance dissuadent 95 % des tentatives d'effraction.",
+      "L'éclairage extérieur à détection de mouvement est un moyen simple et efficace de dissuasion.",
+      "Certains assureurs accordent une réduction de prime de 5 à 10 % pour les logements sécurisés."
     ]
   }
 }

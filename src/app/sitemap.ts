@@ -6,6 +6,8 @@ import { getProblemSlugs } from '@/lib/data/problems'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
+import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
+import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 // Return 404 for sitemap IDs not in generateSitemaps() — prevents ghost sitemaps
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
@@ -121,7 +123,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
+    // Blog category pages
+    const blogCategoryPages: MetadataRoute.Sitemap = blogCategories
+      .filter(c => allArticlesMeta.some(a => categoryToSlug(normalizeCategory(a.category)) === c.slug))
+      .map(c => ({
+        url: `${SITE_URL}/blog/categorie/${c.slug}`,
+        lastModified: BUILD_DATE,
+      }))
+
+    // Blog tag pages — all unique tags
+    const tagSet = new Map<string, string>()
+    for (const a of allArticlesMeta) {
+      for (const t of a.tags) {
+        const slug = t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        if (!tagSet.has(slug)) tagSet.set(slug, t)
+      }
+    }
+    const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map(slug => ({
+      url: `${SITE_URL}/blog/tag/${slug}`,
+      lastModified: BUILD_DATE,
+    }))
+
+    return [...homepage, ...staticPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
   // ── Service + city — Phase 1: top 300 cities ────────────────────────

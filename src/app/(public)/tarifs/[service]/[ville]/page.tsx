@@ -11,6 +11,7 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
+import { getProblemsByService } from '@/lib/data/problems'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -578,6 +579,30 @@ export default async function TarifsServiceVillePage({
           </div>
         </div>
       </section>
+
+      {/* Problèmes courants */}
+      {(() => {
+        const problems = getProblemsByService(service).slice(0, 4)
+        if (problems.length === 0) return null
+        return (
+          <section className="py-12 bg-white border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Probl{'\u00E8'}mes courants</h2>
+              <div className="flex flex-wrap gap-3">
+                {problems.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/problemes/${p.slug}/${villeSlug}`}
+                    className="px-4 py-2.5 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-orange-200 transition-all"
+                  >
+                    {p.name} {'\u00E0'} {villeData.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       {/* Cross-intent navigation */}
       <section className="py-8 border-t">

@@ -15,6 +15,7 @@ import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
+import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -762,6 +763,37 @@ export default async function ServicePage({ params }: PageProps) {
             <div>
               <PopularCitiesLinks showTitle={true} limit={8} />
             </div>
+            {/* Articles de blog liés à ce métier */}
+            {(() => {
+              const svcLower = service.name.toLowerCase()
+              const relatedArticles = allArticlesMeta.filter((a) =>
+                a.tags.some((tag) => tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase()))
+                || a.category === 'Fiches métier' && (a.title.toLowerCase().includes(svcLower) || a.slug.includes(serviceSlug))
+              ).slice(0, 4)
+              if (relatedArticles.length === 0) return null
+              return (
+                <div className="mt-8">
+                  <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce métier</h3>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {relatedArticles.map((article) => (
+                      <Link
+                        key={article.slug}
+                        href={`/blog/${article.slug}`}
+                        className="flex items-start gap-3 p-4 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors group"
+                      >
+                        <span className="text-2xl flex-shrink-0">{article.image}</span>
+                        <div>
+                          <div className="font-medium text-gray-900 group-hover:text-blue-600 text-sm leading-snug">
+                            {article.title}
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">{article.readTime} · {article.category}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            })()}
           </div>
           {/* Intent variants — devis, avis, tarifs by city */}
           <div className="mt-8 grid md:grid-cols-3 gap-8">

@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { faqCategories } from '@/lib/data/faq-data'
 import FAQPageClient from './FAQPageClient'
@@ -27,6 +28,11 @@ export const metadata: Metadata = {
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
+
+const breadcrumbSchema = getBreadcrumbSchema([
+  { name: 'Accueil', url: '/' },
+  { name: 'FAQ', url: '/faq' },
+])
 
 // Build FAQPage JSON-LD schema from all FAQ categories
 const faqJsonLd = {
@@ -65,7 +71,7 @@ export default async function FAQPage() {
 
     return (
       <div className="min-h-screen bg-gray-50">
-        <JsonLd data={cmsJsonLd} />
+        <JsonLd data={[cmsJsonLd, breadcrumbSchema]} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'FAQ' }]} className="mb-4" />
@@ -87,7 +93,7 @@ export default async function FAQPage() {
 
   return (
     <>
-      <JsonLd data={faqJsonLd} />
+      <JsonLd data={[faqJsonLd, breadcrumbSchema]} />
       <FAQPageClient />
     </>
   )

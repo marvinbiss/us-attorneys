@@ -8,6 +8,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getSiteStats, getHomepageData, formatProviderCount } from '@/lib/data/stats'
 import { getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
 
@@ -91,15 +92,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Homepage-specific JSON-LD: FAQ + ItemList + AggregateRating */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify([faqSchema, itemListSchema, aggregateRatingSchema].filter(Boolean))
-            .replace(/</g, '\\u003c')
-            .replace(/>/g, '\\u003e')
-            .replace(/&/g, '\\u0026'),
-        }}
-      />
+      <JsonLd data={[faqSchema, itemListSchema, aggregateRatingSchema]} />
 
       {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
       <h1 className="sr-only">

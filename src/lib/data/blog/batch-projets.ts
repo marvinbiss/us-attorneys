@@ -11,6 +11,7 @@ export const projetsArticles: Record<string, {
   authorBio?: string
   updatedDate?: string
   faq?: { question: string; answer: string }[]
+  keyTakeaways?: string[]
 }> = {
   'renover-cuisine-guide-complet-etapes': {
     title: 'Rénover sa Cuisine 2026 : Guide Étapes',
@@ -51,6 +52,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien de temps dure une rénovation de cuisine ?', answer: 'Une rénovation complète de cuisine dure en moyenne 3 à 6 semaines : 1 à 2 jours de dépose, 3 à 5 jours de reprise des réseaux (électricité, plomberie), 2 à 3 jours de carrelage, 2 à 4 jours de pose des meubles, et 1 à 2 jours de finitions.' },
       { question: 'Faut-il refaire l\'électricité lors d\'une rénovation de cuisine ?', answer: 'La norme NF C 15-100 exige des circuits dédiés pour le four, le lave-vaisselle, les plaques de cuisson et le lave-linge. Si votre cuisine date de plus de 20 ans, la mise en conformité électrique est vivement recommandée. Budget : 500 à 2 000 euros.' },
       { question: 'Quel plan de travail choisir pour sa cuisine ?', answer: 'Le stratifié (60-150 €/ml) offre le meilleur rapport qualité-prix. Le quartz (200-400 €/ml) est quasi indestructible et ne nécessite aucun entretien. Le granit (250-500 €/ml) apporte du cachet. Le bois massif est chaleureux mais demande un entretien régulier.' }
+    ],
+    keyTakeaways: [
+      "Une rénovation de cuisine complète coûte entre 5 000 et 25 000 € selon les matériaux et l'électroménager.",
+      "L'ordre des travaux est crucial : démolition, plomberie/électricité, revêtements, pose des meubles, finitions.",
+      "Le triangle d'activité (stockage-lavage-cuisson) ne doit pas dépasser 7 mètres pour une ergonomie optimale.",
+      "Prévoyez 3 à 6 semaines de travaux et anticipez une solution de cuisine provisoire."
     ]
   },
   'refaire-toiture-guide-proprietaire': {
@@ -90,6 +97,12 @@ export const projetsArticles: Record<string, {
       { question: 'Faut-il un permis de construire pour refaire sa toiture ?', answer: 'Une réfection à l\'identique ne nécessite en général aucune autorisation. Si vous changez le matériau de couverture ou modifiez l\'aspect extérieur, une déclaration préalable de travaux est obligatoire (délai d\'instruction d\'un mois en mairie).' },
       { question: 'Quelles aides pour refaire sa toiture ?', answer: 'Si la réfection s\'accompagne d\'une isolation thermique : MaPrimeRénov\' (jusqu\'à 75 €/m² pour les ménages modestes), CEE (10 à 20 €/m²), TVA réduite à 5,5 % et éco-PTZ (jusqu\'à 50 000 € sans intérêts). Les aides peuvent couvrir 40 à 65 % du coût pour les ménages modestes.' },
       { question: 'Combien de temps dure un chantier de toiture ?', answer: 'Deux à quatre semaines en moyenne pour une maison de 100 m² au sol, en comptant les aléas météo. La dépose prend 1 à 2 jours, la charpente et sous-toiture 2 à 3 jours, et la pose de la couverture 3 à 5 jours.' }
+    ],
+    keyTakeaways: [
+      "La réfection complète d'une toiture coûte entre 100 et 250 €/m² selon le matériau de couverture.",
+      "La durée de vie d'une toiture bien entretenue est de 30 à 50 ans pour les tuiles et 80 à 100 ans pour l'ardoise.",
+      "Profitez de la réfection pour isoler par l'extérieur (sarking) et bénéficier des aides MaPrimeRénov'.",
+      "Un couvreur sérieux monte sur le toit pour le diagnostic et ne fait jamais de devis depuis le sol."
     ]
   },
   'amenager-combles-guide-habitables': {
@@ -132,6 +145,12 @@ export const projetsArticles: Record<string, {
       { question: 'Comment savoir si mes combles sont aménageables ?', answer: 'Trois critères : hauteur sous faîtage d\'au moins 1,80 m sur un tiers de la surface, pente de toit idéalement supérieure à 35°, et plancher suffisamment solide. Une charpente en fermettes (W) nécessite une modification coûteuse, tandis qu\'une charpente traditionnelle offre généralement un volume libre suffisant.' },
       { question: 'Combien coûte l\'aménagement de combles ?', answer: 'Aménagement simple (isolation, plancher, finitions) : 600 à 1 000 €/m². Aménagement complet avec salle d\'eau : 1 000 à 1 800 €/m². Pour 30 m² de combles, prévoyez 18 000 à 54 000 euros. La plus-value immobilière (15 à 20 %) compense largement cet investissement.' },
       { question: 'Faut-il un permis de construire pour aménager des combles ?', answer: 'Si la surface créée est inférieure à 20 m² (40 m² en zone urbaine avec PLU), une déclaration préalable suffit. Au-delà, un permis de construire est nécessaire. Si la surface totale du logement dépasse 150 m² après travaux, le recours à un architecte est obligatoire.' }
+    ],
+    keyTakeaways: [
+      "L'aménagement de combles coûte entre 600 et 1 500 €/m² et augmente la surface habitable de 30 à 50 %.",
+      "La hauteur sous plafond minimale habitable est de 1,80 m et la pente de toit doit être suffisante.",
+      "Un permis de construire est nécessaire si la surface créée dépasse 20 m² (40 m² en zone PLU urbaine).",
+      "L'isolation des rampants est l'étape la plus importante pour le confort thermique été comme hiver."
     ]
   },
   'installer-pompe-chaleur-air-eau-guide': {
@@ -173,6 +192,12 @@ export const projetsArticles: Record<string, {
       { question: 'La pompe à chaleur fonctionne-t-elle par grand froid ?', answer: 'Oui, les PAC modernes fonctionnent jusqu\'à -15 à -25 °C selon les modèles. Toutefois, le rendement diminue avec la température extérieure. En dessous de -10 °C, un chauffage d\'appoint peut être nécessaire. Un bilan thermique préalable permet de dimensionner correctement l\'installation.' },
       { question: 'Quelles économies réalise-t-on avec une pompe à chaleur ?', answer: 'Par rapport à une chaudière fioul, la PAC air-eau permet d\'économiser 800 à 1 500 euros par an. Le retour sur investissement, aides déduites, se situe entre 5 et 10 ans selon le combustible remplacé et la qualité de l\'isolation.' },
       { question: 'L\'unité extérieure d\'une PAC est-elle bruyante ?', answer: 'Le niveau sonore varie de 35 à 55 dB(A) selon les modèles. Choisissez un modèle inférieur à 40 dB(A) à 5 mètres pour éviter les nuisances de voisinage. Respectez les distances réglementaires par rapport aux limites de propriété et aux ouvertures des voisins.' }
+    ],
+    keyTakeaways: [
+      "Une PAC air-eau coûte 8 000 à 16 000 € TTC posée et réduit la facture de chauffage de 40 à 60 %.",
+      "Les aides cumulées (MaPrimeRénov' + CEE + éco-PTZ) peuvent couvrir 40 à 70 % du coût.",
+      "Le dimensionnement par un bilan thermique est indispensable pour éviter sur ou sous-dimensionnement.",
+      "Un artisan QualiPAC et RGE est obligatoire pour bénéficier des aides financières."
     ]
   },
   'installer-panneau-solaire-maison-2026': {
@@ -214,6 +239,12 @@ export const projetsArticles: Record<string, {
       { question: 'Faut-il choisir l\'autoconsommation ou la revente totale ?', answer: 'L\'autoconsommation avec vente du surplus est le modèle le plus intéressant en 2026. Vous consommez directement l\'électricité produite (économie au tarif plein) et revendez l\'excédent à EDF OA au tarif CRE en vigueur (révisé trimestriellement — vérifiez sur edf-oa.fr), avec un tarif garanti pendant 20 ans.' },
       { question: 'Quelles sont les démarches pour installer des panneaux solaires ?', answer: 'Quatre étapes administratives : déclaration préalable en mairie (1 mois), demande de raccordement Enedis (2-3 mois), contrat d\'achat EDF OA, et attestation Consuel. Prévoyez 3 à 4 mois entre le premier contact et la mise en service.' },
       { question: 'Comment éviter les arnaques aux panneaux solaires ?', answer: 'Méfiez-vous des démarcheurs téléphoniques proposant du solaire à 1 € : c\'est une arnaque. Choisissez un installateur certifié RGE QualiPV, ne signez jamais le jour même d\'un démarchage, et comparez au moins 3 devis. Évitez les crédits à la consommation proposés par les installateurs (taux souvent élevés).' }
+    ],
+    keyTakeaways: [
+      "Une installation photovoltaïque de 3 kWc coûte entre 7 000 et 12 000 € et produit environ 3 500 kWh/an.",
+      "L'autoconsommation avec vente du surplus offre le meilleur retour sur investissement en 2026.",
+      "Le tarif d'achat du surplus par EDF OA est garanti pendant 20 ans et actualisé chaque trimestre.",
+      "L'installation doit être réalisée par un artisan QualiPV/RGE pour bénéficier de la prime à l'autoconsommation."
     ]
   },
   'creer-salle-de-bain-sous-combles': {
@@ -254,6 +285,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien coûte une salle de bain sous les combles ?', answer: 'Salle d\'eau de 4 m² (douche, lavabo, WC) : 5 000 à 10 000 euros. Salle de bain de 6 à 8 m² (baignoire, douche, double vasque, WC) : 10 000 à 20 000 euros. Ces budgets incluent la plomberie, l\'électricité, l\'étanchéité et les revêtements.' },
       { question: 'Peut-on installer une baignoire sous les combles ?', answer: 'Oui, à condition de vérifier la portance du plancher (une baignoire pleine pèse 250 à 400 kg) et de disposer d\'une hauteur sous plafond suffisante (1,80 m minimum au droit de la baignoire). Placez-la sous la partie la plus haute du toit.' },
       { question: 'Comment évacuer les eaux usées sous les combles ?', answer: 'L\'évacuation gravitaire est la solution privilégiée avec une pente de 1 à 2 cm/m. Si la distance jusqu\'à la colonne d\'évacuation est trop importante, une pompe de relevage (400 à 1 200 €) s\'impose. Le diamètre des canalisations doit être de 40 mm pour le lavabo et 50 à 80 mm pour la douche.' }
+    ],
+    keyTakeaways: [
+      "L'étanchéité (système SPEC) est la priorité absolue pour une salle de bain sous combles.",
+      "Les pentes de toit imposent des contraintes d'agencement : douche côté bas, lavabo côté haut.",
+      "Prévoyez un budget de 8 000 à 20 000 € pour une création complète avec plomberie et électricité.",
+      "La ventilation (VMC) est obligatoire et encore plus critique sous les combles pour éviter la condensation."
     ]
   },
   'agrandir-maison-extension-guide': {
@@ -297,6 +334,12 @@ export const projetsArticles: Record<string, {
       { question: 'Faut-il un permis de construire pour une extension ?', answer: 'Pour une extension de moins de 20 m² (40 m² en zone PLU), une déclaration préalable suffit. Au-delà, un permis de construire est nécessaire. Si la surface totale dépasse 150 m² après travaux, le recours à un architecte est obligatoire.' },
       { question: 'Combien de temps durent les travaux d\'extension ?', answer: 'Extension maçonnée : 3 à 5 mois. Extension bois : 2 à 3 mois. Surélévation : 4 à 6 mois. Véranda : 2 à 4 semaines. Ajoutez 1 à 2 mois pour les démarches administratives préalables.' },
       { question: 'L\'extension doit-elle respecter la RE 2020 ?', answer: 'Oui, toute extension de plus de 5 m² doit respecter la réglementation thermique en vigueur (RE 2020). L\'isolation des murs doit atteindre un R minimum de 3,7 m².K/W et celle de la toiture un R minimum de 6 m².K/W.' }
+    ],
+    keyTakeaways: [
+      "Une extension coûte entre 1 200 et 3 000 €/m² selon la technique (parpaing, ossature bois, verre).",
+      "Un permis de construire est nécessaire au-delà de 20 m² (40 m² en zone PLU urbaine).",
+      "L'architecte est obligatoire si la surface totale après extension dépasse 150 m².",
+      "L'extension en ossature bois offre un chantier rapide (4 à 8 semaines) et une bonne performance thermique."
     ]
   },
   'renover-facade-ravalement-guide': {
@@ -337,6 +380,12 @@ export const projetsArticles: Record<string, {
       { question: 'Le ravalement de façade est-il obligatoire ?', answer: 'Dans de nombreuses communes (notamment Paris), le ravalement est obligatoire tous les 10 ans. Le non-respect peut entraîner une mise en demeure par la mairie suivie de travaux d\'office aux frais du propriétaire. Renseignez-vous auprès de votre mairie.' },
       { question: 'Combien coûte un ravalement de façade ?', answer: 'Ravalement simple (nettoyage + peinture) : 30 à 60 €/m². Ravalement avec reprise d\'enduit : 50 à 100 €/m². Ravalement avec ITE (isolation) : 120 à 220 €/m². Pour une maison de 120 m² de façade, le budget se situe entre 3 600 et 26 400 euros.' },
       { question: 'Faut-il une autorisation pour un ravalement de façade ?', answer: 'Oui, une déclaration préalable de travaux est obligatoire pour tout ravalement modifiant l\'aspect extérieur. En secteur protégé (monument historique), l\'avis de l\'Architecte des Bâtiments de France est requis. En copropriété, le ravalement doit être voté en assemblée générale.' }
+    ],
+    keyTakeaways: [
+      "Le ravalement de façade coûte entre 30 et 100 €/m² (nettoyage) et 100 à 200 €/m² (avec ITE).",
+      "Une déclaration préalable est nécessaire et un ravalement important impose l'isolation thermique.",
+      "Les aides MaPrimeRénov' et CEE sont disponibles si le ravalement inclut une isolation par l'extérieur.",
+      "En copropriété, le ravalement est voté en AG et les charges sont réparties selon les tantièmes."
     ]
   },
   'amenager-terrasse-exterieure-guide': {
@@ -377,6 +426,12 @@ export const projetsArticles: Record<string, {
       { question: 'Quel est le meilleur matériau pour une terrasse extérieure ?', answer: 'Cela dépend de vos priorités. Le bois exotique (ipé, cumaru) est le plus noble et durable (25-30 ans) mais coûteux (80-150 €/m²). Le composite est sans entretien et imputrescible (60-120 €/m²). La pierre naturelle est élégante et pérenne (80-200 €/m²). Le grès cérame 20 mm est antidérapant et facile d\'entretien (50-120 €/m²).' },
       { question: 'Faut-il une autorisation pour construire une terrasse ?', answer: 'Terrasse de plain-pied sans surélévation < 20 m² : aucune formalité. Terrasse surélevée de plus de 60 cm : déclaration préalable obligatoire. Terrasse couverte : la surface de la couverture compte dans l\'emprise au sol et peut nécessiter un permis au-delà de 20 m².' },
       { question: 'Combien de temps durent les travaux de terrasse ?', answer: 'Terrasse sur plots : 3 à 5 jours. Terrasse sur dalle béton (coulage + séchage + pose) : 2 à 3 semaines. Les travaux de terrassement préalables ajoutent 1 à 2 jours supplémentaires.' }
+    ],
+    keyTakeaways: [
+      "Une terrasse en bois coûte 80 à 200 €/m², en composite 100 à 250 €/m², en dalle 50 à 150 €/m².",
+      "Les terrasses de plus de 20 m² et surélevées de plus de 60 cm nécessitent une déclaration préalable.",
+      "Le drainage et la pente d'écoulement (1 à 2 %) sont essentiels pour éviter les stagnations d'eau.",
+      "Les bois européens (pin traité, mélèze) offrent un bon rapport qualité-prix avec un entretien annuel."
     ]
   },
   'installer-climatisation-maison-guide': {
@@ -417,6 +472,12 @@ export const projetsArticles: Record<string, {
       { question: 'Quel type de climatisation choisir pour sa maison ?', answer: 'Monosplit (1 500-3 000 € posé) pour une seule pièce, multisplit (3 500-8 000 €) pour plusieurs pièces, gainable (5 000-12 000 €) pour une discrétion totale dans toute la maison. Optez pour un modèle réversible pour chauffer aussi en hiver.' },
       { question: 'Combien consomme une climatisation ?', answer: 'Un monosplit de 2,5 kW consomme environ 0,8 kWh par heure de fonctionnement. Pour 1 000 heures d\'utilisation annuelle, cela représente 800 kWh, soit environ 160 euros. Un modèle A+++ consomme jusqu\'à 30 % de moins qu\'un modèle de classe A.' },
       { question: 'Faut-il une autorisation pour installer une climatisation ?', answer: 'L\'installation d\'une unité extérieure peut nécessiter une déclaration préalable dans certaines communes. En copropriété, l\'accord du syndic est obligatoire. La réglementation impose un niveau sonore maximal en limite de propriété.' }
+    ],
+    keyTakeaways: [
+      "Une PAC air-air réversible coûte 3 000 à 8 000 € et assure chauffage en hiver et climatisation en été.",
+      "Le dimensionnement par bilan thermique est indispensable pour éviter surconsommation et inconfort.",
+      "L'attestation de capacité pour les fluides frigorigènes est obligatoire pour l'installateur.",
+      "En copropriété, l'installation d'une unité extérieure nécessite l'accord de l'assemblée générale."
     ]
   },
   'refaire-electricite-maison-ancienne': {
@@ -459,6 +520,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien coûte la rénovation électrique d\'une maison ancienne ?', answer: 'Rénovation partielle (mise en sécurité du tableau et des protections) : 3 000 à 6 000 euros. Rénovation totale (reprise de tout le câblage) : 8 000 à 20 000 euros pour une maison de 100 m². La main-d\'oeuvre représente 40 à 70 % du budget total.' },
       { question: 'Ma maison a plus de 30 ans : faut-il refaire l\'électricité ?', answer: 'Pas forcément en totalité, mais un diagnostic est fortement recommandé. Si l\'installation présente des dangers (absence de prise de terre, fils sous gaine textile, tableau à fusibles), une mise en sécurité est indispensable. Le diagnostic coûte 100 à 200 euros.' },
       { question: 'Qu\'est-ce que la norme NF C 15-100 ?', answer: 'C\'est la norme qui définit les règles de sécurité et de confort de l\'installation électrique : nombre minimal de prises par pièce, circuits spécialisés pour les gros appareils, protection différentielle 30 mA sur tous les circuits. Toute rénovation électrique doit respecter cette norme.' }
+    ],
+    keyTakeaways: [
+      "La mise aux normes électrique complète d'une maison ancienne coûte entre 80 et 120 €/m².",
+      "Un diagnostic électrique préalable identifie les anomalies et hiérarchise les interventions.",
+      "La norme NF C 15-100 impose des équipements minimaux par pièce (prises, circuits, protection).",
+      "Le certificat Consuel est obligatoire après une rénovation électrique complète."
     ]
   },
   'refaire-plomberie-maison-ancienne': {
@@ -501,6 +568,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien coûte la rénovation de la plomberie d\'une maison ?', answer: 'Rénovation partielle (alimentations et robinetterie) : 3 000 à 6 000 euros pour une maison de 100 m². Rénovation complète (alimentations, évacuations, eau chaude, sanitaires) : 8 000 à 18 000 euros fourniture et main-d\'oeuvre incluses.' },
       { question: 'Faut-il remplacer les canalisations en plomb ?', answer: 'Oui, le plomb est interdit depuis 1995 en raison de sa toxicité (saturnisme). Le remplacement est fortement recommandé, même s\'il n\'est pas obligatoire pour un propriétaire occupant. Le cuivre et le PER sont les matériaux de remplacement les plus courants.' },
       { question: 'Cuivre ou PER : quel matériau choisir pour la plomberie ?', answer: 'Le cuivre reste la référence (durable 50 ans et plus, résistant, recyclable) mais coûte plus cher et nécessite un savoir-faire en soudure. Le PER (polyéthylène réticulé) est plus économique, plus rapide à poser et résistant au gel. Le multicouche combine les avantages des deux.' }
+    ],
+    keyTakeaways: [
+      "Le remplacement complet de la plomberie coûte entre 60 et 100 €/m² selon la complexité.",
+      "Les canalisations en plomb doivent être remplacées (interdit depuis 1995) par du cuivre ou du PER.",
+      "Profitez de la rénovation pour installer un système de traitement d'eau et des vannes d'arrêt par circuit.",
+      "Les travaux de plomberie encastrée relèvent de la garantie décennale."
     ]
   },
   'poser-carrelage-guide-complet-techniques': {
@@ -543,6 +616,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien coûte la pose de carrelage au m² ?', answer: 'Grès cérame standard (30x30 cm) : 20 à 40 €/m² fourni posé. Grand format (60x60 cm) : 40 à 80 €/m². Imitation parquet (20x120 cm) : 35 à 70 €/m². Pierre naturelle : 60 à 150 €/m². Ajoutez 5 à 10 €/m² pour le mortier-colle et les joints.' },
       { question: 'Peut-on poser du carrelage sur un ancien carrelage ?', answer: 'Oui, à condition que l\'ancien carrelage soit parfaitement adhérent au sol (pas de carreaux qui sonnent creux). Dépolissez la surface avec un disque diamant, appliquez un primaire d\'accrochage spécifique et utilisez un mortier-colle adapté (colle flexible C2).' },
       { question: 'Qu\'est-ce que le double encollage et quand est-il obligatoire ?', answer: 'Le double encollage consiste à appliquer la colle à la fois sur le sol et au dos du carreau. Il est obligatoire pour les carreaux supérieurs à 30x30 cm, les poses en extérieur, les zones humides (douche) et les sols chauffants. Il garantit un transfert de colle supérieur à 65 % de la surface.' }
+    ],
+    keyTakeaways: [
+      "Le double encollage est obligatoire pour les carreaux de plus de 30 x 30 cm (DTU 52.2).",
+      "La préparation du support (ragréage, primaire d'accroche) conditionne 80 % de la qualité de la pose.",
+      "Les joints de dilatation sont obligatoires tous les 60 m² maximum pour éviter les fissures.",
+      "L'étanchéité sous carrelage (SPEC) est indispensable dans les pièces humides."
     ]
   },
   'installer-parquet-massif-contrecolle-guide': {
@@ -587,6 +666,12 @@ export const projetsArticles: Record<string, {
       { question: 'Quel type de parquet choisir pour sa maison ?', answer: 'Le parquet massif (60-150 €/m² posé) offre une durabilité exceptionnelle (50-100 ans, poncé 5 à 8 fois). Le contrecollé (35-90 €/m²) combine esthétique du bois et stabilité. Le stratifié (15-40 €/m²) est le plus économique mais ne peut pas être rénové. Pour un sol chauffant, privilégiez le contrecollé collé.' },
       { question: 'Peut-on poser du parquet sur un sol chauffant ?', answer: 'Le parquet contrecollé posé en collé est compatible avec le chauffage au sol. Le parquet massif nécessite une vérification de compatibilité de l\'essence (le chêne convient bien). Le stratifié en pose flottante est déconseillé car la sous-couche fait office d\'isolant et réduit l\'efficacité du chauffage.' },
       { question: 'Combien de temps faut-il pour poser du parquet ?', answer: 'Pose flottante (stratifié ou contrecollé) : 15 à 25 m² par jour pour un professionnel. Pose collée : 10 à 15 m² par jour. Pose clouée sur lambourdes : 8 à 12 m² par jour. Pour un séjour de 30 m², comptez 1 à 3 jours selon la technique.' }
+    ],
+    keyTakeaways: [
+      "Le parquet massif (40 à 120 €/m²) offre la plus grande longévité mais demande un support stable.",
+      "Le parquet contrecollé (30 à 80 €/m²) est compatible avec le plancher chauffant grâce à sa faible épaisseur.",
+      "La pose collée est recommandée sur plancher chauffant ; la pose flottante pour les budgets serrés.",
+      "Laissez le parquet s'acclimater 48 à 72 heures dans la pièce avant la pose."
     ]
   },
   'construire-garage-guide-permis-budget': {
@@ -631,6 +716,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien coûte la construction d\'un garage ?', answer: 'Garage simple en parpaings (18 m²) : 8 000 à 15 000 €. Garage double (36 m²) : 15 000 à 28 000 €. Garage en ossature bois (18 m²) : 10 000 à 20 000 €. Carport simple : 2 000 à 6 000 €. Ces budgets incluent fondations, structure, toiture, porte et dalle.' },
       { question: 'Faut-il un permis de construire pour un garage ?', answer: 'Surface < 5 m² : aucune formalité. De 5 à 20 m² : déclaration préalable (délai 1 mois). Supérieure à 20 m² : permis de construire obligatoire (délai 2-3 mois). Vérifiez aussi les règles du PLU : emprise au sol maximale, distances aux limites, aspect extérieur.' },
       { question: 'Peut-on construire un garage en limite de propriété ?', answer: 'Les règles varient selon le PLU de votre commune. En général, une distance minimale de 3 mètres est requise par rapport aux limites séparatives, sauf accord du voisin ou disposition spécifique du PLU. Consultez le service urbanisme de votre mairie avant tout projet.' }
+    ],
+    keyTakeaways: [
+      "Un garage de 20 m² coûte entre 10 000 et 25 000 € selon les matériaux (parpaing, bois, métal).",
+      "Un permis de construire est nécessaire au-delà de 20 m² de surface de plancher.",
+      "Les fondations et la dalle doivent être dimensionnées pour supporter le poids d'un véhicule.",
+      "Intégrez les réseaux (électricité, eau, éclairage) dès la conception pour éviter les surcoûts."
     ]
   },
   'amenager-jardin-paysagiste-guide': {
@@ -673,6 +764,12 @@ export const projetsArticles: Record<string, {
       { question: 'Combien coûte l\'aménagement d\'un jardin par un paysagiste ?', answer: 'Jardin de 100 m² (aménagement complet) : 5 000 à 15 000 €. Jardin de 300 m² : 10 000 à 30 000 €. Jardin de 500 m² et plus : 20 000 à 50 000 €. Ces budgets incluent la conception, le terrassement, les plantations, les circulations et l\'éclairage de base.' },
       { question: 'Quelle est la meilleure saison pour aménager un jardin ?', answer: 'Les plantations sont idéalement réalisées en automne (octobre-novembre) ou au printemps (mars-avril). Le terrassement et les travaux de maçonnerie (allées, murets) peuvent être faits toute l\'année hors gel. Lancez la conception en hiver pour une réalisation au printemps.' },
       { question: 'Le plan de conception paysagère est-il indispensable ?', answer: 'Fortement recommandé, le plan de conception (500 à 2 000 €) est la garantie d\'un résultat harmonieux. Le paysagiste intègre les circulations, les zones plantées, les surfaces minérales et les points d\'eau dans un ensemble cohérent. C\'est un investissement qui évite les erreurs coûteuses.' }
+    ],
+    keyTakeaways: [
+      "Un aménagement paysager complet coûte entre 50 et 150 €/m² selon la complexité du projet.",
+      "Un plan de jardin professionnel tient compte du sol, du climat, de l'exposition et du budget d'entretien.",
+      "L'arrosage automatique programmable (1 500 à 4 000 €) réduit la consommation d'eau de 30 à 50 %.",
+      "Les travaux d'entretien de jardin ouvrent droit à un crédit d'impôt de 50 % (services à la personne)."
     ]
   },
   'installer-portail-automatique-guide': {
@@ -715,6 +812,12 @@ export const projetsArticles: Record<string, {
       { question: 'Portail battant ou coulissant : lequel choisir ?', answer: 'Le portail battant est le plus traditionnel et le moins coûteux en terrain plat avec de la place. Le coulissant est idéal pour les entrées en pente ou les espaces réduits (il glisse latéralement sur un rail). En terrain contraint, le coulissant s\'impose malgré un coût supérieur.' },
       { question: 'Combien coûte un portail automatique ?', answer: 'Portail battant aluminium motorisé (3-4 m) : 2 500 à 6 000 € fourni posé. Portail coulissant aluminium motorisé (3,5-5 m) : 3 000 à 8 000 €. Portail fer forgé motorisé : 3 000 à 10 000 €. Ces budgets incluent piliers, motorisation, accessoires de sécurité et pose.' },
       { question: 'Peut-on motoriser un portail existant ?', answer: 'Oui, dans la plupart des cas. La motorisation à bras articulés convient pour les portails battants légers, les vérins pour les portails lourds. Pour un coulissant, la motorisation à crémaillère est standard. Budget motorisation seule : 300 à 1 500 euros selon le type.' }
+    ],
+    keyTakeaways: [
+      "Un portail motorisé coûte entre 2 000 et 8 000 € pose comprise selon le matériau et l'automatisme.",
+      "L'installation électrique doit être conforme à la norme NF C 15-100 et réalisée par un professionnel.",
+      "La motorisation à bras est adaptée aux portails battants ; la motorisation à crémaillère aux coulissants.",
+      "Les normes de sécurité NF EN 13241 imposent des dispositifs anti-écrasement et un éclairage de signalisation."
     ]
   },
   'remplacer-fenetres-guide-performances': {
@@ -758,6 +861,12 @@ export const projetsArticles: Record<string, {
       { question: 'PVC, aluminium ou bois : quel matériau pour les fenêtres ?', answer: 'Le PVC est le plus isolant et le plus économique (200-600 €/fenêtre), sans entretien. L\'aluminium est esthétique avec des profilés fins (400-900 €) mais moins isolant. Le bois est chaleureux et écologique (350-800 €) mais demande un entretien. Le mixte bois-aluminium (500-1 200 €) cumule les avantages.' },
       { question: 'Quelles aides pour remplacer ses fenêtres ?', answer: 'MaPrimeRénov\' : 40 à 100 € par fenêtre selon les revenus. CEE : 40 à 100 € par fenêtre (selon profil de revenus). TVA réduite à 5,5 %. Éco-PTZ sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double ou triple vitrage, posé par un artisan RGE.' },
       { question: 'Pose en rénovation ou dépose totale ?', answer: 'La pose en rénovation (sur le dormant existant) est rapide et économique mais réduit la surface vitrée de 10 à 15 %. La dépose totale offre de meilleures performances thermiques et ne perd pas de surface vitrée, mais nécessite des travaux de maçonnerie et de finition plus importants.' }
+    ],
+    keyTakeaways: [
+      "Le remplacement de fenêtres coûte 350 à 1 500 €/fenêtre selon le matériau (PVC, alu, bois, mixte).",
+      "Le coefficient Uw ≤ 1,3 W/m².K est exigé pour bénéficier de MaPrimeRénov' et de la TVA à 5,5 %.",
+      "La dépose totale offre de meilleures performances thermiques que la pose en rénovation.",
+      "Le PVC offre le meilleur rapport qualité-prix ; le bois-alu la meilleure performance globale."
     ]
   },
   'installer-vmc-ventilation-guide': {
@@ -802,6 +911,12 @@ export const projetsArticles: Record<string, {
       { question: 'VMC simple flux ou double flux : que choisir ?', answer: 'La VMC simple flux hygroréglable (500 à 1 200 €) est suffisante pour la plupart des logements : elle adapte le débit à l\'humidité et coûte peu en entretien. La VMC double flux (3 000 à 7 000 €) récupère 85 à 95 % de la chaleur de l\'air extrait et est recommandée pour les maisons bien isolées (BBC, RE 2020) et les régions froides.' },
       { question: 'Peut-on installer une VMC dans une maison ancienne ?', answer: 'Oui, mais c\'est plus complexe qu\'en construction neuve. Le passage des gaines dans les combles et les percements représentent l\'essentiel du travail. Comptez 2 à 3 jours pour une simple flux en rénovation et 3 à 5 jours pour une double flux.' },
       { question: 'Combien coûte l\'entretien d\'une VMC ?', answer: 'VMC simple flux : 50 à 150 €/an (nettoyage des bouches tous les 3 mois soi-même, entretien moteur tous les 2 ans). VMC double flux : 100 à 300 €/an (remplacement des filtres tous les 6 mois à 1 an, nettoyage de l\'échangeur). L\'entretien est indispensable pour maintenir la qualité de l\'air et l\'efficacité du système.' }
+    ],
+    keyTakeaways: [
+      "La VMC est obligatoire dans les logements depuis 1982 et essentielle pour la qualité de l'air intérieur.",
+      "La VMC double flux récupère 70 à 90 % de la chaleur de l'air extrait et réduit la facture de chauffage.",
+      "L'installation d'une VMC double flux coûte entre 3 000 et 7 000 € pose comprise.",
+      "Un entretien annuel (nettoyage des filtres, vérification des bouches) garantit l'efficacité du système."
     ]
   },
 }

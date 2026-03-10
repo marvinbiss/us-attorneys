@@ -26,6 +26,8 @@ import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getCityValues } from '@/lib/insee-resolver'
+import { getProblemsByService } from '@/lib/data/problems'
+import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 
 export const revalidate = 86400 // Revalidate every 24h
 
@@ -1025,6 +1027,30 @@ export default async function AvisServiceVillePage({
         </div>
       </section>
 
+      {/* Problèmes courants */}
+      {(() => {
+        const problems = getProblemsByService(service).slice(0, 4)
+        if (problems.length === 0) return null
+        return (
+          <section className="py-12 bg-white border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Probl&egrave;mes courants</h2>
+              <div className="flex flex-wrap gap-3">
+                {problems.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/problemes/${p.slug}/${villeSlug}`}
+                    className="px-4 py-2.5 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-orange-200 transition-all"
+                  >
+                    {p.name} &agrave; {villeData.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
+
       {/* Cross-intent navigation */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1150,6 +1176,36 @@ export default async function AvisServiceVillePage({
               </div>
             </div>
           </div>
+          {/* Articles de blog liés */}
+          {(() => {
+            const relatedArticles = allArticlesMeta.filter((a) =>
+              a.tags.some((tag) => tag.toLowerCase().includes(tradeLower) || tradeLower.includes(tag.toLowerCase()))
+              || a.category === 'Fiches métier' && (a.title.toLowerCase().includes(tradeLower) || a.slug.includes(service))
+            ).slice(0, 3)
+            if (relatedArticles.length === 0) return null
+            return (
+              <div className="mt-8">
+                <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce m&eacute;tier</h3>
+                <div className="grid md:grid-cols-3 gap-3">
+                  {relatedArticles.map((article) => (
+                    <Link
+                      key={article.slug}
+                      href={`/blog/${article.slug}`}
+                      className="flex items-start gap-3 p-4 bg-white hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors group"
+                    >
+                      <span className="text-2xl flex-shrink-0">{article.image}</span>
+                      <div>
+                        <div className="font-medium text-gray-900 group-hover:text-blue-600 text-sm leading-snug">
+                          {article.title}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">{article.readTime} &middot; {article.category}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </section>
 

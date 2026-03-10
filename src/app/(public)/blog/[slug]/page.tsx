@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Calendar, User, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
@@ -607,7 +608,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
       }
     : null
 
-  const allSchemas = faqSchema ? [...schemas, faqSchema] : schemas
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Blog', url: '/blog' },
+    { name: article.title, url: `/blog/${slug}` },
+  ])
+
+  const allSchemas = [breadcrumbSchema, ...schemas, ...(faqSchema ? [faqSchema] : [])]
 
   const articleUrl = `${SITE_URL}/blog/${slug}`
   const encodedUrl = encodeURIComponent(articleUrl)

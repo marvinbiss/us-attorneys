@@ -6,6 +6,7 @@ import type { LocationContent } from '@/lib/seo/location-content'
 import type { CommuneData } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType } from '@/types'
 import { GSC_BOOST_PAGES } from '@/lib/seo/gsc-priority-cities'
+import { getProblemsByService } from '@/lib/data/problems'
 
 interface NearbyCity {
   slug: string
@@ -144,6 +145,30 @@ export default function CrossLinks({
                 </Link>
               </div>
             </div>
+
+            {/* Related problems */}
+            {(() => {
+              const problems = getProblemsByService(serviceSlug).slice(0, 4)
+              if (problems.length === 0) return null
+              return (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <h3 className="font-semibold text-gray-900 mb-4">
+                    Problèmes courants
+                  </h3>
+                  <div className="space-y-2">
+                    {problems.map((p) => (
+                      <Link
+                        key={p.slug}
+                        href={`/problemes/${p.slug}/${locationSlug}`}
+                        className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-xl text-sm font-medium border border-gray-100 hover:border-orange-200 transition-all"
+                      >
+                        {p.name} à {location.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            })()}
 
             {/* Cross-service callouts */}
             {otherServices.slice(0, 3).map((s) => (
