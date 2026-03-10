@@ -2383,6 +2383,77 @@ export const tradeContent: Record<string, TradeContent> = {
     certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service D\u00e9m\u00e9nagement', 'Certification ISO 9001 (qualit\u00e9)', 'Charte Qualit\u00e9 D\u00e9m\u00e9nagement (FIDI pour l\'international)', 'Assurance responsabilit\u00e9 civile professionnelle', 'Agr\u00e9ment IATA (d\u00e9m\u00e9nagement avec transport a\u00e9rien)', 'Label Déménageur Éco-responsable', 'Certification ISO 14001 (management environnemental)'],
     averageResponseTime: 'Devis sous 48h (visite technique), planification 2 à 8 semaines',
   },
+
+  ebeniste: {
+    slug: 'ebeniste',
+    name: 'Ébéniste',
+    priceRange: {
+      min: 50,
+      max: 90,
+      unit: '€/h',
+    },
+    commonTasks: [
+      "Fabrication d'un meuble sur mesure (bibliothèque, buffet) : 1 500 à 6 000 €",
+      "Restauration d'un meuble ancien : 300 à 2 500 € selon l'état et la complexité",
+      "Fabrication d'un escalier en bois massif : 3 000 à 12 000 €",
+      "Pose d'un plan de travail en bois massif : 400 à 1 200 € (fourniture + pose)",
+      "Création d'un dressing sur mesure : 2 000 à 8 000 €",
+      "Fabrication d'une table en bois massif : 800 à 4 000 €",
+      "Placage et marqueterie (restauration) : 200 à 1 500 € selon la surface",
+      "Fabrication d'un meuble de salle de bain en bois : 1 000 à 3 500 €",
+    ],
+    tips: [
+      "Choisissez un ébéniste qui vous montre son atelier et des exemples de réalisations précédentes. Le savoir-faire artisanal se juge sur les finitions : assemblages, qualité du ponçage et régularité du vernis ou de l'huile.",
+      "Définissez précisément vos besoins (dimensions, essence de bois, finition) avant de demander un devis. Un cahier des charges clair évite les malentendus et les surcoûts.",
+      "Privilégiez les bois certifiés PEFC ou FSC pour garantir une provenance durable. Le chêne, le noyer et le merisier sont les essences les plus demandées en ébénisterie française.",
+      "Demandez un devis détaillé mentionnant l'essence de bois, le type de finition (vernis, huile, cire, laque), les dimensions exactes et le délai de fabrication.",
+      "Un meuble sur mesure coûte plus cher qu'un meuble industriel, mais sa durée de vie est de 50 à 100 ans contre 5 à 15 ans pour du mobilier en panneaux de particules.",
+      "Pour la restauration d'un meuble ancien de valeur, faites appel à un ébéniste spécialisé en restauration qui respectera les techniques traditionnelles (collage à la colle de peau, vernis au tampon).",
+      "Prévoyez un délai de fabrication de 4 à 12 semaines pour un meuble sur mesure. Un ébéniste sérieux ne bâcle pas son travail : chaque pièce est unique.",
+      "Vérifiez que l'ébéniste possède une assurance responsabilité civile professionnelle et, pour les travaux intégrés au bâti (escaliers, bibliothèques encastrées), une garantie décennale.",
+    ],
+    faq: [
+      {
+        q: "Quelle est la différence entre un ébéniste et un menuisier ?",
+        a: "Le menuisier travaille principalement sur les éléments de structure et d'agencement du bâtiment (portes, fenêtres, parquets, placards). L'ébéniste est spécialisé dans la fabrication et la restauration de meubles, avec un travail de précision sur les assemblages, les placages et les finitions. L'ébéniste maîtrise des techniques comme la marqueterie, le cintrage du bois et le vernis au tampon.",
+      },
+      {
+        q: "Combien coûte un meuble sur mesure par rapport à du mobilier industriel ?",
+        a: "Un meuble sur mesure coûte en moyenne 2 à 5 fois plus cher qu'un équivalent industriel. Par exemple, une bibliothèque en chêne massif sur mesure revient à 2 000 à 5 000 €, contre 300 à 800 € pour un modèle en kit. La différence se justifie par la qualité des matériaux (bois massif vs panneaux), la durabilité (50 à 100 ans vs 5 à 15 ans) et l'adaptation parfaite à votre espace.",
+      },
+      {
+        q: "Quelles essences de bois choisir pour un meuble ?",
+        a: "Le choix dépend de l'usage et du budget. Le chêne (60 à 120 €/m² en plateau) est le plus polyvalent : solide, durable et facile à travailler. Le noyer (100 à 200 €/m²) offre un grain élégant et une teinte chaude. Le merisier (80 à 150 €/m²) est prisé pour les meubles de style. Pour les budgets serrés, le hêtre (40 à 80 €/m²) est un excellent compromis.",
+      },
+      {
+        q: "Peut-on restaurer un meuble ancien abîmé ?",
+        a: "Oui, dans la grande majorité des cas. Un ébéniste restaurateur peut réparer des pieds cassés, remplacer des placages décollés, recoller des assemblages, combler des manques de bois et refaire entièrement la finition. Seuls les meubles dont la structure est irrémédiablement vermoulue (piqûres de vers sur plus de 50 % de l'épaisseur) sont parfois irrécupérables. Un traitement insecticide préalable est souvent nécessaire (50 à 150 €).",
+      },
+      {
+        q: "Quel délai prévoir pour la fabrication d'un meuble sur mesure ?",
+        a: "Comptez en moyenne 4 à 12 semaines entre la validation du devis et la livraison. Ce délai inclut l'approvisionnement en bois (2 à 4 semaines si l'essence n'est pas en stock), la fabrication proprement dite (2 à 6 semaines) et les finitions (ponçage, vernis ou huile en plusieurs couches). Les projets complexes (marqueterie, cintrage) peuvent nécessiter jusqu'à 16 semaines.",
+      },
+      {
+        q: "Comment entretenir un meuble en bois massif ?",
+        a: "Pour un meuble huilé, appliquez une couche d'huile (lin, tung ou huile spéciale bois) tous les 6 à 12 mois. Pour un meuble vernis, un simple dépoussiérage et un nettoyage à l'eau légèrement savonneuse suffisent. Évitez les produits à base de silicone qui encrassent le bois. Ne placez jamais un meuble en bois massif près d'une source de chaleur directe (radiateur, cheminée) : le bois se fendrait.",
+      },
+      {
+        q: "Un ébéniste peut-il reproduire un meuble ancien ou de style ?",
+        a: "Oui, c'est l'une des spécialités de l'ébénisterie. Un ébéniste peut reproduire fidèlement un meuble Louis XV, Art Déco ou contemporain à partir de photos, de plans ou d'un modèle existant. Le coût dépend de la complexité : comptez 1 500 à 3 000 € pour une commode de style simple et 5 000 à 15 000 € pour une pièce complexe avec marqueterie.",
+      },
+    ],
+    certifications: [
+      "CAP Ébéniste ou BMA Ébéniste (formation initiale obligatoire)",
+      "Brevet des Métiers d'Art (BMA) Ébénisterie",
+      "Titre de Meilleur Ouvrier de France (MOF) en ébénisterie",
+      "Label Entreprise du Patrimoine Vivant (EPV)",
+      "Qualibat (qualification 4322 agencement intérieur bois)",
+      "Certification PEFC / FSC (bois issus de forêts gérées durablement)",
+      "Assurance responsabilité civile professionnelle",
+      "Garantie décennale (pour les ouvrages intégrés au bâti)",
+    ],
+    averageResponseTime: "Devis sous 1 semaine (visite et prise de mesures), fabrication 4 à 12 semaines",
+  },
 }
 
 /**

@@ -1,6 +1,6 @@
 /**
  * Données des questions fréquentes pour les pages /questions/
- * 40 questions avec réponses optimisées pour les featured snippets Google.
+ * 55 questions avec réponses optimisées pour les featured snippets Google.
  */
 
 export type QuestionCategory = "prix" | "choix" | "urgence" | "reglementation" | "diy"
@@ -603,6 +603,236 @@ export const questions: Question[] = [
     category: "diy",
     relatedService: "menuisier",
     tags: ["cuisine", "montage", "meuble", "DIY", "bricolage"],
+  },
+
+  // ============================================================
+  // ÉNERGIE / RÉNOVATION — High volume gaps (5 questions)
+  // ============================================================
+  {
+    slug: "aide-pompe-chaleur-2026",
+    question: "Quelles aides pour une pompe à chaleur en 2026 ?",
+    shortAnswer: "En 2026, MaPrimeRénov couvre jusqu'à 5 000 € pour une PAC air-eau et les CEE ajoutent 2 500 à 4 000 €. Le cumul peut atteindre 9 000 € selon vos revenus et la zone climatique.",
+    detailedAnswer: [
+      "MaPrimeRénov reste le dispositif principal pour financer une pompe à chaleur en 2026. Le montant dépend de vos revenus : les ménages très modestes peuvent obtenir jusqu'à 5 000 € pour une PAC air-eau et jusqu'à 11 000 € pour une PAC géothermique. Les ménages aux revenus intermédiaires reçoivent entre 3 000 et 5 000 €.",
+      "Les Certificats d'Économies d'Énergie (CEE) complètent MaPrimeRénov. Les primes CEE pour une pompe à chaleur varient de 2 500 à 4 000 € selon le fournisseur d'énergie et la zone climatique. Comparez les offres sur le site officiel avant de vous engager.",
+      "Pour bénéficier de ces aides, le logement doit avoir plus de 15 ans et les travaux doivent être réalisés par un artisan certifié RGE. Faites réaliser un audit énergétique au préalable pour maximiser les aides en cas de rénovation globale.",
+      "D'autres aides locales peuvent s'ajouter : éco-PTZ (jusqu'à 50 000 € à taux zéro), TVA réduite à 5,5 %, et aides des collectivités locales. Renseignez-vous auprès de votre ADIL ou sur France Rénov pour un accompagnement personnalisé."
+    ],
+    category: "reglementation",
+    relatedService: "pompe-a-chaleur",
+    tags: ["pompe à chaleur", "aides", "MaPrimeRénov", "CEE", "2026"],
+  },
+  {
+    slug: "maprimerenov-conditions-2026",
+    question: "Quelles sont les conditions pour bénéficier de MaPrimeRénov en 2026 ?",
+    shortAnswer: "MaPrimeRénov 2026 est accessible à tous les propriétaires occupants ou bailleurs d'un logement de plus de 15 ans. Les travaux doivent être réalisés par un artisan RGE et la demande se fait avant le début des travaux.",
+    detailedAnswer: [
+      "MaPrimeRénov 2026 s'adresse à tous les propriétaires, qu'ils occupent le logement ou le mettent en location. Le logement doit avoir été construit il y a plus de 15 ans (contre 2 ans auparavant). Les copropriétés peuvent aussi en bénéficier via MaPrimeRénov Copropriétés.",
+      "Le montant de la prime dépend de vos revenus (classés en 4 catégories : très modestes, modestes, intermédiaires, supérieurs) et du gain énergétique apporté par les travaux. Un parcours accompagné (rénovation globale) offre des montants plus élevés qu'un parcours par geste.",
+      "Les travaux éligibles incluent l'isolation (murs, toiture, planchers), le chauffage (PAC, chaudière biomasse, solaire), la ventilation et l'audit énergétique. Un artisan certifié RGE est obligatoire pour chaque poste de travaux.",
+      "La demande se fait en ligne sur maprimerenov.gouv.fr AVANT le début des travaux. Rassemblez vos devis, votre avis d'imposition et les attestations RGE des artisans. Le versement intervient après la fin des travaux, sur présentation des factures."
+    ],
+    category: "reglementation",
+    relatedService: "renovation-energetique",
+    tags: ["MaPrimeRénov", "conditions", "éligibilité", "rénovation", "2026"],
+  },
+  {
+    slug: "dpe-obligatoire-vente-location",
+    question: "Le DPE est-il obligatoire pour vendre ou louer en 2026 ?",
+    shortAnswer: "Oui, le DPE est obligatoire pour toute vente ou location depuis 2006. En 2026, les logements classés G sont interdits à la location. Le DPE doit être réalisé par un diagnostiqueur certifié et est valable 10 ans.",
+    detailedAnswer: [
+      "Le Diagnostic de Performance Énergétique est obligatoire pour toute mise en vente ou en location d'un logement. Il doit figurer dans l'annonce immobilière et être annexé au contrat (compromis de vente ou bail). Son absence expose à des sanctions.",
+      "Depuis le 1er janvier 2025, les logements classés G au DPE sont considérés comme indécents et ne peuvent plus être mis en location. En 2028, cette interdiction s'étendra aux logements classés F, puis aux E en 2034. Les propriétaires bailleurs doivent anticiper ces échéances.",
+      "Le DPE doit être réalisé par un diagnostiqueur certifié par un organisme accrédité COFRAC. Le coût moyen se situe entre 100 et 250 € selon la surface et la localisation. Il est valable 10 ans, sauf en cas de travaux modifiant la performance énergétique.",
+      "Au-delà de l'obligation légale, le DPE influence directement la valeur du bien. Un logement classé A ou B se vend 6 à 15 % plus cher qu'un logement classé D ou E. Investir dans la rénovation énergétique avant la vente peut donc être financièrement rentable."
+    ],
+    category: "reglementation",
+    relatedService: "diagnostiqueur",
+    tags: ["DPE", "diagnostic", "vente", "location", "obligation"],
+  },
+  {
+    slug: "artisan-rge-obligatoire",
+    question: "Est-il obligatoire de choisir un artisan RGE ?",
+    shortAnswer: "Un artisan RGE (Reconnu Garant de l'Environnement) est obligatoire pour bénéficier des aides publiques comme MaPrimeRénov, les CEE ou l'éco-PTZ. Sans certification RGE, vous ne percevrez aucune aide financière.",
+    detailedAnswer: [
+      "La certification RGE est obligatoire pour que vos travaux de rénovation énergétique ouvrent droit aux aides publiques : MaPrimeRénov, Certificats d'Économies d'Énergie (CEE), éco-prêt à taux zéro, TVA réduite à 5,5 %. Sans artisan RGE, vous devrez financer l'intégralité des travaux.",
+      "RGE signifie Reconnu Garant de l'Environnement. Cette certification, délivrée par des organismes comme Qualibat, Qualifelec ou Qualit'EnR, garantit que l'artisan a suivi une formation spécifique et respecte des critères de qualité pour les travaux d'efficacité énergétique.",
+      "Pour vérifier qu'un artisan est bien RGE, consultez l'annuaire officiel sur france-renov.gouv.fr. Vérifiez que la certification couvre bien le type de travaux envisagé (isolation, chauffage, ENR) et qu'elle est en cours de validité. Demandez aussi une copie du certificat.",
+      "Même sans obligation d'aides, choisir un artisan RGE est un gage de qualité. En cas de litige, la certification offre des recours via l'organisme certificateur. De plus, l'assurance décennale de l'artisan RGE couvre spécifiquement les travaux de rénovation énergétique."
+    ],
+    category: "choix",
+    relatedService: "renovation-energetique",
+    tags: ["RGE", "certification", "artisan", "aides", "obligation"],
+  },
+  {
+    slug: "passoire-thermique-que-faire",
+    question: "Mon logement est une passoire thermique, que faire ?",
+    shortAnswer: "Un logement classé F ou G au DPE est une passoire thermique. Commencez par un audit énergétique (obligatoire pour la vente), puis priorisez l'isolation et le chauffage. Les aides couvrent jusqu'à 90 % des travaux pour les ménages modestes.",
+    detailedAnswer: [
+      "Une passoire thermique est un logement classé F ou G au DPE, soit une consommation supérieure à 330 kWh/m²/an. En France, 5,2 millions de logements sont concernés. Ces logements sont progressivement interdits à la location : les G depuis 2025, les F à partir de 2028.",
+      "La première étape est de réaliser un audit énergétique (300 à 800 €). Cet audit, obligatoire pour vendre un logement classé F ou G, propose un parcours de travaux chiffré pour atteindre au minimum la classe C. Il identifie les déperditions majeures et priorise les interventions.",
+      "Les travaux prioritaires sont généralement dans cet ordre : isolation de la toiture (30 % des pertes), isolation des murs (25 %), remplacement des fenêtres (15 %), puis changement du système de chauffage. Une rénovation globale est plus efficace que des travaux par geste.",
+      "Le parcours accompagné MaPrimeRénov offre les aides les plus importantes : jusqu'à 63 000 € pour une rénovation globale atteignant 2 classes de gain. Les ménages très modestes peuvent voir 90 % des travaux financés. Un accompagnateur Rénov (Mon Accompagnateur Rénov) est obligatoire pour ce parcours."
+    ],
+    category: "urgence",
+    relatedService: "isolation-thermique",
+    tags: ["passoire thermique", "DPE", "rénovation", "isolation", "aides"],
+  },
+
+  // ============================================================
+  // PRIX / TARIFS — High volume (5 questions)
+  // ============================================================
+  {
+    slug: "prix-renovation-maison-m2",
+    question: "Quel est le prix de rénovation d'une maison au m² ?",
+    shortAnswer: "Le prix de rénovation d'une maison varie de 250 à 600 €/m² pour un rafraîchissement, 600 à 1 200 €/m² pour une rénovation complète et 1 200 à 2 000 €/m² pour une rénovation lourde avec restructuration.",
+    detailedAnswer: [
+      "Le coût de rénovation dépend de l'ampleur des travaux. Un rafraîchissement (peinture, sols, petite électricité) coûte 250 à 600 €/m². Une rénovation complète (salle de bain, cuisine, électricité, plomberie) revient à 600 à 1 200 €/m². Une rénovation lourde avec restructuration atteint 1 200 à 2 000 €/m².",
+      "Pour une maison de 100 m², comptez donc entre 25 000 et 60 000 € pour un rafraîchissement, 60 000 à 120 000 € pour une rénovation complète et 120 000 à 200 000 € pour une rénovation intégrale. Les prix varient de 20 à 40 % selon la région.",
+      "Les postes les plus coûteux sont la charpente/toiture (15 000 à 30 000 €), la mise aux normes électriques (8 000 à 15 000 €), la plomberie complète (10 000 à 20 000 €) et l'isolation globale (15 000 à 30 000 €). Demandez des devis détaillés poste par poste.",
+      "Pour maîtriser le budget, faites réaliser un diagnostic complet avant de chiffrer. Prévoyez une marge de 10 à 15 % pour les imprévus (problèmes structurels, amiante, mises aux normes). Comparez au moins 3 devis et vérifiez les assurances décennales des artisans."
+    ],
+    category: "prix",
+    relatedService: "macon",
+    tags: ["rénovation", "maison", "prix au m²", "budget", "travaux"],
+  },
+  {
+    slug: "prix-extension-maison-m2",
+    question: "Combien coûte une extension de maison au m² ?",
+    shortAnswer: "Une extension de maison coûte entre 1 200 et 2 500 €/m² pour une construction traditionnelle, 1 000 à 1 800 €/m² en ossature bois et 2 000 à 3 500 €/m² pour une surélévation. Les prix incluent le gros œuvre et le second œuvre.",
+    detailedAnswer: [
+      "Le prix d'une extension dépend du type de construction. Une extension en parpaing ou brique coûte 1 200 à 2 500 €/m², une extension à ossature bois 1 000 à 1 800 €/m² et une véranda 800 à 2 500 €/m². La surélévation, plus complexe, atteint 2 000 à 3 500 €/m².",
+      "Pour une extension de 20 m² (la plus courante), le budget se situe entre 24 000 et 50 000 € en construction traditionnelle. Ce prix comprend les fondations, le gros œuvre, la toiture, l'isolation, les menuiseries, l'électricité et la plomberie. La finition intérieure peut être réalisée soi-même pour économiser.",
+      "Les démarches administratives varient selon la surface : une déclaration préalable suffit pour moins de 20 m² (40 m² en zone urbaine avec PLU). Au-delà, un permis de construire est requis. Si la surface totale dépasse 150 m² après extension, le recours à un architecte est obligatoire.",
+      "Pour optimiser le budget, choisissez une extension de plain-pied (moins chère que la surélévation), privilégiez l'ossature bois (chantier plus rapide, donc moins de main-d'œuvre) et anticipez les raccordements aux réseaux existants. Un architecte peut proposer des solutions créatives à budget maîtrisé."
+    ],
+    category: "prix",
+    relatedService: "macon",
+    tags: ["extension", "maison", "prix au m²", "agrandissement", "construction"],
+  },
+  {
+    slug: "prix-veranda-2026",
+    question: "Quel est le prix d'une véranda en 2026 ?",
+    shortAnswer: "Une véranda coûte entre 15 000 et 50 000 € en 2026, soit 800 à 2 500 €/m². Le prix dépend du matériau (PVC, aluminium, bois), de la surface et du vitrage. Une véranda en aluminium de 15 m² revient à 20 000-35 000 €.",
+    detailedAnswer: [
+      "Le prix d'une véranda varie selon le matériau : le PVC est le moins cher (800 à 1 200 €/m²) mais limité en dimensions, l'aluminium offre le meilleur rapport qualité-prix (1 200 à 2 000 €/m²), le bois est chaleureux mais demande de l'entretien (1 500 à 2 500 €/m²) et l'acier/fer forgé est le plus coûteux (2 000 à 3 500 €/m²).",
+      "Pour une véranda standard de 15 m² en aluminium avec double vitrage, comptez 20 000 à 35 000 € tout compris (dalle, structure, vitrage, électricité). Le triple vitrage et les stores intégrés ajoutent 15 à 25 % au budget mais améliorent considérablement le confort thermique.",
+      "La forme du toit influence aussi le prix : un toit plat est 10 à 15 % moins cher qu'un toit à pentes. La véranda bioclimatique, avec lames orientables et ventilation naturelle, représente un surcoût de 30 % mais offre un confort optimal en toutes saisons.",
+      "Une déclaration préalable de travaux est nécessaire pour une véranda de moins de 20 m² (40 m² en zone PLU). Au-delà, un permis de construire est requis. Attention : une véranda augmente la surface habitable et donc la taxe foncière. Demandez au moins 3 devis avec visite technique obligatoire."
+    ],
+    category: "prix",
+    relatedService: "menuisier",
+    tags: ["véranda", "prix", "aluminium", "vitrage", "2026"],
+  },
+  {
+    slug: "prix-salle-de-bain-complete",
+    question: "Combien coûte une rénovation complète de salle de bain ?",
+    shortAnswer: "Une rénovation complète de salle de bain coûte entre 5 000 et 15 000 € pour une salle de bain standard (4-6 m²). Le budget monte à 15 000-25 000 € pour une salle de bain haut de gamme avec douche à l'italienne et meuble sur mesure.",
+    detailedAnswer: [
+      "Le budget d'une rénovation de salle de bain dépend de la surface et du niveau de finition. Pour une salle de bain de 4 à 6 m² : comptez 5 000 à 8 000 € en entrée de gamme (baignoire acrylique, meuble vasque basique, carrelage standard), 8 000 à 15 000 € en milieu de gamme et 15 000 à 25 000 € en haut de gamme.",
+      "Les postes principaux sont : la plomberie et l'évacuation (1 500 à 3 000 €), le carrelage murs et sol avec pose (2 000 à 5 000 €), la douche ou baignoire (500 à 3 000 €), le meuble vasque (300 à 2 000 €) et la robinetterie (200 à 1 000 €). La dépose de l'ancienne salle de bain ajoute 500 à 1 500 €.",
+      "La douche à l'italienne est la tendance forte mais coûte plus cher : 2 500 à 5 000 € avec receveur extra-plat et paroi en verre. Elle nécessite un sol parfaitement étanché (système d'étanchéité SPEC). Alternative économique : le receveur de douche posé au sol, 30 % moins cher.",
+      "Pour économiser sans sacrifier la qualité, conservez les arrivées d'eau au même emplacement (déplacer la plomberie coûte 1 000 à 3 000 € de plus). Posez le carrelage vous-même si vous êtes bricoleur et confiez la plomberie et l'électricité à des professionnels certifiés."
+    ],
+    category: "prix",
+    relatedService: "salle-de-bain",
+    tags: ["salle de bain", "rénovation", "prix", "douche italienne", "budget"],
+  },
+  {
+    slug: "prix-cuisine-equipee-pose",
+    question: "Quel budget pour une cuisine équipée avec pose ?",
+    shortAnswer: "Une cuisine équipée avec pose coûte entre 5 000 et 12 000 € en entrée de gamme, 12 000 à 25 000 € en milieu de gamme et 25 000 à 50 000 € en haut de gamme. La pose représente 15 à 25 % du budget total.",
+    detailedAnswer: [
+      "Le budget total dépend de la gamme choisie. En entrée de gamme (grandes surfaces de bricolage) : 5 000 à 12 000 € pour une cuisine de 6 à 8 mètres linéaires avec électroménager basique. En milieu de gamme (cuisinistes) : 12 000 à 25 000 €. En haut de gamme (sur mesure) : 25 000 à 50 000 € et plus.",
+      "La pose professionnelle coûte entre 1 500 et 5 000 € selon la complexité : installation des meubles, raccordements électriques et plomberie, pose du plan de travail et de la crédence. Comptez 1 à 3 jours de pose pour une cuisine standard, 3 à 5 jours pour une cuisine avec îlot central.",
+      "Les postes de dépense principaux sont : les meubles et façades (40 % du budget), le plan de travail (10 à 20 %, de 200 €/ml en stratifié à 800 €/ml en granit), l'électroménager (15 à 30 %) et la pose (15 à 25 %). Le plan de travail en quartz ou Dekton offre un excellent rapport durabilité/prix.",
+      "Pour optimiser votre budget : commandez pendant les promotions saisonnières (janvier et septembre), comparez cuisinistes indépendants et grandes enseignes, et négociez la pose incluse dans le devis global. Vérifiez que le devis inclut bien les finitions (plinthes, joints silicone, raccords) pour éviter les surcoûts."
+    ],
+    category: "prix",
+    relatedService: "cuisiniste",
+    tags: ["cuisine équipée", "pose", "prix", "budget", "cuisiniste"],
+  },
+
+  // ============================================================
+  // CHOIX / PRATIQUE (2 questions)
+  // ============================================================
+  {
+    slug: "comment-choisir-artisan-rge",
+    question: "Comment choisir un artisan RGE fiable ?",
+    shortAnswer: "Vérifiez la certification RGE sur france-renov.gouv.fr, contrôlez l'assurance décennale et les avis clients, puis comparez au moins 3 devis détaillés. Privilégiez les artisans locaux avec des chantiers de référence visitables.",
+    detailedAnswer: [
+      "Commencez par vérifier la certification RGE sur l'annuaire officiel france-renov.gouv.fr. Assurez-vous que la certification couvre bien le type de travaux souhaité (il existe différentes qualifications : QualiPAC pour les pompes à chaleur, QualiSol pour le solaire, etc.) et qu'elle est en cours de validité.",
+      "Contrôlez les documents obligatoires : assurance responsabilité civile professionnelle, assurance décennale (couvrant les 10 ans après travaux), immatriculation au registre des métiers et numéro SIRET actif. Demandez des copies et vérifiez-les auprès des assureurs si nécessaire.",
+      "Consultez les avis clients sur plusieurs plateformes (Google, Pages Jaunes, forums spécialisés) et demandez des références de chantiers similaires. Un artisan sérieux acceptera de vous montrer des réalisations récentes ou de vous mettre en contact avec d'anciens clients satisfaits.",
+      "Comparez au moins 3 devis détaillés ligne par ligne : marques et références des matériaux, coûts de main-d'œuvre, délais de réalisation, conditions de paiement. Méfiez-vous des prix anormalement bas et des demandes d'acompte supérieures à 30 %. Un artisan fiable ne vous pressera jamais de signer."
+    ],
+    category: "choix",
+    relatedService: "renovation-energetique",
+    tags: ["artisan RGE", "choisir", "vérification", "confiance", "devis"],
+  },
+  {
+    slug: "devis-travaux-que-verifier",
+    question: "Que vérifier sur un devis de travaux avant de signer ?",
+    shortAnswer: "Vérifiez les mentions légales obligatoires (SIRET, assurance), le détail des prestations, les matériaux avec références précises, le prix TTC, les délais et les conditions de paiement. Un devis flou est un signal d'alerte.",
+    detailedAnswer: [
+      "Un devis conforme doit comporter les mentions légales obligatoires : nom et adresse de l'entreprise, numéro SIRET, assurance décennale avec nom de l'assureur et numéro de police, date de validité du devis, et la mention manuscrite \"Devis reçu avant l'exécution des travaux\".",
+      "Le détail des prestations doit être exhaustif : chaque poste de travaux décrit précisément, quantités et surfaces, marques et références exactes des matériaux, prix unitaires et prix global. Méfiez-vous des lignes vagues comme \"travaux divers\" ou \"fournitures\" sans précision.",
+      "Vérifiez les conditions financières : le prix TTC final (avec taux de TVA applicable : 10 % pour la rénovation, 5,5 % pour la rénovation énergétique, 20 % pour le neuf), l'échéancier de paiement (jamais plus de 30 % d'acompte), et les pénalités de retard éventuelles.",
+      "Contrôlez les délais : date de début et durée prévisionnelle des travaux, conditions de report, et clause de réception des travaux. Comparez le devis avec les prix moyens du marché et n'hésitez pas à demander des clarifications avant de signer. Un artisan sérieux expliquera chaque ligne sans hésiter."
+    ],
+    category: "choix",
+    relatedService: "macon",
+    tags: ["devis", "vérification", "travaux", "mentions légales", "prix"],
+  },
+
+  // ============================================================
+  // DIY (2 questions)
+  // ============================================================
+  {
+    slug: "installer-borne-recharge-soi-meme",
+    question: "Peut-on installer une borne de recharge soi-même ?",
+    shortAnswer: "Non, l'installation d'une borne de recharge de plus de 3,7 kW doit obligatoirement être réalisée par un électricien qualifié IRVE (Infrastructure de Recharge pour Véhicule Électrique). Seule une prise renforcée peut être installée soi-même.",
+    detailedAnswer: [
+      "La réglementation française impose qu'une borne de recharge (wallbox) de plus de 3,7 kW soit installée par un électricien qualifié IRVE. Cette obligation, inscrite dans le décret n°2017-26, vise à garantir la sécurité électrique et la conformité de l'installation. En cas de non-respect, votre assurance pourrait refuser de couvrir un sinistre.",
+      "Seule alternative en autoconstruction : la prise renforcée de type Green'Up, limitée à 3,7 kW (soit environ 20 km d'autonomie par heure de charge). Elle se branche sur un circuit dédié en 2,5 mm² avec un disjoncteur 20A. C'est une solution suffisante pour un usage quotidien de moins de 50 km.",
+      "Une wallbox 7,4 kW (monophasé) ou 22 kW (triphasé) installée par un professionnel IRVE coûte entre 1 200 et 2 500 € tout compris. Le crédit d'impôt couvre 75 % du coût dans la limite de 300 € par point de charge. En copropriété, le droit à la prise permet de faire installer une borne à ses frais.",
+      "Pour choisir votre installateur IRVE, consultez le site qualifelec.fr ou l'annuaire ADVENIR. Vérifiez que la qualification IRVE est en cours de validité et que l'installateur propose bien une mise en service avec attestation de conformité Consuel."
+    ],
+    category: "diy",
+    relatedService: "borne-recharge",
+    tags: ["borne recharge", "voiture électrique", "IRVE", "installation", "réglementation"],
+  },
+  {
+    slug: "isoler-combles-soi-meme",
+    question: "Peut-on isoler ses combles soi-même ?",
+    shortAnswer: "Oui, l'isolation des combles perdus par soufflage ou déroulage de laine minérale est accessible aux bricoleurs. Comptez 10-20 €/m² en matériaux. Attention : vous perdez le droit aux aides MaPrimeRénov et CEE sans artisan RGE.",
+    detailedAnswer: [
+      "L'isolation des combles perdus est l'un des travaux les plus accessibles en autoconstruction. Le déroulage de laine de verre ou laine de roche en rouleaux est simple : il suffit de poser deux couches croisées (minimum 30 cm d'épaisseur, R ≥ 7) sur le plancher des combles. Le coût des matériaux seuls est de 10 à 20 €/m².",
+      "Les précautions indispensables : portez un masque FFP2, des lunettes et des gants car les fibres de laine minérale sont irritantes. Vérifiez que le plancher des combles supporte le poids de l'isolant. Ne comprimez jamais l'isolant (cela réduit son efficacité). Laissez une lame d'air de 2 cm sous la couverture pour la ventilation.",
+      "Attention aux points techniques : traitez les ponts thermiques autour des gaines et des trappes d'accès. Maintenez un écart de 5 cm autour des conduits de cheminée (avec un écran pare-feu). Posez un pare-vapeur côté chauffé si le plancher n'est pas étanche à l'air.",
+      "Le principal inconvénient du DIY est la perte des aides financières. MaPrimeRénov et les CEE exigent un artisan RGE. Or, une isolation des combles par un professionnel RGE coûte 20 à 50 €/m², largement couverte par les aides (parfois à 100 % pour les ménages modestes). Faites le calcul avant de vous lancer."
+    ],
+    category: "diy",
+    relatedService: "isolation-thermique",
+    tags: ["isolation", "combles", "DIY", "laine de verre", "autoconstruction"],
+  },
+
+  // ============================================================
+  // URGENCE (1 question)
+  // ============================================================
+  {
+    slug: "fuite-gaz-que-faire",
+    question: "Fuite de gaz : que faire en urgence ?",
+    shortAnswer: "En cas de fuite de gaz : n'actionnez aucun interrupteur, ouvrez les fenêtres, fermez le robinet de gaz, évacuez le logement et appelez le numéro d'urgence GrDF au 0 800 47 33 33 (gratuit, 24h/24) depuis l'extérieur.",
+    detailedAnswer: [
+      "Si vous sentez une odeur de gaz (le gaz naturel est volontairement odorisé au mercaptan), réagissez immédiatement sans paniquer. Règle n°1 : ne provoquez aucune étincelle. N'allumez pas la lumière, n'utilisez pas d'interrupteur, ne branchez et ne débranchez rien, n'utilisez pas votre téléphone à l'intérieur.",
+      "Aérez immédiatement en ouvrant en grand les fenêtres et les portes pour créer un courant d'air. Si vous pouvez accéder au compteur de gaz en toute sécurité, fermez le robinet d'arrêt (tournez-le perpendiculairement au tuyau). Évacuez tous les occupants du logement, y compris les animaux.",
+      "Une fois à l'extérieur et à distance du bâtiment, appelez le numéro d'urgence GrDF : 0 800 47 33 33 (gratuit, disponible 24h/24). Un technicien interviendra dans l'heure pour sécuriser l'installation. En cas de malaise ou si la fuite est importante, appelez aussi les pompiers (18) ou le SAMU (15).",
+      "Après l'intervention d'urgence, faites contrôler l'intégralité de votre installation par un chauffagiste certifié PG (Professionnel du Gaz). Un entretien annuel de la chaudière gaz est obligatoire et permet de détecter les fuites avant qu'elles ne deviennent dangereuses. Le coût d'un contrôle complet est de 100 à 200 €."
+    ],
+    category: "urgence",
+    relatedService: "chauffagiste",
+    tags: ["fuite de gaz", "urgence", "sécurité", "GrDF", "évacuation"],
   },
 ]
 
