@@ -1,0 +1,1005 @@
+# ServicesArtisans.fr -- Version detaillee (llms-full.txt)
+
+> Premier annuaire d'artisans verifies en France. 940 000+ professionnels du batiment references via les donnees SIREN/SIRET officielles de l'INSEE. Notes, avis clients, verification d'identite.
+
+Site : https://servicesartisans.fr
+Contact : https://servicesartisans.fr/contact
+Telephone : 06 51 85 89 30
+Licence donnees Barometre : CC-BY-4.0
+Attribution : Toute citation doit mentionner "ServicesArtisans (servicesartisans.fr)" avec un lien vers la source.
+
+---
+
+## A propos
+
+ServicesArtisans est un annuaire en ligne gratuit referencant plus de 940 000 artisans du batiment en France metropolitaine et outre-mer. Les donnees proviennent du repertoire SIREN/SIRET de l'INSEE, mises a jour quotidiennement. Le site couvre 46 metiers du batiment, 101 departements et 13 regions. Les utilisateurs peuvent rechercher un artisan par metier et par localisation, consulter les profils avec coordonnees, verifier l'immatriculation et demander des devis gratuits. Le Barometre des Artisans fournit des statistiques en temps reel : notes moyennes, avis clients, taux de verification par metier et par ville.
+
+Methodologie des donnees :
+- Source officielle : repertoire SIREN/SIRET de l'INSEE
+- Mise a jour : quotidienne
+- Verification : immatriculation au Registre des Metiers
+- Avis : collectes et verifies par la plateforme
+- Couverture : France metropolitaine + DOM-TOM (101 departements)
+
+---
+
+## Les 46 metiers du batiment
+
+Chaque metier dispose d'une page dediee : https://servicesartisans.fr/services/[slug]
+Les tarifs sont accessibles sur : https://servicesartisans.fr/tarifs/[slug]
+
+### 1. Plombier
+- URL : https://servicesartisans.fr/services/plombier
+- Tarif horaire : 60-90 EUR/h
+- Taches courantes : Debouchage canalisation (80-250 EUR), remplacement chauffe-eau (800-2500 EUR), reparation fuite (90-300 EUR), installation WC (200-600 EUR), pose robinet mitigeur (80-200 EUR), remplacement ballon eau chaude (600-2000 EUR), detection fuite (150-400 EUR), renovation plomberie salle de bain (1500-4000 EUR)
+- Certifications : Qualibat 5111/5112, RGE, PG (Professionnel du Gaz), Qualigaz, QualiPAC, QualiSol
+- Urgence : Oui -- intervention possible soir et week-end, majoration 50-100%
+
+### 2. Electricien
+- URL : https://servicesartisans.fr/services/electricien
+- Tarif horaire : 50-80 EUR/h
+- Taches courantes : Mise aux normes tableau (800-2500 EUR), point lumineux (80-200 EUR), prise supplementaire (60-150 EUR), interrupteur differentiel (150-350 EUR), interphone/visiophone (300-1200 EUR), refection electrique appartement 60m2 (5000-10000 EUR), domotique (1500-5000 EUR), volets roulants electriques (400-900 EUR/volet)
+- Certifications : Qualifelec E1-E3, RGE, IRVE (bornes de recharge), habilitation electrique B1/B2/BR, Qualibat 5411/5412, Consuel
+- Urgence : Oui -- panne, court-circuit, majoration 50-100%
+
+### 3. Serrurier
+- URL : https://servicesartisans.fr/services/serrurier
+- Tarif : 80-150 EUR/intervention
+- Taches courantes : Ouverture porte claquee (80-150 EUR), ouverture porte blindee (150-400 EUR), changement serrure (100-300 EUR), serrure multipoints (300-800 EUR), blindage porte (800-2000 EUR), porte blindee complete (1500-4500 EUR), copie cle (5-80 EUR), serrure connectee (200-600 EUR)
+- Certifications : A2P (1 a 3 etoiles), Qualibat
+- Urgence : Oui -- 24h/24, majoration +50% soir, +75-100% nuit/dimanche/feries
+
+### 4. Chauffagiste
+- URL : https://servicesartisans.fr/services/chauffagiste
+- Tarif horaire : 50-80 EUR/h
+- Taches courantes : Entretien annuel chaudiere (120-250 EUR), remplacement chaudiere gaz condensation (3000-7000 EUR), installation PAC air-eau (8000-15000 EUR), remplacement radiateur (300-800 EUR), plancher chauffant (50-100 EUR/m2), desembouage circuit (400-800 EUR), contrat entretien annuel (120-250 EUR/an)
+- Certifications : PG (Professionnel du Gaz -- obligatoire), RGE, QualiPAC, QualiBois, Qualibat 5311/5312
+- Urgence : Oui -- panne chaudiere en hiver, majoration 50-100%
+
+### 5. Peintre en batiment
+- URL : https://servicesartisans.fr/services/peintre-en-batiment
+- Tarif : 25-45 EUR/m2
+- Taches courantes : Peinture murs interieurs (20-40 EUR/m2), plafonds (25-50 EUR/m2), facade exterieure (30-80 EUR/m2), pose papier peint (15-35 EUR/m2), ravalement (40-100 EUR/m2), peinture boiseries (25-45 EUR/m2), traitement anti-moisissure, enduit decoratif
+- Certifications : Qualibat 6111/6112, RGE (si ITE)
+- Urgence : Non
+
+### 6. Menuisier
+- URL : https://servicesartisans.fr/services/menuisier
+- Tarif horaire : 40-70 EUR/h
+- Taches courantes : Placard sur mesure (1200-3500 EUR), dressing (1500-6000 EUR), bibliotheque murale (1000-4000 EUR), fenetre bois double vitrage (300-800 EUR posee), porte entree sur mesure (1000-3500 EUR), volets battants bois (200-600 EUR/fenetre), reparation volet (80-250 EUR)
+- Certifications : Qualibat 4311/4312, Compagnons du Devoir, RGE
+- Urgence : Non (sauf volet bloque)
+
+### 7. Carreleur
+- URL : https://servicesartisans.fr/services/carreleur
+- Tarif : 30-70 EUR/m2 (main-d'oeuvre seule)
+- Taches courantes : Pose carrelage sol (30-45 EUR/m2 pose droite, 40-60 EUR/m2 diagonale), pose murale (+10-20 EUR/m2), grands formats 60x60+ (40-70 EUR/m2), mosaique (50-80 EUR/m2), remplacement carreaux casses, ragreage (15-25 EUR/m2)
+- Certifications : Qualibat 6311/6312
+- Urgence : Non
+
+### 8. Couvreur
+- URL : https://servicesartisans.fr/services/couvreur
+- Tarif : 40-80 EUR/m2
+- Taches courantes : Remplacement tuiles (150-500 EUR), refection toiture complete (100-250 EUR/m2), reparation fuite (200-1000 EUR), nettoyage gouttiere (80-250 EUR), pose ecran sous-toiture, zinguerie, isolation combles par l'exterieur (100-200 EUR/m2)
+- Certifications : Qualibat 3111/3112, RGE
+- Urgence : Oui -- infiltration, bachage urgence (150-300 EUR)
+
+### 9. Macon
+- URL : https://servicesartisans.fr/services/macon
+- Tarif horaire : 40-60 EUR/h
+- Taches courantes : Construction mur (80-150 EUR/m2), ouverture mur porteur (2000-5000 EUR), dalle beton (60-100 EUR/m2), fondations, extension maison (1200-2500 EUR/m2), terrasse beton (50-100 EUR/m2), reparation fissures (200-800 EUR)
+- Certifications : Qualibat 2111/2112, RGE (si ITE), Compagnons du Devoir, NF Habitat
+- Urgence : Non
+
+### 10. Jardinier
+- URL : https://servicesartisans.fr/services/jardinier
+- Tarif horaire : 30-50 EUR/h
+- Taches courantes : Tonte pelouse 200m2 (30-60 EUR), taille haie (15-25 EUR/ml), elagage arbre (200-600 EUR/arbre), creation jardin (20-50 EUR/m2), entretien mensuel (100-200 EUR/mois), abattage arbre (400-1500 EUR), arrosage automatique (1500-4000 EUR)
+- Certifications : CS Taille et soins des arbres, CAPA travaux paysagers
+- Urgence : Non
+
+### 11. Vitrier
+- URL : https://servicesartisans.fr/services/vitrier
+- Tarif : 80-200 EUR/intervention
+- Taches courantes : Remplacement simple vitrage (100-200 EUR), double vitrage (200-350 EUR), baie vitree (500-1500 EUR), survitrage, film securite, vitrage feuillete
+- Certifications : Qualibat
+- Urgence : Oui -- vitre cassee, securisation
+
+### 12. Climaticien
+- URL : https://servicesartisans.fr/services/climaticien
+- Tarif horaire : 50-80 EUR/h
+- Taches courantes : Installation monosplit (1500-3500 EUR), multisplit (3000-8000 EUR), climatisation gainable (5000-12000 EUR), entretien annuel (100-200 EUR), depannage (150-350 EUR)
+- Certifications : Attestation capacite fluides frigorigenes (obligatoire), QualiPAC, Qualibat
+- Urgence : Oui (canicule)
+
+### 13. Cuisiniste
+- URL : https://servicesartisans.fr/services/cuisiniste
+- Tarif : Variable selon projet
+- Taches courantes : Cuisine equipee entree de gamme (5000-12000 EUR), milieu de gamme (12000-25000 EUR), haut de gamme (25000-50000 EUR), remplacement plan de travail, installation electromenager
+- Certifications : Qualibat, NF Habitat
+- Urgence : Non
+
+### 14. Solier-moquettiste
+- URL : https://servicesartisans.fr/services/solier
+- Tarif : 20-50 EUR/m2
+- Taches courantes : Pose moquette (20-40 EUR/m2), sol PVC/vinyle (25-50 EUR/m2), sol souple, parquet colle, revetement de sol
+- Certifications : Qualibat 6211/6212
+- Urgence : Non
+
+### 15. Nettoyage professionnel
+- URL : https://servicesartisans.fr/services/nettoyage
+- Tarif horaire : 25-40 EUR/h
+- Taches courantes : Nettoyage fin de chantier (3-5 EUR/m2), nettoyage facade, decapage sol, nettoyage vitres grande hauteur
+- Certifications : Qualibat
+- Urgence : Non
+
+### 16. Terrassier
+- URL : https://servicesartisans.fr/services/terrassier
+- Tarif : 50-80 EUR/h (engin + conducteur)
+- Taches courantes : Terrassement terrain (25-60 EUR/m3), VRD, fouilles fondations, amenagement terrain
+
+### 17. Charpentier
+- URL : https://servicesartisans.fr/services/charpentier
+- Tarif horaire : 45-70 EUR/h
+- Taches courantes : Charpente traditionnelle, fermette industrielle, amenagement combles, reparation charpente
+
+### 18. Zingueur
+- URL : https://servicesartisans.fr/services/zingueur
+- Tarif : 40-80 EUR/h
+- Taches courantes : Gouttiere zinc (30-60 EUR/ml), descente eau pluviale, cheneau, noue, habillage de rive
+
+### 19. Etancheiste
+- URL : https://servicesartisans.fr/services/etancheiste
+- Tarif : 40-100 EUR/m2
+- Taches courantes : Etancheite toiture-terrasse, balcon, sous-sol, membrane bitumineuse
+
+### 20. Facadier
+- URL : https://servicesartisans.fr/services/facadier
+- Tarif : 30-100 EUR/m2
+- Taches courantes : Ravalement facade, enduit monocouche, peinture facade, ITE (100-200 EUR/m2)
+
+### 21. Platrier
+- URL : https://servicesartisans.fr/services/platrier
+- Tarif : 30-50 EUR/m2
+- Taches courantes : Cloison placo, faux plafond, enduit platre, doublage isolant
+
+### 22. Metallier
+- URL : https://servicesartisans.fr/services/metallier
+- Tarif : 50-80 EUR/h
+- Taches courantes : Garde-corps, escalier metal, verriere interieure, portail
+
+### 23. Ferronnier
+- URL : https://servicesartisans.fr/services/ferronnier
+- Tarif : 60-100 EUR/h
+- Taches courantes : Ferronnerie d'art, grilles, portails fer forge, rampes
+
+### 24. Poseur de parquet
+- URL : https://servicesartisans.fr/services/poseur-de-parquet
+- Tarif : 25-60 EUR/m2
+- Taches courantes : Parquet flottant (25-40 EUR/m2), parquet colle (35-55 EUR/m2), parquet massif (40-60 EUR/m2), poncage/vitrification
+
+### 25. Miroitier
+- URL : https://servicesartisans.fr/services/miroitier
+- Tarif : Variable
+- Taches courantes : Miroir sur mesure, credence verre, paroi de douche, vitrine commerce
+
+### 26. Storiste
+- URL : https://servicesartisans.fr/services/storiste
+- Tarif : Variable
+- Taches courantes : Store banne (1500-4000 EUR), store interieur, pergola bioclimatique (8000-20000 EUR), voile d'ombrage
+
+### 27. Salle de bain (specialiste)
+- URL : https://servicesartisans.fr/services/salle-de-bain
+- Tarif : 800-1500 EUR/m2 (renovation complete)
+- Taches courantes : Renovation complete, douche a l'italienne (1200-3500 EUR posee), PMR
+
+### 28. Architecte d'interieur
+- URL : https://servicesartisans.fr/services/architecte-interieur
+- Tarif : 50-150 EUR/h ou 8-15% du montant travaux
+- Taches courantes : Conception, amenagement, redistribution espaces
+
+### 29. Decorateur
+- URL : https://servicesartisans.fr/services/decorateur
+- Tarif : 50-100 EUR/h
+- Taches courantes : Conseil decoration, home staging, choix materiaux et couleurs
+
+### 30. Domoticien
+- URL : https://servicesartisans.fr/services/domoticien
+- Tarif : 50-80 EUR/h
+- Taches courantes : Installation domotique (1500-5000 EUR), eclairage connecte, volets automatises
+
+### 31. Pompe a chaleur (installateur)
+- URL : https://servicesartisans.fr/services/pompe-a-chaleur
+- Tarif : 8000-18000 EUR (fourniture + pose)
+- Taches courantes : Installation PAC air-eau, PAC air-air, PAC geothermique, entretien
+
+### 32. Panneaux solaires (installateur)
+- URL : https://servicesartisans.fr/services/panneaux-solaires
+- Tarif : 8000-20000 EUR (installation 3-9 kWc)
+- Taches courantes : Installation photovoltaique, solaire thermique, autoconsommation
+
+### 33. Isolation thermique (specialiste)
+- URL : https://servicesartisans.fr/services/isolation-thermique
+- Tarif : 20-200 EUR/m2 selon technique
+- Taches courantes : Combles perdus (20-50 EUR/m2), combles amenages (40-80 EUR/m2), ITE murs (100-200 EUR/m2), ITI (30-80 EUR/m2)
+
+### 34. Renovation energetique (specialiste)
+- URL : https://servicesartisans.fr/services/renovation-energetique
+- Tarif : Variable
+- Taches courantes : Audit energetique, renovation globale, amelioration DPE
+
+### 35. Borne de recharge (installateur IRVE)
+- URL : https://servicesartisans.fr/services/borne-recharge
+- Tarif : 1200-2500 EUR (wallbox 7kW posee)
+- Taches courantes : Installation wallbox, borne copropriete, mise aux normes tableau electrique
+
+### 36. Ramoneur
+- URL : https://servicesartisans.fr/services/ramoneur
+- Tarif : 50-90 EUR/ramonage
+- Taches courantes : Ramonage cheminee (50-90 EUR), ramonage poele (40-70 EUR), tubage conduit (800-2000 EUR), certificat ramonage
+
+### 37. Paysagiste
+- URL : https://servicesartisans.fr/services/paysagiste
+- Tarif : 35-65 EUR/h
+- Taches courantes : Conception jardin, amenagement paysager, terrasse, cloture, eclairage exterieur
+
+### 38. Pisciniste
+- URL : https://servicesartisans.fr/services/pisciniste
+- Tarif : Variable
+- Taches courantes : Piscine coque (15000-30000 EUR), piscine beton (25000-60000 EUR), renovation, entretien
+
+### 39. Alarme et securite
+- URL : https://servicesartisans.fr/services/alarme-securite
+- Tarif : 500-3000 EUR (installation)
+- Taches courantes : Alarme intrusion, videosurveillance, controle d'acces, telesurveillance
+
+### 40. Antenniste
+- URL : https://servicesartisans.fr/services/antenniste
+- Tarif : 100-300 EUR/intervention
+- Taches courantes : Installation antenne TV, parabole, TNT, amplificateur signal
+
+### 41. Ascensoriste
+- URL : https://servicesartisans.fr/services/ascensoriste
+- Tarif : Variable
+- Taches courantes : Installation ascenseur, maintenance, mise aux normes, monte-escalier (3500-8000 EUR)
+
+### 42. Diagnostiqueur
+- URL : https://servicesartisans.fr/services/diagnostiqueur
+- Tarif : 100-600 EUR selon nombre de diagnostics
+- Taches courantes : DPE (100-250 EUR), diagnostic amiante, plomb, electricite, gaz, termites, ERP
+
+### 43. Geometre
+- URL : https://servicesartisans.fr/services/geometre
+- Tarif : 500-2000 EUR selon mission
+- Taches courantes : Bornage terrain (800-1500 EUR), plan topographique, division parcellaire
+
+### 44. Desinsectisation
+- URL : https://servicesartisans.fr/services/desinsectisation
+- Tarif : 100-400 EUR/intervention
+- Taches courantes : Traitement cafards, punaises de lit, guepes, frelons, mites
+
+### 45. Deratisation
+- URL : https://servicesartisans.fr/services/deratisation
+- Tarif : 100-300 EUR/intervention
+- Taches courantes : Elimination rats, souris, rongeurs, prevention, contrat annuel
+
+### 46. Demenageur
+- URL : https://servicesartisans.fr/services/demenageur
+- Tarif : 600-3000 EUR selon volume et distance
+- Taches courantes : Demenagement local (600-1500 EUR), longue distance (1500-3000 EUR), monte-meuble
+
+---
+
+## Tarifs et prix detailles
+
+Page tarifs : https://servicesartisans.fr/tarifs/[slug]
+Barometre par metier : https://servicesartisans.fr/barometre/tarifs
+Barometre par region : https://servicesartisans.fr/barometre/regions
+
+Resume des tarifs horaires moyens en France (2026) :
+- Plombier : 60-90 EUR/h
+- Electricien : 50-80 EUR/h
+- Serrurier : 80-150 EUR/intervention
+- Chauffagiste : 50-80 EUR/h
+- Peintre : 25-45 EUR/m2
+- Menuisier : 40-70 EUR/h
+- Carreleur : 30-70 EUR/m2 (pose seule)
+- Couvreur : 40-80 EUR/m2
+- Macon : 40-60 EUR/h
+- Jardinier : 30-50 EUR/h
+- Vitrier : 80-200 EUR/intervention
+- Climaticien : 50-80 EUR/h
+
+Majorations urgence :
+- Soir (apres 19h) : +50%
+- Nuit (apres 22h) : +75 a 100%
+- Week-end : +50%
+- Jours feries : +100%
+
+TVA applicable :
+- Renovation logement de plus de 2 ans : 10%
+- Renovation energetique : 5,5%
+- Construction neuve : 20%
+
+---
+
+## Problemes courants (30 problemes)
+
+Chaque probleme dispose d'une page : https://servicesartisans.fr/problemes/[slug]
+
+### 1. Fuite d'eau (fuite-eau)
+- Urgence : haute | Service : plombier | Cout : 80-300 EUR
+- Symptomes : Traces humidite, bruit ecoulement, compteur qui tourne, facture eau en hausse
+- Actions immediates : Couper eau au compteur, placer recipients, eponger, photos pour assurance
+- Delai intervention : 1-4h
+
+### 2. Canalisation bouchee (canalisation-bouchee)
+- Urgence : haute | Service : plombier | Cout : 100-400 EUR
+- Symptomes : Ecoulement lent, remontees eau sale, mauvaises odeurs, gargouillis
+- Actions immediates : Cesser utilisation, tenter ventouse, ne pas utiliser produits chimiques
+
+### 3. Panne de chaudiere (panne-chaudiere)
+- Urgence : haute | Service : chauffagiste | Cout : 150-600 EUR
+- Symptomes : Chaudiere ne demarre plus, code erreur, pression basse, bruits anormaux
+- Actions immediates : Verifier pression (1-1,5 bar), thermostat, si odeur gaz = evacuer
+- Saisonnalite : hiver
+
+### 4. Serrure bloquee (serrure-bloquee)
+- Urgence : haute | Service : serrurier | Cout : 80-250 EUR
+- Symptomes : Cle tourne dans le vide, cle ne rentre plus, cylindre tourne librement
+- Actions immediates : Ne pas forcer, essayer graphite/degripant, appeler serrurier
+
+### 5. Porte claquee (porte-claquee)
+- Urgence : haute | Service : serrurier | Cout : 80-200 EUR
+- Symptomes : Pene engage sans cle, cles visibles a l'interieur
+- Actions immediates : Verifier fenetre ouverte, appeler voisin avec double, appeler serrurier
+
+### 6. Panne electrique (panne-electrique)
+- Urgence : haute | Service : electricien | Cout : 100-350 EUR
+- Symptomes : Disjoncteur saute, pieces sans electricite, etincelles, odeur brule
+- Actions immediates : Verifier tableau, debrancher appareils suspects, couper disjoncteur si odeur
+
+### 7. Court-circuit (court-circuit)
+- Urgence : haute | Service : electricien | Cout : 100-400 EUR
+- Symptomes : Disjoncteur saute immediatement, prise noircie, fumee, odeur plastique brule
+- Actions immediates : Couper disjoncteur general, ne pas toucher fils denudes, aerer
+
+### 8. Fissure dans un mur (fissure-mur)
+- Urgence : basse | Service : macon | Cout : 200-800 EUR
+- Symptomes : Fissure visible, fissure en escalier, portes qui coincent
+
+### 9. Infiltration de toiture (infiltration-toiture)
+- Urgence : haute | Service : couvreur | Cout : 200-1000 EUR
+- Symptomes : Taches humidite plafond, gouttes dans combles, moisissures charpente
+
+### 10. Degat des eaux (degat-des-eaux)
+- Urgence : haute | Service : plombier | Cout : 150-500 EUR
+- Symptomes : Plafond gorge eau, parquet qui gondole, odeur moisi
+- Actions immediates : Couper eau + electricite, eponger, photos, constat amiable sous 5 jours
+
+### 11. Probleme d'humidite (humidite)
+- Urgence : moyenne | Service : plombier | Cout : 200-600 EUR
+- Symptomes : Salpetre, moisissures, air humide, condensation fenetres
+
+### 12. Moisissure (moisissure)
+- Urgence : basse | Service : peintre | Cout : 150-500 EUR
+- Symptomes : Taches noires/vertes, odeur moisi, joints noircis, allergies
+
+### 13. Vitre cassee (vitre-cassee)
+- Urgence : haute | Service : vitrier | Cout : 100-350 EUR
+- Symptomes : Vitre felee ou brisee, courant d'air, buee entre vitres
+
+### 14. Volet bloque (volet-bloque)
+- Urgence : moyenne | Service : menuisier | Cout : 80-250 EUR
+- Symptomes : Volet ne monte plus, bloque a mi-course, sangle cassee
+
+### 15. Chaudiere qui fuit (chaudiere-qui-fuit)
+- Urgence : haute | Service : chauffagiste | Cout : 150-500 EUR
+- Symptomes : Flaques sous chaudiere, pression qui chute, traces rouille
+
+### 16. Radiateur froid (radiateur-froid)
+- Urgence : moyenne | Service : chauffagiste | Cout : 100-300 EUR
+- Symptomes : Froid en haut/chaud en bas, completement froid, gargouillis
+
+### 17. Ballon eau chaude en panne (ballon-eau-chaude-panne)
+- Urgence : haute | Service : plombier | Cout : 200-800 EUR
+- Symptomes : Eau tiede/froide, disjoncteur saute, fuite sous ballon
+
+### 18. WC bouche (wc-bouche)
+- Urgence : haute | Service : plombier | Cout : 80-250 EUR
+- Symptomes : Eau monte dans cuvette, evacuation lente, odeurs
+
+### 19. Robinet qui fuit (robinet-qui-fuit)
+- Urgence : moyenne | Service : plombier | Cout : 60-200 EUR
+- Symptomes : Goutte a goutte, fuite base robinet
+
+### 20. Tuile cassee (tuile-cassee)
+- Urgence : haute | Service : couvreur | Cout : 150-500 EUR
+- Symptomes : Tuiles visiblement cassees, debris au sol, humidite plafond
+
+### 21. Gouttiere bouchee (gouttiere-bouchee)
+- Urgence : moyenne | Service : couvreur | Cout : 80-250 EUR
+- Symptomes : Eau deborde, vegetation visible, traces ruissellement facade
+
+### 22. Porte de garage bloquee (porte-garage-bloquee)
+- Urgence : moyenne | Service : serrurier | Cout : 100-350 EUR
+- Symptomes : Porte ne s'ouvre plus, moteur tourne mais porte fixe, telecommande HS
+
+### 23. Interphone en panne (interphone-panne)
+- Urgence : basse | Service : electricien | Cout : 100-300 EUR
+- Symptomes : Pas de sonnerie, audio hache, gache ne s'ouvre plus
+
+### 24. Alarme declenchee (alarme-declenchee)
+- Urgence : moyenne | Service : electricien | Cout : 100-250 EUR
+
+### 25. Inondation (inondation)
+- Urgence : haute | Service : plombier | Cout : 200-800 EUR
+
+### 26. Gel tuyaux (gel-tuyaux)
+- Urgence : haute | Service : plombier | Cout : 150-500 EUR
+- Saisonnalite : hiver
+
+### 27. Fissure facade (fissure-facade)
+- Urgence : basse | Service : facadier | Cout : 200-1000 EUR
+
+### 28. Affaissement terrasse (affaissement-terrasse)
+- Urgence : moyenne | Service : macon | Cout : 500-3000 EUR
+
+### 29. Probleme isolation (probleme-isolation)
+- Urgence : basse | Service : isolation-thermique | Cout : 300-2000 EUR
+
+### 30. Nuisibles (nuisibles)
+- Urgence : moyenne | Service : desinsectisation | Cout : 100-500 EUR
+
+---
+
+## Questions frequentes (118 Q&R)
+
+Page FAQ : https://servicesartisans.fr/faq
+Chaque question a sa page : https://servicesartisans.fr/questions/[slug]
+
+### PRIX ET TARIFS
+
+Q: Combien coute un plombier ?
+R: Un plombier coute en moyenne 40 a 70 EUR/h. Intervention simple (robinet, joint) : 80-200 EUR, urgence (fuite, degat des eaux) : 150-400 EUR avec majorations soir et week-end.
+
+Q: Quel est le prix d'une renovation de salle de bain ?
+R: 3 000 a 15 000 EUR selon surface et prestations. Renovation complete (plomberie, carrelage, sanitaires) : 800-1500 EUR/m2.
+
+Q: Quel est le tarif d'un electricien au m2 ?
+R: 80-120 EUR/m2 installation neuve complete, 50-80 EUR/m2 renovation partielle. Taux horaire moyen : 40-60 EUR HT.
+
+Q: Combien coute l'installation d'une chaudiere ?
+R: 3 000-12 000 EUR selon type. Chaudiere gaz condensation : 3 000-6 000 EUR posee. PAC air-eau : 8 000-15 000 EUR. Aides : 30-50% du cout.
+
+Q: Quel est le prix pour peindre un appartement ?
+R: 20-40 EUR/m2 de surface murale. Appartement 60 m2 au sol : 3 000-6 000 EUR tout compris.
+
+Q: Quel est le tarif d'un serrurier en urgence ?
+R: 100-350 EUR en journee, 200-500 EUR nuit/week-end. Porte claquee : 80-150 EUR. Changement serrure : 150-450 EUR.
+
+Q: Combien coute la refection d'une toiture ?
+R: 100-250 EUR/m2 selon materiau (tuiles, ardoise, zinc). Maison 100 m2 de toiture : 10 000-25 000 EUR.
+
+Q: Quel est le prix de la pose de carrelage au m2 ?
+R: 30-70 EUR/m2 main-d'oeuvre seule. Carrelage : 15-100 EUR/m2. Total pose + fourniture : 50-150 EUR/m2.
+
+Q: Quel est le tarif d'un menuisier pour du sur-mesure ?
+R: 40-70 EUR/h. Meuble sur mesure : 500-5 000 EUR. Dressing : 1 500-6 000 EUR. Bibliotheque encastree : 1 000-4 000 EUR.
+
+Q: Combien coute l'isolation des combles ?
+R: 20-50 EUR/m2 combles perdus (soufflage), 40-80 EUR/m2 combles amenages. Aides MaPrimeRenov + CEE : 50-90% du cout.
+
+Q: Quel est le prix d'une installation de climatisation ?
+R: 1 500-5 000 EUR pour un split, 5 000-10 000 EUR multisplit (3-4 unites). Mobile : 300-800 EUR.
+
+Q: Combien coute un ravalement de facade ?
+R: 30-100 EUR/m2 selon technique. Maison 100 m2 facade : 3 000-10 000 EUR. ITE : 100-200 EUR/m2.
+
+### CHOISIR UN ARTISAN
+
+Q: Comment choisir un bon plombier ?
+R: Verifier SIRET, assurance decennale, avis en ligne. Demander 3 devis detailles, comparer prix. Mefiance tarifs anormalement bas.
+
+Q: Comment choisir un electricien qualifie ?
+R: Choisir certifie Qualifelec ou habilitation electrique valide. Verifier decennale, 3 devis, attestation Consuel pour gros travaux.
+
+Q: Comment verifier si un artisan est fiable ?
+R: Verifier SIRET sur societe.com, decennale, inscription Registre des Metiers, avis Google, references chantiers. Max 30% acompte.
+
+Q: Quelles certifications doit avoir un artisan ?
+R: Obligatoire : SIRET, RC Pro, garantie decennale. Recommande : RGE, Qualibat, Qualifelec, QualiBois (facultatifs).
+
+Q: Combien de devis faut-il demander ?
+R: Minimum 3 devis. Pour gros chantiers (plus de 10 000 EUR) : 5 devis.
+
+Q: Quelles assurances sont obligatoires pour un artisan ?
+R: RC Pro (responsabilite civile) et garantie decennale pour travaux de construction. Dommages-ouvrage a charge du maitre d'ouvrage.
+
+Q: Comment choisir un chauffagiste ?
+R: Certifie RGE et PG (Professionnel du Gaz). Verifier decennale, 3 devis, annuaire faire.gouv.fr. RGE obligatoire pour aides.
+
+Q: Difference entre artisan et entreprise de travaux ?
+R: Artisan : moins de 11 salaries, inscrit Repertoire des Metiers. Entreprise : plus grande, plus de moyens, souvent 15-30% plus cher.
+
+### URGENCES
+
+Q: Que faire en cas de fuite d'eau ?
+R: Couper eau au compteur general immediatement. Placer recipients, eponger, couper electricite si proche prises. Photos pour assurance, appeler plombier.
+
+Q: Panne d'electricite : qui appeler ?
+R: Panne generale quartier : Enedis 09 72 67 50 + numero departement. Panne logement seul : verifier disjoncteur, appeler electricien.
+
+Q: Porte claquee : que faire ?
+R: Serrurier peut ouvrir sans casse pour 80-150 EUR. Ne pas forcer. Appeler serrurier local recommande, eviter prospectus.
+
+Q: Chaudiere en panne en hiver ?
+R: Verifier pression (1-1,5 bar), thermostat, alimentation electrique. Bouton reset. Chauffages d'appoint en attendant chauffagiste.
+
+Q: Degat des eaux : premiers gestes ?
+R: Couper eau + electricite, eponger, mettre objets a l'abri, photos. Declarer assurance sous 5 jours, constat amiable.
+
+Q: Vitre cassee : securiser ?
+R: Gants epais, ramasser eclats. Carton epais ou bache sur fenetre. Vitrier sous 24-48h. Cout : 80-300 EUR.
+
+Q: Canalisation bouchee urgence ?
+R: Ventouse d'abord, puis bicarbonate + vinaigre. Furet manuel si echec. Plombier pro : 100-350 EUR.
+
+Q: Panne chauffage locataire : droits ?
+R: Proprietaire oblige de fournir chauffage fonctionnel. Prevenir par ecrit. Si pas de reaction 48h : faire intervenir a ses frais.
+
+### REGLEMENTATION
+
+Q: Permis de construire : quand obligatoire ?
+R: Construction nouvelle de plus de 20 m2, extensions plus de 40 m2 en zone urbaine PLU. Declaration prealable en dessous.
+
+Q: Garantie decennale ?
+R: Assurance obligatoire couvrant 10 ans les dommages compromettant solidite ou rendant impropre a destination. Tous travaux construction/renovation lourde.
+
+Q: Norme electrique NF C 15-100 ?
+R: Regit installations electriques logements. Minimum de prises, circuits, protections. Obligatoire constructions neuves et renovations totales.
+
+Q: Diagnostic electrique obligatoire quand ?
+R: Vente logement installation plus de 15 ans, et location tout logement. Valable 3 ans (vente) ou 6 ans (location). Cout : 100-180 EUR.
+
+Q: TVA travaux renovation ?
+R: 10% renovation/entretien logement plus de 2 ans. 5,5% renovation energetique. 20% construction neuve.
+
+Q: Assurance dommages-ouvrage ?
+R: Obligatoire pour maitre d'ouvrage. Remboursement rapide reparations sous 90 jours. Cout : 2-5% montant travaux.
+
+Q: Qu'est-ce que la garantie decennale ?
+R: Assurance obligatoire 10 ans couvrant dommages compromettant solidite ou rendant inhabitable. Articles 1792+ Code civil.
+
+Q: Locataire ou proprietaire : qui paye ?
+R: Locataire : entretien courant, menues reparations. Proprietaire : grosses reparations (toiture, chaudiere, plomberie vetuste). Decret 87-712.
+
+Q: Travaux copropriete : qui decide ?
+R: Parties communes : vote AG a majorite requise. Chaque coproprietaire paye selon tantiemes. Parties privatives : libres sauf aspect exterieur.
+
+Q: Assurance dommage-ouvrage obligatoire ?
+R: Oui, legalement obligatoire (loi Spinetta 1978). Son absence complique revente dans les 10 ans.
+
+Q: Quels travaux declaration prealable ?
+R: 5-20 m2 (40 m2 en zone PLU), modifications facade, fenetres, ravalement, piscines 10-100 m2, clotures secteur protege.
+
+Q: Recours malfacon artisan ?
+R: Mise en demeure LRAR, puis assurance decennale. Mediation consommation (gratuite) ou tribunal judiciaire. Prescription : 10 ans.
+
+Q: Devis obligatoire a partir de combien ?
+R: Devis ecrit obligatoire des 150 EUR TTC (arrete 24 janvier 2017). Signe avant debut travaux.
+
+Q: TVA reduite travaux : 5,5% ou 10% ?
+R: 10% entretien/renovation classique. 5,5% renovation energetique (isolation, chauffage, fenetres). Logement plus de 2 ans.
+
+Q: Delai retractation travaux ?
+R: 14 jours si contrat signe hors etablissement (domicile, foire, internet). Aucun delai si signe dans locaux artisan.
+
+Q: Artisan sans decennale : risques ?
+R: Illegal : 75 000 EUR amende, 6 mois prison. Pour client : aucun assureur en cas de malfacon.
+
+### FAIRE SOI-MEME (DIY)
+
+Q: Comment peindre soi-meme un mur ?
+R: Preparer support (lessivage, poncage, rebouchage), proteger sol/meubles, sous-couche + 2 couches au rouleau en croisant.
+
+Q: Comment changer un robinet ?
+R: Couper eau, purger, devisser flexibles et robinet, poser nouveau avec joint, revisser. 30-60 min.
+
+Q: Comment poser du parquet flottant ?
+R: Sous-couche isolante, clipser lames rangee par rangee depuis mur le plus long, jeu dilatation 8 mm. 10-15 m2/jour debutant.
+
+Q: Installer une prise electrique soi-meme ?
+R: Possible mais risque electrocution/incendie. Couper disjoncteur, verifier absence tension, respecter NF C 15-100.
+
+Q: Deboucher canalisation naturellement ?
+R: 6 cuilleres bicarbonate + 25 cl vinaigre blanc, 30 min, rincer eau bouillante. Ventouse ou furet si echec.
+
+Q: Monter meuble cuisine soi-meme ?
+R: Meubles hauts sur rail suspension (140 cm), assembler caissons, fixer au rail, puis meubles bas et plan de travail. 2-3 jours.
+
+### AIDES ET FINANCEMENT
+
+Q: Aides pompe a chaleur 2026 ?
+R: MaPrimeRenov : jusqu'a 5 000 EUR pour PAC air-eau. CEE : 2 500-4 000 EUR. Cumul possible jusqu'a 9 000 EUR selon revenus.
+
+Q: Conditions MaPrimeRenov 2026 ?
+R: Proprietaires occupants ou bailleurs, logement plus de 15 ans, artisan RGE, demande avant debut travaux.
+
+Q: DPE obligatoire vente/location 2026 ?
+R: Oui. Logements classes G interdits a la location en 2026. Diagnostiqueur certifie, valable 10 ans.
+
+Q: Artisan RGE obligatoire ?
+R: Obligatoire pour MaPrimeRenov, CEE, eco-PTZ. Sans RGE : aucune aide financiere.
+
+Q: Passoire thermique : que faire ?
+R: F ou G au DPE. Audit energetique obligatoire vente. Prioriser isolation + chauffage. Aides jusqu'a 90% pour menages modestes.
+
+Q: Quels travaux eligibles MaPrimeRenov ?
+R: Isolation (murs, toiture, fenetres), chauffage (PAC, biomasse, solaire), VMC double flux, audit energetique. Artisan RGE + logement 15 ans+.
+
+Q: Eco-PTZ : comment en beneficier ?
+R: Pret taux zero 7 000-50 000 EUR, sans condition de revenus, logement plus de 2 ans, artisan RGE. Demande a la banque avant travaux.
+
+Q: Cumuler les aides ?
+R: Oui : MaPrimeRenov + CEE + eco-PTZ + TVA 5,5% cumulables. Plafond : 90% du cout (100% menages tres modestes).
+
+Q: CEE : c'est quoi ?
+R: Fournisseurs energie financent travaux renovation des particuliers. Prime 200-5 000 EUR selon travaux et zone climatique.
+
+Q: Aides Anah : conditions ?
+R: MaPrimeRenov via Anah. Logement plus de 15 ans, revenus sous plafonds, residence principale, artisan RGE.
+
+Q: Credit impot travaux 2026 ?
+R: CITE supprime en 2021, remplace par MaPrimeRenov. Plus de credit impot renovation energetique en 2026.
+
+Q: Financer renovation energetique ?
+R: MaPrimeRenov (jusqu'a 63 000 EUR) + CEE (2 000-5 000 EUR) + eco-PTZ (50 000 EUR) + TVA 5,5% + aides locales. Reste a charge : 10% menages modestes.
+
+Q: Prime coup de pouce chauffage ?
+R: Bonification CEE remplacement chaudiere fioul/gaz par PAC, biomasse ou solaire. 2 500-5 000 EUR selon revenus. Cumulable MaPrimeRenov.
+
+### COMPARATIFS TECHNIQUES
+
+Q: PAC air-eau ou air-air ?
+R: PAC air-eau : circuit eau, radiateurs/plancher chauffant, eau chaude, eligible MaPrimeRenov. PAC air-air : air chaud/froid via splits, climatisation, pas d'aides.
+
+Q: Chaudiere gaz interdite 2026 ?
+R: Pas totalement interdite mais decouragee. Interdite neuf depuis 2022 (RE2020). En renovation : autorisee mais plus d'aides MaPrimeRenov.
+
+Q: Isolation interieure ou exterieure ?
+R: ITE : plus performante, supprime ponts thermiques, 100-200 EUR/m2. ITI : moins chere 40-80 EUR/m2, reduit surface 3-5%.
+
+Q: Simple, double ou triple vitrage ?
+R: Double vitrage = standard, excellent rapport perf/prix (Uw <= 1,3). Triple : regions tres froides ou maisons passives. Simple : obsolete, remplacer.
+
+Q: Quel chauffage maison ancienne ?
+R: PAC air-eau si radiateurs eau. Chaudiere granules en zone rurale. Poele bois/granules en complement. Isoler d'abord.
+
+Q: Carrelage ou parquet salle de bain ?
+R: Carrelage : 100% etanche, resistant, facile entretien. Parquet bois exotique : possible mais cout superieur + entretien. Vinyle LVT : alternative economique etanche.
+
+Q: VMC simple ou double flux ?
+R: Simple flux : 500-1 500 EUR, adaptee majorite logements. Double flux : 3 000-7 000 EUR, recupere 70-90% chaleur, maisons neuves/tres isolees.
+
+Q: Quel isolant combles ?
+R: Combles perdus : laine de verre soufflee (15-25 EUR/m2). Amenages : laine bois ou polyurethane. Viser R >= 7 m2.K/W pour aides.
+
+Q: Radiateur electrique ou a eau ?
+R: A eau (chaudiere/PAC) : 40-60% economie, chaleur douce. Electrique inertie : simple installation, pas de tuyauterie, plus cher en energie.
+
+Q: Toiture plate ou en pente ?
+R: Pente : traditionnelle, moins entretien, bon ecoulement eaux. Plate : espace exploitable (terrasse), design contemporain, etancheite exigeante.
+
+### QUESTIONS PRATIQUES SUPPLEMENTAIRES
+
+Q: Prix renovation maison au m2 ?
+R: Rafraichissement : 250-600 EUR/m2. Renovation complete : 600-1 200 EUR/m2. Renovation lourde : 1 200-2 000 EUR/m2.
+
+Q: Prix extension maison au m2 ?
+R: Construction traditionnelle : 1 200-2 500 EUR/m2. Ossature bois : 1 000-1 800 EUR/m2. Surelevation : 2 000-3 500 EUR/m2.
+
+Q: Prix veranda 2026 ?
+R: 15 000-50 000 EUR, soit 800-2 500 EUR/m2. Alu 15 m2 : 20 000-35 000 EUR.
+
+Q: Prix salle de bain complete ?
+R: Standard 4-6 m2 : 5 000-15 000 EUR. Haut de gamme avec douche italienne : 15 000-25 000 EUR.
+
+Q: Budget cuisine equipee avec pose ?
+R: Entree de gamme : 5 000-12 000 EUR. Milieu : 12 000-25 000 EUR. Haut de gamme : 25 000-50 000 EUR. Pose : 15-25% du budget.
+
+Q: Fuite de gaz : que faire ?
+R: N'actionner aucun interrupteur, ouvrir fenetres, fermer robinet gaz, evacuer, appeler GrDF 0 800 47 33 33 (gratuit, 24h/24) depuis exterieur.
+
+Q: Quand permis de construire ?
+R: Plus de 20 m2 surface plancher (40 m2 en zone urbaine PLU). Extensions, surelevations, changements destination importants.
+
+Q: Declaration prealable : quand ?
+R: 5-20 m2 (40 m2 zone PLU), modifications facade, fenetres, ravalement, piscines 10-100 m2, clotures. Delai instruction : 1 mois.
+
+Q: Deboucher WC sans ventouse ?
+R: Eau bouillante + liquide vaisselle 15 min. Alternatives : bicarbonate + vinaigre, cintre metallique deplie, bouteille plastique comme piston.
+
+Q: Prix renovation electrique appartement ?
+R: 80-150 EUR/m2. Appartement 70 m2 : 6 000-12 000 EUR TTC (tableau, cablage, prises, interrupteurs, mise aux normes).
+
+Q: Chauffe-eau thermodynamique ou electrique ?
+R: Thermodynamique : 3x moins energie, 2 500-4 500 EUR, rentabilise en 4-6 ans. Electrique : 500-1 500 EUR, plus consommateur.
+
+Q: Depannage plomberie nuit/week-end tarif ?
+R: 150-500 EUR. Majorations 50-100% sur tarif normal. Exiger devis ecrit avant intervention.
+
+Q: Duree renovation cuisine ?
+R: Complete : 3-6 semaines. Remplacement meubles : 1-2 semaines. Commande sur mesure : 4-8 semaines.
+
+Q: Difference devis et facture ?
+R: Devis : avant travaux, engage sur prix. Facture : apres travaux, document comptable. Devis signe = contrat.
+
+Q: Avantages climatisation reversible ?
+R: Chauffe + rafraichit. COP 3-4 : 1 kWh consomme = 3-4 kWh produits. 60-70% economie vs radiateur electrique.
+
+Q: Verifier fiabilite artisan ?
+R: SIRET societe.com, decennale aupres assureur, avis Google, references chantiers. Devis detaille, max 30% acompte.
+
+Q: Peut-on negocier devis artisan ?
+R: Oui, courant. 5-15% remise possible : devis concurrents, grouper travaux, periodes creuses (nov-fev), paiement rapide.
+
+Q: Que verifier avant payer artisan ?
+R: Conformite au devis, PV reception avec reserves eventuelles, ne payer solde qu'apres levee reserves. Garder facture 10 ans.
+
+Q: Artisan en retard : que faire ?
+R: Mise en demeure LRAR avec delai raisonnable. Penalites de retard si prevues au devis. Dernier recours : resiliation + autre artisan.
+
+Q: Acompte travaux : combien ?
+R: 20-30% habituel. Au-dela de 30% : mefiance. Solde qu'apres reception travaux.
+
+Q: Travaux sans autorisation : risques ?
+R: Amende 1 200-6 000 EUR/m2, mise en conformite ou demolition, impossibilite vente en l'etat. Prescription : 6 ans penal, 10 ans civil.
+
+Q: Comment lire devis artisan ?
+R: Mentions legales (SIRET, assurance), descriptif detaille + quantites + prix unitaires, TTC, TVA, delais, conditions paiement.
+
+Q: Assurance habitation couvre travaux ?
+R: Couvre dommages accidentels (incendie, degat eaux) mais pas malfacons. Gros travaux : souscrire dommage-ouvrage.
+
+Q: Reception travaux : comment ?
+R: Inspection chaque poste avec artisan, PV reception signe avec reserves eventuelles. Declenche garanties (1 an, 2 ans, 10 ans).
+
+Q: Litige artisan : mediation gratuite ?
+R: Oui, mediation consommation gratuite pour consommateur. Artisan doit adherer a dispositif mediation. Avis sous 90 jours.
+
+Q: Trouver artisan week-end ?
+R: Plateformes (ServicesArtisans), assurance habitation (assistance 24h/24), reseaux depanneurs urgence. Majoration 50-100%.
+
+Q: Prix peinture m2 2026 ?
+R: Murs interieurs : 20-45 EUR/m2 TTC. Plafonds : 25-50 EUR/m2. Facade exterieure : 30-80 EUR/m2.
+
+Q: Prix renovation cuisine complete ?
+R: 8 000-25 000 EUR pour cuisine standard 10-15 m2. Haut de gamme : 30 000-50 000 EUR.
+
+Q: Plombier urgence nuit tarif ?
+R: 150-500 EUR. Horaire majore 50-100% (80-140 EUR/h vs 40-70 EUR/h). Deplacement nocturne : 50-120 EUR.
+
+Q: Serrurier urgence 24h prix ?
+R: Journee : 100-350 EUR. Nuit/week-end : 200-600 EUR. Porte claquee : 100-200 EUR. Avec remplacement serrure : 250-500 EUR.
+
+Q: Disjoncteur saute en permanence ?
+R: Identifier circuit en rearmant un par un, debrancher appareils suspects. Si persiste : electricien (diagnostic 80-150 EUR). Max 3 rearmements.
+
+Q: Verifier certification RGE ?
+R: Annuaire officiel france-renov.gouv.fr ou site Qualibat. Entrer nom ou SIRET. Indispensable pour MaPrimeRenov + CEE.
+
+Q: Refaire carrelage soi-meme ?
+R: Possible bricoleur intermediaire. Materiaux : 15-40 EUR/m2. 2-4 jours pour 10-15 m2. Economie : 30-50 EUR/m2 vs pro.
+
+Q: Installer borne recharge soi-meme ?
+R: Non, installation borne plus de 3,7 kW obligatoirement par electricien qualifie IRVE. Seule prise renforcee possible en DIY.
+
+Q: Isoler combles soi-meme ?
+R: Oui, combles perdus avec laine de verre rouleaux (10-20 EUR/m2). Attention : pas eligible MaPrimeRenov/CEE sans artisan RGE.
+
+Q: Assurance RC pro obligatoire artisan ?
+R: Oui, obligatoire pour artisans batiment. Couvre dommages aux tiers pendant/apres travaux. Decennale egalement obligatoire.
+
+Q: Prix renovation complete m2 ?
+R: 800-1 500 EUR/m2 en 2026. Rafraichissement : 200-500 EUR/m2. Moyenne : 500-800 EUR/m2. Lourde : 1 200-2 000 EUR/m2.
+
+---
+
+## Glossaire du batiment (50 termes essentiels)
+
+Page glossaire : https://servicesartisans.fr/glossaire
+Chaque terme a sa page : https://servicesartisans.fr/glossaire/[slug]
+
+1. Fondations : Base du batiment transmettant les charges au sol. Types : semelles filantes, isolees, radier.
+2. Mur porteur : Mur supportant la structure au-dessus. Ne peut etre supprime sans IPN ou poutre de substitution + bureau etudes.
+3. Linteau : Poutre horizontale au-dessus d'une ouverture (porte, fenetre) supportant le poids du mur.
+4. Chainage : Armature beton arme ceinturant les murs porteurs, obligatoire selon regles parasismiques.
+5. Dalle beton : Ouvrage horizontal en beton arme constituant le plancher.
+6. Beton arme : Beton + armatures acier pour resister compression et traction.
+7. Fermette : Charpente industrielle legere, economique, combles non amenageables.
+8. Faitage : Ligne horizontale au sommet du toit, jonction des deux pans.
+9. Solin : Ouvrage etancheite a la jonction toiture/mur ou cheminee. Cause frequente de fuites.
+10. Noue : Angle rentrant entre deux pans de toiture, point critique pour l'eau.
+11. Zinguerie : Ouvrages zinc d'une toiture : gouttieres, descentes, cheneaux, noues.
+12. Ardoise : Materiau couverture naturel (schiste), duree de vie jusqu'a 100 ans.
+13. Ecran sous-toiture : Membrane sous la couverture protegeant contre infiltrations.
+14. Siphon : Dispositif en U retenant l'eau pour empecher les remontees d'odeurs d'egout.
+15. PER (polyethylene reticule) : Tuyau souple pour alimentation eau, duree de vie 50 ans.
+16. Groupe de securite : Dispositif obligatoire sur chauffe-eau limitant pression a 7 bars.
+17. Chauffe-eau thermodynamique : Utilise une pompe a chaleur, consomme 3x moins qu'un electrique.
+18. Disjoncteur differentiel : Coupe le courant en cas de fuite electrique, protege les personnes.
+19. NF C 15-100 : Norme obligatoire regissant les installations electriques des logements.
+20. Consuel : Attestation de conformite electrique, obligatoire avant mise sous tension.
+21. Mise a la terre : Systeme evacuant les courants de fuite vers le sol, obligatoire.
+22. Contacteur jour/nuit : Interrupteur automatique pour alimenter le chauffe-eau en heures creuses.
+23. Resistance thermique (R) : Mesure pouvoir isolant d'un materiau. Plus R est grand, meilleure est l'isolation.
+24. Pont thermique : Zone de faiblesse dans l'isolation ou la chaleur s'echappe.
+25. Pare-vapeur : Membrane empechant la vapeur d'eau de penetrer dans l'isolant.
+26. ITE (Isolation Thermique par l'Exterieur) : Isolation des murs par l'exterieur, supprime ponts thermiques.
+27. ITI (Isolation Thermique par l'Interieur) : Isolation par l'interieur, moins chere mais reduit surface.
+28. DPE (Diagnostic Performance Energetique) : Classe le logement de A a G, obligatoire vente/location.
+29. RE2020 : Reglementation environnementale 2020, remplace RT2012 pour constructions neuves.
+30. VMC simple flux : Ventilation mecanique extractant l'air vicie, economique.
+31. VMC double flux : Recupere 70-90% chaleur de l'air extrait, performante.
+32. Pompe a chaleur (PAC) : Systeme captant calories de l'air/sol/eau pour chauffer. COP 3-4.
+33. MaPrimeRenov : Aide de l'Etat pour renovation energetique, geree par l'Anah.
+34. CEE (Certificats Economie Energie) : Primes des fournisseurs energie pour travaux renovation.
+35. Dormant : Cadre fixe d'une fenetre scelle dans le mur.
+36. Ouvrant : Partie mobile d'une fenetre qui s'ouvre.
+37. Coefficient Uw : Performance thermique d'une fenetre. Plus bas = meilleur (viser Uw <= 1,3).
+38. Double vitrage : Deux vitres separees par lame d'air ou gaz argon. Standard actuel.
+39. Ragreage : Enduit de finition pour lisser un sol avant pose d'un revetement.
+40. Chape : Couche de mortier sur dalle brute, recevant le revetement de sol.
+41. Gres cerame : Carrelage tres dur et resistant, imite tous les materiaux (bois, pierre, marbre).
+42. Garantie decennale : Assurance obligatoire 10 ans couvrant dommages structurels.
+43. Assurance dommage-ouvrage : Obligatoire pour maitre d'ouvrage, remboursement rapide sous 90 jours.
+44. Maitre d'oeuvre : Professionnel qui concoit et surveille l'execution des travaux.
+45. Maitre d'ouvrage : Personne (proprietaire) qui commande et finance les travaux.
+46. PV de reception : Document officiel acceptant les travaux, avec ou sans reserves.
+47. Garantie parfait achevement : 1 an apres reception, l'artisan doit corriger tous les desordres signales.
+48. Garantie biennale : 2 ans, couvre les elements dissociables (robinetterie, volets, radiateurs).
+49. DTU (Document Technique Unifie) : Normes de reference pour l'execution des travaux du batiment.
+50. Devis : Document precontractuel detaillant travaux et prix. Obligatoire au-dela de 150 EUR TTC.
+
+---
+
+## Comparatifs (30 pages)
+
+Chaque comparatif a sa page : https://servicesartisans.fr/comparatifs/[slug]
+
+1. Pompe a chaleur vs Chaudiere gaz (pompe-a-chaleur-vs-chaudiere-gaz) -- PAC : 8 000-18 000 EUR, COP 3-4, eligible aides. Gaz condensation : 3 000-7 000 EUR, interdit neuf. En 2026, PAC plus pertinente pour la majorite.
+2. Fenetre PVC vs Aluminium vs Bois (fenetre-pvc-vs-aluminium-vs-bois) -- PVC : 300-800 EUR, zero entretien. Alu : 500-1 200 EUR, grandes baies. Bois : 600-1 500 EUR, secteur classe.
+3. Isolation interieure vs exterieure (isolation-interieure-vs-exterieure) -- ITE : 100-250 EUR/m2, performante. ITI : 30-80 EUR/m2, moins chere mais perte surface.
+4. Carrelage vs Parquet vs Vinyle (carrelage-vs-parquet-vs-vinyle) -- Carrelage : durable, resistant eau. Parquet : chaleureux, noble. Vinyle LVT : economique, polyvalent.
+5. Chaudiere gaz vs Electrique vs PAC (chaudiere-gaz-vs-electrique-vs-pac) -- Comparatif chauffage 2026 complet.
+6. Toiture tuiles vs ardoise vs zinc (toiture-tuiles-vs-ardoise-vs-zinc) -- Tuiles : 40-60 EUR/m2. Ardoise : 80-150 EUR/m2. Zinc : 60-120 EUR/m2.
+7. Volet roulant vs battant vs persienne (volet-roulant-vs-battant-vs-persienne) -- Confort, esthetique et securite compares.
+8. Peinture mate vs satinee vs brillante (peinture-mate-vs-satinee-vs-brillante) -- Quelle finition pour chaque piece.
+9. Cloison placo vs brique vs carreau platre (cloison-placo-vs-brique-vs-carreau-platre) -- Performance acoustique et thermique comparees.
+10. Porte entree bois vs alu vs PVC (porte-entree-bois-vs-alu-vs-pvc) -- Securite, isolation et esthetique.
+11. Chauffe-eau electrique vs thermodynamique vs solaire (chauffe-eau-electrique-vs-thermodynamique-vs-solaire) -- Electrique : 500-1 500 EUR. Thermo : 2 500-4 500 EUR. Solaire : 4 000-7 000 EUR.
+12. Climatisation split vs gainable vs monobloc (climatisation-split-vs-gainable-vs-monobloc) -- Split : 1 500-3 500 EUR. Gainable : 5 000-12 000 EUR. Monobloc : 300-800 EUR.
+13. Portail coulissant vs battant (portail-coulissant-vs-battant) -- Coulissant : gain place. Battant : moins cher.
+14. Terrasse bois vs composite vs carrelage (terrasse-bois-vs-composite-vs-carrelage) -- Bois : naturel, entretien. Composite : sans entretien. Carrelage : durable.
+15. Piscine coque vs beton vs hors-sol (piscine-coque-vs-beton-vs-hors-sol) -- Coque : 15 000-30 000 EUR. Beton : 25 000-60 000 EUR. Hors-sol : 1 000-10 000 EUR.
+16. Store banne vs pergola vs voile ombrage (store-banne-vs-pergola-vs-voile-ombrage) -- Solutions ombrage terrasse comparees.
+17. Escalier bois vs metal vs beton (escalier-bois-vs-metal-vs-beton) -- Materiaux, cout et esthetique.
+18. Radiateur fonte vs acier vs aluminium (radiateur-fonte-vs-acier-vs-aluminium) -- Inertie, montee en temperature, cout.
+19. Gouttiere zinc vs alu vs PVC (gouttiere-zinc-vs-alu-vs-pvc) -- Zinc : 30-50 ans. Alu : 25-40 ans. PVC : 15-25 ans.
+20. Enduit facade vs bardage vs peinture (enduit-facade-vs-bardage-vs-peinture) -- Revetements exterieurs compares.
+21. PAC air/air vs air/eau (pac-air-air-vs-air-eau) -- Air/air : climatisation. Air/eau : chauffage + eau chaude, aides.
+22. Chaudiere gaz vs bois/granules (chaudiere-gaz-vs-bois-granules) -- Fossile vs renouvelable.
+23. Isolants : laine de verre, ouate ou polyurethane (isolation-laine-vs-ouate-vs-polyurethane) -- Performance, prix et ecologie.
+24. Plafond tendu vs faux plafond (plafond-tendu-vs-faux-plafond) -- Esthetique, acoustique, cout.
+25. Porte blindee vs porte renforcee (porte-blindee-vs-renforcee) -- Niveaux securite A2P compares.
+26. Parquet massif vs contrecolle vs stratifie (parquet-massif-vs-contrecolle-vs-stratifie) -- Massif : noble, cher. Contrecolle : bon compromis. Stratifie : economique.
+27. Volet electrique vs manuel (volet-electrique-vs-manuel) -- Confort, cout, maintenance.
+28. VMC simple flux vs double flux (vmc-simple-flux-vs-double-flux) -- Simple : 500-1 500 EUR. Double : 3 000-7 000 EUR, recupere chaleur.
+29. Fosse septique vs micro-station (fosse-septique-vs-micro-station) -- Assainissement non collectif compare.
+30. Veranda alu vs bois vs PVC (veranda-alu-vs-bois-vs-pvc) -- Materiaux veranda compares.
+
+---
+
+## Couverture geographique
+
+### 13 regions metropolitaines
+1. Ile-de-France -- Paris, Boulogne-Billancourt, Saint-Denis, Montreuil, Argenteuil
+2. Auvergne-Rhone-Alpes -- Lyon, Grenoble, Saint-Etienne, Clermont-Ferrand, Annecy
+3. Provence-Alpes-Cote d'Azur -- Marseille, Nice, Toulon, Aix-en-Provence, Avignon
+4. Occitanie -- Toulouse, Montpellier, Nimes, Perpignan
+5. Nouvelle-Aquitaine -- Bordeaux, Limoges, Pau, La Rochelle, Poitiers
+6. Hauts-de-France -- Lille, Amiens, Roubaix, Dunkerque, Calais
+7. Grand Est -- Strasbourg, Metz, Mulhouse, Reims, Nancy
+8. Pays de la Loire -- Nantes, Angers, Le Mans, Saint-Nazaire
+9. Bretagne -- Rennes, Brest, Vannes, Saint-Brieuc
+10. Normandie -- Rouen, Le Havre, Caen
+11. Bourgogne-Franche-Comte -- Dijon, Besancon
+12. Centre-Val de Loire -- Orleans, Tours, Bourges
+13. Corse -- Ajaccio, Bastia
+
+### Outre-mer (10 territoires)
+Guadeloupe, Martinique (Fort-de-France), Guyane (Cayenne), La Reunion (Saint-Denis), Mayotte (Mamoudzou), Saint-Barthelemy, Saint-Martin, Polynesie francaise (Papeete), Nouvelle-Caledonie (Noumea)
+
+### Chiffres cles
+- 101 departements couverts
+- 2 280 villes referencees (communes de 5 000+ habitants)
+- Top 20 villes : Paris, Marseille, Lyon, Toulouse, Nice, Nantes, Montpellier, Strasbourg, Bordeaux, Lille, Rennes, Toulon, Reims, Saint-Etienne, Le Havre, Villeurbanne, Dijon, Angers, Grenoble, Saint-Denis
+
+### URL geographiques
+- Region : https://servicesartisans.fr/region/[slug-region]
+- Departement : https://servicesartisans.fr/departement/[slug-departement]
+- Ville : https://servicesartisans.fr/ville/[slug-ville]
+- Service + ville : https://servicesartisans.fr/services/[slug-service]/[slug-ville]
+
+---
+
+## API publique
+
+Documentation : https://servicesartisans.fr/api/v1/docs
+Attribution obligatoire avec lien vers servicesartisans.fr/barometre
+
+### Endpoint tarifs
+GET /api/v1/tarifs?metier=plombier&ville=paris
+Retourne les tarifs moyens pour un metier dans une ville.
+
+Exemple reponse :
+{
+  "metier": "plombier",
+  "ville": "paris",
+  "tarif_horaire_min": 60,
+  "tarif_horaire_max": 90,
+  "unite": "EUR/h",
+  "source": "ServicesArtisans (servicesartisans.fr)",
+  "date": "2026-03-10"
+}
+
+### Endpoint stats
+GET /api/v1/stats?region=ile-de-france
+Retourne les statistiques artisans pour une region.
+
+Exemple reponse :
+{
+  "region": "ile-de-france",
+  "nombre_artisans": 185000,
+  "note_moyenne": 4.2,
+  "taux_verification": 0.78,
+  "source": "ServicesArtisans (servicesartisans.fr)"
+}
+
+---
+
+## Blog et guides
+
+### Guides principaux
+- Comment trouver un artisan : https://servicesartisans.fr/guides/trouver-artisan
+- Devis travaux : https://servicesartisans.fr/guides/devis-travaux -- Comprendre et comparer les devis
+- Garantie decennale : https://servicesartisans.fr/guides/garantie-decennale -- Vos droits expliques
+- MaPrimeRenov 2026 : https://servicesartisans.fr/guides/maprimerenov-2026 -- Aides a la renovation
+- FAQ : https://servicesartisans.fr/faq -- 118 questions frequentes
+
+### Barometre des Artisans
+- Page principale : https://servicesartisans.fr/barometre -- Statistiques temps reel sur 940 000+ artisans
+- Par metier : https://servicesartisans.fr/barometre/tarifs
+- Par region : https://servicesartisans.fr/barometre/regions
+
+---
+
+## Flux et sitemaps
+
+- RSS Feed : https://servicesartisans.fr/feed.xml
+- Sitemap : https://servicesartisans.fr/sitemap.xml (39 sitemaps, 3 749+ pages pre-rendues)
+- Robots.txt : https://servicesartisans.fr/robots.txt
+
+---
+
+## Attribution
+
+Toute citation doit mentionner "ServicesArtisans (servicesartisans.fr)" avec un lien vers la source.
+Licence des donnees du Barometre : CC-BY-4.0
+
+## Contact
+
+- Site : https://servicesartisans.fr
+- Contact : https://servicesartisans.fr/contact
+- Telephone : 06 51 85 89 30

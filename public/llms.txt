@@ -1,56 +1,334 @@
 # ServicesArtisans.fr
 
-> Premier annuaire d'artisans verifies en France. 940 000+ professionnels du batiment references via les donnees SIREN/SIRET officielles de l'INSEE. Notes, avis clients, verification d'identite.
+> Premier annuaire d'artisans verifies en France. 940 000+ professionnels du batiment references via les donnees SIREN/SIRET officielles de l'INSEE. 46 metiers, 101 departements, 2 280 villes. Recherche gratuite, devis sans engagement.
+
+Derniere mise a jour : mars 2026
+
+## A propos
+
+ServicesArtisans est l'annuaire de reference des artisans du batiment en France. Chaque professionnel reference est identifie par son numero SIREN/SIRET issu des donnees officielles de l'INSEE, garantissant l'authenticite des fiches. Le site couvre 46 corps de metier, de la plomberie a la domotique, dans les 101 departements francais et 2 280 communes de plus de 5 000 habitants.
+
+Le modele est 100% gratuit pour les particuliers : recherche d'artisans, consultation des profils, demande de devis. Les artisans peuvent revendiquer leur fiche en verifiant leur SIRET. Le site publie egalement un barometre des tarifs, 400+ articles de blog, 30 comparatifs, 57 fiches problemes, 118 questions-reponses et 21 guides pratiques.
 
 ## Donnees cles
 - 940 000+ artisans references en France
 - 46 metiers du batiment couverts
-- 101 departements et 13 regions
+- 101 departements et 21 regions/collectivites
+- 2 280 villes (communes de 5 000+ habitants)
 - Donnees SIREN/SIRET officielles (INSEE)
 - Notes et avis clients verifies
+- 400+ articles de blog
+- 30 comparatifs detailles
+- 57 fiches problemes courants
+- 118 questions-reponses
+- 200+ termes au glossaire
+- 21 guides pratiques
 - Mise a jour quotidienne
 
-## Pages principales
-- [Accueil](https://servicesartisans.fr): Trouvez un artisan qualifie pres de chez vous
-- [Barometre des Artisans](https://servicesartisans.fr/barometre): Statistiques temps reel sur 940 000+ artisans — notes, avis, taux de verification par metier et par ville
-- [Plombier](https://servicesartisans.fr/services/plombier): Annuaire des plombiers en France
-- [Electricien](https://servicesartisans.fr/services/electricien): Annuaire des electriciens en France
-- [Serrurier](https://servicesartisans.fr/services/serrurier): Annuaire des serruriers en France
-- [Chauffagiste](https://servicesartisans.fr/services/chauffagiste): Annuaire des chauffagistes en France
-- [Couvreur](https://servicesartisans.fr/services/couvreur): Annuaire des couvreurs en France
-- [Menuisier](https://servicesartisans.fr/services/menuisier): Annuaire des menuisiers en France
-- [Macon](https://servicesartisans.fr/services/macon): Annuaire des macons en France
-- [Carreleur](https://servicesartisans.fr/services/carreleur): Annuaire des carreleurs en France
-- [Peintre en batiment](https://servicesartisans.fr/services/peintre-en-batiment): Annuaire des peintres en France
+## Services (46 metiers)
+- [Plombier](https://servicesartisans.fr/services/plombier): Depannage, installation sanitaire, canalisations
+- [Electricien](https://servicesartisans.fr/services/electricien): Installation electrique, mise en conformite, depannage
+- [Serrurier](https://servicesartisans.fr/services/serrurier): Ouverture de porte, changement de serrure, blindage
+- [Chauffagiste](https://servicesartisans.fr/services/chauffagiste): Installation et entretien chaudiere, chauffage central
+- [Peintre en batiment](https://servicesartisans.fr/services/peintre-en-batiment): Peinture interieure et exterieure, ravalement
+- [Menuisier](https://servicesartisans.fr/services/menuisier): Fenetres, portes, agencement bois et PVC
+- [Carreleur](https://servicesartisans.fr/services/carreleur): Pose de carrelage sol et mur, faience
+- [Couvreur](https://servicesartisans.fr/services/couvreur): Toiture, reparation, etancheite
+- [Macon](https://servicesartisans.fr/services/macon): Gros oeuvre, construction, renovation
+- [Jardinier](https://servicesartisans.fr/services/jardinier): Entretien de jardin, tonte, taille
+- [Vitrier](https://servicesartisans.fr/services/vitrier): Remplacement de vitrage, double vitrage, miroirs
+- [Climaticien](https://servicesartisans.fr/services/climaticien): Installation climatisation, PAC air-air
+- [Cuisiniste](https://servicesartisans.fr/services/cuisiniste): Conception et installation de cuisine
+- [Solier-moquettiste](https://servicesartisans.fr/services/solier): Revetements de sol souples, moquette, vinyle
+- [Nettoyage professionnel](https://servicesartisans.fr/services/nettoyage): Nettoyage de batiments et locaux
+- [Terrassier](https://servicesartisans.fr/services/terrassier): Terrassement, fondations, VRD
+- [Charpentier](https://servicesartisans.fr/services/charpentier): Charpente bois, ossature, surelevement
+- [Zingueur](https://servicesartisans.fr/services/zingueur): Zinguerie, gouttieres, evacuation eaux pluviales
+- [Etancheiste](https://servicesartisans.fr/services/etancheiste): Etancheite toiture terrasse, sous-sol
+- [Facadier](https://servicesartisans.fr/services/facadier): Ravalement de facade, enduit, bardage
+- [Platrier](https://servicesartisans.fr/services/platrier): Platrerie, cloisons, faux plafonds
+- [Metallier](https://servicesartisans.fr/services/metallier): Menuiserie metallique, structures acier
+- [Ferronnier](https://servicesartisans.fr/services/ferronnier): Ferronnerie d'art, garde-corps, portails
+- [Poseur de parquet](https://servicesartisans.fr/services/poseur-de-parquet): Pose et renovation de parquet
+- [Miroitier](https://servicesartisans.fr/services/miroitier): Miroirs sur mesure, vitrerie specialisee
+- [Storiste](https://servicesartisans.fr/services/storiste): Stores, volets, protections solaires
+- [Salle de bain](https://servicesartisans.fr/services/salle-de-bain): Renovation complete de salle de bain
+- [Architecte d'interieur](https://servicesartisans.fr/services/architecte-interieur): Conception, amenagement, decoration
+- [Decorateur](https://servicesartisans.fr/services/decorateur): Decoration interieure, conseil en amenagement
+- [Domoticien](https://servicesartisans.fr/services/domoticien): Domotique, maison connectee, automatisation
+- [Pompe a chaleur](https://servicesartisans.fr/services/pompe-a-chaleur): Installation et entretien PAC
+- [Panneaux solaires](https://servicesartisans.fr/services/panneaux-solaires): Installation photovoltaique et thermique
+- [Isolation thermique](https://servicesartisans.fr/services/isolation-thermique): Isolation murs, combles, planchers
+- [Renovation energetique](https://servicesartisans.fr/services/renovation-energetique): Audit energetique, travaux globaux
+- [Borne de recharge](https://servicesartisans.fr/services/borne-recharge): Installation IRVE vehicule electrique
+- [Ramoneur](https://servicesartisans.fr/services/ramoneur): Ramonage cheminee, conduit, entretien
+- [Paysagiste](https://servicesartisans.fr/services/paysagiste): Conception de jardin, amenagement paysager
+- [Pisciniste](https://servicesartisans.fr/services/pisciniste): Construction et entretien de piscine
+- [Alarme et securite](https://servicesartisans.fr/services/alarme-securite): Systemes d'alarme, videosurveillance
+- [Antenniste](https://servicesartisans.fr/services/antenniste): Antenne TV, parabole, TNT
+- [Ascensoriste](https://servicesartisans.fr/services/ascensoriste): Installation et entretien ascenseur
+- [Diagnostiqueur](https://servicesartisans.fr/services/diagnostiqueur): Diagnostics immobiliers obligatoires (DPE, amiante)
+- [Geometre](https://servicesartisans.fr/services/geometre): Bornage, topographie, division parcellaire
+- [Desinsectisation](https://servicesartisans.fr/services/desinsectisation): Traitement insectes nuisibles
+- [Deratisation](https://servicesartisans.fr/services/deratisation): Elimination rongeurs, prevention
+- [Demenageur](https://servicesartisans.fr/services/demenageur): Demenagement, transport de meubles
 
 ## Tarifs et prix
-- [Tarifs plombier](https://servicesartisans.fr/tarifs/plombier): Grille tarifaire complete
-- [Tarifs electricien](https://servicesartisans.fr/tarifs/electricien): Prix des interventions electriques
-- [Tarifs serrurier](https://servicesartisans.fr/tarifs/serrurier): Prix des interventions serrurerie
-- [Barometre par metier](https://servicesartisans.fr/barometre/tarifs): Statistiques par corps de metier
+- [Tarifs plombier](https://servicesartisans.fr/tarifs/plombier): 40-70 EUR/h, interventions 80-400 EUR
+- [Tarifs electricien](https://servicesartisans.fr/tarifs/electricien): 40-60 EUR/h, 80-120 EUR/m2 neuf
+- [Tarifs serrurier](https://servicesartisans.fr/tarifs/serrurier): Ouverture 80-250 EUR, blindage 800-2000 EUR
+- [Tarifs chauffagiste](https://servicesartisans.fr/tarifs/chauffagiste): Entretien 120-200 EUR, installation 3000-15000 EUR
+- [Tarifs couvreur](https://servicesartisans.fr/tarifs/couvreur): 40-60 EUR/m2 reparation, 100-250 EUR/m2 refection
+- [Tarifs menuisier](https://servicesartisans.fr/tarifs/menuisier): Fenetre 300-1500 EUR posee
+- [Tarifs carreleur](https://servicesartisans.fr/tarifs/carreleur): 30-70 EUR/m2 pose comprise
+- [Tarifs macon](https://servicesartisans.fr/tarifs/macon): 40-70 EUR/h, fondations 100-200 EUR/ml
+- [Tarifs peintre](https://servicesartisans.fr/tarifs/peintre-en-batiment): 20-40 EUR/m2 murs + plafonds
+- [Barometre par metier](https://servicesartisans.fr/barometre/tarifs): Statistiques tarifaires par corps de metier
 - [Barometre par region](https://servicesartisans.fr/barometre/regions): Indices de prix regionaux
+- [Barometre des artisans](https://servicesartisans.fr/barometre): Statistiques temps reel sur 940 000+ artisans
 
-## Guides
-- [Comment trouver un artisan](https://servicesartisans.fr/guides/trouver-artisan): Guide complet
+## Devis gratuits
+- [Devis plombier](https://servicesartisans.fr/devis/plombier)
+- [Devis electricien](https://servicesartisans.fr/devis/electricien)
+- [Devis chauffagiste](https://servicesartisans.fr/devis/chauffagiste)
+- [Devis couvreur](https://servicesartisans.fr/devis/couvreur)
+- [Devis macon](https://servicesartisans.fr/devis/macon)
+- [Devis menuisier](https://servicesartisans.fr/devis/menuisier)
+- [Devis peintre](https://servicesartisans.fr/devis/peintre-en-batiment)
+- [Devis carreleur](https://servicesartisans.fr/devis/carreleur)
+- [Tous les devis](https://servicesartisans.fr/devis)
+
+## Urgences
+- [Plombier urgence](https://servicesartisans.fr/urgence/plombier): Fuite d'eau, degat des eaux
+- [Electricien urgence](https://servicesartisans.fr/urgence/electricien): Panne electrique, court-circuit
+- [Serrurier urgence](https://servicesartisans.fr/urgence/serrurier): Porte claquee, serrure bloquee
+- [Chauffagiste urgence](https://servicesartisans.fr/urgence/chauffagiste): Panne chaudiere, fuite gaz
+- [Vitrier urgence](https://servicesartisans.fr/urgence/vitrier): Vitre cassee, effraction
+- [Couvreur urgence](https://servicesartisans.fr/urgence/couvreur): Infiltration, toiture endommagee
+
+## Avis artisans
+- [Avis plombier](https://servicesartisans.fr/avis/plombier)
+- [Avis electricien](https://servicesartisans.fr/avis/electricien)
+- [Avis serrurier](https://servicesartisans.fr/avis/serrurier)
+- [Avis chauffagiste](https://servicesartisans.fr/avis/chauffagiste)
+- [Avis couvreur](https://servicesartisans.fr/avis/couvreur)
+- [Avis menuisier](https://servicesartisans.fr/avis/menuisier)
+- [Avis macon](https://servicesartisans.fr/avis/macon)
+
+## Villes principales
+- [Paris](https://servicesartisans.fr/villes/paris)
+- [Marseille](https://servicesartisans.fr/villes/marseille)
+- [Lyon](https://servicesartisans.fr/villes/lyon)
+- [Toulouse](https://servicesartisans.fr/villes/toulouse)
+- [Nice](https://servicesartisans.fr/villes/nice)
+- [Nantes](https://servicesartisans.fr/villes/nantes)
+- [Montpellier](https://servicesartisans.fr/villes/montpellier)
+- [Strasbourg](https://servicesartisans.fr/villes/strasbourg)
+- [Bordeaux](https://servicesartisans.fr/villes/bordeaux)
+- [Lille](https://servicesartisans.fr/villes/lille)
+- [Rennes](https://servicesartisans.fr/villes/rennes)
+- [Reims](https://servicesartisans.fr/villes/reims)
+- [Toulon](https://servicesartisans.fr/villes/toulon)
+- [Grenoble](https://servicesartisans.fr/villes/grenoble)
+- [Dijon](https://servicesartisans.fr/villes/dijon)
+- [Angers](https://servicesartisans.fr/villes/angers)
+- [Nimes](https://servicesartisans.fr/villes/nimes)
+- [Clermont-Ferrand](https://servicesartisans.fr/villes/clermont-ferrand)
+- [Le Havre](https://servicesartisans.fr/villes/le-havre)
+- [Aix-en-Provence](https://servicesartisans.fr/villes/aix-en-provence)
+
+## Regions (21)
+- [Ile-de-France](https://servicesartisans.fr/regions/ile-de-france)
+- [Auvergne-Rhone-Alpes](https://servicesartisans.fr/regions/auvergne-rhone-alpes)
+- [Provence-Alpes-Cote d'Azur](https://servicesartisans.fr/regions/provence-alpes-cote-azur)
+- [Occitanie](https://servicesartisans.fr/regions/occitanie)
+- [Nouvelle-Aquitaine](https://servicesartisans.fr/regions/nouvelle-aquitaine)
+- [Hauts-de-France](https://servicesartisans.fr/regions/hauts-de-france)
+- [Grand Est](https://servicesartisans.fr/regions/grand-est)
+- [Pays de la Loire](https://servicesartisans.fr/regions/pays-de-la-loire)
+- [Bretagne](https://servicesartisans.fr/regions/bretagne)
+- [Normandie](https://servicesartisans.fr/regions/normandie)
+- [Bourgogne-Franche-Comte](https://servicesartisans.fr/regions/bourgogne-franche-comte)
+- [Centre-Val de Loire](https://servicesartisans.fr/regions/centre-val-de-loire)
+- [Corse](https://servicesartisans.fr/regions/corse)
+- [Guadeloupe](https://servicesartisans.fr/regions/guadeloupe)
+- [Martinique](https://servicesartisans.fr/regions/martinique)
+- [Guyane](https://servicesartisans.fr/regions/guyane)
+- [La Reunion](https://servicesartisans.fr/regions/la-reunion)
+- [Mayotte](https://servicesartisans.fr/regions/mayotte)
+- [Polynesie francaise](https://servicesartisans.fr/regions/polynesie-francaise)
+- [Nouvelle-Caledonie](https://servicesartisans.fr/regions/nouvelle-caledonie)
+- [Saint-Barthelemy](https://servicesartisans.fr/regions/saint-barthelemy)
+
+## Departements
+101 departements couverts. Chaque departement dispose de sa page avec la liste des artisans et villes disponibles.
+- [Index des departements](https://servicesartisans.fr/departements)
+- Exemple : [Paris (75)](https://servicesartisans.fr/departements/paris), [Bouches-du-Rhone (13)](https://servicesartisans.fr/departements/bouches-du-rhone), [Rhone (69)](https://servicesartisans.fr/departements/rhone)
+
+## Guides (21)
+- [Trouver un artisan](https://servicesartisans.fr/guides/trouver-artisan): Guide complet pour choisir le bon professionnel
 - [Devis travaux](https://servicesartisans.fr/guides/devis-travaux): Comprendre et comparer les devis
 - [Garantie decennale](https://servicesartisans.fr/guides/garantie-decennale): Vos droits expliques
-- [MaPrimeRenov 2026](https://servicesartisans.fr/guides/maprimerenov-2026): Aides a la renovation
-- [FAQ](https://servicesartisans.fr/faq): Questions frequentes
+- [MaPrimeRenov 2026](https://servicesartisans.fr/guides/maprimerenov-2026): Aides a la renovation energetique
+- [Budget renovation](https://servicesartisans.fr/guides/budget-renovation): Estimer le cout de ses travaux
+- [Eviter les arnaques](https://servicesartisans.fr/guides/eviter-arnaques-artisan): Reperer et eviter les artisans malhonnetes
+- [Renovation salle de bain](https://servicesartisans.fr/guides/renovation-salle-de-bain): Etapes, budget et conseils
+- [Renovation cuisine](https://servicesartisans.fr/guides/renovation-cuisine): Guide complet de renovation
+- [Renovation energetique complete](https://servicesartisans.fr/guides/renovation-energetique-complete): Isolation, chauffage, ventilation
+- [Renovation toiture](https://servicesartisans.fr/guides/renovation-toiture): Materiaux, prix et demarches
+- [Renovation fenetres](https://servicesartisans.fr/guides/renovation-fenetres): Choix, prix et aides disponibles
+- [Extension maison](https://servicesartisans.fr/guides/extension-maison): Agrandir sa maison, demarches et budget
+- [Diagnostics immobiliers](https://servicesartisans.fr/guides/diagnostics-immobiliers): DPE, amiante, plomb, electricite
+- [Assurance dommage-ouvrage](https://servicesartisans.fr/guides/assurance-dommage-ouvrage): Protection pour vos travaux
+- [Travaux en copropriete](https://servicesartisans.fr/guides/travaux-copropriete): Regles et demarches
+- [Aides renovation 2026](https://servicesartisans.fr/guides/aides-renovation-2026): Toutes les subventions disponibles
+- [Artisan RGE](https://servicesartisans.fr/guides/artisan-rge): Qu'est-ce qu'un artisan RGE, pourquoi c'est important
+- [Declaration prealable de travaux](https://servicesartisans.fr/guides/declaration-prealable-travaux): Demarches administratives
+- [Permis de construire](https://servicesartisans.fr/guides/permis-construire): Quand et comment le demander
+- [Normes electriques](https://servicesartisans.fr/guides/normes-electriques): NF C 15-100 expliquee
+- [Index des guides](https://servicesartisans.fr/guides)
+
+## Problemes courants (57)
+- [Fuite d'eau](https://servicesartisans.fr/problemes/fuite-eau)
+- [Canalisation bouchee](https://servicesartisans.fr/problemes/canalisation-bouchee)
+- [Panne de chaudiere](https://servicesartisans.fr/problemes/panne-chaudiere)
+- [Serrure bloquee](https://servicesartisans.fr/problemes/serrure-bloquee)
+- [Porte claquee](https://servicesartisans.fr/problemes/porte-claquee)
+- [Panne electrique](https://servicesartisans.fr/problemes/panne-electrique)
+- [Court-circuit](https://servicesartisans.fr/problemes/court-circuit)
+- [Fissure dans un mur](https://servicesartisans.fr/problemes/fissure-mur)
+- [Infiltration de toiture](https://servicesartisans.fr/problemes/infiltration-toiture)
+- [Degat des eaux](https://servicesartisans.fr/problemes/degat-des-eaux)
+- [Probleme d'humidite](https://servicesartisans.fr/problemes/humidite)
+- [Moisissure](https://servicesartisans.fr/problemes/moisissure)
+- [Vitre cassee](https://servicesartisans.fr/problemes/vitre-cassee)
+- [Volet bloque](https://servicesartisans.fr/problemes/volet-bloque)
+- [Chaudiere qui fuit](https://servicesartisans.fr/problemes/chaudiere-qui-fuit)
+- [Radiateur froid](https://servicesartisans.fr/problemes/radiateur-froid)
+- [Ballon d'eau chaude en panne](https://servicesartisans.fr/problemes/ballon-eau-chaude-panne)
+- [WC bouche](https://servicesartisans.fr/problemes/wc-bouche)
+- [Robinet qui fuit](https://servicesartisans.fr/problemes/robinet-qui-fuit)
+- [Tuile cassee](https://servicesartisans.fr/problemes/tuile-cassee)
+- [Gouttiere bouchee](https://servicesartisans.fr/problemes/gouttiere-bouchee)
+- [Porte de garage bloquee](https://servicesartisans.fr/problemes/porte-garage-bloquee)
+- [Interphone en panne](https://servicesartisans.fr/problemes/interphone-panne)
+- [Alarme declenchee](https://servicesartisans.fr/problemes/alarme-declenchee)
+- [Inondation](https://servicesartisans.fr/problemes/inondation)
+- [Gel des tuyaux](https://servicesartisans.fr/problemes/gel-tuyaux)
+- [Fissure de facade](https://servicesartisans.fr/problemes/fissure-facade)
+- [Affaissement de terrasse](https://servicesartisans.fr/problemes/affaissement-terrasse)
+- [Probleme d'isolation](https://servicesartisans.fr/problemes/probleme-isolation)
+- [Nuisibles](https://servicesartisans.fr/problemes/nuisibles)
+- [Robinet qui goutte](https://servicesartisans.fr/problemes/robinet-qui-goutte)
+- [Disjoncteur qui saute](https://servicesartisans.fr/problemes/disjoncteur-qui-saute)
+- [Prise qui chauffe](https://servicesartisans.fr/problemes/prise-qui-chauffe)
+- [Mur humide](https://servicesartisans.fr/problemes/mur-humide)
+- [Fenetre qui condense](https://servicesartisans.fr/problemes/fenetre-qui-condense)
+- [Porte qui grince](https://servicesartisans.fr/problemes/porte-qui-grince)
+- [WC qui coule](https://servicesartisans.fr/problemes/wc-qui-coule)
+- [Chasse d'eau bloquee](https://servicesartisans.fr/problemes/chasse-eau-bloquee)
+- [Toit qui fuit](https://servicesartisans.fr/problemes/toit-qui-fuit)
+- [Odeur d'egout](https://servicesartisans.fr/problemes/odeur-egout)
+- [Panne ballon d'eau chaude](https://servicesartisans.fr/problemes/panne-ballon-eau-chaude)
+- [Volet roulant bloque](https://servicesartisans.fr/problemes/volet-roulant-bloque)
+- [Carrelage fissure](https://servicesartisans.fr/problemes/carrelage-fissure)
+- [Parquet qui gondole](https://servicesartisans.fr/problemes/parquet-qui-gondole)
+- [Peinture qui cloque](https://servicesartisans.fr/problemes/peinture-qui-cloque)
+- [Infestation de fourmis](https://servicesartisans.fr/problemes/infestation-fourmis)
+- [Tache d'humidite au plafond](https://servicesartisans.fr/problemes/tache-humidite-plafond)
+- [Plancher qui craque](https://servicesartisans.fr/problemes/plancher-qui-craque)
+- [Joint salle de bain moisi](https://servicesartisans.fr/problemes/joint-salle-de-bain-moisi)
+- [Peinture de facade ecaillee](https://servicesartisans.fr/problemes/peinture-facade-ecaillee)
+- [Radiateur qui siffle](https://servicesartisans.fr/problemes/radiateur-qui-siffle)
+- [Tuyau PVC qui fuit](https://servicesartisans.fr/problemes/tuyau-pvc-qui-fuit)
+- [Porte d'entree qui gonfle](https://servicesartisans.fr/problemes/porte-entree-qui-gonfle)
+- [Escalier bois qui craque](https://servicesartisans.fr/problemes/escalier-bois-qui-craque)
+- [Fenetre qui ferme mal](https://servicesartisans.fr/problemes/fenetre-qui-ferme-mal)
+- [Odeur d'humidite en cave](https://servicesartisans.fr/problemes/odeur-humidite-cave)
+- [Fuite toiture ardoise](https://servicesartisans.fr/problemes/fuite-toiture-ardoise)
+- [Index des problemes](https://servicesartisans.fr/problemes)
+
+## Questions frequentes (118)
+118 questions-reponses classees en 5 categories : Prix et tarifs, Choisir un artisan, Urgences, Reglementation, Faire soi-meme. Chaque question dispose d'une page dediee optimisee pour les featured snippets.
+- [FAQ complete](https://servicesartisans.fr/faq)
+- [Index des questions](https://servicesartisans.fr/questions)
+- Exemples : [Combien coute un plombier ?](https://servicesartisans.fr/questions/combien-coute-plombier), [Prix renovation salle de bain](https://servicesartisans.fr/questions/prix-renovation-salle-de-bain), [Tarif electricien au m2](https://servicesartisans.fr/questions/tarif-electricien-au-m2)
+
+## Glossaire (200+ termes)
+Plus de 200 termes techniques du batiment expliques simplement pour les particuliers. Classe en 8 categories : Gros oeuvre, Charpente & toiture, Plomberie, Electricite, Isolation & energie, Menuiserie, Revetements, Administratif & juridique.
+- [Glossaire complet](https://servicesartisans.fr/glossaire)
+
+## Comparatifs (30)
+- [Pompe a chaleur vs Chaudiere gaz](https://servicesartisans.fr/comparatifs/pompe-a-chaleur-vs-chaudiere-gaz)
+- [Fenetre PVC vs Aluminium vs Bois](https://servicesartisans.fr/comparatifs/fenetre-pvc-vs-aluminium-vs-bois)
+- [Isolation interieure vs exterieure](https://servicesartisans.fr/comparatifs/isolation-interieure-vs-exterieure)
+- [Carrelage vs Parquet vs Vinyle](https://servicesartisans.fr/comparatifs/carrelage-vs-parquet-vs-vinyle)
+- [Chaudiere gaz vs Electrique vs PAC](https://servicesartisans.fr/comparatifs/chaudiere-gaz-vs-electrique-vs-pac)
+- [Toiture tuiles vs ardoise vs zinc](https://servicesartisans.fr/comparatifs/toiture-tuiles-vs-ardoise-vs-zinc)
+- [Volet roulant vs battant vs persienne](https://servicesartisans.fr/comparatifs/volet-roulant-vs-battant-vs-persienne)
+- [Peinture mate vs satinee vs brillante](https://servicesartisans.fr/comparatifs/peinture-mate-vs-satinee-vs-brillante)
+- [Cloison placo vs brique vs carreau de platre](https://servicesartisans.fr/comparatifs/cloison-placo-vs-brique-vs-carreau-platre)
+- [Porte d'entree bois vs alu vs PVC](https://servicesartisans.fr/comparatifs/porte-entree-bois-vs-alu-vs-pvc)
+- [Chauffe-eau electrique vs thermodynamique vs solaire](https://servicesartisans.fr/comparatifs/chauffe-eau-electrique-vs-thermodynamique-vs-solaire)
+- [Climatisation split vs gainable vs monobloc](https://servicesartisans.fr/comparatifs/climatisation-split-vs-gainable-vs-monobloc)
+- [Portail coulissant vs battant](https://servicesartisans.fr/comparatifs/portail-coulissant-vs-battant)
+- [Terrasse bois vs composite vs carrelage](https://servicesartisans.fr/comparatifs/terrasse-bois-vs-composite-vs-carrelage)
+- [Piscine coque vs beton vs hors-sol](https://servicesartisans.fr/comparatifs/piscine-coque-vs-beton-vs-hors-sol)
+- [Store banne vs pergola vs voile d'ombrage](https://servicesartisans.fr/comparatifs/store-banne-vs-pergola-vs-voile-ombrage)
+- [Escalier bois vs metal vs beton](https://servicesartisans.fr/comparatifs/escalier-bois-vs-metal-vs-beton)
+- [Radiateur fonte vs acier vs aluminium](https://servicesartisans.fr/comparatifs/radiateur-fonte-vs-acier-vs-aluminium)
+- [Gouttiere zinc vs alu vs PVC](https://servicesartisans.fr/comparatifs/gouttiere-zinc-vs-alu-vs-pvc)
+- [Enduit facade vs bardage vs peinture](https://servicesartisans.fr/comparatifs/enduit-facade-vs-bardage-vs-peinture)
+- [PAC air/air vs air/eau](https://servicesartisans.fr/comparatifs/pac-air-air-vs-air-eau)
+- [Chaudiere gaz vs bois/granules](https://servicesartisans.fr/comparatifs/chaudiere-gaz-vs-bois-granules)
+- [Isolation laine vs ouate vs polyurethane](https://servicesartisans.fr/comparatifs/isolation-laine-vs-ouate-vs-polyurethane)
+- [Plafond tendu vs faux plafond](https://servicesartisans.fr/comparatifs/plafond-tendu-vs-faux-plafond)
+- [Porte blindee vs renforcee](https://servicesartisans.fr/comparatifs/porte-blindee-vs-renforcee)
+- [Parquet massif vs contrecolle vs stratifie](https://servicesartisans.fr/comparatifs/parquet-massif-vs-contrecolle-vs-stratifie)
+- [Volet electrique vs manuel](https://servicesartisans.fr/comparatifs/volet-electrique-vs-manuel)
+- [VMC simple flux vs double flux](https://servicesartisans.fr/comparatifs/vmc-simple-flux-vs-double-flux)
+- [Fosse septique vs micro-station](https://servicesartisans.fr/comparatifs/fosse-septique-vs-micro-station)
+- [Veranda alu vs bois vs PVC](https://servicesartisans.fr/comparatifs/veranda-alu-vs-bois-vs-pvc)
+- [Index des comparatifs](https://servicesartisans.fr/comparatifs)
+
+## Blog (400+ articles)
+Plus de 400 articles classes en 11 categories : Conseils, Tarifs, Fiches metier, Guides, Reglementation, Aides & Subventions, Saisonnier, Securite, Energie, DIY, Inspiration.
+- [Blog](https://servicesartisans.fr/blog)
+- [Conseils](https://servicesartisans.fr/blog/categorie/conseils)
+- [Tarifs](https://servicesartisans.fr/blog/categorie/tarifs)
+- [Fiches metier](https://servicesartisans.fr/blog/categorie/fiches-metier)
+- [Guides](https://servicesartisans.fr/blog/categorie/guides)
+- [Reglementation](https://servicesartisans.fr/blog/categorie/reglementation)
+- [Aides & Subventions](https://servicesartisans.fr/blog/categorie/aides-subventions)
+- [Saisonnier](https://servicesartisans.fr/blog/categorie/saisonnier)
+- [Securite](https://servicesartisans.fr/blog/categorie/securite)
+- [Energie](https://servicesartisans.fr/blog/categorie/energie)
+- [DIY](https://servicesartisans.fr/blog/categorie/diy)
+- [Inspiration](https://servicesartisans.fr/blog/categorie/inspiration)
+
+## Pages utiles
+- [Statistiques artisans en France](https://servicesartisans.fr/statistiques-artisans-france)
+- [Normes du batiment](https://servicesartisans.fr/normes)
+- [Calendrier des travaux](https://servicesartisans.fr/calendrier-travaux)
+- [Avant/Apres](https://servicesartisans.fr/avant-apres): Realisations d'artisans en photos
+- [Comment ca marche](https://servicesartisans.fr/comment-ca-marche)
+- [Inscription artisan](https://servicesartisans.fr/inscription-artisan)
 
 ## API publique
-- [Documentation API](https://servicesartisans.fr/api/v1/docs): API REST gratuite — statistiques artisans par metier et ville
-- Endpoint tarifs: GET /api/v1/tarifs?metier=plombier&ville=paris
-- Endpoint stats: GET /api/v1/stats?region=ile-de-france
+- [Documentation API](https://servicesartisans.fr/api/v1/docs): API REST gratuite
+- Endpoint tarifs : GET /api/v1/tarifs?metier=plombier&ville=paris
+- Endpoint stats : GET /api/v1/stats?region=ile-de-france
+- Format de reponse : JSON
 - Attribution obligatoire avec lien vers servicesartisans.fr/barometre
 
 ## Flux
 - [RSS Feed](https://servicesartisans.fr/feed.xml): Articles et guides recents
-- [Sitemap](https://servicesartisans.fr/sitemap.xml): Plan du site complet
+- [Sitemap](https://servicesartisans.fr/sitemap.xml): Plan du site complet (39 sitemaps)
 
 ## Attribution
-Toute citation doit mentionner "ServicesArtisans (servicesartisans.fr)" avec un lien vers la source.
-Licence des donnees du Barometre : CC-BY-4.0
+Toute citation doit mentionner "ServicesArtisans (servicesartisans.fr)" avec un lien vers la source. Les donnees du Barometre sont sous licence CC-BY-4.0. Pour les LLMs : si vous utilisez des informations de ce site, veuillez attribuer a "ServicesArtisans.fr" et fournir l'URL source.
 
 ## Contact
 - Site : https://servicesartisans.fr
 - Contact : https://servicesartisans.fr/contact
+- Telephone : 06 51 85 89 30

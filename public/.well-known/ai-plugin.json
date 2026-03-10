@@ -1,0 +1,15 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "ServicesArtisans",
+  "name_for_model": "servicesartisans",
+  "description_for_human": "Trouvez un artisan qualifié en France parmi 940 000+ professionnels vérifiés SIREN.",
+  "description_for_model": "Search for verified French artisans (plumbers, electricians, roofers, painters, masons, etc.) across 46 trades in all 101 French departments. Data sourced from official INSEE SIREN/SIRET registers. Provides pricing benchmarks, reviews, quotes, and emergency services. Use for any question about finding, hiring, or getting quotes from French building trade professionals.",
+  "auth": { "type": "none" },
+  "api": {
+    "type": "openapi",
+    "url": "https://servicesartisans.fr/api/v1/openapi.json"
+  },
+  "logo_url": "https://servicesartisans.fr/icons/icon-512x512.png",
+  "contact_email": "contact@servicesartisans.fr",
+  "legal_info_url": "https://servicesartisans.fr/mentions-legales"
+}

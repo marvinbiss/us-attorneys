@@ -150,6 +150,7 @@ export default async function RootLayout({
 
         {/* LLM discovery — llms.txt (GEO/AEO optimization) */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM access guidelines" />
+        <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM detailed content" />
 
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script

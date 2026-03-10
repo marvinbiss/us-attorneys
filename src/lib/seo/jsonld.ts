@@ -324,3 +324,69 @@ export function getProfessionalServiceSchema(artisan: {
     },
   }
 }
+
+// Schema.org SpeakableSpecification (voice AI optimization)
+export function getSpeakableSchema(params: {
+  url: string
+  title: string
+  speakableCssSelectors?: string[]
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: params.title,
+    url: params.url,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: params.speakableCssSelectors || [
+        'h1',
+        '[data-speakable="true"]',
+        '.speakable-summary',
+      ],
+    },
+  }
+}
+
+// Schema.org QAPage (single question with accepted answer — distinct from FAQPage)
+export function getQAPageSchema(params: {
+  question: string
+  answer: string
+  url: string
+  dateCreated?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'QAPage',
+    mainEntity: {
+      '@type': 'Question',
+      name: params.question,
+      text: params.question,
+      answerCount: 1,
+      ...(params.dateCreated && { dateCreated: params.dateCreated }),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: params.answer,
+        url: params.url,
+      },
+    },
+  }
+}
+
+// Schema.org FAQPage with SpeakableSpecification (voice AI optimization for FAQ pages)
+export function getSpeakableFAQSchema(params: {
+  url: string
+  title: string
+  description: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    name: params.title,
+    url: params.url,
+    description: params.description,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.faq-question', '.faq-answer', '[data-speakable="true"]'],
+    },
+  }
+}

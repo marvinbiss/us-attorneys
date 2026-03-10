@@ -79,10 +79,67 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: PRIVATE_DISALLOW,
       },
-      // AI Training bots — Block training data scraping (protect content)
+      // Applebot-Extended — Apple Intelligence / Siri AI search (CRITICAL for Apple ecosystem visibility)
       {
-        userAgent: ['GPTBot', 'Google-Extended', 'CCBot', 'anthropic-ai'],
+        userAgent: 'Applebot-Extended',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      // Amazonbot — Amazon Alexa and shopping AI answers
+      {
+        userAgent: 'Amazonbot',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      // Meta-ExternalAgent — Meta AI (Facebook, Instagram, WhatsApp AI assistant)
+      {
+        userAgent: 'Meta-ExternalAgent',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      // YouBot — You.com AI search engine
+      {
+        userAgent: 'YouBot',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      // Google-CloudVertexBot — Google Vertex AI grounding/search
+      {
+        userAgent: 'Google-CloudVertexBot',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      // AI Training bots — Block training data scraping (protect content)
+      // These bots scrape content to train LLMs — we block them to protect our original content.
+      {
+        userAgent: [
+          'GPTBot',
+          'Google-Extended',
+          'CCBot',
+          'anthropic-ai',
+          'Timpibot',
+          'Diffbot',
+          'Omgilibot',
+          'Kangaroo Bot',
+          'ImagesiftBot',
+          'img2dataset',
+        ],
         disallow: ['/'],
+      },
+      // Social preview bots — Allow so links shared on social media render rich previews (OG tags).
+      // Block private routes to avoid preview fetches on auth/admin pages.
+      {
+        userAgent: [
+          'facebookexternalhit',
+          'Twitterbot',
+          'LinkedInBot',
+          'Slackbot',
+          'TelegramBot',
+          'Discordbot',
+          'WhatsApp',
+        ],
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
       },
       // All other legitimate bots
       {

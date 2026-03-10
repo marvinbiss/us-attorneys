@@ -1,0 +1,19 @@
+/* TEAM */
+Site: ServicesArtisans.fr
+Location: France
+Contact: contact@servicesartisans.fr
+
+/* SITE */
+Framework: Next.js 14 (App Router)
+Language: TypeScript
+Styling: Tailwind CSS
+Database: Supabase (PostgreSQL)
+Hosting: Vercel
+Standards: HTML5, CSS3, ES2024
+Data Source: INSEE SIREN/SIRET (donnees gouvernementales)
+Components: React 18, Leaflet, Stripe, Resend
+Last update: 2026-03-10
+
+/* NOTE */
+940 000+ artisans references via les donnees officielles de l'INSEE.
+46 metiers du batiment couverts dans 101 departements.
