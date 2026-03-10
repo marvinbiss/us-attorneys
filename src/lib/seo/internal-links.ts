@@ -158,6 +158,7 @@ interface ArticleMeta {
   category: string
   tags: string[]
   title: string
+  readTime?: string
 }
 
 /**
@@ -170,14 +171,14 @@ export function getRelatedArticleSlugs(
   tags: string[],
   allSlugs: string[],
   allArticlesMap: Record<string, ArticleMeta>
-): { slug: string; title: string }[] {
+): { slug: string; title: string; category: string; readTime: string }[] {
   const currentTags = tags.map((t) => t.toLowerCase())
 
   const scored = allSlugs
     .filter((s) => s !== currentSlug)
     .map((s) => {
       const article = allArticlesMap[s]
-      if (!article) return { slug: s, title: '', score: 0 }
+      if (!article) return { slug: s, title: '', category: '', readTime: '', score: 0 }
 
       let score = 0
 
@@ -190,7 +191,7 @@ export function getRelatedArticleSlugs(
         if (currentTags.includes(tag)) score += 3
       }
 
-      return { slug: s, title: article.title, score }
+      return { slug: s, title: article.title, category: article.category, readTime: article.readTime || '', score }
     })
     .filter((s) => s.score > 0 && s.title)
     .sort((a, b) => b.score - a.score)

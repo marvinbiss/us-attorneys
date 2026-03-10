@@ -213,12 +213,29 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
 
   const faqSchema = getFAQSchema(allFaqItems)
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${trade.name} urgence par ville`,
+    description: `Trouvez un ${trade.name.toLowerCase()} d'urgence dans votre ville. ${trade.averageResponseTime}. Artisans référencés disponibles soir et week-end.`,
+    url: `${SITE_URL}/urgence/${service}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: topCities.map((ville, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: `${trade.name} urgence à ${ville.name}`,
+        url: `${SITE_URL}/urgence/${service}/${ville.slug}`,
+      })),
+    },
+  }
+
   // Related services for cross-linking
   const relatedServices = services.filter((s) => s.slug !== service).slice(0, 4)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, {
+      <JsonLd data={[breadcrumbSchema, faqSchema, collectionPageSchema, {
         '@context': 'https://schema.org',
         '@type': 'Service',
         name: `${trade.name} urgence soir & week-end`,

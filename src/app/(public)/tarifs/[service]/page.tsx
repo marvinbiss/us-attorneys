@@ -179,11 +179,28 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     })
   }
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `Tarifs ${trade.name} par ville`,
+    description: `Guide des tarifs ${trade.name.toLowerCase()} 2026 par ville. Prix horaire : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    url: `${SITE_URL}/tarifs/${service}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: topCities.map((ville, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: `Tarifs ${trade.name.toLowerCase()} à ${ville.name}`,
+        url: `${SITE_URL}/services/${service}/${ville.slug}`,
+      })),
+    },
+  }
+
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, collectionPageSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">

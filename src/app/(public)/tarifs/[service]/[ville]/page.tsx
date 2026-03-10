@@ -12,6 +12,7 @@ import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
+import { relatedServices } from '@/lib/constants/navigation'
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -202,13 +203,14 @@ export default async function TarifsServiceVillePage({
   )
 
   const offerCount = commune?.nb_entreprises_artisanales
-  const localBusinessSchema = {
+  const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${trade.name} \u00E0 ${villeData.name}`,
-    description: `Service de ${tradeLower} \u00E0 ${villeData.name} (${villeData.departement}). Tarifs 2026 : ${minPrice} \u00E0 ${maxPrice} ${trade.priceRange.unit}.`,
+    name: `${trade.name} \u00e0 ${villeData.name}`,
+    description: `Service de ${tradeLower} \u00e0 ${villeData.name} (${villeData.departement}). Tarifs 2026 : ${minPrice} \u00e0 ${maxPrice} ${trade.priceRange.unit}.`,
+    url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
     provider: {
-      '@type': 'Organization',
+      '@type': 'LocalBusiness',
       name: SITE_NAME,
       url: SITE_URL,
     },
@@ -262,11 +264,14 @@ export default async function TarifsServiceVillePage({
 
   const relatedCities = getNearbyCities(villeSlug, 6)
 
-  const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 6)
+  const relatedSlugs = relatedServices[service] || []
+  const otherTrades = relatedSlugs.length > 0
+    ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
+    : tradeSlugs.filter((s) => s !== service).slice(0, 6)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, localBusinessSchema, pricingItemListSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -580,6 +585,62 @@ export default async function TarifsServiceVillePage({
         </div>
       </section>
 
+      {/* Services complémentaires */}
+      {(() => {
+        const complementarySlugs = relatedServices[service] || []
+        const complementary = complementarySlugs
+          .filter((s) => s !== service && tradeContent[s])
+          .slice(0, 4)
+        if (complementary.length === 0) return null
+        return (
+          <section className="py-12 bg-white border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Services compl{'\u00E9'}mentaires {'\u00E0'} {villeData.name}
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">
+                Ces services sont souvent demand{'\u00E9'}s avec {tradeLower}.
+              </p>
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {complementary.map((slug) => {
+                  const t = tradeContent[slug]
+                  if (!t) return null
+                  const m = getRegionalMultiplier(villeData.region)
+                  return (
+                    <div key={slug} className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-2.5">
+                      <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
+                      <div className="text-xs text-gray-500">
+                        {Math.round(t.priceRange.min * m)} {'\u2013'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        <Link
+                          href={`/services/${slug}/${villeSlug}`}
+                          className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded-lg text-xs font-medium border border-gray-200 hover:border-blue-200 transition-all"
+                        >
+                          Artisans
+                        </Link>
+                        <Link
+                          href={`/devis/${slug}/${villeSlug}`}
+                          className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-amber-50 text-gray-600 hover:text-amber-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-amber-200 transition-all"
+                        >
+                          Devis
+                        </Link>
+                        <Link
+                          href={`/tarifs/${slug}/${villeSlug}`}
+                          className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-emerald-50 text-gray-600 hover:text-emerald-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-emerald-200 transition-all"
+                        >
+                          Tarifs
+                        </Link>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
+
       {/* Problèmes courants */}
       {(() => {
         const problems = getProblemsByService(service).slice(0, 4)
@@ -659,11 +720,15 @@ export default async function TarifsServiceVillePage({
                 <Link href={`/villes/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   Artisans {'\u00E0'} {villeData.name}
                 </Link>
-                {otherTrades.slice(0, 3).map((slug) => (
-                  <Link key={slug} href={`/tarifs/${slug}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                    Tarifs {tradeContent[slug].name.toLowerCase()} {'\u00E0'} {villeData.name}
-                  </Link>
-                ))}
+                {otherTrades.slice(0, 5).map((slug) => {
+                  const t = tradeContent[slug]
+                  if (!t) return null
+                  return (
+                    <Link key={slug} href={`/tarifs/${slug}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                      Tarifs {t.name.toLowerCase()} {'\u00E0'} {villeData.name}
+                    </Link>
+                  )
+                })}
               </div>
             </div>
             <div>

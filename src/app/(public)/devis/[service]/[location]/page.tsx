@@ -533,6 +533,61 @@ export default async function DevisServiceLocationPage({
         </div>
       </section>
 
+      {/* Services complémentaires */}
+      {(() => {
+        const complementary = otherTrades
+          .filter((s) => s !== service && tradeContent[s])
+          .slice(0, 4)
+        if (complementary.length === 0) return null
+        return (
+          <section className="py-12 bg-gray-50 border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Services complémentaires à {villeData.name}
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">
+                Ces services sont souvent demandés avec {tradeLower}.
+              </p>
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {complementary.map((slug) => {
+                  const t = tradeContent[slug]
+                  if (!t) return null
+                  const m = getRegionalMultiplier(villeData.region)
+                  return (
+                    <div key={slug} className="bg-white rounded-xl border border-gray-200 p-4 space-y-2.5">
+                      <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
+                      <div className="text-xs text-gray-500">
+                        {Math.round(t.priceRange.min * m)}–{Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        <Link
+                          href={`/services/${slug}/${location}`}
+                          className="inline-flex items-center px-2.5 py-1 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 rounded-lg text-xs font-medium border border-gray-200 hover:border-blue-200 transition-all"
+                        >
+                          Artisans
+                        </Link>
+                        <Link
+                          href={`/devis/${slug}/${location}`}
+                          className="inline-flex items-center px-2.5 py-1 bg-gray-50 hover:bg-amber-50 text-gray-600 hover:text-amber-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-amber-200 transition-all"
+                        >
+                          Devis
+                        </Link>
+                        <Link
+                          href={`/tarifs/${slug}/${location}`}
+                          className="inline-flex items-center px-2.5 py-1 bg-gray-50 hover:bg-emerald-50 text-gray-600 hover:text-emerald-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-emerald-200 transition-all"
+                        >
+                          Tarifs
+                        </Link>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
+
       {/* Problèmes courants */}
       {(() => {
         const problems = getProblemsByService(service).slice(0, 4)
@@ -612,7 +667,7 @@ export default async function DevisServiceLocationPage({
                 <Link href={`/villes/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   Artisans à {villeData.name}
                 </Link>
-                {otherTrades.slice(0, 3).map((slug) => {
+                {otherTrades.slice(0, 5).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (

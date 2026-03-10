@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { AlertTriangle, ArrowRight, Shield, Clock, Euro, MapPin, ChevronDown, Lightbulb, ListChecks, Eye, Users, Thermometer, Building2 } from 'lucide-react'
+import { AlertTriangle, ArrowRight, Shield, Clock, Euro, MapPin, ChevronDown, Lightbulb, ListChecks, Eye, Users, Thermometer, Building2, BookOpen } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
@@ -11,6 +11,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
+import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -511,6 +512,71 @@ export default async function ProblemeVillePage({
           </div>
         </div>
       </section>
+
+      {/* Related blog articles */}
+      {(() => {
+        // Match articles by tags that relate to the problem's primary service or problem name
+        const serviceKeywords = [
+          problem.primaryService,
+          tradeName.toLowerCase(),
+          problem.name.toLowerCase(),
+          ...problem.relatedServices,
+        ]
+        const relatedArticles = allArticlesMeta
+          .filter(a =>
+            a.tags.some(tag =>
+              serviceKeywords.some(kw =>
+                tag.toLowerCase().includes(kw) || kw.includes(tag.toLowerCase())
+              )
+            )
+          )
+          .slice(0, 3)
+
+        if (relatedArticles.length === 0) return null
+
+        return (
+          <section className="py-16 bg-white">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                  <BookOpen className="w-4 h-4" />
+                  Articles utiles
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Nos conseils sur {problem.name.toLowerCase()}
+                </h2>
+              </div>
+              <div className="space-y-4">
+                {relatedArticles.map(article => (
+                  <Link
+                    key={article.slug}
+                    href={`/blog/${article.slug}`}
+                    className="flex items-start gap-4 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-200 hover:border-blue-200 p-5 transition-all group"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm mb-1">
+                        {article.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 line-clamp-2">{article.excerpt}</p>
+                      <span className="inline-block mt-2 text-xs text-blue-600 font-medium">{article.readTime}</span>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 flex-shrink-0 mt-1 transition-colors" />
+                  </Link>
+                ))}
+              </div>
+              <div className="text-center mt-6">
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center gap-2 text-blue-600 font-medium text-sm hover:text-blue-800 transition-colors"
+                >
+                  Tous nos articles
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       {/* Nearby cities */}
       {nearbyCities.length > 0 && (

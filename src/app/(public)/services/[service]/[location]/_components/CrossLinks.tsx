@@ -7,6 +7,8 @@ import type { CommuneData } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType } from '@/types'
 import { GSC_BOOST_PAGES } from '@/lib/seo/gsc-priority-cities'
 import { getProblemsByService } from '@/lib/data/problems'
+import { relatedServices } from '@/lib/constants/navigation'
+import { tradeContent } from '@/lib/data/trade-content'
 
 interface NearbyCity {
   slug: string
@@ -203,6 +205,58 @@ export default function CrossLinks({
                 </div>
               </div>
             )}
+
+            {/* Services complémentaires dans cette ville */}
+            {(() => {
+              const complementarySlugs = relatedServices[serviceSlug] || []
+              const complementaryServices = complementarySlugs
+                .filter((slug) => slug !== serviceSlug && tradeContent[slug])
+                .slice(0, 6)
+
+              if (complementaryServices.length === 0) return null
+
+              return (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
+                  <h3 className="font-semibold text-gray-900 mb-2">
+                    Services complémentaires à {location.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Besoin d&apos;un autre artisan à {location.name} ? Ces services sont souvent demandés avec {service.name.toLowerCase()}.
+                  </p>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {complementaryServices.map((slug) => {
+                      const t = tradeContent[slug]
+                      if (!t) return null
+                      return (
+                        <div key={slug} className="bg-gray-50 rounded-xl border border-gray-100 p-4 space-y-2">
+                          <div className="font-medium text-gray-900 text-sm">{t.name}</div>
+                          <div className="flex flex-wrap gap-1.5">
+                            <Link
+                              href={`/services/${slug}/${locationSlug}`}
+                              className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-amber-50 text-gray-600 hover:text-amber-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-amber-200 transition-all"
+                            >
+                              Artisans
+                            </Link>
+                            <Link
+                              href={`/devis/${slug}/${locationSlug}`}
+                              className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-amber-50 text-gray-600 hover:text-amber-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-amber-200 transition-all"
+                            >
+                              Devis
+                            </Link>
+                            <Link
+                              href={`/tarifs/${slug}/${locationSlug}`}
+                              className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-emerald-50 text-gray-600 hover:text-emerald-800 rounded-lg text-xs font-medium border border-gray-200 hover:border-emerald-200 transition-all"
+                            >
+                              Tarifs
+                            </Link>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })()}
 
             {/* GSC boost links — pages with promising positions */}
             {(() => {

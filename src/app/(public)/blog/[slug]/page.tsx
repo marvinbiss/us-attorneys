@@ -18,11 +18,11 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 /** Lightweight map for the related-articles scorer */
-const allArticlesMeta: Record<string, { category: string; tags: string[]; title: string }> =
+const allArticlesMeta: Record<string, { category: string; tags: string[]; title: string; readTime: string }> =
   Object.fromEntries(
     Object.entries(allArticles).map(([slug, a]) => [
       slug,
-      { category: a.category, tags: a.tags, title: a.title },
+      { category: a.category, tags: a.tags, title: a.title, readTime: a.readTime },
     ])
   )
 
@@ -881,20 +881,31 @@ export default async function BlogArticlePage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Articles connexes */}
+          {/* Articles similaires */}
           {relatedArticles.length > 0 && (
             <div className="mt-12">
               <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-blue-500 rounded-full" />
-                Articles connexes
+                Articles similaires
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {relatedArticles.map(({ slug: relSlug, title: relTitle }) => (
+                {relatedArticles.map(({ slug: relSlug, title: relTitle, category: relCategory, readTime: relReadTime }) => (
                   <Link
                     key={relSlug}
                     href={`/blog/${relSlug}`}
                     className="group p-5 bg-white border border-gray-200 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                   >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+                        {categoryEmoji[relCategory] || '📝'} {relCategory}
+                      </span>
+                      {relReadTime && (
+                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {relReadTime}
+                        </span>
+                      )}
+                    </div>
                     <span className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">{relTitle}</span>
                   </Link>
                 ))}

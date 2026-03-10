@@ -142,6 +142,23 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
     },
   }
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `Devis ${tradeLower} par ville`,
+    description: `Demandez un devis ${tradeLower} gratuit. Comparez les artisans référencés par ville. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    url: `${SITE_URL}/devis/${service}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: topCities.map((ville, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: `Devis ${tradeLower} à ${ville.name}`,
+        url: `${SITE_URL}/devis/${service}/${ville.slug}`,
+      })),
+    },
+  }
+
   const relatedSlugs = relatedServices[service] || []
   const otherTrades = relatedSlugs.length > 0
     ? relatedSlugs.slice(0, 8).filter((s) => tradeContent[s])
@@ -149,7 +166,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, collectionPageSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
