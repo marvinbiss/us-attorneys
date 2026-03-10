@@ -62,18 +62,33 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: PRIVATE_DISALLOW,
       },
+      // AI Search bots — Allow retrieval/search (appear in AI answers)
+      // These crawlers fetch content when users ask questions — we WANT to be cited.
+      {
+        userAgent: ['OAI-SearchBot', 'ChatGPT-User'],
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      {
+        userAgent: ['Claude-SearchBot', 'Claude-User'],
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      {
+        userAgent: 'PerplexityBot',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+      },
+      // AI Training bots — Block training data scraping (protect content)
+      {
+        userAgent: ['GPTBot', 'Google-Extended', 'CCBot', 'anthropic-ai'],
+        disallow: ['/'],
+      },
       // All other legitimate bots
       {
         userAgent: '*',
         allow: '/',
         disallow: PRIVATE_DISALLOW,
-      },
-      // Google-Extended — opt out of Gemini/Vertex AI training.
-      // No impact on rankings. Consistent with blocking Bytespider (TikTok AI) above.
-      // The token is separate from Googlebot: disabling it does NOT affect Google Search.
-      {
-        userAgent: 'Google-Extended',
-        disallow: ['/'],
       },
       // Block aggressive SEO scrapers (consume resources, no SEO benefit)
       {

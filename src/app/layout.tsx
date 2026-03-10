@@ -148,6 +148,9 @@ export default async function RootLayout({
         {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
 
+        {/* LLM discovery — llms.txt (GEO/AEO optimization) */}
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM access guidelines" />
+
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script
           type="application/ld+json"

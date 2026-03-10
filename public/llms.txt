@@ -1,0 +1,56 @@
+# ServicesArtisans.fr
+
+> Premier annuaire d'artisans verifies en France. 940 000+ professionnels du batiment references via les donnees SIREN/SIRET officielles de l'INSEE. Notes, avis clients, verification d'identite.
+
+## Donnees cles
+- 940 000+ artisans references en France
+- 46 metiers du batiment couverts
+- 101 departements et 13 regions
+- Donnees SIREN/SIRET officielles (INSEE)
+- Notes et avis clients verifies
+- Mise a jour quotidienne
+
+## Pages principales
+- [Accueil](https://servicesartisans.fr): Trouvez un artisan qualifie pres de chez vous
+- [Barometre des Artisans](https://servicesartisans.fr/barometre): Statistiques temps reel sur 940 000+ artisans — notes, avis, taux de verification par metier et par ville
+- [Plombier](https://servicesartisans.fr/services/plombier): Annuaire des plombiers en France
+- [Electricien](https://servicesartisans.fr/services/electricien): Annuaire des electriciens en France
+- [Serrurier](https://servicesartisans.fr/services/serrurier): Annuaire des serruriers en France
+- [Chauffagiste](https://servicesartisans.fr/services/chauffagiste): Annuaire des chauffagistes en France
+- [Couvreur](https://servicesartisans.fr/services/couvreur): Annuaire des couvreurs en France
+- [Menuisier](https://servicesartisans.fr/services/menuisier): Annuaire des menuisiers en France
+- [Macon](https://servicesartisans.fr/services/macon): Annuaire des macons en France
+- [Carreleur](https://servicesartisans.fr/services/carreleur): Annuaire des carreleurs en France
+- [Peintre en batiment](https://servicesartisans.fr/services/peintre-en-batiment): Annuaire des peintres en France
+
+## Tarifs et prix
+- [Tarifs plombier](https://servicesartisans.fr/tarifs/plombier): Grille tarifaire complete
+- [Tarifs electricien](https://servicesartisans.fr/tarifs/electricien): Prix des interventions electriques
+- [Tarifs serrurier](https://servicesartisans.fr/tarifs/serrurier): Prix des interventions serrurerie
+- [Barometre par metier](https://servicesartisans.fr/barometre/tarifs): Statistiques par corps de metier
+- [Barometre par region](https://servicesartisans.fr/barometre/regions): Indices de prix regionaux
+
+## Guides
+- [Comment trouver un artisan](https://servicesartisans.fr/guides/trouver-artisan): Guide complet
+- [Devis travaux](https://servicesartisans.fr/guides/devis-travaux): Comprendre et comparer les devis
+- [Garantie decennale](https://servicesartisans.fr/guides/garantie-decennale): Vos droits expliques
+- [MaPrimeRenov 2026](https://servicesartisans.fr/guides/maprimerenov-2026): Aides a la renovation
+- [FAQ](https://servicesartisans.fr/faq): Questions frequentes
+
+## API publique
+- [Documentation API](https://servicesartisans.fr/api/v1/docs): API REST gratuite — statistiques artisans par metier et ville
+- Endpoint tarifs: GET /api/v1/tarifs?metier=plombier&ville=paris
+- Endpoint stats: GET /api/v1/stats?region=ile-de-france
+- Attribution obligatoire avec lien vers servicesartisans.fr/barometre
+
+## Flux
+- [RSS Feed](https://servicesartisans.fr/feed.xml): Articles et guides recents
+- [Sitemap](https://servicesartisans.fr/sitemap.xml): Plan du site complet
+
+## Attribution
+Toute citation doit mentionner "ServicesArtisans (servicesartisans.fr)" avec un lien vers la source.
+Licence des donnees du Barometre : CC-BY-4.0
+
+## Contact
+- Site : https://servicesartisans.fr
+- Contact : https://servicesartisans.fr/contact
