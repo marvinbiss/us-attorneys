@@ -29,6 +29,8 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: { autoRefreshToken: false, persistSession: false },
+  db: { schema: 'public' },
+  global: { headers: { 'x-my-custom-header': 'barometre-aggregation' } },
 })
 
 // Mapping specialty → slug cohérent avec france.ts services
@@ -111,7 +113,8 @@ async function fetchProviders(): Promise<
     review_count: number | null
   }> = []
 
-  const BATCH = 50000
+  // Supabase default row limit is 1000 — use smaller batches
+  const BATCH = 1000
   let offset = 0
   let hasMore = true
 
