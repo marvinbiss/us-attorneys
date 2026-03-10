@@ -73,6 +73,14 @@ export interface CommuneData {
   // MaPrimeRénov
   nb_maprimerenov_annuel: number | null
 
+  // Géorisques
+  risque_inondation?: boolean
+  risque_argile?: string | null  // 'fort' | 'moyen' | 'faible'
+  zone_sismique?: number | null  // 1-5
+  risque_radon?: number | null   // 1-3
+  nb_catnat?: number
+  risques_principaux?: string[]
+
   enriched_at: string | null
 }
 
@@ -95,6 +103,8 @@ const COMMUNE_COLUMNS = [
   'temperature_moyenne_hiver', 'temperature_moyenne_ete',
   'nb_transactions_annuelles', 'prix_m2_maison', 'prix_m2_appartement',
   'nb_maprimerenov_annuel',
+  'risque_inondation', 'risque_argile', 'zone_sismique', 'risque_radon',
+  'nb_catnat', 'risques_principaux',
   'enriched_at',
 ].join(',')
 
@@ -145,6 +155,17 @@ export function hasEnrichmentData(commune: CommuneData): boolean {
     commune.jours_gel_annuels ||
     commune.nb_transactions_annuelles ||
     commune.nb_maprimerenov_annuel
+  )
+}
+
+/** Check if commune has Géorisques risk data */
+export function hasGeorisquesData(commune: CommuneData): boolean {
+  return !!(
+    commune.risque_inondation ||
+    commune.risque_argile ||
+    commune.zone_sismique ||
+    commune.risque_radon ||
+    commune.nb_catnat
   )
 }
 

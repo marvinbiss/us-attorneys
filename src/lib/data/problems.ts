@@ -1,7 +1,9 @@
 /**
  * Données des problèmes courants pour les pages /problemes/
- * 30 problèmes avec métadonnées complètes pour le diagnostic SEO.
+ * 46 problèmes avec métadonnées complètes pour le diagnostic SEO.
  */
+
+import problemsExtra from './problems-extra'
 
 export interface Problem {
   slug: string
@@ -1051,22 +1053,25 @@ const problems: Problem[] = [
   },
 ]
 
+// Merge the 16 extra granular problems added March 2026
+const allProblems: Problem[] = [...problems, ...problemsExtra]
+
 // ---------------------------------------------------------------------------
 // Export functions
 // ---------------------------------------------------------------------------
 
 export function getProblemBySlug(slug: string): Problem | undefined {
-  return problems.find((p) => p.slug === slug)
+  return allProblems.find((p) => p.slug === slug)
 }
 
 export function getProblemSlugs(): string[] {
-  return problems.map((p) => p.slug)
+  return allProblems.map((p) => p.slug)
 }
 
 export function getProblemsByService(serviceSlug: string): Problem[] {
-  return problems.filter(
+  return allProblems.filter(
     (p) => p.primaryService === serviceSlug || p.relatedServices.includes(serviceSlug)
   )
 }
 
-export default problems
+export default allProblems

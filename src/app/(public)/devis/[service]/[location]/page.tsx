@@ -9,7 +9,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
-import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
+import { getCommuneBySlug, formatNumber, formatEuro } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
@@ -409,6 +409,157 @@ export default async function DevisServiceLocationPage({
           </div>
         </div>
       </section>
+
+      {/* Contexte local pour votre devis */}
+      {commune && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Contexte local pour votre devis à {villeData.name}
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {(commune.nb_artisans_btp != null || commune.nb_entreprises_artisanales != null) && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Users className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Tissu artisanal</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {commune.nb_artisans_btp != null
+                      ? `${formatNumber(commune.nb_artisans_btp)} artisans BTP référencés à ${villeData.name}, ce qui favorise la concurrence et des devis compétitifs.`
+                      : `${formatNumber(commune.nb_entreprises_artisanales!)} entreprises artisanales à ${villeData.name}, ce qui favorise la concurrence et des devis compétitifs.`}
+                  </p>
+                </div>
+              )}
+
+              {commune.nb_artisans_rge != null && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Artisans RGE certifiés</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {formatNumber(commune.nb_artisans_rge)} artisans RGE certifiés à {villeData.name} pour les travaux éligibles aux aides à la rénovation énergétique.
+                  </p>
+                </div>
+              )}
+
+              {commune.revenu_median != null && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Euro className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Budget des ménages</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Le revenu médian à {villeData.name} est de {formatEuro(commune.revenu_median)}/an, ce qui contextualise le budget moyen des ménages pour les travaux.
+                  </p>
+                </div>
+              )}
+
+              {commune.prix_m2_moyen != null && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Prix immobilier</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Le prix au m² de {formatEuro(commune.prix_m2_moyen)} à {villeData.name} permet d&apos;estimer le budget travaux proportionnel à la valeur du bien.
+                  </p>
+                </div>
+              )}
+
+              {commune.pct_passoires_dpe != null && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Thermometer className="w-5 h-5 text-red-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Passoires thermiques</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques (DPE F ou G) à {villeData.name} — forte demande en rénovation énergétique.
+                  </p>
+                </div>
+              )}
+
+              {(commune.jours_gel_annuels != null || commune.climat_zone != null) && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Thermometer className="w-5 h-5 text-sky-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Contexte climatique</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {getClimatLabel(commune.climat_zone ?? null)}
+                    {commune.jours_gel_annuels != null && ` avec ${commune.jours_gel_annuels} jours de gel par an`}
+                    {' — '}un facteur à prendre en compte pour planifier vos travaux de {tradeLower}.
+                  </p>
+                </div>
+              )}
+
+              {commune.part_maisons_pct != null && (
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-5 h-5 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Type de bâti dominant</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {commune.part_maisons_pct > 50
+                      ? `${commune.part_maisons_pct}\u00A0% de maisons individuelles à ${villeData.name} — les travaux de toiture, façade et jardin sont fréquents.`
+                      : `${100 - commune.part_maisons_pct}\u00A0% d'appartements à ${villeData.name} — les travaux en copropriété et de rénovation intérieure prédominent.`}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Bon à savoir */}
+            {((commune.revenu_median != null && commune.revenu_median < 28000) ||
+              (commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 20) ||
+              (commune.jours_gel_annuels != null && commune.jours_gel_annuels > 30)) && (
+              <div className="mt-8 bg-blue-50 rounded-xl border border-blue-200 p-6">
+                <h3 className="font-semibold text-blue-900 text-sm mb-3">💡 Bon à savoir</h3>
+                <ul className="space-y-2 text-sm text-blue-800">
+                  {commune.revenu_median != null && commune.revenu_median < 22000 && (
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov&apos; Bleu</strong> (barème le plus avantageux).</span>
+                    </li>
+                  )}
+                  {commune.revenu_median != null && commune.revenu_median >= 22000 && commune.revenu_median < 28000 && (
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov&apos; Jaune</strong> (barème avantageux).</span>
+                    </li>
+                  )}
+                  {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 20 && (
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques, la rénovation énergétique est une <strong>urgence</strong> à {villeData.name}. Les aides de l&apos;État sont renforcées pour ces logements.</span>
+                    </li>
+                  )}
+                  {commune.jours_gel_annuels != null && commune.jours_gel_annuels > 30 && (
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Avec {commune.jours_gel_annuels} jours de gel par an, l&apos;<strong>isolation</strong> est une priorité à {villeData.name} pour réduire la facture de chauffage.</span>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Conseils */}
       <section className="py-16 bg-white">

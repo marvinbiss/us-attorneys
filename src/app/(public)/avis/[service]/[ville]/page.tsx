@@ -14,6 +14,8 @@ import {
   Thermometer,
   Building2,
   Star,
+  Zap,
+  TrendingUp,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -890,6 +892,127 @@ export default async function AvisServiceVillePage({
           </div>
         </div>
       </section>
+
+      {/* ─── MARCHÉ LOCAL ─────────────────────────────────────── */}
+      {commune && (commune.nb_entreprises_artisanales || commune.pct_passoires_dpe || commune.revenu_median || commune.nb_maprimerenov_annuel || commune.nb_transactions_annuelles) && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+              Le march&eacute; &agrave; {villeData.name}
+            </h2>
+            <p className="text-gray-500 text-sm text-center mb-8">
+              Donn&eacute;es locales pour contextualiser votre recherche de {tradeLower} &agrave; {villeData.name}.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* Marché artisanal local */}
+              {commune.nb_entreprises_artisanales != null && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">March&eacute; artisanal local</h3>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li>&Agrave; {villeData.name}, <span className="font-semibold">{formatNumber(commune.nb_entreprises_artisanales)}</span> entreprises artisanales sont r&eacute;f&eacute;renc&eacute;es.</li>
+                    {commune.nb_artisans_btp != null && (
+                      <li><span className="font-semibold">{formatNumber(commune.nb_artisans_btp)}</span> sp&eacute;cialis&eacute;es dans le b&acirc;timent.</li>
+                    )}
+                    {commune.nb_artisans_rge != null && (
+                      <li>Dont <span className="font-semibold">{formatNumber(commune.nb_artisans_rge)}</span> certifi&eacute;es RGE.</li>
+                    )}
+                  </ul>
+                  {commune.population > 0 && (
+                    <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                      {(() => {
+                        const ratio = Math.round((commune.nb_entreprises_artisanales / commune.population) * 10000)
+                        const level = ratio >= 200 ? 'forte' : ratio >= 80 ? 'mod\u00e9r\u00e9e' : 'faible'
+                        return `Avec un ratio de ${ratio} artisans pour 10\u00a0000 habitants, la concurrence est ${level} \u00e0 ${villeData.name}.`
+                      })()}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Qualité du parc immobilier */}
+              {(commune.pct_passoires_dpe != null || commune.part_maisons_pct != null) && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-5 h-5 text-green-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">Qualit&eacute; du parc immobilier</h3>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    {commune.pct_passoires_dpe != null && (
+                      <li><span className="font-semibold">{commune.pct_passoires_dpe}&nbsp;%</span> de passoires thermiques (DPE F ou G).</li>
+                    )}
+                    {commune.nb_dpe_total != null && (
+                      <li>Sur <span className="font-semibold">{formatNumber(commune.nb_dpe_total)}</span> diagnostics r&eacute;alis&eacute;s.</li>
+                    )}
+                    {commune.part_maisons_pct != null && (
+                      <li>{commune.part_maisons_pct}&nbsp;% de maisons individuelles.</li>
+                    )}
+                  </ul>
+                  {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 15 && (
+                    <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                      Un parc avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques g&eacute;n&egrave;re une forte demande en r&eacute;novation &eacute;nerg&eacute;tique &agrave; {villeData.name}.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Pouvoir d'achat et prix */}
+              {(commune.revenu_median != null || commune.prix_m2_moyen != null) && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Euro className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">Pouvoir d&apos;achat et prix</h3>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    {commune.revenu_median != null && (
+                      <li>Revenu m&eacute;dian : <span className="font-semibold">{formatNumber(commune.revenu_median)}&nbsp;&euro;</span> / an.</li>
+                    )}
+                    {commune.prix_m2_moyen != null && (
+                      <li>Prix au m&sup2; : <span className="font-semibold">{formatNumber(commune.prix_m2_moyen)}&nbsp;&euro;</span>.</li>
+                    )}
+                  </ul>
+                  {commune.revenu_median != null && commune.prix_m2_moyen != null && (
+                    <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                      {(() => {
+                        const level = commune.prix_m2_moyen! >= 4000 ? 'premium' : commune.prix_m2_moyen! >= 2000 ? 'interm\u00e9diaire' : 'accessible'
+                        return `Le revenu m\u00e9dian de ${formatNumber(commune.revenu_median!)}\u00a0\u20ac et un prix au m\u00b2 de ${formatNumber(commune.prix_m2_moyen!)}\u00a0\u20ac situent ${villeData.name} dans un march\u00e9 ${level}.`
+                      })()}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Indicateurs de satisfaction */}
+              {(commune.nb_maprimerenov_annuel != null || commune.nb_transactions_annuelles != null) && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">Indicateurs d&apos;activit&eacute;</h3>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    {commune.nb_maprimerenov_annuel != null && (
+                      <li><span className="font-semibold">{formatNumber(commune.nb_maprimerenov_annuel)}</span> dossiers MaPrimeR&eacute;nov&apos; d&eacute;pos&eacute;s, signe d&apos;un march&eacute; actif.</li>
+                    )}
+                    {commune.nb_transactions_annuelles != null && (
+                      <li><span className="font-semibold">{formatNumber(commune.nb_transactions_annuelles)}</span> transactions immobili&egrave;res, source de demande en travaux.</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── TIPS ─────────────────────────────────────────────── */}
       <section className="py-16 bg-gray-50">

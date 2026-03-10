@@ -10,6 +10,7 @@ import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { hashCode } from '@/lib/seo/location-content'
+import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -464,6 +465,14 @@ export default async function TarifsServiceVillePage({
           )}
         </div>
       </section>
+
+      {/* Local Data Insights — unique content per commune */}
+      <LocalDataInsights
+        communeData={commune}
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+      />
 
       {/* Conseils */}
       <section className="py-16 bg-white">

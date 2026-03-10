@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2 } from "lucide-react"
+import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
@@ -74,6 +74,42 @@ const guides = [
       "Quand la déclaration préalable est nécessaire, formulaire Cerfa 13703, délai d\"instruction d\"un mois et accord tacite.",
     href: "/guides/declaration-prealable-travaux",
     icon: FileText,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Garantie Décennale : Tout Comprendre",
+    description:
+      "Définition, durée de 10 ans, travaux couverts, exclusions, vérification de l'attestation et démarches en cas de sinistre.",
+    href: "/guides/garantie-decennale",
+    icon: ShieldCheck,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Devis Travaux : Guide pour Bien Comparer",
+    description:
+      "Mentions obligatoires, combien de devis demander, comment comparer, négocier et éviter les pièges.",
+    href: "/guides/devis-travaux",
+    icon: Hammer,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Travaux en Copropriété : Règles et Démarches",
+    description:
+      "Parties communes vs privatives, vote en AG, majorités requises, autorisations et gros travaux obligatoires.",
+    href: "/guides/travaux-copropriete",
+    icon: Users,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Assurance Dommage-Ouvrage : Est-ce Obligatoire ?",
+    description:
+      "Définition, obligation légale, coût (1 à 5 % du chantier), souscription et conséquences en cas d'absence.",
+    href: "/guides/assurance-dommage-ouvrage",
+    icon: ShieldCheck,
     badge: "Nouveau",
     badgeColor: "bg-blue-100 text-blue-800",
   },

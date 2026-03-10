@@ -12,6 +12,11 @@ import {
   Users,
   Thermometer,
   Building2,
+  Snowflake,
+  CloudRain,
+  Sun,
+  Home,
+  Wrench,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -20,7 +25,7 @@ import { SITE_URL, SITE_NAME, PHONE_TEL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
-import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
+import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
@@ -667,6 +672,266 @@ export default async function UrgenceServiceVillePage({
           </div>
         </div>
       </section>
+
+      {/* ─── COMMUNE DATA: URGENCES CONTEXTE LOCAL ──────────── */}
+      {commune && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+              Urgences {tradeLower} à {villeData.name} : contexte local
+            </h2>
+            <p className="text-gray-500 text-sm text-center mb-10">
+              Données réelles de la commune pour comprendre les urgences {tradeLower} à {villeData.name}.
+            </p>
+
+            <div className="space-y-6">
+              {/* ── Risques climatiques locaux ── */}
+              {(() => {
+                const climateInsights: { icon: React.ReactNode; text: string }[] = []
+
+                // Gel + plombier/chauffagiste
+                if (
+                  commune.jours_gel_annuels != null &&
+                  commune.jours_gel_annuels > 20 &&
+                  (service === 'plombier' || service === 'chauffagiste')
+                ) {
+                  climateInsights.push({
+                    icon: <Snowflake className="w-5 h-5 text-blue-500" />,
+                    text: `Avec ${commune.jours_gel_annuels} jours de gel par an à ${villeData.name}, les urgences de canalisations gelées et pannes de chauffage sont fréquentes en hiver.`,
+                  })
+                }
+
+                // Méditerranéen + climaticien
+                if (
+                  commune.climat_zone === 'mediterraneen' &&
+                  service === 'climaticien'
+                ) {
+                  climateInsights.push({
+                    icon: <Sun className="w-5 h-5 text-orange-500" />,
+                    text: `Le climat méditerranéen de ${villeData.name} entraîne des pics de demande en dépannage climatisation pendant les canicules estivales.`,
+                  })
+                }
+
+                // Fortes précipitations + couvreur
+                if (
+                  commune.precipitation_annuelle != null &&
+                  commune.precipitation_annuelle > 900 &&
+                  service === 'couvreur'
+                ) {
+                  climateInsights.push({
+                    icon: <CloudRain className="w-5 h-5 text-blue-600" />,
+                    text: `Avec ${formatNumber(commune.precipitation_annuelle)} mm de précipitations annuelles, les urgences de toiture sont courantes à ${villeData.name}.`,
+                  })
+                }
+
+                // Gel générique (autres métiers)
+                if (
+                  commune.jours_gel_annuels != null &&
+                  commune.jours_gel_annuels > 20 &&
+                  service !== 'plombier' &&
+                  service !== 'chauffagiste' &&
+                  climateInsights.length === 0
+                ) {
+                  climateInsights.push({
+                    icon: <Snowflake className="w-5 h-5 text-blue-500" />,
+                    text: `${villeData.name} connaît ${commune.jours_gel_annuels} jours de gel par an, ce qui peut entraîner des dégâts nécessitant une intervention ${tradeLower} en urgence.`,
+                  })
+                }
+
+                // Chaleur été (si pas déjà méditerranéen+clim)
+                if (
+                  commune.temperature_moyenne_ete != null &&
+                  commune.temperature_moyenne_ete > 24 &&
+                  climateInsights.length === 0
+                ) {
+                  climateInsights.push({
+                    icon: <Sun className="w-5 h-5 text-orange-500" />,
+                    text: `Avec une température estivale moyenne de ${commune.temperature_moyenne_ete}°C à ${villeData.name}, les pics de demande en urgence augmentent en été.`,
+                  })
+                }
+
+                if (climateInsights.length === 0) return null
+
+                return (
+                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Thermometer className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <h3 className="font-heading font-semibold text-gray-900">
+                        Risques climatiques locaux
+                      </h3>
+                    </div>
+                    <div className="space-y-3">
+                      {climateInsights.map((insight, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <div className="flex-shrink-0 mt-0.5">{insight.icon}</div>
+                          <p className="text-gray-700 text-sm leading-relaxed">{insight.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })()}
+
+              {/* ── Densité d'artisans disponibles ── */}
+              {(commune.nb_artisans_btp != null || commune.nb_artisans_rge != null) && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Wrench className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <h3 className="font-heading font-semibold text-gray-900">
+                      Artisans disponibles en urgence
+                    </h3>
+                  </div>
+                  <div className="space-y-3">
+                    {commune.nb_artisans_btp != null && (
+                      <div className="flex items-start gap-3">
+                        <Users className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          À {villeData.name}, <strong>{formatNumber(commune.nb_artisans_btp)} artisans du BTP</strong> sont référencés, ce qui facilite la disponibilité en urgence pour trouver un {tradeLower} rapidement.
+                        </p>
+                      </div>
+                    )}
+                    {commune.nb_artisans_rge != null && commune.nb_artisans_rge > 0 && (
+                      <div className="flex items-start gap-3">
+                        <Shield className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          Dont <strong>{formatNumber(commune.nb_artisans_rge)} artisans certifiés RGE</strong> — utile si vos travaux urgents nécessitent une certification pour bénéficier des aides (MaPrimeRénov&apos;, CEE).
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ── Contexte immobilier ── */}
+              {(commune.part_maisons_pct != null || commune.nb_logements != null) && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Home className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <h3 className="font-heading font-semibold text-gray-900">
+                      Contexte immobilier et urgences
+                    </h3>
+                  </div>
+                  <div className="space-y-3">
+                    {commune.part_maisons_pct != null && commune.part_maisons_pct > 60 && (
+                      <div className="flex items-start gap-3">
+                        <Building2 className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          Avec <strong>{commune.part_maisons_pct} % de maisons</strong> à {villeData.name}, les urgences de toiture, plomberie extérieure et serrurerie sont plus fréquentes que dans les villes à dominante d&apos;appartements.
+                        </p>
+                      </div>
+                    )}
+                    {commune.part_maisons_pct != null && commune.part_maisons_pct <= 60 && (
+                      <div className="flex items-start gap-3">
+                        <Building2 className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          À {villeData.name}, <strong>{100 - commune.part_maisons_pct} % des logements sont des appartements</strong>. Les urgences en copropriété (plomberie collective, électricité parties communes) sont fréquentes et peuvent nécessiter une coordination avec le syndic.
+                        </p>
+                      </div>
+                    )}
+                    {commune.nb_logements != null && commune.population > 0 && (
+                      <div className="flex items-start gap-3">
+                        <MapPin className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          {villeData.name} compte <strong>{formatNumber(commune.nb_logements)} logements</strong> pour {formatNumber(commune.population)} habitants
+                          {commune.densite_population != null && (
+                            <> (densité : {formatNumber(Math.round(commune.densite_population))} hab/km²)</>
+                          )}
+                          . {commune.densite_population != null && commune.densite_population > 1000
+                            ? `Cette forte densité urbaine signifie un maillage serré d'artisans et des délais d'intervention généralement courts.`
+                            : `En zone moins dense, les délais d'intervention peuvent être plus longs — privilégiez les artisans les plus proches.`
+                          }
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ── Stats locales (inline cards) ── */}
+              {(commune.temperature_moyenne_hiver != null || commune.mois_travaux_ext_debut != null) && (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {commune.temperature_moyenne_hiver != null && (
+                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-cyan-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Snowflake className="w-5 h-5 text-cyan-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Temp. moyenne hivernale</p>
+                        <p className="text-lg font-bold text-gray-900">{commune.temperature_moyenne_hiver}°C</p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {commune.temperature_moyenne_hiver <= 2
+                            ? 'Risque élevé de gel — anticipez les urgences'
+                            : commune.temperature_moyenne_hiver <= 5
+                              ? 'Hiver modéré — risque de gel ponctuel'
+                              : 'Hiver doux — gel rare'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {commune.mois_travaux_ext_debut != null && commune.mois_travaux_ext_fin != null && (
+                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Sun className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Travaux extérieurs</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          {monthName(commune.mois_travaux_ext_debut)} — {monthName(commune.mois_travaux_ext_fin)}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          Période optimale pour les interventions extérieures
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {commune.temperature_moyenne_ete != null && (
+                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Sun className="w-5 h-5 text-orange-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Temp. moyenne estivale</p>
+                        <p className="text-lg font-bold text-gray-900">{commune.temperature_moyenne_ete}°C</p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {commune.temperature_moyenne_ete >= 26
+                            ? 'Été chaud — forte demande en climatisation'
+                            : commune.temperature_moyenne_ete >= 22
+                              ? 'Été tempéré — demande modérée'
+                              : 'Été frais — faible demande en climatisation'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {commune.precipitation_annuelle != null && (
+                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <CloudRain className="w-5 h-5 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Précipitations annuelles</p>
+                        <p className="text-lg font-bold text-gray-900">{formatNumber(commune.precipitation_annuelle)} mm</p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {commune.precipitation_annuelle > 1000
+                            ? 'Zone très pluvieuse — vigilance toiture et infiltrations'
+                            : commune.precipitation_annuelle > 700
+                              ? 'Pluviométrie moyenne — risque modéré d\'infiltrations'
+                              : 'Zone peu pluvieuse'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── WHAT TO DO WHILE WAITING ──────────────────────── */}
       <section className="py-16 bg-gray-50">

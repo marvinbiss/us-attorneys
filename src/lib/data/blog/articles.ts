@@ -20,6 +20,9 @@ import { renovationArticles } from './batch-renovation-2026'
 import { produitsArticles } from './batch-produits-materiaux'
 import { tutorielsDiy2Articles } from './batch-tutoriels-diy-2'
 import { tutorielsDiyArticles } from './batch-tutoriels-diy'
+import { saisonnierUrgenceArticles } from './batch-saisonnier-urgence'
+import { prixRegionauxArticles } from './batch-prix-regionaux'
+import { comparatifsArticles } from './batch-comparatifs-materiaux'
 
 export interface BlogArticle {
   title: string
@@ -61,6 +64,9 @@ export const allArticles: Record<string, BlogArticle> = {
   ...produitsArticles,
   ...tutorielsDiy2Articles,
   ...tutorielsDiyArticles,
+  ...saisonnierUrgenceArticles,
+  ...prixRegionauxArticles,
+  ...comparatifsArticles,
 }
 
 /** All slugs for generateStaticParams */
