@@ -36,3 +36,10 @@ npm-debug.log*
 scripts/.collect-progress.json
 scripts/.enrich-phone-progress.json
 scripts/.enrich-data/
+scripts/.lean-data/
+scripts/.mobile-data/
+scripts/.pw-data/
+scripts/.verify-data/
+scripts/.bulk-data/
+scripts/.gm-data/
+scripts/output/
