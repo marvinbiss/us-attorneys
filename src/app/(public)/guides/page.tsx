@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users } from "lucide-react"
+import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users, ShowerHead, ChefHat, Leaf, Search, ShieldAlert, Calculator, Home, FileCheck } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
@@ -110,6 +110,96 @@ const guides = [
       "Définition, obligation légale, coût (1 à 5 % du chantier), souscription et conséquences en cas d'absence.",
     href: "/guides/assurance-dommage-ouvrage",
     icon: ShieldCheck,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Comment Trouver un Artisan de Confiance en 2026",
+    description:
+      "Vérifications SIRET, décennale, RGE, comparaison de devis, labels, droits du client et recours. Le guide complet pour éviter les mauvaises surprises.",
+    href: "/guides/trouver-artisan",
+    icon: Search,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
+    description:
+      "Les 10 arnaques les plus fréquentes, signaux d'alerte, vérifications et recours en cas de fraude. Témoignages et organismes de protection.",
+    href: "/guides/eviter-arnaques-artisan",
+    icon: ShieldAlert,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?",
+    description:
+      "Prix au m² par type de rénovation, budget par pièce, aides financières (MaPrimeRénov', CEE, éco-PTZ) et conseils pour maîtriser votre budget.",
+    href: "/guides/budget-renovation",
+    icon: Calculator,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Rénovation Salle de Bain : Étapes, Prix et Conseils 2026",
+    description:
+      "Guide complet : les 7 étapes d'une rénovation SDB, prix par poste (douche italienne, carrelage, plomberie), budget total et erreurs à éviter.",
+    href: "/guides/renovation-salle-de-bain",
+    icon: ShowerHead,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Rénovation Cuisine : Guide Complet des Étapes et Prix 2026",
+    description:
+      "De la conception à la pose : étapes, prix par poste (meubles, plan de travail, électroménager), types d'implantation et comparatif des matériaux.",
+    href: "/guides/renovation-cuisine",
+    icon: ChefHat,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Rénovation Énergétique : Guide Complet pour Votre Maison",
+    description:
+      "Les 4 piliers (isolation, chauffage, ventilation, fenêtres), l'ordre optimal des travaux, toutes les aides 2026 et le retour sur investissement.",
+    href: "/guides/renovation-energetique-complete",
+    icon: Leaf,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Extension de Maison : Démarches, Prix et Conseils 2026",
+    description:
+      "Types d'extensions (latérale, surélévation, véranda), démarches DP ou permis selon la surface, prix au m² (800-2500€) et matériaux.",
+    href: "/guides/extension-maison",
+    icon: Building2,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Diagnostics Immobiliers : Le Guide Complet",
+    description:
+      "Les 10 diagnostics obligatoires (DPE, amiante, plomb, termites, électricité, gaz), durée de validité, prix et qui peut les réaliser.",
+    href: "/guides/diagnostics-immobiliers",
+    icon: FileCheck,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Rénovation de Toiture : Travaux et Prix 2026",
+    description:
+      "Signes d'usure, types de couverture (tuile, ardoise, zinc, bac acier), prix (60-200€/m²), isolation et aides MaPrimeRénov.",
+    href: "/guides/renovation-toiture",
+    icon: Home,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Changer ses Fenêtres : Matériaux, Prix et Aides 2026",
+    description:
+      "Matériaux (PVC, bois, alu, mixte), types de vitrage, pose en rénovation vs dépose totale, prix et aides financières (MaPrimeRénov, CEE, TVA 5,5%).",
+    href: "/guides/renovation-fenetres",
+    icon: Home,
     badge: "Nouveau",
     badgeColor: "bg-blue-100 text-blue-800",
   },

@@ -1,6 +1,6 @@
 /**
  * Données des questions fréquentes pour les pages /questions/
- * 105 questions avec réponses optimisées pour les featured snippets Google.
+ * 118 questions avec réponses optimisées pour les featured snippets Google.
  */
 
 export type QuestionCategory = "prix" | "choix" | "urgence" | "reglementation" | "diy"
@@ -1593,6 +1593,175 @@ export const questions: Question[] = [
     category: "choix",
     relatedService: "plombier",
     tags: ["week-end", "urgence", "dépannage", "artisan", "majoration"],
+  },
+
+  // ============================================================
+  // AJOUT MARS 2026 — 11 questions supplémentaires
+  // ============================================================
+  {
+    slug: "prix-peinture-m2-maison",
+    question: "Quel est le prix de la peinture au m² en 2026 ?",
+    shortAnswer: "En 2026, le prix de la peinture au m² varie de 20 à 45 € TTC (main-d'œuvre + fournitures) pour des murs intérieurs. Les plafonds coûtent 25 à 50 €/m² et une façade extérieure 30 à 80 €/m² selon l'état du support.",
+    detailedAnswer: [
+      "Le prix de la peinture au m² en 2026 dépend de plusieurs facteurs : le type de peinture (acrylique, glycéro, écologique), la qualité du support, le nombre de couches nécessaires et la complexité du chantier. Pour des murs intérieurs en bon état, comptez 20 à 30 €/m² en entrée de gamme et 35 à 45 €/m² en milieu-haut de gamme.",
+      "Les plafonds sont facturés plus cher (25 à 50 €/m²) en raison de la position de travail pénible et de la nécessité fréquente d'un échafaudage. Les peintures décoratives (effet béton ciré, stucco, patine) atteignent 50 à 90 €/m² en raison de la technicité requise.",
+      "Pour la peinture de façade extérieure, les tarifs vont de 30 à 80 €/m² selon l'état du crépi, la hauteur de la façade et la nécessité d'un échafaudage. Un nettoyage haute pression préalable (5 à 10 €/m²) est souvent nécessaire. La peinture de façade représente un budget de 5 000 à 15 000 € pour une maison de 100 m² au sol.",
+      "Astuce pour comparer les devis : demandez le prix au m² de surface murale (et non au m² au sol). Pour convertir, un m² au sol correspond à environ 2,5 à 3 m² de surface murale (murs + plafond). Un appartement de 80 m² au sol représente donc 200 à 240 m² de surface à peindre.",
+      "La TVA applicable est de 10 % pour les logements de plus de 2 ans (au lieu de 20 %), ce qui réduit significativement le budget. Pensez aussi à vérifier si votre peintre est assuré en responsabilité civile décennale, obligatoire pour les professionnels du bâtiment."
+    ],
+    category: "prix",
+    relatedService: "peintre-en-batiment",
+    tags: ["peinture", "prix au m²", "peintre", "façade", "tarif 2026"],
+  },
+  {
+    slug: "prix-renovation-cuisine-complete",
+    question: "Combien coûte une rénovation de cuisine complète ?",
+    shortAnswer: "Une rénovation de cuisine complète coûte entre 8 000 et 25 000 € pour une cuisine standard (10-15 m²). Ce budget inclut les meubles, l'électroménager, la plomberie, l'électricité et la pose. Une cuisine haut de gamme peut atteindre 30 000 à 50 000 €.",
+    detailedAnswer: [
+      "Le coût d'une rénovation de cuisine complète dépend de la surface, de la gamme choisie et de l'ampleur des travaux. En entrée de gamme (Ikea, Brico Dépôt), comptez 5 000 à 10 000 € pour les meubles et l'électroménager, auxquels s'ajoutent 3 000 à 5 000 € de pose et travaux. En milieu de gamme (Leroy Merlin, Schmidt, Cuisinella), le budget total est de 12 000 à 20 000 €.",
+      "Les postes de dépenses principaux sont : les meubles et le plan de travail (40 à 50 % du budget), l'électroménager (20 à 30 %), la plomberie et l'électricité (15 à 20 %), le carrelage ou le revêtement de sol (10 à 15 %). Un déplacement de l'évier ou de la plaque de cuisson augmente significativement le budget en raison des travaux de plomberie et d'électricité associés.",
+      "Le plan de travail représente un poste variable : stratifié (80-200 €/ml), quartz (200-500 €/ml), granit (250-600 €/ml), Dekton ou céramique (300-700 €/ml). Le choix du plan de travail impacte fortement le budget final.",
+      "Pour économiser sans sacrifier la qualité, gardez l'implantation existante (éviter de déplacer la plomberie et le gaz), optez pour des façades de qualité sur des caissons standard, et investissez sur l'électroménager qui dure plus longtemps que les meubles.",
+      "Un cuisiniste indépendant ou un artisan menuisier facture généralement 15 à 25 % de moins que les grandes enseignes, avec une qualité de pose souvent supérieure. Demandez 3 devis détaillés pour comparer poste par poste. La TVA est de 10 % sur la main-d'œuvre si le logement a plus de 2 ans."
+    ],
+    category: "prix",
+    relatedService: "cuisiniste",
+    tags: ["cuisine", "rénovation", "prix", "cuisiniste", "plan de travail"],
+  },
+  {
+    slug: "plombier-urgence-nuit-tarif",
+    question: "Combien coûte un plombier d'urgence la nuit ?",
+    shortAnswer: "Un plombier d'urgence la nuit coûte entre 150 et 500 € selon l'intervention. Le tarif horaire est majoré de 50 à 100 % (80 à 140 €/h au lieu de 40-70 €/h en journée), et les frais de déplacement nocturne sont de 50 à 120 €.",
+    detailedAnswer: [
+      "Les tarifs d'un plombier d'urgence la nuit (entre 20h et 6h) sont encadrés par les conventions collectives mais restent significativement plus élevés qu'en journée. La majoration légale est de 100 % pour le travail de nuit, ce qui porte le taux horaire de 40-70 € en journée à 80-140 € la nuit. Les frais de déplacement nocturne s'ajoutent : comptez 50 à 120 € selon la distance.",
+      "Pour les interventions courantes de nuit : la réparation d'une fuite urgente coûte 200 à 450 €, le débouchage d'une canalisation 250 à 500 €, le remplacement d'un groupe de sécurité de chauffe-eau 200 à 400 €. Ces prix incluent le déplacement mais rarement les pièces de rechange.",
+      "Avant d'appeler un plombier de nuit, évaluez si l'urgence est réelle. Si vous pouvez couper le robinet d'arrêt ou le compteur général pour stopper une fuite, il est souvent plus économique d'attendre le lendemain matin. Un plombier en horaires normaux vous coûtera 40 à 60 % de moins pour la même intervention.",
+      "Méfiez-vous des arnaques aux plombiers de nuit. Certaines plateformes affichent des tarifs bas (« dépannage à partir de 39 € ») qui s'envolent une fois sur place. Exigez toujours un devis écrit AVANT le début de l'intervention, même de nuit. Privilégiez un plombier local recommandé plutôt qu'un numéro trouvé sur Internet.",
+      "Votre assurance habitation inclut souvent un service d'assistance 24h/24 qui peut envoyer un plombier de nuit sans avance de frais. Vérifiez votre contrat et gardez le numéro d'assistance à portée de main. Les mutuelles complémentaires incluent parfois aussi un service de dépannage à domicile."
+    ],
+    category: "urgence",
+    relatedService: "plombier",
+    tags: ["plombier", "urgence", "nuit", "tarif", "dépannage nocturne"],
+  },
+  {
+    slug: "serrurier-urgence-24h-prix",
+    question: "Quel est le tarif d'un serrurier en urgence 24h/24 ?",
+    shortAnswer: "Un serrurier en urgence coûte de 100 à 350 € en journée et de 200 à 600 € la nuit ou le week-end. L'ouverture d'une porte claquée revient à 100-200 €, tandis qu'une ouverture avec remplacement de serrure coûte 250 à 500 €.",
+    detailedAnswer: [
+      "Le tarif d'un serrurier en urgence 24h/24 dépend du type d'intervention, de l'heure et du jour. En journée ouvrable, une ouverture de porte claquée (sans destruction) coûte 80 à 180 €, une ouverture avec crochetage 120 à 250 €, et une ouverture destructive (perçage du cylindre) 180 à 350 € plus le coût de la nouvelle serrure.",
+      "Les majorations s'appliquent le soir (20h-22h : +25 à 50 %), la nuit (22h-6h : +75 à 100 %), le week-end (+50 à 75 %) et les jours fériés (+100 %). Un déplacement qui coûte 100 € le mardi à 14h peut donc atteindre 200 à 250 € un dimanche à 3h du matin.",
+      "Le coût du remplacement de la serrure s'ajoute à l'ouverture de porte : un cylindre européen standard coûte 30 à 80 € (fourni + posé), une serrure multipoints A2P 3 étoiles revient à 200 à 500 €. Pour un blindage de porte complet, comptez 800 à 2 000 €. Faites toujours remplacer le cylindre après une ouverture destructive.",
+      "Attention aux arnaques fréquentes dans la serrurerie d'urgence. Les devis téléphoniques bas (« ouverture 39 € ») ne sont jamais respectés. Exigez un devis écrit sur place avant intervention. Vérifiez les avis en ligne et privilégiez les serruriers recommandés par votre entourage ou votre assurance. Les annuaires comme ServicesArtisans référencent des professionnels vérifiés.",
+      "Votre assurance habitation couvre souvent l'intervention d'un serrurier en cas de vol ou de tentative d'effraction (mais rarement en cas de porte claquée). Appelez votre assureur en premier : il dispose d'un réseau de serruriers agréés avec des tarifs négociés. Les cartes bancaires premium (Visa Premier, Gold Mastercard) incluent parfois aussi une assistance serrurerie."
+    ],
+    category: "urgence",
+    relatedService: "serrurier",
+    tags: ["serrurier", "urgence", "24h", "porte claquée", "tarif"],
+  },
+  {
+    slug: "electricien-urgent-disjoncteur",
+    question: "Que faire quand le disjoncteur saute en permanence ?",
+    shortAnswer: "Si le disjoncteur saute en permanence, commencez par identifier le circuit en cause en réarmant un par un. Débranchez les appareils suspects. Si le problème persiste, appelez un électricien (diagnostic : 80-150 €). Ne réarmez jamais plus de 3 fois un disjoncteur sans trouver la cause.",
+    detailedAnswer: [
+      "Un disjoncteur qui saute en permanence indique un problème électrique sérieux qu'il ne faut jamais ignorer. Les trois causes principales sont : la surcharge (trop d'appareils branchés sur un même circuit), le court-circuit (fil dénudé, prise défectueuse) et le défaut d'isolement (appareil défectueux qui laisse passer du courant à la terre).",
+      "En premier recours, identifiez le circuit responsable. Au tableau électrique, baissez tous les disjoncteurs divisionnaires puis réarmez-les un par un. Le circuit qui fait sauter le disjoncteur principal est en cause. Débranchez ensuite tous les appareils de ce circuit et rebranchez-les un par un : l'appareil défectueux se révèlera.",
+      "Si le disjoncteur différentiel (30 mA) saute, c'est un défaut d'isolement — un appareil laisse fuir du courant vers la terre. Les appareils souvent en cause : lave-linge, sèche-linge, lave-vaisselle, chauffe-eau, four. Débranchez-les tous et testez un par un. Un appareil humide peut aussi causer un défaut temporaire.",
+      "L'intervention d'un électricien est nécessaire si vous ne trouvez pas la cause, si le problème concerne le câblage (et non un appareil), ou si des signes de danger sont présents (odeur de brûlé, prise noircie, fils chauds). Le diagnostic coûte 80 à 150 €. La réparation (remplacement disjoncteur, câble, prise) revient à 100 à 350 € au total.",
+      "En attendant l'électricien, n'utilisez pas le circuit défaillant. Ne pontez jamais un disjoncteur et ne le remplacez jamais par un calibre supérieur (risque d'incendie). Si vous sentez une odeur de brûlé ou voyez des traces noires sur le tableau, coupez le disjoncteur général et appelez un électricien d'urgence immédiatement."
+    ],
+    category: "urgence",
+    relatedService: "electricien",
+    tags: ["disjoncteur", "électricien", "urgence", "panne électrique", "court-circuit"],
+  },
+  {
+    slug: "comment-verifier-rge-artisan",
+    question: "Comment vérifier la certification RGE d'un artisan ?",
+    shortAnswer: "Pour vérifier la certification RGE d'un artisan, consultez l'annuaire officiel france-renov.gouv.fr ou le site de Qualibat. Entrez le nom ou le SIRET de l'entreprise. La certification RGE est indispensable pour bénéficier de MaPrimeRénov' et des CEE.",
+    detailedAnswer: [
+      "La certification RGE (Reconnu Garant de l'Environnement) est un label délivré par des organismes accrédités (Qualibat, Qualifelec, Qualit'EnR, Certibat) aux artisans formés aux travaux de rénovation énergétique. Pour vérifier qu'un artisan est bien certifié RGE, la méthode la plus fiable est de consulter l'annuaire officiel sur france-renov.gouv.fr.",
+      "Sur france-renov.gouv.fr, cliquez sur « Trouver un professionnel RGE » et entrez le nom de l'entreprise, son numéro SIRET ou sa localisation. La fiche affiche les qualifications détenues, leur date de validité et les domaines de compétence (isolation, chauffage, menuiserie, etc.). Un artisan peut être RGE pour certains travaux et pas pour d'autres.",
+      "Vous pouvez aussi vérifier directement auprès de l'organisme certificateur. Qualibat (qualibat.com) est le plus courant pour le bâtiment, Qualifelec pour les électriciens, Qualit'EnR pour les installateurs d'énergies renouvelables. Chaque organisme dispose d'un annuaire en ligne consultable gratuitement.",
+      "La certification RGE est obligatoire pour que vos travaux soient éligibles aux aides publiques : MaPrimeRénov' (jusqu'à 10 000 €), les Certificats d'Économies d'Énergie (CEE, 500 à 4 000 €), l'éco-prêt à taux zéro (jusqu'à 50 000 €) et la TVA à 5,5 % pour les travaux d'amélioration énergétique. Sans RGE, vous perdez l'accès à ces financements.",
+      "Attention : un artisan peut afficher le logo RGE alors que sa certification a expiré. Vérifiez systématiquement la date de validité (la certification est valable 4 ans, renouvelable). Un artisan peut aussi être en cours de renouvellement — demandez-lui l'attestation de demande de renouvellement en cours. Enfin, la certification RGE de l'entreprise doit correspondre au type de travaux que vous envisagez."
+    ],
+    category: "choix",
+    relatedService: "",
+    tags: ["RGE", "certification", "vérification", "artisan", "MaPrimeRénov"],
+  },
+  {
+    slug: "refaire-carrelage-soi-meme",
+    question: "Peut-on refaire son carrelage soi-même ?",
+    shortAnswer: "Oui, refaire son carrelage soi-même est possible pour un bricoleur intermédiaire. Prévoyez 15 à 40 €/m² de matériaux (carreaux + colle + joints) et 2 à 4 jours pour une pièce de 10-15 m². Les économies sont de 30 à 50 €/m² par rapport à un carreleur professionnel.",
+    detailedAnswer: [
+      "Refaire son carrelage soi-même est un projet accessible si vous avez des compétences de bricolage intermédiaires et les bons outils. L'opération comprend la dépose de l'ancien carrelage, la préparation du support (ragréage si nécessaire), l'encollage, la pose des carreaux, les coupes et les joints. Pour une salle de bain ou une cuisine de 10 m², comptez 2 à 3 jours complets.",
+      "Le budget matériaux se décompose ainsi : carreaux (8 à 60 €/m² selon la gamme), colle à carrelage (5 à 10 €/m²), joints (3 à 5 €/m²), croisillons, primaire d'accrochage et ragréage si nécessaire (5 à 15 €/m²). Total : 20 à 90 €/m² en matériaux selon la gamme. Un carreleur professionnel facture en plus 30 à 50 €/m² de main-d'œuvre.",
+      "Les outils indispensables : carrelette ou coupe-carreau électrique (location : 30-50 €/jour), peigne à colle, niveau à bulle, mètre, genouillères, spatule à joints, éponge. Pour les coupes complexes (autour des WC, des tuyaux), une meuleuse d'angle avec disque diamant est nécessaire (50 à 80 €).",
+      "Les pièges à éviter : ne pas vérifier la planéité du sol (un ragréage coûte 10-15 €/m² mais est indispensable si le sol n'est pas plan), négliger le temps de séchage de la colle (24h minimum avant de marcher, 48h avant les joints), ne pas prévoir 10 % de carreaux en plus pour les coupes et la casse.",
+      "Pour les pièces humides (salle de bain, douche), la pose d'un système d'étanchéité sous le carrelage (SPEC ou équivalent) est indispensable et requiert un savoir-faire spécifique. Dans une douche à l'italienne, faites appel à un carreleur professionnel : un défaut d'étanchéité provoque des dégâts des eaux coûteux et invisibles pendant des mois."
+    ],
+    category: "diy",
+    relatedService: "carreleur",
+    tags: ["carrelage", "DIY", "pose", "soi-même", "carreleur"],
+  },
+  {
+    slug: "poser-parquet-flottant-soi-meme",
+    question: "Comment poser du parquet flottant soi-même ?",
+    shortAnswer: "Poser du parquet flottant soi-même est l'un des projets DIY les plus accessibles. Le matériel coûte 15 à 50 €/m² (parquet + sous-couche), et la pose prend 1 à 2 jours pour une pièce de 20 m². L'économie est d'environ 20 à 35 €/m² par rapport à un professionnel.",
+    detailedAnswer: [
+      "Le parquet flottant (ou stratifié clipsable) est le revêtement de sol le plus facile à poser soi-même grâce à son système de clips sans colle. Les lames s'emboîtent entre elles et « flottent » sur une sous-couche isolante posée sur le sol existant. Un bricoleur débutant peut poser 15 à 25 m² en une journée.",
+      "Le matériel nécessaire : parquet flottant (15 à 50 €/m² selon la gamme), sous-couche acoustique et pare-vapeur (3 à 8 €/m²), plinthes de finition (3 à 8 €/ml), cales de dilatation (5 €), kit de pose avec cale de frappe et tire-lame (15-25 €). Outils : scie sauteuse ou scie à onglets pour les coupes, mètre, crayon, équerre.",
+      "Les étapes clés : acclimater le parquet 48h dans la pièce avant la pose, vérifier la planéité du sol (tolérance : 3 mm sous une règle de 2 m), poser la sous-couche bord à bord avec du ruban adhésif, commencer la pose depuis le mur le plus droit en laissant un jeu de dilatation de 8 mm tout autour de la pièce.",
+      "Les erreurs classiques à éviter : oublier le jeu de dilatation (le parquet gondole), ne pas décraler les joints d'une rangée à l'autre (minimum 30 cm de décalage), poser dans une pièce humide sans sous-couche pare-vapeur, ne pas retirer les cales de dilatation avant de poser les plinthes.",
+      "Limites du DIY : pour les grandes surfaces (> 40 m²), les poses complexes (chevrons, bâton rompu) ou le parquet massif collé, faites appel à un poseur professionnel. Le parquet massif requiert un encollage au sol, un temps de séchage de 48h et un ponçage-vitrification — des techniques qui nécessitent de l'expérience et du matériel spécialisé."
+    ],
+    category: "diy",
+    relatedService: "poseur-de-parquet",
+    tags: ["parquet", "flottant", "pose", "DIY", "revêtement de sol"],
+  },
+  {
+    slug: "isoler-combles-soi-meme",
+    question: "Peut-on isoler ses combles soi-même ?",
+    shortAnswer: "Oui, l'isolation des combles perdus est réalisable soi-même avec de la laine de verre en rouleaux (10-20 €/m²). L'isolation des combles aménagés est plus technique. Attention : les travaux DIY ne sont pas éligibles à MaPrimeRénov' ni aux CEE (artisan RGE obligatoire).",
+    detailedAnswer: [
+      "L'isolation des combles perdus (non habitables) est un projet DIY accessible pour un bricoleur intermédiaire. La technique consiste à dérouler des rouleaux d'isolant (laine de verre, laine de roche) en deux couches croisées sur le plancher des combles. L'épaisseur recommandée en 2026 est de 30 à 40 cm (R ≥ 7 m².K/W) pour respecter la RE2020.",
+      "Le budget matériaux pour des combles perdus : laine de verre en rouleaux (8 à 15 €/m² pour une épaisseur de 30 cm), pare-vapeur (2 à 5 €/m²), adhésif spécial, suspentes et rails si pose en sous-face de rampant. Total : 10 à 25 €/m². Un professionnel facture 25 à 50 €/m² pose comprise, soit une économie de 15 à 30 €/m² en DIY.",
+      "L'isolation des combles aménagés (habitables) est plus complexe : pose sous rampants avec ossature métallique, pare-vapeur continu et étanche à l'air, traitement des points singuliers (fenêtres de toit, conduits de cheminée). Cette technique requiert un savoir-faire spécifique pour éviter les ponts thermiques et les problèmes de condensation.",
+      "Point crucial : les travaux d'isolation réalisés par un particulier ne sont PAS éligibles aux aides financières. MaPrimeRénov', les CEE (Certificats d'Économies d'Énergie) et la TVA à 5,5 % exigent que les travaux soient réalisés par un artisan certifié RGE. Pour des combles de 60 m², les aides peuvent atteindre 1 500 à 3 000 € — souvent plus que l'économie réalisée en faisant soi-même.",
+      "Précautions de sécurité indispensables : portez un masque FFP2, des gants, des lunettes et des vêtements couvrants (les fibres de laine de verre sont irritantes). Ne marchez que sur les solives ou un plancher de circulation provisoire (jamais entre les solives, le plafond ne supporte pas votre poids). Dégagez les spots encastrés d'au moins 10 cm pour éviter tout risque d'incendie."
+    ],
+    category: "diy",
+    relatedService: "isolation-thermique",
+    tags: ["isolation", "combles", "DIY", "laine de verre", "économies énergie"],
+  },
+  {
+    slug: "assurance-rc-artisan-obligatoire",
+    question: "L'assurance RC pro est-elle obligatoire pour un artisan ?",
+    shortAnswer: "Oui, l'assurance responsabilité civile professionnelle (RC pro) est obligatoire pour les artisans du bâtiment. Elle couvre les dommages causés aux tiers pendant et après les travaux. L'assurance décennale est également obligatoire et couvre les malfaçons pendant 10 ans.",
+    detailedAnswer: [
+      "L'assurance responsabilité civile professionnelle (RC pro) est obligatoire pour tous les artisans du bâtiment en France, en vertu de la loi Spinetta de 1978 et du Code des assurances. Elle couvre les dommages corporels, matériels et immatériels causés aux clients et aux tiers pendant l'exécution des travaux (chute de gravats sur une voiture, dégât des eaux chez un voisin, etc.).",
+      "L'assurance décennale est une obligation distincte, spécifique aux constructeurs. Elle couvre pendant 10 ans après la réception des travaux tous les dommages compromettant la solidité de l'ouvrage ou le rendant impropre à sa destination : fissures structurelles, infiltrations, effondrement, défaut d'isolation majeur. Son coût varie de 1 500 à 5 000 €/an selon le métier et le chiffre d'affaires.",
+      "Avant de confier des travaux à un artisan, exigez systématiquement son attestation d'assurance décennale en cours de validité. Vérifiez que les activités déclarées correspondent aux travaux prévus (un plombier assuré pour la plomberie n'est pas couvert s'il fait de l'électricité). L'attestation doit mentionner le nom de l'assureur, le numéro de contrat et les activités couvertes.",
+      "En cas de sinistre, si l'artisan n'est pas assuré, c'est lui qui devra indemniser les dommages sur ses fonds propres — ce qui est souvent impossible. Le client peut alors se retourner contre l'artisan personnellement, mais les chances de recouvrement sont faibles si l'entreprise est en liquidation. D'où l'importance vitale de vérifier l'assurance AVANT les travaux.",
+      "Les autres assurances importantes pour un artisan : la garantie de parfait achèvement (1 an), la garantie de bon fonctionnement (2 ans pour les équipements dissociables), la protection juridique professionnelle et l'assurance dommages-ouvrage (obligatoire pour le maître d'ouvrage, pas pour l'artisan). Un artisan bien assuré est un gage de sérieux et de professionnalisme."
+    ],
+    category: "reglementation",
+    relatedService: "",
+    tags: ["assurance", "RC pro", "décennale", "obligatoire", "artisan"],
+  },
+  {
+    slug: "prix-renovation-complete-m2",
+    question: "Quel est le prix d'une rénovation complète au m² ?",
+    shortAnswer: "Le prix d'une rénovation complète varie de 800 à 1 500 €/m² en 2026 pour un appartement ou une maison. Un rafraîchissement léger coûte 200 à 500 €/m², une rénovation moyenne 500 à 800 €/m², et une rénovation lourde (structure, redistribution) 1 200 à 2 000 €/m².",
+    detailedAnswer: [
+      "Le prix d'une rénovation complète au m² en 2026 dépend de l'état initial du logement, de l'ampleur des travaux et du niveau de finition souhaité. On distingue trois niveaux : le rafraîchissement (peinture, sols, quelques équipements) à 200-500 €/m², la rénovation complète standard (électricité, plomberie, sols, murs, cuisine, salle de bain) à 800-1 500 €/m², et la rénovation lourde (modification de structure, redistribution des pièces) à 1 200-2 000 €/m².",
+      "Pour un appartement de 70 m² en rénovation complète standard, le budget moyen se situe entre 56 000 et 105 000 €. Les postes principaux sont : la plomberie et les sanitaires (15-20 % du budget), l'électricité (10-15 %), les sols et revêtements muraux (15-20 %), la cuisine (15-20 %), la salle de bain (10-15 %), la peinture (5-10 %), les menuiseries intérieures (5-10 %).",
+      "Les coûts cachés à prévoir : le diagnostic amiante et plomb avant travaux (300-600 € pour un appartement), le désamiantage si nécessaire (30 à 100 €/m²), la mise aux normes électriques NF C 15-100 (souvent nécessaire dans les logements anciens), l'évacuation des gravats (500 à 2 000 € pour un appartement complet).",
+      "En Île-de-France, majorez les prix de 20 à 30 % par rapport à la moyenne nationale. Les grandes métropoles (Lyon, Marseille, Bordeaux) affichent une majoration de 10 à 15 %. En zone rurale, les prix sont généralement inférieurs de 10 à 20 % à la moyenne nationale.",
+      "Pour maîtriser le budget, faites réaliser un métré précis par un architecte d'intérieur ou un maître d'œuvre (honoraires : 8 à 12 % du montant des travaux). Demandez au minimum 3 devis détaillés par poste. Prévoyez une marge de sécurité de 10 à 15 % pour les imprévus — dans l'ancien, il y en a toujours. La TVA à 10 % s'applique aux logements de plus de 2 ans (5,5 % pour les travaux de performance énergétique)."
+    ],
+    category: "prix",
+    relatedService: "",
+    tags: ["rénovation", "prix au m²", "budget", "travaux", "appartement", "maison"],
   },
 ]
 

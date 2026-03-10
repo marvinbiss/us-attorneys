@@ -1,6 +1,6 @@
 /**
  * Données pour les pages de comparaison.
- * 20 comparatifs détaillés pour aider les propriétaires français à choisir.
+ * 30 comparatifs détaillés pour aider les propriétaires français à choisir.
  */
 
 export interface ComparisonOption {
@@ -1990,6 +1990,946 @@ export const comparisons: Comparison[] = [
         question: 'Combien coûte un ravalement de façade complet ?',
         answer:
           'Pour une maison de 100 m² de façade : peinture seule (1 500-3 500 €), enduit monocouche (3 000-8 000 €), bardage bois/composite (6 000-15 000 €). Ajoutez 1 500 à 3 000 € pour l\'échafaudage. En copropriété, le coût est réparti selon les tantièmes. Demandez plusieurs devis et vérifiez que l\'artisan est assuré en garantie décennale.',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // 10 NOUVEAUX COMPARATIFS (ajoutés mars 2026)
+  // ═══════════════════════════════════════════════════════════════
+
+  {
+    slug: 'pac-air-air-vs-air-eau',
+    title: 'PAC air/air vs air/eau : laquelle choisir ?',
+    metaDescription:
+      'Comparatif PAC air/air vs PAC air/eau en 2026 : prix, rendement, aides financières, confort. Découvrez quelle pompe à chaleur correspond le mieux à votre logement.',
+    intro:
+      "Vous hésitez entre une pompe à chaleur air/air et une pompe à chaleur air/eau ? Ces deux systèmes fonctionnent sur le même principe (capter les calories de l'air extérieur) mais diffèrent radicalement dans leur mode de diffusion de la chaleur. La PAC air/air souffle de l'air chaud via des splits muraux, tandis que la PAC air/eau alimente un circuit hydraulique (radiateurs ou plancher chauffant). Ce choix impacte directement votre confort, vos économies d'énergie et les aides auxquelles vous pouvez prétendre.",
+    category: 'Chauffage / Énergie',
+    options: [
+      {
+        name: 'PAC air/air (climatisation réversible)',
+        avantages: [
+          'Prix d\'installation le plus bas des PAC (2 500 à 6 000 € pour un multi-split)',
+          'Chauffage ET climatisation intégrés dans un seul système',
+          'Installation rapide (1 à 2 jours) sans modification du réseau de chauffage',
+          'Réglage pièce par pièce grâce aux unités intérieures indépendantes',
+          'COP de 3,5 à 4,5 selon les modèles récents (2026)',
+          'Filtration de l\'air intégré (pollen, poussières)',
+        ],
+        inconvenients: [
+          'Non éligible à MaPrimeRénov\' (considérée comme climatisation)',
+          'Ne produit pas d\'eau chaude sanitaire',
+          'Assèche l\'air ambiant en mode chauffage',
+          'Brassage d\'air parfois inconfortable (courants d\'air)',
+          'Splits muraux visibles, impact esthétique dans les pièces',
+          'Performance en chute sous -10 °C',
+        ],
+        prixMoyen: '2 500 € - 6 000 €',
+        dureeVie: '12-18 ans',
+        idealPour: 'Appartements, petites surfaces, régions à climat doux, besoin de clim en été',
+      },
+      {
+        name: 'PAC air/eau',
+        avantages: [
+          'Éligible à MaPrimeRénov\' 2026 (jusqu\'à 5 000 €) et CEE (prime coup de pouce)',
+          'Compatible avec le chauffage central existant (radiateurs, plancher chauffant)',
+          'Produit le chauffage ET l\'eau chaude sanitaire',
+          'Chaleur douce et homogène, sans brassage d\'air',
+          'COP de 3 à 4,2 selon la température extérieure',
+          'Aucun split visible à l\'intérieur (seulement l\'unité extérieure)',
+        ],
+        inconvenients: [
+          'Investissement plus élevé (8 000 à 18 000 € pose comprise)',
+          'Installation plus complexe (2 à 4 jours, raccordement hydraulique)',
+          'Nécessite un réseau de chauffage central existant ou à créer',
+          'Pas de fonction climatisation (sauf modèles réversibles sur plancher)',
+          'Performance dégradée en dessous de -7 °C (appoint électrique)',
+          'Entretien obligatoire tous les 2 ans (200 à 350 €)',
+        ],
+        prixMoyen: '8 000 € - 18 000 €',
+        dureeVie: '15-20 ans',
+        idealPour: 'Maisons avec chauffage central, projets de rénovation globale, éligibles aux aides',
+      },
+    ],
+    verdict:
+      'La PAC air/air est idéale pour un budget serré ou un besoin de climatisation en été, notamment en appartement. La PAC air/eau est le choix de référence pour une rénovation énergétique complète : elle assure chauffage et eau chaude, et bénéficie d\'aides financières substantielles. Si vous avez déjà des radiateurs ou un plancher chauffant, la PAC air/eau s\'impose. Si vous partez de zéro dans un logement sans chauffage central, la PAC air/air sera moins coûteuse à installer.',
+    criteresChoix: [
+      'Type de logement : appartement (air/air) vs maison (air/eau)',
+      'Réseau de chauffage existant : si radiateurs déjà en place → air/eau',
+      'Besoin de climatisation en été : oui → air/air',
+      'Budget travaux disponible : < 6 000 € → air/air, > 8 000 € → air/eau',
+      'Éligibilité aux aides : seule la PAC air/eau ouvre droit à MaPrimeRénov\'',
+      'Production d\'eau chaude : uniquement possible avec la PAC air/eau',
+    ],
+    faq: [
+      {
+        question: 'Peut-on combiner une PAC air/air et une PAC air/eau ?',
+        answer:
+          'Oui, c\'est même une solution pertinente dans certains cas : la PAC air/eau assure le chauffage central et l\'eau chaude, tandis que la PAC air/air climatise les pièces en été. Cependant, cela représente un double investissement. Il est souvent plus économique de choisir une PAC air/eau réversible sur plancher chauffant si vous souhaitez un rafraîchissement estival.',
+      },
+      {
+        question: 'Quelle PAC consomme le moins d\'électricité ?',
+        answer:
+          'À surface équivalente, la PAC air/air consomme légèrement moins car elle ne chauffe pas d\'eau. En moyenne, comptez 800 à 1 200 €/an d\'électricité pour une PAC air/air (100 m²) contre 1 000 à 1 500 €/an pour une PAC air/eau (chauffage + ECS). Le COP des deux systèmes est comparable (3 à 4,5).',
+      },
+      {
+        question: 'La PAC air/air est-elle vraiment exclue de MaPrimeRénov\' ?',
+        answer:
+          'Oui, depuis 2020, la PAC air/air est exclue de MaPrimeRénov\' car elle est assimilée à un système de climatisation. Seuls les systèmes à eau (PAC air/eau, géothermie) et le solaire thermique sont éligibles. Vous pouvez toutefois bénéficier du taux de TVA réduit à 10 % si le logement a plus de 2 ans.',
+      },
+      {
+        question: 'Quel entretien pour chaque type de PAC ?',
+        answer:
+          'La PAC air/air nécessite un nettoyage régulier des filtres (tous les 15 jours en utilisation intensive) et une vérification annuelle recommandée (100-200 €). La PAC air/eau impose un entretien obligatoire tous les 2 ans par un professionnel certifié (200-350 €), incluant le contrôle du circuit frigorifique et hydraulique.',
+      },
+    ],
+  },
+
+  {
+    slug: 'chaudiere-gaz-vs-bois-granules',
+    title: 'Chaudière gaz vs bois/granulés : quel combustible choisir ?',
+    metaDescription:
+      'Comparatif chaudière gaz condensation vs chaudière bois à granulés en 2026 : prix, rendement, écologie, aides. Guide complet pour choisir votre système de chauffage.',
+    intro:
+      "Face à la hausse du prix du gaz et aux nouvelles réglementations environnementales, de nombreux propriétaires envisagent de remplacer leur chaudière gaz par un système bois à granulés (pellets). Si la chaudière gaz à condensation reste performante et abordable, la chaudière à granulés séduit par son bilan carbone quasi neutre et un coût de combustible stable. Voici un comparatif complet pour vous aider à trancher.",
+    category: 'Chauffage / Énergie',
+    options: [
+      {
+        name: 'Chaudière gaz à condensation',
+        avantages: [
+          'Coût d\'installation modéré (3 500 à 7 500 € pose comprise)',
+          'Rendement élevé jusqu\'à 109 % sur PCI',
+          'Encombrement réduit (murale ou au sol compacte)',
+          'Montée en température très rapide',
+          'Technologie maîtrisée par tous les chauffagistes',
+          'Pas de stockage de combustible nécessaire',
+        ],
+        inconvenients: [
+          'Énergie fossile : émissions de CO₂ (230 g/kWh)',
+          'Prix du gaz en hausse constante (+60 % entre 2021 et 2026)',
+          'Interdite en construction neuve (RE2020)',
+          'Non éligible à MaPrimeRénov\' depuis 2023',
+          'Entretien annuel obligatoire (150-250 €)',
+          'Dépendance au réseau de gaz naturel',
+        ],
+        prixMoyen: '3 500 € - 7 500 €',
+        dureeVie: '15-25 ans',
+        idealPour: 'Logements déjà raccordés au gaz, budget limité, espace restreint',
+      },
+      {
+        name: 'Chaudière bois à granulés (pellets)',
+        avantages: [
+          'Énergie renouvelable : bilan carbone quasi neutre',
+          'Éligible à MaPrimeRénov\' 2026 (jusqu\'à 7 000 € pour les ménages modestes)',
+          'Coût du combustible stable et compétitif (350-400 €/tonne en 2026)',
+          'Rendement de 90 à 95 % sur les modèles récents',
+          'Alimentation automatique par vis sans fin (confort d\'utilisation)',
+          'Valorise la filière bois française (emplois locaux)',
+        ],
+        inconvenients: [
+          'Investissement initial élevé (12 000 à 22 000 € pose comprise)',
+          'Nécessite un espace de stockage pour le silo à granulés (1 à 3 m²)',
+          'Livraison de granulés à organiser (1 à 2 fois/an)',
+          'Entretien plus contraignant : décendrage, ramonage 2 fois/an',
+          'Bruit du système d\'alimentation (vis sans fin)',
+          'Poids important : installation au sol uniquement',
+        ],
+        prixMoyen: '12 000 € - 22 000 €',
+        dureeVie: '20-30 ans',
+        idealPour: 'Maisons rurales ou péri-urbaines avec espace de stockage, démarche écologique',
+      },
+    ],
+    verdict:
+      'La chaudière gaz reste pertinente si vous êtes déjà raccordé et disposez d\'un budget limité, mais son avenir est incertain face aux réglementations. La chaudière à granulés est l\'investissement d\'avenir : écologique, subventionnée et économique à l\'usage (coût annuel de combustible 30 à 40 % inférieur au gaz). Si vous avez l\'espace pour un silo et un budget initial conséquent, les granulés sont le choix le plus rationnel en 2026.',
+    criteresChoix: [
+      'Raccordement au gaz existant : si oui, le remplacement gaz-gaz est moins cher',
+      'Espace disponible pour un silo de stockage (1 à 3 m² au sol)',
+      'Budget initial : 3 500-7 500 € (gaz) vs 12 000-22 000 € (granulés)',
+      'Sensibilité écologique et objectif de réduction CO₂',
+      'Accès livraison granulés (facilité en zone rurale/péri-urbaine)',
+      'Éligibilité aux aides : seule la chaudière granulés est aidée par MaPrimeRénov\'',
+    ],
+    faq: [
+      {
+        question: 'Combien coûte le chauffage annuel en gaz vs granulés ?',
+        answer:
+          'Pour une maison de 120 m² bien isolée : gaz naturel environ 1 600 à 2 200 €/an (prix 2026), granulés environ 1 000 à 1 400 €/an (4 à 5 tonnes). Les granulés reviennent 30 à 40 % moins cher, mais l\'écart se réduit si le logement est très bien isolé. Le prix du gaz est plus volatile que celui des granulés.',
+      },
+      {
+        question: 'Les chaudières gaz vont-elles être interdites en rénovation ?',
+        answer:
+          'En 2026, seules les constructions neuves sont concernées par l\'interdiction (RE2020). En rénovation, vous pouvez toujours installer une chaudière gaz à condensation. Cependant, l\'Union européenne prévoit des restrictions progressives d\'ici 2030-2035. Anticiper le passage aux granulés ou à une PAC est une stratégie prudente.',
+      },
+      {
+        question: 'Les granulés sont-ils vraiment écologiques ?',
+        answer:
+          'Oui, à condition d\'utiliser des granulés certifiés (DINplus, ENplus A1) issus de forêts gérées durablement. Le bilan carbone est quasi neutre car le CO₂ émis lors de la combustion a été absorbé par l\'arbre durant sa croissance. La filière française produit environ 2,5 millions de tonnes/an, couvrant la demande nationale sans déforestation.',
+      },
+      {
+        question: 'Peut-on passer du gaz aux granulés facilement ?',
+        answer:
+          'Le remplacement nécessite 2 à 4 jours de travaux. Il faut retirer l\'ancienne chaudière, installer la chaudière à granulés et son silo, raccorder au circuit hydraulique existant (compatible) et créer un conduit de fumées adapté. Le tubage du conduit existant est souvent possible. Prévoyez un budget global de 15 000 à 25 000 € avant aides.',
+      },
+    ],
+  },
+
+  {
+    slug: 'isolation-laine-vs-ouate-vs-polyurethane',
+    title: 'Isolants : laine de verre, ouate de cellulose ou polyuréthane ?',
+    metaDescription:
+      'Comparatif des isolants en 2026 : laine de verre, ouate de cellulose et polyuréthane. Prix au m², performance thermique, écologie et mise en œuvre. Guide complet.',
+    intro:
+      "Le choix de l'isolant est une étape cruciale de tout projet de rénovation énergétique. Laine de verre, ouate de cellulose et polyuréthane offrent des performances thermiques comparables mais se distinguent par leur prix, leur impact écologique, leur comportement au feu et leur facilité de mise en œuvre. Ce comparatif vous aide à identifier l'isolant le plus adapté à votre projet.",
+    category: 'Isolation',
+    options: [
+      {
+        name: 'Laine de verre',
+        avantages: [
+          'Prix le plus bas du marché (5 à 12 €/m² en 100 mm)',
+          'Excellente résistance au feu (classement A1, incombustible)',
+          'Bonne performance thermique (lambda 0,032 à 0,040 W/m.K)',
+          'Disponible en rouleaux, panneaux et vrac (soufflage combles)',
+          'Légère et facile à poser',
+          'Produit le plus courant, disponible partout',
+        ],
+        inconvenients: [
+          'Irritante à la pose (port d\'EPI obligatoire)',
+          'Sensible à l\'humidité : perd ses propriétés si mouillée',
+          'Tassement possible dans le temps (perte de 10-15 % en 20 ans)',
+          'Bilan carbone moyen (fusion du verre à haute température)',
+          'Isolation acoustique moyenne comparée à la ouate',
+          'Durée de vie plus courte que les alternatives',
+        ],
+        prixMoyen: '5 € - 12 €/m² (100 mm)',
+        dureeVie: '20-30 ans',
+        idealPour: 'Budgets serrés, combles perdus en soufflage, projets standard',
+      },
+      {
+        name: 'Ouate de cellulose',
+        avantages: [
+          'Matériau écologique (papier journal recyclé, 90 % de contenu recyclé)',
+          'Excellente isolation acoustique (affaiblissement de 40 à 50 dB)',
+          'Bonne régulation hygrométrique (absorbe et restitue l\'humidité)',
+          'Performance thermique élevée (lambda 0,038 à 0,042 W/m.K)',
+          'Très bon confort d\'été grâce à son inertie thermique',
+          'Bilan carbone très faible (10 fois moins que le polyuréthane)',
+        ],
+        inconvenients: [
+          'Prix intermédiaire (15 à 25 €/m² en 100 mm posé)',
+          'Mise en œuvre spécialisée (soufflage ou insufflation par un pro)',
+          'Tassement possible de 15-20 % si mal posée (surdosage nécessaire)',
+          'Traitement ignifuge au sel de bore (réglementation variable)',
+          'Peu adaptée aux parois verticales sans caisson fermé',
+          'Sensibilité aux rongeurs si non protégée',
+        ],
+        prixMoyen: '15 € - 25 €/m² (100 mm posé)',
+        dureeVie: '30-40 ans',
+        idealPour: 'Démarche écologique, isolation des combles, rénovation de maisons anciennes',
+      },
+      {
+        name: 'Polyuréthane (PUR/PIR)',
+        avantages: [
+          'Meilleure performance thermique du marché (lambda 0,022 à 0,028 W/m.K)',
+          'Épaisseur réduite pour une résistance thermique donnée (-40 % vs laine)',
+          'Totalement insensible à l\'humidité (cellules fermées)',
+          'Excellente résistance mécanique en compression',
+          'Pas de tassement dans le temps',
+          'Idéal pour les espaces contraints (ITE, sous-sol, toiture terrasse)',
+        ],
+        inconvenients: [
+          'Prix le plus élevé (25 à 50 €/m² en 100 mm)',
+          'Produit issu de la pétrochimie (mauvais bilan carbone)',
+          'Dégage des fumées toxiques en cas d\'incendie (classement B-s2,d0)',
+          'Non recyclable en fin de vie',
+          'Rigide : peu adapté aux surfaces irrégulières',
+          'Mauvaise isolation acoustique (ne coupe pas les bruits d\'impact)',
+        ],
+        prixMoyen: '25 € - 50 €/m² (100 mm)',
+        dureeVie: '40-50 ans',
+        idealPour: 'ITE en faible épaisseur, toitures terrasses, sols, espaces réduits',
+      },
+    ],
+    verdict:
+      'La laine de verre reste le choix économique par excellence pour les combles perdus et les projets à budget limité. La ouate de cellulose est le meilleur compromis performance/écologie, idéale en rénovation de maisons anciennes. Le polyuréthane s\'impose quand l\'espace est compté (isolation par l\'extérieur fine, sols, toitures terrasses) malgré son coût et son impact environnemental. Pour les combles aménageables, la ouate insufflée dans les rampants est souvent la meilleure option.',
+    criteresChoix: [
+      'Budget disponible : laine de verre (économique) vs polyuréthane (premium)',
+      'Sensibilité écologique : ouate de cellulose (biosourcé) vs polyuréthane (pétrochimie)',
+      'Épaisseur disponible : si espace limité → polyuréthane',
+      'Type de mise en œuvre : combles perdus (soufflage laine ou ouate), murs (panneaux)',
+      'Besoin acoustique : ouate de cellulose > laine de verre > polyuréthane',
+      'Risque d\'humidité : polyuréthane (insensible) > ouate > laine de verre',
+    ],
+    faq: [
+      {
+        question: 'Quelle épaisseur d\'isolant pour la RT2020/RE2020 ?',
+        answer:
+          'En combles : R ≥ 7 m².K/W, soit environ 280 mm de laine de verre, 300 mm de ouate, ou 180 mm de polyuréthane. En murs : R ≥ 3,7, soit environ 140 mm de laine, 150 mm de ouate, ou 100 mm de polyuréthane. Ces valeurs sont les minimums pour bénéficier des aides MaPrimeRénov\' 2026.',
+      },
+      {
+        question: 'La ouate de cellulose attire-t-elle les rongeurs ?',
+        answer:
+          'Non, les sels de bore utilisés comme traitement ignifuge repoussent les rongeurs et insectes. Cependant, si l\'isolant est accessible (combles perdus ouverts), il est recommandé de protéger les accès avec des grilles anti-rongeurs. Une pose professionnelle avec la bonne densité (28-30 kg/m³ en soufflage) limite aussi les risques.',
+      },
+      {
+        question: 'Le polyuréthane est-il dangereux en cas d\'incendie ?',
+        answer:
+          'Le polyuréthane dégage des fumées toxiques (isocyanates) en cas de combustion. C\'est pourquoi il doit toujours être recouvert d\'un parement coupe-feu (plaque de plâtre BA13 minimum). Les panneaux PIR (polyisocyanurate) offrent une meilleure résistance au feu que le PUR classique. En ERP, des restrictions spécifiques s\'appliquent.',
+      },
+      {
+        question: 'Peut-on mélanger différents isolants dans une même maison ?',
+        answer:
+          'Oui, c\'est même recommandé dans certains cas. Par exemple : ouate de cellulose en combles (pour le confort d\'été et l\'acoustique), polyuréthane en ITE (pour minimiser l\'épaisseur) et laine de verre en cloisons intérieures (pour le rapport qualité-prix). L\'important est de traiter les jonctions entre isolants pour éviter les ponts thermiques.',
+      },
+    ],
+  },
+
+  {
+    slug: 'plafond-tendu-vs-faux-plafond',
+    title: 'Plafond tendu vs faux plafond : lequel choisir ?',
+    metaDescription:
+      'Comparatif plafond tendu vs faux plafond en plaques de plâtre en 2026 : prix au m², pose, isolation, esthétique. Guide complet pour rénover votre plafond.',
+    intro:
+      "Lors d'une rénovation, le plafond est souvent le parent pauvre des travaux. Pourtant, deux solutions permettent de transformer radicalement une pièce : le plafond tendu (toile PVC ou polyester tendue sur profilés) et le faux plafond en plaques de plâtre (BA13 sur ossature métallique). Chacun a ses atouts en termes de prix, de mise en œuvre et de résultat esthétique.",
+    category: 'Structure',
+    options: [
+      {
+        name: 'Plafond tendu',
+        avantages: [
+          'Pose rapide sans poussière (1 jour pour une pièce de 20 m²)',
+          'Finition parfaite : surface lisse, sans joint ni fissure',
+          'Large choix de finitions : mat, satiné, laqué, imprimé, lumineux',
+          'Imperméable : protège en cas de fuite d\'eau (retient jusqu\'à 100 L/m²)',
+          'Perte de hauteur minimale (3 à 5 cm seulement)',
+          'Aucun entretien, ne jaunit pas et ne se fissure pas',
+        ],
+        inconvenients: [
+          'Prix plus élevé (40 à 90 €/m² posé)',
+          'Non réparable en cas de perforation (remplacement de la toile)',
+          'Pas d\'isolation thermique ou phonique intrinsèque',
+          'Nécessite un professionnel spécialisé (technique de chauffe pour PVC)',
+          'Résonance possible dans les grandes pièces',
+          'Sens interdit pour les perforations (spots à prévoir avant la pose)',
+        ],
+        prixMoyen: '40 € - 90 €/m² posé',
+        dureeVie: '15-25 ans (garantie 10 ans)',
+        idealPour: 'Rénovation rapide, pièces humides, plafonds abîmés ou irréguliers, design contemporain',
+      },
+      {
+        name: 'Faux plafond en plaques de plâtre (BA13)',
+        avantages: [
+          'Prix plus accessible (25 à 55 €/m² posé)',
+          'Excellente isolation phonique et thermique (avec laine minérale)',
+          'Résistant aux chocs et perforations',
+          'Permet de dissimuler gaines, câbles et conduits',
+          'Réparable facilement (enduit, rebouchage)',
+          'Peut être peint, enduit, tapissé selon vos envies',
+        ],
+        inconvenients: [
+          'Pose longue et salissante (2 à 4 jours pour 20 m² avec finitions)',
+          'Joints visibles si mal réalisés (bande à joint obligatoire)',
+          'Perte de hauteur importante (8 à 15 cm minimum)',
+          'Risque de fissures aux joints dans le temps',
+          'Sensible à l\'humidité (gonflement en pièce mal ventilée)',
+          'Nécessite peinture après pose (coût supplémentaire)',
+        ],
+        prixMoyen: '25 € - 55 €/m² posé',
+        dureeVie: '20-40 ans',
+        idealPour: 'Isolation thermique/phonique, intégration de spots, passage de gaines, budget maîtrisé',
+      },
+    ],
+    verdict:
+      'Le plafond tendu est idéal pour une rénovation rapide et propre, avec un résultat esthétique impeccable. Il excelle dans les pièces humides et les plafonds très abîmés. Le faux plafond BA13 reste le choix rationnel quand vous avez besoin d\'isolation thermique ou phonique, ou quand le budget est limité. Pour une cuisine ou salle de bains, le plafond tendu PVC est imbattable. Pour les chambres à l\'étage (bruit du dessus), le faux plafond avec laine minérale est préférable.',
+    criteresChoix: [
+      'Budget : faux plafond BA13 (25-55 €/m²) vs plafond tendu (40-90 €/m²)',
+      'Besoin d\'isolation phonique ou thermique : faux plafond BA13 + laine',
+      'Hauteur sous plafond disponible : tendu (-3 cm) vs BA13 (-10 cm)',
+      'Type de pièce : humide → tendu PVC, chambre → BA13 isolé',
+      'Délai souhaité : tendu (1 jour) vs BA13 (3-4 jours)',
+      'Finition souhaitée : tendu (laqué, design) vs BA13 (peint classique)',
+    ],
+    faq: [
+      {
+        question: 'Le plafond tendu est-il adapté aux pièces humides ?',
+        answer:
+          'Oui, le plafond tendu PVC est parfaitement imperméable et anti-condensation. C\'est même la solution idéale pour les salles de bains, cuisines et piscines intérieures. Il résiste à l\'humidité sans gonfler ni moisir. En cas de fuite d\'eau de l\'étage supérieur, il forme une poche (jusqu\'à 100 L/m²) et protège vos meubles. Un technicien peut ensuite vider l\'eau et retendre la toile.',
+      },
+      {
+        question: 'Peut-on installer des spots dans un plafond tendu ?',
+        answer:
+          'Oui, mais ils doivent être prévus AVANT la pose de la toile. Le poseur installe des plateformes de support au plafond, puis perce la toile avec des renforts thermocollants. Utilisez exclusivement des spots LED (pas de halogènes qui dégageraient trop de chaleur). Le coût des spots est généralement en supplément (15-30 € par spot posé).',
+      },
+      {
+        question: 'Le faux plafond BA13 peut-il se fissurer ?',
+        answer:
+          'Oui, les fissures aux joints sont le défaut principal du faux plafond BA13. Elles apparaissent généralement dans les 2-3 premières années, surtout dans les maisons neuves (tassement). Pour les limiter, exigez un calicot (bande à joint) en fibre de verre, un enduit de qualité et un temps de séchage suffisant entre les couches. Les fissures se réparent facilement avec un enduit souple.',
+      },
+    ],
+  },
+
+  {
+    slug: 'porte-blindee-vs-renforcee',
+    title: 'Porte blindée vs porte renforcée : laquelle pour votre sécurité ?',
+    metaDescription:
+      'Comparatif porte blindée vs porte renforcée en 2026 : prix, niveau de sécurité, certification A2P, installation. Guide pour protéger votre logement.',
+    intro:
+      "La sécurité de votre logement commence par la porte d'entrée. Deux solutions s'offrent à vous : la porte blindée (bloc-porte complet en acier) ou la porte renforcée (porte standard avec blindage ajouté). Le niveau de protection, le prix et l'impact sur votre habitat diffèrent sensiblement entre ces deux options.",
+    category: 'Menuiserie',
+    options: [
+      {
+        name: 'Porte blindée (bloc-porte)',
+        avantages: [
+          'Niveau de sécurité maximal : certification A2P BP1, BP2 ou BP3',
+          'Résistance à l\'effraction de 5 à 15 minutes selon la certification',
+          'Isolation thermique et phonique intégrée (jusqu\'à 40 dB)',
+          'Serrure multipoints intégrée (3, 5 ou 7 points)',
+          'Esthétique soignée avec large choix de finitions',
+          'Garantie longue (10 à 20 ans selon les fabricants)',
+        ],
+        inconvenients: [
+          'Prix très élevé (1 500 à 5 000 € pose comprise)',
+          'Poids important (80 à 120 kg) : nécessite un bâti adapté',
+          'Installation par un professionnel spécialisé obligatoire',
+          'Changement complet du bâti (huisserie) souvent nécessaire',
+          'Délai de fabrication (2 à 4 semaines sur mesure)',
+          'En copropriété, la face palière doit respecter l\'harmonie de l\'immeuble',
+        ],
+        prixMoyen: '1 500 € - 5 000 €',
+        dureeVie: '30-50 ans',
+        idealPour: 'Rez-de-chaussée, zones à risque, besoin de sécurité maximale, construction neuve',
+      },
+      {
+        name: 'Porte renforcée (blindage de porte existante)',
+        avantages: [
+          'Prix modéré (600 à 1 800 € pose comprise)',
+          'Conservation de la porte existante (face intérieure inchangée)',
+          'Installation rapide (demi-journée à une journée)',
+          'Pas de modification du bâti dans la plupart des cas',
+          'Dissuasif pour 80 % des cambriolages (les voleurs passent à la porte suivante)',
+          'Compatible avec toutes les portes en bois standard',
+        ],
+        inconvenients: [
+          'Sécurité inférieure à un bloc-porte blindé (pas de certification A2P BP)',
+          'Résistance limitée à 3-5 minutes d\'effraction',
+          'Poids ajouté sur les gonds (50-70 kg) : risque d\'affaissement',
+          'Isolation thermique et phonique limitée',
+          'Esthétique parfois médiocre côté palier (tôle d\'acier visible)',
+          'Serrure à remplacer séparément (supplément 200-500 €)',
+        ],
+        prixMoyen: '600 € - 1 800 €',
+        dureeVie: '20-30 ans',
+        idealPour: 'Budget limité, appartement en étage, amélioration de la sécurité existante',
+      },
+    ],
+    verdict:
+      'La porte blindée (bloc-porte) est le choix sécuritaire par excellence pour un rez-de-chaussée, une maison individuelle ou une zone à risque. Elle offre la meilleure résistance à l\'effraction et une isolation performante. Le blindage de porte existante est un excellent compromis pour les appartements en étage ou les budgets limités : il dissuade la majorité des cambrioleurs à moindre coût. Dans les deux cas, investissez dans une serrure A2P certifiée.',
+    criteresChoix: [
+      'Niveau de risque : rez-de-chaussée/maison → blindée, étage → renforcée',
+      'Budget : 600-1 800 € (renforcée) vs 1 500-5 000 € (blindée)',
+      'État de la porte actuelle : bonne → blindage, vétuste → bloc-porte',
+      'Copropriété : vérifier le règlement (face palière imposée)',
+      'Isolation souhaitée : bloc-porte blindé intègre une isolation performante',
+      'Certification A2P : seul le bloc-porte peut être certifié A2P BP',
+    ],
+    faq: [
+      {
+        question: 'Que signifie la certification A2P pour une porte blindée ?',
+        answer:
+          'A2P est une certification délivrée par le CNPP (Centre National de Prévention et de Protection). Elle garantit une résistance testée à l\'effraction : A2P BP1 (5 minutes), A2P BP2 (10 minutes), A2P BP3 (15 minutes). Ces durées paraissent courtes mais 83 % des cambrioleurs abandonnent après 3 minutes. Une porte certifiée A2P est la meilleure garantie de protection.',
+      },
+      {
+        question: 'L\'assurance habitation impose-t-elle une porte blindée ?',
+        answer:
+          'Non, aucune assurance n\'impose une porte blindée. Cependant, certains contrats offrent une réduction de prime (5 à 15 %) si vous installez une porte certifiée A2P. En cas de cambriolage, l\'assurance ne peut pas refuser l\'indemnisation au motif que la porte n\'était pas blindée, sauf si le contrat stipule des mesures de protection spécifiques (rare).',
+      },
+      {
+        question: 'Peut-on blinder une porte d\'appartement en copropriété ?',
+        answer:
+          'Oui, mais avec des contraintes. La face palière (côté couloir) doit respecter l\'harmonie de l\'immeuble. Le règlement de copropriété peut imposer une couleur, un matériau ou un style spécifique. Certaines copropriétés exigent un vote en AG. Le blindage de porte existante est souvent plus facile car la face palière reste inchangée (seule la face intérieure est modifiée).',
+      },
+      {
+        question: 'Combien de temps dure l\'installation ?',
+        answer:
+          'Le blindage d\'une porte existante prend une demi-journée à une journée (3 à 6 heures). L\'installation d\'un bloc-porte blindé nécessite une journée complète (6 à 8 heures) car il faut déposer l\'ancienne porte, adapter ou remplacer le bâti, poser le bloc-porte et régler la serrure multipoints. Votre logement reste accessible pendant toute l\'intervention.',
+      },
+    ],
+  },
+
+  {
+    slug: 'parquet-massif-vs-contrecolle-vs-stratifie',
+    title: 'Parquet : massif, contrecollé ou stratifié ?',
+    metaDescription:
+      'Comparatif parquet massif vs contrecollé vs stratifié en 2026 : prix au m², durabilité, pose, entretien. Guide complet pour choisir votre revêtement de sol.',
+    intro:
+      "Le parquet est le revêtement de sol préféré des Français pour sa chaleur et son élégance. Mais derrière le terme « parquet » se cachent trois produits très différents : le parquet massif (bois noble sur toute l'épaisseur), le parquet contrecollé (couche de bois noble sur support) et le sol stratifié (décor imprimé sur panneau HDF). Prix, durabilité et entretien varient considérablement.",
+    category: 'Revêtements',
+    options: [
+      {
+        name: 'Parquet massif',
+        avantages: [
+          'Noblesse et authenticité : bois noble sur toute l\'épaisseur (14 à 23 mm)',
+          'Durée de vie exceptionnelle (50 à 100 ans avec entretien)',
+          'Peut être poncé et rénové 5 à 8 fois au cours de sa vie',
+          'Valorise le bien immobilier (+3 à 5 % selon les notaires)',
+          'Large choix d\'essences : chêne, hêtre, noyer, merbau, teck',
+          'Patine naturelle qui s\'embellit avec le temps',
+        ],
+        inconvenients: [
+          'Prix le plus élevé (50 à 150 €/m² hors pose)',
+          'Pose collée ou clouée par un professionnel (long et coûteux)',
+          'Sensible aux variations hygrométriques (gonflement/retrait)',
+          'Entretien régulier nécessaire (huile ou vitrification)',
+          'Incompatible avec le chauffage au sol (sauf certaines essences)',
+          'Délai d\'acclimatation de 48h avant pose (stockage dans la pièce)',
+        ],
+        prixMoyen: '50 € - 150 €/m² (hors pose)',
+        dureeVie: '50-100 ans',
+        idealPour: 'Belles demeures, investissement patrimonial, amoureux du bois authentique',
+      },
+      {
+        name: 'Parquet contrecollé',
+        avantages: [
+          'Aspect identique au massif (couche de bois noble de 2,5 à 6 mm)',
+          'Pose flottante possible (clipsable, rapide, économique)',
+          'Compatible avec le chauffage au sol (structure stable)',
+          'Moins sensible aux variations hygrométriques que le massif',
+          'Peut être poncé 1 à 3 fois (si couche noble ≥ 3,5 mm)',
+          'Prix intermédiaire, bon rapport qualité-prix',
+        ],
+        inconvenients: [
+          'Durée de vie inférieure au massif (25 à 50 ans)',
+          'Nombre de rénovations limité (1 à 3 ponçages selon épaisseur)',
+          'Couche de bois noble parfois fine (2,5 mm entrée de gamme)',
+          'Qualité très variable selon les fabricants',
+          'Résonance possible en pose flottante (sous-couche indispensable)',
+          'Moins valorisant qu\'un massif pour la revente',
+        ],
+        prixMoyen: '25 € - 80 €/m² (hors pose)',
+        dureeVie: '25-50 ans',
+        idealPour: 'Rénovation avec chauffage au sol, bon compromis qualité/prix, pose rapide souhaitée',
+      },
+      {
+        name: 'Sol stratifié',
+        avantages: [
+          'Prix le plus bas (8 à 30 €/m² hors pose)',
+          'Pose flottante clipsable très rapide (20 m²/jour en DIY)',
+          'Résistance aux taches, rayures et UV (classement AC3 à AC5)',
+          'Aucun entretien spécifique (serpillère humide suffit)',
+          'Grand choix de décors : bois, béton, carreaux de ciment',
+          'Compatible chauffage au sol sans restriction',
+        ],
+        inconvenients: [
+          'Ce n\'est PAS du vrai bois (décor photographique imprimé)',
+          'Impossible à poncer ou à rénover (remplacement total)',
+          'Sensation au toucher moins agréable que le bois',
+          'Sensible à l\'eau stagnante (gonflement irréversible des joints)',
+          'Sonorité « plastique » à la marche sans bonne sous-couche',
+          'Ne valorise pas le bien immobilier à la revente',
+        ],
+        prixMoyen: '8 € - 30 €/m² (hors pose)',
+        dureeVie: '10-25 ans',
+        idealPour: 'Budget limité, locataires, pièces à fort passage, changement fréquent de déco',
+      },
+    ],
+    verdict:
+      'Le parquet massif est un investissement patrimonial pour les amoureux du bois authentique, avec une durée de vie inégalée. Le parquet contrecollé offre le meilleur compromis en 2026 : aspect bois noble, compatibilité chauffage au sol et pose facile. Le stratifié est la solution économique pour les budgets serrés ou les pièces à fort passage, mais ne prétend pas être du bois. Conseil : pour un salon, investissez dans du contrecollé chêne (couche noble ≥ 4 mm). Pour les chambres d\'enfants ou un investissement locatif, le stratifié AC4 est suffisant.',
+    criteresChoix: [
+      'Budget : stratifié (8-30 €/m²) vs contrecollé (25-80 €/m²) vs massif (50-150 €/m²)',
+      'Chauffage au sol : contrecollé ou stratifié (pas de massif sauf exception)',
+      'Durée de vie souhaitée : massif (50-100 ans) vs contrecollé (25-50 ans) vs stratifié (10-25 ans)',
+      'Pose DIY ou pro : stratifié et contrecollé clipsable en DIY, massif collé/cloué par un pro',
+      'Pièce humide : aucun parquet bois (préférer carrelage ou vinyle)',
+      'Valorisation immobilière : massif > contrecollé > stratifié',
+    ],
+    faq: [
+      {
+        question: 'Le parquet contrecollé est-il du vrai parquet ?',
+        answer:
+          'Oui ! Juridiquement, un parquet doit avoir une couche d\'usure en bois noble d\'au moins 2,5 mm (norme NF EN 13756). Le parquet contrecollé remplit ce critère. Le stratifié, en revanche, n\'est pas du parquet car il n\'a aucune couche de bois noble : c\'est un décor photographique sur panneau HDF.',
+      },
+      {
+        question: 'Peut-on poser du parquet dans une cuisine ou une salle de bains ?',
+        answer:
+          'En cuisine, un parquet contrecollé vitrifié ou un stratifié AC4/AC5 hydrofuge est possible avec précaution (essuyer immédiatement les projections d\'eau). En salle de bains, seul le parquet massif en bois exotique (teck, merbau) résiste à l\'humidité, mais le carrelage ou le vinyle LVT restent préférables. Le stratifié classique est déconseillé dans les pièces humides.',
+      },
+      {
+        question: 'Combien coûte la pose d\'un parquet par un professionnel ?',
+        answer:
+          'Pose flottante clipsable (stratifié ou contrecollé) : 15 à 25 €/m². Pose collée en plein (contrecollé ou massif) : 25 à 40 €/m². Pose clouée sur lambourdes (massif) : 35 à 55 €/m². Ajoutez 5 à 10 €/m² pour la sous-couche et les finitions (plinthes, barres de seuil). Total pour 40 m² : 1 200 à 3 600 € selon la méthode.',
+      },
+      {
+        question: 'Quelle sous-couche choisir sous un parquet ?',
+        answer:
+          'Sous un stratifié ou contrecollé flottant : sous-couche en mousse PE (2 €/m², basique), en liège (5-8 €/m², acoustique), ou en fibre de bois (6-10 €/m², isolation thermique). Épaisseur minimale : 2 mm. Sur chauffage au sol, choisissez une sous-couche fine (2 mm) avec une résistance thermique faible (< 0,04 m².K/W). Le pare-vapeur est obligatoire sur dalle béton.',
+      },
+    ],
+  },
+
+  {
+    slug: 'volet-electrique-vs-manuel',
+    title: 'Volet électrique vs manuel : que choisir ?',
+    metaDescription:
+      'Comparatif volet roulant électrique vs manuel en 2026 : prix, confort, durabilité, domotique. Guide pour choisir la motorisation adaptée à vos volets.',
+    intro:
+      "Lors de l'installation ou du remplacement de vos volets roulants, la question de la motorisation se pose inévitablement. Le volet électrique offre un confort incomparable au quotidien, tandis que le volet manuel reste une solution fiable et économique. Ce comparatif vous aide à choisir en fonction de votre budget, de vos habitudes et de votre projet.",
+    category: 'Menuiserie',
+    options: [
+      {
+        name: 'Volet roulant électrique (filaire ou radio)',
+        avantages: [
+          'Confort d\'utilisation maximal (un bouton ou une télécommande)',
+          'Programmation horaire possible (simulation de présence, économies d\'énergie)',
+          'Compatible domotique : pilotage smartphone, scénarios automatiques',
+          'Idéal pour les grandes baies vitrées (manœuvre sans effort)',
+          'Accessibilité PMR (obligation dans les logements neufs)',
+          'Détection d\'obstacles intégrée (sécurité enfants)',
+        ],
+        inconvenients: [
+          'Prix plus élevé : +150 à 300 € par volet vs manuel',
+          'Nécessite une alimentation électrique (travaux d\'électricité)',
+          'Panne moteur possible (remplacement : 200 à 400 €)',
+          'Inutilisable en cas de coupure de courant (sauf secours manuel)',
+          'Entretien du moteur (graissage, vérification tous les 5 ans)',
+          'Motorisation radio : risque de panne de pile de la télécommande',
+        ],
+        prixMoyen: '300 € - 800 € par volet posé',
+        dureeVie: '15-20 ans (moteur)',
+        idealPour: 'Grandes ouvertures, personnes âgées ou PMR, projet domotique, confort au quotidien',
+      },
+      {
+        name: 'Volet roulant manuel (sangle ou manivelle)',
+        avantages: [
+          'Prix d\'installation réduit (150 à 400 € par volet posé)',
+          'Aucune alimentation électrique nécessaire',
+          'Fiabilité mécanique : pas de panne moteur possible',
+          'Fonctionne même en cas de coupure de courant',
+          'Entretien quasi nul (graissage occasionnel)',
+          'Remplacement de la sangle ou manivelle peu coûteux (20-50 €)',
+        ],
+        inconvenients: [
+          'Effort physique nécessaire (problématique pour les personnes âgées)',
+          'Impossible à programmer ou à piloter à distance',
+          'Usure de la sangle dans le temps (remplacement tous les 5-10 ans)',
+          'Manivelle encombrante sur le mur',
+          'Non compatible avec la domotique',
+          'Moins pratique pour les grandes baies vitrées (volet lourd)',
+        ],
+        prixMoyen: '150 € - 400 € par volet posé',
+        dureeVie: '20-30 ans (mécanisme)',
+        idealPour: 'Petites fenêtres, budget limité, résidence secondaire, simplicité recherchée',
+      },
+    ],
+    verdict:
+      'Le volet électrique est devenu le standard en 2026 pour le confort, la sécurité et la compatibilité domotique. Son surcoût de 150 à 300 € par volet est rapidement amorti par les économies d\'énergie (programmation) et le confort quotidien. Le volet manuel reste pertinent pour les petites fenêtres, les résidences secondaires ou les budgets très limités. Conseil : si vous rénovez, motorisez au minimum les volets des pièces de vie (salon, chambre principale) et gardez les manuels pour les pièces secondaires.',
+    criteresChoix: [
+      'Budget par volet : manuel (150-400 €) vs électrique (300-800 €)',
+      'Taille des ouvertures : grandes baies → électrique impératif',
+      'Projet domotique : oui → électrique radio ou filaire',
+      'Accessibilité PMR : électrique obligatoire en logement neuf',
+      'Fiabilité recherchée : manuel (aucune panne moteur possible)',
+      'Nombre de volets à équiper : motoriser au moins les pièces de vie',
+    ],
+    faq: [
+      {
+        question: 'Peut-on motoriser un volet roulant manuel existant ?',
+        answer:
+          'Oui, la motorisation d\'un volet existant est une opération courante. Un moteur tubulaire se glisse dans l\'axe du volet (remplacement de l\'axe d\'enroulement). Comptez 250 à 500 € par volet (moteur + pose). La motorisation radio est idéale en rénovation car elle ne nécessite pas de câblage électrique dans le mur (fonctionne sur pile ou solaire).',
+      },
+      {
+        question: 'Volet filaire ou radio : quelle différence ?',
+        answer:
+          'Le volet filaire est relié par un câble électrique à un interrupteur mural (fiable, pas de pile, moins cher). Le volet radio fonctionne avec une télécommande sans fil (plus pratique, pas de saignée dans le mur, mais télécommande et pile à gérer). En construction neuve, préférez le filaire (câblage prévu). En rénovation, le radio évite les travaux d\'électricité.',
+      },
+      {
+        question: 'Les volets électriques consomment-ils beaucoup d\'électricité ?',
+        answer:
+          'Non, la consommation est négligeable. Un moteur de volet consomme environ 100 à 200 W pendant 15 à 30 secondes d\'utilisation. Avec 2 manœuvres par jour (matin et soir), un volet consomme environ 1 à 2 kWh par an, soit moins de 0,50 €/an. Pour 10 volets, comptez moins de 5 €/an d\'électricité.',
+      },
+    ],
+  },
+
+  {
+    slug: 'vmc-simple-flux-vs-double-flux',
+    title: 'VMC simple flux vs double flux : quel système de ventilation ?',
+    metaDescription:
+      'Comparatif VMC simple flux vs double flux en 2026 : prix, économies d\'énergie, qualité de l\'air, entretien. Guide pour choisir votre ventilation mécanique.',
+    intro:
+      "La ventilation mécanique contrôlée (VMC) est obligatoire dans tout logement depuis 1982. Elle assure le renouvellement de l'air intérieur et évacue l'humidité. Deux technologies coexistent : la VMC simple flux (extraction d'air uniquement) et la VMC double flux (extraction + récupération de chaleur). Le choix impacte directement votre facture de chauffage et la qualité de l'air que vous respirez.",
+    category: 'Chauffage / Énergie',
+    options: [
+      {
+        name: 'VMC simple flux (autoréglable ou hygroréglable)',
+        avantages: [
+          'Prix d\'installation très accessible (500 à 1 500 € pose comprise)',
+          'Installation simple et rapide (1 journée)',
+          'Entretien minimal (nettoyage bouches + changement courroie)',
+          'Faible consommation électrique (15 à 30 W en continu)',
+          'Modèle hygroréglable B : adapte le débit à l\'humidité (économie de 12 à 15 %)',
+          'Technologie éprouvée, pièces détachées faciles à trouver',
+        ],
+        inconvenients: [
+          'Pas de récupération de chaleur : l\'air chaud est expulsé dehors',
+          'Pertes de chaleur importantes (jusqu\'à 25 % des déperditions thermiques)',
+          'Air entrant non filtré (poussières, pollens, pollution)',
+          'Courants d\'air froid en hiver au niveau des entrées d\'air',
+          'Bruit possible au niveau des bouches d\'extraction',
+          'Pas de préchauffage de l\'air neuf entrant',
+        ],
+        prixMoyen: '500 € - 1 500 €',
+        dureeVie: '10-20 ans',
+        idealPour: 'Budgets limités, logements peu isolés, rénovation légère, maisons anciennes',
+      },
+      {
+        name: 'VMC double flux avec échangeur thermique',
+        avantages: [
+          'Récupère 70 à 92 % de la chaleur de l\'air extrait',
+          'Économies de chauffage de 15 à 25 % sur la facture annuelle',
+          'Air entrant filtré (pollen, poussières fines PM2.5, pollution)',
+          'Pas de courant d\'air froid : l\'air neuf est préchauffé',
+          'Confort acoustique : pas d\'entrées d\'air dans les fenêtres',
+          'Indispensable dans les maisons passives et BBC (RT2012/RE2020)',
+        ],
+        inconvenients: [
+          'Investissement important (4 000 à 8 000 € pose comprise)',
+          'Installation complexe (réseau de gaines dans les combles ou faux plafonds)',
+          'Entretien régulier des filtres (tous les 3 à 6 mois, 30-50 €/filtre)',
+          'Consommation électrique plus élevée (40 à 80 W en continu)',
+          'Encombrement du caisson échangeur (combles ou local technique)',
+          'Risque de condensation dans les gaines si mal isolées',
+        ],
+        prixMoyen: '4 000 € - 8 000 €',
+        dureeVie: '15-25 ans',
+        idealPour: 'Maisons bien isolées, construction neuve RE2020, allergiques, zones froides',
+      },
+    ],
+    verdict:
+      'La VMC simple flux hygroréglable B reste le choix le plus courant en rénovation pour son rapport coût/efficacité. Elle suffit pour un logement correctement isolé mais pas ultra-performant. La VMC double flux est indispensable dans les maisons très bien isolées (BBC, passives, RE2020) où les pertes de chaleur par ventilation deviennent le poste principal. Si vous rénovez une maison ancienne, commencez par l\'isolation avant d\'investir dans une double flux. Dans une construction neuve RE2020, la double flux est presque systématique.',
+    criteresChoix: [
+      'Niveau d\'isolation du logement : maison passoire → simple flux, BBC/RE2020 → double flux',
+      'Budget : 500-1 500 € (simple) vs 4 000-8 000 € (double)',
+      'Qualité de l\'air : allergies, zone polluée → double flux filtrée',
+      'Type de projet : rénovation légère → simple flux, construction neuve → double flux',
+      'Espace disponible : double flux nécessite combles ou local technique',
+      'Zone climatique : hiver rigoureux → double flux plus rentable',
+    ],
+    faq: [
+      {
+        question: 'La VMC double flux est-elle rentable ?',
+        answer:
+          'Dans une maison bien isolée (déperditions < 50 kWh/m²/an), la double flux économise 200 à 500 €/an de chauffage. Le retour sur investissement se situe entre 10 et 20 ans. Elle devient rentable plus rapidement dans les régions froides (Nord, Est, montagne) et les maisons très étanches. Dans une passoire thermique, l\'investissement est rarement rentable.',
+      },
+      {
+        question: 'Peut-on installer une VMC double flux en rénovation ?',
+        answer:
+          'Oui, mais c\'est plus complexe qu\'en neuf. Il faut passer un réseau de gaines (aller + retour) dans les combles ou les faux plafonds. Comptez 6 000 à 10 000 € en rénovation vs 4 000-8 000 € en neuf. Une alternative : la VMC double flux décentralisée (un appareil par pièce, pas de gaines) pour 300 à 600 € par unité.',
+      },
+      {
+        question: 'Quelle VMC simple flux choisir : autoréglable ou hygroréglable ?',
+        answer:
+          'L\'hygroréglable B est le standard recommandé en 2026. Elle adapte les débits d\'extraction ET d\'entrée d\'air en fonction de l\'humidité, limitant les pertes de chaleur. L\'autoréglable maintient un débit constant quelle que soit l\'humidité (moins efficace). La différence de prix est faible (100-200 € de plus pour l\'hygro B), l\'investissement est toujours rentable.',
+      },
+      {
+        question: 'À quelle fréquence faut-il nettoyer les filtres de la VMC double flux ?',
+        answer:
+          'Les filtres d\'une VMC double flux doivent être vérifiés tous les 3 mois et changés tous les 6 à 12 mois selon l\'environnement (plus fréquent en ville polluée ou zone agricole). Un jeu de filtres coûte 30 à 80 € selon le modèle. Des filtres encrassés réduisent le débit d\'air de 30 à 50 % et augmentent la consommation électrique du moteur.',
+      },
+    ],
+  },
+
+  {
+    slug: 'fosse-septique-vs-micro-station',
+    title: "Fosse septique vs micro-station d'épuration : quel assainissement ?",
+    metaDescription:
+      'Comparatif fosse septique vs micro-station d\'épuration en 2026 : prix, entretien, réglementation, surface nécessaire. Guide pour votre assainissement non collectif.',
+    intro:
+      "En France, 5 millions de logements ne sont pas raccordés au tout-à-l'égout et doivent disposer d'un assainissement non collectif (ANC). Deux solutions dominent : la fosse septique toutes eaux (filière traditionnelle avec épandage) et la micro-station d'épuration (traitement biologique compact). Le choix dépend de la surface de votre terrain, de votre budget et de la réglementation locale.",
+    category: 'Extérieur',
+    options: [
+      {
+        name: 'Fosse septique toutes eaux + épandage',
+        avantages: [
+          'Technologie éprouvée et fiable (des décennies de recul)',
+          'Coût d\'installation modéré (4 000 à 8 000 € pour 4-5 pièces)',
+          'Pas de consommation électrique (fonctionnement gravitaire)',
+          'Vidange espacée (tous les 3 à 4 ans en moyenne)',
+          'Fonctionne même en cas d\'absence prolongée (pas de bactéries à nourrir)',
+          'Durée de vie très longue (30 à 50 ans pour la fosse béton)',
+        ],
+        inconvenients: [
+          'Surface de terrain importante nécessaire (100 à 400 m² pour l\'épandage)',
+          'Étude de sol obligatoire (étude pédologique : 500 à 1 000 €)',
+          'Tranchées d\'épandage non constructibles et non plantables (arbres)',
+          'Odeurs possibles si mauvais entretien ou défaut de ventilation',
+          'Vidange coûteuse (200 à 400 € par intervention)',
+          'Non adapté aux sols argileux ou imperméables (nappe phréatique haute)',
+        ],
+        prixMoyen: '4 000 € - 8 000 €',
+        dureeVie: '30-50 ans',
+        idealPour: 'Grands terrains en zone rurale, sol perméable, résidences secondaires',
+      },
+      {
+        name: 'Micro-station d\'épuration',
+        avantages: [
+          'Emprise au sol très réduite (5 à 10 m² suffisent)',
+          'Qualité de rejet supérieure (eau traitée rejetable en fossé ou milieu naturel)',
+          'Installation rapide (2 à 3 jours de terrassement)',
+          'Pas de tranchées d\'épandage (terrain libre pour d\'autres usages)',
+          'Sans odeur grâce au traitement biologique aérobie',
+          'Éligible aux aides de l\'ANAH et des agences de l\'eau (jusqu\'à 3 000 €)',
+        ],
+        inconvenients: [
+          'Investissement plus élevé (7 000 à 15 000 € pose comprise)',
+          'Consommation électrique permanente (50 à 100 €/an)',
+          'Sensible aux variations de charge (résidences secondaires déconseillées)',
+          'Entretien régulier par le fabricant (contrat annuel 150 à 250 €/an)',
+          'Durée de vie plus courte que la fosse béton (15 à 25 ans)',
+          'Les bactéries meurent en cas d\'absence prolongée (> 3-4 mois)',
+        ],
+        prixMoyen: '7 000 € - 15 000 €',
+        dureeVie: '15-25 ans',
+        idealPour: 'Petits terrains, résidences principales, sols non perméables, zones littorales',
+      },
+    ],
+    verdict:
+      'La fosse septique reste la solution de référence pour les grands terrains avec un sol perméable, notamment en résidence secondaire (fonctionne sans électricité ni bactéries à entretenir). La micro-station est idéale pour les terrains réduits et les sols difficiles (argileux, nappe haute), mais elle nécessite une utilisation régulière pour maintenir les bactéries actives. Pour une résidence principale sur petit terrain, la micro-station est souvent le seul choix possible. Vérifiez toujours le zonage d\'assainissement de votre commune avant de choisir.',
+    criteresChoix: [
+      'Surface du terrain : > 200 m² disponibles → fosse + épandage, < 100 m² → micro-station',
+      'Type de sol : perméable → fosse, argileux/imperméable → micro-station',
+      'Usage : résidence principale → micro-station OK, secondaire → fosse préférable',
+      'Budget installation : fosse (4 000-8 000 €) vs micro-station (7 000-15 000 €)',
+      'Coût de fonctionnement : fosse (vidange 200 €/3-4 ans) vs micro-station (150-250 €/an)',
+      'Réglementation locale : zonage d\'assainissement et SPANC de votre commune',
+    ],
+    faq: [
+      {
+        question: 'Quelle est la différence entre une fosse septique et une fosse toutes eaux ?',
+        answer:
+          'La fosse septique ne traite que les eaux-vannes (WC). La fosse toutes eaux traite les eaux-vannes ET les eaux ménagères (cuisine, salle de bains). Depuis 2009, seules les fosses toutes eaux sont autorisées en installation neuve. Si vous avez une ancienne fosse septique, vous devrez la mettre aux normes lors d\'une vente ou d\'un contrôle SPANC.',
+      },
+      {
+        question: 'Combien coûte la vidange d\'une fosse septique ?',
+        answer:
+          'La vidange d\'une fosse toutes eaux coûte 200 à 400 € selon la contenance (3 000 à 5 000 litres) et votre localisation. Elle doit être réalisée quand les boues atteignent 50 % du volume de la fosse, soit en moyenne tous les 3 à 4 ans pour une famille de 4 personnes. Conservez le bordereau de vidange (document obligatoire pour le SPANC).',
+      },
+      {
+        question: 'La micro-station fonctionne-t-elle en résidence secondaire ?',
+        answer:
+          'Difficilement. Les bactéries aérobies qui traitent les eaux usées ont besoin d\'un apport régulier de matière organique. En cas d\'absence de plus de 3-4 mois, les bactéries meurent et il faut 4 à 6 semaines pour reconstituer la flore bactérienne au retour. Certains fabricants proposent des modèles « vacances » avec mode veille, mais la fosse septique reste préférable pour les résidences secondaires.',
+      },
+      {
+        question: 'Quelles aides financières pour l\'assainissement non collectif ?',
+        answer:
+          'En 2026 : subventions des agences de l\'eau (jusqu\'à 3 000 €), aides ANAH pour les ménages modestes (jusqu\'à 50 % du montant), éco-prêt à taux zéro (jusqu\'à 10 000 €) pour les installations de plus de 20 ans, et TVA à 10 % pour les travaux de réhabilitation. Certaines communes ou départements proposent des aides complémentaires. Contactez votre SPANC pour connaître les dispositifs locaux.',
+      },
+    ],
+  },
+
+  {
+    slug: 'veranda-alu-vs-bois-vs-pvc',
+    title: 'Véranda : aluminium, bois ou PVC ?',
+    metaDescription:
+      'Comparatif véranda aluminium vs bois vs PVC en 2026 : prix au m², isolation, entretien, esthétique. Guide complet pour choisir le matériau de votre véranda.',
+    intro:
+      "La véranda est une extension de vie très prisée des Français, qui permet de gagner 10 à 40 m² de surface habitable. Le choix du matériau de la structure (aluminium, bois ou PVC) conditionne l'esthétique, l'isolation, la durabilité et le budget de votre projet. Ce comparatif vous aide à identifier le matériau le plus adapté à vos besoins et à votre maison.",
+    category: 'Extérieur',
+    options: [
+      {
+        name: 'Véranda en aluminium',
+        avantages: [
+          'Matériau le plus populaire (70 % des vérandas vendues en France)',
+          'Profilés fins permettant de maximiser les surfaces vitrées',
+          'Entretien minimal (nettoyage à l\'eau savonneuse)',
+          'Ne rouille pas, ne se déforme pas, ne pourrit pas',
+          'Large gamme de coloris (laquage RAL, imitation bois)',
+          'Compatible avec les grandes portées sans poteau intermédiaire',
+        ],
+        inconvenients: [
+          'Prix intermédiaire à élevé (1 200 à 2 500 €/m² posé)',
+          'Conductivité thermique élevée (nécessite une rupture de pont thermique)',
+          'Sensation froide au toucher en hiver',
+          'Dilatation thermique (claquements en cas de forte chaleur)',
+          'Rayures possibles sur le laquage (retouche difficile)',
+          'Fabrication énergivore (empreinte carbone élevée)',
+        ],
+        prixMoyen: '1 200 € - 2 500 €/m²',
+        dureeVie: '30-50 ans',
+        idealPour: 'Style contemporain, grandes surfaces vitrées, entretien minimal, toutes régions',
+      },
+      {
+        name: 'Véranda en bois',
+        avantages: [
+          'Esthétique chaleureuse et naturelle (charme du bois massif)',
+          'Excellent isolant thermique naturel (pas de pont thermique)',
+          'Matériau écologique et renouvelable (bilan carbone favorable)',
+          'S\'intègre parfaitement aux maisons traditionnelles et de caractère',
+          'Sensation de chaleur au toucher, même en hiver',
+          'Possibilité de personnalisation (sculpture, moulurations)',
+        ],
+        inconvenients: [
+          'Prix le plus élevé (1 800 à 3 500 €/m² posé)',
+          'Entretien régulier obligatoire (lasure ou peinture tous les 3-5 ans)',
+          'Sensible aux insectes xylophages et aux champignons',
+          'Profilés plus épais que l\'aluminium (surface vitrée réduite)',
+          'Nécessite un traitement autoclave ou des essences résistantes (chêne, méranti)',
+          'Délais de fabrication plus longs (4 à 8 semaines)',
+        ],
+        prixMoyen: '1 800 € - 3 500 €/m²',
+        dureeVie: '25-40 ans (avec entretien)',
+        idealPour: 'Maisons de caractère, style traditionnel, sensibilité écologique, bel investissement',
+      },
+      {
+        name: 'Véranda en PVC',
+        avantages: [
+          'Prix le plus bas du marché (800 à 1 500 €/m² posé)',
+          'Excellente isolation thermique (Uw jusqu\'à 1,1 W/m².K)',
+          'Aucun entretien (ne pourrit pas, ne rouille pas, ne se peint pas)',
+          'Très bonne résistance à l\'humidité et au sel (zones littorales)',
+          'Recyclable à 100 % en fin de vie',
+          'Installation rapide (profilés préfabriqués en usine)',
+        ],
+        inconvenients: [
+          'Choix de coloris limité (blanc majoritaire, quelques teintes)',
+          'Esthétique moins raffinée que l\'aluminium ou le bois',
+          'Profilés épais qui réduisent la luminosité',
+          'Portée limitée : nécessite des poteaux intermédiaires au-delà de 4 m',
+          'Jaunissement possible dans le temps (UV, entrée de gamme)',
+          'Image bas de gamme auprès de certains acheteurs (revente)',
+        ],
+        prixMoyen: '800 € - 1 500 €/m²',
+        dureeVie: '20-30 ans',
+        idealPour: 'Budget limité, petites vérandas (< 20 m²), zones littorales, maisons récentes',
+      },
+    ],
+    verdict:
+      'L\'aluminium domine le marché pour de bonnes raisons : profilés fins, entretien nul et longévité exceptionnelle. C\'est le choix par défaut en 2026. Le bois séduit pour les maisons de caractère et les amoureux de matériaux nobles, mais demande un budget conséquent et un entretien régulier. Le PVC est la solution économique pour les petites vérandas (< 20 m²) et les budgets serrés, avec une isolation imbattable. Conseil : pour une véranda habitable toute l\'année, l\'aluminium à rupture de pont thermique avec double vitrage 4/20/4 est le meilleur choix.',
+    criteresChoix: [
+      'Budget au m² : PVC (800-1 500 €) vs alu (1 200-2 500 €) vs bois (1 800-3 500 €)',
+      'Entretien accepté : bois (tous les 3-5 ans) vs alu/PVC (aucun)',
+      'Esthétique de la maison : traditionnelle → bois, contemporaine → alu, standard → PVC',
+      'Surface de la véranda : grande (> 20 m²) → alu ou bois, petite → PVC possible',
+      'Zone géographique : littoral → PVC ou alu, montagne → bois ou alu RPT',
+      'Valeur de revente : alu > bois > PVC en termes de valorisation immobilière',
+    ],
+    faq: [
+      {
+        question: 'Faut-il un permis de construire pour une véranda ?',
+        answer:
+          'Pour une véranda de moins de 20 m² (40 m² en zone PLU avec commune > 2 000 habitants) : une déclaration préalable de travaux suffit. Au-delà, un permis de construire est obligatoire. Si la surface totale du logement (existant + véranda) dépasse 150 m², le recours à un architecte est obligatoire. Vérifiez toujours le PLU de votre commune et les règles de prospect (distance aux limites).',
+      },
+      {
+        question: 'Une véranda est-elle habitable toute l\'année ?',
+        answer:
+          'Oui, à condition de prévoir une isolation performante : double ou triple vitrage à contrôle solaire, toiture isolée (panneaux sandwich ou polycarbonate 32 mm), rupture de pont thermique (alu), stores intérieurs ou extérieurs. Un chauffage d\'appoint (radiateur électrique, plancher chauffant) est souvent nécessaire en hiver. Les vérandas bioclimatiques orientées sud avec protections solaires offrent le meilleur confort.',
+      },
+      {
+        question: 'Quelle est la meilleure orientation pour une véranda ?',
+        answer:
+          'L\'orientation sud ou sud-est est idéale : ensoleillement maximal en hiver, protections solaires efficaces en été (brise-soleil, casquette). L\'ouest est à éviter (surchauffe en été difficile à gérer). Le nord convient pour un bureau ou un atelier (lumière constante sans surchauffe). Prévoyez toujours des protections solaires (stores, volets) quelle que soit l\'orientation.',
+      },
+      {
+        question: 'Combien coûte une véranda de 20 m² ?',
+        answer:
+          'En 2026, comptez : PVC (16 000 à 30 000 €), aluminium (24 000 à 50 000 €), bois (36 000 à 70 000 €). Ces prix incluent la structure, le vitrage, la toiture, la dalle béton et la pose. Ajoutez 2 000 à 5 000 € pour les options (stores, éclairage, chauffage au sol). La TVA applicable est de 20 % (construction neuve) ou 10 % (extension d\'un logement > 2 ans).',
       },
     ],
   },

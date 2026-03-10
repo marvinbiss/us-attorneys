@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, Scale, Flame, DoorOpen, PaintBucket, TreePine, Building2 } from "lucide-react"
+import { ArrowRight, Scale, Flame, DoorOpen, PaintBucket, TreePine, Building2, ShieldCheck } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
@@ -8,16 +8,16 @@ import { SITE_URL } from "@/lib/seo/config"
 import { comparisons } from "@/lib/data/comparisons"
 
 export const metadata: Metadata = {
-  title: "Comparatifs Travaux 2026 : 20 Guides pour Bien Choisir | ServicesArtisans",
+  title: "Comparatifs Travaux 2026 : 30 Guides pour Bien Choisir | ServicesArtisans",
   description:
-    "Comparatifs détaillés pour vos travaux : pompe à chaleur vs gaz, PVC vs alu, isolation intérieure vs extérieure. Prix, avantages, inconvénients et verdict pour chaque solution.",
+    "30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages, inconvénients et verdict pour chaque solution.",
   alternates: {
     canonical: `${SITE_URL}/comparaison`,
   },
   openGraph: {
-    title: "Comparatifs Travaux 2026 : 20 Guides pour Bien Choisir",
+    title: "Comparatifs Travaux 2026 : 30 Guides pour Bien Choisir",
     description:
-      "Comparatifs détaillés pour vos travaux : pompe à chaleur vs gaz, PVC vs alu, isolation intérieure vs extérieure. Prix, avantages et verdict.",
+      "30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages et verdict.",
     url: `${SITE_URL}/comparaison`,
     type: "website",
   },
@@ -54,6 +54,12 @@ const categories = [
     color: "bg-blue-100 text-blue-700",
     iconBg: "bg-blue-50",
   },
+  {
+    name: "Isolation",
+    icon: ShieldCheck,
+    color: "bg-cyan-100 text-cyan-700",
+    iconBg: "bg-cyan-50",
+  },
 ]
 
 export default function ComparaisonPage() {
@@ -84,7 +90,7 @@ export default function ComparaisonPage() {
               </h1>
             </div>
             <p className="text-lg text-gray-600 max-w-2xl">
-              {"20 comparatifs détaillés pour vous aider à choisir les meilleures solutions pour vos travaux. Prix 2026, avantages, inconvénients et verdict d'experts."}
+              {"30 comparatifs détaillés pour vous aider à choisir les meilleures solutions pour vos travaux. Prix 2026, avantages, inconvénients et verdict d'experts."}
             </p>
           </div>
         </div>
