@@ -190,7 +190,9 @@ async function aggregate() {
       aggMap.set(key, agg)
     }
     agg.nb_artisans++
-    agg.nb_avis += provider.review_count || 0
+    // Cap review_count at 2000 to filter corrupted data (e.g. 251345710)
+    const safeReviewCount = (provider.review_count && provider.review_count <= 2000) ? provider.review_count : 0
+    agg.nb_avis += safeReviewCount
     if (provider.is_verified) {
       agg.taux_verification = ((agg.taux_verification * (agg.nb_artisans - 1)) + 1) / agg.nb_artisans
     } else {
@@ -202,7 +204,8 @@ async function aggregate() {
   const ratingAccum = new Map<string, { sum: number; count: number }>()
 
   function trackRating(key: string, rating: number | null) {
-    if (rating === null || rating === undefined) return
+    // Skip null/zero ratings and corrupted values (must be between 1 and 5)
+    if (rating === null || rating === undefined || rating <= 0 || rating > 5) return
     let acc = ratingAccum.get(key)
     if (!acc) {
       acc = { sum: 0, count: 0 }
@@ -226,28 +229,29 @@ async function aggregate() {
     const region = p.address_region
     const regionSlug = region ? slugify(region) : null
 
+    // Use slugs for keys to avoid duplicates from accent/case variations
     // Niveau national (métier seul)
     const natKey = getKey(metierSlug)
     addToAgg(natKey, metier, metierSlug, null, null, null, null, null, null, p)
     trackRating(natKey, p.rating_average)
 
     // Niveau région
-    if (region) {
-      const regKey = getKey(metierSlug, null, null, region)
+    if (region && regionSlug) {
+      const regKey = getKey(metierSlug, null, null, regionSlug)
       addToAgg(regKey, metier, metierSlug, null, null, null, null, region, regionSlug, p)
       trackRating(regKey, p.rating_average)
     }
 
     // Niveau département
-    if (dept) {
-      const deptKey = getKey(metierSlug, null, dept)
+    if (dept && deptCode) {
+      const deptKey = getKey(metierSlug, null, deptCode)
       addToAgg(deptKey, metier, metierSlug, null, null, dept, deptCode, region, regionSlug, p)
       trackRating(deptKey, p.rating_average)
     }
 
-    // Niveau ville
-    if (ville) {
-      const villeKey = getKey(metierSlug, ville)
+    // Niveau ville (key includes deptCode to distinguish same-name cities)
+    if (ville && villeSlug) {
+      const villeKey = getKey(metierSlug, `${villeSlug}__${deptCode || ''}`)
       addToAgg(villeKey, metier, metierSlug, ville, villeSlug, dept, deptCode, region, regionSlug, p)
       trackRating(villeKey, p.rating_average)
     }
