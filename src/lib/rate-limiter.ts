@@ -186,8 +186,8 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   newsletter: { window: 300 * 1000, max: 3 },    // 3 requests per 5 minutes for newsletter (sends email)
   inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for artisan registration (sends emails)
   ai: { window: 60 * 1000, max: 10 },            // 10 requests per minute for AI generation (expensive)
-  estimation: { window: 60 * 1000, max: 15 },    // 15 messages per minute for estimation chat
-  estimationLead: { window: 300 * 1000, max: 3 }, // 3 leads per 5 minutes for estimation lead capture (anti-spam)
+  estimation: { window: 60 * 1000, max: 15, failOpen: true },    // 15 messages per minute for estimation chat — fail open so widget always works
+  estimationLead: { window: 300 * 1000, max: 3, failOpen: true }, // 3 leads per 5 minutes for estimation lead capture — fail open
   verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for SIRET/entreprise verification (external API)
   geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
