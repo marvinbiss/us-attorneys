@@ -31,6 +31,8 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import dynamic from 'next/dynamic'
 
+export const revalidate = 86400 // ISR 24h
+
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
   { ssr: false }

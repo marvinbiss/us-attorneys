@@ -13,6 +13,8 @@ import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400 // ISR 24h
+
 // Only services that have emergency info
 const emergencySlugs = Object.keys(tradeContent).filter(
   (slug) => tradeContent[slug].emergencyInfo
