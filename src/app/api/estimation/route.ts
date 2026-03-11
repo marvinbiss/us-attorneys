@@ -25,12 +25,12 @@ const contextSchema = z.object({
   metier: z.string().min(1),
   metierSlug: z.string().optional(),
   ville: z.string().min(1),
-  departement: z.string().min(1).max(3),
+  departement: z.string().max(3).optional().default(''),
   pageUrl: z.string().optional(),
   artisan: z.object({
     name: z.string().min(1),
-    slug: z.string().min(1),
-    publicId: z.string().min(1),
+    slug: z.string().optional().default(''),
+    publicId: z.string().optional().default(''),
   }).optional(),
 })
 
