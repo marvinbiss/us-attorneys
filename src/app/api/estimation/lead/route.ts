@@ -18,7 +18,7 @@ const estimationLeadSchema = z.object({
   email: z.string().email('Email invalide').optional().or(z.literal('')),
   metier: z.string().min(1, 'Le métier est requis'),
   ville: z.string().min(1, 'La ville est requise'),
-  departement: z.string().min(1, 'Le département est requis'),
+  departement: z.string().default(''),
   description_projet: z.string().optional(),
   estimation_min: z.number().optional(),
   estimation_max: z.number().optional(),

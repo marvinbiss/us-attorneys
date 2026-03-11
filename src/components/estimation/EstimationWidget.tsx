@@ -159,10 +159,12 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
   const [leadPhone, setLeadPhone] = useState('')
   const [leadEmail, setLeadEmail] = useState('')
   const [leadLoading, setLeadLoading] = useState(false)
+  const [leadError, setLeadError] = useState(false)
 
   // Callback field
   const [callbackPhone, setCallbackPhone] = useState('')
   const [callbackLoading, setCallbackLoading] = useState(false)
+  const [callbackError, setCallbackError] = useState(false)
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -330,6 +332,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
     if (!leadPhone.trim()) return
 
     setLeadLoading(true)
+    setLeadError(false)
     try {
       const response = await fetch('/api/estimation/lead', {
         method: 'POST',
@@ -340,7 +343,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
           email: leadEmail || undefined,
           metier: context.metier,
           ville: context.ville,
-          departement: context.departement,
+          departement: context.departement || undefined,
           source: 'chat' as const,
           conversation_history: messages,
           page_url: context.pageUrl,
@@ -365,6 +368,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       ])
     } catch (error) {
       console.error('Lead submission error:', error)
+      setLeadError(true)
     } finally {
       setLeadLoading(false)
     }
@@ -377,6 +381,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
     if (!callbackPhone.trim()) return
 
     setCallbackLoading(true)
+    setCallbackError(false)
     try {
       const response = await fetch('/api/estimation/lead', {
         method: 'POST',
@@ -385,7 +390,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
           telephone: callbackPhone,
           metier: context.metier,
           ville: context.ville,
-          departement: context.departement,
+          departement: context.departement || undefined,
           source: 'callback' as const,
           page_url: context.pageUrl,
           artisan_public_id: context.artisan?.publicId,
@@ -398,6 +403,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       setCallbackCountdown(30)
     } catch (error) {
       console.error('Callback submission error:', error)
+      setCallbackError(true)
     } finally {
       setCallbackLoading(false)
     }
@@ -657,6 +663,11 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                             onChange={(e) => setLeadEmail(e.target.value)}
                             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
                           />
+                          {leadError && (
+                            <p className="text-xs text-red-600 text-center">
+                              Une erreur est survenue. Veuillez réessayer.
+                            </p>
+                          )}
                           <button
                             type="submit"
                             disabled={leadLoading || !leadPhone.trim()}
@@ -763,6 +774,11 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                         className="w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
                         style={{ fontSize: '16px' }}
                       />
+                      {callbackError && (
+                        <p className="text-xs text-red-600 text-center">
+                          Une erreur est survenue. Veuillez réessayer.
+                        </p>
+                      )}
                       <button
                         type="submit"
                         disabled={
