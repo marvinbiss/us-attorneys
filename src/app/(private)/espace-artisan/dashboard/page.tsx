@@ -1,13 +1,28 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, Eye, Phone, PhoneCall, ChevronRight, Calendar, Loader2, AlertCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import useSWR from 'swr'
+import { motion } from 'framer-motion'
+import {
+  FileText,
+  Eye,
+  Phone,
+  PhoneCall,
+  ChevronRight,
+  Calendar,
+  AlertCircle,
+  ArrowRight,
+  UserCheck,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
+import { StatCard } from '@/components/dashboard/StatCard'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
-import { createClient } from '@/lib/supabase/client'
 import { getArtisanUrl } from '@/lib/utils'
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface StatsData {
   profileViews: { value: number; change: string }
@@ -15,6 +30,7 @@ interface StatsData {
   phoneClicks: { value: number; change: string }
   demandesRecues: { value: number; change: string }
   unreadMessages: number
+  portfolioPhotoCount?: number
 }
 
 interface Demande {
@@ -22,265 +38,469 @@ interface Demande {
   client_name: string
   service_name: string
   city: string | null
+  postal_code: string | null
   created_at: string
-  budget: string | null
   status: string
 }
 
 interface Profile {
   full_name: string | null
   role: string | null
-  is_verified: boolean
+}
+
+interface Provider {
+  id: string
   stable_id: string | null
   slug: string | null
   specialty: string | null
   address_city: string | null
+  is_verified: boolean
 }
 
-export default function DashboardArtisanPage() {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [stats, setStats] = useState<StatsData | null>(null)
-  const [demandes, setDemandes] = useState<Demande[]>([])
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [portfolioPhotoCount, setPortfolioPhotoCount] = useState<number | null>(null)
+interface DashboardData {
+  stats: StatsData
+  recentDemandes: Demande[]
+  profile: Profile
+  provider: Provider
+}
 
-  useEffect(() => {
-    fetchDashboardData()
-    fetchPortfolioCount()
-  }, [])
+interface FetchError {
+  status: number
+  message?: string
+}
 
-  const fetchDashboardData = async () => {
-    try {
-      setError(null)
-      const response = await fetch('/api/artisan/stats')
-      const data = await response.json()
+// ─── SWR Fetcher ─────────────────────────────────────────────────────────────
 
-      if (response.ok) {
-        setStats(data.stats)
-        setDemandes(data.recentDemandes || [])
-        setProfile(data.profile)
-      } else if (response.status === 401) {
-        window.location.href = '/connexion?redirect=/espace-artisan'
-        return
-      } else if (response.status === 403) {
-        setError('Accès réservé aux artisans. Veuillez vous inscrire en tant qu\'artisan.')
-      } else {
-        setError(data.error || 'Erreur lors du chargement des données')
-      }
-    } catch (err) {
-      console.error('Error fetching dashboard:', err)
-      setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
-    } finally {
-      setLoading(false)
-    }
+const fetcher = (url: string): Promise<DashboardData> =>
+  fetch(url).then((r) => {
+    if (!r.ok) throw { status: r.status } as FetchError
+    return r.json()
+  })
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function parseTrend(change: string): { value: number; isPositive: boolean } | undefined {
+  const num = parseInt(change.replace(/[^-\d]/g, ''), 10)
+  if (isNaN(num) || num === 0) return undefined
+  return { value: Math.abs(num), isPositive: num >= 0 }
+}
+
+function getStatusLabel(status: string): string {
+  switch (status) {
+    case 'pending': return 'Nouveau'
+    case 'sent': return 'Devis envoyé'
+    case 'accepted': return 'Accepté'
+    case 'refused': return 'Refusé'
+    case 'expired': return 'Expiré'
+    default: return status
   }
+}
 
-  const fetchPortfolioCount = async () => {
-    try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { count } = await supabase
-        .from('portfolio_items')
-        .select('*', { count: 'exact', head: true })
-        .eq('artisan_id', user.id)
-      setPortfolioPhotoCount(count ?? 0)
-    } catch {
-      // Silently fail — banner just won't show
-      setPortfolioPhotoCount(null)
-    }
+function getStatusClasses(status: string): string {
+  switch (status) {
+    case 'pending': return 'bg-red-100 text-red-700'
+    case 'sent': return 'bg-yellow-100 text-yellow-700'
+    case 'accepted': return 'bg-green-100 text-green-700'
+    case 'refused': return 'bg-gray-100 text-gray-700'
+    case 'expired': return 'bg-gray-100 text-gray-700'
+    default: return 'bg-gray-100 text-gray-600'
   }
+}
 
-  const statsDisplay = [
-    { label: 'Vues du profil', value: stats?.profileViews.value || 0, change: stats?.profileViews.change || '+0%', icon: Eye },
-    { label: 'Numéros affichés', value: stats?.phoneReveals.value || 0, change: stats?.phoneReveals.change || '+0%', icon: Phone },
-    { label: 'Appels reçus', value: stats?.phoneClicks.value || 0, change: stats?.phoneClicks.change || '+0%', icon: PhoneCall },
-    { label: 'Demandes reçues', value: stats?.demandesRecues.value || 0, change: stats?.demandesRecues.change || '+0%', icon: FileText },
-  ]
+// ─── Skeletons ───────────────────────────────────────────────────────────────
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Chargement...</p>
+function StatsSkeleton() {
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-busy="true" aria-label="Chargement des statistiques">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-start justify-between mb-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-200 animate-pulse" />
+            <div className="w-14 h-5 rounded-full bg-gray-200 animate-pulse" />
+          </div>
+          <div className="w-16 h-8 rounded bg-gray-200 animate-pulse mb-1" />
+          <div className="w-24 h-4 rounded bg-gray-200 animate-pulse" />
         </div>
-      </div>
-    )
-  }
+      ))}
+    </div>
+  )
+}
 
-  if (error) {
+function DemandesSkeleton() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6" aria-busy="true" aria-label="Chargement des demandes">
+      <div className="flex items-center justify-between mb-6">
+        <div className="w-40 h-6 rounded bg-gray-200 animate-pulse" />
+        <div className="w-16 h-4 rounded bg-gray-200 animate-pulse" />
+      </div>
+      <div className="space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2 flex-1">
+                <div className="w-48 h-5 rounded bg-gray-200 animate-pulse" />
+                <div className="flex gap-4">
+                  <div className="w-24 h-4 rounded bg-gray-200 animate-pulse" />
+                  <div className="w-20 h-4 rounded bg-gray-200 animate-pulse" />
+                  <div className="w-28 h-4 rounded bg-gray-200 animate-pulse" />
+                </div>
+              </div>
+              <div className="w-20 h-6 rounded-full bg-gray-200 animate-pulse" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── Profile Completion CTA ──────────────────────────────────────────────────
+
+function ProfileCompletionCTA() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2.5 rounded-lg bg-blue-50 text-blue-600">
+          <UserCheck className="w-5 h-5" aria-hidden="true" />
+        </div>
+        <h3 className="font-semibold text-gray-900">Complétez votre profil</h3>
+      </div>
+      <p className="text-sm text-gray-500 mb-4">
+        Un profil complet et vérifié vous permet d&apos;apparaître en priorité dans les résultats de recherche et d&apos;inspirer confiance aux clients.
+      </p>
+      <ul className="space-y-2 mb-5 text-sm text-gray-600">
+        <li className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+          Ajoutez une description détaillée
+        </li>
+        <li className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+          Complétez vos coordonnées
+        </li>
+        <li className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+          Ajoutez votre logo
+        </li>
+      </ul>
+      <Link
+        href="/espace-artisan/profil"
+        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors w-full justify-center"
+      >
+        Compléter mon profil
+        <ArrowRight className="w-4 h-4" aria-hidden="true" />
+      </Link>
+    </div>
+  )
+}
+
+// ─── Empty Demandes State (Linear/Shopify pattern) ───────────────────────────
+
+function EmptyDemandesState() {
+  return (
+    <div className="text-center py-12 px-4">
+      <div className="mx-auto w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-5">
+        <FileText className="w-8 h-8 text-gray-400" aria-hidden="true" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        Vous n&apos;avez pas encore de demandes
+      </h3>
+      <p className="text-sm text-gray-500 max-w-sm mx-auto mb-6">
+        Complétez votre profil et ajoutez des photos pour apparaître dans les résultats de recherche
+      </p>
+      <Link
+        href="/espace-artisan/profil"
+        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
+      >
+        Compléter mon profil
+        <ArrowRight className="w-4 h-4" aria-hidden="true" />
+      </Link>
+    </div>
+  )
+}
+
+// ─── Main Page Component ─────────────────────────────────────────────────────
+
+export default function DashboardArtisanPage() {
+  const router = useRouter()
+
+  const { data, error, isLoading, mutate } = useSWR<DashboardData, FetchError>(
+    '/api/artisan/stats',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 30_000,
+      dedupingInterval: 5_000,
+    }
+  )
+
+  // Redirect on 401
+  useEffect(() => {
+    if (error && (error as FetchError).status === 401) {
+      router.push('/connexion?redirect=/espace-artisan')
+    }
+  }, [error, router])
+
+  const stats = data?.stats ?? null
+  const demandes = data?.recentDemandes ?? []
+  const profile = data?.profile ?? null
+  const provider = data?.provider ?? null
+
+  // 403 — artisan-only access
+  if (error && (error as FetchError).status === 403) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={() => {
-                setLoading(true)
-                fetchDashboardData()
-              }}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            >
-              Réessayer
-            </button>
-            <Link
-              href="/inscription-artisan"
-              className="text-blue-600 hover:underline text-sm"
-            >
-              S'inscrire en tant qu'artisan
-            </Link>
-          </div>
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Accès réservé</h2>
+          <p className="text-gray-600 mb-6">
+            Accès réservé aux artisans. Veuillez vous inscrire en tant qu&apos;artisan.
+          </p>
+          <Link
+            href="/inscription-artisan"
+            className="inline-block bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
+          >
+            S&apos;inscrire en tant qu&apos;artisan
+          </Link>
         </div>
       </div>
     )
   }
 
+  // Generic error (non-401, non-403)
+  const hasGenericError = error && (error as FetchError).status !== 401 && (error as FetchError).status !== 403
+
   const displayName = profile?.full_name || 'Mon entreprise'
-  const displayCity = profile?.address_city || ''
-  const publicUrl = profile ? getArtisanUrl({
-    stable_id: profile.stable_id,
-    slug: profile.slug,
-    specialty: profile.specialty,
-    city: profile.address_city,
-  }) : null
+  const displayCity = provider?.address_city || ''
+  const publicUrl = provider
+    ? getArtisanUrl({
+        stable_id: provider.stable_id,
+        slug: provider.slug,
+        specialty: provider.specialty,
+        city: provider.address_city,
+      })
+    : null
+
+  const statsCards = stats
+    ? [
+        {
+          title: 'Vues du profil',
+          value: stats.profileViews.value,
+          trend: parseTrend(stats.profileViews.change),
+          icon: <Eye className="w-5 h-5" aria-hidden="true" />,
+          color: 'blue' as const,
+        },
+        {
+          title: 'Numéros affichés',
+          value: stats.phoneReveals.value,
+          trend: parseTrend(stats.phoneReveals.change),
+          icon: <Phone className="w-5 h-5" aria-hidden="true" />,
+          color: 'green' as const,
+        },
+        {
+          title: 'Appels reçus',
+          value: stats.phoneClicks.value,
+          trend: parseTrend(stats.phoneClicks.change),
+          icon: <PhoneCall className="w-5 h-5" aria-hidden="true" />,
+          color: 'indigo' as const,
+        },
+        {
+          title: 'Demandes reçues',
+          value: stats.demandesRecues.value,
+          trend: parseTrend(stats.demandesRecues.change),
+          icon: <FileText className="w-5 h-5" aria-hidden="true" />,
+          color: 'yellow' as const,
+        },
+      ]
+    : []
+
+  const showProfileCTA = provider && !provider.is_verified
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/espace-artisan' },
-            { label: 'Tableau de bord' }
-          ]} />
+          <Breadcrumb
+            items={[
+              { label: 'Espace Artisan', href: '/espace-artisan' },
+              { label: 'Tableau de bord' },
+            ]}
+          />
         </div>
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Tableau de bord</h1>
-              <p className="text-blue-100">{displayName}{displayCity && ` - ${displayCity}`}</p>
+              <p className="text-blue-100">
+                {displayName}
+                {displayCity && ` \u2014 ${displayCity}`}
+              </p>
             </div>
             <div className="flex items-center gap-4">
-              {profile?.is_verified && (
-                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              {provider?.is_verified && (
+                <span
+                  className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+                  role="status"
+                >
                   Profil référencé
                 </span>
               )}
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
           <ArtisanSidebar
             activePage="dashboard"
-            newDemandesCount={0}
+            newDemandesCount={stats?.demandesRecues?.value || 0}
             unreadMessagesCount={stats?.unreadMessages ?? 0}
             publicUrl={publicUrl}
           />
 
           {/* Main content */}
-          <div className="lg:col-span-3 space-y-8">
-            {/* Photo upload prompt */}
-            {portfolioPhotoCount !== null && (
-              <PhotoUploadBanner photoCount={portfolioPhotoCount} />
+          <main className="lg:col-span-3 space-y-8">
+            {/* Inline error banner */}
+            {hasGenericError && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4"
+                role="alert"
+              >
+                <AlertCircle className="w-5 h-5 text-red-500 shrink-0" aria-hidden="true" />
+                <p className="text-sm text-red-700 flex-1">
+                  Erreur de connexion. Veuillez vérifier votre connexion internet.
+                </p>
+                <button
+                  onClick={() => mutate()}
+                  className="text-sm font-medium text-red-700 hover:text-red-800 underline focus-visible:ring-2 focus-visible:ring-red-500 rounded"
+                >
+                  Réessayer
+                </button>
+              </motion.div>
             )}
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {statsDisplay.map((stat) => {
-                const Icon = stat.icon
-                return (
-                  <div key={stat.label} className="bg-white rounded-xl shadow-sm p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <Icon className="w-8 h-8 text-blue-600" />
-                      <span className="text-green-600 text-sm font-medium">{stat.change}</span>
-                    </div>
-                    <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                    <div className="text-sm text-gray-500">{stat.label}</div>
-                  </div>
-                )
-              })}
-            </div>
+            {/* Photo Upload Banner */}
+            {data?.stats?.portfolioPhotoCount !== undefined && (
+              <PhotoUploadBanner photoCount={data.stats.portfolioPhotoCount} />
+            )}
 
-            {/* Dernières demandes */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Dernières demandes
-                </h2>
-                <Link href="/espace-artisan/demandes-recues" className="text-blue-600 hover:underline text-sm">
-                  Voir tout
-                </Link>
-              </div>
-              <div className="space-y-4">
-                {demandes.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                    <p>Aucune demande pour le moment</p>
-                  </div>
+            {/* Stats Section */}
+            <section aria-label="Statistiques" aria-live="polite">
+              {isLoading ? (
+                <StatsSkeleton />
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {statsCards.map((card, index) => (
+                    <StatCard
+                      key={card.title}
+                      title={card.title}
+                      value={card.value}
+                      trend={card.trend}
+                      icon={card.icon}
+                      color={card.color}
+                      delay={index * 0.05}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* Two-column layout: Demandes + Profile CTA */}
+            <div className={showProfileCTA ? 'grid lg:grid-cols-3 gap-8' : ''}>
+              {/* Dernières demandes */}
+              <section className={showProfileCTA ? 'lg:col-span-2' : ''} aria-label="Dernières demandes">
+                {isLoading ? (
+                  <DemandesSkeleton />
                 ) : (
-                  demandes.map((demande) => (
-                    <div
-                      key={demande.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium text-gray-900">
-                            {demande.service_name}
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-gray-500">
-                            <span>{demande.client_name}</span>
-                            <span>{demande.city || 'Non précisé'}</span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              {new Date(demande.created_at).toLocaleDateString('fr-FR')}
-                            </span>
-                          </div>
-                          {demande.budget && (
-                            <div className="mt-2 text-sm font-medium text-blue-600">
-                              Budget : {demande.budget}
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              demande.status === 'pending'
-                                ? 'bg-red-100 text-red-700'
-                                : demande.status === 'sent'
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : demande.status === 'accepted'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            {demande.status === 'pending' && 'Nouveau'}
-                            {demande.status === 'sent' && 'Devis envoyé'}
-                            {demande.status === 'accepted' && 'Accepté'}
-                            {demande.status === 'refused' && 'Refusé'}
-                            {demande.status === 'expired' && 'Expiré'}
-                          </span>
-                          <ChevronRight className="w-5 h-5 text-gray-400" />
-                        </div>
-                      </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white rounded-xl border border-gray-200 p-6"
+                  >
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-lg font-semibold text-gray-900">Dernières demandes</h2>
+                      <Link
+                        href="/espace-artisan/demandes-recues"
+                        className="text-blue-600 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+                      >
+                        Voir tout
+                      </Link>
                     </div>
-                  ))
+                    <div className="space-y-4">
+                      {demandes.length === 0 ? (
+                        <EmptyDemandesState />
+                      ) : (
+                        demandes.map((demande, index) => (
+                          <motion.div
+                            key={demande.id}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.25 + index * 0.04 }}
+                          >
+                            <Link
+                              href={`/espace-artisan/demandes-recues?id=${demande.id}`}
+                              className="block border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-blue-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-all"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <h3 className="font-medium text-gray-900">
+                                    {demande.service_name}
+                                  </h3>
+                                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-gray-500">
+                                    <span>{demande.client_name}</span>
+                                    <span>{demande.city || 'Non précisé'}</span>
+                                    <span className="flex items-center gap-1">
+                                      <Calendar className="w-4 h-4" aria-hidden="true" />
+                                      {new Date(demande.created_at).toLocaleDateString('fr-FR')}
+                                    </span>
+                                  </div>
+                                  {demande.postal_code && (
+                                    <div className="mt-2 text-sm font-medium text-blue-600">
+                                      Code postal : {demande.postal_code}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-4">
+                                  <span
+                                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusClasses(demande.status)}`}
+                                    role="status"
+                                  >
+                                    {getStatusLabel(demande.status)}
+                                  </span>
+                                  <ChevronRight className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                                </div>
+                              </div>
+                            </Link>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
+                  </motion.div>
                 )}
-              </div>
-            </div>
+              </section>
 
-          </div>
+              {/* Profile Completion CTA (right column) */}
+              {showProfileCTA && !isLoading && (
+                <motion.aside
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  aria-label="Complétion du profil"
+                >
+                  <ProfileCompletionCTA />
+                </motion.aside>
+              )}
+            </div>
+          </main>
         </div>
       </div>
     </div>

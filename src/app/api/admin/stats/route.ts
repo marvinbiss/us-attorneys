@@ -92,6 +92,8 @@ export async function GET() {
       recentBookingsR, recentReviewsR, pendingReportsListR,
       // Chart: last 30 days (17–19) — capped at 5K rows each
       chartProfilesR, chartBookingsR, chartReviewsR,
+      // Estimation leads (20–22)
+      estimationTotalR, estimationTodayR, recentEstimationLeadsR,
     ] = await Promise.allSettled([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true),
@@ -120,6 +122,10 @@ export async function GET() {
       supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
       supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
       supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
+      // Estimation leads (20–22)
+      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
+      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
+      supabase.from('estimation_leads').select('id, nom, telephone, metier, ville, source, created_at').order('created_at', { ascending: false }).limit(5),
     ])
 
     logBatchErrors('queries', [
@@ -131,6 +137,7 @@ export async function GET() {
       activeUsers7dR,
       recentBookingsR, recentReviewsR, pendingReportsListR,
       chartProfilesR, chartBookingsR, chartReviewsR,
+      estimationTotalR, estimationTodayR, recentEstimationLeadsR,
     ])
 
     // ── Derived metrics ────────────────────────────────────────────────
@@ -223,6 +230,13 @@ export async function GET() {
       recentActivity: activity.slice(0, 10),
       pendingReports,
       chartData,
+      estimationLeads: {
+        total: safeCount(estimationTotalR),
+        today: safeCount(estimationTodayR),
+        recent: safeData<{ id: string; nom: string | null; telephone: string; metier: string; ville: string; source: string; created_at: string }>(
+          recentEstimationLeadsR as PromiseSettledResult<{ data: { id: string; nom: string | null; telephone: string; metier: string; ville: string; source: string; created_at: string }[] | null }>
+        ),
+      },
     })
 
     response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')

@@ -3,7 +3,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Shield, Activity, Star, AlertTriangle, ArrowRight } from 'lucide-react'
+import { Shield, Activity, Star, AlertTriangle, ArrowRight, MessageSquare, Phone } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import { StatsGrid } from '@/components/admin/dashboard/StatsGrid'
@@ -92,6 +92,19 @@ interface StatsResponse {
     users: number
     reviews: number
   }>
+  estimationLeads: {
+    total: number
+    today: number
+    recent: Array<{
+      id: string
+      nom: string | null
+      telephone: string
+      metier: string
+      ville: string
+      source: string
+      created_at: string
+    }>
+  }
 }
 
 export default function AdminDashboard() {
@@ -233,6 +246,82 @@ export default function AdminDashboard() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Estimation Leads Widget */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="flex items-center justify-between p-6 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <MessageSquare className="w-5 h-5 text-emerald-600" />
+              <h3 className="font-semibold text-gray-900">Leads Estimation IA</h3>
+            </div>
+            <div className="flex items-center gap-3">
+              {!isLoading && (
+                <>
+                  <span className="text-sm text-gray-500">
+                    Total : <span className="font-semibold text-gray-900">{data?.estimationLeads?.total ?? 0}</span>
+                  </span>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    (data?.estimationLeads?.today ?? 0) > 0
+                      ? 'bg-emerald-100 text-emerald-700'
+                      : 'bg-gray-100 text-gray-500'
+                  }`}>
+                    {data?.estimationLeads?.today ?? 0} aujourd&apos;hui
+                  </span>
+                </>
+              )}
+              <Link
+                href="/admin/estimation-leads"
+                className="flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+              >
+                Voir tout
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+          {isLoading ? (
+            <div className="p-6 space-y-3 animate-pulse">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-10 bg-gray-100 rounded" />
+              ))}
+            </div>
+          ) : (data?.estimationLeads?.recent?.length ?? 0) === 0 ? (
+            <div className="p-8 text-center text-gray-400 text-sm">
+              Aucun lead estimation pour le moment
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-50">
+              {data?.estimationLeads?.recent?.map((lead) => (
+                <div key={lead.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-medium ${
+                      lead.source === 'chat' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'
+                    }`}>
+                      {lead.source === 'chat' ? 'Chat' : 'Rappel'}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {lead.nom || lead.telephone} — {lead.metier}
+                      </p>
+                      <p className="text-xs text-gray-500">{lead.ville}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <a
+                      href={`tel:${lead.telephone}`}
+                      className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
+                      title={`Appeler ${lead.telephone}`}
+                    >
+                      <Phone className="w-4 h-4" />
+                    </a>
+                    <span className="text-xs text-gray-400">
+                      {new Date(lead.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Activity Chart */}
