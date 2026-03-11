@@ -149,8 +149,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
       <section
         className="relative flex items-center justify-center overflow-hidden"
         style={{
-          height: '85vh',
-          minHeight: '600px',
+          minHeight: 'calc(100svh - 64px)',
           maxHeight: '900px',
           background: 'linear-gradient(160deg,#1a0f06 0%,#2d1a0e 40%,#0a0503 100%)',
         }}
@@ -172,9 +171,9 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           style={{ background: 'linear-gradient(to bottom,rgba(10,8,5,.85) 0%,rgba(10,8,5,.5) 100%)' }}
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-5 md:px-10 w-full text-center pt-20 md:pt-0">
+        <div className="relative z-10 max-w-3xl mx-auto px-5 md:px-10 w-full text-center pt-16 pb-4 md:pt-0 md:pb-0">
           <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 md:mb-7 text-xs font-bold tracking-[.06em] uppercase"
+            className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-3 md:mb-7 text-[10px] md:text-xs font-bold tracking-[.06em] uppercase"
             style={{ background: 'rgba(232,107,75,.15)', border: '1px solid rgba(232,107,75,.35)', color: '#FFB49A' }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-clay-400 animate-pulse hidden sm:inline-block" />
@@ -182,28 +181,28 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </div>
 
           <h1
-            className="font-black tracking-[-0.05em] leading-[.92] text-white mb-6"
-            style={{ fontSize: 'clamp(2.8rem,5vw,4.5rem)' }}
+            className="font-black tracking-[-0.05em] leading-[1.05] sm:leading-[.92] text-white mb-2 md:mb-6"
+            style={{ fontSize: 'clamp(2.2rem,5vw,4.5rem)' }}
           >
             Trouvez <em className="not-italic text-clay-400">l&apos;artisan</em> parfait.
           </h1>
 
-          <p className="text-base text-white/75 leading-[1.75] max-w-xl mx-auto mb-6 md:mb-10">
+          <p className="text-sm md:text-base text-white/75 leading-[1.5] md:leading-[1.75] max-w-xl mx-auto mb-3 md:mb-10">
             Des professionnels vérifiés, assurés, recommandés. Des devis gratuits en 24h partout en France.
           </p>
 
-          <div className="max-w-2xl mx-auto mb-6">
+          <div className="max-w-2xl mx-auto mb-3 md:mb-6">
             <ClayHeroSearch />
           </div>
 
           {/* Quick filter chips — functional links */}
-          <div className="flex flex-wrap justify-center gap-2 mb-6 md:mb-10">
+          <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 mb-3 md:mb-10">
             {SERVICE_ITEMS.map(({ Icon: ChipIcon, name, slug }) => (
               <Link
                 key={slug}
                 href={`/services/${slug}`}
                 aria-label={`Rechercher des artisans en ${name}`}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-200 text-white/75 hover:text-white"
+                className="inline-flex items-center gap-1 md:gap-1.5 text-[11px] md:text-xs font-semibold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full transition-all duration-200 text-white/75 hover:text-white"
                 style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)' }}
               >
                 <ChipIcon className="w-3 h-3 text-clay-400" />
@@ -229,8 +228,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             ))}
           </div>
 
-          {/* Social proof — compact on mobile, full on desktop */}
-          <div className="flex items-center justify-center gap-2.5 md:gap-4 mt-5 md:mt-8">
+          {/* Social proof — hidden on mobile, shown on desktop */}
+          <div className="hidden md:flex items-center justify-center gap-4 mt-8">
             <div className="flex">
               {[
                 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=168&h=168&fit=crop&crop=face&q=80',
@@ -243,14 +242,14 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   alt="Photo d'un client satisfait"
                   width={56}
                   height={56}
-                  sizes="(max-width: 768px) 36px, 56px"
+                  sizes="56px"
                   placeholder="blur"
                   blurDataURL={BLUR_PLACEHOLDER}
-                  className="w-9 h-9 md:w-14 md:h-14 rounded-full border-2 border-white/20 object-cover -mr-2 md:-mr-3"
+                  className="w-14 h-14 rounded-full border-2 border-white/20 object-cover -mr-3"
                 />
               ))}
             </div>
-            <p className="text-xs md:text-base font-medium text-white/70">
+            <p className="text-base font-medium text-white/70">
               <strong className="text-white/85">Des centaines de clients</strong> trouvent leur artisan chaque semaine
             </p>
           </div>
