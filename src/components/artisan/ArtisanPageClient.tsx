@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
@@ -18,7 +18,6 @@ import {
   ArtisanBreadcrumb,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
-import { ArtisanProofBar } from '@/components/artisan/ArtisanProofBar'
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
 import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
 import { ArtisanProfileStrength } from '@/components/artisan/ArtisanProfileStrength'
@@ -132,27 +131,12 @@ export default function ArtisanPageClient({
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
 
-  const heroRef = useRef<HTMLDivElement>(null)
-  const [showProofBar, setShowProofBar] = useState(false)
-
   // Track profile view
   useEffect(() => {
     if (artisan) {
       BookingFunnel.viewProfile(artisanId, artisan.business_name || '', 'profile_page')
     }
   }, [artisan, artisanId])
-
-  // IntersectionObserver: show proof bar when hero scrolls out of view
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowProofBar(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '-57px 0px 0px 0px' }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [artisan])
 
   // Not found state
   if (!artisan) {
@@ -186,7 +170,6 @@ export default function ArtisanPageClient({
       <ArtisanSchema artisan={artisan} reviews={reviews} />
 
       {/* Sticky trust proof bar */}
-      <ArtisanProofBar artisan={artisan} visible={showProofBar} />
 
       {/* Skip links for keyboard navigation */}
       <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
@@ -263,7 +246,7 @@ export default function ArtisanPageClient({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column - Main content */}
             <div className="lg:col-span-2 space-y-6">
-              <section ref={heroRef} aria-label="Informations principales">
+              <section aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} />
               </section>
               <section aria-label="Disponibilité et avantages">
