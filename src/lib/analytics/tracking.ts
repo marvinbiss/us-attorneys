@@ -29,6 +29,15 @@ export type BookingEvent =
   | 'reminder_sent'
   | 'reminder_clicked'
   | 'devis_submitted'
+  | 'chat_opened'
+  | 'chat_message_sent'
+  | 'chat_lead_form_shown'
+  | 'estimation_lead_submitted'
+  | 'artisan_devis_click'
+  | 'artisan_email_click'
+  | 'artisan_website_click'
+  | 'blog_cta_click'
+  | 'header_devis_click'
 
 export interface TrackingData {
   event: BookingEvent

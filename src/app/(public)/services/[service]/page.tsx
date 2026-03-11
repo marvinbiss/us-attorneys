@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
+import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench, FileText } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
@@ -19,6 +19,7 @@ import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -374,6 +375,29 @@ export default async function ServicePage({ params }: PageProps) {
           />
         </div>
       )}
+
+      {/* CTA Principal + Social Proof */}
+      <section className="my-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SocialProofBanner metier={service.name} variant="card" />
+
+          <div className="mt-6 bg-gradient-to-r from-clay-500 to-clay-600 rounded-2xl p-8 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+              Besoin d&apos;un {service.name.toLowerCase()} ?
+            </h2>
+            <p className="text-clay-100 mb-6">
+              Recevez jusqu&apos;à 3 devis gratuits en 2 minutes
+            </p>
+            <Link
+              href={`/devis/${serviceSlug}`}
+              className="inline-flex items-center gap-2 bg-white text-clay-600 hover:bg-clay-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-lg"
+            >
+              <FileText className="w-5 h-5" />
+              Demander un devis gratuit
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Search by city */}
       <section className="py-12">

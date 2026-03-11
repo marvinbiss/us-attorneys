@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, Send, X, Phone, ArrowRight, Check, Loader2, Sparkles } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -201,6 +202,18 @@ function renderMarkdown(text: string): React.ReactNode[] {
 }
 
 // ---------------------------------------------------------------------------
+// French phone validation
+// ---------------------------------------------------------------------------
+
+function isValidFrenchPhone(phone: string): boolean {
+  const cleaned = phone.replace(/[\s.\-()]/g, '')
+  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
+  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
+  if (/^0033[1-9]\d{8}$/.test(cleaned)) return true
+  return false
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -223,10 +236,14 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
   const [leadLoading, setLeadLoading] = useState(false)
   const [leadError, setLeadError] = useState(false)
 
+  // Lead phone validation
+  const [leadPhoneError, setLeadPhoneError] = useState('')
+
   // Callback field
   const [callbackPhone, setCallbackPhone] = useState('')
   const [callbackLoading, setCallbackLoading] = useState(false)
   const [callbackError, setCallbackError] = useState(false)
+  const [callbackPhoneError, setCallbackPhoneError] = useState('')
 
   // Greeting bubble + pill launcher
   const [showGreeting, setShowGreeting] = useState(false)
@@ -292,6 +309,11 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       if (scrollPercent >= 0.4) {
         greetingTriggeredRef.current = true
         setShowGreeting(true)
+        trackEvent('chat_opened' as any, {
+          trigger: 'scroll',
+          metier: context.metierSlug,
+          ville: context.ville,
+        })
       }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -323,6 +345,11 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
         exitIntentFired.current = true
         setIsOpen(true)
         setShowGreeting(false)
+        trackEvent('chat_opened' as any, {
+          trigger: 'exit_intent',
+          metier: context.metierSlug,
+          ville: context.ville,
+        })
       }
     }
     document.addEventListener('mouseout', handleMouseOut)
@@ -428,6 +455,11 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       setInputValue('')
       setIsStreaming(true)
 
+      trackEvent('chat_message_sent' as any, {
+        metier: context.metierSlug,
+        message_count: updatedMessages.length,
+      })
+
       try {
         const response = await fetch('/api/estimation', {
           method: 'POST',
@@ -467,6 +499,10 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
         // Check if we should show the lead form
         if (shouldShowLeadForm(assistantMessage)) {
           setShowLeadForm(true)
+          trackEvent('chat_lead_form_shown' as any, {
+            metier: context.metierSlug,
+            messages_before_form: updatedMessages.length + 1,
+          })
         }
       } catch (error) {
         console.error('Estimation streaming error:', error)
@@ -492,6 +528,13 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
     e.preventDefault()
     if (!leadPhone.trim()) return
 
+    // Validate phone
+    if (!isValidFrenchPhone(leadPhone)) {
+      setLeadPhoneError('Numéro invalide (ex: 06 12 34 56 78)')
+      return
+    }
+    setLeadPhoneError('')
+
     setLeadLoading(true)
     setLeadError(false)
     try {
@@ -513,6 +556,13 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       })
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+      trackEvent('estimation_lead_submitted' as any, {
+        source: 'chat',
+        metier: context.metierSlug,
+        ville: context.ville,
+        has_email: !!leadEmail,
+      })
 
       setLeadSubmitted(true)
       setShowLeadForm(false)
@@ -541,6 +591,13 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
     e.preventDefault()
     if (!callbackPhone.trim()) return
 
+    // Validate phone
+    if (!isValidFrenchPhone(callbackPhone)) {
+      setCallbackPhoneError('Numéro invalide (ex: 06 12 34 56 78)')
+      return
+    }
+    setCallbackPhoneError('')
+
     setCallbackLoading(true)
     setCallbackError(false)
     try {
@@ -559,6 +616,12 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       })
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+      trackEvent('estimation_lead_submitted' as any, {
+        source: 'callback',
+        metier: context.metierSlug,
+        ville: context.ville,
+      })
 
       setCallbackSubmitted(true)
       setCallbackCountdown(30)
@@ -596,7 +659,14 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                   exit={{ opacity: 0, y: 10, scale: 0.9 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                   className="relative max-w-[260px] sm:max-w-[300px] bg-white rounded-2xl rounded-br-sm shadow-xl border border-gray-100 px-4 py-3 cursor-pointer"
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => {
+                    setIsOpen(true)
+                    trackEvent('chat_opened' as any, {
+                      trigger: 'greeting',
+                      metier: context.metierSlug,
+                      ville: context.ville,
+                    })
+                  }}
                 >
                   <button
                     onClick={(e) => {
@@ -649,6 +719,11 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
               onClick={() => {
                 setIsOpen(true)
                 setShowGreeting(false)
+                trackEvent('chat_opened' as any, {
+                  trigger: 'launcher',
+                  metier: context.metierSlug,
+                  ville: context.ville,
+                })
               }}
               aria-label="Ouvrir le chat d'estimation"
               className={
@@ -885,15 +960,30 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                             onChange={(e) => setLeadName(e.target.value)}
                             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
                           />
-                          <input
-                            type="tel"
-                            required
-                            placeholder="Votre téléphone *"
-                            value={leadPhone}
-                            onChange={(e) => setLeadPhone(e.target.value)}
-                            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
-                            style={{ fontSize: '16px' }}
-                          />
+                          <div>
+                            <input
+                              type="tel"
+                              inputMode="tel"
+                              autoComplete="tel"
+                              required
+                              placeholder="Votre téléphone *"
+                              value={leadPhone}
+                              onChange={(e) => {
+                                setLeadPhone(e.target.value)
+                                if (leadPhoneError) setLeadPhoneError('')
+                              }}
+                              className={
+                                'w-full rounded-lg border px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 ' +
+                                (leadPhoneError
+                                  ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                                  : 'border-gray-300 focus:border-[#E07040] focus:ring-[#E07040]')
+                              }
+                              style={{ fontSize: '16px' }}
+                            />
+                            {leadPhoneError && (
+                              <p className="text-xs text-red-600 mt-1">{leadPhoneError}</p>
+                            )}
+                          </div>
                           <input
                             type="email"
                             placeholder="Votre email (optionnel)"
@@ -1003,15 +1093,30 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                       onSubmit={handleCallbackSubmit}
                       className="space-y-3"
                     >
-                      <input
-                        type="tel"
-                        required
-                        placeholder="06 12 34 56 78"
-                        value={callbackPhone}
-                        onChange={(e) => setCallbackPhone(e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
-                        style={{ fontSize: '16px' }}
-                      />
+                      <div>
+                        <input
+                          type="tel"
+                          inputMode="tel"
+                          autoComplete="tel"
+                          required
+                          placeholder="06 12 34 56 78"
+                          value={callbackPhone}
+                          onChange={(e) => {
+                            setCallbackPhone(e.target.value)
+                            if (callbackPhoneError) setCallbackPhoneError('')
+                          }}
+                          className={
+                            'w-full rounded-lg border px-4 py-3 text-center text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 ' +
+                            (callbackPhoneError
+                              ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                              : 'border-gray-300 focus:border-[#E07040] focus:ring-[#E07040]')
+                          }
+                          style={{ fontSize: '16px' }}
+                        />
+                        {callbackPhoneError && (
+                          <p className="text-xs text-red-600 mt-1 text-center">{callbackPhoneError}</p>
+                        )}
+                      </div>
                       {callbackError && (
                         <p className="text-xs text-red-600 text-center">
                           Une erreur est survenue. Veuillez réessayer.

@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
+import { trackEvent } from '@/lib/analytics/tracking'
 import { cn } from '@/lib/utils'
 import { villes, regions, departements, services as allServices } from '@/lib/data/france'
 import {
@@ -290,6 +291,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/devis"
+              onClick={() => trackEvent('header_devis_click', {})}
               className="ml-2 px-4 py-2 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Devis gratuit

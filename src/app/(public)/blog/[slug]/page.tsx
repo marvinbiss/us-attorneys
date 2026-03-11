@@ -588,6 +588,16 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const blocks = parseContentBlocks(article.content)
   const tocItems = extractTocItems(blocks)
 
+  // Derive contextual devis link from service links (first /services/X match -> /devis/X)
+  const firstServiceLink = getRelatedServiceLinks(slug, article.category, article.tags)
+    .find((l) => l.href.startsWith('/services/'))
+  const devisHref = firstServiceLink
+    ? `/devis/${firstServiceLink.href.split('/services/')[1].split('/')[0]}`
+    : '/devis'
+
+  // Index after which to insert mid-article CTA (after ~2nd h2 section)
+  const MID_ARTICLE_CTA_AFTER_SECTION = 2
+
   // Build FAQ items: prefer article.faq field, fallback to content-extracted FAQs
   const faqItems = article.faq && article.faq.length > 0
     ? article.faq
@@ -763,6 +773,25 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 key={sectionIdx}
                 className={sectionIdx > 0 && section.heading ? 'article-section' : ''}
               >
+                {/* Mid-article CTA — inserted after the Nth section */}
+                {sectionIdx === MID_ARTICLE_CTA_AFTER_SECTION && sections.length > 3 && (
+                  <div className="not-prose my-8 bg-gradient-to-r from-clay-50 to-amber-50 border border-clay-200 rounded-xl p-6 sm:p-8">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900 mb-1">Besoin d&apos;un professionnel ?</p>
+                        <p className="text-sm text-gray-600">Recevez jusqu&apos;à 3 devis gratuits d&apos;artisans vérifiés près de chez vous.</p>
+                      </div>
+                      <Link
+                        href={devisHref}
+                        className="inline-flex items-center gap-2 bg-clay-500 hover:bg-clay-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors whitespace-nowrap text-sm"
+                      >
+                        Devis gratuit
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
                 {/* Section heading */}
                 {section.heading && (
                   <h2
@@ -1090,7 +1119,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
             Trouvez le professionnel qu&apos;il vous faut en quelques clics
           </p>
           <Link
-            href="/devis"
+            href={devisHref}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Demander un devis gratuit

@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { Phone, Mail, ExternalLink, FileText, Shield, Star } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
-import { BookingFunnel } from '@/lib/analytics/tracking'
+import { BookingFunnel, trackEvent } from '@/lib/analytics/tracking'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
@@ -31,7 +30,6 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
   const hasPhone = isValidPhone(artisan.phone)
   const hasEmail = !!artisan.email
   const hasWebsite = !!artisan.website
-  const [showPhone, setShowPhone] = useState(false)
 
   return (
     <div className="bg-[#FFFCF8] rounded-2xl shadow-premium border border-stone-200/60 overflow-hidden">
@@ -60,44 +58,46 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           )}
         </div>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons — Ordre optimisé pour la conversion */}
         <div className="space-y-3">
-          {/* Primary CTA: Demander un devis */}
+          {/* 1. Téléphone (action la plus directe, haute conversion) */}
+          {hasPhone && (
+            <button
+              type="button"
+              onClick={() => {
+                BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'contact_card')
+                BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'contact_card')
+                trackEvent('phone_reveal' as any, { artisan_slug: artisan.slug })
+                trackEvent('phone_click' as any, { artisan_slug: artisan.slug })
+                window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-medium transition-colors"
+              aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
+            >
+              <Phone className="w-4 h-4" />
+              {formatFrenchPhone(artisan.phone!)}
+            </button>
+          )}
+
+          {/* 2. Devis gratuit (formulaire, conversion moyenne) */}
           <Link
             href="#devis"
+            onClick={() => {
+              trackEvent('artisan_devis_click' as any, { artisan_slug: artisan.slug })
+            }}
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 group"
           >
             <FileText className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
             Demander un devis gratuit
           </Link>
 
-          {hasPhone && (
-            <button
-              type="button"
-              onClick={() => {
-                if (showPhone) {
-                  BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'contact_card')
-                  window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
-                } else {
-                  BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'contact_card')
-                  setShowPhone(true)
-                }
-              }}
-              className="w-full py-3.5 px-4 rounded-xl bg-stone-800 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-soft hover:bg-stone-900 hover:shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
-              aria-label={showPhone ? `Appeler le ${formatFrenchPhone(artisan.phone!)}` : 'Afficher le numéro de téléphone'}
-            >
-              <Phone className="w-5 h-5" aria-hidden="true" />
-              {showPhone ? (
-                <span>{formatFrenchPhone(artisan.phone!)}</span>
-              ) : (
-                <span>Afficher le numéro</span>
-              )}
-            </button>
-          )}
-
+          {/* 3. Email (basse conversion) */}
           {hasEmail && (
             <a
               href={`mailto:${artisan.email}`}
+              onClick={() => {
+                trackEvent('artisan_email_click' as any, { artisan_slug: artisan.slug })
+              }}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
               aria-label={`Envoyer un email à ${artisan.email}`}
             >
@@ -106,26 +106,35 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             </a>
           )}
 
+          {/* 4. Site web (fuite, en dernier et discret) */}
           {hasWebsite && (
-            <a
-              href={artisan.website!.startsWith('http') ? artisan.website! : `https://${artisan.website}`}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
-              aria-label="Voir le site web de l'artisan"
+            <button
+              type="button"
+              onClick={() => {
+                trackEvent('artisan_website_click' as any, {
+                  artisan_slug: artisan.slug,
+                  url: artisan.website
+                })
+                window.open(
+                  artisan.website!.startsWith('http') ? artisan.website! : `https://${artisan.website}`,
+                  '_blank',
+                  'noopener,noreferrer'
+                )
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium transition-colors text-sm"
             >
-              <ExternalLink className="w-5 h-5 text-slate-400 transition-colors group-hover:text-slate-600" aria-hidden="true" />
+              <ExternalLink className="w-4 h-4" />
               Voir le site web
-            </a>
+            </button>
           )}
         </div>
 
         {/* Trust footer */}
-        <div className="mt-5 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Vos données sont protégées conformément au RGPD</span>
-          </div>
+        <div className="flex items-center gap-2 pt-4 mt-5 border-t border-gray-100">
+          <Shield className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
+          <span className="text-xs text-gray-500">
+            Service gratuit • Données protégées (RGPD) • Sans engagement
+          </span>
         </div>
       </div>
     </div>

@@ -256,6 +256,32 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
         </div>
       </section>
 
+      {/* ─── SOCIAL PROOF BANNER ──────────────────────────────── */}
+      <div className="bg-[#FFFCF8] py-5" style={{ borderBottom: '1px solid rgba(0,0,0,.06)' }}>
+        <div className="max-w-[1320px] mx-auto px-6 md:px-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-emerald-200 shadow-sm">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-sm font-medium text-gray-700">
+                <strong className="text-emerald-700">{countStr}</strong> artisans vérifiés
+              </span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-blue-200 shadow-sm">
+              <MapPin className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-gray-700">
+                <strong className="text-blue-700">{deptCount}</strong> départements couverts
+              </span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-amber-200 shadow-sm">
+              <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+              <span className="text-sm font-medium text-gray-700">
+                <strong className="text-amber-600">100%</strong> gratuit et sans engagement
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ─── TRUST BAR ──────────────────────────────────────────── */}
       <ScrollReveal>
         <div className="bg-white" style={{ borderBottom: '1px solid rgba(0,0,0,.06)' }}>

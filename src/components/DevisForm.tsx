@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
-import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown } from 'lucide-react'
+import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 interface FormData {
@@ -38,59 +38,57 @@ const urgencyOptions = [
 ]
 
 const budgetOptions = [
-  { value: 'moins-500', label: 'Moins de 500 €' },
-  { value: '500-2000', label: '500‑2 000 €' },
-  { value: '2000-5000', label: '2 000‑5 000 €' },
-  { value: 'plus-5000', label: 'Plus de 5 000 €' },
+  { value: 'moins-500', label: 'Moins de 500 €' },
+  { value: '500-2000', label: '500‑2 000 €' },
+  { value: '2000-5000', label: '2 000‑5 000 €' },
+  { value: 'plus-5000', label: 'Plus de 5 000 €' },
   { value: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
-const PHONE_REGEX = /^(?:(?:\+33|0033|0)\s?[1-9])(?:[\s.-]?\d{2}){4}$/
+function isValidFrenchPhone(phone: string): boolean {
+  const cleaned = phone.replace(/[\s.\-()]/g, '')
+  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
+  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
+  if (/^0033[1-9]\d{8}$/.test(cleaned)) return true
+  return false
+}
+
+const stepLabels = ['Service', 'Ville', 'Projet', 'Contact']
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
-  const stepLabels = ['Projet', 'Contact']
   return (
-    <div className="flex items-center justify-center mb-8">
-      {stepLabels.map((label, i) => {
-        const stepNum = i + 1
-        const isActive = stepNum === currentStep
-        const isCompleted = stepNum < currentStep
-        return (
-          <div key={label} className="flex items-center">
-            <div className="flex flex-col items-center">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  isCompleted
-                    ? 'bg-blue-600 text-white'
-                    : isActive
-                    ? 'bg-blue-600 text-white ring-4 ring-blue-100'
-                    : 'bg-gray-200 text-gray-500'
-                }`}
-              >
-                {isCompleted ? (
-                  <CheckCircle className="w-5 h-5" />
-                ) : (
-                  stepNum
-                )}
-              </div>
-              <span
-                className={`mt-2 text-xs font-medium ${
-                  isActive ? 'text-blue-600' : isCompleted ? 'text-blue-600' : 'text-gray-400'
-                }`}
-              >
-                {label}
-              </span>
+    <div className="flex items-center justify-between mb-8">
+      {[1, 2, 3, 4].map((s) => (
+        <div key={s} className="flex items-center">
+          <div className="flex flex-col items-center">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                currentStep > s
+                  ? 'bg-blue-600 text-white'
+                  : currentStep === s
+                  ? 'bg-blue-600 text-white ring-4 ring-blue-100'
+                  : 'bg-gray-200 text-gray-500'
+              }`}
+            >
+              {currentStep > s ? <Check className="w-4 h-4" /> : s}
             </div>
-            {i < stepLabels.length - 1 && (
-              <div
-                className={`w-16 sm:w-24 h-0.5 mx-2 mb-5 transition-all duration-300 ${
-                  isCompleted ? 'bg-blue-600' : 'bg-gray-200'
-                }`}
-              />
-            )}
+            <span
+              className={`mt-1.5 text-xs font-medium ${
+                currentStep >= s ? 'text-blue-600' : 'text-gray-400'
+              }`}
+            >
+              {stepLabels[s - 1]}
+            </span>
           </div>
-        )
-      })}
+          {s < 4 && (
+            <div
+              className={`w-8 sm:w-12 h-0.5 mx-1 sm:mx-2 mb-5 transition-all duration-300 ${
+                currentStep > s ? 'bg-blue-600' : 'bg-gray-200'
+              }`}
+            />
+          )}
+        </div>
+      ))}
     </div>
   )
 }
@@ -107,7 +105,7 @@ export default function DevisForm({
   prefilledCityPostal,
 }: DevisFormProps = {}) {
   const isPrefilled = !!(prefilledService && prefilledCity)
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(isPrefilled ? 3 : 1)
   const [formData, setFormData] = useState<FormData>({
     ...initialFormData,
     ...(prefilledService ? { service: prefilledService } : {}),
@@ -145,21 +143,33 @@ export default function DevisForm({
   const validateStep1 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.service) newErrors.service = 'Veuillez choisir un service'
-    if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
-    if (formData.description && formData.description.length < 10) {
-      newErrors.description = 'Veuillez décrire votre projet (10 caractères minimum)'
-    }
-    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const validateStep2 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
+    if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const validateStep3 = (): boolean => {
+    const newErrors: Partial<Record<keyof FormData, string>> = {}
+    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
+    if (formData.description.trim().length > 0 && formData.description.trim().length < 10) {
+      newErrors.description = 'Veuillez détailler davantage (10 caractères minimum) ou laisser le champ vide'
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const validateStep4 = (): boolean => {
+    const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
     if (!formData.telephone.trim()) {
       newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
-    } else if (!PHONE_REGEX.test(formData.telephone.trim())) {
+    } else if (!isValidFrenchPhone(formData.telephone.trim())) {
       newErrors.telephone = 'Veuillez entrer un numéro de téléphone français valide'
     }
     if (!formData.email.trim()) {
@@ -181,16 +191,25 @@ export default function DevisForm({
         source: 'devis_form',
       })
       setStep(2)
+    } else if (step === 2 && validateStep2()) {
+      setStep(3)
+    } else if (step === 3 && validateStep3()) {
+      setStep(4)
     }
   }
 
   const handlePrev = () => {
-    if (step > 1) setStep(step - 1)
+    if (step === 2) setStep(1)
+    else if (step === 3) {
+      if (isPrefilled) return // Can't go back past step 3 when prefilled
+      setStep(2)
+    }
+    else if (step === 4) setStep(3)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validateStep2()) return
+    if (!validateStep4()) return
 
     setSubmitting(true)
     setSubmitError(null)
@@ -275,20 +294,21 @@ export default function DevisForm({
     >
       <StepIndicator currentStep={step} />
 
-      {/* Step 1: Service + City + Project details */}
-      {step === 1 && (
-        <div className="space-y-6">
-          <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-            {isPrefilled ? 'Détails du projet' : 'Décrivez votre projet'}
-          </h3>
-          <p className="text-slate-500 text-sm mb-4">
-            {isPrefilled
-              ? 'Précisez votre besoin pour recevoir des devis adaptés.'
-              : 'Sélectionnez un service, votre ville et décrivez votre besoin.'}
-          </p>
+      {/* Step 1: Service */}
+      <div
+        className={`transition-all duration-300 ${
+          step === 1 ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'
+        }`}
+      >
+        {step === 1 && (
+          <div className="space-y-6">
+            <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
+              Quel service recherchez-vous ?
+            </h3>
+            <p className="text-slate-500 text-sm mb-4">
+              Sélectionnez le type de prestation dont vous avez besoin.
+            </p>
 
-          {/* Service dropdown — hidden when pre-filled */}
-          {!isPrefilled && (
             <div>
               <label htmlFor="service" className="block text-sm font-semibold text-slate-700 mb-2">
                 Type de service <span className="text-red-500">*</span>
@@ -317,10 +337,33 @@ export default function DevisForm({
                 <p id="service-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.service}</p>
               )}
             </div>
-          )}
 
-          {/* City input with autocomplete — hidden when pre-filled */}
-          {!isPrefilled && (
+            <button
+              type="button"
+              onClick={handleNext}
+              className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Suivant <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Step 2: Ville */}
+      <div
+        className={`transition-all duration-300 ${
+          step === 2 ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'
+        }`}
+      >
+        {step === 2 && (
+          <div className="space-y-6">
+            <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
+              Où se situe votre projet ?
+            </h3>
+            <p className="text-slate-500 text-sm mb-4">
+              Indiquez votre ville pour trouver des artisans proches de chez vous.
+            </p>
+
             <div>
               <label htmlFor="ville" className="block text-sm font-semibold text-slate-700 mb-2">
                 Ville <span className="text-red-500">*</span>
@@ -333,13 +376,16 @@ export default function DevisForm({
                   placeholder="Ex : Paris, Lyon, Marseille..."
                   value={villeQuery}
                   onChange={(e) => {
-                    setVilleQuery(e.target.value)
+                    const newValue = e.target.value
+                    setVilleQuery(newValue)
                     setShowVilleSuggestions(true)
-                    if (formData.ville) updateField('ville', '')
+                    if (formData.ville && newValue !== formData.ville) {
+                      updateField('ville', '')
+                      setSelectedVillePostal('')
+                    }
                   }}
                   onFocus={() => setShowVilleSuggestions(true)}
                   onBlur={() => {
-                    // Delay to allow click on suggestion
                     setTimeout(() => setShowVilleSuggestions(false), 200)
                   }}
                   aria-describedby={errors.ville ? 'ville-error' : undefined}
@@ -377,238 +423,290 @@ export default function DevisForm({
                 <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
               )}
             </div>
-          )}
 
-          {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
-              Décrivez votre projet <span className="text-slate-400 font-normal">(optionnel)</span>
-            </label>
-            <textarea
-              id="description"
-              rows={3}
-              placeholder="Ex : fuite robinet cuisine, remplacement chaudière..."
-              value={formData.description}
-              onChange={(e) => updateField('description', e.target.value)}
-              aria-describedby={errors.description ? 'description-error' : undefined}
-              aria-invalid={!!errors.description}
-              className={`w-full rounded-xl border ${
-                errors.description ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none`}
-            />
-            <div className="flex justify-between mt-1">
-              {errors.description ? (
-                <p id="description-error" role="alert" className="text-sm text-red-600">{errors.description}</p>
-              ) : (
-                <span />
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
+              >
+                <ArrowLeft className="w-5 h-5" /> Précédent
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Suivant <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Step 3: Urgence + Description + Budget */}
+      <div
+        className={`transition-all duration-300 ${
+          step === 3 ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'
+        }`}
+      >
+        {step === 3 && (
+          <div className="space-y-6">
+            <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
+              Détails du projet
+            </h3>
+            <p className="text-slate-500 text-sm mb-4">
+              Précisez votre besoin pour recevoir des devis adaptés.
+            </p>
+
+            {/* Urgency */}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
+                Délai souhaité <span className="text-red-500">*</span>
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {urgencyOptions.map((opt) => (
+                  <label
+                    key={opt.value}
+                    className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
+                      formData.urgence === opt.value
+                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        : 'border-gray-200 hover:border-gray-300 text-slate-700'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="urgence"
+                      value={opt.value}
+                      checked={formData.urgence === opt.value}
+                      onChange={(e) => updateField('urgence', e.target.value)}
+                      className="sr-only"
+                    />
+                    {opt.label}
+                  </label>
+                ))}
+              </div>
+              {errors.urgence && (
+                <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.urgence}</p>
               )}
-              {formData.description.length > 0 && (
-                <span
-                  className={`text-xs ${
-                    formData.description.length >= 10 ? 'text-green-600' : 'text-gray-400'
-                  }`}
-                >
-                  {formData.description.length}/10 caract.
-                </span>
-              )}
             </div>
-          </div>
 
-          {/* Urgency */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-3">
-              Délai souhaité <span className="text-red-500">*</span>
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {urgencyOptions.map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
-                    formData.urgence === opt.value
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 hover:border-gray-300 text-slate-700'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="urgence"
-                    value={opt.value}
-                    checked={formData.urgence === opt.value}
-                    onChange={(e) => updateField('urgence', e.target.value)}
-                    className="sr-only"
-                  />
-                  {opt.label}
-                </label>
-              ))}
-            </div>
-            {errors.urgence && (
-              <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.urgence}</p>
-            )}
-          </div>
-
-          {/* Budget — optional */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-3">
-              Budget estimé <span className="text-slate-400 font-normal">(optionnel)</span>
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {budgetOptions.map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium text-center ${
-                    formData.budget === opt.value
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 hover:border-gray-300 text-slate-700'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="budget"
-                    value={opt.value}
-                    checked={formData.budget === opt.value}
-                    onChange={(e) => updateField('budget', e.target.value)}
-                    className="sr-only"
-                  />
-                  {opt.label}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-          >
-            Suivant <ArrowRight className="w-5 h-5" />
-          </button>
-        </div>
-      )}
-
-      {/* Step 2: Contact info */}
-      {step === 2 && (
-        <div className="space-y-6">
-          <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-            Vos coordonnées
-          </h3>
-          <p className="text-slate-500 text-sm mb-4">
-            Pour que les artisans puissent vous contacter avec leurs devis.
-          </p>
-
-          {/* Nom */}
-          <div>
-            <label htmlFor="nom" className="block text-sm font-semibold text-slate-700 mb-2">
-              Nom complet <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="nom"
-              type="text"
-              autoComplete="name"
-              placeholder="Jean Dupont"
-              value={formData.nom}
-              onChange={(e) => updateField('nom', e.target.value)}
-              aria-describedby={errors.nom ? 'nom-error' : undefined}
-              aria-invalid={!!errors.nom}
-              className={`w-full rounded-xl border ${
-                errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-            />
-            {errors.nom && (
-              <p id="nom-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
-            )}
-          </div>
-
-          {/* Phone */}
-          <div>
-            <label htmlFor="telephone" className="block text-sm font-semibold text-slate-700 mb-2">
-              Téléphone <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="telephone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="06 12 34 56 78"
-              value={formData.telephone}
-              onChange={(e) => updateField('telephone', e.target.value)}
-              aria-describedby={errors.telephone ? 'telephone-error' : undefined}
-              aria-invalid={!!errors.telephone}
-              className={`w-full rounded-xl border ${
-                errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-            />
-            {errors.telephone && (
-              <p id="telephone-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
-            )}
-          </div>
-
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-              Adresse e-mail <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="jean.dupont@email.fr"
-              value={formData.email}
-              onChange={(e) => updateField('email', e.target.value)}
-              aria-describedby={errors.email ? 'email-error' : undefined}
-              aria-invalid={!!errors.email}
-              className={`w-full rounded-xl border ${
-                errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-            />
-            {errors.email && (
-              <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.email}</p>
-            )}
-          </div>
-
-          {/* Consent checkbox */}
-          <div>
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.consentement}
-                onChange={(e) => updateField('consentement', e.target.checked)}
-                className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            {/* Description */}
+            <div>
+              <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
+                Décrivez votre projet <span className="text-slate-400 font-normal">(optionnel)</span>
+              </label>
+              <textarea
+                id="description"
+                rows={3}
+                placeholder="Ex : fuite robinet cuisine, remplacement chaudière..."
+                value={formData.description}
+                onChange={(e) => updateField('description', e.target.value)}
+                aria-describedby={errors.description ? 'description-error' : undefined}
+                aria-invalid={!!errors.description}
+                className={`w-full rounded-xl border ${
+                  errors.description ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none`}
               />
-              <span className="text-sm text-slate-600 leading-relaxed">
-                J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
-                en lien avec ma demande.{' '}
-                <span className="text-gray-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
-              </span>
-            </label>
-            {errors.consentement && (
-              <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.consentement}</p>
-            )}
-          </div>
-
-          {submitError && (
-            <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
-              {submitError}
+              <div className="flex justify-between mt-1">
+                {errors.description ? (
+                  <p id="description-error" role="alert" className="text-sm text-red-600">{errors.description}</p>
+                ) : (
+                  <span />
+                )}
+                {formData.description.length > 0 && (
+                  <span
+                    className={`text-xs ${
+                      formData.description.trim().length >= 10 ? 'text-green-600' : 'text-gray-400'
+                    }`}
+                  >
+                    {formData.description.length}/10 caract.
+                  </span>
+                )}
+              </div>
             </div>
-          )}
 
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={handlePrev}
-              disabled={submitting}
-              className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300 disabled:opacity-50"
-            >
-              <ArrowLeft className="w-5 h-5" /> Précédent
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
-            >
-              {submitting ? 'Envoi en cours…' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
-            </button>
+            {/* Budget — optional */}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
+                Budget estimé <span className="text-slate-400 font-normal">(optionnel)</span>
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {budgetOptions.map((opt) => (
+                  <label
+                    key={opt.value}
+                    className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium text-center ${
+                      formData.budget === opt.value
+                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        : 'border-gray-200 hover:border-gray-300 text-slate-700'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="budget"
+                      value={opt.value}
+                      checked={formData.budget === opt.value}
+                      onChange={(e) => updateField('budget', e.target.value)}
+                      className="sr-only"
+                    />
+                    {opt.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              {!isPrefilled && (
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
+                >
+                  <ArrowLeft className="w-5 h-5" /> Précédent
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleNext}
+                className={`${isPrefilled ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300`}
+              >
+                Suivant <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* Step 4: Contact info */}
+      <div
+        className={`transition-all duration-300 ${
+          step === 4 ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'
+        }`}
+      >
+        {step === 4 && (
+          <div className="space-y-6">
+            <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
+              Vos coordonnées
+            </h3>
+            <p className="text-slate-500 text-sm mb-4">
+              Pour que les artisans puissent vous contacter avec leurs devis.
+            </p>
+
+            {/* Nom */}
+            <div>
+              <label htmlFor="nom" className="block text-sm font-semibold text-slate-700 mb-2">
+                Nom complet <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="nom"
+                type="text"
+                autoComplete="name"
+                placeholder="Jean Dupont"
+                value={formData.nom}
+                onChange={(e) => updateField('nom', e.target.value)}
+                aria-describedby={errors.nom ? 'nom-error' : undefined}
+                aria-invalid={!!errors.nom}
+                className={`w-full rounded-xl border ${
+                  errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+              />
+              {errors.nom && (
+                <p id="nom-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
+              )}
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label htmlFor="telephone" className="block text-sm font-semibold text-slate-700 mb-2">
+                Téléphone <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="telephone"
+                type="tel"
+                autoComplete="tel"
+                placeholder="06 12 34 56 78"
+                value={formData.telephone}
+                onChange={(e) => updateField('telephone', e.target.value)}
+                aria-describedby={errors.telephone ? 'telephone-error' : undefined}
+                aria-invalid={!!errors.telephone}
+                className={`w-full rounded-xl border ${
+                  errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+              />
+              {errors.telephone && (
+                <p id="telephone-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+                Adresse e-mail <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="jean.dupont@email.fr"
+                value={formData.email}
+                onChange={(e) => updateField('email', e.target.value)}
+                aria-describedby={errors.email ? 'email-error' : undefined}
+                aria-invalid={!!errors.email}
+                className={`w-full rounded-xl border ${
+                  errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+              />
+              {errors.email && (
+                <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.email}</p>
+              )}
+            </div>
+
+            {/* Consent checkbox */}
+            <div>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.consentement}
+                  onChange={(e) => updateField('consentement', e.target.checked)}
+                  className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-sm text-slate-600 leading-relaxed">
+                  J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
+                  en lien avec ma demande.{' '}
+                  <span className="text-gray-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
+                </span>
+              </label>
+              {errors.consentement && (
+                <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.consentement}</p>
+              )}
+            </div>
+
+            {submitError && (
+              <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+                {submitError}
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={submitting}
+                className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300 disabled:opacity-50"
+              >
+                <ArrowLeft className="w-5 h-5" /> Précédent
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
+              >
+                {submitting ? 'Envoi en cours…' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </form>
   )
 }
