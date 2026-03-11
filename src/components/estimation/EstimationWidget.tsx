@@ -103,7 +103,7 @@ const defaultPrompts = [
 ]
 
 // ---------------------------------------------------------------------------
-// Lead form trigger keywords
+// Lead form trigger: detect price estimation in response
 // ---------------------------------------------------------------------------
 
 const LEAD_TRIGGER_KEYWORDS = [
@@ -111,11 +111,31 @@ const LEAD_TRIGGER_KEYWORDS = [
   'rappel',
   'mettre en contact',
   'contacter un',
+  'souhaitez-vous',
 ]
 
 function shouldShowLeadForm(content: string): boolean {
   const lower = content.toLowerCase()
-  return LEAD_TRIGGER_KEYWORDS.some((kw) => lower.includes(kw))
+  // Trigger on keywords OR when a price estimation is given (bold €)
+  if (LEAD_TRIGGER_KEYWORDS.some((kw) => lower.includes(kw))) return true
+  // Detect price pattern like **80€ — 150€** or **80 € — 150 €**
+  if (/\*\*\d+\s*€/.test(content)) return true
+  return false
+}
+
+// ---------------------------------------------------------------------------
+// Simple markdown renderer (bold + line breaks only)
+// ---------------------------------------------------------------------------
+
+function renderMarkdown(text: string): React.ReactNode[] {
+  // Split by **bold** markers
+  const parts = text.split(/(\*\*[^*]+\*\*)/)
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>
+    }
+    return <span key={i}>{part}</span>
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -167,12 +187,14 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
     }
   }, [isOpen, activeTab])
 
-  // Lock body scroll on mobile when fullscreen
+  // Lock body scroll on mobile when fullscreen + hide mobile nav
   useEffect(() => {
     if (isOpen && typeof window !== 'undefined' && window.innerWidth < 640) {
       document.body.style.overflow = 'hidden'
+      document.body.setAttribute('data-estimation-open', 'true')
       return () => {
         document.body.style.overflow = ''
+        document.body.removeAttribute('data-estimation-open')
       }
     }
   }, [isOpen])
@@ -404,7 +426,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
             transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             onClick={() => setIsOpen(true)}
             aria-label="Ouvrir le chat d'estimation"
-            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2"
+            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2"
           >
             <motion.div
               animate={{ scale: [1, 1.05, 1] }}
@@ -435,11 +457,10 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className={
-              'fixed z-50 flex flex-col bg-white shadow-2xl ' +
+              'fixed z-[60] flex flex-col bg-white shadow-2xl ' +
               'inset-0 ' +
               'sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:max-h-[600px] sm:rounded-[20px]'
             }
-            style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
             {/* ----------------------------------------------------------- */}
             {/* Header                                                       */}
@@ -559,7 +580,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                             : 'rounded-tl-sm bg-gray-100 text-gray-800')
                         }
                       >
-                        {msg.content}
+                        {msg.role === 'assistant' ? renderMarkdown(msg.content) : msg.content}
                         {/* Streaming cursor */}
                         {msg.role === 'assistant' &&
                           idx === messages.length - 1 &&
@@ -664,6 +685,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                 <form
                   onSubmit={handleChatSubmit}
                   className="flex items-center gap-2 border-t border-gray-200 px-3 py-2.5 shrink-0"
+                  style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 10px)' }}
                 >
                   <input
                     ref={inputRef}

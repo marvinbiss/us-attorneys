@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, Search, FileText, Wrench, AlertTriangle } from 'lucide-react'
@@ -16,13 +17,23 @@ const navItems = [
 export default function MobileBottomNav() {
   const pathname = usePathname()
   const { isMenuOpen } = useMobileMenu()
+  const [estimationOpen, setEstimationOpen] = useState(false)
+
+  // Watch for estimation widget open/close via body attribute
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setEstimationOpen(document.body.hasAttribute('data-estimation-open'))
+    })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-estimation-open'] })
+    return () => observer.disconnect()
+  }, [])
 
   // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
   const hideOnPages = ['/espace-client', '/espace-artisan', '/admin']
   const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
 
-  // Masquer quand le menu mobile est ouvert
-  if (shouldHide || isMenuOpen) return null
+  // Masquer quand le menu mobile est ouvert ou quand le widget estimation est ouvert
+  if (shouldHide || isMenuOpen || estimationOpen) return null
 
   return (
     <nav
