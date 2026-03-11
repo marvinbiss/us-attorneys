@@ -244,6 +244,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       setIsStreaming(true)
 
       try {
+        console.log('[EstimationWidget] Sending:', JSON.stringify({ messages: updatedMessages.length, context }))
         const response = await fetch('/api/estimation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -254,7 +255,9 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
         })
 
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`)
+          const errorBody = await response.text().catch(() => '')
+          console.error('Estimation API error:', response.status, errorBody)
+          throw new Error(`HTTP ${response.status}: ${errorBody}`)
         }
 
         const reader = response.body?.getReader()
