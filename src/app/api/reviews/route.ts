@@ -5,9 +5,11 @@
  */
 
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { logger } from '@/lib/logger'
+import { slugify } from '@/lib/utils'
 import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { z } from 'zod'
@@ -347,6 +349,37 @@ export async function POST(request: Request) {
 
     // Update artisan's average rating (non-blocking)
     updateArtisanRating(supabase, booking.provider_id).catch((err) => logger.error('Update rating failed', err))
+
+    // Revalidation on-demand des pages affectées (non-bloquant)
+    try {
+      const { data: providerData } = await supabase
+        .from('providers')
+        .select('specialty, address_city, slug, stable_id')
+        .eq('id', booking.provider_id)
+        .single()
+
+      if (providerData) {
+        const serviceSlug = slugify(providerData.specialty || 'artisan')
+        const locationSlug = slugify(providerData.address_city || 'france')
+        const publicId = providerData.slug || providerData.stable_id
+
+        // Page profil artisan
+        if (publicId) {
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+        }
+        // Page avis ville
+        revalidatePath(`/avis/${serviceSlug}/${locationSlug}`, 'page')
+        // Listing ville
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+
+        logger.info('Revalidated paths after review submission', {
+          providerId: booking.provider_id,
+          reviewId: review.id,
+        })
+      }
+    } catch (revalError) {
+      logger.error('Revalidation failed after review submission:', revalError)
+    }
 
     return NextResponse.json(
       createSuccessResponse({

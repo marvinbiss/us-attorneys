@@ -15,7 +15,6 @@ import CrossLinks from './_components/CrossLinks'
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
-import { REVALIDATE } from '@/lib/cache'
 import { getArtisanUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
 import { services as staticServicesList, villes, getVilleBySlug, getNearbyCities, getVillesByDepartement } from '@/lib/data/france'
@@ -39,14 +38,14 @@ function safeJsonStringify(data: unknown): string {
     .replace(/&/g, '\\u0026')
 }
 
-// ISR: revalidate every 60s — stale cache served on DB outage
-export const revalidate = REVALIDATE.serviceLocation
+// ISR: revalidate every 24h — stale cache served on DB outage
+export const revalidate = 86400
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
-// Pre-render top 5 cities (46 × 5 = 230 pages)
+// Pre-render top 50 cities (46 × 50 = 2300 pages)
 // Remaining cities are generated on-demand via ISR
-const TOP_CITIES_COUNT = 5
+const TOP_CITIES_COUNT = 50
 export function generateStaticParams() {
   const topCities = villes.slice(0, TOP_CITIES_COUNT)
   return staticServicesList.flatMap(s =>

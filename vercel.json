@@ -1,5 +1,17 @@
 {
   "framework": "nextjs",
+  "regions": ["cdg1"],
+  "functions": {
+    "src/app/**/*.tsx": {
+      "maxDuration": 30
+    },
+    "src/app/api/cron/**/*.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/sitemap-providers/route.ts": {
+      "maxDuration": 60
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/send-reminders",

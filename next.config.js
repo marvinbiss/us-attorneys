@@ -47,6 +47,8 @@ const nextConfig = {
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=(self)' },
+          // CSP also defined in middleware.ts (takes precedence for non-static routes)
+          // This CSP serves as fallback for static assets not processed by middleware
           {
             key: 'Content-Security-Policy',
             value: [
@@ -75,6 +77,55 @@ const nextConfig = {
         source: '/fonts/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // Cache-Control for programmatic public pages (CDN caching)
+      {
+        source: '/services/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/devis/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/tarifs/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/avis/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/villes/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/departements/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/regions/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/problemes/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
     ]

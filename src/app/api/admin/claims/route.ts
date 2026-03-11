@@ -5,9 +5,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { slugify } from '@/lib/utils'
 import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
 import { z } from 'zod'
 import crypto from 'crypto'
@@ -358,6 +360,34 @@ export async function PATCH(request: NextRequest) {
           emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`
           logger.error('Failed to send claim approval email', { claimId, error: emailErr })
         }
+      }
+
+      // Revalidation on-demand des pages affectées (non-bloquant)
+      try {
+        const { data: providerInfo } = await supabase
+          .from('providers')
+          .select('specialty, address_city, slug, stable_id')
+          .eq('id', claim.provider_id)
+          .single()
+
+        if (providerInfo) {
+          const serviceSlug = slugify(providerInfo.specialty || 'artisan')
+          const locationSlug = slugify(providerInfo.address_city || 'france')
+          const publicId = providerInfo.slug || providerInfo.stable_id
+
+          if (publicId) {
+            revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+          }
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+          revalidatePath(`/services/${serviceSlug}`, 'page')
+
+          logger.info('Revalidated paths after claim approval', {
+            claimId,
+            providerId: claim.provider_id,
+          })
+        }
+      } catch (revalError) {
+        logger.error('Revalidation failed after claim approval:', revalError)
       }
 
       logger.info('Claim approved', {

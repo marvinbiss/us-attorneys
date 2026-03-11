@@ -20,8 +20,8 @@ import DevisForm from '@/components/DevisForm'
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
-  const topServices = tradeSlugs.slice(0, 3)
-  const topCities = villes.slice(0, 10)
+  const topServices = tradeSlugs.slice(0, 10)
+  const topCities = villes.slice(0, 30)
   return topServices.flatMap((s) =>
     topCities.flatMap((v) =>
       getQuartiersByVille(v.slug).map((q) => ({
@@ -34,6 +34,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
+export const revalidate = 86400
 
 // ---------------------------------------------------------------------------
 // Metadata

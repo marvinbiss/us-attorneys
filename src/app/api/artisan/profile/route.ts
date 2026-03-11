@@ -5,8 +5,10 @@
  */
 
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
+import { slugify } from '@/lib/utils'
 import { z } from 'zod'
 
 // PUT request schema — only columns that actually exist
@@ -127,7 +129,7 @@ export async function PUT(request: Request) {
         .from('providers')
         .update(providerUpdate)
         .eq('user_id', user!.id)
-        .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, is_verified, is_active')
+        .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, stable_id, is_verified, is_active')
         .single()
 
       if (providerError) {
@@ -138,6 +140,36 @@ export async function PUT(request: Request) {
         )
       }
       provider = data
+    }
+
+    // Revalidation on-demand des pages affectées (non-bloquant)
+    if (provider) {
+      try {
+        const serviceSlug = slugify(provider.specialty || 'artisan')
+        const locationSlug = slugify(provider.address_city || 'france')
+        const publicId = provider.slug || provider.stable_id
+
+        // Page profil artisan
+        if (publicId) {
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+        }
+        // Listing ville
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+        // Listing service
+        revalidatePath(`/services/${serviceSlug}`, 'page')
+
+        logger.info('Revalidated paths after profile update', {
+          providerId: provider.id,
+          paths: [
+            `/services/${serviceSlug}/${locationSlug}/${publicId}`,
+            `/services/${serviceSlug}/${locationSlug}`,
+            `/services/${serviceSlug}`,
+          ],
+        })
+      } catch (revalError) {
+        // Ne pas bloquer la réponse si la revalidation échoue
+        logger.error('Revalidation failed after profile update:', revalError)
+      }
     }
 
     return NextResponse.json({

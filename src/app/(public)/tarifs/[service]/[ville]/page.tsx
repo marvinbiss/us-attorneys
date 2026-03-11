@@ -28,7 +28,7 @@ function parsePopulation(pop: string): number {
 
 const top5Cities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 5)
+  .slice(0, 50)
 
 export function generateStaticParams() {
   const params: { service: string; ville: string }[] = []
@@ -41,6 +41,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
+export const revalidate = 86400
 
 // ---------------------------------------------------------------------------
 // Helpers

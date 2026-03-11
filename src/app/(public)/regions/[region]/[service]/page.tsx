@@ -12,10 +12,10 @@ import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/se
 import { getServiceImage } from '@/lib/data/images'
 
 export function generateStaticParams() {
-  // Pre-render only top 5 services per region; rest served via ISR
-  const topSlugs = getTradesSlugs().slice(0, 5)
+  // Pre-render ALL services per region (16 × 46 = 736 pages)
+  const allSlugs = getTradesSlugs()
   return regions.flatMap(r =>
-    topSlugs.map(s => ({ region: r.slug, service: s }))
+    allSlugs.map(s => ({ region: r.slug, service: s }))
   )
 }
 

@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 import { logger } from '@/lib/logger'
+import { getCachedData, CACHE_TTL } from '@/lib/cache'
 
 /**
  * Detect if we're inside `next build` (static generation phase).
@@ -154,31 +155,37 @@ export async function getServiceBySlug(slug: string) {
     throw new Error(`Service not found: ${slug}`)
   }
 
-  try {
-    const data = await withTimeout(
-      (async () => {
-        const { data, error } = await supabase
-          .from('services')
-          .select('id, name, slug, description, icon, category, is_active')
-          .eq('slug', slug)
-          .single()
+  return getCachedData(
+    `service:${slug}`,
+    async () => {
+      try {
+        const data = await withTimeout(
+          (async () => {
+            const { data, error } = await supabase
+              .from('services')
+              .select('id, name, slug, description, icon, category, is_active')
+              .eq('slug', slug)
+              .single()
 
-        if (error || !data) {
-          const staticService = staticServices[slug]
-          if (staticService) return staticService
-          throw error || new Error('Service not found')
-        }
+            if (error || !data) {
+              const staticService = staticServices[slug]
+              if (staticService) return staticService
+              throw error || new Error('Service not found')
+            }
+            return data
+          })(),
+          QUERY_TIMEOUT_MS,
+          `getServiceBySlug(${slug})`,
+        )
         return data
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getServiceBySlug(${slug})`,
-    )
-    return data
-  } catch (error) {
-    const staticService = staticServices[slug]
-    if (staticService) return staticService
-    throw error
-  }
+      } catch (error) {
+        const staticService = staticServices[slug]
+        if (staticService) return staticService
+        throw error
+      }
+    },
+    CACHE_TTL.services, // 86400s — services ne changent pas
+  )
 }
 
 export async function getLocationBySlug(slug: string) {
@@ -189,39 +196,45 @@ export async function getLocationBySlug(slug: string) {
     return null
   }
 
-  try {
-    const data = await retryWithBackoff(
-      async () => {
-        const { data, error } = await supabase
-          .from('communes')
-          .select('code_insee, name, slug, code_postal, population, departement_code, departement_name, region_name, latitude, longitude')
-          .eq('slug', slug)
-          .limit(1)
-          .single()
+  return getCachedData(
+    `location:${slug}`,
+    async () => {
+      try {
+        const data = await retryWithBackoff(
+          async () => {
+            const { data, error } = await supabase
+              .from('communes')
+              .select('code_insee, name, slug, code_postal, population, departement_code, departement_name, region_name, latitude, longitude')
+              .eq('slug', slug)
+              .limit(1)
+              .single()
 
-        if (error || !data) throw error || new Error('Location not found')
-        return {
-          id: data.code_insee,
-          name: data.name,
-          slug: data.slug,
-          postal_code: data.code_postal,
-          population: data.population,
-          department_code: data.departement_code,
-          department_name: data.departement_name,
-          region_name: data.region_name,
-          latitude: data.latitude,
-          longitude: data.longitude,
-        }
-      },
-      `getLocationBySlug(${slug})`,
-    )
-    return data
-  } catch {
-    // Fallback to france.ts static data when DB table is empty/missing
-    const ville = getVilleBySlugImport(slug)
-    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
-    return null
-  }
+            if (error || !data) throw error || new Error('Location not found')
+            return {
+              id: data.code_insee,
+              name: data.name,
+              slug: data.slug,
+              postal_code: data.code_postal,
+              population: data.population,
+              department_code: data.departement_code,
+              department_name: data.departement_name,
+              region_name: data.region_name,
+              latitude: data.latitude,
+              longitude: data.longitude,
+            }
+          },
+          `getLocationBySlug(${slug})`,
+        )
+        return data
+      } catch {
+        // Fallback to france.ts static data when DB table is empty/missing
+        const ville = getVilleBySlugImport(slug)
+        if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+        return null
+      }
+    },
+    CACHE_TTL.locations, // 604800s (7j) — communes ne changent jamais
+  )
 }
 
 // Provider detail SELECT — uses EXACTLY the same columns as the listing pages.
@@ -367,70 +380,79 @@ export async function getProvidersByServiceAndLocation(
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
 
-  // Use STATIC data for service/location — no DB needed. This keeps total function
-  // time well under Vercel's 10s serverless timeout (avoids nested retry cascades).
-  const ville = getVilleBySlugImport(locationSlug)
-  if (!ville) return []
+  const cacheKey = `providers:svc-loc:${serviceSlug}:${locationSlug}:${limit}:${offset}:${postalCode || ''}`
 
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-  if (!specialties || specialties.length === 0) return []
+  return getCachedData(
+    cacheKey,
+    async () => {
+      // Use STATIC data for service/location — no DB needed. This keeps total function
+      // time well under Vercel's 10s serverless timeout (avoids nested retry cascades).
+      const ville = getVilleBySlugImport(locationSlug)
+      if (!ville) return []
 
-  // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
-  // whose address_postal_code matches the exact arrondissement.
-  if (postalCode) {
-    return await retryWithBackoff(
-      async () => {
-        const { data, error } = await supabase
-          .from('providers')
-          .select(PROVIDER_LIST_SELECT)
-          .in('specialty', specialties)
-          .eq('address_postal_code', postalCode)
-          .eq('is_active', true)
-          .order('phone', { ascending: false, nullsFirst: false })
-          .order('is_verified', { ascending: false })
-          .order('name')
-          .range(offset, offset + limit - 1)
-        if (error) throw error
-        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-      },
-      `getProvidersByServiceAndLocation:postal(${serviceSlug}, ${postalCode})`,
-    )
-  }
+      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+      if (!specialties || specialties.length === 0) return []
 
-  const cityValues = getCityValues(ville.name)
+      // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
+      // whose address_postal_code matches the exact arrondissement.
+      if (postalCode) {
+        return await retryWithBackoff(
+          async () => {
+            const { data, error } = await supabase
+              .from('providers')
+              .select(PROVIDER_LIST_SELECT)
+              .in('specialty', specialties)
+              .eq('address_postal_code', postalCode)
+              .eq('is_active', true)
+              .order('phone', { ascending: false, nullsFirst: false })
+              .order('is_verified', { ascending: false })
+              .order('name')
+              .range(offset, offset + limit - 1)
+            if (error) throw error
+            return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+          },
+          `getProvidersByServiceAndLocation:postal(${serviceSlug}, ${postalCode})`,
+        )
+      }
 
-  try {
-    return await retryWithBackoff(
-      async () => {
-        // Primary: direct specialty + city (fast — uses index + .in())
-        const { data: direct, error: directError } = await supabase
-          .from('providers')
-          .select(PROVIDER_LIST_SELECT)
-          .in('specialty', specialties)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
-          // STRICT RULE: providers with phone always rank above those without
-          .order('phone', { ascending: false, nullsFirst: false })
-          .order('is_verified', { ascending: false })
-          .order('name')
-          .range(offset, offset + limit - 1)
+      const cityValues = getCityValues(ville.name)
 
-        if (directError) {
-          logger.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, { error: directError.message })
-        }
+      try {
+        return await retryWithBackoff(
+          async () => {
+            // Primary: direct specialty + city (fast — uses index + .in())
+            const { data: direct, error: directError } = await supabase
+              .from('providers')
+              .select(PROVIDER_LIST_SELECT)
+              .in('specialty', specialties)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+              // STRICT RULE: providers with phone always rank above those without
+              .order('phone', { ascending: false, nullsFirst: false })
+              .order('is_verified', { ascending: false })
+              .order('name')
+              .range(offset, offset + limit - 1)
 
-        if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as ProviderListRow[])
+            if (directError) {
+              logger.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, { error: directError.message })
+            }
 
-        return []
-      },
-      `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
-    )
-  } catch (err) {
-    // Re-throw so ISR keeps stale cached page instead of caching empty results.
-    // Page component catches this and renders gracefully on first cold visit.
-    logger.error(`[getProvidersByServiceAndLocation] FAILED for ${serviceSlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
-    throw err
-  }
+            if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as ProviderListRow[])
+
+            return []
+          },
+          `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+        )
+      } catch (err) {
+        // Re-throw so ISR keeps stale cached page instead of caching empty results.
+        // Page component catches this and renders gracefully on first cold visit.
+        logger.error(`[getProvidersByServiceAndLocation] FAILED for ${serviceSlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+        throw err
+      }
+    },
+    CACHE_TTL.artisans, // 3600s (1h)
+    { skipNull: true },
+  )
 }
 
 /**
@@ -487,32 +509,39 @@ export async function getProviderCountByServiceAndLocation(
   // Fail open: default to 1 during build so pages are indexed (not noindexed).
   // ISR will correct with the real DB count on first revalidation.
   if (IS_BUILD) return 1
-  try {
-    return await retryWithBackoff(
-      async () => {
-        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-        if (!specialties || specialties.length === 0) return 0
 
-        const ville = getVilleBySlugImport(locationSlug)
-        const cityName = ville?.name
-        if (!cityName) return 0
+  return getCachedData(
+    `provider-count:svc-loc:${serviceSlug}:${locationSlug}`,
+    async () => {
+      try {
+        return await retryWithBackoff(
+          async () => {
+            const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+            if (!specialties || specialties.length === 0) return 0
 
-        const cityValues = getCityValues(cityName)
-        const { count, error } = await supabase
-          .from('providers')
-          .select('id', { count: 'exact', head: true })
-          .in('specialty', specialties)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
+            const ville = getVilleBySlugImport(locationSlug)
+            const cityName = ville?.name
+            if (!cityName) return 0
 
-        if (error) throw error
-        return count ?? 0
-      },
-      `getProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
-    )
-  } catch {
-    return 0
-  }
+            const cityValues = getCityValues(cityName)
+            const { count, error } = await supabase
+              .from('providers')
+              .select('id', { count: 'exact', head: true })
+              .in('specialty', specialties)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+
+            if (error) throw error
+            return count ?? 0
+          },
+          `getProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+        )
+      } catch {
+        return 0
+      }
+    },
+    CACHE_TTL.artisans, // 3600s (1h)
+  )
 }
 
 export async function getProvidersByLocation(locationSlug: string) {
@@ -549,22 +578,30 @@ export async function getProvidersByLocation(locationSlug: string) {
 
 export async function getAllProviders() {
   if (IS_BUILD) return [] // Skip during build
-  return withTimeout(
-    (async () => {
-      const { data, error } = await supabase
-        .from('providers')
-        .select(PROVIDER_LIST_SELECT)
-        .eq('is_active', true)
-        .order('phone', { ascending: false, nullsFirst: false })
-        .order('is_verified', { ascending: false })
-        .order('name')
-        .limit(1000)
 
-      if (error) throw error
-      return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-    })(),
-    QUERY_TIMEOUT_MS,
-    'getAllProviders',
+  return getCachedData(
+    'providers:all',
+    async () => {
+      return withTimeout(
+        (async () => {
+          const { data, error } = await supabase
+            .from('providers')
+            .select(PROVIDER_LIST_SELECT)
+            .eq('is_active', true)
+            .order('phone', { ascending: false, nullsFirst: false })
+            .order('is_verified', { ascending: false })
+            .order('name')
+            .limit(1000)
+
+          if (error) throw error
+          return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+        })(),
+        QUERY_TIMEOUT_MS,
+        'getAllProviders',
+      )
+    },
+    CACHE_TTL.artisans, // 3600s (1h)
+    { skipNull: true },
   )
 }
 

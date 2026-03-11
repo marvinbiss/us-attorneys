@@ -62,14 +62,14 @@ import { hashCode } from '@/lib/seo/location-content'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
 
-export const revalidate = 300
+export const revalidate = 86400
 
 // Pre-render top service×city×quartier combos for ISR warming
-const TOP_CITIES_QUARTIER = 10
+const TOP_CITIES_QUARTIER = 30
 export function generateStaticParams() {
   const topCities = villes.slice(0, TOP_CITIES_QUARTIER)
-  // Only pre-render first 3 services × 10 cities × quartiers to keep build fast
-  const topServices = staticServicesList.slice(0, 3)
+  // Pre-render top 10 services × 30 cities × quartiers for better ISR coverage
+  const topServices = staticServicesList.slice(0, 10)
   return topServices.flatMap(s =>
     topCities.flatMap(v => {
       const quartiers = v.quartiers || []

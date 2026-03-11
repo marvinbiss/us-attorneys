@@ -138,12 +138,27 @@ export async function GET(request: Request) {
       `[Cron] Review metrics recalculation complete: ${totalUpdated} updated, ${totalSkipped} skipped, ${totalErrors} errors`
     )
 
+    // Refresh de la vue matérialisée mv_provider_stats
+    let mvRefreshed = false
+    try {
+      const { error: mvError } = await supabase.rpc('refresh_provider_stats')
+      if (mvError) {
+        logger.error('[Cron] Failed to refresh mv_provider_stats:', mvError)
+      } else {
+        mvRefreshed = true
+        logger.info('[Cron] mv_provider_stats refreshed successfully')
+      }
+    } catch (mvErr) {
+      logger.error('[Cron] Exception refreshing mv_provider_stats:', mvErr)
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Review metrics recalculated',
       updated: totalUpdated,
       skipped: totalSkipped,
       errors: totalErrors,
+      mvRefreshed,
     })
   } catch (error) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)

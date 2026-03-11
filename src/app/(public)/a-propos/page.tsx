@@ -52,7 +52,30 @@ async function getStats() {
   try {
     const supabase = createAdminClient()
 
-    // Race all queries against a 6s timeout to prevent build hangs
+    // Try materialized view first (single query ~5ms vs 3 queries O(n))
+    try {
+      const { data: stats, error } = await Promise.race([
+        supabase
+          .from('mv_provider_stats')
+          .select('active_count, unique_cities, total_reviews, providers_with_reviews')
+          .single(),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('getStats MV timeout')), 6_000)
+        ),
+      ])
+
+      if (!error && stats) {
+        return {
+          artisanCount: stats.active_count || FALLBACK_STATS.artisanCount,
+          reviewCount: stats.total_reviews || FALLBACK_STATS.reviewCount,
+          cityCount: stats.unique_cities || FALLBACK_STATS.cityCount,
+        }
+      }
+    } catch {
+      // MV not available — fall through to legacy queries
+    }
+
+    // Fallback: legacy 3-query approach if MV doesn't exist yet
     const result = await Promise.race([
       Promise.all([
         supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),

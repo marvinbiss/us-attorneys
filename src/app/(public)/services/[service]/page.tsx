@@ -7,7 +7,6 @@ import { getServiceBySlug, getLocationsByService, getProvidersByService, getProv
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
-import { REVALIDATE } from '@/lib/cache'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -43,8 +42,8 @@ interface ServiceProvider {
   }>
 }
 
-// ISR: Revalidate every 30 minutes
-export const revalidate = REVALIDATE.serviceDetail
+// ISR: Revalidate every 24h
+export const revalidate = 86400
 export const dynamicParams = false
 
 // Pre-render all 15 service pages at build time

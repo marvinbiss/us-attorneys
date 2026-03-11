@@ -22,7 +22,7 @@ interface CacheEntry<T> {
   lastAccess: number
 }
 
-const DEFAULT_TTL = 5 * 60 * 1000 // 5 minutes
+const DEFAULT_TTL = 60 * 60 * 1000 // 1 hour
 const DEFAULT_MAX_SIZE = 1000
 
 /**
@@ -313,13 +313,13 @@ export function memoize<TArgs extends unknown[], TReturn>(
 
 // Global cache instances
 export const apiCache = new MemoryCache({
-  ttl: 5 * 60 * 1000,     // 5 minutes
+  ttl: 60 * 60 * 1000,    // 1 hour
   maxSize: 500,
-  staleWhileRevalidate: 60 * 1000, // 1 minute
+  staleWhileRevalidate: 5 * 60 * 1000, // 5 minutes
 })
 
 export const searchCache = new MemoryCache({
-  ttl: 60 * 1000,         // 1 minute
+  ttl: 5 * 60 * 1000,     // 5 minutes
   maxSize: 200,
 })
 

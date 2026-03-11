@@ -23,7 +23,7 @@ function parsePopulation(pop: string): number {
 
 const top10Cities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 10)
+  .slice(0, 30)
 
 export function generateStaticParams() {
   const top10Problems = getProblemSlugs().slice(0, 10)

@@ -186,11 +186,16 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Refresh session
+  // Refresh session — only for routes that need auth (skip Supabase call for public pages)
   let response: NextResponse
-  try {
-    response = await updateSession(request)
-  } catch {
+  const needsAuth = pathname.startsWith('/espace-') || pathname.startsWith('/admin') || pathname.startsWith('/booking')
+  if (needsAuth) {
+    try {
+      response = await updateSession(request)
+    } catch {
+      response = NextResponse.next()
+    }
+  } else {
     response = NextResponse.next()
   }
 
@@ -204,6 +209,14 @@ export async function middleware(request: NextRequest) {
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+  }
+
+  // Add CDN cache headers for programmatic public pages
+  const programmaticPrefixes = ['/services/', '/devis/', '/tarifs/', '/avis/', '/villes/', '/departements/', '/regions/', '/problemes/']
+  if (programmaticPrefixes.some(p => pathname.startsWith(p))) {
+    response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+    response.headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
   }
 
   return addSecurityHeaders(response, request, nonce)

@@ -7,8 +7,10 @@
  */
 
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { slugify } from '@/lib/utils'
 import { z } from 'zod'
 
 // POST request schema
@@ -156,6 +158,34 @@ export async function POST(request: Request) {
         { error: 'Erreur lors de la publication de l\'avis' },
         { status: 500 }
       )
+    }
+
+    // Revalidation on-demand des pages affectées (non-bloquant)
+    try {
+      const { data: providerData } = await supabase
+        .from('providers')
+        .select('specialty, address_city, slug, stable_id')
+        .eq('user_id', artisan_id)
+        .single()
+
+      if (providerData) {
+        const serviceSlug = slugify(providerData.specialty || 'artisan')
+        const locationSlug = slugify(providerData.address_city || 'france')
+        const publicId = providerData.slug || providerData.stable_id
+
+        if (publicId) {
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+        }
+        revalidatePath(`/avis/${serviceSlug}/${locationSlug}`, 'page')
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+
+        logger.info('Revalidated paths after client review submission', {
+          artisanId: artisan_id,
+          reviewId: review.id,
+        })
+      }
+    } catch (revalError) {
+      logger.error('Revalidation failed after client review:', revalError)
     }
 
     return NextResponse.json({
