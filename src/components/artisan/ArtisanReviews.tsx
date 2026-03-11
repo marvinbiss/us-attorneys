@@ -1,15 +1,118 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Star } from 'lucide-react'
+import { Star, CheckCircle, ChevronDown } from 'lucide-react'
 import { Artisan, Review } from './types'
+
+const MAX_VISIBLE_REVIEWS = 3
+
+/** Format a date string to French locale (e.g. "12 mars 2025") */
+function formatDateFr(raw: string): string {
+  try {
+    const d = new Date(raw)
+    if (isNaN(d.getTime())) return raw
+    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+  } catch {
+    return raw
+  }
+}
+
+/** Render star icons for a given rating */
+function ReviewStars({ rating, size = 'w-4 h-4' }: { rating: number; size?: string }) {
+  const full = Math.floor(rating)
+  const hasHalf = rating - full >= 0.5
+  return (
+    <div className="flex items-center gap-0.5" aria-label={`${rating} sur 5`}>
+      {[1, 2, 3, 4, 5].map((s) => {
+        const filled = s <= full
+        const half = !filled && s === full + 1 && hasHalf
+        return (
+          <Star
+            key={s}
+            className={`${size} ${
+              filled
+                ? 'text-amber-500 fill-amber-500'
+                : half
+                ? 'text-amber-400 fill-amber-200'
+                : 'text-gray-200 fill-gray-200'
+            }`}
+            aria-hidden="true"
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+/** Single review card */
+function ReviewCard({ review, index }: { review: Review; index: number }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.35, delay: index * 0.1 }}
+      className="bg-[#FFFCF8] rounded-xl border border-sand-200 p-4"
+    >
+      {/* Header: author + rating + date */}
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-stone-800 text-sm truncate">{review.author}</span>
+            {review.verified && (
+              <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Avis vérifié">
+                <CheckCircle className="w-3.5 h-3.5 fill-emerald-100" aria-hidden="true" />
+                <span className="text-xs font-medium">Vérifié</span>
+              </span>
+            )}
+          </div>
+          <ReviewStars rating={review.rating} />
+        </div>
+        <time
+          className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0"
+          dateTime={review.dateISO || review.date}
+        >
+          {formatDateFr(review.dateISO || review.date)}
+        </time>
+      </div>
+
+      {/* Comment */}
+      <p
+        className={`text-sm text-gray-700 leading-relaxed ${!expanded ? 'line-clamp-3' : ''}`}
+      >
+        {review.comment}
+      </p>
+      {review.comment.length > 180 && !expanded && (
+        <button
+          onClick={() => setExpanded(true)}
+          className="text-clay-500 hover:text-clay-600 text-xs font-medium mt-1 inline-flex items-center gap-0.5 transition-colors"
+        >
+          Lire plus
+          <ChevronDown className="w-3 h-3" aria-hidden="true" />
+        </button>
+      )}
+
+      {/* Service tag */}
+      {review.service && (
+        <div className="mt-2.5">
+          <span className="inline-block text-xs font-medium text-stone-600 bg-sand-200 px-2 py-0.5 rounded-full">
+            {review.service}
+          </span>
+        </div>
+      )}
+    </motion.div>
+  )
+}
 
 interface ArtisanReviewsProps {
   artisan: Artisan
-  reviews: Review[] // kept for API compatibility — individual reviews are not displayed
+  reviews: Review[]
 }
 
-export function ArtisanReviews({ artisan }: ArtisanReviewsProps) {
+export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
   const rating = artisan.average_rating
   const count = artisan.review_count
 
@@ -18,6 +121,9 @@ export function ArtisanReviews({ artisan }: ArtisanReviewsProps) {
 
   const fullStars = Math.floor(rating)
   const hasHalf = rating - fullStars >= 0.5
+
+  const visibleReviews = reviews.slice(0, MAX_VISIBLE_REVIEWS)
+  const hasMoreReviews = reviews.length > MAX_VISIBLE_REVIEWS
 
   return (
     <motion.div
@@ -94,6 +200,32 @@ export function ArtisanReviews({ artisan }: ArtisanReviewsProps) {
           )}
         </div>
       </div>
+
+      {/* Individual reviews */}
+      {visibleReviews.length > 0 && (
+        <div className="mt-6 pt-6 border-t border-sand-200">
+          <h3 className="text-base font-semibold text-stone-800 mb-4">
+            Derniers avis clients
+          </h3>
+          <div className="space-y-3">
+            {visibleReviews.map((review, i) => (
+              <ReviewCard key={review.id} review={review} index={i} />
+            ))}
+          </div>
+
+          {hasMoreReviews && (
+            <div className="mt-4 text-center">
+              <a
+                href="#reviews"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-clay-500 hover:text-clay-600 transition-colors"
+              >
+                Voir tous les avis ({reviews.length})
+                <ChevronDown className="w-4 h-4" aria-hidden="true" />
+              </a>
+            </div>
+          )}
+        </div>
+      )}
     </motion.div>
   )
 }

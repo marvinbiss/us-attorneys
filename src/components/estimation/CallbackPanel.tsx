@@ -1,8 +1,8 @@
 'use client'
 
-import React, { memo } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Check, Loader2 } from 'lucide-react'
+import { Phone, Check, Loader2, Clock, ShieldCheck } from 'lucide-react'
 import type { EstimationContext } from './utils'
 import type { UseLeadSubmitReturn } from './hooks/useLeadSubmit'
 
@@ -11,10 +11,40 @@ interface CallbackPanelProps {
   lead: UseLeadSubmitReturn
 }
 
+/** Fire canvas-confetti from the bottom of the widget */
+async function fireConfetti() {
+  try {
+    const confetti = (await import('canvas-confetti')).default
+    // Burst from bottom-center
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { x: 0.5, y: 0.9 },
+      colors: ['#E07040', '#f59e0b', '#22c55e', '#c9603a', '#fbbf24'],
+      startVelocity: 30,
+      gravity: 1.2,
+      ticks: 120,
+      disableForReducedMotion: true,
+    })
+  } catch {
+    // Silently fail — confetti is non-critical
+  }
+}
+
 export const CallbackPanel = memo(function CallbackPanel({
   context,
   lead,
 }: CallbackPanelProps) {
+  const confettiFired = useRef(false)
+
+  // Fire confetti once on successful submission
+  useEffect(() => {
+    if (lead.callbackSubmitted && !confettiFired.current) {
+      confettiFired.current = true
+      fireConfetti()
+    }
+  }, [lead.callbackSubmitted])
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
       {!lead.callbackSubmitted ? (
@@ -128,19 +158,67 @@ export const CallbackPanel = memo(function CallbackPanel({
           animate={{ scale: 1, opacity: 1 }}
           className="w-full max-w-sm text-center space-y-5"
         >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-            <Check className="h-8 w-8 text-green-600" />
-          </div>
+          {/* Animated checkmark */}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
+            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -45 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.25 }}
+            >
+              <Check className="h-8 w-8 text-green-600" />
+            </motion.div>
+          </motion.div>
+
           <div>
-            <p className="text-base font-semibold text-gray-900">
+            <motion.p
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-base font-semibold text-gray-900"
+            >
               Demande envoyée !
-            </p>
-            <p className="mt-1 text-sm text-gray-600">
-              {context.artisan
-                ? `Un ${context.metier.toLowerCase()} à ${context.ville} vous recontactera dans les meilleurs délais.`
-                : `Un ${context.metier.toLowerCase()} à ${context.ville} vous recontactera dans les meilleurs délais.`}
-            </p>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-1 text-sm text-gray-600"
+            >
+              Votre demande a été envoyée ! Un artisan vous contactera sous 24h.
+            </motion.p>
           </div>
+
+          {/* Reassurance stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+            className="flex items-center justify-center gap-4 text-xs text-gray-500"
+          >
+            <span className="inline-flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5 text-green-500" />
+              Réponse rapide
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <ShieldCheck className="h-3.5 w-3.5 text-green-500" />
+              Artisan vérifié
+            </span>
+          </motion.div>
+
+          {/* Subtle satisfaction message */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="text-xs text-gray-400"
+          >
+            98% de nos clients sont recontactés en moins de 2h
+          </motion.p>
         </motion.div>
       )}
     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
@@ -18,11 +18,21 @@ import {
   ArtisanBreadcrumb,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
+import { ArtisanProofBar } from '@/components/artisan/ArtisanProofBar'
+import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
+import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
+import { ArtisanProfileStrength } from '@/components/artisan/ArtisanProfileStrength'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
+
+// Dynamic import for exit intent (not needed on first paint)
+const ArtisanExitIntent = dynamic(
+  () => import('@/components/artisan/ArtisanExitIntent').then(mod => ({ default: mod.ArtisanExitIntent })),
+  { ssr: false }
+)
 
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
@@ -122,12 +132,27 @@ export default function ArtisanPageClient({
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
 
+  const heroRef = useRef<HTMLDivElement>(null)
+  const [showProofBar, setShowProofBar] = useState(false)
+
   // Track profile view
   useEffect(() => {
     if (artisan) {
       BookingFunnel.viewProfile(artisanId, artisan.business_name || '', 'profile_page')
     }
   }, [artisan, artisanId])
+
+  // IntersectionObserver: show proof bar when hero scrolls out of view
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowProofBar(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-57px 0px 0px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [artisan])
 
   // Not found state
   if (!artisan) {
@@ -159,6 +184,9 @@ export default function ArtisanPageClient({
     <>
       {/* Schema.org JSON-LD */}
       <ArtisanSchema artisan={artisan} reviews={reviews} />
+
+      {/* Sticky trust proof bar */}
+      <ArtisanProofBar artisan={artisan} visible={showProofBar} />
 
       {/* Skip links for keyboard navigation */}
       <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
@@ -235,14 +263,20 @@ export default function ArtisanPageClient({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column - Main content */}
             <div className="lg:col-span-2 space-y-6">
-              <section aria-label="Informations principales">
+              <section ref={heroRef} aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} />
+              </section>
+              <section aria-label="Disponibilité et avantages">
+                <ArtisanUrgencyBanner artisan={artisan} />
               </section>
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
               </section>
               <section aria-label="À propos">
                 <ArtisanAbout artisan={artisan} />
+              </section>
+              <section aria-label="Pourquoi choisir cet artisan">
+                <ArtisanWhyChoose artisan={artisan} />
               </section>
               <section aria-label="Fiche entreprise">
                 <ArtisanBusinessCard artisan={artisan} />
@@ -280,6 +314,7 @@ export default function ArtisanPageClient({
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
               <div className="space-y-6 sticky top-20">
                 <ArtisanSidebar artisan={artisan} />
+                <ArtisanProfileStrength artisan={artisan} />
                 {!isClaimed && (
                   <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
                 )}
@@ -291,6 +326,12 @@ export default function ArtisanPageClient({
         {/* Mobile CTA */}
         <ArtisanMobileCTA artisan={artisan} />
       </div>
+
+      {/* Exit intent slide-in */}
+      <ArtisanExitIntent
+        artisan={artisan}
+        onOpenEstimation={() => window.dispatchEvent(new Event('sa:open-estimation'))}
+      />
     </>
   )
 }

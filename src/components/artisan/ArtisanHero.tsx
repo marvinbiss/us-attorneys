@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
@@ -29,6 +30,8 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const verificationLevel = getVerificationLevel(artisan)
   const [showPhone, setShowPhone] = useState(false)
 
+  const hasPortfolioImage = artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -46,8 +49,34 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
           {/* Avatar */}
           <div className="flex-shrink-0">
             <div className="relative">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-glow-clay overflow-hidden ring-4 ring-[#FFFCF8]">
-                <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
+              {/* Pulsing ring for artisans accepting new clients */}
+              {artisan.accepts_new_clients && (
+                <motion.div
+                  className="absolute -inset-1.5 rounded-2xl border-2 border-clay-400/50"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    opacity: [0.5, 0.2, 0.5],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  aria-hidden="true"
+                />
+              )}
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-glow-clay overflow-hidden ring-4 ring-[#FFFCF8] relative">
+                {hasPortfolioImage ? (
+                  <Image
+                    src={artisan.portfolio![0].imageUrl}
+                    alt={`Photo de ${displayName}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 96px, 128px"
+                  />
+                ) : (
+                  <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
+                )}
               </div>
               {artisan.is_verified && (
                 <Link
@@ -58,6 +87,13 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 >
                   <CheckCircle className="w-5 h-5" aria-hidden="true" />
                 </Link>
+              )}
+              {/* Team size badge overlapping bottom of avatar */}
+              {artisan.team_size && artisan.team_size > 1 && (
+                <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 bg-white px-2.5 py-0.5 rounded-full shadow-md border border-stone-200 text-xs font-medium text-slate-700 whitespace-nowrap">
+                  <Users className="w-3 h-3 text-clay-400" aria-hidden="true" />
+                  Équipe de {artisan.team_size}
+                </div>
               )}
             </div>
           </div>

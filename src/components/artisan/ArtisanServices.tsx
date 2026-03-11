@@ -86,9 +86,13 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
           <div className="bg-clay-50 rounded-xl border border-clay-200 p-6 text-center mt-4">
             <p className="text-slate-700 font-medium mb-2">Tarifs sur devis personnalis&eacute;</p>
             <p className="text-sm text-slate-500 mb-4">Cet artisan propose des tarifs adapt&eacute;s &agrave; chaque projet. Demandez un devis gratuit pour conna&icirc;tre ses prix.</p>
-            <a href="#devis" className="inline-flex items-center gap-2 bg-clay-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-clay-600 transition-colors">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event('sa:open-estimation'))}
+              className="inline-flex items-center gap-2 bg-clay-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-clay-600 transition-colors"
+            >
               Demander un devis gratuit
-            </a>
+            </button>
           </div>
         )}
 

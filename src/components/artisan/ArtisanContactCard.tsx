@@ -1,9 +1,8 @@
 'use client'
 
-import Link from 'next/link'
-import { Phone, Mail, ExternalLink, FileText, Shield, Star } from 'lucide-react'
+import { Phone, Mail, MessageCircle, Shield, Star } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
-import { BookingFunnel, trackEvent } from '@/lib/analytics/tracking'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
@@ -29,8 +28,6 @@ function formatFrenchPhone(phone: string): string {
 export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
   const hasPhone = isValidPhone(artisan.phone)
   const hasEmail = !!artisan.email
-  const hasWebsite = !!artisan.website
-
   return (
     <div className="bg-[#FFFCF8] rounded-2xl shadow-premium border border-stone-200/60 overflow-hidden">
       {/* Header accent */}
@@ -65,8 +62,6 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <button
               type="button"
               onClick={() => {
-                BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'contact_card')
-                BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'contact_card')
                 trackEvent('phone_reveal' as any, { artisan_slug: artisan.slug })
                 trackEvent('phone_click' as any, { artisan_slug: artisan.slug })
                 window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
@@ -79,17 +74,18 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             </button>
           )}
 
-          {/* 2. Devis gratuit (formulaire, conversion moyenne) */}
-          <Link
-            href="#devis"
+          {/* 2. Devis IA gratuit (ouvre le widget d'estimation) */}
+          <button
+            type="button"
             onClick={() => {
               trackEvent('artisan_devis_click' as any, { artisan_slug: artisan.slug })
+              window.dispatchEvent(new Event('sa:open-estimation'))
             }}
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 group"
           >
-            <FileText className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
+            <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
             Demander un devis gratuit
-          </Link>
+          </button>
 
           {/* 3. Email (basse conversion) */}
           {hasEmail && (
@@ -106,27 +102,6 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             </a>
           )}
 
-          {/* 4. Site web (fuite, en dernier et discret) */}
-          {hasWebsite && (
-            <button
-              type="button"
-              onClick={() => {
-                trackEvent('artisan_website_click' as any, {
-                  artisan_slug: artisan.slug,
-                  url: artisan.website
-                })
-                window.open(
-                  artisan.website!.startsWith('http') ? artisan.website! : `https://${artisan.website}`,
-                  '_blank',
-                  'noopener,noreferrer'
-                )
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium transition-colors text-sm"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Voir le site web
-            </button>
-          )}
         </div>
 
         {/* Trust footer */}
