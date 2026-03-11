@@ -212,7 +212,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Add CDN cache headers for programmatic public pages
-  const programmaticPrefixes = ['/services/', '/devis/', '/tarifs/', '/avis/', '/villes/', '/departements/', '/regions/', '/problemes/']
+  const programmaticPrefixes = ['/services/', '/devis/', '/tarifs/', '/avis/', '/villes/', '/departements/', '/regions/', '/problemes/', '/urgence/']
   if (programmaticPrefixes.some(p => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
     response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
