@@ -127,6 +127,9 @@ export async function POST(request: NextRequest) {
     const { messages, context } = validation.data
     const { metier, ville, departement } = context
 
+    // Normalize metier to lowercase for DB lookup (widget sends display name like "Plombier")
+    const metierLower = metier.toLowerCase()
+
     // Guard: max 20 messages
     if (messages.length > 20) {
       return NextResponse.json(
@@ -139,12 +142,12 @@ export async function POST(request: NextRequest) {
     const supabase = createAdminClient()
 
     const tarifs = await getCachedData<Tarif[]>(
-      `tarifs:${metier}`,
+      `tarifs:${metierLower}`,
       async () => {
         const { data, error } = await supabase
           .from('prestations_tarifs')
           .select('prestation, prix_min, prix_max, unite')
-          .eq('metier', metier)
+          .eq('metier', metierLower)
 
         if (error) {
           logger.error('Erreur r\u00E9cup\u00E9ration tarifs', error, { action: 'estimation' })
@@ -224,9 +227,10 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    logger.error('Estimation API error', error, { action: 'estimation' })
+    const errMsg = error instanceof Error ? error.message : String(error)
+    logger.error('Estimation API error', error, { action: 'estimation', message: errMsg })
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Erreur serveur', debug: process.env.NODE_ENV === 'development' ? errMsg : undefined },
       { status: 500 },
     )
   }
