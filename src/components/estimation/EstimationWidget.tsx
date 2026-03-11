@@ -426,7 +426,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
             transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             onClick={() => setIsOpen(true)}
             aria-label="Ouvrir le chat d'estimation"
-            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2"
+            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2"
           >
             <motion.div
               animate={{ scale: [1, 1.05, 1] }}
@@ -457,7 +457,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className={
-              'fixed z-[60] flex flex-col bg-white shadow-2xl ' +
+              'fixed z-[9999] flex flex-col bg-white shadow-2xl ' +
               'inset-0 ' +
               'sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:max-h-[600px] sm:rounded-[20px]'
             }
