@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, Send, X, Phone, ArrowRight, Check, Loader2 } from 'lucide-react'
+import { MessageCircle, Send, X, Phone, ArrowRight, Check, Loader2, Sparkles } from 'lucide-react'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -103,6 +103,29 @@ const defaultPrompts = [
 ]
 
 // ---------------------------------------------------------------------------
+// Greeting bubble: contextual proactive message
+// ---------------------------------------------------------------------------
+
+const GREETING_STORAGE_KEY = 'sa_estimation_greeting_dismissed'
+
+function getGreetingMessage(context: EstimationWidgetProps['context']): string {
+  const metier = context.metier.toLowerCase()
+  const ville = context.ville
+  const pageUrl = context.pageUrl || ''
+
+  if (context.artisan) {
+    return `Demandez un devis gratuit à ${context.artisan.name} en 30 secondes`
+  }
+  if (pageUrl.includes('/urgence/')) {
+    return `Urgence ${metier} à ${ville} ? Estimez le coût et soyez rappelé immédiatement`
+  }
+  if (pageUrl.includes('/tarifs/')) {
+    return `Ces prix correspondent à votre projet ? Vérifiez en 30 secondes`
+  }
+  return `Besoin d'un ${metier} à ${ville} ? Estimez le prix gratuitement`
+}
+
+// ---------------------------------------------------------------------------
 // Lead form trigger: detect price estimation in response
 // ---------------------------------------------------------------------------
 
@@ -166,6 +189,10 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
   const [callbackLoading, setCallbackLoading] = useState(false)
   const [callbackError, setCallbackError] = useState(false)
 
+  // Greeting bubble + pill launcher
+  const [showGreeting, setShowGreeting] = useState(false)
+  const [isLauncherExpanded, setIsLauncherExpanded] = useState(true)
+
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -174,8 +201,31 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
   // --- Derived -------------------------------------------------------------
   const prompts = quickPrompts[context.metierSlug] ?? defaultPrompts
   const hasUserMessages = messages.some((m) => m.role === 'user')
+  const greetingMessage = getGreetingMessage(context)
 
   // --- Effects -------------------------------------------------------------
+
+  // Show greeting bubble after delay (unless dismissed this session)
+  useEffect(() => {
+    if (isOpen) return
+    try {
+      if (sessionStorage.getItem(GREETING_STORAGE_KEY)) return
+    } catch { /* SSR / private browsing */ }
+
+    const timer = setTimeout(() => {
+      setShowGreeting(true)
+    }, 5000)
+    return () => clearTimeout(timer)
+  }, [isOpen])
+
+  // Collapse pill launcher to circle after 8s
+  useEffect(() => {
+    if (isOpen) return
+    const timer = setTimeout(() => {
+      setIsLauncherExpanded(false)
+    }, 8000)
+    return () => clearTimeout(timer)
+  }, [isOpen])
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -421,30 +471,87 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
   return (
     <>
       {/* ----------------------------------------------------------------- */}
-      {/* Floating Bubble                                                    */}
+      {/* Floating Launcher (pill + greeting bubble + badge + ping)          */}
       {/* ----------------------------------------------------------------- */}
       <AnimatePresence>
         {!isOpen && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            onClick={() => setIsOpen(true)}
-            aria-label="Ouvrir le chat d'estimation"
-            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2"
-          >
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeInOut',
+          <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
+            {/* Greeting bubble */}
+            <AnimatePresence>
+              {showGreeting && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                  className="relative max-w-[260px] sm:max-w-[300px] bg-white rounded-2xl rounded-br-sm shadow-xl border border-gray-100 px-4 py-3 cursor-pointer"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setShowGreeting(false)
+                      try { sessionStorage.setItem(GREETING_STORAGE_KEY, '1') } catch { /* noop */ }
+                    }}
+                    className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 transition-colors shadow-sm"
+                    aria-label="Fermer"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                  <p className="text-sm text-gray-800 font-medium leading-snug">
+                    {greetingMessage}
+                  </p>
+                  <p className="text-xs text-[#E07040] font-semibold mt-1.5 flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    Estimation IA gratuite
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Launcher button (pill → circle) */}
+            <motion.button
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              onClick={() => {
+                setIsOpen(true)
+                setShowGreeting(false)
               }}
+              aria-label="Ouvrir le chat d'estimation"
+              className={
+                'relative flex items-center justify-center bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2 transition-all duration-500 ' +
+                (isLauncherExpanded
+                  ? 'h-12 rounded-full px-5 gap-2.5'
+                  : 'h-14 w-14 rounded-full')
+              }
             >
-              <MessageCircle className="h-6 w-6" />
-            </motion.div>
-          </motion.button>
+              {/* Ping ring animation */}
+              <span className="absolute inset-0 rounded-full bg-[#E07040] animate-ping opacity-20" />
+
+              {/* Notification badge */}
+              {!showGreeting && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm">
+                  1
+                </span>
+              )}
+
+              {/* Icon */}
+              <MessageCircle className={isLauncherExpanded ? 'h-5 w-5 shrink-0' : 'h-6 w-6'} />
+
+              {/* Pill text (visible when expanded) */}
+              {isLauncherExpanded && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  className="text-sm font-semibold whitespace-nowrap overflow-hidden"
+                >
+                  Estimation gratuite
+                </motion.span>
+              )}
+            </motion.button>
+          </div>
         )}
       </AnimatePresence>
 
