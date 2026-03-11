@@ -110,10 +110,16 @@ export async function POST(request: Request) {
         }
       })
 
-    // Fire-and-forget: notify admin by email
+    // Fire-and-forget: notify admin + confirm client
     notifyAdminNewEstimationLead(data, lead.id).catch((err) => {
       logger.error('Failed to send estimation lead notification email', err)
     })
+
+    if (email) {
+      sendClientConfirmationEmail(data, lead.id).catch((err) => {
+        logger.error('Failed to send estimation lead client confirmation email', err)
+      })
+    }
 
     return NextResponse.json({ success: true, id: lead.id })
   } catch (error) {
@@ -195,6 +201,100 @@ async function notifyAdminNewEstimationLead(
     html,
     tags: [
       { name: 'type', value: 'estimation_lead_admin' },
+      { name: 'lead_id', value: leadId },
+    ],
+  })
+}
+
+// ============================================================
+// Client confirmation
+// ============================================================
+
+/** Escape HTML special chars to prevent XSS in email templates */
+function htmlEscape(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+async function sendClientConfirmationEmail(
+  data: z.infer<typeof estimationLeadSchema>,
+  leadId: string,
+): Promise<void> {
+  const clientEmail = data.email
+  if (!clientEmail || clientEmail.length === 0) return
+
+  const prenom = data.nom ? htmlEscape(data.nom.split(' ')[0]) : ''
+  const salutation = prenom ? `Bonjour ${prenom}` : 'Bonjour'
+  const metier = htmlEscape(data.metier.toLowerCase())
+  const ville = htmlEscape(data.ville)
+  const isArtisanPage = !!data.artisan_public_id
+
+  const nextSteps = isArtisanPage
+    ? `<p style="color: #333; font-size: 15px; line-height: 1.6;">
+        L'artisan que vous avez contacté va recevoir votre demande et vous recontactera
+        dans les plus brefs délais par téléphone ou email.
+      </p>`
+    : `<p style="color: #333; font-size: 15px; line-height: 1.6;">
+        Nous allons transmettre votre demande à des ${metier}s qualifiés et vérifiés
+        à <strong>${ville}</strong>. Vous serez recontacté dans les plus brefs délais
+        par téléphone ou email.
+      </p>`
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: #E07040; padding: 24px; border-radius: 12px 12px 0 0; text-align: center;">
+      <h1 style="color: white; margin: 0; font-size: 22px;">Votre demande a bien été reçue</h1>
+    </div>
+    <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <p style="color: #333; font-size: 16px; margin-bottom: 4px;">${salutation},</p>
+      <p style="color: #333; font-size: 15px; line-height: 1.6;">
+        Merci pour votre demande d'estimation pour un <strong>${metier}</strong>
+        à <strong>${ville}</strong>. Nous avons bien enregistré vos coordonnées.
+      </p>
+
+      <div style="background: #fef7f4; border-left: 4px solid #E07040; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;">
+        <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Récapitulatif :</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service : <strong>${htmlEscape(data.metier)}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Ville : <strong>${ville}${data.departement ? ` (${htmlEscape(data.departement)})` : ''}</strong></p>
+        <p style="margin: 0; font-size: 14px; color: #333;">Téléphone : <strong>${htmlEscape(data.telephone)}</strong></p>
+      </div>
+
+      <h3 style="color: #333; font-size: 16px; margin: 24px 0 8px 0;">Que se passe-t-il maintenant ?</h3>
+      ${nextSteps}
+
+      <div style="background: #f0fdf4; border-radius: 8px; padding: 16px; margin: 24px 0;">
+        <p style="margin: 0; font-size: 14px; color: #166534; line-height: 1.5;">
+          <strong>Nos engagements :</strong> service 100% gratuit, artisans vérifiés, aucune obligation de votre part.
+        </p>
+      </div>
+
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${SITE_URL}/services" style="display: inline-block; background: #E07040; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">Découvrir nos artisans</a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
+      <p style="color: #aaa; font-size: 12px; text-align: center;">
+        ServicesArtisans.fr – La plateforme des artisans qualifiés<br>
+        <a href="${SITE_URL}" style="color: #aaa;">servicesartisans.fr</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>`
+
+  await sendEmail({
+    to: clientEmail,
+    subject: `Votre demande de ${metier} à ${ville} – ServicesArtisans`,
+    html,
+    tags: [
+      { name: 'type', value: 'estimation_lead_client' },
       { name: 'lead_id', value: leadId },
     ],
   })
