@@ -15,6 +15,11 @@ interface EstimationWidgetProps {
     ville: string        // "Lyon"
     departement: string  // "69"
     pageUrl: string      // "/services/plombier/lyon"
+    artisan?: {
+      name: string       // "Dupont Plomberie"
+      slug: string       // "dupont-plomberie"
+      publicId: string   // stable_id or slug
+    }
   }
 }
 
@@ -312,6 +317,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
           context,
           source: 'estimation',
           messages,
+          artisan_public_id: context.artisan?.publicId,
         }),
       })
 
@@ -325,7 +331,9 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
         ...prev,
         {
           role: 'assistant',
-          content: `Parfait ! Votre demande a bien été enregistrée. Un ${context.metier.toLowerCase()} qualifié à ${context.ville} vous recontactera dans les plus brefs délais.`,
+          content: context.artisan
+            ? `Parfait ! Votre demande a bien été envoyée à ${context.artisan.name}. Il vous recontactera dans les plus brefs délais.`
+            : `Parfait ! Votre demande a bien été enregistrée. Un ${context.metier.toLowerCase()} qualifié à ${context.ville} vous recontactera dans les plus brefs délais.`,
         },
       ])
     } catch (error) {
@@ -350,6 +358,7 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
           phone: callbackPhone,
           context,
           source: 'callback',
+          artisan_public_id: context.artisan?.publicId,
         }),
       })
 
@@ -438,7 +447,9 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                 </div>
                 <div className="min-w-0">
                   <p className="text-sm font-semibold truncate">
-                    {context.metier} à {context.ville}
+                    {context.artisan
+                      ? `Devis avec ${context.artisan.name}`
+                      : `${context.metier} à ${context.ville}`}
                   </p>
                   <p className="text-[11px] text-white/80">
                     Estimation gratuite IA
@@ -497,11 +508,23 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                       className="flex justify-start"
                     >
                       <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3 text-sm text-gray-800">
-                        Bonjour ! Je suis votre assistant estimation.
-                        Dites-moi quel projet vous avez en tête avec votre{' '}
-                        <strong>{context.metier.toLowerCase()}</strong> à{' '}
-                        <strong>{context.ville}</strong>, et je vous
-                        donnerai une estimation de prix.
+                        {context.artisan ? (
+                          <>
+                            Bonjour ! Je suis l&apos;assistant estimation de{' '}
+                            <strong>{context.artisan.name}</strong>,{' '}
+                            {context.metier.toLowerCase()} à{' '}
+                            <strong>{context.ville}</strong>. Décrivez votre
+                            projet et je vous donnerai une estimation de prix.
+                          </>
+                        ) : (
+                          <>
+                            Bonjour ! Je suis votre assistant estimation.
+                            Dites-moi quel projet vous avez en tête avec votre{' '}
+                            <strong>{context.metier.toLowerCase()}</strong> à{' '}
+                            <strong>{context.ville}</strong>, et je vous
+                            donnerai une estimation de prix.
+                          </>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -578,7 +601,9 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                           className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3"
                         >
                           <p className="text-sm font-semibold text-gray-900">
-                            Recevoir mon estimation personnalisée
+                            {context.artisan
+                              ? `Envoyer ma demande à ${context.artisan.name}`
+                              : 'Recevoir mon estimation personnalisée'}
                           </p>
                           <input
                             type="text"
@@ -613,7 +638,9 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                             ) : (
                               <>
                                 <ArrowRight className="h-4 w-4" />
-                                Être mis en relation
+                                {context.artisan
+                                  ? `Envoyer à ${context.artisan.name}`
+                                  : 'Être mis en relation'}
                               </>
                             )}
                           </button>
@@ -670,16 +697,27 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                     </div>
                     <div>
                       <p className="text-base font-semibold text-gray-900">
-                        Rappel express
+                        {context.artisan
+                          ? `Être rappelé par ${context.artisan.name}`
+                          : 'Rappel express'}
                       </p>
                       <p className="mt-1 text-sm text-gray-600">
-                        Un{' '}
-                        <strong>
-                          {context.metier.toLowerCase()}
-                        </strong>{' '}
-                        vérifié à{' '}
-                        <strong>{context.ville}</strong> vous
-                        rappelle en 30 secondes
+                        {context.artisan ? (
+                          <>
+                            <strong>{context.artisan.name}</strong> vous
+                            rappelle en 30 secondes
+                          </>
+                        ) : (
+                          <>
+                            Un{' '}
+                            <strong>
+                              {context.metier.toLowerCase()}
+                            </strong>{' '}
+                            vérifié à{' '}
+                            <strong>{context.ville}</strong> vous
+                            rappelle en 30 secondes
+                          </>
+                        )}
                       </p>
                     </div>
                     <form
@@ -727,8 +765,9 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
                         Demande envoyée !
                       </p>
                       <p className="mt-1 text-sm text-gray-600">
-                        Un {context.metier.toLowerCase()} à{' '}
-                        {context.ville} va vous rappeler
+                        {context.artisan
+                          ? `${context.artisan.name} va vous rappeler`
+                          : `Un ${context.metier.toLowerCase()} à ${context.ville} va vous rappeler`}
                       </p>
                     </div>
 

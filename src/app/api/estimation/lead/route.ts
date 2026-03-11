@@ -24,6 +24,7 @@ const estimationLeadSchema = z.object({
   source: z.enum(['chat', 'callback'], { message: 'La source est requise' }),
   conversation_history: z.array(z.unknown()).optional(),
   page_url: z.string().optional(),
+  artisan_public_id: z.string().optional(),
 })
 
 export async function POST(request: Request) {
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
         source: data.source,
         conversation_history: data.conversation_history ?? null,
         page_url: data.page_url || null,
+        artisan_public_id: data.artisan_public_id || null,
       })
       .select('id')
       .single()
@@ -92,6 +94,7 @@ export async function POST(request: Request) {
           ville: data.ville,
           departement: data.departement,
           source: data.source,
+          artisan_public_id: data.artisan_public_id || null,
         },
         metadata: {
           ip_address: ipAddress,

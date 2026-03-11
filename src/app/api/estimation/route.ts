@@ -27,6 +27,11 @@ const requestSchema = z.object({
     metier: z.string().min(1),
     ville: z.string().min(1),
     departement: z.string().min(1).max(3),
+    artisan: z.object({
+      name: z.string().min(1),
+      slug: z.string().min(1),
+      publicId: z.string().min(1),
+    }).optional(),
   }),
 })
 
@@ -65,12 +70,21 @@ function buildSystemPrompt(
   departement: string,
   coefficient: number,
   formattedGrid: string,
+  artisanName?: string,
 ): string {
+  const artisanLine = artisanName
+    ? `\n\u2022 Artisan : ${artisanName}\nLe visiteur consulte la fiche de ${artisanName}, un ${metierName.toLowerCase()} \u00E0 ${ville}.`
+    : ''
+
+  const ctaLine = artisanName
+    ? `"Souhaitez-vous envoyer votre demande \u00E0 ${artisanName} ?"`
+    : `"Souhaitez-vous \u00EAtre mis en relation avec un ${metierName.toLowerCase()} v\u00E9rifi\u00E9 \u00E0 ${ville} ?"`
+
   return `Tu es l'assistant estimation de ServicesArtisans.fr.
 CONTEXTE :
 \u2022 M\u00E9tier : ${metierName}
 \u2022 Ville : ${ville} (${departement})
-\u2022 Coefficient g\u00E9ographique : ${coefficient}
+\u2022 Coefficient g\u00E9ographique : ${coefficient}${artisanLine}
 
 GRILLE TARIFAIRE \u2014 ${metierName.toUpperCase()} :
 ${formattedGrid}
@@ -82,7 +96,7 @@ R\u00C8GLES :
 4. Donne TOUJOURS une fourchette en gras : **min\u20AC \u2014 max\u20AC**
 5. Pr\u00E9cise que c'est une estimation indicative
 6. Apr\u00E8s l'estimation, propose la mise en relation :
-   "Souhaitez-vous \u00EAtre mis en relation avec un ${metierName.toLowerCase()} v\u00E9rifi\u00E9 \u00E0 ${ville} ?"
+   ${ctaLine}
 7. Si urgence mentionn\u00E9e, propose le rappel imm\u00E9diat
 8. Ne donne JAMAIS de conseil technique dangereux
 9. Vouvoie toujours
@@ -161,7 +175,7 @@ export async function POST(request: NextRequest) {
 
     // 4. Build system prompt
     const formattedGrid = formatGrid(tarifs)
-    const systemPrompt = buildSystemPrompt(metier, ville, departement, coefficient, formattedGrid)
+    const systemPrompt = buildSystemPrompt(metier, ville, departement, coefficient, formattedGrid, context.artisan?.name)
 
     // 5. Call Anthropic with streaming
     const anthropic = new Anthropic()

@@ -662,6 +662,11 @@ export default async function ProviderPage({ params }: PageProps) {
         ville: artisan.city,
         departement: location?.department_code || '',
         pageUrl: `/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        artisan: {
+          name: artisan.business_name || 'Artisan',
+          slug: provider.slug || '',
+          publicId: provider.stable_id || provider.slug || publicId,
+        },
       }} />
     </>
   )
