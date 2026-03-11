@@ -36,6 +36,7 @@ const nav = [
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Système', href: '/admin/systeme', icon: Gauge },
   { name: 'Demandes', href: '/admin/leads', icon: FileText },
+  { name: 'Leads Estimation', href: '/admin/estimation-leads', icon: MessageSquare },
   { name: 'Répartition', href: '/admin/dispatch', icon: ArrowRight },
   { name: 'Algorithme', href: '/admin/algorithme', icon: Sliders },
   { name: 'Outils', href: '/admin/outils', icon: Wrench },
