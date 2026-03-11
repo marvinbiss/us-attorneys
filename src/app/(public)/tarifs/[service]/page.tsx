@@ -13,6 +13,12 @@ import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 const tradeSlugs = getTradesSlugs()
 
@@ -611,6 +617,14 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </nav>
         </div>
       </section>
+
+      <EstimationWidget context={{
+        metier: trade.name,
+        metierSlug: service,
+        ville: 'France',
+        departement: '',
+        pageUrl: `/tarifs/${service}`,
+      }} />
     </div>
   )
 }

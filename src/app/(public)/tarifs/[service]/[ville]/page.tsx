@@ -15,6 +15,12 @@ import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -790,6 +796,14 @@ export default async function TarifsServiceVillePage({
           </div>
         </div>
       </section>
+
+      <EstimationWidget context={{
+        metier: trade.name,
+        metierSlug: service,
+        ville: villeData.name,
+        departement: villeData.departementCode,
+        pageUrl: `/tarifs/${service}/${villeSlug}`,
+      }} />
     </div>
   )
 }

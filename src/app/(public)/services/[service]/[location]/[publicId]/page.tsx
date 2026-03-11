@@ -61,6 +61,12 @@ import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 export const revalidate = 86400
 
@@ -649,6 +655,14 @@ export default async function ProviderPage({ params }: PageProps) {
           </nav>
         </div>
       </section>
+
+      <EstimationWidget context={{
+        metier: service?.name || artisan.specialty,
+        metierSlug: serviceSlug,
+        ville: artisan.city,
+        departement: location?.department_code || '',
+        pageUrl: `/services/${serviceSlug}/${locationSlug}/${publicId}`,
+      }} />
     </>
   )
 }

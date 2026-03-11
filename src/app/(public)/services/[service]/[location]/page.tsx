@@ -28,7 +28,13 @@ import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -557,6 +563,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         locationContent={locationContent}
         communeData={communeData}
       />
+
+      <EstimationWidget context={{
+        metier: service.name,
+        metierSlug: serviceSlug,
+        ville: location.name,
+        departement: location.department_code || '',
+        pageUrl: `/services/${serviceSlug}/${locationSlug}`,
+      }} />
     </>
   )
 }

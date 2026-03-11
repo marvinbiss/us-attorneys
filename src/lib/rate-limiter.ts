@@ -186,6 +186,8 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   newsletter: { window: 300 * 1000, max: 3 },    // 3 requests per 5 minutes for newsletter (sends email)
   inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for artisan registration (sends emails)
   ai: { window: 60 * 1000, max: 10 },            // 10 requests per minute for AI generation (expensive)
+  estimation: { window: 60 * 1000, max: 15 },    // 15 messages per minute for estimation chat
+  estimationLead: { window: 300 * 1000, max: 3 }, // 3 leads per 5 minutes for estimation lead capture (anti-spam)
   verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for SIRET/entreprise verification (external API)
   geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
@@ -215,6 +217,12 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
 
   // AI generation — expensive external API calls (Claude, OpenAI)
   if (pathname.startsWith('/api/admin/prospection/ai')) return RATE_LIMITS.ai
+
+  // Estimation lead capture — anti-spam (must match before /api/estimation)
+  if (pathname.startsWith('/api/estimation/lead')) return RATE_LIMITS.estimationLead
+
+  // Estimation chat — 15 messages/min
+  if (pathname.startsWith('/api/estimation')) return RATE_LIMITS.estimation
 
   // Bookings — create, cancel, reschedule
   if (pathname.startsWith('/api/bookings')) return RATE_LIMITS.booking

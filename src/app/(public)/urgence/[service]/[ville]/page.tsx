@@ -29,6 +29,12 @@ import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-da
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 // ---------------------------------------------------------------------------
 // Emergency-specific display data
@@ -1299,6 +1305,14 @@ export default async function UrgenceServiceVillePage({
           </div>
         </div>
       </section>
+
+      <EstimationWidget context={{
+        metier: trade.name,
+        metierSlug: service,
+        ville: villeData.name,
+        departement: villeData.departementCode,
+        pageUrl: `/urgence/${service}/${villeSlug}`,
+      }} />
     </div>
   )
 }

@@ -30,6 +30,12 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { getCityValues } from '@/lib/insee-resolver'
 import { getProblemsByService } from '@/lib/data/problems'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 export const revalidate = 86400 // Revalidate every 24h
 
@@ -1391,6 +1397,14 @@ export default async function AvisServiceVillePage({
           </div>
         </div>
       </section>
+
+      <EstimationWidget context={{
+        metier: trade.name,
+        metierSlug: service,
+        ville: villeData.name,
+        departement: villeData.departementCode,
+        pageUrl: `/avis/${service}/${villeSlug}`,
+      }} />
     </div>
   )
 }

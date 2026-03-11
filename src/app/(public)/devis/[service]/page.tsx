@@ -11,6 +11,12 @@ import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 const tradeSlugs = getTradesSlugs()
 
@@ -496,6 +502,14 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           </div>
         </div>
       </section>
+
+      <EstimationWidget context={{
+        metier: trade.name,
+        metierSlug: service,
+        ville: 'France',
+        departement: '',
+        pageUrl: `/devis/${service}`,
+      }} />
     </div>
   )
 }

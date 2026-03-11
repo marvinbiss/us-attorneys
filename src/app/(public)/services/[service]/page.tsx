@@ -19,6 +19,12 @@ import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
+import dynamic from 'next/dynamic'
+
+const EstimationWidget = dynamic(
+  () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
@@ -858,6 +864,14 @@ export default async function ServicePage({ params }: PageProps) {
       </section>
 
       {/* Internal Links Footer */}
+
+      <EstimationWidget context={{
+        metier: service.name,
+        metierSlug: serviceSlug,
+        ville: 'France',
+        departement: '',
+        pageUrl: `/services/${serviceSlug}`,
+      }} />
     </div>
   )
 }
