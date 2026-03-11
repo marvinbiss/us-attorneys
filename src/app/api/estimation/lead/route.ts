@@ -9,6 +9,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { headers } from 'next/headers'
 import { sendEmail } from '@/lib/api/resend-client'
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,6 +31,21 @@ const estimationLeadSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // 0. Rate limiting (5 submissions per hour per IP)
+    const headersList = await headers()
+    const ip =
+      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      headersList.get('x-real-ip') ||
+      'unknown'
+    const rateLimitResult = rateLimit(ip, 5, 3_600_000)
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes. Veuillez réessayer dans une minute.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
+      )
+    }
+
     const body = await request.json()
 
     // Validate input
@@ -42,6 +58,11 @@ export async function POST(request: Request) {
     }
 
     const data = validation.data
+
+    // Sanitize page_url: must start with "/" or "https://servicesartisans.fr"
+    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://servicesartisans.fr')) {
+      data.page_url = undefined
+    }
     const supabase = createAdminClient()
 
     // Normalize empty email to null
@@ -77,7 +98,6 @@ export async function POST(request: Request) {
     }
 
     // Log in audit_logs via admin client (no user session required)
-    const headersList = await headers()
     const ipAddress =
       headersList.get('x-forwarded-for')?.split(',')[0] ||
       headersList.get('x-real-ip') ||
@@ -182,8 +202,8 @@ async function notifyAdminNewEstimationLead(
         <p style="margin: 0 0 10px 0;"><strong>Métier :</strong> ${data.metier}</p>
         <p style="margin: 0 0 10px 0;"><strong>Ville :</strong> ${data.ville} (${data.departement})</p>
         <p style="margin: 0 0 10px 0;"><strong>Estimation :</strong> ${estimation}</p>
-        ${data.artisan_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Artisan :</strong> ${data.artisan_public_id}</p>` : ''}
-        ${data.page_url ? `<p style="margin: 0;"><strong>Page :</strong> <a href="${data.page_url}" style="color: #059669;">${data.page_url}</a></p>` : ''}
+        ${data.artisan_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Artisan :</strong> ${htmlEscape(data.artisan_public_id)}</p>` : ''}
+        ${data.page_url ? `<p style="margin: 0;"><strong>Page :</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
       </div>
       <div style="text-align: center; margin: 28px 0;">
         <a href="${SITE_URL}/admin/estimation-leads" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">Voir dans l'admin</a>

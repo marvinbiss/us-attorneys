@@ -9,6 +9,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCachedData } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
+import { headers } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
@@ -108,11 +110,42 @@ R\u00C8GLES STRICTES :
 }
 
 // ---------------------------------------------------------------------------
+// Security helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Sanitize a string before injecting into the LLM system prompt.
+ * Strips newlines, control characters, limits length, allows only safe chars.
+ */
+function sanitizeForPrompt(str: string): string {
+  return str
+    .replace(/[\n\r]/g, '')
+    .replace(/[\x00-\x1f\x7f-\x9f]/g, '')
+    .slice(0, 100)
+    .replace(/[^a-zA-ZÀ-ÿ0-9 \-']/g, '')
+}
+
+// ---------------------------------------------------------------------------
 // Route handler
 // ---------------------------------------------------------------------------
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. Rate limiting (10 requests per minute per IP)
+    const headersList = await headers()
+    const ip =
+      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      headersList.get('x-real-ip') ||
+      'unknown'
+    const rateLimitResult = rateLimit(ip, 10, 60_000)
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes. Veuillez réessayer dans une minute.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
+      )
+    }
+
     // 1. Parse & validate body
     const body = await request.json()
     const validation = requestSchema.safeParse(body)
@@ -180,14 +213,22 @@ export async function POST(request: NextRequest) {
 
     const coefficient = coeffData?.coefficient ?? 1.0
 
-    // 4. Build system prompt
-    const formattedGrid = formatGrid(tarifs)
-    const systemPrompt = buildSystemPrompt(metier, ville, departement, coefficient, formattedGrid, context.artisan?.name)
+    // 4. Build system prompt (sanitize context fields to prevent prompt injection)
+    const safeMetier = sanitizeForPrompt(metier)
+    const safeVille = sanitizeForPrompt(ville)
+    const safeDepartement = sanitizeForPrompt(departement)
+    const safeArtisanName = context.artisan?.name ? sanitizeForPrompt(context.artisan.name) : undefined
 
-    // 5. Call Anthropic with streaming
+    const formattedGrid = formatGrid(tarifs)
+    const systemPrompt = buildSystemPrompt(safeMetier, safeVille, safeDepartement, coefficient, formattedGrid, safeArtisanName)
+
+    // 5. Call Anthropic with streaming + timeout
     const anthropic = new Anthropic()
 
-    const stream = await anthropic.messages.stream({
+    const abortController = new AbortController()
+    const timeout = setTimeout(() => abortController.abort(), 15_000)
+
+    const stream = anthropic.messages.stream({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 512,
       system: systemPrompt,
@@ -195,7 +236,7 @@ export async function POST(request: NextRequest) {
         role: m.role,
         content: m.content,
       })),
-    })
+    }, { signal: abortController.signal })
 
     // 6. Return a ReadableStream
     const encoder = new TextEncoder()
@@ -211,10 +252,18 @@ export async function POST(request: NextRequest) {
               controller.enqueue(encoder.encode(event.delta.text))
             }
           }
+          clearTimeout(timeout)
           controller.close()
         } catch (streamError) {
-          logger.error('Erreur streaming Anthropic', streamError, { action: 'estimation' })
-          controller.error(streamError)
+          clearTimeout(timeout)
+          if (abortController.signal.aborted) {
+            logger.error('Anthropic stream timed out after 15s', streamError, { action: 'estimation' })
+            controller.enqueue(encoder.encode('\n\nDésolé, le service est temporairement surchargé. Veuillez réessayer.'))
+            controller.close()
+          } else {
+            logger.error('Erreur streaming Anthropic', streamError, { action: 'estimation' })
+            controller.error(streamError)
+          }
         }
       },
     })

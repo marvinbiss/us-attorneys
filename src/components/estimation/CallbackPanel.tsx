@@ -1,0 +1,148 @@
+'use client'
+
+import React, { memo } from 'react'
+import { motion } from 'framer-motion'
+import { Phone, Check, Loader2 } from 'lucide-react'
+import type { EstimationContext } from './utils'
+import type { UseLeadSubmitReturn } from './hooks/useLeadSubmit'
+
+interface CallbackPanelProps {
+  context: EstimationContext
+  lead: UseLeadSubmitReturn
+}
+
+export const CallbackPanel = memo(function CallbackPanel({
+  context,
+  lead,
+}: CallbackPanelProps) {
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
+      {!lead.callbackSubmitted ? (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-sm text-center space-y-5"
+        >
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E07040]/10">
+            <Phone className="h-7 w-7 text-[#E07040]" />
+          </div>
+          <div>
+            <p className="text-base font-semibold text-gray-900">
+              {context.artisan
+                ? `Être rappelé par ${context.artisan.name}`
+                : 'Demande de rappel'}
+            </p>
+            <p className="mt-1 text-sm text-gray-600">
+              {context.artisan ? (
+                <>
+                  <strong>{context.artisan.name}</strong> vous
+                  rappelle dans les meilleurs délais
+                </>
+              ) : (
+                <>
+                  Un{' '}
+                  <strong>
+                    {context.metier.toLowerCase()}
+                  </strong>{' '}
+                  vérifié à{' '}
+                  <strong>{context.ville}</strong> vous
+                  rappelle dans les meilleurs délais
+                </>
+              )}
+            </p>
+          </div>
+          <form
+            onSubmit={lead.handleCallbackSubmit}
+            className="space-y-3"
+          >
+            <div>
+              <input
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+                placeholder="06 12 34 56 78"
+                value={lead.callbackPhone}
+                onChange={(e) => {
+                  lead.setCallbackPhone(e.target.value)
+                }}
+                className={
+                  'w-full rounded-lg border px-4 py-3 text-center text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 ' +
+                  (lead.callbackPhoneError
+                    ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:border-[#E07040] focus:ring-[#E07040]')
+                }
+                style={{ fontSize: '16px' }}
+              />
+              {lead.callbackPhoneError && (
+                <p className="text-xs text-red-600 mt-1 text-center">
+                  {lead.callbackPhoneError}
+                </p>
+              )}
+            </div>
+            {/* RGPD consent */}
+            <label className="flex items-start gap-2 text-xs text-gray-500 text-left">
+              <input
+                type="checkbox"
+                checked={lead.rgpdCallbackConsent}
+                onChange={(e) => lead.setRgpdCallbackConsent(e.target.checked)}
+                className="mt-0.5"
+              />
+              <span>
+                J&apos;accepte que mes données soient traitées pour recevoir un rappel.{' '}
+                <a
+                  href="/confidentialite"
+                  target="_blank"
+                  className="underline"
+                >
+                  Politique de confidentialité
+                </a>
+              </span>
+            </label>
+            {lead.callbackError && (
+              <p className="text-xs text-red-600 text-center">
+                Une erreur est survenue. Veuillez réessayer.
+              </p>
+            )}
+            <button
+              type="submit"
+              disabled={
+                lead.callbackLoading || !lead.callbackPhone.trim() || !lead.rgpdCallbackConsent
+              }
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-3 text-sm font-semibold text-white hover:bg-[#c9603a] transition-colors disabled:opacity-50"
+            >
+              {lead.callbackLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  <Phone className="h-4 w-4" />
+                  Demander un rappel
+                </>
+              )}
+            </button>
+          </form>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-full max-w-sm text-center space-y-5"
+        >
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+            <Check className="h-8 w-8 text-green-600" />
+          </div>
+          <div>
+            <p className="text-base font-semibold text-gray-900">
+              Demande envoyée !
+            </p>
+            <p className="mt-1 text-sm text-gray-600">
+              {context.artisan
+                ? `Un ${context.metier.toLowerCase()} à ${context.ville} vous recontactera dans les meilleurs délais.`
+                : `Un ${context.metier.toLowerCase()} à ${context.ville} vous recontactera dans les meilleurs délais.`}
+            </p>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  )
+})
