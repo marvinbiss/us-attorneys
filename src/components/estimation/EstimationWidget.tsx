@@ -244,7 +244,6 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
       setIsStreaming(true)
 
       try {
-        console.log('[EstimationWidget] Sending:', JSON.stringify({ messages: updatedMessages.length, context }))
         const response = await fetch('/api/estimation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -285,14 +284,13 @@ export default function EstimationWidget({ context }: EstimationWidgetProps) {
           setShowLeadForm(true)
         }
       } catch (error) {
-        const errMsg = error instanceof Error ? error.message : String(error)
-        console.error('Estimation streaming error:', errMsg)
+        console.error('Estimation streaming error:', error)
         setMessages((prev) => {
           const updated = [...prev]
           updated[updated.length - 1] = {
             role: 'assistant',
             content:
-              `Désolé, une erreur est survenue (${errMsg}). Veuillez réessayer ou nous contacter directement.`,
+              "Désolé, une erreur est survenue. Veuillez réessayer ou nous contacter directement.",
           }
           return updated
         })
