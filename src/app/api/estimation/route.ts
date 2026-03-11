@@ -21,18 +21,22 @@ const messageSchema = z.object({
   content: z.string().min(1).max(2000),
 })
 
+const contextSchema = z.object({
+  metier: z.string().min(1),
+  metierSlug: z.string().optional(),
+  ville: z.string().min(1),
+  departement: z.string().min(1).max(3),
+  pageUrl: z.string().optional(),
+  artisan: z.object({
+    name: z.string().min(1),
+    slug: z.string().min(1),
+    publicId: z.string().min(1),
+  }).optional(),
+})
+
 const requestSchema = z.object({
   messages: z.array(messageSchema).min(1).max(20),
-  context: z.object({
-    metier: z.string().min(1),
-    ville: z.string().min(1),
-    departement: z.string().min(1).max(3),
-    artisan: z.object({
-      name: z.string().min(1),
-      slug: z.string().min(1),
-      publicId: z.string().min(1),
-    }).optional(),
-  }),
+  context: contextSchema,
 })
 
 // ---------------------------------------------------------------------------
