@@ -656,7 +656,7 @@ export default async function ProviderPage({ params }: PageProps) {
         </div>
       </section>
 
-      <EstimationWidget context={{
+      <EstimationWidget hideLauncher context={{
         metier: service?.name || artisan.specialty,
         metierSlug: serviceSlug,
         ville: artisan.city,

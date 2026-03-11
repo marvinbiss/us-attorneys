@@ -25,7 +25,13 @@ import type { EstimationContext } from './utils'
 // Component
 // ---------------------------------------------------------------------------
 
-export default function EstimationWidget({ context }: { context: EstimationContext }) {
+interface EstimationWidgetProps {
+  context: EstimationContext
+  /** Hide the floating launcher button (e.g. on artisan pages where CTA bar opens the widget) */
+  hideLauncher?: boolean
+}
+
+export default function EstimationWidget({ context, hideLauncher = false }: EstimationWidgetProps) {
   // --- Main state ---
   const [isOpen, setIsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'chat' | 'callback'>('chat')
@@ -68,6 +74,15 @@ export default function EstimationWidget({ context }: { context: EstimationConte
       }
     }
   }, [isOpen])
+
+  // --- Listen for external open event (e.g. from CTA bar on artisan pages) ---
+  useEffect(() => {
+    function handleExternalOpen() {
+      handleOpen('cta_bar')
+    }
+    window.addEventListener('sa:open-estimation', handleExternalOpen)
+    return () => window.removeEventListener('sa:open-estimation', handleExternalOpen)
+  }, [handleOpen])
 
   // --- Escape key to close ---
   useEffect(() => {
@@ -115,9 +130,9 @@ export default function EstimationWidget({ context }: { context: EstimationConte
   // --- Render ---
   return (
     <>
-      {/* Launcher + Greeting (when closed) */}
+      {/* Launcher + Greeting (when closed, hidden when hideLauncher is set) */}
       <AnimatePresence>
-        {!isOpen && (
+        {!isOpen && !hideLauncher && (
           <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
             <AnimatePresence>
               {engagement.showGreeting && (
