@@ -35,7 +35,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS mv_provider_stats_unique
 -- Le tri courant est (phone DESC NULLS LAST, is_verified DESC, name ASC)
 -- avec filtre is_active = TRUE. Ce covering index sert toutes les colonnes
 -- nécessaires depuis l'index, sans heap fetch.
-CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_providers_active_listing
+-- NOTE: NOT CONCURRENTLY — Supabase migrations run inside transactions
+CREATE INDEX IF NOT EXISTS idx_providers_active_listing
   ON providers (is_active, phone DESC NULLS LAST, is_verified DESC, name ASC)
   INCLUDE (id, stable_id, slug, specialty, address_city, rating_average, review_count, latitude, longitude)
   WHERE is_active = TRUE;
@@ -45,7 +46,8 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_providers_active_listing
 -- ============================================================================
 -- Pour /api/admin/leads qui utilise ilike('%city%', '%service%')
 -- pg_trgm est activé depuis migration 303.
-CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_devis_requests_city_service_trgm
+-- NOTE: NOT CONCURRENTLY — Supabase migrations run inside transactions
+CREATE INDEX IF NOT EXISTS idx_devis_requests_city_service_trgm
   ON devis_requests USING gin (city gin_trgm_ops, service_name gin_trgm_ops);
 
 -- ============================================================================
