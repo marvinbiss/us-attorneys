@@ -136,7 +136,7 @@ export async function getOverviewStats(
   const total_contacts = Object.values(contacts_by_type).reduce((a, b) => a + b, 0)
 
   // Group messages by channel and status in JS
-  const messages_by_channel: Record<ProspectionChannel, number> = { email: 0, sms: 0, whatsapp: 0 }
+  const messages_by_channel: Record<ProspectionChannel, number> = { email: 0, sms: 0, whatsapp: 0, voice: 0 }
   let total_messages_sent = 0
   let totalDelivered = 0
   let totalReplied = 0

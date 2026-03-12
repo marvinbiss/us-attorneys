@@ -10,6 +10,9 @@
     },
     "src/app/api/sitemap-providers/route.ts": {
       "maxDuration": 60
+    },
+    "src/app/api/vapi/**/*.ts": {
+      "maxDuration": 30
     }
   },
   "crons": [
@@ -56,6 +59,14 @@
     {
       "path": "/api/cron/indexnow-submit",
       "schedule": "15 6 * * *"
+    },
+    {
+      "path": "/api/cron/voice-lead-expiry",
+      "schedule": "0 */4 * * *"
+    },
+    {
+      "path": "/api/cron/voice-stats",
+      "schedule": "0 1 * * *"
     }
   ]
 }

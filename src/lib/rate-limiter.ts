@@ -190,6 +190,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   estimationLead: { window: 300 * 1000, max: 3, failOpen: true }, // 3 leads per 5 minutes for estimation lead capture — fail open
   verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for SIRET/entreprise verification (external API)
   geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
+  vapiWebhook: { window: 60 * 1000, max: 300, failOpen: true }, // 300/min for VAPI voice webhooks — fail open
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
   cron: { window: 60 * 1000, max: 10, failOpen: true },     // 10/min for cron jobs — fail open so cron runs don't fail
   analytics: { window: 60 * 1000, max: 120, failOpen: true }, // 120/min for analytics beacons — fail open
@@ -211,6 +212,9 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
 
   // Cron jobs — Vercel cron triggers, must not be blocked
   if (pathname.startsWith('/api/cron')) return RATE_LIMITS.cron
+
+  // VAPI voice webhooks — very high throughput, fail-open
+  if (pathname.startsWith('/api/vapi')) return RATE_LIMITS.vapiWebhook
 
   // External service webhooks (Resend, Twilio) — high throughput, fail-open
   if (pathname.startsWith('/api/admin/prospection/webhooks')) return RATE_LIMITS.webhook

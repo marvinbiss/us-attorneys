@@ -7,7 +7,7 @@
 export type ContactType = 'artisan' | 'client' | 'mairie'
 export type ContactSource = 'import' | 'database' | 'manual' | 'api' | 'scraping'
 export type ConsentStatus = 'opted_in' | 'opted_out' | 'unknown'
-export type ProspectionChannel = 'email' | 'sms' | 'whatsapp'
+export type ProspectionChannel = 'email' | 'sms' | 'whatsapp' | 'voice'
 export type AudienceType = 'artisan' | 'client' | 'mairie'
 export type CampaignStatus = 'draft' | 'scheduled' | 'sending' | 'paused' | 'completed' | 'cancelled'
 export type MessageStatus = 'queued' | 'sending' | 'sent' | 'delivered' | 'read' | 'replied' | 'failed' | 'bounced' | 'opted_out' | 'cancelled'

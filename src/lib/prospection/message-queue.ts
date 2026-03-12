@@ -31,6 +31,7 @@ const CHANNEL_RATE_LIMITS: Record<ProspectionChannel, { perSecond: number; perMi
   whatsapp: { perSecond: 80, perMinute: 1000 },
   sms: { perSecond: 10, perMinute: 400 },
   email: { perSecond: 100, perMinute: 5000 },
+  voice: { perSecond: 5, perMinute: 60 },
 }
 
 // In-memory rate limiter per channel with sliding window
