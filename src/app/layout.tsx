@@ -56,8 +56,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#1d4fd7' },
-    { media: '(prefers-color-scheme: dark)', color: '#1840b8' },
+    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
+    { media: '(prefers-color-scheme: dark)', color: '#1d4ed8' },
   ],
   colorScheme: 'light',
 }
@@ -142,7 +142,7 @@ export default async function RootLayout({
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
-        <meta name="msapplication-TileColor" content="#1d4fd7" />
+        <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
@@ -196,13 +196,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <Script id="ms-clarity" strategy="afterInteractive">
-          {`(function(c,l,a,r,i,t,y){
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window,document,"clarity","script",process.env.NEXT_PUBLIC_CLARITY_ID||"pending");`}
-        </Script>
+        {/* Microsoft Clarity — chargé uniquement après consentement analytics (RGPD) via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
         <PageViewTracker />

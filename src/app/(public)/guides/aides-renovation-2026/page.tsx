@@ -23,7 +23,7 @@ import {
 const PAGE_URL = `${SITE_URL}/guides/aides-renovation-2026`
 
 export const metadata: Metadata = {
-  title: "Toutes les Aides à la Rénovation Énergétique en 2026 — Guide Complet",
+  title: "Aides Rénovation Énergétique 2026 — Guide Complet",
   description:
     "Guide complet des aides à la rénovation énergétique en 2026 : MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 %, chèque énergie, aides locales. Montants, conditions et cumul des aides.",
   alternates: { canonical: PAGE_URL },
@@ -34,6 +34,12 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     type: "article",
     siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Toutes les Aides à la Rénovation Énergétique en 2026",
+    description:
+      "Guide exhaustif des aides financières pour rénover votre logement en 2026 : montants, conditions, cumul possible.",
   },
 }
 
@@ -482,7 +488,7 @@ export default function AidesRenovation2026Page() {
                 Trouver un artisan RGE
               </Link>
               <Link
-                href="/calculateur"
+                href="/outils/calculateur-prix"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <Calculator className="w-5 h-5" />

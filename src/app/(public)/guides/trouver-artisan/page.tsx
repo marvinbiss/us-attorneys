@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Comment Trouver un Artisan de Confiance en 2026",
+    description:
+      "Guide complet pour trouver un artisan fiable en France : vérifications, devis, labels et recours.",
+  },
 }
 
 const ouChercher = [

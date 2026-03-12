@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Devis Travaux : Guide Complet pour Bien Comparer",
+    description:
+      "Guide complet pour obtenir, comparer et négocier vos devis travaux en 2026.",
+  },
 }
 
 const mentionsObligatoires = [

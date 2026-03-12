@@ -149,6 +149,13 @@ const nextConfig = {
       { source: '/services/peintre', destination: '/services/peintre-en-batiment', permanent: true },
       { source: '/services/peintre/:location', destination: '/services/peintre-en-batiment/:location', permanent: true },
       { source: '/services/peintre/:location/:id', destination: '/services/peintre-en-batiment/:location/:id', permanent: true },
+      // Blog cannibalisation fixes — 301 redirects to canonical articles
+      // Isolation: canonical = isolation-maison-guide-complet-materiaux-prix-aides
+      { source: '/blog/isolation-thermique-guide', destination: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', permanent: true },
+      { source: '/blog/isolation-thermique-meilleures-solutions-2026', destination: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', permanent: true },
+      // Toiture/prix: canonical = prix-toiture-2026-refection-reparation-materiaux
+      { source: '/blog/prix-couvreur-2026-cout-refection-toiture', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
+      { source: '/blog/refaire-toiture-guide-proprietaire', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
     ]
   },
 

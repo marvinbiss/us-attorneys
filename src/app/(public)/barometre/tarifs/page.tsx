@@ -4,7 +4,7 @@ import { BarChart3, Star, Users, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL } from '@/lib/seo/config'
 import { getTopMetiers } from '@/lib/barometre/queries'
 import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 
@@ -15,14 +15,14 @@ import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 const canonicalUrl = `${SITE_URL}/barometre/tarifs`
 
 export const metadata: Metadata = {
-  title: `Statistiques par métier — Baromètre des Artisans | ${SITE_NAME}`,
+  title: `Statistiques par métier — Baromètre Artisans`,
   description:
     'Consultez les statistiques détaillées par corps de métier : plombier, électricien, maçon, couvreur et plus. Nombre d\'artisans, notes moyennes, avis par métier en France.',
   alternates: { canonical: canonicalUrl },
   robots: { index: true, follow: true },
   openGraph: {
     locale: 'fr_FR',
-    title: `Statistiques par métier — Baromètre des Artisans | ${SITE_NAME}`,
+    title: `Statistiques par métier — Baromètre Artisans`,
     description: 'Stats détaillées par corps de métier du bâtiment en France.',
     url: canonicalUrl,
     type: 'website',

@@ -31,6 +31,7 @@ export function getOrganizationSchema() {
       contactType: 'customer service',
       availableLanguage: 'French',
       email: companyIdentity.email,
+      ...(companyIdentity.phone && { telephone: companyIdentity.phone }),
     },
     ...(registered && {
       legalName: companyIdentity.legalName,
@@ -189,6 +190,7 @@ export function getItemListSchema(params: {
         name: item.name,
         url: `${SITE_URL}${item.url}`,
         image: item.image,
+        priceRange: '€€',
         ...(item.rating && item.reviewCount && item.reviewCount > 0 && {
           aggregateRating: {
             '@type': 'AggregateRating',

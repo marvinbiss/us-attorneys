@@ -8,51 +8,51 @@ import BadgeClient from './BadgeClient'
 const canonicalUrl = `${SITE_URL}/badge-artisan`
 
 export const metadata: Metadata = {
-  title: `Badge Artisan Verifie — Affichez votre certification | ${SITE_NAME}`,
-  description: `Generez votre badge "Artisan Verifie" ${SITE_NAME} et integrez-le sur votre site web. Renforcez votre credibilite, obtenez des backlinks SEO et attirez plus de clients. Gratuit et sans engagement.`,
+  title: `Badge Artisan Vérifié — Votre certification`,
+  description: `Générez votre badge "Artisan Vérifié" ${SITE_NAME} et intégrez-le sur votre site web. Renforcez votre crédibilité, obtenez des backlinks SEO et attirez plus de clients. Gratuit et sans engagement.`,
   alternates: { canonical: canonicalUrl },
   openGraph: {
     locale: 'fr_FR',
-    title: `Badge Artisan Verifie — Affichez votre certification | ${SITE_NAME}`,
-    description: `Generez votre badge "Artisan Verifie" et integrez-le sur votre site web. Gratuit, personnalisable et compatible tous sites.`,
+    title: `Badge Artisan Vérifié — Votre certification`,
+    description: `Générez votre badge "Artisan Vérifié" et intégrez-le sur votre site web. Gratuit, personnalisable et compatible tous sites.`,
     url: canonicalUrl,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Badge Artisan Verifie | ${SITE_NAME}`,
-    description: `Generez votre badge "Artisan Verifie" et integrez-le sur votre site web. Gratuit et sans engagement.`,
+    title: `Badge Artisan Vérifié | ${SITE_NAME}`,
+    description: `Générez votre badge "Artisan Vérifié" et intégrez-le sur votre site web. Gratuit et sans engagement.`,
   },
 }
 
 const faqItems = [
   {
     question: "Le badge est-il gratuit ?",
-    answer: `Oui, le badge ${SITE_NAME} est 100 % gratuit, sans frais caches ni abonnement. Vous pouvez l'integrer sur autant de sites que vous le souhaitez.`,
+    answer: `Oui, le badge ${SITE_NAME} est 100 % gratuit, sans frais cachés ni abonnement. Vous pouvez l'intégrer sur autant de sites que vous le souhaitez.`,
   },
   {
     question: "Le badge ralentit-il mon site ?",
-    answer: "Non, le badge est une simple image SVG de moins de 3 Ko. Il se charge instantanement et n'utilise aucun JavaScript, cookie ni tracker. C'est l'un des formats les plus legers possibles.",
+    answer: "Non, le badge est une simple image SVG de moins de 3 Ko. Il se charge instantanément et n'utilise aucun JavaScript, cookie ni tracker. C'est l'un des formats les plus légers possibles.",
   },
   {
     question: "Puis-je personnaliser le badge ?",
-    answer: "Oui, vous pouvez choisir entre 3 styles (Clair, Sombre, Minimal). Si votre entreprise est referencee sur ServicesArtisans, le badge affiche automatiquement votre note, vos avis et votre statut de verification en temps reel.",
+    answer: "Oui, vous pouvez choisir entre 3 styles (Clair, Sombre, Minimal). Si votre entreprise est référencée sur ServicesArtisans, le badge affiche automatiquement votre note, vos avis et votre statut de vérification en temps réel.",
   },
   {
-    question: "Comment ca marche sur WordPress ?",
-    answer: "Copiez le code HTML genere, puis collez-le dans un bloc \"HTML personnalise\" sur votre page ou dans un widget de la barre laterale. C'est compatible avec Elementor, Divi, Gutenberg et tous les constructeurs de pages.",
+    question: "Comment ça marche sur WordPress ?",
+    answer: "Copiez le code HTML généré, puis collez-le dans un bloc \"HTML personnalisé\" sur votre page ou dans un widget de la barre latérale. C'est compatible avec Elementor, Divi, Gutenberg et tous les constructeurs de pages.",
   },
   {
-    question: "Le badge ameliore-t-il mon referencement Google ?",
-    answer: "Oui. Le badge inclut un lien vers votre fiche artisan sur ServicesArtisans.fr, ce qui constitue un backlink de qualite. C'est bon pour votre SEO et ca renforce votre presence en ligne.",
+    question: "Le badge améliore-t-il mon référencement Google ?",
+    answer: "Oui. Le badge inclut un lien vers votre fiche artisan sur ServicesArtisans.fr, ce qui constitue un backlink de qualité. C'est bon pour votre SEO et ça renforce votre présence en ligne.",
   },
   {
-    question: "Les donnees du badge se mettent-elles a jour ?",
-    answer: "Oui, si vous utilisez le badge dynamique (via \"Trouver ma fiche\"), votre note moyenne, nombre d'avis et statut de verification se mettent a jour automatiquement toutes les 24 heures.",
+    question: "Les données du badge se mettent-elles à jour ?",
+    answer: "Oui, si vous utilisez le badge dynamique (via \"Trouver ma fiche\"), votre note moyenne, nombre d'avis et statut de vérification se mettent à jour automatiquement toutes les 24 heures.",
   },
   {
-    question: "Que se passe-t-il si je desactive mon compte ?",
-    answer: `Le badge continuera d'afficher les dernieres informations connues. Il restera visible sur votre site tant que vous ne retirez pas le code HTML. Vous pouvez le supprimer a tout moment.`,
+    question: "Que se passe-t-il si je désactive mon compte ?",
+    answer: `Le badge continuera d'afficher les dernières informations connues. Il restera visible sur votre site tant que vous ne retirez pas le code HTML. Vous pouvez le supprimer à tout moment.`,
   },
 ]
 
@@ -97,11 +97,11 @@ export default function BadgeArtisanPage() {
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-              Badge Artisan Verifie
+              Badge Artisan Vérifié
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Generez votre badge personnalise et integrez-le sur votre site web.
-              Renforcez votre credibilite et obtenez un backlink SEO gratuit.
+              Générez votre badge personnalisé et intégrez-le sur votre site web.
+              Renforcez votre crédibilité et obtenez un backlink SEO gratuit.
             </p>
           </div>
         </div>

@@ -13,6 +13,25 @@ interface CookiePreferences {
 const COOKIE_CONSENT_KEY = 'cookie_consent'
 const COOKIE_PREFERENCES_KEY = 'cookie_preferences'
 
+/** Load Microsoft Clarity script — only called after analytics consent (RGPD) */
+function enableClarity() {
+  if (typeof window !== 'undefined' && !(window as unknown as Record<string, unknown>).clarity) {
+    const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID
+    if (clarityId) {
+      ;(function (c: Window & Record<string, unknown>, l: Document, a: string, r: string, i: string) {
+        c[a] = c[a] || function (...args: unknown[]) {
+          ;((c[a] as Record<string, unknown[]>).q = (c[a] as Record<string, unknown[]>).q || []).push(args)
+        }
+        const t = l.createElement(r) as HTMLScriptElement
+        t.async = true
+        t.src = 'https://www.clarity.ms/tag/' + i
+        const y = l.getElementsByTagName(r)[0]
+        y.parentNode?.insertBefore(t, y)
+      })(window as unknown as Window & Record<string, unknown>, document, 'clarity', 'script', clarityId)
+    }
+  }
+}
+
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
@@ -31,10 +50,15 @@ export default function CookieConsent() {
       const timer = setTimeout(() => setIsVisible(true), 1000)
       return () => clearTimeout(timer)
     } else {
-      // Load saved preferences
+      // Load saved preferences and re-enable consented services
       const savedPrefs = localStorage.getItem(COOKIE_PREFERENCES_KEY)
       if (savedPrefs) {
-        setPreferences(JSON.parse(savedPrefs))
+        const parsed: CookiePreferences = JSON.parse(savedPrefs)
+        setPreferences(parsed)
+        // Re-initialize Clarity if analytics was previously consented
+        if (parsed.analytics) {
+          enableClarity()
+        }
       }
     }
   }, [])
@@ -100,6 +124,8 @@ export default function CookieConsent() {
       window.gtag?.('consent', 'update', {
         analytics_storage: 'granted',
       })
+      // Initialize Microsoft Clarity (RGPD: only after consent)
+      enableClarity()
     }
   }
 

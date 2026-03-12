@@ -22,7 +22,7 @@ import {
 const PAGE_URL = `${SITE_URL}/calendrier-travaux`
 
 export const metadata: Metadata = {
-  title: 'Calendrier des travaux : quand faire quoi ? Guide mois par mois',
+  title: 'Calendrier des Travaux : Guide Mois par Mois',
   description:
     'Calendrier saisonnier des travaux de la maison : quels travaux faire chaque mois, lesquels éviter et les conseils pratiques pour planifier votre rénovation au bon moment.',
   alternates: { canonical: PAGE_URL },

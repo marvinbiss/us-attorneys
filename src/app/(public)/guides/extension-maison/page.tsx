@@ -31,6 +31,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Extension de Maison : Démarches, Prix et Conseils 2026",
+    description:
+      "Tout savoir pour agrandir votre maison : types d'extensions, démarches DP ou permis, prix par type et matériaux recommandés.",
+  },
 }
 
 const typesExtension = [

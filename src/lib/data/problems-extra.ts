@@ -1,5 +1,5 @@
 /**
- * 27 probl\u00e8mes suppl\u00e9mentaires granulaires (mars 2026).
+ * 28 probl\u00e8mes suppl\u00e9mentaires granulaires (mars 2026).
  * Import\u00e9s et concat\u00e9n\u00e9s dans problems.ts.
  */
 import type { Problem } from './problems'
@@ -971,6 +971,49 @@ const problemsExtra: Problem[] = [
       { q: 'Combien coûte la réparation d\u2019une fuite de toiture en ardoise ?', a: 'Le remplacement de quelques ardoises cassées coûte 150 à 400 \u20ac (déplacement + intervention). La réfection d\u2019un solin de cheminée revient à 300 à 800 \u20ac. Si une zone importante est endommagée (10-20 m\u00b2), comptez 80 à 150 \u20ac/m\u00b2 (ardoises naturelles + pose). La réfection complète d\u2019une toiture en ardoise coûte 100 à 200 \u20ac/m\u00b2, soit 10 000 à 20 000 \u20ac pour une maison standard.' },
       { q: 'Quelle est la durée de vie d\u2019une toiture en ardoise ?', a: 'L\u2019ardoise naturelle est l\u2019un des matériaux de couverture les plus durables : 80 à 100 ans pour de l\u2019ardoise d\u2019Angers de qualité, 30 à 50 ans pour de l\u2019ardoise d\u2019importation (Espagne). Les crochets en acier inoxydable durent aussi longtemps que l\u2019ardoise. Les points faibles sont les solins (à refaire tous les 15-25 ans) et les crochets en acier galvanisé (rouille après 30-40 ans).' },
       { q: 'Mon assurance couvre-t-elle les fuites de toiture ?', a: 'L\u2019assurance habitation couvre les dégâts causés par les fuites (plafonds, murs, mobilier) si la cause est un événement climatique (tempête, grêle) ou un sinistre soudain. Le vieillissement normal et le défaut d\u2019entretien ne sont pas couverts. La réparation de la toiture elle-même est à votre charge sauf en cas de tempête (garantie TGN). Déclarez le sinistre sous 5 jours (2 jours pour une catastrophe naturelle).' },
+    ],
+  },
+  {
+    slug: 'reparation-toiture',
+    name: 'Réparation de toiture',
+    description: 'La réparation de toiture couvre l\u2019ensemble des interventions nécessaires pour restaurer l\u2019étanchéité et la solidité d\u2019un toit endommagé : remplacement de tuiles ou ardoises cassées, reprise de faîtage, réfection de solins, réparation de zinguerie (gouttières, chéneaux, noues) et traitement de charpente. Un couvreur professionnel diagnostique les dégâts et intervient en toute sécurité pour protéger durablement votre habitation.',
+    relatedServices: ['couvreur', 'charpentier', 'zingueur'],
+    primaryService: 'couvreur',
+    urgencyLevel: 'haute',
+    symptoms: [
+      'Infiltrations d\u2019eau ou taches d\u2019humidité au plafond ou dans les combles',
+      'Tuiles, ardoises ou éléments de couverture cassés, déplacés ou manquants',
+      'Gouttières percées, descentes bouchées ou zinguerie rouillée',
+      'Faîtage fissuré, décollé ou envahi par la mousse',
+      'Charpente qui craque, bois noirci ou présence d\u2019insectes xylophages',
+      'Mousse ou lichen abondant qui soulève les éléments de couverture',
+      'Augmentation de l\u2019humidité intérieure ou moisissures dans les combles',
+    ],
+    immediateActions: [
+      'Placez des récipients sous les infiltrations pour protéger vos sols et meubles',
+      'Ne montez JAMAIS sur le toit vous-même — le risque de chute est mortel, surtout par temps humide',
+      'Bâchez la zone endommagée depuis l\u2019extérieur uniquement si c\u2019est accessible en toute sécurité',
+      'Inspectez les combles avec une lampe torche pour repérer les points d\u2019entrée d\u2019eau',
+      'Prenez des photos des dégâts (intérieurs et extérieurs) pour votre dossier d\u2019assurance',
+      'Contactez un couvreur professionnel pour un diagnostic et un devis',
+    ],
+    preventiveTips: [
+      'Faites inspecter votre toiture par un couvreur tous les 3 à 5 ans',
+      'Nettoyez les gouttières et chéneaux au moins deux fois par an (printemps et automne)',
+      'Faites démousser et traiter la toiture tous les 5 à 10 ans pour prolonger sa durée de vie',
+      'Vérifiez l\u2019état du faîtage, des solins et des raccords après chaque tempête ou épisode de grêle',
+      'Taillez les branches d\u2019arbres qui surplombent le toit pour éviter les chutes et l\u2019accumulation de débris',
+      'Traitez la charpente contre les insectes xylophages et les champignons tous les 10 ans',
+    ],
+    estimatedCost: { min: 200, max: 5000 },
+    averageResponseTime: 'Sous 24 à 72h (urgence) / 1 à 4 semaines (réparation planifiée)',
+    seasonality: 'printemps',
+    faq: [
+      { q: 'Comment savoir si ma toiture a besoin d\u2019une réparation ?', a: 'Les signes d\u2019alerte sont : des taches d\u2019humidité au plafond (surtout après la pluie), des tuiles ou ardoises cassées ou déplacées visibles depuis le sol, un faîtage fissuré, des gouttières qui débordent ou fuient, de la mousse abondante. Depuis les combles, vérifiez s\u2019il y a des traces d\u2019eau sur la charpente ou l\u2019isolant. Un couvreur peut réaliser un diagnostic complet (souvent gratuit avec devis).' },
+      { q: 'Combien coûte une réparation de toiture ?', a: 'Les prix varient selon la nature des travaux : remplacement de quelques tuiles cassées : 150 à 400 \u20ac ; reprise de faîtage : 40 à 80 \u20ac/mètre linéaire ; réfection d\u2019un solin de cheminée : 300 à 800 \u20ac ; remplacement de gouttières : 30 à 80 \u20ac/mètre linéaire ; réfection partielle de couverture (10-20 m\u00b2) : 50 à 150 \u20ac/m\u00b2. Pour une réfection complète, comptez 80 à 200 \u20ac/m\u00b2 selon le matériau (tuile, ardoise, zinc).' },
+      { q: 'Quelle est la durée de vie d\u2019une toiture ?', a: 'Cela dépend du matériau de couverture : tuiles en terre cuite : 50 à 100 ans ; ardoise naturelle : 80 à 100 ans ; tuiles béton : 30 à 50 ans ; zinc : 40 à 80 ans ; bac acier : 25 à 50 ans. Les points faibles restent les éléments de zinguerie (gouttières, noues) à vérifier tous les 10 à 15 ans et les solins autour des pénétrations (cheminée, velux) à refaire tous les 15 à 25 ans.' },
+      { q: 'Mon assurance prend-elle en charge la réparation de toiture ?', a: 'L\u2019assurance habitation couvre les dégâts causés par un événement climatique (tempête, grêle, neige) via la garantie Tempêtes-Grêle-Neige (TGN). Le vieillissement normal et le défaut d\u2019entretien ne sont pas couverts. La franchise est généralement de 200 à 500 \u20ac. Déclarez le sinistre sous 5 jours ouvrés (2 jours pour une catastrophe naturelle) avec photos et devis du couvreur.' },
+      { q: 'Peut-on réparer une toiture soi-même ?', a: 'Les travaux en hauteur sont extrêmement dangereux : les chutes de toit représentent un nombre important d\u2019accidents domestiques graves chaque année. Pour le remplacement d\u2019une tuile accessible depuis une échelle sécurisée, un bricoleur expérimenté peut intervenir. Pour tout travail nécessitant de marcher sur le toit, faites appel à un couvreur professionnel équipé (harnais, échafaudage, ligne de vie).' },
     ],
   },
 ]

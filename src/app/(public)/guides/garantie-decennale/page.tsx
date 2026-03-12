@@ -32,6 +32,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Garantie Décennale : Tout Comprendre en 2026",
+    description:
+      "Guide complet sur la garantie décennale : définition, durée, travaux couverts, exclusions et démarches en cas de sinistre.",
+  },
 }
 
 const travauxCouverts = [

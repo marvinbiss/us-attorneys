@@ -22,17 +22,23 @@ import {
 const PAGE_URL = `${SITE_URL}/guides/renovation-fenetres`
 
 export const metadata: Metadata = {
-  title: "Changer ses Fenêtres : Guide des Matériaux, Prix et Aides 2026",
+  title: "Changer ses Fenêtres : Matériaux, Prix et Aides 2026",
   description:
     "Guide complet remplacement de fenêtres 2026 : matériaux (PVC, bois, alu), types d'ouverture, vitrage, prix (300-1500€), aides MaPrimeRénov et CEE.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: "Changer ses Fenêtres : Guide des Matériaux, Prix et Aides 2026",
+    title: "Changer ses Fenêtres : Matériaux, Prix et Aides 2026",
     description:
       "Tout savoir pour changer vos fenêtres : matériaux, types d'ouverture, vitrage, prix et aides financières disponibles en 2026.",
     url: PAGE_URL,
     type: "article",
     siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Changer ses Fenêtres : Matériaux, Prix et Aides 2026",
+    description:
+      "Tout savoir pour changer vos fenêtres : matériaux, types d'ouverture, vitrage, prix et aides financières disponibles en 2026.",
   },
 }
 

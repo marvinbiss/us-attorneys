@@ -43,6 +43,11 @@ export function generateMetadata({
       type: "article",
       url: `${SITE_URL}/questions/${question.slug}`,
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   }
 }
 

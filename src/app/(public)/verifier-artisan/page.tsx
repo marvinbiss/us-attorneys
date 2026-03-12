@@ -6,26 +6,26 @@ import Breadcrumb from "@/components/Breadcrumb"
 import VerifierClient from "./VerifierClient"
 
 export const metadata: Metadata = {
-  title: "Verifier un Artisan — SIRET, RGE, Fiabilite | ServicesArtisans",
+  title: "Vérifier un Artisan — SIRET, RGE et Fiabilité",
   description:
-    "Verifiez gratuitement un artisan en 30 secondes. Entrez son numero SIRET pour confirmer son existence legale, son activite et sa fiabilite. Outil de verification gratuit.",
+    "Vérifiez gratuitement un artisan en 30 secondes. Entrez son numéro SIRET pour confirmer son existence légale, son activité et sa fiabilité. Outil de vérification gratuit.",
   keywords: [
-    "verifier artisan",
-    "verifier SIRET artisan",
+    "vérifier artisan",
+    "vérifier SIRET artisan",
     "artisan fiable",
-    "verification SIRET",
-    "verifier entreprise artisan",
+    "vérification SIRET",
+    "vérifier entreprise artisan",
     "SIRET artisan",
     "artisan de confiance",
-    "verification artisan gratuit",
+    "vérification artisan gratuit",
   ],
   alternates: {
     canonical: `${SITE_URL}/verifier-artisan`,
   },
   openGraph: {
-    title: "Verifier un Artisan — SIRET, RGE, Fiabilite",
+    title: "Vérifier un Artisan — SIRET, RGE, Fiabilité",
     description:
-      "Verifiez gratuitement un artisan en 30 secondes. Entrez son numero SIRET pour confirmer son existence legale et sa fiabilite.",
+      "Vérifiez gratuitement un artisan en 30 secondes. Entrez son numéro SIRET pour confirmer son existence légale et sa fiabilité.",
     url: `${SITE_URL}/verifier-artisan`,
     type: "website",
     siteName: SITE_NAME,
@@ -34,54 +34,54 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "ServicesArtisans — Verifier un artisan",
+        alt: "ServicesArtisans — Vérifier un artisan",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Verifier un Artisan — SIRET, RGE, Fiabilite",
+    title: "Vérifier un Artisan — SIRET, RGE, Fiabilité",
     description:
-      "Verifiez gratuitement un artisan en 30 secondes. Outil de verification SIRET gratuit.",
+      "Vérifiez gratuitement un artisan en 30 secondes. Outil de vérification SIRET gratuit.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const breadcrumbSchema = getBreadcrumbSchema([
   { name: "Accueil", url: "/" },
-  { name: "Verifier un artisan", url: "/verifier-artisan" },
+  { name: "Vérifier un artisan", url: "/verifier-artisan" },
 ])
 
 const faqItems = [
   {
-    question: "Qu'est-ce qu'un numero SIRET ?",
+    question: "Qu'est-ce qu'un numéro SIRET ?",
     answer:
-      "Le numero SIRET (Systeme d'Identification du Repertoire des Etablissements) est un identifiant unique de 14 chiffres attribue par l'INSEE a chaque etablissement d'une entreprise en France. Il est compose du SIREN (9 chiffres identifiant l'entreprise) et du NIC (5 chiffres identifiant l'etablissement). Tout artisan exerçant legalement doit en posseder un.",
+      "Le numéro SIRET (Système d'Identification du Répertoire des Établissements) est un identifiant unique de 14 chiffres attribué par l'INSEE à chaque établissement d'une entreprise en France. Il est composé du SIREN (9 chiffres identifiant l'entreprise) et du NIC (5 chiffres identifiant l'établissement). Tout artisan exerçant légalement doit en posséder un.",
   },
   {
     question: "Comment trouver le SIRET d'un artisan ?",
     answer:
-      "Vous pouvez trouver le SIRET d'un artisan de plusieurs façons : sur ses devis et factures (obligation legale d'y faire figurer le SIRET), sur sa carte de visite professionnelle, en lui demandant directement, ou en effectuant une recherche sur societe.com ou infogreffe.fr avec le nom de l'entreprise.",
+      "Vous pouvez trouver le SIRET d'un artisan de plusieurs façons : sur ses devis et factures (obligation légale d'y faire figurer le SIRET), sur sa carte de visite professionnelle, en lui demandant directement, ou en effectuant une recherche sur societe.com ou infogreffe.fr avec le nom de l'entreprise.",
   },
   {
-    question: "Un artisan est-il oblige d'avoir un SIRET ?",
+    question: "Un artisan est-il obligé d'avoir un SIRET ?",
     answer:
-      "Oui, tout artisan exerçant une activite professionnelle en France doit obligatoirement etre immatricule et posseder un numero SIRET. C'est une obligation legale. Un artisan sans SIRET exerce illegalement (travail dissimule). Verifiez toujours ce numero avant de confier des travaux.",
+      "Oui, tout artisan exerçant une activité professionnelle en France doit obligatoirement être immatriculé et posséder un numéro SIRET. C'est une obligation légale. Un artisan sans SIRET exerce illégalement (travail dissimulé). Vérifiez toujours ce numéro avant de confier des travaux.",
   },
   {
     question: "Que faire si le SIRET est invalide ?",
     answer:
-      "Si le SIRET d'un artisan est invalide ou introuvable, c'est un signal d'alerte majeur. Ne confiez pas de travaux a cette personne. Vous pouvez signaler la situation a la DGCCRF (Direction generale de la concurrence) ou a l'URSSAF. Privilegiez toujours des artisans dont le SIRET est verifiable.",
+      "Si le SIRET d'un artisan est invalide ou introuvable, c'est un signal d'alerte majeur. Ne confiez pas de travaux à cette personne. Vous pouvez signaler la situation à la DGCCRF (Direction générale de la concurrence) ou à l'URSSAF. Privilégiez toujours des artisans dont le SIRET est vérifiable.",
   },
   {
-    question: "La verification est-elle gratuite ?",
+    question: "La vérification est-elle gratuite ?",
     answer:
-      "Oui, notre outil de verification de SIRET est 100% gratuit et sans inscription. Il utilise les donnees publiques officielles de l'INSEE pour vous fournir des informations fiables sur n'importe quelle entreprise artisanale en France.",
+      "Oui, notre outil de vérification de SIRET est 100% gratuit et sans inscription. Il utilise les données publiques officielles de l'INSEE pour vous fournir des informations fiables sur n'importe quelle entreprise artisanale en France.",
   },
   {
-    question: "Quelles autres verifications faire avant d'engager un artisan ?",
+    question: "Quelles autres vérifications faire avant d'engager un artisan ?",
     answer:
-      "Au-dela du SIRET, verifiez : l'attestation d'assurance responsabilite civile professionnelle (obligatoire), la garantie decennale (obligatoire pour les travaux de construction), les qualifications RGE si vous souhaitez beneficier d'aides de l'Etat, les avis clients sur plusieurs plateformes, et demandez toujours plusieurs devis comparatifs.",
+      "Au-delà du SIRET, vérifiez : l'attestation d'assurance responsabilité civile professionnelle (obligatoire), la garantie décennale (obligatoire pour les travaux de construction), les qualifications RGE si vous souhaitez bénéficier d'aides de l'État, les avis clients sur plusieurs plateformes, et demandez toujours plusieurs devis comparatifs.",
   },
 ]
 
@@ -101,12 +101,12 @@ const faqSchema = {
 const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "Verificateur d'artisan",
+  name: "Vérificateur d'artisan",
   url: `${SITE_URL}/verifier-artisan`,
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:
-    "Outil gratuit de verification de SIRET pour artisans. Verifiez instantanement la fiabilite d'un artisan.",
+    "Outil gratuit de vérification de SIRET pour artisans. Vérifiez instantanément la fiabilité d'un artisan.",
   offers: {
     "@type": "Offer",
     price: "0",
@@ -127,7 +127,7 @@ export default function VerifierArtisanPage() {
         {/* Breadcrumb */}
         <div className="bg-white border-b">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <Breadcrumb items={[{ label: "Verifier un artisan" }]} />
+            <Breadcrumb items={[{ label: "Vérifier un artisan" }]} />
           </div>
         </div>
 

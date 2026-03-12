@@ -39,7 +39,7 @@ const existingEmojis: Record<string, string> = {
   'renovation-energetique-aides-2026': '🏠',
   'tendances-salle-de-bain-2026': '🛁',
   'devis-travaux-comprendre': '📋',
-  'isolation-thermique-guide': '🧱',
+  // 'isolation-thermique-guide' removed — redirected to isolation-maison-guide-complet-materiaux-prix-aides
   'electricite-normes-securite': '⚡',
   'peinture-interieure-conseils': '🎨',
   'chauffage-solution-economique': '🔥',
@@ -57,8 +57,8 @@ const existingEmojis: Record<string, string> = {
   'prix-peintre-batiment-2026-guide-complet': '🎨',
   'garantie-decennale-tout-savoir': '🛡️',
   'comment-choisir-cuisine-equipee-guide': '🍳',
-  'isolation-thermique-meilleures-solutions-2026': '🧱',
-  'prix-couvreur-2026-cout-refection-toiture': '🏠',
+  // 'isolation-thermique-meilleures-solutions-2026' removed — redirected to isolation-maison-guide-complet-materiaux-prix-aides
+  // 'prix-couvreur-2026-cout-refection-toiture' removed — redirected to prix-toiture-2026-refection-reparation-materiaux
   'renovation-salle-de-bain-budget-etapes': '🚿',
   'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026': '🔥',
   'droits-obligations-travaux-chez-soi': '⚖️',

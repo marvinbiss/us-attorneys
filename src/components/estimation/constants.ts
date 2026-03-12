@@ -63,6 +63,18 @@ export const quickPrompts: Record<string, string[]> = {
     'Porte vitrée',
     'Miroir sur mesure',
   ],
+  'pompe-a-chaleur': [
+    'Installation pompe à chaleur',
+    'Remplacement chaudière par PAC',
+    'Entretien PAC annuel',
+    'Devis PAC air-eau',
+  ],
+  'isolation-thermique': [
+    'Isolation des combles',
+    'Isolation extérieure (ITE)',
+    'Isolation murs intérieurs',
+    'Devis isolation maison',
+  ],
 }
 
 export const defaultPrompts = [
@@ -97,6 +109,8 @@ export const priceTeasers: Record<string, string> = {
   vitrier: 'Remplacement vitre : à partir de 80\u20AC',
   climaticien: 'Installation clim : à partir de 800\u20AC',
   cuisiniste: 'Cuisine équipée : à partir de 3 000\u20AC',
+  'pompe-a-chaleur': 'PAC air-eau : à partir de 10 000\u20AC',
+  'isolation-thermique': 'Isolation combles : à partir de 20\u20AC/m²',
 }
 
 // ---------------------------------------------------------------------------

@@ -40,7 +40,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "MaPrimeRénov 2026 : Guide Complet, Montants et Conditions | ServicesArtisans",
+  title: "MaPrimeRénov 2026 : Montants, Conditions et Guide",
   description:
     "Guide complet MaPrimeRénov 2026 : montants jusqu'à 70 000 €, conditions d'éligibilité, barèmes de revenus, parcours accompagné et par geste. Tout pour obtenir votre aide à la rénovation énergétique.",
   keywords: [

@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/guides`,
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Guides Pratiques pour vos Travaux",
+    description:
+      "Guides complets pour vos travaux : aides financières, rénovation énergétique, MaPrimeRénov 2026, conseils artisans.",
+  },
 }
 
 const guides = [
@@ -168,6 +174,33 @@ const guides = [
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
+    title: "Pompe à Chaleur : Guide Complet Prix, Aides et Installation 2026",
+    description:
+      "Types de PAC (air-eau, air-air, géothermique), prix d'achat et pose, COP, aides MaPrimeRénov' et CEE, entretien et rentabilité.",
+    href: "/guides/pompe-a-chaleur",
+    icon: Leaf,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Isolation Thermique : Guide Complet Prix, Matériaux et Aides 2026",
+    description:
+      "Comparatif des isolants (laine de verre, polyuréthane, ouate de cellulose), prix au m², résistance thermique R, aides financières et techniques de pose.",
+    href: "/guides/isolation-thermique",
+    icon: Leaf,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Isolation des Combles : Guide Prix, Techniques et Aides 2026",
+    description:
+      "Isolation combles perdus et aménageables : soufflage, panneaux, sarking, prix au m² (20-80€), aides MaPrimeRénov' et CEE, économies d'énergie.",
+    href: "/guides/isolation-combles",
+    icon: Leaf,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
     title: "Extension de Maison : Démarches, Prix et Conseils 2026",
     description:
       "Types d'extensions (latérale, surélévation, véranda), démarches DP ou permis selon la surface, prix au m² (800-2500€) et matériaux.",
@@ -221,7 +254,7 @@ const relatedPages = [
   {
     title: "Baromètre des prix",
     description: "Tarifs moyens, indices régionaux et tendances pour les métiers du bâtiment.",
-    href: "/barometre-prix",
+    href: "/barometre",
     icon: BarChart3,
   },
 ]

@@ -3,6 +3,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
+import { getQuestionSlugs } from '@/lib/data/questions'
+import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
@@ -91,8 +93,68 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/artisans`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/recherche`, lastModified: BUILD_DATE },
+      // Pages outils & contenu
+      { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/avant-apres`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/calendrier-travaux`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/checklist-travaux`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/comparaison`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/glossaire`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/normes`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/statistiques-artisans-france`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/badge-artisan`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/verifier-artisan`, lastModified: BUILD_DATE },
+      // /barometre-prix removed — 301 redirects to /barometre (cannibalization fix)
+      { url: `${SITE_URL}/questions`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/barometre`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/barometre/regions`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/barometre/tarifs`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/widget-prix`, lastModified: BUILD_DATE },
     ]
+
+    // Guide pages
+    const guideSlugs = [
+      'aides-renovation-2026',
+      'artisan-rge',
+      'assurance-dommage-ouvrage',
+      'budget-renovation',
+      'declaration-prealable-travaux',
+      'devis-travaux',
+      'diagnostics-immobiliers',
+      'eviter-arnaques-artisan',
+      'extension-maison',
+      'garantie-decennale',
+      'isolation-combles',
+      'isolation-thermique',
+      'maprimerenov-2026',
+      'normes-electriques',
+      'permis-construire',
+      'pompe-a-chaleur',
+      'renovation-cuisine',
+      'renovation-energetique-complete',
+      'renovation-fenetres',
+      'renovation-salle-de-bain',
+      'renovation-toiture',
+      'travaux-copropriete',
+      'trouver-artisan',
+    ]
+    const guidePages: MetadataRoute.Sitemap = guideSlugs.map(slug => ({
+      url: `${SITE_URL}/guides/${slug}`,
+      lastModified: BUILD_DATE,
+    }))
+
+    // Question pages
+    const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map(slug => ({
+      url: `${SITE_URL}/questions/${slug}`,
+      lastModified: BUILD_DATE,
+    }))
+
+    // Comparison pages
+    const comparisonPages: MetadataRoute.Sitemap = comparisons.map(c => ({
+      url: `${SITE_URL}/comparaison/${c.slug}`,
+      lastModified: BUILD_DATE,
+    }))
 
     // Blog articles — lastModified réel (seul contenu avec vraie date vérifiable)
     const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
@@ -144,7 +206,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    return [...homepage, ...staticPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
+    return [...homepage, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
   // ── Service + city — Phase 1: top 300 cities ────────────────────────

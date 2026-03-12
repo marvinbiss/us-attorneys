@@ -28,7 +28,7 @@ import { SITE_URL } from "@/lib/seo/config"
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "Permis de Construire 2026 : Quand est-il Obligatoire ? | ServicesArtisans",
+  title: "Permis de Construire : Quand est-il Obligatoire ?",
   description:
     "Guide complet permis de construire 2026 : quand est-il obligatoire (>20m², >40m² en zone PLU), documents requis, délais, coûts et cas spéciaux. Toutes les informations pour vos travaux.",
   keywords: [

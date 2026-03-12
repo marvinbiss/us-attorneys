@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Assurance Dommage-Ouvrage : Est-ce Obligatoire ?",
+    description:
+      "Guide complet de l'assurance dommage-ouvrage : obligation, coût, souscription et sinistre.",
+  },
 }
 
 const avantages = [

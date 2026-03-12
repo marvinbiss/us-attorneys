@@ -87,6 +87,19 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Tempête / grêle',
     ],
   },
+  couvreur: {
+    gradient: 'from-orange-600 to-orange-800',
+    lightBg: 'bg-orange-50',
+    lightText: 'text-orange-700',
+    problems: [
+      'Fuite de toiture urgente',
+      'Toiture arrachée par le vent',
+      'Infiltration après tempête',
+      'Tuiles cassées après grêle',
+      'Gouttière arrachée',
+      'Bâche d\'urgence à poser',
+    ],
+  },
   climaticien: {
     gradient: 'from-indigo-600 to-indigo-800',
     lightBg: 'bg-indigo-50',

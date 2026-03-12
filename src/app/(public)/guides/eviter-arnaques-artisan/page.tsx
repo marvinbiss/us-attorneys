@@ -36,6 +36,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
+    description:
+      "Guide complet pour identifier et éviter les arnaques artisans. Signaux d'alerte, vérifications et recours.",
+  },
 }
 
 const arnaquesCourantes = [

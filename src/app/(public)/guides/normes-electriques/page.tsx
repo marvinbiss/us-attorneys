@@ -25,7 +25,7 @@ import { SITE_URL } from "@/lib/seo/config"
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "Normes Électriques NF C 15-100 : Guide pour les Particuliers | ServicesArtisans",
+  title: "Norme NF C 15-100 : Guide Électricité Maison",
   description:
     "Guide complet norme NF C 15-100 : nombre de prises par pièce, protection des circuits, zones salle de bain, mise aux normes obligatoire, coûts de rénovation électrique et diagnostic.",
   keywords: [

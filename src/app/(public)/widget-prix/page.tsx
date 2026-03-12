@@ -11,7 +11,7 @@ import { getTradesSlugs, getTradeContent } from '@/lib/data/trade-content'
 // Metadata
 // ---------------------------------------------------------------------------
 
-const PAGE_TITLE = `Widget Prix Artisan Gratuit — Intégrez les tarifs sur votre site | ${SITE_NAME}`
+const PAGE_TITLE = `Widget Prix Artisan — Tarifs sur votre site`
 const PAGE_DESCRIPTION =
   'Widget embeddable gratuit et API JSON pour afficher les prix des artisans sur votre site ou blog. Plombier, électricien, serrurier… Tarifs actualisés par ville et région.'
 

@@ -56,7 +56,7 @@ console.log(`Services: ${ALL_SERVICES.length}`)
 // ---------------------------------------------------------------------------
 // 2. Build URLs — focus on top services first (most Search Console exposure)
 // ---------------------------------------------------------------------------
-const topServices = ALL_SERVICES.slice(0, 5) // plombier, electricien, serrurier, chauffagiste, peintre
+const topServices = ALL_SERVICES.slice(5) // 41 remaining services (first 5 already submitted)
 const urls = []
 for (const service of topServices) {
   for (const commune of newCommunes) {

@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rénovation Cuisine : Guide Complet des Étapes et Prix 2026",
+    description:
+      "Toutes les étapes pour rénover votre cuisine, les prix détaillés 2026 et les conseils d'artisans pour un résultat professionnel.",
+  },
 }
 
 const etapes = [

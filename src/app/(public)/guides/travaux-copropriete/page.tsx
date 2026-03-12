@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Travaux en Copropriété : Règles et Démarches 2026",
+    description:
+      "Toutes les règles pour réaliser des travaux en copropriété : parties communes, privatives, votes AG et autorisations.",
+  },
 }
 
 const majorites = [

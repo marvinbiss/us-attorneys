@@ -22,17 +22,23 @@ import {
 const PAGE_URL = `${SITE_URL}/guides/renovation-toiture`
 
 export const metadata: Metadata = {
-  title: "Rénovation de Toiture : Guide Complet des Travaux et Prix 2026",
+  title: "Rénovation Toiture : Travaux et Prix 2026",
   description:
     "Guide complet rénovation toiture 2026 : signes d'usure, types de couverture (tuile, ardoise, zinc), prix (60-200€/m²), isolation, charpente et aides financières.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: "Rénovation de Toiture : Guide Complet des Travaux et Prix 2026",
+    title: "Rénovation Toiture : Travaux et Prix 2026",
     description:
       "Tout savoir sur la rénovation de toiture : types de couverture, étapes des travaux, prix au m² et aides MaPrimeRénov.",
     url: PAGE_URL,
     type: "article",
     siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rénovation Toiture : Travaux et Prix 2026",
+    description:
+      "Tout savoir sur la rénovation de toiture : types de couverture, étapes des travaux, prix au m² et aides MaPrimeRénov.",
   },
 }
 

@@ -52,29 +52,51 @@ function addSecurityHeaders(response: NextResponse, request: NextRequest, nonce:
   return response
 }
 
-// URL canonicalization
+// URL canonicalization — all fixes combined into a single 301 hop
 function getCanonicalRedirect(request: NextRequest): string | null {
   const url = request.nextUrl
   const host = request.headers.get('host') || 'servicesartisans.fr'
 
+  let canonicalHost = host
+  let pathname = url.pathname
+  let needsRedirect = false
+
+  // 1. http → https + www → non-www
   if (process.env.NODE_ENV === 'production') {
     if (url.protocol === 'http:' || host.startsWith('www.')) {
-      const canonicalHost = host.replace(/^www\./, '')
-      return `https://${canonicalHost}${url.pathname}${url.search}`
+      canonicalHost = host.replace(/^www\./, '')
+      needsRedirect = true
     }
   }
 
-  if (url.pathname !== '/' && url.pathname.endsWith('/')) {
-    return `https://${host}${url.pathname.slice(0, -1)}${url.search}`
+  // 2. Trailing slash removal
+  if (pathname !== '/' && pathname.endsWith('/')) {
+    pathname = pathname.slice(0, -1)
+    needsRedirect = true
   }
 
-  // Strip UTM and tracking parameters to avoid duplicate content
+  // 3. Strip UTM and tracking parameters to avoid duplicate content
   const trackingParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid']
   const hasTracking = trackingParams.some(p => url.searchParams.has(p))
+  let search = url.search
   if (hasTracking) {
     trackingParams.forEach(p => url.searchParams.delete(p))
     const cleanSearch = url.searchParams.toString()
-    return `https://${host}${url.pathname}${cleanSearch ? `?${cleanSearch}` : ''}`
+    search = cleanSearch ? `?${cleanSearch}` : ''
+    needsRedirect = true
+  }
+
+  // 4. Lowercase normalization — prevent duplicate content from mixed-case URLs
+  //    Exclude artisan publicId paths: /services/{service}/{location}/{publicId}
+  //    because stable_id contains mixed-case characters (HMAC-SHA256 base64)
+  const isArtisanPublicIdPath = /^\/services\/[^/]+\/[^/]+\/[^/]+$/.test(pathname)
+  if (!isArtisanPublicIdPath && pathname !== pathname.toLowerCase()) {
+    pathname = pathname.toLowerCase()
+    needsRedirect = true
+  }
+
+  if (needsRedirect) {
+    return `https://${canonicalHost}${pathname}${search}`
   }
 
   return null
@@ -95,6 +117,9 @@ export async function middleware(request: NextRequest) {
   const legacyRedirects: Record<string, string> = {
     '/problemes-courants': '/problemes',
     '/outils/diagnostic-artisan': '/outils/diagnostic',
+    // Cannibalization fixes — consolidate duplicate pages
+    '/barometre-prix': '/barometre',
+    '/calculateur': '/outils/calculateur-prix',
   }
   if (legacyRedirects[pathname]) {
     const host = request.headers.get('host') || 'servicesartisans.fr'

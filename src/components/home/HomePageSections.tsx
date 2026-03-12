@@ -46,6 +46,8 @@ const services = [
   { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50', text: 'text-indigo-600', desc: 'Toiture, zinguerie, charpente' },
   { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-slate-600 to-slate-700', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Gros œuvre, extension, rénovation' },
   { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Entretien, élagage, aménagement' },
+  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: Flame, color: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', text: 'text-emerald-600', desc: 'Installation, entretien, air-eau, géothermie' },
+  { name: 'Isolation', slug: 'isolation-thermique', icon: Shield, color: 'from-teal-500 to-teal-600', bg: 'bg-teal-50', text: 'text-teal-600', desc: 'ITE, ITI, combles, plancher' },
 ]
 
 export function ServicesShowcase() {

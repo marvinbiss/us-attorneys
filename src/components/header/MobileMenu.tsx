@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import {
   Search, ChevronDown, MapPin, Wrench, ArrowRight, Star,
-  Layers, Sparkles, Navigation, Map, Building2, Phone, Heart
+  Layers, Sparkles, Navigation, Map, Building2, Phone, Heart, BookOpen
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -300,6 +300,14 @@ export default function MobileMenu({
             >
               <Sparkles className="w-4 h-4 text-purple-500" />
               <span className="font-medium text-sm text-slate-700">Blog</span>
+            </Link>
+            <Link
+              href="/guides"
+              className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+              onClick={closeMobileMenu}
+            >
+              <BookOpen className="w-4 h-4 text-green-500" />
+              <span className="font-medium text-sm text-slate-700">Guides</span>
             </Link>
           </div>
 

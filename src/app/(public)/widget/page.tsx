@@ -10,19 +10,19 @@ import { WidgetCopyButton } from './WidgetCopyButton'
 const canonicalUrl = `${SITE_URL}/widget`
 
 export const metadata: Metadata = {
-  title: `Widget ${SITE_NAME} — Affichez votre profil sur votre site`,
+  title: `Widget ${SITE_NAME} — Affichez votre profil`,
   description: `Intégrez le widget ${SITE_NAME} sur votre site web pour renforcer votre crédibilité en ligne. Badge artisan gratuit, installation en 2 minutes.`,
   alternates: { canonical: canonicalUrl },
   openGraph: {
     locale: 'fr_FR',
-    title: `Widget ${SITE_NAME} — Affichez votre profil sur votre site`,
+    title: `Widget ${SITE_NAME} — Affichez votre profil`,
     description: `Intégrez le widget ${SITE_NAME} sur votre site web pour renforcer votre crédibilité en ligne.`,
     url: canonicalUrl,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Widget ${SITE_NAME} — Affichez votre profil sur votre site`,
+    title: `Widget ${SITE_NAME} — Affichez votre profil`,
     description: `Intégrez le widget ${SITE_NAME} sur votre site web pour renforcer votre crédibilité en ligne.`,
   },
 }

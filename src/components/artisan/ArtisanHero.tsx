@@ -69,7 +69,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 {hasPortfolioImage ? (
                   <Image
                     src={artisan.portfolio![0].imageUrl}
-                    alt={`Photo de ${displayName}`}
+                    alt={`${displayName} - ${artisan.specialty} à ${artisan.city}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 96px, 128px"

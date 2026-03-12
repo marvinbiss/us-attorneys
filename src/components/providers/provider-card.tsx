@@ -54,7 +54,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
             {provider.image_url ? (
               <Image
                 src={provider.image_url}
-                alt={provider.name}
+                alt={`${provider.name}${provider.service_type ? ` - ${provider.service_type}` : ''} à ${provider.address_city}`}
                 fill
                 className="object-cover"
                 sizes="64px"

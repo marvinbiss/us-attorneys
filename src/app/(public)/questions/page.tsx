@@ -4,7 +4,7 @@ import { ArrowRight, Euro, Search, AlertTriangle, FileText, Wrench, HelpCircle }
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema, getCollectionPageSchema } from "@/lib/seo/jsonld"
-import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
+import { SITE_URL } from "@/lib/seo/config"
 import { questions, categoryLabels, type QuestionCategory } from "@/lib/data/questions"
 
 // ---------------------------------------------------------------------------
@@ -12,12 +12,12 @@ import { questions, categoryLabels, type QuestionCategory } from "@/lib/data/que
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: `Questions fréquentes sur les travaux et l'artisanat | ${SITE_NAME}`,
+  title: `Questions Travaux et Artisanat — FAQ`,
   description:
     "Trouvez les réponses à toutes vos questions sur les travaux, les tarifs des artisans, la réglementation et les urgences. Guides pratiques et conseils d'experts.",
   alternates: { canonical: `${SITE_URL}/questions` },
   openGraph: {
-    title: `Questions fréquentes sur les travaux et l'artisanat | ${SITE_NAME}`,
+    title: `Questions Travaux et Artisanat — FAQ`,
     description:
       "Trouvez les réponses à toutes vos questions sur les travaux, les tarifs des artisans, la réglementation et les urgences.",
     type: "website",

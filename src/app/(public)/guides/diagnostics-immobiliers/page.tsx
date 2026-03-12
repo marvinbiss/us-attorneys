@@ -34,6 +34,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Diagnostics Immobiliers Obligatoires : Le Guide Complet",
+    description:
+      "Tous les diagnostics immobiliers obligatoires pour la vente ou la location : DPE, amiante, plomb, termites, gaz, électricité.",
+  },
 }
 
 const diagnostics = [

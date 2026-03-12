@@ -107,7 +107,7 @@ export function SimilarArtisans({
                 {artisan.avatarUrl ? (
                   <Image
                     src={artisan.avatarUrl}
-                    alt={artisan.name}
+                    alt={`${artisan.name} - ${artisan.specialty} à ${artisan.city}`}
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"

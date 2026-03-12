@@ -18,7 +18,7 @@ import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 const canonicalUrl = `${SITE_URL}/barometre`
 
 export const metadata: Metadata = {
-  title: `Baromètre des Artisans 2026 — Statistiques et données par métier | ${SITE_NAME}`,
+  title: `Baromètre des Artisans 2026 — Stats par métier`,
   description:
     'Baromètre des artisans en France : statistiques temps réel sur 940 000+ professionnels du bâtiment. Notes moyennes, taux de vérification, répartition par métier et par ville. Données ouvertes et API publique.',
   alternates: { canonical: canonicalUrl },
@@ -473,7 +473,7 @@ export default async function BarometrePage() {
               </div>
             </Link>
             <Link
-              href="/barometre-prix"
+              href="/barometre/tarifs"
               className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow group"
             >
               <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">

@@ -22,7 +22,7 @@ import {
 const PAGE_URL = `${SITE_URL}/guides/artisan-rge`
 
 export const metadata: Metadata = {
-  title: "Artisan RGE : Vérifier et Trouver un Professionnel Certifié (2026)",
+  title: "Artisan RGE : Trouver un Pro Certifié (2026)",
   description:
     "Tout savoir sur la certification RGE (Reconnu Garant de l'Environnement) : comment vérifier un artisan RGE, les qualifications Qualibat, QualiPAC, QualiSol et comment bénéficier des aides MaPrimeRénov'.",
   alternates: { canonical: PAGE_URL },
@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     url: PAGE_URL,
     type: "article",
     siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Artisan RGE : Vérifier et Trouver un Professionnel Certifié",
+    description:
+      "Guide complet sur la certification RGE : vérification, qualifications et aides financières accessibles.",
   },
 }
 

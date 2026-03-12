@@ -15,7 +15,7 @@ import { regionalIndices } from '@/lib/data/barometre'
 const canonicalUrl = `${SITE_URL}/barometre/regions`
 
 export const metadata: Metadata = {
-  title: `Baromètre par région — Artisans du bâtiment en France | ${SITE_NAME}`,
+  title: `Baromètre par région — Artisans en France`,
   description:
     'Explorez les statistiques des artisans par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie et les 13 régions métropolitaines. Indices de prix, nombre d\'artisans et tendances.',
   alternates: { canonical: canonicalUrl },

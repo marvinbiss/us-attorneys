@@ -60,51 +60,6 @@ export const projetsArticles: Record<string, {
       "Prévoyez 3 à 6 semaines de travaux et anticipez une solution de cuisine provisoire."
     ]
   },
-  'refaire-toiture-guide-proprietaire': {
-    title: 'Refaire sa Toiture 2026 : Guide',
-    excerpt: 'Diagnostic, choix des matériaux, budget détaillé et aides financières : tout savoir avant de refaire sa toiture. Devis gratuit.',
-    content: [
-      "La toiture est le premier rempart de votre maison contre les intempéries. Une couverture vieillissante entraîne infiltrations, déperditions thermiques et dévalorisation du bien. Refaire sa toiture est un investissement majeur qu\'il convient de planifier avec soin. Consultez un [couvreur qualifié](/services/couvreur) pour un diagnostic précis.",
-      "## 1. Diagnostiquer l\'état de la toiture",
-      "Faites intervenir un couvreur pour un diagnostic complet : état des tuiles ou ardoises, étanchéité de la sous-toiture, solidité de la charpente, état des gouttières et des solins. Ce diagnostic, souvent gratuit dans le cadre d\'un devis, vous permettra de déterminer s\'il faut une réfection partielle ou totale.",
-      "## 2. Choisir le type de couverture",
-      "Les tuiles en terre cuite dominent le marché (40 à 60 % des toitures françaises). L\'ardoise naturelle, plus noble, est privilégiée dans l\'Ouest et le Centre. Le zinc convient aux toits à faible pente. Le bac acier est économique pour les annexes. Vérifiez le Plan Local d\'Urbanisme (PLU) de votre commune, qui impose souvent le type de couverture.",
-      "## 3. Vérifier et traiter la charpente",
-      "Avant de poser la nouvelle couverture, la charpente doit être inspectée : présence de termites, champignons ou mérule, affaissements, pièces fragilisées. Un traitement préventif coûte de 15 à 30 euros/m². Le remplacement de pièces de charpente peut atteindre 5 000 à 15 000 euros selon l\'étendue des dégâts.",
-      "## 4. Intégrer l\'isolation",
-      "Profitez de la réfection de toiture pour isoler par l\'extérieur (sarking) : cette technique supprime les ponts thermiques et ne réduit pas la surface habitable. Comptez 100 à 250 euros/m² pour un sarking complet. L\'isolation par l\'intérieur (sous rampants) est moins coûteuse, de 40 à 80 euros/m², mais empiète sur le volume des combles.",
-      "## 5. Obtenir les autorisations",
-      "Une simple réfection à l\'identique ne nécessite en général aucune autorisation. En revanche, si vous changez le matériau de couverture ou modifiez l\'aspect extérieur, une déclaration préalable de travaux est obligatoire. Le délai d\'instruction est d\'un mois en mairie.",
-      "## 6. Déroulement du chantier",
-      "La dépose de l\'ancienne couverture prend un à deux jours. La pose du nouvel écran de sous-toiture, puis du lattage et contre-lattage, demande deux à trois jours. La pose des tuiles ou ardoises s\'étend sur trois à cinq jours pour une maison de 100 m² au sol. Total : deux à quatre semaines en comptant les aléas météo.",
-      "## Budget détaillé",
-      "Réfection en tuiles mécaniques : 80 à 150 euros/m². Réfection en tuiles plates : 100 à 180 euros/m². Réfection en ardoise naturelle : 120 à 230 euros/m². Réfection en zinc : 70 à 150 euros/m². Pour une maison de 100 m² de surface au sol (environ 130 m² de toiture), le budget global se situe entre 10 000 et 30 000 euros hors isolation.",
-      "## Aides financières",
-      "Si la réfection s\'accompagne d\'une isolation thermique, vous pouvez bénéficier de MaPrimeRénov\' (jusqu\'à 75 euros/m² pour les ménages modestes), des CEE (primes énergie de 10 à 20 euros/m²) et de la TVA réduite à 5,5 %. L\'éco-PTZ permet de financer jusqu\'à 50 000 euros sans intérêts.",
-      "## Points de vigilance",
-      "Exigez une garantie décennale en cours de validité. Prévoyez des bâches de protection en cas d\'intempéries pendant le chantier. Faites réaliser un procès-verbal de réception des travaux et conservez-le précieusement. Ne versez jamais la totalité du paiement avant la fin complète du chantier."
-    ],
-    image: '/images/blog/refaire-toiture.jpg',
-    author: 'Jean-Pierre Duval',
-    date: '2026-02-08',
-    readTime: '11 min',
-    category: 'Guides',
-    tags: ['Toiture', 'Couverture', 'Rénovation', 'Budget'],
-    authorBio: 'Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.',
-    updatedDate: '2026-02-12',
-    faq: [
-      { question: 'Combien coûte la réfection d\'une toiture ?', answer: 'Pour une maison de 100 m² au sol (environ 130 m² de toiture) : tuiles mécaniques 10 000 à 20 000 €, tuiles plates 13 000 à 23 000 €, ardoise naturelle 16 000 à 30 000 €, zinc 9 000 à 20 000 €. Ces prix sont hors isolation.' },
-      { question: 'Faut-il un permis de construire pour refaire sa toiture ?', answer: 'Une réfection à l\'identique ne nécessite en général aucune autorisation. Si vous changez le matériau de couverture ou modifiez l\'aspect extérieur, une déclaration préalable de travaux est obligatoire (délai d\'instruction d\'un mois en mairie).' },
-      { question: 'Quelles aides pour refaire sa toiture ?', answer: 'Si la réfection s\'accompagne d\'une isolation thermique : MaPrimeRénov\' (jusqu\'à 75 €/m² pour les ménages modestes), CEE (10 à 20 €/m²), TVA réduite à 5,5 % et éco-PTZ (jusqu\'à 50 000 € sans intérêts). Les aides peuvent couvrir 40 à 65 % du coût pour les ménages modestes.' },
-      { question: 'Combien de temps dure un chantier de toiture ?', answer: 'Deux à quatre semaines en moyenne pour une maison de 100 m² au sol, en comptant les aléas météo. La dépose prend 1 à 2 jours, la charpente et sous-toiture 2 à 3 jours, et la pose de la couverture 3 à 5 jours.' }
-    ],
-    keyTakeaways: [
-      "La réfection complète d'une toiture coûte entre 100 et 250 €/m² selon le matériau de couverture.",
-      "La durée de vie d'une toiture bien entretenue est de 30 à 50 ans pour les tuiles et 80 à 100 ans pour l'ardoise.",
-      "Profitez de la réfection pour isoler par l'extérieur (sarking) et bénéficier des aides MaPrimeRénov'.",
-      "Un couvreur sérieux monte sur le toit pour le diagnostic et ne fait jamais de devis depuis le sol."
-    ]
-  },
   'amenager-combles-guide-habitables': {
     title: 'Aménager ses Combles 2026 : Guide',
     excerpt: 'Faisabilité, isolation, plancher, lumière et budget : le guide complet pour aménager vos combles en surface habitable. Devis gratuit.',

@@ -8,7 +8,7 @@ import { SITE_URL } from "@/lib/seo/config"
 import { comparisons } from "@/lib/data/comparisons"
 
 export const metadata: Metadata = {
-  title: "Comparatifs Travaux 2026 : 30 Guides pour Bien Choisir | ServicesArtisans",
+  title: "Comparatifs Travaux 2026 : 30 Guides pour Choisir",
   description:
     "30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages, inconvénients et verdict pour chaque solution.",
   alternates: {

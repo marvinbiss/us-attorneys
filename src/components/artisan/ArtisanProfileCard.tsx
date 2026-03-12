@@ -97,7 +97,7 @@ export function ArtisanProfileCard({
           {coverUrl && !imageError && (
             <Image
               src={coverUrl}
-              alt={`Photo de couverture de ${companyName || name}`}
+              alt={`Photo de couverture de ${companyName || name} - ${profession} à ${location}`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -138,7 +138,7 @@ export function ArtisanProfileCard({
                 {imageUrl && !imageError ? (
                   <Image
                     src={imageUrl}
-                    alt={name}
+                    alt={`${name} - ${profession} à ${location}`}
                     fill
                     className="object-cover"
                     sizes="96px"
@@ -308,7 +308,7 @@ export function ArtisanProfileCard({
             {imageUrl && !imageError ? (
               <Image
                 src={imageUrl}
-                alt={name}
+                alt={`${name} - ${profession} à ${location}`}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 640px) 100vw, 224px"
@@ -449,7 +449,7 @@ export function ArtisanProfileCard({
           {imageUrl && !imageError ? (
             <Image
               src={imageUrl}
-              alt={name}
+              alt={`${name} - ${profession} à ${location}`}
               fill
               className="object-cover"
               sizes="48px"
@@ -496,7 +496,7 @@ export function ArtisanProfileCard({
           {imageUrl && !imageError ? (
             <Image
               src={imageUrl}
-              alt={name}
+              alt={`${name} - ${profession} à ${location}`}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

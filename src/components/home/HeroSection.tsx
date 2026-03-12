@@ -41,11 +41,13 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
 const chipServices = [
   { name: 'Plombier', slug: 'plombier' },
   { name: 'Électricien', slug: 'electricien' },
-  { name: 'Serrurier', slug: 'serrurier' },
-  { name: 'Peintre', slug: 'peintre-en-batiment' },
-  { name: 'Menuisier', slug: 'menuisier' },
-  { name: 'Chauffagiste', slug: 'chauffagiste' },
   { name: 'Couvreur', slug: 'couvreur' },
+  { name: 'Chauffagiste', slug: 'chauffagiste' },
+  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur' },
+  { name: 'Isolation', slug: 'isolation-thermique' },
+  { name: 'Peintre', slug: 'peintre-en-batiment' },
+  { name: 'Serrurier', slug: 'serrurier' },
+  { name: 'Menuisier', slug: 'menuisier' },
   { name: 'Maçon', slug: 'macon' },
 ]
 

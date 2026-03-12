@@ -31,6 +31,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       contactType: 'customer service',
       availableLanguage: ['French'],
       url: `${baseUrl}/contact`,
+      ...(companyIdentity.phone && { telephone: companyIdentity.phone }),
     },
     ...(getSocialLinks().length > 0 && { sameAs: getSocialLinks() }),
   }
@@ -200,6 +201,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
+    priceRange: '€€',
     currenciesAccepted: 'EUR',
 
     // Opening hours for Google Knowledge Panel

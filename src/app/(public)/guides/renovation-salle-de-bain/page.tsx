@@ -37,6 +37,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rénovation Salle de Bain : Étapes, Prix et Conseils 2026",
+    description:
+      "Toutes les étapes d'une rénovation de salle de bain, les prix détaillés par poste et les conseils d'artisans pour réussir votre projet.",
+  },
 }
 
 const etapes = [

@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -52,10 +52,7 @@ function calculateQualityScore(provider: Record<string, unknown>): {
 
 export async function GET(request: Request) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabase = createAdminClient()
 
     // Verify cron secret
     const authHeader = request.headers.get('authorization')
@@ -93,11 +90,25 @@ export async function GET(request: Request) {
         break
       }
 
-      // Process batch
+      // Process batch: calculate scores and persist to DB
       for (const provider of providers) {
         const { score, flags } = calculateQualityScore(provider)
-        logger.info(`[Cron] Provider ${provider.id}: score=${score} flags=${flags.join(',')}`)
-        totalUpdated++
+
+        const { error: updateError } = await supabase
+          .from('providers')
+          .update({
+            data_quality_score: score,
+            data_quality_flags: flags,
+          })
+          .eq('id', provider.id)
+
+        if (updateError) {
+          logger.error(`[Cron] Failed to update quality score for provider ${provider.id}:`, updateError)
+          totalErrors++
+        } else {
+          logger.info(`[Cron] Provider ${provider.id}: score=${score} flags=${flags.join(',')}`)
+          totalUpdated++
+        }
       }
 
       if (providers.length < BATCH_SIZE) {

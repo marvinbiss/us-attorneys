@@ -36,6 +36,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rénovation Énergétique : Guide Complet pour Votre Maison",
+    description:
+      "Les 4 piliers de la rénovation énergétique, l'ordre des travaux, les aides 2026 et le retour sur investissement détaillé.",
+  },
 }
 
 const parOuCommencer = [

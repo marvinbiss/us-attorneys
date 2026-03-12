@@ -12,17 +12,18 @@ function escapeXml(s: string): string {
     .replace(/'/g, '&apos;')
 }
 
-function imageTag(loc: string, title: string): string {
+function imageTag(loc: string, title: string, caption: string): string {
   return `    <image:image>
       <image:loc>${escapeXml(loc)}</image:loc>
       <image:title>${escapeXml(title)}</image:title>
+      <image:caption>${escapeXml(caption)}</image:caption>
     </image:image>`
 }
 
-function urlEntry(loc: string, images: { loc: string; title: string }[]): string {
+function urlEntry(loc: string, images: { loc: string; title: string; caption: string }[]): string {
   return `  <url>
     <loc>${escapeXml(loc)}</loc>
-${images.map((img) => imageTag(img.loc, img.title)).join('\n')}
+${images.map((img) => imageTag(img.loc, img.title, img.caption)).join('\n')}
   </url>`
 }
 
@@ -37,7 +38,7 @@ export async function GET() {
 
   // 1. Homepage
   urls.push(
-    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt }])
+    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Trouvez les meilleurs artisans en France sur ServicesArtisans — plateforme de mise en relation avec des professionnels qualifiés' }])
   )
 
   // 2. Pages de services — une image par métier
@@ -46,7 +47,7 @@ export async function GET() {
     if (img) {
       urls.push(
         urlEntry(`${SITE_URL}/services/${service.slug}`, [
-          { loc: img.src, title: img.alt },
+          { loc: img.src, title: img.alt, caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur ServicesArtisans` },
         ])
       )
     }
@@ -54,9 +55,13 @@ export async function GET() {
 
   // 3. Top 20 villes — photos géographiques
   for (const [citySlug, img] of Object.entries(cityImages)) {
+    const cityName = citySlug
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join('-')
     urls.push(
       urlEntry(`${SITE_URL}/villes/${citySlug}`, [
-        { loc: img.src, title: img.alt },
+        { loc: img.src, title: img.alt, caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur ServicesArtisans` },
       ])
     )
   }
@@ -65,25 +70,26 @@ export async function GET() {
   for (const slug of articleSlugs) {
     const article = allArticles[slug]
     const img = getBlogImage(slug, article?.category)
+    const articleTitle = article?.title || slug.replace(/-/g, ' ')
     urls.push(
-      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt }])
+      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt, caption: `Illustration de l'article « ${articleTitle} » — blog ServicesArtisans` }])
     )
   }
 
   // 5. Pages statiques avec images connues
-  const staticPageMap: Record<string, string> = {
-    howItWorks: `${SITE_URL}/comment-ca-marche`,
-    about: `${SITE_URL}/a-propos`,
-    verification: `${SITE_URL}/notre-processus-de-verification`,
+  const staticPageMap: Record<string, { url: string; captionPrefix: string }> = {
+    howItWorks: { url: `${SITE_URL}/comment-ca-marche`, captionPrefix: 'Comment ça marche' },
+    about: { url: `${SITE_URL}/a-propos`, captionPrefix: 'À propos de ServicesArtisans' },
+    verification: { url: `${SITE_URL}/notre-processus-de-verification`, captionPrefix: 'Processus de vérification des artisans' },
   }
 
-  for (const [key, pageUrl] of Object.entries(staticPageMap)) {
+  for (const [key, { url: pageUrl, captionPrefix }] of Object.entries(staticPageMap)) {
     const imgs = pageImages[key as keyof typeof pageImages]
     if (imgs && imgs.length > 0) {
       urls.push(
         urlEntry(
           pageUrl,
-          imgs.map((img) => ({ loc: img.src, title: img.alt }))
+          imgs.map((img) => ({ loc: img.src, title: img.alt, caption: `${captionPrefix} — ${img.alt}` }))
         )
       )
     }

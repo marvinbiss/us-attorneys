@@ -35,6 +35,12 @@ export const metadata: Metadata = {
     type: "article",
     siteName: SITE_NAME,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?",
+    description:
+      "Guide complet des prix de rénovation en 2026 : fourchettes par type de travaux, aides financières et conseils budget.",
+  },
 }
 
 const fourchettesRenovation = [
