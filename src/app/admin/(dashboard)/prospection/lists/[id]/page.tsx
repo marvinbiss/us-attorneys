@@ -63,7 +63,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         setEditName(data.data.name)
         setEditDesc(data.data.description || '')
       } else {
-        setError(data.error?.message || 'Liste non trouv\u00e9e')
+        setError(data.error?.message || 'Liste non trouvée')
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
@@ -213,7 +213,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error || 'Liste non trouv\u00e9e'}
+          {error || 'Liste non trouvée'}
         </div>
       </div>
     )
@@ -307,7 +307,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         {list.list_type === 'static' && (
           <button
             className="flex items-center gap-1 px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50 text-gray-600"
-            title="Fonctionnalit\u00e9 \u00e0 venir"
+            title="Fonctionnalité à venir"
             disabled
           >
             <UserPlus className="w-3 h-3" /> Ajouter des contacts

@@ -24,26 +24,26 @@ interface AuditLog {
 }
 
 const actionLabels: Record<string, string> = {
-  'create_provider': 'Cr\u00e9ation artisan',
+  'create_provider': 'Création artisan',
   'update_provider': 'Modification artisan',
   'delete_provider': 'Suppression artisan',
-  'create_review': 'Cr\u00e9ation avis',
+  'create_review': 'Création avis',
   'update_review': 'Modification avis',
   'delete_review': 'Suppression avis',
   'ban_user': 'Bannissement utilisateur',
-  'unban_user': 'D\u00e9bannissement utilisateur',
-  'create_service': 'Cr\u00e9ation service',
+  'unban_user': 'Débannissement utilisateur',
+  'create_service': 'Création service',
   'update_service': 'Modification service',
   'delete_service': 'Suppression service',
-  'create_user': 'Cr\u00e9ation utilisateur',
+  'create_user': 'Création utilisateur',
   'update_user': 'Modification utilisateur',
   'delete_user': 'Suppression utilisateur',
-  'verify_provider': 'V\u00e9rification artisan',
+  'verify_provider': 'Vérification artisan',
   'suspend_provider': 'Suspension artisan',
-  'activate_provider': 'R\u00e9activation artisan',
-  'resolve_report': 'R\u00e9solution signalement',
+  'activate_provider': 'Réactivation artisan',
+  'resolve_report': 'Résolution signalement',
   'dismiss_report': 'Rejet signalement',
-  'update_settings': 'Modification param\u00e8tres',
+  'update_settings': 'Modification paramètres',
 }
 
 interface JournalResponse {

@@ -374,30 +374,30 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <h2 className="text-xl font-heading font-semibold text-gray-900">
-            Combien co{'\u00fb'}te un {trade.name.toLowerCase()} en France ?
+            Combien coûte un {trade.name.toLowerCase()} en France ?
           </h2>
           <p className="text-gray-700 leading-relaxed">
             Le tarif horaire moyen d&apos;un {trade.name.toLowerCase()} en France se situe entre {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}.
-            Ce prix varie selon la r{'\u00e9'}gion, la complexit{'\u00e9'} de l&apos;intervention et les mat{'\u00e9'}riaux n{'\u00e9'}cessaires.
-            En {'\u00ce'}le-de-France, comptez une majoration de 20 {'\u00e0'} 25 % par rapport {'\u00e0'} la moyenne nationale.
+            Ce prix varie selon la région, la complexité de l&apos;intervention et les matériaux nécessaires.
+            En Île-de-France, comptez une majoration de 20 à 25 % par rapport à la moyenne nationale.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-gray-900">
             Comment choisir son {trade.name.toLowerCase()} ?
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            Pour bien choisir votre {trade.name.toLowerCase()}, v{'\u00e9'}rifiez son num{'\u00e9'}ro SIRET sur le site de l&apos;INSEE,
-            demandez une copie de son assurance d{'\u00e9'}cennale et comparez au moins 3 devis d{'\u00e9'}taill{'\u00e9'}s.
-            Privil{'\u00e9'}giez les artisans certifi{'\u00e9'}s{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez les avis clients en ligne.
+            Pour bien choisir votre {trade.name.toLowerCase()}, vérifiez son numéro SIRET sur le site de l&apos;INSEE,
+            demandez une copie de son assurance décennale et comparez au moins 3 devis détaillés.
+            Privilégiez les artisans certifiés{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez les avis clients en ligne.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-gray-900">
             Quels sont les tarifs moyens d&apos;un {trade.name.toLowerCase()} ?
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            Les tarifs d&apos;un {trade.name.toLowerCase()} d{'\u00e9'}pendent du type de prestation.
+            Les tarifs d&apos;un {trade.name.toLowerCase()} dépendent du type de prestation.
             Pour les interventions courantes : {trade.commonTasks.slice(0, 2).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
-            Le tarif horaire de base est de {trade.priceRange.min} {'\u00e0'} {trade.priceRange.max} {trade.priceRange.unit}, hors fournitures et d{'\u00e9'}placement.
+            Le tarif horaire de base est de {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}, hors fournitures et déplacement.
           </p>
         </div>
       </section>
@@ -406,10 +406,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-16 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            Prix d{'\u00e9'}taill{'\u00e9'}s par prestation et par ville
+            Prix détaillés par prestation et par ville
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            D{'\u00e9'}couvrez les tarifs pr{'\u00e9'}cis pour chaque type d&apos;intervention dans les principales villes de France.
+            Découvrez les tarifs précis pour chaque type d&apos;intervention dans les principales villes de France.
           </p>
           <div className="space-y-6">
             {trade.commonTasks.slice(0, 8).map((task) => {
@@ -425,7 +425,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                         href={`/tarifs/${service}/${ville.slug}/${taskSlug}`}
                         className="text-xs text-blue-700 hover:text-blue-900 hover:underline bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
                       >
-                        Prix {taskName.toLowerCase()} {'\u00e0'} {ville.name} {'\u2192'}
+                        Prix {taskName.toLowerCase()} à {ville.name} →
                       </Link>
                     ))}
                   </div>

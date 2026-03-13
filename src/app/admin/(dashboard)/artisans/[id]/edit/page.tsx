@@ -198,7 +198,7 @@ export default function EditArtisanPage() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        setToast({ message: 'Artisan mis \u00e0 jour avec succ\u00e8s !', type: 'success' })
+        setToast({ message: 'Artisan mis à jour avec succès !', type: 'success' })
         setHasChanges(false)
 
         // Redirect after a short delay with full page reload to clear cache

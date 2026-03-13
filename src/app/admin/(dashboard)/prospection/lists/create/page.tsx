@@ -21,23 +21,23 @@ const DEPARTMENTS = [
 ]
 
 const REGIONS = [
-  'Auvergne-Rh\u00f4ne-Alpes',
-  'Bourgogne-Franche-Comt\u00e9',
+  'Auvergne-Rhône-Alpes',
+  'Bourgogne-Franche-Comté',
   'Bretagne',
   'Centre-Val de Loire',
   'Corse',
   'Grand Est',
   'Hauts-de-France',
-  '\u00cele-de-France',
+  'Île-de-France',
   'Normandie',
   'Nouvelle-Aquitaine',
   'Occitanie',
   'Pays de la Loire',
-  "Provence-Alpes-C\u00f4te d'Azur",
+  "Provence-Alpes-Côte d'Azur",
   'Guadeloupe',
   'Martinique',
   'Guyane',
-  'La R\u00e9union',
+  'La Réunion',
   'Mayotte',
 ]
 

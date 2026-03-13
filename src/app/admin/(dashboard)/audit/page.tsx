@@ -55,18 +55,18 @@ const ENTITY_TYPES = [
 ]
 
 const eventTypeLabels: Record<string, string> = {
-  'created': 'Cr\u00e9\u00e9',
-  'dispatched': 'Distribu\u00e9',
-  'viewed': 'Consult\u00e9',
-  'quoted': 'Devis envoy\u00e9',
-  'declined': 'Refus\u00e9',
-  'accepted': 'Accept\u00e9',
-  'completed': 'Termin\u00e9',
-  'cancelled': 'Annul\u00e9',
-  'expired': 'Expir\u00e9',
+  'created': 'Créé',
+  'dispatched': 'Distribué',
+  'viewed': 'Consulté',
+  'quoted': 'Devis envoyé',
+  'declined': 'Refusé',
+  'accepted': 'Accepté',
+  'completed': 'Terminé',
+  'cancelled': 'Annulé',
+  'expired': 'Expiré',
   'pending': 'En attente',
-  'reassigned': 'R\u00e9assign\u00e9',
-  'refused': 'Refus\u00e9',
+  'reassigned': 'Réassigné',
+  'refused': 'Refusé',
 }
 
 type AuditTab = 'audit_logs' | 'lead_events'
@@ -288,7 +288,7 @@ export default function AdminAuditPage() {
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID du lead</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID de l&apos;artisan</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">M\u00e9tadonn\u00e9es</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métadonnées</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">

@@ -113,7 +113,7 @@ export default function AdminProvidersPage() {
       })
 
       const actionText = action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
-      setToast({ message: `Artisan ${actionText} avec succ\u00e8s !`, type: 'success' })
+      setToast({ message: `Artisan ${actionText} avec succès !`, type: 'success' })
 
       mutate()
     } catch (err) {
@@ -430,7 +430,7 @@ export default function AdminProvidersPage() {
           await executeAction(suspendModal.providerId, 'suspend')
         }}
         title="Suspendre l'artisan"
-        message="\u00cates-vous s\u00fbr de vouloir suspendre cet artisan ? Il ne sera plus visible sur la plateforme."
+        message="Êtes-vous sûr de vouloir suspendre cet artisan ? Il ne sera plus visible sur la plateforme."
         confirmText="Suspendre"
         variant="danger"
       />

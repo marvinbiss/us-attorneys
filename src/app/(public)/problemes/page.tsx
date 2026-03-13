@@ -231,7 +231,7 @@ export default function ProblemesPage() {
                           <p className="text-sm text-gray-500 mb-3 line-clamp-2">{problem.description}</p>
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700">
-                              {problem.estimatedCost.min} – {problem.estimatedCost.max} \u20ac
+                              {problem.estimatedCost.min} – {problem.estimatedCost.max} €
                             </span>
                             <span className="text-xs text-gray-400">
                               {serviceNameMap[problem.primaryService] || problem.primaryService}

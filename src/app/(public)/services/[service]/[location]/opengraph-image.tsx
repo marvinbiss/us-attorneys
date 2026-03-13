@@ -102,7 +102,7 @@ export default async function Image({
               textAlign: 'center',
             }}
           >
-            {`\u00e0 ${cityName}`}
+            {`à ${cityName}`}
           </div>
 
           {/* Department */}

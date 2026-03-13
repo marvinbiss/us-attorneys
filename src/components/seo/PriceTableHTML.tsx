@@ -120,10 +120,10 @@ export default function PriceTableHTML({
         <tfoot>
           <tr className="bg-gray-50/80 border-t border-gray-200">
             <td colSpan={2} className="px-5 py-3 text-xs text-gray-500 italic">
-              Prix indicatifs, peuvent varier selon la complexit{'\u00e9'} des travaux, la r{'\u00e9'}gion et le professionnel.
+              Prix indicatifs, peuvent varier selon la complexité des travaux, la région et le professionnel.
               {location && multiplier !== 1 && (
                 <span className="ml-1">
-                  Tarifs ajust{'\u00e9'}s pour {location} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}{'\u00a0'}% vs moyenne nationale).
+                  Tarifs ajustés pour {location} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}&nbsp;% vs moyenne nationale).
                 </span>
               )}
             </td>

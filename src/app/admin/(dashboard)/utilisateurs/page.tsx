@@ -295,7 +295,7 @@ export default function AdminUsersPage() {
                 Bannir utilisateur
               </h3>
               <p className="text-gray-600 mb-4">
-                {`\u00cates-vous s\u00fbr de vouloir bannir ${banModal.userName} ? L\u2019utilisateur ne pourra plus acc\u00e9der \u00e0 la plateforme.`}
+                {`Êtes-vous sûr de vouloir bannir ${banModal.userName} ? L'utilisateur ne pourra plus accéder à la plateforme.`}
               </p>
 
               <div className="mb-4">

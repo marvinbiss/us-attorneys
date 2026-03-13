@@ -203,7 +203,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                 <a
                   href={`mailto:${artisan.email}`}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-slate-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-                  aria-label={`Envoyer un email \u00e0 ${artisan.email}`}
+                  aria-label={`Envoyer un email à ${artisan.email}`}
                 >
                   <Briefcase className="w-4 h-4 text-slate-400" aria-hidden="true" />
                   <span className="truncate max-w-[200px]">{artisan.email}</span>

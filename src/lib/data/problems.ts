@@ -54,7 +54,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Généralement sous 1 à 4h (selon disponibilité et localisation)',
     faq: [
       { q: 'Comment détecter une fuite d’eau cachée ?', a: 'Relevez votre compteur d’eau le soir, ne consommez pas d’eau pendant la nuit, puis vérifiez le matin. Si le compteur a tourné, il y a une fuite. Un plombier peut également utiliser une caméra thermique ou un détecteur acoustique pour localiser la fuite sans casser.' },
-      { q: 'Combien coûte la réparation d’une fuite d’eau ?', a: 'Le coût varie de 80 \u20ac pour un simple changement de joint à 300 \u20ac pour une réparation sur canalisation encastrée. En urgence de nuit ou le week-end, prévoyez une majoration de 50 à 100 %.' },
+      { q: 'Combien coûte la réparation d’une fuite d’eau ?', a: 'Le coût varie de 80 € pour un simple changement de joint à 300 € pour une réparation sur canalisation encastrée. En urgence de nuit ou le week-end, prévoyez une majoration de 50 à 100 %.' },
       { q: 'Ma fuite d’eau est-elle prise en charge par l’assurance ?', a: 'Si la fuite provoque un dégât des eaux, votre assurance habitation prend en charge les dommages (sauf la réparation de la fuite elle-même). Déclarez le sinistre sous 5 jours ouvrés avec le constat amiable dégât des eaux.' },
       { q: 'Faut-il couper l’eau immédiatement en cas de fuite ?', a: 'Oui, coupez l’arrivée d’eau générale dès que possible. Le compteur se trouve généralement à la cave, dans un placard technique ou à l’extérieur du logement. Cela évite d’aggraver les dégâts en attendant le plombier.' },
       { q: 'Peut-on réparer une fuite d’eau soi-même ?', a: 'Pour un joint de robinet ou un flexible, oui. Pour une canalisation percée ou un raccord sous pression, il est fortement recommandé de faire appel à un plombier professionnel afin d’éviter d’aggraver la situation.' },
@@ -90,7 +90,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
       { q: 'Comment déboucher une canalisation naturellement ?', a: 'Versez 6 cuillères à soupe de bicarbonate de soude et 25 cl de vinaigre blanc dans la canalisation. Laissez agir 30 minutes puis rincez à l’eau bouillante. Si le bouchon persiste, utilisez une ventouse ou un furet manuel.' },
-      { q: 'Quel est le prix d’un débouchage professionnel ?', a: 'Un débouchage simple coûte entre 100 et 200 \u20ac. Un hydrocurage haute pression pour les canalisations enterrées peut atteindre 400 \u20ac. Demandez toujours un devis avant intervention.' },
+      { q: 'Quel est le prix d’un débouchage professionnel ?', a: 'Un débouchage simple coûte entre 100 et 200 €. Un hydrocurage haute pression pour les canalisations enterrées peut atteindre 400 €. Demandez toujours un devis avant intervention.' },
       { q: 'Les produits chimiques sont-ils efficaces ?', a: 'Les produits chimiques peuvent dissoudre certains bouchons légers, mais ils abiment les canalisations (surtout en PVC) et polluent l’eau. Privilégiez les méthodes mécaniques (ventouse, furet) ou faites appel à un professionnel.' },
       { q: 'Ma canalisation se bouche régulièrement, que faire ?', a: 'Des bouchons récurrents peuvent indiquer un problème structurel : contre-pente, canalisation écrasée ou racines d’arbre. Un diagnostic par caméra permet d’identifier la cause exacte et de planifier une réparation durable.' },
     ],
@@ -127,7 +127,7 @@ const problems: Problem[] = [
     seasonality: 'hiver',
     faq: [
       { q: 'Pourquoi ma chaudière ne démarre plus ?', a: 'Les causes les plus fréquentes sont : pression trop basse, thermostat défaillant, problème d’allumage (brûleur encrassé ou électrode défectueuse), ou panne du circulateur. Seul un chauffagiste agréé peut diagnostiquer et réparer en toute sécurité.' },
-      { q: 'Combien coûte la réparation d’une chaudière ?', a: 'Le coût dépend de la panne : de 150 \u20ac pour un remplacement de pièce courante à 600 \u20ac pour une intervention complexe (changement de vanne 3 voies, réparation de l’échangeur). Un contrat d’entretien annuel (120 à 250 \u20ac) inclut souvent le dépannage.' },
+      { q: 'Combien coûte la réparation d’une chaudière ?', a: 'Le coût dépend de la panne : de 150 € pour un remplacement de pièce courante à 600 € pour une intervention complexe (changement de vanne 3 voies, réparation de l’échangeur). Un contrat d’entretien annuel (120 à 250 €) inclut souvent le dépannage.' },
       { q: 'L’entretien annuel est-il vraiment obligatoire ?', a: 'Oui, l’entretien annuel est obligatoire pour les chaudières entre 4 et 400 kW (décret de 2009). Il garantit la sécurité, optimise le rendement et réduit la consommation d’énergie de 8 à 12 %. Sans attestation d’entretien, l’assureur peut refuser d’indemniser un sinistre.' },
       { q: 'Dois-je remplacer ma chaudière ou la réparer ?', a: 'Si votre chaudière a plus de 15 ans et que les réparations se multiplient, le remplacement est souvent plus économique. Une chaudière à condensation moderne consomme 20 à 30 % de moins et ouvre droit à MaPrimeRénov’.' },
     ],
@@ -160,10 +160,10 @@ const problems: Problem[] = [
     estimatedCost: { min: 80, max: 250 },
     averageResponseTime: 'Généralement sous 30 min à 1h en zone urbaine (selon disponibilité)',
     faq: [
-      { q: 'Combien coûte l’ouverture d’une porte avec serrure bloquée ?', a: 'L’ouverture par un serrurier coûte entre 80 et 250 \u20ac selon la technique utilisée (crochetage, by-pass, perçage du cylindre). Le crochetage non destructif est le moins cher. De nuit ou le week-end, comptez une majoration de 50 à 100 %.' },
+      { q: 'Combien coûte l’ouverture d’une porte avec serrure bloquée ?', a: 'L’ouverture par un serrurier coûte entre 80 et 250 € selon la technique utilisée (crochetage, by-pass, perçage du cylindre). Le crochetage non destructif est le moins cher. De nuit ou le week-end, comptez une majoration de 50 à 100 %.' },
       { q: 'Le serrurier peut-il ouvrir sans casser la serrure ?', a: 'Un bon serrurier privilégie toujours l’ouverture non destructive (crochetage, impression). Il ne perce le cylindre qu’en dernier recours. Méfiez-vous des serruriers qui proposent d’emblée de changer la porte ou le blindage.' },
       { q: 'Comment éviter les arnaques de serruriers ?', a: 'Demandez un devis précis par téléphone avant déplacement. Vérifiez le numéro SIRET et les avis en ligne. Refusez tout supplément non annoncé et exigez une facture détaillée. Ne payez jamais en liquide sans facture.' },
-      { q: 'Ma clé est cassée dans la serrure, que faire ?', a: 'Ne tentez pas de retirer le morceau de clé avec une pince : vous risquez de l’enfoncer davantage. Un serrurier dispose d’un extracteur spécial pour retirer le bout de clé sans abimer le cylindre. Coût moyen : 80 à 150 \u20ac.' },
+      { q: 'Ma clé est cassée dans la serrure, que faire ?', a: 'Ne tentez pas de retirer le morceau de clé avec une pince : vous risquez de l’enfoncer davantage. Un serrurier dispose d’un extracteur spécial pour retirer le bout de clé sans abimer le cylindre. Coût moyen : 80 à 150 €.' },
     ],
   },
   {
@@ -193,7 +193,7 @@ const problems: Problem[] = [
     estimatedCost: { min: 80, max: 200 },
     averageResponseTime: 'Généralement sous 30 min à 1h en zone urbaine (selon disponibilité)',
     faq: [
-      { q: 'Combien coûte l’ouverture d’une porte claquée ?', a: 'L’ouverture d’une porte claquée coûte entre 80 et 200 \u20ac en journée. La technique la plus courante est le by-pass (feuille de radio) qui ne nécessite aucun remplacement de pièce. La nuit, comptez une majoration de 50 à 100 %.' },
+      { q: 'Combien coûte l’ouverture d’une porte claquée ?', a: 'L’ouverture d’une porte claquée coûte entre 80 et 200 € en journée. La technique la plus courante est le by-pass (feuille de radio) qui ne nécessite aucun remplacement de pièce. La nuit, comptez une majoration de 50 à 100 %.' },
       { q: 'Le serrurier va-t-il abimer ma porte ?', a: 'Dans la grande majorité des cas, non. L’ouverture d’une porte claquée est une intervention simple qui ne nécessite aucun perçage ni remplacement. Méfiez-vous des serruriers qui affirment devoir changer le cylindre après une simple porte claquée.' },
       { q: 'Combien de temps dure l’intervention ?', a: 'L’ouverture d’une porte claquée prend généralement entre 5 et 15 minutes pour un serrurier expérimenté. Le délai total dépend surtout du temps de trajet du professionnel.' },
       { q: 'Mon assurance couvre-t-elle l’ouverture de porte ?', a: 'Certaines assurances habitation incluent une garantie « assistance clés » qui prend en charge l’ouverture de porte. Vérifiez votre contrat ou appelez votre assureur avant de contacter un serrurier pour connaître vos droits.' },
@@ -230,8 +230,8 @@ const problems: Problem[] = [
     averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
       { q: 'Pourquoi mon disjoncteur saute-t-il régulièrement ?', a: 'Un disjoncteur qui saute régulièrement indique généralement : une surcharge du circuit (trop d’appareils branchés), un court-circuit dans l’installation, ou un défaut d’isolement (appareil ou câble défectueux). Un électricien peut identifier la cause précise avec un mégohmètre.' },
-      { q: 'Combien coûte un dépannage électrique ?', a: 'Le dépannage électrique coûte entre 100 et 350 \u20ac selon la complexité : 100 à 150 \u20ac pour un diagnostic simple, 200 à 350 \u20ac pour une réparation avec remplacement de pièces. En urgence de nuit, comptez 50 à 100 % de majoration.' },
-      { q: 'Mon installation électrique est ancienne, est-ce dangereux ?', a: 'Une installation de plus de 25 ans peut présenter des risques : fils dénudés, absence de mise à la terre, disjoncteurs obsolètes. Un diagnostic électrique (DPE, 100 à 200 \u20ac) permet d’évaluer les risques et de planifier une mise aux normes progressive.' },
+      { q: 'Combien coûte un dépannage électrique ?', a: 'Le dépannage électrique coûte entre 100 et 350 € selon la complexité : 100 à 150 € pour un diagnostic simple, 200 à 350 € pour une réparation avec remplacement de pièces. En urgence de nuit, comptez 50 à 100 % de majoration.' },
+      { q: 'Mon installation électrique est ancienne, est-ce dangereux ?', a: 'Une installation de plus de 25 ans peut présenter des risques : fils dénudés, absence de mise à la terre, disjoncteurs obsolètes. Un diagnostic électrique (DPE, 100 à 200 €) permet d’évaluer les risques et de planifier une mise aux normes progressive.' },
       { q: 'Faut-il une mise aux normes complète ?', a: 'Pas forcément. La norme NF C 15-100 s’applique aux installations neuves. Pour les logements anciens, on applique les « 6 points de sécurité » : disjoncteur général, prise de terre, différentiel 30 mA, protection des fils, absence de matériel vétuste, liaison équipotentielle dans la salle de bain.' },
     ],
   },
@@ -267,7 +267,7 @@ const problems: Problem[] = [
       { q: 'Un court-circuit peut-il provoquer un incendie ?', a: 'Oui, un court-circuit est l’une des principales causes d’incendie d’origine électrique en France (environ 25 % des incendies domestiques). Les protections (disjoncteurs, fusibles) doivent couper le courant instantanément. Si votre installation est vétuste, le risque augmente considérablement.' },
       { q: 'Comment localiser un court-circuit ?', a: 'L’électricien procède par élimination : il désactive tous les circuits au tableau, puis les réactive un par un pour identifier celui qui déclenche le disjoncteur. Il utilise ensuite un mégohmètre pour mesurer l’isolement et localiser le défaut précis.' },
       { q: 'Peut-on réarmer le disjoncteur après un court-circuit ?', a: 'Ne réarmez le disjoncteur qu’après avoir identifié et débranché l’appareil ou le circuit fautif. Si le disjoncteur saute de nouveau, il y a un défaut dans l’installation qui nécessite l’intervention d’un électricien.' },
-      { q: 'Combien coûte la réparation d’un court-circuit ?', a: 'Le diagnostic et la réparation coûtent entre 100 et 400 \u20ac. Le prix dépend de la localisation du défaut (accessible ou encastré) et de l’ampleur des dégâts (simple reconnexion ou remplacement de câblage).' },
+      { q: 'Combien coûte la réparation d’un court-circuit ?', a: 'Le diagnostic et la réparation coûtent entre 100 et 400 €. Le prix dépend de la localisation du défaut (accessible ou encastré) et de l’ampleur des dégâts (simple reconnexion ou remplacement de câblage).' },
     ],
   },
   {
@@ -299,7 +299,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 48 heures (rendez-vous)',
     faq: [
       { q: 'Quand une fissure de mur est-elle dangereuse ?', a: 'Une fissure est préoccupante si elle mesure plus de 2 mm de large, si elle est traversante (visible des deux côtés du mur), si elle s’élargit progressivement ou si elle s’accompagne d’un décalage entre les deux bords. Dans ce cas, consultez un maçon ou un expert en bâtiment.' },
-      { q: 'Combien coûte la réparation d’une fissure ?', a: 'Une réparation esthétique (rebouchage + peinture) coûte 200 à 400 \u20ac. Un traitement structurel (agrafage, injection de résine) coûte 400 à 800 \u20ac ou plus selon l’ampleur. Si la fissure est liée aux fondations, les travaux de reprise en sous-\u0153uvre peuvent atteindre plusieurs milliers d’euros.' },
+      { q: 'Combien coûte la réparation d’une fissure ?', a: 'Une réparation esthétique (rebouchage + peinture) coûte 200 à 400 €. Un traitement structurel (agrafage, injection de résine) coûte 400 à 800 € ou plus selon l’ampleur. Si la fissure est liée aux fondations, les travaux de reprise en sous-œuvre peuvent atteindre plusieurs milliers d’euros.' },
       { q: 'Les fissures sont-elles couvertes par l’assurance ?', a: 'Les fissures causées par un événement naturel (sécheresse, inondation) peuvent être prises en charge si un arrêté de catastrophe naturelle est publié. Vous disposez alors de 10 jours pour déclarer le sinistre à votre assureur.' },
       { q: 'Quelle est la différence entre microfissure et fissure structurelle ?', a: 'Une microfissure (moins de 0,2 mm) est généralement superficielle et liée au retrait de l’enduit. Une fissure structurelle (plus de 2 mm, en escalier ou traversante) indique un mouvement du bâtiment et nécessite un diagnostic approfondi.' },
     ],
@@ -335,7 +335,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Généralement sous 4 à 12h (selon disponibilité)',
     faq: [
       { q: 'Comment localiser une infiltration de toiture ?', a: 'L’eau peut parcourir un long chemin le long de la charpente avant de goutter. Inspectez les combles avec une lampe torche pendant une journée de pluie pour identifier le point d’entrée. Un couvreur expérimenté peut également réaliser un test d’étanchéité au tuyau d’arrosage.' },
-      { q: 'Combien coûte la réparation d’une infiltration ?', a: 'Le coût varie de 200 \u20ac pour un remplacement de tuiles à 1 000 \u20ac pour une réfection de solin ou de zinguerie. Un bâchage d’urgence coûte 150 à 300 \u20ac. Une réfection complète de toiture peut aller de 5 000 à 15 000 \u20ac.' },
+      { q: 'Combien coûte la réparation d’une infiltration ?', a: 'Le coût varie de 200 € pour un remplacement de tuiles à 1 000 € pour une réfection de solin ou de zinguerie. Un bâchage d’urgence coûte 150 à 300 €. Une réfection complète de toiture peut aller de 5 000 à 15 000 €.' },
       { q: 'Mon assurance couvre-t-elle les infiltrations de toiture ?', a: 'L’assurance habitation couvre les dégâts causés par une tempête (arrêté Cat Nat) ou une catastrophe naturelle. L’usure normale de la toiture n’est généralement pas couverte. Déclarez le sinistre dans les 5 jours ouvrés. Pour une catastrophe naturelle, le délai est de 10 jours après publication de l’arrêté ministériel au Journal Officiel (Code des assurances, art. L125-1).' },
       { q: 'Peut-on réparer une infiltration en hiver ?', a: 'Oui, un bâchage d’urgence est possible en toute saison. Les réparations définitives (remplacement de tuiles, réfection de solin) sont également réalisables en hiver, sauf en cas de gel ou de neige sur le toit.' },
     ],
@@ -408,7 +408,7 @@ const problems: Problem[] = [
     faq: [
       { q: 'Quelles sont les causes d’humidité dans une maison ?', a: 'Les principales causes sont : les remontées capillaires (murs en contact avec le sol), la condensation (mauvaise ventilation, isolation insuffisante), les infiltrations (toiture, façade) et les fuites de canalisation cachées. Un diagnostic par un professionnel permet d’identifier la cause exacte.' },
       { q: 'L’humidité est-elle dangereuse pour la santé ?', a: 'Oui, un taux d’humidité supérieur à 70 % favorise les moisissures et les acariens, responsables d’allergies, d’asthme et d’infections respiratoires. Les enfants et les personnes âgées sont particulièrement vulnérables.' },
-      { q: 'Combien coûte un traitement anti-humidité ?', a: 'Un traitement par injection de résine hydrophobe contre les remontées capillaires coûte 200 à 400 \u20ac par mètre linéaire. L’installation d’une VMC coûte 500 à 2 000 \u20ac. Un cuvelage de sous-sol va de 150 à 300 \u20ac/m\u00b2.' },
+      { q: 'Combien coûte un traitement anti-humidité ?', a: 'Un traitement par injection de résine hydrophobe contre les remontées capillaires coûte 200 à 400 € par mètre linéaire. L’installation d’une VMC coûte 500 à 2 000 €. Un cuvelage de sous-sol va de 150 à 300 €/m².' },
       { q: 'La VMC suffit-elle à résoudre un problème d’humidité ?', a: 'La VMC traite la condensation mais pas les remontées capillaires ni les infiltrations. Si l’humidité provient du sol ou des murs, un traitement spécifique (injection, drainage, étanchéité) est nécessaire en complément de la ventilation.' },
     ],
   },
@@ -474,7 +474,7 @@ const problems: Problem[] = [
     estimatedCost: { min: 100, max: 350 },
     averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
-      { q: 'Combien coûte le remplacement d’une vitre ?', a: 'Le remplacement d’un simple vitrage coûte 100 à 200 \u20ac (fourniture + pose). Un double vitrage standard revient à 200 à 350 \u20ac. Une baie vitrée peut atteindre 500 à 1 500 \u20ac selon les dimensions et le type de vitrage.' },
+      { q: 'Combien coûte le remplacement d’une vitre ?', a: 'Le remplacement d’un simple vitrage coûte 100 à 200 € (fourniture + pose). Un double vitrage standard revient à 200 à 350 €. Une baie vitrée peut atteindre 500 à 1 500 € selon les dimensions et le type de vitrage.' },
       { q: 'Le double vitrage cassé peut-il être réparé ?', a: 'Un double vitrage cassé ne se répare pas : il faut remplacer l’ensemble du vitrage isolant (les deux vitres + l’intercalaire). Cependant, si seule une vitre est fêlée et que le joint périphérique est intact, le vitrier peut ne remplacer que la vitre abimée dans certains cas.' },
       { q: 'Mon assurance couvre-t-elle une vitre cassée ?', a: 'Oui, la garantie bris de glace de votre assurance habitation couvre le remplacement des vitrages. En cas d’effraction, c’est la garantie vol qui s’applique. En cas de tempête, c’est la garantie tempête. Déclarez le sinistre sous 5 jours.' },
       { q: 'Quel type de vitrage choisir en remplacement ?', a: 'Pour l’isolation thermique, optez pour un double vitrage 4/16/4 avec argon. Pour la sécurité, choisissez un vitrage feuilleté 44.2. Pour l’isolation acoustique, un vitrage asymétrique 10/12/4 est recommandé. Le vitrier vous conseillera selon vos besoins.' },
@@ -490,7 +490,7 @@ const problems: Problem[] = [
     symptoms: [
       'Le volet roulant ne monte plus ou reste bloqué à mi-course',
       'Le volet battant ne s’ouvre ou ne se ferme plus correctement',
-      'Bruit de grincement ou de frottement lors de la man\u0153uvre',
+      'Bruit de grincement ou de frottement lors de la manœuvre',
       'La sangle du volet est cassée ou décrochée',
     ],
     immediateActions: [
@@ -508,9 +508,9 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 24 heures',
     faq: [
       { q: 'Pourquoi mon volet roulant est-il bloqué ?', a: 'Les causes les plus fréquentes sont : des lames désaxées ou tordues, un moteur électrique en panne, une sangle cassée, un condensateur défectueux ou des coulisses encrassées. Un professionnel peut débloquer le volet et identifier la cause pour éviter la récidive.' },
-      { q: 'Faut-il remplacer le volet entier ou le réparer ?', a: 'Dans la majorité des cas, la réparation suffit : remplacement d’une sangle (20 à 50 \u20ac), changement du moteur (150 à 400 \u20ac), redressage de lames. Le remplacement complet n’est nécessaire que si le tablier est très endommagé ou le coffre obsolète.' },
-      { q: 'Combien coûte la réparation d’un volet roulant ?', a: 'La réparation coûte entre 80 et 250 \u20ac selon la panne : 80 à 120 \u20ac pour un changement de sangle, 150 à 250 \u20ac pour un remplacement de moteur. Un remplacement complet coûte 300 à 800 \u20ac (hors motorisation).' },
-      { q: 'Peut-on motoriser un volet roulant à sangle ?', a: 'Oui, la motorisation d’un volet roulant existant coûte entre 200 et 500 \u20ac (moteur + pose). Le moteur se place dans le coffre du volet. Il est également possible d’ajouter une commande radio ou une programmation horaire.' },
+      { q: 'Faut-il remplacer le volet entier ou le réparer ?', a: 'Dans la majorité des cas, la réparation suffit : remplacement d’une sangle (20 à 50 €), changement du moteur (150 à 400 €), redressage de lames. Le remplacement complet n’est nécessaire que si le tablier est très endommagé ou le coffre obsolète.' },
+      { q: 'Combien coûte la réparation d’un volet roulant ?', a: 'La réparation coûte entre 80 et 250 € selon la panne : 80 à 120 € pour un changement de sangle, 150 à 250 € pour un remplacement de moteur. Un remplacement complet coûte 300 à 800 € (hors motorisation).' },
+      { q: 'Peut-on motoriser un volet roulant à sangle ?', a: 'Oui, la motorisation d’un volet roulant existant coûte entre 200 et 500 € (moteur + pose). Le moteur se place dans le coffre du volet. Il est également possible d’ajouter une commande radio ou une programmation horaire.' },
     ],
   },
   {
@@ -543,8 +543,8 @@ const problems: Problem[] = [
     faq: [
       { q: 'Pourquoi ma chaudière fuit-elle ?', a: 'Les causes principales sont : soupape de sécurité défectueuse (pression trop élevée), vase d’expansion percé, joints usés, corps de chauffe fissuré (corrosion) ou raccords desserrés. Seul un chauffagiste agréé peut diagnostiquer et réparer la fuite en toute sécurité.' },
       { q: 'Est-ce dangereux si ma chaudière fuit ?', a: 'Une fuite d’eau de chaudière présente plusieurs risques : dégât des eaux, corrosion des composants, et si la pression descend trop bas, arrêt de la chaudière. Sur une chaudière à gaz, ne tentez aucune réparation vous-même.' },
-      { q: 'Faut-il remplacer la chaudière si elle fuit ?', a: 'Pas nécessairement. Si la fuite vient d’un joint ou de la soupape, la réparation est simple et peu coûteuse (150 à 300 \u20ac). Si le corps de chauffe est fissuré (corrosion), le remplacement de la chaudière est souvent plus économique (3 000 à 7 000 \u20ac pour une chaudière à condensation).' },
-      { q: 'La fuite est-elle couverte par le contrat d’entretien ?', a: 'La plupart des contrats d’entretien couvrent le dépannage (déplacement + main-d’\u0153uvre). Les pièces détachées sont incluses dans les contrats « tout compris » (200 à 400 \u20ac/an) mais pas dans les contrats de base (120 à 180 \u20ac/an).' },
+      { q: 'Faut-il remplacer la chaudière si elle fuit ?', a: 'Pas nécessairement. Si la fuite vient d’un joint ou de la soupape, la réparation est simple et peu coûteuse (150 à 300 €). Si le corps de chauffe est fissuré (corrosion), le remplacement de la chaudière est souvent plus économique (3 000 à 7 000 € pour une chaudière à condensation).' },
+      { q: 'La fuite est-elle couverte par le contrat d’entretien ?', a: 'La plupart des contrats d’entretien couvrent le dépannage (déplacement + main-d’œuvre). Les pièces détachées sont incluses dans les contrats « tout compris » (200 à 400 €/an) mais pas dans les contrats de base (120 à 180 €/an).' },
     ],
   },
   {
@@ -576,8 +576,8 @@ const problems: Problem[] = [
     faq: [
       { q: 'Comment purger un radiateur ?', a: 'Mettez le chauffage en marche, placez un récipient sous la vis de purge (petit carré en haut du radiateur), ouvrez-la d’un quart de tour avec une clé de purge. Laissez l’air s’échapper jusqu’à ce que l’eau coule régulièrement, puis refermez. Vérifiez la pression au manomètre.' },
       { q: 'Pourquoi un seul radiateur est-il froid ?', a: 'Si un seul radiateur est froid, vérifiez d’abord la vanne thermostatique (elle peut être bloquée). Purgez-le. Si cela ne suffit pas, le problème peut être un déséquilibre hydraulique ou un embouage du radiateur qui nécessite un désembouage professionnel.' },
-      { q: 'Qu’est-ce que le désembouage ?', a: 'Le désembouage consiste à nettoyer le circuit de chauffage pour éliminer les boues (oxydes métalliques) qui obstruent les radiateurs et réduisent leur efficacité. Coût : 400 à 800 \u20ac pour une maison. Il améliore le rendement de 20 à 30 %.' },
-      { q: 'Combien coûte l’intervention d’un chauffagiste pour un radiateur froid ?', a: 'Le déplacement + diagnostic coûte 80 à 120 \u20ac. Si le problème se règle par une purge, pas de supplément. Le remplacement d’une tête thermostatique coûte 50 à 100 \u20ac. Un désembouage revient à 400 à 800 \u20ac.' },
+      { q: 'Qu’est-ce que le désembouage ?', a: 'Le désembouage consiste à nettoyer le circuit de chauffage pour éliminer les boues (oxydes métalliques) qui obstruent les radiateurs et réduisent leur efficacité. Coût : 400 à 800 € pour une maison. Il améliore le rendement de 20 à 30 %.' },
+      { q: 'Combien coûte l’intervention d’un chauffagiste pour un radiateur froid ?', a: 'Le déplacement + diagnostic coûte 80 à 120 €. Si le problème se règle par une purge, pas de supplément. Le remplacement d’une tête thermostatique coûte 50 à 100 €. Un désembouage revient à 400 à 800 €.' },
     ],
   },
   {
@@ -609,9 +609,9 @@ const problems: Problem[] = [
     averageResponseTime: 'Généralement sous 4 à 12h (selon disponibilité)',
     faq: [
       { q: 'Mon ballon d’eau chaude ne chauffe plus, que faire ?', a: 'Vérifiez d’abord le disjoncteur dédié et le contacteur jour/nuit (mettez-le en marche forcée). Si le ballon ne chauffe toujours pas, appuyez sur le bouton de réarmement du thermostat de sécurité (sous le capot inférieur). Si le problème persiste, la résistance est probablement entartrée ou le thermostat défectueux.' },
-      { q: 'Faut-il réparer ou remplacer le ballon ?', a: 'Si le ballon a moins de 10 ans, la réparation est rentable (remplacement de résistance : 150 à 300 \u20ac, thermostat : 100 à 200 \u20ac). Au-delà de 12 à 15 ans, le remplacement est préférable (600 à 2 000 \u20ac selon capacité et technologie).' },
+      { q: 'Faut-il réparer ou remplacer le ballon ?', a: 'Si le ballon a moins de 10 ans, la réparation est rentable (remplacement de résistance : 150 à 300 €, thermostat : 100 à 200 €). Au-delà de 12 à 15 ans, le remplacement est préférable (600 à 2 000 € selon capacité et technologie).' },
       { q: 'Quelle capacité de ballon choisir ?', a: 'Comptez environ 50 litres par personne : 100 L pour un couple, 200 L pour une famille de 4 personnes, 300 L pour 5 à 6 personnes. Un ballon thermodynamique consomme 2 à 3 fois moins d’électricité qu’un cumulus classique (source : ADEME).' },
-      { q: 'Mon ballon fuit, est-ce réparable ?', a: 'Si la fuite provient du groupe de sécurité, un simple remplacement suffit (80 à 150 \u20ac). Si la cuve elle-même est percée (corrosion), le remplacement du ballon est inévitable. Une fuite de cuve ne se répare pas.' },
+      { q: 'Mon ballon fuit, est-ce réparable ?', a: 'Si la fuite provient du groupe de sécurité, un simple remplacement suffit (80 à 150 €). Si la cuve elle-même est percée (corrosion), le remplacement du ballon est inévitable. Une fuite de cuve ne se répare pas.' },
     ],
   },
   {
@@ -642,7 +642,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Généralement sous 1 à 4h (selon disponibilité)',
     faq: [
       { q: 'Comment déboucher des WC sans plombier ?', a: 'Utilisez une ventouse spéciale WC (à bords renforcés) en effectuant des mouvements de pompage vigoureux. Si cela ne fonctionne pas, essayez un furet manuel. Évitez les produits chimiques agressifs qui peuvent endommager les canalisations en PVC.' },
-      { q: 'Combien coûte le débouchage de WC par un plombier ?', a: 'Le débouchage de WC coûte entre 80 et 250 \u20ac selon la difficulté. Un débouchage à la ventouse ou au furet coûte 80 à 150 \u20ac. Si le bouchon est profond dans la canalisation, un hydrocurage peut être nécessaire (200 à 400 \u20ac).' },
+      { q: 'Combien coûte le débouchage de WC par un plombier ?', a: 'Le débouchage de WC coûte entre 80 et 250 € selon la difficulté. Un débouchage à la ventouse ou au furet coûte 80 à 150 €. Si le bouchon est profond dans la canalisation, un hydrocurage peut être nécessaire (200 à 400 €).' },
       { q: 'Pourquoi mes WC se bouchent-ils régulièrement ?', a: 'Des WC qui se bouchent fréquemment peuvent indiquer : un problème de pente sur la canalisation d’évacuation, un rétrécissement du tuyau (calcaire, racines), ou une fosse septique pleine. Un diagnostic par caméra permet d’identifier la cause et de planifier une solution durable.' },
       { q: 'L’eau de Javel peut-elle déboucher les WC ?', a: 'Non, l’eau de Javel désinfecte mais ne dissout pas les bouchons. Le mélange eau chaude + liquide vaisselle peut aider pour les bouchons légers (graisse). Pour les bouchons solides, seule une action mécanique (ventouse, furet) est efficace.' },
     ],
@@ -673,8 +673,8 @@ const problems: Problem[] = [
     estimatedCost: { min: 60, max: 200 },
     averageResponseTime: 'Sous 24 heures',
     faq: [
-      { q: 'Comment réparer un robinet qui goutte ?', a: 'Pour un robinet mélangeur : coupez l’eau, démontez la tête du robinet, remplacez le joint clapet (2 à 5 \u20ac). Pour un mitigeur : remplacez la cartouche céramique (15 à 40 \u20ac). Si le siège est abîmé, il faudra le rectifier ou remplacer le robinet entier.' },
-      { q: 'Combien coûte la réparation d’un robinet ?', a: 'Un plombier facture 60 à 120 \u20ac pour un changement de joint ou de cartouche (déplacement + main-d’\u0153uvre + pièce). Le remplacement complet d’un robinet mitigeur coûte 80 à 200 \u20ac (fourniture + pose).' },
+      { q: 'Comment réparer un robinet qui goutte ?', a: 'Pour un robinet mélangeur : coupez l’eau, démontez la tête du robinet, remplacez le joint clapet (2 à 5 €). Pour un mitigeur : remplacez la cartouche céramique (15 à 40 €). Si le siège est abîmé, il faudra le rectifier ou remplacer le robinet entier.' },
+      { q: 'Combien coûte la réparation d’un robinet ?', a: 'Un plombier facture 60 à 120 € pour un changement de joint ou de cartouche (déplacement + main-d’œuvre + pièce). Le remplacement complet d’un robinet mitigeur coûte 80 à 200 € (fourniture + pose).' },
       { q: 'Un robinet qui fuit consomme-t-il beaucoup d’eau ?', a: 'Oui, un robinet qui goutte à raison d’une goutte par seconde gaspille environ 3 à 5 litres par jour, soit 1 100 à 1 800 litres par an. Cela représente 5 à 8 € sur la facture d’eau annuelle. Réparer une fuite est donc rapidement rentable.' },
       { q: 'Puis-je remplacer un robinet moi-même ?', a: 'Oui, si vous avez quelques notions de bricolage. Coupez l’eau, démontez l’ancien robinet (clé plate ou clé à molette), nettoyez le support, posez le nouveau avec les flexibles fournis. Comptez 30 minutes à 1 heure pour un remplacement standard.' },
     ],
@@ -706,7 +706,7 @@ const problems: Problem[] = [
     estimatedCost: { min: 150, max: 500 },
     averageResponseTime: 'Sous 24 heures',
     faq: [
-      { q: 'Combien coûte le remplacement de tuiles cassées ?', a: 'Le remplacement de quelques tuiles coûte 150 à 500 \u20ac selon le nombre, le type de tuile et l’accessibilité du toit. Le prix comprend le déplacement, la main-d’\u0153uvre et les tuiles de remplacement. Les tuiles en terre cuite coûtent 1 à 3 \u20ac pièce, les ardoises 5 à 15 \u20ac pièce.' },
+      { q: 'Combien coûte le remplacement de tuiles cassées ?', a: 'Le remplacement de quelques tuiles coûte 150 à 500 € selon le nombre, le type de tuile et l’accessibilité du toit. Le prix comprend le déplacement, la main-d’œuvre et les tuiles de remplacement. Les tuiles en terre cuite coûtent 1 à 3 € pièce, les ardoises 5 à 15 € pièce.' },
       { q: 'L’assurance couvre-t-elle les tuiles cassées par une tempête ?', a: 'Oui, la garantie tempête de votre assurance habitation couvre les dégâts causés par des vents supérieurs à 100 km/h ou anormalement violents. Déclarez le sinistre sous 5 jours avec photos et devis du couvreur.' },
       { q: 'Peut-on remplacer des tuiles sans refaire toute la toiture ?', a: 'Oui, un couvreur peut remplacer des tuiles individuellement si la charpente et le reste de la couverture sont en bon état. Si plus de 30 % des tuiles sont endommagées, une réfection complète est généralement plus économique à long terme.' },
       { q: 'Comment trouver des tuiles identiques aux miennes ?', a: 'Un couvreur expérimenté sait identifier le modèle de tuile. Pour les maisons anciennes, il existe des négociants spécialisés en tuiles de récupération. Les fabricants proposent aussi des tuiles « vieillies » pour s’harmoniser avec les toitures existantes.' },
@@ -739,8 +739,8 @@ const problems: Problem[] = [
     estimatedCost: { min: 80, max: 250 },
     averageResponseTime: 'Sous 48 heures',
     faq: [
-      { q: 'Combien coûte le nettoyage de gouttières ?', a: 'Le nettoyage complet des gouttières d’une maison coûte entre 80 et 250 \u20ac selon la longueur, la hauteur et l’accessibilité. Certains couvreurs proposent des forfaits annuels d’entretien (2 passages) à 150 à 300 \u20ac.' },
-      { q: 'Les pare-feuilles sont-ils efficaces ?', a: 'Oui, les pare-feuilles réduisent considérablement l’accumulation de débris. Les modèles en grille métallique ou en mousse coûtent 5 à 15 \u20ac par mètre linéaire (posé). Ils ne dispensent pas d’un contrôle annuel mais espacent les nettoyages.' },
+      { q: 'Combien coûte le nettoyage de gouttières ?', a: 'Le nettoyage complet des gouttières d’une maison coûte entre 80 et 250 € selon la longueur, la hauteur et l’accessibilité. Certains couvreurs proposent des forfaits annuels d’entretien (2 passages) à 150 à 300 €.' },
+      { q: 'Les pare-feuilles sont-ils efficaces ?', a: 'Oui, les pare-feuilles réduisent considérablement l’accumulation de débris. Les modèles en grille métallique ou en mousse coûtent 5 à 15 € par mètre linéaire (posé). Ils ne dispensent pas d’un contrôle annuel mais espacent les nettoyages.' },
       { q: 'Quand faut-il remplacer une gouttière ?', a: 'Remplacez une gouttière si elle présente des fissures, de la rouille percée (zinc) ou des joints défectueux (PVC). Une gouttière en zinc dure 30 à 50 ans, en aluminium 25 à 40 ans, en PVC 15 à 25 ans.' },
       { q: 'Puis-je nettoyer les gouttières moi-même ?', a: 'Si les gouttières sont accessibles depuis une échelle stable et que vous êtes à l’aise en hauteur, oui. Portez des gants, utilisez une échelle conforme et ne vous penchez jamais. Au-delà d’un étage ou sur un toit pentu, faites appel à un professionnel.' },
     ],
@@ -756,7 +756,7 @@ const problems: Problem[] = [
       'La porte ne s’ouvre plus ou reste bloquée à mi-course',
       'Le moteur tourne mais la porte ne bouge pas',
       'La télécommande ne fonctionne plus',
-      'Bruits anormaux (grincements, claquements) lors de la man\u0153uvre',
+      'Bruits anormaux (grincements, claquements) lors de la manœuvre',
     ],
     immediateActions: [
       'Vérifiez l’alimentation électrique du moteur et les piles de la télécommande',
@@ -773,9 +773,9 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 24 heures',
     faq: [
       { q: 'Pourquoi ma porte de garage ne s’ouvre plus ?', a: 'Les causes les plus fréquentes sont : télécommande hors service (piles), cellules de sécurité encrassées, ressort de compensation cassé, moteur défaillant ou rails déformés. Utilisez le déverrouillage manuel en attendant le réparateur.' },
-      { q: 'Combien coûte la réparation d’une porte de garage ?', a: 'Le diagnostic + réparation coûte 100 à 350 \u20ac : 100 à 150 \u20ac pour un problème de télécommande ou de cellules, 200 à 350 \u20ac pour un remplacement de moteur ou de ressorts. Le remplacement complet d’une porte coûte 800 à 3 000 \u20ac.' },
+      { q: 'Combien coûte la réparation d’une porte de garage ?', a: 'Le diagnostic + réparation coûte 100 à 350 € : 100 à 150 € pour un problème de télécommande ou de cellules, 200 à 350 € pour un remplacement de moteur ou de ressorts. Le remplacement complet d’une porte coûte 800 à 3 000 €.' },
       { q: 'Peut-on réparer un ressort de porte de garage soi-même ?', a: 'Non, les ressorts de porte de garage sont des pièces sous forte tension qui présentent un risque de blessure grave. Seul un professionnel équipé et expérimenté doit intervenir sur les ressorts.' },
-      { q: 'Faut-il changer la porte entière ou juste le moteur ?', a: 'Si la porte est en bon état (pas de rouille, pas de déformation), il suffit de remplacer le moteur (300 à 800 \u20ac). Si la porte est vétuste ou endommagée, le remplacement complet est plus économique à long terme.' },
+      { q: 'Faut-il changer la porte entière ou juste le moteur ?', a: 'Si la porte est en bon état (pas de rouille, pas de déformation), il suffit de remplacer le moteur (300 à 800 €). Si la porte est vétuste ou endommagée, le remplacement complet est plus économique à long terme.' },
     ],
   },
   {
@@ -805,7 +805,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 48 heures',
     faq: [
       { q: 'Pourquoi mon interphone ne fonctionne plus ?', a: 'Les causes fréquentes sont : câblage oxydé ou coupé, platine de rue endommagée (humidité), combiné intérieur défectueux, alimentation coupée ou gâche électrique usée. Un électricien peut tester chaque composant pour identifier la panne.' },
-      { q: 'Combien coûte la réparation d’un interphone ?', a: 'Le dépannage coûte 80 à 250 \u20ac selon la panne. Le remplacement d’un combiné coûte 50 à 150 \u20ac (fourniture + pose). Le remplacement complet d’un système d’interphonie coûte 500 à 2 000 \u20ac en copropriété.' },
+      { q: 'Combien coûte la réparation d’un interphone ?', a: 'Le dépannage coûte 80 à 250 € selon la panne. Le remplacement d’un combiné coûte 50 à 150 € (fourniture + pose). Le remplacement complet d’un système d’interphonie coûte 500 à 2 000 € en copropriété.' },
       { q: 'Qui paie la réparation de l’interphone en copropriété ?', a: 'L’interphone est un équipement commun : les réparations sont à la charge de la copropriété (budget d’entretien courant). Si seul votre combiné est défectueux, c’est généralement à la charge du copropriétaire.' },
       { q: 'Faut-il remplacer tout le système ou juste le combiné ?', a: 'Si le système a plus de 20 ans, un remplacement complet par un modèle numérique peut être plus économique. Si le système est récent, le remplacement du composant défectueux (platine, combiné, gâche) suffit.' },
     ],
@@ -838,9 +838,9 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 24 heures',
     faq: [
       { q: 'Pourquoi mon alarme se déclenche-t-elle sans raison ?', a: 'Les déclenchements intempestifs sont généralement causés par : un détecteur de mouvement sensible aux animaux ou courants d’air, une pile faible, un détecteur encrassé (poussière, insectes), ou une interférence radio. Le remplacement ou le recalibrage du détecteur règle généralement le problème.' },
-      { q: 'Combien coûte la réparation d’un système d’alarme ?', a: 'Le diagnostic + réparation coûte 100 à 300 \u20ac. Le remplacement d’un détecteur coûte 50 à 100 \u20ac. La révision complète du système coûte 150 à 250 \u20ac. Un contrat de maintenance annuel (100 à 200 \u20ac) évite les pannes.' },
+      { q: 'Combien coûte la réparation d’un système d’alarme ?', a: 'Le diagnostic + réparation coûte 100 à 300 €. Le remplacement d’un détecteur coûte 50 à 100 €. La révision complète du système coûte 150 à 250 €. Un contrat de maintenance annuel (100 à 200 €) évite les pannes.' },
       { q: 'Mon alarme dérange les voisins, quels sont les risques ?', a: 'Une sirène extérieure ne doit pas sonner plus de 3 minutes selon les recommandations professionnelles (standard APSAD R81) — certaines communes imposent également des limitations via arrêté municipal. Les nuisances sonores répétées peuvent entraîner une amende. Faites réparer le système rapidement et prévenez vos voisins.' },
-      { q: 'Faut-il remplacer mon ancien système d’alarme ?', a: 'Les systèmes de plus de 10 ans utilisent des technologies obsolètes (fréquences brouillables, pas de notification smartphone). Un système connecté moderne (500 à 1 500 \u20ac installé) offre une meilleure protection et élimine la plupart des faux déclenchements.' },
+      { q: 'Faut-il remplacer mon ancien système d’alarme ?', a: 'Les systèmes de plus de 10 ans utilisent des technologies obsolètes (fréquences brouillables, pas de notification smartphone). Un système connecté moderne (500 à 1 500 € installé) offre une meilleure protection et élimine la plupart des faux déclenchements.' },
     ],
   },
   {
@@ -874,14 +874,14 @@ const problems: Problem[] = [
     faq: [
       { q: 'Que faire en premier en cas d’inondation ?', a: 'La priorité est la sécurité : coupez l’électricité (si possible sans marcher dans l’eau), coupez le gaz, mettez-vous en sécurité en hauteur. Si le niveau monte rapidement, appelez les pompiers (18) ou le 112. Ne tentez jamais de traverser une zone inondée à pied ou en voiture.' },
       { q: 'Mon assurance couvre-t-elle une inondation ?', a: 'Les inondations d’origine naturelle sont couvertes par la garantie catastrophe naturelle (arrêté ministériel nécessaire). Les inondations accidentelles (rupture de canalisation) sont couvertes par la garantie dégât des eaux. Déclarez le sinistre sous 5 jours (10 jours pour Cat Nat).' },
-      { q: 'Combien coûte le pompage après une inondation ?', a: 'Le pompage d’urgence coûte 200 à 1 000 \u20ac selon le volume d’eau et la surface. Les entreprises spécialisées en sinistres proposent le pompage, le séchage industriel et la remise en état. Les coûts sont généralement pris en charge par l’assurance.' },
+      { q: 'Combien coûte le pompage après une inondation ?', a: 'Le pompage d’urgence coûte 200 à 1 000 € selon le volume d’eau et la surface. Les entreprises spécialisées en sinistres proposent le pompage, le séchage industriel et la remise en état. Les coûts sont généralement pris en charge par l’assurance.' },
       { q: 'Combien de temps pour sécher un logement inondé ?', a: 'Le séchage naturel prend 4 à 12 semaines selon l’ampleur. Avec des déshumidificateurs industriels, comptez 2 à 4 semaines. Les travaux de remise en état (peinture, sols) ne doivent commencer qu’une fois le taux d’humidité revenu à la normale.' },
     ],
   },
   {
     slug: 'gel-tuyaux',
     name: 'Gel des tuyaux',
-    description: 'Lorsque la température descend sous 0 \u00b0C, l’eau dans les canalisations peut geler et provoquer l’éclatement des tuyaux. C’est une urgence hivernale fréquente qui nécessite l’intervention rapide d’un plombier pour dégeler et réparer.',
+    description: 'Lorsque la température descend sous 0 °C, l’eau dans les canalisations peut geler et provoquer l’éclatement des tuyaux. C’est une urgence hivernale fréquente qui nécessite l’intervention rapide d’un plombier pour dégeler et réparer.',
     relatedServices: ['plombier'],
     primaryService: 'plombier',
     urgencyLevel: 'haute',
@@ -903,22 +903,22 @@ const problems: Problem[] = [
       'Isolez les tuyaux exposés au froid (gaine isolante, laine de verre)',
       'Laissez couler un filet d’eau pendant les nuits de grand froid',
       'Purgez les canalisations extérieures avant l’hiver',
-      'Maintenez une température minimale de 7 \u00b0C dans les pièces non chauffées',
+      'Maintenez une température minimale de 7 °C dans les pièces non chauffées',
     ],
     estimatedCost: { min: 150, max: 500 },
     averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     seasonality: 'hiver',
     faq: [
       { q: 'Comment dégeler un tuyau gelé ?', a: 'Ouvrez le robinet concerné, puis réchauffez progressivement le tuyau avec un sèche-cheveux, une serviette chaude ou un câble chauffant. Commencez par le côté du robinet et progressez vers le point gelé. N’utilisez jamais de flamme nue (chalumeau) qui pourrait faire éclater le tuyau.' },
-      { q: 'Mon tuyau a éclaté à cause du gel, que faire ?', a: 'Coupez immédiatement l’arrivée d’eau et l’électricité de la zone. Appelez un plombier d’urgence. Prenez des photos pour votre assurance. Le remplacement d’un tronc de canalisation coûte 150 à 500 \u20ac selon l’accès et le matériau.' },
+      { q: 'Mon tuyau a éclaté à cause du gel, que faire ?', a: 'Coupez immédiatement l’arrivée d’eau et l’électricité de la zone. Appelez un plombier d’urgence. Prenez des photos pour votre assurance. Le remplacement d’un tronc de canalisation coûte 150 à 500 € selon l’accès et le matériau.' },
       { q: 'Le gel des tuyaux est-il couvert par l’assurance ?', a: 'Oui, la plupart des assurances habitation couvrent les dégâts causés par le gel des canalisations via la garantie dégât des eaux. La réparation du tuyau lui-même peut être incluse si votre contrat comporte une garantie « dommages aux canalisations privées ».' },
-      { q: '\u00c0 quelle température les tuyaux gèlent-ils ?', a: 'L’eau gèle à 0 \u00b0C, mais les tuyaux isolés résistent généralement jusqu’à -5 \u00b0C. Les tuyaux exposés (extérieurs, sous-sol non chauffé, vide sanitaire) sont les plus vulnérables. En dessous de -10 \u00b0C, même les canalisations intérieures mal isolées peuvent geler.' },
+      { q: 'À quelle température les tuyaux gèlent-ils ?', a: 'L’eau gèle à 0 °C, mais les tuyaux isolés résistent généralement jusqu’à -5 °C. Les tuyaux exposés (extérieurs, sous-sol non chauffé, vide sanitaire) sont les plus vulnérables. En dessous de -10 °C, même les canalisations intérieures mal isolées peuvent geler.' },
     ],
   },
   {
     slug: 'fissure-facade',
     name: 'Fissure de façade',
-    description: 'Les fissures de façade altèrent l’esthétique et l’étanchéité du bâtiment. Elles peuvent être superficielles (fa\u00efçence) ou structurelles. Un maçon ou un façadier doit évaluer la gravité et réaliser les travaux de réparation adaptés.',
+    description: 'Les fissures de façade altèrent l’esthétique et l’étanchéité du bâtiment. Elles peuvent être superficielles (faïçence) ou structurelles. Un maçon ou un façadier doit évaluer la gravité et réaliser les travaux de réparation adaptés.',
     relatedServices: ['macon', 'peintre-en-batiment'],
     primaryService: 'macon',
     urgencyLevel: 'basse',
@@ -943,7 +943,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 1 semaine (rendez-vous)',
     faq: [
       { q: 'Quels types de fissures de façade existent ?', a: 'On distingue : les microfissures (<0,2 mm, esthétiques), les fissures de retrait (0,2 à 2 mm, liées au séchage de l’enduit), et les fissures structurelles (>2 mm, en escalier ou traversantes, liées à un mouvement du bâtiment). Seules les deux dernières nécessitent un traitement spécifique.' },
-      { q: 'Combien coûte la réparation d’une fissure de façade ?', a: 'Le traitement localisé d’une fissure coûte 300 à 800 \u20ac (ouverture, calicot, enduit). Un ravalement complet de façade coûte 40 à 100 \u20ac/m\u00b2, soit 4 000 à 15 000 \u20ac pour une maison individuelle. Les travaux structurels (agrafage, injection) sont plus onéreux.' },
+      { q: 'Combien coûte la réparation d’une fissure de façade ?', a: 'Le traitement localisé d’une fissure coûte 300 à 800 € (ouverture, calicot, enduit). Un ravalement complet de façade coûte 40 à 100 €/m², soit 4 000 à 15 000 € pour une maison individuelle. Les travaux structurels (agrafage, injection) sont plus onéreux.' },
       { q: 'Un ravalement de façade est-il obligatoire ?', a: 'Certaines communes imposent un ravalement tous les 10 ans (Paris, notamment). Vérifiez le règlement de votre commune. En copropriété, le ravalement est voté en assemblée générale et les coûts sont répartis entre copropriétaires.' },
       { q: 'Les fissures de façade sont-elles couvertes par la garantie décennale ?', a: 'Oui, si le logement a moins de 10 ans et que les fissures compromettent la solidité de l’ouvrage ou le rendent impropre à sa destination. Le constructeur ou le maçon est tenu de réparer aux frais de son assurance décennale.' },
     ],
@@ -976,7 +976,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 1 semaine (rendez-vous)',
     faq: [
       { q: 'Pourquoi ma terrasse s’affaisse-t-elle ?', a: 'Les causes principales sont : un tassement différentiel du sol (sol argileux, remblai mal compacté), un drainage insuffisant (l’eau fragilise le support), des fondations trop légères ou des racines d’arbres qui soulèvent les dalles.' },
-      { q: 'Combien coûte la réparation d’un affaissement de terrasse ?', a: 'La réparation coûte 500 à 2 000 \u20ac selon l’ampleur : relevage de dalles et rechargement (500 à 800 \u20ac), injection de résine expansive pour stabiliser le sol (1 000 à 2 000 \u20ac), réfection complète de la terrasse (3 000 à 10 000 \u20ac selon la surface).' },
+      { q: 'Combien coûte la réparation d’un affaissement de terrasse ?', a: 'La réparation coûte 500 à 2 000 € selon l’ampleur : relevage de dalles et rechargement (500 à 800 €), injection de résine expansive pour stabiliser le sol (1 000 à 2 000 €), réfection complète de la terrasse (3 000 à 10 000 € selon la surface).' },
       { q: 'La garantie décennale couvre-t-elle l’affaissement ?', a: 'Si la terrasse a moins de 10 ans et que l’affaissement est dû à un défaut de construction (fondations, drainage), la garantie décennale du constructeur s’applique. Conservez les factures et le procès-verbal de réception des travaux.' },
       { q: 'Faut-il refaire toute la terrasse ?', a: 'Pas nécessairement. Si l’affaissement est localisé, un relevage des dalles avec rechargement du support peut suffire. Si le sol est instable sur une grande surface, l’injection de résine ou la reprise des fondations est nécessaire avant de reposer le revêtement.' },
     ],
@@ -1010,11 +1010,11 @@ const problems: Problem[] = [
     estimatedCost: { min: 1000, max: 5000 },
     averageResponseTime: 'Sous 1 semaine (rendez-vous)',
     faq: [
-      { q: 'Par o\u00f9 commencer l’isolation de ma maison ?', a: 'Commencez par les combles (30 % des déperditions), puis les murs (25 %), les fenêtres (15 %) et le plancher bas (10 %). Un audit énergétique (300 à 800 \u20ac) vous indiquera les priorités spécifiques à votre logement.' },
-      { q: 'Combien coûte l’isolation des combles ?', a: 'L’isolation des combles perdus coûte 20 à 50 \u20ac/m\u00b2, soit 1 000 à 3 000 \u20ac pour une maison de 100 m\u00b2. L’isolation des combles aménagés coûte 40 à 80 \u20ac/m\u00b2. Les aides (MaPrimeRénov’, CEE) peuvent couvrir 50 à 90 % du coût selon vos revenus.' },
-      { q: 'Quelles aides pour les travaux d’isolation ?', a: 'MaPrimeRénov’ : jusqu’à 75 \u20ac/m\u00b2 pour les combles. CEE (Certificats d’Économies d’Énergie) : 10 à 20 \u20ac/m\u00b2 en prime. Éco-prêt à taux zéro : jusqu’à 50 000 \u20ac à 0 % d’intérêt. TVA réduite à 5,5 % sur les travaux. L’artisan doit être certifié RGE.' },
-      { q: 'L’isolation par l’extérieur est-elle meilleure ?', a: 'L’ITE (Isolation Thermique par l’Extérieur) supprime les ponts thermiques et préserve la surface habitable. Elle coûte 100 à 200 \u20ac/m\u00b2 (contre 40 à 80 \u20ac/m\u00b2 pour l’intérieur) mais offre une meilleure performance. Elle est idéale lors d’un ravalement de façade.' },
-      { q: 'Quand remplacer les fenêtres ?', a: 'Remplacez vos fenêtres si elles sont en simple vitrage, si vous sentez des courants d’air malgré la fermeture, ou si la condensation est permanente. Le double vitrage moderne (Uw \u2264 1,3) réduit les pertes thermiques de 40 à 60 %. Coût : 300 à 1 000 \u20ac par fenêtre posée.' },
+      { q: 'Par où commencer l’isolation de ma maison ?', a: 'Commencez par les combles (30 % des déperditions), puis les murs (25 %), les fenêtres (15 %) et le plancher bas (10 %). Un audit énergétique (300 à 800 €) vous indiquera les priorités spécifiques à votre logement.' },
+      { q: 'Combien coûte l’isolation des combles ?', a: 'L’isolation des combles perdus coûte 20 à 50 €/m², soit 1 000 à 3 000 € pour une maison de 100 m². L’isolation des combles aménagés coûte 40 à 80 €/m². Les aides (MaPrimeRénov’, CEE) peuvent couvrir 50 à 90 % du coût selon vos revenus.' },
+      { q: 'Quelles aides pour les travaux d’isolation ?', a: 'MaPrimeRénov’ : jusqu’à 75 €/m² pour les combles. CEE (Certificats d’Économies d’Énergie) : 10 à 20 €/m² en prime. Éco-prêt à taux zéro : jusqu’à 50 000 € à 0 % d’intérêt. TVA réduite à 5,5 % sur les travaux. L’artisan doit être certifié RGE.' },
+      { q: 'L’isolation par l’extérieur est-elle meilleure ?', a: 'L’ITE (Isolation Thermique par l’Extérieur) supprime les ponts thermiques et préserve la surface habitable. Elle coûte 100 à 200 €/m² (contre 40 à 80 €/m² pour l’intérieur) mais offre une meilleure performance. Elle est idéale lors d’un ravalement de façade.' },
+      { q: 'Quand remplacer les fenêtres ?', a: 'Remplacez vos fenêtres si elles sont en simple vitrage, si vous sentez des courants d’air malgré la fermeture, ou si la condensation est permanente. Le double vitrage moderne (Uw ≤ 1,3) réduit les pertes thermiques de 40 à 60 %. Coût : 300 à 1 000 € par fenêtre posée.' },
     ],
   },
   {
@@ -1045,7 +1045,7 @@ const problems: Problem[] = [
     estimatedCost: { min: 100, max: 400 },
     averageResponseTime: 'Sous 24 heures',
     faq: [
-      { q: 'Combien coûte un traitement anti-nuisibles ?', a: 'Le prix dépend du type de nuisible et de la surface : désinsectisation cafards (100 à 200 \u20ac), traitement punaises de lit (200 à 400 \u20ac par pièce), dératisation (150 à 300 \u20ac), destruction de nid de guêpes (80 à 200 \u20ac). Plusieurs passages peuvent être nécessaires.' },
+      { q: 'Combien coûte un traitement anti-nuisibles ?', a: 'Le prix dépend du type de nuisible et de la surface : désinsectisation cafards (100 à 200 €), traitement punaises de lit (200 à 400 € par pièce), dératisation (150 à 300 €), destruction de nid de guêpes (80 à 200 €). Plusieurs passages peuvent être nécessaires.' },
       { q: 'Les traitements chimiques sont-ils dangereux ?', a: 'Les professionnels utilisent des produits homologués et sécurisés. Vous devrez évacuer le logement pendant quelques heures après l’intervention (selon le produit). Les traitements par gel ou par pièges sont moins contraignants.' },
       { q: 'Mon propriétaire doit-il payer le traitement ?', a: 'Si l’infestation est due à un défaut du logement (trous dans les murs, manque d’étanchéité), le propriétaire est responsable. Pour les punaises de lit, la loi Elan de 2018 met le traitement à la charge du propriétaire sauf si le locataire est à l’origine de l’infestation.' },
       { q: 'Combien de temps dure un traitement anti-nuisibles ?', a: 'Un traitement cafards nécessite 2 à 3 passages espacés de 2 semaines. Les punaises de lit demandent 2 à 3 traitements sur 3 à 4 semaines. La dératisation prend 2 à 4 semaines avec un suivi mensuel pendant 3 mois.' },

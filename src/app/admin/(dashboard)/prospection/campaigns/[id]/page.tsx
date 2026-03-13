@@ -46,7 +46,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       if (data.success) {
         setCampaign(data.data)
       } else {
-        setError(data.error?.message || 'Campagne non trouv\u00e9e')
+        setError(data.error?.message || 'Campagne non trouvée')
       }
     } catch {
       setError('Impossible de charger la campagne')
@@ -98,11 +98,11 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       const data = await res.json()
       if (data.success) {
         const actionLabels: Record<string, string> = {
-          send: 'Campagne lanc\u00e9e',
+          send: 'Campagne lancée',
           pause: 'Campagne mise en pause',
           resume: 'Campagne reprise',
         }
-        setSuccessMsg(actionLabels[action] || 'Action effectu\u00e9e')
+        setSuccessMsg(actionLabels[action] || 'Action effectuée')
         setTimeout(() => setSuccessMsg(null), 3000)
         fetchCampaign()
         fetchStats()
@@ -146,7 +146,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error || 'Campagne non trouv\u00e9e'}
+          {error || 'Campagne non trouvée'}
         </div>
       </div>
     )
@@ -158,11 +158,11 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
 
   const statCards = [
     { label: 'Destinataires', value: campaign.total_recipients, icon: Users, color: 'text-blue-600 bg-blue-100' },
-    { label: 'Envoy\u00e9s', value: campaign.sent_count, icon: Send, color: 'text-green-600 bg-green-100' },
-    { label: 'Livr\u00e9s', value: campaign.delivered_count, icon: CheckCircle, color: 'text-blue-600 bg-blue-100' },
-    { label: 'R\u00e9ponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-blue-600 bg-blue-100' },
-    { label: '\u00c9checs', value: campaign.failed_count, icon: XCircle, color: 'text-red-600 bg-red-100' },
-    { label: 'Co\u00fbt', value: `${campaign.actual_cost.toFixed(2)} \u20ac`, icon: DollarSign, color: 'text-amber-600 bg-amber-100' },
+    { label: 'Envoyés', value: campaign.sent_count, icon: Send, color: 'text-green-600 bg-green-100' },
+    { label: 'Livrés', value: campaign.delivered_count, icon: CheckCircle, color: 'text-blue-600 bg-blue-100' },
+    { label: 'Réponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-blue-600 bg-blue-100' },
+    { label: 'Échecs', value: campaign.failed_count, icon: XCircle, color: 'text-red-600 bg-red-100' },
+    { label: 'Coût', value: `${campaign.actual_cost.toFixed(2)} €`, icon: DollarSign, color: 'text-amber-600 bg-amber-100' },
   ]
 
   return (

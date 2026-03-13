@@ -111,7 +111,7 @@ export default function ListsPage() {
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
                   <List className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   {lists.length === 0
-                    ? 'Aucune liste. Cr\u00e9ez votre premi\u00e8re liste de contacts.'
+                    ? 'Aucune liste. Créez votre première liste de contacts.'
                     : 'Aucune liste pour ce filtre.'}
                 </td>
               </tr>

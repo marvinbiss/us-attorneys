@@ -67,7 +67,7 @@ export default function ContactDetailPage() {
           consent_status: data.data.consent_status || 'unknown',
         })
       } else {
-        setError(data.error?.message || 'Contact non trouv\u00e9')
+        setError(data.error?.message || 'Contact non trouvé')
       }
     } catch {
       setError('Impossible de charger le contact')
@@ -145,7 +145,7 @@ export default function ContactDetailPage() {
       if (data.success) {
         setContact(data.data)
         setEditing(false)
-        setSuccessMsg('Contact mis \u00e0 jour avec succ\u00e8s')
+        setSuccessMsg('Contact mis à jour avec succès')
         setTimeout(() => setSuccessMsg(null), 3000)
       } else {
         setActionError(data.error?.message || 'Erreur')
@@ -182,7 +182,7 @@ export default function ContactDetailPage() {
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error || 'Contact non trouv\u00e9'}
+          {error || 'Contact non trouvé'}
         </div>
       </div>
     )
@@ -415,7 +415,7 @@ export default function ContactDetailPage() {
                     </div>
                     <p className="text-gray-600 line-clamp-2">{msg.rendered_body || '-'}</p>
                     <p className="text-xs text-gray-400 mt-1">
-                      {msg.sent_at ? new Date(msg.sent_at).toLocaleString('fr-FR') : 'Non envoy\u00e9'}
+                      {msg.sent_at ? new Date(msg.sent_at).toLocaleString('fr-FR') : 'Non envoyé'}
                     </p>
                   </div>
                 ))}
@@ -440,7 +440,7 @@ export default function ContactDetailPage() {
                     : 'bg-gray-100 text-gray-600'
                 }`}>
                   {contact.consent_status === 'opted_in' ? 'Inscrit'
-                    : contact.consent_status === 'opted_out' ? 'D\u00e9sinscrit'
+                    : contact.consent_status === 'opted_out' ? 'Désinscrit'
                     : 'Inconnu'}
                 </span>
               </div>

@@ -643,13 +643,13 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <h2 className="text-xl font-heading font-semibold text-gray-900">
-              Pourquoi faire appel {'\u00e0'} un {service.name.toLowerCase()} professionnel ?
+              Pourquoi faire appel à un {service.name.toLowerCase()} professionnel ?
             </h2>
             <p className="text-gray-700 leading-relaxed">
-              Faire appel {'\u00e0'} un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
-              et couvert par une assurance d{'\u00e9'}cennale. Un artisan qualifi{'\u00e9'} dispose de l&apos;exp{'\u00e9'}rience,
-              de l&apos;outillage adapt{'\u00e9'} et des certifications n{'\u00e9'}cessaires pour r{'\u00e9'}aliser vos travaux en toute s{'\u00e9'}curit{'\u00e9'}.
-              De plus, recourir {'\u00e0'} un professionnel r{'\u00e9'}f{'\u00e9'}renc{'\u00e9'} vous prot{'\u00e8'}ge en cas de malfaçon.
+              Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
+              et couvert par une assurance décennale. Un artisan qualifié dispose de l&apos;expérience,
+              de l&apos;outillage adapté et des certifications nécessaires pour réaliser vos travaux en toute sécurité.
+              De plus, recourir à un professionnel référencé vous protège en cas de malfaçon.
             </p>
 
             <h2 className="text-xl font-heading font-semibold text-gray-900">

@@ -324,7 +324,7 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                   {selectedTask.name}
                 </h3>
                 <p className="text-blue-200 text-sm">
-                  {trade.name}{city ? ` \u00b7 ${city}` : ''}
+                  {trade.name}{city ? ` · ${city}` : ''}
                 </p>
               </div>
 
@@ -382,7 +382,7 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                     className="flex items-center justify-center gap-2 w-full bg-blue-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
                   >
                     <Search className="w-5 h-5" />
-                    Trouver un {trade.name.toLowerCase()}{city ? ` \u00e0 ${city}` : ''}
+                    Trouver un {trade.name.toLowerCase()}{city ? ` à ${city}` : ''}
                   </Link>
                   <Link
                     href="/devis"

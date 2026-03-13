@@ -11,11 +11,11 @@ const VARIABLES = [
   { key: 'contact_name', label: 'Nom' },
   { key: 'company_name', label: 'Entreprise' },
   { key: 'city', label: 'Ville' },
-  { key: 'department', label: 'D\u00e9partement' },
+  { key: 'department', label: 'Département' },
   { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'T\u00e9l\u00e9phone' },
+  { key: 'phone', label: 'Téléphone' },
   { key: 'date', label: 'Date du jour' },
-  { key: 'unsubscribe_link', label: 'Lien d\u00e9sinscription' },
+  { key: 'unsubscribe_link', label: 'Lien désinscription' },
 ]
 
 export default function TemplateDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -88,13 +88,13 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors de la pr\u00e9visualisation')
+        setActionError(data?.error?.message || 'Erreur lors de la prévisualisation')
         return
       }
       const data = await res.json()
       if (data.success) setPreview(data.data.rendered_body)
     } catch {
-      setActionError('Impossible de g\u00e9n\u00e9rer l\'aper\u00e7u')
+      setActionError('Impossible de générer l\'aperçu')
     }
   }
 
@@ -281,7 +281,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
               onChange={(e) => setBody(e.target.value)}
               rows={8}
               className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
-              placeholder={channel === 'sms' ? 'Max 160 caract\u00e8res pour 1 SMS' : 'Contenu du message...'}
+              placeholder={channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'}
             />
             {channel === 'sms' && (
               <p className="text-xs text-gray-400 mt-1">{body.length}/160 caract&egrave;res ({Math.ceil(body.length / 160) || 1} SMS)</p>

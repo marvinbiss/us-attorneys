@@ -402,7 +402,7 @@ export async function generateMetadata({
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
 
-  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} \u20ac. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.`
+  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} €. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.`
 
   return {
     title,
@@ -509,7 +509,7 @@ export default async function ProblemeVillePage({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${problem.name} à ${villeData.name}`,
-    description: `Diagnostic et résolution de ${problem.name.toLowerCase()} à ${villeData.name} (${villeData.departement}). Coût : ${minPrice} à ${maxPrice} \u20ac.`,
+    description: `Diagnostic et résolution de ${problem.name.toLowerCase()} à ${villeData.name} (${villeData.departement}). Coût : ${minPrice} à ${maxPrice} €.`,
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -567,7 +567,7 @@ export default async function ProblemeVillePage({
           <div className="flex flex-wrap gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Euro className="w-4 h-4" />
-              <span className="text-sm">{minPrice} – {maxPrice} \u20ac</span>
+              <span className="text-sm">{minPrice} – {maxPrice} €</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <MapPin className="w-4 h-4" />
@@ -615,7 +615,7 @@ export default async function ProblemeVillePage({
               Comment reconnaître ce problème ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              \u00c0 {villeData.name}, voici les signes qui indiquent un problème de {problem.name.toLowerCase()}.
+              À {villeData.name}, voici les signes qui indiquent un problème de {problem.name.toLowerCase()}.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
@@ -669,7 +669,7 @@ export default async function ProblemeVillePage({
               <span className="text-5xl font-bold text-blue-600">
                 {minPrice} — {maxPrice}
               </span>
-              <span className="text-gray-600 text-lg">\u20ac</span>
+              <span className="text-gray-600 text-lg">€</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
               Prix indicatif pour {problem.name.toLowerCase()} à {villeData.name} et ses alentours
@@ -722,8 +722,8 @@ export default async function ProblemeVillePage({
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les problèmes de ${problem.name.toLowerCase()} y sont courants.`
-                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires. Les interventions en copropriété peuvent impliquer le syndic.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les problèmes de ${problem.name.toLowerCase()} y sont courants.`
+                    : `À ${villeData.name}, les appartements sont majoritaires. Les interventions en copropriété peuvent impliquer le syndic.`
                   : `La répartition entre maisons et appartements influence les spécificités des interventions à ${villeData.name}.`
               }
             />
@@ -1008,7 +1008,7 @@ export default async function ProblemeVillePage({
                     {rp.name} à {villeData.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {Math.round(rp.estimatedCost.min * multiplier)} – {Math.round(rp.estimatedCost.max * multiplier)} \u20ac
+                    {Math.round(rp.estimatedCost.min * multiplier)} – {Math.round(rp.estimatedCost.max * multiplier)} €
                   </div>
                 </Link>
               ))}
@@ -1046,7 +1046,7 @@ export default async function ProblemeVillePage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">\u00c0 {villeData.name}</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">À {villeData.name}</h3>
               <div className="space-y-2">
                 <Link href={`/villes/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
                   Artisans à {villeData.name}

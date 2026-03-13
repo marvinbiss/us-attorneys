@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ probleme:
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const description = `${problem.name} : ${problem.description} Coût estimé : ${problem.estimatedCost.min} à ${problem.estimatedCost.max} \u20ac. ${problem.averageResponseTime}.`
+  const description = `${problem.name} : ${problem.description} Coût estimé : ${problem.estimatedCost.min} à ${problem.estimatedCost.max} €. ${problem.averageResponseTime}.`
 
   return {
     title,
@@ -178,7 +178,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="flex flex-wrap gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Euro className="w-4 h-4" />
-              <span className="text-sm">{problem.estimatedCost.min} – {problem.estimatedCost.max} \u20ac</span>
+              <span className="text-sm">{problem.estimatedCost.min} – {problem.estimatedCost.max} €</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4" />
@@ -284,10 +284,10 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               <span className="text-5xl font-bold text-blue-600">
                 {problem.estimatedCost.min} — {problem.estimatedCost.max}
               </span>
-              <span className="text-gray-600 text-lg">\u20ac</span>
+              <span className="text-gray-600 text-lg">€</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;\u0153uvre incluse
+              Prix moyen constaté en France métropolitaine, main-d&apos;œuvre incluse
             </p>
             <p className="text-xs text-gray-400 mt-2">
               Les tarifs varient selon votre région, la complexité du problème et l&apos;urgence. Majorations possibles en nuit/week-end.
@@ -439,7 +439,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
                     </div>
                     <p className="text-xs text-gray-500 line-clamp-2">{rp.description}</p>
                     <div className="mt-2 text-xs text-gray-400">
-                      {rp.estimatedCost.min} – {rp.estimatedCost.max} \u20ac
+                      {rp.estimatedCost.min} – {rp.estimatedCost.max} €
                     </div>
                   </Link>
                 )
