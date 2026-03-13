@@ -6,11 +6,11 @@ import { usePathname } from 'next/navigation'
 import { Home, Search, FileText, Wrench, AlertTriangle } from 'lucide-react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
-const navItems = [
+const navItems: { href: string; icon: typeof Home; label: string; isPrimary?: boolean }[] = [
   { href: '/', icon: Home, label: 'Accueil' },
   { href: '/recherche', icon: Search, label: 'Recherche' },
+  { href: '/devis', icon: FileText, label: 'Devis', isPrimary: true },
   { href: '/services', icon: Wrench, label: 'Services' },
-  { href: '/devis', icon: FileText, label: 'Devis' },
   { href: '/urgence', icon: AlertTriangle, label: 'Urgence' },
 ]
 
@@ -41,8 +41,25 @@ export default function MobileBottomNav() {
       aria-label="Navigation mobile"
     >
       <div className="flex items-center justify-around h-16 pb-safe">
-        {navItems.map(({ href, icon: Icon, label }) => {
+        {navItems.map(({ href, icon: Icon, label, isPrimary }) => {
           const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
+
+          if (isPrimary) {
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={isActive ? 'page' : undefined}
+                className="flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95"
+              >
+                <div className="w-11 h-11 -mt-5 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30 ring-4 ring-white">
+                  <Icon className="w-5 h-5 text-white stroke-[2.5]" />
+                </div>
+                <span className="text-[11px] font-semibold text-blue-600">{label}</span>
+              </Link>
+            )
+          }
+
           return (
             <Link
               key={href}

@@ -13,6 +13,12 @@ import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import dynamic from 'next/dynamic'
+
+const ExitIntentPopup = dynamic(
+  () => import('@/components/ExitIntentPopup'),
+  { ssr: false }
+)
 
 export const revalidate = 86400 // ISR 24h
 
@@ -642,6 +648,14 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </div>
         </div>
       </section>
+
+      <ExitIntentPopup
+        sessionKey="sa:exit-urgence"
+        title="Besoin d'aide urgente ?"
+        description="Un artisan qualifié peut intervenir rapidement. Demandez un devis maintenant."
+        ctaText="Demander une intervention"
+        ctaHref={`/devis/${service}`}
+      />
     </div>
   )
 }

@@ -11,6 +11,9 @@ import { getFAQSchema, getItemListSchema, getWebsiteSchema } from '@/lib/seo/jso
 import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
+import dynamic from 'next/dynamic'
+
+const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 
 export const revalidate = 3600 // Rafraîchit les stats toutes les heures
 
@@ -107,6 +110,13 @@ export default async function HomePage() {
         topProviders={homepageData.topProviders}
         recentReviews={homepageData.recentReviews}
       />
+
+      {/* ─── SOCIAL PROOF ────────────────────────────────────── */}
+      <section className="py-6 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <SocialProofBanner variant="card" />
+        </div>
+      </section>
 
       {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
       <section className="py-16 bg-sand-200 cv-auto">

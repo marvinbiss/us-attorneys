@@ -89,7 +89,13 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
 
   // Also send to Google Analytics if available
   if (typeof window.gtag === 'function') {
-    window.gtag('event', event, data.properties)
+    const gtagParams: Record<string, unknown> = { ...data.properties }
+    // Forward conversion value to GA4
+    if (properties?.value) {
+      gtagParams.value = properties.value
+      gtagParams.currency = properties?.currency || 'EUR'
+    }
+    window.gtag('event', event, gtagParams)
   }
 
   // Debug logging in development
@@ -144,6 +150,8 @@ export const BookingFunnel = {
       artisanId,
       artisanName,
       source,
+      value: 5,
+      currency: 'EUR',
     })
   },
 
@@ -153,6 +161,8 @@ export const BookingFunnel = {
       artisanId,
       artisanName,
       source,
+      value: 15,
+      currency: 'EUR',
     })
   },
 

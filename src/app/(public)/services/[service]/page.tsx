@@ -23,10 +23,16 @@ import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
+
+const ExitIntentPopup = dynamic(
+  () => import('@/components/ExitIntentPopup'),
   { ssr: false }
 )
 
@@ -998,6 +1004,8 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* Internal Links Footer */}
 
+      <StickyMobileCTA serviceSlug={serviceSlug} />
+
       <EstimationWidget context={{
         metier: service.name,
         metierSlug: serviceSlug,
@@ -1005,6 +1013,12 @@ export default async function ServicePage({ params }: PageProps) {
         departement: '',
         pageUrl: `/services/${serviceSlug}`,
       }} />
+
+      <ExitIntentPopup
+        sessionKey="sa:exit-services"
+        description="Comparez les devis de plusieurs artisans qualifiés, gratuitement et sans engagement."
+        ctaHref={`/devis/${serviceSlug}`}
+      />
     </div>
   )
 }

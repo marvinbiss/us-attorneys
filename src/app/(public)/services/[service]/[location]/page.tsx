@@ -29,6 +29,7 @@ import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -556,6 +557,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         villeName={location.name}
         currentIntent="services"
       />
+
+      <StickyMobileCTA serviceSlug={serviceSlug} citySlug={locationSlug} />
 
       <EstimationWidget context={{
         metier: service.name,

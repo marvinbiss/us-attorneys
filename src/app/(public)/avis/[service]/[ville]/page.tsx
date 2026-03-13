@@ -39,6 +39,11 @@ const EstimationWidget = dynamic(
   { ssr: false }
 )
 
+const ExitIntentPopup = dynamic(
+  () => import('@/components/ExitIntentPopup'),
+  { ssr: false }
+)
+
 export const revalidate = 86400 // Revalidate every 24h
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
@@ -1393,6 +1398,12 @@ export default async function AvisServiceVillePage({
         departement: villeData.departementCode,
         pageUrl: `/avis/${service}/${villeSlug}`,
       }} />
+
+      <ExitIntentPopup
+        sessionKey="sa:exit-avis"
+        description="Contactez un artisan bien noté — recevez jusqu'à 3 devis gratuits."
+        ctaHref={`/devis/${service}/${villeSlug}`}
+      />
     </div>
   )
 }

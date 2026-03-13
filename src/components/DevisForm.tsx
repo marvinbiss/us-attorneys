@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check } from 'lucide-react'
@@ -53,42 +53,61 @@ function isValidFrenchPhone(phone: string): boolean {
   return false
 }
 
+const STORAGE_KEY = 'sa:devis-draft'
+
 const stepLabels = ['Service', 'Ville', 'Projet', 'Contact']
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
+  const progress = Math.round(((currentStep - 1) / 3) * 100)
   return (
-    <div className="flex items-center justify-between mb-8">
-      {[1, 2, 3, 4].map((s) => (
-        <div key={s} className="flex items-center">
-          <div className="flex flex-col items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
-                currentStep > s
-                  ? 'bg-blue-600 text-white'
-                  : currentStep === s
-                  ? 'bg-blue-600 text-white ring-4 ring-blue-100'
-                  : 'bg-gray-200 text-gray-500'
-              }`}
-            >
-              {currentStep > s ? <Check className="w-4 h-4" /> : s}
+    <div className="mb-8">
+      {/* Progress bar */}
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-medium text-blue-600">
+          Étape {currentStep} sur 4
+        </span>
+        <span className="text-sm font-semibold text-blue-600">{progress}%</span>
+      </div>
+      <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4">
+        <div
+          className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      {/* Step circles */}
+      <div className="flex items-center justify-between">
+        {[1, 2, 3, 4].map((s) => (
+          <div key={s} className="flex items-center">
+            <div className="flex flex-col items-center">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                  currentStep > s
+                    ? 'bg-blue-600 text-white'
+                    : currentStep === s
+                    ? 'bg-blue-600 text-white ring-4 ring-blue-100'
+                    : 'bg-gray-200 text-gray-500'
+                }`}
+              >
+                {currentStep > s ? <Check className="w-4 h-4" /> : s}
+              </div>
+              <span
+                className={`mt-1.5 text-xs font-medium ${
+                  currentStep >= s ? 'text-blue-600' : 'text-gray-400'
+                }`}
+              >
+                {stepLabels[s - 1]}
+              </span>
             </div>
-            <span
-              className={`mt-1.5 text-xs font-medium ${
-                currentStep >= s ? 'text-blue-600' : 'text-gray-400'
-              }`}
-            >
-              {stepLabels[s - 1]}
-            </span>
+            {s < 4 && (
+              <div
+                className={`w-8 sm:w-12 h-0.5 mx-1 sm:mx-2 mb-5 transition-all duration-300 ${
+                  currentStep > s ? 'bg-blue-600' : 'bg-gray-200'
+                }`}
+              />
+            )}
           </div>
-          {s < 4 && (
-            <div
-              className={`w-8 sm:w-12 h-0.5 mx-1 sm:mx-2 mb-5 transition-all duration-300 ${
-                currentStep > s ? 'bg-blue-600' : 'bg-gray-200'
-              }`}
-            />
-          )}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }
@@ -105,19 +124,30 @@ export default function DevisForm({
   prefilledCityPostal,
 }: DevisFormProps = {}) {
   const isPrefilled = !!(prefilledService && prefilledCity)
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(isPrefilled ? 3 : 1)
-  const [formData, setFormData] = useState<FormData>({
-    ...initialFormData,
-    ...(prefilledService ? { service: prefilledService } : {}),
-    ...(prefilledCity ? { ville: prefilledCity } : {}),
-  })
+
+  // Restore saved form progress from localStorage
+  const savedState = typeof window !== 'undefined' ? (() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      return saved ? JSON.parse(saved) : null
+    } catch { return null }
+  })() : null
+
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(
+    isPrefilled ? 3 : (savedState?.step || 1) as 1 | 2 | 3 | 4
+  )
+  const [formData, setFormData] = useState<FormData>(
+    isPrefilled
+      ? { ...initialFormData, service: prefilledService || '', ville: prefilledCity || '' }
+      : (savedState?.formData || initialFormData)
+  )
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState(prefilledCity || '')
+  const [villeQuery, setVilleQuery] = useState(prefilledCity || savedState?.villeQuery || '')
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
-  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || '')
+  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || savedState?.selectedVillePostal || '')
 
   const updateField = useCallback(
     <K extends keyof FormData>(field: K, value: FormData[K]) => {
@@ -130,6 +160,14 @@ export default function DevisForm({
     },
     []
   )
+
+  // Persist form progress to localStorage
+  useEffect(() => {
+    if (submitted) return
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, step, villeQuery, selectedVillePostal }))
+    } catch {}
+  }, [formData, step, villeQuery, selectedVillePostal, submitted])
 
   const filteredVilles = villeQuery.length >= 2
     ? villes
@@ -242,8 +280,11 @@ export default function DevisForm({
         postalCode: selectedVillePostal || '',
         urgency: formData.urgence || '',
         source: 'devis_form',
+        value: 45,
+        currency: 'EUR',
       })
       setSubmitted(true)
+      localStorage.removeItem(STORAGE_KEY)
     } catch (err) {
       setSubmitError(
         err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
@@ -262,13 +303,39 @@ export default function DevisForm({
         <h3 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-4">
           Votre demande a bien été envoyée !
         </h3>
-        <p className="text-slate-500 text-lg leading-relaxed max-w-md mx-auto">
-          Des artisans qualifiés de votre région vont étudier votre demande et vous contacter.
-        </p>
-        <p className="text-slate-400 text-sm mt-3 max-w-md mx-auto">
-          Vous recevrez des réponses sous 24h par email ou téléphone.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 mt-8 max-w-md mx-auto">
+
+        {/* Timeline next steps */}
+        <div className="text-left max-w-sm mx-auto mt-6 mb-8 space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-sm font-bold text-blue-600">1</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Analyse de votre demande</p>
+              <p className="text-xs text-slate-500">Nous recherchons les artisans les plus adaptés à votre projet</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-sm font-bold text-blue-600">2</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Réception des devis sous 24h</p>
+              <p className="text-xs text-slate-500">Jusqu&apos;à 3 artisans qualifiés vous contactent par email ou téléphone</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-sm font-bold text-blue-600">3</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Comparez et choisissez</p>
+              <p className="text-xs text-slate-500">Comparez les devis, consultez les avis et choisissez librement</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
           <Link
             href="/services"
             className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
@@ -292,6 +359,9 @@ export default function DevisForm({
       noValidate
       className="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-2xl mx-auto"
     >
+      <p className="text-center text-sm text-gray-500 mb-4">
+        Formulaire rapide — moins de 60 secondes
+      </p>
       <StepIndicator currentStep={step} />
 
       {/* Step 1: Service */}
@@ -701,9 +771,12 @@ export default function DevisForm({
                 disabled={submitting}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
               >
-                {submitting ? 'Envoi en cours…' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
+                {submitting ? 'Envoi en cours…' : 'Recevoir mes devis gratuits'} {!submitting && <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
+            <p className="text-center text-xs text-gray-400 mt-3">
+              Gratuit et sans engagement · Réponse sous 24h · Vos données restent confidentielles
+            </p>
           </div>
         )}
       </div>

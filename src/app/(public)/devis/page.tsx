@@ -10,6 +10,9 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
+import dynamic from 'next/dynamic'
+
+const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit — Comparez les Offres',
@@ -203,6 +206,11 @@ export default async function DevisPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── SOCIAL PROOF ────────────────────────────────────── */}
+      <div className="relative z-10 -mt-6 mb-4 max-w-3xl mx-auto px-4">
+        <SocialProofBanner variant="card" />
+      </div>
 
       {/* ─── FORM ─────────────────────────────────────────────── */}
       <section id="formulaire" className="relative -mt-16 z-10 px-4 pb-20">

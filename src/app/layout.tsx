@@ -170,6 +170,10 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
+        {/* Preconnect for Meta Pixel */}
+        <link rel="preconnect" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+
         {/* Preconnect for Supabase backend */}
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
@@ -180,7 +184,7 @@ export default async function RootLayout({
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         {/* Google Tag Manager */}
-        <Script id="gtm" strategy="lazyOnload">
+        <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -196,6 +200,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        {/* Meta Pixel — chargé après consentement analytics (RGPD) */}
+        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+          <Script id="meta-pixel" strategy="afterInteractive">
+            {`!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
+fbq('track', 'PageView');`}
+          </Script>
+        )}
+        {/* Google Ads Remarketing */}
+        {process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && (
+          <Script
+            id="google-ads"
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}
+          />
+        )}
+        {process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && (
+          <Script id="google-ads-config" strategy="afterInteractive">
+            {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');`}
+          </Script>
+        )}
         {/* Microsoft Clarity — chargé uniquement après consentement analytics (RGPD) via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />

@@ -30,6 +30,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -1315,6 +1316,8 @@ export default async function UrgenceServiceVillePage({
         villeName={villeData.name}
         currentIntent="urgence"
       />
+
+      <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
 
       <EstimationWidget context={{
         metier: trade.name,

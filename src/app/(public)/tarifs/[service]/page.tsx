@@ -17,10 +17,16 @@ import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
+  { ssr: false }
+)
+
+const ExitIntentPopup = dynamic(
+  () => import('@/components/ExitIntentPopup'),
   { ssr: false }
 )
 
@@ -724,6 +730,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
+      <StickyMobileCTA serviceSlug={service} />
+
       <EstimationWidget context={{
         metier: trade.name,
         metierSlug: service,
@@ -731,6 +739,12 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         departement: '',
         pageUrl: `/tarifs/${service}`,
       }} />
+
+      <ExitIntentPopup
+        sessionKey="sa:exit-tarifs"
+        description="Obtenez le prix exact pour votre projet — comparez jusqu'à 3 devis gratuits."
+        ctaHref={`/devis/${service}`}
+      />
     </div>
   )
 }
