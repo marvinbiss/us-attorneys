@@ -15,12 +15,18 @@ import { getDefaultAuthor } from '@/lib/data/team'
 import { getServiceImage } from '@/lib/data/images'
 
 // ---------------------------------------------------------------------------
-// NO generateStaticParams — too many combinations (46 x 10 x 300 = 138K)
-// and empty generateStaticParams() in a child of a parent that generates
-// static params causes a 500 in Next.js 14.2 on Vercel.
-// Pages are generated on-demand via ISR.
+// Static params: return a minimal seed set (NOT empty — empty array in a
+// child of a parent with generateStaticParams causes a 500 on Vercel with
+// Next.js 14.2). Too many combinations (46 x 10 x 300 = 138K) to generate
+// all at build time, so we rely on dynamicParams + ISR for on-demand pages.
 // ---------------------------------------------------------------------------
 
+export function generateStaticParams() {
+  // Return at least one valid param to avoid Vercel ISR bug with empty arrays
+  return [{ service: 'plombier', ville: 'paris', travail: 'debouchage-de-canalisation' }]
+}
+
+export const dynamicParams = true
 export const revalidate = 86400 // ISR 24h
 
 // ---------------------------------------------------------------------------
