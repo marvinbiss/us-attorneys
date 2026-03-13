@@ -144,7 +144,12 @@ export default async function TarifsServiceTravailVillePage({
 
   const currentTaskIndex = tasks.indexOf(currentTask)
 
-  const commune = await getCommuneBySlug(villeSlug)
+  let commune = null
+  try {
+    commune = await getCommuneBySlug(villeSlug)
+  } catch {
+    // Graceful fallback — page works without commune data
+  }
 
   const multiplier = getRegionalMultiplier(villeData.region)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
