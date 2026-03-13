@@ -132,7 +132,6 @@ export default async function TarifsServiceTravailVillePage({
 }: {
   params: Promise<{ service: string; ville: string; travail: string }>
 }) {
-  try {
   const { service, ville: villeSlug, travail } = await params
 
   const trade = tradeContent[service]
@@ -386,7 +385,7 @@ export default async function TarifsServiceTravailVillePage({
                           <span>{name}</span>
                         ) : (
                           <Link
-                            href={`/tarifs/${service}/${tasks[i].slug}/${villeSlug}`}
+                            href={`/tarifs/${service}/${villeSlug}/${tasks[i].slug}`}
                             className="hover:text-blue-600 transition-colors"
                           >
                             {name}
@@ -535,8 +534,4 @@ export default async function TarifsServiceTravailVillePage({
       </section>
     </div>
   )
-  } catch (error) {
-    console.error('[tarifs/travail] Render error:', error)
-    throw error
-  }
 }
