@@ -372,21 +372,6 @@ export function getServicePricingSchema(params: {
         worstRating: 1,
       },
     }),
-    review: {
-      '@type': 'Review',
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: params.ratingValue || 4.7,
-        bestRating: 5,
-      },
-      author: {
-        '@type': 'Organization',
-        name: 'ServicesArtisans',
-      },
-      reviewBody: params.location
-        ? `Tarifs ${params.serviceName.toLowerCase()} à ${params.location} vérifiés et mis à jour régulièrement par ServicesArtisans.`
-        : `Tarifs ${params.serviceName.toLowerCase()} en France vérifiés et mis à jour régulièrement par ServicesArtisans.`,
-    },
   }
 }
 

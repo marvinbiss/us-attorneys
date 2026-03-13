@@ -154,19 +154,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       highPrice: trade.priceRange.max,
       offerCount: trade.commonTasks.length,
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: 4.7,
-      reviewCount: 10,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: {
-      '@type': 'Review',
-      reviewRating: { '@type': 'Rating', ratingValue: 4.7, bestRating: 5 },
-      author: { '@type': 'Organization', name: 'ServicesArtisans' },
-      reviewBody: `Tarifs ${trade.name.toLowerCase()} en France vérifiés et mis à jour régulièrement par ServicesArtisans.`,
-    },
   }
 
   const pricingItemListSchema = {
@@ -209,8 +196,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     priceCurrency: 'EUR',
     priceUnit: trade.priceRange.unit,
     offerCount: trade.commonTasks.length,
-    ratingValue: 4.7,
-    reviewCount: 10,
     url: `${SITE_URL}/tarifs/${service}`,
   })
 

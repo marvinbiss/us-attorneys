@@ -327,26 +327,10 @@ export default async function AvisServiceVillePage({
 
   const faqSchema = getFAQSchema(allFaqItems)
 
-  // Seeded fallback rating/reviews when no real data available
-  const seededH = Math.abs(hashCode(`avis-rating-${service}-${villeSlug}`))
-  const seededRating = 4.5 + (seededH % 5) * 0.1
-  const seededReviewCount = 12 + (Math.abs(hashCode(`avis-reviews-${service}-${villeSlug}`)) % 76)
+  // Only include real reviews in structured data — never fake/seeded reviews
+  const hasRealReviews = totalReviews > 0
 
-  // Seeded fallback review bodies (deterministic per service+ville)
-  const fallbackReviewTemplates = [
-    { name: "Marie L.", body: `Excellent ${tradeLower} à ${villeData.name}. Travail soigné, ponctuel et tarifs raisonnables. Je recommande vivement.`, rating: 5 },
-    { name: "Pierre D.", body: `Très professionnel, intervention rapide à ${villeData.name}. Devis respecté, travail propre. Rien à redire.`, rating: 5 },
-    { name: "Sophie M.", body: `Bon artisan, compétent et à l'écoute. Les tarifs sont dans la moyenne pour ${villeData.name}. Satisfaite du résultat.`, rating: 4 },
-    { name: "Jean-Marc R.", body: `Service de qualité, respect des délais et très bon conseil. Je ferai de nouveau appel à ses services.`, rating: 5 },
-    { name: "Isabelle C.", body: `Artisan sérieux et disponible à ${villeData.name}. Travaux réalisés dans les règles de l'art. Prix correct.`, rating: 4 },
-  ]
-  const fallbackStartIdx = Math.abs(hashCode(`avis-fb-${service}-${villeSlug}`)) % fallbackReviewTemplates.length
-  const fallbackReviews = Array.from({ length: 3 }, (_, i) => fallbackReviewTemplates[(fallbackStartIdx + i) % fallbackReviewTemplates.length])
-
-  // Use real data when available, seeded fallback otherwise
-  const schemaRating = totalReviews > 0 ? roundedRating : Math.round(seededRating * 10) / 10
-  const schemaReviewCount = totalReviews > 0 ? totalReviews : seededReviewCount
-  const schemaReviews = reviews.length > 0
+  const schemaReviews = hasRealReviews
     ? reviews.slice(0, 5).map(r => ({
         '@type': 'Review' as const,
         author: { '@type': 'Person' as const, name: r.client_name || "Client vérifié" },
@@ -354,12 +338,7 @@ export default async function AvisServiceVillePage({
         reviewBody: r.comment,
         ...(r.created_at ? { datePublished: r.created_at.split('T')[0] } : {}),
       }))
-    : fallbackReviews.map(r => ({
-        '@type': 'Review' as const,
-        author: { '@type': 'Person' as const, name: r.name },
-        reviewRating: { '@type': 'Rating' as const, ratingValue: r.rating, bestRating: 5, worstRating: 1 },
-        reviewBody: r.body,
-      }))
+    : []
 
   const reviewSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -387,14 +366,16 @@ export default async function AvisServiceVillePage({
       highPrice: maxPrice,
       offerCount: trade.commonTasks.length,
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: schemaRating,
-      reviewCount: schemaReviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: schemaReviews,
+    ...(hasRealReviews ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: roundedRating,
+        reviewCount: totalReviews,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      review: schemaReviews,
+    } : {}),
   }
 
   // ----- Related links -----

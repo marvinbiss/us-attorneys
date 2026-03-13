@@ -267,8 +267,6 @@ export default async function ServicePage({ params }: PageProps) {
     priceCurrency: 'EUR',
     priceUnit: trade.priceRange.unit,
     offerCount: totalProviderCount || trade.commonTasks.length,
-    ratingValue: 4.7,
-    reviewCount: totalProviderCount > 0 ? Math.max(totalProviderCount * 2, 10) : 10,
     url: `${SITE_URL}/services/${serviceSlug}`,
   }) : null
 
