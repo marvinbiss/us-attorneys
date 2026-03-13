@@ -40,60 +40,53 @@ export async function GET(request: Request) {
     const city = parsed.data.city ? sanitizeSearchQuery(parsed.data.city) : null
     const service = parsed.data.service ? sanitizeSearchQuery(parsed.data.service) : null
 
-    // 1. Count leads created (optionally filtered by city/service)
+    // Build all 3 queries
     let leadsQuery = supabase
       .from('devis_requests')
       .select('id', { count: 'exact', head: true })
-
     if (city) leadsQuery = leadsQuery.ilike('city', `%${city}%`)
     if (service) leadsQuery = leadsQuery.ilike('service_name', `%${service}%`)
 
-    const { count: leadsCreated } = await leadsQuery
+    let assignedQuery = supabase
+      .from('lead_assignments')
+      .select('id, lead:devis_requests!inner(city, service_name)', { count: 'exact', head: true })
+    if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
+    if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
 
-    // 2. Count leads assigned (via lead_assignments)
-    let leadsAssigned: number | null = 0
-    try {
-      // Try join with devis_requests (works if FK exists)
-      let assignedQuery = supabase
-        .from('lead_assignments')
-        .select('id, lead:devis_requests!inner(city, service_name)', { count: 'exact', head: true })
-
-      if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
-      if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
-
-      const { count, error: assignedError } = await assignedQuery
-      if (assignedError) {
-        // FK may not exist (migration 202 removes it); fall back to simple count
-        const { count: fallbackCount } = await supabase
-          .from('lead_assignments')
-          .select('id', { count: 'exact', head: true })
-        leadsAssigned = fallbackCount
-      } else {
-        leadsAssigned = count
-      }
-    } catch {
-      // Fallback: count all assignments without join
-      const { count: fallbackCount } = await supabase
-        .from('lead_assignments')
-        .select('id', { count: 'exact', head: true })
-      leadsAssigned = fallbackCount
-    }
-
-    // 3. Active artisans list (optionally filtered by city/service)
     let artisansQuery = supabase
       .from('providers')
       .select('id, stable_id, name, slug, specialty, address_city, is_verified')
       .eq('is_active', true)
       .order('name', { ascending: true })
       .limit(100)
-
     if (city) artisansQuery = artisansQuery.ilike('address_city', `${city}%`)
     if (service) artisansQuery = artisansQuery.ilike('specialty', `${service}%`)
 
-    const { data: artisans, error: artisansError } = await artisansQuery
+    // Execute all 3 queries in parallel (instead of sequential)
+    const assignedPromise = assignedQuery.then(
+      (res) => res,
+      () => ({ count: null as number | null, error: null })
+    )
 
-    if (artisansError) {
-      logger.warn('Admin leads artisans query failed', { code: artisansError.code, message: artisansError.message })
+    const [leadsResult, assignedResult, artisansResult] = await Promise.all([
+      leadsQuery,
+      assignedPromise,
+      artisansQuery,
+    ])
+
+    const leadsCreated = leadsResult.count
+    let leadsAssigned = assignedResult.count
+    // Fallback if FK join failed
+    if (leadsAssigned === null || leadsAssigned === undefined) {
+      const { count: fallbackCount } = await supabase
+        .from('lead_assignments')
+        .select('id', { count: 'exact', head: true })
+      leadsAssigned = fallbackCount
+    }
+
+    const artisans = artisansResult.data
+    if (artisansResult.error) {
+      logger.warn('Admin leads artisans query failed', { code: artisansResult.error.code, message: artisansResult.error.message })
     }
 
     return NextResponse.json({

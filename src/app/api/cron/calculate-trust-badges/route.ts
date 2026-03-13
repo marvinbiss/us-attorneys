@@ -63,32 +63,53 @@ export async function GET(request: Request) {
         break
       }
 
-      for (const provider of providers) {
-        try {
-          // Calculate review metrics for this provider
-          // reviews.artisan_id references profiles.id = providers.user_id
-          if (!provider.user_id) {
-            totalSkipped++
-            continue
-          }
-          const { data: reviewStats, error: reviewError } = await supabase
-            .from('reviews')
-            .select('rating')
-            .eq('artisan_id', provider.user_id)
-            .eq('status', 'published')
+      // Batch-fetch all reviews for this batch of providers (eliminates N+1)
+      const userIds = providers
+        .map(p => p.user_id)
+        .filter((id): id is string => !!id)
 
-          if (reviewError) {
-            totalErrors++
-            continue
-          }
+      const skippedInBatch = providers.filter(p => !p.user_id).length
+      totalSkipped += skippedInBatch
 
-          const reviews = reviewStats || []
-          const reviewCount = reviews.length
-          const ratingAverage =
-            reviewCount > 0
-              ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviewCount
-              : 0
+      if (userIds.length === 0) {
+        if (providers.length < BATCH_SIZE) {
+          hasMore = false
+        } else {
+          offset += BATCH_SIZE
+        }
+        continue
+      }
 
+      // Single query instead of N queries
+      const { data: allReviews, error: reviewError } = await supabase
+        .from('reviews')
+        .select('artisan_id, rating')
+        .in('artisan_id', userIds)
+        .eq('status', 'published')
+
+      if (reviewError) {
+        logger.error('[Cron] Error batch-fetching reviews:', reviewError)
+        totalErrors++
+      } else {
+        // Group reviews by artisan_id
+        const reviewsByArtisan = new Map<string, number[]>()
+        for (const r of allReviews || []) {
+          const existing = reviewsByArtisan.get(r.artisan_id) || []
+          existing.push(r.rating || 0)
+          reviewsByArtisan.set(r.artisan_id, existing)
+        }
+
+        // Prepare batch updates
+        const updates: Promise<void>[] = []
+
+        for (const provider of providers) {
+          if (!provider.user_id) continue
+
+          const ratings = reviewsByArtisan.get(provider.user_id) || []
+          const reviewCount = ratings.length
+          const ratingAverage = reviewCount > 0
+            ? ratings.reduce((sum, r) => sum + r, 0) / reviewCount
+            : 0
           const roundedRating = Math.round(ratingAverage * 100) / 100
 
           // Skip update if nothing changed
@@ -100,30 +121,30 @@ export async function GET(request: Request) {
             continue
           }
 
-          // Update provider with only the columns that exist
-          const { error: updateError } = await supabase
-            .from('providers')
-            .update({
-              rating_average: roundedRating,
-              review_count: reviewCount,
+          updates.push(
+            Promise.resolve(
+              supabase
+                .from('providers')
+                .update({ rating_average: roundedRating, review_count: reviewCount })
+                .eq('id', provider.id)
+            ).then(({ error: updateError }) => {
+              if (updateError) {
+                totalErrors++
+                logger.error(`[Cron] Error updating provider ${provider.id}:`, updateError)
+              } else {
+                totalUpdated++
+              }
+            }).catch((err) => {
+              totalErrors++
+              logger.error(`[Cron] Error processing provider ${provider.id}:`, err)
             })
-            .eq('id', provider.id)
-
-          if (updateError) {
-            totalErrors++
-            logger.error(
-              `[Cron] Error updating review metrics for provider ${provider.id}:`,
-              updateError
-            )
-          } else {
-            totalUpdated++
-          }
-        } catch (providerError) {
-          totalErrors++
-          logger.error(
-            `[Cron] Error processing provider ${provider.id}:`,
-            providerError
           )
+        }
+
+        // Execute updates in parallel (batch of 50 max)
+        const CONCURRENT_UPDATES = 50
+        for (let i = 0; i < updates.length; i += CONCURRENT_UPDATES) {
+          await Promise.allSettled(updates.slice(i, i + CONCURRENT_UPDATES))
         }
       }
 

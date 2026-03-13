@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, Play, Maximize2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -82,11 +83,15 @@ export function ReviewPhotoGallery({
             )}
           >
             {item.type === 'photo' ? (
-              <img
+              <Image
                 src={item.thumbnailUrl || item.url}
                 alt={item.caption || `Photo d'avis client ${index + 1}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
+                width={200}
+                height={200}
+                sizes="(max-width: 768px) 25vw, 200px"
+                unoptimized
               />
             ) : (
               <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
@@ -163,10 +168,15 @@ export function ReviewPhotoGallery({
             {/* Media */}
             <div className="max-w-full max-h-full p-4">
               {media[currentIndex].type === 'photo' ? (
-                <img
+                <Image
                   src={media[currentIndex].url}
                   alt={media[currentIndex].caption || `Photo d'avis client ${currentIndex + 1}`}
                   className="max-w-full max-h-[70vh] object-contain"
+                  width={800}
+                  height={600}
+                  sizes="90vw"
+                  priority
+                  unoptimized
                 />
               ) : (
                 <video
@@ -199,10 +209,14 @@ export function ReviewPhotoGallery({
                     : 'border-transparent opacity-50 hover:opacity-75'
                 )}
               >
-                <img
+                <Image
                   src={item.thumbnailUrl || item.url}
                   alt={`Miniature photo ${index + 1}`}
                   className="w-full h-full object-cover"
+                  width={64}
+                  height={64}
+                  sizes="64px"
+                  unoptimized
                 />
               </button>
             ))}

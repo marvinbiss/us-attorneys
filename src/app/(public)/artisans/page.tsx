@@ -10,8 +10,7 @@ import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
 import { resolveProviderCities } from '@/lib/insee-resolver'
 
-// Force dynamic rendering — always query DB live, never cache at build time
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // ISR - revalidate every hour
 
 export const metadata: Metadata = {
   title: 'Annuaire Artisans France — SIREN Vérifiés',

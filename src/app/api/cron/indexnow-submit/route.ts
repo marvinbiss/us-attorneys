@@ -37,6 +37,7 @@ export async function GET(request: Request) {
       'Authorization': `Bearer ${process.env.CRON_SECRET}`,
     },
     body: JSON.stringify({ urls }),
+    signal: AbortSignal.timeout(30000), // 30s timeout
   })
 
   const result = await response.json()

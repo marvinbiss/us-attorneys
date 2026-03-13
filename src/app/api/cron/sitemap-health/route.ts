@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   }
 
   // Fetch sitemap index to get all child sitemaps
-  const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, { cache: 'no-store' })
+  const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
   if (!indexRes.ok) {
     console.error('[sitemap-health] CRITICAL: sitemap index returned', indexRes.status)
     return NextResponse.json({ error: 'Sitemap index failed', status: indexRes.status }, { status: 500 })
@@ -36,7 +36,7 @@ export async function GET(request: Request) {
     const batchResults = await Promise.all(
       batch.map(async (url) => {
         try {
-          const res = await fetch(url, { cache: 'no-store' })
+          const res = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
           const text = res.ok ? await res.text() : ''
           const urlCount = (text.match(/<url>/g) || []).length
           const ok = res.ok && urlCount > 0
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
   // Also check special sitemaps
   for (const special of [`${SITE_URL}/image-sitemap.xml`, `${SITE_URL}/news-sitemap.xml`]) {
     try {
-      const res = await fetch(special, { cache: 'no-store' })
+      const res = await fetch(special, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
       // news-sitemap can legitimately be empty (0 articles in last 48h)
       const ok = res.ok
       if (!ok) failures.push(special)

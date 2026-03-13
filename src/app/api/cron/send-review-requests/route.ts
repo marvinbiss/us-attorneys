@@ -167,61 +167,81 @@ export async function GET(request: Request) {
     let sentCount = 0
     let failedCount = 0
 
-    for (const booking of bookingsToRequest) {
-      const artisan = artisanMap.get(booking.provider_id || '')
-      const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
-      const artisanName = artisan?.full_name || 'Artisan'
-      const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`
+    // Process in parallel batches of 5 (instead of sequential with 100ms delay)
+    const BATCH_CONCURRENCY = 5
+    const notificationLogs: Array<{
+      booking_id: string
+      type: string
+      status: string
+      recipient_email: string
+      error_message?: string
+    }> = []
 
-      try {
-        // Send email
-        const emailTemplate = getReviewEmailTemplate({
-          clientName: client?.full_name || '',
-          artisanName,
-          serviceName: booking.service_name || 'Service',
-          reviewUrl,
-        })
+    for (let i = 0; i < bookingsToRequest.length; i += BATCH_CONCURRENCY) {
+      const batch = bookingsToRequest.slice(i, i + BATCH_CONCURRENCY)
 
-        const emailResult = await sendEmail({
-          to: client?.email || '',
-          ...emailTemplate,
-        })
+      const results = await Promise.allSettled(
+        batch.map(async (booking) => {
+          const artisan = artisanMap.get(booking.provider_id || '')
+          const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
+          const artisanName = artisan?.full_name || 'Artisan'
+          const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`
 
-        // Send SMS if phone available
-        let smsResult = { success: false }
-        if (client?.phone_e164) {
-          const smsData: SMSData = {
-            to: client.phone_e164,
+          const emailTemplate = getReviewEmailTemplate({
             clientName: client?.full_name || '',
             artisanName,
             serviceName: booking.service_name || 'Service',
-            date: '',
-            time: '',
-            bookingId: booking.id,
+            reviewUrl,
+          })
+
+          const emailResult = await sendEmail({
+            to: client?.email || '',
+            ...emailTemplate,
+          })
+
+          let smsResult = { success: false }
+          if (client?.phone_e164) {
+            const smsData: SMSData = {
+              to: client.phone_e164,
+              clientName: client?.full_name || '',
+              artisanName,
+              serviceName: booking.service_name || 'Service',
+              date: '',
+              time: '',
+              bookingId: booking.id,
+            }
+            smsResult = await sendReviewRequestSMS(smsData)
           }
-          smsResult = await sendReviewRequestSMS(smsData)
-        }
 
-        // Log notification
-        await supabase.from('notification_logs').insert({
-          booking_id: booking.id,
-          type: 'review_request',
-          status: emailResult.success || smsResult.success ? 'sent' : 'failed',
-          recipient_email: client?.email || '',
-          error_message: emailResult.error,
+          notificationLogs.push({
+            booking_id: booking.id,
+            type: 'review_request',
+            status: emailResult.success || smsResult.success ? 'sent' : 'failed',
+            recipient_email: client?.email || '',
+            error_message: emailResult.error,
+          })
+
+          return emailResult.success || smsResult.success
         })
+      )
 
-        if (emailResult.success || smsResult.success) {
+      for (const result of results) {
+        if (result.status === 'fulfilled' && result.value) {
           sentCount++
         } else {
           failedCount++
+          if (result.status === 'rejected') {
+            logger.error(`[Review Cron] Batch error:`, result.reason)
+          }
         }
+      }
+    }
 
-        // Rate limiting
-        await new Promise((r) => setTimeout(r, 100))
-      } catch (err) {
-        failedCount++
-        logger.error(`[Review Cron] Error for booking ${booking.id}:`, err)
+    // Batch-insert notification logs
+    if (notificationLogs.length > 0) {
+      const { error: logError } = await supabase.from('notification_logs').insert(notificationLogs)
+      if (logError) {
+        logger.error('[Review Cron] Error batch-inserting notification logs:', logError)
       }
     }
 

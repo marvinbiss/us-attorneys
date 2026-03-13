@@ -4,52 +4,46 @@ import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from
 import { logger } from '@/lib/logger'
 
 /**
- * Middleware v2 — simplified
- * - Session refresh
+ * Middleware v3 — performance-optimized
+ * - Session refresh (with validation cache)
  * - Auth guard for private routes
  * - URL canonicalization
- * - Security headers
+ * - CSP header with per-request nonce (other security headers in next.config.js)
  * - Rate limiting for API routes (Upstash Redis in production, in-memory fallback in dev)
  */
 
-// Security headers
-function addSecurityHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
+// Pre-computed CSP parts — only nonce changes per request
+const CSP_PREFIX = "default-src 'self'; script-src 'self' 'nonce-"
+const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com; " +
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+  "font-src 'self' https://fonts.gstatic.com data:; " +
+  "img-src 'self' data: blob: https: http:; " +
+  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; " +
+  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org; " +
+  "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+
+// CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
+function addCspHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
   const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
   const isDev = process.env.NODE_ENV === 'development'
 
   if (isDev || isCapacitor) {
-    response.headers.set('X-Content-Type-Options', 'nosniff')
-    response.headers.set('X-DNS-Prefetch-Control', 'on')
     return response
   }
 
-  const cspDirectives = [
-    "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com`,
-    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-    "font-src 'self' https://fonts.gstatic.com data:",
-    "img-src 'self' data: blob: https: http:",
-    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
-    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-    "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
-  ]
-
-  const cspHeader = cspDirectives.join('; ')
-  response.headers.set('Content-Security-Policy', cspHeader)
+  response.headers.set('Content-Security-Policy', CSP_PREFIX + nonce + CSP_SUFFIX)
   response.headers.set('x-nonce', nonce)
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self), payment=(self)')
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
-  response.headers.set('X-DNS-Prefetch-Control', 'on')
 
   return response
+}
+
+// Legacy redirects — hoisted to module scope to avoid per-request allocation
+const LEGACY_REDIRECTS: Record<string, string> = {
+  '/problemes-courants': '/problemes',
+  '/outils/diagnostic-artisan': '/outils/diagnostic',
+  '/barometre-prix': '/barometre',
+  '/calculateur': '/outils/calculateur-prix',
 }
 
 // URL canonicalization — all fixes combined into a single 301 hop
@@ -104,7 +98,6 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
   // Redirect /tarifs-artisans → /tarifs (301 permanent)
   if (pathname.startsWith('/tarifs-artisans')) {
@@ -114,16 +107,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect legacy/mistyped URLs → correct paths (301 permanent)
-  const legacyRedirects: Record<string, string> = {
-    '/problemes-courants': '/problemes',
-    '/outils/diagnostic-artisan': '/outils/diagnostic',
-    // Cannibalization fixes — consolidate duplicate pages
-    '/barometre-prix': '/barometre',
-    '/calculateur': '/outils/calculateur-prix',
-  }
-  if (legacyRedirects[pathname]) {
+  if (LEGACY_REDIRECTS[pathname]) {
     const host = request.headers.get('host') || 'servicesartisans.fr'
-    return NextResponse.redirect(`https://${host}${legacyRedirects[pathname]}${request.nextUrl.search}`, 301)
+    return NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
   }
 
   // URL canonicalization
@@ -131,6 +117,9 @@ export async function middleware(request: NextRequest) {
   if (canonicalUrl && process.env.NODE_ENV === 'production') {
     return NextResponse.redirect(canonicalUrl, 301)
   }
+
+  // Generate nonce AFTER early redirects to avoid wasting crypto on redirected requests
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
   // Auth guard for private spaces
   if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
@@ -244,11 +233,11 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
   }
 
-  return addSecurityHeaders(response, request, nonce)
+  return addCspHeaders(response, request, nonce)
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|sitemap\\.xml|sitemap/|robots\\.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|xml)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap\\.xml|sitemap/|robots\\.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|xml|css|js|woff2?)$).*)',
   ],
 }

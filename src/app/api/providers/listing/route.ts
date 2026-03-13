@@ -9,7 +9,7 @@ const schema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(50),
 })
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // ISR - revalidate every hour
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)

@@ -8,8 +8,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { villes } from '@/lib/data/france'
 import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 60 // Cache for 1 minute (updated more frequently)
+export const revalidate = 60 // Cache for 1 minute (ISR)
 
 export async function GET() {
   try {

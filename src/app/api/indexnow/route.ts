@@ -34,6 +34,7 @@ export async function POST(request: Request) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(15000), // 15s timeout
     })
 
     return NextResponse.json({

@@ -10,8 +10,7 @@ import { getDepartmentName, getRegionName, getDeptCodeFromPostal } from '@/lib/g
 import { slugify } from '@/lib/utils'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 300 // ISR - revalidate every 5 minutes
 
 // Schema for artisan ID (UUID or slug)
 const artisanIdSchema = z.string().min(1).max(255).regex(
