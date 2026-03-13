@@ -427,7 +427,7 @@ function getCalloutLabel(calloutType: CalloutBlock['calloutType'], title: string
     case 'info': return 'BON À SAVOIR'
     case 'takeaway': return 'À RETENIR'
     case 'budget': return 'BUDGET INDICATIF'
-    case 'expert': return 'AVIS D\u2019EXPERT'
+    case 'expert': return 'AVIS D’EXPERT'
   }
 }
 

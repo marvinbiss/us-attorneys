@@ -32,9 +32,9 @@ export const revalidate = 86400 // ISR 24h
 function getRegionalMultiplier(region: string): number {
   const multipliers: Record<string, number> = {
     'Ile-de-France': 1.25,
-    '\u00CEle-de-France': 1.25,
-    "Provence-Alpes-C\u00F4te d'Azur": 1.10,
-    'Auvergne-Rh\u00F4ne-Alpes': 1.10,
+    'Île-de-France': 1.25,
+    "Provence-Alpes-Côte d'Azur": 1.10,
+    'Auvergne-Rhône-Alpes': 1.10,
     'Occitanie': 1.05,
     'Nouvelle-Aquitaine': 1.00,
     'Hauts-de-France': 0.95,
@@ -43,7 +43,7 @@ function getRegionalMultiplier(region: string): number {
     'Pays de la Loire': 1.00,
     'Normandie': 0.95,
     'Centre-Val de Loire': 0.95,
-    'Bourgogne-Franche-Comt\u00E9': 0.95,
+    'Bourgogne-Franche-Comté': 0.95,
     'Corse': 1.10,
   }
   return multipliers[region] ?? 1.0
@@ -95,10 +95,10 @@ export async function generateMetadata({
   const multiplier = getRegionalMultiplier(villeData.region)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
 
-  const title = `Prix ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} \u2014 Tarifs 2026 | ${SITE_NAME}`
+  const title = `Prix ${currentTask.name.toLowerCase()} à ${villeData.name} — Tarifs 2026 | ${SITE_NAME}`
   const description = priceRange
-    ? `Combien co\u00FBte ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} ? ${priceRange.low} \u00E0 ${priceRange.high} \u20AC. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifi\u00E9.`
-    : `Combien co\u00FBte ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} ? Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifi\u00E9.`
+    ? `Combien coûte ${currentTask.name.toLowerCase()} à ${villeData.name} ? ${priceRange.low} à ${priceRange.high} €. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié.`
+    : `Combien coûte ${currentTask.name.toLowerCase()} à ${villeData.name} ? Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié.`
   const canonicalUrl = `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`
 
   return {
@@ -164,14 +164,14 @@ export default async function TarifsServiceTravailVillePage({
 
   // FAQ: pick 2-3 from trade FAQ + 1 custom
   const relevantFaqItems = trade.faq.slice(0, 3).map((f) => ({
-    question: f.q.replace(/\?$/, '') + ` \u00E0 ${villeData.name} ?`,
+    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
     answer: f.a,
   }))
   const customFaqItem = {
-    question: `Combien co\u00FBte ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} ?`,
+    question: `Combien coûte ${currentTask.name.toLowerCase()} à ${villeData.name} ?`,
     answer: priceRange
-      ? `Le prix de ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} se situe entre ${priceRange.low} et ${priceRange.high} \u20AC. Ce tarif peut varier selon la complexit\u00E9, l'accessibilit\u00E9 et les mat\u00E9riaux utilis\u00E9s. Demandez un devis gratuit pour un prix pr\u00E9cis.`
-      : `Le prix de ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} varie selon la complexit\u00E9 du chantier. Demandez un devis gratuit pour un prix pr\u00E9cis.`,
+      ? `Le prix de ${currentTask.name.toLowerCase()} à ${villeData.name} se situe entre ${priceRange.low} et ${priceRange.high} €. Ce tarif peut varier selon la complexité, l'accessibilité et les matériaux utilisés. Demandez un devis gratuit pour un prix précis.`
+      : `Le prix de ${currentTask.name.toLowerCase()} à ${villeData.name} varie selon la complexité du chantier. Demandez un devis gratuit pour un prix précis.`,
   }
   const allFaqItems = [...relevantFaqItems, customFaqItem]
   const faqSchema = getFAQSchema(allFaqItems)
@@ -180,10 +180,10 @@ export default async function TarifsServiceTravailVillePage({
     ? getServicePricingSchema({
         serviceName: `${currentTask.name} - ${trade.name}`,
         serviceSlug: service,
-        description: `Prix ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name} : ${priceRange.low}-${priceRange.high} \u20AC. Tarifs ajust\u00E9s pour la r\u00E9gion ${villeData.region}.`,
+        description: `Prix ${currentTask.name.toLowerCase()} à ${villeData.name} : ${priceRange.low}-${priceRange.high} €. Tarifs ajustés pour la région ${villeData.region}.`,
         lowPrice: priceRange.low,
         highPrice: priceRange.high,
-        priceUnit: '\u20AC',
+        priceUnit: '€',
         offerCount: commune?.nb_entreprises_artisanales ?? undefined,
         location: villeData.name,
         url: `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`,
@@ -192,13 +192,13 @@ export default async function TarifsServiceTravailVillePage({
 
   const speakableSchema = getSpeakableSchema({
     url: `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`,
-    title: `Prix ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name}`,
+    title: `Prix ${currentTask.name.toLowerCase()} à ${villeData.name}`,
   })
 
   const webPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: `Prix ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name}`,
+    name: `Prix ${currentTask.name.toLowerCase()} à ${villeData.name}`,
     url: `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`,
     author: {
       '@type': 'Person',
@@ -237,16 +237,16 @@ export default async function TarifsServiceTravailVillePage({
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-              Prix {currentTask.name.toLowerCase()} {'\u00E0'} {villeData.name}
+              Prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}
             </h1>
             {priceRange && (
               <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
                 {adjustedPriceText}
               </p>
             )}
-            <LastUpdated label="Tarifs v\u00E9rifi\u00E9s et mis \u00E0 jour le" className="justify-center text-slate-500 mb-4" />
+            <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-slate-500 mb-4" />
             <p className="text-sm text-slate-500">
-              Tarifs v{'\u00E9'}rifi{'\u00E9'}s par{' '}
+              Tarifs v{'é'}rifi{'é'}s par{' '}
               <Link href="/a-propos" className="underline hover:text-white transition-colors">
                 {author.name}
               </Link>
@@ -256,7 +256,7 @@ export default async function TarifsServiceTravailVillePage({
               {priceRange && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <Euro className="w-4 h-4 text-amber-400" />
-                  <span>{priceRange.low} {'\u2013'} {priceRange.high} {'\u20AC'}</span>
+                  <span>{priceRange.low} {'–'} {priceRange.high} {'€'}</span>
                 </div>
               )}
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -279,14 +279,14 @@ export default async function TarifsServiceTravailVillePage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">
-              {currentTask.name} {'\u00E0'} {villeData.name}
+              {currentTask.name} {'à'} {villeData.name}
             </h2>
             {priceRange ? (
               <div className="flex items-baseline justify-center gap-2">
                 <span className="text-5xl font-bold text-blue-600">
-                  {priceRange.low} {'\u2014'} {priceRange.high}
+                  {priceRange.low} {'—'} {priceRange.high}
                 </span>
-                <span className="text-gray-600 text-lg">{'\u20AC'}</span>
+                <span className="text-gray-600 text-lg">{'€'}</span>
               </div>
             ) : (
               <div className="text-2xl font-bold text-blue-600">
@@ -294,13 +294,13 @@ export default async function TarifsServiceTravailVillePage({
               </div>
             )}
             <p className="text-gray-500 text-sm mt-3">
-              Ce tarif peut varier selon la complexit{'\u00E9'}, l{'\u2019'}accessibilit{'\u00E9'} et les mat{'\u00E9'}riaux utilis{'\u00E9'}s.
+              Ce tarif peut varier selon la complexit{'é'}, l{'’'}accessibilit{'é'} et les mat{'é'}riaux utilis{'é'}s.
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % sup\u00E9rieurs \u00E0 la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inf\u00E9rieurs \u00E0 la moyenne nationale`}
+                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -316,8 +316,8 @@ export default async function TarifsServiceTravailVillePage({
               )}
               {commune.revenu_median && (
                 <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.revenu_median)} {'\u20AC'}/an</div>
-                  <div className="text-sm text-gray-500 mt-1">Revenu m{'\u00E9'}dian</div>
+                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.revenu_median)} {'€'}/an</div>
+                  <div className="text-sm text-gray-500 mt-1">Revenu m{'é'}dian</div>
                 </div>
               )}
               {commune.nb_entreprises_artisanales && (
@@ -331,12 +331,12 @@ export default async function TarifsServiceTravailVillePage({
 
           {/* All tasks table with highlight */}
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Tous les tarifs {tradeLower} {'\u00E0'} {villeData.name}
+            Tous les tarifs {tradeLower} {'à'} {villeData.name}
           </h2>
           <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-4">
             <table className="w-full text-left">
               <caption className="px-5 py-3 text-left text-base font-semibold text-gray-900 bg-white border-b border-gray-100">
-                Tarifs {tradeLower} {villeData.name} {'\u2014'} 2026
+                Tarifs {tradeLower} {villeData.name} {'—'} 2026
                 {trade.priceRange.unit && (
                   <span className="ml-2 text-sm font-normal text-gray-500">
                     ({trade.priceRange.unit})
@@ -397,10 +397,10 @@ export default async function TarifsServiceTravailVillePage({
               <tfoot>
                 <tr className="bg-gray-50/80 border-t border-gray-200">
                   <td colSpan={2} className="px-5 py-3 text-xs text-gray-500 italic">
-                    Prix indicatifs, peuvent varier selon la complexit{'\u00E9'} des travaux, la r{'\u00E9'}gion et le professionnel.
+                    Prix indicatifs, peuvent varier selon la complexit{'é'} des travaux, la r{'é'}gion et le professionnel.
                     {multiplier !== 1 && (
                       <span className="ml-1">
-                        Tarifs ajust{'\u00E9'}s pour {villeData.name} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}{'\u00A0'}% vs moyenne nationale).
+                        Tarifs ajust{'é'}s pour {villeData.name} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}{' '}% vs moyenne nationale).
                       </span>
                     )}
                   </td>
@@ -415,7 +415,7 @@ export default async function TarifsServiceTravailVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fr{'\u00E9'}quentes {'\u2014'} {currentTask.name} {'\u00E0'} {villeData.name}
+            Questions fr{'é'}quentes {'—'} {currentTask.name} {'à'} {villeData.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
@@ -437,17 +437,17 @@ export default async function TarifsServiceTravailVillePage({
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Trouver un {tradeLower} {'\u00E0'} {villeData.name}
+            Trouver un {tradeLower} {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit pour {currentTask.name.toLowerCase()} {'\u00E0'} {villeData.name}.
+            Comparez les profils et obtenez un devis gratuit pour {currentTask.name.toLowerCase()} {'à'} {villeData.name}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
-              Voir les {tradeLower}s {'\u00E0'} {villeData.name}
+              Voir les {tradeLower}s {'à'} {villeData.name}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -479,11 +479,11 @@ export default async function TarifsServiceTravailVillePage({
                     className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
                   >
                     <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                      {currentTask.name} {'\u00E0'} {v.name}
+                      {currentTask.name} {'à'} {v.name}
                     </div>
                     {range && (
                       <div className="text-xs text-gray-500 mt-1">
-                        {range.low} {'\u2013'} {range.high} {'\u20AC'}
+                        {range.low} {'–'} {range.high} {'€'}
                       </div>
                     )}
                   </Link>
@@ -502,7 +502,7 @@ export default async function TarifsServiceTravailVillePage({
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Tous les tarifs {tradeLower} {'\u00E0'} {villeData.name}
+            Tous les tarifs {tradeLower} {'à'} {villeData.name}
           </Link>
         </div>
       </section>
@@ -520,9 +520,9 @@ export default async function TarifsServiceTravailVillePage({
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">M{'\u00E9'}thodologie tarifaire</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">M{'é'}thodologie tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affich{'\u00E9'}s pour {currentTask.name.toLowerCase()} {'\u00E0'} {villeData.name} sont des fourchettes indicatives ajust{'\u00E9'}es en fonction des donn{'\u00E9'}es r{'\u00E9'}gionales ({villeData.region}). Ils varient selon la complexit{'\u00E9'} du chantier, les mat{'\u00E9'}riaux et l&apos;urgence. Seul un devis personnalis{'\u00E9'} fait foi. {SITE_NAME} est un annuaire ind{'\u00E9'}pendant.
+              Les prix affich{'é'}s pour {currentTask.name.toLowerCase()} {'à'} {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l&apos;urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
             </p>
           </div>
         </div>

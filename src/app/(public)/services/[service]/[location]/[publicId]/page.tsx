@@ -352,7 +352,7 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -436,7 +436,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       city: realCity,
     })
     const ratingStr = provider.rating_average && Number(provider.rating_average) >= 1
-      ? ` ${Number(provider.rating_average).toFixed(1)}\u2605`
+      ? ` ${Number(provider.rating_average).toFixed(1)}★`
       : ''
     const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}${ratingStr}`)
 
@@ -447,8 +447,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
     if (provider.siret) descParts.push('SIRET vérifié')
     descParts.push('Devis gratuit')
-    const rawDesc = descParts.join(' \u00b7 ') + '.'
-    const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '\u2026' : rawDesc
+    const rawDesc = descParts.join(' · ') + '.'
+    const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '…' : rawDesc
 
     // Noindex only if provider is explicitly flagged by admin.
     // Non-canonical URLs are handled by redirect() in the page component + alternates.canonical.

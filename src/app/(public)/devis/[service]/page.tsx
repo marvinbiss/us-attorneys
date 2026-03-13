@@ -239,7 +239,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;\u0153uvre incluse
+              Prix moyen constaté en France métropolitaine, main-d&apos;œuvre incluse
             </p>
           </div>
 

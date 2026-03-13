@@ -59,21 +59,21 @@ const tradeFaqs = [
 ]
 
 const tradeEmojis: Record<string, string> = {
-  plombier: '\uD83D\uDD27',
-  electricien: '\u26A1',
-  serrurier: '\uD83D\uDD11',
-  chauffagiste: '\uD83D\uDD25',
-  'peintre-en-batiment': '\uD83C\uDFA8',
-  menuisier: '\uD83E\uDE9A',
-  carreleur: '\uD83E\uDDF1',
-  couvreur: '\uD83C\uDFE0',
-  macon: '\uD83C\uDFD7\uFE0F',
-  jardinier: '\uD83C\uDF33',
-  vitrier: '\uD83E\uDE9F',
-  climaticien: '\u2744\uFE0F',
-  cuisiniste: '\uD83C\uDF73',
-  solier: '\uD83D\uDECB\uFE0F',
-  nettoyage: '\u2728',
+  plombier: '🔧',
+  electricien: '⚡',
+  serrurier: '🔑',
+  chauffagiste: '🔥',
+  'peintre-en-batiment': '🎨',
+  menuisier: '🪚',
+  carreleur: '🧱',
+  couvreur: '🏠',
+  macon: '🏗️',
+  jardinier: '🌳',
+  vitrier: '🪟',
+  climaticien: '❄️',
+  cuisiniste: '🍳',
+  solier: '🛋️',
+  nettoyage: '✨',
 }
 
 export default async function TarifsPage() {
@@ -203,7 +203,7 @@ export default async function TarifsPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {trades.map((trade) => {
                 const topTasks = trade.commonTasks.slice(0, 3)
-                const emoji = tradeEmojis[trade.slug] || '\uD83D\uDD27'
+                const emoji = tradeEmojis[trade.slug] || '🔧'
 
                 return (
                   <div

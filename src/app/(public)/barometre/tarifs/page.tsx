@@ -89,7 +89,7 @@ export default async function BarometreTarifsPage() {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-2xl" role="img" aria-hidden="true">
-                      {metier?.icon || '\uD83D\uDD27'}
+                      {metier?.icon || '🔧'}
                     </span>
                     <h2 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
                       {row.metier}

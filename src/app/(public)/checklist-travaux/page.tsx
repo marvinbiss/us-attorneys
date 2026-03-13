@@ -67,7 +67,7 @@ const sections: ChecklistSection[] = [
       {
         text: "Vérifier les autorisations d'urbanisme nécessaires",
         detail:
-          "Déclaration préalable (< 20 m\u00B2), permis de construire (> 20 m\u00B2 ou > 40 m\u00B2 en zone PLU). Délai : 1 à 3 mois.",
+          "Déclaration préalable (< 20 m²), permis de construire (> 20 m² ou > 40 m² en zone PLU). Délai : 1 à 3 mois.",
       },
       {
         text: "Consulter le PLU de votre commune",
@@ -100,9 +100,9 @@ const sections: ChecklistSection[] = [
           "Classez vos souhaits en 3 catégories : indispensable, souhaitable, optionnel. Cela guidera les arbitrages budgétaires.",
       },
       {
-        text: "Consulter un architecte si la surface dépasse 150 m\u00B2",
+        text: "Consulter un architecte si la surface dépasse 150 m²",
         detail:
-          "Le recours à un architecte est obligatoire si la surface de plancher totale après travaux dépasse 150 m\u00B2.",
+          "Le recours à un architecte est obligatoire si la surface de plancher totale après travaux dépasse 150 m².",
       },
     ],
   },
@@ -190,7 +190,7 @@ const sections: ChecklistSection[] = [
           "Réservez une place de stationnement pour la camionnette de l'artisan. Prévoyez l'accès pour les livraisons volumineuses (benne, palette).",
       },
       {
-        text: "Informer les voisins (bruit, poussi\u00E8re, stationnement)",
+        text: "Informer les voisins (bruit, poussière, stationnement)",
         detail:
           "Un courrier ou un mot dans la boîte aux lettres des voisins évite les conflits. Mentionnez la durée prévue et les horaires.",
       },

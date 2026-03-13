@@ -338,7 +338,7 @@ export default function DashboardArtisanPage() {
               <h1 className="text-2xl font-bold">Tableau de bord</h1>
               <p className="text-blue-100">
                 {displayName}
-                {displayCity && ` \u2014 ${displayCity}`}
+                {displayCity && ` — ${displayCity}`}
               </p>
             </div>
             <div className="flex items-center gap-4">

@@ -734,7 +734,7 @@ export default async function ServicePage({ params }: PageProps) {
       {(() => {
         const serviceGuidesMap: Record<string, { slug: string; title: string }[]> = {
           'electricien': [
-            { slug: 'normes-electriques', title: 'Normes électriques NF C 15\u00a0100' },
+            { slug: 'normes-electriques', title: 'Normes électriques NF C 15 100' },
             { slug: 'diagnostics-immobiliers', title: 'Diagnostics immobiliers obligatoires' },
           ],
           'plombier': [

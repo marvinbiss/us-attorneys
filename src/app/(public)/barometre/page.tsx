@@ -225,7 +225,7 @@ export default async function BarometrePage() {
                   className="group flex items-center gap-4 bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow"
                 >
                   <span className="text-2xl w-10 text-center flex-shrink-0" role="img" aria-hidden="true">
-                    {metier?.icon || '\uD83D\uDD27'}
+                    {metier?.icon || '🔧'}
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">

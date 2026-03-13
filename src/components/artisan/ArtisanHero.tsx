@@ -118,7 +118,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               <span className="font-medium">{artisan.city} ({artisan.postal_code})</span>
               {artisan.intervention_radius_km && (
                 <>
-                  <span className="text-slate-300" aria-hidden="true">{'\u2022'}</span>
+                  <span className="text-slate-300" aria-hidden="true">•</span>
                   <span className="text-slate-400">Rayon : {artisan.intervention_radius_km} km</span>
                 </>
               )}

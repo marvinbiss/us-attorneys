@@ -77,7 +77,7 @@ export async function POST(request: Request) {
       const { data: { user } } = await serverSupabase.auth.getUser()
       clientId = user?.id ?? null
     } catch {
-      // Anonymous submission \u2014 no session cookie
+      // Anonymous submission — no session cookie
     }
 
     // Validate input
@@ -172,8 +172,8 @@ export async function POST(request: Request) {
             ${data.description ? `<li><strong>Description :</strong> ${htmlEscape(data.description)}</li>` : ''}
           </ul>
           <p><strong>Que se passe-t-il maintenant ?</strong></p>
-          <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu\u2019à 3 devis gratuits dans les meilleurs délais.</p>
-          <p>Cordialement,<br />L\u2019équipe ServicesArtisans</p>
+          <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu’à 3 devis gratuits dans les meilleurs délais.</p>
+          <p>Cordialement,<br />L’équipe ServicesArtisans</p>
           <p style="color: #666; font-size: 12px;">
             <a href="https://servicesartisans.fr">servicesartisans.fr</a>
           </p>

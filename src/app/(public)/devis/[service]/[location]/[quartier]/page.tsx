@@ -48,7 +48,7 @@ export const revalidate = 86400
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({
@@ -297,7 +297,7 @@ export default async function DevisQuartierPage({
               <span className="text-gray-600 text-lg">{unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté à {quartierName}, main-d&apos;\u0153uvre incluse
+              Prix moyen constaté à {quartierName}, main-d&apos;œuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">

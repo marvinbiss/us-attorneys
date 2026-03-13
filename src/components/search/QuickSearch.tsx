@@ -542,13 +542,13 @@ export default function QuickSearch() {
                     {suggestion.type === 'city' && suggestion.cityDept && (
                       <div className="text-xs text-gray-400 truncate">
                         {suggestion.cityDept}
-                        {suggestion.cityPop ? ` \u00b7 ${suggestion.cityPop}` : ''}
+                        {suggestion.cityPop ? ` · ${suggestion.cityPop}` : ''}
                       </div>
                     )}
                     {suggestion.type === 'combined' && suggestion.cityDept && (
                       <div className="text-xs text-gray-400 truncate">
                         {suggestion.cityDept}
-                        {suggestion.cityPop ? ` \u00b7 ${suggestion.cityPop}` : ''}
+                        {suggestion.cityPop ? ` · ${suggestion.cityPop}` : ''}
                       </div>
                     )}
                   </div>

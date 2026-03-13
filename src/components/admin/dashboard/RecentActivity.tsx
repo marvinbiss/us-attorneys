@@ -19,7 +19,7 @@ interface RecentActivityProps {
 
 function formatRelativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime()
-  if (diff < 60_000) return 'À l\u2019instant'
+  if (diff < 60_000) return 'À l’instant'
   if (diff < 3_600_000) return `Il y a ${Math.floor(diff / 60_000)} min`
   if (diff < 86_400_000) return `Il y a ${Math.floor(diff / 3_600_000)}h`
   if (diff < 604_800_000) return `Il y a ${Math.floor(diff / 86_400_000)}j`

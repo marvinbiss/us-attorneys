@@ -65,7 +65,7 @@ function formatGrid(tarifs: Tarif[]): string {
 
   const header = '| Prestation | Prix min | Prix max | Unité |\n|---|---|---|---|'
   const rows = tarifs
-    .map((t) => `| ${t.prestation} | ${t.prix_min}\u20AC | ${t.prix_max}\u20AC | ${t.unite} |`)
+    .map((t) => `| ${t.prestation} | ${t.prix_min}€ | ${t.prix_max}€ | ${t.unite} |`)
     .join('\n')
   return `${header}\n${rows}`
 }
@@ -79,34 +79,34 @@ function buildSystemPrompt(
   artisanName?: string,
 ): string {
   const artisanLine = artisanName
-    ? `\n\u2022 Artisan : ${artisanName}\nLe visiteur consulte la fiche de ${artisanName}, un ${metierName.toLowerCase()} \u00E0 ${ville}.`
+    ? `\n• Artisan : ${artisanName}\nLe visiteur consulte la fiche de ${artisanName}, un ${metierName.toLowerCase()} à ${ville}.`
     : ''
 
   const ctaLine = artisanName
-    ? `"Souhaitez-vous envoyer votre demande \u00E0 ${artisanName} ?"`
-    : `"Souhaitez-vous \u00EAtre mis en relation avec un ${metierName.toLowerCase()} v\u00E9rifi\u00E9 \u00E0 ${ville} ?"`
+    ? `"Souhaitez-vous envoyer votre demande à ${artisanName} ?"`
+    : `"Souhaitez-vous être mis en relation avec un ${metierName.toLowerCase()} vérifié à ${ville} ?"`
 
   return `Tu es l'assistant estimation de ServicesArtisans.fr.
 CONTEXTE :
-\u2022 M\u00E9tier : ${metierName}
-\u2022 Ville : ${ville} (${departement})
-\u2022 Coefficient g\u00E9ographique : ${coefficient} (OBLIGATOIRE : multiplie TOUJOURS les prix de la grille par ce coefficient)${artisanLine}
+• Métier : ${metierName}
+• Ville : ${ville} (${departement})
+• Coefficient géographique : ${coefficient} (OBLIGATOIRE : multiplie TOUJOURS les prix de la grille par ce coefficient)${artisanLine}
 
-GRILLE TARIFAIRE \u2014 ${metierName.toUpperCase()} :
+GRILLE TARIFAIRE — ${metierName.toUpperCase()} :
 ${formattedGrid}
 
-R\u00C8GLES STRICTES :
-1. Pose UNE SEULE question par r\u00E9ponse. JAMAIS deux questions. JAMAIS "et aussi...?". UNE question, point final.
+RÈGLES STRICTES :
+1. Pose UNE SEULE question par réponse. JAMAIS deux questions. JAMAIS "et aussi...?". UNE question, point final.
 2. Maximum 2-3 questions avant de donner l'estimation. Ne pose pas plus de 3 questions au total.
-3. Si le visiteur r\u00E9pond "oui", "non", ou une r\u00E9ponse courte/vague, NE REPOSE PAS la m\u00EAme question reformul\u00E9e. Interpr\u00E8te sa r\u00E9ponse au mieux et avance vers l'estimation. Si tu manques d'infos, donne une fourchette plus large plut\u00F4t que de reposer.
-4. Sois concis : 3-4 lignes max par r\u00E9ponse.
-5. CALCUL OBLIGATOIRE : prix_min de la grille \u00D7 ${coefficient} et prix_max de la grille \u00D7 ${coefficient}. Arrondis \u00E0 la dizaine.
-6. Donne TOUJOURS la fourchette en gras : **min\u20AC \u2014 max\u20AC**
-7. Pr\u00E9cise que c'est une estimation indicative.
-8. OBLIGATOIRE apr\u00E8s chaque estimation : termine par ${ctaLine}
-9. Si urgence mentionn\u00E9e, propose le rappel imm\u00E9diat.
+3. Si le visiteur répond "oui", "non", ou une réponse courte/vague, NE REPOSE PAS la même question reformulée. Interprète sa réponse au mieux et avance vers l'estimation. Si tu manques d'infos, donne une fourchette plus large plutôt que de reposer.
+4. Sois concis : 3-4 lignes max par réponse.
+5. CALCUL OBLIGATOIRE : prix_min de la grille × ${coefficient} et prix_max de la grille × ${coefficient}. Arrondis à la dizaine.
+6. Donne TOUJOURS la fourchette en gras : **min€ — max€**
+7. Précise que c'est une estimation indicative.
+8. OBLIGATOIRE après chaque estimation : termine par ${ctaLine}
+9. Si urgence mentionnée, propose le rappel immédiat.
 10. Ne donne JAMAIS de conseil technique dangereux.
-11. Vouvoie toujours. 1-2 emojis max par r\u00E9ponse.`
+11. Vouvoie toujours. 1-2 emojis max par réponse.`
 }
 
 // ---------------------------------------------------------------------------
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Donn\u00E9es invalides', details: validation.error.flatten() },
+        { error: 'Données invalides', details: validation.error.flatten() },
         { status: 400 },
       )
     }
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
           .eq('metier', metierLower)
 
         if (error) {
-          logger.error('Erreur r\u00E9cup\u00E9ration tarifs', error, { action: 'estimation' })
+          logger.error('Erreur récupération tarifs', error, { action: 'estimation' })
           return []
         }
         return (data as Tarif[]) ?? []
@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
           .single()
 
         if (error) {
-          logger.warn('Coefficient g\u00E9o non trouv\u00E9, utilisation de 1.0', { action: 'estimation', departement })
+          logger.warn('Coefficient géo non trouvé, utilisation de 1.0', { action: 'estimation', departement })
           return null
         }
         return data as CoefficientGeo
