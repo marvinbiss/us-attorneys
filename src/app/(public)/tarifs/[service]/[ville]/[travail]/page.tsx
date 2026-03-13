@@ -132,6 +132,7 @@ export default async function TarifsServiceTravailVillePage({
 }: {
   params: Promise<{ service: string; ville: string; travail: string }>
 }) {
+  try {
   const { service, ville: villeSlug, travail } = await params
 
   const trade = tradeContent[service]
@@ -534,4 +535,8 @@ export default async function TarifsServiceTravailVillePage({
       </section>
     </div>
   )
+  } catch (error) {
+    console.error('[tarifs/travail] Render error:', error)
+    throw error
+  }
 }
