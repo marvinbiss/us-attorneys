@@ -363,24 +363,15 @@ export default async function AvisServiceVillePage({
 
   const reviewSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'Service',
     name: `${trade.name} à ${villeData.name}`,
     description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance à ${villeData.name} (${villeData.departement}). Prix : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/avis/${service}/${villeSlug}`,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: villeData.name,
-      addressRegion: villeData.region,
-      addressCountry: 'FR',
-      postalCode: villeData.codePostal,
+    provider: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
     },
-    ...(commune?.latitude && commune?.longitude ? {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: commune.latitude,
-        longitude: commune.longitude,
-      },
-    } : {}),
     areaServed: {
       '@type': 'City',
       name: villeData.name,
@@ -389,8 +380,13 @@ export default async function AvisServiceVillePage({
         name: villeData.region,
       },
     },
-    priceRange: `${minPrice}–${maxPrice} ${trade.priceRange.unit}`,
-    telephone: '+33',
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'EUR',
+      lowPrice: minPrice,
+      highPrice: maxPrice,
+      offerCount: trade.commonTasks.length,
+    },
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: schemaRating,
