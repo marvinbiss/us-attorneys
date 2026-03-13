@@ -10,6 +10,7 @@ import { departements, getDepartementBySlug, getVillesByDepartement, services, g
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateDepartementContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
+import PriceTable from '@/components/seo/PriceTable'
 
 const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
 
@@ -265,15 +266,7 @@ export default async function DeptServicePage({ params }: PageProps) {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Prestations courantes</h3>
-              <ul className="space-y-3">
-                {trade.commonTasks.slice(0, 6).map((task, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
-                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <span>{task}</span>
-                  </li>
-                ))}
-              </ul>
+              <PriceTable tasks={trade.commonTasks.slice(0, 6)} tradeName={trade.name} priceRange={{ min: minPrice, max: maxPrice, unit: trade.priceRange.unit }} />
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
               <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Certifications recommandées</h3>

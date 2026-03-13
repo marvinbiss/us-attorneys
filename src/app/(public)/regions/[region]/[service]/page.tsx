@@ -10,6 +10,7 @@ import { regions, getRegionBySlug, services as allServices, getVillesByDeparteme
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
+import PriceTable from '@/components/seo/PriceTable'
 
 export function generateStaticParams() {
   // Pre-render ALL services per region (16 × 46 = 736 pages)
@@ -271,6 +272,17 @@ export default async function RegionServicePage({ params }: PageProps) {
             <p className="text-sm text-slate-500">Les tarifs en {region.name} sont {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'} la moyenne nationale (coefficient {multiplier.toFixed(2)}). {content.profile.economyLabel}.</p>
           </div>
         </section>
+
+        {/* ─── PRICE TABLE (CommonTasks) ─────────────────────── */}
+        {trade.commonTasks && trade.commonTasks.length > 0 && (
+          <section className="mb-16">
+            <PriceTable
+              tasks={trade.commonTasks}
+              tradeName={trade.name}
+              priceRange={{ min: minPrice, max: maxPrice, unit: trade.priceRange.unit }}
+            />
+          </section>
+        )}
 
         {/* ─── DEPARTMENTS GRID ─────────────────────────────── */}
         <section className="mb-16">

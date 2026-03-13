@@ -2,13 +2,14 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench, FileText } from 'lucide-react'
+import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
+import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
+import PriceTable from '@/components/seo/PriceTable'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -257,10 +258,21 @@ export default async function ServicePage({ params }: PageProps) {
     title: h1Text,
   })
 
+  const pricingSchema = trade ? getServicePricingSchema({
+    serviceName: service.name,
+    serviceSlug: serviceSlug,
+    description: service.description || `Services de ${service.name.toLowerCase()} en France`,
+    lowPrice: trade.priceRange.min,
+    highPrice: trade.priceRange.max,
+    priceCurrency: 'EUR',
+    priceUnit: trade.priceRange.unit,
+    url: `${SITE_URL}/services/${serviceSlug}`,
+  }) : null
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* JSON-LD */}
-      <JsonLd data={faqSchema ? [serviceSchema, breadcrumbSchema, faqSchema, speakableSchema] : [serviceSchema, breadcrumbSchema, speakableSchema]} />
+      <JsonLd data={[serviceSchema, breadcrumbSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -547,34 +559,7 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <Euro className="w-6 h-6 text-amber-600" />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Tarifs {service.name.toLowerCase()} — Guide des prix 2026
-                </h2>
-              </div>
-              <p className="text-gray-600 mb-6">
-                Tarif horaire moyen : <strong className="text-gray-900">{trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}</strong>.
-                Voici les prix constatés pour les prestations les plus demandées :
-              </p>
-              <div className="grid md:grid-cols-2 gap-3">
-                {trade.commonTasks.map((task, i) => {
-                  const [label, price] = task.split(' : ')
-                  return (
-                    <div key={i} className="flex items-start justify-between gap-4 p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700 text-sm">{label}</span>
-                      {price && (
-                        <span className="text-sm font-semibold text-amber-700 whitespace-nowrap">{price}</span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-              <p className="text-xs text-gray-500 mt-4">
-                * Prix indicatifs constatés en France métropolitaine. Les tarifs varient selon la région, la complexité des travaux et le professionnel.
-              </p>
+              <PriceTable tasks={trade.commonTasks} tradeName={service.name} priceRange={trade.priceRange} />
             </div>
           </div>
         </section>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { hashCode } from '@/lib/seo/location-content'
 import type { TradeContent } from '@/lib/data/trade-content'
 import type { Service, Location as LocationType } from '@/types'
+import PriceTable from '@/components/seo/PriceTable'
 
 interface Props {
   trade: TradeContent
@@ -82,23 +83,27 @@ export default function TradeSections({
               {pricingMultiplier !== 1.0 && ` Tarifs ajustés pour la zone de ${location.name}.`}
               {pricingMultiplier === 1.0 && ` Les prix à ${location.name} peuvent varier selon la complexité des travaux et le professionnel choisi.`}
             </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {trade.commonTasks.slice(0, 6).map((task, i) => {
-                const [label, price] = task.split(' : ')
-                const adjustedPrice = price && pricingMultiplier !== 1.0
-                  ? price.replace(/\d[\d\s]*/g, (m) => {
+            <PriceTable
+              tasks={pricingMultiplier !== 1.0
+                ? trade.commonTasks.slice(0, 6).map((task) => {
+                    const colonIndex = task.indexOf(' : ')
+                    if (colonIndex === -1) return task
+                    const label = task.slice(0, colonIndex)
+                    const price = task.slice(colonIndex + 3).replace(/\d[\d\s]*/g, (m) => {
                       const n = parseInt(m.replace(/\s/g, ''), 10)
                       return isNaN(n) ? m : String(Math.round(n * pricingMultiplier))
                     })
-                  : price
-                return (
-                  <div key={i} className="flex items-start justify-between gap-3 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
-                    <span className="text-gray-700">{label}</span>
-                    {adjustedPrice && <span className="font-semibold text-amber-700 whitespace-nowrap">{adjustedPrice}</span>}
-                  </div>
-                )
-              })}
-            </div>
+                    return `${label} : ${price}`
+                  })
+                : trade.commonTasks.slice(0, 6)
+              }
+              tradeName={trade.name}
+              priceRange={{
+                min: Math.round(trade.priceRange.min * pricingMultiplier),
+                max: Math.round(trade.priceRange.max * pricingMultiplier),
+                unit: trade.priceRange.unit,
+              }}
+            />
             {trade.emergencyInfo && (
               <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl">
                 <p className="text-sm text-red-800">
