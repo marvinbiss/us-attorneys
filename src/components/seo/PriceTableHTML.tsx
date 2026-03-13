@@ -5,13 +5,21 @@
  * Parse les commonTasks (format "Label : prix" ou "Label: prix") et applique
  * un multiplicateur regional optionnel aux prix numeriques.
  *
+ * Si serviceSlug ET locationSlug sont fournis, chaque nom de tache devient un lien
+ * vers /tarifs/[service]/[ville]/[taskSlug].
+ *
  * Server Component — pas de 'use client'.
  */
+
+import Link from 'next/link'
+import { slugifyTask } from '@/lib/data/trade-content'
 
 interface PriceTableHTMLProps {
   tasks: string[]           // commonTasks du trade
   serviceName: string       // ex: "Plombier"
+  serviceSlug?: string      // slug du service pour les liens (ex: "plombier")
   location?: string         // ex: "Paris" (optionnel)
+  locationSlug?: string     // slug de la ville pour les liens (ex: "paris")
   multiplier?: number       // multiplicateur regional (defaut 1)
   unit?: string             // ex: "€/h"
 }
@@ -20,7 +28,7 @@ interface PriceTableHTMLProps {
  * Parse une tache au format "Nom prestation : 80 a 250 € ..." ou "Nom prestation: prix"
  * Retourne { name, price } ou le prix est ajuste si un multiplicateur est fourni.
  */
-function parseTask(task: string, multiplier: number): { name: string; price: string } {
+function parseTaskLocal(task: string, multiplier: number): { name: string; price: string } {
   // Support both "Label : prix" and "Label: prix"
   const colonIndex = task.indexOf(':')
   if (colonIndex === -1) {
@@ -46,11 +54,15 @@ function parseTask(task: string, multiplier: number): { name: string; price: str
 export default function PriceTableHTML({
   tasks,
   serviceName,
+  serviceSlug,
   location,
+  locationSlug,
   multiplier = 1,
   unit,
 }: PriceTableHTMLProps) {
   if (!tasks || tasks.length === 0) return null
+
+  const canLink = Boolean(serviceSlug && locationSlug)
 
   const captionText = location
     ? `Tarifs ${serviceName.toLowerCase()} ${location} — 2026`
@@ -79,14 +91,24 @@ export default function PriceTableHTML({
         </thead>
         <tbody>
           {tasks.map((task, i) => {
-            const { name, price } = parseTask(task, multiplier)
+            const { name, price } = parseTaskLocal(task, multiplier)
+            const taskSlug = canLink ? slugifyTask(name) : ''
             return (
               <tr
                 key={i}
                 className={`hover:bg-blue-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
               >
-                <td className="px-5 py-4 text-gray-800 text-sm border-t border-gray-100">
-                  {name}
+                <td className="px-5 py-4 text-sm border-t border-gray-100">
+                  {canLink ? (
+                    <Link
+                      href={`/tarifs/${serviceSlug}/${locationSlug}/${taskSlug}`}
+                      className="text-blue-700 hover:text-blue-900 hover:underline"
+                    >
+                      {name}
+                    </Link>
+                  ) : (
+                    <span className="text-gray-800">{name}</span>
+                  )}
                 </td>
                 <td className="px-5 py-4 text-gray-900 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap">
                   {price}

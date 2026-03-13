@@ -43,6 +43,11 @@ export async function GET() {
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `devis-service-cities-${i}`),
     ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `urgence-service-cities-${i}`),
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `tarifs-service-cities-${i}`),
+    // tarifs task×city pages — uses LARGE_BATCH (45000) in sitemap()
+    ...(() => {
+      const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
+      return Array.from({ length: Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `tarifs-task-cities-${i}`)
+    })(),
     'avis-services',
     ...Array.from({ length: Math.ceil(avisServiceSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
     'problemes',

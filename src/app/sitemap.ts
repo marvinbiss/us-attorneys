@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getTradesSlugs, parseTask } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
@@ -40,6 +40,10 @@ export async function generateSitemaps() {
   const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
+  // Count total task×city combinations for tarifs-task-cities sitemaps
+  const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
+  const tarifsTaskCitiesBatchCount = Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH)
+
   const sitemaps: { id: string }[] = [
     { id: 'static' },
     ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
@@ -50,6 +54,7 @@ export async function generateSitemaps() {
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
     ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `urgence-service-cities-${i}` })),
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `tarifs-service-cities-${i}` })),
+    ...Array.from({ length: tarifsTaskCitiesBatchCount }, (_, i) => ({ id: `tarifs-task-cities-${i}` })),
     { id: 'avis-services' },
     ...Array.from({ length: Math.ceil(avisServiceSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `avis-service-cities-${i}` })),
     { id: 'problemes' },
@@ -351,6 +356,30 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         if (count >= end) break outer
         if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}` })
         count++
+      }
+    }
+
+    return result
+  }
+
+  // ── Tarifs task×city pages (Phase 1: top 300 cities only) ───────────
+  if (id.startsWith('tarifs-task-cities-')) {
+    const batchIndex = parseInt(id.replace('tarifs-task-cities-', ''), 10)
+    const BATCH = LARGE_BATCH
+    const start = batchIndex * BATCH
+    const end = start + BATCH
+    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
+
+    outer: for (const [serviceSlug, trade] of Object.entries(tradeContent)) {
+      for (const task of trade.commonTasks) {
+        const { slug: taskSlug } = parseTask(task)
+        for (const v of phase1Cities) {
+          if (count >= end) break outer
+          if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE })
+          count++
+        }
       }
     }
 

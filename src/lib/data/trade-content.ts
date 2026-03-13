@@ -2470,3 +2470,33 @@ export function getTradeContent(slug: string): TradeContent | undefined {
 export function getTradesSlugs(): string[] {
   return Object.keys(tradeContent)
 }
+
+/**
+ * Slugifie un nom de tâche pour l'URL /tarifs/[service]/[ville]/[travail].
+ */
+export function slugifyTask(taskName: string): string {
+  return taskName
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+/**
+ * Parse une tâche depuis commonTasks (format "nom : prix").
+ */
+export function parseTask(task: string): { name: string; slug: string; priceText: string } {
+  const colonIdx = task.indexOf(':')
+  if (colonIdx === -1) return { name: task.trim(), slug: slugifyTask(task.trim()), priceText: '' }
+  const name = task.substring(0, colonIdx).trim()
+  const priceText = task.substring(colonIdx + 1).trim()
+  return { name, slug: slugifyTask(name), priceText }
+}
+
+/** Retourne toutes les taches parsees pour un service */
+export function getTasksForService(serviceSlug: string): { name: string; slug: string; priceText: string }[] {
+  const trade = tradeContent[serviceSlug]
+  if (!trade) return []
+  return trade.commonTasks.map(parseTask)
+}

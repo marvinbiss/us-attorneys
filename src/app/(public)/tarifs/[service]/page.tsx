@@ -7,7 +7,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
@@ -313,8 +313,43 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <PriceTableHTML
             tasks={trade.commonTasks}
             serviceName={trade.name}
+            serviceSlug={service}
             unit={trade.priceRange.unit}
           />
+        </div>
+      </section>
+
+      {/* Liens vers les pages par travail et ville */}
+      <section className="py-16 bg-white border-t">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+            Prix d{'\u00e9'}taill{'\u00e9'}s par prestation et par ville
+          </h2>
+          <p className="text-gray-500 text-sm text-center mb-8">
+            D{'\u00e9'}couvrez les tarifs pr{'\u00e9'}cis pour chaque type d&apos;intervention dans les principales villes de France.
+          </p>
+          <div className="space-y-6">
+            {trade.commonTasks.slice(0, 8).map((task) => {
+              const taskName = task.split(':')[0].trim()
+              const taskSlug = slugifyTask(taskName)
+              return (
+                <div key={taskSlug} className="bg-gray-50 rounded-xl border border-gray-200 p-5">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-3">{taskName}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {topCities.slice(0, 8).map((ville) => (
+                      <Link
+                        key={ville.slug}
+                        href={`/tarifs/${service}/${ville.slug}/${taskSlug}`}
+                        className="text-xs text-blue-700 hover:text-blue-900 hover:underline bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
+                      >
+                        Prix {taskName.toLowerCase()} {'\u00e0'} {ville.name} {'\u2192'}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </section>
 
