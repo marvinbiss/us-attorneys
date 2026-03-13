@@ -383,7 +383,7 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} en France : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans r\u00E9f\u00E9renc\u00E9s et v\u00E9rifi\u00E9s SIREN dans ${topCities?.length || 0}+ villes. Devis gratuit, donn\u00E9es officielles INSEE.`}
+            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans référencés et vérifiés SIREN dans ${topCities?.length || 0}+ villes. Devis gratuit, données officielles INSEE.`}
           />
         </div>
       )}

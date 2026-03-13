@@ -20,8 +20,8 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     if (years > 0) {
       cards.push({
         icon: Calendar,
-        title: 'Exp\u00e9rience',
-        description: `${years} ans d\u2019activit\u00e9`,
+        title: 'Expérience',
+        description: `${years} ans d'activité`,
       })
     }
   }
@@ -29,8 +29,8 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
   if (artisan.is_verified) {
     cards.push({
       icon: Shield,
-      title: 'Fiabilit\u00e9',
-      description: 'Identit\u00e9 v\u00e9rifi\u00e9e (SIRET)',
+      title: 'Fiabilité',
+      description: 'Identité vérifiée (SIRET)',
     })
   }
 
@@ -45,16 +45,16 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
   if (artisan.team_size && artisan.team_size > 1) {
     cards.push({
       icon: Users,
-      title: '\u00c9quipe',
-      description: `\u00c9quipe de ${artisan.team_size} professionnels`,
+      title: 'Équipe',
+      description: `Équipe de ${artisan.team_size} professionnels`,
     })
   }
 
   if (artisan.intervention_radius_km) {
     cards.push({
       icon: MapPin,
-      title: 'Proximit\u00e9',
-      description: `Intervention dans un rayon de ${artisan.intervention_radius_km}\u202fkm`,
+      title: 'Proximité',
+      description: `Intervention dans un rayon de ${artisan.intervention_radius_km} km`,
     })
   }
 

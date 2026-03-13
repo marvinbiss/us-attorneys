@@ -210,7 +210,7 @@ export default async function AProposPage() {
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
             Nous avons construit un annuaire d&apos;artisans en France
             en exploitant les donn&eacute;es ouvertes du gouvernement.
-            {stats.artisanCount > 0 ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels r\u00e9f\u00e9renc\u00e9s,` : ' Des milliers de professionnels r\u00e9f\u00e9renc\u00e9s,'} accessibles gratuitement.
+            {stats.artisanCount > 0 ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels référencés,` : ' Des milliers de professionnels référencés,'} accessibles gratuitement.
           </p>
           </div>
         </div>

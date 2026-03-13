@@ -8,9 +8,9 @@ import { services } from '@/lib/data/france'
 import CalculateurClient from './CalculateurClient'
 
 export const metadata: Metadata = {
-  title: 'Calculateur de prix artisan 2026 \u2014 Estimez vos travaux',
+  title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
   description:
-    'Estimez le co\u00fbt de vos travaux en quelques clics : prix plombier, tarif \u00e9lectricien, co\u00fbt serrurier, devis peintre et tous les m\u00e9tiers du b\u00e2timent. Calculateur gratuit avec prix actualis\u00e9s 2026.',
+    'Estimez le coût de vos travaux en quelques clics : prix plombier, tarif électricien, coût serrurier, devis peintre et tous les métiers du bâtiment. Calculateur gratuit avec prix actualisés 2026.',
   alternates: {
     canonical: `${SITE_URL}/outils/calculateur-prix`,
   },
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Calculateur de prix artisan 2026 \u2014 Estimez vos travaux',
+    title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
     description:
-      'Estimez le co\u00fbt de vos travaux en quelques clics. Prix plombier, tarif \u00e9lectricien, co\u00fbt serrurier. Calculateur gratuit.',
+      'Estimez le coût de vos travaux en quelques clics. Prix plombier, tarif électricien, coût serrurier. Calculateur gratuit.',
     url: `${SITE_URL}/outils/calculateur-prix`,
     type: 'website',
     locale: 'fr_FR',
@@ -33,15 +33,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans \u2014 Calculateur de prix artisan',
+        alt: 'ServicesArtisans — Calculateur de prix artisan',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Calculateur de prix artisan 2026 \u2014 Estimez vos travaux',
+    title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
     description:
-      'Estimez le co\u00fbt de vos travaux en quelques clics. Prix plombier, tarif \u00e9lectricien, co\u00fbt serrurier.',
+      'Estimez le coût de vos travaux en quelques clics. Prix plombier, tarif électricien, coût serrurier.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -59,25 +59,25 @@ export default function CalculateurPrixPage() {
     '@type': 'HowTo',
     name: 'Comment estimer le prix de vos travaux',
     description:
-      'Utilisez notre calculateur pour estimer le co\u00fbt de vos travaux en 3 \u00e9tapes simples.',
+      'Utilisez notre calculateur pour estimer le coût de vos travaux en 3 étapes simples.',
     step: [
       {
         '@type': 'HowToStep',
         position: 1,
-        name: 'Choisissez un m\u00e9tier',
-        text: 'S\u00e9lectionnez le type d\u2019artisan dont vous avez besoin parmi 10 corps de m\u00e9tier : plombier, \u00e9lectricien, serrurier, chauffagiste, peintre, etc.',
+        name: 'Choisissez un métier',
+        text: 'Sélectionnez le type d’artisan dont vous avez besoin parmi 10 corps de métier : plombier, électricien, serrurier, chauffagiste, peintre, etc.',
       },
       {
         '@type': 'HowToStep',
         position: 2,
-        name: 'S\u00e9lectionnez une prestation',
-        text: 'Choisissez la prestation souhait\u00e9e parmi les interventions courantes du m\u00e9tier s\u00e9lectionn\u00e9 pour obtenir un prix pr\u00e9cis.',
+        name: 'Sélectionnez une prestation',
+        text: 'Choisissez la prestation souhaitée parmi les interventions courantes du métier sélectionné pour obtenir un prix précis.',
       },
       {
         '@type': 'HowToStep',
         position: 3,
         name: 'Obtenez votre estimation',
-        text: 'Consultez la fourchette de prix estim\u00e9e, les conseils pratiques et trouvez un artisan qualifi\u00e9 pr\u00e8s de chez vous.',
+        text: 'Consultez la fourchette de prix estimée, les conseils pratiques et trouvez un artisan qualifié près de chez vous.',
       },
     ],
   }

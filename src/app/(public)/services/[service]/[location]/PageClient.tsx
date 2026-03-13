@@ -159,7 +159,7 @@ export default function ServiceLocationPageClient({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading text-xl md:text-2xl font-bold text-gray-900">
-                {h1Text || `${service.name} \u00e0 ${location.name}`}
+                {h1Text || `${service.name} à ${location.name}`}
               </h1>
               {(location.department_name || location.postal_code) && (
                 <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">
@@ -172,7 +172,7 @@ export default function ServiceLocationPageClient({
               {recentDevisCount > 0 && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-medium mt-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  {recentDevisCount} devis demand{'\u00e9'}{recentDevisCount > 1 ? 's' : ''} ce mois-ci
+                  {recentDevisCount} devis demand{'é'}{recentDevisCount > 1 ? 's' : ''} ce mois-ci
                 </div>
               )}
             </div>
@@ -254,7 +254,7 @@ export default function ServiceLocationPageClient({
           value={sortOrder}
           onChange={(e) => handleSortChange(e.target.value as 'default' | 'name' | 'rating')}
           className="px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-clay-400"
-          aria-label="Trier les r\u00e9sultats"
+          aria-label="Trier les résultats"
         >
           <option value="default">Trier</option>
           <option value="name">Nom A-Z</option>
@@ -291,7 +291,7 @@ export default function ServiceLocationPageClient({
               type="text"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder="Nom, sp\u00e9cialit\u00e9, adresse..."
+              placeholder="Nom, spécialité, adresse..."
               className="w-full bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[40px]"
               autoFocus
             />

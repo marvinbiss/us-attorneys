@@ -88,7 +88,7 @@ interface PageProps {
 /** Truncate title to ~42 chars to leave room for " | ServicesArtisans" suffix (18 chars → total ~60, Google's display limit) */
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -228,8 +228,8 @@ function generateJsonLd(
   const localBusinessSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: `${service.name} \u00e0 ${location.name}`,
-    description: `Trouvez un ${svcLower} qualifi\u00e9 \u00e0 ${location.name}. Artisans v\u00e9rifi\u00e9s SIREN, devis gratuit et avis clients.`,
+    name: `${service.name} à ${location.name}`,
+    description: `Trouvez un ${svcLower} qualifié à ${location.name}. Artisans vérifiés SIREN, devis gratuit et avis clients.`,
     image: getServiceImage(serviceSlug).src,
     address: {
       '@type': 'PostalAddress',
@@ -255,7 +255,7 @@ function generateJsonLd(
         },
       } : {}),
     },
-    priceRange: '\u20ac\u20ac',
+    priceRange: '€€',
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
     telephone: '+33',
     aggregateRating: {
@@ -270,8 +270,8 @@ function generateJsonLd(
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${service.name} \u00e0 ${location.name}`,
-    description: `Trouvez les meilleurs ${svcLower}s \u00e0 ${location.name}`,
+    name: `${service.name} à ${location.name}`,
+    description: `Trouvez les meilleurs ${svcLower}s à ${location.name}`,
     image: getServiceImage(serviceSlug).src,
     areaServed: {
       '@type': 'City',
@@ -518,7 +518,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} \u00E0 ${location.name} : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount} artisans v\u00E9rifi\u00E9s SIREN disponibles dans le ${location.department_code}. D\u00E9lai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
+            answer={`${trade.name} à ${location.name} : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount} artisans vérifiés SIREN disponibles dans le ${location.department_code}. Délai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
           />
         </div>
       )}

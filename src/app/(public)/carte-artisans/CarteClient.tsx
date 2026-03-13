@@ -216,7 +216,7 @@ export default function CarteClient() {
               <p className="text-2xl font-bold">
                 {selectedRegion
                   ? totalArtisans.toLocaleString('fr-FR')
-                  : '350\u00A0000+'}
+                  : '350 000+'}
               </p>
             </div>
           </div>

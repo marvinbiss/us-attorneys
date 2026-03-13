@@ -97,20 +97,20 @@ export const CONVERSATION_STORAGE_KEY = 'sa_estimation_conversation'
 // ---------------------------------------------------------------------------
 
 export const priceTeasers: Record<string, string> = {
-  plombier: 'Fuite d\u2019eau : à partir de 80\u20AC',
-  serrurier: 'Ouverture de porte : à partir de 90\u20AC',
-  electricien: 'Panne électrique : à partir de 70\u20AC',
-  chauffagiste: 'Entretien chaudière : à partir de 90\u20AC',
-  couvreur: 'Réparation toiture : à partir de 150\u20AC',
-  peintre: 'Peinture pièce : à partir de 25\u20AC/m²',
-  menuisier: 'Porte sur mesure : à partir de 200\u20AC',
-  carreleur: 'Carrelage : à partir de 30\u20AC/m²',
-  maçon: 'Mur de clôture : à partir de 100\u20AC/ml',
-  vitrier: 'Remplacement vitre : à partir de 80\u20AC',
-  climaticien: 'Installation clim : à partir de 800\u20AC',
-  cuisiniste: 'Cuisine équipée : à partir de 3 000\u20AC',
-  'pompe-a-chaleur': 'PAC air-eau : à partir de 10 000\u20AC',
-  'isolation-thermique': 'Isolation combles : à partir de 20\u20AC/m²',
+  plombier: 'Fuite d’eau : à partir de 80€',
+  serrurier: 'Ouverture de porte : à partir de 90€',
+  electricien: 'Panne électrique : à partir de 70€',
+  chauffagiste: 'Entretien chaudière : à partir de 90€',
+  couvreur: 'Réparation toiture : à partir de 150€',
+  peintre: 'Peinture pièce : à partir de 25€/m²',
+  menuisier: 'Porte sur mesure : à partir de 200€',
+  carreleur: 'Carrelage : à partir de 30€/m²',
+  maçon: 'Mur de clôture : à partir de 100€/ml',
+  vitrier: 'Remplacement vitre : à partir de 80€',
+  climaticien: 'Installation clim : à partir de 800€',
+  cuisiniste: 'Cuisine équipée : à partir de 3 000€',
+  'pompe-a-chaleur': 'PAC air-eau : à partir de 10 000€',
+  'isolation-thermique': 'Isolation combles : à partir de 20€/m²',
 }
 
 // ---------------------------------------------------------------------------

@@ -41,11 +41,11 @@ export async function GET(request: Request) {
   h+='<svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4L4 18h5v14h8v-8h6v8h8V18h5L20 4z" fill="#2563eb"/><path d="M28 12l-4-4v4h4z" fill="#1d4ed8"/><circle cx="30" cy="30" r="8" fill="#f59e0b"/><path d="M27 30l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   h+='<span style="font-weight:700;font-size:14px;color:#1e293b">${escapedSiteName}</span></div>';
   if(n){h+='<div style="font-weight:600;font-size:15px;color:#0f172a;margin-bottom:4px">'+n.replace(/</g,'&lt;')+'</div>';}
-  if(ds){h+='<div style="font-size:13px;color:#64748b;margin-bottom:8px">'+ds.replace(/</g,'&lt;')+(dv?' \\u00e0 '+dv.replace(/</g,'&lt;'):'')+'</div>';}
+  if(ds){h+='<div style="font-size:13px;color:#64748b;margin-bottom:8px">'+ds.replace(/</g,'&lt;')+(dv?' à '+dv.replace(/</g,'&lt;'):'')+'</div>';}
   h+='<a href="'+url+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:#2563eb;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:background 0.2s"';
   h+=' onmouseover="this.style.background=\'#1d4ed8\'" onmouseout="this.style.background=\'#2563eb\'">';
   h+='Voir le profil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
-  h+='<div style="margin-top:10px;font-size:10px;color:#94a3b8">Professionnel r\\u00e9f\\u00e9renc\\u00e9 sur <a href="${escapedSiteUrl}" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none">${escapedSiteName}</a></div>';
+  h+='<div style="margin-top:10px;font-size:10px;color:#94a3b8">Professionnel référencé sur <a href="${escapedSiteUrl}" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none">${escapedSiteName}</a></div>';
   h+='</div>';
   c.innerHTML=h;
 })();`

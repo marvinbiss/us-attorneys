@@ -23,12 +23,12 @@ const PAGE_URL = `${SITE_URL}/guides/isolation-combles`
 export const metadata: Metadata = {
   title: "Isolation des Combles : Guide Prix, Techniques et Aides 2026",
   description:
-    "Guide isolation combles 2026 : combles perdus (20-75\u202F\u20AC/m\u00B2), combles am\u00E9nag\u00E9s (48-265\u202F\u20AC/m\u00B2), techniques (soufflage, rouleau, sarking), aides et artisans RGE.",
+    "Guide isolation combles 2026 : combles perdus (20-75 €/m²), combles aménagés (48-265 €/m²), techniques (soufflage, rouleau, sarking), aides et artisans RGE.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Isolation des Combles : Guide Prix, Techniques et Aides 2026",
     description:
-      "Guide complet isolation des combles : combles perdus vs am\u00E9nag\u00E9s, techniques, mat\u00E9riaux, prix d\u00E9taill\u00E9s et aides financi\u00E8res 2026.",
+      "Guide complet isolation des combles : combles perdus vs aménagés, techniques, matériaux, prix détaillés et aides financières 2026.",
     url: PAGE_URL,
     type: "article",
     siteName: SITE_NAME,
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Isolation des Combles : Guide Prix, Techniques et Aides 2026",
     description:
-      "Guide complet isolation des combles : combles perdus vs am\u00E9nag\u00E9s, techniques, mat\u00E9riaux, prix d\u00E9taill\u00E9s et aides financi\u00E8res 2026.",
+      "Guide complet isolation des combles : combles perdus vs aménagés, techniques, matériaux, prix détaillés et aides financières 2026.",
   },
 }
 
@@ -46,133 +46,133 @@ const comparaisonCombles = [
     type: "Combles perdus",
     icon: Layers,
     description:
-      "Espace sous toiture non habitable (hauteur insuffisante, charpente fermette). L\u2019isolation se pose directement sur le plancher des combles.",
+      "Espace sous toiture non habitable (hauteur insuffisante, charpente fermette). L’isolation se pose directement sur le plancher des combles.",
     quandChoisir:
-      "Quand les combles ne sont pas am\u00E9nageables : hauteur sous fa\u00EEtage inf\u00E9rieure \u00E0 1,80\u202Fm, charpente industrielle (fermettes en W), ou absence de projet d\u2019am\u00E9nagement.",
-    prix: "20 \u2013 75\u202F\u20AC/m\u00B2",
-    performance: "R \u2265 7 m\u00B2.K/W (recommand\u00E9)",
-    avantages: "Tr\u00E8s \u00E9conomique, rapide (1 journ\u00E9e), excellente performance thermique",
-    inconvenients: "Combles inaccessibles apr\u00E8s soufflage, ne convient pas si on veut am\u00E9nager",
+      "Quand les combles ne sont pas aménageables : hauteur sous faîtage inférieure à 1,80 m, charpente industrielle (fermettes en W), ou absence de projet d’aménagement.",
+    prix: "20 – 75 €/m²",
+    performance: "R ≥ 7 m².K/W (recommandé)",
+    avantages: "Très économique, rapide (1 journée), excellente performance thermique",
+    inconvenients: "Combles inaccessibles après soufflage, ne convient pas si on veut aménager",
   },
   {
-    type: "Combles am\u00E9nag\u00E9s",
+    type: "Combles aménagés",
     icon: Home,
     description:
-      "Espace sous toiture habitable ou destin\u00E9 \u00E0 l\u2019\u00EAtre. L\u2019isolation se pose sous les rampants de toiture (par l\u2019int\u00E9rieur ou l\u2019ext\u00E9rieur).",
+      "Espace sous toiture habitable ou destiné à l’être. L’isolation se pose sous les rampants de toiture (par l’intérieur ou l’extérieur).",
     quandChoisir:
-      "Quand les combles sont d\u00E9j\u00E0 am\u00E9nag\u00E9s ou quand vous pr\u00E9voyez de les am\u00E9nager : hauteur suffisante, charpente traditionnelle, acc\u00E8s existant.",
-    prix: "48 \u2013 265\u202F\u20AC/m\u00B2",
-    performance: "R \u2265 6 m\u00B2.K/W (recommand\u00E9)",
-    avantages: "Conserve l\u2019espace habitable, plusieurs techniques possibles, confort \u00E9t\u00E9 comme hiver",
-    inconvenients: "Plus co\u00FBteux, travaux plus longs, l\u00E9g\u00E8re perte de volume (isolation int\u00E9rieure)",
+      "Quand les combles sont déjà aménagés ou quand vous prévoyez de les aménager : hauteur suffisante, charpente traditionnelle, accès existant.",
+    prix: "48 – 265 €/m²",
+    performance: "R ≥ 6 m².K/W (recommandé)",
+    avantages: "Conserve l’espace habitable, plusieurs techniques possibles, confort été comme hiver",
+    inconvenients: "Plus coûteux, travaux plus longs, légère perte de volume (isolation intérieure)",
   },
 ]
 
 const techniques = [
   {
     name: "Soufflage (combles perdus)",
-    prix: "20 \u2013 40\u202F\u20AC/m\u00B2",
-    performance: "R = 7 \u00E0 10 m\u00B2.K/W",
-    duree: "1 journ\u00E9e (100\u202Fm\u00B2)",
-    avantages: "Le plus \u00E9conomique, couvre parfaitement les recoins, supprime les ponts thermiques, \u00E9ligible \u00E0 toutes les aides",
-    ideal: "Combles perdus non am\u00E9nageables",
+    prix: "20 – 40 €/m²",
+    performance: "R = 7 à 10 m².K/W",
+    duree: "1 journée (100 m²)",
+    avantages: "Le plus économique, couvre parfaitement les recoins, supprime les ponts thermiques, éligible à toutes les aides",
+    ideal: "Combles perdus non aménageables",
   },
   {
     name: "Rouleaux / Panneaux (combles perdus)",
-    prix: "25 \u2013 75\u202F\u20AC/m\u00B2",
-    performance: "R = 7 \u00E0 8 m\u00B2.K/W",
-    duree: "1 \u00E0 2 jours (100\u202Fm\u00B2)",
-    avantages: "Acc\u00E8s aux combles conserv\u00E9 (avec rehausse), pose en double couche crois\u00E9e pour supprimer les ponts thermiques",
-    ideal: "Combles perdus avec acc\u00E8s occasionnel souhait\u00E9",
+    prix: "25 – 75 €/m²",
+    performance: "R = 7 à 8 m².K/W",
+    duree: "1 à 2 jours (100 m²)",
+    avantages: "Accès aux combles conservé (avec rehausse), pose en double couche croisée pour supprimer les ponts thermiques",
+    ideal: "Combles perdus avec accès occasionnel souhaité",
   },
   {
-    name: "Panneaux sous rampants (int\u00E9rieur)",
-    prix: "48 \u2013 90\u202F\u20AC/m\u00B2",
-    performance: "R = 6 \u00E0 8 m\u00B2.K/W",
-    duree: "3 \u00E0 5 jours (100\u202Fm\u00B2)",
-    avantages: "Conserve la couverture en place, bonne performance, co\u00FBt mod\u00E9r\u00E9 pour des combles am\u00E9nag\u00E9s",
-    ideal: "Combles am\u00E9nag\u00E9s, r\u00E9novation sans d\u00E9pose de couverture",
+    name: "Panneaux sous rampants (intérieur)",
+    prix: "48 – 90 €/m²",
+    performance: "R = 6 à 8 m².K/W",
+    duree: "3 à 5 jours (100 m²)",
+    avantages: "Conserve la couverture en place, bonne performance, coût modéré pour des combles aménagés",
+    ideal: "Combles aménagés, rénovation sans dépose de couverture",
   },
   {
-    name: "Sarking (ext\u00E9rieur)",
-    prix: "120 \u2013 265\u202F\u20AC/m\u00B2",
-    performance: "R = 6 \u00E0 10 m\u00B2.K/W",
-    duree: "5 \u00E0 10 jours (100\u202Fm\u00B2)",
-    avantages: "Supprime tous les ponts thermiques, aucune perte de volume int\u00E9rieur, id\u00E9al lors d\u2019une r\u00E9fection de toiture",
-    ideal: "Combles am\u00E9nag\u00E9s + r\u00E9novation compl\u00E8te de la couverture",
+    name: "Sarking (extérieur)",
+    prix: "120 – 265 €/m²",
+    performance: "R = 6 à 10 m².K/W",
+    duree: "5 à 10 jours (100 m²)",
+    avantages: "Supprime tous les ponts thermiques, aucune perte de volume intérieur, idéal lors d’une réfection de toiture",
+    ideal: "Combles aménagés + rénovation complète de la couverture",
   },
 ]
 
 const materiaux = [
   {
-    name: "Laine de verre souffl\u00E9e",
+    name: "Laine de verre soufflée",
     icon: Layers,
-    lambda: "0,040 \u2013 0,045 W/m.K",
-    prix: "3 \u2013 8\u202F\u20AC/m\u00B2 (fourniture)",
-    avantages: "Tr\u00E8s \u00E9conomique, l\u00E9g\u00E8re, incombustible (classe A1), excellent rapport performance/prix",
-    inconvenients: "Irritante \u00E0 la pose, tassement possible \u00E0 long terme (5-10\u202F%), sensible \u00E0 l\u2019humidit\u00E9",
+    lambda: "0,040 – 0,045 W/m.K",
+    prix: "3 – 8 €/m² (fourniture)",
+    avantages: "Très économique, légère, incombustible (classe A1), excellent rapport performance/prix",
+    inconvenients: "Irritante à la pose, tassement possible à long terme (5-10 %), sensible à l’humidité",
   },
   {
     name: "Ouate de cellulose",
     icon: Leaf,
-    lambda: "0,038 \u2013 0,042 W/m.K",
-    prix: "6 \u2013 14\u202F\u20AC/m\u00B2 (fourniture)",
-    avantages: "\u00C9cologique (papier recycl\u00E9), excellent d\u00E9phasage thermique (\u00E9t\u00E9), bon isolant acoustique, l\u00E9g\u00E8rement meilleur lambda",
-    inconvenients: "Traitement au sel de bore n\u00E9cessaire (ignifuge), tassement possible (jusqu\u2019\u00E0 20\u202F% si mal pos\u00E9e)",
+    lambda: "0,038 – 0,042 W/m.K",
+    prix: "6 – 14 €/m² (fourniture)",
+    avantages: "Écologique (papier recyclé), excellent déphasage thermique (été), bon isolant acoustique, légèrement meilleur lambda",
+    inconvenients: "Traitement au sel de bore nécessaire (ignifuge), tassement possible (jusqu’à 20 % si mal posée)",
   },
   {
     name: "Laine de roche",
     icon: Shield,
-    lambda: "0,034 \u2013 0,040 W/m.K",
-    prix: "8 \u2013 18\u202F\u20AC/m\u00B2 (fourniture)",
-    avantages: "Excellente r\u00E9sistance au feu (classe A1), tr\u00E8s bon isolant acoustique, imputrescible, ne craint pas l\u2019humidit\u00E9",
-    inconvenients: "Plus lourde que la laine de verre, irritante \u00E0 la pose, bilan carbone plus \u00E9lev\u00E9",
+    lambda: "0,034 – 0,040 W/m.K",
+    prix: "8 – 18 €/m² (fourniture)",
+    avantages: "Excellente résistance au feu (classe A1), très bon isolant acoustique, imputrescible, ne craint pas l’humidité",
+    inconvenients: "Plus lourde que la laine de verre, irritante à la pose, bilan carbone plus élevé",
   },
   {
     name: "Fibre de bois",
     icon: Leaf,
-    lambda: "0,036 \u2013 0,046 W/m.K",
-    prix: "15 \u2013 30\u202F\u20AC/m\u00B2 (fourniture)",
-    avantages: "\u00C9cologique (bois r\u00E9sineux), meilleur d\u00E9phasage thermique du march\u00E9 (confort d\u2019\u00E9t\u00E9 sup\u00E9rieur), r\u00E9gulation hygrothermique naturelle",
-    inconvenients: "Prix \u00E9lev\u00E9, plus lourde (n\u00E9cessite structure adapt\u00E9e), sensible aux insectes si non trait\u00E9e",
+    lambda: "0,036 – 0,046 W/m.K",
+    prix: "15 – 30 €/m² (fourniture)",
+    avantages: "Écologique (bois résineux), meilleur déphasage thermique du marché (confort d’été supérieur), régulation hygrothermique naturelle",
+    inconvenients: "Prix élevé, plus lourde (nécessite structure adaptée), sensible aux insectes si non traitée",
   },
 ]
 
 const prixDetailles = [
   {
     technique: "Soufflage combles perdus (laine de verre)",
-    surface50: "1 000 \u2013 2 000\u202F\u20AC",
-    surface100: "2 000 \u2013 4 000\u202F\u20AC",
-    surface150: "3 000 \u2013 6 000\u202F\u20AC",
-    prixM2: "20 \u2013 40\u202F\u20AC/m\u00B2",
+    surface50: "1 000 – 2 000 €",
+    surface100: "2 000 – 4 000 €",
+    surface150: "3 000 – 6 000 €",
+    prixM2: "20 – 40 €/m²",
   },
   {
     technique: "Soufflage combles perdus (ouate de cellulose)",
-    surface50: "1 500 \u2013 2 750\u202F\u20AC",
-    surface100: "3 000 \u2013 5 500\u202F\u20AC",
-    surface150: "4 500 \u2013 8 250\u202F\u20AC",
-    prixM2: "30 \u2013 55\u202F\u20AC/m\u00B2",
+    surface50: "1 500 – 2 750 €",
+    surface100: "3 000 – 5 500 €",
+    surface150: "4 500 – 8 250 €",
+    prixM2: "30 – 55 €/m²",
   },
   {
     technique: "Rouleaux sur plancher (double couche)",
-    surface50: "1 250 \u2013 3 750\u202F\u20AC",
-    surface100: "2 500 \u2013 7 500\u202F\u20AC",
-    surface150: "3 750 \u2013 11 250\u202F\u20AC",
-    prixM2: "25 \u2013 75\u202F\u20AC/m\u00B2",
+    surface50: "1 250 – 3 750 €",
+    surface100: "2 500 – 7 500 €",
+    surface150: "3 750 – 11 250 €",
+    prixM2: "25 – 75 €/m²",
   },
   {
-    technique: "Panneaux sous rampants (int\u00E9rieur)",
-    surface50: "2 400 \u2013 4 500\u202F\u20AC",
-    surface100: "4 800 \u2013 9 000\u202F\u20AC",
-    surface150: "7 200 \u2013 13 500\u202F\u20AC",
-    prixM2: "48 \u2013 90\u202F\u20AC/m\u00B2",
+    technique: "Panneaux sous rampants (intérieur)",
+    surface50: "2 400 – 4 500 €",
+    surface100: "4 800 – 9 000 €",
+    surface150: "7 200 – 13 500 €",
+    prixM2: "48 – 90 €/m²",
   },
   {
-    technique: "Sarking (ext\u00E9rieur)",
-    surface50: "6 000 \u2013 13 250\u202F\u20AC",
-    surface100: "12 000 \u2013 26 500\u202F\u20AC",
-    surface150: "18 000 \u2013 39 750\u202F\u20AC",
-    prixM2: "120 \u2013 265\u202F\u20AC/m\u00B2",
+    technique: "Sarking (extérieur)",
+    surface50: "6 000 – 13 250 €",
+    surface100: "12 000 – 26 500 €",
+    surface150: "18 000 – 39 750 €",
+    prixM2: "120 – 265 €/m²",
   },
 ]
 
@@ -180,32 +180,32 @@ const etapesChantier = [
   {
     titre: "Diagnostic thermique et devis",
     description:
-      "Un artisan RGE inspecte vos combles : type de charpente, \u00E9tat de l\u2019existant, pr\u00E9sence de VMC, acc\u00E8s. Il recommande la technique adapt\u00E9e et \u00E9tablit un devis d\u00E9taill\u00E9. Demandez au moins 3 devis.",
+      "Un artisan RGE inspecte vos combles : type de charpente, état de l’existant, présence de VMC, accès. Il recommande la technique adaptée et établit un devis détaillé. Demandez au moins 3 devis.",
   },
   {
-    titre: "Pr\u00E9paration du chantier",
+    titre: "Préparation du chantier",
     description:
-      "D\u00E9gagement des combles (stockage, ancienne isolation d\u00E9grad\u00E9e), v\u00E9rification de l\u2019\u00E9tanch\u00E9it\u00E9 de la toiture, rep\u00E9rage des bo\u00EEtiers \u00E9lectriques et spots encastr\u00E9s (mise en s\u00E9curit\u00E9 avec capots coupe-feu).",
+      "Dégagement des combles (stockage, ancienne isolation dégradée), vérification de l’étanchéité de la toiture, repérage des boîtiers électriques et spots encastrés (mise en sécurité avec capots coupe-feu).",
   },
   {
     titre: "Traitement de la ventilation",
     description:
-      "V\u00E9rification ou installation de la VMC. Une bonne ventilation est indispensable apr\u00E8s isolation pour \u00E9viter la condensation. Pose de d\u00E9flecteurs au niveau des entr\u00E9es d\u2019air en rive de toit.",
+      "Vérification ou installation de la VMC. Une bonne ventilation est indispensable après isolation pour éviter la condensation. Pose de déflecteurs au niveau des entrées d’air en rive de toit.",
   },
   {
-    titre: "Pose du pare-vapeur (si n\u00E9cessaire)",
+    titre: "Pose du pare-vapeur (si nécessaire)",
     description:
-      "Mise en place d\u2019une membrane pare-vapeur c\u00F4t\u00E9 chaud (obligatoire pour les isolants sensibles \u00E0 l\u2019humidit\u00E9). Les joints sont scotch\u00E9s pour garantir la continuit\u00E9 de l\u2019\u00E9tanch\u00E9it\u00E9 \u00E0 l\u2019air.",
+      "Mise en place d’une membrane pare-vapeur côté chaud (obligatoire pour les isolants sensibles à l’humidité). Les joints sont scotchés pour garantir la continuité de l’étanchéité à l’air.",
   },
   {
-    titre: "Pose de l\u2019isolant",
+    titre: "Pose de l’isolant",
     description:
-      "Soufflage m\u00E9canique (combles perdus) ou pose de panneaux/rouleaux (sous rampants ou sur plancher). L\u2019\u00E9paisseur est contr\u00F4l\u00E9e par des piges gradu\u00E9es. En sarking, l\u2019isolant rigide est fix\u00E9 sur les chevrons.",
+      "Soufflage mécanique (combles perdus) ou pose de panneaux/rouleaux (sous rampants ou sur plancher). L’épaisseur est contrôlée par des piges graduées. En sarking, l’isolant rigide est fixé sur les chevrons.",
   },
   {
-    titre: "Finitions et r\u00E9ception",
+    titre: "Finitions et réception",
     description:
-      "Pose du parement int\u00E9rieur (BA13) pour les combles am\u00E9nag\u00E9s, mise en place de la trappe d\u2019acc\u00E8s isol\u00E9e, nettoyage du chantier. L\u2019artisan remet l\u2019attestation sur l\u2019honneur (n\u00E9cessaire pour les aides).",
+      "Pose du parement intérieur (BA13) pour les combles aménagés, mise en place de la trappe d’accès isolée, nettoyage du chantier. L’artisan remet l’attestation sur l’honneur (nécessaire pour les aides).",
   },
 ]
 
@@ -217,29 +217,29 @@ const services = [
 
 const faqItems = [
   {
-    question: "Combien co\u00FBte l\u2019isolation des combles perdus ?",
+    question: "Combien coûte l’isolation des combles perdus ?",
     answer:
-      "L\u2019isolation des combles perdus par soufflage co\u00FBte entre 20 et 40\u202F\u20AC/m\u00B2 pose comprise (laine de verre) et 30 \u00E0 55\u202F\u20AC/m\u00B2 (ouate de cellulose). Pour une maison de 100\u202Fm\u00B2 de combles, comptez entre 2\u202F000 et 5\u202F500\u202F\u20AC avant aides. Apr\u00E8s d\u00E9duction de MaPrimeR\u00E9nov\u2019 et des CEE, le reste \u00E0 charge peut descendre \u00E0 quelques centaines d\u2019euros pour les m\u00E9nages modestes.",
+      "L’isolation des combles perdus par soufflage coûte entre 20 et 40 €/m² pose comprise (laine de verre) et 30 à 55 €/m² (ouate de cellulose). Pour une maison de 100 m² de combles, comptez entre 2 000 et 5 500 € avant aides. Après déduction de MaPrimeRénov’ et des CEE, le reste à charge peut descendre à quelques centaines d’euros pour les ménages modestes.",
   },
   {
-    question: "Quelle \u00E9paisseur d\u2019isolant est recommand\u00E9e pour les combles ?",
+    question: "Quelle épaisseur d’isolant est recommandée pour les combles ?",
     answer:
-      "Pour atteindre la r\u00E9sistance thermique R\u202F=\u202F7\u202Fm\u00B2.K/W recommand\u00E9e en combles perdus, il faut environ 30 \u00E0 35\u202Fcm de laine de verre souffl\u00E9e, 28 \u00E0 33\u202Fcm de ouate de cellulose, ou 25 \u00E0 30\u202Fcm de laine de roche. Pour les combles am\u00E9nag\u00E9s (R\u202F\u2265\u202F6), l\u2019\u00E9paisseur varie de 22 \u00E0 28\u202Fcm selon le mat\u00E9riau. Ne l\u00E9sinez pas sur l\u2019\u00E9paisseur\u202F: le surco\u00FBt est minime et les \u00E9conomies d\u2019\u00E9nergie sont proportionnelles.",
+      "Pour atteindre la résistance thermique R = 7 m².K/W recommandée en combles perdus, il faut environ 30 à 35 cm de laine de verre soufflée, 28 à 33 cm de ouate de cellulose, ou 25 à 30 cm de laine de roche. Pour les combles aménagés (R ≥ 6), l’épaisseur varie de 22 à 28 cm selon le matériau. Ne lésinez pas sur l’épaisseur : le surcoût est minime et les économies d’énergie sont proportionnelles.",
   },
   {
-    question: "Quelle est la dur\u00E9e de vie de l\u2019isolation des combles ?",
+    question: "Quelle est la durée de vie de l’isolation des combles ?",
     answer:
-      "Une isolation correctement pos\u00E9e dure 25 \u00E0 40 ans en moyenne. La laine de verre et la laine de roche conservent leurs performances 30 \u00E0 40 ans. La ouate de cellulose dure 25 \u00E0 35 ans (l\u00E9ger tassement possible). La fibre de bois offre une excellente durabilit\u00E9 (35 \u00E0 40 ans). Les signes de remplacement\u202F: augmentation des factures \u00E9nerg\u00E9tiques, sensation de froid, pr\u00E9sence d\u2019humidit\u00E9 ou de moisissures dans les combles.",
+      "Une isolation correctement posée dure 25 à 40 ans en moyenne. La laine de verre et la laine de roche conservent leurs performances 30 à 40 ans. La ouate de cellulose dure 25 à 35 ans (léger tassement possible). La fibre de bois offre une excellente durabilité (35 à 40 ans). Les signes de remplacement : augmentation des factures énergétiques, sensation de froid, présence d’humidité ou de moisissures dans les combles.",
   },
   {
-    question: "L\u2019isolation des combles est-elle efficace en \u00E9t\u00E9 comme en hiver ?",
+    question: "L’isolation des combles est-elle efficace en été comme en hiver ?",
     answer:
-      "Oui, mais avec des nuances. En hiver, tous les isolants limitent les pertes de chaleur (jusqu\u2019\u00E0 30\u202F% d\u2019\u00E9conomies sur la facture de chauffage). En \u00E9t\u00E9, c\u2019est le d\u00E9phasage thermique qui compte\u202F: il retarde la p\u00E9n\u00E9tration de la chaleur. La fibre de bois (d\u00E9phasage 10-12h) et la ouate de cellulose (8-10h) sont sup\u00E9rieures \u00E0 la laine de verre (4-6h). Pour un confort d\u2019\u00E9t\u00E9 optimal, privil\u00E9giez ces isolants biosourc\u00E9s.",
+      "Oui, mais avec des nuances. En hiver, tous les isolants limitent les pertes de chaleur (jusqu’à 30 % d’économies sur la facture de chauffage). En été, c’est le déphasage thermique qui compte : il retarde la pénétration de la chaleur. La fibre de bois (déphasage 10-12h) et la ouate de cellulose (8-10h) sont supérieures à la laine de verre (4-6h). Pour un confort d’été optimal, privilégiez ces isolants biosourcés.",
   },
   {
-    question: "Pourquoi choisir un artisan RGE pour l\u2019isolation des combles ?",
+    question: "Pourquoi choisir un artisan RGE pour l’isolation des combles ?",
     answer:
-      "La certification RGE (Reconnu Garant de l\u2019Environnement) est obligatoire pour b\u00E9n\u00E9ficier de MaPrimeR\u00E9nov\u2019, des CEE, de l\u2019\u00E9co-PTZ et de la TVA \u00E0 5,5\u202F%. Au-del\u00E0 des aides, un artisan RGE garantit une pose conforme aux DTU (r\u00E8gles de l\u2019art)\u202F: \u00E9paisseur correcte, traitement des ponts thermiques, pare-vapeur bien pos\u00E9, ventilation v\u00E9rifi\u00E9e. V\u00E9rifiez la certification sur le site france-renov.gouv.fr avant de signer.",
+      "La certification RGE (Reconnu Garant de l’Environnement) est obligatoire pour bénéficier de MaPrimeRénov’, des CEE, de l’éco-PTZ et de la TVA à 5,5 %. Au-delà des aides, un artisan RGE garantit une pose conforme aux DTU (règles de l’art) : épaisseur correcte, traitement des ponts thermiques, pare-vapeur bien posé, ventilation vérifiée. Vérifiez la certification sur le site france-renov.gouv.fr avant de signer.",
   },
 ]
 
@@ -307,14 +307,14 @@ export default function IsolationComblesPage() {
             {"Isolation des combles : guide prix, techniques et aides 2026"}
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {"Les combles repr\u00E9sentent jusqu\u2019\u00E0 30\u202F% des pertes de chaleur d\u2019une maison. D\u00E9couvrez les techniques d\u2019isolation, les prix d\u00E9taill\u00E9s et les aides disponibles en 2026 pour r\u00E9duire votre facture \u00E9nerg\u00E9tique."}
+            {"Les combles représentent jusqu’à 30 % des pertes de chaleur d’une maison. Découvrez les techniques d’isolation, les prix détaillés et les aides disponibles en 2026 pour réduire votre facture énergétique."}
           </p>
         </section>
 
-        {/* Combles perdus vs am\u00E9nag\u00E9s */}
+        {/* Combles perdus vs aménagés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
-            Combles perdus vs combles am\u00E9nag\u00E9s
+            Combles perdus vs combles aménagés
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {comparaisonCombles.map((c) => {
@@ -346,7 +346,7 @@ export default function IsolationComblesPage() {
                       <p className="text-sm text-gray-600">{c.avantages}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-amber-700 mb-1">Inconv\u00E9nients</p>
+                      <p className="text-sm font-semibold text-amber-700 mb-1">Inconvénients</p>
                       <p className="text-sm text-gray-600">{c.inconvenients}</p>
                     </div>
                   </div>
@@ -377,16 +377,16 @@ export default function IsolationComblesPage() {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mb-2">{t.avantages}</p>
-                <p className="text-sm font-medium text-blue-600">Id\u00E9al pour : {t.ideal}</p>
+                <p className="text-sm font-medium text-blue-600">Idéal pour : {t.ideal}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Mat\u00E9riaux */}
+        {/* Matériaux */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
-            Mat\u00E9riaux isolants : comparatif
+            Matériaux isolants : comparatif
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {materiaux.map((m) => {
@@ -399,7 +399,7 @@ export default function IsolationComblesPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-gray-900">{m.name}</h3>
-                      <p className="text-xs text-gray-500">\u03BB = {m.lambda}</p>
+                      <p className="text-xs text-gray-500">λ = {m.lambda}</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-3 text-sm mb-3">
@@ -413,7 +413,7 @@ export default function IsolationComblesPage() {
                       <p className="text-sm text-gray-600">{m.avantages}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-amber-700 mb-1">Inconv\u00E9nients</p>
+                      <p className="text-sm font-semibold text-amber-700 mb-1">Inconvénients</p>
                       <p className="text-sm text-gray-600">{m.inconvenients}</p>
                     </div>
                   </div>
@@ -423,10 +423,10 @@ export default function IsolationComblesPage() {
           </div>
         </section>
 
-        {/* Prix d\u00E9taill\u00E9s */}
+        {/* Prix détaillés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
-            Prix d\u00E9taill\u00E9s par technique et surface
+            Prix détaillés par technique et surface
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="overflow-x-auto">
@@ -434,10 +434,10 @@ export default function IsolationComblesPage() {
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
                     <th className="text-left p-4 font-semibold text-gray-900">Technique</th>
-                    <th className="text-center p-4 font-semibold text-gray-900">50 m\u00B2</th>
-                    <th className="text-center p-4 font-semibold text-gray-900">100 m\u00B2</th>
-                    <th className="text-center p-4 font-semibold text-gray-900">150 m\u00B2</th>
-                    <th className="text-center p-4 font-semibold text-gray-900">Prix/m\u00B2</th>
+                    <th className="text-center p-4 font-semibold text-gray-900">50 m²</th>
+                    <th className="text-center p-4 font-semibold text-gray-900">100 m²</th>
+                    <th className="text-center p-4 font-semibold text-gray-900">150 m²</th>
+                    <th className="text-center p-4 font-semibold text-gray-900">Prix/m²</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -455,7 +455,7 @@ export default function IsolationComblesPage() {
             </div>
             <div className="p-4 bg-blue-50 border-t border-blue-100">
               <p className="text-sm text-blue-800">
-                {"Prix TTC pose comprise, indicatifs pour 2026. Incluent la fourniture de l\u2019isolant, la main-d\u2019\u0153uvre et le pare-vapeur. Hors d\u00E9pose de l\u2019ancien isolant (+5 \u00E0 15\u202F\u20AC/m\u00B2) et hors parement int\u00E9rieur (BA13)."}
+                {"Prix TTC pose comprise, indicatifs pour 2026. Incluent la fourniture de l’isolant, la main-d’œuvre et le pare-vapeur. Hors dépose de l’ancien isolant (+5 à 15 €/m²) et hors parement intérieur (BA13)."}
               </p>
             </div>
           </div>
@@ -465,44 +465,44 @@ export default function IsolationComblesPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 font-heading">
-              Aides financi\u00E8res 2026 pour l{"'"}isolation des combles
+              Aides financières 2026 pour l{"'"}isolation des combles
             </h2>
             <p className="text-green-50 mb-6 text-lg">
-              {"L\u2019isolation des combles est l\u2019un des travaux les mieux subventionn\u00E9s. Artisan RGE obligatoire pour toutes les aides."}
+              {"L’isolation des combles est l’un des travaux les mieux subventionnés. Artisan RGE obligatoire pour toutes les aides."}
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white/10 rounded-xl p-5">
-                <h3 className="font-semibold text-lg mb-2">MaPrimeR\u00E9nov{"'"}</h3>
+                <h3 className="font-semibold text-lg mb-2">MaPrimeRénov{"'"}</h3>
                 <p className="text-green-50 text-sm">
-                  {"Jusqu\u2019\u00E0 25\u202F\u20AC/m\u00B2 pour les m\u00E9nages tr\u00E8s modestes (combles perdus) et jusqu\u2019\u00E0 75\u202F\u20AC/m\u00B2 pour l\u2019isolation des rampants. Le montant d\u00E9pend de vos revenus et de la zone g\u00E9ographique. Cumulable avec les CEE."}
+                  {"Jusqu’à 25 €/m² pour les ménages très modestes (combles perdus) et jusqu’à 75 €/m² pour l’isolation des rampants. Le montant dépend de vos revenus et de la zone géographique. Cumulable avec les CEE."}
                 </p>
               </div>
               <div className="bg-white/10 rounded-xl p-5">
-                <h3 className="font-semibold text-lg mb-2">CEE (Certificats d{"'"}\u00C9conomies d{"'"}\u00C9nergie)</h3>
+                <h3 className="font-semibold text-lg mb-2">CEE (Certificats d{"'"}Économies d{"'"}Énergie)</h3>
                 <p className="text-green-50 text-sm">
-                  {"Prime \u00E9nergie vers\u00E9e par les fournisseurs d\u2019\u00E9nergie (EDF, TotalEnergies, etc.). De 10 \u00E0 22\u202F\u20AC/m\u00B2 selon la surface, la zone climatique et vos revenus. \u00C0 demander AVANT de signer le devis."}
+                  {"Prime énergie versée par les fournisseurs d’énergie (EDF, TotalEnergies, etc.). De 10 à 22 €/m² selon la surface, la zone climatique et vos revenus. À demander AVANT de signer le devis."}
                 </p>
               </div>
               <div className="bg-white/10 rounded-xl p-5">
-                <h3 className="font-semibold text-lg mb-2">TVA \u00E0 5,5 %</h3>
+                <h3 className="font-semibold text-lg mb-2">TVA à 5,5 %</h3>
                 <p className="text-green-50 text-sm">
-                  {"TVA r\u00E9duite \u00E0 5,5\u202F% (au lieu de 20\u202F%) appliqu\u00E9e directement sur la facture par l\u2019artisan RGE. Valable pour les logements de plus de 2 ans (r\u00E9sidence principale ou secondaire)."}
+                  {"TVA réduite à 5,5 % (au lieu de 20 %) appliquée directement sur la facture par l’artisan RGE. Valable pour les logements de plus de 2 ans (résidence principale ou secondaire)."}
                 </p>
               </div>
               <div className="bg-white/10 rounded-xl p-5">
-                <h3 className="font-semibold text-lg mb-2">\u00C9co-PTZ et aides locales</h3>
+                <h3 className="font-semibold text-lg mb-2">Éco-PTZ et aides locales</h3>
                 <p className="text-green-50 text-sm">
-                  {"Pr\u00EAt \u00E0 taux z\u00E9ro jusqu\u2019\u00E0 50\u202F000\u202F\u20AC pour un bouquet de travaux, remboursable sur 20 ans. Certaines r\u00E9gions et collectivit\u00E9s proposent des compl\u00E9ments (ex : \u00CEle-de-France, Auvergne-Rh\u00F4ne-Alpes)."}
+                  {"Prêt à taux zéro jusqu’à 50 000 € pour un bouquet de travaux, remboursable sur 20 ans. Certaines régions et collectivités proposent des compléments (ex : Île-de-France, Auvergne-Rhône-Alpes)."}
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* \u00C9tapes du chantier */}
+        {/* Étapes du chantier */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
-            \u00C9tapes du chantier et dur\u00E9e
+            Étapes du chantier et durée
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
             <div className="prose prose-lg max-w-none text-gray-700">
@@ -524,29 +524,29 @@ export default function IsolationComblesPage() {
               <div className="bg-blue-50 rounded-xl p-4 text-center">
                 <p className="text-sm text-blue-600 font-medium mb-1">Combles perdus (soufflage)</p>
                 <p className="text-2xl font-bold text-blue-800">1 jour</p>
-                <p className="text-xs text-blue-600">pour 100 m\u00B2</p>
+                <p className="text-xs text-blue-600">pour 100 m²</p>
               </div>
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <p className="text-sm text-blue-600 font-medium mb-1">Sous rampants (int\u00E9rieur)</p>
-                <p className="text-2xl font-bold text-blue-800">3 \u00E0 5 jours</p>
-                <p className="text-xs text-blue-600">pour 100 m\u00B2</p>
+                <p className="text-sm text-blue-600 font-medium mb-1">Sous rampants (intérieur)</p>
+                <p className="text-2xl font-bold text-blue-800">3 à 5 jours</p>
+                <p className="text-xs text-blue-600">pour 100 m²</p>
               </div>
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <p className="text-sm text-blue-600 font-medium mb-1">Sarking (ext\u00E9rieur)</p>
-                <p className="text-2xl font-bold text-blue-800">5 \u00E0 10 jours</p>
-                <p className="text-xs text-blue-600">pour 100 m\u00B2</p>
+                <p className="text-sm text-blue-600 font-medium mb-1">Sarking (extérieur)</p>
+                <p className="text-2xl font-bold text-blue-800">5 à 10 jours</p>
+                <p className="text-xs text-blue-600">pour 100 m²</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Services li\u00E9s */}
+        {/* Services liés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-heading">
             Trouver un artisan RGE pour vos combles
           </h2>
           <p className="text-gray-600 mb-8 text-lg">
-            {"Confiez l\u2019isolation de vos combles \u00E0 des professionnels certifi\u00E9s RGE et assur\u00E9s en d\u00E9cennale."}
+            {"Confiez l’isolation de vos combles à des professionnels certifiés RGE et assurés en décennale."}
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {services.map((s) => {
@@ -570,23 +570,23 @@ export default function IsolationComblesPage() {
           </div>
         </section>
 
-        {/* Guides li\u00E9s */}
+        {/* Guides liés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
-            Guides compl\u00E9mentaires
+            Guides complémentaires
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Link href="/guides/renovation-toiture" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"R\u00E9novation de toiture"}</h3>
-              <p className="text-sm text-gray-500">{"Profitez d\u2019une r\u00E9fection de toiture pour isoler par sarking."}</p>
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Rénovation de toiture"}</h3>
+              <p className="text-sm text-gray-500">{"Profitez d’une réfection de toiture pour isoler par sarking."}</p>
             </Link>
             <Link href="/guides/aides-renovation-2026" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Aides r\u00E9novation 2026"}</h3>
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Aides rénovation 2026"}</h3>
               <p className="text-sm text-gray-500">{"Toutes les aides pour financer votre isolation."}</p>
             </Link>
             <Link href="/guides/artisan-rge" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Artisan RGE"}</h3>
-              <p className="text-sm text-gray-500">{"Obligatoire pour b\u00E9n\u00E9ficier des aides \u00E0 l\u2019isolation."}</p>
+              <p className="text-sm text-gray-500">{"Obligatoire pour bénéficier des aides à l’isolation."}</p>
             </Link>
           </div>
         </section>
@@ -595,7 +595,7 @@ export default function IsolationComblesPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading flex items-center gap-3">
             <HelpCircle className="w-8 h-8 text-blue-600" />
-            Questions fr\u00E9quentes sur l{"'"}isolation des combles
+            Questions fréquentes sur l{"'"}isolation des combles
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
@@ -619,10 +619,10 @@ export default function IsolationComblesPage() {
         <section className="max-w-5xl mx-auto px-4 py-12">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              {"Besoin d\u2019un artisan pour isoler vos combles ?"}
+              {"Besoin d’un artisan pour isoler vos combles ?"}
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              {"Trouvez des artisans RGE certifi\u00E9s pr\u00E8s de chez vous. Devis gratuit et sans engagement."}
+              {"Trouvez des artisans RGE certifiés près de chez vous. Devis gratuit et sans engagement."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

@@ -56,9 +56,9 @@ export const revalidate = 86400
 function getRegionalMultiplier(region: string): number {
   const multipliers: Record<string, number> = {
     'Ile-de-France': 1.25,
-    '\u00CEle-de-France': 1.25,
-    'Provence-Alpes-C\u00F4te d\'Azur': 1.10,
-    'Auvergne-Rh\u00F4ne-Alpes': 1.10,
+    'Île-de-France': 1.25,
+    "Provence-Alpes-Côte d'Azur": 1.10,
+    'Auvergne-Rhône-Alpes': 1.10,
     'Occitanie': 1.05,
     'Nouvelle-Aquitaine': 1.00,
     'Hauts-de-France': 0.95,
@@ -90,16 +90,16 @@ function getClimatLabel(zone: string | null): string {
 
 function getSeasonalTip(zone: string | null, serviceName: string): string {
   if (zone === 'mediterraneen') {
-    return `\u00C0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l'année. La demande de ${serviceName.toLowerCase()} peut \u00EAtre plus forte en été avec l'afflux de résidents saisonniers.`
+    return `À noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l'année. La demande de ${serviceName.toLowerCase()} peut être plus forte en été avec l'afflux de résidents saisonniers.`
   }
   if (zone === 'montagnard') {
     return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d'intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
   }
   if (zone === 'continental') {
-    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et \u00E0 l'isolation sont particuli\u00E8rement pertinents.`
+    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et à l'isolation sont particulièrement pertinents.`
   }
   if (zone === 'oceanique' || zone === 'semi-oceanique') {
-    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées \u00E0 l'étanchéité et \u00E0 la ventilation sont courantes.`
+    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées à l'étanchéité et à la ventilation sont courantes.`
   }
   return `Les conditions climatiques locales peuvent influencer le type et la fréquence des interventions de ${serviceName.toLowerCase()}.`
 }
@@ -110,7 +110,7 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({
@@ -133,7 +133,7 @@ export async function generateMetadata({
   const titleHash = Math.abs(hashCode(`tarif-title-${service}-${villeSlug}`))
   const titleTemplates = [
     `Prix ${tradeLower} ${villeData.name} 2026`,
-    `Prix ${tradeLower} \u00e0 ${villeData.name} — Tarifs`,
+    `Prix ${tradeLower} à ${villeData.name} — Tarifs`,
     `Tarif ${tradeLower} ${villeData.name} 2026`,
     `Prix ${tradeLower} ${villeData.name} : barème`,
     `Tarifs ${tradeLower} ${villeData.name} — Guide`,
@@ -142,11 +142,11 @@ export async function generateMetadata({
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}-${villeSlug}`))
   const descTemplates = [
-    `Prix ${tradeLower} \u00E0 ${villeData.name} en 2026 : ${minPrice}\u2013${maxPrice} ${unit}. Tarifs locaux, facteurs de prix et devis gratuit.`,
-    `Tarif ${tradeLower} \u00E0 ${villeData.name} (${dept}) : de ${minPrice} \u00E0 ${maxPrice} ${unit}. Comparez les artisans et demandez un devis.`,
-    `Quel est le prix d\u2019un ${tradeLower} \u00E0 ${villeData.name} ? De ${minPrice} \u00E0 ${maxPrice} ${unit} en 2026. Guide complet et devis gratuit.`,
-    `Guide des tarifs ${tradeLower} \u00E0 ${villeData.name} en 2026. Prix moyen : ${minPrice}\u2013${maxPrice} ${unit}. Conseils et devis sans engagement.`,
-    `Tarifs ${tradeLower} ${villeData.name} en 2026 : ${minPrice} \u00E0 ${maxPrice} ${unit}. D\u00E9couvrez les prix locaux et obtenez un devis gratuit.`,
+    `Prix ${tradeLower} à ${villeData.name} en 2026 : ${minPrice}–${maxPrice} ${unit}. Tarifs locaux, facteurs de prix et devis gratuit.`,
+    `Tarif ${tradeLower} à ${villeData.name} (${dept}) : de ${minPrice} à ${maxPrice} ${unit}. Comparez les artisans et demandez un devis.`,
+    `Quel est le prix d’un ${tradeLower} à ${villeData.name} ? De ${minPrice} à ${maxPrice} ${unit} en 2026. Guide complet et devis gratuit.`,
+    `Guide des tarifs ${tradeLower} à ${villeData.name} en 2026. Prix moyen : ${minPrice}–${maxPrice} ${unit}. Conseils et devis sans engagement.`,
+    `Tarifs ${tradeLower} ${villeData.name} en 2026 : ${minPrice} à ${maxPrice} ${unit}. Découvrez les prix locaux et obtenez un devis gratuit.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -206,7 +206,7 @@ export default async function TarifsServiceVillePage({
 
   const faqSchema = getFAQSchema(
     trade.faq.slice(0, 5).map((f) => ({
-      question: f.q.replace(/\?$/, '') + ` \u00E0 ${villeData.name}\u00A0?`,
+      question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
       answer: f.a,
     }))
   )
@@ -215,8 +215,8 @@ export default async function TarifsServiceVillePage({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${trade.name} \u00e0 ${villeData.name}`,
-    description: `Service de ${tradeLower} \u00e0 ${villeData.name} (${villeData.departement}). Tarifs 2026 : ${minPrice} \u00e0 ${maxPrice} ${trade.priceRange.unit}.`,
+    name: `${trade.name} à ${villeData.name}`,
+    description: `Service de ${tradeLower} à ${villeData.name} (${villeData.departement}). Tarifs 2026 : ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
     provider: {
       '@type': 'LocalBusiness',
@@ -255,8 +255,8 @@ export default async function TarifsServiceVillePage({
   const pricingItemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `Tarifs ${trade.name} \u00E0 ${villeData.name}`,
-    description: `Liste des prestations et prix indicatifs pour ${trade.name} \u00E0 ${villeData.name}`,
+    name: `Tarifs ${trade.name} à ${villeData.name}`,
+    description: `Liste des prestations et prix indicatifs pour ${trade.name} à ${villeData.name}`,
     numberOfItems: trade.commonTasks.length,
     itemListElement: trade.commonTasks.map((task, i) => {
       const parts = task.split(':')
@@ -285,7 +285,7 @@ export default async function TarifsServiceVillePage({
 
   const speakableSchema = getSpeakableSchema({
     url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
-    title: `Tarifs ${tradeLower} \u00E0 ${villeData.name}`,
+    title: `Tarifs ${tradeLower} à ${villeData.name}`,
   })
 
   const relatedCities = getNearbyCities(villeSlug, 6)
@@ -325,18 +325,18 @@ export default async function TarifsServiceVillePage({
               {(() => {
                 const h1Hash = Math.abs(hashCode(`tarif-h1-${service}-${villeSlug}`))
                 const h1Templates = [
-                  `Tarifs ${tradeLower} \u00E0 ${villeData.name} en 2026`,
-                  `Prix ${tradeLower} \u00E0 ${villeData.name} : guide des tarifs 2026`,
-                  `Combien co\u00FBte un ${tradeLower} \u00E0 ${villeData.name}\u00A0?`,
-                  `${trade.name} \u00E0 ${villeData.name} : tarifs et prix 2026`,
-                  `Guide des tarifs ${tradeLower} \u00E0 ${villeData.name}`,
+                  `Tarifs ${tradeLower} à ${villeData.name} en 2026`,
+                  `Prix ${tradeLower} à ${villeData.name} : guide des tarifs 2026`,
+                  `Combien coûte un ${tradeLower} à ${villeData.name} ?`,
+                  `${trade.name} à ${villeData.name} : tarifs et prix 2026`,
+                  `Guide des tarifs ${tradeLower} à ${villeData.name}`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Prix {tradeLower} {'\u00E0'} {villeData.name} ({villeData.departement}) :
-              {' '}{minPrice} {'\u00E0'} {maxPrice} {trade.priceRange.unit}.
+              Prix {tradeLower} {'à'} {villeData.name} ({villeData.departement}) :
+              {' '}{minPrice} {'à'} {maxPrice} {trade.priceRange.unit}.
               Tarifs adapt{'é'}s au march{'é'} local.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
@@ -364,7 +364,7 @@ export default async function TarifsServiceVillePage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">
-              Tarif horaire moyen {'\u00E0'} {villeData.name}
+              Tarif horaire moyen {'à'} {villeData.name}
             </h2>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
@@ -373,20 +373,20 @@ export default async function TarifsServiceVillePage({
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constat{'é'} {'\u00E0'} {villeData.name} et ses alentours,
+              Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours,
               main-d&apos;oeuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)}\u00A0% supérieurs \u00E0 la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)}\u00A0% inférieurs \u00E0 la moyenne nationale`}
+                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Prestations courantes et prix {'\u00E0'} {villeData.name}
+            Prestations courantes et prix {'à'} {villeData.name}
           </h2>
           <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
             <table className="w-full text-left">
@@ -418,10 +418,10 @@ export default async function TarifsServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            Facteurs qui influencent les prix {'\u00E0'} {villeData.name}
+            Facteurs qui influencent les prix {'à'} {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Plusieurs facteurs locaux expliquent les variations tarifaires {'\u00E0'} {villeData.name}.
+            Plusieurs facteurs locaux expliquent les variations tarifaires {'à'} {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             <LocalFactorCard
@@ -430,8 +430,8 @@ export default async function TarifsServiceVillePage({
               value={commune?.revenu_median ? `${formatNumber(commune.revenu_median)} €/an` : null}
               description={
                 commune?.revenu_median
-                  ? `Le revenu médian \u00E0 ${villeData.name} est de ${formatNumber(commune.revenu_median)}\u00A0€ par an, ce qui influence le positionnement tarifaire des artisans locaux.`
-                  : `Le pouvoir d'achat local \u00E0 ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
+                  ? `Le revenu médian à ${villeData.name} est de ${formatNumber(commune.revenu_median)} € par an, ce qui influence le positionnement tarifaire des artisans locaux.`
+                  : `Le pouvoir d'achat local à ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
               }
             />
             <LocalFactorCard
@@ -442,8 +442,8 @@ export default async function TarifsServiceVillePage({
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
                     ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} bénéficie d'une forte concurrence, ce qui peut maintenir les prix compétitifs.`
-                    : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Une concurrence modérée peut impliquer des tarifs lég\u00E8rement plus élevés.`
-                  : `Le nombre d'artisans disponibles \u00E0 ${villeData.name} influence directement les tarifs pratiqués.`
+                    : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Une concurrence modérée peut impliquer des tarifs légèrement plus élevés.`
+                  : `Le nombre d'artisans disponibles à ${villeData.name} influence directement les tarifs pratiqués.`
               }
             />
             <LocalFactorCard
@@ -455,13 +455,13 @@ export default async function TarifsServiceVillePage({
             <LocalFactorCard
               icon={<Building2 className="w-5 h-5 text-purple-600" />}
               title="Type de logement"
-              value={commune?.part_maisons_pct ? `${commune.part_maisons_pct}\u00A0% de maisons` : null}
+              value={commune?.part_maisons_pct ? `${commune.part_maisons_pct} % de maisons` : null}
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00C0 ${villeData.name}, ${commune.part_maisons_pct}\u00A0% des logements sont des maisons individuelles. Les interventions sur maisons (toiture, fa\u00E7ade, jardin) sont fréquentes.`
-                    : `\u00C0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct}\u00A0%). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
-                  : `La répartition entre maisons et appartements \u00E0 ${villeData.name} influence les types de travaux demandés.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions sur maisons (toiture, façade, jardin) sont fréquentes.`
+                    : `À ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
+                  : `La répartition entre maisons et appartements à ${villeData.name} influence les types de travaux demandés.`
               }
             />
           </div>
@@ -470,7 +470,7 @@ export default async function TarifsServiceVillePage({
             <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {commune.prix_m2_moyen && (
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.prix_m2_moyen)} {'€'}/m{'\u00B2'}</div>
+                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.prix_m2_moyen)} {'€'}/m{'²'}</div>
                   <div className="text-sm text-gray-500 mt-1">Prix immobilier moyen</div>
                 </div>
               )}
@@ -502,7 +502,7 @@ export default async function TarifsServiceVillePage({
       {/* Speakable Answer Box */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <SpeakableAnswerBox
-          answer={`${trade.name} \u00E0 ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit} (prix ajust\u00E9 r\u00E9gion ${villeData.region}). Prestations courantes : ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join(', ')}. ${commune?.nb_entreprises_artisanales ? `${commune.nb_entreprises_artisanales} entreprises artisanales dans la commune.` : ''}`}
+          answer={`${trade.name} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit} (prix ajusté région ${villeData.region}). Prestations courantes : ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join(', ')}. ${commune?.nb_entreprises_artisanales ? `${commune.nb_entreprises_artisanales} entreprises artisanales dans la commune.` : ''}`}
         />
       </div>
 
@@ -510,7 +510,7 @@ export default async function TarifsServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Conseils pour choisir un {tradeLower} {'\u00E0'} {villeData.name}
+            Conseils pour choisir un {tradeLower} {'à'} {villeData.name}
           </h2>
           <div className="space-y-4">
             {trade.tips.map((tip, i) => (
@@ -529,7 +529,7 @@ export default async function TarifsServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fr{'é'}quentes {'—'} {trade.name} {'\u00E0'} {villeData.name}
+            Questions fr{'é'}quentes {'—'} {trade.name} {'à'} {villeData.name}
           </h2>
           <div className="space-y-4">
             {trade.faq.slice(0, 5).map((item, i) => (
@@ -551,17 +551,17 @@ export default async function TarifsServiceVillePage({
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Trouver un {tradeLower} {'\u00E0'} {villeData.name}
+            Trouver un {tradeLower} {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit aupr{'\u00E8'}s de professionnels r{'é'}f{'é'}renc{'é'}s {'\u00E0'} {villeData.name}.
+            Comparez les profils et obtenez un devis gratuit aupr{'è'}s de professionnels r{'é'}f{'é'}renc{'é'}s {'à'} {villeData.name}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
-              Voir les {tradeLower}s {'\u00E0'} {villeData.name}
+              Voir les {tradeLower}s {'à'} {villeData.name}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -589,7 +589,7 @@ export default async function TarifsServiceVillePage({
                 className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                  {trade.name} {'\u00E0'} {v.name}
+                  {trade.name} {'à'} {v.name}
                 </div>
               </Link>
             ))}
@@ -601,7 +601,7 @@ export default async function TarifsServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Autres tarifs artisans {'\u00E0'} {villeData.name}
+            Autres tarifs artisans {'à'} {villeData.name}
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {otherTrades.map((slug) => {
@@ -614,7 +614,7 @@ export default async function TarifsServiceVillePage({
                   className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group"
                 >
                   <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                    {t.name} {'\u00E0'} {villeData.name}
+                    {t.name} {'à'} {villeData.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
                     {Math.round(t.priceRange.min * m)} {'—'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
@@ -637,10 +637,10 @@ export default async function TarifsServiceVillePage({
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <h2 className="text-xl font-bold text-gray-900 mb-2">
-                Services compl{'\u00E9'}mentaires {'\u00E0'} {villeData.name}
+                Services compl{'é'}mentaires {'à'} {villeData.name}
               </h2>
               <p className="text-sm text-gray-500 mb-4">
-                Ces services sont souvent demand{'\u00E9'}s avec {tradeLower}.
+                Ces services sont souvent demand{'é'}s avec {tradeLower}.
               </p>
               <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
                 {complementary.map((slug) => {
@@ -651,7 +651,7 @@ export default async function TarifsServiceVillePage({
                     <div key={slug} className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-2.5">
                       <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
                       <div className="text-xs text-gray-500">
-                        {Math.round(t.priceRange.min * m)} {'\u2013'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                        {Math.round(t.priceRange.min * m)} {'–'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         <Link
@@ -689,7 +689,7 @@ export default async function TarifsServiceVillePage({
         return (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Probl{'\u00E8'}mes courants</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Probl{'è'}mes courants</h2>
               <div className="flex flex-wrap gap-3">
                 {problems.map((p) => (
                   <Link
@@ -697,7 +697,7 @@ export default async function TarifsServiceVillePage({
                     href={`/problemes/${p.slug}/${villeSlug}`}
                     className="px-4 py-2.5 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-orange-200 transition-all"
                   >
-                    {p.name} {'\u00E0'} {villeData.name}
+                    {p.name} {'à'} {villeData.name}
                   </Link>
                 ))}
               </div>
@@ -712,16 +712,16 @@ export default async function TarifsServiceVillePage({
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Voir aussi</h2>
           <div className="flex flex-wrap gap-3">
             <Link href={`/devis/${service}/${villeSlug}`} className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors">
-              Devis {tradeLower} {'\u00E0'} {villeData.name}
+              Devis {tradeLower} {'à'} {villeData.name}
             </Link>
             <Link href={`/avis/${service}/${villeSlug}`} className="px-4 py-2 bg-blue-50 text-blue-800 rounded-lg text-sm font-medium border border-blue-100 hover:border-blue-200 transition-colors">
-              Avis {tradeLower} {'\u00E0'} {villeData.name}
+              Avis {tradeLower} {'à'} {villeData.name}
             </Link>
             <Link href={`/urgence/${service}/${villeSlug}`} className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors">
-              Urgence {tradeLower} {'\u00E0'} {villeData.name}
+              Urgence {tradeLower} {'à'} {villeData.name}
             </Link>
             <Link href={`/services/${service}/${villeSlug}`} className="px-4 py-2 bg-gray-50 text-gray-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-gray-300 transition-colors">
-              {trade.name} {'\u00E0'} {villeData.name}
+              {trade.name} {'à'} {villeData.name}
             </Link>
           </div>
         </div>
@@ -739,19 +739,19 @@ export default async function TarifsServiceVillePage({
                   Tarifs {tradeLower} en France
                 </Link>
                 <Link href={`/services/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  {trade.name} {'\u00E0'} {villeData.name}
+                  {trade.name} {'à'} {villeData.name}
                 </Link>
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   {trade.name} {'—'} tous les artisans
                 </Link>
                 <Link href={`/devis/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  Devis {tradeLower} {'\u00E0'} {villeData.name}
+                  Devis {tradeLower} {'à'} {villeData.name}
                 </Link>
                 <Link href={`/avis/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  Avis {tradeLower} {'\u00E0'} {villeData.name}
+                  Avis {tradeLower} {'à'} {villeData.name}
                 </Link>
                 <Link href={`/urgence/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  {trade.name} urgence {'\u00E0'} {villeData.name}
+                  {trade.name} urgence {'à'} {villeData.name}
                 </Link>
               </div>
             </div>
@@ -759,14 +759,14 @@ export default async function TarifsServiceVillePage({
               <h3 className="font-semibold text-gray-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
                 <Link href={`/villes/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  Artisans {'\u00E0'} {villeData.name}
+                  Artisans {'à'} {villeData.name}
                 </Link>
                 {otherTrades.slice(0, 5).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
                     <Link key={slug} href={`/tarifs/${slug}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                      Tarifs {t.name.toLowerCase()} {'\u00E0'} {villeData.name}
+                      Tarifs {t.name.toLowerCase()} {'à'} {villeData.name}
                     </Link>
                   )
                 })}
@@ -776,7 +776,7 @@ export default async function TarifsServiceVillePage({
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
                 <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment {'\u00E7'}a marche</Link>
+                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment {'ç'}a marche</Link>
                 <Link href="/devis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Demander un devis</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
               </div>

@@ -205,8 +205,8 @@ export default function ArtisanPageClient({
               <div className="flex items-center gap-2">
                 <ShareButton
                   url={typeof window !== 'undefined' ? window.location.href : ''}
-                  title={`D\u00e9couvrez ${displayName}, artisan sur ServicesArtisans`}
-                  description={`${displayName} \u2014 ${artisan.specialty} \u00e0 ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
+                  title={`Découvrez ${displayName}, artisan sur ServicesArtisans`}
+                  description={`${displayName} — ${artisan.specialty} à ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
                   variant="icon"
                 />
                 <motion.button

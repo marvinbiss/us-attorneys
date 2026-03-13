@@ -98,7 +98,7 @@ export default async function Image({
               textAlign: 'center',
             }}
           >
-            {`Artisans qualifi\u00e9s en France`}
+            {`Artisans qualifiés en France`}
           </div>
 
           {/* Sub-subtitle */}

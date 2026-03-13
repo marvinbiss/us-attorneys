@@ -24,7 +24,7 @@ const tradeSlugs = getTradesSlugs()
 
 const REGIONAL_PRICING = [
   { region: 'Île-de-France', multiplier: 1.25, label: 'Paris et banlieue' },
-  { region: 'PACA', multiplier: 1.10, label: 'Côte d\'Azur et Provence' },
+  { region: 'PACA', multiplier: 1.10, label: "Côte d'Azur et Provence" },
   { region: 'Auvergne-Rhône-Alpes', multiplier: 1.10, label: 'Lyon, Grenoble, Annecy' },
   { region: 'Occitanie', multiplier: 1.05, label: 'Toulouse, Montpellier' },
   { region: 'Nouvelle-Aquitaine', multiplier: 1.00, label: 'Bordeaux, Limoges' },
@@ -298,7 +298,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </div>
 
           <SpeakableAnswerBox
-            answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join('. ')}. Prix constat\u00E9s aupr\u00E8s de 940 000+ artisans r\u00E9f\u00E9renc\u00E9s.`}
+            answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join('. ')}. Prix constatés auprès de 940 000+ artisans référencés.`}
           />
 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">

@@ -2,20 +2,20 @@
  * Real artisan/BTP enterprise counts per French department.
  *
  * Sources (cross-referenced for consistency):
- *  - CAPEB Chiffres Cl\u00e9s 2024: 621 803 entreprises artisanales du b\u00e2timent
- *  - CMA \u00cele-de-France 2025: 348 000 entreprises artisanales en IDF
- *  - CMA Hauts-de-France 2024: cr\u00e9ations et stock par d\u00e9partement
- *  - Le Moniteur (densit\u00e9 BTP/10 000 hab par d\u00e9partement)
- *  - ISM/MAAF Barom\u00e8tre de l\u2019Artisanat 2025 (donn\u00e9es r\u00e9gionales)
- *  - U2P Chiffres Cl\u00e9s 2024 (r\u00e9partition r\u00e9gionale)
- *  - INSEE population l\u00e9gale 2024 (base de calcul densit\u00e9)
+ *  - CAPEB Chiffres Clés 2024: 621 803 entreprises artisanales du bâtiment
+ *  - CMA Île-de-France 2025: 348 000 entreprises artisanales en IDF
+ *  - CMA Hauts-de-France 2024: créations et stock par département
+ *  - Le Moniteur (densité BTP/10 000 hab par département)
+ *  - ISM/MAAF Baromètre de l’Artisanat 2025 (données régionales)
+ *  - U2P Chiffres Clés 2024 (répartition régionale)
+ *  - INSEE population légale 2024 (base de calcul densité)
  *  - FFB / statistiques.developpement-durable.gouv.fr (entreprises BTP)
  *
  * National totals (sanity check):
  *  - Total artisan enterprises:  ~1 300 000
  *  - BTP artisan enterprises:    ~  550 000
  *
- * Methodology: department counts derived from INSEE population \u00d7 density
+ * Methodology: department counts derived from INSEE population × density
  * ratios (artisans/10 000 hab) published by Le Moniteur / CMA / CAPEB,
  * calibrated against known regional and national totals.
  *
@@ -24,7 +24,7 @@
  */
 
 export const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number }> = {
-  // ---- \u00cele-de-France (total ~348 000 artisans, ~91 000 BTP) CMA IDF 2025 ----
+  // ---- Île-de-France (total ~348 000 artisans, ~91 000 BTP) CMA IDF 2025 ----
   '75': { artisans: 78500, btp: 11200 },   // Paris (2 104 000 hab)
   '77': { artisans: 31000, btp: 12900 },   // Seine-et-Marne (1 421 000)
   '78': { artisans: 30500, btp: 12200 },   // Yvelines (1 448 000)
@@ -61,8 +61,8 @@ export const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number
   '76': { artisans: 18500, btp: 5800 },    // Seine-Maritime (1 256 000)
 
   // ---- Bretagne (~70 000 artisans, ~28 000 BTP) ----
-  '22': { artisans: 11500, btp: 4800 },    // C\u00f4tes-d'Armor (600 000)
-  '29': { artisans: 18000, btp: 7200 },    // Finist\u00e8re (909 000) ~6000 bat CAPEB
+  '22': { artisans: 11500, btp: 4800 },    // Côtes-d'Armor (600 000)
+  '29': { artisans: 18000, btp: 7200 },    // Finistère (909 000) ~6000 bat CAPEB
   '35': { artisans: 20000, btp: 7600 },    // Ille-et-Vilaine (1 094 000)
   '56': { artisans: 15000, btp: 6200 },    // Morbihan (759 000)
 
@@ -71,7 +71,7 @@ export const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number
   '49': { artisans: 13500, btp: 5200 },    // Maine-et-Loire (818 000)
   '53': { artisans: 5200, btp: 2100 },     // Mayenne (307 000)
   '72': { artisans: 9500, btp: 3600 },     // Sarthe (566 000)
-  '85': { artisans: 13000, btp: 5500 },    // Vend\u00e9e (685 000)
+  '85': { artisans: 13000, btp: 5500 },    // Vendée (685 000)
 
   // ---- Centre-Val de Loire (~42 000 artisans, ~16 000 BTP) ----
   '18': { artisans: 4800, btp: 1800 },     // Cher (302 000)
@@ -81,64 +81,64 @@ export const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number
   '41': { artisans: 5400, btp: 2100 },     // Loir-et-Cher (329 000)
   '45': { artisans: 11000, btp: 4000 },    // Loiret (680 000)
 
-  // ---- Bourgogne-Franche-Comt\u00e9 (~48 000 artisans, ~18 000 BTP) ----
-  '21': { artisans: 9200, btp: 3400 },     // C\u00f4te-d'Or (534 000)
+  // ---- Bourgogne-Franche-Comté (~48 000 artisans, ~18 000 BTP) ----
+  '21': { artisans: 9200, btp: 3400 },     // Côte-d'Or (534 000)
   '25': { artisans: 9500, btp: 3800 },     // Doubs (543 000)
   '39': { artisans: 4800, btp: 2000 },     // Jura (260 000)
-  '58': { artisans: 3400, btp: 1400 },     // Ni\u00e8vre (202 000)
-  '70': { artisans: 3600, btp: 1500 },     // Haute-Sa\u00f4ne (234 000)
-  '71': { artisans: 9000, btp: 3500 },     // Sa\u00f4ne-et-Loire (551 000)
+  '58': { artisans: 3400, btp: 1400 },     // Nièvre (202 000)
+  '70': { artisans: 3600, btp: 1500 },     // Haute-Saône (234 000)
+  '71': { artisans: 9000, btp: 3500 },     // Saône-et-Loire (551 000)
   '89': { artisans: 5500, btp: 2100 },     // Yonne (338 000)
   '90': { artisans: 2200, btp: 850 },      // Territoire de Belfort (142 000)
 
-  // ---- Auvergne-Rh\u00f4ne-Alpes (~165 000 artisans, ~62 000 BTP) ----
+  // ---- Auvergne-Rhône-Alpes (~165 000 artisans, ~62 000 BTP) ----
   '01': { artisans: 11500, btp: 4800 },    // Ain (655 000)
   '03': { artisans: 5400, btp: 2100 },     // Allier (335 000)
-  '07': { artisans: 6800, btp: 2900 },     // Ard\u00e8che (328 000)
+  '07': { artisans: 6800, btp: 2900 },     // Ardèche (328 000)
   '15': { artisans: 2800, btp: 1200 },     // Cantal (144 000)
-  '26': { artisans: 9500, btp: 4000 },     // Dr\u00f4me (517 000)
-  '38': { artisans: 22000, btp: 8400 },    // Is\u00e8re (1 272 000)
+  '26': { artisans: 9500, btp: 4000 },     // Drôme (517 000)
+  '38': { artisans: 22000, btp: 8400 },    // Isère (1 272 000)
   '42': { artisans: 12000, btp: 4500 },    // Loire (762 000)
   '43': { artisans: 4200, btp: 1800 },     // Haute-Loire (227 000)
-  '63': { artisans: 11000, btp: 3800 },    // Puy-de-D\u00f4me (659 000) 21 200 actives CMA
-  '69': { artisans: 32000, btp: 10500 },   // Rh\u00f4ne (1 878 000)
+  '63': { artisans: 11000, btp: 3800 },    // Puy-de-Dôme (659 000) 21 200 actives CMA
+  '69': { artisans: 32000, btp: 10500 },   // Rhône (1 878 000)
   '73': { artisans: 10500, btp: 5200 },    // Savoie (436 000) 28/10k menuisiers+
   '74': { artisans: 17500, btp: 7800 },    // Haute-Savoie (826 000) 10 261 bat CAPEB
 
   // ---- Nouvelle-Aquitaine (~105 000 artisans, ~42 000 BTP) ----
   '16': { artisans: 5800, btp: 2400 },     // Charente (352 000)
   '17': { artisans: 11500, btp: 4800 },    // Charente-Maritime (651 000)
-  '19': { artisans: 4200, btp: 1700 },     // Corr\u00e8ze (240 000)
+  '19': { artisans: 4200, btp: 1700 },     // Corrèze (240 000)
   '23': { artisans: 2200, btp: 950 },      // Creuse (116 000)
   '24': { artisans: 8000, btp: 3400 },     // Dordogne (413 000)
   '33': { artisans: 27000, btp: 10000 },   // Gironde (1 623 000)
   '40': { artisans: 7500, btp: 3200 },     // Landes (413 000)
   '47': { artisans: 5500, btp: 2300 },     // Lot-et-Garonne (330 000)
-  '64': { artisans: 12500, btp: 5000 },    // Pyr\u00e9n\u00e9es-Atlantiques (682 000)
-  '79': { artisans: 6000, btp: 2400 },     // Deux-S\u00e8vres (374 000)
+  '64': { artisans: 12500, btp: 5000 },    // Pyrénées-Atlantiques (682 000)
+  '79': { artisans: 6000, btp: 2400 },     // Deux-Sèvres (374 000)
   '86': { artisans: 7000, btp: 2600 },     // Vienne (439 000)
   '87': { artisans: 6000, btp: 2200 },     // Haute-Vienne (373 000)
 
   // ---- Occitanie (~130 000 artisans, ~52 000 BTP) ----
-  '09': { artisans: 3200, btp: 1400 },     // Ari\u00e8ge (153 000)
+  '09': { artisans: 3200, btp: 1400 },     // Ariège (153 000)
   '11': { artisans: 7200, btp: 3100 },     // Aude (374 000)
   '12': { artisans: 5200, btp: 2200 },     // Aveyron (279 000)
   '30': { artisans: 14000, btp: 5800 },    // Gard (748 000)
   '31': { artisans: 27000, btp: 9800 },    // Haute-Garonne (1 415 000)
   '32': { artisans: 3500, btp: 1500 },     // Gers (191 000)
-  '34': { artisans: 23000, btp: 9200 },    // H\u00e9rault (1 175 000)
+  '34': { artisans: 23000, btp: 9200 },    // Hérault (1 175 000)
   '46': { artisans: 3200, btp: 1400 },     // Lot (174 000)
-  '48': { artisans: 1600, btp: 750 },      // Loz\u00e8re (76 000)
-  '65': { artisans: 4500, btp: 1900 },     // Hautes-Pyr\u00e9n\u00e9es (228 000)
-  '66': { artisans: 9500, btp: 4200 },     // Pyr\u00e9n\u00e9es-Orientales (479 000)
+  '48': { artisans: 1600, btp: 750 },      // Lozère (76 000)
+  '65': { artisans: 4500, btp: 1900 },     // Hautes-Pyrénées (228 000)
+  '66': { artisans: 9500, btp: 4200 },     // Pyrénées-Orientales (479 000)
   '81': { artisans: 6500, btp: 2600 },     // Tarn (389 000)
   '82': { artisans: 4200, btp: 1800 },     // Tarn-et-Garonne (262 000)
 
-  // ---- Provence-Alpes-C\u00f4te d'Azur (~120 000 artisans, ~52 000 BTP) ----
+  // ---- Provence-Alpes-Côte d'Azur (~120 000 artisans, ~52 000 BTP) ----
   '04': { artisans: 4200, btp: 2000 },     // Alpes-de-Haute-Provence (164 000)
   '05': { artisans: 3600, btp: 1800 },     // Hautes-Alpes (141 000) 26.5/10k menuisiers
   '06': { artisans: 26000, btp: 14000 },   // Alpes-Maritimes (1 083 000) 129/10k BTP
-  '13': { artisans: 38000, btp: 13500 },   // Bouches-du-Rh\u00f4ne (2 043 000)
+  '13': { artisans: 38000, btp: 13500 },   // Bouches-du-Rhône (2 043 000)
   '83': { artisans: 22000, btp: 12900 },   // Var (1 076 000) 120/10k BTP
   '84': { artisans: 11500, btp: 4800 },    // Vaucluse (561 000)
 
@@ -150,7 +150,7 @@ export const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number
   '971': { artisans: 8200, btp: 5300 },    // Guadeloupe (384 000) 138/10k
   '972': { artisans: 6500, btp: 2800 },    // Martinique (364 000)
   '973': { artisans: 5000, btp: 2200 },    // Guyane (294 000)
-  '974': { artisans: 16000, btp: 6200 },   // La R\u00e9union (860 000)
+  '974': { artisans: 16000, btp: 6200 },   // La Réunion (860 000)
   '976': { artisans: 3500, btp: 1400 },    // Mayotte (321 000)
 }
 

@@ -188,7 +188,7 @@ export function formatNumber(n: number): string {
 }
 
 export function formatEuro(n: number): string {
-  return n.toLocaleString('fr-FR') + ' \u20AC'
+  return n.toLocaleString('fr-FR') + ' €'
 }
 
 const MONTH_NAMES = [

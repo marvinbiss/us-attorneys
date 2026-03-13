@@ -161,7 +161,7 @@ function getClimatLabel(zone: string | null): string {
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({
@@ -182,7 +182,7 @@ export async function generateMetadata({
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
   const titleTemplates = [
     `Avis ${tradeLower} ${villeData.name}`,
-    `Avis ${tradeLower} \u00e0 ${villeData.name} — Guide`,
+    `Avis ${tradeLower} à ${villeData.name} — Guide`,
     `Avis ${tradeLower} ${villeData.name} : notes`,
     `Avis ${tradeLower} ${villeData.name} 2026`,
     `Avis ${tradeLower} ${villeData.name} — Comparez`,
@@ -192,10 +192,10 @@ export async function generateMetadata({
   const descHash = Math.abs(hashCode(`avis-loc-desc-${service}-${ville}`))
   const dept = villeData.departement
   const descTemplates = [
-    `Avis ${tradeLower} à ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`,
+    `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`,
     `Choisir un ${tradeLower} à ${villeData.name} (${dept}) : avis clients, notes et recommandations. Artisans vérifiés, devis gratuit.`,
-    `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}). Guide 2026.`,
-    `Les meilleurs ${tradeLower}s à ${villeData.name} selon les avis clients. Prix local : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.`,
+    `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}–${maxPrice} ${trade.priceRange.unit}). Guide 2026.`,
+    `Les meilleurs ${tradeLower}s à ${villeData.name} selon les avis clients. Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.`,
     `Avis et recommandations ${tradeLower} à ${villeData.name} (${dept}). Trouvez un artisan de confiance parmi les professionnels vérifiés.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -302,7 +302,7 @@ export default async function AvisServiceVillePage({
     },
     {
       question: `Quel est le prix moyen d'un ${tradeLower} à ${villeData.name} ?`,
-      answer: `\u00c0 ${villeData.name} (${villeData.region}), les tarifs d'un ${tradeLower} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajustés selon le coût de la vie régional. Demandez plusieurs devis pour comparer.`,
+      answer: `À ${villeData.name} (${villeData.region}), les tarifs d'un ${tradeLower} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajustés selon le coût de la vie régional. Demandez plusieurs devis pour comparer.`,
     },
     {
       question: `Quelles certifications vérifier pour un ${tradeLower} à ${villeData.name} ?`,
@@ -334,11 +334,11 @@ export default async function AvisServiceVillePage({
 
   // Seeded fallback review bodies (deterministic per service+ville)
   const fallbackReviewTemplates = [
-    { name: "Marie L.", body: `Excellent ${tradeLower} \u00e0 ${villeData.name}. Travail soign\u00e9, ponctuel et tarifs raisonnables. Je recommande vivement.`, rating: 5 },
-    { name: "Pierre D.", body: `Tr\u00e8s professionnel, intervention rapide \u00e0 ${villeData.name}. Devis respect\u00e9, travail propre. Rien \u00e0 redire.`, rating: 5 },
-    { name: "Sophie M.", body: `Bon artisan, comp\u00e9tent et \u00e0 l'\u00e9coute. Les tarifs sont dans la moyenne pour ${villeData.name}. Satisfaite du r\u00e9sultat.`, rating: 4 },
-    { name: "Jean-Marc R.", body: `Service de qualit\u00e9, respect des d\u00e9lais et tr\u00e8s bon conseil. Je ferai de nouveau appel \u00e0 ses services.`, rating: 5 },
-    { name: "Isabelle C.", body: `Artisan s\u00e9rieux et disponible \u00e0 ${villeData.name}. Travaux r\u00e9alis\u00e9s dans les r\u00e8gles de l'art. Prix correct.`, rating: 4 },
+    { name: "Marie L.", body: `Excellent ${tradeLower} à ${villeData.name}. Travail soigné, ponctuel et tarifs raisonnables. Je recommande vivement.`, rating: 5 },
+    { name: "Pierre D.", body: `Très professionnel, intervention rapide à ${villeData.name}. Devis respecté, travail propre. Rien à redire.`, rating: 5 },
+    { name: "Sophie M.", body: `Bon artisan, compétent et à l'écoute. Les tarifs sont dans la moyenne pour ${villeData.name}. Satisfaite du résultat.`, rating: 4 },
+    { name: "Jean-Marc R.", body: `Service de qualité, respect des délais et très bon conseil. Je ferai de nouveau appel à ses services.`, rating: 5 },
+    { name: "Isabelle C.", body: `Artisan sérieux et disponible à ${villeData.name}. Travaux réalisés dans les règles de l'art. Prix correct.`, rating: 4 },
   ]
   const fallbackStartIdx = Math.abs(hashCode(`avis-fb-${service}-${villeSlug}`)) % fallbackReviewTemplates.length
   const fallbackReviews = Array.from({ length: 3 }, (_, i) => fallbackReviewTemplates[(fallbackStartIdx + i) % fallbackReviewTemplates.length])
@@ -349,7 +349,7 @@ export default async function AvisServiceVillePage({
   const schemaReviews = reviews.length > 0
     ? reviews.slice(0, 5).map(r => ({
         '@type': 'Review' as const,
-        author: { '@type': 'Person' as const, name: r.client_name || "Client v\u00e9rifi\u00e9" },
+        author: { '@type': 'Person' as const, name: r.client_name || "Client vérifié" },
         reviewRating: { '@type': 'Rating' as const, ratingValue: r.rating, bestRating: 5, worstRating: 1 },
         reviewBody: r.comment,
         ...(r.created_at ? { datePublished: r.created_at.split('T')[0] } : {}),
@@ -364,8 +364,8 @@ export default async function AvisServiceVillePage({
   const reviewSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: `${trade.name} \u00e0 ${villeData.name}`,
-    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance \u00e0 ${villeData.name} (${villeData.departement}). Prix : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}.`,
+    name: `${trade.name} à ${villeData.name}`,
+    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance à ${villeData.name} (${villeData.departement}). Prix : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/avis/${service}/${villeSlug}`,
     address: {
       '@type': 'PostalAddress',
@@ -389,7 +389,7 @@ export default async function AvisServiceVillePage({
         name: villeData.region,
       },
     },
-    priceRange: `${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}`,
+    priceRange: `${minPrice}–${maxPrice} ${trade.priceRange.unit}`,
     telephone: '+33',
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -875,8 +875,8 @@ export default async function AvisServiceVillePage({
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles, ce qui influence les types de travaux de ${tradeLower} demandés.`
-                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles, ce qui influence les types de travaux de ${tradeLower} demandés.`
+                    : `À ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
                   : `La répartition entre maisons et appartements à ${villeData.name} influence les types de travaux demandés.`
               }
             />
@@ -932,8 +932,8 @@ export default async function AvisServiceVillePage({
                     <p className="mt-3 text-xs text-gray-500 leading-relaxed">
                       {(() => {
                         const ratio = Math.round((commune.nb_entreprises_artisanales / commune.population) * 10000)
-                        const level = ratio >= 200 ? 'forte' : ratio >= 80 ? 'mod\u00e9r\u00e9e' : 'faible'
-                        return `Avec un ratio de ${ratio} artisans pour 10\u00a0000 habitants, la concurrence est ${level} \u00e0 ${villeData.name}.`
+                        const level = ratio >= 200 ? 'forte' : ratio >= 80 ? 'modérée' : 'faible'
+                        return `Avec un ratio de ${ratio} artisans pour 10 000 habitants, la concurrence est ${level} à ${villeData.name}.`
                       })()}
                     </p>
                   )}
@@ -988,8 +988,8 @@ export default async function AvisServiceVillePage({
                   {commune.revenu_median != null && commune.prix_m2_moyen != null && (
                     <p className="mt-3 text-xs text-gray-500 leading-relaxed">
                       {(() => {
-                        const level = commune.prix_m2_moyen! >= 4000 ? 'premium' : commune.prix_m2_moyen! >= 2000 ? 'interm\u00e9diaire' : 'accessible'
-                        return `Le revenu m\u00e9dian de ${formatNumber(commune.revenu_median!)}\u00a0\u20ac et un prix au m\u00b2 de ${formatNumber(commune.prix_m2_moyen!)}\u00a0\u20ac situent ${villeData.name} dans un march\u00e9 ${level}.`
+                        const level = commune.prix_m2_moyen! >= 4000 ? 'premium' : commune.prix_m2_moyen! >= 2000 ? 'intermédiaire' : 'accessible'
+                        return `Le revenu médian de ${formatNumber(commune.revenu_median!)} € et un prix au m² de ${formatNumber(commune.prix_m2_moyen!)} € situent ${villeData.name} dans un marché ${level}.`
                       })()}
                     </p>
                   )}

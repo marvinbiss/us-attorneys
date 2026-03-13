@@ -58,7 +58,7 @@ function getClimatLabel(zone: string | null): string {
 
 function getSeasonalTip(zone: string | null, serviceName: string): string {
   if (zone === 'mediterraneen') {
-    return `\u00c0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l'année. La demande de ${serviceName.toLowerCase()} peut être plus forte en été avec l'afflux de résidents saisonniers.`
+    return `À noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l'année. La demande de ${serviceName.toLowerCase()} peut être plus forte en été avec l'afflux de résidents saisonniers.`
   }
   if (zone === 'montagnard') {
     return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d'intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
@@ -78,7 +78,7 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({
@@ -103,18 +103,18 @@ export async function generateMetadata({
     `Devis ${tradeLower} ${villeData.name} — Gratuit`,
     `Devis ${tradeLower} ${villeData.name} 2026`,
     `Devis ${tradeLower} ${villeData.name} : comparez`,
-    `Devis ${tradeLower} \u00e0 ${villeData.name} — Gratuit`,
+    `Devis ${tradeLower} à ${villeData.name} — Gratuit`,
     `Devis ${tradeLower} ${villeData.name} : 3 offres`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`devis-loc-desc-${service}-${location}`))
   const descTemplates = [
-    `Devis ${tradeLower} à ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Comparez jusqu\u2019à 3 artisans référencés. 100\u00A0% gratuit, sans engagement.`,
-    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Réponse sous 24h.`,
+    `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.`,
+    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse sous 24h.`,
     `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
-    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}) et choisissez le meilleur artisan. Gratuit.`,
-    `Besoin d\u2019un ${tradeLower} à ${villeData.name}\u00A0? Recevez jusqu\u2019à 3 devis gratuits d\u2019artisans vérifiés dans le ${dept}.`,
+    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez le meilleur artisan. Gratuit.`,
+    `Besoin d'un ${tradeLower} à ${villeData.name} ? Recevez jusqu'à 3 devis gratuits d'artisans vérifiés dans le ${dept}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -329,7 +329,7 @@ export default async function DevisServiceLocationPage({
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté à {villeData.name} et ses alentours, main-d&apos;\u0153uvre incluse
+              Prix moyen constaté à {villeData.name} et ses alentours, main-d&apos;œuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
@@ -369,10 +369,10 @@ export default async function DevisServiceLocationPage({
             <LocalFactorCard
               icon={<Euro className="w-5 h-5 text-blue-600" />}
               title="Pouvoir d'achat local"
-              value={commune?.revenu_median ? `${formatNumber(commune.revenu_median)} \u20ac/an` : null}
+              value={commune?.revenu_median ? `${formatNumber(commune.revenu_median)} €/an` : null}
               description={
                 commune?.revenu_median
-                  ? `Le revenu médian à ${villeData.name} est de ${formatNumber(commune.revenu_median)} \u20ac par an, ce qui influence le positionnement tarifaire des artisans locaux.`
+                  ? `Le revenu médian à ${villeData.name} est de ${formatNumber(commune.revenu_median)} € par an, ce qui influence le positionnement tarifaire des artisans locaux.`
                   : `Le pouvoir d'achat local à ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
               }
             />
@@ -401,8 +401,8 @@ export default async function DevisServiceLocationPage({
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions sur maisons (toiture, façade, jardin) sont fréquentes.`
-                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions sur maisons (toiture, façade, jardin) sont fréquentes.`
+                    : `À ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
                   : `La répartition entre maisons et appartements à ${villeData.name} influence les types de travaux demandés.`
               }
             />
@@ -516,8 +516,8 @@ export default async function DevisServiceLocationPage({
                   </div>
                   <p className="text-gray-600 text-sm leading-relaxed">
                     {commune.part_maisons_pct > 50
-                      ? `${commune.part_maisons_pct}\u00A0% de maisons individuelles à ${villeData.name} — les travaux de toiture, façade et jardin sont fréquents.`
-                      : `${100 - commune.part_maisons_pct}\u00A0% d'appartements à ${villeData.name} — les travaux en copropriété et de rénovation intérieure prédominent.`}
+                      ? `${commune.part_maisons_pct} % de maisons individuelles à ${villeData.name} — les travaux de toiture, façade et jardin sont fréquents.`
+                      : `${100 - commune.part_maisons_pct} % d'appartements à ${villeData.name} — les travaux en copropriété et de rénovation intérieure prédominent.`}
                   </p>
                 </div>
               )}

@@ -185,7 +185,7 @@ export function ShareButton({
       color: 'text-gray-600 hover:bg-gray-100',
     },
     {
-      label: copied ? 'Lien copi\u00e9 !' : 'Copier le lien',
+      label: copied ? 'Lien copié !' : 'Copier le lien',
       icon: <Link2 className="w-4 h-4" />,
       onClick: () => {
         handleCopyLink()

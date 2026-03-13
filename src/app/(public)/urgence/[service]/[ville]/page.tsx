@@ -218,7 +218,7 @@ export async function generateMetadata({
     `Urgence ${tradeLower} à ${villeData.name} : intervention rapide, y compris le week-end. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`,
     `Dépannage ${tradeLower} urgent à ${villeData.name} : disponible soir et week-end. ${trade.averageResponseTime}. Artisans vérifiés.`,
     `${trade.name} d'urgence à ${villeData.name} : intervention rapide 7j/7. Professionnels référencés à proximité. Devis gratuit.`,
-    `Besoin d'un ${tradeLower} en urgence à ${villeData.name}\u00A0? Intervention rapide, soir et week-end. ${trade.averageResponseTime}.`,
+    `Besoin d'un ${tradeLower} en urgence à ${villeData.name} ? Intervention rapide, soir et week-end. ${trade.averageResponseTime}.`,
     `Urgence ${tradeLower} ${villeData.name} : artisans disponibles pour intervention immédiate. ${trade.averageResponseTime}. Devis gratuit.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -297,7 +297,7 @@ export default async function UrgenceServiceVillePage({
   const emergencyFaqItems = [
     {
       question: `Combien coûte un ${tradeLower} en urgence à ${villeData.name} ?`,
-      answer: `Les interventions d'urgence de nuit (après 20h) sont majorées de 50 à 100 % par rapport aux tarifs de journée. \u00c0 ${villeData.name}, comptez environ ${Math.round(minPrice * 1.5)} à ${Math.round(maxPrice * 2)} ${trade.priceRange.unit} en urgence nocturne. Demandez toujours un devis avant intervention.`,
+      answer: `Les interventions d'urgence de nuit (après 20h) sont majorées de 50 à 100 % par rapport aux tarifs de journée. À ${villeData.name}, comptez environ ${Math.round(minPrice * 1.5)} à ${Math.round(maxPrice * 2)} ${trade.priceRange.unit} en urgence nocturne. Demandez toujours un devis avant intervention.`,
     },
     {
       question: `Quel est le délai d'intervention à ${villeData.name} ?`,
@@ -662,8 +662,8 @@ export default async function UrgenceServiceVillePage({
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions d'urgence sur maisons (toiture, canalisations) sont fréquentes.`
-                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les urgences en copropriété peuvent impliquer des contraintes spécifiques.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions d'urgence sur maisons (toiture, canalisations) sont fréquentes.`
+                    : `À ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les urgences en copropriété peuvent impliquer des contraintes spécifiques.`
                   : `La répartition entre maisons et appartements à ${villeData.name} influence les types d'urgences rencontrées.`
               }
             />

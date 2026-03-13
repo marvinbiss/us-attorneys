@@ -43,7 +43,7 @@ export function CompareButton({ provider, size = 'sm', className }: CompareButto
       aria-pressed={active}
     >
       <Scale className={clsx('flex-shrink-0', size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4')} />
-      <span>{active ? 'Ajout\u00e9' : 'Comparer'}</span>
+      <span>{active ? 'Ajouté' : 'Comparer'}</span>
     </button>
   )
 }

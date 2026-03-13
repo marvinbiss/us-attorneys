@@ -184,7 +184,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         value={item.name}
                         onChange={(e) => updateServicePrice(index, 'name', e.target.value)}
                         maxLength={200}
-                        placeholder="Ex: D\u00e9bouchage canalisation"
+                        placeholder="Ex: Débouchage canalisation"
                         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                           item.name.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
                         }`}
@@ -203,7 +203,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         value={item.price}
                         onChange={(e) => updateServicePrice(index, 'price', e.target.value)}
                         maxLength={100}
-                        placeholder="Ex: 80 \u20ac ou \u00c0 partir de 50 \u20ac"
+                        placeholder="Ex: 80 € ou À partir de 50 €"
                         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                           item.price.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
                         }`}
@@ -222,7 +222,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         value={item.description}
                         onChange={(e) => updateServicePrice(index, 'description', e.target.value)}
                         maxLength={500}
-                        placeholder="D\u00e9tails optionnels"
+                        placeholder="Détails optionnels"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                       />
                     </div>
