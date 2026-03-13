@@ -164,29 +164,47 @@ export default async function VillesIndexPage() {
           </p>
         </div>
 
-        {sortedRegions.map(([region, regionVilles]) => (
-          <section key={region} className="mb-12">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-blue-600" />
+        {/* Region quick-nav */}
+        <nav className="flex flex-wrap gap-2 mb-10">
+          {sortedRegions.map(([region]) => (
+            <a
+              key={region}
+              href={`#region-${region.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')}`}
+              className="text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"
+            >
+              {region}
+            </a>
+          ))}
+        </nav>
+
+        {sortedRegions.map(([region, regionVilles]) => {
+          const regionId = region.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')
+          return (
+            <details key={region} id={`region-${regionId}`} className="mb-4 bg-white rounded-xl border border-gray-200 group">
+              <summary className="flex items-center gap-3 p-4 cursor-pointer list-none select-none hover:bg-gray-50 rounded-xl transition-colors">
+                <Building2 className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <h3 className="font-heading text-base font-bold text-slate-900 tracking-tight">{region}</h3>
+                <span className="text-sm text-slate-400 font-medium">({regionVilles.length} villes)</span>
+                <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-open:rotate-90 transition-transform" />
+              </summary>
+              <div className="px-4 pb-4">
+                <div className="flex flex-wrap gap-x-1 gap-y-0.5">
+                  {regionVilles.map((ville, i) => (
+                    <span key={ville.slug}>
+                      <Link
+                        href={`/villes/${ville.slug}`}
+                        className="text-sm text-slate-600 hover:text-blue-600 hover:underline transition-colors"
+                      >
+                        {ville.name}
+                      </Link>
+                      {i < regionVilles.length - 1 && <span className="text-slate-300 mx-1">&middot;</span>}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="font-heading text-lg font-bold text-slate-900 tracking-tight">{region}</h3>
-              <span className="text-sm text-slate-400 font-medium">({regionVilles.length} villes)</span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {regionVilles.map((ville) => (
-                <Link
-                  key={ville.slug}
-                  href={`/villes/${ville.slug}`}
-                  className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 px-3.5 py-3.5 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
-                >
-                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
-                  <span className="text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{ville.name}</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ))}
+            </details>
+          )
+        })}
       </div>
 
       {/* ─── CTA ────────────────────────────────────────────── */}

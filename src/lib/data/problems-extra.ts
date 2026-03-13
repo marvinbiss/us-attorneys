@@ -1,5 +1,5 @@
 /**
- * 28 problèmes supplémentaires granulaires (mars 2026).
+ * 30 problèmes supplémentaires granulaires (mars 2026).
  * Importés et concaténés dans problems.ts.
  */
 import type { Problem } from './problems'
@@ -1014,6 +1014,90 @@ const problemsExtra: Problem[] = [
       { q: 'Quelle est la durée de vie d’une toiture ?', a: 'Cela dépend du matériau de couverture : tuiles en terre cuite : 50 à 100 ans ; ardoise naturelle : 80 à 100 ans ; tuiles béton : 30 à 50 ans ; zinc : 40 à 80 ans ; bac acier : 25 à 50 ans. Les points faibles restent les éléments de zinguerie (gouttières, noues) à vérifier tous les 10 à 15 ans et les solins autour des pénétrations (cheminée, velux) à refaire tous les 15 à 25 ans.' },
       { q: 'Mon assurance prend-elle en charge la réparation de toiture ?', a: 'L’assurance habitation couvre les dégâts causés par un événement climatique (tempête, grêle, neige) via la garantie Tempêtes-Grêle-Neige (TGN). Le vieillissement normal et le défaut d’entretien ne sont pas couverts. La franchise est généralement de 200 à 500 €. Déclarez le sinistre sous 5 jours ouvrés (2 jours pour une catastrophe naturelle) avec photos et devis du couvreur.' },
       { q: 'Peut-on réparer une toiture soi-même ?', a: 'Les travaux en hauteur sont extrêmement dangereux : les chutes de toit représentent un nombre important d’accidents domestiques graves chaque année. Pour le remplacement d’une tuile accessible depuis une échelle sécurisée, un bricoleur expérimenté peut intervenir. Pour tout travail nécessitant de marcher sur le toit, faites appel à un couvreur professionnel équipé (harnais, échafaudage, ligne de vie).' },
+    ],
+  },
+  {
+    slug: 'panne-chauffage',
+    name: 'Panne de chauffage',
+    description: 'Une panne de chauffage peut toucher une chaudière, une pompe à chaleur, un radiateur électrique ou un plancher chauffant. En hiver, l\u2019absence de chauffage constitue une urgence, surtout pour les personnes vulnérables. Un chauffagiste professionnel diagnostique l\u2019origine de la panne et remet votre installation en service rapidement.',
+    relatedServices: ['chauffagiste', 'plombier', 'electricien'],
+    primaryService: 'chauffagiste',
+    urgencyLevel: 'haute',
+    symptoms: [
+      'Radiateurs froids ou tièdes malgré le thermostat réglé à la bonne température',
+      'Chaudière ou pompe à chaleur qui ne démarre pas ou s\u2019arrête immédiatement',
+      'Bruits inhabituels dans l\u2019installation (claquements, sifflements, gargouillis)',
+      'Code erreur affiché sur le panneau de la chaudière ou de la PAC',
+      'Eau tiède ou froide au robinet si le chauffage et l\u2019eau chaude sont couplés',
+      'Consommation de gaz ou d\u2019électricité anormalement élevée',
+    ],
+    immediateActions: [
+      'Vérifiez le thermostat d\u2019ambiance (piles, réglage, mode)',
+      'Contrôlez le disjoncteur du tableau électrique dédié au chauffage',
+      'Vérifiez la pression du circuit de chauffage (doit être entre 1 et 1,5 bar)',
+      'Purgez les radiateurs si certains restent froids en haut',
+      'En cas de fuite, coupez l\u2019arrivée d\u2019eau du circuit et contactez un chauffagiste en urgence',
+      'Utilisez des chauffages d\u2019appoint en attendant la réparation (attention au risque de monoxyde de carbone avec les appareils à combustion)',
+    ],
+    preventiveTips: [
+      'Faites entretenir votre chaudière ou PAC une fois par an (obligatoire pour les chaudières gaz/fioul)',
+      'Purgez vos radiateurs avant chaque saison de chauffe',
+      'Maintenez la pression du circuit entre 1 et 1,5 bar',
+      'Désembouez le circuit de chauffage tous les 5 à 10 ans',
+      'Ne couvrez pas et ne bloquez pas les radiateurs avec des meubles',
+    ],
+    estimatedCost: { min: 100, max: 600 },
+    averageResponseTime: 'Généralement sous 4 à 24h en période de chauffe',
+    seasonality: 'hiver',
+    faq: [
+      { q: 'Pourquoi mon chauffage ne fonctionne plus ?', a: 'Les causes les plus fréquentes sont : un thermostat déréglé ou en panne, un disjoncteur qui a sauté, une pression de circuit trop basse, une panne de chaudière (allumage, circulateur, vanne 3 voies), des radiateurs emboués ou non purgés, ou un problème sur la pompe à chaleur (défaut de fluide, carte électronique). Un chauffagiste professionnel identifie la cause exacte.' },
+      { q: 'Combien coûte un dépannage de chauffage ?', a: 'Un diagnostic + réparation simple (purge, repressurisation, remplacement d\u2019un thermocouple) coûte 100 à 200 \u20ac. Le remplacement d\u2019un circulateur revient à 250 à 500 \u20ac. Une vanne 3 voies : 200 à 400 \u20ac. En urgence (nuit, week-end), prévoyez une majoration de 50 à 100 %. Demandez toujours un devis avant intervention.' },
+      { q: 'Mon propriétaire doit-il réparer le chauffage ?', a: 'Le propriétaire est responsable des réparations importantes (remplacement de chaudière, circulateur, vanne). Le locataire prend en charge l\u2019entretien courant (entretien annuel obligatoire, purge des radiateurs). En cas de panne rendant le logement inhabitable (pas de chauffage en hiver), le propriétaire doit intervenir rapidement \u2014 c\u2019est une obligation de décence du logement.' },
+      { q: 'Peut-on rester sans chauffage en hiver ?', a: 'Un logement sans chauffage fonctionnel en hiver ne respecte pas les critères de décence (température minimum de 18 \u00b0C exigée). Le locataire peut mettre en demeure le propriétaire. En attendant la réparation, utilisez des radiateurs d\u2019appoint électriques (plus sûrs que les appareils à combustion). Évitez absolument les chauffages au gaz en intérieur non ventilé (risque de monoxyde de carbone).' },
+      { q: 'Comment prévenir les pannes de chauffage ?', a: 'L\u2019entretien annuel de la chaudière ou PAC est obligatoire et détecte 80 % des pannes potentielles. Purgez les radiateurs en septembre/octobre. Maintenez la pression du circuit entre 1 et 1,5 bar. Faites un désembouage tous les 5 à 10 ans. Ne coupez jamais totalement le chauffage en hiver (risque de gel des canalisations).' },
+    ],
+  },
+  {
+    slug: 'fuite-toiture',
+    name: 'Fuite de toiture',
+    description: 'Une fuite de toiture laisse l\u2019eau de pluie s\u2019infiltrer dans la charpente, l\u2019isolation et les plafonds. Les causes principales sont des tuiles ou ardoises cassées, un solin défaillant autour d\u2019une cheminée ou d\u2019un velux, une gouttière percée ou un défaut d\u2019étanchéité. Un couvreur professionnel intervient pour localiser la fuite et la réparer durablement.',
+    relatedServices: ['couvreur', 'charpentier', 'zingueur'],
+    primaryService: 'couvreur',
+    urgencyLevel: 'haute',
+    symptoms: [
+      'Taches d\u2019humidité ou auréoles brunes au plafond du dernier étage',
+      'Gouttes d\u2019eau visibles dans les combles ou le grenier lors de pluies',
+      'Bois de charpente noirci, mouillé ou qui commence à pourrir',
+      'Isolation mouillée ou tassée dans les combles',
+      'Peinture qui cloque ou plâtre qui se décolle au plafond',
+      'Moisissures ou odeur de moisi dans les pièces sous toiture',
+      'Tuiles ou ardoises visiblement cassées, déplacées ou manquantes depuis le sol',
+    ],
+    immediateActions: [
+      'Placez des récipients sous les points d\u2019infiltration pour protéger sols et meubles',
+      'Éloignez les appareils électriques et coupez l\u2019électricité si l\u2019eau coule près de prises ou luminaires',
+      'Ne montez PAS sur le toit vous-même \u2014 le risque de chute est mortel, surtout par temps de pluie',
+      'Inspectez les combles avec une lampe torche pour repérer les points d\u2019entrée d\u2019eau',
+      'Prenez des photos de tous les dégâts (intérieurs et extérieurs) pour votre assurance',
+      'Contactez un couvreur en urgence pour bâchage et réparation provisoire',
+    ],
+    preventiveTips: [
+      'Faites inspecter votre toiture par un couvreur tous les 3 à 5 ans',
+      'Nettoyez les gouttières et chéneaux au moins deux fois par an (printemps et automne)',
+      'Vérifiez l\u2019état de la couverture après chaque tempête ou épisode de grêle',
+      'Faites démousser et traiter la toiture tous les 5 à 10 ans',
+      'Vérifiez régulièrement l\u2019étanchéité des solins autour des cheminées, velux et sorties de toit',
+      'Taillez les branches d\u2019arbres qui surplombent le toit',
+    ],
+    estimatedCost: { min: 150, max: 2000 },
+    averageResponseTime: 'Sous 24 à 48h (urgence) / 1 à 3 semaines (réparation planifiée)',
+    seasonality: 'automne',
+    faq: [
+      { q: 'Comment détecter une fuite de toiture ?', a: 'Les signes les plus courants sont des taches brunes ou des auréoles au plafond, surtout après la pluie. Inspectez les combles avec une lampe torche : cherchez des traces d\u2019eau sur la charpente, l\u2019isolation mouillée, ou des points lumineux à travers la couverture. Depuis le sol, observez avec des jumelles si des tuiles ou ardoises sont cassées, déplacées ou manquantes.' },
+      { q: 'Combien coûte la réparation d\u2019une fuite de toiture ?', a: 'Le coût dépend de l\u2019ampleur des dégâts : remplacement de quelques tuiles cassées : 150 à 400 \u20ac ; réfection d\u2019un solin de cheminée : 300 à 800 \u20ac ; reprise d\u2019étanchéité autour d\u2019un velux : 200 à 500 \u20ac ; bâchage d\u2019urgence : 200 à 600 \u20ac. Si les dégâts sont plus étendus (charpente touchée, isolation à refaire), les coûts peuvent atteindre 2 000 \u20ac et plus.' },
+      { q: 'L\u2019assurance prend-elle en charge les fuites de toiture ?', a: 'L\u2019assurance habitation couvre les dégâts intérieurs causés par la fuite (plafonds, murs, mobilier). La réparation de la toiture elle-même n\u2019est couverte que si la cause est un événement climatique (tempête, grêle) via la garantie TGN. Le vieillissement normal et le défaut d\u2019entretien ne sont pas pris en charge. Déclarez le sinistre sous 5 jours ouvrés avec photos et devis.' },
+      { q: 'Peut-on réparer une fuite de toiture soi-même ?', a: 'Les travaux en hauteur sont extrêmement dangereux. Les chutes de toit constituent une cause majeure d\u2019accidents domestiques graves. Seul un couvreur professionnel dispose de l\u2019équipement de sécurité (harnais, échafaudage, ligne de vie) et du savoir-faire pour intervenir sur un toit. En attendant le couvreur, contentez-vous de protéger l\u2019intérieur (récipients, bâche au sol).' },
+      { q: 'Fuite de toiture en location : qui paie ?', a: 'Le propriétaire est responsable de l\u2019entretien et de la réparation de la toiture (gros œuvre). Le locataire doit signaler la fuite rapidement par écrit (lettre recommandée). Si le propriétaire ne réagit pas, le locataire peut le mettre en demeure puis saisir le tribunal. Les dégâts sur les affaires personnelles du locataire sont couverts par son assurance habitation.' },
     ],
   },
 ]

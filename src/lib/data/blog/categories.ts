@@ -89,6 +89,20 @@ export const blogCategories: BlogCategory[] = [
     metaTitle: 'Inspiration Déco & Aménagement 2026 | ServicesArtisans',
     metaDescription: 'Tendances déco 2026, idées d\'aménagement et inspiration rénovation. Salle de bain, cuisine, extérieur : les styles qui marquent.',
   },
+  {
+    slug: 'materiaux',
+    label: 'Matériaux',
+    description: 'Comparatifs et guides de choix de matériaux pour vos travaux de construction et rénovation.',
+    metaTitle: 'Matériaux de Construction & Rénovation — Comparatifs 2026 | ServicesArtisans',
+    metaDescription: 'Comparatifs matériaux 2026 : carrelage, parquet, isolation, plomberie. Guides de choix, prix et conseils pour bien sélectionner vos matériaux.',
+  },
+  {
+    slug: 'urgences',
+    label: 'Urgences',
+    description: 'Que faire en cas d\'urgence : fuite d\'eau, panne électrique, serrure bloquée. Réflexes et contacts.',
+    metaTitle: 'Urgences Maison — Réflexes & Dépannage | ServicesArtisans',
+    metaDescription: 'Urgences maison : fuite d\'eau, panne électrique, serrure bloquée. Les bons réflexes, quand appeler un artisan et comment éviter les arnaques.',
+  },
 ]
 
 /** Slugify a category label for URL usage */
@@ -112,6 +126,7 @@ export function getCategoryBySlug(slug: string): BlogCategory | undefined {
 const categoryNormalize: Record<string, string> = {
   'Securite': 'Sécurité',
   'Energie': 'Énergie',
+  'Materiaux': 'Matériaux',
 }
 
 export function normalizeCategory(category: string): string {

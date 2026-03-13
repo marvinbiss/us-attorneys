@@ -144,7 +144,7 @@ export const servicePricings: ServicePricing[] = [
 
 export const regionalIndices: RegionalIndex[] = [
   { region: "Île-de-France", regionSlug: "ile-de-france", index: 130, tendance: "hausse" },
-  { region: "Provence-Alpes-Côte d'Azur", regionSlug: "provence-alpes-cote-azur", index: 115, tendance: "hausse" },
+  { region: "Provence-Alpes-Côte d'Azur", regionSlug: "provence-alpes-cote-d-azur", index: 115, tendance: "hausse" },
   { region: "Auvergne-Rhône-Alpes", regionSlug: "auvergne-rhone-alpes", index: 110, tendance: "stable" },
   { region: "Occitanie", regionSlug: "occitanie", index: 105, tendance: "stable" },
   { region: "Nouvelle-Aquitaine", regionSlug: "nouvelle-aquitaine", index: 100, tendance: "stable" },

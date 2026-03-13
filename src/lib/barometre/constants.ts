@@ -94,7 +94,7 @@ export const BAROMETRE_REGIONS: BarometreRegion[] = [
     ],
   },
   {
-    slug: 'provence-alpes-cote-azur',
+    slug: 'provence-alpes-cote-d-azur',
     name: "Provence-Alpes-Côte d'Azur",
     departements: [
       { code: '04', nom: 'Alpes-de-Haute-Provence' },

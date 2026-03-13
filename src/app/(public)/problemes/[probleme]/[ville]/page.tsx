@@ -103,10 +103,10 @@ function getProblemCategory(primaryService: string, slug: string): ProblemCatego
     'interphone-panne', 'alarme-declenchee',
   ]
   const chauffageProblems = [
-    'panne-chaudiere', 'chaudiere-qui-fuit', 'radiateur-froid',
+    'panne-chaudiere', 'chaudiere-qui-fuit', 'radiateur-froid', 'panne-chauffage',
   ]
   const toitureProblems = [
-    'infiltration-toiture', 'tuile-cassee', 'gouttiere-bouchee', 'toit-qui-fuit',
+    'infiltration-toiture', 'tuile-cassee', 'gouttiere-bouchee', 'toit-qui-fuit', 'fuite-toiture',
   ]
   const humiditeProblems = [
     'humidite', 'moisissure', 'mur-humide', 'fenetre-qui-condense',

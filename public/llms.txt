@@ -140,7 +140,7 @@ Le modele est 100% gratuit pour les particuliers : recherche d'artisans, consult
 ## Regions (21)
 - [Ile-de-France](https://servicesartisans.fr/regions/ile-de-france)
 - [Auvergne-Rhone-Alpes](https://servicesartisans.fr/regions/auvergne-rhone-alpes)
-- [Provence-Alpes-Cote d'Azur](https://servicesartisans.fr/regions/provence-alpes-cote-azur)
+- [Provence-Alpes-Cote d'Azur](https://servicesartisans.fr/regions/provence-alpes-cote-d-azur)
 - [Occitanie](https://servicesartisans.fr/regions/occitanie)
 - [Nouvelle-Aquitaine](https://servicesartisans.fr/regions/nouvelle-aquitaine)
 - [Hauts-de-France](https://servicesartisans.fr/regions/hauts-de-france)

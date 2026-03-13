@@ -76,7 +76,7 @@ export const relatedServices: Record<string, string[]> = {
 export const popularRegions = [
   { name: 'Île-de-France', slug: 'ile-de-france' },
   { name: 'Auvergne-Rhône-Alpes', slug: 'auvergne-rhone-alpes' },
-  { name: 'Provence-Alpes-Côte d\'Azur', slug: 'provence-alpes-cote-azur' },
+  { name: 'Provence-Alpes-Côte d\'Azur', slug: 'provence-alpes-cote-d-azur' },
   { name: 'Occitanie', slug: 'occitanie' },
   { name: 'Nouvelle-Aquitaine', slug: 'nouvelle-aquitaine' },
   { name: 'Hauts-de-France', slug: 'hauts-de-france' },

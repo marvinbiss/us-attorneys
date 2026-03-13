@@ -12,7 +12,7 @@ import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
 
 export const revalidate = 86400
-export const dynamicParams = false
+export const dynamicParams = true
 
 export function generateStaticParams() {
   return getProblemSlugs().map((probleme) => ({ probleme }))

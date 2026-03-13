@@ -108,6 +108,8 @@ export default async function BlogCategoryPage({ params }: PageProps) {
     'Énergie': 'bg-teal-100 text-teal-700',
     'DIY': 'bg-orange-100 text-orange-700',
     'Inspiration': 'bg-pink-100 text-pink-700',
+    'Matériaux': 'bg-cyan-100 text-cyan-700',
+    'Urgences': 'bg-red-100 text-red-700',
   }
 
   const badgeColor = categoryColors[cat.label] || 'bg-blue-100 text-blue-700'

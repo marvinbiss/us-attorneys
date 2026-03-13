@@ -31,6 +31,8 @@ export const categoryEmoji: Record<string, string> = {
   'Energie': '⚡',
   'DIY': '🔧',
   'Inspiration': '✨',
+  'Matériaux': '🧱',
+  'Urgences': '🚨',
 }
 
 /** Emojis assigned to the original 27 articles (preserve exact existing ones) */
