@@ -378,22 +378,18 @@ export default function Footer() {
                 className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
               >
                 <defs>
-                  <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#E86B4B" />
-                    <stop offset="50%" stopColor="#D4553A" />
-                    <stop offset="100%" stopColor="#C24B2A" />
+                  <linearGradient id="footerBg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#E86B4B" />
+                    <stop offset="1" stopColor="#C24B2A" />
                   </linearGradient>
-                  <linearGradient id="footerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#f59e0b" />
-                    <stop offset="100%" stopColor="#d97706" />
-                  </linearGradient>
+                  <radialGradient id="footerShine" cx=".32" cy=".26" r=".65">
+                    <stop stopColor="#fff" stopOpacity=".16" />
+                    <stop offset="1" stopColor="#fff" stopOpacity="0" />
+                  </radialGradient>
                 </defs>
-                <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#footerLogoGrad)" />
-                <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
-                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#E86B4B" />
-                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#E86B4B" fillOpacity="0.25" />
-                <circle cx="39" cy="9" r="5" fill="url(#footerAccent)" />
-                <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerBg)" />
+                <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerShine)" />
+                <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
               </svg>
               <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-gray-200 transition-colors duration-200">
                 Services<span className="text-clay-400">Artisans</span>
