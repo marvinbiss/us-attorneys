@@ -20,6 +20,11 @@ const ExitIntentPopup = dynamic(
   { ssr: false }
 )
 
+const UrgencyCountdown = dynamic(
+  () => import('@/components/UrgencyCountdown'),
+  { ssr: false }
+)
+
 export const revalidate = 86400 // ISR 24h
 
 // All services are available for emergency pages
@@ -374,6 +379,11 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </div>
         </div>
       </section>
+
+      {/* Urgency Countdown */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <UrgencyCountdown serviceName={trade.name} />
+      </div>
 
       {/* Problems */}
       <section className="py-16 bg-white">

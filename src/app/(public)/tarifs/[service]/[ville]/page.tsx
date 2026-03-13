@@ -34,6 +34,26 @@ const ExitIntentPopup = dynamic(
   { ssr: false }
 )
 
+const MicroConversions = dynamic(
+  () => import('@/components/MicroConversions'),
+  { ssr: false }
+)
+
+const CallbackRequest = dynamic(
+  () => import('@/components/CallbackRequest'),
+  { ssr: false }
+)
+
+const FAQTracker = dynamic(
+  () => import('@/components/FAQTracker'),
+  { ssr: false }
+)
+
+const ProactiveChatPrompt = dynamic(
+  () => import('@/components/ProactiveChatPrompt'),
+  { ssr: false }
+)
+
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
 // ---------------------------------------------------------------------------
@@ -439,6 +459,9 @@ export default async function TarifsServiceVillePage({
             multiplier={multiplier}
             unit={trade.priceRange.unit}
           />
+          <div className="mt-8">
+            <CallbackRequest serviceSlug={service} cityName={villeData.name} />
+          </div>
         </div>
       </section>
 
@@ -880,6 +903,11 @@ export default async function TarifsServiceVillePage({
         description="Obtenez le prix exact pour votre projet — comparez jusqu'à 3 devis gratuits."
         ctaHref={`/devis/${service}/${villeSlug}`}
       />
+
+      <MicroConversions pageType="tarifs-ville" serviceSlug={service} cityName={villeData.name} />
+      <FAQTracker pageType="tarifs-ville" serviceSlug={service} />
+
+      <ProactiveChatPrompt serviceSlug={service} citySlug={villeSlug} />
     </div>
   )
 }

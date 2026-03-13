@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Star, ThumbsUp, MessageCircle, ChevronDown, Filter, User } from 'lucide-react'
+import { Star, ThumbsUp, MessageCircle, ChevronDown, Filter, User, CheckCircle } from 'lucide-react'
 
 interface Review {
   id: string
@@ -13,6 +13,9 @@ interface Review {
   artisan_response: string | null
   artisan_responded_at: string | null
   helpful_count: number
+  booking_id?: string | null
+  user_id?: string | null
+  is_verified?: boolean
 }
 
 interface ReviewStats {
@@ -262,8 +265,17 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                   <p className="text-xs text-gray-500">{formatDate(review.created_at)}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 {renderStars(review.rating)}
+                {(review.booking_id || review.user_id || review.is_verified) && (
+                  <span
+                    className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
+                    title="Cet avis provient d'un client ayant utilisé la plateforme"
+                  >
+                    <CheckCircle className="w-3 h-3" />
+                    Avis vérifié
+                  </span>
+                )}
                 {review.would_recommend && (
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
                     Recommande

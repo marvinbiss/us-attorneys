@@ -40,6 +40,21 @@ const EstimationWidget = dynamic(
   { ssr: false }
 )
 
+const MicroConversions = dynamic(
+  () => import('@/components/MicroConversions'),
+  { ssr: false }
+)
+
+const ProactiveChatPrompt = dynamic(
+  () => import('@/components/ProactiveChatPrompt'),
+  { ssr: false }
+)
+
+const CallbackRequest = dynamic(
+  () => import('@/components/CallbackRequest'),
+  { ssr: false }
+)
+
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
   return JSON.stringify(data)
@@ -563,6 +578,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         communeData={communeData}
       />
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+        <CallbackRequest serviceSlug={serviceSlug} cityName={location.name} />
+      </div>
+
       <CrossIntentLinks
         service={serviceSlug}
         serviceName={service.name}
@@ -580,6 +599,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         departement: location.department_code || '',
         pageUrl: `/services/${serviceSlug}/${locationSlug}`,
       }} />
+
+      <MicroConversions pageType="service-ville" serviceSlug={serviceSlug} cityName={location.name} />
+
+      <ProactiveChatPrompt serviceSlug={serviceSlug} citySlug={locationSlug} />
     </>
   )
 }

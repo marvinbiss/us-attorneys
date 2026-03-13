@@ -45,6 +45,20 @@ const budgetOptions = [
   { value: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
+/** Common project types per service for quick selection */
+const serviceSubcategories: Record<string, string[]> = {
+  plombier: ['Fuite d\'eau', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'WC / Sanitaires', 'Tuyauterie'],
+  electricien: ['Panne électrique', 'Installation prise/interrupteur', 'Tableau électrique', 'Éclairage', 'Mise aux normes', 'Domotique'],
+  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte'],
+  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur'],
+  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond'],
+  menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet'],
+  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure'],
+  couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage'],
+  macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition'],
+  jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture'],
+}
+
 function isValidFrenchPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s.\-()]/g, '')
   if (/^0[1-9]\d{8}$/.test(cleaned)) return true
@@ -445,6 +459,7 @@ export default function DevisForm({
                   onChange={(e) => updateField('service', e.target.value)}
                   aria-describedby={errors.service ? 'service-error' : undefined}
                   aria-invalid={!!errors.service}
+                  style={{ fontSize: '16px' }}
                   className={`w-full appearance-none rounded-xl border ${
                     errors.service ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
@@ -515,6 +530,7 @@ export default function DevisForm({
                   }}
                   aria-describedby={errors.ville ? 'ville-error' : undefined}
                   aria-invalid={!!errors.ville}
+                  style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
                     errors.ville ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
@@ -625,6 +641,40 @@ export default function DevisForm({
               )}
             </div>
 
+            {/* Quick project type selection */}
+            {formData.service && serviceSubcategories[formData.service] && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Type de projet <span className="text-slate-400 font-normal">(cliquez pour sélectionner)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {serviceSubcategories[formData.service].map((cat) => {
+                    const isSelected = formData.description.includes(cat)
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => {
+                          if (isSelected) {
+                            updateField('description', formData.description.replace(cat, '').replace(/,\s*,/g, ',').replace(/^,\s*|,\s*$/g, '').trim())
+                          } else {
+                            updateField('description', formData.description ? `${formData.description}, ${cat}` : cat)
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                          isSelected
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
@@ -633,11 +683,14 @@ export default function DevisForm({
               <textarea
                 id="description"
                 rows={3}
-                placeholder="Ex : fuite robinet cuisine, remplacement chaudière..."
+                placeholder={formData.service && serviceSubcategories[formData.service]
+                  ? "Précisions supplémentaires (optionnel)..."
+                  : "Ex : fuite robinet cuisine, remplacement chaudière..."}
                 value={formData.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 aria-describedby={errors.description ? 'description-error' : undefined}
                 aria-invalid={!!errors.description}
+                style={{ fontSize: '16px' }}
                 className={`w-full rounded-xl border ${
                   errors.description ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                 } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none`}
@@ -742,6 +795,7 @@ export default function DevisForm({
                   onBlur={() => validateField('nom')}
                   aria-describedby={errors.nom ? 'nom-error' : undefined}
                   aria-invalid={!!errors.nom}
+                  style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
                     errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
@@ -773,6 +827,7 @@ export default function DevisForm({
                   onBlur={() => validateField('telephone')}
                   aria-describedby={errors.telephone ? 'telephone-error' : undefined}
                   aria-invalid={!!errors.telephone}
+                  style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
                     errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
@@ -804,6 +859,7 @@ export default function DevisForm({
                   onBlur={() => validateField('email')}
                   aria-describedby={errors.email ? 'email-error' : undefined}
                   aria-invalid={!!errors.email}
+                  style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
                     errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}

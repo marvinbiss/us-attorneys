@@ -87,6 +87,9 @@ export default function PriceTableHTML({
             <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">
               Prix indicatif
             </th>
+            <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-gray-700 text-center w-28">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -113,13 +116,30 @@ export default function PriceTableHTML({
                 <td className="px-5 py-4 text-gray-900 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap">
                   {price}
                 </td>
+                <td className="hidden sm:table-cell px-3 py-4 border-t border-gray-100 text-center">
+                  {serviceSlug ? (
+                    <Link
+                      href={locationSlug ? `/devis/${serviceSlug}/${locationSlug}` : `/devis/${serviceSlug}`}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      Devis gratuit
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/devis"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      Devis gratuit
+                    </Link>
+                  )}
+                </td>
               </tr>
             )
           })}
         </tbody>
         <tfoot>
           <tr className="bg-gray-50/80 border-t border-gray-200">
-            <td colSpan={2} className="px-5 py-3 text-xs text-gray-500 italic">
+            <td colSpan={3} className="px-5 py-3 text-xs text-gray-500 italic">
               Prix indicatifs, peuvent varier selon la complexité des travaux, la région et le professionnel.
               {location && multiplier !== 1 && (
                 <span className="ml-1">

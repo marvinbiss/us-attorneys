@@ -185,14 +185,14 @@ export function VerifiedReviewBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 text-green-600',
+        'inline-flex items-center gap-1 text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full font-medium',
         sizeConf.text,
         className
       )}
-      title="Cet avis provient d'un client qui a effectué une réservation confirmée"
+      title="Cet avis provient d'un client ayant utilisé la plateforme"
     >
       <CheckCircle size={sizeConf.icon} />
-      <span>Avis authentique</span>
+      <span>Avis vérifié</span>
     </span>
   )
 }

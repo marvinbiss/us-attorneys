@@ -41,6 +41,16 @@ const EstimationWidget = dynamic(
   { ssr: false }
 )
 
+const MicroConversions = dynamic(
+  () => import('@/components/MicroConversions'),
+  { ssr: false }
+)
+
+const UrgencyCountdown = dynamic(
+  () => import('@/components/UrgencyCountdown'),
+  { ssr: false }
+)
+
 // ---------------------------------------------------------------------------
 // Emergency-specific display data
 // ---------------------------------------------------------------------------
@@ -498,6 +508,11 @@ export default async function UrgenceServiceVillePage({
           </div>
         </div>
       </section>
+
+      {/* ─── URGENCY COUNTDOWN ─────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <UrgencyCountdown serviceName={trade.name} cityName={villeData.name} />
+      </div>
 
       {/* ─── EMERGENCY PROBLEMS ────────────────────────────── */}
       <section className="py-16 bg-white">
@@ -1332,6 +1347,8 @@ export default async function UrgenceServiceVillePage({
         departement: villeData.departementCode,
         pageUrl: `/urgence/${service}/${villeSlug}`,
       }} />
+
+      <MicroConversions pageType="urgence-ville" serviceSlug={service} cityName={villeData.name} />
     </div>
   )
 }

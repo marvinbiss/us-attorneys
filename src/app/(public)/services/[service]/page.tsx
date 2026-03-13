@@ -38,6 +38,21 @@ const ExitIntentPopup = dynamic(
   { ssr: false }
 )
 
+const MicroConversions = dynamic(
+  () => import('@/components/MicroConversions'),
+  { ssr: false }
+)
+
+const FAQTracker = dynamic(
+  () => import('@/components/FAQTracker'),
+  { ssr: false }
+)
+
+const ProactiveChatPrompt = dynamic(
+  () => import('@/components/ProactiveChatPrompt'),
+  { ssr: false }
+)
+
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
   id: string
@@ -1031,6 +1046,11 @@ export default async function ServicePage({ params }: PageProps) {
         description="Comparez les devis de plusieurs artisans qualifiés, gratuitement et sans engagement."
         ctaHref={`/devis/${serviceSlug}`}
       />
+
+      <MicroConversions pageType="service" serviceSlug={serviceSlug} />
+      <FAQTracker pageType="service" serviceSlug={serviceSlug} />
+
+      <ProactiveChatPrompt serviceSlug={serviceSlug} />
     </div>
   )
 }

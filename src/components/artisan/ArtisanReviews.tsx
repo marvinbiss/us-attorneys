@@ -63,9 +63,12 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
           <div className="flex items-center gap-2">
             <span className="font-semibold text-stone-800 text-sm truncate">{review.author}</span>
             {review.verified && (
-              <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Avis vérifié">
-                <CheckCircle className="w-3.5 h-3.5 fill-emerald-100" aria-hidden="true" />
-                <span className="text-xs font-medium">Vérifié</span>
+              <span
+                className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
+                title="Cet avis provient d'un client ayant utilisé la plateforme"
+              >
+                <CheckCircle className="w-3 h-3" aria-hidden="true" />
+                Avis vérifié
               </span>
             )}
           </div>
