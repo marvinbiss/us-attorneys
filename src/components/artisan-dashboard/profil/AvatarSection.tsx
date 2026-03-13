@@ -126,6 +126,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               alt={`Photo de profil de ${name}`}
               width={96}
               height={96}
+              sizes="96px"
               className="w-24 h-24 rounded-full object-cover"
               unoptimized
             />

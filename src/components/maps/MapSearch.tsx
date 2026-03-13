@@ -387,7 +387,7 @@ export default function MapSearch() {
                           <div className="relative flex-shrink-0 rounded-xl">
                             <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
                               {provider.avatar_url ? (
-                                <NextImage src={provider.avatar_url} alt={provider.name} width={80} height={80} className="w-full h-full object-cover" />
+                                <NextImage src={provider.avatar_url} alt={provider.name} width={80} height={80} sizes="80px" className="w-full h-full object-cover" />
                               ) : (
                                 <span className="text-3xl font-bold text-gray-400">
                                   {provider.name.charAt(0)}

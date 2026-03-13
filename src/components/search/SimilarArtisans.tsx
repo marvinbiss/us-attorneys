@@ -110,6 +110,7 @@ export function SimilarArtisans({
                     alt={`${artisan.name} - ${artisan.specialty} à ${artisan.city}`}
                     width={48}
                     height={48}
+                    sizes="48px"
                     className="w-full h-full object-cover"
                     placeholder="blur"
                     blurDataURL={BLUR_PLACEHOLDER}

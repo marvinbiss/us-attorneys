@@ -30,6 +30,8 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { getCityValues } from '@/lib/insee-resolver'
 import { getProblemsByService } from '@/lib/data/problems'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+import LastUpdated from '@/components/seo/LastUpdated'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -484,6 +486,7 @@ export default async function AvisServiceVillePage({
               &agrave; {villeData.name} ({villeData.departement}).
               Prix local : {minPrice} &agrave; {maxPrice} {trade.priceRange.unit}.
             </p>
+            <LastUpdated label="Avis vérifiés le" className="justify-center text-slate-500 mb-4" />
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               {totalReviews > 0 && (
                 <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
@@ -1374,6 +1377,14 @@ export default async function AvisServiceVillePage({
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks
+        service={service}
+        serviceName={trade.name}
+        ville={villeSlug}
+        villeName={villeData.name}
+        currentIntent="avis"
+      />
 
       <EstimationWidget context={{
         metier: trade.name,

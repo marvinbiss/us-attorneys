@@ -185,13 +185,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    // Blog category pages
+    // Blog category pages — lastModified = date du dernier article de la catégorie
     const blogCategoryPages: MetadataRoute.Sitemap = blogCategories
       .filter(c => allArticlesMeta.some(a => categoryToSlug(normalizeCategory(a.category)) === c.slug))
-      .map(c => ({
-        url: `${SITE_URL}/blog/categorie/${c.slug}`,
-        lastModified: BUILD_DATE,
-      }))
+      .map(c => {
+        const categoryArticles = allArticlesMeta.filter(a => categoryToSlug(normalizeCategory(a.category)) === c.slug)
+        const latestDate = categoryArticles.length > 0
+          ? new Date(Math.max(...categoryArticles.map(a => new Date(a.date).getTime())))
+          : undefined
+        return {
+          url: `${SITE_URL}/blog/categorie/${c.slug}`,
+          lastModified: latestDate || BUILD_DATE,
+        }
+      })
 
     // Blog tag pages — all unique tags
     const tagSet = new Map<string, string>()
@@ -201,10 +207,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         if (!tagSet.has(slug)) tagSet.set(slug, t)
       }
     }
-    const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map(slug => ({
-      url: `${SITE_URL}/blog/tag/${slug}`,
-      lastModified: BUILD_DATE,
-    }))
+    const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map(tagSlug => {
+      // Trouver la date du dernier article ayant ce tag
+      const tagArticles = allArticlesMeta.filter(a =>
+        a.tags.some(t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === tagSlug)
+      )
+      const latestDate = tagArticles.length > 0
+        ? new Date(Math.max(...tagArticles.map(a => new Date(a.date).getTime())))
+        : undefined
+      return {
+        url: `${SITE_URL}/blog/tag/${tagSlug}`,
+        lastModified: latestDate || BUILD_DATE,
+      }
+    })
 
     return [...homepage, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }

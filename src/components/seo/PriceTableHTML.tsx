@@ -1,0 +1,113 @@
+/**
+ * PriceTableHTML — Tableau HTML semantique des tarifs pour capturer les Featured Snippets Google.
+ *
+ * Rend un vrai <table> avec <caption>, <thead>, <tbody>, <tfoot>.
+ * Parse les commonTasks (format "Label : prix" ou "Label: prix") et applique
+ * un multiplicateur regional optionnel aux prix numeriques.
+ *
+ * Server Component — pas de 'use client'.
+ */
+
+interface PriceTableHTMLProps {
+  tasks: string[]           // commonTasks du trade
+  serviceName: string       // ex: "Plombier"
+  location?: string         // ex: "Paris" (optionnel)
+  multiplier?: number       // multiplicateur regional (defaut 1)
+  unit?: string             // ex: "€/h"
+}
+
+/**
+ * Parse une tache au format "Nom prestation : 80 a 250 € ..." ou "Nom prestation: prix"
+ * Retourne { name, price } ou le prix est ajuste si un multiplicateur est fourni.
+ */
+function parseTask(task: string, multiplier: number): { name: string; price: string } {
+  // Support both "Label : prix" and "Label: prix"
+  const colonIndex = task.indexOf(':')
+  if (colonIndex === -1) {
+    return { name: task.trim(), price: 'Sur devis' }
+  }
+
+  const name = task.slice(0, colonIndex).trim()
+  let priceStr = task.slice(colonIndex + 1).trim()
+
+  if (multiplier !== 1) {
+    // Replace all numbers in the price string with multiplied values
+    priceStr = priceStr.replace(/(\d[\d\s]*)/g, (match) => {
+      const num = parseInt(match.replace(/\s/g, ''), 10)
+      if (isNaN(num)) return match
+      const adjusted = Math.round(num * multiplier)
+      return adjusted.toLocaleString('fr-FR')
+    })
+  }
+
+  return { name, price: priceStr || 'Sur devis' }
+}
+
+export default function PriceTableHTML({
+  tasks,
+  serviceName,
+  location,
+  multiplier = 1,
+  unit,
+}: PriceTableHTMLProps) {
+  if (!tasks || tasks.length === 0) return null
+
+  const captionText = location
+    ? `Tarifs ${serviceName.toLowerCase()} ${location} — 2026`
+    : `Tarifs ${serviceName.toLowerCase()} en France — 2026`
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+      <table className="w-full text-left">
+        <caption className="px-5 py-3 text-left text-base font-semibold text-gray-900 bg-white border-b border-gray-100">
+          {captionText}
+          {unit && (
+            <span className="ml-2 text-sm font-normal text-gray-500">
+              ({unit})
+            </span>
+          )}
+        </caption>
+        <thead>
+          <tr className="bg-gray-50 border-b border-gray-200">
+            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700">
+              Prestation
+            </th>
+            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">
+              Prix indicatif
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map((task, i) => {
+            const { name, price } = parseTask(task, multiplier)
+            return (
+              <tr
+                key={i}
+                className={`hover:bg-blue-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+              >
+                <td className="px-5 py-4 text-gray-800 text-sm border-t border-gray-100">
+                  {name}
+                </td>
+                <td className="px-5 py-4 text-gray-900 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap">
+                  {price}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+        <tfoot>
+          <tr className="bg-gray-50/80 border-t border-gray-200">
+            <td colSpan={2} className="px-5 py-3 text-xs text-gray-500 italic">
+              Prix indicatifs, peuvent varier selon la complexit{'\u00e9'} des travaux, la r{'\u00e9'}gion et le professionnel.
+              {location && multiplier !== 1 && (
+                <span className="ml-1">
+                  Tarifs ajust{'\u00e9'}s pour {location} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}{'\u00a0'}% vs moyenne nationale).
+                </span>
+              )}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  )
+}

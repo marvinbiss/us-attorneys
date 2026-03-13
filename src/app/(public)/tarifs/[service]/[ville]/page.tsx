@@ -15,6 +15,9 @@ import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
+import PriceTableHTML from '@/components/seo/PriceTableHTML'
+import LastUpdated from '@/components/seo/LastUpdated'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -339,6 +342,7 @@ export default async function TarifsServiceVillePage({
               {' '}{minPrice} {'à'} {maxPrice} {trade.priceRange.unit}.
               Tarifs adapt{'é'}s au march{'é'} local.
             </p>
+            <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-slate-500 mb-4" />
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
@@ -388,29 +392,13 @@ export default async function TarifsServiceVillePage({
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Prestations courantes et prix {'à'} {villeData.name}
           </h2>
-          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="px-5 py-3.5 text-sm font-semibold text-gray-700">Prestation</th>
-                  <th className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">Prix indicatif</th>
-                </tr>
-              </thead>
-              <tbody>
-                {trade.commonTasks.map((task, i) => {
-                  const colonIndex = task.indexOf(':')
-                  const name = colonIndex !== -1 ? task.slice(0, colonIndex).trim() : task.trim()
-                  const price = colonIndex !== -1 ? task.slice(colonIndex + 1).trim() : 'Sur devis'
-                  return (
-                    <tr key={i} className={`hover:bg-blue-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                      <td className="px-5 py-4 text-gray-800 text-sm border-t border-gray-100">{name}</td>
-                      <td className="px-5 py-4 text-gray-900 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap">{price}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+          <PriceTableHTML
+            tasks={trade.commonTasks}
+            serviceName={trade.name}
+            location={villeData.name}
+            multiplier={multiplier}
+            unit={trade.priceRange.unit}
+          />
         </div>
       </section>
 
@@ -796,6 +784,14 @@ export default async function TarifsServiceVillePage({
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks
+        service={service}
+        serviceName={trade.name}
+        ville={villeSlug}
+        villeName={villeData.name}
+        currentIntent="tarifs"
+      />
 
       <EstimationWidget context={{
         metier: trade.name,

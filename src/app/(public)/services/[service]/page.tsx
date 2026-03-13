@@ -21,6 +21,7 @@ import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
+import LastUpdated from '@/components/seo/LastUpdated'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -318,6 +319,7 @@ export default async function ServicePage({ params }: PageProps) {
             {service.description ||
               `Trouvez les meilleurs ${service.name.toLowerCase()}s près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
           </p>
+          <LastUpdated label="Données artisans mises à jour le" className="text-slate-500 mt-3" />
 
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">

@@ -13,6 +13,7 @@ import { getCommuneBySlug, formatNumber, formatEuro } from '@/lib/data/commune-d
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DevisForm from '@/components/DevisForm'
 
 // ---------------------------------------------------------------------------
@@ -853,6 +854,14 @@ export default async function DevisServiceLocationPage({
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks
+        service={service}
+        serviceName={trade.name}
+        ville={location}
+        villeName={villeData.name}
+        currentIntent="devis"
+      />
     </div>
   )
 }

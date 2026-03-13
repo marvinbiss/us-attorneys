@@ -97,6 +97,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             alt={alt || name || 'Avatar'}
             width={sizePx[size]}
             height={sizePx[size]}
+            sizes={`${sizePx[size]}px`}
             className={clsx(
               'rounded-full object-cover',
               sizes[size]

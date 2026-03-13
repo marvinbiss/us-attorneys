@@ -29,6 +29,7 @@ import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-da
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -1307,6 +1308,14 @@ export default async function UrgenceServiceVillePage({
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks
+        service={service}
+        serviceName={trade.name}
+        ville={villeSlug}
+        villeName={villeData.name}
+        currentIntent="urgence"
+      />
 
       <EstimationWidget context={{
         metier: trade.name,

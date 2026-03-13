@@ -11,6 +11,7 @@ import SeoContent from './_components/SeoContent'
 import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
 import CrossLinks from './_components/CrossLinks'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -562,6 +563,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         deptCities={deptCities}
         locationContent={locationContent}
         communeData={communeData}
+      />
+
+      <CrossIntentLinks
+        service={serviceSlug}
+        serviceName={service.name}
+        ville={locationSlug}
+        villeName={location.name}
+        currentIntent="services"
       />
 
       <EstimationWidget context={{
