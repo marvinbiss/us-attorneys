@@ -225,10 +225,14 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
   }
 
-  // NOTE: CDN cache headers for public pages are NOT set here.
-  // ISR (revalidate) in each page component handles caching correctly
-  // and knows not to cache error responses (500). Setting Cache-Control
-  // in middleware would blindly cache errors for 24h.
+  // CDN cache headers for programmatic public pages.
+  // Vercel CDN does NOT cache 4xx/5xx responses regardless of Cache-Control,
+  // so these headers only affect successful (2xx) responses.
+  const programmaticPrefixes = ['/services/', '/devis/', '/tarifs/', '/avis/', '/villes/', '/departements/', '/regions/', '/problemes/', '/urgence/']
+  if (programmaticPrefixes.some(p => pathname.startsWith(p))) {
+    response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+  }
 
   return addCspHeaders(response, request, nonce)
 }
