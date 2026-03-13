@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = false
+
 const faqItems = [
   {
     question: "Le badge est-il gratuit ?",

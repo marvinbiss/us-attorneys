@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = false
+
 const guarantees = [
   {
     icon: Shield,

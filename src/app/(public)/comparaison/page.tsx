@@ -7,6 +7,8 @@ import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
 import { SITE_URL } from "@/lib/seo/config"
 import { comparisons } from "@/lib/data/comparisons"
 
+export const revalidate = false
+
 export const metadata: Metadata = {
   title: "Comparatifs Travaux 2026 : 30 Guides pour Choisir",
   description:

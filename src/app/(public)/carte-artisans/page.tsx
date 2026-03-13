@@ -59,6 +59,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = 86400
+
 export default function CarteArtisansPage() {
   const breadcrumbItems = [
     { label: 'Carte des artisans' },

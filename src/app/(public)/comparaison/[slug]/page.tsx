@@ -18,6 +18,7 @@ import {
   Target,
 } from "lucide-react"
 
+export const revalidate = false
 export const dynamicParams = false
 
 export function generateStaticParams() {

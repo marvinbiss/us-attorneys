@@ -234,6 +234,13 @@ export async function middleware(request: NextRequest) {
     response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
   }
 
+  // CDN cache headers for static public pages
+  const staticPublicPages = ['/', '/blog', '/faq', '/contact', '/comment-ca-marche', '/comparaison', '/artisans', '/carte-artisans', '/a-propos', '/garantie', '/cgv', '/confidentialite', '/accessibilite', '/avant-apres', '/calendrier-travaux', '/badge-artisan', '/carrieres', '/barometre']
+  if (staticPublicPages.includes(pathname) || pathname.startsWith('/barometre/') || pathname.startsWith('/blog/') || pathname.startsWith('/comparaison/') || pathname.startsWith('/urgence/')) {
+    response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+  }
+
   return addCspHeaders(response, request, nonce)
 }
 

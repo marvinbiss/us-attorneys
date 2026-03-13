@@ -15,6 +15,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/avant-apres`
 
+export const revalidate = false
+
 export const metadata: Metadata = {
   title: "Avant/Après Travaux : Galeries de Rénovation",
   description:

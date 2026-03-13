@@ -36,6 +36,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = false
+
 const breadcrumbItems = [{ label: 'Calendrier des travaux' }]
 
 const seasonInfo: Record<string, { icon: typeof Sun; color: string; label: string; months: string[] }> = {

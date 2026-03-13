@@ -8,6 +8,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Carrières — Rejoignez notre équipe',
   description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',

@@ -18,11 +18,15 @@ const EstimationWidget = dynamic(
   { ssr: false }
 )
 
+export const revalidate = false
+
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))
 }
+
+export const dynamicParams = false
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
