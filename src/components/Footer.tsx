@@ -23,6 +23,8 @@ const outilsLinks = [
   { name: 'Demander un devis', href: '/devis' },
   { name: 'Urgence artisan', href: '/urgence' },
   { name: 'Problèmes courants', href: '/problemes' },
+  { name: 'Vérifier un artisan', href: '/verifier-artisan' },
+  { name: 'Statistiques artisans', href: '/statistiques-artisans-france' },
   { name: 'Widget pour artisans', href: '/widget' },
 ]
 

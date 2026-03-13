@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText } from 'lucide-react'
+import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText, BookOpen } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
@@ -22,6 +22,7 @@ import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -118,7 +119,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: 'fr_FR',
       title,
       description,
+      url: `${SITE_URL}/services/${serviceSlug}`,
       type: 'website',
+      siteName: 'ServicesArtisans',
       images: [{ url: serviceImage.src, width: 1200, height: 630, alt: serviceImage.alt }],
     },
     twitter: {
@@ -381,6 +384,8 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks service={serviceSlug} serviceName={service.name} currentIntent="services" />
 
       {/* Speakable Answer Box */}
       {trade && (
@@ -724,6 +729,95 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Guides utiles — maillage interne vers guides */}
+      {(() => {
+        const serviceGuidesMap: Record<string, { slug: string; title: string }[]> = {
+          'electricien': [
+            { slug: 'normes-electriques', title: 'Normes électriques NF C 15\u00a0100' },
+            { slug: 'diagnostics-immobiliers', title: 'Diagnostics immobiliers obligatoires' },
+          ],
+          'plombier': [
+            { slug: 'aides-renovation-2026', title: 'Aides rénovation 2026' },
+            { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
+          ],
+          'chauffagiste': [
+            { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
+            { slug: 'maprimerenov-2026', title: 'MaPrimeRénov\' 2026' },
+            { slug: 'isolation-thermique', title: 'Guide isolation thermique' },
+          ],
+          'couvreur': [
+            { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
+            { slug: 'isolation-combles', title: 'Guide isolation des combles' },
+          ],
+          'menuisier': [
+            { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
+            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
+          ],
+          'peintre-en-batiment': [
+            { slug: 'renovation-energetique-complete', title: 'Guide rénovation énergétique complète' },
+            { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
+          ],
+          'macon': [
+            { slug: 'extension-maison', title: 'Guide extension maison' },
+            { slug: 'permis-construire', title: 'Guide permis de construire' },
+          ],
+          'carreleur': [
+            { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
+            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
+          ],
+          'cuisiniste': [
+            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
+            { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
+          ],
+          'climaticien': [
+            { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
+            { slug: 'maprimerenov-2026', title: 'MaPrimeRénov\' 2026' },
+          ],
+          'vitrier': [
+            { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
+          ],
+          'charpentier': [
+            { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
+            { slug: 'isolation-combles', title: 'Guide isolation des combles' },
+          ],
+          'serrurier': [
+            { slug: 'eviter-arnaques-artisan', title: 'Éviter les arnaques artisan' },
+            { slug: 'devis-travaux', title: 'Guide devis travaux' },
+          ],
+        }
+        const guides = serviceGuidesMap[serviceSlug]
+        if (!guides || guides.length === 0) return null
+        return (
+          <section className="py-12 bg-white border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <BookOpen className="w-5 h-5 text-amber-600" />
+                </div>
+                <h2 className="text-xl font-bold text-gray-900">Guides utiles</h2>
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {guides.map((guide) => (
+                  <Link
+                    key={guide.slug}
+                    href={`/guides/${guide.slug}`}
+                    className="flex items-start gap-3 p-5 bg-gray-50 hover:bg-amber-50 rounded-xl border border-gray-200 hover:border-amber-300 transition-all group"
+                  >
+                    <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-amber-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="font-medium text-gray-900 group-hover:text-amber-600 text-sm">
+                        {guide.title}
+                      </span>
+                      <span className="block text-xs text-gray-500 mt-1">Lire le guide complet</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       {/* CTA */}
       <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">

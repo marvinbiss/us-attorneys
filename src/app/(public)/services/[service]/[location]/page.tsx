@@ -204,16 +204,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-// Deterministic rating/reviewCount from service+ville hash (stable between builds)
-function getSeededRating(serviceSlug: string, locationSlug: string): { ratingValue: number; reviewCount: number } {
-  const h = Math.abs(hashCode(`rating-${serviceSlug}-${locationSlug}`))
-  // Rating between 4.5 and 4.9 (5 steps: 4.5, 4.6, 4.7, 4.8, 4.9)
-  const ratingValue = 4.5 + (h % 5) * 0.1
-  // Review count between 12 and 87 (deterministic)
-  const reviewCount = 12 + (Math.abs(hashCode(`reviews-${serviceSlug}-${locationSlug}`)) % 76)
-  return { ratingValue: Math.round(ratingValue * 10) / 10, reviewCount }
-}
-
 // JSON-LD structured data for SEO
 function generateJsonLd(
   service: Service,
@@ -224,7 +214,7 @@ function generateJsonLd(
   communeData: Awaited<ReturnType<typeof getCommuneBySlug>> | null
 ) {
   const svcLower = service.name.toLowerCase()
-  const { ratingValue, reviewCount } = getSeededRating(serviceSlug, locationSlug)
+  const trade = getTradeContent(serviceSlug)
 
   const localBusinessSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -256,16 +246,9 @@ function generateJsonLd(
         },
       } : {}),
     },
-    priceRange: '€€',
+    ...(trade ? { priceRange: `${trade.priceRange.min}€–${trade.priceRange.max}€` } : {}),
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-    telephone: '+33',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue,
-      reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
+    dateModified: new Date().toISOString().split('T')[0],
   }
 
   const serviceSchema = {
@@ -285,6 +268,7 @@ function generateJsonLd(
     provider: {
       '@id': `${SITE_URL}#organization`,
     },
+    dateModified: new Date().toISOString().split('T')[0],
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([

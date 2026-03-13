@@ -252,81 +252,6 @@ export function getCollectionPageSchema(params: {
   }
 }
 
-// Schema.org ProfessionalService (enhanced for artisans with booking)
-export function getProfessionalServiceSchema(artisan: {
-  id: string
-  name: string
-  description: string
-  address?: string
-  city: string
-  postalCode?: string
-  phone?: string
-  email?: string
-  rating?: number
-  reviewCount?: number
-  services: string[]
-  priceRange?: string
-  image?: string
-  availableSlots?: { date: string; times: string[] }[]
-  url?: string
-}) {
-  const canonicalUrl = artisan.url || SITE_URL
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    '@id': `${canonicalUrl}#professional-service`,
-    name: artisan.name,
-    description: artisan.description,
-    url: canonicalUrl,
-    image: artisan.image || `${SITE_URL}/opengraph-image`,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: artisan.city,
-      ...(artisan.postalCode ? { postalCode: artisan.postalCode } : {}),
-      addressCountry: 'FR',
-    },
-    ...(artisan.phone ? { telephone: artisan.phone } : {}),
-    ...(artisan.email ? { email: artisan.email } : {}),
-    ...(artisan.priceRange ? { priceRange: artisan.priceRange } : {}),
-    ...((artisan.rating && artisan.reviewCount && artisan.reviewCount > 0) ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: Number(artisan.rating.toFixed(1)),
-        reviewCount: artisan.reviewCount,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    } : {}),
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Services proposés',
-      itemListElement: artisan.services.map((service, index) => ({
-        '@type': 'Offer',
-        '@id': `${canonicalUrl}#service-${index}`,
-        itemOffered: {
-          '@type': 'Service',
-          name: service,
-        },
-      })),
-    },
-    potentialAction: {
-      '@type': 'ReserveAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${canonicalUrl}#reserver`,
-        actionPlatform: [
-          'http://schema.org/DesktopWebPlatform',
-          'http://schema.org/MobileWebPlatform',
-        ],
-      },
-      result: {
-        '@type': 'Reservation',
-        name: 'Réservation de service',
-      },
-    },
-  }
-}
-
 // Schema.org Product + AggregateOffer (rich snippets with prices in SERP)
 export function getServicePricingSchema(params: {
   serviceName: string
@@ -381,40 +306,6 @@ export function getServicePricingSchema(params: {
   }
 }
 
-// Schema.org Offer for individual service tasks with price specifications
-export function getTaskOfferSchema(params: {
-  taskName: string
-  lowPrice: number
-  highPrice: number
-  priceCurrency?: string
-  serviceName: string
-  url: string
-}) {
-  const priceValidUntil = `${new Date().getFullYear()}-12-31`
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Offer',
-    itemOffered: {
-      '@type': 'Service',
-      name: params.taskName,
-      provider: {
-        '@type': 'Organization',
-        name: 'ServicesArtisans',
-      },
-    },
-    priceSpecification: {
-      '@type': 'PriceSpecification',
-      minPrice: params.lowPrice,
-      maxPrice: params.highPrice,
-      priceCurrency: params.priceCurrency || 'EUR',
-    },
-    url: params.url,
-    availability: 'https://schema.org/InStock',
-    priceValidUntil,
-  }
-}
-
 // Schema.org SpeakableSpecification (voice AI optimization)
 export function getSpeakableSchema(params: {
   url: string
@@ -437,46 +328,3 @@ export function getSpeakableSchema(params: {
   }
 }
 
-// Schema.org QAPage (single question with accepted answer — distinct from FAQPage)
-export function getQAPageSchema(params: {
-  question: string
-  answer: string
-  url: string
-  dateCreated?: string
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'QAPage',
-    mainEntity: {
-      '@type': 'Question',
-      name: params.question,
-      text: params.question,
-      answerCount: 1,
-      ...(params.dateCreated && { dateCreated: params.dateCreated }),
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: params.answer,
-        url: params.url,
-      },
-    },
-  }
-}
-
-// Schema.org FAQPage with SpeakableSpecification (voice AI optimization for FAQ pages)
-export function getSpeakableFAQSchema(params: {
-  url: string
-  title: string
-  description: string
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    name: params.title,
-    url: params.url,
-    description: params.description,
-    speakable: {
-      '@type': 'SpeakableSpecification',
-      cssSelector: ['h1', '.faq-question', '.faq-answer', '[data-speakable="true"]'],
-    },
-  }
-}

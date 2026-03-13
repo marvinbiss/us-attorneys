@@ -16,6 +16,7 @@ import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -84,6 +85,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
       description,
       url: `${SITE_URL}/tarifs/${service}`,
       type: 'website',
+      siteName: 'ServicesArtisans',
       images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Tarifs ${trade.name}` }],
     },
     twitter: {
@@ -333,6 +335,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="tarifs" />
 
       {/* Price range */}
       <section className="py-16 bg-white">
