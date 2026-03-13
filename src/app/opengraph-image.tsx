@@ -63,7 +63,7 @@ export default async function Image() {
                 width: 72,
                 height: 72,
                 borderRadius: 16,
-                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                background: 'linear-gradient(135deg, #E86B4B, #C24B2A)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -127,7 +127,7 @@ export default async function Image() {
               width: 120,
               height: 4,
               borderRadius: 2,
-              background: 'linear-gradient(90deg, #2563eb, #f59e0b)',
+              background: 'linear-gradient(90deg, #E86B4B, #f59e0b)',
               marginTop: 40,
               display: 'flex',
             }}

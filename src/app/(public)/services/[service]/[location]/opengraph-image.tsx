@@ -126,7 +126,7 @@ export default async function Image({
               width: 120,
               height: 4,
               borderRadius: 2,
-              background: 'linear-gradient(90deg, #2563eb, #f59e0b)',
+              background: 'linear-gradient(90deg, #E86B4B, #f59e0b)',
               marginBottom: 40,
               display: 'flex',
             }}
@@ -146,7 +146,7 @@ export default async function Image({
                 width: 44,
                 height: 44,
                 borderRadius: 10,
-                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                background: 'linear-gradient(135deg, #E86B4B, #C24B2A)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

@@ -56,8 +56,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
-    { media: '(prefers-color-scheme: dark)', color: '#1d4ed8' },
+    { media: '(prefers-color-scheme: light)', color: '#E86B4B' },
+    { media: '(prefers-color-scheme: dark)', color: '#C24B2A' },
   ],
   colorScheme: 'light',
 }
@@ -142,7 +142,7 @@ export default async function RootLayout({
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
-        <meta name="msapplication-TileColor" content="#2563eb" />
+        <meta name="msapplication-TileColor" content="#E86B4B" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}

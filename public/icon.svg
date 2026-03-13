@@ -1,6 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <rect width="512" height="512" rx="96" fill="#2563eb"/>
-  <path d="M256 120c-75.1 0-136 60.9-136 136s60.9 136 136 136 136-60.9 136-136-60.9-136-136-136zm0 240c-57.4 0-104-46.6-104-104s46.6-104 104-104 104 46.6 104 104-46.6 104-104 104z" fill="white"/>
-  <path d="M352 296l48 48-24 24-48-48c-20.5 14.5-45.5 23-72.5 23-68.5 0-124-55.5-124-124s55.5-124 124-124 124 55.5 124 124c0 27-8.5 52-23 72.5zM256 171c-45.3 0-82 36.7-82 82s36.7 82 82 82 82-36.7 82-82-36.7-82-82-82z" fill="white"/>
-  <circle cx="280" cy="232" r="24" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E86B4B" />
+      <stop offset="50%" stop-color="#D4553A" />
+      <stop offset="100%" stop-color="#C24B2A" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect x="21" y="21" width="469" height="469" rx="149" fill="url(#logoGrad)" />
+  <path d="M256 106.7L96 240h48v144h224V240h48L256 106.7Z" fill="white" fill-opacity="0.95" />
+  <path d="M229.3 261.3C229.3 240.7 246 224 266.7 224c14.7 0 27.3 8.7 33.3 21.3L336 224l10.7 10.7L310 260.3c2.9 5 4.5 10.8 4.5 16.4 0 20.6-16.7 37.3-37.3 37.3-14.7 0-27.3-8.7-33.3-21.3L208 314l-10.7-10.7L233.7 277.7c-2.9-5-4.4-10.8-4.4-16.4Z" fill="#E86B4B" />
+  <rect x="229.3" y="314.7" width="53.3" height="69.3" rx="16" fill="#E86B4B" fill-opacity="0.25" />
+  <circle cx="416" cy="96" r="53.3" fill="url(#accentGrad)" />
+  <path d="M400 96L410.7 106.7L432 85.3" stroke="white" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
