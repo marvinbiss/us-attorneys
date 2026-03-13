@@ -2,11 +2,6 @@ import { notFound } from 'next/navigation'
 import { tradeContent, getTasksForService } from '@/lib/data/trade-content'
 import { getVilleBySlug } from '@/lib/data/france'
 
-export function generateStaticParams() {
-  return []
-}
-
-export const dynamicParams = true
 export const revalidate = 86400
 
 export default async function TarifsServiceTravailVillePage({
