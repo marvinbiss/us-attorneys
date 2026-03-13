@@ -94,6 +94,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/politique-avis`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/mediation`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/garantie`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE },

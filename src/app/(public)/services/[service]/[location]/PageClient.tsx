@@ -326,7 +326,7 @@ export default function ServiceLocationPageClient({
             href={`/devis/${serviceSlug || service.slug}/${locationSlug || ''}`}
             className="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-900/20 hover:bg-blue-50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-sm sm:text-base whitespace-nowrap"
           >
-            Demander un devis
+            Recevoir mes devis gratuits
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -360,7 +360,7 @@ export default function ServiceLocationPageClient({
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-200 text-base"
                 >
                   <FileText className="w-5 h-5" />
-                  Demander un devis gratuit
+                  Recevoir mes devis gratuits
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

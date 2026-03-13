@@ -31,6 +31,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
+import SearchRecorder from '@/components/SearchRecorder'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -404,6 +405,11 @@ export default async function UrgenceServiceVillePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SearchRecorder
+        type="urgence"
+        label={`Urgence ${trade.name} à ${villeData.name}`}
+        href={`/urgence/${service}/${villeSlug}`}
+      />
       <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
@@ -471,7 +477,7 @@ export default async function UrgenceServiceVillePage({
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
-              Demander un devis à {villeData.name}
+              Intervention rapide — Devis gratuit
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -1073,7 +1079,7 @@ export default async function UrgenceServiceVillePage({
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
-              Demander un devis à {villeData.name}
+              Intervention rapide — Devis gratuit
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

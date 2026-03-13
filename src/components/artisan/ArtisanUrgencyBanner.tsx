@@ -39,15 +39,37 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
 
   if (artisan.updated_at) {
     const updatedAt = new Date(artisan.updated_at)
-    const thirtyDaysAgo = new Date()
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-    if (updatedAt >= thirtyDaysAgo) {
+    const now = new Date()
+    const diffMs = now.getTime() - updatedAt.getTime()
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffHours < 1) {
       items.push({
         icon: RefreshCw,
-        label: 'Profil mis à jour récemment',
+        label: 'Actif il y a moins d\'une heure',
+        color: 'text-green-500',
+      })
+    } else if (diffHours < 24) {
+      items.push({
+        icon: RefreshCw,
+        label: `Actif il y a ${diffHours}h`,
+        color: 'text-green-500',
+      })
+    } else if (diffDays < 7) {
+      items.push({
+        icon: RefreshCw,
+        label: `Actif il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`,
+        color: 'text-blue-500',
+      })
+    } else if (diffDays < 30) {
+      items.push({
+        icon: RefreshCw,
+        label: 'Profil mis à jour ce mois',
         color: 'text-blue-500',
       })
     }
+    // If > 30 days, don't show anything (removes vague "Profil mis à jour récemment")
   }
 
   return items

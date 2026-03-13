@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
-import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check } from 'lucide-react'
+import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check, MapPin } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 interface FormData {
@@ -148,6 +148,7 @@ export default function DevisForm({
   const [villeQuery, setVilleQuery] = useState(prefilledCity || savedState?.villeQuery || '')
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
   const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || savedState?.selectedVillePostal || '')
+  const [geoLoading, setGeoLoading] = useState(false)
 
   const updateField = useCallback(
     <K extends keyof FormData>(field: K, value: FormData[K]) => {
@@ -160,6 +161,31 @@ export default function DevisForm({
     },
     []
   )
+
+  const validateField = useCallback((field: keyof FormData) => {
+    setErrors((prev) => {
+      const next = { ...prev }
+      switch (field) {
+        case 'nom':
+          if (!formData.nom.trim()) next.nom = 'Veuillez entrer votre nom'
+          else delete next.nom
+          break
+        case 'telephone':
+          if (!formData.telephone.trim()) next.telephone = 'Veuillez entrer votre numéro de téléphone'
+          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Veuillez entrer un numéro de téléphone français valide'
+          else delete next.telephone
+          break
+        case 'email':
+          if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
+          else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide'
+          else delete next.email
+          break
+        default:
+          break
+      }
+      return next
+    })
+  }, [formData])
 
   // Persist form progress to localStorage
   useEffect(() => {
@@ -177,6 +203,35 @@ export default function DevisForm({
         )
         .slice(0, 8)
     : []
+
+  const handleGeolocation = useCallback(async () => {
+    if (!navigator.geolocation) return
+    setGeoLoading(true)
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
+      })
+      const { latitude, longitude } = position.coords
+      const res = await fetch(
+        `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
+      )
+      const data = await res.json()
+      if (data.features && data.features.length > 0) {
+        const feature = data.features[0]
+        const cityName = feature.properties.city || feature.properties.name
+        const postcode = feature.properties.postcode
+        if (cityName) {
+          updateField('ville', cityName)
+          setVilleQuery(cityName)
+          if (postcode) setSelectedVillePostal(postcode)
+        }
+      }
+    } catch {
+      // Silently fail — user can still type manually
+    } finally {
+      setGeoLoading(false)
+    }
+  }, [updateField])
 
   const validateStep1 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
@@ -442,7 +497,7 @@ export default function DevisForm({
                 <input
                   id="ville"
                   type="text"
-                  autoComplete="off"
+                  autoComplete="address-level2"
                   placeholder="Ex : Paris, Lyon, Marseille..."
                   value={villeQuery}
                   onChange={(e) => {
@@ -489,6 +544,15 @@ export default function DevisForm({
                   </ul>
                 )}
               </div>
+              <button
+                type="button"
+                onClick={handleGeolocation}
+                disabled={geoLoading}
+                className="mt-2 inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors disabled:opacity-50"
+              >
+                <MapPin className="w-4 h-4" />
+                {geoLoading ? 'Localisation en cours…' : 'Utiliser ma position'}
+              </button>
               {errors.ville && (
                 <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
               )}
@@ -667,19 +731,27 @@ export default function DevisForm({
               <label htmlFor="nom" className="block text-sm font-semibold text-slate-700 mb-2">
                 Nom complet <span className="text-red-500">*</span>
               </label>
-              <input
-                id="nom"
-                type="text"
-                autoComplete="name"
-                placeholder="Jean Dupont"
-                value={formData.nom}
-                onChange={(e) => updateField('nom', e.target.value)}
-                aria-describedby={errors.nom ? 'nom-error' : undefined}
-                aria-invalid={!!errors.nom}
-                className={`w-full rounded-xl border ${
-                  errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-              />
+              <div className="relative">
+                <input
+                  id="nom"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Jean Dupont"
+                  value={formData.nom}
+                  onChange={(e) => updateField('nom', e.target.value)}
+                  onBlur={() => validateField('nom')}
+                  aria-describedby={errors.nom ? 'nom-error' : undefined}
+                  aria-invalid={!!errors.nom}
+                  className={`w-full rounded-xl border ${
+                    errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                  } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                />
+                {formData.nom.trim() && !errors.nom && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
+                    <Check className="w-4 h-4" />
+                  </span>
+                )}
+              </div>
               {errors.nom && (
                 <p id="nom-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
               )}
@@ -690,19 +762,27 @@ export default function DevisForm({
               <label htmlFor="telephone" className="block text-sm font-semibold text-slate-700 mb-2">
                 Téléphone <span className="text-red-500">*</span>
               </label>
-              <input
-                id="telephone"
-                type="tel"
-                autoComplete="tel"
-                placeholder="06 12 34 56 78"
-                value={formData.telephone}
-                onChange={(e) => updateField('telephone', e.target.value)}
-                aria-describedby={errors.telephone ? 'telephone-error' : undefined}
-                aria-invalid={!!errors.telephone}
-                className={`w-full rounded-xl border ${
-                  errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-              />
+              <div className="relative">
+                <input
+                  id="telephone"
+                  type="tel"
+                  autoComplete="tel"
+                  placeholder="06 12 34 56 78"
+                  value={formData.telephone}
+                  onChange={(e) => updateField('telephone', e.target.value)}
+                  onBlur={() => validateField('telephone')}
+                  aria-describedby={errors.telephone ? 'telephone-error' : undefined}
+                  aria-invalid={!!errors.telephone}
+                  className={`w-full rounded-xl border ${
+                    errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                  } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                />
+                {formData.telephone.trim() && !errors.telephone && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
+                    <Check className="w-4 h-4" />
+                  </span>
+                )}
+              </div>
               {errors.telephone && (
                 <p id="telephone-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
               )}
@@ -713,19 +793,27 @@ export default function DevisForm({
               <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
                 Adresse e-mail <span className="text-red-500">*</span>
               </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                placeholder="jean.dupont@email.fr"
-                value={formData.email}
-                onChange={(e) => updateField('email', e.target.value)}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-                aria-invalid={!!errors.email}
-                className={`w-full rounded-xl border ${
-                  errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
-              />
+              <div className="relative">
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="jean.dupont@email.fr"
+                  value={formData.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  onBlur={() => validateField('email')}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                  aria-invalid={!!errors.email}
+                  className={`w-full rounded-xl border ${
+                    errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                  } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                />
+                {formData.email.trim() && !errors.email && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
+                    <Check className="w-4 h-4" />
+                  </span>
+                )}
+              </div>
               {errors.email && (
                 <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.email}</p>
               )}

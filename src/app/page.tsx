@@ -14,6 +14,7 @@ import { popularServices } from '@/lib/constants/navigation'
 import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
+const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
 
 export const revalidate = 3600 // Rafraîchit les stats toutes les heures
 
@@ -110,6 +111,13 @@ export default async function HomePage() {
         topProviders={homepageData.topProviders}
         recentReviews={homepageData.recentReviews}
       />
+
+      {/* ─── RECENT SEARCHES (personalization) ─────────────── */}
+      <section className="py-6 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <RecentSearches />
+        </div>
+      </section>
 
       {/* ─── SOCIAL PROOF ────────────────────────────────────── */}
       <section className="py-6 bg-white">

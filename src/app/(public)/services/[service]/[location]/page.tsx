@@ -30,6 +30,8 @@ import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
+import SearchRecorder from '@/components/SearchRecorder'
+import DemandIndicator from '@/components/DemandIndicator'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -487,6 +489,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
             { label: location.name },
           ]} />
         </div>
+      </div>
+
+      <SearchRecorder
+        type="service-ville"
+        label={`${service.name} à ${location.name}`}
+        href={`/services/${serviceSlug}/${locationSlug}`}
+      />
+
+      {/* Demand indicator — urgency/scarcity signal */}
+      <div className="max-w-7xl mx-auto px-4 py-3">
+        <DemandIndicator serviceSlug={serviceSlug} cityName={location.name} variant="banner" />
       </div>
 
       {/* Page Content */}

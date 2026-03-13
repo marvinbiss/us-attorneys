@@ -459,6 +459,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/garantie" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Notre garantie
+                </Link>
+              </li>
+              <li>
                 <Link href="/politique-avis" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Politique des avis
                 </Link>

@@ -20,6 +20,8 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
+import SearchRecorder from '@/components/SearchRecorder'
+import DemandIndicator from '@/components/DemandIndicator'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -320,6 +322,11 @@ export default async function TarifsServiceVillePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SearchRecorder
+        type="tarifs"
+        label={`Tarifs ${trade.name} à ${villeData.name}`}
+        href={`/tarifs/${service}/${villeSlug}`}
+      />
       <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingSchema, pricingItemListSchema, speakableSchema]} />
 
       {/* Hero */}
@@ -414,6 +421,10 @@ export default async function TarifsServiceVillePage({
                   : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
+          </div>
+
+          <div className="mb-8">
+            <DemandIndicator serviceSlug={service} cityName={villeData.name} />
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -617,7 +628,7 @@ export default async function TarifsServiceVillePage({
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
             >
-              Demander un devis gratuit
+              Obtenir mon prix exact
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

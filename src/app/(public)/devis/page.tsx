@@ -10,9 +10,11 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
+import TrustGuarantee from '@/components/TrustGuarantee'
 import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
+const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit — Comparez les Offres',
@@ -212,6 +214,11 @@ export default async function DevisPage() {
         <SocialProofBanner variant="card" />
       </div>
 
+      {/* ─── RECENT SEARCHES (personalization) ─────────────── */}
+      <div className="relative z-10 -mt-8 mb-4 max-w-3xl mx-auto px-4">
+        <RecentSearches />
+      </div>
+
       {/* ─── FORM ─────────────────────────────────────────────── */}
       <section id="formulaire" className="relative -mt-16 z-10 px-4 pb-20">
         <DevisForm />
@@ -320,6 +327,13 @@ export default async function DevisPage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── TRUST GUARANTEE ────────────────────────────────────── */}
+      <section className="py-8 bg-white">
+        <div className="max-w-3xl mx-auto px-4">
+          <TrustGuarantee variant="compact" />
         </div>
       </section>
 

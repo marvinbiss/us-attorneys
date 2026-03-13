@@ -24,6 +24,8 @@ import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
+import DemandIndicator from '@/components/DemandIndicator'
+import TrustGuarantee from '@/components/TrustGuarantee'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -384,7 +386,7 @@ export default async function ServicePage({ params }: PageProps) {
               href={`/devis/${serviceSlug}`}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
-              Demander un devis gratuit
+              Comparer les artisans près de chez moi
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -402,9 +404,19 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       )}
 
+      {/* Trust Guarantee */}
+      <section className="my-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TrustGuarantee variant="banner" />
+        </div>
+      </section>
+
       {/* CTA Principal + Social Proof */}
       <section className="my-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-4">
+            <DemandIndicator serviceSlug={serviceSlug} />
+          </div>
           <SocialProofBanner metier={service.name} variant="card" />
 
           <div className="mt-6 bg-gradient-to-r from-clay-500 to-clay-600 rounded-2xl p-8 text-center">
@@ -419,7 +431,7 @@ export default async function ServicePage({ params }: PageProps) {
               className="inline-flex items-center gap-2 bg-white text-clay-600 hover:bg-clay-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-lg"
             >
               <FileText className="w-5 h-5" />
-              Demander un devis gratuit
+              Comparer les artisans près de chez moi
             </Link>
           </div>
         </div>
