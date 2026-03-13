@@ -99,17 +99,23 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Redirect /tarifs-artisans → /tarifs (301 permanent)
+  // Redirect /tarifs-artisans → /tarifs (301 permanent, cached at CDN edge)
   if (pathname.startsWith('/tarifs-artisans')) {
     const newPath = pathname.replace('/tarifs-artisans', '/tarifs')
     const host = request.headers.get('host') || 'servicesartisans.fr'
-    return NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
+    const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
+    redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    redirectResponse.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    return redirectResponse
   }
 
-  // Redirect legacy/mistyped URLs → correct paths (301 permanent)
+  // Redirect legacy/mistyped URLs → correct paths (301 permanent, cached at CDN edge)
   if (LEGACY_REDIRECTS[pathname]) {
     const host = request.headers.get('host') || 'servicesartisans.fr'
-    return NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
+    const legacyRedirect = NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
+    legacyRedirect.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    legacyRedirect.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    return legacyRedirect
   }
 
   // URL canonicalization
@@ -225,18 +231,74 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
   }
 
-  // CDN cache headers for programmatic public pages.
+  // CDN cache headers for public pages.
   // Vercel CDN does NOT cache 4xx/5xx responses regardless of Cache-Control,
   // so these headers only affect successful (2xx) responses.
-  const programmaticPrefixes = ['/services/', '/devis/', '/tarifs/', '/avis/', '/villes/', '/departements/', '/regions/', '/problemes/', '/urgence/']
-  if (programmaticPrefixes.some(p => pathname.startsWith(p))) {
-    response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
-    response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
-  }
-
-  // CDN cache headers for static public pages
-  const staticPublicPages = ['/', '/blog', '/faq', '/contact', '/comment-ca-marche', '/comparaison', '/artisans', '/carte-artisans', '/a-propos', '/garantie', '/cgv', '/confidentialite', '/accessibilite', '/avant-apres', '/calendrier-travaux', '/badge-artisan', '/carrieres', '/barometre']
-  if (staticPublicPages.includes(pathname) || pathname.startsWith('/barometre/') || pathname.startsWith('/blog/') || pathname.startsWith('/comparaison/') || pathname.startsWith('/urgence/')) {
+  //
+  // Strategy: prefix-match covers all dynamic/nested routes, exact-match covers leaf pages.
+  // Any public route that starts with one of these prefixes gets CDN caching.
+  const publicCachePrefixes = [
+    '/services/',
+    '/devis/',
+    '/tarifs/',
+    '/avis/',
+    '/villes/',
+    '/departements/',
+    '/regions/',
+    '/problemes/',
+    '/urgence/',
+    '/guides/',
+    '/questions/',
+    '/blog/',
+    '/comparaison/',
+    '/barometre/',
+    '/outils/',
+  ]
+  // Exact-match pages (no sub-routes, or the index page of a prefix group)
+  const publicCacheExact = new Set([
+    '/',
+    '/blog',
+    '/faq',
+    '/contact',
+    '/comment-ca-marche',
+    '/comparaison',
+    '/artisans',
+    '/carte-artisans',
+    '/a-propos',
+    '/garantie',
+    '/cgv',
+    '/confidentialite',
+    '/accessibilite',
+    '/avant-apres',
+    '/calendrier-travaux',
+    '/badge-artisan',
+    '/carrieres',
+    '/barometre',
+    '/glossaire',
+    '/guides',
+    '/questions',
+    '/avis',
+    '/problemes',
+    '/departements',
+    '/regions',
+    '/villes',
+    '/normes',
+    '/outils',
+    '/checklist-travaux',
+    '/statistiques-artisans-france',
+    '/presse',
+    '/partenaires',
+    '/mediation',
+    '/mentions-legales',
+    '/politique-avis',
+    '/plan-du-site',
+    '/verifier-artisan',
+    '/notre-processus-de-verification',
+    '/devis',
+    '/tarifs',
+    '/recherche',
+  ])
+  if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
     response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
   }

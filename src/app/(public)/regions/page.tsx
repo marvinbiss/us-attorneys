@@ -7,6 +7,8 @@ import { regions, departements, villes, services, getVillesByDepartement } from 
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Artisans par Région — 18 Régions',
   description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',

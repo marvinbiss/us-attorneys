@@ -9,6 +9,8 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Politique de gestion des avis',
   description: 'Notre politique de gestion des avis : qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes sur ServicesArtisans.',

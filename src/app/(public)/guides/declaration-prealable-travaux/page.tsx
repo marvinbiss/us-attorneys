@@ -23,6 +23,8 @@ import { SITE_URL } from "@/lib/seo/config"
 // Metadata
 // ---------------------------------------------------------------------------
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Déclaration Préalable de Travaux : Guide 2026",
   description:

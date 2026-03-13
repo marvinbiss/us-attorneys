@@ -22,6 +22,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/aides-renovation-2026`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Aides Rénovation Énergétique 2026 — Guide Complet",
   description:

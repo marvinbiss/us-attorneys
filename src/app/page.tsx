@@ -16,7 +16,7 @@ import dynamic from 'next/dynamic'
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
 
-export const revalidate = 3600 // Rafraîchit les stats toutes les heures
+export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 24h
 
 export async function generateMetadata(): Promise<Metadata> {
   const { artisanCount: count } = await getSiteStats()

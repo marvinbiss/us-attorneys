@@ -20,6 +20,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/devis-travaux`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Devis Travaux : Guide Complet pour Bien Comparer (2026)",
   description:

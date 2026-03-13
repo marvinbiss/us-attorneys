@@ -5,6 +5,8 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import DiagnosticClient from './DiagnosticClient'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Quel artisan choisir ? Diagnostic gratuit en 30 secondes',
   description:

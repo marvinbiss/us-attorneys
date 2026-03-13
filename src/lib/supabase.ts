@@ -13,7 +13,18 @@ const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export const supabase = IS_BUILD
   ? (null as unknown as ReturnType<typeof createClient>)
-  : createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  : createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+      global: {
+        // Tell Next.js to cache Supabase responses so ISR pages don't
+        // become fully dynamic (perpetual x-vercel-cache: MISS).
+        fetch: (url, options = {}) => {
+          return fetch(url, {
+            ...options,
+            next: { revalidate: 3600 },
+          } as RequestInit)
+        },
+      },
+    })
 
 /**
  * Row shape returned by provider listing queries (PROVIDER_LIST_SELECT).

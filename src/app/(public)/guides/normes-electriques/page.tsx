@@ -24,6 +24,8 @@ import { SITE_URL } from "@/lib/seo/config"
 // Metadata
 // ---------------------------------------------------------------------------
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Norme NF C 15-100 : Guide Électricité Maison",
   description:

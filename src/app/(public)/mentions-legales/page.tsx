@@ -8,6 +8,8 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Mentions légales',
   description: 'Mentions légales du site ServicesArtisans.fr - Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',

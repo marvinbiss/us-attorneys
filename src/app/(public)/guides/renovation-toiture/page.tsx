@@ -21,6 +21,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/renovation-toiture`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Rénovation Toiture : Travaux et Prix 2026",
   description:

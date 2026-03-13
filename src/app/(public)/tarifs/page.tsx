@@ -11,6 +11,8 @@ import { services, villes } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Prix Artisans 2026 — Tarifs et Barèmes',
   description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon et tous les métiers du bâtiment. Grille tarifaire complète pour estimer votre budget.',

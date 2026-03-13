@@ -20,6 +20,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/isolation-thermique`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Isolation Thermique : Prix, Matériaux et Aides 2026",
   description:

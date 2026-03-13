@@ -7,6 +7,8 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { services } from '@/lib/data/france'
 import CalculateurClient from './CalculateurClient'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
   description:

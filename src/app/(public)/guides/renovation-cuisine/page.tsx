@@ -20,6 +20,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/renovation-cuisine`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Rénovation Cuisine : Guide Complet des Étapes et Prix 2026",
   description:

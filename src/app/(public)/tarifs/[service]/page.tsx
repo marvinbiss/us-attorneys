@@ -47,6 +47,9 @@ export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))
 }
 
+export const dynamicParams = true
+export const revalidate = 86400
+
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'

@@ -15,6 +15,8 @@ import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema, getHowToSchema } from "@/lib/seo/jsonld"
 import { SITE_URL } from "@/lib/seo/config"
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Checklist Avant Travaux 2026 : 60 Points Clés",
   description:

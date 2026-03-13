@@ -20,6 +20,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/isolation-combles`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Isolation des Combles : Guide Prix, Techniques et Aides 2026",
   description:

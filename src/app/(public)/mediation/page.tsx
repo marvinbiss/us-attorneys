@@ -9,6 +9,8 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Médiation et résolution des litiges',
   description: 'Processus de médiation de ServicesArtisans : réclamation, médiation interne et externe, délais de traitement. Résolution amiable des litiges.',

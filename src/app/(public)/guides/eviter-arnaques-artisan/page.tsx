@@ -23,6 +23,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/eviter-arnaques-artisan`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
   description:

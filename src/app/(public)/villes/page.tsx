@@ -7,6 +7,8 @@ import { villes, regions, departements, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Artisans par ville — Des milliers de professionnels',
   description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Des milliers de professionnels dans 101 départements. Devis gratuits, sans engagement.`,

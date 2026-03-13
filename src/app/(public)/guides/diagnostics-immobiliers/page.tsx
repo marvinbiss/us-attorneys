@@ -21,6 +21,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/diagnostics-immobiliers`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Diagnostics Immobiliers Obligatoires : Le Guide Complet",
   description:

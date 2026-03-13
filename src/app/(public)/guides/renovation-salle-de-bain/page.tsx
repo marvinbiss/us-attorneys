@@ -24,6 +24,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/renovation-salle-de-bain`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Rénovation Salle de Bain : Étapes, Prix et Conseils 2026",
   description:

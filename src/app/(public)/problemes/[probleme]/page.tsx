@@ -11,6 +11,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
 
+export const revalidate = 86400
 export const dynamicParams = false
 
 export function generateStaticParams() {

@@ -22,6 +22,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/budget-renovation`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?",
   description:

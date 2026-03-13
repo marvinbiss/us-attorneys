@@ -1,11 +1,21 @@
 /**
  * Fonctions serveur pour requêter barometre_stats depuis Supabase
  * Utilisées dans les pages SSR/ISR — NE PAS importer dans des composants client
+ *
+ * Toutes les fonctions exposées sont wrappées avec unstable_cache (Next.js Data Cache)
+ * pour garantir que les résultats sont mis en cache côté serveur et que les pages
+ * utilisant ces données soient éligibles au CDN caching (ISR).
+ * Sans ce wrapper, les appels Supabase JS (fetch tiers) ne passent pas par le
+ * cache Next.js, ce qui force un rendu dynamique à chaque requête.
  */
 
+import { unstable_cache } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+
+/** Durée de cache par défaut : 24h (alignée sur revalidate des pages baromètre) */
+const CACHE_TTL = 86400
 
 // ---------------------------------------------------------------------------
 // Types
@@ -43,8 +53,7 @@ export interface NationalStats {
 // ---------------------------------------------------------------------------
 
 /** Stats nationales par métier (ville=null, dept=null, region=null) */
-export async function getStatsByMetier(metierSlug: string): Promise<BarometreStatRow | null> {
-  if (IS_BUILD) return null
+async function _getStatsByMetier(metierSlug: string): Promise<BarometreStatRow | null> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -61,9 +70,16 @@ export async function getStatsByMetier(metierSlug: string): Promise<BarometreSta
   }
 }
 
-/** Stats par métier dans une ville */
-export async function getStatsByMetierVille(metierSlug: string, villeSlug: string): Promise<BarometreStatRow | null> {
+export async function getStatsByMetier(metierSlug: string): Promise<BarometreStatRow | null> {
   if (IS_BUILD) return null
+  return unstable_cache(_getStatsByMetier, ['barometre-stats-metier', metierSlug], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(metierSlug)
+}
+
+/** Stats par métier dans une ville */
+async function _getStatsByMetierVille(metierSlug: string, villeSlug: string): Promise<BarometreStatRow | null> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -78,9 +94,16 @@ export async function getStatsByMetierVille(metierSlug: string, villeSlug: strin
   }
 }
 
+export async function getStatsByMetierVille(metierSlug: string, villeSlug: string): Promise<BarometreStatRow | null> {
+  if (IS_BUILD) return null
+  return unstable_cache(_getStatsByMetierVille, ['barometre-stats-metier-ville', metierSlug, villeSlug], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(metierSlug, villeSlug)
+}
+
 /** Tous les métiers dans une région */
-export async function getStatsByRegion(regionSlug: string): Promise<BarometreStatRow[]> {
-  if (IS_BUILD) return []
+async function _getStatsByRegion(regionSlug: string): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -96,9 +119,16 @@ export async function getStatsByRegion(regionSlug: string): Promise<BarometreSta
   }
 }
 
-/** Tous les métiers dans un département */
-export async function getStatsByDepartement(deptCode: string): Promise<BarometreStatRow[]> {
+export async function getStatsByRegion(regionSlug: string): Promise<BarometreStatRow[]> {
   if (IS_BUILD) return []
+  return unstable_cache(_getStatsByRegion, ['barometre-stats-region', regionSlug], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(regionSlug)
+}
+
+/** Tous les métiers dans un département */
+async function _getStatsByDepartement(deptCode: string): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -113,11 +143,16 @@ export async function getStatsByDepartement(deptCode: string): Promise<Barometre
   }
 }
 
+export async function getStatsByDepartement(deptCode: string): Promise<BarometreStatRow[]> {
+  if (IS_BUILD) return []
+  return unstable_cache(_getStatsByDepartement, ['barometre-stats-dept', deptCode], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(deptCode)
+}
+
 /** Stats globales nationales (somme de tous les métiers niveau national) */
-export async function getNationalStats(): Promise<NationalStats> {
-  if (IS_BUILD) {
-    return { totalArtisans: 940000, noteGlobale: 4.2, totalAvis: 0, tauxVerifGlobal: 0, nbMetiers: 0, nbVilles: 0 }
-  }
+async function _getNationalStats(): Promise<NationalStats> {
   try {
     const supabase = createAdminClient()
 
@@ -160,9 +195,18 @@ export async function getNationalStats(): Promise<NationalStats> {
   }
 }
 
+export async function getNationalStats(): Promise<NationalStats> {
+  if (IS_BUILD) {
+    return { totalArtisans: 940000, noteGlobale: 4.2, totalAvis: 0, tauxVerifGlobal: 0, nbMetiers: 0, nbVilles: 0 }
+  }
+  return unstable_cache(_getNationalStats, ['barometre-national-stats'], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })()
+}
+
 /** Top N métiers par nb_artisans (niveau national) */
-export async function getTopMetiers(limit = 10): Promise<BarometreStatRow[]> {
-  if (IS_BUILD) return []
+async function _getTopMetiers(limit: number): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -179,9 +223,16 @@ export async function getTopMetiers(limit = 10): Promise<BarometreStatRow[]> {
   }
 }
 
-/** Top N villes par nb_artisans (toutes spécialités confondues) */
-export async function getTopVilles(limit = 10): Promise<{ ville: string; ville_slug: string; total: number }[]> {
+export async function getTopMetiers(limit = 10): Promise<BarometreStatRow[]> {
   if (IS_BUILD) return []
+  return unstable_cache(_getTopMetiers, ['barometre-top-metiers', String(limit)], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(limit)
+}
+
+/** Top N villes par nb_artisans (toutes spécialités confondues) */
+async function _getTopVilles(limit: number): Promise<{ ville: string; ville_slug: string; total: number }[]> {
   try {
     const supabase = createAdminClient()
     // On récupère les villes et on agrège côté client
@@ -218,12 +269,19 @@ export async function getTopVilles(limit = 10): Promise<{ ville: string; ville_s
   }
 }
 
+export async function getTopVilles(limit = 10): Promise<{ ville: string; ville_slug: string; total: number }[]> {
+  if (IS_BUILD) return []
+  return unstable_cache(_getTopVilles, ['barometre-top-villes', String(limit)], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(limit)
+}
+
 /** Stats d'un métier dans les top 20 villes */
-export async function getMetierTopVilles(
+async function _getMetierTopVilles(
   metierSlug: string,
   villeNames: string[],
 ): Promise<BarometreStatRow[]> {
-  if (IS_BUILD) return []
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -236,4 +294,15 @@ export async function getMetierTopVilles(
   } catch {
     return []
   }
+}
+
+export async function getMetierTopVilles(
+  metierSlug: string,
+  villeNames: string[],
+): Promise<BarometreStatRow[]> {
+  if (IS_BUILD) return []
+  return unstable_cache(_getMetierTopVilles, ['barometre-metier-top-villes', metierSlug], {
+    revalidate: CACHE_TTL,
+    tags: ['barometre'],
+  })(metierSlug, villeNames)
 }

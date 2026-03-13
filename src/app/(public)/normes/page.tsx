@@ -18,6 +18,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/normes`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Normes du Bâtiment : DTU, NF et Réglementations Essentielles",
   description:

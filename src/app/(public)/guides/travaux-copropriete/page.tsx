@@ -20,6 +20,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/travaux-copropriete`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Travaux en Copropriété : Règles et Démarches 2026",
   description:

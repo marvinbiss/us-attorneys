@@ -21,6 +21,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/renovation-fenetres`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Changer ses Fenêtres : Matériaux, Prix et Aides 2026",
   description:

@@ -23,6 +23,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/renovation-energetique-complete`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Rénovation Énergétique : Guide Complet pour Votre Maison",
   description:

@@ -23,6 +23,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/pompe-a-chaleur`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Pompe à Chaleur : Prix, Aides et Installation 2026",
   description:

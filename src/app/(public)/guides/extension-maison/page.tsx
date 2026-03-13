@@ -18,6 +18,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/extension-maison`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Extension de Maison : Démarches, Prix et Conseils 2026",
   description:

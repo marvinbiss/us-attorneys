@@ -19,6 +19,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/garantie-decennale`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Garantie Décennale : Tout Comprendre en 2026",
   description:

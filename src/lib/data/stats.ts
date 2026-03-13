@@ -1,14 +1,19 @@
 /**
  * Fonctions serveur pour récupérer les vraies statistiques depuis Supabase
  * Utilisées dans les pages SSR/ISR — NE PAS importer dans des composants client
+ *
+ * Les fonctions sont wrappées avec unstable_cache pour garantir le CDN caching.
+ * Sans ce wrapper, les appels Supabase (fetch tiers) contournent le cache Next.js
+ * et forcent un rendu dynamique sur chaque requête.
  */
 
+import { unstable_cache } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 /** Nombre total d'artisans actifs dans la base */
-export async function getProviderCount(): Promise<number> {
+async function _getProviderCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
     const { count } = await supabase
@@ -20,6 +25,11 @@ export async function getProviderCount(): Promise<number> {
     return 0
   }
 }
+
+export const getProviderCount = unstable_cache(_getProviderCount, ['provider-count'], {
+  revalidate: 3600, // 1h — aligné sur le revalidate du root layout
+  tags: ['providers'],
+})
 
 /** Nombre d'artisans actifs dans une région (par nom de région) */
 export async function getProviderCountByRegion(regionName: string): Promise<number> {

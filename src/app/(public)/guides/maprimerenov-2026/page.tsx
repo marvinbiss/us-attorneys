@@ -39,6 +39,8 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 // Metadata
 // ---------------------------------------------------------------------------
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "MaPrimeRénov 2026 : Montants, Conditions et Guide",
   description:

@@ -5,6 +5,8 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import Breadcrumb from "@/components/Breadcrumb"
 import VerifierClient from "./VerifierClient"
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Vérifier un Artisan — SIRET, RGE et Fiabilité",
   description:

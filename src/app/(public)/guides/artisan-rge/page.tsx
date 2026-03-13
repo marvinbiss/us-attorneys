@@ -21,6 +21,8 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/artisan-rge`
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Artisan RGE : Trouver un Pro Certifié (2026)",
   description:

@@ -17,6 +17,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = false
+export const revalidate = 86400
 
 // ---------------------------------------------------------------------------
 // Metadata
