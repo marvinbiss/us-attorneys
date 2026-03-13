@@ -18,6 +18,7 @@ import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import { getDefaultAuthor } from '@/lib/data/team'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -214,6 +215,11 @@ export default async function TarifsServiceVillePage({
     }))
   )
 
+  const author = getDefaultAuthor()
+
+  const dateModified = new Date().toISOString().split('T')[0]
+  const priceValidUntil = `${new Date().getFullYear()}-12-31`
+
   const offerCount = commune?.nb_entreprises_artisanales
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -221,6 +227,7 @@ export default async function TarifsServiceVillePage({
     name: `${trade.name} à ${villeData.name}`,
     description: `Service de ${tradeLower} à ${villeData.name} (${villeData.departement}). Tarifs 2026 : ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
+    dateModified,
     provider: {
       '@type': 'LocalBusiness',
       name: SITE_NAME,
@@ -240,6 +247,12 @@ export default async function TarifsServiceVillePage({
       lowPrice: minPrice,
       highPrice: maxPrice,
       ...(offerCount ? { offerCount } : {}),
+      priceValidUntil,
+    },
+    author: {
+      '@type': 'Person',
+      name: author.name,
+      url: `${SITE_URL}/a-propos`,
     },
   }
 
@@ -281,6 +294,7 @@ export default async function TarifsServiceVillePage({
           } : {}),
           description: task,
           availability: 'https://schema.org/InStock',
+          priceValidUntil,
         }
       }
     })
@@ -343,6 +357,13 @@ export default async function TarifsServiceVillePage({
               Tarifs adapt{'é'}s au march{'é'} local.
             </p>
             <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-slate-500 mb-4" />
+            <p className="text-sm text-slate-500">
+              Tarifs vérifiés par{' '}
+              <Link href="/a-propos" className="underline hover:text-white transition-colors">
+                {author.name}
+              </Link>
+              , {author.role.toLowerCase()}
+            </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />

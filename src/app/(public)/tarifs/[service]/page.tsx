@@ -4,12 +4,13 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
+import { getDefaultAuthor } from '@/lib/data/team'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -135,11 +136,17 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     trade.faq.map((f) => ({ question: f.q, answer: f.a }))
   )
 
+  const author = getDefaultAuthor()
+
+  const dateModified = new Date().toISOString().split('T')[0]
+  const priceValidUntil = `${new Date().getFullYear()}-12-31`
+
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${trade.name} en France`,
     description: `Guide des tarifs ${trade.name.toLowerCase()} 2026. Prix horaire, tarifs par prestation et variations régionales.`,
+    dateModified,
     provider: {
       '@type': 'Organization',
       name: 'ServicesArtisans',
@@ -155,6 +162,12 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
       offerCount: trade.commonTasks.length,
+      priceValidUntil,
+    },
+    author: {
+      '@type': 'Person',
+      name: author.name,
+      url: `${SITE_URL}/a-propos`,
     },
   }
 
@@ -184,6 +197,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           } : {}),
           description: task,
           availability: 'https://schema.org/InStock',
+          priceValidUntil,
         }
       }
     })
@@ -223,11 +237,37 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     title: `Tarifs ${trade.name.toLowerCase()} en France`,
   })
 
+  const tradeLowerHowTo = trade.name.toLowerCase()
+  const howToSchema = getHowToSchema(
+    [
+      {
+        name: 'Comparer les tarifs moyens',
+        text: `Consultez notre grille tarifaire pour connaître les prix moyens d'un ${tradeLowerHowTo} en France : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+      },
+      {
+        name: 'Vérifier les qualifications',
+        text: `Assurez-vous que le ${tradeLowerHowTo} possède un numéro SIRET valide et les certifications requises${trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''}.`,
+      },
+      {
+        name: 'Demander plusieurs devis',
+        text: `Comparez au moins 3 devis détaillés de ${tradeLowerHowTo}s différents. Vérifiez que chaque devis inclut le détail des fournitures, la main-d'œuvre et les éventuels frais de déplacement.`,
+      },
+      {
+        name: 'Choisir le meilleur rapport qualité-prix',
+        text: `Ne choisissez pas uniquement le moins cher. Privilégiez un ${tradeLowerHowTo} avec de bons avis clients, une assurance décennale à jour et un devis clair et détaillé.`,
+      },
+    ],
+    {
+      name: `Comment trouver un ${tradeLowerHowTo} au meilleur prix`,
+      description: `Guide étape par étape pour comparer les tarifs et choisir un ${tradeLowerHowTo} qualifié au meilleur rapport qualité-prix en France.`,
+    }
+  )
+
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingSchema, pricingItemListSchema, collectionPageSchema, speakableSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingSchema, pricingItemListSchema, collectionPageSchema, speakableSchema, howToSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -269,6 +309,13 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               Tarif horaire : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
             </p>
             <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-slate-500 mb-4" />
+            <p className="text-sm text-slate-500">
+              Tarifs vérifiés par{' '}
+              <Link href="/a-propos" className="underline hover:text-white transition-colors">
+                {author.name}
+              </Link>
+              , {author.role.toLowerCase()}
+            </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />

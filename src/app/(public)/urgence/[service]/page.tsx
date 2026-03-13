@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { Phone, Clock, Shield, CheckCircle, ArrowRight, AlertTriangle, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode } from '@/lib/seo/location-content'
@@ -12,6 +12,7 @@ import { villes, services } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 export const revalidate = 86400 // ISR 24h
 
@@ -226,6 +227,36 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
 
   const faqSchema = getFAQSchema(allFaqItems)
 
+  const tradeLowerHowTo = trade.name.toLowerCase()
+  const howToSchema = getHowToSchema(
+    [
+      {
+        name: 'Sécuriser la zone',
+        text: `En cas d'urgence ${tradeLowerHowTo}, commencez par sécuriser la zone : coupez l'arrivée d'eau, le disjoncteur ou le gaz selon la situation. Éloignez les personnes et les objets de valeur.`,
+      },
+      {
+        name: 'Évaluer la gravité',
+        text: `Déterminez s'il s'agit d'une urgence vitale (fuite de gaz, risque d'électrocution) nécessitant les pompiers (18 ou 112), ou d'une urgence technique nécessitant un ${tradeLowerHowTo}.`,
+      },
+      {
+        name: `Contacter un ${tradeLowerHowTo} d'urgence`,
+        text: `Recherchez un ${tradeLowerHowTo} d'urgence disponible dans votre secteur. Privilégiez les artisans référencés avec un SIRET vérifié. Décrivez précisément le problème pour obtenir un diagnostic rapide.`,
+      },
+      {
+        name: 'Demander un devis avant intervention',
+        text: `Même en urgence, exigez un devis écrit ou une estimation tarifaire avant le début des travaux. Vérifiez les majorations éventuelles (nuit, week-end, jours fériés).`,
+      },
+      {
+        name: 'Conserver les justificatifs',
+        text: `Gardez la facture détaillée et les photos des dégâts pour votre assurance. En cas de dégât des eaux ou de sinistre, déclarez à votre assureur dans les 5 jours ouvrés.`,
+      },
+    ],
+    {
+      name: `Comment gérer une urgence ${tradeLowerHowTo}`,
+      description: `Les étapes essentielles pour réagir efficacement face à une urgence ${tradeLowerHowTo} : sécurisation, contact professionnel et démarches.`,
+    }
+  )
+
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -248,7 +279,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, collectionPageSchema, {
+      <JsonLd data={[breadcrumbSchema, faqSchema, howToSchema, collectionPageSchema, {
         '@context': 'https://schema.org',
         '@type': 'Service',
         name: `${trade.name} urgence soir & week-end`,
@@ -582,6 +613,13 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </nav>
         </div>
       </section>
+
+      {/* Cross-intent links */}
+      <CrossIntentLinks
+        service={service}
+        serviceName={trade.name}
+        currentIntent="urgence"
+      />
 
       {/* Final CTA */}
       <section className={`bg-gradient-to-br ${meta.gradient} text-white py-16 overflow-hidden`}>

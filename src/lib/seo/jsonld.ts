@@ -342,6 +342,10 @@ export function getServicePricingSchema(params: {
   location?: string
   url: string
 }) {
+  const now = new Date()
+  const dateModified = now.toISOString().split('T')[0]
+  const priceValidUntil = `${now.getFullYear()}-12-31`
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -350,6 +354,7 @@ export function getServicePricingSchema(params: {
       : `${params.serviceName} — Tarifs France`,
     description: params.description,
     url: params.url,
+    dateModified,
     brand: {
       '@type': 'Organization',
       name: 'ServicesArtisans',
@@ -362,6 +367,7 @@ export function getServicePricingSchema(params: {
       ...(params.priceUnit && { unitText: params.priceUnit }),
       ...(params.offerCount && { offerCount: params.offerCount }),
       availability: 'https://schema.org/InStock',
+      priceValidUntil,
     },
     ...(params.ratingValue && params.reviewCount && {
       aggregateRating: {
@@ -384,6 +390,8 @@ export function getTaskOfferSchema(params: {
   serviceName: string
   url: string
 }) {
+  const priceValidUntil = `${new Date().getFullYear()}-12-31`
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Offer',
@@ -403,6 +411,7 @@ export function getTaskOfferSchema(params: {
     },
     url: params.url,
     availability: 'https://schema.org/InStock',
+    priceValidUntil,
   }
 }
 

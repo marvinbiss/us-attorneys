@@ -11,6 +11,7 @@ import { getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import { getDefaultAuthor } from '@/lib/data/team'
 import { getServiceImage } from '@/lib/data/images'
 
 // ---------------------------------------------------------------------------
@@ -150,6 +151,8 @@ export default async function TarifsServiceTravailVillePage({
   const adjustedPriceText = applyMultiplier(currentTask.priceText, multiplier)
   const tradeLower = trade.name.toLowerCase()
 
+  const author = getDefaultAuthor()
+
   // JSON-LD schemas
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -192,11 +195,23 @@ export default async function TarifsServiceTravailVillePage({
     title: `Prix ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name}`,
   })
 
+  const webPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `Prix ${currentTask.name.toLowerCase()} \u00E0 ${villeData.name}`,
+    url: `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`,
+    author: {
+      '@type': 'Person',
+      name: author.name,
+      url: `${SITE_URL}/a-propos`,
+    },
+  }
+
   const relatedCities = getNearbyCities(villeSlug, 6)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, pricingSchema, speakableSchema].filter(Boolean)} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, pricingSchema, speakableSchema, webPageSchema].filter(Boolean)} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -230,6 +245,13 @@ export default async function TarifsServiceTravailVillePage({
               </p>
             )}
             <LastUpdated label="Tarifs v\u00E9rifi\u00E9s et mis \u00E0 jour le" className="justify-center text-slate-500 mb-4" />
+            <p className="text-sm text-slate-500">
+              Tarifs v{'\u00E9'}rifi{'\u00E9'}s par{' '}
+              <Link href="/a-propos" className="underline hover:text-white transition-colors">
+                {author.name}
+              </Link>
+              , {author.role.toLowerCase()}
+            </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               {priceRange && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
