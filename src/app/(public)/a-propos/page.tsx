@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Shield, Search, Lock, Eye, ArrowRight, Database } from 'lucide-react'
+import { Shield, Search, Lock, Eye, ArrowRight, Database, Users } from 'lucide-react'
 import { pageImages, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -10,6 +10,7 @@ import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
+import { teamMembers, getAllAuthors } from '@/lib/data/team'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
@@ -167,6 +168,38 @@ export default async function AProposPage() {
             <div className="bg-white rounded-xl shadow-sm p-8">
               <CmsContent html={cmsPage.content_html} />
             </div>
+          </div>
+        </section>
+        {/* Notre équipe — E-E-A-T (also in CMS branch) */}
+        <section className="py-16 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">
+              Notre équipe
+            </h2>
+            {(() => {
+              const editorial = teamMembers[0]
+              return (
+                <div className="bg-gray-50 rounded-xl shadow-sm p-8 border border-gray-100">
+                  <div className="flex items-start gap-6">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Users className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">{editorial.name}</h3>
+                      <p className="text-sm text-blue-600 mb-2">{editorial.role}</p>
+                      <p className="text-gray-700 leading-relaxed">{editorial.bio}</p>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {editorial.expertise.map(e => (
+                          <span key={e} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">
+                            {e}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })()}
           </div>
         </section>
       </div>
@@ -487,6 +520,82 @@ export default async function AProposPage() {
                 </p>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Notre équipe — E-E-A-T */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Notre équipe
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Les experts derrière nos contenus et notre plateforme.
+            </p>
+          </div>
+
+          {/* Équipe éditoriale collective */}
+          {(() => {
+            const editorial = teamMembers[0]
+            return (
+              <div className="bg-gray-50 rounded-xl shadow-sm p-8 mb-10 max-w-4xl mx-auto border border-gray-100">
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Users className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">{editorial.name}</h3>
+                    <p className="text-sm text-blue-600 mb-2">{editorial.role}</p>
+                    <p className="text-gray-700 leading-relaxed">{editorial.bio}</p>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {editorial.expertise.map(e => (
+                        <span key={e} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">
+                          {e}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
+
+          {/* Auteurs individuels */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {getAllAuthors().map((author) => {
+              const initials = author.name.split(' ').map(n => n[0]).join('')
+              return (
+                <div key={author.slug} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                      {initials}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{author.name}</h3>
+                      <p className="text-sm text-blue-600">{author.role}</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-3">{author.bio}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-2">
+                    {author.expertise.map(exp => (
+                      <span key={exp} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                        {exp}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {author.certifications.map(cert => (
+                      <span key={cert} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
+                        {cert}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">{author.yearsExperience} ans d&apos;expérience</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

@@ -80,7 +80,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
       author: (() => {
         const authorName = allArticles[a.slug]?.author || 'ServicesArtisans'
         return authorName === 'ServicesArtisans'
-          ? { '@type': 'Organization', name: authorName, '@id': `${SITE_URL}#organization` }
+          ? { '@type': 'Organization', name: 'Équipe éditoriale ServicesArtisans', url: `${SITE_URL}/a-propos`, '@id': `${SITE_URL}#organization` }
           : { '@type': 'Person', name: authorName }
       })(),
     })),

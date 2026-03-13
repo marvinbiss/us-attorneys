@@ -15,10 +15,8 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const revalidate = 86400 // ISR 24h
 
-// Only services that have emergency info
-const emergencySlugs = Object.keys(tradeContent).filter(
-  (slug) => tradeContent[slug].emergencyInfo
-)
+// All services are available for emergency pages
+const emergencySlugs = Object.keys(tradeContent)
 
 // Emergency-specific display data
 const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightText: string; problems: string[] }> = {

@@ -395,7 +395,9 @@ export default async function TarifsServiceVillePage({
           <PriceTableHTML
             tasks={trade.commonTasks}
             serviceName={trade.name}
+            serviceSlug={service}
             location={villeData.name}
+            locationSlug={villeSlug}
             multiplier={multiplier}
             unit={trade.priceRange.unit}
           />
@@ -494,8 +496,40 @@ export default async function TarifsServiceVillePage({
         />
       </div>
 
-      {/* Conseils */}
+      {/* Questions fréquentes — PAA optimisé */}
       <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <h2 className="text-xl font-heading font-semibold text-gray-900">
+            Combien co{'û'}te un {tradeLower} {'à'} {villeData.name} ?
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            Le tarif horaire d&apos;un {tradeLower} {'à'} {villeData.name} se situe entre {minPrice} et {maxPrice} {trade.priceRange.unit}.
+            Ce prix varie selon la complexit{'é'} de l&apos;intervention, l&apos;accessibilit{'é'} du chantier et les mat{'é'}riaux n{'é'}cessaires.
+            {multiplier >= 1.2 ? ` Les tarifs en ${villeData.region} sont généralement 20 à 25 % supérieurs à la moyenne nationale.` : ''}
+          </p>
+
+          <h2 className="text-xl font-heading font-semibold text-gray-900">
+            Comment trouver un bon {tradeLower} {'à'} {villeData.name} ?
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            Pour trouver un {tradeLower} fiable {'à'} {villeData.name}, v{'é'}rifiez son num{'é'}ro SIRET,
+            demandez une copie de son assurance d{'é'}cennale et comparez au moins 3 devis.
+            Consultez les avis clients et privil{'é'}giez les artisans certifi{'é'}s{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''}.
+          </p>
+
+          <h2 className="text-xl font-heading font-semibold text-gray-900">
+            Quel est le d{'é'}lai d&apos;intervention d&apos;un {tradeLower} {'à'} {villeData.name} ?
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            En moyenne, un {tradeLower} {'à'} {villeData.name} peut intervenir sous {trade.averageResponseTime.split(',')[0].toLowerCase()}.
+            En cas d&apos;urgence, certains professionnels proposent des interventions sous 1 {'à'} 2 heures,
+            avec une majoration tarifaire de 50 {'à'} 100 %.
+          </p>
+        </div>
+      </section>
+
+      {/* Conseils */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Conseils pour choisir un {tradeLower} {'à'} {villeData.name}
@@ -514,7 +548,7 @@ export default async function TarifsServiceVillePage({
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Questions fr{'é'}quentes {'—'} {trade.name} {'à'} {villeData.name}

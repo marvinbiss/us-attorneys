@@ -96,7 +96,8 @@ export function getBlogArticleSchema(article: {
       if (article.author === 'ServicesArtisans') {
         return {
           '@type': 'Organization' as const,
-          name: 'ServicesArtisans',
+          name: 'Équipe éditoriale ServicesArtisans',
+          url: `${SITE_URL}/a-propos`,
           '@id': `${SITE_URL}#organization`,
         }
       }

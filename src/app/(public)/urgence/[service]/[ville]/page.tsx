@@ -147,9 +147,8 @@ function getDefaultProblems(trade: (typeof tradeContent)[string]): string[] {
 // Static params: top 8 emergency services x top 30 cities = 240 pages
 // ---------------------------------------------------------------------------
 
-const emergencySlugs = Object.keys(tradeContent).filter(
-  (slug) => tradeContent[slug].emergencyInfo
-)
+// All services are available for emergency pages
+const emergencySlugs = Object.keys(tradeContent)
 
 function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
@@ -269,7 +268,7 @@ export default async function UrgenceServiceVillePage({
 
   const trade = tradeContent[service]
   const villeData = getVilleBySlug(villeSlug)
-  if (!trade || !villeData || !trade.emergencyInfo) notFound()
+  if (!trade || !villeData) notFound()
 
   const commune = await getCommuneBySlug(villeSlug)
 

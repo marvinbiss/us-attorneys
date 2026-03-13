@@ -319,6 +319,38 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
+      {/* Questions fréquentes — PAA optimisé */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <h2 className="text-xl font-heading font-semibold text-gray-900">
+            Combien co{'\u00fb'}te un {trade.name.toLowerCase()} en France ?
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            Le tarif horaire moyen d&apos;un {trade.name.toLowerCase()} en France se situe entre {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}.
+            Ce prix varie selon la r{'\u00e9'}gion, la complexit{'\u00e9'} de l&apos;intervention et les mat{'\u00e9'}riaux n{'\u00e9'}cessaires.
+            En {'\u00ce'}le-de-France, comptez une majoration de 20 {'\u00e0'} 25 % par rapport {'\u00e0'} la moyenne nationale.
+          </p>
+
+          <h2 className="text-xl font-heading font-semibold text-gray-900">
+            Comment choisir son {trade.name.toLowerCase()} ?
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            Pour bien choisir votre {trade.name.toLowerCase()}, v{'\u00e9'}rifiez son num{'\u00e9'}ro SIRET sur le site de l&apos;INSEE,
+            demandez une copie de son assurance d{'\u00e9'}cennale et comparez au moins 3 devis d{'\u00e9'}taill{'\u00e9'}s.
+            Privil{'\u00e9'}giez les artisans certifi{'\u00e9'}s{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez les avis clients en ligne.
+          </p>
+
+          <h2 className="text-xl font-heading font-semibold text-gray-900">
+            Quels sont les tarifs moyens d&apos;un {trade.name.toLowerCase()} ?
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            Les tarifs d&apos;un {trade.name.toLowerCase()} d{'\u00e9'}pendent du type de prestation.
+            Pour les interventions courantes : {trade.commonTasks.slice(0, 2).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
+            Le tarif horaire de base est de {trade.priceRange.min} {'\u00e0'} {trade.priceRange.max} {trade.priceRange.unit}, hors fournitures et d{'\u00e9'}placement.
+          </p>
+        </div>
+      </section>
+
       {/* Liens vers les pages par travail et ville */}
       <section className="py-16 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

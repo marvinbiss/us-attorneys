@@ -36,7 +36,7 @@ export async function generateSitemaps() {
   // Quartier-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
   const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
-  const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
+  const emergencySlugs = Object.keys(tradeContent)
   const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
@@ -179,7 +179,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    const emergencySlugs = Object.keys(tradeContent).filter((s) => tradeContent[s].emergencyInfo)
+    const emergencySlugs = Object.keys(tradeContent)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
       lastModified: BUILD_DATE,
@@ -325,7 +325,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
+    const emergencySlugs = Object.keys(tradeContent)
     const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0

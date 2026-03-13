@@ -633,6 +633,33 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
+      {/* Questions fréquentes — PAA optimisé */}
+      {trade && (
+        <section className="py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <h2 className="text-xl font-heading font-semibold text-gray-900">
+              Pourquoi faire appel {'\u00e0'} un {service.name.toLowerCase()} professionnel ?
+            </h2>
+            <p className="text-gray-700 leading-relaxed">
+              Faire appel {'\u00e0'} un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
+              et couvert par une assurance d{'\u00e9'}cennale. Un artisan qualifi{'\u00e9'} dispose de l&apos;exp{'\u00e9'}rience,
+              de l&apos;outillage adapt{'\u00e9'} et des certifications n{'\u00e9'}cessaires pour r{'\u00e9'}aliser vos travaux en toute s{'\u00e9'}curit{'\u00e9'}.
+              De plus, recourir {'\u00e0'} un professionnel r{'\u00e9'}f{'\u00e9'}renc{'\u00e9'} vous prot{'\u00e8'}ge en cas de malfaçon.
+            </p>
+
+            <h2 className="text-xl font-heading font-semibold text-gray-900">
+              Quelles certifications doit avoir un {service.name.toLowerCase()} ?
+            </h2>
+            <p className="text-gray-700 leading-relaxed">
+              {trade.certifications.length > 0
+                ? `Un ${service.name.toLowerCase()} qualifié doit idéalement posséder les certifications suivantes : ${trade.certifications.slice(0, 3).join(', ')}. Ces labels garantissent un niveau de compétence reconnu et vous permettent, dans certains cas, de bénéficier d'aides financières de l'État.`
+                : `Un ${service.name.toLowerCase()} doit au minimum disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Vérifiez également son inscription au registre des métiers et son numéro SIRET.`
+              }
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* FAQ — rich content for SEO */}
       {trade && trade.faq.length > 0 && (
         <section className="py-12">

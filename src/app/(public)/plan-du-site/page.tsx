@@ -188,7 +188,7 @@ export default async function PlanDuSitePage() {
             Urgences par service
           </h2>
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {Object.keys(tradeContent).filter(slug => tradeContent[slug].emergencyInfo).map(slug => (
+            {Object.keys(tradeContent).map(slug => (
               <Link
                 key={slug}
                 href={`/urgence/${slug}`}

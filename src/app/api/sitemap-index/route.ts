@@ -23,7 +23,7 @@ const MAX_PROVIDER_SITEMAPS = 20
  * Quartier-level sitemaps are removed entirely.
  */
 export async function GET() {
-  const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
+  const emergencySlugs = Object.keys(tradeContent)
   const tradeSlugs = getTradesSlugs()
   const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()

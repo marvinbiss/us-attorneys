@@ -2442,6 +2442,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: "Oui, c'est l'une des spécialités de l'ébénisterie. Un ébéniste peut reproduire fidèlement un meuble Louis XV, Art Déco ou contemporain à partir de photos, de plans ou d'un modèle existant. Le coût dépend de la complexité : comptez 1 500 à 3 000 € pour une commode de style simple et 5 000 à 15 000 € pour une pièce complexe avec marqueterie.",
       },
     ],
+    emergencyInfo:
+      "Pas de service d'urgence pour l'ébénisterie. La fabrication et la restauration de meubles sont des projets planifiés nécessitant un travail en atelier. Prenez rendez-vous pour un devis gratuit sous 1 semaine.",
     certifications: [
       "CAP Ébéniste ou BMA Ébéniste (formation initiale obligatoire)",
       "Brevet des Métiers d'Art (BMA) Ébénisterie",
