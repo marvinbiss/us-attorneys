@@ -207,7 +207,7 @@ export function generateDataDrivenContent(
   // 2. SOCIO-ECONOMIC CONTEXT
   // =========================================================================
   let socioEconomic: string | null = null
-  if (commune.revenu_median || commune.nb_logements || commune.part_maisons_pct !== null) {
+  if (commune.revenu_median || commune.nb_logements || commune.part_maisons_pct != null) {
     const parts: string[] = []
 
     if (commune.revenu_median) {
@@ -229,7 +229,7 @@ export function generateDataDrivenContent(
       parts.push(logTemplates[(seed + 1) % logTemplates.length])
     }
 
-    if (commune.part_maisons_pct !== null && commune.part_maisons_pct !== undefined) {
+    if (commune.part_maisons_pct != null && commune.part_maisons_pct !== undefined) {
       const pct = commune.part_maisons_pct
       parts.push(
         `Le parc immobilier est ${housingType(pct)} (${pct}% de maisons individuelles).`
@@ -384,7 +384,7 @@ export function generateDataDrivenContent(
   // 5. ENERGY PERFORMANCE (DPE + MaPrimeRénov)
   // =========================================================================
   let energetique: string | null = null
-  if (commune.pct_passoires_dpe !== null && commune.pct_passoires_dpe !== undefined) {
+  if (commune.pct_passoires_dpe != null && commune.pct_passoires_dpe !== undefined) {
     const parts: string[] = []
     const pct = commune.pct_passoires_dpe
 
@@ -455,8 +455,8 @@ export function generateDataDrivenContent(
   // 6. CLIMATE-DRIVEN ADVICE WITH REAL DATA
   // =========================================================================
   let climatData: string | null = null
-  if (commune.jours_gel_annuels !== null || commune.precipitation_annuelle !== null ||
-      commune.temperature_moyenne_hiver !== null || commune.climat_zone) {
+  if (commune.jours_gel_annuels != null || commune.precipitation_annuelle != null ||
+      commune.temperature_moyenne_hiver != null || commune.climat_zone) {
     const parts: string[] = []
 
     if (commune.climat_zone) {
@@ -468,7 +468,7 @@ export function generateDataDrivenContent(
       parts.push(climTemplates[seed % climTemplates.length])
     }
 
-    if (commune.temperature_moyenne_hiver !== null && commune.temperature_moyenne_ete !== null) {
+    if (commune.temperature_moyenne_hiver != null && commune.temperature_moyenne_ete != null) {
       const tempTemplates = [
         `Les températures moyennes varient de ${commune.temperature_moyenne_hiver.toFixed(1)} °C en hiver à ${commune.temperature_moyenne_ete.toFixed(1)} °C en été.`,
         `En moyenne, le thermomètre affiche ${commune.temperature_moyenne_hiver.toFixed(1)} °C l'hiver et ${commune.temperature_moyenne_ete.toFixed(1)} °C l'été.`,
@@ -477,7 +477,7 @@ export function generateDataDrivenContent(
       parts.push(tempTemplates[(seed + 1) % tempTemplates.length])
     }
 
-    if (commune.jours_gel_annuels !== null) {
+    if (commune.jours_gel_annuels != null) {
       const gelTemplates = [
         `Avec ${commune.jours_gel_annuels} jours de gel par an en moyenne, l'hiver à ${commune.name} est ${gelSeverity(commune.jours_gel_annuels)}.`,
         `On enregistre en moyenne ${commune.jours_gel_annuels} jours de gel par an à ${commune.name}, un régime hivernal ${gelSeverity(commune.jours_gel_annuels)}.`,
@@ -494,7 +494,7 @@ export function generateDataDrivenContent(
       }
     }
 
-    if (commune.precipitation_annuelle !== null) {
+    if (commune.precipitation_annuelle != null) {
       const precipTemplates = [
         `Avec ${formatNumber(commune.precipitation_annuelle)} mm de précipitations annuelles, la commune est ${precipLabel(commune.precipitation_annuelle)}.`,
         `La pluviométrie à ${commune.name} atteint ${formatNumber(commune.precipitation_annuelle)} mm/an, un régime ${precipLabel(commune.precipitation_annuelle)}.`,
@@ -759,7 +759,7 @@ export function generateDataDrivenContent(
   }
 
   // Q3: Energy renovation
-  if (commune.pct_passoires_dpe !== null && commune.pct_passoires_dpe !== undefined) {
+  if (commune.pct_passoires_dpe != null && commune.pct_passoires_dpe !== undefined) {
     let answer = `À ${commune.name}, ${commune.pct_passoires_dpe}% des logements sont classés F ou G au DPE.`
     if (commune.nb_artisans_rge) {
       answer += ` Pour bénéficier de MaPrimeRénov', choisissez l'un des ${commune.nb_artisans_rge} artisans certifiés RGE de la commune.`
@@ -774,12 +774,12 @@ export function generateDataDrivenContent(
   }
 
   // Q4: Climate impact
-  if (commune.jours_gel_annuels !== null || commune.climat_zone) {
+  if (commune.jours_gel_annuels != null || commune.climat_zone) {
     let answer = ''
     if (commune.climat_zone) {
       answer += `${commune.name} bénéficie d'un climat ${commune.climat_zone}.`
     }
-    if (commune.jours_gel_annuels !== null) {
+    if (commune.jours_gel_annuels != null) {
       answer += ` Avec ${commune.jours_gel_annuels} jours de gel par an, `
       answer += commune.jours_gel_annuels >= 40
         ? `les ${svc}s doivent utiliser des matériaux résistants au gel et planifier les travaux extérieurs hors période hivernale.`
@@ -795,7 +795,7 @@ export function generateDataDrivenContent(
   }
 
   // Q5: Real estate context
-  if (commune.prix_m2_moyen && commune.part_maisons_pct !== null) {
+  if (commune.prix_m2_moyen && commune.part_maisons_pct != null) {
     const answer = `Le marché immobilier de ${commune.name} affiche un prix moyen de ${formatEuro(commune.prix_m2_moyen)}/m² avec ${commune.part_maisons_pct}% de maisons individuelles. ${commune.part_maisons_pct >= 50 ? 'Les maisons nécessitent régulièrement des travaux d\'entretien et de rénovation.' : 'Les copropriétés représentent une part importante du parc, avec des besoins spécifiques en parties communes.'} ${commune.nb_transactions_annuelles ? `${formatNumber(commune.nb_transactions_annuelles)} transactions par an témoignent du dynamisme du marché local.` : ''}`
     faqItems.push({
       question: `Quel est le contexte immobilier à ${commune.name} pour des travaux ${de} ?`,

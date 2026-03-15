@@ -184,11 +184,11 @@ export function hasDemographicData(commune: LocationData): boolean {
 // ---------------------------------------------------------------------------
 
 export function formatNumber(n: number): string {
-  return n.toLocaleString('fr-FR')
+  return (n ?? 0).toLocaleString('fr-FR')
 }
 
 export function formatEuro(n: number): string {
-  return n.toLocaleString('fr-FR') + ' €'
+  return (n ?? 0).toLocaleString('fr-FR') + ' €'
 }
 
 const MONTH_NAMES = [

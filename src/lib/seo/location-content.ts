@@ -16,6 +16,31 @@ import { getDeptArtisanCounts } from '@/lib/data/dept-attorney-counts'
 import { getQuartierData, type QuartierProfile as QuartierDataProfile } from '@/lib/data/quartier-data'
 
 // ---------------------------------------------------------------------------
+// Compat: normalize City from usa.ts (neighborhoods) or france.ts (quartiers)
+// ---------------------------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normalizeCity(v: any): City {
+  if (v && !v.quartiers && v.neighborhoods) {
+    return { ...v, quartiers: v.neighborhoods, departementCode: v.stateCode ?? '', departement: v.stateName ?? '', codePostal: v.zipCode ?? '', region: '' }
+  }
+  return v
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normalizeState(s: any): import('@/lib/data/france').State {
+  if (s && !s.chefLieu && s.capital) {
+    return { ...s, chefLieu: s.capital, numero: s.code ?? '' }
+  }
+  return s
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normalizeRegion(r: any): import('@/lib/data/france').Region {
+  if (r && !r.departments && r.states) {
+    return { ...r, departments: r.states }
+  }
+  return r
+}
+
+// ---------------------------------------------------------------------------
 // Regional pricing multipliers
 // ---------------------------------------------------------------------------
 
@@ -1371,10 +1396,11 @@ function generateServiceClimateTip(svc: string, cityName: string, climate: Clima
 export function generateLocationContent(
   specialtySlug: string,
   specialtyName: string,
-  ville: City,
+  villeRaw: City,
   attorneyCount: number = 0,
   locationData?: import('@/lib/data/commune-data').LocationData | null | undefined,
 ): LocationContent {
+  const ville = normalizeCity(villeRaw)
   const svcLower = specialtyName.toLowerCase()
   const regionClimate = REGION_CLIMATE[ville.region] || 'semi-oceanique'
   const climate = CLIMATES.find(c => c.key === regionClimate) || CLIMATES[4]
@@ -2159,7 +2185,8 @@ function generateQuartierDataDrivenContent(
   }
 }
 
-export function generateQuartierContent(ville: City, quartierName: string, specialtySlug?: string): QuartierContent {
+export function generateQuartierContent(villeRaw: City, quartierName: string, specialtySlug?: string): QuartierContent {
+  const ville = normalizeCity(villeRaw)
   const seedSuffix = specialtySlug ? `-${specialtySlug}` : ''
   const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}${seedSuffix}`))
   const profile = getQuartierProfile(ville, quartierName)
@@ -2645,7 +2672,8 @@ function getDepartementProfile(dept: import('@/lib/data/france').State): Departe
   }
 }
 
-export function generateDepartementContent(dept: import('@/lib/data/france').State): DepartementContent {
+export function generateDepartementContent(deptRaw: import('@/lib/data/france').State): DepartementContent {
+  const dept = normalizeState(deptRaw)
   const seed = Math.abs(hashCode(`dept-${dept.slug}`))
   const profile = getDepartementProfile(dept)
 
@@ -2935,7 +2963,8 @@ function getRegionProfile(region: import('@/lib/data/france').Region): RegionPro
   }
 }
 
-export function generateRegionContent(region: import('@/lib/data/france').Region, cityCountOverride?: number): RegionContent {
+export function generateRegionContent(regionRaw: import('@/lib/data/france').Region, cityCountOverride?: number): RegionContent {
+  const region = normalizeRegion(regionRaw)
   const seed = Math.abs(hashCode(`region-${region.slug}`))
   const profile = getRegionProfile(region)
   const deptCount = region.departments.length
@@ -3243,7 +3272,8 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   },
 ]
 
-export function generateVilleContent(ville: import('@/lib/data/france').City): VilleContent {
+export function generateVilleContent(villeRaw: import('@/lib/data/france').City): VilleContent {
+  const ville = normalizeCity(villeRaw)
   const seed = Math.abs(hashCode(`ville-${ville.slug}`))
   const profile = getVilleProfile(ville)
   const quartierCount = ville.quartiers?.length || 0
