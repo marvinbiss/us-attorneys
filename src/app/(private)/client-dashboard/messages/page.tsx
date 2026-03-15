@@ -120,7 +120,7 @@ export default function MessagesClientPage() {
   }
 
   const getDisplayName = (partner: Partner) => {
-    return partner.full_name || 'Artisan'
+    return partner.full_name || 'Attorney'
   }
 
   const formatTime = (dateStr: string) => {
@@ -130,13 +130,13 @@ export default function MessagesClientPage() {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
     if (days === 0) {
-      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
     } else if (days === 1) {
-      return 'Hier'
+      return 'Yesterday'
     } else if (days < 7) {
-      return date.toLocaleDateString('fr-FR', { weekday: 'short' })
+      return date.toLocaleDateString('en-US', { weekday: 'short' })
     }
-    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })
+    return date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit' })
   }
 
   return (
@@ -146,7 +146,7 @@ export default function MessagesClientPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
-              { label: 'Espace Client', href: '/client-dashboard' },
+              { label: 'Client Dashboard', href: '/client-dashboard' },
               { label: 'Messages' }
             ]}
             className="mb-4"
@@ -158,7 +158,7 @@ export default function MessagesClientPage() {
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
-                <p className="text-gray-600">Vos conversations avec les artisans</p>
+                <p className="text-gray-600">Your conversations with attorneys</p>
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function MessagesClientPage() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
-                Mes demandes
+                My Cases
               </Link>
               <Link
                 href="/client-dashboard/messages"
@@ -194,14 +194,14 @@ export default function MessagesClientPage() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Star className="w-5 h-5" />
-                Avis donnés
+                My Reviews
               </Link>
               <Link
                 href="/client-dashboard/parametres"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Settings className="w-5 h-5" />
-                Paramètres
+                Settings
               </Link>
               <LogoutButton />
             </nav>
@@ -214,20 +214,20 @@ export default function MessagesClientPage() {
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
                 <div>
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                  <p className="text-gray-600">Chargement des messages...</p>
+                  <p className="text-gray-600">Loading messages...</p>
                 </div>
               </div>
             ) : conversations.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
                 <div>
                   <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-medium text-gray-900 mb-2">Aucune conversation</h3>
-                  <p className="text-gray-500 mb-4">Vos conversations avec les artisans apparaîtront ici.</p>
+                  <h3 className="font-medium text-gray-900 mb-2">No conversations</h3>
+                  <p className="text-gray-500 mb-4">Your conversations with attorneys will appear here.</p>
                   <Link
                     href="/search"
                     className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                   >
-                    Trouver un artisan
+                    Find an Attorney
                   </Link>
                 </div>
               </div>
@@ -240,7 +240,7 @@ export default function MessagesClientPage() {
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
-                        placeholder="Rechercher..."
+                        placeholder="Search..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
@@ -333,7 +333,7 @@ export default function MessagesClientPage() {
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Écrivez votre message..."
+                            placeholder="Type your message..."
                             className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
                             disabled={sendingMessage}
                           />
@@ -353,7 +353,7 @@ export default function MessagesClientPage() {
                     </>
                   ) : (
                     <div className="flex-1 flex items-center justify-center text-gray-500">
-                      Sélectionnez une conversation
+                      Select a conversation
                     </div>
                   )}
                 </div>

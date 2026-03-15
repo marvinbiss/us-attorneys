@@ -59,9 +59,9 @@ function formatName(raw: string): string {
 }
 
 const FALLBACK_REVIEWS = [
-  { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80' },
-  { client_name: 'Thomas Bernard', rating: 4, comment: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.", created_at: '', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80' },
-  { client_name: 'Amélie Leclerc', rating: 5, comment: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.", created_at: '', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80' },
+  { client_name: 'Sarah Johnson', rating: 5, comment: "Found an amazing attorney for my personal injury case through US Attorneys. Quick response, professional service, and a great outcome. Literally saved me.", created_at: '', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80' },
+  { client_name: 'Michael Chen', rating: 4, comment: "Needed a family law attorney for a complex custody case. The attorney I found here was thorough, on time, and within budget. Highly recommend.", created_at: '', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80' },
+  { client_name: 'Emily Rodriguez', rating: 5, comment: "Finally a serious platform! Attorneys are truly verified, not fake profiles. Found my real estate attorney in 5 minutes, consultation done 3 days later.", created_at: '', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80' },
 ]
 
 // Images de fond uniques par position (jamais 2 identiques côte à côte)
@@ -90,7 +90,7 @@ function renderStars(rating: number) {
 }
 
 // ── FAQ Section ──────────────────────────────────────────────────
-const FAQ_CATEGORIES = ['Général', 'Demande de devis']
+const FAQ_CATEGORIES = ['General', 'Consultation Request']
 
 function ClayFAQSection() {
   const faqs = faqCategories
@@ -101,11 +101,11 @@ function ClayFAQSection() {
     <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
       <div className="text-center mb-1">
         <div className="inline-block text-xs font-bold text-clay-400 tracking-[.12em] uppercase">
-          Questions fréquentes
+          Frequently Asked Questions
         </div>
       </div>
       <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900 text-center mb-12" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-        Tout ce que vous devez savoir.
+        Everything you need to know.
       </h2>
       <div className="max-w-3xl mx-auto space-y-3">
         {faqs.map((faq) => (
@@ -131,7 +131,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
   const { attorneyCount, reviewCount, avgRating, deptCount } = stats
   const countStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)}+` : '—'
   const reviewStr = reviewCount > 0 ? `${formatAttorneyCount(reviewCount)}` : '—'
-  const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '—'
+  const ratingStr = avgRating > 0 ? avgRating.toFixed(1) : '—'
 
   // Use real top providers from DB when available, fall back to curated list
   const artisans = topProviders.length >= 3
@@ -157,7 +157,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&h=900&fit=crop&q=80"
-            alt="Artisan au travail"
+            alt="Attorney at work"
             fill
             priority
             placeholder="blur"
@@ -177,18 +177,18 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
             style={{ background: 'rgba(232,107,75,.15)', border: '1px solid rgba(232,107,75,.35)', color: '#FFB49A' }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-clay-400 animate-pulse hidden sm:inline-block" />
-            {countStr} artisans référencés · SIREN officiel
+            {countStr} verified attorneys · Official Bar Records
           </div>
 
           <h1
             className="font-black tracking-[-0.05em] leading-[1.05] sm:leading-[.92] text-white mb-2 md:mb-6"
             style={{ fontSize: 'clamp(2.2rem,5vw,4.5rem)' }}
           >
-            Trouvez <em className="not-italic text-clay-400">l&apos;artisan</em> parfait.
+            Find the <em className="not-italic text-clay-400">perfect attorney.</em>
           </h1>
 
           <p className="text-sm md:text-base text-white/75 leading-[1.5] md:leading-[1.75] max-w-xl mx-auto mb-3 md:mb-10">
-            Des professionnels vérifiés, assurés, recommandés. Des devis gratuits en 24h partout en France.
+            Verified, insured, and recommended professionals. Free consultations within 24h nationwide.
           </p>
 
           <div className="max-w-2xl mx-auto mb-3 md:mb-6">
@@ -201,7 +201,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
               <Link
                 key={slug}
                 href={`/practice-areas/${slug}`}
-                aria-label={`Rechercher des artisans en ${name}`}
+                aria-label={`Search attorneys for ${name}`}
                 className="inline-flex items-center gap-1 md:gap-1.5 text-[11px] md:text-xs font-semibold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full transition-all duration-200 text-white/75 hover:text-white"
                 style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)' }}
               >
@@ -214,9 +214,9 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
           {/* Trust pills — compact on mobile, full on desktop */}
           <div className="flex justify-center gap-1.5 md:gap-2.5 flex-wrap">
             {[
-              { Icon: ShieldCheck, text: 'SIREN vérifié' },
-              { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} avis` },
-              { Icon: Zap,         text: 'Devis en 24h' },
+              { Icon: ShieldCheck, text: 'Bar verified' },
+              { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} reviews` },
+              { Icon: Zap,         text: 'Consultation in 24h' },
             ].map(({ Icon: PillIcon, text }) => (
               <div
                 key={text}
@@ -239,7 +239,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                 <Image
                   key={i}
                   src={src}
-                  alt="Photo d'un client satisfait"
+                  alt="Photo of a satisfied client"
                   width={56}
                   height={56}
                   sizes="56px"
@@ -250,7 +250,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
               ))}
             </div>
             <p className="text-base font-medium text-white/70">
-              <strong className="text-white/85">Des centaines de clients</strong> trouvent leur artisan chaque semaine
+              <strong className="text-white/85">Hundreds of clients</strong> find their attorney every week
             </p>
           </div>
         </div>
@@ -263,19 +263,19 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-emerald-200 shadow-sm">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-sm font-medium text-gray-700">
-                <strong className="text-emerald-700">{countStr}</strong> artisans vérifiés
+                <strong className="text-emerald-700">{countStr}</strong> verified attorneys
               </span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-blue-200 shadow-sm">
               <MapPin className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-medium text-gray-700">
-                <strong className="text-blue-700">{deptCount}</strong> départements couverts
+                <strong className="text-blue-700">{deptCount}</strong> states covered
               </span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-amber-200 shadow-sm">
               <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
               <span className="text-sm font-medium text-gray-700">
-                <strong className="text-amber-600">100%</strong> gratuit et sans engagement
+                <strong className="text-amber-600">100%</strong> free, no obligation
               </span>
             </div>
           </div>
@@ -287,11 +287,11 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
         <div className="bg-white" style={{ borderBottom: '1px solid rgba(0,0,0,.06)' }}>
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-16 flex flex-wrap justify-around items-center gap-6">
             {[
-              { Icon: ShieldCheck, label: 'SIREN vérifié',              sub: 'Chaque artisan contrôlé' },
-              { Icon: Star,        label: `${ratingStr}/5 moyenne`,     sub: `+${reviewStr} avis vérifiés` },
-              { Icon: Zap,         label: 'Devis en 24h',               sub: 'Gratuit et sans engagement' },
-              { Icon: Shield,      label: 'Données officielles',        sub: 'Registres de l\'État' },
-              { Icon: MapPin,      label: `${deptCount} départements`,  sub: 'Toute la France couverte' },
+              { Icon: ShieldCheck, label: 'Bar verified',                sub: 'Every attorney vetted' },
+              { Icon: Star,        label: `${ratingStr}/5 average`,     sub: `${reviewStr}+ verified reviews` },
+              { Icon: Zap,         label: 'Consultation in 24h',        sub: 'Free, no obligation' },
+              { Icon: Shield,      label: 'Official data',              sub: 'State bar records' },
+              { Icon: MapPin,      label: `${deptCount} states`,        sub: 'Nationwide coverage' },
             ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (
               <div key={label} className="flex items-center gap-3">
                 <div
@@ -317,14 +317,14 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
       <ScrollReveal as="section">
         <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
           <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">
-            Ce que nous proposons
+            What we offer
           </div>
           <div className="flex justify-between items-end mb-9">
             <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-              Tous les corps de métier
+              All practice areas
             </h2>
             <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
-              Voir tout →
+              View all →
             </Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -338,7 +338,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                   <SvcIcon className="w-8 h-8 text-clay-400 mx-auto mb-3" />
                   <div className="text-sm font-extrabold text-stone-900 mb-1">{name}</div>
                   <div className="text-xs text-stone-400">
-                    {specialtyCounts[slug] > 0 ? `${formatAttorneyCount(specialtyCounts[slug])} artisans` : 'Artisans disponibles'}
+                    {specialtyCounts[slug] > 0 ? `${formatAttorneyCount(specialtyCounts[slug])} attorneys` : 'Attorneys available'}
                   </div>
                 </Link>
               </ScrollReveal>
@@ -353,19 +353,19 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
             <div className="flex justify-between items-end mb-10">
               <div>
-                <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">Près de vous</div>
+                <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">Near you</div>
                 <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-                  Les artisans les mieux notés.
+                  Top-rated attorneys.
                 </h2>
               </div>
               <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
-                Voir tous →
+                View all →
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {artisans.map((a, i) => {
                 const rating = a.rating_average ?? 0
-                const ratingDisplay = rating.toFixed(1).replace('.', ',')
+                const ratingDisplay = rating.toFixed(1)
                 const profileHref = a.stable_id ? `/practice-areas/${a.slug}/${a.profileCity}/${a.stable_id}` : `/practice-areas/${a.slug}`
                 const bgImage = CARD_BG_IMAGES[i % CARD_BG_IMAGES.length]
 
@@ -388,7 +388,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                         />
                         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))' }} />
                         <div className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full text-green-700 bg-white/90" style={{ backdropFilter: 'blur(8px)' }}>
-                          {a.is_verified ? '✓ Vérifié SIREN' : '✓ Artisan référencé'}
+                          {a.is_verified ? '✓ Bar Verified' : '✓ Listed Attorney'}
                         </div>
                       </div>
                       <div className="px-5 pb-5 pt-4">
@@ -399,14 +399,14 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                         <div className="flex items-center gap-1.5 mb-3">
                           <span className="text-sm">{renderStars(rating)}</span>
                           <span className="text-sm font-bold text-stone-900">{ratingDisplay}</span>
-                          <span className="text-xs text-stone-400">({a.review_count ?? 0} avis)</span>
+                          <span className="text-xs text-stone-400">({a.review_count ?? 0} reviews)</span>
                         </div>
                         <div className="flex justify-end items-center">
                           <Link
                             href={profileHref}
                             className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors bg-stone-900 hover:bg-clay-400"
                           >
-                            Voir le profil
+                            View profile
                           </Link>
                         </div>
                       </div>
@@ -425,11 +425,11 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
             <div className="text-center mb-1">
               <div className="inline-block text-xs font-bold text-clay-400 tracking-[.12em] uppercase">
-                Comment ça marche
+                How it works
               </div>
             </div>
             <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900 text-center mb-12" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-              Simple, rapide, fiable.
+              Simple, fast, reliable.
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
               <div
@@ -440,10 +440,10 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                 }}
               />
               {[
-                { n: '1', title: 'Décrivez vos travaux', desc: "Type, localisation, urgence — 2 minutes suffisent pour décrire votre besoin." },
-                { n: '2', title: 'Recevez des devis', desc: "Jusqu'à 3 artisans vérifiés vous contactent sous 24h. Gratuit et sans engagement." },
-                { n: '3', title: 'Choisissez librement', desc: "Comparez les profils, avis et tarifs. Choisissez l'artisan qui vous convient." },
-                { n: '4', title: 'Profitez des résultats', desc: "Travaux réalisés par des professionnels référencés. Données SIREN vérifiées." },
+                { n: '1', title: 'Describe your case', desc: "Type, location, urgency — 2 minutes to describe your legal needs." },
+                { n: '2', title: 'Get free consultations', desc: "Up to 3 verified attorneys contact you within 24h. Free, no obligation." },
+                { n: '3', title: 'Choose freely', desc: "Compare profiles, reviews, and fees. Pick the attorney that fits your needs." },
+                { n: '4', title: 'Get results', desc: "Work with bar-verified professionals. Official state bar records checked." },
               ].map((step, i) => (
                 <ScrollReveal key={step.n} delay={i * 0.1}>
                   <div className="text-center relative z-10">
@@ -475,11 +475,11 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
         <div className="py-24" style={{ background: '#1C1917' }}>
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
             <h2 className="font-black tracking-[-0.04em] leading-tight text-white" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-              Ils nous font <span className="text-clay-400">confiance.</span>
+              They <span className="text-clay-400">trust us.</span>
             </h2>
             <div className="text-right">
               <div className="text-[2.4rem] font-black text-clay-400">★★★★★</div>
-              <div className="text-sm" style={{ color: 'rgba(255,255,255,.60)' }}>{ratingStr}/5 · {reviewStr} avis vérifiés</div>
+              <div className="text-sm" style={{ color: 'rgba(255,255,255,.60)' }}>{ratingStr}/5 · {reviewStr} verified reviews</div>
             </div>
           </div>
 
@@ -499,7 +499,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                     <div className="flex items-center gap-2.5">
                       <Image
                         src={avatar}
-                        alt={rv.client_name || 'Client vérifié'}
+                        alt={rv.client_name || 'Verified client'}
                         width={40}
                         height={40}
                         sizes="40px"
@@ -509,8 +509,8 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                         style={{ border: '2px solid rgba(255,255,255,.1)' }}
                       />
                       <div>
-                        <div className="text-sm font-bold text-white">{rv.client_name || 'Client vérifié'}</div>
-                        <div className="text-xs" style={{ color: 'rgba(255,255,255,.60)' }}>Client vérifié</div>
+                        <div className="text-sm font-bold text-white">{rv.client_name || 'Verified client'}</div>
+                        <div className="text-xs" style={{ color: 'rgba(255,255,255,.60)' }}>Verified client</div>
                       </div>
                       <div className="ml-auto text-xs">
                         {renderStars(rv.rating)}
@@ -550,24 +550,24 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
 
           <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-10 py-24 text-center w-full">
             <h2 className="font-black tracking-[-0.05em] text-white leading-[.95] mb-4" style={{ fontSize: 'clamp(2rem,4vw,3rem)' }}>
-              Votre projet mérite le meilleur.
+              Your case deserves the best.
             </h2>
             <p className="text-base leading-[1.7] mb-8 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,.80)' }}>
-              Des milliers de propriétaires font confiance à ServicesArtisans pour leurs travaux — et ne l&apos;ont jamais regretté.
+              Thousands of clients trust US Attorneys to find legal representation — and never look back.
             </p>
             <div className="flex gap-3 flex-wrap justify-center">
               <Link
                 href="/services"
                 className="text-clay-600 text-sm font-extrabold px-8 py-3.5 rounded-full transition-all duration-200 bg-white hover:-translate-y-0.5"
               >
-                Trouver un artisan
+                Find an attorney
               </Link>
               <Link
                 href="/attorney-dashboard"
                 className="text-white text-sm font-bold px-7 py-3.5 rounded-full transition-all duration-200 hover:bg-white/10"
                 style={{ border: '1.5px solid rgba(255,255,255,.4)' }}
               >
-                Je suis artisan →
+                I am an attorney →
               </Link>
             </div>
           </div>

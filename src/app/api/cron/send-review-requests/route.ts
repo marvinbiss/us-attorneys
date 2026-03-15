@@ -1,5 +1,5 @@
 /**
- * Review Request Cron Job - ServicesArtisans
+ * Review Request Cron Job - US Attorneys
  * Sends review request emails 2 hours after completed appointments
  * Best practice: Timing is crucial - 2h after is optimal for service businesses
  */
@@ -20,7 +20,7 @@ function getReviewEmailTemplate(data: {
   reviewUrl: string
 }) {
   return {
-    subject: `Comment s'est passé votre RDV avec ${data.attorneyName}?`,
+    subject: `How was your appointment with ${data.attorneyName}?`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -38,10 +38,10 @@ function getReviewEmailTemplate(data: {
                 Bonjour <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Comment s'est passé votre rendez-vous avec <strong>${data.attorneyName}</strong> pour <strong>${data.specialtyName}</strong> ?
+                How was your appointment with <strong>${data.attorneyName}</strong> for <strong>${data.specialtyName}</strong>?
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Votre avis aide d'autres personnes à trouver les meilleurs artisans et permet à ${data.attorneyName} de s'améliorer.
+                Your review helps others find the best attorneys and helps ${data.attorneyName} improve.
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
@@ -57,7 +57,7 @@ function getReviewEmailTemplate(data: {
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
               <p style="color: #999; font-size: 12px; text-align: center;">
-                ServicesArtisans - Trouvez des artisans qualifiés près de chez vous
+                US Attorneys - Find qualified attorneys near you
               </p>
             </div>
           </div>
@@ -67,15 +67,15 @@ function getReviewEmailTemplate(data: {
     text: `
 Bonjour ${data.clientName},
 
-Comment s'est passé votre rendez-vous avec ${data.attorneyName} pour ${data.specialtyName} ?
+How was your appointment with ${data.attorneyName} for ${data.specialtyName}?
 
-Votre avis aide d'autres personnes à trouver les meilleurs artisans.
+Your review helps others find the best attorneys.
 
 Laisser un avis: ${data.reviewUrl}
 
 Cela ne prend que 30 secondes.
 
-ServicesArtisans
+US Attorneys
     `,
   }
 }
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Review Cron] Unauthorized access attempt')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     // Calculate time window: appointments that started 2-3 hours ago (availability_slots has no FK on bookings)
@@ -155,14 +155,14 @@ export async function GET(request: Request) {
 
     logger.info(`[Review Cron] ${bookingsToRequest.length} need review requests`)
 
-    // Fetch artisan details
+    // Fetch attorney details
     const attorneyIds = Array.from(new Set(bookingsToRequest.map((b) => b.attorney_id).filter(Boolean)))
-    const { data: artisans } = await supabase
+    const { data: attorneys } = await supabase
       .from('profiles')
       .select('id, full_name')
       .in('id', attorneyIds)
 
-    const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
+    const attorneyMap = new Map(attorneys?.map((a) => [a.id, a]) || [])
 
     let sentCount = 0
     let failedCount = 0
@@ -182,9 +182,9 @@ export async function GET(request: Request) {
 
       const results = await Promise.allSettled(
         batch.map(async (booking) => {
-          const artisan = artisanMap.get(booking.attorney_id || '')
+          const attorney = attorneyMap.get(booking.attorney_id || '')
           const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
-          const attorneyName = artisan?.full_name || 'Artisan'
+          const attorneyName = attorney?.full_name || 'Attorney'
           const reviewUrl = `${SITE_URL}/leave-review/${booking.id.slice(0, 8)}`
 
           const emailTemplate = getReviewEmailTemplate({
@@ -269,7 +269,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Review Cron] Error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de l\'envoi des demandes d\'avis' } },
+      { success: false, error: { message: 'Error sending review requests' } },
       { status: 500 }
     )
   }

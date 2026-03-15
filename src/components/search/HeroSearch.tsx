@@ -14,16 +14,16 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 // ── Services ─────────────────────────────────────────────────────────
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600', searches: '15k/mois', urgent: true },
-  { name: 'Électricien', slug: 'electricien', icon: 'Zap', color: 'from-amber-500 to-amber-600', searches: '12k/mois', urgent: true },
-  { name: 'Serrurier', slug: 'serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700', searches: '9k/mois', urgent: true },
-  { name: 'Chauffagiste', slug: 'chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600', searches: '7k/mois', urgent: false },
-  { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600', searches: '6k/mois', urgent: false },
-  { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700', searches: '5k/mois', urgent: false },
-  { name: 'Carreleur', slug: 'carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600', searches: '4k/mois', urgent: false },
-  { name: 'Couvreur', slug: 'couvreur', icon: 'Home', color: 'from-red-500 to-red-600', searches: '4k/mois', urgent: false },
-  { name: 'Maçon', slug: 'macon', icon: 'Wrench', color: 'from-stone-500 to-stone-600', searches: '3k/mois', urgent: false },
-  { name: 'Jardinier', slug: 'jardinier', icon: 'TreeDeciduous', color: 'from-green-500 to-green-600', searches: '3k/mois', urgent: false },
+  { name: 'Personal Injury', slug: 'personal-injury', icon: 'Wrench', color: 'from-blue-500 to-blue-600', searches: '15k/mo', urgent: true },
+  { name: 'Criminal Defense', slug: 'criminal-defense', icon: 'Zap', color: 'from-amber-500 to-amber-600', searches: '12k/mo', urgent: true },
+  { name: 'Family Law', slug: 'family-law', icon: 'Key', color: 'from-slate-600 to-slate-700', searches: '9k/mo', urgent: true },
+  { name: 'Immigration', slug: 'immigration', icon: 'Flame', color: 'from-orange-500 to-orange-600', searches: '7k/mo', urgent: false },
+  { name: 'Real Estate', slug: 'real-estate', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600', searches: '6k/mo', urgent: false },
+  { name: 'Employment Law', slug: 'employment-law', icon: 'Hammer', color: 'from-amber-600 to-amber-700', searches: '5k/mo', urgent: false },
+  { name: 'Estate Planning', slug: 'estate-planning', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600', searches: '4k/mo', urgent: false },
+  { name: 'Bankruptcy', slug: 'bankruptcy', icon: 'Home', color: 'from-red-500 to-red-600', searches: '4k/mo', urgent: false },
+  { name: 'Business Law', slug: 'business-law', icon: 'Wrench', color: 'from-stone-500 to-stone-600', searches: '3k/mo', urgent: false },
+  { name: 'Tax Law', slug: 'tax-law', icon: 'TreeDeciduous', color: 'from-green-500 to-green-600', searches: '3k/mo', urgent: false },
 ]
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
@@ -40,9 +40,9 @@ function formatPopulation(pop: string): string {
   const cleaned = pop.replace(/\s/g, '')
   const num = parseInt(cleaned, 10)
   if (isNaN(num)) return pop
-  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace('.0', '')} M hab.`
-  if (num >= 1_000) return `${Math.round(num / 1_000).toLocaleString('fr-FR')} k hab.`
-  return `${num.toLocaleString('fr-FR')} hab.`
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace('.0', '')}M pop.`
+  if (num >= 1_000) return `${Math.round(num / 1_000).toLocaleString('en-US')}k pop.`
+  return `${num.toLocaleString('en-US')} pop.`
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
@@ -268,12 +268,12 @@ export function HeroSearch() {
               setRecentSearches(getRecentSearches())
               setActiveField(null)
             } else {
-              setLocation('Autour de moi')
+              setLocation('Near me')
               setActiveField(null)
             }
           }
         } catch {
-          setLocation('Autour de moi')
+          setLocation('Near me')
           setActiveField(null)
         } finally {
           setIsLocating(false)
@@ -432,7 +432,7 @@ export function HeroSearch() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white rounded-2xl shadow-2xl shadow-slate-900/10 overflow-visible relative"
       >
-        <form onSubmit={handleSubmit} role="search" aria-label="Rechercher un artisan">
+        <form onSubmit={handleSubmit} role="search" aria-label="Search for an attorney">
           <div className="flex flex-col md:flex-row">
             {/* ── SERVICE FIELD ──────────────────────────────────── */}
             <div className="flex-1 relative">
@@ -448,7 +448,7 @@ export function HeroSearch() {
                 }}
               >
                 <label className="block text-xs font-semibold text-slate-500 mb-1 tracking-wide uppercase">
-                  Quel service ?
+                  What service?
                 </label>
                 <div className="flex items-center gap-3">
                   <Search className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
@@ -461,8 +461,8 @@ export function HeroSearch() {
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => setActiveField('service')}
                     onKeyDown={handleServiceKeyDown}
-                    placeholder="Plombier, electricien, peintre..."
-                    aria-label="Type de service recherche"
+                    placeholder="Personal injury, family law, criminal..."
+                    aria-label="Type of service"
                     aria-expanded={activeField === 'service'}
                     aria-haspopup="listbox"
                     autoComplete="off"
@@ -477,7 +477,7 @@ export function HeroSearch() {
                         serviceInputRef.current?.focus()
                       }}
                       className="flex-shrink-0 w-7 h-7 min-h-[28px] rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
-                      aria-label="Effacer le service"
+                      aria-label="Clear service"
                     >
                       <X className="w-3.5 h-3.5 text-slate-500" />
                     </button>
@@ -496,19 +496,19 @@ export function HeroSearch() {
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[420px] overflow-y-auto"
                     role="listbox"
-                    aria-label="Services disponibles"
+                    aria-label="Available services"
                   >
                     {/* Urgence Banner */}
                     <div className="p-3 bg-gradient-to-r from-red-500 to-orange-500 text-white">
                       <div className="flex items-center gap-2">
                         <Zap className="w-4 h-4" />
-                        <span className="font-medium text-sm">Urgence 24h/24 ?</span>
+                        <span className="font-medium text-sm">24/7 Emergency?</span>
                         <button
                           type="button"
                           onClick={() => router.push('/emergency')}
                           className="ml-auto text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full transition-colors backdrop-blur-sm"
                         >
-                          Trouver maintenant
+                          Find now
                           <ChevronRight className="w-3 h-3 inline ml-0.5" />
                         </button>
                       </div>
@@ -518,11 +518,11 @@ export function HeroSearch() {
                     <div className="p-2" ref={specialtyListRef}>
                       <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
                         <TrendingUp className="w-3 h-3" />
-                        {query ? `Résultats pour « ${query} »` : 'Services populaires'}
+                        {query ? `Résults for « ${query} »` : 'Popular services'}
                       </div>
                       {filteredServices.length === 0 && (
                         <div className="px-3 py-6 text-center text-slate-400 text-sm">
-                          Aucun service trouvé. Essayez un autre terme.
+                          No service found. Try another term.
                         </div>
                       )}
                       {filteredServices.map((service, idx) => {
@@ -555,12 +555,12 @@ export function HeroSearch() {
                                 {service.name}
                               </div>
                               <div className="text-xs text-slate-500">
-                                {service.searches} recherches
+                                {service.searches} searches
                               </div>
                             </div>
                             {service.urgent && (
                               <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
-                                Urgence 24h
+                                24h Emergency
                               </span>
                             )}
                             <ChevronRight className={`w-4 h-4 transition-all duration-150 ${
@@ -574,16 +574,16 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Flèches</kbd>
-                        naviguer
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Arrows</kbd>
+                        navigate
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entrée</kbd>
-                        valider
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Enter</kbd>
+                        select
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Échap</kbd>
-                        fermer
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Esc</kbd>
+                        close
                       </span>
                     </div>
                   </motion.div>
@@ -605,7 +605,7 @@ export function HeroSearch() {
                 }}
               >
                 <label className="block text-xs font-semibold text-slate-500 mb-1 tracking-wide uppercase">
-                  Où ?
+                  Where?
                 </label>
                 <div className="flex items-center gap-3">
                   <MapPin className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
@@ -618,8 +618,8 @@ export function HeroSearch() {
                     onChange={(e) => setLocation(e.target.value)}
                     onFocus={() => setActiveField('location')}
                     onKeyDown={handleLocationKeyDown}
-                    placeholder="City, code postal..."
-                    aria-label="City ou code postal"
+                    placeholder="City, ZIP code..."
+                    aria-label="City or ZIP code"
                     aria-expanded={activeField === 'location'}
                     aria-haspopup="listbox"
                     autoComplete="off"
@@ -634,7 +634,7 @@ export function HeroSearch() {
                         locationInputRef.current?.focus()
                       }}
                       className="flex-shrink-0 w-7 h-7 min-h-[28px] rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
-                      aria-label="Effacer la ville"
+                      aria-label="Clear city"
                     >
                       <X className="w-3.5 h-3.5 text-slate-500" />
                     </button>
@@ -653,7 +653,7 @@ export function HeroSearch() {
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[460px] overflow-y-auto"
                     role="listbox"
-                    aria-label="Villes disponibles"
+                    aria-label="Available cities"
                   >
                     {/* Geolocation button */}
                     <button
@@ -673,10 +673,10 @@ export function HeroSearch() {
                       </div>
                       <div className="text-left">
                         <div className="font-medium text-slate-900">
-                          {isLocating ? 'Localisation en cours...' : 'Utiliser ma position'}
+                          {isLocating ? 'Locating...' : 'Use my location'}
                         </div>
                         <div className="text-sm text-slate-500">
-                          Artisans autour de vous
+                          Attorneys near you
                         </div>
                       </div>
                     </button>
@@ -686,7 +686,7 @@ export function HeroSearch() {
                       <div className="p-2">
                         <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
                           <Clock className="w-3 h-3" />
-                          Recherches récentes
+                          Recent searches
                         </div>
                         {recentSearches.map((cityName, idx) => {
                           const isHighlighted = idx === highlightedCityIndex
@@ -719,7 +719,7 @@ export function HeroSearch() {
                                 type="button"
                                 onClick={(e) => handleRemoveRecent(cityName, e)}
                                 className="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
-                                aria-label={`Supprimer ${cityName} des recherches récentes`}
+                                aria-label={`Remove ${cityName} from recent searches`}
                               >
                                 <X className="w-3 h-3 text-slate-400" />
                               </button>
@@ -733,7 +733,7 @@ export function HeroSearch() {
                     {filteredCities.length > 0 && (
                       <div className="p-2" ref={cityListRef}>
                         <div className="px-3 py-2 text-xs text-slate-500 font-medium">
-                          {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouvée{filteredCities.length > 1 ? 's' : ''}
+                          {filteredCities.length} {filteredCities.length > 1 ? 'cities' : 'city'} found
                         </div>
                         {filteredCities.map((city, idx) => {
                           const isHighlighted = idx === highlightedCityIndex
@@ -782,10 +782,10 @@ export function HeroSearch() {
                       <div className="p-4">
                         <div className="text-center py-3">
                           <div className="text-sm text-slate-500 mb-1">
-                            Aucune ville trouvée pour <span className="font-semibold text-slate-700">&laquo;&thinsp;{location}&thinsp;&raquo;</span>
+                            No city found for <span className="font-semibold text-slate-700">&ldquo;{location}&rdquo;</span>
                           </div>
                           <div className="text-xs text-slate-400 mb-4">
-                            Nous ne couvrons pas encore cette ville. Essayez une ville voisine.
+                            We don&apos;t cover this city yet. Try a nearby city.
                           </div>
                           <div className="flex flex-wrap items-center justify-center gap-2">
                             {fallbackCities.map((fc) => (
@@ -808,7 +808,7 @@ export function HeroSearch() {
                     {showPopularCities && (
                       <div className="p-2" ref={cityListRef}>
                         <div className="px-3 py-2 text-xs text-slate-500 font-medium">
-                          Villes populaires
+                          Popular cities
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                           {popularCities.map((city, idx) => {
@@ -845,12 +845,12 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Flèches</kbd>
-                        naviguer
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Arrows</kbd>
+                        navigate
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entrée</kbd>
-                        valider
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Enter</kbd>
+                        select
                       </span>
                     </div>
                   </motion.div>
@@ -864,11 +864,11 @@ export function HeroSearch() {
                 type="submit"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                aria-label="Rechercher"
+                aria-label="Search"
                 className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <Search className="w-5 h-5" />
-                <span className="md:hidden lg:inline">Rechercher</span>
+                <span className="md:hidden lg:inline">Search</span>
               </motion.button>
             </div>
           </div>
@@ -882,7 +882,7 @@ export function HeroSearch() {
         transition={{ delay: 0.3 }}
         className="mt-6 flex flex-wrap items-center justify-center gap-3"
       >
-        <span className="text-sm text-white/60">Populaire :</span>
+        <span className="text-sm text-white/60">Popular:</span>
         {services.slice(0, 4).map((service) => {
           const IconComponent = iconMap[service.icon] || Wrench
           return (

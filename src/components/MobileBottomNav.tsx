@@ -7,11 +7,11 @@ import { Home, Search, FileText, Wrench, AlertTriangle } from 'lucide-react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 const navItems: { href: string; icon: typeof Home; label: string; isPrimary?: boolean }[] = [
-  { href: '/', icon: Home, label: 'Accueil' },
-  { href: '/search', icon: Search, label: 'Recherche' },
-  { href: '/quotes', icon: FileText, label: 'Devis', isPrimary: true },
+  { href: '/', icon: Home, label: 'Home' },
+  { href: '/search', icon: Search, label: 'Search' },
+  { href: '/quotes', icon: FileText, label: 'Consult', isPrimary: true },
   { href: '/services', icon: Wrench, label: 'Services' },
-  { href: '/emergency', icon: AlertTriangle, label: 'Urgence' },
+  { href: '/emergency', icon: AlertTriangle, label: 'Emergency' },
 ]
 
 export default function MobileBottomNav() {
@@ -38,7 +38,7 @@ export default function MobileBottomNav() {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
-      aria-label="Navigation mobile"
+      aria-label="Mobile navigation"
     >
       <div className="flex items-center justify-around h-16 pb-safe">
         {navItems.map(({ href, icon: Icon, label, isPrimary }) => {

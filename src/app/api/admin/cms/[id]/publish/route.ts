@@ -21,7 +21,7 @@ export async function POST(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -53,18 +53,18 @@ export async function POST(
 
         if (existing?.status === 'published') {
           return NextResponse.json(
-            { success: false, error: { message: 'La page est déjà publiée' } },
+            { success: false, error: { message: 'Page is already published' } },
             { status: 409 }
           )
         }
         return NextResponse.json(
-          { success: false, error: { message: 'Page non trouvée' } },
+          { success: false, error: { message: 'Page not found' } },
           { status: 404 }
         )
       }
       logger.error('CMS page publish error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la publication de la page' } },
+        { success: false, error: { message: 'Error publishing page' } },
         { status: 500 }
       )
     }
@@ -80,7 +80,7 @@ export async function POST(
   } catch (error) {
     logger.error('CMS page publish error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -99,7 +99,7 @@ export async function DELETE(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -127,7 +127,7 @@ export async function DELETE(
     if (error || !page) {
       logger.error('CMS page unpublish error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la dépublication de la page' } },
+        { success: false, error: { message: 'Error unpublishing page' } },
         { status: error ? 500 : 404 }
       )
     }
@@ -145,7 +145,7 @@ export async function DELETE(
   } catch (error) {
     logger.error('CMS page unpublish error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

@@ -22,7 +22,7 @@ export async function POST() {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     // Get user's email and phone from profile
@@ -49,17 +49,17 @@ export async function POST() {
 
     if (updateError) {
       logger.error('Claim leads error:', updateError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
     return NextResponse.json({
       claimed: claimed?.length || 0,
       message: claimed?.length
-        ? `${claimed.length} demande(s) rattachée(s) à votre compte`
-        : 'Aucune demande à rattacher',
+        ? `${claimed.length} request(s) linked to your account`
+        : 'No requests to link',
     })
   } catch (error) {
     logger.error('Claim leads POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

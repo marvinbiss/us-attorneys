@@ -24,7 +24,7 @@ export async function POST(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     const body = await request.json()
@@ -32,7 +32,7 @@ export async function POST(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides' } },
+        { success: false, error: { message: 'Invalid data' } },
         { status: 400 }
       )
     }
@@ -47,7 +47,7 @@ export async function POST(
 
     if (!conversation) {
       return NextResponse.json(
-        { success: false, error: { message: 'Conversation non trouvée' } },
+        { success: false, error: { message: 'Conversation not found' } },
         { status: 404 }
       )
     }
@@ -73,7 +73,7 @@ export async function POST(
   } catch (error) {
     logger.error('Archive error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

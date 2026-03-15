@@ -1,5 +1,5 @@
 /**
- * Bookings API - ServicesArtisans
+ * Bookings API - US Attorneys
  * Handles booking creation and retrieval with proper validation
  */
 
@@ -14,12 +14,12 @@ import { z } from 'zod'
 
 // Schema for GET request query params
 const getQuerySchema = z.object({
-  attorneyId: z.string().uuid('ID artisan invalide'),
+  attorneyId: z.string().uuid('Invalid attorney ID'),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   month: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/).optional(),
 })
 
-// GET /api/bookings - Get artisan's bookings or available slots
+// GET /api/bookings - Get attorney's bookings or available slots
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Paramètres invalides',
+          'Invalid parameters',
           { fields: formatZodErrors(queryValidation.error) }
         ),
         { status: 400 }
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentification requise'),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentication required'),
         { status: 401 }
       )
     }
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
       if (error) {
         logger.error('Database error', error)
         return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des créneaux'),
+          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving slots'),
           { status: 500 }
         )
       }
@@ -93,7 +93,7 @@ export async function GET(request: Request) {
       return NextResponse.json(createSuccessResponse({ slots: slotsByDate }))
     }
 
-    // If fetching for a specific date (artisan view - all slots with bookings)
+    // If fetching for a specific date (attorney view - all slots with bookings)
     if (date) {
       const { data: slots, error } = await supabase
         .from('availability_slots')
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
       if (error) {
         logger.error('Database error', error)
         return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des créneaux'),
+          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving slots'),
           { status: 500 }
         )
       }
@@ -123,7 +123,7 @@ export async function GET(request: Request) {
       return NextResponse.json(createSuccessResponse({ slots }))
     }
 
-    // Default: get all bookings for the artisan
+    // Default: get all bookings for the attorney
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
@@ -138,7 +138,7 @@ export async function GET(request: Request) {
     if (error) {
       logger.error('Database error', error)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des réservations'),
+        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving bookings'),
         { status: 500 }
       )
     }
@@ -147,7 +147,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Error fetching bookings', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la récupération des réservations'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error retrieving bookings'),
       { status: 500 }
     )
   }
@@ -165,7 +165,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Données de réservation invalides',
+          'Invalid booking data',
           { fields: formatZodErrors(validation.errors) }
         ),
         { status: 400 }
@@ -202,7 +202,7 @@ export async function POST(request: Request) {
     if (rpcError) {
       logger.error('Booking RPC error', rpcError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la création de la réservation'),
+        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error creating booking'),
         { status: 500 }
       )
     }
@@ -225,7 +225,7 @@ export async function POST(request: Request) {
     const booking = { id: result.booking_id }
     const slot = result.slot
 
-    // Fetch artisan details for email notification
+    // Fetch attorney details for email notification
     // Uses admin client: RLS policy 328 restricts cross-user profile reads
     const adminSupabase = createAdminClient()
     const { data: artisan } = await adminSupabase
@@ -236,15 +236,15 @@ export async function POST(request: Request) {
 
     // Format date for email
     const bookingDate = new Date(slot.date)
-    const formattedDate = bookingDate.toLocaleDateString('fr-FR', {
+    const formattedDate = bookingDate.toLocaleDateString('en-US', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     })
 
-    // Determine artisan display name
-    const artisanDisplayName = artisan?.full_name || 'Artisan'
+    // Determine attorney display name
+    const artisanDisplayName = artisan?.full_name || 'Attorney'
 
     // Send confirmation notifications (email + SMS, non-blocking)
     const notificationPayload: NotificationPayload = {
@@ -276,14 +276,14 @@ export async function POST(request: Request) {
           endTime: slot.end_time,
           attorneyName: artisanDisplayName,
         },
-        message: 'Réservation confirmée avec succès',
+        message: 'Booking confirmed successfully',
       }),
       { status: 201 }
     )
   } catch (error) {
     logger.error('Error creating booking', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la création de la réservation'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error creating booking'),
       { status: 500 }
     )
   }

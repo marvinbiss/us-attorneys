@@ -9,23 +9,23 @@ interface TrustGuaranteeProps {
 const guarantees = [
   {
     icon: Shield,
-    title: 'Artisans vérifiés',
-    description: 'SIRET contrôlé, assurance vérifiée',
+    title: 'Verified Attorneys',
+    description: 'Bar number verified, credentials checked',
   },
   {
     icon: CheckCircle,
-    title: 'Devis 100% gratuits',
-    description: 'Sans engagement, sans frais cachés',
+    title: '100% Free Consultations',
+    description: 'No obligation, no hidden fees',
   },
   {
     icon: Lock,
-    title: 'Données protégées',
-    description: 'Vos informations restent confidentielles',
+    title: 'Data Protected',
+    description: 'Your information remains confidential',
   },
   {
     icon: Clock,
-    title: 'Réponse sous 24h',
-    description: "Jusqu'à 3 artisans vous contactent",
+    title: 'Response within 24h',
+    description: "Up to 3 attorneys contact you",
   },
 ]
 
@@ -40,7 +40,7 @@ export default function TrustGuarantee({ variant = 'banner' }: TrustGuaranteePro
           </span>
         ))}
         <Link href="/guarantee" className="text-blue-600 hover:underline">
-          En savoir plus
+          Learn more
         </Link>
       </div>
     )
@@ -51,7 +51,7 @@ export default function TrustGuarantee({ variant = 'banner' }: TrustGuaranteePro
       <div className="flex items-center gap-2 mb-4">
         <Shield className="w-5 h-5 text-green-600" />
         <h3 className="font-heading text-lg font-bold text-gray-900">
-          La garantie ServicesArtisans
+          The US Attorneys Guarantee
         </h3>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -72,7 +72,7 @@ export default function TrustGuarantee({ variant = 'banner' }: TrustGuaranteePro
           href="/guarantee"
           className="text-sm text-green-700 hover:text-green-900 font-medium hover:underline"
         >
-          Découvrir notre engagement qualité
+          Discover our quality commitment
         </Link>
       </div>
     </div>

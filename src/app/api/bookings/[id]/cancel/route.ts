@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 // POST request schema
 const cancelBookingSchema = z.object({
-  cancelledBy: z.enum(['client', 'artisan']),
+  cancelledBy: z.enum(['client', 'attorney']),
   reason: z.string().max(500).optional(),
 })
 
@@ -24,7 +24,7 @@ export async function POST(
     const result = cancelBookingSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Erreur de validation', details: result.error.flatten() },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -35,7 +35,7 @@ export async function POST(
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Authentification requise' },
+        { error: 'Authentication required' },
         { status: 401 }
       )
     }
@@ -49,7 +49,7 @@ export async function POST(
 
     if (bookingError || !booking) {
       return NextResponse.json(
-        { error: 'Réservation introuvable' },
+        { error: 'Booking not found' },
         { status: 404 }
       )
     }
@@ -57,14 +57,14 @@ export async function POST(
     // Verify ownership: only the client or the provider can cancel
     if (booking.client_id !== user.id && booking.attorney_id !== user.id) {
       return NextResponse.json(
-        { error: 'Vous n\'êtes pas autorisé à annuler cette réservation' },
+        { error: 'You are not authorized to cancel this booking' },
         { status: 403 }
       )
     }
 
     if (booking.status === 'cancelled') {
       return NextResponse.json(
-        { error: 'Cette réservation est déjà annulée' },
+        { error: 'This booking is already cancelled' },
         { status: 400 }
       )
     }
@@ -76,7 +76,7 @@ export async function POST(
 
     if (hoursUntilBooking < 24 && cancelledBy === 'client') {
       return NextResponse.json(
-        { error: 'Les annulations doivent être effectuées au moins 24h à l\'avance' },
+        { error: 'Cancellations must be made at least 24 hours in advance' },
         { status: 400 }
       )
     }
@@ -94,7 +94,7 @@ export async function POST(
 
     if (updateError) throw updateError
 
-    // Fetch artisan details for notification
+    // Fetch attorney details for notification
     // Uses admin client: RLS policy 328 restricts cross-user profile reads
     const adminSupabase = createAdminClient()
     const { data: artisan } = await adminSupabase
@@ -104,7 +104,7 @@ export async function POST(
       .single()
 
     // Format date for email
-    const formattedDate = new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
+    const formattedDate = new Date(booking.scheduled_date).toLocaleDateString('en-US', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -117,11 +117,11 @@ export async function POST(
         bookingId: id,
         clientName: booking.client_name,
         clientEmail: booking.client_email,
-        attorneyName: artisan.full_name || 'Artisan',
+        attorneyName: artisan.full_name || 'Attorney',
         artisanEmail: artisan.email,
         specialtyName: booking.service_description || 'Service',
         date: formattedDate,
-        startTime: new Date(booking.scheduled_date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+        startTime: new Date(booking.scheduled_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         endTime: '',
         cancelledBy,
         reason,
@@ -140,12 +140,12 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: 'Réservation annulée avec succès',
+      message: 'Booking cancelled successfully',
     })
   } catch (error) {
     logger.error('Error cancelling booking:', error)
     return NextResponse.json(
-      { error: 'Erreur lors de l\'annulation' },
+      { error: 'Error during cancellation' },
       { status: 500 }
     )
   }

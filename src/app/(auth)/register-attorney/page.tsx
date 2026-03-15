@@ -13,30 +13,30 @@ import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 const benefits = [
-  { icon: Users, title: 'Nouveaux clients', description: 'Recevez des demandes de devis qualifiées' },
-  { icon: Star, title: 'Visibilité', description: 'Apparaissez dans les recherches locales' },
-  { icon: TrendingUp, title: 'Croissance', description: 'Développez votre activité' },
+  { icon: Users, title: 'New Clients', description: 'Receive qualified consultation requests' },
+  { icon: Star, title: 'Visibility', description: 'Appear in local search results' },
+  { icon: TrendingUp, title: 'Growth', description: 'Grow your practice' },
 ]
 
-export default function InscriptionArtisanPage() {
+export default function AttorneyRegistrationPage() {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
-    // Etape 1 - Entreprise
+    // Step 1 - Firm
     entreprise: '',
     siret: '',
     metier: '',
     autreMetier: '',
-    // Etape 2 - Contact
+    // Step 2 - Contact
     nom: '',
     prenom: '',
     email: '',
     telephone: '',
-    // Etape 3 - Localisation
+    // Step 3 - Location
     adresse: '',
     codePostal: '',
     ville: '',
     rayonIntervention: '30',
-    // Etape 4 - Description
+    // Step 4 - Description
     description: '',
     experience: '',
     certifications: '',
@@ -51,19 +51,19 @@ export default function InscriptionArtisanPage() {
     switch (currentStep) {
       case 1:
         if (!formData.entreprise.trim() || !formData.siret.trim() || !formData.metier.trim()) {
-          setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
+          setStepError('Please fill in all required fields before continuing.')
           return false
         }
         return true
       case 2:
         if (!formData.prenom.trim() || !formData.nom.trim() || !formData.email.trim() || !formData.telephone.trim()) {
-          setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
+          setStepError('Please fill in all required fields before continuing.')
           return false
         }
         return true
       case 3:
         if (!formData.adresse.trim() || !formData.ville.trim()) {
-          setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
+          setStepError('Please fill in all required fields before continuing.')
           return false
         }
         return true
@@ -73,7 +73,7 @@ export default function InscriptionArtisanPage() {
   }
 
   const breadcrumbItems = [
-    { label: 'Inscription artisan' }
+    { label: 'Attorney Registration' }
   ]
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,12 +91,12 @@ export default function InscriptionArtisanPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'inscription')
+        throw new Error(data.error || 'Registration error')
       }
 
       setIsSubmitted(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+      setError(err instanceof Error ? err.message : 'Registration error')
     } finally {
       setIsLoading(false)
     }
@@ -110,24 +110,24 @@ export default function InscriptionArtisanPage() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Inscription reçue !
+            Registration Received!
           </h1>
           <p className="text-gray-600 mb-8">
-            Merci pour votre inscription. Notre équipe va vérifier vos informations et
-            vous recevrez un email de confirmation sous 24-48h.
+            Thank you for registering. Our team will review your information and
+            you will receive a confirmation email within 24-48 hours.
           </p>
           <div className="space-y-4">
             <Link
               href="/"
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
-              Retour à l'accueil
+              Back to Home
             </Link>
             <Link
               href="/services"
               className="block w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
             >
-              Explorer les services
+              Explore Services
             </Link>
           </div>
         </div>
@@ -154,11 +154,11 @@ export default function InscriptionArtisanPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-                Rejoignez le r&eacute;seau ServicesArtisans
+                Join the US Attorneys Network
               </h1>
               <p className="text-xl text-slate-400 mb-8">
-                Inscription gratuite. Recevez des demandes de devis qualifi&eacute;es et
-                d&eacute;veloppez votre activit&eacute;.
+                Free registration. Receive qualified consultation requests and
+                grow your practice.
               </p>
               <div className="grid grid-cols-3 gap-6">
                 {benefits.map((benefit) => {
@@ -198,13 +198,13 @@ export default function InscriptionArtisanPage() {
               </div>
 
               <form onSubmit={handleSubmit}>
-                {/* Etape 1 - Entreprise */}
+                {/* Step 1 - Firm */}
                 {step === 1 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-4">Votre entreprise</h2>
+                    <h2 className="text-xl font-bold mb-4">Your Firm</h2>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Nom de l'entreprise *
+                        Firm Name *
                       </label>
                       <div className="relative">
                         <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -216,13 +216,13 @@ export default function InscriptionArtisanPage() {
                           required
                           disabled={isLoading}
                           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                          placeholder="Mon Entreprise"
+                          placeholder="My Law Firm"
                         />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Numéro SIRET *
+                        Bar Number / EIN *
                       </label>
                       <SiretAutocomplete
                         value={formData.siret}
@@ -239,26 +239,26 @@ export default function InscriptionArtisanPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Métier principal *
+                        Primary Practice Area *
                       </label>
                       <MetierAutocomplete
                         value={formData.metier}
                         onSelect={(service) => setFormData(prev => ({ ...prev, metier: service.name }))}
                         onClear={() => setFormData(prev => ({ ...prev, metier: '' }))}
-                        placeholder="Rechercher votre métier..."
+                        placeholder="Search your practice area..."
                         showAllOnFocus={true}
                       />
                     </div>
                   </div>
                 )}
 
-                {/* Etape 2 - Contact */}
+                {/* Step 2 - Contact */}
                 {step === 2 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-4">Vos coordonnées</h2>
+                    <h2 className="text-xl font-bold mb-4">Your Contact Info</h2>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
                         <input
                           type="text"
                           autoComplete="given-name"
@@ -270,7 +270,7 @@ export default function InscriptionArtisanPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
                         <input
                           type="text"
                           autoComplete="family-name"
@@ -298,7 +298,7 @@ export default function InscriptionArtisanPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
@@ -315,12 +315,12 @@ export default function InscriptionArtisanPage() {
                   </div>
                 )}
 
-                {/* Etape 3 - Localisation */}
+                {/* Step 3 - Location */}
                 {step === 3 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-4">Zone d'intervention</h2>
+                    <h2 className="text-xl font-bold mb-4">Service Area</h2>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Adresse *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
                       <div className="relative">
                         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
@@ -347,12 +347,12 @@ export default function InscriptionArtisanPage() {
                         }}
                         onClear={() => setFormData(prev => ({ ...prev, ville: '', codePostal: '' }))}
                         showGeolocation={true}
-                        placeholder="Rechercher votre ville..."
+                        placeholder="Search your city..."
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Rayon d'intervention (km)
+                        Service Radius (km)
                       </label>
                       <select
                         value={formData.rayonIntervention}
@@ -370,13 +370,13 @@ export default function InscriptionArtisanPage() {
                   </div>
                 )}
 
-                {/* Etape 4 - Description */}
+                {/* Step 4 - Description */}
                 {step === 4 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-4">Présentez-vous</h2>
+                    <h2 className="text-xl font-bold mb-4">About You</h2>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description de votre activité
+                        Description of your practice
                       </label>
                       <textarea
                         value={formData.description}
@@ -384,12 +384,12 @@ export default function InscriptionArtisanPage() {
                         rows={3}
                         disabled={isLoading}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                        placeholder="Décrivez vos services, spécialités..."
+                        placeholder="Describe your services, specialties..."
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Années d'expérience
+                        Years of Experience
                       </label>
                       <input
                         type="text"
@@ -397,12 +397,12 @@ export default function InscriptionArtisanPage() {
                         onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                         disabled={isLoading}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                        placeholder="Ex: 15 ans"
+                        placeholder="e.g., 15 years"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Certifications / Labels
+                        Certifications / Bar Admissions
                       </label>
                       <input
                         type="text"
@@ -410,14 +410,14 @@ export default function InscriptionArtisanPage() {
                         onChange={(e) => setFormData({ ...formData, certifications: e.target.value })}
                         disabled={isLoading}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                        placeholder="RGE, Qualibat, etc."
+                        placeholder="State Bar, ABA, etc."
                       />
                     </div>
                     <div className="bg-blue-50 rounded-lg p-4 text-sm text-blue-800">
-                      En vous inscrivant, vous acceptez nos{' '}
-                      <Link href="/legal" className="underline hover:text-blue-600">conditions d'utilisation</Link>
-                      {' '}et notre{' '}
-                      <Link href="/privacy" className="underline hover:text-blue-600">politique de confidentialité</Link>.
+                      By registering, you agree to our{' '}
+                      <Link href="/legal" className="underline hover:text-blue-600">Terms of Service</Link>
+                      {' '}and our{' '}
+                      <Link href="/privacy" className="underline hover:text-blue-600">Privacy Policy</Link>.
                     </div>
                   </div>
                 )}
@@ -447,7 +447,7 @@ export default function InscriptionArtisanPage() {
                       className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
                     >
                       <ArrowLeft className="w-5 h-5" />
-                      Retour
+                      Back
                     </button>
                   ) : (
                     <div />
@@ -463,7 +463,7 @@ export default function InscriptionArtisanPage() {
                       }}
                       className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
                     >
-                      Continuer
+                      Continue
                       <ArrowRight className="w-5 h-5" />
                     </button>
                   ) : (
@@ -475,12 +475,12 @@ export default function InscriptionArtisanPage() {
                       {isLoading ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
-                          Inscription en cours...
+                          Registering...
                         </>
                       ) : (
                         <>
                           <CheckCircle className="w-5 h-5" />
-                          Finaliser l'inscription
+                          Complete Registration
                         </>
                       )}
                     </button>
@@ -496,13 +496,13 @@ export default function InscriptionArtisanPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
-            Ils nous font confiance
+            They Trust Us
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Pierre M.', job: 'Plombier à Lyon', jobLink: '/practice-areas/plombier/lyon', text: 'Grâce à ServicesArtisans, j\'ai doublé mon chiffre d\'affaires en un an.' },
-              { name: 'Sophie L.', job: 'Électricienne à Paris', jobLink: '/practice-areas/electricien/paris', text: 'Une vraie mine d\'or pour trouver de nouveaux clients qualifiés.' },
-              { name: 'Marc D.', job: 'Menuisier à Bordeaux', jobLink: '/practice-areas/menuisier/bordeaux', text: 'Le meilleur investissement pour mon entreprise. Je recommande !' },
+              { name: 'James M.', job: 'Personal Injury Attorney in New York', jobLink: '/practice-areas/personal-injury/new-york', text: 'Thanks to US Attorneys, I doubled my caseload in one year.' },
+              { name: 'Sarah L.', job: 'Family Law Attorney in Los Angeles', jobLink: '/practice-areas/family-law/los-angeles', text: 'A true goldmine for finding qualified new clients.' },
+              { name: 'David R.', job: 'Criminal Defense Attorney in Chicago', jobLink: '/practice-areas/criminal-defense/chicago', text: 'The best investment for my practice. Highly recommend!' },
             ].map((t) => (
               <div key={t.name} className="bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex gap-1 mb-4">
@@ -522,7 +522,7 @@ export default function InscriptionArtisanPage() {
       {/* Related links */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explorer le réseau</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explore the Network</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />
             <PopularCitiesLinks />
@@ -533,22 +533,22 @@ export default function InscriptionArtisanPage() {
               href="/pricing"
               className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Nos tarifs</h3>
-              <p className="text-gray-600 text-sm">Découvrez nos offres adaptées à votre activité</p>
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Our Pricing</h3>
+              <p className="text-gray-600 text-sm">Discover plans tailored to your practice</p>
             </Link>
             <Link
               href="/reviews"
               className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Avis clients</h3>
-              <p className="text-gray-600 text-sm">Ce que disent nos clients de nos artisans</p>
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Client Reviews</h3>
+              <p className="text-gray-600 text-sm">What clients say about our attorneys</p>
             </Link>
             <Link
               href="/how-it-works"
               className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Comment ça marche</h3>
-              <p className="text-gray-600 text-sm">Tout savoir sur notre plateforme</p>
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">How It Works</h3>
+              <p className="text-gray-600 text-sm">Everything about our platform</p>
             </Link>
           </div>
         </div>

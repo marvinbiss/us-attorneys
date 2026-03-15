@@ -60,7 +60,7 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
       return { success: false, error: 'body ou contentSid requis' }
     }
 
-    // Ajouter callback URL pour le tracking
+    // Add callback URL pour le tracking
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
     if (siteUrl) {
       messageParams.statusCallback = `${siteUrl}/api/admin/prospection/webhooks/twilio`

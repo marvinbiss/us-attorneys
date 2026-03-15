@@ -33,7 +33,7 @@ export default function ReviewPage() {
       try {
         const response = await fetch(`/api/reviews?bookingId=${bookingId}`)
         if (!response.ok) {
-          throw new Error('Réservation non trouvée')
+          throw new Error('Booking not found')
         }
         const data = await response.json()
         setBookingInfo(data)
@@ -41,7 +41,7 @@ export default function ReviewPage() {
           setSubmitted(true)
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur inconnue')
+        setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setLoading(false)
       }
@@ -56,7 +56,7 @@ export default function ReviewPage() {
     e.preventDefault()
 
     if (rating === 0) {
-      setError('Veuillez sélectionner une note')
+      setError('Please select a rating')
       return
     }
 
@@ -77,22 +77,22 @@ export default function ReviewPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de l\'envoi')
+        throw new Error(data.error || 'Error submitting review')
       }
 
       setSubmitted(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue')
+      setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setSubmitting(false)
     }
   }
 
   const ratingLabels = [
-    'Très mauvais',
-    'Mauvais',
-    'Moyen',
-    'Bien',
+    'Very Poor',
+    'Poor',
+    'Average',
+    'Good',
     'Excellent',
   ]
 
@@ -110,14 +110,14 @@ export default function ReviewPage() {
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Lien invalide
+            Invalid Link
           </h1>
           <p className="text-gray-600 mb-6">{error}</p>
           <a
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
-            Retour à l'accueil
+            Back to Home
           </a>
         </div>
       </div>
@@ -132,16 +132,16 @@ export default function ReviewPage() {
             <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Merci pour votre avis !
+            Thank You for Your Review!
           </h1>
           <p className="text-gray-600 mb-6">
-            Votre retour aide {bookingInfo?.attorneyName} à s'améliorer et aide d'autres clients à faire leur choix.
+            Your feedback helps {bookingInfo?.attorneyName} improve and helps other clients make informed decisions.
           </p>
           <a
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
-            Découvrir d'autres artisans
+            Browse Attorneys
           </a>
         </div>
       </div>
@@ -154,10 +154,10 @@ export default function ReviewPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Donnez votre avis
+            Leave a Review
           </h1>
           <p className="text-gray-600">
-            Comment s'est passé votre rendez-vous ?
+            How was your appointment?
           </p>
         </div>
 
@@ -185,7 +185,7 @@ export default function ReviewPage() {
           {/* Star rating */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Note globale *
+              Overall Rating *
             </label>
             <div className="flex justify-center gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -217,7 +217,7 @@ export default function ReviewPage() {
           {/* Would recommend */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Recommanderiez-vous cet artisan ?
+              Would you recommend this attorney?
             </label>
             <div className="flex gap-3">
               <button
@@ -229,7 +229,7 @@ export default function ReviewPage() {
                     : 'border-gray-200 hover:border-gray-300 text-gray-600'
                 }`}
               >
-                👍 Oui
+                👍 Yes
               </button>
               <button
                 type="button"
@@ -240,7 +240,7 @@ export default function ReviewPage() {
                     : 'border-gray-200 hover:border-gray-300 text-gray-600'
                 }`}
               >
-                👎 Non
+                👎 No
               </button>
             </div>
           </div>
@@ -251,18 +251,18 @@ export default function ReviewPage() {
               htmlFor="comment"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Votre commentaire (optionnel)
+              Your Comment (optional)
             </label>
             <textarea
               id="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={4}
-              placeholder="Partagez votre expérience..."
+              placeholder="Share your experience..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
             />
             <p className="text-xs text-gray-500 mt-1">
-              {comment.length}/500 caractères
+              {comment.length}/500 characters
             </p>
           </div>
 
@@ -282,18 +282,18 @@ export default function ReviewPage() {
             {submitting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Envoi en cours...
+                Submitting...
               </>
             ) : (
               <>
                 <Send className="w-5 h-5" />
-                Envoyer mon avis
+                Submit Review
               </>
             )}
           </button>
 
           <p className="text-xs text-gray-500 text-center mt-4">
-            Votre avis sera visible publiquement sur le profil de l'artisan
+            Your review will be publicly visible on the attorney's profile
           </p>
         </form>
       </div>

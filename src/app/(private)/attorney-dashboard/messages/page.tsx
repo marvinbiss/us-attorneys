@@ -168,7 +168,7 @@ export default function MessagesArtisanPage() {
   }
 
   const getDisplayName = (partner: Partner) => {
-    return partner.full_name || 'Utilisateur'
+    return partner.full_name || 'User'
   }
 
   const formatTime = (dateStr: string) => {
@@ -178,13 +178,13 @@ export default function MessagesArtisanPage() {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
     if (days === 0) {
-      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
     } else if (days === 1) {
-      return 'Hier'
+      return 'Yesterday'
     } else if (days < 7) {
-      return date.toLocaleDateString('fr-FR', { weekday: 'short' })
+      return date.toLocaleDateString('en-US', { weekday: 'short' })
     }
-    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })
+    return date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit' })
   }
 
   return (
@@ -193,7 +193,7 @@ export default function MessagesArtisanPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/attorney-dashboard' },
+            { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
             { label: 'Messages' }
           ]} />
         </div>
@@ -208,7 +208,7 @@ export default function MessagesArtisanPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Messages</h1>
-              <p className="text-blue-100">Communiquez avec vos clients</p>
+              <p className="text-blue-100">Communicate with your clients</p>
             </div>
           </div>
         </div>
@@ -227,15 +227,15 @@ export default function MessagesArtisanPage() {
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[400px] sm:h-[600px] flex items-center justify-center">
                 <div>
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                  <p className="text-gray-600">Chargement des messages...</p>
+                  <p className="text-gray-600">Loading messages...</p>
                 </div>
               </div>
             ) : conversations.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[400px] sm:h-[600px] flex items-center justify-center">
                 <div>
                   <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-medium text-gray-900 mb-2">Aucune conversation</h3>
-                  <p className="text-gray-500">Vos échanges avec les clients apparaîtront ici</p>
+                  <h3 className="font-medium text-gray-900 mb-2">No conversations</h3>
+                  <p className="text-gray-500">Your conversations with clients will appear here</p>
                 </div>
               </div>
             ) : (
@@ -247,7 +247,7 @@ export default function MessagesArtisanPage() {
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
-                        placeholder="Rechercher..."
+                        placeholder="Search..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
@@ -299,7 +299,7 @@ export default function MessagesArtisanPage() {
                             type="button"
                             onClick={handleBackToList}
                             className="md:hidden p-1 text-gray-500 hover:text-gray-700 transition-colors"
-                            aria-label="Retour aux conversations"
+                            aria-label="Back to conversations"
                           >
                             <ArrowLeft className="w-5 h-5" />
                           </button>
@@ -314,7 +314,7 @@ export default function MessagesArtisanPage() {
                           href="/attorney-dashboard/demandes-recues"
                           className="text-sm text-blue-600 hover:underline"
                         >
-                          Voir la demande
+                          View Case
                         </Link>
                       </div>
 
@@ -355,7 +355,7 @@ export default function MessagesArtisanPage() {
                           <button
                             type="button"
                             disabled
-                            title="Bientôt disponible"
+                            title="Coming soon"
                             className="p-2 text-gray-300 cursor-not-allowed transition-colors"
                           >
                             <Paperclip className="w-5 h-5" />
@@ -364,7 +364,7 @@ export default function MessagesArtisanPage() {
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Écrivez votre message..."
+                            placeholder="Type your message..."
                             className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
                             disabled={sendingMessage}
                           />
@@ -384,7 +384,7 @@ export default function MessagesArtisanPage() {
                     </>
                   ) : (
                     <div className="flex-1 flex items-center justify-center text-gray-500">
-                      Sélectionnez une conversation
+                      Select a conversation
                     </div>
                   )}
                 </div>

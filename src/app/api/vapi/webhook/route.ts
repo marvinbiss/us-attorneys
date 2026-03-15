@@ -84,8 +84,8 @@ function handleAssistantRequest(): NextResponse {
         similarityBoost: 0.8,
       },
       firstMessage:
-        "Bonjour, bienvenue chez ServicesArtisans ! Je suis Sophie, votre conseillère en rénovation énergétique. Cet appel peut être enregistré à des fins de qualité. Comment puis-je vous aider aujourd'hui ?",
-      endCallMessage: 'Merci pour votre appel et bonne journée !',
+        "Hello, welcome to US Attorneys! I'm Sophie, your legal consultation advisor. This call may be recorded for quality purposes. How can I help you today?",
+      endCallMessage: 'Thank you for your call and have a great day!',
       transcriber: {
         provider: 'deepgram',
         model: 'nova-2',
@@ -130,20 +130,20 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
 
       if (score === 'disqualified') {
         const reason = !data.is_homeowner
-          ? 'non propriétaire'
+          ? 'not a property owner'
           : 'zone non couverte'
         return NextResponse.json({
-          result: `Le prospect ne correspond pas à nos critères : ${reason}. Terminez poliment l'appel.`,
+          result: `The prospect does not meet our criteria: ${reason}. Politely end the call.`,
         })
       }
 
       return NextResponse.json({
-        result: `Qualification enregistrée avec succès. Score : ${score}. ${
+        result: `Qualification recorded successfully. Score: ${score}. ${
           score === 'A'
-            ? 'Excellent prospect, proposez un transfert immédiat.'
+            ? 'Excellent prospect, offer an immediate transfer.'
             : score === 'B'
             ? 'Bon prospect, proposez un rappel sous 24h.'
-            : 'Prospect à suivre, proposez un rappel.'
+            : 'Prospect to follow up, offer a callback.'
         }`,
       })
     }
@@ -168,7 +168,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
       })
 
       return NextResponse.json({
-        result: "Le transfert a été initié. Informez le prospect qu'un artisan va le rappeler dans les plus brefs délais.",
+        result: "The transfer has been initiated. Inform the prospect that an attorney will call them back shortly.",
       })
     }
 

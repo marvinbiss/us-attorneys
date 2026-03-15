@@ -19,7 +19,7 @@ const updateServiceSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Détails d'un service
+// GET - Service details
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -33,7 +33,7 @@ export async function GET(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -49,7 +49,7 @@ export async function GET(
     if (error) {
       logger.warn('Service detail query failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Service introuvable' } },
+        { success: false, error: { message: 'Service not found' } },
         { status: 404 }
       )
     }
@@ -58,13 +58,13 @@ export async function GET(
   } catch (error) {
     logger.error('Admin service details error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// PATCH - Mettre à jour un service
+// PATCH - Update a service
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -78,7 +78,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -88,7 +88,7 @@ export async function PATCH(
     const result = updateServiceSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -115,7 +115,7 @@ export async function PATCH(
     if (error) {
       logger.error('Service update failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de mettre à jour le service' } },
+        { success: false, error: { message: 'Unable to update the service' } },
         { status: 500 }
       )
     }
@@ -126,18 +126,18 @@ export async function PATCH(
     return NextResponse.json({
       success: true,
       service: data,
-      message: 'Service mis à jour',
+      message: 'Service updated',
     })
   } catch (error) {
     logger.error('Admin service update error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// DELETE - Supprimer/désactiver un service
+// DELETE - Delete/deactivate a service
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -151,7 +151,7 @@ export async function DELETE(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -170,19 +170,19 @@ export async function DELETE(
     if (error) {
       logger.error('Service delete failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de désactiver le service' } },
+        { success: false, error: { message: 'Unable to deactivate the service' } },
         { status: 500 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Service désactivé',
+      message: 'Service deactivated',
     })
   } catch (error) {
     logger.error('Admin service delete error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

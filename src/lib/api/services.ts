@@ -133,7 +133,7 @@ export async function getAttorneys(params: {
       return {
         artisans: (data || []).map((a) => ({
           id: a.id,
-          name: a.name || 'Artisan',
+          name: a.name || 'Attorney',
           specialty: a.specialty,
           address_city: a.address_city || '',
           address_postal_code: a.address_postal_code || '',
@@ -165,13 +165,13 @@ export async function getAttorneyById(id: string): Promise<Artisan | null> {
         .single()
 
       if (error) {
-        logger.error('Error fetching artisan', error)
+        logger.error('Error fetching attorney', error)
         return null
       }
 
       return {
         id: data.id,
-        name: data.name || 'Artisan',
+        name: data.name || 'Attorney',
         specialty: data.specialty,
         address_city: data.address_city || '',
         address_postal_code: data.address_postal_code || '',

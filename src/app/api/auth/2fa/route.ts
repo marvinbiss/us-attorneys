@@ -37,7 +37,7 @@ export async function GET() {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     const status = await twoFactorAuth.getStatus(user.id)
@@ -45,7 +45,7 @@ export async function GET() {
     return NextResponse.json({ status })
   } catch (error) {
     logger.error('2FA status error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     const body = await request.json()
@@ -75,57 +75,57 @@ export async function POST(request: Request) {
       case 'verify': {
         const result = verifySchema.safeParse(body)
         if (!result.success) {
-          return NextResponse.json({ success: false, error: { message: 'Code invalide' } }, { status: 400 })
+          return NextResponse.json({ success: false, error: { message: 'Invalid code' } }, { status: 400 })
         }
 
         const verified = await twoFactorAuth.verifyAndEnable(user.id, result.data.code)
         return NextResponse.json({
           success: verified,
-          message: verified ? '2FA activé avec succès' : 'Code invalide',
+          message: verified ? '2FA enabled successfully' : 'Invalid code',
         })
       }
 
       case 'disable': {
         const result = disableSchema.safeParse(body)
         if (!result.success) {
-          return NextResponse.json({ success: false, error: { message: 'Code invalide' } }, { status: 400 })
+          return NextResponse.json({ success: false, error: { message: 'Invalid code' } }, { status: 400 })
         }
 
         const disabled = await twoFactorAuth.disable(user.id, result.data.code)
         return NextResponse.json({
           success: disabled,
-          message: disabled ? '2FA désactivé' : 'Code invalide',
+          message: disabled ? '2FA disabled' : 'Invalid code',
         })
       }
 
       case 'regenerate_backup': {
         const result = regenerateSchema.safeParse(body)
         if (!result.success) {
-          return NextResponse.json({ success: false, error: { message: 'Code invalide' } }, { status: 400 })
+          return NextResponse.json({ success: false, error: { message: 'Invalid code' } }, { status: 400 })
         }
 
         const backupCodes = await twoFactorAuth.regenerateBackupCodes(user.id, result.data.code)
         return NextResponse.json({
           success: true,
           backupCodes,
-          message: 'Nouveaux codes de secours générés',
+          message: 'New backup codes generated',
         })
       }
 
       case 'verify_login': {
         const result = verifyLoginSchema.safeParse(body)
         if (!result.success) {
-          return NextResponse.json({ success: false, error: { message: 'Code invalide' } }, { status: 400 })
+          return NextResponse.json({ success: false, error: { message: 'Invalid code' } }, { status: 400 })
         }
 
         const verified = await twoFactorAuth.verifyCode(user.id, result.data.code)
         if (!verified) {
-          return NextResponse.json({ success: false, error: { message: 'Code invalide' } }, { status: 401 })
+          return NextResponse.json({ success: false, error: { message: 'Invalid code' } }, { status: 401 })
         }
 
         return NextResponse.json({
           success: true,
-          message: 'Vérification réussie',
+          message: 'Verification successful',
         })
       }
 
@@ -134,7 +134,7 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     logger.error('2FA error:', error)
-    const message = error instanceof Error ? error.message : 'Erreur serveur'
+    const message = error instanceof Error ? error.message : 'Server error'
     return NextResponse.json({ success: false, error: { message } }, { status: 500 })
   }
 }

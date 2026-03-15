@@ -1,5 +1,5 @@
 /**
- * Authentication Middleware - ServicesArtisans
+ * Authentication Middleware - US Attorneys
  * Proper auth checks for protected routes
  */
 
@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-export type UserRole = 'client' | 'artisan' | 'admin'
+export type UserRole = 'client' | 'attorney' | 'admin'
 
 export interface AuthenticatedUser {
   id: string
@@ -110,12 +110,12 @@ export async function requireAdmin(request: NextRequest) {
  * Require artisan or admin role
  */
 export async function requireArtisan(request: NextRequest) {
-  return requireRole(request, ['artisan', 'admin'])
+  return requireRole(request, ['attorney', 'admin'])
 }
 
 /**
  * Require authenticated user (any role)
  */
 export async function requireAuth(request: NextRequest) {
-  return requireRole(request, ['client', 'artisan', 'admin'])
+  return requireRole(request, ['client', 'attorney', 'admin'])
 }

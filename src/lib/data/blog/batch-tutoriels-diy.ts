@@ -113,7 +113,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Finitions et nettoyage",
 
-      "Retirez le ruban de masquage lorsque la dernière couche est encore légèrement humide (30 à 45 minutes après), en tirant à 45° pour un bord net. Vérifiez le résultat à la lumière rasante et effectuez les retouches nécessaires. Nettoyez vos outils à l'eau (peinture acrylique) immédiatement après usage. Si le résultat ne vous satisfait pas ou si le chantier est trop important, n'hésitez pas à [consulter un peintre qualifié](/practice-areas/peintre) pour un devis gratuit."
+      "Retirez le ruban de masquage lorsque la dernière couche est encore légèrement humide (30 à 45 minutes après), en tirant à 45° pour un bord net. Vérifiez le résultat à la lumière rasante et effectuez les retouches nécessaires. Nettoyez vos outils à l'eau (peinture acrylique) immédiatement après usage. Si le résultat ne vous satisfait pas ou si le chantier est trop important, n'hésitez pas à [consulter un peintre qualifié](/practice-areas/peintre) pour a consultation gratuit."
     ]
   },
 
@@ -785,7 +785,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand faut-il remplacer les fenêtres ?",
-        answer: "Le remplacement est recommandé si vos fenêtres sont en simple vitrage, si le cadre est déformé ou pourri (bois) ou si les joints d'étanchéité entre le vitrage et le cadre sont défaillants. Faites appel à un [menuisier](/practice-areas/menuisier) ou un [vitrier](/practice-areas/vitrier) pour un devis. Des aides financières (MaPrimeRénov', CEE) peuvent couvrir une partie du coût."
+        answer: "Le remplacement est recommandé si vos fenêtres sont en simple vitrage, si le cadre est déformé ou pourri (bois) ou si les joints d'étanchéité entre le vitrage et le cadre sont défaillants. Faites appel à un [menuisier](/practice-areas/menuisier) ou un [vitrier](/practice-areas/vitrier) pour a consultation. Des aides financières (MaPrimeRénov', CEE) peuvent couvrir une partie du coût."
       },
       {
         question: "Combien peut-on économiser en isolant ses fenêtres ?",
@@ -817,7 +817,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand envisager le remplacement des fenêtres",
 
-      "Les solutions de calfeutrage sont efficaces mais temporaires. Si vos fenêtres sont en simple vitrage, très anciennes (plus de 30 ans) ou si le cadre est dégradé, le remplacement par du double ou triple vitrage est la solution définitive. Faites appel à un [menuisier](/practice-areas/menuisier) ou un [vitrier](/practice-areas/vitrier) pour un devis. Le coût moyen est de 300 à 800 euros par fenêtre (pose comprise), mais les aides financières (MaPrimeRénov', certificats d'économies d'énergie) peuvent couvrir 30 à 50 % du montant."
+      "Les solutions de calfeutrage sont efficaces mais temporaires. Si vos fenêtres sont en simple vitrage, très anciennes (plus de 30 ans) ou si le cadre est dégradé, le remplacement par du double ou triple vitrage est la solution définitive. Faites appel à un [menuisier](/practice-areas/menuisier) ou un [vitrier](/practice-areas/vitrier) pour a consultation. Le coût moyen est de 300 à 800 euros par fenêtre (pose comprise), mais les aides financières (MaPrimeRénov', certificats d'économies d'énergie) peuvent couvrir 30 à 50 % du montant."
     ]
   },
 

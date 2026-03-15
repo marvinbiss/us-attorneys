@@ -162,7 +162,7 @@ export default function ArtisanResultCard({
                 {/* Team size for centers */}
                 {artisan.is_center && artisan.team_size && (
                   <p className="text-sm text-gray-500">
-                    {artisan.team_size} professionnel{artisan.team_size > 1 ? 's' : ''}
+                    {artisan.team_size} professional{artisan.team_size > 1 ? 's' : ''}
                   </p>
                 )}
 
@@ -186,13 +186,13 @@ export default function ArtisanResultCard({
                   {artisan.is_verified && (
                     <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded">
                       <CheckCircle className="w-3 h-3" />
-                      Certifié
+                      Certified
                     </span>
                   )}
                   {artisan.is_center && (
                     <span className="inline-flex items-center gap-1 text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
                       <Wrench className="w-3 h-3" />
-                      Entreprise
+                      Firm
                     </span>
                   )}
                 </div>
@@ -276,16 +276,15 @@ export default function ArtisanResultCard({
               <div className="mt-2 text-xs text-gray-500">
                 {artisan.accepts_new_clients === false ? (
                   <span className="text-amber-600">
-                    Ce professionnel réserve la prise de rendez-vous en ligne aux clients déjà
-                    suivis.
+                    This attorney reserves online booking for existing clients only.
                   </span>
                 ) : hasAnyAvailability && firstAvailableDate ? (
                   <span>
-                    Disponibilités à partir du {firstAvailableDate.dayName},{' '}
+                    Available from {firstAvailableDate.dayName},{' '}
                     {firstAvailableDate.month} {firstAvailableDate.dayNumber}
                   </span>
                 ) : (
-                  <span>Aucune disponibilité en ligne</span>
+                  <span>No online availability</span>
                 )}
               </div>
             </div>

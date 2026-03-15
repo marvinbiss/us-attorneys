@@ -3,7 +3,7 @@
  * GET /api/admin/analytics/visitors?range=7d|30d|90d|all
  *
  * Returns unique visitors, page views, top pages, and session journeys.
- * Separate from the artisan-focused /api/admin/analytics endpoint.
+ * Separate from the attorney-focused /api/admin/analytics endpoint.
  */
 
 import { NextResponse } from 'next/server'
@@ -254,7 +254,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Admin visitor analytics error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

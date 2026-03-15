@@ -117,14 +117,14 @@ export async function searchEtablissements(
     'statutDiffusionEtablissement:O', // Diffusable
   ]
 
-  // Filtrer par codes NAF
+  // Filter par codes NAF
   if (nafCodes.length === 1) {
     queries.push(`activitePrincipaleEtablissement:${nafCodes[0]}`)
   } else {
     queries.push(`(${nafCodes.map(c => `activitePrincipaleEtablissement:${c}`).join(' OR ')})`)
   }
 
-  // Filtrer par departement si specifie
+  // Filter par departement si specifie
   if (departement) {
     queries.push(`codePostalEtablissement:${departement}*`)
   }

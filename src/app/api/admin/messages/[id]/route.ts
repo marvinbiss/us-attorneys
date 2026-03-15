@@ -10,7 +10,7 @@ const updateSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// PATCH - Mettre à jour le statut d'une conversation
+// PATCH - Update conversation status
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +24,7 @@ export async function PATCH(
     const { id } = await params
     if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID de conversation invalide' } },
+        { success: false, error: { message: 'Invalid conversation ID' } },
         { status: 400 }
       )
     }
@@ -33,7 +33,7 @@ export async function PATCH(
     const result = updateSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Statut invalide', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid status', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -49,7 +49,7 @@ export async function PATCH(
     if (error) {
       logger.warn('Conversation update failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la mise à jour de la conversation' } },
+        { success: false, error: { message: 'Error updating conversation' } },
         { status: 502 }
       )
     }
@@ -58,12 +58,12 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: status === 'archived' ? 'Conversation archivée' : 'Conversation bloquée',
+      message: status === 'archived' ? 'Conversation archived' : 'Conversation blocked',
     })
   } catch (error) {
     logger.error('Admin conversation update error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

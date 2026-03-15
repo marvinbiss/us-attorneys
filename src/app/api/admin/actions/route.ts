@@ -10,7 +10,7 @@ const actionSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// POST - Exécuter une action d'administration
+// POST - Execute an admin action
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requirePermission('settings', 'write')
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const result = actionSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Action invalide' } },
+        { success: false, error: { message: 'Invalid action' } },
         { status: 400 }
       )
     }
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       await logAdminAction(authResult.admin.id, 'settings.reset_stats', 'system', 'global')
       return NextResponse.json({
         success: true,
-        message: 'Statistiques réinitialisées avec succès',
+        message: 'Statistics reset successfully',
       })
     }
 
@@ -46,18 +46,18 @@ export async function POST(request: NextRequest) {
       await logAdminAction(authResult.admin.id, 'settings.clear_cache', 'system', 'global')
       return NextResponse.json({
         success: true,
-        message: 'Cache vidé avec succès',
+        message: 'Cache cleared successfully',
       })
     }
 
     return NextResponse.json(
-      { success: false, error: { message: 'Action inconnue' } },
+      { success: false, error: { message: 'Unknown action' } },
       { status: 400 }
     )
   } catch (error) {
     logger.error('Admin action error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

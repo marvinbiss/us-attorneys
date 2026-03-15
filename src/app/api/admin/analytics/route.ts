@@ -181,7 +181,7 @@ export async function GET(request: Request) {
         const p = event.providers as unknown as ProviderInfo
         providerMap.set(event.attorney_id, {
           id: event.attorney_id,
-          name: p?.name || 'Inconnu',
+          name: p?.name || 'Unknown',
           city: p?.address_city || '',
           specialty: p?.specialty || '',
           slug: p?.slug || '',
@@ -224,7 +224,7 @@ export async function GET(request: Request) {
         type: e.event_type,
         source: e.source,
         date: e.created_at,
-        attorneyName: p?.name || 'Inconnu',
+        attorneyName: p?.name || 'Unknown',
         providerCity: p?.address_city || '',
         attorneySlug: p?.slug || '',
         providerStableId: p?.stable_id || '',
@@ -247,7 +247,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Admin analytics error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

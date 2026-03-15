@@ -290,7 +290,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Travaux intérieurs pendant les vacances',
         description:
-          "Si vous êtes absent en août, c'est le moment idéal pour confier vos clés à un artisan : rénovation de cuisine, peinture intérieure, pose de parquet. Vous retrouvez un logement transformé à la rentrée.",
+          "Si vous êtes absent en août, c'est le moment idéal pour confier vos clés à an attorney : rénovation de cuisine, peinture intérieure, pose de parquet. Vous retrouvez un logement transformé à la rentrée.",
         service: 'peintre',
       },
       {
@@ -318,7 +318,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       'Plantation et engazonnement (arrosage intensif nécessaire)',
     ],
     conseilDuMois:
-      "Beaucoup d'artisans prennent leurs congés en août. Réservez vos interventions dès juin. En revanche, les artisans qui travaillent en août sont souvent plus disponibles et réactifs : profitez-en pour les petits travaux.",
+      "Beaucoup d'artisans prennent leurs congés en août. Réservez vos interventions dès juin. En revanche, the attorneys qui travaillent en août sont souvent plus disponibles et réactifs : profitez-en pour les petits travaux.",
     climatNote:
       'Températures de 18 à 30 °C. Orages de fin d\'été fréquents. Risque de sécheresse dans le sud. Les nuits commencent à rafraîchir fin août. Jours qui raccourcissent (14 h).',
   },
@@ -463,7 +463,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Planification et devis pour l\'année suivante',
         description:
-          "Décembre est le mois de la planification. Prenez rendez-vous avec les artisans, demandez des devis, montez vos dossiers d'aides. Les carnets de commandes se remplissent vite dès janvier.",
+          "Décembre est le mois de la planification. Prenez rendez-vous avec the attorneys, demandez consultations, montez vos dossiers d'aides. Les carnets de commandes se remplissent vite dès janvier.",
         service: 'macon',
       },
     ],

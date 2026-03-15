@@ -25,7 +25,7 @@ export const dynamic = 'force-dynamic'
 
 // Default settings
 const DEFAULT_SETTINGS = {
-  siteName: 'ServicesArtisans',
+  siteName: 'US Attorneys',
   contactEmail: 'contact@us-attorneys.com',
   supportEmail: 'support@us-attorneys.com',
   maintenanceMode: false,
@@ -64,7 +64,7 @@ export async function GET() {
     return NextResponse.json({ settings: settings.data || DEFAULT_SETTINGS })
   } catch (error) {
     logger.error('Settings fetch error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -81,7 +81,7 @@ export async function PATCH(request: NextRequest) {
     const result = updateSettingsSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -117,10 +117,10 @@ export async function PATCH(request: NextRequest) {
 
       if (error) {
         logger.error('Settings update error', error)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour des paramètres. La table platform_settings n\'existe peut-être pas encore.' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error updating settings. The platform_settings table may not exist yet.' } }, { status: 500 })
       }
 
-      // Log audit
+      // Audit log
       await logAdminAction(authResult.admin.id, 'settings_updated', 'settings', '1', updates)
 
       return NextResponse.json({ settings: settings?.data })
@@ -128,11 +128,11 @@ export async function PATCH(request: NextRequest) {
       // platform_settings table may not exist yet
       logger.error('Settings table not found — platform_settings may not be created yet')
       return NextResponse.json({
-        success: false, error: { message: 'La table platform_settings n\'existe pas encore. Veuillez exécuter la migration correspondante.' },
+        success: false, error: { message: 'The platform_settings table does not exist yet. Please run the corresponding migration.' },
       }, { status: 500 })
     }
   } catch (error) {
     logger.error('Settings update error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

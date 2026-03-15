@@ -141,7 +141,7 @@ export function ReviewPhotoGallery({
             <button
               onClick={closeLightbox}
               className="p-2 hover:bg-white/10 rounded-full"
-              aria-label="Fermer la galerie"
+              aria-label="Close gallery"
             >
               <X className="w-6 h-6" />
             </button>

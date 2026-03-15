@@ -1,5 +1,5 @@
 /**
- * Formatting utilities for ServicesArtisans
+ * Formatting utilities for US Attorneys
  */
 
 /**
@@ -38,7 +38,7 @@ export function maskPhone(phone: string): string {
  * Format a price in euros
  */
 export function formatPrice(amount: number): string {
-  return new Intl.NumberFormat('fr-FR', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
@@ -51,7 +51,7 @@ export function formatPrice(amount: number): string {
  */
 export function formatDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
-  return new Intl.DateTimeFormat('fr-FR', {
+  return new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -63,7 +63,7 @@ export function formatDate(date: string | Date): string {
  */
 export function formatDateTime(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
-  return new Intl.DateTimeFormat('fr-FR', {
+  return new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',

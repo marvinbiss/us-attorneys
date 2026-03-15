@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 // Format price with currency
 export function formatPrice(price: number, currency = 'EUR'): string {
-  return new Intl.NumberFormat('fr-FR', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
@@ -23,7 +23,7 @@ export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOpt
     month: 'long',
     year: 'numeric',
   }
-  return new Intl.DateTimeFormat('fr-FR', options || defaultOptions).format(new Date(date))
+  return new Intl.DateTimeFormat('en-US', options || defaultOptions).format(new Date(date))
 }
 
 // Format relative time
@@ -121,7 +121,7 @@ export function getAttorneyUrl(artisan: {
   city?: string | null
 }): string {
   const normalized = _normalize(artisan.specialty || '')
-  const specialtySlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'artisan')
+  const specialtySlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'attorney')
   const locationSlug = _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
   const id = artisan.slug || artisan.stable_id || ''
   return `/practice-areas/${specialtySlug}/${locationSlug}/${id}`

@@ -72,7 +72,7 @@ export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
           >
             <Image
               src={gridPhotos[0]?.imageUrl}
-              alt={gridPhotos[0]?.title || 'Photo principale'}
+              alt={gridPhotos[0]?.title || 'Main photo'}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               placeholder="blur"
@@ -173,10 +173,10 @@ export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
           whileTap={{ scale: 0.98 }}
           onClick={() => openLightbox(0)}
           className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-gray-900 shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
-          aria-label={`Voir les ${photos.length} photos en plein ecran`}
+          aria-label={`View all ${photos.length} photos fullscreen`}
         >
           <Grid3X3 className="w-4 h-4" aria-hidden="true" />
-          Voir les {photos.length} photos
+          View all {photos.length} photos
         </motion.button>
       </motion.div>
 
@@ -193,7 +193,7 @@ export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
             tabIndex={0}
             role="dialog"
             aria-modal="true"
-            aria-label={`Galerie photo - Image ${currentIndex + 1} sur ${photos.length}`}
+            aria-label={`Photo gallery - Image ${currentIndex + 1} of ${photos.length}`}
           >
             {/* Close button */}
             <motion.button
@@ -201,7 +201,7 @@ export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
               animate={{ opacity: 1, y: 0 }}
               className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={closeLightbox}
-              aria-label="Fermer la galerie"
+              aria-label="Close gallery"
             >
               <X className="w-6 h-6 text-white" aria-hidden="true" />
             </motion.button>
@@ -217,7 +217,7 @@ export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
               animate={{ opacity: 1, x: 0 }}
               className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
-              aria-label="Photo precedente"
+              aria-label="Previous photo"
             >
               <ChevronLeft className="w-8 h-8 text-white" aria-hidden="true" />
             </motion.button>
@@ -227,7 +227,7 @@ export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
               animate={{ opacity: 1, x: 0 }}
               className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={(e) => { e.stopPropagation(); goToNext(); }}
-              aria-label="Photo suivante"
+              aria-label="Next photo"
             >
               <ChevronRight className="w-8 h-8 text-white" aria-hidden="true" />
             </motion.button>

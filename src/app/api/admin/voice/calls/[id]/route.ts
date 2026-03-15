@@ -24,7 +24,7 @@ export async function GET(
 
     if (error || !call) {
       return NextResponse.json(
-        { success: false, error: { message: 'Appel non trouvé' } },
+        { success: false, error: { message: 'Call not found' } },
         { status: 404 }
       )
     }
@@ -47,7 +47,7 @@ export async function GET(
   } catch (error) {
     logger.error('Voice call detail GET error', error as Error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

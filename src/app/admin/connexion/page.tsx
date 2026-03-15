@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Loader2, Shield } from 'lucide-react'
 
-export default function AdminConnexionPage() {
+export default function AdminLoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +28,7 @@ export default function AdminConnexionPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error?.message || 'Erreur de connexion')
+        setError(data.error?.message || 'Sign in failed')
         return
       }
 
@@ -42,7 +42,7 @@ export default function AdminConnexionPage() {
       router.push('/admin')
       router.refresh()
     } catch {
-      setError('Erreur de connexion au serveur')
+      setError('Unable to connect to server')
     } finally {
       setIsLoading(false)
     }
@@ -62,7 +62,7 @@ export default function AdminConnexionPage() {
             Administration
           </h1>
           <p className="text-gray-400">
-            Connectez-vous pour accéder au panel admin
+            Sign in to access the admin panel
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export default function AdminConnexionPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email administrateur
+                Admin Email
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -96,7 +96,7 @@ export default function AdminConnexionPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Mot de passe
+                Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -113,7 +113,7 @@ export default function AdminConnexionPage() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -129,7 +129,7 @@ export default function AdminConnexionPage() {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Connexion Admin
+                  Admin Sign In
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -138,7 +138,7 @@ export default function AdminConnexionPage() {
 
           <div className="mt-6 pt-6 border-t border-slate-700">
             <p className="text-center text-gray-500 text-sm">
-              Accès réservé aux administrateurs autorisés.
+              Access restricted to authorized administrators.
             </p>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function AdminConnexionPage() {
             href="/"
             className="text-gray-400 hover:text-white text-sm transition-colors"
           >
-            ← Retour au site
+            &larr; Back to Site
           </Link>
         </div>
       </div>

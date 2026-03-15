@@ -50,23 +50,23 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
             </span>
-            <span className="text-sm font-medium">Accepte de nouveaux clients</span>
+            <span className="text-sm font-medium">Accepting new clients</span>
           </div>
         )}
 
         {/* Trust badges */}
         <div className="space-y-2.5 mb-6 pb-6 border-b border-gray-100">
-          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">V&eacute;rifications</h4>
+          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Verifications</h4>
           {artisan.is_verified && (
             <div className="flex items-center gap-2.5 text-sm text-slate-600">
               <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
-              <span>Identit&eacute; v&eacute;rifi&eacute;e (SIRET)</span>
+              <span>Identity verified (Bar Number)</span>
             </div>
           )}
         </div>
 
         {/* CTA Buttons */}
-        <div className="space-y-3 mb-6" role="group" aria-label="Actions de contact">
+        <div className="space-y-3 mb-6" role="group" aria-label="Contact actions">
           {artisan.phone && (
             <motion.a
               href={`tel:${artisan.phone.replace(/\s/g, '')}`}
@@ -98,10 +98,10 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
             transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
             onClick={openEstimationWidget}
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
-            aria-label="Ouvrir le chat d'estimation pour un devis gratuit"
+            aria-label="Open the estimation chat for a free consultation"
           >
             <MessageCircle className="w-5 h-5" aria-hidden="true" />
-            Demander un devis gratuit
+            Request a Free Consultation
           </motion.button>
 
           {artisan.email && (
@@ -110,10 +110,10 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
               whileTap={{ scale: 0.98 }}
               onClick={handleEmail}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2"
-              aria-label={`Envoyer un email à ${artisan.email}`}
+              aria-label={`Send an email to ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400" aria-hidden="true" />
-              Envoyer un email
+              Send an email
             </motion.button>
           )}
         </div>
@@ -161,7 +161,7 @@ export function AttorneyMobileCTA({ artisan }: AttorneySidebarProps) {
       transition={{ duration: 0.3 }}
       className="fixed bottom-16 left-0 right-0 bg-[#FFFCF8]/95 backdrop-blur-lg border-t border-stone-200/60 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
       role="group"
-      aria-label="Actions rapides"
+      aria-label="Quick actions"
     >
       <div className="flex gap-3">
         {/* Primary: Estimation CTA */}
@@ -175,10 +175,10 @@ export function AttorneyMobileCTA({ artisan }: AttorneySidebarProps) {
             openEstimationWidget()
           }}
           className={`${artisan.phone ? 'flex-1' : 'w-full'} py-4 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2`}
-          aria-label="Ouvrir l'assistant d'estimation pour un devis gratuit"
+          aria-label="Open the estimation assistant for a free consultation"
         >
           <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-          Devis gratuit
+          Free Consultation
         </motion.button>
 
         {/* Phone: Prominent call button */}
@@ -194,7 +194,7 @@ export function AttorneyMobileCTA({ artisan }: AttorneySidebarProps) {
             aria-label={`Appeler ${artisan.phone}`}
           >
             <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-            Appeler
+            Call
           </motion.a>
         )}
       </div>

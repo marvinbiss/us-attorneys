@@ -38,7 +38,7 @@ export default function BookingPayment({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors du paiement')
+        throw new Error(data.error || 'Payment error')
       }
 
       // Redirect to Stripe Checkout
@@ -47,7 +47,7 @@ export default function BookingPayment({
       }
     } catch (err) {
       console.error('Payment error:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors du paiement')
+      setError(err instanceof Error ? err.message : 'Payment error')
     } finally {
       setIsLoading(false)
     }
@@ -60,8 +60,8 @@ export default function BookingPayment({
           <CreditCard className="w-6 h-6 text-blue-600" />
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900">Paiement de l'acompte</h3>
-          <p className="text-sm text-gray-500">Sécurisé par Stripe</p>
+          <h3 className="font-semibold text-gray-900">Deposit payment</h3>
+          <p className="text-sm text-gray-500">Secured by Stripe</p>
         </div>
       </div>
 
@@ -72,13 +72,13 @@ export default function BookingPayment({
           <span className="font-medium text-gray-900">{specialtyName}</span>
         </div>
         <div className="flex justify-between items-center mb-3">
-          <span className="text-gray-600">Artisan</span>
+          <span className="text-gray-600">Attorney</span>
           <span className="font-medium text-gray-900">{attorneyName}</span>
         </div>
         <div className="border-t border-gray-200 pt-3 mt-3">
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-gray-900">Acompte à payer</span>
-            <span className="text-xl font-bold text-blue-600">{depositAmount.toFixed(2)} EUR</span>
+            <span className="font-semibold text-gray-900">Deposit to pay</span>
+            <span className="text-xl font-bold text-blue-600">${depositAmount.toFixed(2)}</span>
           </div>
         </div>
       </div>
@@ -87,10 +87,10 @@ export default function BookingPayment({
       <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg mb-6">
         <Lock className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm text-green-800 font-medium">Paiement sécurisé</p>
+          <p className="text-sm text-green-800 font-medium">Secure payment</p>
           <p className="text-xs text-green-700 mt-1">
-            Vos informations de paiement sont chiffrées et sécurisées par Stripe.
-            L'acompte sera déduit du montant total lors de la prestation.
+            Your payment information is encrypted and secured by Stripe.
+            The deposit will be deducted from the total amount at the time of service.
           </p>
         </div>
       </div>
@@ -112,25 +112,25 @@ export default function BookingPayment({
         {isLoading ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            Redirection vers le paiement...
+            Redirecting to payment...
           </>
         ) : (
           <>
             <CreditCard className="w-5 h-5" />
-            Payer {depositAmount.toFixed(2)} EUR
+            Pay ${depositAmount.toFixed(2)}
           </>
         )}
       </button>
 
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-4">
-        En procédant au paiement, vous acceptez nos{' '}
+        By proceeding with payment, you agree to our{' '}
         <a href="/terms" className="text-blue-600 hover:underline">
-          conditions générales
+          terms of service
         </a>{' '}
-        et notre{' '}
+        and our{' '}
         <a href="/privacy" className="text-blue-600 hover:underline">
-          politique de remboursement
+          refund policy
         </a>.
       </p>
     </div>
@@ -145,10 +145,10 @@ export function PaymentSuccess() {
         <Check className="w-8 h-8 text-green-600" />
       </div>
       <h3 className="text-xl font-bold text-gray-900 mb-2">
-        Paiement réussi !
+        Payment successful!
       </h3>
       <p className="text-gray-600">
-        Votre acompte a été enregistré. Vous recevrez un email de confirmation.
+        Your deposit has been recorded. You will receive a confirmation email.
       </p>
     </div>
   )
@@ -162,10 +162,10 @@ export function PaymentCancelled() {
         <AlertCircle className="w-8 h-8 text-yellow-600" />
       </div>
       <h3 className="text-xl font-bold text-gray-900 mb-2">
-        Paiement annulé
+        Payment cancelled
       </h3>
       <p className="text-gray-600">
-        Votre réservation est maintenue mais l'acompte n'a pas été payé.
+        Your booking has been kept but the deposit has not been paid.
       </p>
     </div>
   )

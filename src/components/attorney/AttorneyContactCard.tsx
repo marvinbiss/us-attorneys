@@ -34,7 +34,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
       <div className="h-1 bg-gradient-to-r from-clay-400 via-clay-300 to-clay-500" />
 
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 font-heading mb-4">Contacter cet artisan</h3>
+        <h3 className="text-lg font-semibold text-gray-900 font-heading mb-4">Contact this attorney</h3>
 
         {/* Availability + rating row */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
@@ -44,7 +44,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
               </span>
-              <span className="text-xs font-semibold text-green-700">Disponible</span>
+              <span className="text-xs font-semibold text-green-700">Available</span>
             </div>
           )}
           {artisan.average_rating > 0 && (
@@ -84,7 +84,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 group"
           >
             <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
-            Demander un devis gratuit
+            Request a Free Consultation
           </button>
 
           {/* 3. Email (basse conversion) */}
@@ -95,10 +95,10 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
                 trackEvent('artisan_email_click', { artisan_slug: artisan.slug })
               }}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
-              aria-label={`Envoyer un email à ${artisan.email}`}
+              aria-label={`Send an email to ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400 transition-colors group-hover:text-slate-600" aria-hidden="true" />
-              Envoyer un email
+              Send an email
             </a>
           )}
 
@@ -108,7 +108,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
         <div className="flex items-center gap-2 pt-4 mt-5 border-t border-gray-100">
           <Shield className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
           <span className="text-xs text-gray-500">
-            Service gratuit • Données protégées (RGPD) • Sans engagement
+            Free service • Data protected • No obligation
           </span>
         </div>
       </div>

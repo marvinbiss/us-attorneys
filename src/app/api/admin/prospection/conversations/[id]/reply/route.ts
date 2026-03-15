@@ -26,7 +26,7 @@ export async function POST(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -35,7 +35,7 @@ export async function POST(
     const parsed = replySchema.safeParse(body)
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     const supabase = createAdminClient()
@@ -48,12 +48,12 @@ export async function POST(
       .single()
 
     if (!conversation) {
-      return NextResponse.json({ success: false, error: { message: 'Conversation non trouvée' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Conversation not found' } }, { status: 404 })
     }
 
     const contact = conversation.contact as { phone_e164?: string; email?: string }
 
-    // Envoyer via le bon canal
+    // Send via le bon canal
     let externalId: string | undefined
 
     switch (conversation.channel) {
@@ -75,7 +75,7 @@ export async function POST(
           const safeContent = sanitizeHtml(parsed.data.content).replace(/\n/g, '<br>')
           const result = await sendProspectionEmail({
             to: contact.email,
-            subject: 'Re: ServicesArtisans',
+            subject: 'Re: US Attorneys',
             html: `<p>${safeContent}</p>`,
           })
           externalId = result.id
@@ -83,7 +83,7 @@ export async function POST(
         break
     }
 
-    // Sauvegarder le message dans la conversation
+    // Save le message dans la conversation
     const { data: msg, error: msgError } = await supabase
       .from('prospection_conversation_messages')
       .insert({
@@ -100,7 +100,7 @@ export async function POST(
       logger.error('Save reply error', msgError)
     }
 
-    // Mettre à jour la conversation
+    // Update la conversation
     await supabase
       .from('prospection_conversations')
       .update({ last_message_at: new Date().toISOString() })
@@ -114,6 +114,6 @@ export async function POST(
     return NextResponse.json({ success: true, data: msg })
   } catch (error) {
     logger.error('Reply error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

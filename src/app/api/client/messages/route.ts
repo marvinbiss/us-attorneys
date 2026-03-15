@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
       if (!conversation) {
         return NextResponse.json(
-          { error: 'Conversation non trouvée' },
+          { error: 'Conversation not found' },
           { status: 404 }
         )
       }
@@ -75,17 +75,17 @@ export async function GET(request: Request) {
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
         return NextResponse.json(
-          { error: 'Erreur lors de la récupération des messages' },
+          { error: 'Error retrieving messages' },
           { status: 500 }
         )
       }
 
-      // Mark messages sent by artisan as read
+      // Mark messages sent by attorney as read
       await supabase
         .from('messages')
         .update({ read_at: new Date().toISOString() })
         .eq('conversation_id', conversationId)
-        .eq('sender_type', 'artisan')
+        .eq('sender_type', 'attorney')
         .is('read_at', null)
 
       return NextResponse.json({ messages: messages || [], currentUserId: user.id })
@@ -111,7 +111,7 @@ export async function GET(request: Request) {
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des conversations' },
+        { error: 'Error retrieving conversations' },
         { status: 500 }
       )
     }
@@ -130,7 +130,7 @@ export async function GET(request: Request) {
           .from('messages')
           .select('id', { count: 'exact', head: true })
           .eq('conversation_id', conv.id)
-          .eq('sender_type', 'artisan')
+          .eq('sender_type', 'attorney')
           .is('read_at', null)
 
         return {
@@ -147,7 +147,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Client Messages GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -162,7 +162,7 @@ export async function POST(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -183,7 +183,7 @@ export async function POST(request: Request) {
       // Try to find existing conversation or create one
       if (!attorney_id) {
         return NextResponse.json(
-          { error: 'conversation_id ou attorney_id requis' },
+          { error: 'conversation_id or attorney_id required' },
           { status: 400 }
         )
       }
@@ -207,7 +207,7 @@ export async function POST(request: Request) {
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
           return NextResponse.json(
-            { error: 'Erreur lors de la création de la conversation' },
+            { error: 'Error creating conversation' },
             { status: 500 }
           )
         }
@@ -224,7 +224,7 @@ export async function POST(request: Request) {
 
       if (!conversation) {
         return NextResponse.json(
-          { error: 'Conversation non trouvée ou non autorisée' },
+          { error: 'Conversation not found or unauthorized' },
           { status: 403 }
         )
       }
@@ -245,7 +245,7 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Error sending message:', insertError)
       return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi du message' },
+        { error: 'Error sending message' },
         { status: 500 }
       )
     }
@@ -257,7 +257,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Client Messages POST error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

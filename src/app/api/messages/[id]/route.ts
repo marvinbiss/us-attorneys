@@ -25,7 +25,7 @@ export async function PATCH(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     const body = await request.json()
@@ -33,7 +33,7 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -59,7 +59,7 @@ export async function PATCH(
 
     if (!data) {
       return NextResponse.json(
-        { success: false, error: { message: 'Message non trouvé ou non autorisé' } },
+        { success: false, error: { message: 'Message not found or unauthorized' } },
         { status: 404 }
       )
     }
@@ -68,7 +68,7 @@ export async function PATCH(
   } catch (error) {
     logger.error('Edit message error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -84,7 +84,7 @@ export async function DELETE(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     // Hard delete message (RLS will verify ownership)
@@ -107,7 +107,7 @@ export async function DELETE(
   } catch (error) {
     logger.error('Delete message error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

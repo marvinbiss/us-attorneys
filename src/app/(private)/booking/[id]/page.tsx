@@ -72,16 +72,16 @@ export default function BookingPage() {
 
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('Réservation introuvable')
+          throw new Error('Booking not found')
         }
-        throw new Error('Erreur lors du chargement')
+        throw new Error('Error loading data')
       }
 
       const data = await response.json()
       setBooking(data.booking)
     } catch (err) {
       console.error('Error fetching booking:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors du chargement')
+      setError(err instanceof Error ? err.message : 'Error loading data')
     } finally {
       setIsLoading(false)
     }
@@ -104,7 +104,7 @@ export default function BookingPage() {
         `/api/bookings?attorneyId=${booking.artisan.id}&month=${monthStr}`
       )
 
-      if (!response.ok) throw new Error('Erreur lors du chargement des créneaux')
+      if (!response.ok) throw new Error('Error loading available slots')
 
       const data = await response.json()
 
@@ -148,7 +148,7 @@ export default function BookingPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors du report')
+        throw new Error(data.error || 'Error rescheduling')
       }
 
       // Refresh booking details
@@ -157,17 +157,17 @@ export default function BookingPage() {
       setSelectedNewSlot(null)
     } catch (err) {
       console.error('Reschedule error:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors du report')
+      setError(err instanceof Error ? err.message : 'Error rescheduling')
     } finally {
       setIsRescheduling(false)
     }
   }
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('fr-FR', {
+    return new Date(dateStr).toLocaleDateString('en-US', {
       weekday: 'long',
-      day: 'numeric',
       month: 'long',
+      day: 'numeric',
       year: 'numeric',
     })
   }
@@ -178,21 +178,21 @@ export default function BookingPage() {
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
             <Check className="w-4 h-4" />
-            Confirmé
+            Confirmed
           </span>
         )
       case 'cancelled':
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
             <X className="w-4 h-4" />
-            Annulé
+            Cancelled
           </span>
         )
       case 'completed':
         return (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
             <Check className="w-4 h-4" />
-            Terminé
+            Completed
           </span>
         )
       default:
@@ -216,16 +216,16 @@ export default function BookingPage() {
             <AlertCircle className="w-8 h-8 text-red-600" />
           </div>
           <h1 className="text-xl font-bold text-gray-900 mb-2">
-            {error || 'Réservation introuvable'}
+            {error || 'Booking not found'}
           </h1>
           <p className="text-gray-600 mb-6">
-            La réservation que vous recherchez n'existe pas ou a été supprimée.
+            The booking you are looking for does not exist or has been deleted.
           </p>
           <Link
             href="/"
             className="text-blue-600 hover:underline"
           >
-            Retour à l'accueil
+            Back to Home
           </Link>
         </div>
       </div>
@@ -237,9 +237,9 @@ export default function BookingPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-2">Ma réservation</h1>
+          <h1 className="text-2xl font-bold mb-2">My Booking</h1>
           <p className="text-blue-100">
-            Gérez votre rendez-vous avec {booking.artisan.name || booking.artisan.full_name}
+            Manage your appointment with {booking.artisan.name || booking.artisan.full_name}
           </p>
         </div>
       </div>
@@ -248,14 +248,14 @@ export default function BookingPage() {
         {/* Status Card */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Statut</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Status</h2>
             {getStatusBadge(booking.status)}
           </div>
 
           {booking.status === 'cancelled' && booking.cancellation_reason && (
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600">
-                <span className="font-medium">Raison de l'annulation:</span>{' '}
+                <span className="font-medium">Cancellation reason:</span>{' '}
                 {booking.cancellation_reason}
               </p>
             </div>
@@ -265,7 +265,7 @@ export default function BookingPage() {
         {/* Booking Details */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-6">
-            Détails du rendez-vous
+            Appointment Details
           </h2>
 
           <div className="space-y-4">
@@ -286,7 +286,7 @@ export default function BookingPage() {
                 <Clock className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Horaire</p>
+                <p className="text-sm text-gray-500">Time</p>
                 <p className="font-medium text-gray-900">
                   {booking.slot.start_time} - {booking.slot.end_time}
                 </p>
@@ -298,7 +298,7 @@ export default function BookingPage() {
                 <User className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Artisan</p>
+                <p className="text-sm text-gray-500">Attorney</p>
                 <p className="font-medium text-gray-900">
                   {booking.artisan.name || booking.artisan.full_name}
                 </p>
@@ -322,7 +322,7 @@ export default function BookingPage() {
         {/* Your Information */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-6">
-            Vos coordonnées
+            Your Information
           </h2>
 
           <div className="space-y-4">
@@ -359,8 +359,8 @@ export default function BookingPage() {
                 <div className="flex items-center gap-3">
                   <RefreshCw className="w-5 h-5 text-blue-600" />
                   <div className="text-left">
-                    <p className="font-medium text-gray-900">Reporter le rendez-vous</p>
-                    <p className="text-sm text-gray-500">Choisir un autre créneau</p>
+                    <p className="font-medium text-gray-900">Reschedule Appointment</p>
+                    <p className="text-sm text-gray-500">Choose a different time slot</p>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-gray-400" />
@@ -373,8 +373,8 @@ export default function BookingPage() {
                 <div className="flex items-center gap-3">
                   <X className="w-5 h-5 text-red-600" />
                   <div className="text-left">
-                    <p className="font-medium text-red-700">Annuler le rendez-vous</p>
-                    <p className="text-sm text-red-500">Annulation sous 24h minimum</p>
+                    <p className="font-medium text-red-700">Cancel Appointment</p>
+                    <p className="text-sm text-red-500">Cancellation requires 24h notice</p>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-red-400" />
@@ -386,14 +386,14 @@ export default function BookingPage() {
         {/* Contact Artisan */}
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm mb-2">
-            Besoin d'aide ?
+            Need help?
           </p>
           {booking.artisan.phone && (
             <a
               href={`tel:${booking.artisan.phone}`}
               className="text-blue-600 hover:underline font-medium"
             >
-              Contacter l'artisan
+              Contact Attorney
             </a>
           )}
         </div>
@@ -421,7 +421,7 @@ export default function BookingPage() {
           <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden shadow-2xl">
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="text-lg font-semibold text-gray-900">
-                Choisir un nouveau créneau
+                Choose a New Time Slot
               </h3>
               <button
                 onClick={() => {
@@ -441,7 +441,7 @@ export default function BookingPage() {
                 </div>
               ) : availableSlots.length === 0 ? (
                 <p className="text-center text-gray-500 py-8">
-                  Aucun créneau disponible pour le moment
+                  No available slots at the moment
                 </p>
               ) : (
                 <div className="space-y-2">
@@ -477,7 +477,7 @@ export default function BookingPage() {
                   disabled={isRescheduling}
                   className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-50 disabled:opacity-50"
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   onClick={handleReschedule}
@@ -485,7 +485,7 @@ export default function BookingPage() {
                   className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isRescheduling && <Loader2 className="w-4 h-4 animate-spin" />}
-                  Confirmer
+                  Confirm
                 </button>
               </div>
             </div>

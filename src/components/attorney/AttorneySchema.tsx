@@ -25,11 +25,11 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
       width: 512,
       height: 512,
     },
-    description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France',
+    description: 'Platform connecting individuals with qualified attorneys across the United States',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
-      availableLanguage: ['French'],
+      availableLanguage: ['English'],
       url: `${baseUrl}/contact`,
       ...(companyIdentity.phone && { telephone: companyIdentity.phone }),
     },
@@ -43,7 +43,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     '@type': 'Service',
     '@id': `${attorneyUrl}#service-${index}`,
     name: service.name,
-    description: service.description || `${service.name} par ${displayName}`,
+    description: service.description || `${service.name} by ${displayName}`,
     provider: {
       '@type': 'LocalBusiness',
       '@id': `${attorneyUrl}#business`,
@@ -83,7 +83,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     '@type': ['LocalBusiness', businessType],
     '@id': `${attorneyUrl}#business`,
     name: displayName,
-    description: artisan.description || `${displayName} - ${artisan.specialty} à ${artisan.city}`,
+    description: artisan.description || `${displayName} - ${artisan.specialty} in ${artisan.city}`,
     image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     // Add knowsAbout for E-E-A-T signals
     knowsAbout: artisan.specialty,
@@ -104,7 +104,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
       addressLocality: artisan.city,
       ...(artisan.region || artisan.department ? { addressRegion: artisan.region || artisan.department } : {}),
       postalCode: artisan.postal_code,
-      addressCountry: 'FR',
+      addressCountry: 'US',
     },
 
     ...(artisan.latitude && artisan.longitude && {
@@ -226,7 +226,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     potentialAction: {
       '@type': 'CommunicateAction',
       target: `${attorneyUrl}#devis`,
-      name: 'Demander un devis gratuit',
+      name: 'Request a free consultation',
     },
   }
 
@@ -248,8 +248,8 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
   const specialtySlug = slugify(artisan.specialty)
   const citySlug = slugify(artisan.city)
   const breadcrumbItems = [
-    { name: 'Accueil', item: baseUrl },
-    { name: 'Services', item: `${baseUrl}/services` },
+    { name: 'Home', item: baseUrl },
+    { name: 'Practice Areas', item: `${baseUrl}/services` },
     { name: artisan.specialty, item: `${baseUrl}/practice-areas/${specialtySlug}` },
     { name: artisan.city, item: `${baseUrl}/practice-areas/${specialtySlug}/${citySlug}` },
     { name: displayName, item: '' },

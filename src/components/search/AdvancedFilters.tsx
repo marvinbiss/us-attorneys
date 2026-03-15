@@ -72,7 +72,7 @@ export function AdvancedFilters({
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-gray-500" />
           <span className="font-medium text-gray-900 dark:text-white">
-            Filtres avancés
+            Advanced filters
           </span>
           {activeFiltersCount > 0 && (
             <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-600 rounded-full">
@@ -98,7 +98,7 @@ export function AdvancedFilters({
             >
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Note minimum</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Minimum rating</span>
               </div>
               {expandedSections.has('rating') ? (
                 <ChevronUp className="w-4 h-4 text-gray-400" />
@@ -121,7 +121,7 @@ export function AdvancedFilters({
                       )}
                     >
                       {rating === 0 ? (
-                        'Tous'
+                        'All'
                       ) : (
                         <>
                           <Star className="w-3 h-3 fill-current" />
@@ -175,7 +175,7 @@ export function AdvancedFilters({
             >
               <div className="flex items-center gap-2">
                 <Euro className="w-4 h-4 text-green-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tarif horaire</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Hourly rate</span>
               </div>
               {expandedSections.has('price') ? (
                 <ChevronUp className="w-4 h-4 text-gray-400" />
@@ -205,7 +205,7 @@ export function AdvancedFilters({
             >
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-purple-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Disponibilité</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Availability</span>
               </div>
               {expandedSections.has('availability') ? (
                 <ChevronUp className="w-4 h-4 text-gray-400" />
@@ -226,7 +226,7 @@ export function AdvancedFilters({
           {/* Verified only toggle */}
           <div className="p-4 flex items-center justify-between">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Artisans référencés uniquement
+              Verified attorneys only
             </span>
             <button
               onClick={() => handleChange('verified', !values.verified)}
@@ -247,18 +247,18 @@ export function AdvancedFilters({
           {/* Sort by */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-              Trier par
+              Sort by
             </label>
             <select
               value={values.sortBy || 'relevance'}
               onChange={(e) => handleChange('sortBy', e.target.value as FilterValues['sortBy'])}
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
             >
-              <option value="relevance">Pertinence</option>
-              <option value="rating">Meilleures notes</option>
+              <option value="relevance">Relevance</option>
+              <option value="rating">Highest rated</option>
               <option value="distance">Distance</option>
-              <option value="price_low">Prix croissant</option>
-              <option value="price_high">Prix décroissant</option>
+              <option value="price_low">Price: low to high</option>
+              <option value="price_high">Price: high to low</option>
             </select>
           </div>
 
@@ -269,7 +269,7 @@ export function AdvancedFilters({
               className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               <RotateCcw className="w-4 h-4" />
-              Réinitialiser les filtres
+              Reset filters
             </button>
           </div>
         </div>

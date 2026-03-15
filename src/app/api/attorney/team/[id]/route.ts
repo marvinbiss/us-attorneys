@@ -1,5 +1,5 @@
 /**
- * Artisan Equipe [id] API
+ * Attorney Team [id] API
  * PATCH:  Update a team member (Zod validation)
  * DELETE: Remove a team member
  */
@@ -33,7 +33,7 @@ export async function PATCH(
 
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: validation.error.flatten() } },
         { status: 400 }
       )
     }
@@ -71,7 +71,7 @@ export async function PATCH(
     if (error) {
       logger.error('Error updating team member:', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la mise à jour du membre' } },
+        { success: false, error: { message: 'Error updating team member' } },
         { status: 500 }
       )
     }
@@ -79,7 +79,7 @@ export async function PATCH(
     return NextResponse.json({ member: data })
   } catch (error) {
     logger.error('Equipe PATCH error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -115,7 +115,7 @@ export async function DELETE(
     if (error) {
       logger.error('Error deleting team member:', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la suppression du membre' } },
+        { success: false, error: { message: 'Error deleting team member' } },
         { status: 500 }
       )
     }
@@ -123,6 +123,6 @@ export async function DELETE(
     return new NextResponse(null, { status: 204 })
   } catch (error) {
     logger.error('Equipe DELETE error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

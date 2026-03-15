@@ -12,7 +12,7 @@ function formatDateFr(raw: string): string {
   try {
     const d = new Date(raw)
     if (isNaN(d.getTime())) return raw
-    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
   } catch {
     return raw
   }
@@ -23,7 +23,7 @@ function ReviewStars({ rating, size = 'w-4 h-4' }: { rating: number; size?: stri
   const full = Math.floor(rating)
   const hasHalf = rating - full >= 0.5
   return (
-    <div className="flex items-center gap-0.5" aria-label={`${rating} sur 5`}>
+    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5`}>
       {[1, 2, 3, 4, 5].map((s) => {
         const filled = s <= full
         const half = !filled && s === full + 1 && hasHalf
@@ -65,10 +65,10 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
             {review.verified && (
               <span
                 className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
-                title="Cet avis provient d'un client ayant utilisé la plateforme"
+                title="This review is from a client who used the platform"
               >
                 <CheckCircle className="w-3 h-3" aria-hidden="true" />
-                Avis vérifié
+                Verified review
               </span>
             )}
           </div>
@@ -93,7 +93,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
           onClick={() => setExpanded(true)}
           className="text-clay-500 hover:text-clay-600 text-xs font-medium mt-1 inline-flex items-center gap-0.5 transition-colors"
         >
-          Lire plus
+          Read more
           <ChevronDown className="w-3 h-3" aria-hidden="true" />
         </button>
       )}
@@ -138,12 +138,12 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
           <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
-          Réputation
+          Reputation
         </h2>
         {/* Source attribution badge */}
         <span
           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-50 border border-gray-200 text-xs font-medium text-gray-500"
-          title="Note observée sur Google"
+          title="Rating observed on Google"
         >
           <span
             className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-stone-700 text-white font-bold leading-none"
@@ -152,7 +152,7 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
           >
             G
           </span>
-          Observé sur Google
+          Observed on Google
         </span>
       </div>
 
@@ -161,7 +161,7 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
         <div className="text-center flex-shrink-0">
           <div
             className="text-5xl font-bold text-gray-900 leading-none"
-            aria-label={`Note de ${rating.toFixed(1)} sur 5`}
+            aria-label={`Rating ${rating.toFixed(1)} out of 5`}
           >
             {rating.toFixed(1)}
           </div>
@@ -186,7 +186,7 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
           </div>
           {count > 0 && (
             <div className="text-sm text-gray-500 mt-1.5">
-              {count.toLocaleString('fr-FR')} avis
+              {count.toLocaleString('en-US')} reviews
             </div>
           )}
         </div>
@@ -194,11 +194,11 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
         {/* Contextual note */}
         <div className="flex-1 pl-5 border-l border-gray-100">
           <p className="text-sm text-gray-600 leading-relaxed">
-            Note consolidée basée sur les avis clients collectés en ligne.
+            Consolidated rating based on client reviews collected online.
           </p>
           {count > 0 && (
             <p className="text-xs text-gray-400 mt-1.5">
-              Source : Google Business Profile
+              Source: Google Business Profile
             </p>
           )}
         </div>
@@ -208,7 +208,7 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
       {visibleReviews.length > 0 && (
         <div className="mt-6 pt-6 border-t border-sand-200">
           <h3 className="text-base font-semibold text-stone-800 mb-4">
-            Derniers avis clients
+            Latest client reviews
           </h3>
           <div className="space-y-3">
             {visibleReviews.map((review, i) => (
@@ -222,7 +222,7 @@ export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
                 href="#reviews"
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-clay-500 hover:text-clay-600 transition-colors"
               >
-                Voir tous les avis ({reviews.length})
+                See all reviews ({reviews.length})
                 <ChevronDown className="w-4 h-4" aria-hidden="true" />
               </a>
             </div>

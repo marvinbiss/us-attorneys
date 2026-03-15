@@ -50,7 +50,7 @@ export default function BookingConfirmationPage() {
     const fetchBooking = async () => {
       try {
         const response = await fetch(`/api/bookings/${bookingId}`)
-        if (!response.ok) throw new Error('Réservation non trouvée')
+        if (!response.ok) throw new Error('Booking not found')
         const data = await response.json()
         setBooking(data.booking)
 
@@ -64,7 +64,7 @@ export default function BookingConfirmationPage() {
           })
         }, 500)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur inconnue')
+        setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setLoading(false)
       }
@@ -90,13 +90,13 @@ export default function BookingConfirmationPage() {
 
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//ServicesArtisans//FR
+PRODID:-//USAttorneys//EN
 BEGIN:VEVENT
 UID:${booking.id}@us-attorneys.com
 DTSTART:${formatICSDate(startDate)}
 DTEND:${formatICSDate(endDate)}
-SUMMARY:RDV ${booking.specialtyName} - ${booking.attorneyName}
-DESCRIPTION:Rendez-vous avec ${booking.attorneyName}
+SUMMARY:Appointment: ${booking.specialtyName} - ${booking.attorneyName}
+DESCRIPTION:Appointment with ${booking.attorneyName}
 LOCATION:${booking.artisanAddress || ''}
 STATUS:CONFIRMED
 END:VEVENT
@@ -106,7 +106,7 @@ END:VCALENDAR`
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `rdv-${booking.attorneyName.toLowerCase().replace(/\s+/g, '-')}.ics`
+    link.download = `appointment-${booking.attorneyName.toLowerCase().replace(/\s+/g, '-')}.ics`
     link.click()
     URL.revokeObjectURL(url)
 
@@ -117,8 +117,8 @@ END:VCALENDAR`
     if (!booking) return
 
     const shareData = {
-      title: `RDV ${booking.specialtyName}`,
-      text: `J'ai pris RDV avec ${booking.attorneyName} le ${booking.date} à ${booking.startTime}`,
+      title: `Appointment: ${booking.specialtyName}`,
+      text: `I have an appointment with ${booking.attorneyName} on ${booking.date} at ${booking.startTime}`,
       url: window.location.href,
     }
 
@@ -147,14 +147,14 @@ END:VCALENDAR`
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Réservation non trouvée
+            Booking Not Found
           </h1>
           <p className="text-gray-600 mb-6">{error}</p>
           <Link
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
-            Retour à l'accueil
+            Back to Home
           </Link>
         </div>
       </div>
@@ -170,10 +170,10 @@ END:VCALENDAR`
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Rendez-vous confirmé !
+            Appointment Confirmed!
           </h1>
           <p className="text-gray-600">
-            Un email de confirmation a été envoyé à {booking.clientEmail}
+            A confirmation email has been sent to {booking.clientEmail}
           </p>
         </div>
 
@@ -199,10 +199,10 @@ END:VCALENDAR`
               <div>
                 <p className="text-sm text-gray-500">Date</p>
                 <p className="font-semibold text-gray-900">
-                  {new Date(booking.date).toLocaleDateString('fr-FR', {
+                  {new Date(booking.date).toLocaleDateString('en-US', {
                     weekday: 'long',
-                    day: 'numeric',
                     month: 'long',
+                    day: 'numeric',
                     year: 'numeric',
                   })}
                 </p>
@@ -212,7 +212,7 @@ END:VCALENDAR`
             <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
               <Clock className="w-6 h-6 text-blue-600" />
               <div>
-                <p className="text-sm text-gray-500">Horaire</p>
+                <p className="text-sm text-gray-500">Time</p>
                 <p className="font-semibold text-gray-900">
                   {booking.startTime} - {booking.endTime}
                 </p>
@@ -223,7 +223,7 @@ END:VCALENDAR`
               <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl">
                 <MapPin className="w-6 h-6 text-green-600" />
                 <div>
-                  <p className="text-sm text-gray-500">Adresse</p>
+                  <p className="text-sm text-gray-500">Address</p>
                   <p className="font-semibold text-gray-900">
                     {booking.artisanAddress}
                   </p>
@@ -235,7 +235,7 @@ END:VCALENDAR`
               <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-xl">
                 <Phone className="w-6 h-6 text-orange-600" />
                 <div>
-                  <p className="text-sm text-gray-500">Téléphone</p>
+                  <p className="text-sm text-gray-500">Phone</p>
                   <a
                     href={`tel:${booking.artisanPhone}`}
                     className="font-semibold text-gray-900 hover:text-violet-600"
@@ -251,7 +251,7 @@ END:VCALENDAR`
           <div className="px-6 pb-6">
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
               <div>
-                <p className="text-sm text-gray-500">Numéro de réservation</p>
+                <p className="text-sm text-gray-500">Booking Reference</p>
                 <p className="font-mono font-bold text-gray-900">
                   {booking.id.slice(0, 8).toUpperCase()}
                 </p>
@@ -262,7 +262,7 @@ END:VCALENDAR`
                 }}
                 className="text-violet-600 hover:text-violet-700 text-sm font-medium"
               >
-                Copier
+                Copy
               </button>
             </div>
           </div>
@@ -281,12 +281,12 @@ END:VCALENDAR`
             {addedToCalendar ? (
               <>
                 <CheckCircle className="w-5 h-5" />
-                Ajouté !
+                Added!
               </>
             ) : (
               <>
                 <Plus className="w-5 h-5" />
-                Ajouter au calendrier
+                Add to Calendar
               </>
             )}
           </button>
@@ -302,12 +302,12 @@ END:VCALENDAR`
             {shared ? (
               <>
                 <CheckCircle className="w-5 h-5" />
-                Copié !
+                Copied!
               </>
             ) : (
               <>
                 <Share2 className="w-5 h-5" />
-                Partager
+                Share
               </>
             )}
           </button>
@@ -318,9 +318,9 @@ END:VCALENDAR`
           <div className="flex gap-3">
             <Bell className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-amber-800">Rappels automatiques</p>
+              <p className="font-medium text-amber-800">Automatic Reminders</p>
               <p className="text-sm text-amber-700 mt-1">
-                Vous recevrez un rappel par email et SMS 24h et 1h avant votre rendez-vous.
+                You will receive email and SMS reminders 24 hours and 1 hour before your appointment.
               </p>
             </div>
           </div>
@@ -332,9 +332,9 @@ END:VCALENDAR`
           className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition group"
         >
           <div>
-            <p className="font-medium text-gray-900">Gérer ma réservation</p>
+            <p className="font-medium text-gray-900">Manage My Booking</p>
             <p className="text-sm text-gray-500">
-              Modifier, annuler ou reporter le rendez-vous
+              Modify, cancel, or reschedule the appointment
             </p>
           </div>
           <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-violet-600 transition" />
@@ -346,7 +346,7 @@ END:VCALENDAR`
             href="/"
             className="text-violet-600 hover:text-violet-700 font-medium"
           >
-            Retour à l'accueil
+            Back to Home
           </Link>
         </div>
       </div>

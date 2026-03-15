@@ -42,21 +42,21 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -71,7 +71,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
     if (error || !item) {
       return NextResponse.json(
-        { error: 'Élément non trouvé' },
+        { error: 'Item not found' },
         { status: 404 }
       )
     }
@@ -80,7 +80,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   } catch (error) {
     logger.error('Portfolio item GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -96,21 +96,21 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -125,7 +125,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     if (fetchError || !existingItem) {
       return NextResponse.json(
-        { error: 'Élément non trouvé ou accès non autorisé' },
+        { error: 'Item not found or access denied' },
         { status: 404 }
       )
     }
@@ -136,7 +136,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: result.error.flatten() },
+        { error: 'Invalid data', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -155,7 +155,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     if (updateError) {
       logger.error('Error updating portfolio item:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour' },
+        { error: 'Error during update' },
         { status: 500 }
       )
     }
@@ -163,12 +163,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({
       success: true,
       item,
-      message: 'Élément mis à jour',
+      message: 'Item updated',
     })
   } catch (error) {
     logger.error('Portfolio item PUT error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -184,21 +184,21 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -213,7 +213,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
 
     if (fetchError || !item) {
       return NextResponse.json(
-        { error: 'Élément non trouvé ou accès non autorisé' },
+        { error: 'Item not found or access denied' },
         { status: 404 }
       )
     }
@@ -227,7 +227,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     if (deleteError) {
       logger.error('Error deleting portfolio item:', deleteError)
       return NextResponse.json(
-        { error: 'Erreur lors de la suppression' },
+        { error: 'Error during deletion' },
         { status: 500 }
       )
     }
@@ -238,12 +238,12 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({
       success: true,
-      message: 'Élément supprimé',
+      message: 'Item deleted',
     })
   } catch (error) {
     logger.error('Portfolio item DELETE error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

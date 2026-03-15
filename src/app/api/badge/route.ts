@@ -49,7 +49,7 @@ function starPoints(cx: number, cy: number, outerR: number, innerR: number): str
 }
 
 export async function GET(request: NextRequest) {
-  const name = request.nextUrl.searchParams.get('name') || 'Artisan'
+  const name = request.nextUrl.searchParams.get('name') || 'Attorney'
   const service = request.nextUrl.searchParams.get('service') || ''
   const rating = request.nextUrl.searchParams.get('rating') || '4.5'
   const reviews = request.nextUrl.searchParams.get('reviews') || '0'
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
   if (isMinimal) {
     svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
   <rect width="200" height="50" rx="6" fill="${bgColor}" stroke="${borderColor}" stroke-width="1"/>
-  <text x="12" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="${accentColor}">ServicesArtisans.fr</text>
+  <text x="12" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="${accentColor}">US Attorneys.fr</text>
   <text x="12" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="${textColor}">${escapedName}</text>
   <g transform="translate(165, 10)">
     <rect width="24" height="24" rx="5" fill="#dcfce7"/>
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
   } else {
     svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100">
   <rect width="300" height="100" rx="8" fill="${bgColor}" stroke="${borderColor}" stroke-width="1"/>
-  <text x="15" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="${accentColor}">ServicesArtisans.fr</text>
+  <text x="15" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="${accentColor}">US Attorneys.fr</text>
   <text x="15" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="${textColor}">${escapedName}</text>
   <text x="15" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="${subtextColor}">${escapedService}</text>
   ${generateStars(ratingNum, 15, 80, starColor)}

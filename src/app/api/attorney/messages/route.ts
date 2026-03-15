@@ -1,5 +1,5 @@
 /**
- * Artisan Messages API
+ * Attorney Messages API
  * GET: Fetch conversations and messages
  * POST: Send a new message
  */
@@ -50,13 +50,13 @@ export async function GET(request: Request) {
 
     if (!provider) {
       return NextResponse.json(
-        { error: 'Profil artisan non trouvé' },
+        { error: 'Attorney profile not found' },
         { status: 404 }
       )
     }
 
     if (conversationId) {
-      // Verify conversation belongs to this artisan
+      // Verify conversation belongs to this attorney
       const { data: conversation } = await supabase
         .from('conversations')
         .select('id, client_id, attorney_id')
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
 
       if (!conversation) {
         return NextResponse.json(
-          { error: 'Conversation non trouvée' },
+          { error: 'Conversation not found' },
           { status: 404 }
         )
       }
@@ -81,7 +81,7 @@ export async function GET(request: Request) {
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
         return NextResponse.json(
-          { error: 'Erreur lors de la récupération des messages' },
+          { error: 'Error retrieving messages' },
           { status: 500 }
         )
       }
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des conversations' },
+        { error: 'Error retrieving conversations' },
         { status: 500 }
       )
     }
@@ -154,7 +154,7 @@ export async function GET(request: Request) {
       if (msgsError) {
         logger.error('Error fetching recent messages:', msgsError)
         return NextResponse.json(
-          { error: 'Erreur lors de la récupération des messages' },
+          { error: 'Error retrieving messages' },
           { status: 500 }
         )
       }
@@ -190,7 +190,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Messages GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -220,7 +220,7 @@ export async function POST(request: Request) {
 
     if (!provider) {
       return NextResponse.json(
-        { error: 'Profil artisan non trouvé' },
+        { error: 'Attorney profile not found' },
         { status: 404 }
       )
     }
@@ -231,7 +231,7 @@ export async function POST(request: Request) {
       // Try to find existing conversation or create one
       if (!client_id) {
         return NextResponse.json(
-          { error: 'conversation_id ou client_id requis' },
+          { error: 'conversation_id or client_id required' },
           { status: 400 }
         )
       }
@@ -255,14 +255,14 @@ export async function POST(request: Request) {
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
           return NextResponse.json(
-            { error: 'Erreur lors de la création de la conversation' },
+            { error: 'Error creating conversation' },
             { status: 500 }
           )
         }
         resolvedConversationId = newConv.id
       }
     } else {
-      // Verify conversation belongs to this artisan
+      // Verify conversation belongs to this attorney
       const { data: conversation } = await supabase
         .from('conversations')
         .select('id')
@@ -272,7 +272,7 @@ export async function POST(request: Request) {
 
       if (!conversation) {
         return NextResponse.json(
-          { error: 'Conversation non trouvée ou non autorisée' },
+          { error: 'Conversation not found or unauthorized' },
           { status: 403 }
         )
       }
@@ -284,7 +284,7 @@ export async function POST(request: Request) {
       .insert({
         conversation_id: resolvedConversationId,
         sender_id: user.id,
-        sender_type: 'artisan',
+        sender_type: 'attorney',
         content,
       })
       .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
@@ -293,7 +293,7 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Error sending message:', insertError)
       return NextResponse.json(
-        { error: "Erreur lors de l'envoi du message" },
+        { error: "Error sending message" },
         { status: 500 }
       )
     }
@@ -305,7 +305,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Messages POST error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

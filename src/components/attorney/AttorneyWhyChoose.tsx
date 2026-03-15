@@ -20,8 +20,8 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     if (years > 0) {
       cards.push({
         icon: Calendar,
-        title: 'Expérience',
-        description: `${years} ans d'activité`,
+        title: 'Experience',
+        description: `${years} years in practice`,
       })
     }
   }
@@ -29,8 +29,8 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
   if (artisan.is_verified) {
     cards.push({
       icon: Shield,
-      title: 'Fiabilité',
-      description: 'Identité vérifiée (SIRET)',
+      title: 'Reliability',
+      description: 'Identity verified (Bar Number)',
     })
   }
 
@@ -38,31 +38,31 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     cards.push({
       icon: Star,
       title: 'Satisfaction',
-      description: `Note de ${artisan.average_rating.toFixed(1)}/5 (${artisan.review_count} avis)`,
+      description: `Rated ${artisan.average_rating.toFixed(1)}/5 (${artisan.review_count} reviews)`,
     })
   }
 
   if (artisan.team_size && artisan.team_size > 1) {
     cards.push({
       icon: Users,
-      title: 'Équipe',
-      description: `Équipe de ${artisan.team_size} professionnels`,
+      title: 'Team',
+      description: `Team of ${artisan.team_size} professionals`,
     })
   }
 
   if (artisan.intervention_radius_km) {
     cards.push({
       icon: MapPin,
-      title: 'Proximité',
-      description: `Intervention dans un rayon de ${artisan.intervention_radius_km} km`,
+      title: 'Proximity',
+      description: `Service area within ${artisan.intervention_radius_km} miles`,
     })
   }
 
   if (artisan.free_quote) {
     cards.push({
       icon: CheckCircle,
-      title: 'Sans engagement',
-      description: 'Devis gratuit',
+      title: 'No obligation',
+      description: 'Free consultation',
     })
   }
 
@@ -99,7 +99,7 @@ export function AttorneyWhyChoose({ artisan }: { artisan: LegacyArtisan }) {
           <Trophy className="w-4.5 h-4.5 text-amber-500" aria-hidden="true" />
         </div>
         <h2 className="text-lg font-semibold text-gray-900 font-heading">
-          Pourquoi choisir cet artisan
+          Why choose this attorney
         </h2>
       </div>
 

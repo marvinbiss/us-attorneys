@@ -59,24 +59,24 @@ export const CallbackPanel = memo(function CallbackPanel({
           <div>
             <p className="text-base font-semibold text-gray-900">
               {context.artisan
-                ? `Être rappelé par ${context.artisan.name}`
-                : 'Demande de rappel'}
+                ? `Get a callback from ${context.artisan.name}`
+                : 'Request a callback'}
             </p>
             <p className="mt-1 text-sm text-gray-600">
               {context.artisan ? (
                 <>
-                  <strong>{context.artisan.name}</strong> vous
-                  rappelle dans les meilleurs délais
+                  <strong>{context.artisan.name}</strong> will
+                  call you back as soon as possible
                 </>
               ) : (
                 <>
-                  Un{' '}
+                  A verified{' '}
                   <strong>
                     {context.metier.toLowerCase()}
                   </strong>{' '}
-                  vérifié à{' '}
-                  <strong>{context.ville}</strong> vous
-                  rappelle dans les meilleurs délais
+                  in{' '}
+                  <strong>{context.ville}</strong> will
+                  call you back as soon as possible
                 </>
               )}
             </p>
@@ -91,7 +91,7 @@ export const CallbackPanel = memo(function CallbackPanel({
                 inputMode="tel"
                 autoComplete="tel"
                 required
-                placeholder="06 12 34 56 78"
+                placeholder="(555) 123-4567"
                 value={lead.callbackPhone}
                 onChange={(e) => {
                   lead.setCallbackPhone(e.target.value)
@@ -119,19 +119,19 @@ export const CallbackPanel = memo(function CallbackPanel({
                 className="mt-0.5"
               />
               <span>
-                J&apos;accepte que mes données soient traitées pour recevoir un rappel.{' '}
+                I agree to have my data processed to receive a callback.{' '}
                 <a
                   href="/privacy"
                   target="_blank"
                   className="underline"
                 >
-                  Politique de confidentialité
+                  Privacy Policy
                 </a>
               </span>
             </label>
             {lead.callbackError && (
               <p className="text-xs text-red-600 text-center">
-                Une erreur est survenue. Veuillez réessayer.
+                An error occurred. Please try again.
               </p>
             )}
             <button
@@ -146,7 +146,7 @@ export const CallbackPanel = memo(function CallbackPanel({
               ) : (
                 <>
                   <Phone className="h-4 w-4" />
-                  Demander un rappel
+                  Request a callback
                 </>
               )}
             </button>
@@ -181,7 +181,7 @@ export const CallbackPanel = memo(function CallbackPanel({
               transition={{ delay: 0.3 }}
               className="text-base font-semibold text-gray-900"
             >
-              Demande envoyée !
+              Request sent!
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 5 }}
@@ -189,7 +189,7 @@ export const CallbackPanel = memo(function CallbackPanel({
               transition={{ delay: 0.4 }}
               className="mt-1 text-sm text-gray-600"
             >
-              Votre demande a été envoyée ! Un artisan vous contactera sous 24h.
+              Your request has been sent! An attorney will contact you within 24h.
             </motion.p>
           </div>
 
@@ -202,11 +202,11 @@ export const CallbackPanel = memo(function CallbackPanel({
           >
             <span className="inline-flex items-center gap-1">
               <Clock className="h-3.5 w-3.5 text-green-500" />
-              Réponse rapide
+              Quick response
             </span>
             <span className="inline-flex items-center gap-1">
               <ShieldCheck className="h-3.5 w-3.5 text-green-500" />
-              Artisan vérifié
+              Verified attorney
             </span>
           </motion.div>
 
@@ -217,7 +217,7 @@ export const CallbackPanel = memo(function CallbackPanel({
             transition={{ delay: 0.7 }}
             className="text-xs text-gray-400"
           >
-            98% de nos clients sont recontactés en moins de 2h
+            98% of our clients are contacted back within 2 hours
           </motion.p>
         </motion.div>
       )}

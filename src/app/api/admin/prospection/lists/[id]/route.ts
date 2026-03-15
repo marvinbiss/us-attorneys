@@ -25,7 +25,7 @@ export async function GET(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -39,13 +39,13 @@ export async function GET(
       .single()
 
     if (error || !data) {
-      return NextResponse.json({ success: false, error: { message: 'Liste non trouvée' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'List not found' } }, { status: 404 })
     }
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Get list error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -60,7 +60,7 @@ export async function PATCH(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -70,7 +70,7 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -91,13 +91,13 @@ export async function PATCH(
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
       }
       logger.error('Update list error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
     }
     if (!data) {
-      return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
     }
 
     await logAdminAction(authResult.admin.id, 'list.update', 'prospection_list', id, {
@@ -107,7 +107,7 @@ export async function PATCH(
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Patch list error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -122,7 +122,7 @@ export async function DELETE(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -136,7 +136,7 @@ export async function DELETE(
 
     if (error) {
       logger.error('Delete list error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'list.delete', 'prospection_list', id)
@@ -144,6 +144,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Delete list error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

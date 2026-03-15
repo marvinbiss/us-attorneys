@@ -67,23 +67,23 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
 
   const handleClaim = async () => {
     if (siret.length !== 14) {
-      setError('Le SIRET doit contenir exactement 14 chiffres')
+      setError('The bar number must be valid')
       return
     }
     if (fullName.trim().length < 2) {
-      setError('Veuillez entrer votre nom complet')
+      setError('Please enter your full name')
       return
     }
     if (!email.includes('@')) {
-      setError('Veuillez entrer une adresse email valide')
+      setError('Please enter a valid email address')
       return
     }
     if (phone.replace(/\D/g, '').length < 10) {
-      setError('Veuillez entrer un numéro de téléphone valide')
+      setError('Please enter a valid phone number')
       return
     }
     if (position.trim().length < 2) {
-      setError('Veuillez indiquer votre poste dans l\'entreprise')
+      setError('Please indicate your role at the firm')
       return
     }
 
@@ -108,13 +108,13 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
 
       if (!response.ok) {
         const debugInfo = data.debug ? ` [DEBUG: ${JSON.stringify(data.debug)}]` : ''
-        setError((data.error || 'Erreur lors de la revendication') + debugInfo)
+        setError((data.error || 'Error claiming profile') + debugInfo)
         return
       }
 
       setSuccess(true)
     } catch {
-      setError('Erreur de connexion au serveur')
+      setError('Server connection error')
     } finally {
       setIsLoading(false)
     }
@@ -126,14 +126,14 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
         <div className="flex items-start gap-3">
           <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-amber-800">Vous êtes cet artisan ?</p>
+            <p className="text-sm font-medium text-amber-800">Are you this attorney?</p>
             <p className="text-sm text-amber-700 mt-1">
-              Cette fiche ne peut pas encore être revendiquée automatiquement.
-              Contactez-nous à{' '}
+              This profile cannot yet be claimed automatically.
+              Contact us at{' '}
               <a href="mailto:support@us-attorneys.com" className="underline font-medium">
                 support@us-attorneys.com
               </a>{' '}
-              avec une copie de votre extrait Kbis.
+              with a copy of your bar admission certificate.
             </p>
           </div>
         </div>
@@ -148,7 +148,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"
       >
         <Shield className="w-5 h-5" />
-        Vous êtes cet artisan ? Revendiquez cette fiche
+        Are you this attorney? Claim this profile
       </button>
 
       {/* Modal */}
@@ -177,17 +177,17 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Demande envoyée !
+                  Request sent!
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Votre demande de revendication pour <strong>{attorneyName}</strong> a été soumise.
-                  Un administrateur la validera sous 24 à 48 heures.
+                  Your claim request for <strong>{attorneyName}</strong> has been submitted.
+                  An administrator will review it within 24 to 48 hours.
                 </p>
                 <button
                   onClick={() => setShowModal(false)}
                   className="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors"
                 >
-                  Fermer
+                  Close
                 </button>
               </div>
             ) : (
@@ -199,14 +199,14 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-gray-900">
-                      Revendiquer cette fiche
+                      Claim this profile
                     </h3>
                     <p className="text-sm text-gray-500">{attorneyName}</p>
                   </div>
                 </div>
 
                 <p className="text-sm text-gray-600 mb-4">
-                  Remplissez vos coordonnées et votre SIRET pour prouver que vous êtes le propriétaire de cette entreprise.
+                  Fill in your details and bar number to verify that you are this attorney.
                 </p>
 
                 {error && (
@@ -220,13 +220,13 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                   {/* Nom complet */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Nom complet <span className="text-red-500">*</span>
+                      Full name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={fullName}
                       onChange={(e) => { setFullName(e.target.value); setError(null) }}
-                      placeholder="Jean Dupont"
+                      placeholder="John Smith"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
@@ -235,13 +235,13 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                   {/* Email */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email professionnel <span className="text-red-500">*</span>
+                      Professional email <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); setError(null) }}
-                      placeholder="jean@monentreprise.fr"
+                      placeholder="john@lawfirm.com"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
@@ -250,28 +250,28 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                   {/* Téléphone */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Téléphone <span className="text-red-500">*</span>
+                      Phone <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => { setPhone(formatPhone(e.target.value)); setError(null) }}
-                      placeholder="06 12 34 56 78"
+                      placeholder="(555) 123-4567"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
-                  {/* Poste */}
+                  {/* Position */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Poste / Fonction <span className="text-red-500">*</span>
+                      Position / Role <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={position}
                       onChange={(e) => { setPosition(e.target.value); setError(null) }}
-                      placeholder="Gérant, Artisan plombier, Chef d'entreprise..."
+                      placeholder="Partner, Associate, Managing Attorney..."
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
@@ -280,7 +280,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                   {/* SIRET */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Numéro SIRET <span className="text-red-500">*</span>
+                      Bar Number <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -292,14 +292,14 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                       disabled={isLoading}
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      Votre SIRET figure sur votre extrait Kbis ou sur{' '}
+                      Your bar number can be found on your state bar association website or{' '}
                       <a
-                        href="https://www.societe.com"
+                        href="https://www.americanbar.org"
                         target="_blank"
                         rel="nofollow noopener noreferrer"
                         className="text-amber-600 hover:underline"
                       >
-                        societe.com
+                        americanbar.org
                       </a>
                     </p>
                   </div>
@@ -311,7 +311,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                     disabled={isLoading}
                     className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
                   >
-                    Annuler
+                    Cancel
                   </button>
                   <button
                     onClick={handleClaim}
@@ -321,13 +321,13 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      'Envoyer ma demande'
+                      'Send my request'
                     )}
                   </button>
                 </div>
 
                 <p className="mt-4 text-xs text-gray-400 text-center">
-                  Un administrateur vérifiera et validera votre demande sous 24 à 48h.
+                  An administrator will verify and approve your request within 24 to 48 hours.
                 </p>
               </>
             )}

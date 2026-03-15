@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const result = paymentsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
           status as 'active' | 'canceled' | 'past_due' | 'all'
         )
 
-        // Enrichir avec les données utilisateur (use email from Stripe since profiles may not have stripe_customer_id)
+        // Enrich with user data (use email from Stripe since profiles may not have stripe_customer_id)
         const enrichedData = subscriptions.data.map((sub) => ({
           ...sub,
           userId: null,
@@ -126,12 +126,12 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: false,
-      error: { message: 'Type invalide' },
+      error: { message: 'Invalid type' },
     }, { status: 400 })
   } catch (error) {
     logger.error('Admin payments error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

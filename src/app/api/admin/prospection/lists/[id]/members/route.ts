@@ -22,7 +22,7 @@ export async function GET(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -43,7 +43,7 @@ export async function GET(
 
     if (error) {
       logger.error('List members error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error retrieving data' } }, { status: 500 })
     }
 
     return NextResponse.json({
@@ -53,7 +53,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Members GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -68,7 +68,7 @@ export async function POST(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -78,7 +78,7 @@ export async function POST(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -95,7 +95,7 @@ export async function POST(
 
     if (error) {
       logger.error('Add members error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during creation' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'list.add_members', 'prospection_list', id, {
@@ -105,7 +105,7 @@ export async function POST(
     return NextResponse.json({ success: true, data: { added: members.length } })
   } catch (error) {
     logger.error('Members POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -120,7 +120,7 @@ export async function DELETE(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -134,7 +134,7 @@ export async function DELETE(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -148,7 +148,7 @@ export async function DELETE(
 
     if (error) {
       logger.error('Remove members error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'list.remove_members', 'prospection_list', id, {
@@ -158,6 +158,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Members DELETE error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

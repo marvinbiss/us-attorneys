@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non autorisé' },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     if (!(planId in PLANS)) {
       return NextResponse.json(
-        { error: 'Plan invalide' },
+        { error: 'Invalid plan' },
         { status: 400 }
       )
     }
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     if (!plan.priceId) {
       return NextResponse.json(
-        { error: 'Ce plan ne nécessite pas de paiement' },
+        { error: 'This plan does not require payment' },
         { status: 400 }
       )
     }
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Stripe checkout error:', error)
     return NextResponse.json(
-      { error: 'Erreur lors de la création du paiement' },
+      { error: 'Error creating payment' },
       { status: 500 }
     )
   }

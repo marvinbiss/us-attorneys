@@ -282,7 +282,7 @@ export const comparisons: Comparison[] = [
       {
         question: 'L\'ITE est-elle éligible à MaPrimeRénov\' en 2026 ?',
         answer:
-          'Oui, l\'ITE des murs est éligible à MaPrimeRénov\' 2026 avec un montant de 40 à 75 €/m² selon vos revenus (plafonné à 100 m²). L\'ITI est également éligible mais à un montant inférieur (15 à 25 €/m²). Dans les deux cas, les travaux doivent être réalisés par un artisan RGE.',
+          'Oui, l\'ITE des murs est éligible à MaPrimeRénov\' 2026 avec un montant de 40 à 75 €/m² selon vos revenus (plafonné à 100 m²). L\'ITI est également éligible mais à un montant inférieur (15 à 25 €/m²). Dans les deux cas, les travaux doivent être réalisés par an attorney RGE.',
       },
       {
         question: 'Peut-on isoler par l\'extérieur un mur en pierre ?',
@@ -785,7 +785,7 @@ export const comparisons: Comparison[] = [
       {
         question: 'Quel est le prix d\'un peintre professionnel en 2026 ?',
         answer:
-          'Un peintre professionnel facture 25 à 45 €/m² (fourniture + pose, 2 couches) selon la région et la complexité. Soit 2 500 à 4 500 € pour repeindre un appartement de 70 m² (murs + plafonds). Demandez toujours un devis détaillé précisant le nombre de couches, la marque de peinture et la préparation du support incluse.',
+          'Un peintre professionnel facture 25 à 45 €/m² (fourniture + pose, 2 couches) selon la région et la complexité. Soit 2 500 à 4 500 € pour repeindre un appartement de 70 m² (murs + plafonds). Demandez toujours a consultation détaillé précisant le nombre de couches, la marque de peinture et la préparation du support incluse.',
       },
     ],
   },
@@ -884,7 +884,7 @@ export const comparisons: Comparison[] = [
           'Le placo hydrofuge (H1, reconnaissable à sa couleur verte) est le standard en salle de bain. La brique plâtrière est aussi adaptée grâce à ses propriétés hygrométriques. Dans les deux cas, appliquez un système de protection à l\'eau (SPEC) dans les zones de projection directe (douche, baignoire). Évitez le carreau de plâtre standard (non hydrofuge) dans les pièces humides.',
       },
       {
-        question: 'Faut-il un artisan pour monter une cloison ?',
+        question: 'Faut-il an attorney pour monter une cloison ?',
         answer:
           'Le montage d\'une cloison placo est accessible à un bon bricoleur (ossature métallique + vissage des plaques). La brique et le carreau de plâtre nécessitent plus de savoir-faire (alignement, collage, découpe). Dans tous les cas, l\'intervention d\'un électricien est requise pour le passage des gaines et le respect de la norme NF C 15-100. Comptez 300 à 600 € de main d\'œuvre pour une cloison de 10 m².',
       },

@@ -1,6 +1,6 @@
 /**
- * API pour récupérer les avis en vedette (pour la homepage)
- * Retourne les meilleurs avis récents avec au moins 4 étoiles
+ * API to retrieve featured reviews (for the homepage)
+ * Returns the best recent reviews with at least 4 stars
  */
 
 import { NextResponse } from 'next/server'
@@ -13,7 +13,7 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Fetch top-rated recent reviews with artisan info (only published reviews)
+    // Fetch top-rated recent reviews with attorney info (only published reviews)
     const { data: reviews, error } = await supabase
       .from('reviews')
       .select(`
@@ -38,11 +38,11 @@ export async function GET() {
       return NextResponse.json({ reviews: [] })
     }
 
-    // Transform reviews to include artisan info
+    // Transform reviews to include attorney info
     const transformedReviews = (reviews || [])
       .filter(r => r.comment && r.comment.length > 20) // Only reviews with actual content
       .map(review => {
-        // Artisan can be null, single object, or array depending on the relation
+        // Attorney can be null, single object, or array depending on the relation
         const artisan = Array.isArray(review.artisan) ? review.artisan[0] : review.artisan
         return {
           id: review.id,

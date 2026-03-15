@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('Voice calls list error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des appels' } },
+        { success: false, error: { message: 'Error retrieving calls' } },
         { status: 500 }
       )
     }
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Voice calls GET error', error as Error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

@@ -9,7 +9,7 @@ import { z } from 'zod'
 const updateUserSchema = z.object({
   full_name: z.string().max(100).optional(),
   phone: z.string().max(20).optional(),
-  user_type: z.enum(['client', 'artisan']).optional(),
+  user_type: z.enum(['client', 'attorney']).optional(),
   name: z.string().max(100).optional(),
   siret: z.string().max(20).optional(),
   description: z.string().max(1000).optional(),
@@ -21,7 +21,7 @@ const updateUserSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Détails d'un utilisateur
+// GET - User details
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -35,7 +35,7 @@ export async function GET(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -48,7 +48,7 @@ export async function GET(
 
     if (authError || !authUser.user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Utilisateur non trouvé' } },
+        { success: false, error: { message: 'User not found' } },
         { status: 404 }
       )
     }
@@ -115,7 +115,7 @@ export async function GET(
         email: user.email,
         full_name: profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: profile.phone_e164 || user.user_metadata?.phone || null,
-        user_type: profile.role === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        user_type: profile.role === 'attorney' ? 'attorney' : (user.user_metadata?.is_artisan ? 'attorney' : 'client'),
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: null,
@@ -133,13 +133,13 @@ export async function GET(
   } catch (error) {
     logger.error('Admin user details error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// PATCH - Mettre à jour un utilisateur
+// PATCH - Update a user
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -153,7 +153,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -164,7 +164,7 @@ export async function PATCH(
     const result = updateUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -173,7 +173,7 @@ export async function PATCH(
     const userMetadataUpdates: Record<string, unknown> = {}
     if (result.data.full_name !== undefined) userMetadataUpdates.full_name = result.data.full_name
     if (result.data.phone !== undefined) userMetadataUpdates.phone = result.data.phone
-    if (result.data.user_type !== undefined) userMetadataUpdates.is_artisan = result.data.user_type === 'artisan'
+    if (result.data.user_type !== undefined) userMetadataUpdates.is_artisan = result.data.user_type === 'attorney'
 
     if (Object.keys(userMetadataUpdates).length > 0) {
       const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
@@ -197,9 +197,9 @@ export async function PATCH(
           updates[field] = result.data[field as keyof typeof result.data]
         }
       }
-      // Sync profiles.role when user_type changes (artisan/client)
+      // Sync profiles.role when user_type changes (attorney/client)
       if (result.data.user_type) {
-        updates.role = result.data.user_type === 'artisan' ? 'artisan' : 'client'
+        updates.role = result.data.user_type === 'attorney' ? 'attorney' : 'client'
       }
       updates.updated_at = new Date().toISOString()
 
@@ -218,12 +218,12 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: 'Utilisateur mis à jour',
+      message: 'User updated',
     })
   } catch (error) {
     logger.error('Admin user update error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -243,7 +243,7 @@ export async function DELETE(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -291,12 +291,12 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Utilisateur supprimé',
+      message: 'Deleted user',
     })
   } catch (error) {
     logger.error('Admin user delete error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

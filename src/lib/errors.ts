@@ -1,5 +1,5 @@
 /**
- * Custom error classes for ServicesArtisans
+ * Custom error classes for US Attorneys
  */
 
 export class AppError extends Error {
@@ -16,7 +16,7 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string = 'Données invalides') {
+  constructor(message: string = 'Invalid data') {
     super(message, 'VALIDATION_ERROR', 400)
     this.name = 'ValidationError'
   }
@@ -24,20 +24,20 @@ export class ValidationError extends AppError {
 
 export class NotFoundError extends AppError {
   constructor(resource: string = 'Ressource') {
-    super(`${resource} non trouvé`, 'NOT_FOUND', 404)
+    super(`${resource} not found`, 'NOT_FOUND', 404)
     this.name = 'NotFoundError'
   }
 }
 
 export class AuthenticationError extends AppError {
-  constructor(message: string = 'Authentification requise') {
+  constructor(message: string = 'Authentication required') {
     super(message, 'AUTHENTICATION_ERROR', 401)
     this.name = 'AuthenticationError'
   }
 }
 
 export class AuthorizationError extends AppError {
-  constructor(message: string = 'Accès non autorisé') {
+  constructor(message: string = 'Unauthorized access') {
     super(message, 'AUTHORIZATION_ERROR', 403)
     this.name = 'AuthorizationError'
   }
@@ -46,7 +46,7 @@ export class AuthorizationError extends AppError {
 export class RateLimitError extends AppError {
   constructor(retryAfterSeconds: number = 60) {
     super(
-      `Trop de requêtes. Réessayez dans ${retryAfterSeconds} secondes.`,
+      `Too many requests. Retry in ${retryAfterSeconds} seconds.`,
       'RATE_LIMIT_ERROR',
       429
     )
@@ -66,7 +66,7 @@ export class ExternalServiceError extends AppError {
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string = 'Conflit de données') {
+  constructor(message: string = 'Data conflict') {
     super(message, 'CONFLICT_ERROR', 409)
     this.name = 'ConflictError'
   }

@@ -21,7 +21,7 @@ export async function GET(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -36,7 +36,7 @@ export async function GET(
 
     if (error || !page) {
       return NextResponse.json(
-        { success: false, error: { message: 'Page non trouvée' } },
+        { success: false, error: { message: 'Page not found' } },
         { status: 404 }
       )
     }
@@ -45,7 +45,7 @@ export async function GET(
   } catch (error) {
     logger.error('CMS page get error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -64,7 +64,7 @@ export async function PUT(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -74,7 +74,7 @@ export async function PUT(
       body = await request.json()
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Corps de requête JSON invalide' } },
+        { success: false, error: { message: 'Invalid JSON request body' } },
         { status: 400 }
       )
     }
@@ -82,7 +82,7 @@ export async function PUT(
     const parsed = updatePageSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -101,13 +101,13 @@ export async function PUT(
     // Guard against oversized JSON payloads
     if (validated.content_json && JSON.stringify(validated.content_json).length > 500000) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le contenu JSON dépasse la taille maximale autorisée' } },
+        { success: false, error: { message: 'JSON content exceeds maximum allowed size' } },
         { status: 400 }
       )
     }
     if (validated.structured_data && JSON.stringify(validated.structured_data).length > 100000) {
       return NextResponse.json(
-        { success: false, error: { message: 'Les données structurées dépassent la taille maximale autorisée' } },
+        { success: false, error: { message: 'Structured data exceeds maximum allowed size' } },
         { status: 400 }
       )
     }
@@ -139,7 +139,7 @@ export async function PUT(
     if (error || !page) {
       logger.error('CMS page update error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la mise à jour de la page' } },
+        { success: false, error: { message: 'Error updating page' } },
         { status: error ? 500 : 404 }
       )
     }
@@ -161,7 +161,7 @@ export async function PUT(
   } catch (error) {
     logger.error('CMS page update error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -180,7 +180,7 @@ export async function DELETE(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -201,7 +201,7 @@ export async function DELETE(
     if (error || !page) {
       logger.error('CMS page delete error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la suppression de la page' } },
+        { success: false, error: { message: 'Error deleting page' } },
         { status: error ? 500 : 404 }
       )
     }
@@ -219,7 +219,7 @@ export async function DELETE(
   } catch (error) {
     logger.error('CMS page delete error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

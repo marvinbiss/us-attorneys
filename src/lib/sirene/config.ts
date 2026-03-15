@@ -3,7 +3,7 @@
  * Codes NAF des metiers du batiment
  */
 
-// Codes NAF des artisans du batiment
+// Codes NAF attorneys du batiment
 export const NAF_CODES_BATIMENT = {
   // Travaux de construction specialises (Division 43)
   '4311Z': 'Travaux de demolition',

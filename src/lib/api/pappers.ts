@@ -3,10 +3,10 @@
  * Documentation: https://www.pappers.fr/api
  *
  * Enrichissement des fiches artisans avec :
- * - Infos financières (CA, résultat)
+ * - Financial info (revenue, profit)
  * - Dirigeants
- * - Procédures collectives
- * - Annonces légales
+ * - Insolvency proceedings
+ * - Legal announcements
  *
  * Upgraded with world-class error handling, caching, and retry logic
  */
@@ -49,7 +49,7 @@ export interface EntrepriseComplete {
   siren: string
   siret: string
 
-  // Informations générales
+  // General information
   nom: string
   nomCommercial: string | null
   formeJuridique: string
@@ -57,7 +57,7 @@ export interface EntrepriseComplete {
   dateCreation: string
   dateCreationFormate: string
 
-  // Activité
+  // Activity
   codeNAF: string
   libelleNAF: string
   domaine: string
@@ -86,12 +86,12 @@ export interface EntrepriseComplete {
   effectif: string | null
   trancheEffectif: string | null
 
-  // État
+  // Status
   actif: boolean
   radiee: boolean
   dateRadiation?: string
 
-  // Procédures
+  // Procedures
   procedureCollective: boolean
   procedureEnCours: string | null
 
@@ -217,7 +217,7 @@ async function pappersRequest<T>(
 // ============================================
 
 /**
- * Récupère les informations complètes d'une entreprise par SIRET
+ * Retrieves complete company information by SIRET
  */
 export async function getEntrepriseParSiret(siret: string): Promise<EntrepriseComplete | null> {
   // Validate and clean SIRET
@@ -251,7 +251,7 @@ export async function getEntrepriseParSiret(siret: string): Promise<EntrepriseCo
 }
 
 /**
- * Récupère les informations par SIREN
+ * Retrieves information by SIREN
  */
 export async function getEntrepriseParSiren(siren: string): Promise<EntrepriseComplete | null> {
   // Validate and clean SIREN
@@ -296,7 +296,7 @@ export async function rechercherEntreprises(
   }
 ): Promise<RechercheResultat[]> {
   if (!query || query.length < 2) {
-    throw new ValidationError('Requête trop courte (minimum 2 caractères)', { field: 'query' })
+    throw new ValidationError('Query too short (minimum 2 characters)', { field: 'query' })
   }
 
   const params: Record<string, string> = {
@@ -343,8 +343,8 @@ export async function rechercherEntreprises(
 // ============================================
 
 /**
- * Vérifie rapidement si une entreprise est "saine"
- * (active, pas de procédure collective, existence > 1 an)
+ * Quickly checks if a company is "healthy"
+ * (active, no insolvency proceedings, exists > 1 year)
  */
 export async function verifierSanteEntreprise(siret: string): Promise<{
   saine: boolean
@@ -356,7 +356,7 @@ export async function verifierSanteEntreprise(siret: string): Promise<{
   if (!entreprise) {
     return {
       saine: false,
-      raisons: ['Entreprise non trouvée'],
+      raisons: ['Company not found'],
       score: 0,
     }
   }
@@ -364,53 +364,53 @@ export async function verifierSanteEntreprise(siret: string): Promise<{
   const raisons: string[] = []
   let score = 100
 
-  // Vérifier si active
+  // Verify si active
   if (!entreprise.actif || entreprise.radiee) {
-    raisons.push('Entreprise inactive ou radiée')
+    raisons.push('Company inactive or deregistered')
     score -= 100
   }
 
-  // Vérifier les procédures collectives
+  // Check insolvency proceedings
   if (entreprise.procedureCollective) {
-    raisons.push(`Procédure en cours: ${entreprise.procedureEnCours}`)
+    raisons.push(`Proceedings in progress: ${entreprise.procedureEnCours}`)
     score -= 50
   }
 
-  // Vérifier l'ancienneté (moins de 1 an = risque)
+  // Check age (less than 1 year = risk)
   const dateCreation = new Date(entreprise.dateCreation)
   const anciennete = (Date.now() - dateCreation.getTime()) / (1000 * 60 * 60 * 24 * 365)
   if (anciennete < 1) {
-    raisons.push("Entreprise créée il y a moins d'un an")
+    raisons.push("Company created less than a year ago")
     score -= 20
   } else if (anciennete >= 5) {
     score += 10 // Bonus for established companies
   }
 
-  // Vérifier le CA (si disponible)
+  // Verify le CA (si disponible)
   if (entreprise.dernierCA !== null && entreprise.dernierCA < 10000) {
-    raisons.push("Chiffre d'affaires très faible")
+    raisons.push("Very low revenue")
     score -= 10
   } else if (entreprise.dernierCA !== null && entreprise.dernierCA >= 100000) {
     score += 5 // Bonus for healthy revenue
   }
 
-  // Vérifier le résultat négatif
+  // Check negative result
   if (entreprise.dernierResultat !== null && entreprise.dernierResultat < 0) {
-    raisons.push('Résultat déficitaire')
+    raisons.push('Loss-making result')
     score -= 15
   }
 
-  // Dirigeant identifié
+  // Director identified
   if (entreprise.dirigeants.length > 0) {
     score += 5
   } else {
-    raisons.push('Aucun dirigeant identifié')
+    raisons.push('No director identified')
     score -= 5
   }
 
   return {
     saine: score >= 70,
-    raisons: raisons.length > 0 ? raisons : ['Aucun problème détecté'],
+    raisons: raisons.length > 0 ? raisons : ['No issues detected'],
     score: Math.max(0, Math.min(100, score)),
   }
 }
@@ -463,7 +463,7 @@ function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseCom
     formeJuridiqueCode: String(data.categorie_juridique || ''),
     dateCreation: String(data.date_creation || ''),
     dateCreationFormate: data.date_creation
-      ? new Date(String(data.date_creation)).toLocaleDateString('fr-FR')
+      ? new Date(String(data.date_creation)).toLocaleDateString('en-US')
       : '',
 
     codeNAF: String(data.code_naf || ''),
@@ -484,7 +484,7 @@ function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseCom
 
     capital: data.capital as number | null,
     capitalFormate: data.capital
-      ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(data.capital))
+      ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(Number(data.capital))
       : null,
     dernierCA: dernierBilan.chiffreAffaires ?? null,
     dernierResultat: dernierBilan.resultat ?? null,
@@ -568,7 +568,7 @@ export function validateSiret(siret: string): boolean {
  */
 export function formaterMontant(montant: number | null): string {
   if (montant === null) return 'N/C'
-  return new Intl.NumberFormat('fr-FR', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
@@ -576,7 +576,7 @@ export function formaterMontant(montant: number | null): string {
 }
 
 /**
- * Formate l'ancienneté
+ * Formats the company age
  */
 export function formaterAnciennete(dateCreation: string): string {
   const date = new Date(dateCreation)
@@ -606,7 +606,7 @@ export function formaterSiren(siren: string): string {
 }
 
 /**
- * Obtient le badge de confiance approprié
+ * Gets the appropriate trust badge
  */
 export function getBadgeConfiance(entreprise: EntrepriseComplete): {
   niveau: 'gold' | 'silver' | 'bronze' | 'none'
@@ -618,36 +618,36 @@ export function getBadgeConfiance(entreprise: EntrepriseComplete): {
   if (badges.entrepriseSaine && badges.plusDe5Ans && badges.caSuperieur100k) {
     return {
       niveau: 'gold',
-      label: 'Entreprise établie',
-      description: "Plus de 5 ans d'activité, CA > 100k€, aucun problème",
+      label: 'Established company',
+      description: "Over 5 years of activity, revenue > $100k, no issues",
     }
   }
 
   if (badges.entrepriseSaine && badges.plusDe5Ans) {
     return {
       niveau: 'silver',
-      label: 'Entreprise confirmée',
-      description: "Plus de 5 ans d'activité, situation saine",
+      label: 'Confirmed company',
+      description: "Over 5 years of activity, healthy status",
     }
   }
 
   if (badges.entrepriseSaine) {
     return {
       niveau: 'bronze',
-      label: 'Entreprise référencée',
-      description: 'Situation légale conforme',
+      label: 'Registered company',
+      description: 'Legal status compliant',
     }
   }
 
   return {
     niveau: 'none',
-    label: 'Non référencé',
+    label: 'Not registered',
     description: 'Informations insuffisantes',
   }
 }
 
 /**
- * Codes NAF courants pour les artisans
+ * Codes NAF courants pour the attorneys
  */
 export const CODES_NAF_ARTISANS: Record<string, string> = {
   '4321A': 'Travaux d\'installation électrique',

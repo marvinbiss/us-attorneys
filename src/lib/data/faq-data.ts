@@ -3,19 +3,19 @@ export const faqCategories = [
     name: 'Général',
     questions: [
       {
-        q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est un annuaire d\'artisans de France. Les données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
+        q: 'Qu\'est-ce que US Attorneys ?',
+        a: 'US Attorneys est un annuaire d\'artisans de France. Les données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
       },
       {
         q: 'Le service est-il gratuit ?',
-        a: 'Oui, ServicesArtisans est entièrement gratuit, aussi bien pour les particuliers que pour les artisans. Pas d\'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d\'artisans que vous le souhaitez.',
+        a: 'Oui, US Attorneys est entièrement gratuit, aussi bien pour les particuliers que pour the attorneys. Pas d\'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d\'artisans que vous le souhaitez.',
       },
       {
-        q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Recherchez un métier et une localisation, 2) Comparez les profils et les informations officielles, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
+        q: 'Comment fonctionne US Attorneys ?',
+        a: 'C\'est simple : 1) Recherchez un métier et une localisation, 2) Comparez les profils et les informations officielles, 3) Contactez directement l\'artisan de votre choix pour obtenir a consultation gratuit.',
       },
       {
-        q: 'D\'où proviennent les données des artisans ?',
+        q: 'D\'où proviennent les données attorneys ?',
         a: 'Toutes nos données proviennent de l\'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est référencé via son numéro SIREN, garantissant qu\'il s\'agit d\'une entreprise réelle et active.',
       },
     ],
@@ -24,20 +24,20 @@ export const faqCategories = [
     name: 'Demande de devis',
     questions: [
       {
-        q: 'Comment demander un devis ?',
-        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en décrivant votre projet, et nous transmettons votre demande aux artisans qualifiés de votre région.',
+        q: 'Comment demander a consultation ?',
+        a: 'Cliquez sur "Demander a consultation", remplissez le formulaire en décrivant votre projet, et nous transmettons votre demande aux artisans qualifiés de votre région.',
       },
       {
         q: 'Combien de devis vais-je recevoir ?',
         a: 'Vous recevrez jusqu\'à 3 devis d\'artisans différents, généralement sous 24 à 48 heures.',
       },
       {
-        q: 'Suis-je obligé d\'accepter un devis ?',
-        a: 'Non, vous êtes libre de refuser tous les devis. Notre service est sans engagement.',
+        q: 'Suis-je obligé d\'accepter a consultation ?',
+        a: 'Non, vous êtes libre de refuser tous the consultations. Notre service est sans engagement.',
       },
       {
         q: 'Les devis sont-ils vraiment gratuits ?',
-        a: 'Oui, les devis sont 100% gratuits et sans engagement. Vous ne payez que si vous décidez de faire appel à un artisan.',
+        a: 'Oui, the consultations sont 100% gratuits et sans engagement. Vous ne payez que si vous décidez de faire appel à an attorney.',
       },
     ],
   },
@@ -45,15 +45,15 @@ export const faqCategories = [
     name: 'Artisans',
     questions: [
       {
-        q: 'Comment sont sélectionnés les artisans ?',
-        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous contrôlons que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre des dizaines de métiers du bâtiment dans les 101 départements français.',
+        q: 'Comment sont sélectionnés the attorneys ?',
+        a: 'Chaque artisan référencé sur US Attorneys provient des registres officiels SIREN de l\'État français. Nous contrôlons que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre des dizaines de métiers du bâtiment dans les 101 départements français.',
       },
       {
         q: 'Les artisans sont-ils assurés ?',
         a: 'Les artisans du bâtiment sont légalement tenus de disposer d\'une garantie décennale (art. L241-1 Code des assurances). Nous vous recommandons de la vérifier systématiquement avant de signer tout devis.',
       },
       {
-        q: 'Puis-je voir les avis sur un artisan ?',
+        q: 'Puis-je voir les avis sur an attorney ?',
         a: 'Oui, chaque fiche artisan affiche les avis et notes laissés par les clients précédents.',
       },
     ],
@@ -80,7 +80,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Dois-je créer un compte ?',
-        a: 'Non, vous pouvez demander un devis sans créer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
+        a: 'Non, vous pouvez demander a consultation sans créer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
       },
       {
         q: 'Comment supprimer mon compte ?',

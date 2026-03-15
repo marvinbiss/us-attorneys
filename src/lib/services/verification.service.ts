@@ -68,7 +68,7 @@ export async function verifyEntreprise(siret: string): Promise<VerificationResul
       siretExists: false,
       entreprise: null,
       sante: { saine: false, score: 0, raisons: ['SIRET invalide'] },
-      badge: { niveau: 'none', label: 'Non référencé', description: 'SIRET invalide' },
+      badge: { niveau: 'none', label: 'Not registered', description: 'SIRET invalide' },
       verifiedAt: new Date().toISOString(),
       sources: [],
     }
@@ -102,8 +102,8 @@ export async function verifyEntreprise(siret: string): Promise<VerificationResul
       siretValid: true,
       siretExists: false,
       entreprise: null,
-      sante: { saine: false, score: 0, raisons: ['Entreprise non trouvée'] },
-      badge: { niveau: 'none', label: 'Non référencé', description: 'Entreprise introuvable' },
+      sante: { saine: false, score: 0, raisons: ['Company not found'] },
+      badge: { niveau: 'none', label: 'Not registered', description: 'Entreprise introuvable' },
       verifiedAt: new Date().toISOString(),
       sources,
     }
@@ -121,7 +121,7 @@ export async function verifyEntreprise(siret: string): Promise<VerificationResul
   // Step 5: Calculate trust badge
   const badge = entreprise
     ? getBadgeConfiance(entreprise)
-    : { niveau: 'none' as const, label: 'Non référencé', description: 'Données insuffisantes' }
+    : { niveau: 'none' as const, label: 'Not registered', description: 'Données insuffisantes' }
 
   // Step 6: Geocode address if available
   let geolocation: VerificationResult['geolocation'] = undefined
@@ -266,8 +266,8 @@ export async function batchVerify(
               siretValid: false,
               siretExists: false,
               entreprise: null,
-              sante: { saine: false, score: 0, raisons: ['Erreur de vérification'] },
-              badge: { niveau: 'none' as const, label: 'Erreur', description: 'Erreur de vérification' },
+              sante: { saine: false, score: 0, raisons: ['Verification error'] },
+              badge: { niveau: 'none' as const, label: 'Erreur', description: 'Verification error' },
               verifiedAt: new Date().toISOString(),
               sources: [],
             },
@@ -339,7 +339,7 @@ export function calculateTrustScore(verification: VerificationResult): {
 
   // Revenue > 50k
   factors.push({
-    name: 'CA > 50 000€',
+    name: 'CA > 50 000$',
     points: 10,
     met: (verification.entreprise?.dernierCA ?? 0) >= 50000,
   })
@@ -379,7 +379,7 @@ export function getVerificationSummary(verification: VerificationResult): {
       status: 'error',
       title: 'Entreprise introuvable',
       description: 'Ce SIRET n\'existe pas dans les registres officiels',
-      details: ['Vérifiez le numéro SIRET auprès de l\'artisan'],
+      details: ['Vérifiez le numéro SIRET auprès de l\'attorney'],
     }
   }
 
@@ -404,7 +404,7 @@ export function getVerificationSummary(verification: VerificationResult): {
   if (verification.sante.score >= 80) {
     return {
       status: 'verified',
-      title: 'Entreprise référencée',
+      title: 'Registered company',
       description: 'Toutes les vérifications ont été passées avec succès',
       details: [
         `Score de santé: ${verification.sante.score}/100`,
@@ -415,7 +415,7 @@ export function getVerificationSummary(verification: VerificationResult): {
 
   return {
     status: 'verified',
-    title: 'Entreprise référencée',
+    title: 'Registered company',
     description: 'Entreprise active mais avec quelques points d\'attention',
     details: verification.sante.raisons,
   }

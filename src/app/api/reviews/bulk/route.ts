@@ -18,7 +18,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Non authentifié' } },
+        { success: false, error: { message: 'Not authenticated' } },
         { status: 401 }
       )
     }
@@ -32,7 +32,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!profile?.is_admin) {
       return NextResponse.json(
-        { success: false, error: { message: 'Accès réservé aux administrateurs' } },
+        { success: false, error: { message: 'Access reserved for administrators' } },
         { status: 403 }
       )
     }
@@ -42,7 +42,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides' } },
+        { success: false, error: { message: 'Invalid data' } },
         { status: 400 }
       )
     }
@@ -71,7 +71,7 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     logger.error('Bulk moderate reviews error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

@@ -1,6 +1,6 @@
 /**
- * Artisan Equipe API
- * GET:  List team members for the connected artisan
+ * Attorney Team API
+ * GET:  List team members for the connected attorney
  * POST: Add a new team member (Zod validation)
  */
 
@@ -33,7 +33,7 @@ export async function GET() {
     if (error) {
       logger.error('Error fetching team members:', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors du chargement de l\'équipe' } },
+        { success: false, error: { message: 'Error loading team' } },
         { status: 500 }
       )
     }
@@ -41,7 +41,7 @@ export async function GET() {
     return NextResponse.json({ members: data ?? [] })
   } catch (error) {
     logger.error('Equipe GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
 
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: validation.error.flatten() } },
         { status: 400 }
       )
     }
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     if (error) {
       logger.error('Error inserting team member:', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de l\'ajout du membre' } },
+        { success: false, error: { message: 'Error adding team member' } },
         { status: 500 }
       )
     }
@@ -87,6 +87,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ member: data }, { status: 201 })
   } catch (error) {
     logger.error('Equipe POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

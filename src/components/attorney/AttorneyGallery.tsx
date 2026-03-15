@@ -79,15 +79,15 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
       >
         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <Camera className="w-5 h-5 text-clay-400" />
-          Réalisations ({photos.length})
+          Portfolio ({photos.length})
           {stats.videos > 0 && (
             <span className="ml-2 text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
-              {stats.videos} vidéo{stats.videos > 1 ? 's' : ''}
+              {stats.videos} video{stats.videos > 1 ? 's' : ''}
             </span>
           )}
           {stats.beforeAfter > 0 && (
             <span className="ml-1 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-              {stats.beforeAfter} avant/après
+              {stats.beforeAfter} before/after
             </span>
           )}
         </h2>
@@ -116,7 +116,7 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
               ) : photos[0].mediaType === 'before_after' ? (
                 <div className="px-4 py-2 bg-black/60 rounded-lg flex items-center gap-2">
                   <Layers className="w-5 h-5 text-white" />
-                  <span className="text-white font-medium">Avant/Après</span>
+                  <span className="text-white font-medium">Before/After</span>
                 </div>
               ) : (
                 <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -171,7 +171,7 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
             className="mt-4 w-full py-3 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
           >
             <Camera className="w-5 h-5" />
-            Voir toutes les réalisations
+            View all portfolio items
           </motion.button>
         )}
       </motion.div>
@@ -186,7 +186,7 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
             className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
             onClick={closeLightbox}
             role="dialog"
-            aria-label="Galerie de réalisations en plein écran"
+            aria-label="Portfolio gallery fullscreen"
             aria-modal="true"
           >
             {/* Header */}
@@ -204,7 +204,7 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
                 <button
                   className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                   onClick={closeLightbox}
-                  aria-label="Fermer la galerie"
+                  aria-label="Close gallery"
                 >
                   <X className="w-6 h-6 text-white" />
                 </button>
@@ -219,7 +219,7 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
                 animate={{ opacity: 1, x: 0 }}
                 className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
                 onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
-                aria-label="Photo précédente"
+                aria-label="Previous photo"
               >
                 <ChevronLeft className="w-8 h-8 text-white" />
               </motion.button>
@@ -230,7 +230,7 @@ export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
                 animate={{ opacity: 1, x: 0 }}
                 className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
                 onClick={(e) => { e.stopPropagation(); goToNext(); }}
-                aria-label="Photo suivante"
+                aria-label="Next photo"
               >
                 <ChevronRight className="w-8 h-8 text-white" />
               </motion.button>

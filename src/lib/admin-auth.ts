@@ -1,5 +1,5 @@
 /**
- * Admin Authentication Utility - ServicesArtisans
+ * Admin Authentication Utility - US Attorneys
  * Ensures only admin users can access admin endpoints
  */
 
@@ -91,7 +91,7 @@ async function validateCsrf(): Promise<NextResponse | null> {
     if (secFetchSite === 'cross-site') {
       logger.warn('CSRF blocked: cross-site request detected via Sec-Fetch-Site')
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        { success: false, error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' } },
         { status: 403 }
       )
     }
@@ -118,7 +118,7 @@ async function validateCsrf(): Promise<NextResponse | null> {
     } catch {
       logger.warn('CSRF blocked: malformed origin header', { origin })
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        { success: false, error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' } },
         { status: 403 }
       )
     }
@@ -134,7 +134,7 @@ async function validateCsrf(): Promise<NextResponse | null> {
     if (!isAllowed) {
       logger.warn('CSRF blocked: origin mismatch', { origin: originHost, allowed: allowedUrls })
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        { success: false, error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' } },
         { status: 403 }
       )
     }
@@ -159,7 +159,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       return {
         success: false,
         error: NextResponse.json(
-          { success: false, error: { code: 'UNAUTHORIZED', message: 'Authentification requise' } },
+          { success: false, error: { code: 'UNAUTHORIZED', message: 'Authentication required' } },
           { status: 401 }
         ),
       }
@@ -208,7 +208,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       return {
         success: false,
         error: NextResponse.json(
-          { success: false, error: { code: 'PROFILE_ACCESS_ERROR', message: 'Impossible de vérifier les permissions' } },
+          { success: false, error: { code: 'PROFILE_ACCESS_ERROR', message: 'Unable to verify permissions' } },
           { status: 503 }
         ),
       }
@@ -230,7 +230,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       return {
         success: false,
         error: NextResponse.json(
-          { success: false, error: { code: 'FORBIDDEN', message: 'Accès admin requis' } },
+          { success: false, error: { code: 'FORBIDDEN', message: 'Admin access required' } },
           { status: 403 }
         ),
       }
@@ -253,7 +253,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     return {
       success: false,
       error: NextResponse.json(
-        { success: false, error: { code: 'AUTH_ERROR', message: 'Erreur d\'authentification' } },
+        { success: false, error: { code: 'AUTH_ERROR', message: 'Authentication error' } },
         { status: 500 }
       ),
     }

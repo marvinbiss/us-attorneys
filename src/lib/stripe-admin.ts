@@ -168,11 +168,11 @@ export async function changeSubscriptionPlan(
   prorationBehavior: 'create_prorations' | 'none' | 'always_invoice' = 'create_prorations'
 ) {
   try {
-    // Récupérer l'abonnement actuel
+    // Retrieve l'abonnement actuel
     const subscription = await getStripe().subscriptions.retrieve(subscriptionId)
     const subscriptionItemId = subscription.items.data[0].id
 
-    // Mettre à jour avec le nouveau prix
+    // Update avec le nouveau prix
     const updatedSubscription = await getStripe().subscriptions.update(subscriptionId, {
       items: [
         {

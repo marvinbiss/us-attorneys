@@ -88,7 +88,7 @@ export default async function DepartementPage({ params }: PageProps) {
   if (!dept) notFound()
 
   const villesDuDepartement = getCitiesByState(dept.code)
-  const content = generateDepartementContent(dept as never)
+  const content = generateDepartementContent(dept)
   const deptArtisanCount = await getAttorneyCountByDepartment(dept.name)
 
   // Other departments in the same region

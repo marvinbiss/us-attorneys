@@ -115,21 +115,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`hub-title-${specialtySlug}`))
   const titleTemplates = [
-    `${specialtyName} en France — Devis Gratuit 2026`,
-    `${specialtyName} : tarifs et devis gratuit 2026`,
-    `${specialtyName} France — Artisans vérifiés`,
-    `${specialtyName} — Comparez les artisans 2026`,
-    `${specialtyName} en France — Artisans qualifiés`,
+    `${specialtyName} Nationwide — Free Consultation 2026`,
+    `${specialtyName} : fees and free consultation 2026`,
+    `${specialtyName} Nationwide — Verified Attorneys`,
+    `${specialtyName} — Compare Attorneys 2026`,
+    `${specialtyName} Nationwide — Qualified Attorneys`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`hub-desc-${specialtySlug}`))
   const descTemplates = [
-    `Trouvez un ${svcLower} qualifié parmi nos artisans vérifiés SIREN. Tarifs, avis et devis gratuit dans ${states.length} départements.`,
-    `Comparez les ${svcLower}s en France : tarifs, avis et certifications. Devis gratuit, sans engagement.`,
-    `Annuaire de ${svcLower}s vérifiés par SIREN en France. Prix, conseils d'experts et devis gratuit.`,
-    `Besoin d'un ${svcLower} ? Annuaire national : tarifs indicatifs, artisans référencés, devis gratuit en ligne.`,
-    `${specialtyName} en France 2026 : prix, conseils, certifications. Comparez les artisans et demandez un devis gratuit.`,
+    `Find a qualified ${svcLower} among our bar-verified attorneys. Fees, reviews and free consultation in ${states.length} states.`,
+    `Compare ${svcLower}s nationwide: fees, reviews and certifications. Free consultation, no obligation.`,
+    `Directory of bar-verified ${svcLower}s nationwide. Pricing, expert advice and free consultation.`,
+    `Need a ${svcLower}? National directory: indicative fees, verified attorneys, free consultation online.`,
+    `${specialtyName} Nationwide 2026: pricing, advice, certifications. Compare attorneys and request a free consultation.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -273,18 +273,18 @@ export default async function ServicePage({ params }: PageProps) {
   // H1 variation for SEO
   const h1Hash = Math.abs(hashCode(`hub-h1-${specialtySlug}`))
   const h1Templates = [
-    `${service.name} en France`,
-    `Trouver un ${service.name.toLowerCase()} en France`,
-    `${service.name} — Annuaire national`,
-    `Artisans ${service.name.toLowerCase()} en France`,
-    `${service.name} : comparez les professionnels`,
+    `${service.name} Nationwide`,
+    `Find a ${service.name.toLowerCase()} Nationwide`,
+    `${service.name} — National Directory`,
+    `${service.name.toLowerCase()} Attorneys Nationwide`,
+    `${service.name}: Compare Professionals`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
   // JSON-LD structured data
   const serviceSchema = getServiceSchema({
     name: service.name,
-    description: service.description || `Services de ${service.name.toLowerCase()} en France`,
+    description: service.description || `${service.name.toLowerCase()} legal services nationwide`,
     category: service.category || service.name,
     image: getServiceImage(specialtySlug).src,
   })
@@ -307,7 +307,7 @@ export default async function ServicePage({ params }: PageProps) {
   const pricingSchema = trade ? getServicePricingSchema({
     specialtyName: service.name,
     specialtySlug: specialtySlug,
-    description: service.description || `Services de ${service.name.toLowerCase()} en France`,
+    description: service.description || `${service.name.toLowerCase()} legal services nationwide`,
     lowPrice: trade.priceRange.min,
     highPrice: trade.priceRange.max,
     priceCurrency: 'EUR',
@@ -362,9 +362,9 @@ export default async function ServicePage({ params }: PageProps) {
           </h1>
           <p className="text-lg md:text-xl text-slate-400 max-w-3xl leading-relaxed">
             {service.description ||
-              `Trouvez les meilleurs ${service.name.toLowerCase()}s près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
+              `Find the best ${service.name.toLowerCase()}s near you. Compare reviews, fees and get free consultations.`}
           </p>
-          <LastUpdated label="Données artisans mises à jour le" className="text-slate-500 mt-3" />
+          <LastUpdated label="Attorney data updated on" className="text-slate-500 mt-3" />
 
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
@@ -372,19 +372,19 @@ export default async function ServicePage({ params }: PageProps) {
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
                 {totalAttorneyCount > 0 ? totalAttorneyCount.toLocaleString('fr-FR') : '—'}
               </span>
-              <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
+              <span className="text-sm text-slate-400 mt-1">verified attorneys</span>
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
                 {topCities?.length || 0}+
               </span>
-              <span className="text-sm text-slate-400 mt-1">cities couvertes</span>
+              <span className="text-sm text-slate-400 mt-1">cities covered</span>
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
                 100%
               </span>
-              <span className="text-sm text-slate-400 mt-1">données SIREN</span>
+              <span className="text-sm text-slate-400 mt-1">bar-verified data</span>
             </div>
             {trade && (
               <div className="flex flex-col">
@@ -400,11 +400,11 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-3 mt-8">
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
               <Shield className="w-4 h-4 text-emerald-400" />
-              <span className="text-sm text-slate-300 font-medium">Artisans vérifiés</span>
+              <span className="text-sm text-slate-300 font-medium">Verified Attorneys</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
               <Star className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-slate-300 font-medium">Qualité contrôlée</span>
+              <span className="text-sm text-slate-300 font-medium">Quality Controlled</span>
             </div>
             {trade && (
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
@@ -420,7 +420,7 @@ export default async function ServicePage({ params }: PageProps) {
               href={`/quotes/${specialtySlug}`}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
-              Comparer les artisans près de chez moi
+              Compare attorneys near me
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -433,7 +433,7 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount.toLocaleString('fr-FR')} artisans référencés et vérifiés SIREN dans ${topCities?.length || 0}+ cities. Devis gratuit, données officielles INSEE.`}
+            answer={`${trade.name} nationwide: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount.toLocaleString('en-US')} verified attorneys in ${topCities?.length || 0}+ cities. Free consultation, official data.`}
           />
         </div>
       )}
@@ -455,17 +455,17 @@ export default async function ServicePage({ params }: PageProps) {
 
           <div className="mt-6 bg-gradient-to-r from-clay-500 to-clay-600 rounded-2xl p-8 text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-              Besoin d&apos;un {service.name.toLowerCase()} ?
+              Need a {service.name.toLowerCase()}?
             </h2>
             <p className="text-clay-100 mb-6">
-              Recevez jusqu&apos;à 3 devis gratuits en 2 minutes
+              Get up to 3 free consultations in 2 minutes
             </p>
             <Link
               href={`/quotes/${specialtySlug}`}
               className="inline-flex items-center gap-2 bg-white text-clay-600 hover:bg-clay-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-lg"
             >
               <FileText className="w-5 h-5" />
-              Comparer les artisans près de chez moi
+              Compare attorneys near me
             </Link>
           </div>
         </div>
@@ -475,7 +475,7 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
-            Trouver un {service.name.toLowerCase()} par ville
+            Find a {service.name.toLowerCase()} by city
           </h2>
 
           {/* Popular cities grid */}
@@ -537,7 +537,7 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
-            {service.name} par département
+            {service.name} by State
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {states.map((dept) => {
@@ -586,7 +586,7 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
-              {service.name}s récemment ajoutés
+              Recently Added {service.name}s
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {recentProviders.slice(0, 6).map((provider) => {
@@ -637,7 +637,7 @@ export default async function ServicePage({ params }: PageProps) {
                     <Shield className="w-6 h-6 text-blue-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    Conseils pour choisir votre {service.name.toLowerCase()}
+                    Tips for Choosing Your {service.name.toLowerCase()}
                   </h2>
                 </div>
                 <div className="space-y-4">
@@ -655,7 +655,7 @@ export default async function ServicePage({ params }: PageProps) {
                 <div className="bg-gray-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <BadgeCheck className="w-5 h-5 text-green-600" />
-                    <h3 className="font-semibold text-gray-900">Certifications à vérifier</h3>
+                    <h3 className="font-semibold text-gray-900">Certifications to Verify</h3>
                   </div>
                   <ul className="space-y-2">
                     {trade.certifications.map((cert, i) => (
@@ -671,7 +671,7 @@ export default async function ServicePage({ params }: PageProps) {
                   <div className="bg-red-50 border border-red-100 rounded-xl p-6">
                     <div className="flex items-center gap-2 mb-3">
                       <Clock className="w-5 h-5 text-red-600" />
-                      <h3 className="font-semibold text-red-900">Urgence {service.name.toLowerCase()}</h3>
+                      <h3 className="font-semibold text-red-900">Emergency {service.name.toLowerCase()}</h3>
                     </div>
                     <p className="text-sm text-red-800 leading-relaxed">{trade.emergencyInfo}</p>
                   </div>
@@ -680,7 +680,7 @@ export default async function ServicePage({ params }: PageProps) {
                 <div className="bg-blue-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Wrench className="w-5 h-5 text-blue-600" />
-                    <h3 className="font-semibold text-gray-900">Délai d&apos;intervention</h3>
+                    <h3 className="font-semibold text-gray-900">Response Time</h3>
                   </div>
                   <p className="text-sm text-gray-700">{trade.averageResponseTime}</p>
                 </div>
@@ -695,22 +695,22 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <h2 className="text-xl font-heading font-semibold text-gray-900">
-              Pourquoi faire appel à un {service.name.toLowerCase()} professionnel ?
+              Why Hire a Professional {service.name.toLowerCase()}?
             </h2>
             <p className="text-gray-700 leading-relaxed">
-              Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
-              et couvert par une assurance décennale. Un artisan qualifié dispose de l&apos;expérience,
-              de l&apos;outillage adapté et des certifications nécessaires pour réaliser vos travaux en toute sécurité.
-              De plus, recourir à un professionnel référencé vous protège en cas de malfaçon.
+              Hiring a professional {service.name.toLowerCase()} ensures work that complies with current standards
+              and is covered by professional liability insurance. A qualified attorney has the experience,
+              proper resources and certifications needed to handle your legal services safely.
+              Additionally, working with a verified professional protects you in case of malpractice.
             </p>
 
             <h2 className="text-xl font-heading font-semibold text-gray-900">
-              Quelles certifications doit avoir un {service.name.toLowerCase()} ?
+              What Certifications Should a {service.name.toLowerCase()} Have?
             </h2>
             <p className="text-gray-700 leading-relaxed">
               {trade.certifications.length > 0
-                ? `Un ${service.name.toLowerCase()} qualifié doit idéalement posséder les certifications suivantes : ${trade.certifications.slice(0, 3).join(', ')}. Ces labels garantissent un niveau de compétence reconnu et vous permettent, dans certains cas, de bénéficier d'aides financières de l'État.`
-                : `Un ${service.name.toLowerCase()} doit au minimum disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Vérifiez également son inscription au registre des métiers et son numéro SIRET.`
+                ? `A qualified ${service.name.toLowerCase()} should ideally hold the following certifications: ${trade.certifications.slice(0, 3).join(', ')}. These credentials guarantee a recognized level of competence and may, in some cases, qualify you for financial assistance.`
+                : `A ${service.name.toLowerCase()} should at minimum have professional liability insurance and a guarantee of service. Also verify their bar admission and registration number.`
               }
             </p>
           </div>
@@ -723,7 +723,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-8">
               <h2 className="text-2xl font-bold text-gray-900">
-                Questions fréquentes — {service.name}
+                Frequently Asked Questions — {service.name}
               </h2>
             </div>
             <div className="space-y-4">
@@ -749,31 +749,31 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm">
               <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
-                Comment trouver un bon {service.name.toLowerCase()} ?
+                How to Find a Good {service.name.toLowerCase()}?
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p>
-                  Trouver un {service.name.toLowerCase()} de confiance peut sembler compliqué.
-                  ServicesArtisans vous simplifie la tâche en répertoriant les meilleurs
-                  professionnels de votre région.
+                  Finding a trustworthy {service.name.toLowerCase()} can seem complicated.
+                  We simplify the task by listing the best
+                  professionals in your area.
                 </p>
-                <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
+                <h3>Criteria for Choosing Your {service.name.toLowerCase()}</h3>
                 <ul>
                   <li>
-                    <strong>Les avis clients</strong> : Consultez les retours d&apos;expérience
-                    des autres clients pour vous faire une idée de la qualité du travail.
+                    <strong>Client Reviews</strong>: Check feedback from
+                    other clients to get an idea of the quality of work.
                   </li>
                   <li>
-                    <strong>Les certifications</strong> : Vérifiez que l&apos;artisan dispose
-                    des qualifications nécessaires pour réaliser vos travaux.
+                    <strong>Certifications</strong>: Verify that the attorney has
+                    the qualifications needed for your legal services.
                   </li>
                   <li>
-                    <strong>La proximité</strong> : Un artisan proche de chez vous pourra
-                    intervenir plus rapidement et les frais de déplacement seront réduits.
+                    <strong>Proximity</strong>: An attorney near you can
+                    respond more quickly and travel costs will be reduced.
                   </li>
                   <li>
-                    <strong>Le devis détaillé</strong> : Demandez toujours un devis écrit
-                    avant de vous engager.
+                    <strong>Detailed Consultation</strong>: Always request a written consultation
+                    before committing.
                   </li>
                 </ul>
               </div>
@@ -847,7 +847,7 @@ export default async function ServicePage({ params }: PageProps) {
                 <div className="p-2 bg-amber-100 rounded-lg">
                   <BookOpen className="w-5 h-5 text-amber-600" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Guides utiles</h2>
+                <h2 className="text-xl font-bold text-gray-900">Useful Guides</h2>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {guides.map((guide) => (
@@ -861,7 +861,7 @@ export default async function ServicePage({ params }: PageProps) {
                       <span className="font-medium text-gray-900 group-hover:text-amber-600 text-sm">
                         {guide.title}
                       </span>
-                      <span className="block text-xs text-gray-500 mt-1">Lire le guide complet</span>
+                      <span className="block text-xs text-gray-500 mt-1">Read the full guide</span>
                     </div>
                   </Link>
                 ))}
@@ -878,16 +878,16 @@ export default async function ServicePage({ params }: PageProps) {
         }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-            Vous êtes {service.name.toLowerCase()} ?
+            Are You a {service.name.toLowerCase()}?
           </h2>
           <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-            Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
+            Register for free and receive qualified consultation requests
           </p>
           <Link
             href="/register-attorney"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
-            Créer mon profil
+            Create My Profile
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -897,9 +897,9 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial Methodology</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les tarifs et informations présentés sont indicatifs, basés sur des moyennes nationales et régionales. Les artisans sont référencés via leur numéro SIREN. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
+              The fees and information presented are indicative, based on national and regional averages. Attorneys are verified via their bar registration. This is an independent directory — we do not provide legal services and do not guarantee outcomes.
             </p>
           </div>
         </div>
@@ -909,17 +909,17 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
+            Trust &amp; Safety
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
-              Comment nous référençons les artisans
+              How We Verify Attorneys
             </Link>
             <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
-              Notre politique des avis
+              Our Review Policy
             </Link>
             <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
-              Service de médiation
+              Mediation Service
             </Link>
           </nav>
         </div>
@@ -928,10 +928,10 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Voir aussi - Autres services */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">Voir aussi</h2>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">See Also</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Services connexes</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Related Services</h3>
               <div className="flex flex-wrap gap-2">
                 {(relatedServices[specialtySlug] || popularServices.filter(s => s.slug !== specialtySlug).map(s => s.slug))
                   .slice(0, 6)
@@ -949,19 +949,19 @@ export default async function ServicePage({ params }: PageProps) {
                     )
                   })}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-4 mt-6">Outils pratiques</h3>
+              <h3 className="font-semibold text-gray-900 mb-4 mt-6">Practical Tools</h3>
               <div className="flex flex-wrap gap-2">
                 <Link
                   href="/tools/calculator-prix"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
                 >
-                  Calculateur de prix
+                  Fee Calculator
                 </Link>
                 <Link
                   href="/tools/diagnostic"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
                 >
-                  Diagnostic artisan
+                  Attorney Diagnostic
                 </Link>
               </div>
             </div>
@@ -978,7 +978,7 @@ export default async function ServicePage({ params }: PageProps) {
               if (relatedArticles.length === 0) return null
               return (
                 <div className="mt-8">
-                  <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce métier</h3>
+                  <h3 className="font-semibold text-gray-900 mb-4">Articles on this practice area</h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     {relatedArticles.map((article) => (
                       <Link
@@ -1003,7 +1003,7 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Intent variants — devis, avis, tarifs by city */}
           <div className="mt-8 grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Devis {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Consultation by City</h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
@@ -1017,7 +1017,7 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Avis {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Reviews by City</h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
@@ -1031,7 +1031,7 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Tarifs {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Fees by City</h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link

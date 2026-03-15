@@ -53,7 +53,7 @@ export function createApiHandler<T = unknown>(
             const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`)
             throw new ValidationError(messages.join(', '))
           }
-          throw new ValidationError('Corps de requête invalide')
+          throw new ValidationError('Invalid request body')
         }
       }
 
@@ -94,7 +94,7 @@ export function createApiHandler<T = unknown>(
             .single()
 
           if (!admin) {
-            throw new AuthorizationError('Accès administrateur requis')
+            throw new AuthorizationError('Admin access required')
           }
         }
       }

@@ -5,8 +5,8 @@ import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
 import { z } from 'zod'
 
 const webhookSchema = z.object({
-  MessageSid: z.string().min(1, 'MessageSid requis'),
-  MessageStatus: z.string().min(1, 'MessageStatus requis'),
+  MessageSid: z.string().min(1, 'MessageSid required'),
+  MessageStatus: z.string().min(1, 'MessageStatus required'),
   ErrorCode: z.string().optional(),
   ErrorMessage: z.string().optional(),
 }).passthrough()
@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Webhook Twilio - Status callbacks pour SMS et WhatsApp
- * Reçoit les mises à jour de statut: queued, sent, delivered, read, failed
+ * Receives status updates: queued, sent, delivered, read, failed
  */
 export async function POST(request: NextRequest) {
   try {
@@ -23,17 +23,17 @@ export async function POST(request: NextRequest) {
     const params: Record<string, string> = {}
     formData.forEach((value, key) => { params[key] = value.toString() })
 
-    // Vérifier la signature Twilio
+    // Verify la signature Twilio
     const signature = request.headers.get('x-twilio-signature') || ''
     const url = request.url
     if (!verifyTwilioSignature(signature, url, params)) {
-      logger.warn('Signature webhook Twilio invalide')
-      return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
+      logger.warn('Invalid Twilio webhook signature')
+      return NextResponse.json({ success: false, error: { message: 'Invalid signature' } }, { status: 403 })
     }
 
     const validated = webhookSchema.safeParse(params)
     if (!validated.success) {
-      return NextResponse.json({ success: false, error: { message: 'Paramètres manquants ou invalides', details: validated.error.flatten() } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Missing or invalid parameters', details: validated.error.flatten() } }, { status: 400 })
     }
 
     const messageSid = validated.data.MessageSid

@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 // Booking ID schema - must be valid UUID
-const bookingIdSchema = z.string().uuid('ID de réservation invalide')
+const bookingIdSchema = z.string().uuid('Invalid booking ID')
 
 // PATCH request schema
 const bookingPatchSchema = z.object({
@@ -27,7 +27,7 @@ export async function GET(
     const idValidation = bookingIdSchema.safeParse(bookingId)
     if (!idValidation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID de réservation invalide' } },
+        { success: false, error: { message: 'Invalid booking ID' } },
         { status: 400 }
       )
     }
@@ -70,7 +70,7 @@ export async function GET(
 
     if (error || !booking) {
       return NextResponse.json(
-        { success: false, error: { message: 'Réservation introuvable' } },
+        { success: false, error: { message: 'Booking not found' } },
         { status: 404 }
       )
     }
@@ -79,24 +79,24 @@ export async function GET(
     const slot = slotData?.[0] || null
 
     // Security check: If user is authenticated, verify they have access to this booking
-    // (either as the client who made it, or as the artisan)
+    // (either as the client who made it, or as the attorney)
     if (user) {
       const isOwner = booking.client_id === user.id
-      const isArtisan = slot?.attorney_id === user.id
+      const isAttorney = slot?.attorney_id === user.id
 
-      // For authenticated users, they must be the owner or the artisan
-      if (!isOwner && !isArtisan) {
+      // For authenticated users, they must be the owner or the attorney
+      if (!isOwner && !isAttorney) {
         // Check if user email matches booking email (for non-registered users who made booking)
         if (user.email?.toLowerCase() !== booking.client_email?.toLowerCase()) {
           return NextResponse.json(
-            { success: false, error: { message: 'Accès non autorisé à cette réservation' } },
+            { success: false, error: { message: 'Unauthorized access to this booking' } },
             { status: 403 }
           )
         }
       }
     }
 
-    // Fetch artisan details (limited info for non-owners)
+    // Fetch attorney details (limited info for non-owners)
     let artisan = null
     if (slot?.attorney_id) {
       const { data: attorneyData } = await adminSupabase
@@ -128,7 +128,7 @@ export async function GET(
         endTime: slot?.end_time,
         slotId: slot?.id,
         attorneyId: artisan?.id || slot?.attorney_id,
-        attorneyName: artisan?.full_name || 'Artisan',
+        attorneyName: artisan?.full_name || 'Attorney',
         artisanPhone: artisan?.phone_e164 ?? null,
         artisanEmail: artisan?.email,
         artisanAvatar: null,
@@ -138,13 +138,13 @@ export async function GET(
         client_email: booking.client_email,
         service_description: booking.service_description,
         slot: booking.slot,
-        artisan: artisan || { id: slot?.attorney_id, full_name: 'Artisan' },
+        artisan: artisan || { id: slot?.attorney_id, full_name: 'Attorney' },
       },
     })
   } catch (error) {
     logger.error('Error fetching booking:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors du chargement de la réservation' } },
+      { success: false, error: { message: 'Error loading booking' } },
       { status: 500 }
     )
   }
@@ -162,7 +162,7 @@ export async function PATCH(
     const idValidation = bookingIdSchema.safeParse(bookingId)
     if (!idValidation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID de réservation invalide' } },
+        { success: false, error: { message: 'Invalid booking ID' } },
         { status: 400 }
       )
     }
@@ -173,7 +173,7 @@ export async function PATCH(
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -181,7 +181,7 @@ export async function PATCH(
     const body = await request.json()
     const result = bookingPatchSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
     }
     const { status, notes } = result.data
 
@@ -195,20 +195,20 @@ export async function PATCH(
 
     if (fetchError || !existingBooking) {
       return NextResponse.json(
-        { success: false, error: { message: 'Réservation introuvable' } },
+        { success: false, error: { message: 'Booking not found' } },
         { status: 404 }
       )
     }
 
-    // Check authorization: must be owner or artisan
+    // Check authorization: must be owner or attorney
     const slotData = existingBooking.slot as Array<{ attorney_id: string }> | null
     const isOwner = existingBooking.client_id === user.id
-    const isArtisan = slotData?.[0]?.attorney_id === user.id
+    const isAttorney = slotData?.[0]?.attorney_id === user.id
     const isEmailMatch = user.email?.toLowerCase() === existingBooking.client_email?.toLowerCase()
 
-    if (!isOwner && !isArtisan && !isEmailMatch) {
+    if (!isOwner && !isAttorney && !isEmailMatch) {
       return NextResponse.json(
-        { success: false, error: { message: 'Vous n\'êtes pas autorisé à modifier cette réservation' } },
+        { success: false, error: { message: 'You are not authorized to modify this booking' } },
         { status: 403 }
       )
     }
@@ -237,7 +237,7 @@ export async function PATCH(
   } catch (error) {
     logger.error('Booking PATCH error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la mise à jour' } },
+      { success: false, error: { message: 'Error during update' } },
       { status: 500 }
     )
   }

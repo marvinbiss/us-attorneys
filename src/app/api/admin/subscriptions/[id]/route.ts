@@ -12,7 +12,7 @@ const changeSubscriptionSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Détails d'un abonnement
+// GET - Subscription details
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -26,7 +26,7 @@ export async function GET(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -43,14 +43,14 @@ export async function GET(
     } catch {
       logger.warn('Stripe not configured or subscription not found')
       return NextResponse.json(
-        { success: false, error: { message: 'Abonnements Stripe non disponibles. Vérifiez la configuration STRIPE_SECRET_KEY.' } },
+        { success: false, error: { message: 'Stripe subscriptions not available. Check STRIPE_SECRET_KEY configuration.' } },
         { status: 503 }
       )
     }
   } catch (error) {
     logger.error('Admin subscription details error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -70,7 +70,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -79,7 +79,7 @@ export async function PATCH(
     const validation = changeSubscriptionSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: validation.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: validation.error.flatten() } },
         { status: 400 }
       )
     }
@@ -89,12 +89,12 @@ export async function PATCH(
     try {
       const { changeSubscriptionPlan, PRICE_IDS } = await import('@/lib/stripe-admin')
 
-      // Déterminer le price ID
+      // Determine the price ID
       const newPriceId = newPlan === 'pro' ? PRICE_IDS.pro : PRICE_IDS.premium
 
       if (!newPriceId) {
         return NextResponse.json(
-          { success: false, error: { message: 'Configuration Stripe manquante pour ce plan' } },
+          { success: false, error: { message: 'Missing Stripe configuration for this plan' } },
           { status: 500 }
         )
       }
@@ -117,19 +117,19 @@ export async function PATCH(
       return NextResponse.json({
         success: true,
         result,
-        message: `Plan changé vers ${newPlan}`,
+        message: `Plan changed to ${newPlan}`,
       })
     } catch (stripeError) {
       logger.error('Stripe subscription change failed', stripeError)
       return NextResponse.json(
-        { success: false, error: { message: 'Stripe non configuré ou erreur lors du changement de plan' } },
+        { success: false, error: { message: 'Stripe not configured or error changing plan' } },
         { status: 503 }
       )
     }
   } catch (error) {
     logger.error('Admin subscription change error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors du changement de plan' } },
+      { success: false, error: { message: 'Error changing plan' } },
       { status: 500 }
     )
   }

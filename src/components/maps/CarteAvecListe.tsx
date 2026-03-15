@@ -78,7 +78,7 @@ export default function CarteAvecListe({
           setProviders(validProviders)
         }
       } catch (error) {
-        console.error('Erreur:', error)
+        console.error('Error:', error)
       } finally {
         setLoading(false)
       }
@@ -180,7 +180,7 @@ export default function CarteAvecListe({
                           <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                           <span className="font-bold">{provider.rating_average.toFixed(1)}</span>
                         </div>
-                        <div className="text-xs text-gray-500">{provider.review_count} avis</div>
+                        <div className="text-xs text-gray-500">{provider.review_count} reviews</div>
                       </div>
                     )}
                   </div>
@@ -191,7 +191,7 @@ export default function CarteAvecListe({
                     href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                     className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
                   >
-                    Voir le profil
+                    View profile
                   </Link>
                 </div>
               </Popup>

@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 export async function POST() {
   return NextResponse.json(
-    { error: 'Fonctionnalité non disponible' },
+    { error: 'Feature not available' },
     { status: 501 }
   )
 }

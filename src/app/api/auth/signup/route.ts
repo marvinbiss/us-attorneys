@@ -1,5 +1,5 @@
 /**
- * User Signup API - ServicesArtisans
+ * User Signup API - US Attorneys
  * Handles user registration with email verification
  */
 
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     // Validate environment
     if (!supabaseUrl || !supabaseServiceKey) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Configuration serveur manquante'),
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Missing server configuration'),
         { status: 500 }
       )
     }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Donnees invalides',
+          'Invalid data',
           { fields: formatZodErrors(validation.errors) }
         ),
         { status: 400 }
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     if (authError || !authData.user) {
       logger.error('Auth error:', authError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, authError?.message || 'Erreur lors de la creation du compte'),
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, authError?.message || 'Error creating account'),
         { status: 500 }
       )
     }
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       createSuccessResponse({
-        message: 'Compte créé avec succès. Vérifiez votre email pour activer votre compte.',
+        message: 'Account created successfully. Check your email to activate your account.',
         userId: authData.user.id,
         requiresVerification: true,
       }),
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Signup error:', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de l\'inscription'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during registration'),
       { status: 500 }
     )
   }

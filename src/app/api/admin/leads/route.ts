@@ -1,6 +1,6 @@
 /**
  * Admin Leads API
- * GET: Lead counts + active artisans for a city x metier
+ * GET: Lead counts + active attorneys for a city x practice area
  * Uses service_role (bypasses RLS)
  */
 
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     // Sanitize search inputs to prevent ILIKE injection

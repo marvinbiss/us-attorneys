@@ -634,7 +634,7 @@ function normalizeStripeError(error: unknown): AppError {
  * Format amount for display
  */
 export function formatAmount(amount: number, currency: string = 'eur'): string {
-  return new Intl.NumberFormat('fr-FR', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency.toUpperCase(),
   }).format(amount / 100)
@@ -647,10 +647,10 @@ export function getSubscriptionStatusLabel(status: Stripe.Subscription.Status): 
   const labels: Record<Stripe.Subscription.Status, string> = {
     active: 'Actif',
     past_due: 'En retard',
-    unpaid: 'Impayé',
-    canceled: 'Annulé',
+    unpaid: 'Unpaid',
+    canceled: 'Cancelled',
     incomplete: 'Incomplet',
-    incomplete_expired: 'Expiré',
+    incomplete_expired: 'Expired',
     trialing: 'Essai',
     paused: 'Suspendu',
   }

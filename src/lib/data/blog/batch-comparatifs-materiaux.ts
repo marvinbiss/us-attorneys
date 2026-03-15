@@ -5,7 +5,7 @@ export const comparatifsArticles: Record<string, BlogArticle> = {
     title: "Quel est le meilleur isolant thermique ? Comparatif 2026",
     excerpt: "Laine de verre, laine de roche, polyuréthane, ouate de cellulose, liège : comparatif complet des isolants thermiques avec performances, prix et usages recommandés.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-02',
     readTime: '10 min',
     category: 'Matériaux',
@@ -61,7 +61,7 @@ Pour 1 m² avec R = 5 m².K/W (isolation murs) : la laine de verre nécessite 17
 
       `## Comment choisir : notre recommandation
 
-Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur compromis performance/prix/confort d'été. Pour les **murs par l'intérieur**, la laine de verre en panneaux semi-rigides reste imbattable sur le prix. Pour l'**ITE**, la laine de roche ou la fibre de bois en panneaux rigides garantissent durabilité et performance. Pour les **sols**, le polyuréthane ou le XPS optimisent l'épaisseur. Faites appel à un artisan RGE pour bénéficier des aides MaPrimeRénov' et CEE — consultez notre annuaire sur ServicesArtisans.`,
+Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur compromis performance/prix/confort d'été. Pour les **murs par l'intérieur**, la laine de verre en panneaux semi-rigides reste imbattable sur le prix. Pour l'**ITE**, la laine de roche ou la fibre de bois en panneaux rigides garantissent durabilité et performance. Pour les **sols**, le polyuréthane ou le XPS optimisent l'épaisseur. Faites appel à an attorney RGE pour bénéficier des aides MaPrimeRénov' et CEE — consultez notre annuaire sur US Attorneys.`,
     ],
   },
 
@@ -69,7 +69,7 @@ Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur c
     title: "Peinture intérieure : guide pour choisir la bonne",
     excerpt: "Acrylique, glycéro, alkyde : quel type de peinture choisir pour chaque pièce ? Finitions, rendement, prix et conseils de professionnels pour un résultat parfait.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-04',
     readTime: '9 min',
     category: 'Matériaux',
@@ -125,7 +125,7 @@ Comptez 25 à 40 €/m² pour une peinture intérieure réalisée par un profess
 
       `## Nos conseils pour un résultat professionnel
 
-Investissez dans des outils de qualité : rouleau anti-gouttes pour les grandes surfaces, pinceau à rechampir pour les angles. Peignez toujours en commençant par le plafond, puis les murs, et terminez par les boiseries. Respectez les temps de séchage entre les couches. Maintenez une température de 15 à 25 °C et évitez de peindre par temps très humide. Pour un résultat impeccable, faites appel à un peintre professionnel — trouvez le vôtre sur ServicesArtisans.`,
+Investissez dans des outils de qualité : rouleau anti-gouttes pour les grandes surfaces, pinceau à rechampir pour les angles. Peignez toujours en commençant par le plafond, puis les murs, et terminez par les boiseries. Respectez les temps de séchage entre les couches. Maintenez une température de 15 à 25 °C et évitez de peindre par temps très humide. Pour un résultat impeccable, faites appel à un peintre professionnel — trouvez le vôtre sur US Attorneys.`,
     ],
   },
 
@@ -133,7 +133,7 @@ Investissez dans des outils de qualité : rouleau anti-gouttes pour les grandes 
     title: "Robinetterie : laiton, inox ou zamak ?",
     excerpt: "Laiton chromé, inox brossé ou zamak : comparatif des matériaux de robinetterie. Durabilité, prix, entretien et comment reconnaître la qualité.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-06',
     readTime: '8 min',
     category: 'Matériaux',
@@ -185,7 +185,7 @@ Le zamak est un alliage de zinc, aluminium, magnésium et cuivre. Il est moulé 
 
       `## Notre verdict et recommandation
 
-Pour un rapport qualité-prix optimal, choisissez du **laiton chromé** de marque reconnue (Grohe, Hansgrohe, Jacob Delafon). Pour une cuisine ou une exigence maximale de durabilité, investissez dans l'**inox 304/316**. Et surtout, fuyez le zamak : les économies réalisées à l'achat seront perdues en réparations et en remplacement prématuré. Un plombier professionnel saura vous conseiller — trouvez-en un sur ServicesArtisans.`,
+Pour un rapport qualité-prix optimal, choisissez du **laiton chromé** de marque reconnue (Grohe, Hansgrohe, Jacob Delafon). Pour une cuisine ou une exigence maximale de durabilité, investissez dans l'**inox 304/316**. Et surtout, fuyez le zamak : les économies réalisées à l'achat seront perdues en réparations et en remplacement prématuré. Un plombier professionnel saura vous conseiller — trouvez-en un sur US Attorneys.`,
     ],
   },
 
@@ -193,7 +193,7 @@ Pour un rapport qualité-prix optimal, choisissez du **laiton chromé** de marqu
     title: "Types de carrelage : grès cérame, faïence, pierre naturelle",
     excerpt: "Grès cérame, faïence, pierre naturelle, terre cuite : guide complet des types de carrelage avec usages, avantages, prix et critères de choix pour chaque pièce.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-08',
     readTime: '9 min',
     category: 'Matériaux',
@@ -245,7 +245,7 @@ La tendance 2026 va aux grands formats : 60x120, 80x80 et même 120x120 cm. Moin
 
       `## Conseils pour la pose
 
-Faites appel à un carreleur professionnel pour les grands formats (risque de casse) et les pièces humides (étanchéité critique). La préparation du support est essentielle : ragréage pour un sol plan, primaire d'accrochage sur les surfaces lisses. Prévoyez 10 % de carrelage supplémentaire pour les coupes et les casses. Trouvez un carreleur qualifié près de chez vous sur ServicesArtisans.`,
+Faites appel à un carreleur professionnel pour les grands formats (risque de casse) et les pièces humides (étanchéité critique). La préparation du support est essentielle : ragréage pour un sol plan, primaire d'accrochage sur les surfaces lisses. Prévoyez 10 % de carrelage supplémentaire pour les coupes et les casses. Trouvez un carreleur qualifié près de chez vous sur US Attorneys.`,
     ],
   },
 
@@ -253,7 +253,7 @@ Faites appel à un carreleur professionnel pour les grands formats (risque de ca
     title: "Parquet massif, contrecollé ou stratifié ?",
     excerpt: "Parquet massif, contrecollé ou stratifié : comparatif détaillé des revêtements de sol en bois. Durabilité, confort, prix et guide de choix selon vos besoins.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-10',
     readTime: '9 min',
     category: 'Matériaux',
@@ -317,7 +317,7 @@ En résumé, le massif coûte 50 à 150 €/m² posé et dure 100+ ans. Le contr
 
       `## Notre recommandation selon votre projet
 
-Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante est le meilleur compromis. Pour une **maison neuve avec plancher chauffant**, le contrecollé en pose collée. Pour un **budget serré**, le stratifié AC4 offre un bon rendu visuel. Pour une **maison de caractère**, le massif chêne en pose clouée sur lambourdes. Dans tous les cas, faites appel à un poseur expérimenté pour un résultat durable — trouvez le vôtre sur ServicesArtisans.`,
+Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante est le meilleur compromis. Pour une **maison neuve avec plancher chauffant**, le contrecollé en pose collée. Pour un **budget serré**, le stratifié AC4 offre un bon rendu visuel. Pour une **maison de caractère**, le massif chêne en pose clouée sur lambourdes. Dans tous les cas, faites appel à un poseur expérimenté pour un résultat durable — trouvez le vôtre sur US Attorneys.`,
     ],
   },
 
@@ -325,7 +325,7 @@ Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante
     title: "Menuiseries bois, PVC ou aluminium : le comparatif",
     excerpt: "Fenêtres et portes en bois, PVC ou aluminium : comparatif performances thermiques, prix, entretien et durabilité pour choisir vos menuiseries en 2026.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-12',
     readTime: '9 min',
     category: 'Matériaux',
@@ -340,7 +340,7 @@ Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante
       { question: "Quel matériau isole le mieux ?", answer: "Le bois est le meilleur isolant naturel (Uw de 1,2 à 1,4 W/m².K pour une fenêtre double vitrage). Le PVC suit de près (Uw de 1,2 à 1,6). L'aluminium isole moins bien malgré les ruptures de pont thermique (Uw de 1,4 à 1,8). Pour atteindre les exigences RT 2020, les trois matériaux conviennent avec un double ou triple vitrage." },
       { question: "Quelle est la durée de vie des menuiseries ?", answer: "Le PVC dure 30 à 50 ans, l'aluminium 40 à 60 ans, le bois 50 ans et plus avec un entretien régulier (lasure ou peinture tous les 5-8 ans). Le mixte bois-alu dépasse 50 ans grâce à la protection alu en extérieur." },
       { question: "Le PVC jaunit-il avec le temps ?", answer: "Les PVC de qualité (blanc ou teinté dans la masse) résistent au jaunissement pendant 20 à 30 ans grâce aux stabilisants UV. Les PVC premiers prix peuvent jaunir en 10 ans. Choisissez des menuiseries certifiées NF ou Qualicoat pour une garantie de tenue des couleurs." },
-      { question: "Quelles aides pour changer ses fenêtres ?", answer: "MaPrimeRénov' offre 40 à 100 € par fenêtre selon vos revenus. Les CEE ajoutent 50 à 150 €. La TVA est réduite à 5,5 % pour les logements de plus de 2 ans. L'éco-PTZ finance le reste. Total des aides : 100 à 300 € par fenêtre, à condition de faire appel à un artisan RGE." },
+      { question: "Quelles aides pour changer ses fenêtres ?", answer: "MaPrimeRénov' offre 40 à 100 € par fenêtre selon vos revenus. Les CEE ajoutent 50 à 150 €. La TVA est réduite à 5,5 % pour les logements de plus de 2 ans. L'éco-PTZ finance le reste. Total des aides : 100 à 300 € par fenêtre, à condition de faire appel à an attorney RGE." },
     ],
     content: [
       `## PVC : le rapport qualité-prix imbattable
@@ -373,7 +373,7 @@ Pour une fenêtre double vitrage standard (4/16/4 argon) : le bois affiche un Uw
 
       `## Installation par un professionnel RGE
 
-La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant de l'Environnement) pour bénéficier des aides financières. La dépose de l'ancien châssis, la préparation du support, la pose, l'étanchéité à l'air et à l'eau et les finitions intérieures sont des étapes critiques. Une fenêtre mal posée perd jusqu'à 40 % de ses performances thermiques. Trouvez un menuisier RGE qualifié sur ServicesArtisans et demandez 3 devis pour comparer.`,
+La pose de menuiseries doit être réalisée par an attorney RGE (Reconnu Garant de l'Environnement) pour bénéficier des aides financières. La dépose de l'ancien châssis, la préparation du support, la pose, l'étanchéité à l'air et à l'eau et les finitions intérieures sont des étapes critiques. Une fenêtre mal posée perd jusqu'à 40 % de ses performances thermiques. Trouvez un menuisier RGE qualifié sur US Attorneys et demandez 3 devis pour comparer.`,
     ],
   },
 
@@ -381,7 +381,7 @@ La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant 
     title: "Tuiles terre cuite, béton ou ardoise : que choisir ?",
     excerpt: "Tuile terre cuite, tuile béton ou ardoise naturelle : comparatif complet des couvertures de toiture avec durée de vie, prix, esthétique et entretien.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-14',
     readTime: '8 min',
     category: 'Matériaux',
@@ -429,7 +429,7 @@ Chaque matériau de couverture a une pente minimale d'utilisation. La tuile cana
 
       `## Réglementation et PLU
 
-Avant de choisir votre couverture, consultez le PLU de votre commune. De nombreuses zones imposent un matériau et une couleur précis pour harmoniser le paysage. En zone ABF (périmètre de monument historique), l'Architecte des Bâtiments de France doit valider votre choix. Le non-respect du PLU peut entraîner une mise en demeure de remise en conformité. Votre couvreur connaît les règles locales — trouvez-en un sur ServicesArtisans.`,
+Avant de choisir votre couverture, consultez le PLU de votre commune. De nombreuses zones imposent un matériau et une couleur précis pour harmoniser le paysage. En zone ABF (périmètre de monument historique), l'Architecte des Bâtiments de France doit valider votre choix. Le non-respect du PLU peut entraîner une mise en demeure de remise en conformité. Votre couvreur connaît les règles locales — trouvez-en un sur US Attorneys.`,
 
       `## Notre recommandation
 
@@ -441,7 +441,7 @@ Pour un **budget maîtrisé**, la tuile terre cuite à emboîtement offre le mei
     title: "Plaque de plâtre BA13 : types et usages",
     excerpt: "BA13 standard, hydrofuge, coupe-feu, phonique : guide complet des plaques de plâtre avec caractéristiques, prix et usages recommandés pour chaque situation.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-16',
     readTime: '8 min',
     category: 'Matériaux',
@@ -493,7 +493,7 @@ L'ossature métallique (rails et montants en acier galvanisé) est le support st
 
       `## Finitions et traitement des joints
 
-La qualité des finitions fait toute la différence. **Bande à joint** : papier armé ou fibre de verre collé à l'enduit sur chaque raccord entre plaques. **Enduit** : 3 passes (collage, dégrossissage, finition) pour un joint invisible. **Ponçage** : au grain 120 puis 180 pour un rendu lisse. Le traitement des joints est l'étape la plus technique : un mauvais jointage se voit immédiatement sous l'éclairage rasant. Faites appel à un plaquiste qualifié — trouvez-en un sur ServicesArtisans.`,
+La qualité des finitions fait toute la différence. **Bande à joint** : papier armé ou fibre de verre collé à l'enduit sur chaque raccord entre plaques. **Enduit** : 3 passes (collage, dégrossissage, finition) pour un joint invisible. **Ponçage** : au grain 120 puis 180 pour un rendu lisse. Le traitement des joints est l'étape la plus technique : un mauvais jointage se voit immédiatement sous l'éclairage rasant. Faites appel à un plaquiste qualifié — trouvez-en un sur US Attorneys.`,
     ],
   },
 
@@ -501,7 +501,7 @@ La qualité des finitions fait toute la différence. **Bande à joint** : papier
     title: "Enduit de façade : monocouche, traditionnel ou chaux ?",
     excerpt: "Enduit monocouche, traditionnel ou à la chaux : comparatif des enduits de façade avec avantages, prix, mise en œuvre et durabilité pour chaque type.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-18',
     readTime: '8 min',
     category: 'Matériaux',
@@ -555,7 +555,7 @@ La préparation du support conditionne la tenue de l'enduit. Sur un mur neuf en 
 
       `## Faire appel à un façadier professionnel
 
-Un enduit de façade mal appliqué peut se fissurer, se décoller ou laisser passer l'eau en quelques années. La mise en œuvre exige le respect des DTU (Documents Techniques Unifiés) : DTU 26.1 pour les enduits traditionnels, DTU 26.1/26.2 pour les monocouches. Un façadier professionnel vous garantit une mise en œuvre conforme et vous fait bénéficier de la garantie décennale. Trouvez un façadier qualifié près de chez vous sur ServicesArtisans.`,
+Un enduit de façade mal appliqué peut se fissurer, se décoller ou laisser passer l'eau en quelques années. La mise en œuvre exige le respect des DTU (Documents Techniques Unifiés) : DTU 26.1 pour les enduits traditionnels, DTU 26.1/26.2 pour les monocouches. Un façadier professionnel vous garantit une mise en œuvre conforme et vous fait bénéficier de la garantie décennale. Trouvez un façadier qualifié près de chez vous sur US Attorneys.`,
     ],
   },
 
@@ -563,7 +563,7 @@ Un enduit de façade mal appliqué peut se fissurer, se décoller ou laisser pas
     title: "Béton ciré, résine ou carrelage : quel sol choisir ?",
     excerpt: "Béton ciré, résine de sol ou carrelage grand format : comparatif des revêtements de sol sans joint. Esthétique, entretien, prix et guide de choix pour chaque pièce.",
     image: '/images/blog/placeholder.webp',
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: '2026-02-20',
     readTime: '9 min',
     category: 'Matériaux',
@@ -619,7 +619,7 @@ Les trois solutions exigent un support parfaitement plan, propre, sec et stable.
 
       `## Faire le bon choix avec un professionnel
 
-Le béton ciré et la résine de sol sont des revêtements techniques dont la qualité dépend à 90 % de la compétence de l'applicateur. Un mauvais dosage, un support mal préparé ou un temps de séchage non respecté ruinent le résultat. Exigez des références de chantiers réalisés et demandez à voir des réalisations en conditions réelles. Trouvez un applicateur qualifié ou un carreleur expérimenté sur ServicesArtisans pour un résultat à la hauteur de vos attentes.`,
+Le béton ciré et la résine de sol sont des revêtements techniques dont la qualité dépend à 90 % de la compétence de l'applicateur. Un mauvais dosage, un support mal préparé ou un temps de séchage non respecté ruinent le résultat. Exigez des références de chantiers réalisés et demandez à voir des réalisations en conditions réelles. Trouvez un applicateur qualifié ou un carreleur expérimenté sur US Attorneys pour un résultat à la hauteur de vos attentes.`,
     ],
   },
 }

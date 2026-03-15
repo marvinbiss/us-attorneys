@@ -1,5 +1,5 @@
 /**
- * Design System Tokens - ServicesArtisans
+ * Design System Tokens - US Attorneys
  * World-class design tokens for consistent branding
  * Based on best practices from Doctolib, Booksy, and Treatwell
  */

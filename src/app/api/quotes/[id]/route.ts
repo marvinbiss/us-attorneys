@@ -23,7 +23,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentication required' }
         },
         { status: 401 }
       )
@@ -84,7 +84,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Server error' }
       },
       { status: 500 }
     )
@@ -104,7 +104,7 @@ export async function PATCH(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentication required' }
         },
         { status: 401 }
       )
@@ -164,7 +164,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Seul le client peut accepter le devis' }
+              error: { code: 1002, message: 'Seul le client peut accepter the consultation' }
             },
             { status: 403 }
           )
@@ -177,7 +177,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Seul le client peut refuser le devis' }
+              error: { code: 1002, message: 'Seul le client peut refuser the consultation' }
             },
             { status: 403 }
           )
@@ -190,7 +190,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Seul l\'artisan peut annuler le devis' }
+              error: { code: 1002, message: 'Only the attorney can cancel the consultation' }
             },
             { status: 403 }
           )
@@ -220,7 +220,7 @@ export async function PATCH(
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Server error' }
       },
       { status: 500 }
     )

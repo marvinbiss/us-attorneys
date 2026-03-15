@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
   const style = request.nextUrl.searchParams.get('style') || 'light'
 
   if (!slug && !id) {
-    return NextResponse.json({ error: 'slug ou id requis' }, { status: 400 })
+    return NextResponse.json({ error: 'slug or id required' }, { status: 400 })
   }
 
   const supabase = createAdminClient()
@@ -72,10 +72,10 @@ export async function GET(request: NextRequest) {
   const { data: provider, error } = await query.single()
 
   if (error || !provider) {
-    // Badge "non trouvé" — retourne un SVG générique
+    // Badge "not found" — returns a generic SVG
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
   <rect width="300" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="150" y="44" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" fill="#94a3b8">Artisan non trouve</text>
+  <text x="150" y="44" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" fill="#94a3b8">Attorney not found</text>
 </svg>`
     return new NextResponse(svg, {
       headers: {
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
     })
   }
 
-  const name = escapeXml((provider.name || 'Artisan').length > 26 ? (provider.name || 'Artisan').slice(0, 24) + '...' : (provider.name || 'Artisan'))
+  const name = escapeXml((provider.name || 'Attorney').length > 26 ? (provider.name || 'Attorney').slice(0, 24) + '...' : (provider.name || 'Attorney'))
   const specialty = escapeXml((provider.specialty || '').length > 28 ? (provider.specialty || '').slice(0, 26) + '...' : (provider.specialty || ''))
   const city = escapeXml((provider.address_city || '').length > 20 ? (provider.address_city || '').slice(0, 18) + '...' : (provider.address_city || ''))
   const rating = Math.min(5, Math.max(0, provider.rating_average || 0))
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
   <rect width="220" height="54" rx="8" fill="${bgColor}" stroke="${borderColor}" stroke-width="1"/>
   ${shieldIcon(8, 12, 28, verifiedColor)}
   <text x="42" y="22" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="${textColor}">${name}</text>
-  <text x="42" y="38" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${verifiedLabel} sur ServicesArtisans</text>
+  <text x="42" y="38" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${verifiedLabel} sur US Attorneys</text>
   <rect x="42" y="44" width="35" height="1" rx="0.5" fill="${brandColor}" opacity="0.3"/>
 </svg>`
   } else {
@@ -150,13 +150,13 @@ export async function GET(request: NextRequest) {
   <!-- Stars + Reviews -->
   ${hasRating ? `
   ${generateStars(rating, 55, 86)}
-  <text x="${55 + 5 * 14 + 8}" y="90" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${rating.toFixed(1)} (${reviews} avis)</text>
+  <text x="${55 + 5 * 14 + 8}" y="90" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${rating.toFixed(1)} (${reviews} reviews)</text>
   ` : `
-  <text x="55" y="90" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${isActive ? 'Artisan actif sur ServicesArtisans.fr' : 'Fiche sur ServicesArtisans.fr'}</text>
+  <text x="55" y="90" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${isActive ? 'Active attorney on US Attorneys' : 'Listed on US Attorneys'}</text>
   `}
 
   <!-- Brand -->
-  <text x="${w - 15}" y="${h - 10}" text-anchor="end" font-family="system-ui,-apple-system,sans-serif" font-size="8" font-weight="600" fill="${brandColor}" opacity="0.6">ServicesArtisans.fr</text>
+  <text x="${w - 15}" y="${h - 10}" text-anchor="end" font-family="system-ui,-apple-system,sans-serif" font-size="8" font-weight="600" fill="${brandColor}" opacity="0.6">US Attorneys.fr</text>
 </svg>`
   }
 

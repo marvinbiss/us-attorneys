@@ -53,10 +53,10 @@ export default function ArtisanLeadStatsPage() {
           setStats(data.stats)
           setMonthlyTrend(data.monthlyTrend || [])
         } else {
-          setError(data.error || 'Erreur')
+          setError(data.error || 'Error')
         }
       } catch {
-        setError('Erreur de connexion')
+        setError('Connection error')
       } finally {
         setLoading(false)
       }
@@ -69,7 +69,7 @@ export default function ArtisanLeadStatsPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement des statistiques...</p>
+          <p className="text-sm text-gray-500 mt-2">Loading statistics...</p>
         </div>
       </div>
     )
@@ -80,7 +80,7 @@ export default function ArtisanLeadStatsPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
-          <p className="text-red-700">{error || 'Erreur inconnue'}</p>
+          <p className="text-red-700">{error || 'Unknown error'}</p>
         </div>
       </div>
     )
@@ -102,11 +102,11 @@ export default function ArtisanLeadStatsPage() {
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/attorney-dashboard" className="hover:text-gray-900">Espace Artisan</Link>
+            <Link href="/attorney-dashboard" className="hover:text-gray-900">Attorney Dashboard</Link>
             <span>/</span>
-            <Link href="/attorney-dashboard/leads" className="hover:text-gray-900">Opportunités</Link>
+            <Link href="/attorney-dashboard/leads" className="hover:text-gray-900">Leads</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">Statistiques</span>
+            <span className="text-gray-900 font-medium">Statistics</span>
           </div>
         </div>
       </div>
@@ -117,37 +117,37 @@ export default function ArtisanLeadStatsPage() {
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour aux opportunités
+          Back to Leads
         </Link>
 
         <div className="flex items-center gap-3 mb-6">
           <BarChart3 className="w-6 h-6 text-blue-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Statistiques des demandes</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Lead Statistics</h1>
         </div>
 
         {/* KPI cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
-            title="Total reçus"
+            title="Total Received"
             value={stats.total}
             icon={<Inbox className="w-5 h-5" />}
             color="blue"
             trend={stats.monthlyGrowth !== 0 ? { value: stats.monthlyGrowth, isPositive: stats.monthlyGrowth > 0 } : undefined}
           />
           <StatCard
-            title="Devis envoyés"
+            title="Quotes Sent"
             value={stats.quoted}
             icon={<Send className="w-5 h-5" />}
             color="green"
           />
           <StatCard
-            title="Taux conversion"
+            title="Conversion Rate"
             value={`${stats.conversionRate}%`}
             icon={<Check className="w-5 h-5" />}
             color="indigo"
           />
           <StatCard
-            title="Temps réponse"
+            title="Response Time"
             value={stats.avgResponseMinutes > 0 ? `${stats.avgResponseMinutes} min` : '—'}
             icon={<Clock className="w-5 h-5" />}
             color="yellow"
@@ -157,15 +157,15 @@ export default function ArtisanLeadStatsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Status breakdown */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Répartition par statut</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Status Breakdown</h3>
             <div className="space-y-3">
               {[
-                { label: 'En attente', value: stats.pending, color: 'bg-blue-500', icon: <Clock className="w-4 h-4 text-blue-500" /> },
-                { label: 'Consultés', value: stats.viewed, color: 'bg-yellow-500', icon: <TrendingUp className="w-4 h-4 text-yellow-500" /> },
-                { label: 'Devis envoyé', value: stats.quoted, color: 'bg-green-500', icon: <Send className="w-4 h-4 text-green-500" /> },
-                { label: 'Déclinés', value: stats.declined, color: 'bg-gray-400', icon: <X className="w-4 h-4 text-gray-400" /> },
-                { label: 'Acceptés', value: stats.accepted, color: 'bg-emerald-500', icon: <Check className="w-4 h-4 text-emerald-500" /> },
-                { label: 'Terminés', value: stats.completed, color: 'bg-green-700', icon: <CheckCircle className="w-4 h-4 text-green-700" /> },
+                { label: 'Pending', value: stats.pending, color: 'bg-blue-500', icon: <Clock className="w-4 h-4 text-blue-500" /> },
+                { label: 'Viewed', value: stats.viewed, color: 'bg-yellow-500', icon: <TrendingUp className="w-4 h-4 text-yellow-500" /> },
+                { label: 'Quote Sent', value: stats.quoted, color: 'bg-green-500', icon: <Send className="w-4 h-4 text-green-500" /> },
+                { label: 'Declined', value: stats.declined, color: 'bg-gray-400', icon: <X className="w-4 h-4 text-gray-400" /> },
+                { label: 'Accepted', value: stats.accepted, color: 'bg-emerald-500', icon: <Check className="w-4 h-4 text-emerald-500" /> },
+                { label: 'Completed', value: stats.completed, color: 'bg-green-700', icon: <CheckCircle className="w-4 h-4 text-green-700" /> },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
                   {item.icon}
@@ -183,12 +183,12 @@ export default function ArtisanLeadStatsPage() {
           </div>
 
           {/* Funnel */}
-          <FunnelChart steps={funnel} title="Entonnoir de conversion" />
+          <FunnelChart steps={funnel} title="Conversion Funnel" />
         </div>
 
         {/* Monthly trend */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-sm font-semibold text-gray-900 mb-4">Tendance mensuelle (6 mois)</h3>
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Monthly Trend (6 months)</h3>
           <div className="flex items-end gap-3 h-40">
             {monthlyTrend.map((m) => (
               <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
@@ -208,8 +208,8 @@ export default function ArtisanLeadStatsPage() {
             ))}
           </div>
           <div className="mt-4 flex items-center justify-between text-sm">
-            <span className="text-gray-500">Ce mois : <strong className="text-gray-900">{stats.thisMonth}</strong></span>
-            <span className="text-gray-500">Mois précédent : <strong className="text-gray-900">{stats.lastMonth}</strong></span>
+            <span className="text-gray-500">This month: <strong className="text-gray-900">{stats.thisMonth}</strong></span>
+            <span className="text-gray-500">Last month: <strong className="text-gray-900">{stats.lastMonth}</strong></span>
           </div>
         </div>
       </div>

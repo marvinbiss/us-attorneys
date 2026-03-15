@@ -65,7 +65,7 @@ export async function GET() {
       d.setDate(d.getDate() - (13 - i))
       return {
         date: d.toISOString().split('T')[0],
-        label: d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }),
+        label: d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
       }
     })
 

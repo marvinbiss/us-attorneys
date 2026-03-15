@@ -17,7 +17,7 @@ const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
     <div className="w-full h-full bg-gray-100 animate-pulse flex items-center justify-center rounded-xl">
       <div className="text-center">
         <div className="w-12 h-12 border-4 border-clay-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <span className="text-gray-500 font-medium">Chargement de la carte...</span>
+        <span className="text-gray-500 font-medium">Loading map...</span>
       </div>
     </div>
   ),
@@ -159,7 +159,7 @@ export default function ServiceLocationPageClient({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading text-xl md:text-2xl font-bold text-gray-900">
-                {h1Text || `${service.name} à ${location.name}`}
+                {h1Text || `${service.name} in ${location.name}`}
               </h1>
               {(location.department_name || location.postal_code) && (
                 <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">
@@ -172,7 +172,7 @@ export default function ServiceLocationPageClient({
               {recentDevisCount > 0 && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-medium mt-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  {recentDevisCount} devis demand{'é'}{recentDevisCount > 1 ? 's' : ''} ce mois-ci
+                  {recentDevisCount} consultation{recentDevisCount > 1 ? 's' : ''} requested this month
                 </div>
               )}
             </div>
@@ -187,7 +187,7 @@ export default function ServiceLocationPageClient({
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                Les deux
+                Both
               </button>
               <button
                 onClick={() => setViewMode('list')}
@@ -198,7 +198,7 @@ export default function ServiceLocationPageClient({
                 }`}
               >
                 <List className="w-4 h-4" />
-                Liste
+                List
               </button>
               <button
                 onClick={() => setViewMode('map')}
@@ -209,7 +209,7 @@ export default function ServiceLocationPageClient({
                 }`}
               >
                 <MapIcon className="w-4 h-4" />
-                Carte
+                Map
               </button>
             </div>
 
@@ -248,17 +248,17 @@ export default function ServiceLocationPageClient({
           className="flex items-center gap-2 flex-1 px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-500 min-h-[44px] active:bg-gray-200 transition-colors"
         >
           <Search className="w-4 h-4" />
-          <span>{searchQuery || 'Rechercher un artisan...'}</span>
+          <span>{searchQuery || 'Search for an attorney...'}</span>
         </button>
         <select
           value={sortOrder}
           onChange={(e) => handleSortChange(e.target.value as 'default' | 'name' | 'rating')}
           className="px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-clay-400"
-          aria-label="Trier les résultats"
+          aria-label="Sort results"
         >
-          <option value="default">Trier</option>
-          <option value="name">Nom A-Z</option>
-          <option value="rating">Avis</option>
+          <option value="default">Sort</option>
+          <option value="name">Name A-Z</option>
+          <option value="rating">Reviews</option>
         </select>
         <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
           <button
@@ -291,7 +291,7 @@ export default function ServiceLocationPageClient({
               type="text"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder="Nom, spécialité, adresse..."
+              placeholder="Name, specialty, address..."
               className="w-full bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[40px]"
               autoFocus
             />
@@ -300,7 +300,7 @@ export default function ServiceLocationPageClient({
               onClick={() => setMobileSearchOpen(false)}
               className="text-xs text-clay-400 font-semibold whitespace-nowrap px-2 py-1"
             >
-              Fermer
+              Close
             </button>
           </div>
         </div>
@@ -315,10 +315,10 @@ export default function ServiceLocationPageClient({
             </div>
             <div className="text-center sm:text-left">
               <p className="font-heading font-bold text-base sm:text-lg">
-                Recevez jusqu&apos;&agrave; 3 devis gratuits de {service.name.toLowerCase()} &agrave; {location.name}
+                Get up to 3 free consultations from {service.name.toLowerCase()} in {location.name}
               </p>
               <p className="text-blue-100 text-sm hidden sm:block">
-                Comparez les prix et choisissez le meilleur artisan
+                Compare fees and choose the best attorney
               </p>
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function ServiceLocationPageClient({
             href={`/quotes/${specialtySlug || service.slug}/${locationSlug || ''}`}
             className="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-900/20 hover:bg-blue-50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-sm sm:text-base whitespace-nowrap"
           >
-            Recevoir mes devis gratuits
+            Get My Free Consultations
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -350,17 +350,17 @@ export default function ServiceLocationPageClient({
                   <SearchX className="w-8 h-8 text-gray-400" />
                 </div>
                 <h2 className="font-heading text-xl font-bold text-gray-900 mb-2">
-                  Aucun {service.name.toLowerCase()} r&eacute;f&eacute;renc&eacute; &agrave; {location.name} pour le moment
+                  No {service.name.toLowerCase()} listed in {location.name} at this time
                 </h2>
                 <p className="text-gray-500 max-w-md mb-8">
-                  Demandez un devis et nous rechercherons un professionnel qualifi&eacute; pour vous dans les plus brefs d&eacute;lais.
+                  Request a consultation and we will find a qualified professional for you as soon as possible.
                 </p>
                 <Link
                   href={`/quotes/${specialtySlug || service.slug}/${locationSlug || ''}`}
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-200 text-base"
                 >
                   <FileText className="w-5 h-5" />
-                  Recevoir mes devis gratuits
+                  Get My Free Consultations
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -387,8 +387,8 @@ export default function ServiceLocationPageClient({
                         <ChevronDown className="w-4 h-4" />
                       )}
                       {isLoadingMore
-                        ? 'Chargement...'
-                        : `Afficher plus (${allProviders.length} / ${totalCount.toLocaleString('fr-FR')})`}
+                        ? 'Loading...'
+                        : `Show more (${allProviders.length} / ${totalCount.toLocaleString('en-US')})`}
                     </button>
                   </div>
                 )}

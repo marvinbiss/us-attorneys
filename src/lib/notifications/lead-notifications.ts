@@ -13,7 +13,7 @@ import type { LeadEventType } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
-const SITE_NAME = 'ServicesArtisans'
+const SITE_NAME = 'US Attorneys'
 
 // ============================================================
 // Types
@@ -32,7 +32,7 @@ interface NotificationTarget {
   userId: string
   email: string | null
   name: string
-  role: 'client' | 'artisan'
+  role: 'client' | 'attorney'
 }
 
 interface NotificationSpec {
@@ -50,16 +50,16 @@ interface NotificationSpec {
 
 const EVENT_CONFIG: Record<string, {
   channels: ('email' | 'in_app')[]
-  targetRoles: ('client' | 'artisan')[]
+  targetRoles: ('client' | 'attorney')[]
 }> = {
   created:    { channels: ['email', 'in_app'], targetRoles: ['client'] },
-  dispatched: { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
+  dispatched: { channels: ['email', 'in_app'], targetRoles: ['attorney'] },
   viewed:     { channels: ['in_app'],          targetRoles: ['client'] },
   quoted:     { channels: ['email', 'in_app'], targetRoles: ['client'] },
-  accepted:   { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
-  refused:    { channels: ['in_app'],          targetRoles: ['artisan'] },
-  completed:  { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
-  expired:    { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
+  accepted:   { channels: ['email', 'in_app'], targetRoles: ['attorney'] },
+  refused:    { channels: ['in_app'],          targetRoles: ['attorney'] },
+  completed:  { channels: ['email', 'in_app'], targetRoles: ['client', 'attorney'] },
+  expired:    { channels: ['email', 'in_app'], targetRoles: ['client', 'attorney'] },
 }
 
 // ============================================================
@@ -107,7 +107,7 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
     }
   }
 
-  if (config.targetRoles.includes('artisan') && event.attorney_id) {
+  if (config.targetRoles.includes('attorney') && event.attorney_id) {
     const { data: provider } = await supabase
       .from('attorneys')
       .select('id, user_id, name, email')
@@ -119,7 +119,7 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
         userId: provider.user_id,
         email: provider.email,
         name: provider.name,
-        role: 'artisan',
+        role: 'attorney',
       })
     }
   }
@@ -226,65 +226,65 @@ function buildNotificationSpec(
     case 'created':
       return {
         type: 'lead_created',
-        title: 'Demande bien reçue',
-        message: `Votre demande pour "${lead.service_name}" à ${location} a été enregistrée. Nous recherchons les meilleurs artisans.`,
+        title: 'Request received',
+        message: `Your request for "${lead.service_name}" in ${location} has been registered. We are searching for the best attorneys.`,
         link: '/client-dashboard/mes-demandes',
-        emailSubject: `Demande reçue – ${lead.service_name}`,
+        emailSubject: `Request received – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Demande enregistrée',
+          heading: 'Request registered',
           color: '#2563eb',
           greeting: `Bonjour ${target.name}`,
-          body: `Votre demande de devis pour <strong>${lead.service_name}</strong> à ${location} a bien été enregistrée. Nous allons contacter les artisans qualifiés de votre zone.`,
+          body: `Your consultation request for <strong>${lead.service_name}</strong> in ${location} has been registered. We will contact qualified attorneys in your area.`,
           ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes`,
           ctaLabel: 'Suivre ma demande',
-          footer: 'Vous recevrez une notification dès qu\'un artisan vous enverra un devis.',
+          footer: 'You will receive a notification as soon as an attorney sends you a consultation.',
         }),
       }
 
     case 'dispatched':
       return {
         type: 'lead_dispatched',
-        title: 'Nouveau lead reçu',
-        message: `Demande de ${lead.client_name} pour "${lead.service_name}" à ${location}.`,
+        title: 'New lead received',
+        message: `Request from ${lead.client_name} for "${lead.service_name}" in ${location}.`,
         link: '/attorney-dashboard/leads',
-        emailSubject: `Nouveau lead – ${lead.service_name} à ${location}`,
+        emailSubject: `New lead – ${lead.service_name} in ${location}`,
         emailHtml: emailTemplate({
           heading: 'Nouveau lead disponible',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
-          body: `Vous avez reçu une nouvelle demande de <strong>${lead.client_name}</strong> pour <strong>${lead.service_name}</strong> à ${location}. Consultez-la et envoyez votre devis.`,
+          body: `You have received a new request from <strong>${lead.client_name}</strong> for <strong>${lead.service_name}</strong> in ${location}. Review it and send your consultation.`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir le lead',
-          footer: 'Répondez rapidement pour maximiser vos chances.',
+          footer: 'Respond quickly to maximize your chances.',
         }),
       }
 
     case 'viewed':
       return {
         type: 'lead_viewed',
-        title: 'Un artisan a consulté votre demande',
-        message: `Un artisan a pris connaissance de votre demande pour "${lead.service_name}".`,
+        title: 'An attorney has viewed your request',
+        message: `An attorney a pris connaissance de votre demande pour "${lead.service_name}".`,
         link: `/client-dashboard/mes-demandes/${lead.id}`,
         emailSubject: '',
         emailHtml: '',
       }
 
     case 'quoted': {
-      const amount = event.metadata.amount ? ` – ${event.metadata.amount} €` : ''
+      const amount = event.metadata.amount ? ` – ${event.metadata.amount} $` : ''
       return {
         type: 'quote_received',
-        title: 'Nouveau devis reçu',
-        message: `Un artisan vous a envoyé un devis pour "${lead.service_name}"${amount}.`,
+        title: 'New consultation received',
+        message: `An attorney has sent you a consultation for "${lead.service_name}"${amount}.`,
         link: `/client-dashboard/mes-demandes/${lead.id}`,
-        emailSubject: `Devis reçu – ${lead.service_name}`,
+        emailSubject: `Consultation received – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Vous avez reçu un devis',
+          heading: 'You have received a consultation',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
-          body: `Un artisan vous a envoyé un devis pour <strong>${lead.service_name}</strong> à ${location}${amount ? `.<br><br>Montant proposé : <strong>${event.metadata.amount} €</strong>` : ''}.`,
+          body: `An attorney has sent you a consultation for <strong>${lead.service_name}</strong> in ${location}${amount ? `.<br><br>Proposed amount: <strong>$${event.metadata.amount}</strong>` : ''}.`,
           ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes/${lead.id}`,
-          ctaLabel: 'Voir le devis',
-          footer: 'Consultez le détail et comparez les offres reçues.',
+          ctaLabel: 'Voir the consultation',
+          footer: 'View the details and compare received offers.',
         }),
       }
     }
@@ -292,15 +292,15 @@ function buildNotificationSpec(
     case 'accepted':
       return {
         type: 'lead_closed',
-        title: 'Devis accepté !',
-        message: `${lead.client_name} a accepté votre devis pour "${lead.service_name}".`,
+        title: 'Consultation accepted!',
+        message: `${lead.client_name} accepted your consultation for "${lead.service_name}".`,
         link: '/attorney-dashboard/leads',
-        emailSubject: `Devis accepté – ${lead.service_name}`,
+        emailSubject: `Consultation accepted – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Votre devis a été accepté',
+          heading: 'Your consultation has been accepted',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
-          body: `Bonne nouvelle ! <strong>${lead.client_name}</strong> a accepté votre devis pour <strong>${lead.service_name}</strong>. Vous pouvez le contacter pour organiser l'intervention.`,
+          body: `Great news! <strong>${lead.client_name}</strong> accepted your consultation for <strong>${lead.service_name}</strong>. You can contact them to arrange the engagement.`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir le lead',
           footer: '',
@@ -310,8 +310,8 @@ function buildNotificationSpec(
     case 'refused':
       return {
         type: 'lead_closed',
-        title: 'Devis refusé',
-        message: `Votre devis pour "${lead.service_name}" n'a pas été retenu.`,
+        title: 'Consultation declined',
+        message: `Your consultation for "${lead.service_name}" was not selected.`,
         link: '/attorney-dashboard/leads',
         emailSubject: '',
         emailHtml: '',
@@ -321,32 +321,32 @@ function buildNotificationSpec(
       if (target.role === 'client') {
         return {
           type: 'lead_closed',
-          title: 'Mission terminée',
-          message: `La mission pour "${lead.service_name}" est terminée. Merci de votre confiance !`,
+          title: 'Case completed',
+          message: `The case for "${lead.service_name}" is complete. Thank you for your trust!`,
           link: `/client-dashboard/mes-demandes/${lead.id}`,
-          emailSubject: `Mission terminée – ${lead.service_name}`,
+          emailSubject: `Case completed – ${lead.service_name}`,
           emailHtml: emailTemplate({
-            heading: 'Mission terminée',
+            heading: 'Case completed',
             color: '#059669',
             greeting: `Bonjour ${target.name}`,
-            body: `La mission pour <strong>${lead.service_name}</strong> à ${location} est terminée. Merci de votre confiance !`,
+            body: `The case for <strong>${lead.service_name}</strong> in ${location} is complete. Thank you for your trust!`,
             ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes/${lead.id}`,
-            ctaLabel: 'Voir le détail',
-            footer: 'N\'hésitez pas à laisser un avis pour aider d\'autres clients.',
+            ctaLabel: 'View details',
+            footer: 'Feel free to leave a review to help other clients.',
           }),
         }
       }
       return {
         type: 'lead_closed',
-        title: 'Mission terminée',
-        message: `La mission "${lead.service_name}" pour ${lead.client_name} est terminée.`,
+        title: 'Case completed',
+        message: `The case "${lead.service_name}" for ${lead.client_name} is complete.`,
         link: '/attorney-dashboard/leads',
-        emailSubject: `Mission terminée – ${lead.service_name}`,
+        emailSubject: `Case completed – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Mission terminée',
+          heading: 'Case completed',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
-          body: `La mission <strong>${lead.service_name}</strong> pour ${lead.client_name} est terminée. Bravo !`,
+          body: `The case <strong>${lead.service_name}</strong> for ${lead.client_name} is complete. Well done!`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir mes leads',
           footer: '',
@@ -357,15 +357,15 @@ function buildNotificationSpec(
       if (target.role === 'client') {
         return {
           type: 'lead_closed',
-          title: 'Demande expirée',
-          message: `Votre demande pour "${lead.service_name}" a expiré sans réponse.`,
+          title: 'Request expired',
+          message: `Your request for "${lead.service_name}" has expired without a response.`,
           link: `/client-dashboard/mes-demandes/${lead.id}`,
-          emailSubject: `Demande expirée – ${lead.service_name}`,
+          emailSubject: `Request expired – ${lead.service_name}`,
           emailHtml: emailTemplate({
-            heading: 'Demande expirée',
+            heading: 'Request expired',
             color: '#d97706',
             greeting: `Bonjour ${target.name}`,
-            body: `Votre demande pour <strong>${lead.service_name}</strong> à ${location} a expiré. Vous pouvez en créer une nouvelle à tout moment.`,
+            body: `Your request for <strong>${lead.service_name}</strong> in ${location} has expired. You can create a new one at any time.`,
             ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes`,
             ctaLabel: 'Mes demandes',
             footer: '',
@@ -374,15 +374,15 @@ function buildNotificationSpec(
       }
       return {
         type: 'lead_closed',
-        title: 'Lead expiré',
-        message: `Le lead "${lead.service_name}" de ${lead.client_name} a expiré.`,
+        title: 'Lead expired',
+        message: `The lead "${lead.service_name}" from ${lead.client_name} has expired.`,
         link: '/attorney-dashboard/leads',
         emailSubject: `Lead expiré – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Lead expiré',
+          heading: 'Lead expired',
           color: '#d97706',
           greeting: `Bonjour ${target.name}`,
-          body: `Le lead <strong>${lead.service_name}</strong> de ${lead.client_name} a expiré.`,
+          body: `The lead <strong>${lead.service_name}</strong> from ${lead.client_name} has expired.`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir mes leads',
           footer: '',
@@ -423,7 +423,7 @@ function emailTemplate(opts: {
       </div>
       ${opts.footer ? `<p style="color: #888; font-size: 13px; line-height: 1.5;">${opts.footer}</p>` : ''}
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
-      <p style="color: #aaa; font-size: 12px; text-align: center;">${SITE_NAME} – La plateforme des artisans qualifiés</p>
+      <p style="color: #aaa; font-size: 12px; text-align: center;">${SITE_NAME} – The qualified attorneys platform</p>
     </div>
   </div>
 </body>

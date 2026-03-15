@@ -1,6 +1,6 @@
 /**
- * API pour récupérer les artisans par ville
- * Utilisé pour afficher les markers sur la carte
+ * API to retrieve attorneys by city
+ * Used to display markers on the map
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     if (!queryValidation.success) {
       return NextResponse.json(
-        { error: queryValidation.error.issues[0]?.message || 'Parametres invalides' },
+        { error: queryValidation.error.issues[0]?.message || 'Invalid parameters' },
         { status: 400 }
       )
     }

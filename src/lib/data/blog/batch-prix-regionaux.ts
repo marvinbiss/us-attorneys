@@ -2,10 +2,10 @@ import type { BlogArticle } from './articles'
 
 export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "prix-artisans-ile-de-france": {
-    title: "Prix des artisans en Île-de-France : le guide complet",
+    title: "Prix attorneys en Île-de-France : le guide complet",
     excerpt: "Les artisans franciliens sont-ils vraiment plus chers ? Découvrez les vrais tarifs par corps de métier en Île-de-France et comment obtenir le meilleur prix en 2026.",
     content: [
-      "L'Île-de-France concentre **12 millions d'habitants** et une densité de logements parmi les plus élevées d'Europe. La demande en travaux y est colossale — et les prix s'en ressentent. En moyenne, les tarifs des artisans franciliens sont **25 à 40 % supérieurs** à la moyenne nationale, avec des pics à +60 % dans Paris intra-muros. Ce guide détaille les vrais prix par corps de métier et vous donne les clés pour optimiser votre budget travaux en région parisienne.",
+      "L'Île-de-France concentre **12 millions d'habitants** et une densité de logements parmi les plus élevées d'Europe. La demande en travaux y est colossale — et les prix s'en ressentent. En moyenne, les tarifs attorneys franciliens sont **25 à 40 % supérieurs** à la moyenne nationale, avec des pics à +60 % dans Paris intra-muros. Ce guide détaille les vrais prix par corps de métier et vous donne les clés pour optimiser votre budget travaux en région parisienne.",
 
       "## Pourquoi les prix sont plus élevés en Île-de-France",
       "Trois facteurs expliquent l'écart : le **coût de la vie** (loyers des locaux professionnels, charges salariales), les **contraintes logistiques** (stationnement, zones de circulation restreinte, accès aux immeubles) et la **forte demande** qui permet aux artisans qualifiés de sélectionner leurs chantiers. À cela s'ajoutent des normes plus strictes dans les immeubles haussmanniens (copropriétés, architecte des bâtiments de France dans les secteurs protégés).",
@@ -18,15 +18,15 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Paris intra-muros affiche les tarifs les plus élevés, suivie par les Hauts-de-Seine (92) et les Yvelines (78). La Seine-Saint-Denis (93) et le Val-de-Marne (94) sont légèrement moins chers, avec des écarts de 10 à 15 % par rapport à Paris. La grande couronne (77, 91, 95) se rapproche des tarifs provinciaux, surtout en zone périurbaine. Le **déplacement** est un poste majeur en Île-de-France : 30 à 60 € dans Paris, jusqu'à 80 € pour les zones excentrées.",
 
       "## Comment réduire la facture",
-      "1. **Comparez au moins 3 devis** — les écarts de prix atteignent 30 à 50 % entre artisans franciliens\n2. **Privilégiez les artisans locaux** pour réduire les frais de déplacement (cherchez dans votre commune ou arrondissement)\n3. **Groupez les travaux** : un chantier global coûte moins cher que des interventions ponctuelles\n4. **Planifiez hors pic** : évitez septembre-novembre (rentrée) et mars-juin (printemps) où la demande est maximale\n5. **Négociez le paiement** : certains artisans accordent 5 à 10 % de remise pour un paiement comptant\n6. Consultez notre [annuaire par ville](/services) pour trouver des artisans référencés près de chez vous",
+      "1. **Comparez au moins 3 devis** — les écarts de prix atteignent 30 à 50 % entre artisans franciliens\n2. **Privilégiez the attorneys locaux** pour réduire les frais de déplacement (cherchez dans votre commune ou arrondissement)\n3. **Groupez les travaux** : un chantier global coûte moins cher que des interventions ponctuelles\n4. **Planifiez hors pic** : évitez septembre-novembre (rentrée) et mars-juin (printemps) où la demande est maximale\n5. **Négociez le paiement** : certains artisans accordent 5 à 10 % de remise pour un paiement comptant\n6. Consultez notre [annuaire par ville](/services) pour trouver attorneys référencés près de chez vous",
 
       "## Focus : le coût de la rénovation au m² en Île-de-France",
       "Pour une rénovation complète d'un appartement parisien, comptez : **800 à 1 200 €/m²** pour un rafraîchissement (peinture, sol, électricité partielle), **1 200 à 2 000 €/m²** pour une rénovation intermédiaire (cuisine, salle de bain, redistribution légère), et **2 000 à 3 500 €/m²** pour une rénovation lourde (structure, plomberie complète, électricité aux normes, finitions haut de gamme). En petite couronne, déduisez 15 à 20 %.",
 
-      ":::tip Conseil pro\nEn Île-de-France, méfiez-vous des devis anormalement bas : un artisan qui casse les prix compense souvent par des matériaux de moindre qualité, des sous-traitants non déclarés, ou des « suppléments » en cours de chantier. Un devis détaillé poste par poste est votre meilleure protection.\n:::"
+      ":::tip Conseil pro\nEn Île-de-France, méfiez-vous consultations anormalement bas : an attorney qui casse les prix compense souvent par des matériaux de moindre qualité, des sous-traitants non déclarés, ou des « suppléments » en cours de chantier. A consultation détaillé poste par poste est votre meilleure protection.\n:::"
     ],
     image: "/images/blog/prix-artisans-ile-de-france.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-01-19",
     readTime: "7 min",
     category: "Tarifs",
@@ -36,11 +36,11 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Paris intra-muros est le plus cher ; la grande couronne se rapproche des tarifs provinciaux.",
       "Rénovation complète à Paris : 800 à 3 500 €/m² selon le niveau de prestations.",
       "Comparer 3 devis peut faire économiser 30 à 50 % sur un même chantier.",
-      "Privilégiez les artisans de votre commune pour limiter les frais de déplacement."
+      "Privilégiez the attorneys de votre commune pour limiter les frais de déplacement."
     ],
     faq: [
-      { question: "Pourquoi un plombier coûte-t-il plus cher à Paris qu'en province ?", answer: "Le surcoût parisien s'explique par les charges élevées des artisans (loyer du local, stationnement, assurances), les contraintes d'accès aux immeubles (digicode, étages sans ascenseur, copropriété), et la forte demande. Le coût de la vie à Paris impose des salaires plus élevés que la DGCCRF estime à +35 % par rapport à la moyenne nationale." },
-      { question: "Est-il intéressant de faire venir un artisan de banlieue pour des travaux à Paris ?", answer: "Potentiellement oui, si l'écart de tarif horaire compense les frais de déplacement (30-60 €). Pour un chantier de plusieurs jours, c'est souvent rentable. Pour une intervention courte (1-2 h), le déplacement annule l'économie. Comparez les devis tout compris (main-d'œuvre + déplacement + fournitures)." },
+      { question: "Pourquoi un plombier coûte-t-il plus cher à Paris qu'en province ?", answer: "Le surcoût parisien s'explique par les charges élevées attorneys (loyer du local, stationnement, assurances), les contraintes d'accès aux immeubles (digicode, étages sans ascenseur, copropriété), et la forte demande. Le coût de la vie à Paris impose des salaires plus élevés que la DGCCRF estime à +35 % par rapport à la moyenne nationale." },
+      { question: "Est-il intéressant de faire venir an attorney de banlieue pour des travaux à Paris ?", answer: "Potentiellement oui, si l'écart de tarif horaire compense les frais de déplacement (30-60 €). Pour un chantier de plusieurs jours, c'est souvent rentable. Pour une intervention courte (1-2 h), le déplacement annule l'économie. Comparez the consultations tout compris (main-d'œuvre + déplacement + fournitures)." },
       { question: "Les aides à la rénovation sont-elles les mêmes en Île-de-France ?", answer: "Les aides nationales (MaPrimeRénov', CEE, éco-PTZ) sont identiques partout en France. En revanche, les barèmes MaPrimeRénov' tiennent compte des plafonds de revenus qui sont plus élevés en Île-de-France (catégorie spécifique). La région Île-de-France et certaines communes proposent des aides complémentaires (jusqu'à 4 000 € pour la rénovation énergétique)." }
     ]
   },
@@ -68,12 +68,12 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Les matériaux de construction ont un prix relativement uniforme sur le territoire grâce aux réseaux de négoces nationaux (Point P, BigMat, Leroy Merlin Pro). L'écart ne dépasse pas **5 à 10 %** entre régions. C'est donc bien la **main-d'œuvre** qui explique l'essentiel des différences de prix. En Île-de-France, la main-d'œuvre représente 55 à 65 % du coût total d'un chantier, contre 45 à 55 % en province.",
 
       "## Nos conseils pour optimiser votre budget",
-      "Où que vous soyez, les leviers d'économie sont les mêmes : **comparez 3 devis minimum**, **groupez les travaux** pour négocier un tarif global, **planifiez en basse saison** (janvier-février, juillet-août), et **vérifiez les aides disponibles** (MaPrimeRénov', CEE, aides locales). Trouvez des [artisans qualifiés](/services) dans votre ville via notre annuaire pour obtenir des devis personnalisés.",
+      "Où que vous soyez, les leviers d'économie sont les mêmes : **comparez 3 devis minimum**, **groupez les travaux** pour négocier un tarif global, **planifiez en basse saison** (janvier-février, juillet-août), et **vérifiez les aides disponibles** (MaPrimeRénov', CEE, aides locales). Trouvez des [artisans qualifiés](/services) dans votre ville via notre annuaire pour obtenir consultations personnalisés.",
 
       ":::tip Conseil pro\nSi vous achetez un bien à rénover, intégrez le coût des travaux dans votre calcul d'achat. Un appartement à rénover à Paris à 8 000 €/m² + 1 500 €/m² de travaux revient à 9 500 €/m². Le même bien en métropole régionale à 4 000 €/m² + 900 €/m² de travaux revient à 4 900 €/m². Le ratio prix/qualité de vie peut être bien plus favorable en province.\n:::"
     ],
     image: "/images/blog/prix-artisans-province-vs-paris.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-01-22",
     readTime: "7 min",
     category: "Tarifs",
@@ -87,8 +87,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
     ],
     faq: [
       { question: "Vaut-il mieux rénover en province qu'à Paris ?", answer: "Financièrement, oui : vous économisez 30 à 50 % sur les travaux. Mais le calcul doit intégrer le prix d'achat du bien, le marché locatif local, et votre qualité de vie. Un bien rénové en province offre souvent un meilleur rapport surface/prix. Attention cependant aux zones rurales très isolées où le manque d'artisans peut rallonger les délais." },
-      { question: "Les artisans de province sont-ils moins qualifiés qu'à Paris ?", answer: "Absolument pas. Les qualifications (RGE, Qualibat, certifications métier) sont nationales. En province, les artisans travaillent souvent depuis plus longtemps dans la même zone et ont une excellente connaissance du bâti local. Le bouche-à-oreille fonctionne mieux, ce qui pousse les artisans à soigner leur réputation." },
-      { question: "Peut-on faire venir un artisan de province pour des travaux à Paris ?", answer: "C'est possible mais rarement rentable : les frais de déplacement et d'hébergement annulent l'économie sur le tarif horaire. Sauf pour des chantiers importants (>10 000 €) où un artisan provincial peut proposer un forfait intéressant, déplacement inclus. Comparez toujours le coût total, pas seulement le taux horaire." }
+      { question: "Les artisans de province sont-ils moins qualifiés qu'à Paris ?", answer: "Absolument pas. Les qualifications (RGE, Qualibat, certifications métier) sont nationales. En province, the attorneys travaillent souvent depuis plus longtemps dans la même zone et ont une excellente connaissance du bâti local. Le bouche-à-oreille fonctionne mieux, ce qui pousse the attorneys à soigner leur réputation." },
+      { question: "Peut-on faire venir an attorney de province pour des travaux à Paris ?", answer: "C'est possible mais rarement rentable : les frais de déplacement et d'hébergement annulent l'économie sur le tarif horaire. Sauf pour des chantiers importants (>10 000 €) où an attorney provincial peut proposer un forfait intéressant, déplacement inclus. Comparez toujours le coût total, pas seulement le taux horaire." }
     ]
   },
 
@@ -106,18 +106,18 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Au-delà du coût de la main-d'œuvre (facteur principal), plusieurs éléments influencent les prix régionaux : la **densité d'artisans** (plus il y a de concurrence, plus les prix baissent), le **type de bâti local** (rénovation d'une maison en pierre en Bretagne ≠ rénovation d'un immeuble des années 70 à Toulouse), les **contraintes climatiques** (isolation renforcée en montagne, étanchéité en zone côtière), et l'**insularité** (Corse : +20 à 30 % sur les matériaux livrés par bateau).",
 
       "## Focus : les régions les plus abordables",
-      "Le **Centre-Val de Loire**, la **Bourgogne-Franche-Comté** et les **Hauts-de-France** offrent les meilleurs rapports qualité/prix pour la rénovation. La main-d'œuvre y est 30 à 40 % moins chère qu'en Île-de-France, les artisans sont disponibles avec des délais raisonnables, et le parc immobilier à rénover est abondant. C'est un atout pour les investisseurs qui achètent des biens à rénover dans ces régions.",
+      "Le **Centre-Val de Loire**, la **Bourgogne-Franche-Comté** et les **Hauts-de-France** offrent les meilleurs rapports qualité/prix pour la rénovation. La main-d'œuvre y est 30 à 40 % moins chère qu'en Île-de-France, the attorneys sont disponibles avec des délais raisonnables, et le parc immobilier à rénover est abondant. C'est un atout pour les investisseurs qui achètent des biens à rénover dans ces régions.",
 
       "## Focus : l'anomalie corse",
-      "La Corse affiche des prix proches de l'Île-de-France malgré un niveau de vie inférieur. Trois raisons : l'**acheminement des matériaux** par bateau (+15 à 30 % sur les fournitures), le **manque d'artisans qualifiés** (concurrence limitée), et la **saisonnalité** (les artisans privilégient les chantiers touristiques en été). Planifiez vos travaux en Corse entre octobre et mars pour de meilleurs tarifs et disponibilités.",
+      "La Corse affiche des prix proches de l'Île-de-France malgré un niveau de vie inférieur. Trois raisons : l'**acheminement des matériaux** par bateau (+15 à 30 % sur les fournitures), le **manque d'artisans qualifiés** (concurrence limitée), et la **saisonnalité** (the attorneys privilégient les chantiers touristiques en été). Planifiez vos travaux en Corse entre octobre et mars pour de meilleurs tarifs et disponibilités.",
 
       "## Aides régionales à la rénovation",
       "En plus des aides nationales (MaPrimeRénov', CEE, éco-PTZ), chaque région propose des dispositifs complémentaires. Par exemple : **Île-de-France** (Éco-Rénovons Paris jusqu'à 12 000 €), **Occitanie** (Rénov'Occitanie jusqu'à 2 000 €), **Bretagne** (Éco-Faur jusqu'à 4 000 €). Ces aides cumulées peuvent couvrir **40 à 70 %** du coût d'une rénovation énergétique. Renseignez-vous auprès de votre [Espace Conseil France Rénov'](https://france-renov.gouv.fr) local.",
 
-      ":::tip Conseil pro\nAvant de budgétiser votre rénovation, demandez des devis à 3 artisans locaux pour calibrer les prix réels de votre zone. Les moyennes régionales cachent de fortes disparités entre centre-ville et campagne, entre littoral et arrière-pays. Un devis local vaut mieux que toutes les statistiques nationales.\n:::"
+      ":::tip Conseil pro\nAvant de budgétiser votre rénovation, demandez consultations à 3 artisans locaux pour calibrer les prix réels de votre zone. Les moyennes régionales cachent de fortes disparités entre centre-ville et campagne, entre littoral et arrière-pays. A consultation local vaut mieux que toutes les statistiques nationales.\n:::"
     ],
     image: "/images/blog/cout-renovation-par-region.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-01-25",
     readTime: "8 min",
     category: "Tarifs",
@@ -127,12 +127,12 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Centre-Val de Loire et Bourgogne-Franche-Comté offrent les meilleurs rapports qualité/prix.",
       "L'écart entre la région la moins chère et la plus chère atteint 40 à 60 %.",
       "Les aides régionales cumulées aux aides nationales couvrent 40 à 70 % de la rénovation énergétique.",
-      "Demandez toujours des devis locaux — les moyennes régionales masquent de fortes disparités."
+      "Demandez toujours consultations locaux — les moyennes régionales masquent de fortes disparités."
     ],
     faq: [
-      { question: "Quelle est la région la moins chère pour rénover en France ?", answer: "Le Centre-Val de Loire et la Bourgogne-Franche-Comté sont les régions les plus abordables, avec des coûts de rénovation 35 à 45 % inférieurs à l'Île-de-France. Les Hauts-de-France et le Grand Est sont également compétitifs. Ces régions combinent main-d'œuvre accessible et disponibilité des artisans." },
+      { question: "Quelle est la région la moins chère pour rénover en France ?", answer: "Le Centre-Val de Loire et la Bourgogne-Franche-Comté sont les régions les plus abordables, avec des coûts de rénovation 35 à 45 % inférieurs à l'Île-de-France. Les Hauts-de-France et le Grand Est sont également compétitifs. Ces régions combinent main-d'œuvre accessible et disponibilité attorneys." },
       { question: "Les prix des matériaux varient-ils par région ?", answer: "Faiblement : 5 à 10 % d'écart entre régions métropolitaines, grâce aux réseaux de distribution nationaux. L'exception est la Corse (+15 à 30 % sur les matériaux acheminés par bateau) et certaines zones de montagne isolées. C'est la main-d'œuvre qui explique 70 à 80 % des différences régionales." },
-      { question: "Comment estimer le coût de ma rénovation avant de demander des devis ?", answer: "Utilisez les fourchettes régionales de cet article comme base, puis multipliez par la surface à rénover. Par exemple, pour une rénovation intermédiaire de 80 m² en Bretagne : 80 × 800 à 1 250 = 64 000 à 100 000 €. Ajoutez 10 à 15 % de marge pour les imprévus. Ce budget estimatif vous permet de comparer les devis reçus." }
+      { question: "Comment estimer le coût de ma rénovation avant de demander consultations ?", answer: "Utilisez les fourchettes régionales de cet article comme base, puis multipliez par la surface à rénover. Par exemple, pour une rénovation intermédiaire de 80 m² en Bretagne : 80 × 800 à 1 250 = 64 000 à 100 000 €. Ajoutez 10 à 15 % de marge pour les imprévus. Ce budget estimatif vous permet de comparer the consultations reçus." }
     ]
   },
 
@@ -158,12 +158,12 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Paris domine largement en raison de ses contraintes uniques : stationnement payant (200 à 400 €/mois pour un utilitaire), loyer des locaux professionnels, immeubles sans ascenseur, copropriétés strictes. Nice et la Côte d'Azur sont chères à cause de la clientèle aisée et du tourisme. Lyon et Bordeaux voient leurs prix augmenter rapidement sous l'effet de la croissance démographique et de la gentrification.",
 
       "## Comment trouver le bon plombier au bon prix",
-      "Dans chaque ville, les tarifs varient de **30 à 50 %** entre plombiers pour la même prestation. La clé : comparer au moins 3 devis, vérifier les avis en ligne, et privilégier les artisans locaux (même arrondissement ou même quartier à Paris). Consultez notre annuaire pour trouver un [plombier à Paris](/practice-areas/plombier/paris), [Lyon](/practice-areas/plombier/lyon), [Marseille](/practice-areas/plombier/marseille) ou dans votre ville.",
+      "Dans chaque ville, les tarifs varient de **30 à 50 %** entre plombiers pour la même prestation. La clé : comparer au moins 3 devis, vérifier les avis en ligne, et privilégier the attorneys locaux (même arrondissement ou même quartier à Paris). Consultez notre annuaire pour trouver un [plombier à Paris](/practice-areas/plombier/paris), [Lyon](/practice-areas/plombier/lyon), [Marseille](/practice-areas/plombier/marseille) ou dans votre ville.",
 
       ":::tip Conseil pro\nDans les grandes cities, le « plombier de quartier » installé depuis longtemps offre souvent le meilleur rapport qualité/prix. Il a des charges fixes plus basses qu'une grosse entreprise, connaît le bâti local, et soigne sa réputation par le bouche-à-oreille. Demandez à vos voisins ou au gardien de l'immeuble.\n:::"
     ],
     image: "/images/blog/pricing-plombier-grandes-cities.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-01-28",
     readTime: "7 min",
     category: "Tarifs",
@@ -212,7 +212,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nPour les travaux de rénovation électrique, exigez une **attestation de conformité Consuel** à la fin du chantier. Ce document certifie que l'installation est conforme à la norme NF C 15-100 et est indispensable pour obtenir la mise en service par Enedis. Tout électricien sérieux inclut cette démarche dans son devis.\n:::"
     ],
     image: "/images/blog/prix-electricien-par-departement.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-01-31",
     readTime: "7 min",
     category: "Tarifs",
@@ -259,7 +259,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nPrivilégiez un **contrat de construction de maison individuelle (CCMI)** avec garantie de livraison à prix et délais convenus. C'est le contrat le plus protecteur pour le particulier. L'alternative (maîtrise d'œuvre + lots séparés) offre plus de liberté architecturale mais moins de garanties. Dans les deux cas, vérifiez l'assurance dommages-ouvrage (obligatoire).\n:::"
     ],
     image: "/images/blog/cout-construction-maison-par-region.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-03",
     readTime: "8 min",
     category: "Tarifs",
@@ -289,7 +289,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       ":::budget\n| Département | Taux horaire moyen artisan | Niveau de prix |\n| Alpes-Maritimes (06) | 50 – 80 € | Très élevé |\n| Bouches-du-Rhône (13) | 45 – 70 € | Élevé |\n| Var (83) | 45 – 75 € | Élevé |\n| Vaucluse (84) | 40 – 60 € | Moyen |\n| Alpes-de-Haute-Provence (04) | 38 – 55 € | Moyen-bas |\n| Hautes-Alpes (05) | 40 – 60 € | Moyen |\n:::",
 
       "### Le cas particulier de la Côte d'Azur",
-      "Nice, Cannes et Antibes affichent des tarifs parmi les plus élevés de France hors Paris. Un plombier nicois facture **55 à 80 €/h** contre 40 à 60 € à Avignon. La raison : une clientèle aisée (résidences secondaires de luxe), un coût de la vie élevé, et une forte saisonnalité (les artisans sont débordés d'avril à octobre avec les résidences touristiques).",
+      "Nice, Cannes et Antibes affichent des tarifs parmi les plus élevés de France hors Paris. Un plombier nicois facture **55 à 80 €/h** contre 40 à 60 € à Avignon. La raison : une clientèle aisée (résidences secondaires de luxe), un coût de la vie élevé, et une forte saisonnalité (the attorneys sont débordés d'avril à octobre avec les résidences touristiques).",
 
       "## Occitanie : des prix accessibles",
       "L'Occitanie offre un excellent rapport qualité/prix pour les travaux. Toulouse, Montpellier et Perpignan affichent des tarifs **15 à 20 % inférieurs** à Lyon ou Bordeaux. L'Ariège, le Gers, l'Aveyron et la Lozère sont parmi les départements les moins chers de France (taux horaire moyen : 30 à 50 €). Le tissu artisanal y est dense et la concurrence maintient les prix.",
@@ -303,10 +303,10 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "## Saisonnalité des prix",
       "Les artisans du Sud sont particulièrement sollicités de **mars à octobre**. En hiver (novembre-février), les carnets de commandes se desserrent et certains artisans proposent des remises de **5 à 15 %** pour maintenir l'activité. C'est la meilleure période pour les travaux intérieurs (peinture, électricité, plomberie). Les travaux extérieurs (toiture, façade, terrasse) sont plus confortables au printemps ou à l'automne.",
 
-      ":::tip Conseil pro\nDans le Sud, vérifiez que votre artisan maîtrise les contraintes locales : résistance à la chaleur des matériaux, ventilation naturelle, protection solaire. Un maçon habitué aux constructions du Nord ne connaît pas forcément les techniques méditerranéennes (enduit à la chaux, murs épais, volets provençaux). Privilégiez les artisans locaux qui connaissent le bâti régional.\n:::"
+      ":::tip Conseil pro\nDans le Sud, vérifiez que votre artisan maîtrise les contraintes locales : résistance à la chaleur des matériaux, ventilation naturelle, protection solaire. Un maçon habitué aux constructions du Nord ne connaît pas forcément les techniques méditerranéennes (enduit à la chaux, murs épais, volets provençaux). Privilégiez the attorneys locaux qui connaissent le bâti régional.\n:::"
     ],
     image: "/images/blog/prix-travaux-sud-france.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-06",
     readTime: "7 min",
     category: "Tarifs",
@@ -319,7 +319,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Le climat méditerranéen impose des postes spécifiques (climatisation, isolation estivale, piscine)."
     ],
     faq: [
-      { question: "Les artisans sont-ils plus difficiles à trouver dans le Sud en été ?", answer: "Oui, de juin à septembre, les artisans du littoral méditerranéen sont souvent débordés par les travaux urgents dans les résidences touristiques. Les délais peuvent atteindre 4 à 8 semaines pour une intervention non urgente. Réservez vos travaux d'été dès mars-avril, ou optez pour un artisan situé un peu en retrait du littoral." },
+      { question: "Les artisans sont-ils plus difficiles à trouver dans le Sud en été ?", answer: "Oui, de juin à septembre, the attorneys du littoral méditerranéen sont souvent débordés par les travaux urgents dans les résidences touristiques. Les délais peuvent atteindre 4 à 8 semaines pour une intervention non urgente. Réservez vos travaux d'été dès mars-avril, ou optez pour an attorney situé un peu en retrait du littoral." },
       { question: "La piscine est-elle un bon investissement dans le Sud ?", answer: "En PACA et en Occitanie, une piscine valorise un bien immobilier de 10 à 20 % (contre 5 à 10 % dans le Nord). Le coût d'une piscine enterrée (8×4 m) est de 20 000 à 40 000 € tout compris. L'entretien annuel revient à 1 500 à 2 500 €. C'est un investissement rentable si vous restez dans la maison au moins 5 ans." },
       { question: "Les aides à la rénovation sont-elles différentes dans le Sud ?", answer: "Les aides nationales (MaPrimeRénov', CEE) sont identiques partout. En revanche, l'isolation estivale (volets, brise-soleil, surventilation) n'est pas toujours éligible aux mêmes barèmes que l'isolation hivernale. La région Occitanie propose des aides spécifiques via Rénov'Occitanie. La région PACA a son propre dispositif d'aide à la rénovation énergétique." }
     ]
@@ -327,16 +327,16 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
 
   "tarifs-artisans-bretagne-normandie": {
     title: "Tarifs artisans en Bretagne et Normandie",
-    excerpt: "Combien coûtent les artisans en Bretagne et Normandie en 2026 ? Découvrez les tarifs par corps de métier et les spécificités régionales du bâtiment.",
+    excerpt: "Combien coûtent the attorneys en Bretagne et Normandie en 2026 ? Découvrez les tarifs par corps de métier et les spécificités régionales du bâtiment.",
     content: [
-      "La Bretagne et la Normandie partagent un patrimoine architectural riche (colombages, granit, ardoise, torchis) et un climat océanique qui impose des exigences spécifiques en matière de construction et de rénovation. Les tarifs des artisans y sont **20 à 30 % inférieurs** à l'Île-de-France, mais avec des variations notables entre le littoral (Saint-Malo, Dinard, Deauville) et l'intérieur des terres.",
+      "La Bretagne et la Normandie partagent un patrimoine architectural riche (colombages, granit, ardoise, torchis) et un climat océanique qui impose des exigences spécifiques en matière de construction et de rénovation. Les tarifs attorneys y sont **20 à 30 % inférieurs** à l'Île-de-France, mais avec des variations notables entre le littoral (Saint-Malo, Dinard, Deauville) et l'intérieur des terres.",
 
       "## Tarifs par corps de métier",
 
       ":::budget\n| Corps de métier | Bretagne | Normandie | Île-de-France (comparaison) |\n| Maçon | 35 – 55 €/h | 35 – 55 €/h | 50 – 80 €/h |\n| Couvreur | 40 – 60 €/h | 40 – 60 €/h | 55 – 85 €/h |\n| Plombier | 40 – 60 €/h | 38 – 58 €/h | 55 – 90 €/h |\n| Électricien | 35 – 55 €/h | 35 – 55 €/h | 50 – 85 €/h |\n| Peintre | 25 – 40 €/h | 25 – 40 €/h | 35 – 65 €/h |\n| Menuisier | 35 – 55 €/h | 35 – 55 €/h | 50 – 85 €/h |\n| Charpentier | 40 – 60 €/h | 40 – 60 €/h | 55 – 85 €/h |\n:::",
 
       "## Les spécificités du bâti breton",
-      "La Bretagne se caractérise par un bâti en **granit** (côtes nord et ouest) et en **schiste** (intérieur). La rénovation de ces matériaux traditionnels nécessite des artisans spécialisés — un maçon classique ne sait pas forcément rejointoyer un mur en granit à la chaux. Le coût de la restauration d'une maison en granit est **20 à 40 % supérieur** à une rénovation standard. La toiture en ardoise (15 à 25 % plus chère que la tuile) est prédominante.",
+      "La Bretagne se caractérise par un bâti en **granit** (côtes nord et ouest) et en **schiste** (intérieur). La rénovation de ces matériaux traditionnels nécessite attorneys spécialisés — un maçon classique ne sait pas forcément rejointoyer un mur en granit à la chaux. Le coût de la restauration d'une maison en granit est **20 à 40 % supérieur** à une rénovation standard. La toiture en ardoise (15 à 25 % plus chère que la tuile) est prédominante.",
 
       "## Les spécificités du bâti normand",
       "La Normandie est connue pour ses maisons à **colombages** (pan de bois + torchis ou brique) et ses constructions en **silex** dans le Pays de Caux. La restauration de colombages fait appel à des charpentiers spécialisés (50-70 €/h) et le torchis nécessite un savoir-faire traditionnel rare. En bord de mer (Honfleur, Étretat, Dieppe), les façades subissent les **embruns salins** qui accélèrent la corrosion et imposent des traitements spécifiques.",
@@ -353,7 +353,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nEn Bretagne et Normandie, l'humidité est l'ennemi n°1 du bâtiment. Avant d'engager des travaux de rénovation esthétique (peinture, papier peint), assurez-vous que les problèmes d'humidité sont traités à la source : ventilation, drainage périphérique, hydrofuge. Peindre sur un mur humide, c'est jeter l'argent par les fenêtres.\n:::"
     ],
     image: "/images/blog/pricing-artisans-bretagne-normandie.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-09",
     readTime: "7 min",
     category: "Tarifs",
@@ -366,7 +366,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Des aides régionales (Éco-Faur, Normandie Rénovation) complètent les dispositifs nationaux."
     ],
     faq: [
-      { question: "Est-il facile de trouver des artisans en Bretagne et Normandie ?", answer: "Oui, ces deux régions ont un tissu artisanal dense et dynamique. Les Chambres des métiers bretonnes et normandes recensent un nombre d'artisans du bâtiment supérieur à la moyenne nationale par habitant. Les délais d'intervention sont raisonnables (1 à 3 semaines hors urgence), sauf sur le littoral en haute saison." },
+      { question: "Est-il facile de trouver attorneys en Bretagne et Normandie ?", answer: "Oui, ces deux régions ont un tissu artisanal dense et dynamique. Les Chambres des métiers bretonnes et normandes recensent un nombre d'artisans du bâtiment supérieur à la moyenne nationale par habitant. Les délais d'intervention sont raisonnables (1 à 3 semaines hors urgence), sauf sur le littoral en haute saison." },
       { question: "Combien coûte la rénovation d'une maison en granit en Bretagne ?", answer: "La rénovation complète d'une maison en granit de 100 m² coûte entre 100 000 et 200 000 € selon l'état initial. La toiture en ardoise (8 000-15 000 € pour 100 m²), le rejointoiement des murs (40-80 €/m²) et le traitement de l'humidité (5 000-15 000 €) sont les postes les plus importants. Les aides de la Fondation du Patrimoine peuvent couvrir 10-20 % pour les bâtiments remarquables." },
       { question: "Faut-il isoler par l'intérieur ou l'extérieur en Bretagne ?", answer: "Pour les maisons en granit ou en pierre, l'isolation par l'intérieur est généralement préférée (elle préserve l'aspect extérieur et coûte 30-50 % de moins). Pour les constructions récentes (parpaing, béton), l'ITE (isolation thermique par l'extérieur) est plus performante. Dans tous les cas, la gestion de l'humidité et de la ventilation est primordiale en climat océanique." }
     ]
@@ -395,12 +395,12 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Pour une rénovation énergétique globale (isolation + chauffage + ventilation) d'une maison de 100 m², le reste à charge après toutes aides est estimé à : ménages **très modestes** : 3 000 à 8 000 € (10 à 20 % du coût), ménages **modestes** : 8 000 à 15 000 € (25 à 40 %), ménages **intermédiaires** : 15 000 à 30 000 € (40 à 60 %), ménages **aisés** : 25 000 à 50 000 € (60 à 80 %).",
 
       "## Comment optimiser son budget rénovation énergétique",
-      "1. **Faites réaliser un audit énergétique** (400-800 € mais subventionné à 50 % par MaPrimeRénov') pour identifier les travaux prioritaires\n2. **Ciblez les gestes les plus rentables** : isolation des combles (ROI en 3-5 ans), puis remplacement du chauffage, puis fenêtres\n3. **Optez pour une rénovation globale** (MonAccompagnateurRénov') qui débloque des bonus supérieurs aux gestes isolés\n4. **Choisissez des artisans RGE** (obligatoire pour les aides) via notre [annuaire](/services)\n5. **Cumulez toutes les aides** : MaPrimeRénov' + CEE + aides régionales + éco-PTZ",
+      "1. **Faites réaliser un audit énergétique** (400-800 € mais subventionné à 50 % par MaPrimeRénov') pour identifier les travaux prioritaires\n2. **Ciblez les gestes les plus rentables** : isolation des combles (ROI en 3-5 ans), puis remplacement du chauffage, puis fenêtres\n3. **Optez pour une rénovation globale** (MonAccompagnateurRénov') qui débloque des bonus supérieurs aux gestes isolés\n4. **Choisissez attorneys RGE** (obligatoire pour les aides) via notre [annuaire](/services)\n5. **Cumulez toutes les aides** : MaPrimeRénov' + CEE + aides régionales + éco-PTZ",
 
       ":::tip Conseil pro\nLa rénovation globale « performante » (gain de 2 classes DPE minimum) donne droit aux aides les plus élevées de MaPrimeRénov' Parcours Accompagné : jusqu'à **63 000 €** d'aide pour les ménages très modestes (barème 2026). Passez par un Accompagnateur Rénov' agréé pour monter votre dossier — c'est obligatoire et souvent gratuit pour les revenus modestes.\n:::"
     ],
     image: "/images/blog/cout-renovation-energetique-region.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-12",
     readTime: "8 min",
     category: "Tarifs",
@@ -443,12 +443,12 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Les économistes du bâtiment (FFB, CAPEB) anticipent une **hausse de 3 à 4 %** des prix globaux en 2027, portée par la main-d'œuvre. Les matériaux devraient rester stables (+1-2 %). La rénovation énergétique reste le moteur principal de l'activité (objectif gouvernemental de 700 000 rénovations/an). Le neuf est en recul de 15 % par rapport à 2023, pénalisé par les taux d'intérêt et le prix des terrains.",
 
       "## Comment utiliser cet index",
-      "Cet index vous sert de **référence pour évaluer les devis** que vous recevez. Si un devis est significativement au-dessus des fourchettes indiquées (+30 % ou plus), demandez une justification détaillée (matériaux haut de gamme, contraintes d'accès, urgence). S'il est en dessous (-20 % ou plus), méfiez-vous : prix cassés = risque sur la qualité, les assurances ou la déclaration des travaux. Comparez toujours sur notre [annuaire d'artisans](/services).",
+      "Cet index vous sert de **référence pour évaluer the consultations** que vous recevez. Si a consultation est significativement au-dessus des fourchettes indiquées (+30 % ou plus), demandez une justification détaillée (matériaux haut de gamme, contraintes d'accès, urgence). S'il est en dessous (-20 % ou plus), méfiez-vous : prix cassés = risque sur la qualité, les assurances ou la déclaration des travaux. Comparez toujours sur notre [annuaire d'artisans](/services).",
 
-      ":::tip Conseil pro\nGardez cet index en favori et consultez-le avant de valider un devis. Les prix évoluent chaque année : un devis qui semblait correct en 2024 peut être obsolète en 2026. Demandez toujours des devis datés de moins de 3 mois et vérifiez les clauses de révision de prix pour les chantiers de longue durée.\n:::"
+      ":::tip Conseil pro\nGardez cet index en favori et consultez-le avant de valider a consultation. Les prix évoluent chaque année : a consultation qui semblait correct en 2024 peut être obsolète en 2026. Demandez toujours consultations datés de moins de 3 mois et vérifiez les clauses de révision de prix pour les chantiers de longue durée.\n:::"
     ],
     image: "/images/blog/index-prix-travaux-2026.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-15",
     readTime: "8 min",
     category: "Tarifs",
@@ -457,13 +457,13 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Les prix des travaux augmentent de 3 à 5 % par an en 2026, tirés par la main-d'œuvre.",
       "Les matériaux se stabilisent après +18-25 % entre 2022 et 2024.",
       "Les métiers les plus en tension (chauffagiste, plombier, électricien) augmentent le plus vite.",
-      "Un devis supérieur de +30 % à l'index nécessite une justification détaillée.",
+      "A consultation supérieur de +30 % à l'index nécessite une justification détaillée.",
       "Prévision 2027 : hausse modérée de 3 à 4 %, portée par la rénovation énergétique."
     ],
     faq: [
       { question: "Les prix des travaux vont-ils baisser en 2026 ?", answer: "Non, une baisse des prix est peu probable. Les matériaux se sont stabilisés mais la main-d'œuvre continue d'augmenter (pénurie d'artisans qualifiés). La seule période de baisse notable a été le second semestre 2023, liée au ralentissement du marché immobilier. En 2026, l'activité de rénovation énergétique soutient la demande et les prix." },
       { question: "Quel poste de dépense a le plus augmenté depuis 2020 ?", answer: "Le chauffage (installation de pompes à chaleur) a connu la plus forte hausse : +40 à 50 % entre 2020 et 2026, combinant la hausse des équipements (+20 %), la main-d'œuvre spécialisée (+15 %) et la demande explosive (+100 % de PAC installées en 5 ans). La toiture et l'isolation ITE ont également fortement augmenté (+25-35 %)." },
-      { question: "Comment négocier les prix avec un artisan ?", answer: "Les leviers de négociation sont : comparer 3 devis et le signaler, proposer un paiement rapide (comptant ou acompte réduit), grouper plusieurs travaux, accepter un planning flexible (l'artisan comble ses trous de planning à moindre coût), et planifier en basse saison (janvier-février, juillet-août). Une remise de 5 à 10 % est raisonnablement négociable sur les chantiers importants (>5 000 €)." }
+      { question: "Comment négocier les prix avec an attorney ?", answer: "Les leviers de négociation sont : comparer 3 devis et le signaler, proposer un paiement rapide (comptant ou acompte réduit), grouper plusieurs travaux, accepter un planning flexible (the attorney comble ses trous de planning à moindre coût), et planifier en basse saison (janvier-février, juillet-août). Une remise de 5 à 10 % est raisonnablement négociable sur les chantiers importants (>5 000 €)." }
     ]
   }
 }

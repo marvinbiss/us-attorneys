@@ -14,11 +14,11 @@ interface PriceRangeFilterProps {
 }
 
 const PRICE_PRESETS = [
-  { label: 'Tous', min: undefined, max: undefined },
-  { label: '< 30EUR/h', min: undefined, max: 30 },
-  { label: '30-50EUR/h', min: 30, max: 50 },
-  { label: '50-80EUR/h', min: 50, max: 80 },
-  { label: '> 80EUR/h', min: 80, max: undefined },
+  { label: 'All', min: undefined, max: undefined },
+  { label: '< $150/h', min: undefined, max: 150 },
+  { label: '$150-300/h', min: 150, max: 300 },
+  { label: '$300-500/h', min: 300, max: 500 },
+  { label: '> $500/h', min: 500, max: undefined },
 ]
 
 export function PriceRangeFilter({
@@ -87,7 +87,7 @@ export function PriceRangeFilter({
       <div className="flex items-center gap-3">
         <div className="flex-1">
           <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
-            Min (EUR/h)
+            Min ($/h)
           </label>
           <div className="relative">
             <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -107,7 +107,7 @@ export function PriceRangeFilter({
 
         <div className="flex-1">
           <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
-            Max (EUR/h)
+            Max ($/h)
           </label>
           <div className="relative">
             <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />

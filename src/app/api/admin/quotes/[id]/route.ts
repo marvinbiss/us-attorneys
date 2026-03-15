@@ -28,7 +28,7 @@ export async function GET(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -43,13 +43,13 @@ export async function GET(
 
     if (error) {
       logger.error('Quote fetch error', error)
-      return NextResponse.json({ success: false, error: { message: 'Devis non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
     }
 
     return NextResponse.json({ quote })
   } catch (error) {
     logger.error('Quote fetch error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -66,7 +66,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -76,7 +76,7 @@ export async function PATCH(
     const result = updateQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -101,16 +101,16 @@ export async function PATCH(
 
     if (error) {
       logger.error('Quote operation error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de l\'opération' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during operation' } }, { status: 500 })
     }
 
-    // Log audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'quote_updated', 'booking', params.id, updates)
 
     return NextResponse.json({ quote })
   } catch (error) {
     logger.error('Quote update error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -127,7 +127,7 @@ export async function DELETE(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -148,15 +148,15 @@ export async function DELETE(
 
     if (error) {
       logger.error('Quote operation error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de l\'opération' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during operation' } }, { status: 500 })
     }
 
-    // Log audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'quote_deleted', 'booking', params.id)
 
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Quote delete error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

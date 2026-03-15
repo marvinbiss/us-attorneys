@@ -148,14 +148,14 @@ export default function AttorneyPageClient({
           className="text-center p-8"
         >
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 font-heading mb-2">Artisan non trouvé</h1>
-          <p className="text-slate-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
+          <h1 className="text-2xl font-bold text-gray-900 font-heading mb-2">Attorney not found</h1>
+          <p className="text-slate-600 mb-6">This attorney does not exist or is no longer available.</p>
           <Link
             href="/search"
             className="inline-flex items-center gap-2 px-6 py-3 bg-clay-400 text-white rounded-xl font-medium hover:bg-clay-600 transition-colors shadow-md shadow-glow-clay"
           >
             <ArrowLeft className="w-5 h-5" />
-            Retour à la recherche
+            Back to search
           </Link>
         </motion.div>
       </div>
@@ -172,18 +172,18 @@ export default function AttorneyPageClient({
       {/* Sticky trust proof bar */}
 
       {/* Skip links for keyboard navigation */}
-      <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
+      <nav aria-label="Quick links" className="sr-only focus-within:not-sr-only">
         <a
           href="#main-content"
           className="absolute top-4 left-4 z-50 bg-clay-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
-          Aller au contenu principal
+          Skip to main content
         </a>
         <a
           href="#contact-sidebar"
           className="absolute top-4 left-4 z-50 bg-clay-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
-          Aller aux informations de contact
+          Skip to contact information
         </a>
       </nav>
 
@@ -196,17 +196,17 @@ export default function AttorneyPageClient({
               <Link
                 href="/search"
                 className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-sand-100"
-                aria-label="Retour à la recherche"
+                aria-label="Back to search"
               >
                 <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-                <span className="hidden sm:inline font-medium text-sm">Retour</span>
+                <span className="hidden sm:inline font-medium text-sm">Back</span>
               </Link>
 
               <div className="flex items-center gap-2">
                 <ShareButton
                   url={typeof window !== 'undefined' ? window.location.href : ''}
-                  title={`Découvrez ${displayName}, artisan sur ServicesArtisans`}
-                  description={`${displayName} — ${artisan.specialty} à ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
+                  title={`Discover ${displayName}, attorney on US Attorneys`}
+                  description={`${displayName} — ${artisan.specialty} in ${artisan.city}. View their profile on US Attorneys.`}
                   variant="icon"
                 />
                 <motion.button
@@ -218,7 +218,7 @@ export default function AttorneyPageClient({
                       ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
                       : 'bg-gray-50 text-slate-600 border-gray-100 hover:bg-sand-200'
                   }`}
-                  aria-label={isFavorite(attorneyId) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                  aria-label={isFavorite(attorneyId) ? 'Remove from favorites' : 'Add to favorites'}
                   aria-pressed={isFavorite(attorneyId)}
                 >
                   <Heart className={`w-4.5 h-4.5 ${isFavorite(attorneyId) ? 'fill-current' : ''}`} aria-hidden="true" />
@@ -229,15 +229,15 @@ export default function AttorneyPageClient({
         </header>
 
         {/* Main content */}
-        <main id="main-content" className="max-w-7xl mx-auto px-4 py-6" aria-label={`Profil de ${displayName}`}>
+        <main id="main-content" className="max-w-7xl mx-auto px-4 py-6" aria-label={`${displayName}'s profile`}>
           {/* Breadcrumb */}
-          <nav className="mb-6" aria-label="Fil d'Ariane">
+          <nav className="mb-6" aria-label="Breadcrumb">
             <AttorneyBreadcrumb artisan={artisan} />
           </nav>
 
           {/* Photo Grid - Airbnb style (full width, only if portfolio exists) */}
           {artisan.portfolio && artisan.portfolio.length > 0 && (
-            <section className="mb-8" aria-label="Galerie photos">
+            <section className="mb-8" aria-label="Photo gallery">
               <AttorneyPhotoGrid artisan={artisan} />
             </section>
           )}
@@ -246,55 +246,55 @@ export default function AttorneyPageClient({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column - Main content */}
             <div className="lg:col-span-2 space-y-6">
-              <section aria-label="Informations principales">
+              <section aria-label="Main information">
                 <AttorneyHero artisan={artisan} />
               </section>
-              <section aria-label="Disponibilité et avantages">
+              <section aria-label="Availability and benefits">
                 <AttorneyUrgencyBanner artisan={artisan} />
               </section>
-              <section aria-label="Statistiques">
+              <section aria-label="Statistics">
                 <AttorneyStats artisan={artisan} />
               </section>
-              <section aria-label="À propos">
+              <section aria-label="About">
                 <AttorneyAbout artisan={artisan} />
               </section>
-              <section aria-label="Pourquoi choisir cet artisan">
+              <section aria-label="Why choose this attorney">
                 <AttorneyWhyChoose artisan={artisan} />
               </section>
-              <section aria-label="Fiche entreprise">
+              <section aria-label="Business card">
                 <AttorneyBusinessCard artisan={artisan} />
               </section>
               {/* Mobile-only contact section (hidden on desktop where sidebar is visible) */}
-              <section className="lg:hidden" aria-label="Contacter cet artisan">
+              <section className="lg:hidden" aria-label="Contact this attorney">
                 <AttorneyContactCard artisan={artisan} />
               </section>
               {!isClaimed && (
-                <section className="lg:hidden" aria-label="Revendiquer cette fiche">
+                <section className="lg:hidden" aria-label="Claim this profile">
                   <ClaimButton attorneyId={attorneyId} attorneyName={artisan.business_name || displayName} hasSiret={hasSiret} />
                 </section>
               )}
-              <section id="services" aria-label="Services et tarifs">
+              <section id="services" aria-label="Services and fees">
                 <AttorneyServices artisan={artisan} />
               </section>
-              <section id="devis" aria-label="Demande de devis">
+              <section id="devis" aria-label="Request a consultation">
                 <AttorneyQuoteForm artisan={artisan} />
               </section>
-              <section id="reviews" aria-label="Avis clients">
+              <section id="reviews" aria-label="Client reviews">
                 <AttorneyReviews artisan={artisan} reviews={reviews} />
               </section>
-              <section aria-label="Questions fréquentes">
+              <section aria-label="Frequently asked questions">
                 <AttorneyFAQ artisan={artisan} />
               </section>
-              <section aria-label="Localisation">
+              <section aria-label="Location">
                 <AttorneyMap artisan={artisan} />
               </section>
-              <section aria-label="Artisans similaires">
+              <section aria-label="Similar attorneys">
                 <AttorneySimilar artisan={artisan} similarArtisans={similarArtisans} />
               </section>
             </div>
 
             {/* Right column - Sticky sidebar */}
-            <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
+            <aside id="contact-sidebar" className="hidden lg:block" aria-label="Contact information">
               <div className="space-y-6 sticky top-20">
                 <AttorneySidebar artisan={artisan} />
                 <AttorneyProfileStrength artisan={artisan} />

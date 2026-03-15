@@ -40,11 +40,11 @@ export default function PortfolioPage() {
         window.location.href = '/login?redirect=/attorney-dashboard/portfolio'
         return
       } else {
-        setError(data.error || 'Erreur lors du chargement')
+        setError(data.error || 'Error loading portfolio')
       }
     } catch (err) {
       console.error('Error fetching portfolio:', err)
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -63,7 +63,7 @@ export default function PortfolioPage() {
   }, [items, filter])
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer cet élément du portfolio ?')) return
+    if (!confirm('Delete this portfolio item?')) return
 
     try {
       const response = await fetch(`/api/portfolio/${id}`, { method: 'DELETE' })
@@ -71,11 +71,11 @@ export default function PortfolioPage() {
         setItems((prev) => prev.filter((item) => item.id !== id))
       } else {
         const data = await response.json()
-        alert(data.error || 'Erreur lors de la suppression')
+        alert(data.error || 'Error deleting item')
       }
     } catch (err) {
       console.error('Error deleting item:', err)
-      alert('Erreur lors de la suppression')
+      alert('Error deleting item')
     }
   }
 
@@ -140,7 +140,7 @@ export default function PortfolioPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Chargement...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     )
@@ -151,7 +151,7 @@ export default function PortfolioPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
           <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={() => {
@@ -160,7 +160,7 @@ export default function PortfolioPage() {
             }}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
-            Réessayer
+            Retry
           </button>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function PortfolioPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
-              { label: 'Espace Artisan', href: '/attorney-dashboard' },
+              { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
               { label: 'Portfolio' },
             ]}
           />
@@ -186,9 +186,9 @@ export default function PortfolioPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold">Mon Portfolio</h1>
+              <h1 className="text-2xl font-bold">My Portfolio</h1>
               <p className="text-blue-100">
-                Gérez vos réalisations et mettez en valeur votre travail
+                Manage your work samples and showcase your expertise
               </p>
             </div>
             <Button
@@ -197,7 +197,7 @@ export default function PortfolioPage() {
               onClick={() => setShowAddModal(true)}
               className="bg-white text-blue-600 hover:bg-blue-50"
             >
-              Ajouter
+              Add
             </Button>
           </div>
         </div>
@@ -211,7 +211,7 @@ export default function PortfolioPage() {
           <div className="lg:col-span-3 space-y-6">
             {/* Stats summary */}
             <div className="bg-white rounded-xl shadow-sm p-4">
-              <h4 className="font-medium text-gray-900 mb-3">Statistiques</h4>
+              <h4 className="font-medium text-gray-900 mb-3">Statistics</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between text-gray-600">
                   <span>Total</span>
@@ -222,15 +222,15 @@ export default function PortfolioPage() {
                   <span className="font-medium text-gray-900">{stats.images}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Vidéos</span>
+                  <span>Videos</span>
                   <span className="font-medium text-gray-900">{stats.videos}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Avant/Après</span>
+                  <span>Before/After</span>
                   <span className="font-medium text-gray-900">{stats.beforeAfter}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Mis en avant</span>
+                  <span>Featured</span>
                   <span className="font-medium text-amber-600">{stats.featured}</span>
                 </div>
               </div>
@@ -248,7 +248,7 @@ export default function PortfolioPage() {
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
               >
-                Tout ({items.length})
+                All ({items.length})
               </button>
               <button
                 onClick={() => setFilter('image')}
@@ -272,7 +272,7 @@ export default function PortfolioPage() {
                 }`}
               >
                 <Video className="w-4 h-4" />
-                Vidéos ({stats.videos})
+                Videos ({stats.videos})
               </button>
               <button
                 onClick={() => setFilter('before_after')}
@@ -284,7 +284,7 @@ export default function PortfolioPage() {
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                Avant/Après ({stats.beforeAfter})
+                Before/After ({stats.beforeAfter})
               </button>
             </div>
 
@@ -294,13 +294,13 @@ export default function PortfolioPage() {
                 <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   {items.length === 0
-                    ? 'Aucune réalisation'
-                    : 'Aucun résultat pour ce filtre'}
+                    ? 'No portfolio items'
+                    : 'No results for this filter'}
                 </h3>
                 <p className="text-gray-500 mb-6">
                   {items.length === 0
-                    ? 'Ajoutez vos premières réalisations pour les mettre en valeur sur votre profil.'
-                    : 'Essayez un autre filtre.'}
+                    ? 'Add your first work samples to showcase on your profile.'
+                    : 'Try a different filter.'}
                 </p>
                 {items.length === 0 && (
                   <Button
@@ -308,7 +308,7 @@ export default function PortfolioPage() {
                     leftIcon={<Plus className="w-5 h-5" />}
                     onClick={() => setShowAddModal(true)}
                   >
-                    Ajouter ma première réalisation
+                    Add First Item
                   </Button>
                 )}
               </div>

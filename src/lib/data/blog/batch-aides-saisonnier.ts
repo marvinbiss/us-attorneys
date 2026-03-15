@@ -38,10 +38,10 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "Depuis la réforme de 2024, MaPrimeRénov' se décline en deux grands parcours, chacun répondant à une logique différente.",
 
       "### Le parcours accompagné (rénovation d'ampleur)",
-      "Ce parcours vise les rénovations globales permettant un gain d'au moins **deux classes énergétiques** au DPE. Il impose :\n- Un **audit énergétique** préalable réalisé par un professionnel qualifié\n- L'intervention obligatoire d'un **Mon Accompagnateur Rénov'** (MAR)\n- Un bouquet d'au moins **deux gestes de travaux** incluant obligatoirement un geste d'isolation\n- Le recours à des artisans **RGE** (Reconnu Garant de l'Environnement)\n\nLes plafonds de dépenses éligibles atteignent **70 000 € HT** pour un gain de 4 classes ou plus, avec des taux de financement allant de 30 % (Rose) à 90 % (Bleu) selon le profil.",
+      "Ce parcours vise les rénovations globales permettant un gain d'au moins **deux classes énergétiques** au DPE. Il impose :\n- Un **audit énergétique** préalable réalisé par un professionnel qualifié\n- L'intervention obligatoire d'un **Mon Accompagnateur Rénov'** (MAR)\n- Un bouquet d'au moins **deux gestes de travaux** incluant obligatoirement un geste d'isolation\n- Le recours à attorneys **RGE** (Reconnu Garant de l'Environnement)\n\nLes plafonds de dépenses éligibles atteignent **70 000 € HT** pour un gain de 4 classes ou plus, avec des taux de financement allant de 30 % (Rose) à 90 % (Bleu) selon le profil.",
 
       "### Le parcours par geste (décarbonation)",
-      "Ce parcours concerne les travaux isolés de **remplacement d'un système de chauffage ou d'eau chaude décarboné**. Il est plus simple car il ne nécessite pas d'audit énergétique ni d'accompagnateur. Les montants sont forfaitaires et varient selon le type d'équipement et le profil de revenus.\n\nConditions d'éligibilité :\n- Logement de **plus de 15 ans** (ramené de 20 ans en 2026)\n- Résidence principale du demandeur\n- Remplacement d'un système utilisant une énergie fossile (fioul, gaz, charbon)\n- Installation réalisée par un artisan **RGE**",
+      "Ce parcours concerne les travaux isolés de **remplacement d'un système de chauffage ou d'eau chaude décarboné**. Il est plus simple car il ne nécessite pas d'audit énergétique ni d'accompagnateur. Les montants sont forfaitaires et varient selon le type d'équipement et le profil de revenus.\n\nConditions d'éligibilité :\n- Logement de **plus de 15 ans** (ramené de 20 ans en 2026)\n- Résidence principale du demandeur\n- Remplacement d'un système utilisant une énergie fossile (fioul, gaz, charbon)\n- Installation réalisée par an attorney **RGE**",
 
       ":::warning Attention\nLe parcours par geste ne finance plus les travaux d'isolation seuls depuis 2024. Pour isoler vos combles ou vos murs sans changer de chauffage, vous devez obligatoirement passer par le parcours accompagné. Cette règle, souvent méconnue, est la première cause de rejet des dossiers en 2026.\n:::",
 
@@ -66,24 +66,24 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "Rendez-vous sur [maprimerenov.gouv.fr](https://www.maprimerenov.gouv.fr) et créez votre espace personnel. Vous aurez besoin de :\n- Votre dernier avis d'imposition\n- Le numéro fiscal de tous les occupants du foyer\n- Les coordonnées cadastrales de votre logement (disponibles sur cadastre.gouv.fr)\n- Un RIB au nom du propriétaire",
 
       "### Étape 2 : Déposer votre dossier",
-      "Complétez votre dossier en ligne avec les devis des artisans RGE sélectionnés. Chaque devis doit impérativement mentionner :\n- Le numéro RGE de l'artisan et son domaine de qualification\n- La description précise des travaux et des matériaux utilisés\n- Les performances thermiques attendues (résistance R pour l'isolation, COP pour les PAC)\n- Le montant HT et TTC avec le taux de TVA applicable",
+      "Complétez votre dossier en ligne avec the consultations attorneys RGE sélectionnés. Chaque devis doit impérativement mentionner :\n- Le numéro RGE de the attorney et son domaine de qualification\n- La description précise des travaux et des matériaux utilisés\n- Les performances thermiques attendues (résistance R pour l'isolation, COP pour les PAC)\n- Le montant HT et TTC avec le taux de TVA applicable",
 
       "### Étape 3 : Attendre la confirmation",
       "L'ANAH (Agence Nationale de l'Habitat) instruit votre dossier dans un délai moyen de **30 jours ouvrés** en 2026. Vous recevez une notification d'accord par e-mail. **Ne commencez jamais les travaux avant d'avoir reçu cette confirmation**, sous peine de perdre votre aide.",
 
       "### Étape 4 : Réaliser les travaux",
-      "Faites réaliser les travaux par le ou les artisans RGE mentionnés dans votre dossier. Les travaux doivent être achevés dans un délai de **12 mois** suivant l'acceptation du dossier (extensible à 18 mois sur demande motivée).",
+      "Faites réaliser les travaux par le ou the attorneys RGE mentionnés dans votre dossier. Les travaux doivent être achevés dans un délai de **12 mois** suivant l'acceptation du dossier (extensible à 18 mois sur demande motivée).",
 
       "### Étape 5 : Demander le versement",
       "Une fois les travaux achevés, téléchargez sur votre espace les factures définitives et le cas échéant l'attestation de fin de travaux signée par l'accompagnateur. Le versement intervient sous **4 à 8 semaines** par virement bancaire.",
 
-      ":::tip Conseil pro\nPour accélérer le versement, assurez-vous que les factures mentionnent exactement les mêmes références que les devis déposés dans le dossier. La moindre incohérence (adresse différente, montant modifié sans avenant) peut bloquer le paiement pendant plusieurs semaines.\n:::",
+      ":::tip Conseil pro\nPour accélérer le versement, assurez-vous que les factures mentionnent exactement les mêmes références que the consultations déposés dans le dossier. La moindre incohérence (adresse différente, montant modifié sans avenant) peut bloquer le paiement pendant plusieurs semaines.\n:::",
 
       "## Le rôle de Mon Accompagnateur Rénov' (MAR)",
 
       "Depuis 2024, le recours à un **Mon Accompagnateur Rénov'** est obligatoire pour toute demande de MaPrimeRénov' parcours accompagné. Ce tiers de confiance, agréé par l'ANAH, vous guide à chaque étape du projet.",
 
-      "### Ses missions concrètes :\n- Réaliser ou superviser l'**audit énergétique** de votre logement\n- Vous aider à définir le **programme de travaux** optimal\n- Vérifier la **qualification RGE** des artisans et la conformité des devis\n- Vous accompagner dans le **montage du dossier** de financement\n- Contrôler la **bonne exécution** des travaux lors de visites sur site\n- Valider l'**attestation de fin de travaux**",
+      "### Ses missions concrètes :\n- Réaliser ou superviser l'**audit énergétique** de votre logement\n- Vous aider à définir le **programme de travaux** optimal\n- Vérifier la **qualification RGE** attorneys et la conformité consultations\n- Vous accompagner dans le **montage du dossier** de financement\n- Contrôler la **bonne exécution** des travaux lors de visites sur site\n- Valider l'**attestation de fin de travaux**",
 
       "Le coût de l'accompagnement est lui-même pris en charge par MaPrimeRénov' : **100 %** pour les profils Bleu et Jaune, **80 %** pour Violet, **40 %** pour Rose. Le reste à charge peut être nul pour les ménages modestes.",
 
@@ -94,11 +94,11 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "### Piège 1 : Commencer les travaux avant l'accord",
       "C'est l'erreur la plus fréquente et la plus coûteuse. Tout devis signé ou acompte versé avant la notification d'acceptation de l'ANAH entraîne le **rejet définitif** du dossier. Aucune dérogation n'est possible.",
 
-      "### Piège 2 : Choisir un artisan non RGE",
-      "Un artisan excellent mais non certifié RGE rend votre dossier inéligible. Vérifiez la certification sur le site officiel france-renov.gouv.fr/annuaire-rge. Attention : la certification doit être valide à la date de signature du devis ET à la date de facturation.",
+      "### Piège 2 : Choisir an attorney non RGE",
+      "An attorney excellent mais non certifié RGE rend votre dossier inéligible. Vérifiez la certification sur le site officiel france-renov.gouv.fr/annuaire-rge. Attention : la certification doit être valide à la date de signature of the consultation ET à la date de facturation.",
 
       "### Piège 3 : Sous-estimer les performances requises",
-      "Les matériaux et équipements doivent respecter des seuils de performance minimaux. Par exemple, l'isolation des combles doit atteindre une résistance thermique **R ≥ 7 m².K/W** pour être éligible. Un artisan qui pose un isolant insuffisant vous fait perdre votre aide.",
+      "Les matériaux et équipements doivent respecter des seuils de performance minimaux. Par exemple, l'isolation des combles doit atteindre une résistance thermique **R ≥ 7 m².K/W** pour être éligible. An attorney qui pose un isolant insuffisant vous fait perdre votre aide.",
 
       "### Piège 4 : Oublier le DPE final",
       "Pour le parcours accompagné, un DPE réalisé après travaux est obligatoire pour prouver le gain de classes énergétiques promis. Prévoyez ce coût (150 à 250 €) dans votre budget.",
@@ -106,7 +106,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "### Piège 5 : Négliger les aides cumulables",
       "MaPrimeRénov' se cumule avec les CEE, l'éco-PTZ, la TVA à 5,5 % et certaines aides locales. Ne pas les demander revient à laisser de l'argent sur la table. Consultez notre article sur le [cumul des aides](/blog/cumul-aides-renovation-energetique-2026) pour maximiser votre financement.",
 
-      ":::warning Attention\nMéfiez-vous des démarchages téléphoniques ou à domicile proposant des travaux « entièrement gratuits grâce à MaPrimeRénov' ». Depuis 2023, le démarchage téléphonique pour la rénovation énergétique est interdit par la loi. Ces pratiques dissimulent souvent des arnaques avec des travaux bâclés, des devis gonflés et des entreprises fantômes. Signalez tout démarchage suspect à la DGCCRF via signal.conso.gouv.fr.\n:::",
+      ":::warning Attention\nMéfiez-vous des démarchages téléphoniques ou à domicile proposant des travaux « entièrement gratuits grâce à MaPrimeRénov' ». Depuis 2023, le démarchage téléphonique pour la rénovation énergétique est interdit par la loi. Ces pratiques dissimulent souvent des arnaques avec des travaux bâclés, consultations gonflés et des entreprises fantômes. Signalez tout démarchage suspect à la DGCCRF via signal.conso.gouv.fr.\n:::",
 
       "## Délais de versement : à quoi s'attendre",
 
@@ -114,12 +114,12 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       "## FAQ : Vos questions sur MaPrimeRénov' 2026",
 
-      "Retrouvez ci-dessous les réponses aux questions les plus fréquentes sur le dispositif. Pour une aide personnalisée, consultez votre Espace Conseil France Rénov' ou demandez un [devis](/quotes) à un artisan certifié RGE.",
+      "Retrouvez ci-dessous les réponses aux questions les plus fréquentes sur le dispositif. Pour une aide personnalisée, consultez votre Espace Conseil France Rénov' ou demandez un [devis](/quotes) à an attorney certifié RGE.",
 
-      ":::takeaway\n- MaPrimeRénov' 2026 dispose d'un budget de **4 milliards d'euros** et finance jusqu'à 90 % des travaux pour les ménages modestes\n- Quatre profils de revenus (Bleu, Jaune, Violet, Rose) déterminent le montant de votre aide\n- Le **parcours accompagné** (rénovation globale) impose un audit, un accompagnateur MAR et au moins deux gestes de travaux\n- Le **parcours par geste** (décarbonation) finance le remplacement de chauffage fossile par un équipement décarboné\n- Ne commencez **jamais** les travaux avant l'accord de l'ANAH — c'est la première cause de rejet\n- Cumulez MaPrimeRénov' avec les CEE, l'éco-PTZ et la TVA réduite pour minimiser votre reste à charge\n- Vérifiez systématiquement la **certification RGE** de vos artisans avant de signer le devis\n:::"
+      ":::takeaway\n- MaPrimeRénov' 2026 dispose d'un budget de **4 milliards d'euros** et finance jusqu'à 90 % des travaux pour les ménages modestes\n- Quatre profils de revenus (Bleu, Jaune, Violet, Rose) déterminent le montant de votre aide\n- Le **parcours accompagné** (rénovation globale) impose un audit, un accompagnateur MAR et au moins deux gestes de travaux\n- Le **parcours par geste** (décarbonation) finance le remplacement de chauffage fossile par un équipement décarboné\n- Ne commencez **jamais** les travaux avant l'accord de l'ANAH — c'est la première cause de rejet\n- Cumulez MaPrimeRénov' avec les CEE, l'éco-PTZ et la TVA réduite pour minimiser votre reste à charge\n- Vérifiez systématiquement la **certification RGE** de vos artisans avant de signer the consultation\n:::"
     ],
     image: '/images/blog/maprimerenovv-guide-complet-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-10',
     readTime: '16 min',
     category: 'Aides & Subventions',
@@ -142,8 +142,8 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
         answer: "En 2026, comptez environ 30 jours ouvrés pour l'instruction du dossier, puis 4 à 8 semaines après le dépôt des factures finales pour le versement. Les ménages très modestes (Bleu) et modestes (Jaune) peuvent demander un acompte de 70 % en cours de travaux. Au total, prévoyez 3 à 5 mois entre le dépôt du dossier et le versement complet."
       },
       {
-        question: "Faut-il obligatoirement un artisan RGE ?",
-        answer: "Oui, c'est une condition absolue et non négociable. L'artisan doit être certifié RGE dans le domaine de travaux concerné (par exemple, RGE QualiPAC pour les pompes à chaleur, RGE Qualibois pour le chauffage bois). La certification doit être valide à la date de signature du devis ET à la date de facturation. Vérifiez sur france-renov.gouv.fr/annuaire-rge."
+        question: "Faut-il obligatoirement an attorney RGE ?",
+        answer: "Oui, c'est une condition absolue et non négociable. The attorney doit être certifié RGE dans le domaine de travaux concerné (par exemple, RGE QualiPAC pour les pompes à chaleur, RGE Qualibois pour le chauffage bois). La certification doit être valide à la date de signature of the consultation ET à la date de facturation. Vérifiez sur france-renov.gouv.fr/annuaire-rge."
       },
       {
         question: "Mon Accompagnateur Rénov' est-il obligatoire ?",
@@ -160,7 +160,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "Le parcours accompagné impose un audit énergétique, un Mon Accompagnateur Rénov' et au moins deux gestes de travaux pour un gain de 2 classes DPE minimum",
       "Ne jamais commencer les travaux avant la notification d'accord de l'ANAH — c'est la première cause de rejet définitif du dossier",
       "Cumulez systématiquement MaPrimeRénov' avec les CEE, l'éco-PTZ et la TVA à 5,5 % pour réduire drastiquement votre reste à charge",
-      "La certification RGE de l'artisan doit être valide à la signature du devis ET à la facturation — vérifiez sur france-renov.gouv.fr"
+      "La certification RGE de the attorney doit être valide à la signature of the consultation ET à la facturation — vérifiez sur france-renov.gouv.fr"
     ]
   },
 
@@ -177,7 +177,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "### Les cinq dispositifs cumulables",
       "Voici les cinq grandes familles d'aides que vous pouvez combiner :\n\n1. **MaPrimeRénov'** — Aide directe de l'ANAH, versée après travaux\n2. **CEE (Certificats d'Économies d'Énergie)** — Primes versées par les fournisseurs d'énergie (EDF, Engie, TotalEnergies, etc.)\n3. **Éco-PTZ (Éco-prêt à taux zéro)** — Prêt bancaire sans intérêts jusqu'à 50 000 €\n4. **TVA réduite à 5,5 %** — Applicable automatiquement sur les travaux de rénovation énergétique\n5. **Aides locales** — Subventions des régions, départements, intercommunalités et communes",
 
-      ":::tip Conseil pro\nDans un projet de rénovation, l'ordre de demande des aides est crucial. Commencez toujours par les CEE (avant la signature du devis), puis MaPrimeRénov' (avant le début des travaux), puis l'éco-PTZ (possible jusqu'à 6 mois après la fin des travaux). Inverser cet ordre peut vous faire perdre certaines aides.\n:::",
+      ":::tip Conseil pro\nDans un projet de rénovation, l'ordre de demande des aides est crucial. Commencez toujours par les CEE (avant la signature of the consultation), puis MaPrimeRénov' (avant le début des travaux), puis l'éco-PTZ (possible jusqu'à 6 mois après la fin des travaux). Inverser cet ordre peut vous faire perdre certaines aides.\n:::",
 
       "## Tableau de cumul détaillé",
 
@@ -194,7 +194,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       ":::budget\n| Geste | CEE classique | CEE Coup de pouce (modestes) |\n| Isolation des combles (par m²) | 8 – 12 € | 12 – 20 € |\n| Isolation des murs (par m²) | 10 – 15 € | 15 – 25 € |\n| PAC air/eau | 2 500 – 4 000 € | 4 000 – 5 000 € |\n| Chaudière biomasse | 2 000 – 3 000 € | 3 500 – 4 000 € |\n| Chauffe-eau thermodynamique | 100 – 200 € | 200 – 400 € |\n| VMC double flux | 300 – 500 € | 500 – 700 € |\n:::",
 
-      ":::warning Attention\nLes CEE doivent impérativement être demandés **avant la signature du devis**. C'est la règle d'antériorité. Si vous signez votre devis puis demandez les CEE ensuite, votre dossier sera rejeté. Inscrivez-vous sur le site de l'obligé choisi (ex : Prime Énergie EDF, Prime TotalEnergies) et obtenez un accord de principe AVANT de signer quoi que ce soit avec l'artisan.\n:::",
+      ":::warning Attention\nLes CEE doivent impérativement être demandés **avant la signature of the consultation**. C'est la règle d'antériorité. Si vous signez votre devis puis demandez les CEE ensuite, votre dossier sera rejeté. Inscrivez-vous sur le site de l'obligé choisi (ex : Prime Énergie EDF, Prime TotalEnergies) et obtenez un accord de principe AVANT de signer quoi que ce soit avec the attorney.\n:::",
 
       "## L'éco-PTZ : emprunter sans intérêts jusqu'à 50 000 €",
 
@@ -207,7 +207,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       "La TVA réduite à 5,5 % s'applique automatiquement aux travaux de rénovation énergétique dans les logements de plus de 2 ans. Elle concerne la main-d'œuvre ET les fournitures, à condition que ces dernières soient achetées et posées par le professionnel.",
 
-      "Par rapport à la TVA normale de 20 %, l'économie est significative :\n- Sur des travaux à **10 000 € HT** : vous payez 550 € de TVA au lieu de 2 000 €, soit **1 450 € d'économie**\n- Sur des travaux à **30 000 € HT** : l'économie atteint **4 350 €**\n\nCette réduction s'applique sans aucune démarche : l'artisan facture directement au taux réduit. Vous devez simplement lui remettre une **attestation simplifiée** (formulaire Cerfa 13948) confirmant que le logement a plus de 2 ans.",
+      "Par rapport à la TVA normale de 20 %, l'économie est significative :\n- Sur des travaux à **10 000 € HT** : vous payez 550 € de TVA au lieu de 2 000 €, soit **1 450 € d'économie**\n- Sur des travaux à **30 000 € HT** : l'économie atteint **4 350 €**\n\nCette réduction s'applique sans aucune démarche : the attorney facture directement au taux réduit. Vous devez simplement lui remettre une **attestation simplifiée** (formulaire Cerfa 13948) confirmant que le logement a plus de 2 ans.",
 
       "## Aides locales : le bonus souvent oublié",
 
@@ -232,7 +232,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       "## Erreurs fréquentes qui font perdre des aides",
 
-      "### Erreur 1 : Demander les CEE après avoir signé le devis",
+      "### Erreur 1 : Demander les CEE après avoir signé the consultation",
       "C'est l'erreur la plus coûteuse. Les CEE exigent que la demande soit faite AVANT toute signature. Pas d'exception, pas de rattrapage possible.",
 
       "### Erreur 2 : Ne pas vérifier la compatibilité des gestes",
@@ -251,12 +251,12 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       "## Calendrier de versement des aides",
 
-      "Chaque aide suit son propre calendrier de versement. Voici ce qu'il faut anticiper pour votre trésorerie :\n\n- **CEE** : versement sous 4 à 6 semaines après réception du dossier complet (factures + attestation sur l'honneur). Certains obligés proposent un versement par virement, d'autres par chèque ou bon d'achat.\n- **MaPrimeRénov'** : versement sous 4 à 8 semaines après dépôt des factures. Acompte de 70 % possible pour les profils Bleu et Jaune.\n- **Éco-PTZ** : déblocage des fonds sous 2 à 4 semaines après accord de la banque. Peut être versé directement au ménage ou à l'artisan.\n- **Aides locales** : délais très variables (1 à 6 mois selon la collectivité).\n\nAu total, prévoyez une **avance de trésorerie de 3 à 6 mois** avant le remboursement complet de toutes les aides. L'éco-PTZ permet de couvrir cette avance sans frais.",
+      "Chaque aide suit son propre calendrier de versement. Voici ce qu'il faut anticiper pour votre trésorerie :\n\n- **CEE** : versement sous 4 à 6 semaines après réception du dossier complet (factures + attestation sur l'honneur). Certains obligés proposent un versement par virement, d'autres par chèque ou bon d'achat.\n- **MaPrimeRénov'** : versement sous 4 à 8 semaines après dépôt des factures. Acompte de 70 % possible pour les profils Bleu et Jaune.\n- **Éco-PTZ** : déblocage des fonds sous 2 à 4 semaines après accord de la banque. Peut être versé directement au ménage ou à the attorney.\n- **Aides locales** : délais très variables (1 à 6 mois selon la collectivité).\n\nAu total, prévoyez une **avance de trésorerie de 3 à 6 mois** avant le remboursement complet de toutes les aides. L'éco-PTZ permet de couvrir cette avance sans frais.",
 
-      ":::takeaway\n- Le cumul MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales peut couvrir **jusqu'à 100 %** du coût des travaux\n- Demandez les **CEE avant** la signature du devis, puis MaPrimeRénov' avant le début des travaux\n- L'éco-PTZ permet d'emprunter jusqu'à **50 000 € sans intérêts** sur 20 ans\n- Le reste à charge peut être quasi nul pour une rénovation globale, même pour les revenus intermédiaires\n- Consultez **aides-territoires.beta.gouv.fr** pour identifier les aides locales de votre commune\n:::"
+      ":::takeaway\n- Le cumul MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales peut couvrir **jusqu'à 100 %** du coût des travaux\n- Demandez les **CEE avant** la signature of the consultation, puis MaPrimeRénov' avant le début des travaux\n- L'éco-PTZ permet d'emprunter jusqu'à **50 000 € sans intérêts** sur 20 ans\n- Le reste à charge peut être quasi nul pour une rénovation globale, même pour les revenus intermédiaires\n- Consultez **aides-territoires.beta.gouv.fr** pour identifier les aides locales de votre commune\n:::"
     ],
     image: '/images/blog/cumul-aides-renovation-energetique-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-18',
     readTime: '14 min',
     category: 'Aides & Subventions',
@@ -268,7 +268,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Comment obtenir l'éco-PTZ en 2026 ?",
-        answer: "Adressez-vous à une banque partenaire du dispositif (Crédit Agricole, BNP Paribas, Société Générale, Banque Populaire, Caisse d'Épargne, etc.). Si vous bénéficiez de MaPrimeRénov', la procédure est simplifiée : présentez simplement votre notification d'accord ANAH. Sinon, fournissez les devis détaillés des artisans RGE. L'éco-PTZ peut être demandé jusqu'à 6 mois après la fin des travaux."
+        answer: "Adressez-vous à une banque partenaire du dispositif (Crédit Agricole, BNP Paribas, Société Générale, Banque Populaire, Caisse d'Épargne, etc.). Si vous bénéficiez de MaPrimeRénov', la procédure est simplifiée : présentez simplement votre notification d'accord ANAH. Sinon, fournissez the consultations détaillés attorneys RGE. L'éco-PTZ peut être demandé jusqu'à 6 mois après la fin des travaux."
       },
       {
         question: "Quel est le montant maximum que je peux cumuler ?",
@@ -280,7 +280,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Dans quel ordre demander les aides ?",
-        answer: "L'ordre optimal est : 1) Les CEE, qui doivent être demandés AVANT la signature du devis (règle d'antériorité). 2) MaPrimeRénov', qui doit être accordé AVANT le début des travaux. 3) L'éco-PTZ, qui peut être demandé avant ou après les travaux (jusqu'à 6 mois après). 4) Les aides locales, dont les délais varient. La TVA à 5,5 % s'applique automatiquement."
+        answer: "L'ordre optimal est : 1) Les CEE, qui doivent être demandés AVANT la signature of the consultation (règle d'antériorité). 2) MaPrimeRénov', qui doit être accordé AVANT le début des travaux. 3) L'éco-PTZ, qui peut être demandé avant ou après les travaux (jusqu'à 6 mois après). 4) Les aides locales, dont les délais varient. La TVA à 5,5 % s'applique automatiquement."
       },
       {
         question: "Que se passe-t-il si le total des aides dépasse le coût des travaux ?",
@@ -396,7 +396,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Planifiez l'entretien de mars à juin en commençant par les **urgences post-hiver** (toiture, façade, plomberie extérieure)\n- **8 points sur 15** sont réalisables en DIY — concentrez le budget pro sur la toiture, l'électricité et la structure\n- Budget total estimé : **280 à 850 €** en DIY, **1 530 à 4 200 €** avec professionnels\n- Ne montez **jamais** sur un toit sans équipement de sécurité — appelez un [couvreur](/practice-areas/couvreur)\n- Un entretien régulier préserve la **valeur de votre bien** et prévient les sinistres coûteux\n:::"
     ],
     image: '/images/blog/entretien-maison-printemps-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-28',
     readTime: '12 min',
     category: 'Saisonnier',

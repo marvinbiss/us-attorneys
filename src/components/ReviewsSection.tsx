@@ -101,11 +101,11 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
     const now = new Date()
     const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
 
-    if (diffDays === 0) return "Aujourd'hui"
-    if (diffDays === 1) return 'Hier'
-    if (diffDays < 7) return `Il y a ${diffDays} jours`
-    if (diffDays < 30) return `Il y a ${Math.floor(diffDays / 7)} semaines`
-    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+    if (diffDays === 0) return 'Today'
+    if (diffDays === 1) return 'Yesterday'
+    if (diffDays < 7) return `${diffDays} days ago`
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }
 
   const renderStars = (rating: number, size: 'sm' | 'md' | 'lg' = 'md') => {
@@ -148,10 +148,10 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
       <div className="bg-gray-50 rounded-xl p-8 text-center">
         <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-700 mb-2">
-          Pas encore d'avis
+          No reviews yet
         </h3>
         <p className="text-gray-500">
-          Soyez le premier à laisser un avis après votre rendez-vous !
+          Be the first to leave a review after your consultation!
         </p>
       </div>
     )
@@ -169,7 +169,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
               {renderStars(Math.round(stats.average), 'lg')}
             </div>
             <p className="text-sm text-gray-600 mt-1">
-              {stats.total} avis
+              {stats.total} reviews
             </p>
           </div>
 
@@ -207,10 +207,10 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
               {stats.recommendRate}%
             </div>
             <p className="text-sm text-gray-600">
-              recommandent
+              recommend
             </p>
             <p className="text-xs text-gray-500">
-              {attorneyName || 'cet artisan'}
+              {attorneyName || 'this attorney'}
             </p>
           </div>
         </div>
@@ -222,15 +222,15 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
           <Filter className="w-4 h-4 text-gray-400" />
           <span className="text-sm text-gray-600">
             {filterRating
-              ? `${filterRating} étoile${filterRating > 1 ? 's' : ''}`
-              : 'Tous les avis'}
+              ? `${filterRating} star${filterRating > 1 ? 's' : ''}`
+              : 'All reviews'}
           </span>
           {filterRating && (
             <button
               onClick={() => setFilterRating(null)}
               className="text-xs text-violet-600 hover:text-violet-700"
             >
-              Effacer
+              Clear
             </button>
           )}
         </div>
@@ -240,10 +240,10 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
           className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
         >
-          <option value="recent">Plus récents</option>
-          <option value="helpful">Plus utiles</option>
-          <option value="highest">Note la plus haute</option>
-          <option value="lowest">Note la plus basse</option>
+          <option value="recent">Most recent</option>
+          <option value="helpful">Most helpful</option>
+          <option value="highest">Highest rated</option>
+          <option value="lowest">Lowest rated</option>
         </select>
       </div>
 
@@ -270,15 +270,15 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
                 {(review.booking_id || review.user_id || review.is_verified) && (
                   <span
                     className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
-                    title="Cet avis provient d'un client ayant utilisé la plateforme"
+                    title="This review is from a verified client who used the platform"
                   >
                     <CheckCircle className="w-3 h-3" />
-                    Avis vérifié
+                    Verified review
                   </span>
                 )}
                 {review.would_recommend && (
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                    Recommande
+                    Recommends
                   </span>
                 )}
               </div>
@@ -293,7 +293,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
             {review.artisan_response && (
               <div className="bg-violet-50 rounded-lg p-4 mb-4">
                 <p className="text-xs font-medium text-violet-700 mb-1">
-                  Réponse de {attorneyName || "l'artisan"}
+                  Response from {attorneyName || 'the attorney'}
                 </p>
                 <p className="text-sm text-gray-700">{review.artisan_response}</p>
                 {review.artisan_responded_at && (
@@ -317,7 +317,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
               >
                 <ThumbsUp className="w-4 h-4" />
                 <span>
-                  Utile ({review.helpful_count})
+                  Helpful ({review.helpful_count})
                 </span>
               </button>
             </div>
@@ -331,7 +331,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
           onClick={() => setShowAll(true)}
           className="w-full flex items-center justify-center gap-2 py-3 text-violet-600 hover:text-violet-700 font-medium"
         >
-          <span>Voir tous les avis ({filteredReviews.length})</span>
+          <span>View all reviews ({filteredReviews.length})</span>
           <ChevronDown className="w-4 h-4" />
         </button>
       )}

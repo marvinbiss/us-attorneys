@@ -74,7 +74,7 @@ export const prixArticles: Record<string, {
       "## Variations régionales",
 
       "### Paris et Île-de-France",
-      "À Paris intra-muros, les tarifs sont en moyenne **30 à 40 %** supérieurs à ceux pratiqués dans les cities moyennes. Ce surcoût s'explique par le coût de la vie, les charges des artisans et la forte demande, notamment en dépannage d'urgence.",
+      "À Paris intra-muros, les tarifs sont en moyenne **30 à 40 %** supérieurs à ceux pratiqués dans les cities moyennes. Ce surcoût s'explique par le coût de la vie, les charges attorneys et la forte demande, notamment en dépannage d'urgence.",
 
       "### Grandes métropoles régionales",
       "Lyon, Marseille, Bordeaux et Toulouse affichent des tarifs intermédiaires, environ **15 à 20 %** au-dessus de la moyenne nationale. La concurrence y est cependant plus forte, ce qui modère les excès.",
@@ -87,7 +87,7 @@ export const prixArticles: Record<string, {
       ":::warning Attention\nLa DGCCRF recense chaque année des centaines de plaintes contre des serruriers frauduleux. Les arnaques les plus courantes : **prix d'appel à 39 €** sur internet suivi d'une facture de 800 €, remplacement injustifié de la serrure complète alors qu'un simple crochetage suffirait, pièces facturées au triple du prix du marché. Ne payez **jamais** en espèces et exigez toujours une facture détaillée.\n:::",
 
       "### Les réflexes anti-arnaque",
-      "1. Exigez systématiquement un **devis écrit** avant toute intervention (obligatoire au-delà de 150 € TTC depuis 2017)\n2. Vérifiez le numéro **SIRET** de l'artisan sur societe.com ou infogreffe.fr\n3. Demandez l'**assurance responsabilité civile professionnelle**\n4. Méfiez-vous des prix d'appel anormalement bas sur internet\n5. Refusez toute intervention si le serrurier refuse de détailler le devis\n6. Consultez les [avis clients vérifiés](/blog/comment-choisir-serrurier-conseils) avant de vous engager",
+      "1. Exigez systématiquement un **devis écrit** avant toute intervention (obligatoire au-delà de 150 € TTC depuis 2017)\n2. Vérifiez le numéro **SIRET** de the attorney sur societe.com ou infogreffe.fr\n3. Demandez l'**assurance responsabilité civile professionnelle**\n4. Méfiez-vous des prix d'appel anormalement bas sur internet\n5. Refusez toute intervention si le serrurier refuse de détailler the consultation\n6. Consultez les [avis clients vérifiés](/blog/comment-choisir-serrurier-conseils) avant de vous engager",
 
       "## Nos conseils pour économiser",
 
@@ -105,7 +105,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Ouverture de porte simple en journée : **80 – 150 €**\n- Changement de serrure multipoints : **250 – 850 €** (fourniture + pose)\n- Blindage de porte existante : **600 – 1 200 €**\n- Bloc-porte blindé A2P BP1 : **1 500 – 3 500 €**\n- Toujours exiger un **devis écrit** avant intervention\n:::"
     ],
     image: "/images/blog/prix-serrurier-2026-tarifs-interventions.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-06",
     readTime: "14 min",
     category: "Tarifs",
@@ -114,7 +114,7 @@ export const prixArticles: Record<string, {
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte une ouverture de porte claquée en 2026 ?", answer: "Une ouverture de porte claquée (sans destruction) coûte entre 80 et 150 € en journée en semaine. Le soir, le week-end ou les jours fériés, la majoration porte ce tarif à 130 – 250 €. En cas de porte blindée, comptez 200 à 450 € en journée." },
-      { question: "Comment reconnaître un serrurier arnaqueur ?", answer: "Les signaux d'alerte sont : un prix d'appel anormalement bas (moins de 50 €), le refus de fournir un devis écrit, un diagnostic alarmiste (il faut tout changer), un paiement exigé uniquement en espèces, et l'absence de numéro SIRET vérifiable. Un serrurier sérieux annonce toujours une fourchette de prix au téléphone." },
+      { question: "Comment reconnaître un serrurier arnaqueur ?", answer: "Les signaux d'alerte sont : un prix d'appel anormalement bas (moins de 50 €), le refus de fournir a consultation écrit, un diagnostic alarmiste (il faut tout changer), un paiement exigé uniquement en espèces, et l'absence de numéro SIRET vérifiable. Un serrurier sérieux annonce toujours une fourchette de prix au téléphone." },
       { question: "Quelle est la différence entre une serrure A2P* et A2P*** ?", answer: "La certification A2P classe les serrures selon leur résistance à l'effraction testée en laboratoire par le CNPP. A2P* résiste 5 minutes, A2P** résiste 10 minutes, et A2P*** résiste 15 minutes. Le prix varie de 80 € (A2P*) à 250 € (A2P***) pour le cylindre seul." },
       { question: "Mon assurance prend-elle en charge l'intervention d'un serrurier ?", answer: "La plupart des contrats multirisques habitation couvrent l'ouverture de porte après perte de clés et le remplacement de serrure après effraction ou tentative d'effraction. Vérifiez les conditions et la franchise de votre contrat (généralement 50 à 150 €). Conservez la facture du serrurier pour le remboursement." },
       { question: "Faut-il choisir un blindage de porte ou un bloc-porte blindé ?", answer: "Le blindage à plat (600 – 1 200 €) est idéal si votre porte et son bâti sont en bon état : il offre un bon niveau de sécurité à moindre coût. Le bloc-porte blindé (1 500 – 5 000 €+) est recommandé si la porte est vétuste ou si vous souhaitez le niveau de protection maximal (certification A2P BP2 ou BP3)." }
@@ -122,7 +122,7 @@ export const prixArticles: Record<string, {
     keyTakeaways: [
       "L'ouverture de porte simple coûte 80 à 150 € en journée, avec majoration de 50 à 100 % le soir/week-end.",
       "Le blindage d'une porte existante revient entre 600 et 1 200 €, alternative économique au bloc-porte blindé.",
-      "Exigez toujours un devis écrit avant intervention, obligatoire au-delà de 150 € TTC depuis 2017.",
+      "Exigez toujours a consultation écrit avant intervention, obligatoire au-delà de 150 € TTC depuis 2017.",
       "Investir dans une serrure A2P certifiée réduit le risque de cambriolage et la prime d'assurance."
     ]
   },
@@ -130,7 +130,7 @@ export const prixArticles: Record<string, {
     title: "Prix Chauffagiste 2026 : Tarifs",
     excerpt: "Tarifs chauffagiste 2026 : chaudière, entretien, dépannage, pompe à chaleur. Comparez les prix. Devis gratuit.",
     content: [
-      "Votre facture de chauffage vous semble exorbitante ? Vous n'êtes pas seul : le chauffage représente en moyenne **60 % de la facture énergétique** des ménages français, soit 1 500 à 2 500 € par an pour une maison de 100 m² mal isolée. Le choix du bon système et du bon professionnel pour l'installer constitue un enjeu financier majeur. En 2026, le marché est en pleine mutation avec la montée en puissance des pompes à chaleur, l'interdiction des chaudières fioul dans le neuf et le déclin progressif du gaz. Ce guide vous détaille les tarifs actualisés pour toutes les prestations d'un chauffagiste, et vous montre comment réduire la facture grâce aux aides de l'État. Trouvez un [chauffagiste qualifié près de chez vous](/practice-areas/chauffagiste) pour obtenir un devis personnalisé.",
+      "Votre facture de chauffage vous semble exorbitante ? Vous n'êtes pas seul : le chauffage représente en moyenne **60 % de la facture énergétique** des ménages français, soit 1 500 à 2 500 € par an pour une maison de 100 m² mal isolée. Le choix du bon système et du bon professionnel pour l'installer constitue un enjeu financier majeur. En 2026, le marché est en pleine mutation avec la montée en puissance des pompes à chaleur, l'interdiction des chaudières fioul dans le neuf et le déclin progressif du gaz. Ce guide vous détaille les tarifs actualisés pour toutes les prestations d'un chauffagiste, et vous montre comment réduire la facture grâce aux aides de l'État. Trouvez un [chauffagiste qualifié près de chez vous](/practice-areas/chauffagiste) pour obtenir a consultation personnalisé.",
 
       "## Tarif horaire d'un chauffagiste",
 
@@ -138,7 +138,7 @@ export const prixArticles: Record<string, {
       "Le taux horaire d'un chauffagiste se situe entre **45 et 75 € HT** en province et entre **60 et 95 € HT** en Île-de-France. Les techniciens spécialisés en pompes à chaleur ou en systèmes de régulation connectés pratiquent des tarifs plus élevés, entre **65 et 100 € HT** de l'heure, en raison de la technicité requise et des certifications obligatoires (QualiPAC, RGE).",
 
       "### Frais annexes à prévoir",
-      "Le déplacement coûte entre 30 et 60 € selon la distance. La mise en service d'un équipement neuf est généralement incluse dans le devis d'installation, mais peut être facturée séparément (80 à 200 €). Les interventions d'urgence en dehors des heures ouvrées subissent une majoration de 50 à 100 %.",
+      "Le déplacement coûte entre 30 et 60 € selon la distance. La mise en service d'un équipement neuf est généralement incluse dans the consultation d'installation, mais peut être facturée séparément (80 à 200 €). Les interventions d'urgence en dehors des heures ouvrées subissent une majoration de 50 à 100 %.",
 
       ":::budget\n| Prestation | Tarif province | Tarif Île-de-France |\n| Taux horaire standard | 45 – 75 € HT | 60 – 95 € HT |\n| Spécialiste PAC/domotique | 65 – 100 € HT | 80 – 120 € HT |\n| Déplacement | 30 – 50 € | 40 – 60 € |\n| Majoration urgence/WE | +50 à 100 % | +50 à 100 % |\n:::",
 
@@ -194,7 +194,7 @@ export const prixArticles: Record<string, {
       "### Éco-prêt à taux zéro",
       "L'éco-PTZ permet de financer jusqu'à **50 000 €** de travaux sans intérêts, remboursables sur 20 ans. Ces aides sont **cumulables** et peuvent réduire de **40 à 70 %** le reste à charge.",
 
-      ":::info Bon à savoir\nPour bénéficier des aides MaPrimeRénov' et des CEE, les travaux doivent **impérativement** être réalisés par un artisan certifié **RGE** (Reconnu Garant de l'Environnement). Vérifiez la validité du certificat RGE sur le site [france-renov.gouv.fr](https://france-renov.gouv.fr). Simulez vos droits aux aides avant de vous engager pour connaître votre reste à charge réel.\n:::",
+      ":::info Bon à savoir\nPour bénéficier des aides MaPrimeRénov' et des CEE, les travaux doivent **impérativement** être réalisés par an attorney certifié **RGE** (Reconnu Garant de l'Environnement). Vérifiez la validité du certificat RGE sur le site [france-renov.gouv.fr](https://france-renov.gouv.fr). Simulez vos droits aux aides avant de vous engager pour connaître votre reste à charge réel.\n:::",
 
       "## Nos conseils pour maîtriser votre budget",
 
@@ -202,14 +202,14 @@ export const prixArticles: Record<string, {
       "1. Faites réaliser un **bilan thermique** de votre logement (200 à 500 €, parfois offert par les installateurs)\n2. Comparez au moins **trois devis détaillés** auprès de professionnels certifiés RGE\n3. Simulez vos droits aux aides sur le site France Rénov' avant de vous engager\n4. Vérifiez les certifications : RGE, QualiPAC pour les pompes à chaleur, QualiBois pour le bois",
 
       "### Pour économiser",
-      "- Planifiez vos travaux **en été** pour bénéficier de meilleurs tarifs et d'une meilleure disponibilité des artisans\n- Optez pour un **contrat d'entretien** incluant le dépannage prioritaire\n- Investissez dans un thermostat connecté (200 – 400 €) qui réduit la consommation de **8 à 15 %** en moyenne, et jusqu'à 20 % avec une programmation active et un abaissement nocturne régulier (source : ADEME)\n- Couplez le changement de chauffage avec des travaux d'[isolation](/blog/prix-ravalement-facade-2026) pour maximiser les économies",
+      "- Planifiez vos travaux **en été** pour bénéficier de meilleurs tarifs et d'une meilleure disponibilité attorneys\n- Optez pour un **contrat d'entretien** incluant le dépannage prioritaire\n- Investissez dans un thermostat connecté (200 – 400 €) qui réduit la consommation de **8 à 15 %** en moyenne, et jusqu'à 20 % avec une programmation active et un abaissement nocturne régulier (source : ADEME)\n- Couplez le changement de chauffage avec des travaux d'[isolation](/blog/prix-ravalement-facade-2026) pour maximiser les économies",
 
-      ":::warning Attention\nMéfiez-vous des offres « pompe à chaleur à 1 € » ou des démarcheurs téléphoniques promettant des installations gratuites. Ces pratiques, fréquemment dénoncées par la DGCCRF, cachent souvent des équipements sous-dimensionnés, des marques inconnues sans SAV, ou des montages financiers douteux. Un artisan sérieux ne démarche **jamais** par téléphone.\n:::",
+      ":::warning Attention\nMéfiez-vous des offres « pompe à chaleur à 1 € » ou des démarcheurs téléphoniques promettant des installations gratuites. Ces pratiques, fréquemment dénoncées par la DGCCRF, cachent souvent des équipements sous-dimensionnés, des marques inconnues sans SAV, ou des montages financiers douteux. An attorney sérieux ne démarche **jamais** par téléphone.\n:::",
 
-      ":::takeaway\n- PAC air-eau : **8 000 – 16 000 €** (avant aides : reste à charge de 3 000 – 8 000 €)\n- Chaudière gaz condensation : **2 500 – 8 000 €** (plus d'aides MaPrimeRénov')\n- Entretien annuel obligatoire : **90 – 250 €** selon l'équipement\n- Aides cumulables MaPrimeRénov' + CEE + éco-PTZ : jusqu'à **70 % de prise en charge**\n- Toujours choisir un artisan **certifié RGE** pour bénéficier des aides\n:::"
+      ":::takeaway\n- PAC air-eau : **8 000 – 16 000 €** (avant aides : reste à charge de 3 000 – 8 000 €)\n- Chaudière gaz condensation : **2 500 – 8 000 €** (plus d'aides MaPrimeRénov')\n- Entretien annuel obligatoire : **90 – 250 €** selon l'équipement\n- Aides cumulables MaPrimeRénov' + CEE + éco-PTZ : jusqu'à **70 % de prise en charge**\n- Toujours choisir an attorney **certifié RGE** pour bénéficier des aides\n:::"
     ],
     image: "/images/blog/prix-chauffagiste-2026-installation-entretien.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-09",
     readTime: "15 min",
     category: "Tarifs",
@@ -226,7 +226,7 @@ export const prixArticles: Record<string, {
       "Une PAC air-eau coûte 8 000 à 16 000 € TTC posée, avec un reste à charge de 3 000 à 8 000 € après aides.",
       "L'entretien annuel est obligatoire : 90 à 180 € pour une chaudière, 150 à 250 € pour une PAC.",
       "Les aides cumulées (MaPrimeRénov' + CEE + éco-PTZ) couvrent jusqu'à 70 % du coût d'installation.",
-      "Méfiez-vous des offres « PAC à 1 € » et du démarchage téléphonique : un artisan sérieux ne démarche jamais."
+      "Méfiez-vous des offres « PAC à 1 € » et du démarchage téléphonique : an attorney sérieux ne démarche jamais."
     ]
   },
   "prix-menuisier-2026-tarifs-travaux": {
@@ -264,7 +264,7 @@ export const prixArticles: Record<string, {
       "### Baies vitrées et portes-fenêtres",
       "La pose d'une baie vitrée coulissante 2 vantaux coûte de **1 200 à 3 500 €** selon le matériau. Le coulissant à galandage (le vantail disparaît dans le mur) est plus onéreux : **2 000 à 5 000 €**. Les portes-fenêtres se situent entre **600 et 1 800 €**.",
 
-      ":::info Bon à savoir\nLe coefficient **Uw** mesure la performance thermique de la fenêtre complète (vitrage + châssis). Plus il est bas, meilleure est l'isolation. En 2026, les exigences minimales pour bénéficier de MaPrimeRénov' sont : Uw ≤ 1,3 W/m².K pour les fenêtres et Uw ≤ 1,7 W/m².K pour les portes-fenêtres. Vérifiez ce coefficient sur le devis de votre [menuisier à Lyon](/practice-areas/menuisier/lyon) ou dans votre région.\n:::",
+      ":::info Bon à savoir\nLe coefficient **Uw** mesure la performance thermique de la fenêtre complète (vitrage + châssis). Plus il est bas, meilleure est l'isolation. En 2026, les exigences minimales pour bénéficier de MaPrimeRénov' sont : Uw ≤ 1,3 W/m².K pour les fenêtres et Uw ≤ 1,7 W/m².K pour les portes-fenêtres. Vérifiez ce coefficient sur the consultation de votre [menuisier à Lyon](/practice-areas/menuisier/lyon) ou dans votre région.\n:::",
 
       "## Escaliers sur mesure",
 
@@ -291,7 +291,7 @@ export const prixArticles: Record<string, {
       "## Comment économiser sur vos travaux de menuiserie",
 
       "### Stratégies de réduction des coûts",
-      "1. **Regroupez vos travaux** pour négocier un tarif global (remise de 10 à 15 % fréquente)\n2. Privilégiez les **essences de bois locales** (chêne de France, pin des Landes)\n3. Planifiez vos projets **en automne ou en hiver**, périodes plus calmes pour les menuisiers\n4. Pour les fenêtres, achetez en lot : le prix unitaire baisse de 15 à 25 % à partir de 5 fenêtres\n5. Comparez les devis de [menuisiers vérifiés](/blog/comment-choisir-menuisier-guide) sur ServicesArtisans",
+      "1. **Regroupez vos travaux** pour négocier un tarif global (remise de 10 à 15 % fréquente)\n2. Privilégiez les **essences de bois locales** (chêne de France, pin des Landes)\n3. Planifiez vos projets **en automne ou en hiver**, périodes plus calmes pour les menuisiers\n4. Pour les fenêtres, achetez en lot : le prix unitaire baisse de 15 à 25 % à partir de 5 fenêtres\n5. Comparez the consultations de [menuisiers vérifiés](/blog/comment-choisir-menuisier-guide) sur US Attorneys",
 
       "### Aides pour les fenêtres",
       "Vérifiez votre éligibilité à MaPrimeRénov' et aux CEE : le remplacement de fenêtres simple vitrage par du double vitrage performant est éligible à des aides couvrant **40 à 50 %** du coût. La TVA réduite à 5,5 % s'applique pour les fenêtres respectant les critères thermiques (Uw ≤ 1,3 W/m².K).",
@@ -301,7 +301,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Tarif horaire menuisier : **35 – 80 € HT** selon la région et la spécialisation\n- Fenêtre PVC posée : **350 – 700 €** (meilleur rapport qualité-prix)\n- Escalier sur mesure en bois : **2 000 – 12 000 €** selon la configuration\n- Dressing complet : **2 500 – 8 000 €** pour 6 à 10 m²\n- Aides fenêtres MaPrimeRénov' : jusqu'à **50 % du coût** pour du simple vers double vitrage\n:::"
     ],
     image: "/images/blog/prix-menuisier-2026-tarifs-travaux.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-13",
     readTime: "14 min",
     category: "Tarifs",
@@ -318,14 +318,14 @@ export const prixArticles: Record<string, {
       "Le tarif horaire d'un menuisier est de 35 à 60 € HT en province et 50 à 80 € en Île-de-France.",
       "Le remplacement d'une fenêtre PVC standard coûte 350 à 700 € pose comprise.",
       "Un escalier sur mesure en bois coûte de 2 000 € (droit, sapin) à 15 000 € (hélicoïdal, chêne massif).",
-      "Exigez le coefficient Uw sur le devis des fenêtres : Uw ≤ 1,3 est requis pour les aides MaPrimeRénov'."
+      "Exigez le coefficient Uw sur the consultation des fenêtres : Uw ≤ 1,3 est requis pour les aides MaPrimeRénov'."
     ]
   },
   "prix-carreleur-2026-pose-fourniture": {
     title: "Prix Carreleur 2026 : Pose et Fourniture",
     excerpt: "Prix carrelage 2026 : pose au m², fournitures, faïence salle de bain, carrelage extérieur. Estimez votre budget. Devis gratuit.",
     content: [
-      "Vous rêvez d'une salle de bain moderne avec du carrelage grand format, ou d'une terrasse en grès cérame imitation bois ? Le carrelage demeure l'un des revêtements les plus prisés en France grâce à sa durabilité exceptionnelle (30 ans et plus), sa facilité d'entretien et la diversité infinie de ses finitions. Mais entre le prix du carrelage lui-même, la préparation du support et la main-d'œuvre, la facture peut rapidement grimper. En 2026, il est indispensable de connaître les tarifs pratiqués pour éviter les mauvaises surprises et **budgéter votre projet avec précision**. Trouvez un [carreleur professionnel près de chez vous](/practice-areas/carreleur) pour obtenir des devis détaillés.",
+      "Vous rêvez d'une salle de bain moderne avec du carrelage grand format, ou d'une terrasse en grès cérame imitation bois ? Le carrelage demeure l'un des revêtements les plus prisés en France grâce à sa durabilité exceptionnelle (30 ans et plus), sa facilité d'entretien et la diversité infinie de ses finitions. Mais entre le prix du carrelage lui-même, la préparation du support et la main-d'œuvre, la facture peut rapidement grimper. En 2026, il est indispensable de connaître les tarifs pratiqués pour éviter les mauvaises surprises et **budgéter votre projet avec précision**. Trouvez un [carreleur professionnel près de chez vous](/practice-areas/carreleur) pour obtenir consultations détaillés.",
 
       "## Tarif horaire d'un carreleur",
 
@@ -392,7 +392,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Pose carrelage sol standard : **30 – 60 € HT/m²** (hors fournitures)\n- Fourniture grès cérame : **15 – 60 €/m²** selon la qualité\n- Préparation du support (ragréage) : **15 – 30 €/m²** à ne pas négliger\n- Budget global salle de bain 6 m² (sol + murs) : **2 500 – 6 000 €**\n- Budget global terrasse 20 m² : **1 600 – 3 600 €** fourniture et pose\n:::"
     ],
     image: "/images/blog/prix-carreleur-2026-pose-fourniture.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-16",
     readTime: "13 min",
     category: "Tarifs",
@@ -409,7 +409,7 @@ export const prixArticles: Record<string, {
       "La pose de carrelage coûte entre 30 et 80 €/m² (main-d'œuvre seule) selon le format et la technique.",
       "Le double encollage est obligatoire pour les carreaux de plus de 30 x 30 cm (DTU 52.2).",
       "La réalisation d'une douche à l'italienne (2 500 à 5 000 €) requiert une étanchéité SPEC irréprochable.",
-      "La préparation du support (ragréage, primaire) est incluse dans un devis sérieux et conditionne le résultat."
+      "La préparation du support (ragréage, primaire) est incluse dans a consultation sérieux et conditionne le résultat."
     ]
   },
   "prix-macon-2026-gros-oeuvre-renovation": {
@@ -488,7 +488,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Tarif horaire maçon : **35 – 75 € HT** selon région et spécialisation\n- Mur en parpaings : **40 – 80 € HT/m²** fournitures et pose\n- Ouverture mur porteur : **2 500 – 6 000 €** (étude structure incluse)\n- Dalle béton : **50 – 100 € HT/m²**\n- Toujours exiger l'**assurance décennale** et prévoir **10-15 % d'imprévus**\n:::"
     ],
     image: "/images/blog/prix-macon-2026-gros-oeuvre-renovation.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-17",
     readTime: "14 min",
     category: "Tarifs",
@@ -512,7 +512,7 @@ export const prixArticles: Record<string, {
     title: "Prix Jardinier Paysagiste 2026 : Tarifs",
     excerpt: "Tarifs jardinier paysagiste 2026 : entretien, création d'espaces verts, élagage, tonte. Tous les prix détaillés. Devis gratuit.",
     content: [
-      "Votre jardin ressemble plus à une jungle qu'à un espace de détente ? Vous rêvez d'une terrasse paysagée, d'un potager structuré ou simplement d'une pelouse impeccable ? Un jardin bien entretenu valorise votre patrimoine immobilier de **5 à 20 %** selon les professionnels de l'immobilier. Mais entre un simple entretien et un aménagement paysager complet, les tarifs varient du simple au décuple. Ce guide 2026 vous donne toutes les clés pour **budgéter précisément vos travaux d'extérieur** et profiter du crédit d'impôt de 50 %. Comparez les devis de [jardiniers et paysagistes près de chez vous](/practice-areas/jardinier).",
+      "Votre jardin ressemble plus à une jungle qu'à un espace de détente ? Vous rêvez d'une terrasse paysagée, d'un potager structuré ou simplement d'une pelouse impeccable ? Un jardin bien entretenu valorise votre patrimoine immobilier de **5 à 20 %** selon les professionnels de l'immobilier. Mais entre un simple entretien et un aménagement paysager complet, les tarifs varient du simple au décuple. Ce guide 2026 vous donne toutes les clés pour **budgéter précisément vos travaux d'extérieur** et profiter du crédit d'impôt de 50 %. Comparez the consultations de [jardiniers et paysagistes près de chez vous](/practice-areas/jardinier).",
 
       "## Tarif horaire d'un jardinier",
 
@@ -573,14 +573,14 @@ export const prixArticles: Record<string, {
 
       "## Nos conseils pour économiser",
 
-      "1. Optez pour un **contrat d'entretien annuel** plutôt que des interventions ponctuelles (-10 à 20 %)\n2. Choisissez des **plantes locales** adaptées au climat, nécessitant moins d'arrosage et d'entretien\n3. Investissez dans un **robot tondeuse** (500 à 2 000 €) pour réduire vos frais de tonte à long terme\n4. Profitez du **crédit d'impôt de 50 %** en passant par un prestataire agréé\n5. Paillez vos massifs pour réduire le désherbage et l'arrosage\n6. Comparez les devis de [jardiniers vérifiés](/blog/comment-choisir-jardinier-paysagiste) sur ServicesArtisans",
+      "1. Optez pour un **contrat d'entretien annuel** plutôt que des interventions ponctuelles (-10 à 20 %)\n2. Choisissez des **plantes locales** adaptées au climat, nécessitant moins d'arrosage et d'entretien\n3. Investissez dans un **robot tondeuse** (500 à 2 000 €) pour réduire vos frais de tonte à long terme\n4. Profitez du **crédit d'impôt de 50 %** en passant par un prestataire agréé\n5. Paillez vos massifs pour réduire le désherbage et l'arrosage\n6. Comparez the consultations de [jardiniers vérifiés](/blog/comment-choisir-jardinier-paysagiste) sur US Attorneys",
 
       ":::tip Conseil pro\nLe **paillage** est l'investissement le plus rentable au jardin : 3 à 8 €/m² pour un paillage de qualité qui réduit le désherbage de 80 %, divise par deux les arrosages et nourrit le sol en se décomposant. En 2-3 ans, l'économie en entretien dépasse largement le coût initial.\n:::",
 
       ":::takeaway\n- Tonte pelouse 200 m² : **30 – 80 €** par passage\n- Contrat entretien annuel : **1 200 – 3 500 €/an** (le plus rentable)\n- Élagage grand arbre : **500 – 1 500 €**\n- Aménagement paysager complet : **50 – 150 €/m²**\n- **Crédit d'impôt de 50 %** sur l'entretien (jusqu'à 2 500 € d'économie/an)\n:::"
     ],
     image: "/images/blog/prix-jardinier-paysagiste-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-20",
     readTime: "14 min",
     category: "Tarifs",
@@ -604,7 +604,7 @@ export const prixArticles: Record<string, {
     title: "Prix Vitrier 2026 : Tarifs Vitrage",
     excerpt: "Tarifs vitrier 2026 : remplacement de vitre, double vitrage, vitrine, miroir sur mesure. Tous les prix détaillés. Devis gratuit.",
     content: [
-      "Une vitre brisée par un ballon de football, une tentative d'effraction qui a fissuré votre double vitrage, ou simplement des fenêtres anciennes qui laissent passer le froid : les raisons de faire appel à un vitrier sont nombreuses. Mais combien cela coûte-t-il réellement ? En 2026, le marché de la vitrerie est porté par les exigences croissantes en matière d'isolation thermique et acoustique, avec des technologies de vitrage toujours plus performantes. Ce guide complet vous donne les **prix réels** pour chaque type d'intervention, de l'urgence au projet de rénovation énergétique. Trouvez un [vitrier qualifié dans votre ville](/practice-areas/vitrier) pour un devis rapide.",
+      "Une vitre brisée par un ballon de football, une tentative d'effraction qui a fissuré votre double vitrage, ou simplement des fenêtres anciennes qui laissent passer le froid : les raisons de faire appel à un vitrier sont nombreuses. Mais combien cela coûte-t-il réellement ? En 2026, le marché de la vitrerie est porté par les exigences croissantes en matière d'isolation thermique et acoustique, avec des technologies de vitrage toujours plus performantes. Ce guide complet vous donne les **prix réels** pour chaque type d'intervention, de l'urgence au projet de rénovation énergétique. Trouvez un [vitrier qualifié dans votre ville](/practice-areas/vitrier) pour a consultation rapide.",
 
       "## Tarif horaire d'un vitrier",
 
@@ -626,7 +626,7 @@ export const prixArticles: Record<string, {
       ":::budget\n| Type de vitrage | Prix fourni-posé/m² | Coefficient Ug | Usage recommandé |\n| Double vitrage standard (4/16/4) | 100 – 250 € | 1,1 W/m².K | Standard toute façade |\n| Double VIR gaz argon | 150 – 350 € | 1,0 W/m².K | Rénovation énergétique |\n| Triple vitrage | 200 – 450 € | 0,5 – 0,7 W/m².K | Façade nord, régions froides |\n| Vitrage acoustique feuilleté | 180 – 400 € | 1,1 W/m².K | Bord de route, centre-ville |\n:::",
 
       "### Remplacement du vitrage seul vs fenêtre complète",
-      "Ces prix s'entendent **hors remplacement du châssis** de la fenêtre. Le remplacement du vitrage seul (si le châssis est en bon état) est 40 à 60 % moins cher que le remplacement de la fenêtre complète. Consultez notre guide sur le [prix des fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour une comparaison détaillée, ou contactez un [miroitier-vitrier à Paris](/practice-areas/vitrier/paris) pour un devis sur mesure.",
+      "Ces prix s'entendent **hors remplacement du châssis** de la fenêtre. Le remplacement du vitrage seul (si le châssis est en bon état) est 40 à 60 % moins cher que le remplacement de la fenêtre complète. Consultez notre guide sur le [prix des fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour une comparaison détaillée, ou contactez un [miroitier-vitrier à Paris](/practice-areas/vitrier/paris) pour a consultation sur mesure.",
 
       ":::info Bon à savoir\nLe coefficient **Ug** mesure la performance thermique du vitrage seul (le « g » signifie « glass »). Plus il est bas, meilleure est l'isolation. Le **Uw** mesure la performance de la fenêtre complète (vitrage + châssis). Pour bénéficier des aides à la rénovation énergétique, c'est le Uw qui doit être inférieur ou égal à 1,3 W/m².K.\n:::",
 
@@ -649,20 +649,20 @@ export const prixArticles: Record<string, {
 
       "## Aides financières pour le changement de vitrage",
 
-      "Le remplacement de simple vitrage par du double vitrage performant est éligible à **MaPrimeRénov'** et aux **CEE**. Les aides peuvent couvrir **30 à 50 %** du coût des travaux selon les revenus du ménage. L'éco-PTZ est également mobilisable. Pour en bénéficier, les travaux doivent être réalisés par un artisan certifié **RGE**. La TVA est réduite à **5,5 %** pour les vitrages respectant les critères de performance thermique.",
+      "Le remplacement de simple vitrage par du double vitrage performant est éligible à **MaPrimeRénov'** et aux **CEE**. Les aides peuvent couvrir **30 à 50 %** du coût des travaux selon les revenus du ménage. L'éco-PTZ est également mobilisable. Pour en bénéficier, les travaux doivent être réalisés par an attorney certifié **RGE**. La TVA est réduite à **5,5 %** pour les vitrages respectant les critères de performance thermique.",
 
       "## Nos conseils pour économiser",
 
-      ":::tip Conseil pro\nEn cas d'urgence (vitre brisée), demandez d'abord une **mise en sécurité provisoire** (panneau de contreplaqué ou film plastique, 50 – 100 €) avant de planifier le remplacement définitif. Cela vous évite de payer les majorations d'urgence et vous laisse le temps de comparer les devis sereinement.\n:::",
+      ":::tip Conseil pro\nEn cas d'urgence (vitre brisée), demandez d'abord une **mise en sécurité provisoire** (panneau de contreplaqué ou film plastique, 50 – 100 €) avant de planifier le remplacement définitif. Cela vous évite de payer les majorations d'urgence et vous laisse le temps de comparer the consultations sereinement.\n:::",
 
-      "1. Comparez **trois devis minimum** pour tout remplacement non urgent\n2. Vérifiez si votre **assurance habitation** couvre le bris de glace (franchise habituelle : 50 – 150 €)\n3. Pour un projet d'amélioration thermique, **groupez le remplacement** de plusieurs vitrages pour un tarif dégressif\n4. Déclarez le sinistre à votre assurance dans les **5 jours ouvrés** et conservez les débris + photos\n5. Consultez un [vitrier vérifié](/blog/comment-choisir-vitrier-guide) pour un devis détaillé",
+      "1. Comparez **trois devis minimum** pour tout remplacement non urgent\n2. Vérifiez si votre **assurance habitation** couvre le bris de glace (franchise habituelle : 50 – 150 €)\n3. Pour un projet d'amélioration thermique, **groupez le remplacement** de plusieurs vitrages pour un tarif dégressif\n4. Déclarez le sinistre à votre assurance dans les **5 jours ouvrés** et conservez les débris + photos\n5. Consultez un [vitrier vérifié](/blog/comment-choisir-vitrier-guide) pour a consultation détaillé",
 
       ":::warning Attention\nComme pour la serrurerie, le secteur de la vitrerie d'urgence attire des entreprises peu scrupuleuses. Méfiez-vous des vitriers qui : annoncent un tarif au téléphone puis gonflent la facture sur place, ne fournissent pas de devis écrit, ne précisent pas le type de vitrage posé (épaisseur, composition), ou exigent un paiement en espèces. Vérifiez toujours le numéro **SIRET** et l'assurance RC professionnelle.\n:::",
 
       ":::takeaway\n- Remplacement simple vitrage : **60 – 150 €** par vitre standard\n- Double vitrage VIR posé : **150 – 350 €/m²**\n- Vitrine commerciale : **1 000 – 4 000 €** par vitrine\n- Crédence verre laqué : **150 – 400 €/m²**\n- Aides MaPrimeRénov' + CEE : jusqu'à **50 % du coût** pour l'amélioration thermique\n:::"
     ],
     image: "/images/blog/prix-vitrier-2026-remplacement-vitrage.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-22",
     readTime: "13 min",
     category: "Tarifs",
@@ -679,7 +679,7 @@ export const prixArticles: Record<string, {
       "Le double vitrage standard coûte 80 à 150 €/m² et le VIR (isolation renforcée) 120 à 200 €/m².",
       "Le remplacement de vitrage en urgence entraîne un supplément de 50 à 100 € pour le déplacement.",
       "L'assurance habitation couvre généralement le bris de glace : déclarez le sinistre sous 5 jours ouvrés.",
-      "Exigez le coefficient Ug sur le devis pour vérifier la performance thermique du vitrage proposé."
+      "Exigez le coefficient Ug sur the consultation pour vérifier la performance thermique du vitrage proposé."
     ]
   },
   "prix-climaticien-2026-installation-entretien": {
@@ -706,7 +706,7 @@ export const prixArticles: Record<string, {
       "## Climatisation gainable",
 
       "### Le haut de gamme invisible",
-      "Le système gainable diffuse l'air frais par des gaines dans les faux plafonds. Le budget d'installation se situe entre **6 000 et 15 000 € TTC** pour 80 à 120 m². C'est la solution privilégiée pour les constructions neuves ou les rénovations complètes. Demandez un devis à un [climaticien à Toulouse](/practice-areas/climaticien/toulouse) ou dans votre région.",
+      "Le système gainable diffuse l'air frais par des gaines dans les faux plafonds. Le budget d'installation se situe entre **6 000 et 15 000 € TTC** pour 80 à 120 m². C'est la solution privilégiée pour les constructions neuves ou les rénovations complètes. Demandez a consultation à un [climaticien à Toulouse](/practice-areas/climaticien/toulouse) ou dans votre région.",
 
       ":::budget\n| Système | Prix TTC posé | Surface adaptée | SEER moyen |\n| Monosplit réversible | 1 500 – 3 500 € | 15 – 40 m² | 5,5 – 7 |\n| Bi-split | 3 000 – 8 000 € | 30 – 60 m² | 5,5 – 7 |\n| Tri-split | 4 000 – 10 000 € | 50 – 80 m² | 5 – 6,5 |\n| Quadri-split | 5 000 – 12 000 € | 70 – 100 m² | 5 – 6,5 |\n| Gainable | 6 000 – 15 000 € | 80 – 120 m² | 5 – 7 |\n:::",
 
@@ -727,14 +727,14 @@ export const prixArticles: Record<string, {
 
       "## Nos conseils pour économiser",
 
-      "1. Installez **en automne ou en hiver** pour éviter le rush estival et obtenir de meilleurs tarifs (-10 à 20 %)\n2. Faites réaliser un **bilan thermique** avant l'installation pour un dimensionnement optimal\n3. Entretenez vos filtres tous les 15 jours en été pour maintenir les performances\n4. Consultez un [climaticien vérifié](/blog/comment-choisir-climaticien-guide) pour un devis précis",
+      "1. Installez **en automne ou en hiver** pour éviter le rush estival et obtenir de meilleurs tarifs (-10 à 20 %)\n2. Faites réaliser un **bilan thermique** avant l'installation pour un dimensionnement optimal\n3. Entretenez vos filtres tous les 15 jours en été pour maintenir les performances\n4. Consultez un [climaticien vérifié](/blog/comment-choisir-climaticien-guide) pour a consultation précis",
 
       ":::warning Attention\nUn climatiseur mal dimensionné coûte cher à l'usage : **surdimensionné**, il alterne entre marche et arrêt (surconsommation de 20 à 30 %) ; **sous-dimensionné**, il tourne en permanence sans atteindre la température souhaitée. Un bilan thermique préalable (200 – 500 €, souvent offert par les installateurs sérieux) est indispensable.\n:::",
 
       ":::takeaway\n- Monosplit réversible : **1 500 – 3 500 €** (une pièce)\n- Multisplit pour maison : **5 000 – 12 000 €**\n- Gainable (invisible) : **6 000 – 15 000 €**\n- Entretien annuel : **100 – 200 €** (obligatoire)\n- Installer **hors saison** pour économiser 10 à 20 %\n:::"
     ],
     image: "/images/blog/prix-climaticien-2026-installation-entretien.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-24",
     readTime: "13 min",
     category: "Tarifs",
@@ -781,9 +781,9 @@ export const prixArticles: Record<string, {
       "## Travaux annexes indispensables",
 
       "### Budget travaux annexes",
-      "- **Plomberie** (évier, lave-vaisselle, gaz) : 300 – 800 €\n- **Électricité** (prises, four, hotte, éclairage) : 400 – 1 200 €\n- **Crédence carrelage** : 40 – 100 €/m²\n- **Peinture/revêtement mural** : 15 – 40 €/m²\n- **Revêtement de sol** : 30 – 100 €/m²\n\nPrévoyez **1 000 à 3 000 €** pour l'ensemble de ces travaux annexes, souvent oubliés dans les devis initiaux.",
+      "- **Plomberie** (évier, lave-vaisselle, gaz) : 300 – 800 €\n- **Électricité** (prises, four, hotte, éclairage) : 400 – 1 200 €\n- **Crédence carrelage** : 40 – 100 €/m²\n- **Peinture/revêtement mural** : 15 – 40 €/m²\n- **Revêtement de sol** : 30 – 100 €/m²\n\nPrévoyez **1 000 à 3 000 €** pour l'ensemble de ces travaux annexes, souvent oubliés dans the consultations initiaux.",
 
-      ":::warning Attention\nVérifiez que le devis de votre cuisiniste inclut **tous** les travaux annexes (plomberie, électricité, finitions). Un devis qui n'affiche que le prix du mobilier et de la pose est trompeur : les raccordements représentent facilement **1 000 à 3 000 €** supplémentaires. Demandez un devis **tout compris** pour éviter les mauvaises surprises.\n:::",
+      ":::warning Attention\nVérifiez que the consultation de votre cuisiniste inclut **tous** les travaux annexes (plomberie, électricité, finitions). A consultation qui n'affiche que le prix du mobilier et de la pose est trompeur : les raccordements représentent facilement **1 000 à 3 000 €** supplémentaires. Demandez a consultation **tout compris** pour éviter les mauvaises surprises.\n:::",
 
       "## Plans de travail : comparatif des prix",
 
@@ -809,7 +809,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Cuisine complète entrée de gamme : **3 000 – 6 000 €**\n- Cuisine milieu de gamme : **6 000 – 15 000 €** (le meilleur rapport qualité-prix)\n- Pose seule par un indépendant : **300 – 700 €/ml**\n- Travaux annexes (plomberie, électricité) : **1 000 – 3 000 €** à ne pas oublier\n- Profiter des **soldes et déstockages** pour économiser 20 à 40 %\n:::"
     ],
     image: "/images/blog/prix-cuisiniste-2026-pose-cuisine.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-27",
     readTime: "14 min",
     category: "Tarifs",
@@ -818,7 +818,7 @@ export const prixArticles: Record<string, {
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte une cuisine équipée complète en 2026 ?", answer: "Une cuisine complète (mobilier + électroménager + pose + travaux annexes) coûte entre 5 000 et 10 000 € en entrée de gamme, 10 000 à 20 000 € en milieu de gamme, et 20 000 à 50 000 €+ en haut de gamme, pour une cuisine de 8 à 12 m²." },
-      { question: "Vaut-il mieux acheter chez un cuisiniste ou en grande surface ?", answer: "Les grandes surfaces de bricolage offrent les prix les plus bas (entrée et milieu de gamme) avec des cuisines en kit. Les grandes enseignes spécialisées (Schmidt, Mobalpa, SoCoo'c) proposent un meilleur accompagnement et une pose intégrée. Le cuisiniste indépendant ou l'artisan menuisier offrent du sur-mesure et un suivi personnalisé, mais à un budget supérieur." },
+      { question: "Vaut-il mieux acheter chez un cuisiniste ou en grande surface ?", answer: "Les grandes surfaces de bricolage offrent les prix les plus bas (entrée et milieu de gamme) avec des cuisines en kit. Les grandes enseignes spécialisées (Schmidt, Mobalpa, SoCoo'c) proposent un meilleur accompagnement et une pose intégrée. Le cuisiniste indépendant ou the attorney menuisier offrent du sur-mesure et un suivi personnalisé, mais à un budget supérieur." },
       { question: "Combien de temps dure la pose d'une cuisine ?", answer: "La pose d'une cuisine standard prend 2 à 5 jours ouvrés. Si des travaux de plomberie, d'électricité ou de carrelage sont nécessaires, comptez 1 à 3 semaines au total. Le délai entre la commande et la livraison du mobilier est de 4 à 8 semaines en moyenne." },
       { question: "Peut-on ne remplacer que les façades de cuisine ?", answer: "Oui, si les caissons (corps des meubles) sont en bon état, le remplacement des seules façades permet de transformer l'aspect de votre cuisine pour 40 à 60 % du prix d'une cuisine neuve. Comptez 80 à 250 € par façade selon le matériau et la taille. C'est la solution la plus économique pour un relooking complet." }
     ],
@@ -884,7 +884,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Stratifié (le plus économique) : **15 – 45 €/m²** fourni-posé\n- Parquet contrecollé chêne : **40 – 100 €/m²** (meilleur rapport qualité-prix)\n- Parquet massif chêne : **80 – 200 €/m²** (investissement long terme)\n- Béton ciré : **100 – 200 €/m²** (style contemporain)\n- Toujours prévoir **ragréage + sous-couche** dans le budget\n:::"
     ],
     image: "/images/blog/prix-solier-revetement-sol-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-29",
     readTime: "13 min",
     category: "Tarifs",
@@ -949,7 +949,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Ménage 3h à domicile : **60 – 135 €** (30 – 68 € après crédit d'impôt)\n- Nettoyage fin de chantier : **3 – 8 €/m²**\n- Copropriété 10-20 lots : **3 000 – 8 000 €/an**\n- **Crédit d'impôt de 50 %** sur le ménage à domicile (jusqu'à 6 000 € d'économie/an)\n- Toujours vérifier l'**attestation URSSAF** du prestataire\n:::"
     ],
     image: "/images/blog/prix-nettoyage-professionnel-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-31",
     readTime: "12 min",
     category: "Tarifs",
@@ -959,12 +959,12 @@ export const prixArticles: Record<string, {
     faq: [
       { question: "Combien coûte un ménage à domicile avec le crédit d'impôt ?", answer: "Un ménage de 3 heures coûte 60 à 135 € en province. Grâce au crédit d'impôt de 50 % (services à la personne), le coût effectif descend à 30 – 68 €. Ce crédit s'applique dans la limite de 12 000 € de dépenses annuelles et est accessible à tous les contribuables, même non imposables." },
       { question: "Quel est le prix d'un nettoyage de fin de chantier ?", answer: "Le nettoyage après travaux coûte entre 3 et 8 €/m² selon le degré de salissure. Pour un appartement de 70 m² : 210 à 560 €. Ce prix inclut le dépoussiérage, le nettoyage des vitres, le lessivage des sols et l'évacuation des résidus. Les chantiers très poussiéreux (plâtrerie, ponçage) sont facturés dans le haut de la fourchette." },
-      { question: "Comment choisir une entreprise de nettoyage fiable ?", answer: "Vérifiez la certification Qualipropre, l'attestation de vigilance URSSAF (preuve que l'entreprise est à jour de ses cotisations sociales), l'assurance RC professionnelle et les avis clients. Demandez un devis détaillé précisant le nombre d'heures, la fréquence et les prestations incluses. Méfiez-vous des tarifs anormalement bas." }
+      { question: "Comment choisir une entreprise de nettoyage fiable ?", answer: "Vérifiez la certification Qualipropre, l'attestation de vigilance URSSAF (preuve que l'entreprise est à jour de ses cotisations sociales), l'assurance RC professionnelle et les avis clients. Demandez a consultation détaillé précisant le nombre d'heures, la fréquence et les prestations incluses. Méfiez-vous des tarifs anormalement bas." }
     ],
     keyTakeaways: [
       "Le nettoyage de bureaux coûte 15 à 25 €/heure et le nettoyage de fin de chantier 3 à 8 €/m².",
       "La certification Qualipropre est le label de référence pour les entreprises de nettoyage professionnel.",
-      "Rédigez un cahier des charges précis pour obtenir des devis comparables et un résultat conforme.",
+      "Rédigez un cahier des charges précis pour obtenir consultations comparables et un résultat conforme.",
       "Exigez l'attestation de vigilance URSSAF pour vous protéger du risque de travail dissimulé."
     ]
   },
@@ -1014,7 +1014,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Rénovation légère : **200 – 500 €/m²** (peinture, sols)\n- Rénovation complète : **1 000 – 2 000 €/m²** (tout refaire)\n- Appartement 65 m² rénovation lourde : **65 000 – 130 000 €**\n- Aides cumulables : jusqu'à **30-50 %** de prise en charge sur les travaux énergétiques\n- Toujours prévoir **15-20 % d'imprévus** dans l'ancien\n:::"
     ],
     image: "/images/blog/prix-renovation-appartement-2026-budget.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-01",
     readTime: "14 min",
     category: "Tarifs",
@@ -1023,7 +1023,7 @@ export const prixArticles: Record<string, {
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel budget pour rénover un appartement de 60 m² en 2026 ?", answer: "Pour un appartement de 60 m², comptez 12 000 à 30 000 € pour une rénovation légère (peinture, sols), 30 000 à 60 000 € pour une rénovation intermédiaire (salle de bain, cuisine, sols), et 60 000 à 120 000 € pour une rénovation lourde (tout refaire). À Paris, majorez ces budgets de 30 à 50 %." },
-      { question: "Quelles aides pour rénover un appartement ancien ?", answer: "MaPrimeRénov' couvre les travaux d'isolation et de chauffage (jusqu'à 20 000 €). L'éco-PTZ finance jusqu'à 50 000 € sans intérêts. Les CEE apportent des primes complémentaires. La TVA est réduite à 10 % (5,5 % pour les travaux énergétiques). Ces aides sont cumulables et conditionnées au recours à un artisan RGE." },
+      { question: "Quelles aides pour rénover un appartement ancien ?", answer: "MaPrimeRénov' couvre les travaux d'isolation et de chauffage (jusqu'à 20 000 €). L'éco-PTZ finance jusqu'à 50 000 € sans intérêts. Les CEE apportent des primes complémentaires. La TVA est réduite à 10 % (5,5 % pour les travaux énergétiques). Ces aides sont cumulables et conditionnées au recours à an attorney RGE." },
       { question: "Faut-il faire appel à un architecte pour rénover ?", answer: "Un architecte d'intérieur n'est pas obligatoire mais fortement recommandé pour les rénovations lourdes (budget supérieur à 50 000 €). Ses honoraires (8 à 15 % du montant des travaux) sont compensés par une meilleure conception, une coordination efficace des corps de métier et la maîtrise du budget. Il peut aussi vous aider à obtenir les autorisations nécessaires." },
       { question: "Combien de temps dure une rénovation d'appartement ?", answer: "Rénovation légère : 2 à 4 semaines. Rénovation intermédiaire : 1 à 3 mois. Rénovation lourde : 3 à 6 mois. Ajoutez 1 à 2 mois pour la conception et la consultation des entreprises. Les retards de livraison de matériaux et les imprévus techniques peuvent allonger ces délais de 2 à 4 semaines." }
     ],
@@ -1086,7 +1086,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Aménagement combles : **600 – 1 500 €/m²** (le plus économique)\n- Extension maçonnerie : **1 200 – 2 200 €/m²** (le classique)\n- Extension bois : **1 400 – 2 500 €/m²** (rapide et performant)\n- Surélévation : **1 800 – 3 000 €/m²** (quand pas de terrain)\n- Permis de construire obligatoire au-delà de **20-40 m²**\n:::"
     ],
     image: "/images/blog/prix-extension-maison-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-03",
     readTime: "15 min",
     category: "Tarifs",
@@ -1097,7 +1097,7 @@ export const prixArticles: Record<string, {
       { question: "Quel est le prix moyen d'une extension de maison au m² en 2026 ?", answer: "Le prix varie selon la technique : extension maçonnerie traditionnelle 1 200 – 2 200 €/m², ossature bois 1 400 – 2 500 €/m², surélévation 1 800 – 3 000 €/m², véranda aluminium 1 000 – 2 500 €/m², aménagement de combles 600 – 1 500 €/m². Ces prix s'entendent clé en main (fondations, structure, isolation, finitions)." },
       { question: "Faut-il un permis de construire pour une extension ?", answer: "Une extension inférieure à 20 m² (40 m² en zone PLU avec plan local d'urbanisme) nécessite une simple déclaration préalable. Au-delà, un permis de construire est obligatoire. Si la surface totale après travaux dépasse 150 m², le recours à un architecte est obligatoire." },
       { question: "Quelle est la solution d'extension la plus économique ?", answer: "L'aménagement de combles existants est la solution la plus économique (600 – 1 500 €/m²) car la structure est déjà en place. Ensuite vient la véranda aluminium (1 000 – 2 500 €/m²). L'extension traditionnelle en parpaing (1 200 – 2 200 €/m²) offre le meilleur rapport espace/prix pour les extensions latérales." },
-      { question: "Extension bois ou maçonnerie : que choisir ?", answer: "L'ossature bois est plus rapide (4-8 semaines vs 3-5 mois), offre une meilleure isolation thermique naturelle et un chantier plus propre. La maçonnerie est 10-15 % moins chère, mieux maîtrisée par les artisans locaux et offre une meilleure inertie thermique. Le choix dépend de votre budget, du délai souhaité et du style architectural de votre maison." }
+      { question: "Extension bois ou maçonnerie : que choisir ?", answer: "L'ossature bois est plus rapide (4-8 semaines vs 3-5 mois), offre une meilleure isolation thermique naturelle et un chantier plus propre. La maçonnerie est 10-15 % moins chère, mieux maîtrisée par the attorneys locaux et offre une meilleure inertie thermique. Le choix dépend de votre budget, du délai souhaité et du style architectural de votre maison." }
     ],
     keyTakeaways: [
       "Une extension coûte 1 200 à 3 000 €/m² selon la technique : parpaing, ossature bois ou verre.",
@@ -1110,7 +1110,7 @@ export const prixArticles: Record<string, {
     title: "Prix Ravalement de Façade 2026 : Tarifs",
     excerpt: "Prix ravalement façade 2026 : nettoyage, enduit, peinture, ITE. Tous les prix au m² selon la technique. Devis gratuit.",
     content: [
-      "Votre façade est grise, fissurée, ou recouverte de mousse ? Vous avez reçu un courrier de la mairie vous demandant de procéder au ravalement ? Le ravalement de façade est une **obligation légale** : certaines communes exigent un ravalement tous les 10 ans. Mais au-delà de l'obligation, c'est aussi l'occasion de **valoriser votre bien** (plus-value de 5 à 10 %) et d'améliorer son isolation thermique. En 2026, les prix varient de **40 à 300 €/m²** selon la technique. Ce guide vous aide à faire le bon choix. Trouvez un [façadier qualifié](/practice-areas/facadier) pour obtenir des devis comparatifs.",
+      "Votre façade est grise, fissurée, ou recouverte de mousse ? Vous avez reçu un courrier de la mairie vous demandant de procéder au ravalement ? Le ravalement de façade est une **obligation légale** : certaines communes exigent un ravalement tous les 10 ans. Mais au-delà de l'obligation, c'est aussi l'occasion de **valoriser votre bien** (plus-value de 5 à 10 %) et d'améliorer son isolation thermique. En 2026, les prix varient de **40 à 300 €/m²** selon la technique. Ce guide vous aide à faire le bon choix. Trouvez un [façadier qualifié](/practice-areas/facadier) pour obtenir consultations comparatifs.",
 
       "## Les différentes techniques et leurs prix",
 
@@ -1133,12 +1133,12 @@ export const prixArticles: Record<string, {
 
       "1. Groupez les travaux avec vos voisins en maison mitoyenne pour **partager les frais d'échafaudage**\n2. Comparez au moins **trois devis** détaillés\n3. Planifiez au **printemps ou en été** pour des conditions météo optimales\n4. Vérifiez les aides communales (certaines cities subventionnent les ravalements programmés)\n5. En copropriété, constituez un **fonds travaux** pour anticiper la dépense",
 
-      ":::warning Attention\nLes façades des bâtiments construits avant **1948** peuvent contenir du plomb dans les peintures. Un **diagnostic plomb avant travaux** (DRIPP) est obligatoire. Si du plomb est détecté, des mesures de confinement et de protection spécifiques sont nécessaires, majorant le coût de 15 à 30 %. Ne confiez jamais un ravalement de façade ancienne à un artisan qui ignore cette réglementation.\n:::",
+      ":::warning Attention\nLes façades des bâtiments construits avant **1948** peuvent contenir du plomb dans les peintures. Un **diagnostic plomb avant travaux** (DRIPP) est obligatoire. Si du plomb est détecté, des mesures de confinement et de protection spécifiques sont nécessaires, majorant le coût de 15 à 30 %. Ne confiez jamais un ravalement de façade ancienne à an attorney qui ignore cette réglementation.\n:::",
 
       ":::takeaway\n- Ravalement simple : **40 – 100 €/m²**\n- Ravalement avec ITE enduit : **100 – 200 €/m²** (le meilleur investissement)\n- Aides ITE cumulables : jusqu'à **60 % du coût** (MaPrimeRénov' + CEE + TVA 5,5 %)\n- Obligation légale dans certaines communes (tous les **10 ans**)\n- Toujours coupler ravalement + isolation pour **maximiser les aides**\n:::"
     ],
     image: "/images/blog/prix-ravalement-facade-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-04",
     readTime: "14 min",
     category: "Tarifs",
@@ -1188,7 +1188,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Terrasse bois pin traité : **40 – 80 €/m²** (le plus économique)\n- Terrasse composite : **80 – 180 €/m²** (zéro entretien)\n- Terrasse béton décoratif : **60 – 200 €/m²** (grande liberté de formes)\n- Terrasse pierre naturelle : **80 – 250 €/m²** (la plus noble)\n- Pose sur plots : économie de **50 – 100 €/m²** vs dalle béton\n:::"
     ],
     image: "/images/blog/prix-terrasse-exterieure-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-05",
     readTime: "14 min",
     category: "Tarifs",
@@ -1230,7 +1230,7 @@ export const prixArticles: Record<string, {
       "La hauteur maximale de clôture est régie par le PLU de votre commune (généralement 1,80 à 2 m). En lotissement, le cahier des charges peut imposer des matériaux et des couleurs. Aucune autorisation n'est nécessaire pour une clôture respectant le PLU, sauf en secteur ABF. Le portail doit s'ouvrir vers l'intérieur de la propriété s'il donne sur la voie publique.",
       "## Nos conseils pour économiser",
 
-      ":::tip Conseil pro\nLe **grillage rigide avec occultant** offre le meilleur rapport qualité-prix pour une clôture fonctionnelle : 40 à 90 €/ml fourni-posé, soit 2 à 4 fois moins cher que l'aluminium pour une durée de vie comparable (20-30 ans). Pour le portail, **achetez en ligne** (économie de 20 à 40 %) et faites poser par un artisan local.\n:::",
+      ":::tip Conseil pro\nLe **grillage rigide avec occultant** offre le meilleur rapport qualité-prix pour une clôture fonctionnelle : 40 à 90 €/ml fourni-posé, soit 2 à 4 fois moins cher que l'aluminium pour une durée de vie comparable (20-30 ans). Pour le portail, **achetez en ligne** (économie de 20 à 40 %) et faites poser par an attorney local.\n:::",
 
       "1. Groupez **clôture et portail** dans un même devis pour un tarif global\n2. Comparez au moins **trois devis** avec fondations incluses\n3. Vérifiez le **PLU** de votre commune avant de choisir le matériau et la hauteur\n4. La **motorisation** peut être ajoutée ultérieurement si le budget est serré",
 
@@ -1239,7 +1239,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Grillage rigide avec occultant : **40 – 90 €/ml** (meilleur rapport qualité-prix)\n- Clôture composite : **100 – 250 €/ml** (zéro entretien)\n- Portail aluminium motorisé : **2 000 – 7 000 €** posé\n- Hauteur maximale fixée par le **PLU** (généralement 1,80 – 2 m)\n- Toujours vérifier les **limites de propriété** avant la pose\n:::"
     ],
     image: "/images/blog/prix-cloture-portail-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-06",
     readTime: "14 min",
     category: "Tarifs",
@@ -1262,7 +1262,7 @@ export const prixArticles: Record<string, {
     title: "Prix Fenêtre Double Vitrage 2026 : Tarifs",
     excerpt: "Prix fenêtre double vitrage 2026 : PVC, aluminium, bois. Comparez les prix avec pose et aides disponibles. Devis gratuit.",
     content: [
-      "Les fenêtres représentent 10 à 15 % des déperditions thermiques d'un logement mal isolé. Remplacer des fenêtres anciennes par du double vitrage performant est l'un des investissements les plus rentables en matière de rénovation énergétique. En 2026, les technologies de vitrage ne cessent de progresser et les aides financières restent attractives. Voici un tour d'horizon complet des prix. Comparez les devis de [menuisiers qualifiés](/practice-areas/menuisier) pour votre projet de remplacement.",
+      "Les fenêtres représentent 10 à 15 % des déperditions thermiques d'un logement mal isolé. Remplacer des fenêtres anciennes par du double vitrage performant est l'un des investissements les plus rentables en matière de rénovation énergétique. En 2026, les technologies de vitrage ne cessent de progresser et les aides financières restent attractives. Voici un tour d'horizon complet des prix. Comparez the consultations de [menuisiers qualifiés](/practice-areas/menuisier) pour votre projet de remplacement.",
       "## Fenêtres PVC : le meilleur rapport qualité-prix",
       "La fenêtre PVC double vitrage reste la solution la plus économique. Une fenêtre standard (1,20 x 1,15 m) coûte entre 300 et 700 € pose comprise. Une porte-fenêtre (2,15 x 1,20 m) revient de 500 à 1 100 €. La baie coulissante 2 vantaux (2,15 x 2,40 m) se situe entre 800 et 2 000 €. Le PVC offre d'excellentes performances thermiques (Uw de 1,1 à 1,4 W/m².K) et ne nécessite aucun entretien.",
       "## Fenêtres aluminium : la finesse des profils",
@@ -1279,18 +1279,18 @@ export const prixArticles: Record<string, {
       "En Île-de-France, les tarifs de pose sont 25 à 35 % supérieurs à la moyenne. Les contraintes architecturales (bâtiments classés, secteurs ABF) imposent parfois des matériaux spécifiques (bois obligatoire) qui augmentent le budget. Dans les régions froides (est, montagne), le triple vitrage est plus fréquemment recommandé, ajoutant 10 à 15 % au budget global.",
       "## Nos conseils pour économiser",
 
-      ":::tip Conseil pro\nRemplacez **toutes vos fenêtres en même temps** pour bénéficier d'un tarif dégressif (économie de 10 à 20 %). Faites poser **en automne ou en hiver**, période creuse où les artisans proposent des tarifs plus avantageux et sont plus disponibles. Le PVC offre le meilleur rapport performance/prix pour 80 % des projets.\n:::",
+      ":::tip Conseil pro\nRemplacez **toutes vos fenêtres en même temps** pour bénéficier d'un tarif dégressif (économie de 10 à 20 %). Faites poser **en automne ou en hiver**, période creuse où the attorneys proposent des tarifs plus avantageux et sont plus disponibles. Le PVC offre le meilleur rapport performance/prix pour 80 % des projets.\n:::",
 
-      "1. Vérifiez que l'artisan est certifié **RGE** pour bénéficier des aides\n2. Comparez au minimum **trois devis** détaillés avec coefficient Uw\n3. Privilégiez la **dépose totale** pour de meilleures performances\n4. Consultez un [vitrier professionnel](/practice-areas/vitrier) ou notre guide du [prix vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour le remplacement de vitrage seul",
+      "1. Vérifiez que the attorney est certifié **RGE** pour bénéficier des aides\n2. Comparez au minimum **trois devis** détaillés avec coefficient Uw\n3. Privilégiez la **dépose totale** pour de meilleures performances\n4. Consultez un [vitrier professionnel](/practice-areas/vitrier) ou notre guide du [prix vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour le remplacement de vitrage seul",
 
       ":::info Bon à savoir\nLe remplacement de fenêtres est l'un des travaux de rénovation énergétique les plus **rentables** : retour sur investissement en **10 à 20 ans** selon les aides obtenues, le type de logement et les économies réalisées (10 à 15 % de la facture de chauffage). L'investissement se justifie aussi par le confort acoustique, la valorisation du bien et les obligations réglementaires futures. C'est aussi l'un des plus simples à mettre en œuvre (1 à 2 heures par fenêtre en pose rénovation).\n:::",
 
       ":::warning Attention\nEn secteur **ABF** (Architectes des Bâtiments de France) ou en copropriété, le choix du matériau peut être imposé (bois obligatoire dans certains immeubles classés). Vérifiez le règlement de copropriété et consultez le service urbanisme **avant** de commander vos fenêtres. Un changement de matériau non autorisé peut entraîner l'obligation de déposer les fenêtres à vos frais.\n:::",
 
-      ":::takeaway\n- Fenêtre PVC double vitrage : **300 – 700 €** posée (meilleur rapport qualité-prix)\n- Fenêtre aluminium : **500 – 1 200 €** posée (profils fins, design)\n- Fenêtre bois : **500 – 1 300 €** posée (isolation naturelle optimale)\n- Aides MaPrimeRénov' + CEE : **70 – 180 €** par fenêtre + TVA 5,5 %\n- Toujours exiger un artisan **RGE** et le coefficient **Uw ≤ 1,3**\n:::"
+      ":::takeaway\n- Fenêtre PVC double vitrage : **300 – 700 €** posée (meilleur rapport qualité-prix)\n- Fenêtre aluminium : **500 – 1 200 €** posée (profils fins, design)\n- Fenêtre bois : **500 – 1 300 €** posée (isolation naturelle optimale)\n- Aides MaPrimeRénov' + CEE : **70 – 180 €** par fenêtre + TVA 5,5 %\n- Toujours exiger an attorney **RGE** et le coefficient **Uw ≤ 1,3**\n:::"
     ],
     image: "/images/blog/prix-fenetre-double-vitrage-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-07",
     readTime: "15 min",
     category: "Tarifs",
@@ -1312,7 +1312,7 @@ export const prixArticles: Record<string, {
   },
   "prix-installation-electrique-neuve-2026": {
     title: "Prix Installation Électrique 2026 : Tarifs",
-    excerpt: "Installation électrique neuve : de 80 à 120 €/m² en 2026. Tableau, câblage, prises, domotique. Comparez les devis gratuits.",
+    excerpt: "Installation électrique neuve : de 80 à 120 €/m² en 2026. Tableau, câblage, prises, domotique. Comparez the consultations gratuits.",
     content: [
       "L'installation électrique est un poste technique majeur dans toute construction neuve ou rénovation lourde. En 2026, la norme NF C 15-100 impose des exigences strictes en matière de sécurité et de confort, tandis que la domotique transforme progressivement nos habitations. Ce guide détaille les tarifs des électriciens pour tous les types de prestations. Trouvez un [électricien certifié près de chez vous](/practice-areas/electricien).",
       "## Tarif horaire d'un électricien",
@@ -1335,7 +1335,7 @@ export const prixArticles: Record<string, {
 
       ":::tip Conseil pro\nPrévoyez des **gaines supplémentaires** lors de l'installation initiale pour de futures extensions (domotique, borne de recharge véhicule électrique, panneaux solaires). Le surcoût est dérisoire pendant le chantier (5 à 10 € par gaine) mais une reprise ultérieure coûte 10 à 20 fois plus cher.\n:::",
 
-      "1. Définissez précisément vos besoins avant les devis (nombre de prises, circuits spéciaux)\n2. Optez pour des appareillages **Legrand** ou **Schneider** (meilleur rapport qualité-prix français)\n3. Comparez **trois devis minimum** de [électriciens vérifiés](/blog/comment-choisir-electricien-guide)\n4. La TVA à **10 %** s'applique sur les travaux de rénovation électrique\n5. Prévoyez le passage des gaines pour une future [borne de recharge](/practice-areas/borne-recharge) véhicule électrique",
+      "1. Définissez précisément vos besoins avant the consultations (nombre de prises, circuits spéciaux)\n2. Optez pour des appareillages **Legrand** ou **Schneider** (meilleur rapport qualité-prix français)\n3. Comparez **trois devis minimum** de [électriciens vérifiés](/blog/comment-choisir-electricien-guide)\n4. La TVA à **10 %** s'applique sur les travaux de rénovation électrique\n5. Prévoyez le passage des gaines pour une future [borne de recharge](/practice-areas/borne-recharge) véhicule électrique",
 
       ":::warning Attention\nToute installation électrique neuve doit obtenir le **certificat de conformité Consuel** (130 – 180 €) avant la mise en service par le fournisseur d'énergie. Sans ce certificat, le raccordement au réseau est impossible. Vérifiez que votre électricien intègre cette démarche dans sa prestation. Pour une rénovation lourde, le Consuel est également obligatoire.\n:::",
 
@@ -1344,7 +1344,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Installation neuve maison 100 m² : **8 000 – 15 000 €** TTC\n- Mise aux normes complète : **80 – 150 €/m²**\n- Tableau électrique : **600 – 2 000 €** posé\n- Panneaux solaires 3 kWc : **7 000 – 14 000 €** (avec prime autoconsommation)\n- Certificat **Consuel** obligatoire pour toute installation neuve\n:::"
     ],
     image: "/images/blog/prix-installation-electrique-neuve-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-09",
     readTime: "15 min",
     category: "Tarifs",
@@ -1398,7 +1398,7 @@ export const prixArticles: Record<string, {
       ":::takeaway\n- Salle de bain entrée de gamme (5 m²) : **3 000 – 6 000 €**\n- Salle de bain milieu de gamme : **6 000 – 12 000 €** (douche italienne, meuble vasque)\n- Salle de bain haut de gamme : **12 000 – 25 000 €+**\n- Conserver l'implantation existante économise **500 – 1 500 €** de plomberie\n- **Étanchéité SPEC** obligatoire sous la douche (15 – 30 €/m²)\n:::"
     ],
     image: "/images/blog/prix-salle-de-bain-complete-2026.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-11",
     readTime: "16 min",
     category: "Tarifs",

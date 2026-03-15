@@ -1,5 +1,5 @@
 /**
- * Password Reset API - ServicesArtisans
+ * Password Reset API - US Attorneys
  * Sends password reset email via Supabase
  */
 
@@ -14,14 +14,14 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const resetSchema = z.object({
-  email: z.string().email('Email invalide'),
+  email: z.string().email('Invalid email'),
 })
 
 export async function POST(request: Request) {
   try {
     if (!supabaseUrl || !supabaseServiceKey) {
       return NextResponse.json(
-        { error: 'Configuration serveur manquante' },
+        { error: 'Missing server configuration' },
         { status: 500 }
       )
     }
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     const validation = resetSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Email invalide' },
+        { error: 'Invalid email' },
         { status: 400 }
       )
     }
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Reset password API error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

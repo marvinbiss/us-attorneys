@@ -12,7 +12,7 @@ const cancelSubscriptionSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// POST - Annuler ou réactiver un abonnement
+// POST - Cancel or reactivate a subscription
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -26,7 +26,7 @@ export async function POST(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -35,7 +35,7 @@ export async function POST(
     const result = cancelSubscriptionSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -54,7 +54,7 @@ export async function POST(
     } catch (stripeError) {
       logger.error('Stripe subscription operation failed', stripeError)
       return NextResponse.json(
-        { success: false, error: { message: 'Stripe non configuré ou erreur lors de l\'opération' } },
+        { success: false, error: { message: 'Stripe not configured or error during operation' } },
         { status: 503 }
       )
     }
@@ -71,12 +71,12 @@ export async function POST(
     return NextResponse.json({
       success: true,
       result: stripeResult,
-      message: action === 'cancel' ? 'Abonnement annulé' : 'Abonnement réactivé',
+      message: action === 'cancel' ? 'Subscription cancelled' : 'Subscription reactivated',
     })
   } catch (error) {
     logger.error('Admin subscription cancel error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

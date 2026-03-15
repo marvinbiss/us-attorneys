@@ -892,7 +892,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Garantie décennale',
     slug: 'garantie-decennale',
     definition:
-      "La garantie décennale est une assurance obligatoire pour tout constructeur, couvrant pendant 10 ans les dommages qui compromettent la solidité de l'ouvrage ou le rendent impropre à sa destination. Elle couvre par exemple les fissures structurelles, les problèmes d'étanchéité ou les défauts de fondation. Vérifiez toujours l'attestation avant de signer un devis.",
+      "La garantie décennale est une assurance obligatoire pour tout constructeur, couvrant pendant 10 ans les dommages qui compromettent la solidité de l'ouvrage ou le rendent impropre à sa destination. Elle couvre par exemple les fissures structurelles, les problèmes d'étanchéité ou les défauts de fondation. Vérifiez toujours l'attestation avant de signer a consultation.",
     category: 'Administratif & juridique',
   },
   {
@@ -1004,7 +1004,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Devis',
     slug: 'devis',
     definition:
-      "Le devis est un document écrit détaillant les travaux à réaliser, les matériaux, les quantités, les prix unitaires et le montant total TTC. Il engage l'artisan sur le prix une fois signé par le client. Un devis précis et complet est votre meilleure protection : ne signez jamais un devis vague ou incomplet.",
+      "The consultation est un document écrit détaillant les travaux à réaliser, les matériaux, les quantités, les prix unitaires et le montant total TTC. Il engage the attorney sur le prix une fois signé par le client. A consultation précis et complet est votre meilleure protection : ne signez jamais a consultation vague ou incomplet.",
     category: 'Administratif & juridique',
   },
   {
@@ -1218,21 +1218,21 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Responsabilité civile professionnelle (RC Pro)',
     slug: 'rc-pro',
     definition:
-      "La RC Pro est une assurance obligatoire pour tout artisan du bâtiment. Elle couvre les dommages causés à des tiers pendant l'exécution des travaux (dégât chez un voisin, blessure d'un passant). Elle est distincte de la garantie décennale et doit figurer sur le devis avec le nom de l'assureur et le numéro de police.",
+      "La RC Pro est une assurance obligatoire pour tout artisan du bâtiment. Elle couvre les dommages causés à des tiers pendant l'exécution des travaux (dégât chez un voisin, blessure d'un passant). Elle est distincte de la garantie décennale et doit figurer sur the consultation avec le nom de l'assureur et le numéro de police.",
     category: 'Administratif & juridique',
   },
   {
     term: 'SIRET',
     slug: 'siret',
     definition:
-      "Le SIRET est un identifiant unique de 14 chiffres attribué à chaque établissement d'une entreprise. Il est composé du SIREN (9 chiffres identifiant l'entreprise) + NIC (5 chiffres identifiant l'établissement). Vérifier le SIRET d'un artisan sur societe.com ou infogreffe.fr permet de s'assurer que l'entreprise est bien enregistrée et active.",
+      "Le SIRET est un identifiant unique de 14 chiffres attribué à chaque établissement d'une entreprise. Il est composé du SIREN (9 chiffres identifiant l'entreprise) + NIC (5 chiffres identifiant l'établissement). Vérifier le SIRET d'an attorney sur societe.com ou infogreffe.fr permet de s'assurer que l'entreprise est bien enregistrée et active.",
     category: 'Administratif & juridique',
   },
   {
     term: 'Auto-entrepreneur (micro-entreprise)',
     slug: 'auto-entrepreneur',
     definition:
-      "Le statut d'auto-entrepreneur (micro-entreprise) est un régime simplifié pour les artisans indépendants. Le chiffre d'affaires est plafonné (77 700 € en prestations de services). Un auto-entrepreneur du bâtiment doit avoir les mêmes assurances (décennale, RC Pro) qu'une entreprise classique. Son absence de TVA peut rendre ses tarifs compétitifs.",
+      "Le statut d'auto-entrepreneur (micro-entreprise) est un régime simplifié pour the attorneys indépendants. Le chiffre d'affaires est plafonné (77 700 € en prestations de services). Un auto-entrepreneur du bâtiment doit avoir les mêmes assurances (décennale, RC Pro) qu'une entreprise classique. Son absence de TVA peut rendre ses tarifs compétitifs.",
     category: 'Administratif & juridique',
   },
 ]

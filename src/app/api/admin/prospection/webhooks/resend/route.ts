@@ -7,14 +7,14 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Webhook Resend - Delivery status callbacks pour les emails
- * Reçoit les événements: email.sent, email.delivered, email.bounced,
+ * Receives events: email.sent, email.delivered, email.bounced,
  * email.complained, email.delivery_delayed
  */
 export async function POST(request: NextRequest) {
   try {
     const rawBody = await request.text()
 
-    // Vérifier la signature Resend (svix)
+    // Verify la signature Resend (svix)
     const svixHeaders = {
       'svix-id': request.headers.get('svix-id') || undefined,
       'svix-timestamp': request.headers.get('svix-timestamp') || undefined,
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!verifyResendSignature(rawBody, svixHeaders)) {
-      logger.warn('Signature webhook Resend invalide')
+      logger.warn('Invalid Resend webhook signature')
       return new NextResponse('OK', { status: 200 })
     }
 
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    // Mapper les événements Resend → statuts prospection
+    // Map Resend events → prospection statuses
     const statusMap: Record<string, string> = {
       'email.sent': 'sent',
       'email.delivered': 'delivered',

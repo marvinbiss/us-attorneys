@@ -14,7 +14,7 @@ const bookingsQuerySchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Liste des réservations
+// GET - List bookings
 export async function GET(request: NextRequest) {
   try {
     // Verify admin with services:read permission
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const result = bookingsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -60,8 +60,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Recherche: bookings n'a pas de colonnes textuelles libres (client_email et service n'existent pas).
-    // La recherche par status est gérée par le filtre dédié ci-dessus.
-    // Le paramètre search est accepté pour compatibilité UI mais ignoré au niveau DB.
+    // Status search is handled by the dedicated filter above.
+    // The search parameter is accepted for UI compatibility but ignored at DB level.
     void search
 
     const { data: bookings, count, error } = await query
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin bookings list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

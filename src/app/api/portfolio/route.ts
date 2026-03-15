@@ -1,6 +1,6 @@
 /**
  * Portfolio API
- * GET: List portfolio items for authenticated artisan
+ * GET: List portfolio items for authenticated attorney
  * POST: Create new portfolio item
  */
 
@@ -10,9 +10,9 @@ import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 const createPortfolioSchema = z.object({
-  title: z.string().min(3, 'Le titre doit contenir au moins 3 caractères').max(100),
+  title: z.string().min(3, 'Title must contain at least 3 characters').max(100),
   description: z.string().max(500).optional().nullable(),
-  image_url: z.string().url('URL de l\'image invalide'),
+  image_url: z.string().url('Invalid image URL'),
   thumbnail_url: z.string().url().optional().nullable(),
   video_url: z.string().url().optional().nullable(),
   before_image_url: z.string().url().optional().nullable(),
@@ -35,21 +35,21 @@ export async function GET(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('Error fetching portfolio items:', error)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération du portfolio' },
+        { error: 'Error retrieving portfolio' },
         { status: 500 }
       )
     }
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Portfolio GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -112,21 +112,21 @@ export async function POST(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: result.error.flatten() },
+        { error: 'Invalid data', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -147,14 +147,14 @@ export async function POST(request: NextRequest) {
     // Validate media_type specific fields
     if (data.media_type === 'video' && !data.video_url) {
       return NextResponse.json(
-        { error: 'L\'URL de la vidéo est requise pour les éléments vidéo' },
+        { error: 'Video URL is required for video items' },
         { status: 400 }
       )
     }
 
     if (data.media_type === 'before_after' && (!data.before_image_url || !data.after_image_url)) {
       return NextResponse.json(
-        { error: 'Les images avant et après sont requises' },
+        { error: 'Before and after images are required' },
         { status: 400 }
       )
     }
@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
     if (createError) {
       logger.error('Error creating portfolio item:', createError)
       return NextResponse.json(
-        { error: 'Erreur lors de la création de l\'élément' },
+        { error: 'Error creating item' },
         { status: 500 }
       )
     }
@@ -203,12 +203,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       item,
-      message: 'Élément ajouté au portfolio',
+      message: 'Item added to portfolio',
     })
   } catch (error) {
     logger.error('Portfolio POST error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

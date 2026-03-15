@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, Wrench } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
-export default function DefinirMotDePassePage() {
+export default function SetPasswordPage() {
   const router = useRouter()
   const supabase = createClient()
   const [password, setPassword] = useState('')
@@ -40,7 +40,7 @@ export default function DefinirMotDePassePage() {
   }
 
   const passwordStrength = getPasswordStrength(password)
-  const strengthLabels = ['Tres faible', 'Faible', 'Moyen', 'Fort', 'Tres fort']
+  const strengthLabels = ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong']
   const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-400', 'bg-green-600']
 
   const isValid =
@@ -61,7 +61,7 @@ export default function DefinirMotDePassePage() {
       const { error: updateError } = await supabase.auth.updateUser({ password })
 
       if (updateError) {
-        setError(updateError.message || 'Erreur lors de la mise a jour du mot de passe')
+        setError(updateError.message || 'Error updating password')
         return
       }
 
@@ -73,7 +73,7 @@ export default function DefinirMotDePassePage() {
       setSuccess(true)
       setTimeout(() => router.push('/attorney-dashboard'), 2000)
     } catch {
-      setError('Erreur de connexion au serveur')
+      setError('Unable to connect to server')
     } finally {
       setIsLoading(false)
     }
@@ -95,10 +95,10 @@ export default function DefinirMotDePassePage() {
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Mot de passe defini !
+            Password Set!
           </h1>
           <p className="text-gray-600 mb-4">
-            Votre compte est pret. Redirection vers votre espace artisan...
+            Your account is ready. Redirecting to your dashboard...
           </p>
           <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
         </div>
@@ -114,10 +114,10 @@ export default function DefinirMotDePassePage() {
             <Wrench className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Definissez votre mot de passe
+            Set Your Password
           </h1>
           <p className="text-gray-400">
-            Votre fiche artisan a ete validee. Choisissez un mot de passe pour acceder a votre espace.
+            Your attorney profile has been approved. Choose a password to access your dashboard.
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function DefinirMotDePassePage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Nouveau mot de passe
+              New Password
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -141,7 +141,7 @@ export default function DefinirMotDePassePage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full pl-10 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                placeholder="8 caracteres minimum"
+                placeholder="8 characters minimum"
               />
               <button
                 type="button"
@@ -162,7 +162,7 @@ export default function DefinirMotDePassePage() {
                   ))}
                 </div>
                 <p className="text-xs text-gray-500">
-                  Force : {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Tres faible'}
+                  Strength: {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Very weak'}
                 </p>
               </div>
             )}
@@ -170,7 +170,7 @@ export default function DefinirMotDePassePage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Confirmer le mot de passe
+              Confirm Password
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -180,11 +180,11 @@ export default function DefinirMotDePassePage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                placeholder="Confirmez votre mot de passe"
+                placeholder="Confirm your password"
               />
             </div>
             {confirmPassword && password !== confirmPassword && (
-              <p className="mt-1 text-sm text-red-400">Les mots de passe ne correspondent pas</p>
+              <p className="mt-1 text-sm text-red-400">Passwords do not match</p>
             )}
           </div>
 
@@ -196,7 +196,7 @@ export default function DefinirMotDePassePage() {
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              'Valider et acceder a mon espace'
+              'Set Password & Access Dashboard'
             )}
           </button>
         </form>

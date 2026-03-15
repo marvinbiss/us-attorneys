@@ -50,7 +50,7 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
         if (prev.length >= MAX_COMPARE) {
           // Toast is scheduled after state update via setTimeout to avoid
           // calling setState (addToast) inside another setState updater
-          setTimeout(() => warning('Maximum 3 artisans à comparer'), 0)
+          setTimeout(() => warning('Maximum 3 attorneys to compare'), 0)
           return prev
         }
         return [...prev, provider]

@@ -1,6 +1,6 @@
 /**
- * PriceTable — Tableau HTML des tarifs pour Featured Snippets Google.
- * Parse les commonTasks (format "Label : prix") et rend un <table> semantique.
+ * PriceTable — HTML fee table for Google Featured Snippets.
+ * Parses commonTasks (format "Label : price") and renders a semantic <table>.
  */
 
 interface PriceTableProps {
@@ -15,25 +15,25 @@ export default function PriceTable({ tasks, tradeName, priceRange }: PriceTableP
   return (
     <div className="mt-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-4">
-        Combien co&ucirc;te un {tradeName.toLowerCase()} ?
+        How much does a {tradeName.toLowerCase()} cost?
       </h2>
       <p className="text-sm text-gray-600 mb-4">
-        Tarif horaire moyen : <strong className="text-gray-900">{priceRange.min}&ndash;{priceRange.max} {priceRange.unit}</strong>.
-        Voici les prix indicatifs des prestations courantes :
+        Average hourly rate: <strong className="text-gray-900">{priceRange.min}&ndash;{priceRange.max} {priceRange.unit}</strong>.
+        Here are typical fee estimates for common services:
       </p>
       <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
         <table className="w-full text-left">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="px-5 py-3.5 text-sm font-semibold text-gray-700">Prestation</th>
-              <th className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">Prix indicatif</th>
+              <th className="px-5 py-3.5 text-sm font-semibold text-gray-700">Service</th>
+              <th className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">Estimated fee</th>
             </tr>
           </thead>
           <tbody>
             {tasks.map((task, i) => {
               const colonIndex = task.indexOf(' : ')
               const label = colonIndex !== -1 ? task.slice(0, colonIndex).trim() : task.trim()
-              const price = colonIndex !== -1 ? task.slice(colonIndex + 3).trim() : 'Sur devis'
+              const price = colonIndex !== -1 ? task.slice(colonIndex + 3).trim() : 'By consultation'
               return (
                 <tr
                   key={i}
@@ -48,7 +48,7 @@ export default function PriceTable({ tasks, tradeName, priceRange }: PriceTableP
         </table>
       </div>
       <p className="text-xs text-gray-500 mt-3">
-        * Prix indicatifs constat&eacute;s en France m&eacute;tropolitaine. Les tarifs varient selon la r&eacute;gion, la complexit&eacute; des travaux et le professionnel.
+        * Estimated fees based on national averages. Actual fees vary by state, case complexity, and attorney.
       </p>
     </div>
   )

@@ -1,6 +1,6 @@
 /**
- * Artisan Assigned Leads API
- * GET: Fetch leads assigned to the authenticated artisan via lead_assignments
+ * Attorney Assigned Leads API
+ * GET: Fetch leads assigned to the authenticated attorney via lead_assignments
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     if (!provider) {
       return NextResponse.json(
-        { success: false, error: { message: 'Aucun profil artisan trouvé' } },
+        { success: false, error: { message: 'No attorney profile found' } },
         { status: 403 }
       )
     }
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Donnees invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     const { page, pageSize, status } = parsed.data
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     if (countError) {
       logger.error('Error counting leads:', countError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors du comptage des leads' } },
+        { success: false, error: { message: 'Error counting leads' } },
         { status: 500 }
       )
     }
@@ -109,12 +109,12 @@ export async function GET(request: NextRequest) {
     if (assignError) {
       logger.error('Error fetching assigned leads:', assignError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des leads' } },
+        { success: false, error: { message: 'Error retrieving leads' } },
         { status: 500 }
       )
     }
 
-    // Fetch quotes for these leads so artisan can see sent quote info
+    // Fetch quotes for these leads so attorney can see sent quote info
     const leadList = assignments || []
     const requestIds = leadList
       .filter((a) => a.lead && a.status === 'quoted')
@@ -160,7 +160,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    logger.error('Artisan leads GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney leads GET error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

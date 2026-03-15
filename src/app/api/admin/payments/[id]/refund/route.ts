@@ -26,7 +26,7 @@ export async function POST(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -36,7 +36,7 @@ export async function POST(
     const result = refundSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -54,7 +54,7 @@ export async function POST(
     } catch (stripeError) {
       logger.error('Stripe refund failed', stripeError)
       return NextResponse.json(
-        { success: false, error: { message: 'Stripe non configuré ou erreur lors du remboursement' } },
+        { success: false, error: { message: 'Stripe not configured or error during refund' } },
         { status: 503 }
       )
     }
@@ -71,12 +71,12 @@ export async function POST(
     return NextResponse.json({
       success: true,
       refund,
-      message: 'Remboursement traité avec succès',
+      message: 'Refund processed successfully',
     })
   } catch (error) {
     logger.error('Admin refund error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors du remboursement' } },
+      { success: false, error: { message: 'Error during refund' } },
       { status: 500 }
     )
   }

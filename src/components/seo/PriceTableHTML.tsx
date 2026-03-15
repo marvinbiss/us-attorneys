@@ -1,14 +1,14 @@
 /**
- * PriceTableHTML — Tableau HTML semantique des tarifs pour capturer les Featured Snippets Google.
+ * PriceTableHTML — Semantic HTML fee table for capturing Google Featured Snippets.
  *
- * Rend un vrai <table> avec <caption>, <thead>, <tbody>, <tfoot>.
- * Parse les commonTasks (format "Label : prix" ou "Label: prix") et applique
- * un multiplicateur regional optionnel aux prix numeriques.
+ * Renders a real <table> with <caption>, <thead>, <tbody>, <tfoot>.
+ * Parses commonTasks (format "Label : price" or "Label: price") and applies
+ * an optional regional multiplier to numeric prices.
  *
- * Si specialtySlug ET locationSlug sont fournis, chaque nom de tache devient un lien
- * vers /pricing/[service]/[ville]/[taskSlug].
+ * If specialtySlug AND locationSlug are provided, each task name becomes a link
+ * to /pricing/[service]/[location]/[taskSlug].
  *
- * Server Component — pas de 'use client'.
+ * Server Component — no 'use client'.
  */
 
 import Link from 'next/link'
@@ -16,23 +16,23 @@ import { slugifyTask } from '@/lib/data/trade-content'
 
 interface PriceTableHTMLProps {
   tasks: string[]           // commonTasks du trade
-  specialtyName: string       // ex: "Plombier"
-  specialtySlug?: string      // slug du service pour les liens (ex: "plombier")
-  location?: string         // ex: "Paris" (optionnel)
-  locationSlug?: string     // slug de la ville pour les liens (ex: "paris")
-  multiplier?: number       // multiplicateur regional (defaut 1)
-  unit?: string             // ex: "€/h"
+  specialtyName: string       // e.g.: "Personal Injury"
+  specialtySlug?: string      // service slug for links (e.g.: "personal-injury")
+  location?: string         // e.g.: "New York" (optional)
+  locationSlug?: string     // location slug for links (e.g.: "new-york")
+  multiplier?: number       // regional multiplier (default 1)
+  unit?: string             // e.g.: "$/h"
 }
 
 /**
- * Parse une tache au format "Nom prestation : 80 a 250 € ..." ou "Nom prestation: prix"
- * Retourne { name, price } ou le prix est ajuste si un multiplicateur est fourni.
+ * Parse a task in format "Service name : 80 to 250 $ ..." or "Service name: price"
+ * Returns { name, price } where the price is adjusted if a multiplier is provided.
  */
 function parseTaskLocal(task: string, multiplier: number): { name: string; price: string } {
   // Support both "Label : prix" and "Label: prix"
   const colonIndex = task.indexOf(':')
   if (colonIndex === -1) {
-    return { name: task.trim(), price: 'Sur devis' }
+    return { name: task.trim(), price: 'By consultation' }
   }
 
   const name = task.slice(0, colonIndex).trim()
@@ -44,11 +44,11 @@ function parseTaskLocal(task: string, multiplier: number): { name: string; price
       const num = parseInt(match.replace(/\s/g, ''), 10)
       if (isNaN(num)) return match
       const adjusted = Math.round(num * multiplier)
-      return adjusted.toLocaleString('fr-FR')
+      return adjusted.toLocaleString('en-US')
     })
   }
 
-  return { name, price: priceStr || 'Sur devis' }
+  return { name, price: priceStr || 'By consultation' }
 }
 
 export default function PriceTableHTML({
@@ -65,8 +65,8 @@ export default function PriceTableHTML({
   const canLink = Boolean(specialtySlug && locationSlug)
 
   const captionText = location
-    ? `Tarifs ${specialtyName.toLowerCase()} ${location} — 2026`
-    : `Tarifs ${specialtyName.toLowerCase()} en France — 2026`
+    ? `${specialtyName} fees in ${location} — 2026`
+    : `${specialtyName} fees nationwide — 2026`
 
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
@@ -82,10 +82,10 @@ export default function PriceTableHTML({
         <thead>
           <tr className="bg-gray-50 border-b border-gray-200">
             <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700">
-              Prestation
+              Service
             </th>
             <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">
-              Prix indicatif
+              Estimated fee
             </th>
             <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-gray-700 text-center w-28">
               Action
@@ -122,14 +122,14 @@ export default function PriceTableHTML({
                       href={locationSlug ? `/quotes/${specialtySlug}/${locationSlug}` : `/quotes/${specialtySlug}`}
                       className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
-                      Devis gratuit
+                      Free consultation
                     </Link>
                   ) : (
                     <Link
                       href="/quotes"
                       className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
-                      Devis gratuit
+                      Free consultation
                     </Link>
                   )}
                 </td>
@@ -140,10 +140,10 @@ export default function PriceTableHTML({
         <tfoot>
           <tr className="bg-gray-50/80 border-t border-gray-200">
             <td colSpan={3} className="px-5 py-3 text-xs text-gray-500 italic">
-              Prix indicatifs, peuvent varier selon la complexité des travaux, la région et le professionnel.
+              Estimated fees may vary based on case complexity, state, and attorney.
               {location && multiplier !== 1 && (
                 <span className="ml-1">
-                  Tarifs ajustés pour {location} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}&nbsp;% vs moyenne nationale).
+                  Fees adjusted for {location} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}% vs national average).
                 </span>
               )}
             </td>

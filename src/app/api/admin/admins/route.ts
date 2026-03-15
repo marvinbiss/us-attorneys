@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: 'Réservé aux super admins' } },
+        { success: false, error: { code: 'FORBIDDEN', message: 'Reserved for super admins' } },
         { status: 403 }
       )
     }
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     const result = adminsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin fetch error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
 
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent ajouter des administrateurs' } },
+        { success: false, error: { code: 'FORBIDDEN', message: 'Only super admins can add administrators' } },
         { status: 403 }
       )
     }
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     const result = createAdminSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -126,12 +126,12 @@ export async function POST(request: NextRequest) {
     if (error) {
       if (error.code === 'PGRST116') {
         return NextResponse.json(
-          { success: false, error: { message: 'Aucun utilisateur trouvé avec cet identifiant' } },
+          { success: false, error: { message: 'No user found with this ID' } },
           { status: 404 }
         )
       }
       logger.error('Error promoting user to admin', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création de l\'administrateur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error creating administrator' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'admin_created', 'settings', updatedProfile.id, { role })
@@ -148,6 +148,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin create error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

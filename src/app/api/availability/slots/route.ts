@@ -1,5 +1,5 @@
 /**
- * Availability Slots API - ServicesArtisans
+ * Availability Slots API - US Attorneys
  * Get availability slots for search results (Doctolib-style)
  *
  * Note: Returns empty slots until real availability data is implemented in the database
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     }
     const result = slotsQuerySchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
     }
     const { attorneyIds: attorneyIdsParam, days, startDate: startDateParam } = result.data
 
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Availability slots error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la récupération des créneaux' } },
+      { success: false, error: { message: 'Error retrieving slots' } },
       { status: 500 }
     )
   }

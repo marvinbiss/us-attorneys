@@ -8,22 +8,22 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'Contactez-nous',
-  description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans. Formulaire de contact, email et assistance rapide.',
+  title: 'Contact Us',
+  description: 'Contact the USAttorneys team for any questions about our attorney directory. Contact form, email, and fast support.',
   alternates: {
     canonical: `${SITE_URL}/contact`,
   },
   openGraph: {
-    title: 'Contactez-nous',
-    description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans.',
+    title: 'Contact Us',
+    description: 'Contact the USAttorneys team for any questions about our attorney directory.',
     url: `${SITE_URL}/contact`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Contact' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Contact' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Contactez-nous',
-    description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans.',
+    title: 'Contact Us',
+    description: 'Contact the USAttorneys team for any questions about our attorney directory.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -37,7 +37,7 @@ export default async function ContactPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <JsonLd data={getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
+          { name: 'Home', url: '/' },
           { name: 'Contact', url: '/contact' },
         ])} />
         <section className="bg-white border-b">
@@ -62,7 +62,7 @@ export default async function ContactPage() {
   return (
     <>
       <JsonLd data={getBreadcrumbSchema([
-        { name: 'Accueil', url: '/' },
+        { name: 'Home', url: '/' },
         { name: 'Contact', url: '/contact' },
       ])} />
       <ContactPageClient />

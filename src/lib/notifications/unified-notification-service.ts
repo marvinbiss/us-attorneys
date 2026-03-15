@@ -1,5 +1,5 @@
 /**
- * Unified Notification Service - ServicesArtisans
+ * Unified Notification Service - US Attorneys
  * World-class notification orchestration with retry logic and priority queuing
  * Based on best practices from Doctolib, Calendly, and Acuity
  */

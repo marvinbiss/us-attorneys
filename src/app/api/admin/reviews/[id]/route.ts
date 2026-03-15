@@ -34,7 +34,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -44,7 +44,7 @@ export async function PATCH(
     const result = moderateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -62,7 +62,7 @@ export async function PATCH(
     if (error) {
       logger.error('Review moderation failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de modérer l\'avis' } },
+        { success: false, error: { message: 'Unable to moderate the review' } },
         { status: 500 }
       )
     }
@@ -80,7 +80,7 @@ export async function PATCH(
   } catch (error) {
     logger.error('Admin review moderation error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

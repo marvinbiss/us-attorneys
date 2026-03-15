@@ -97,25 +97,25 @@ export function AttorneyExitIntent({ artisan, onOpenEstimation }: AttorneyExitIn
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100%-2rem)] max-w-sm"
           role="complementary"
-          aria-label="Estimation gratuite"
+          aria-label="Free consultation"
         >
           <div className="bg-white rounded-2xl shadow-2xl border border-stone-200/60 p-5 relative">
             {/* Close button */}
             <button
               onClick={close}
               className="absolute top-3 right-3 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-sand-100 transition-colors"
-              aria-label="Fermer"
+              aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
 
             {/* Content */}
-            <p className="text-sm font-medium text-slate-500 mb-1">Avant de partir...</p>
+            <p className="text-sm font-medium text-slate-500 mb-1">Before you go...</p>
             <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
               {displayName}
             </p>
             <p className="text-sm text-slate-600 mb-4">
-              Obtenez votre estimation gratuite en 30 secondes
+              Get your free consultation estimate in 30 seconds
             </p>
 
             {/* CTA */}
@@ -123,7 +123,7 @@ export function AttorneyExitIntent({ artisan, onOpenEstimation }: AttorneyExitIn
               onClick={handleCTA}
               className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
             >
-              Estimer mon projet
+              Get my free estimate
             </button>
           </div>
         </motion.div>

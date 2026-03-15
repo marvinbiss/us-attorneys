@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     const bodyValidation = actionBodySchema.safeParse(body)
     if (!bodyValidation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: bodyValidation.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: bodyValidation.error.flatten() } },
         { status: 400 }
       )
     }
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
 
     if (action === 'reassign') {
       if (!newProviderId) {
-        return NextResponse.json({ success: false, error: { message: 'newProviderId requis pour reassign' } }, { status: 400 })
+        return NextResponse.json({ success: false, error: { message: 'newProviderId required for reassign' } }, { status: 400 })
       }
 
       // Get current assignment
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (!current) {
-        return NextResponse.json({ success: false, error: { message: 'Assignment non trouvé' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Assignment not found' } }, { status: 404 })
       }
 
       // Update assignment to new provider
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (!currentReplay) {
-        return NextResponse.json({ success: false, error: { message: 'Assignment non trouvé' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Assignment not found' } }, { status: 404 })
       }
 
       const result = await dispatchLead(currentReplay.lead_id, {
@@ -181,13 +181,13 @@ export async function POST(request: NextRequest) {
         { newAssignments: result }
       )
     } else {
-      return NextResponse.json({ success: false, error: { message: 'Action invalide' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid action' } }, { status: 400 })
     }
 
     return NextResponse.json({ success: true, action })
   } catch (error) {
     logger.error('Dispatch POST error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -202,7 +202,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!id || !isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -217,7 +217,7 @@ export async function DELETE(request: NextRequest) {
     if (error) {
       logger.error('Dispatch assignment delete error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la suppression' } },
+        { success: false, error: { message: 'Error during deletion' } },
         { status: 500 }
       )
     }
@@ -228,7 +228,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     logger.error('Dispatch assignment delete error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

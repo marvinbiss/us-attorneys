@@ -15,9 +15,9 @@ export const revalidate = 86400 // 24h
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export const metadata: Metadata = {
-  title: 'Avis Artisans Vérifiés — Choisir un Pro',
+  title: 'Verified Attorney Reviews — Choose a Pro',
   description:
-    'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+    'Verified reviews on attorneys: family law, personal injury, criminal defense and 50+ practice areas. Compare ratings, recommendations and choose a trusted professional.',
   alternates: {
     canonical: `${SITE_URL}/reviews`,
   },
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Avis Artisans Vérifiés — Choisir un Pro',
+    title: 'Verified Attorney Reviews — Choose a Pro',
     description:
-      'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Verified reviews on attorneys: family law, personal injury, criminal defense and 50+ practice areas. Compare ratings, recommendations and choose a trusted professional.',
     url: `${SITE_URL}/reviews`,
     type: 'website',
     images: [
@@ -39,79 +39,79 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Avis artisans',
+        alt: 'US Attorneys — Attorney Reviews',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Avis Artisans Vérifiés — Choisir un Pro',
+    title: 'Verified Attorney Reviews — Choose a Pro',
     description:
-      'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Verified reviews on attorneys: family law, personal injury, criminal defense and 50+ practice areas. Compare ratings, recommendations and choose a trusted professional.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const trustBadges = [
-  { icon: Star, label: 'Avis vérifiés', sublabel: 'Clients authentiques' },
-  { icon: Shield, label: 'Artisans référencés', sublabel: 'SIREN contrôlé' },
-  { icon: Users, label: 'Comparaison gratuite', sublabel: 'Sans engagement' },
+  { icon: Star, label: 'Verified Reviews', sublabel: 'Authentic clients' },
+  { icon: Shield, label: 'Verified Attorneys', sublabel: 'Bar-verified' },
+  { icon: Users, label: 'Free Comparison', sublabel: 'No obligation' },
 ]
 
 const howSteps = [
   {
     number: '1',
     icon: Search,
-    title: 'Consultez les profils',
+    title: 'Browse Profiles',
     description:
-      'Explorez les profils d’artisans référencés près de chez vous et consultez leurs compétences.',
+      'Explore verified attorney profiles near you and review their qualifications.',
   },
   {
     number: '2',
     icon: Star,
-    title: 'Comparez les avis',
+    title: 'Compare Reviews',
     description:
-      'Lisez les retours d’expérience vérifiés et comparez les notes des professionnels.',
+      'Read verified client experiences and compare professional ratings.',
   },
   {
     number: '3',
     icon: CheckCircle,
-    title: 'Choisissez votre artisan',
+    title: 'Choose Your Attorney',
     description:
-      'Sélectionnez le professionnel qui correspond le mieux à votre projet et demandez un devis.',
+      'Select the professional that best fits your needs and request a consultation.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Comment sont vérifiés les avis ?',
+    question: 'How are reviews verified?',
     answer:
-      'Les avis publiés sur ServicesArtisans proviennent de clients ayant effectivement sollicité un artisan via notre plateforme. Chaque avis est associé à une demande de devis ou à une mise en relation vérifiée.',
+      'Reviews on US Attorneys come from clients who have actually consulted with an attorney through our platform. Each review is linked to a verified consultation or case referral.',
   },
   {
-    question: 'Puis-je laisser un avis ?',
+    question: 'Can I leave a review?',
     answer:
-      'Oui, tout client ayant fait appel à un artisan référencé peut déposer un avis. Celui-ci sera publié après vérification de la mise en relation.',
+      'Yes, any client who has worked with a listed attorney can submit a review. It will be published after verification of the professional relationship.',
   },
   {
-    question: 'Les artisans peuvent-ils supprimer un avis négatif ?',
+    question: 'Can attorneys remove a negative review?',
     answer:
-      'Non. Les avis négatifs sont maintenus dès lors qu’ils respectent nos conditions de publication (pas d’insultes, contenu véridique). Les artisans peuvent y répondre publiquement.',
+      'No. Negative reviews are maintained as long as they comply with our publication guidelines (no insults, truthful content). Attorneys can respond publicly to any review.',
   },
   {
-    question: 'Comment lire les avis efficacement ?',
+    question: 'How should I read reviews effectively?',
     answer:
-      'Privilégiez les avis détaillés qui décrivent le type de travaux réalisés, le respect des délais et la qualité du résultat. Un artisan avec 10 avis à 4,5/5 est souvent plus fiable qu’un artisan avec 2 avis à 5/5.',
+      'Focus on detailed reviews that describe the type of legal work performed, communication quality, and case outcomes. An attorney with 10 reviews at 4.5/5 is often more reliable than one with 2 reviews at 5/5.',
   },
   {
-    question: 'Les avis influencent-ils le classement des artisans ?',
+    question: 'Do reviews influence attorney rankings?',
     answer:
-      'Oui, les artisans les mieux notés et les plus actifs apparaissent en priorité dans les résultats de recherche sur ServicesArtisans.',
+      'Yes, attorneys with the highest ratings and most active profiles appear first in search results on US Attorneys.',
   },
   {
-    question: 'Que faire en cas de litige avec un artisan ?',
+    question: 'What should I do in case of a dispute with an attorney?',
     answer:
-      'En cas de différend, contactez notre service de médiation. Nous intervenons gratuitement pour faciliter la résolution entre le client et l’artisan.',
+      'In case of a dispute, contact our mediation service. We intervene free of charge to facilitate resolution between the client and the attorney.',
   },
 ]
 
@@ -182,8 +182,8 @@ export default async function AvisPage() {
       <JsonLd
         data={[
           getBreadcrumbSchema([
-            { name: 'Accueil', url: '/' },
-            { name: 'Avis', url: '/reviews' },
+            { name: 'Home', url: '/' },
+            { name: 'Reviews', url: '/reviews' },
           ]),
           getFAQSchema(
             faqItems.map((item) => ({
@@ -233,22 +233,22 @@ export default async function AvisPage() {
           {/* Breadcrumb */}
           <div className="mb-10">
             <Breadcrumb
-              items={[{ label: 'Avis' }]}
+              items={[{ label: 'Reviews' }]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
             />
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Avis artisans &mdash;{' '}
+              Attorney Reviews &mdash;{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
-                Trouvez un professionnel
+                Find a Trusted
               </span>{' '}
-              de confiance
+              Professional
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Consultez les avis v&eacute;rifi&eacute;s, comparez les profils
-              et choisissez l&apos;artisan qui correspond &agrave; votre projet.
+              Browse verified reviews, compare profiles
+              and choose the attorney that best fits your needs.
             </p>
 
             {/* Trust badges */}
@@ -287,15 +287,15 @@ export default async function AvisPage() {
                     <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
                     <span className="text-3xl font-bold text-gray-900">{platformStats.avgRating.toFixed(1)}</span>
                   </div>
-                  <div className="text-sm text-gray-500">Note moyenne</div>
+                  <div className="text-sm text-gray-500">Average Rating</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-gray-900">{platformStats.totalReviews.toLocaleString('fr-FR')}</div>
-                  <div className="text-sm text-gray-500">Avis v&eacute;rifi&eacute;s</div>
+                  <div className="text-3xl font-bold text-gray-900">{platformStats.totalReviews.toLocaleString('en-US')}</div>
+                  <div className="text-sm text-gray-500">Verified Reviews</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-gray-900">{platformStats.attorneyCount.toLocaleString('fr-FR')}</div>
-                  <div className="text-sm text-gray-500">Artisans not&eacute;s</div>
+                  <div className="text-3xl font-bold text-gray-900">{platformStats.attorneyCount.toLocaleString('en-US')}</div>
+                  <div className="text-sm text-gray-500">Rated Attorneys</div>
                 </div>
               </div>
             </div>
@@ -308,13 +308,13 @@ export default async function AvisPage() {
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
-              Simple et rapide
+              Simple and fast
             </p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment &ccedil;a marche&nbsp;?
+              How It Works
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trois &eacute;tapes pour trouver un artisan de confiance pr&egrave;s de chez vous.
+              Three steps to find a trusted attorney near you.
             </p>
           </div>
 
@@ -359,10 +359,10 @@ export default async function AvisPage() {
               FAQ
             </p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fr&eacute;quentes
+              Frequently Asked Questions
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Tout ce que vous devez savoir sur les avis artisans.
+              Everything you need to know about attorney reviews.
             </p>
           </div>
 
@@ -392,10 +392,10 @@ export default async function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Avis par m&eacute;tier
+              Reviews by Practice Area
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              S&eacute;lectionnez un m&eacute;tier pour consulter les avis et recommandations.
+              Select a practice area to view reviews and recommendations.
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -423,10 +423,10 @@ export default async function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Avis par ville
+              Reviews by City
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Consultez les avis artisans dans les principales cities de France.
+              Browse attorney reviews in major cities across the United States.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-2.5">
@@ -448,17 +448,17 @@ export default async function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Avis par m&eacute;tier et ville
+              Reviews by Practice Area and City
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trouvez les avis d&apos;artisans par sp&eacute;cialit&eacute; dans votre ville.
+              Find attorney reviews by specialty in your city.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.slice(0, 8).map((service) => (
               <div key={service.slug} className="bg-gray-50 rounded-xl p-5">
                 <h3 className="font-semibold text-gray-900 mb-3">
-                  Avis {service.name.toLowerCase()}
+                  {service.name} reviews
                 </h3>
                 <div className="space-y-1.5">
                   {cities.slice(0, 6).map((ville) => (
@@ -482,16 +482,16 @@ export default async function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Voir aussi
+              See Also
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Explorez nos autres rubriques pour trouver l&apos;artisan id&eacute;al.
+              Explore our other sections to find the ideal attorney.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Col 1: Devis */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-lg">Devis artisans</h3>
+              <h3 className="font-semibold text-gray-900 mb-4 text-lg">Attorney Consultations</h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -499,14 +499,14 @@ export default async function AvisPage() {
                     href={`/quotes/${s.slug}`}
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                   >
-                    <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
+                    <ChevronRight className="w-3 h-3" /> {s.name} consultation
                   </Link>
                 ))}
               </div>
             </div>
             {/* Col 2: Tarifs */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-lg">Tarifs artisans</h3>
+              <h3 className="font-semibold text-gray-900 mb-4 text-lg">Attorney Fees</h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -514,14 +514,14 @@ export default async function AvisPage() {
                     href={`/pricing/${s.slug}`}
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                   >
-                    <ChevronRight className="w-3 h-3" /> Tarif {s.name.toLowerCase()}
+                    <ChevronRight className="w-3 h-3" /> {s.name} fees
                   </Link>
                 ))}
               </div>
             </div>
             {/* Col 3: Urgence */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-lg">Urgence artisans</h3>
+              <h3 className="font-semibold text-gray-900 mb-4 text-lg">Emergency Attorney</h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -529,7 +529,7 @@ export default async function AvisPage() {
                     href={`/emergency/${s.slug}`}
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                   >
-                    <ChevronRight className="w-3 h-3" /> Urgence {s.name.toLowerCase()}
+                    <ChevronRight className="w-3 h-3" /> Emergency {s.name.toLowerCase()}
                   </Link>
                 ))}
               </div>
@@ -539,16 +539,16 @@ export default async function AvisPage() {
               <h3 className="font-semibold text-gray-900 mb-4 text-lg">Navigation</h3>
               <div className="space-y-1.5">
                 <Link href="/services" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" /> Tous les services
+                  <ChevronRight className="w-3 h-3" /> All Practice Areas
                 </Link>
                 <Link href="/cities" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" /> Toutes les cities
+                  <ChevronRight className="w-3 h-3" /> All Cities
                 </Link>
                 <Link href="/states" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" /> Tous les d&eacute;partements
+                  <ChevronRight className="w-3 h-3" /> All States
                 </Link>
                 <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" /> Toutes les r&eacute;gions
+                  <ChevronRight className="w-3 h-3" /> All Regions
                 </Link>
                 <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" /> Blog
@@ -564,18 +564,18 @@ export default async function AvisPage() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-heading text-xl md:text-2xl font-bold text-slate-900 mb-3">
-            Besoin d&apos;un artisan de confiance&nbsp;?
+            Need a Trusted Attorney?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
-            Comparez les avis, consultez les profils et demandez un devis gratuit
-            aupr&egrave;s d&apos;artisans r&eacute;f&eacute;renc&eacute;s.
+            Compare reviews, browse profiles and request a free consultation
+            from verified attorneys.
           </p>
           <Link
             href="/quotes"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             <Star className="w-5 h-5" />
-            Demander un devis gratuit
+            Request a Free Consultation
           </Link>
         </div>
       </section>

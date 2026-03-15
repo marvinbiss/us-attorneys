@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('Prospection contacts list error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error retrieving data' } }, { status: 500 })
     }
 
     return NextResponse.json({
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Prospection contacts GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -100,14 +100,14 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
 
     if (!parsed.data.email && !parsed.data.phone) {
       return NextResponse.json(
-        { success: false, error: { message: 'Email ou téléphone requis' } },
+        { success: false, error: { message: 'Email or phone required' } },
         { status: 400 }
       )
     }
@@ -130,12 +130,12 @@ export async function POST(request: NextRequest) {
     if (error) {
       if (error.code === '23505') {
         return NextResponse.json(
-          { success: false, error: { message: 'Contact déjà existant (email ou téléphone en doublon)' } },
+          { success: false, error: { message: 'Contact already exists (duplicate email or phone)' } },
           { status: 409 }
         )
       }
       logger.error('Create contact error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during creation' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'contact.create', 'prospection_contact', data.id, {
@@ -147,6 +147,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {
     logger.error('Prospection contacts POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

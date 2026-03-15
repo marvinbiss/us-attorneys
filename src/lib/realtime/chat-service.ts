@@ -12,7 +12,7 @@ export interface ChatMessage {
   id: string
   conversation_id: string
   sender_id: string
-  sender_type: 'client' | 'artisan'
+  sender_type: 'client' | 'attorney'
   content: string
   message_type: 'text' | 'image' | 'file' | 'system' | 'voice'
   file_url?: string
@@ -85,7 +85,7 @@ export interface ConversationSettings {
 
 export interface TypingIndicator {
   user_id: string
-  user_type: 'client' | 'artisan'
+  user_type: 'client' | 'attorney'
   is_typing: boolean
   timestamp: number
 }
@@ -247,7 +247,7 @@ class ChatService {
     conversationId: string,
     content: string,
     senderId: string,
-    senderType: 'client' | 'artisan',
+    senderType: 'client' | 'attorney',
     messageType: 'text' | 'image' | 'file' | 'voice' = 'text',
     options?: {
       fileUrl?: string
@@ -405,7 +405,7 @@ class ChatService {
   sendTypingIndicator(
     conversationId: string,
     userId: string,
-    userType: 'client' | 'artisan',
+    userType: 'client' | 'attorney',
     isTyping: boolean
   ): void {
     const channel = this.channels.get(conversationId)
@@ -586,7 +586,7 @@ class ChatService {
    */
   async getConversations(
     userId: string,
-    userType: 'client' | 'artisan',
+    userType: 'client' | 'attorney',
     options?: {
       includeArchived?: boolean
       pinnedFirst?: boolean
@@ -826,7 +826,7 @@ class ChatService {
   async trackPresence(
     conversationId: string,
     userId: string,
-    userType: 'client' | 'artisan'
+    userType: 'client' | 'attorney'
   ): Promise<void> {
     const channel = this.channels.get(conversationId)
     if (!channel) return

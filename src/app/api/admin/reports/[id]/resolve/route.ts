@@ -13,7 +13,7 @@ const resolveReportSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// POST - Résoudre ou rejeter un signalement
+// POST - Resolve or reject a report
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -27,7 +27,7 @@ export async function POST(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -37,7 +37,7 @@ export async function POST(
     const result = resolveReportSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -77,12 +77,12 @@ export async function POST(
     return NextResponse.json({
       success: true,
       report: data,
-      message: action === 'resolve' ? 'Signalement résolu' : 'Signalement rejeté',
+      message: action === 'resolve' ? 'Report resolved' : 'Report rejected',
     })
   } catch (error) {
     logger.error('Admin report resolve error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides' } },
+        { success: false, error: { message: 'Invalid parameters' } },
         { status: 400 }
       )
     }
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des demandes' } },
+        { success: false, error: { message: 'Error retrieving claims' } },
         { status: 500 }
       )
     }
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
     })
   } catch {
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -119,7 +119,7 @@ export async function PATCH(request: NextRequest) {
     const validation = claimActionSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: validation.error.flatten() } },
         { status: 400 }
       )
     }
@@ -144,7 +144,7 @@ export async function PATCH(request: NextRequest) {
 
     if (claim.status !== 'pending') {
       return NextResponse.json(
-        { success: false, error: { message: 'Cette demande a déjà été traitée' } },
+        { success: false, error: { message: 'This claim has already been processed' } },
         { status: 409 }
       )
     }
@@ -159,7 +159,7 @@ export async function PATCH(request: NextRequest) {
         const claimEmail = claim.claimant_email?.trim().toLowerCase()
         if (!claimEmail) {
           return NextResponse.json(
-            { success: false, error: { message: 'Claim anonyme sans email — impossible de créer le compte' } },
+            { success: false, error: { message: 'Anonymous claim without email — cannot create account' } },
             { status: 400 }
           )
         }
@@ -203,7 +203,7 @@ export async function PATCH(request: NextRequest) {
                 id: resolvedUserId,
                 email: claimEmail,
                 full_name: claim.claimant_name || '',
-                role: 'artisan',
+                role: 'attorney',
                 created_at: now,
                 updated_at: now,
               }, { onConflict: 'id' })
@@ -211,7 +211,7 @@ export async function PATCH(request: NextRequest) {
               if (upsertError) {
                 logger.error('Failed to upsert profile for existing auth user', { claimId, userId: resolvedUserId, error: upsertError })
                 return NextResponse.json(
-                  { success: false, error: { message: `Erreur création profil: ${upsertError.message}` } },
+                  { success: false, error: { message: `Error creating profile: ${upsertError.message}` } },
                   { status: 500 }
                 )
               }
@@ -222,7 +222,7 @@ export async function PATCH(request: NextRequest) {
                 createError: createUserError?.message,
               })
               return NextResponse.json(
-                { success: false, error: { message: 'Erreur lors de la création du compte artisan' } },
+                { success: false, error: { message: 'Error creating attorney account' } },
                 { status: 500 }
               )
             }
@@ -235,7 +235,7 @@ export async function PATCH(request: NextRequest) {
               id: resolvedUserId,
               email: claimEmail,
               full_name: claim.claimant_name || '',
-              role: 'artisan',
+              role: 'attorney',
               created_at: now,
               updated_at: now,
             }, { onConflict: 'id' })
@@ -243,7 +243,7 @@ export async function PATCH(request: NextRequest) {
             if (profileError) {
               logger.error('Failed to create profile for new user', { claimId, userId: resolvedUserId, error: profileError })
               return NextResponse.json(
-                { success: false, error: { message: `Erreur création profil: ${profileError.message}` } },
+                { success: false, error: { message: `Error creating profile: ${profileError.message}` } },
                 { status: 500 }
               )
             }
@@ -277,11 +277,11 @@ export async function PATCH(request: NextRequest) {
       if (!updatedProvider) {
         await supabase
           .from('attorney_claims')
-          .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
+          .update({ status: 'rejected', rejection_reason: 'Listing already assigned', reviewed_by: authResult.admin.id, reviewed_at: now })
           .eq('id', claimId)
 
         return NextResponse.json(
-          { success: false, error: { message: 'Cette fiche a déjà été attribuée à un autre utilisateur' } },
+          { success: false, error: { message: 'This listing has already been assigned to another user' } },
           { status: 409 }
         )
       }
@@ -299,12 +299,12 @@ export async function PATCH(request: NextRequest) {
 
       if (updateClaimError) {
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de la mise à jour de la demande' } },
+          { success: false, error: { message: 'Error updating the claim' } },
           { status: 500 }
         )
       }
 
-      // 3. Set profiles.role = 'artisan' (skip if already admin/super_admin/moderator)
+      // 3. Set profiles.role = 'attorney' (skip if already admin/super_admin/moderator)
       const { data: currentProfile } = await supabase
         .from('profiles')
         .select('role')
@@ -315,11 +315,11 @@ export async function PATCH(request: NextRequest) {
       if (!currentProfile || !protectedRoles.includes(currentProfile.role)) {
         await supabase
           .from('profiles')
-          .update({ role: 'artisan', updated_at: now })
+          .update({ role: 'attorney', updated_at: now })
           .eq('id', resolvedUserId)
       }
 
-      // 4. Mark user as artisan in auth metadata
+      // 4. Mark user as attorney in auth metadata
       await supabase.auth.admin.updateUserById(resolvedUserId, {
         user_metadata: { is_artisan: true },
       })
@@ -348,7 +348,7 @@ export async function PATCH(request: NextRequest) {
 
             const emailResult = await sendClaimApprovedEmail({
               to: claimEmail,
-              name: claim.claimant_name || 'Artisan',
+              name: claim.claimant_name || 'Attorney',
               attorneyName: updatedProvider.name || 'Votre fiche',
               passwordLink: safeLink,
             })
@@ -362,7 +362,7 @@ export async function PATCH(request: NextRequest) {
         }
       }
 
-      // Revalidation on-demand des pages affectées (non-bloquant)
+      // On-demand revalidation of affected pages (non-blocking)
       try {
         const { data: attorneyInfo } = await supabase
           .from('attorneys')
@@ -371,7 +371,7 @@ export async function PATCH(request: NextRequest) {
           .single()
 
         if (attorneyInfo) {
-          const specialtySlug = slugify(attorneyInfo.specialty || 'artisan')
+          const specialtySlug = slugify(attorneyInfo.specialty || 'attorney')
           const locationSlug = slugify(attorneyInfo.address_city || 'france')
           const publicId = attorneyInfo.slug || attorneyInfo.stable_id
 
@@ -401,7 +401,7 @@ export async function PATCH(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: `Demande approuvée. La fiche a été attribuée. Email: ${emailStatus}`,
+        message: `Claim approved. Listing has been assigned. Email: ${emailStatus}`,
       })
     } else {
       // Reject
@@ -417,7 +417,7 @@ export async function PATCH(request: NextRequest) {
 
       if (rejectError) {
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors du rejet' } },
+          { success: false, error: { message: 'Error during rejection' } },
           { status: 500 }
         )
       }
@@ -432,13 +432,13 @@ export async function PATCH(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: 'Demande rejetée.',
+        message: 'Claim rejected.',
       })
     }
   } catch (err) {
     logger.error('Admin claims PATCH error', { error: err })
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

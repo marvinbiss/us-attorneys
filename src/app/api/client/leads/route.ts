@@ -36,11 +36,11 @@ function deriveStatus(events: Array<{ event_type: string }>): DerivedStatus {
 const STATUS_LABELS: Record<DerivedStatus, string> = {
   en_attente: 'En attente',
   en_traitement: 'En traitement',
-  devis_recus: 'Devis reçu(s)',
-  accepte: 'Accepté',
-  termine: 'Terminé',
-  expire: 'Expiré',
-  refuse: 'Refusé',
+  devis_recus: 'Consultation(s) received',
+  accepte: 'Accepted',
+  termine: 'Completed',
+  expire: 'Expired',
+  refuse: 'Declined',
 }
 
 export async function GET(request: NextRequest) {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     // Parse and validate pagination from query params
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     const { page, pageSize } = parsed.data
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
 
     if (demandesError) {
       logger.error('Client leads fetch error:', demandesError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
     if (!demandes || demandes.length === 0) {
@@ -158,6 +158,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Client leads GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

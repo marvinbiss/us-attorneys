@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     const result = providersQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.warn('Providers query failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des artisans', code: error.code } },
+        { success: false, error: { message: 'Error retrieving attorneys', code: error.code } },
         { status: 502 }
       )
     }
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       phone: p.phone || '',
       address_city: p.address_city || '',
       address_region: p.address_region || '',
-      specialty: (p.specialty as string) || 'Artisan',
+      specialty: (p.specialty as string) || 'Attorney',
       is_verified: p.is_verified,
       is_active: p.is_active,
       rating_average: Number(p.rating_average) || 0,
@@ -136,7 +136,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin providers list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

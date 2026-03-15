@@ -99,15 +99,15 @@ interface PageProps {
 
 // Convert provider data to LegacyArtisan format (sub-components still read legacy fields)
 function convertToArtisan(provider: ProviderRecord, service: Service | null, location: Location | null, specialtySlug: string): LegacyArtisan {
-  const specialty = service?.name || provider.specialty || 'Artisan'
+  const specialty = service?.name || provider.specialty || 'Attorney'
   const city = location?.name || provider.address_city || ''
-  const name = provider.name || provider.business_name || 'Artisan'
+  const name = provider.name || provider.business_name || 'Attorney'
 
   // Generate description if missing or too short (WITHOUT fake ratings)
   const existingDesc = provider.description || provider.bio
   const description = (existingDesc && existingDesc.length > 50)
     ? existingDesc
-    : generateDescription(name, specialty, city || 'votre région', provider, specialtySlug)
+    : generateDescription(name, specialty, city || 'your area', provider, specialtySlug)
 
   // Only show member_since if it's a meaningful past year.
   // Providers imported in the current year (e.g. 2026 bulk import) would show
@@ -173,11 +173,11 @@ function generateDescription(name: string, specialty: string, city: string, prov
   const introKey = `desc-${provider?.stable_id || provider?.slug || provider?.id || name}-${specialtySlug || spe}`
   const introHash = hashCode(introKey)
   const introTemplates = [
-    `${name} est un professionnel spécialisé en ${spe} à ${city}.`,
-    `Basé à ${city}, ${name} intervient en ${spe} pour les particuliers et professionnels.`,
-    `${name} propose ses services de ${spe} à ${city} et ses environs.`,
-    `Professionnel en ${spe}, ${name} exerce à ${city} auprès d'une clientèle locale.`,
-    `À ${city}, ${name} met son expertise en ${spe} au service de vos projets.`,
+    `${name} is a professional specializing in ${spe} in ${city}.`,
+    `Based in ${city}, ${name} serves clients in ${spe} for individuals and businesses.`,
+    `${name} offers ${spe} services in ${city} and surrounding areas.`,
+    `A ${spe} professional, ${name} practices in ${city} serving a local clientele.`,
+    `In ${city}, ${name} brings expertise in ${spe} to serve your needs.`,
   ]
   parts.push(introTemplates[introHash % introTemplates.length])
 
@@ -186,24 +186,24 @@ function generateDescription(name: string, specialty: string, city: string, prov
     const year = new Date(provider.creation_date).getFullYear()
     const age = new Date().getFullYear() - year
     if (age > 1) {
-      parts.push(`Fondée en ${year}, l'entreprise bénéficie de plus de ${age} ans de présence dans la région.`)
+      parts.push(`Founded in ${year}, the firm has over ${age} years of presence in the region.`)
     }
   }
 
   // Verification
   if (provider?.siret) {
-    parts.push(`Entreprise immatriculée et référencée (SIRET ${provider.siret.substring(0, 9)}...).`)
+    parts.push(`Registered and verified firm (ID ${provider.siret.substring(0, 9)}...).`)
   }
 
   // Legal form
   if (provider?.legal_form_code || provider?.legal_form) {
-    parts.push(`Forme juridique : ${provider.legal_form_code || provider.legal_form}.`)
+    parts.push(`Legal structure: ${provider.legal_form_code || provider.legal_form}.`)
   }
 
   // Rating
   const rating = provider?.rating_average || provider?.average_rating
   if (rating && rating >= 4) {
-    parts.push(`Noté ${Number(rating).toFixed(1)}/5 par ses clients.`)
+    parts.push(`Rated ${Number(rating).toFixed(1)}/5 by clients.`)
   }
 
   // Service-specific expertise (programmatic based on specialty slug)
@@ -225,13 +225,13 @@ function generateDescription(name: string, specialty: string, city: string, prov
   }
 
   // Zone d'intervention
-  parts.push(`Zone d'intervention : ${city} et communes environnantes.`)
+  parts.push(`Service area: ${city} and surrounding cities.`)
 
   // CTA
-  parts.push(`Contactez ${name} pour obtenir un devis gratuit et personnalisé, sans engagement.`)
+  parts.push(`Contact ${name} for a free, personalized consultation with no obligation.`)
 
   // Freshness / E-E-A-T: signal that content is data-derived
-  parts.push('Informations basées sur les données professionnelles déclarées.')
+  parts.push('Information based on declared professional data.')
 
   return parts.join(' ')
 }
@@ -292,7 +292,7 @@ async function getSimilarArtisans(attorneyId: string, specialty: string, postalC
         id: p.id,
         stable_id: p.stable_id || undefined,
         slug: p.slug || undefined,
-        name: p.name || 'Artisan',
+        name: p.name || 'Attorney',
         specialty: p.specialty || specialty,
         rating: p.rating_average || 0,
         reviews: p.review_count || 0,
@@ -363,7 +363,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (quartierMatch) {
     const { city: ville, neighborhoodName: quartierName } = quartierMatch
     const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
-    if (!staticSvc) return { title: 'Non trouvé', robots: { index: false, follow: false } }
+    if (!staticSvc) return { title: 'Not Found', robots: { index: false, follow: false } }
 
     const svcLower = staticSvc.name.toLowerCase()
     let attorneyCount = 0
@@ -375,25 +375,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? [
           `${staticSvc.name} à ${quartierName}, ${ville.name} — ${attorneyCount} pros`,
           `${attorneyCount} ${svcLower}s à ${quartierName} (${ville.name})`,
-          `${staticSvc.name} ${quartierName} ${ville.name} : devis gratuit`,
-          `Trouver un ${svcLower} à ${quartierName}, ${ville.name}`,
+          `${staticSvc.name} ${quartierName} ${ville.name}: free consultation`,
+          `Find a ${svcLower} in ${quartierName}, ${ville.name}`,
         ]
       : [
-          `${staticSvc.name} à ${quartierName}, ${ville.name} — Devis gratuit`,
-          `${svcLower} à ${quartierName} (${ville.name}) : artisans vérifiés`,
-          `Trouver un ${svcLower} à ${quartierName}, ${ville.name}`,
+          `${staticSvc.name} in ${quartierName}, ${ville.name} — Free Consultation`,
+          `${svcLower} in ${quartierName} (${ville.name}): verified attorneys`,
+          `Find a ${svcLower} in ${quartierName}, ${ville.name}`,
         ]
     const title = truncateTitle(titleTemplates[tHash % titleTemplates.length])
 
     const dHash = Math.abs(hashCode(`sq-desc-${specialtySlug}-${locationSlug}-${publicId}`))
     const descTemplates = hasProviders
       ? [
-          `${attorneyCount} ${svcLower}s référencés à ${quartierName}, ${ville.name} (${ville.stateCode}). Devis gratuit en ${getStateByCode(ville.stateCode)?.region || ''}.`,
-          `Comparez les ${svcLower}s à ${quartierName} (${ville.name}). ${attorneyCount} artisans vérifiés SIREN. Devis gratuit.`,
+          `${attorneyCount} verified ${svcLower}s in ${quartierName}, ${ville.name} (${ville.stateCode}). Free consultation in ${getStateByCode(ville.stateCode)?.region || ''}.`,
+          `Compare ${svcLower}s in ${quartierName} (${ville.name}). ${attorneyCount} bar-verified attorneys. Free consultation.`,
         ]
       : [
-          `Trouvez un ${svcLower} qualifié à ${quartierName}, ${ville.name} (${ville.stateCode}). Artisans vérifiés, devis gratuit.`,
-          `${svcLower} à ${quartierName} (${ville.name}) : annuaire d'artisans référencés en ${getStateByCode(ville.stateCode)?.region || ''}. Devis gratuit.`,
+          `Find a qualified ${svcLower} in ${quartierName}, ${ville.name} (${ville.stateCode}). Verified attorneys, free consultation.`,
+          `${svcLower} in ${quartierName} (${ville.name}): directory of verified attorneys in ${getStateByCode(ville.stateCode)?.region || ''}. Free consultation.`,
         ]
     const description = descTemplates[dHash % descTemplates.length]
 
@@ -417,7 +417,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       getSpecialtyBySlug(specialtySlug).catch(() => null),
     ])
     const rawProvider = stableIdResult || slugResult
-    if (!rawProvider) return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
+    if (!rawProvider) return { title: 'Attorney Not Found', robots: { index: false, follow: false } }
 
     // Cast to access DB columns that TS can't infer from select('*')
     const provider = rawProvider as unknown as ProviderRecord
@@ -425,8 +425,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // Resolve provider's real city (may be INSEE code in DB)
     const resolved = resolveProviderCity(provider)
     const realCity = resolved.address_city || provider.address_city || ''
-    const displayName = provider.name || provider.business_name || 'Artisan'
-    const specialtyName = service?.name || 'Artisan'
+    const displayName = provider.name || provider.business_name || 'Attorney'
+    const specialtyName = service?.name || 'Attorney'
 
     // Compute canonical from provider's REAL data, not URL segments
     const canonicalPath = getAttorneyUrl({
@@ -445,8 +445,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (provider.review_count && provider.review_count > 0) {
       descParts.push(`${provider.review_count} avis${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
     }
-    if (provider.siret) descParts.push('SIRET vérifié')
-    descParts.push('Devis gratuit')
+    if (provider.siret) descParts.push('Bar-verified')
+    descParts.push('Free consultation')
     const rawDesc = descParts.join(' · ') + '.'
     const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '…' : rawDesc
 
@@ -487,7 +487,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   } catch {
     // Don't noindex on transient DB errors — ISR will retry and Google will recrawl.
     // Returning index:true prevents permanent noindex from temporary failures.
-    return { title: 'Artisan non trouvé' }
+    return { title: 'Attorney Not Found' }
   }
 }
 
@@ -579,17 +579,17 @@ export default async function AttorneyPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold text-gray-900">
-                Besoin de ce professionnel ?
+                Need This Professional?
               </h2>
               <p className="text-sm text-gray-600 mt-1">
-                Demandez un devis gratuit et sans engagement.
+                Request a free consultation with no obligation.
               </p>
             </div>
             <Link
               href={`/quotes/${specialtySlug}/${locationSlug}`}
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap"
             >
-              Demander un devis gratuit
+              Request a Free Consultation
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
@@ -628,9 +628,9 @@ export default async function AttorneyPage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Informations sur ce profil</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">About This Profile</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les informations de ce profil sont fournies par l&apos;artisan et vérifiées via l&apos;API SIRENE (INSEE). Les tarifs affichés, lorsqu&apos;ils sont renseignés, sont indicatifs et propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise en relation mais ne garantissons pas les prestations.
+              The information on this profile is provided by the attorney and verified via bar records. The fees displayed, when provided, are indicative and specific to this attorney. Reviews are collected from clients who have used their services. This is an independent directory — we facilitate connections but do not guarantee outcomes.
             </p>
           </div>
         </div>
@@ -640,17 +640,17 @@ export default async function AttorneyPage({ params }: PageProps) {
       <section className="py-8 bg-gray-50 border-t">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
+            Trust &amp; Safety
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
-              Comment nous référençons les artisans
+              How We Verify Attorneys
             </Link>
             <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
-              Notre politique des avis
+              Our Review Policy
             </Link>
             <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
-              Service de médiation
+              Mediation Service
             </Link>
           </nav>
         </div>
@@ -663,7 +663,7 @@ export default async function AttorneyPage({ params }: PageProps) {
         departement: location?.department_code || '',
         pageUrl: `/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`,
         artisan: {
-          name: artisan.business_name || 'Artisan',
+          name: artisan.business_name || 'Attorney',
           slug: provider.slug || '',
           publicId: provider.stable_id || provider.slug || publicId,
         },

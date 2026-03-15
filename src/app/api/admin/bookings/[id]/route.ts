@@ -14,7 +14,7 @@ const updateBookingSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Détails d'une réservation
+// GET - Booking details
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -28,7 +28,7 @@ export async function GET(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -52,7 +52,7 @@ export async function GET(
     if (error) {
       logger.warn('Booking detail query failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Réservation introuvable ou table inexistante' } },
+        { success: false, error: { message: 'Booking not found or table does not exist' } },
         { status: 404 }
       )
     }
@@ -61,13 +61,13 @@ export async function GET(
   } catch (error) {
     logger.error('Admin booking details error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// PATCH - Mettre à jour une réservation
+// PATCH - Update a booking
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -81,7 +81,7 @@ export async function PATCH(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -91,7 +91,7 @@ export async function PATCH(
     const result = updateBookingSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -109,7 +109,7 @@ export async function PATCH(
     if (error) {
       logger.error('Booking update failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de mettre à jour la réservation' } },
+        { success: false, error: { message: 'Unable to update the booking' } },
         { status: 500 }
       )
     }
@@ -120,18 +120,18 @@ export async function PATCH(
     return NextResponse.json({
       success: true,
       booking: data,
-      message: 'Réservation mise à jour',
+      message: 'Booking updated',
     })
   } catch (error) {
     logger.error('Admin booking update error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// DELETE - Annuler une réservation
+// DELETE - Cancel a booking
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -145,7 +145,7 @@ export async function DELETE(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -162,7 +162,7 @@ export async function DELETE(
     if (error) {
       logger.error('Booking cancel failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible d\'annuler la réservation' } },
+        { success: false, error: { message: 'Unable to cancel the booking' } },
         { status: 500 }
       )
     }
@@ -172,12 +172,12 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Réservation annulée',
+      message: 'Booking cancelled',
     })
   } catch (error) {
     logger.error('Admin booking cancel error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

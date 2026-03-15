@@ -238,7 +238,7 @@ export default function GeographicMap({
               <svg width="16" height="16" viewBox="0 0 20 20" fill="#f59e0b"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
               <span style="font-weight:700;color:#111827;font-size:14px">${provider.rating_average.toFixed(1)}</span>
             </div>
-            <span style="font-size:12px;color:#6b7280">${provider.review_count} avis</span>
+            <span style="font-size:12px;color:#6b7280">${provider.review_count} reviews</span>
           </div>`
         : ''
 
@@ -253,7 +253,7 @@ export default function GeographicMap({
       const phoneBtn = provider.phone
         ? `<a href="tel:${provider.phone}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;background:linear-gradient(to right,#44403c,#292524);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Appeler
+            Call
           </a>`
         : ''
 
@@ -261,14 +261,14 @@ export default function GeographicMap({
         <div style="padding:16px">
           <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:8px">
             <h3 style="font-weight:700;color:#111827;font-size:16px;line-height:1.3;margin:0">${provider.name}</h3>
-            ${isVerified ? `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#E86B4B;flex-shrink:0" title="Artisan référencé"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></span>` : ''}
+            ${isVerified ? `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#E86B4B;flex-shrink:0" title="Verified attorney"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></span>` : ''}
           </div>
           ${provider.specialty ? `<p style="font-size:14px;color:#E86B4B;font-weight:500;margin:0 0 8px">${provider.specialty}</p>` : ''}
           ${ratingHtml}
           ${addressText ? `<p style="font-size:14px;color:#4b5563;margin:0 0 12px;display:flex;align-items:start;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${addressText}</span></p>` : ''}
           <div style="display:flex;gap:8px">
             ${phoneBtn}
-            <a href="${profileUrl}" style="flex:1;text-align:center;padding:8px 12px;background:linear-gradient(to right,#E86B4B,#D4573D);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">Voir le profil</a>
+            <a href="${profileUrl}" style="flex:1;text-align:center;padding:8px 12px;background:linear-gradient(to right,#E86B4B,#D4573D);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">View profile</a>
           </div>
         </div>
       `
@@ -320,7 +320,7 @@ export default function GeographicMap({
       >
         <div className="text-center text-gray-500">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-clay-400" />
-          <p>Chargement de la carte...</p>
+          <p>Loading map...</p>
         </div>
       </div>
     )
@@ -347,7 +347,7 @@ export default function GeographicMap({
           onClick={handleSearchArea}
           className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-white px-4 py-2 rounded-full shadow-lg border border-stone-200 text-sm font-semibold text-stone-700 hover:bg-clay-50 hover:text-clay-600 transition-all"
         >
-          Rechercher dans cette zone
+          Search this area
         </button>
       )}
     </div>

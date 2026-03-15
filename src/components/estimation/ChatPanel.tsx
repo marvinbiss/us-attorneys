@@ -53,19 +53,19 @@ export const ChatPanel = memo(function ChatPanel({
             <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3 text-sm text-gray-800">
               {context.artisan ? (
                 <>
-                  Bonjour ! Je suis l&apos;assistant IA d&apos;estimation de{' '}
+                  Hello! I&apos;m the AI estimation assistant for{' '}
                   <strong>{context.artisan.name}</strong>,{' '}
-                  {context.metier.toLowerCase()} à{' '}
-                  <strong>{context.ville}</strong>. Décrivez votre
-                  projet et je vous donnerai une estimation de prix.
+                  {context.metier.toLowerCase()} in{' '}
+                  <strong>{context.ville}</strong>. Describe your
+                  case and I&apos;ll give you a cost estimate.
                 </>
               ) : (
                 <>
-                  Bonjour ! Je suis l&apos;assistant IA d&apos;estimation.
-                  Dites-moi quel projet vous avez en tête avec votre{' '}
-                  <strong>{context.metier.toLowerCase()}</strong> à{' '}
-                  <strong>{context.ville}</strong>, et je vous
-                  donnerai une estimation de prix.
+                  Hello! I&apos;m the AI estimation assistant.
+                  Tell me about your legal needs with a{' '}
+                  <strong>{context.metier.toLowerCase()}</strong> in{' '}
+                  <strong>{context.ville}</strong>, and I&apos;ll
+                  give you a cost estimate.
                 </>
               )}
             </div>
@@ -158,7 +158,7 @@ export const ChatPanel = memo(function ChatPanel({
           type="text"
           value={chat.inputValue}
           onChange={(e) => chat.setInputValue(e.target.value)}
-          placeholder="Décrivez votre besoin..."
+          placeholder="Describe your needs..."
           disabled={chat.isStreaming}
           className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#E07040] disabled:opacity-50"
           style={{ fontSize: '16px' }}
@@ -166,7 +166,7 @@ export const ChatPanel = memo(function ChatPanel({
         <button
           type="submit"
           disabled={chat.isStreaming || !chat.inputValue.trim()}
-          aria-label="Envoyer le message"
+          aria-label="Send message"
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E07040] text-white hover:bg-[#c9603a] transition-colors disabled:opacity-40"
         >
           {chat.isStreaming ? (

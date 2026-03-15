@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Webhook Twilio - Messages entrants (SMS et WhatsApp)
- * Gère les réponses des contacts et déclenche l'IA si configurée
+ * Handles contact responses and triggers AI if configured
  */
 export async function POST(request: NextRequest) {
   try {
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const params: Record<string, string> = {}
     formData.forEach((value, key) => { params[key] = value.toString() })
 
-    // Vérifier la signature
+    // Verify la signature
     const signature = request.headers.get('x-twilio-signature') || ''
     if (!verifyTwilioSignature(signature, request.url, params)) {
       return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    // Trouver le contact par numéro de téléphone
+    // Find contact by phone number
     const { data: contact } = await supabase
       .from('prospection_contacts')
       .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, location_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Vérifier si c'est un opt-out (STOP)
+    // Verify si c'est un opt-out (STOP)
     if (['stop', 'arret', 'arrêt', 'desabonner', 'désabonner'].includes(body.trim().toLowerCase())) {
       await supabase
         .from('prospection_contacts')
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Trouver ou créer la conversation
+    // Find or create conversation
     let { data: conversation } = await supabase
       .from('prospection_conversations')
       .select('id, campaign_id, contact_id, message_id, channel, status, ai_provider, ai_model, ai_replies_count, assigned_to, last_message_at, created_at, updated_at')
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Sauvegarder le message entrant
+    // Save le message entrant
     await supabase
       .from('prospection_conversation_messages')
       .insert({
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
         content: body,
       })
 
-    // Mettre à jour la conversation
+    // Update la conversation
     await supabase
       .from('prospection_conversations')
       .update({
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       })
       .eq('id', conversation.id)
 
-    // Mettre à jour le message original comme "replied"
+    // Update le message original comme "replied"
     if (conversation.campaign_id) {
       await supabase
         .from('prospection_messages')
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
         .eq('contact_id', contact.id)
         .in('status', ['sent', 'delivered', 'read'])
 
-      // Incrémenter le compteur replied de la campagne
+      // Increment the campaign replied counter
       try {
         await supabase.rpc('increment', {
           table_name: 'prospection_campaigns',
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Vérifier si auto-reply IA est activée
+    // Check if AI auto-reply is enabled
     const { data: aiSettings } = await supabase
       .from('prospection_ai_settings')
       .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt')
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (aiSettings?.auto_reply_enabled) {
-      // Vérifier l'escalade
+      // Verify l'escalade
       if (shouldEscalate(body, aiSettings.escalation_keywords || [])) {
         await supabase
           .from('prospection_conversations')
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
         return new NextResponse('OK', { status: 200 })
       }
 
-      // Vérifier limite de réponses auto
+      // Check auto-reply limit
       if ((conversation.ai_replies_count || 0) < (aiSettings.max_auto_replies || 3)) {
         try {
           // Charger l'historique
@@ -184,14 +184,14 @@ export async function POST(request: NextRequest) {
             ? aiResult.content
             : 'Merci pour votre message. Un conseiller va vous recontacter rapidement.'
 
-          // Envoyer la réponse IA
+          // Send the AI response
           if (channel === 'whatsapp') {
             await sendWhatsAppReply(from, replyContent)
           } else {
             await sendProspectionSMS({ to: from, body: replyContent })
           }
 
-          // Sauvegarder la réponse IA
+          // Save the AI response
           await supabase
             .from('prospection_conversation_messages')
             .insert({
@@ -206,7 +206,7 @@ export async function POST(request: NextRequest) {
               ai_cost: aiResult.cost,
             })
 
-          // Mettre à jour le compteur IA
+          // Update le compteur IA
           await supabase
             .from('prospection_conversations')
             .update({

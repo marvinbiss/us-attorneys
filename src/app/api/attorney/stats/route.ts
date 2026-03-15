@@ -1,6 +1,6 @@
 /**
- * Artisan Stats API - ServicesArtisans
- * GET: Fetch dashboard statistics for artisan
+ * Attorney Stats API - US Attorneys
+ * GET: Fetch dashboard statistics for attorney
  * Queries REAL data from lead_assignments, reviews, analytics_events, lead_events.
  * No dependency on bookings/availability_slots (those tables are not used in prod).
  */
@@ -76,7 +76,7 @@ export async function GET(request: Request) {
 
     if (!provider) {
       return NextResponse.json(
-        { error: 'Aucun profil artisan', provider: null },
+        { error: 'No attorney profile found', provider: null },
         { status: 404 }
       )
     }
@@ -302,7 +302,7 @@ export async function GET(request: Request) {
         (a) => new Date(a.assigned_at) >= d && new Date(a.assigned_at) < end
       ).length
       return {
-        month: d.toLocaleDateString('fr-FR', { month: 'short' }),
+        month: d.toLocaleDateString('en-US', { month: 'short' }),
         count,
       }
     })
@@ -328,7 +328,7 @@ export async function GET(request: Request) {
 
         if (devisData) {
           for (const d of devisData) {
-            const name = d.service_name || 'Non spécifié'
+            const name = d.service_name || 'Not specified'
             serviceMap.set(name, (serviceMap.get(name) || 0) + 1)
           }
         }
@@ -427,7 +427,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Stats GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

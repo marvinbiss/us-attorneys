@@ -24,7 +24,7 @@ export default function LocalDataInsights({
   if (!locationData) return null
 
   const c = locationData
-  const gentile = c.gentile ? `les ${c.gentile}` : `les habitants de ${villeName}`
+  const gentile = c.gentile ? `the ${c.gentile}` : `the residents of ${villeName}`
 
   // Check if we have enough data to render at least one section
   const hasMarche = c.nb_entreprises_artisanales || c.nb_artisans_btp || c.nb_artisans_rge
@@ -39,10 +39,10 @@ export default function LocalDataInsights({
     <section className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-          {villeName} en chiffres : donn{'é'}es cl{'é'}s pour vos travaux
+          {villeName} by the numbers: key data for your legal needs
         </h2>
         <p className="text-gray-500 text-sm text-center mb-8">
-          Donn{'é'}es locales qui impactent le march{'é'} de la r{'é'}novation et les tarifs de {specialtyName.toLowerCase()} {'à'} {villeName}.
+          Local data that impacts the legal market and {specialtyName.toLowerCase()} fees in {villeName}.
         </p>
 
         <div className="grid sm:grid-cols-2 gap-6">
@@ -50,21 +50,21 @@ export default function LocalDataInsights({
           {hasMarche && (
             <InsightCard
               icon={<Building2 className="w-5 h-5 text-blue-600" />}
-              title="Marché local de la rénovation"
+              title="Local legal market"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
                 {c.nb_entreprises_artisanales && (
-                  <>{'À'} {villeName}, {formatNumber(c.nb_entreprises_artisanales)} entreprises artisanales sont r{'é'}f{'é'}renc{'é'}es{c.nb_artisans_btp ? ` dont ${formatNumber(c.nb_artisans_btp)} dans le BTP` : ''}. </>
+                  <>In {villeName}, {formatNumber(c.nb_entreprises_artisanales)} law firms are listed{c.nb_artisans_btp ? `, including ${formatNumber(c.nb_artisans_btp)} in litigation` : ''}. </>
                 )}
                 {c.nb_artisans_rge != null && c.nb_artisans_rge > 0 && (
-                  <>Avec {formatNumber(c.nb_artisans_rge)} artisan{c.nb_artisans_rge > 1 ? 's' : ''} RGE certifi{'é'}{c.nb_artisans_rge > 1 ? 's' : ''}, {
+                  <>With {formatNumber(c.nb_artisans_rge)} verified attorney{c.nb_artisans_rge > 1 ? 's' : ''}, {
                     c.nb_entreprises_artisanales && c.nb_entreprises_artisanales > 500
-                      ? 'la concurrence est forte, ce qui favorise des tarifs compétitifs'
-                      : 'le choix reste raisonnable pour des travaux de qualité'
+                      ? 'competition is strong, which helps keep fees competitive'
+                      : 'there is a reasonable selection for quality legal services'
                   }. </>
                 )}
                 {c.population > 0 && c.densite_population != null && (
-                  <>La commune compte {formatNumber(c.population)} habitants avec une densit{'é'} de {formatNumber(Math.round(c.densite_population))} hab/km{'²'}.</>
+                  <>The city has {formatNumber(c.population)} residents with a density of {formatNumber(Math.round(c.densite_population))} per sq mi.</>
                 )}
               </p>
             </InsightCard>
@@ -74,26 +74,26 @@ export default function LocalDataInsights({
           {hasImmo && (
             <InsightCard
               icon={<Euro className="w-5 h-5 text-amber-600" />}
-              title="Immobilier & patrimoine"
+              title="Real estate & property"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
                 {c.prix_m2_moyen && (
-                  <>Le prix moyen au m{'²'} {'à'} {villeName} est de {formatEuro(c.prix_m2_moyen)}. </>
+                  <>The average price per sq ft in {villeName} is {formatEuro(c.prix_m2_moyen)}. </>
                 )}
                 {c.prix_m2_maison && c.prix_m2_appartement && (
-                  <>Maisons : {formatEuro(c.prix_m2_maison)}/m{'²'}, appartements : {formatEuro(c.prix_m2_appartement)}/m{'²'}. </>
+                  <>Houses: {formatEuro(c.prix_m2_maison)}/sq ft, condos: {formatEuro(c.prix_m2_appartement)}/sq ft. </>
                 )}
                 {c.part_maisons_pct != null && (
-                  <>Avec {c.part_maisons_pct > 50
-                    ? `${c.part_maisons_pct} % de maisons, les travaux individuels (toiture, façade) sont fréquents`
-                    : `${100 - c.part_maisons_pct} % d'appartements, les travaux de copropriété sont fréquents`
+                  <>With {c.part_maisons_pct > 50
+                    ? `${c.part_maisons_pct}% single-family homes, real estate legal needs are common`
+                    : `${100 - c.part_maisons_pct}% condos/apartments, HOA and property law needs are frequent`
                   }. </>
                 )}
                 {c.nb_transactions_annuelles != null && c.nb_transactions_annuelles > 0 && (
-                  <>Environ {formatNumber(c.nb_transactions_annuelles)} transactions immobili{'è'}res par an g{'é'}n{'è'}rent des besoins en travaux pour {gentile}.</>
+                  <>Approximately {formatNumber(c.nb_transactions_annuelles)} real estate transactions per year generate legal service needs for {gentile}.</>
                 )}
                 {c.nb_logements != null && c.nb_logements > 0 && !c.nb_transactions_annuelles && (
-                  <>Le parc immobilier compte {formatNumber(c.nb_logements)} logements.</>
+                  <>The housing stock includes {formatNumber(c.nb_logements)} units.</>
                 )}
               </p>
             </InsightCard>
@@ -103,17 +103,17 @@ export default function LocalDataInsights({
           {hasDpe && (
             <InsightCard
               icon={<Zap className="w-5 h-5 text-green-600" />}
-              title="Performance énergétique"
+              title="Energy performance"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
                 {c.pct_passoires_dpe != null && (
-                  <>{c.pct_passoires_dpe}{' '}% des logements {c.gentile ? `${c.gentile.toLowerCase().charAt(0) === 'l' ? 'des ' : 'de '}${villeName.toLowerCase()}` : `de ${villeName}`} sont des passoires thermiques (classes F-G). </>
+                  <>{c.pct_passoires_dpe}% of homes in {villeName} have poor energy ratings (classes F-G). </>
                 )}
                 {c.nb_dpe_total != null && c.nb_dpe_total > 0 && (
-                  <>{formatNumber(c.nb_dpe_total)} diagnostics de performance {'é'}nerg{'é'}tique ont {'é'}t{'é'} r{'é'}alis{'é'}s. </>
+                  <>{formatNumber(c.nb_dpe_total)} energy performance assessments have been completed. </>
                 )}
                 {c.nb_maprimerenov_annuel != null && c.nb_maprimerenov_annuel > 0 && (
-                  <>{formatNumber(c.nb_maprimerenov_annuel)} dossiers MaPrimeR{'é'}nov{"'"} ont {'é'}t{'é'} d{'é'}pos{'é'}s, t{'é'}moignant d{"'"}une demande forte en r{'é'}novation {'é'}nerg{'é'}tique.</>
+                  <>{formatNumber(c.nb_maprimerenov_annuel)} energy efficiency applications have been filed, reflecting strong demand for renovation services.</>
                 )}
               </p>
             </InsightCard>
@@ -123,25 +123,25 @@ export default function LocalDataInsights({
           {hasClimat && (
             <InsightCard
               icon={<CloudRain className="w-5 h-5 text-sky-600" />}
-              title="Climat & saisonnalité"
+              title="Climate & seasonality"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
                 {c.jours_gel_annuels != null && c.precipitation_annuelle != null && (
-                  <>Avec {c.jours_gel_annuels} jours de gel par an et {formatNumber(c.precipitation_annuelle)}{' '}mm de pr{'é'}cipitations, </>
+                  <>With {c.jours_gel_annuels} frost days per year and {formatNumber(c.precipitation_annuelle)} mm of precipitation, </>
                 )}
                 {c.jours_gel_annuels != null && c.precipitation_annuelle == null && (
-                  <>Avec {c.jours_gel_annuels} jours de gel par an, </>
+                  <>With {c.jours_gel_annuels} frost days per year, </>
                 )}
                 {c.jours_gel_annuels == null && c.precipitation_annuelle != null && (
-                  <>Avec {formatNumber(c.precipitation_annuelle)}{' '}mm de pr{'é'}cipitations annuelles, </>
+                  <>With {formatNumber(c.precipitation_annuelle)} mm of annual precipitation, </>
                 )}
                 {c.mois_travaux_ext_debut && c.mois_travaux_ext_fin ? (
-                  <>les travaux ext{'é'}rieurs sont optimaux de {monthName(c.mois_travaux_ext_debut)} {'à'} {monthName(c.mois_travaux_ext_fin)}. </>
+                  <>outdoor work is optimal from {monthName(c.mois_travaux_ext_debut)} to {monthName(c.mois_travaux_ext_fin)}. </>
                 ) : (
-                  <>les conditions climatiques influencent le calendrier des travaux. </>
+                  <>weather conditions influence the project schedule. </>
                 )}
                 {c.temperature_moyenne_hiver != null && c.temperature_moyenne_ete != null && (
-                  <>Les temp{'é'}ratures moyennes varient de {c.temperature_moyenne_hiver}{' '}{'°'}C en hiver {'à'} {c.temperature_moyenne_ete}{' '}{'°'}C en {'é'}t{'é'}, un param{'è'}tre cl{'é'} pour l{"'"}isolation et le chauffage.</>
+                  <>Average temperatures range from {c.temperature_moyenne_hiver}°C in winter to {c.temperature_moyenne_ete}°C in summer, a key factor for insulation and heating.</>
                 )}
               </p>
             </InsightCard>
@@ -151,19 +151,19 @@ export default function LocalDataInsights({
           {hasSocio && (
             <InsightCard
               icon={<Users className="w-5 h-5 text-purple-600" />}
-              title="Contexte socio-économique"
+              title="Socioeconomic context"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
-                Le revenu m{'é'}dian {'à'} {villeName} est de {formatEuro(c.revenu_median!)}/an.{' '}
+                The median income in {villeName} is {formatEuro(c.revenu_median!)}/year.{' '}
                 {c.revenu_median! < 22000 ? (
-                  <>Ce niveau de revenu permet {'à'} de nombreux m{'é'}nages de b{'é'}n{'é'}ficier de MaPrimeR{'é'}nov{"'"} {'à'} taux major{'é'} (cat{'é'}gorie bleu ou jaune), r{'é'}duisant significativement le co{'û'}t des travaux pour {gentile}.</>
+                  <>This income level means many households may qualify for legal aid or pro bono services, significantly reducing legal costs for {gentile}.</>
                 ) : c.revenu_median! < 30000 ? (
-                  <>Une partie des m{'é'}nages peut pr{'é'}tendre aux aides MaPrimeR{'é'}nov{"'"} (cat{'é'}gorie jaune ou violet), facilitant le financement des travaux de r{'é'}novation pour {gentile}.</>
+                  <>Some households may qualify for reduced-fee legal services, making it easier to afford legal representation for {gentile}.</>
                 ) : (
-                  <>Avec un pouvoir d{"'"}achat {'é'}lev{'é'}, {gentile} investissent r{'é'}guli{'è'}rement dans des travaux de qualit{'é'} et de r{'é'}novation haut de gamme.</>
+                  <>With higher purchasing power, {gentile} regularly invest in quality legal services and comprehensive representation.</>
                 )}
                 {c.prix_m2_moyen && (
-                  <>{' '}Combin{'é'} {'à'} un prix immobilier de {formatEuro(c.prix_m2_moyen)}/m{'²'}, la r{'é'}novation reste un investissement rentable.</>
+                  <> Combined with real estate prices of {formatEuro(c.prix_m2_moyen)}/sq ft, property-related legal services remain in high demand.</>
                 )}
               </p>
             </InsightCard>

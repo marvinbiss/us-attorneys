@@ -1,6 +1,6 @@
 /**
- * Artisan Registration API - ServicesArtisans
- * Handles artisan registration applications
+ * Attorney Registration API - US Attorneys
+ * Handles attorney registration applications
  */
 
 import { NextResponse } from 'next/server'
@@ -23,19 +23,19 @@ const getResend = () => getResendClient()
 
 const artisanSchema = z.object({
   // Step 1 - Company
-  entreprise: z.string().min(2, 'Le nom d\'entreprise est requis'),
-  siret: z.string().min(14, 'SIRET invalide').max(17),
-  metier: z.string().min(1, 'Le métier est requis'),
+  entreprise: z.string().min(2, 'Business name is required'),
+  siret: z.string().min(14, 'Invalid SIRET').max(17),
+  metier: z.string().min(1, 'Practice area is required'),
   autreMetier: z.string().optional(),
   // Step 2 - Contact
-  nom: z.string().min(2, 'Le nom est requis'),
-  prenom: z.string().min(2, 'Le prénom est requis'),
-  email: z.string().email('Email invalide'),
-  telephone: z.string().min(10, 'Téléphone invalide'),
+  nom: z.string().min(2, 'Name is required'),
+  prenom: z.string().min(2, 'First name is required'),
+  email: z.string().email('Invalid email'),
+  telephone: z.string().min(10, 'Invalid phone number'),
   // Step 3 - Location
-  adresse: z.string().min(5, 'L\'adresse est requise'),
-  codePostal: z.string().min(5, 'Code postal invalide'),
-  ville: z.string().min(2, 'La ville est requise'),
+  adresse: z.string().min(5, 'Address is required'),
+  codePostal: z.string().min(5, 'Invalid postal code'),
+  ville: z.string().min(2, 'City is required'),
   rayonIntervention: z.string(),
   // Step 4 - Description
   description: z.string().optional(),
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const validation = artisanSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Donnees invalides', details: validation.error.flatten() },
+        { error: 'Invalid data', details: validation.error.flatten() },
         { status: 400 }
       )
     }
@@ -64,19 +64,19 @@ export async function POST(request: Request) {
       getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: data.email,
-        subject: 'Votre inscription sur ServicesArtisans - Confirmation',
+        subject: 'Votre inscription sur US Attorneys - Confirmation',
         html: `
           <h2>Bonjour ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')},</h2>
-          <p>Nous avons bien reçu votre demande d'inscription en tant qu'artisan sur ServicesArtisans.</p>
-          <p><strong>Récapitulatif de votre inscription :</strong></p>
+          <p>We have received your registration request as an attorney on US Attorneys.</p>
+          <p><strong>Registration summary:</strong></p>
           <ul>
             <li><strong>Entreprise :</strong> ${escapeHtml(data.entreprise ?? '')}</li>
             <li><strong>SIRET :</strong> ${escapeHtml(data.siret ?? '')}</li>
-            <li><strong>Métier :</strong> ${escapeHtml(metierFinal ?? '')}</li>
+            <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
             <li><strong>Zone d'intervention :</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
           </ul>
-          <p>Notre équipe va vérifier vos informations et vous recevrez une réponse sous 24-48 heures.</p>
-          <p>À bientôt sur ServicesArtisans !</p>
+          <p>Our team will verify your information and you will receive a response within 24-48 hours.</p>
+          <p>See you on US Attorneys!</p>
           <hr />
           <p style="color: #666; font-size: 12px;">
             <a href="https://us-attorneys.com">us-attorneys.com</a>
@@ -85,33 +85,33 @@ export async function POST(request: Request) {
       }),
       getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
-        to: 'artisans@us-attorneys.com',
-        subject: `[Nouvelle inscription] ${escapeHtml(data.entreprise ?? '')} - ${escapeHtml(metierFinal ?? '')}`,
+        to: 'attorneys@us-attorneys.com',
+        subject: `[New registration] ${escapeHtml(data.entreprise ?? '')} - ${escapeHtml(metierFinal ?? '')}`,
         html: `
-          <h2>Nouvelle demande d'inscription artisan</h2>
+          <h2>New attorney registration request</h2>
           <h3>Entreprise</h3>
           <ul>
             <li><strong>Nom :</strong> ${escapeHtml(data.entreprise ?? '')}</li>
             <li><strong>SIRET :</strong> ${escapeHtml(data.siret ?? '')}</li>
-            <li><strong>Métier :</strong> ${escapeHtml(metierFinal ?? '')}</li>
+            <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
           </ul>
           <h3>Contact</h3>
           <ul>
             <li><strong>Nom :</strong> ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')}</li>
             <li><strong>Email :</strong> ${escapeHtml(data.email ?? '')}</li>
-            <li><strong>Téléphone :</strong> ${escapeHtml(data.telephone ?? '')}</li>
+            <li><strong>Phone:</strong> ${escapeHtml(data.telephone ?? '')}</li>
           </ul>
           <h3>Localisation</h3>
           <ul>
             <li><strong>Adresse :</strong> ${escapeHtml(data.adresse ?? '')}</li>
-            <li><strong>City :</strong> ${escapeHtml(data.codePostal ?? '')} ${escapeHtml(data.ville ?? '')}</li>
+            <li><strong>City:</strong> ${escapeHtml(data.codePostal ?? '')} ${escapeHtml(data.ville ?? '')}</li>
             <li><strong>Rayon d'intervention :</strong> ${escapeHtml(data.rayonIntervention ?? '')} km</li>
           </ul>
           ${data.description ? `<h3>Description</h3><p>${escapeHtml(data.description)}</p>` : ''}
-          ${data.experience ? `<p><strong>Expérience :</strong> ${escapeHtml(data.experience)}</p>` : ''}
+          ${data.experience ? `<p><strong>Experience:</strong> ${escapeHtml(data.experience)}</p>` : ''}
           ${data.certifications ? `<p><strong>Certifications :</strong> ${escapeHtml(data.certifications)}</p>` : ''}
           <hr />
-          <p><a href="https://us-attorneys.com/admin">Accéder au dashboard admin</a></p>
+          <p><a href="https://us-attorneys.com/admin">Access admin dashboard</a></p>
         `,
       }),
     ])
@@ -125,12 +125,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Inscription enregistrée avec succès',
+      message: 'Registration recorded successfully',
     })
   } catch (error) {
-    logger.error('Artisan registration API error', error)
+    logger.error('Attorney registration API error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

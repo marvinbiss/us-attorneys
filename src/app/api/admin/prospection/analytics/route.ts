@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const parsed = querySchema.safeParse(rawParams)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres de date invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid date parameters', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -46,6 +46,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Analytics error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

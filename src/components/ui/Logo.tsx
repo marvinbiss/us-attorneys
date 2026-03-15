@@ -87,7 +87,7 @@ export default function Logo({
 
   const LogoText = () => (
     <span className={clsx('font-heading font-extrabold tracking-tight', textSize, textColor)}>
-      Services<span className="text-blue-600">Artisans</span>
+      US<span className="text-blue-600">Attorneys</span>
     </span>
   )
 
@@ -113,7 +113,7 @@ export default function Logo({
 export function Tagline({ className }: { className?: string }) {
   return (
     <p className={clsx('text-gray-600 dark:text-gray-400', className)}>
-      Trouvez des artisans qualifiés près de chez vous
+      Find qualified attorneys near you
     </p>
   )
 }

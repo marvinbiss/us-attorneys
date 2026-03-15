@@ -83,25 +83,25 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
     const newErrors: Partial<Record<keyof FormData, string>> = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Votre nom est requis'
+      newErrors.name = 'Your name is required'
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Votre email est requis'
+      newErrors.email = 'Your email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email invalide'
+      newErrors.email = 'Invalid email'
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Votre téléphone est requis'
+      newErrors.phone = 'Your phone number is required'
     } else if (!/^(?:\+33|0)[1-9](?:[0-9]{8})$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Numéro de téléphone invalide'
+      newErrors.phone = 'Invalid phone number'
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = 'Décrivez votre besoin'
+      newErrors.description = 'Describe your needs'
     } else if (formData.description.trim().length < 10) {
-      newErrors.description = 'Description trop courte (min 10 caractères)'
+      newErrors.description = 'Description too short (min 10 characters)'
     }
 
     setErrors(newErrors)
@@ -150,10 +150,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
           onClose()
         }, 5000)
       } else {
-        setServerError(result.error || 'Erreur lors de l\'envoi')
+        setServerError(result.error || 'Error sending request')
       }
     } catch {
-      setServerError('Erreur de connexion. Réessayez.')
+      setServerError('Connection error. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -192,9 +192,9 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
               <div>
-                <h2 id="quote-modal-title" className="text-xl font-bold text-gray-900">Demande de devis</h2>
+                <h2 id="quote-modal-title" className="text-xl font-bold text-gray-900">Request a Consultation</h2>
                 <p id="quote-modal-description" className="text-sm text-gray-500">
-                  Envoyer à {displayName}
+                  Send to {displayName}
                 </p>
               </div>
               <motion.button
@@ -202,7 +202,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
                 className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
-                aria-label="Fermer le formulaire"
+                aria-label="Close form"
               >
                 <X className="w-5 h-5 text-gray-500" aria-hidden="true" />
               </motion.button>
@@ -228,10 +228,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     <CheckCircle className="w-8 h-8 text-clay-500" />
                   </motion.div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Demande envoyée !
+                    Request sent!
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    {displayName} vous répondra dans les meilleurs délais.
+                    {displayName} will respond as soon as possible.
                   </p>
                   <button
                     type="button"
@@ -242,7 +242,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     }}
                     className="px-6 py-2.5 rounded-xl border-2 border-gray-200 text-slate-700 font-medium hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
                   >
-                    Fermer
+                    Close
                   </button>
                 </motion.div>
               ) : (
@@ -256,7 +256,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Name */}
                   <div>
                     <label htmlFor="quote-name" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Votre nom <span aria-hidden="true">*</span>
+                      Your name <span aria-hidden="true">*</span>
                       <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
@@ -266,7 +266,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         type="text"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
-                        placeholder="Jean Dupont"
+                        placeholder="John Smith"
                         aria-required="true"
                         aria-invalid={!!errors.name}
                         aria-describedby={errors.name ? 'quote-name-error' : undefined}
@@ -283,7 +283,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Email */}
                   <div>
                     <label htmlFor="quote-email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Votre email <span aria-hidden="true">*</span>
+                      Your email <span aria-hidden="true">*</span>
                       <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
@@ -293,7 +293,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleChange('email', e.target.value)}
-                        placeholder="jean@email.com"
+                        placeholder="john@email.com"
                         aria-required="true"
                         aria-invalid={!!errors.email}
                         aria-describedby={errors.email ? 'quote-email-error' : undefined}
@@ -310,7 +310,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Phone */}
                   <div>
                     <label htmlFor="quote-phone" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Votre telephone <span aria-hidden="true">*</span>
+                      Your phone <span aria-hidden="true">*</span>
                       <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
@@ -320,7 +320,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => handleChange('phone', e.target.value)}
-                        placeholder="06 12 34 56 78"
+                        placeholder="(555) 123-4567"
                         aria-required="true"
                         aria-invalid={!!errors.phone}
                         aria-describedby={errors.phone ? 'quote-phone-error' : undefined}
@@ -337,13 +337,13 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Urgency */}
                   <fieldset>
                     <legend className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Délai souhaité
+                      Desired timeline
                     </legend>
-                    <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Délai souhaité">
+                    <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Desired timeline">
                       {[
                         { value: 'urgent', label: 'Urgent', sublabel: '< 48h' },
-                        { value: 'normal', label: 'Normal', sublabel: '1-2 sem' },
-                        { value: 'flexible', label: 'Flexible', sublabel: 'Pas pressé' },
+                        { value: 'normal', label: 'Normal', sublabel: '1-2 weeks' },
+                        { value: 'flexible', label: 'Flexible', sublabel: 'No rush' },
                       ].map((option) => (
                         <button
                           key={option.value}
@@ -367,7 +367,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Description */}
                   <div>
                     <label htmlFor="quote-description" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Décrivez votre besoin <span aria-hidden="true">*</span>
+                      Describe your needs <span aria-hidden="true">*</span>
                       <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
@@ -376,7 +376,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         id="quote-description"
                         value={formData.description}
                         onChange={(e) => handleChange('description', e.target.value)}
-                        placeholder="Décrivez les travaux souhaités, le contexte, les contraintes éventuelles..."
+                        placeholder="Describe your legal matter, context, and any specific requirements..."
                         rows={4}
                         aria-required="true"
                         aria-invalid={!!errors.description}
@@ -390,7 +390,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                       <p id="quote-description-error" className="mt-1 text-sm text-red-600" role="alert">{errors.description}</p>
                     )}
                     <p id="quote-description-hint" className="mt-1 text-xs text-gray-500">
-                      {formData.description.length}/500 caractères
+                      {formData.description.length}/500 characters
                     </p>
                   </div>
 
@@ -406,20 +406,20 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                        <span>Envoi en cours...</span>
+                        <span>Sending...</span>
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5" aria-hidden="true" />
-                        <span>Envoyer ma demande</span>
+                        <span>Send my request</span>
                       </>
                     )}
                   </motion.button>
 
                   {/* Privacy note */}
                   <p className="text-xs text-gray-500 text-center">
-                    En envoyant ce formulaire, vous acceptez d&apos;être contacté par {displayName}.
-                    Vos données sont protégées conformément à notre politique de confidentialité.
+                    By submitting this form, you agree to be contacted by {displayName}.
+                    Your data is protected in accordance with our privacy policy.
                   </p>
                 </form>
               )}

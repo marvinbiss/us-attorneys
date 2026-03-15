@@ -120,7 +120,7 @@ export async function searchByTermOpen(
     params.set('departement', departement)
   }
 
-  // Filtrer sur les activites du batiment (codes NAF 41, 42, 43)
+  // Filter sur les activites du batiment (codes NAF 41, 42, 43)
   params.set('section_activite_principale', 'F') // Section F = Construction
 
   const url = `${SIRENE_OPEN_CONFIG.baseUrl}/search?${params.toString()}`

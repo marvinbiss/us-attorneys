@@ -19,7 +19,7 @@ interface ProactiveChatPromptProps {
 export default function ProactiveChatPrompt({
   specialtySlug,
   citySlug,
-  message = 'Besoin d\'aide pour choisir un artisan ? Nous pouvons vous orienter gratuitement.',
+  message = 'Need help choosing an attorney? We can guide you for free.',
 }: ProactiveChatPromptProps) {
   const [visible, setVisible] = useState(false)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -67,7 +67,7 @@ export default function ProactiveChatPrompt({
         <button
           onClick={() => setVisible(false)}
           className="absolute top-2 right-2 p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          aria-label="Fermer"
+          aria-label="Close"
         >
           <X className="w-3.5 h-3.5" />
         </button>
@@ -84,13 +84,13 @@ export default function ProactiveChatPrompt({
                 onClick={() => setVisible(false)}
                 className="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
               >
-                Devis gratuit
+                Free consultation
               </Link>
               <button
                 onClick={() => setVisible(false)}
                 className="text-xs font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                Non merci
+                No thanks
               </button>
             </div>
           </div>

@@ -13,16 +13,16 @@ interface CriterionResult {
 
 function computeProfileStrength(artisan: LegacyArtisan): { score: number; criteria: CriterionResult[] } {
   const criteria: CriterionResult[] = [
-    { label: 'Nom', met: !!artisan.business_name, points: 10 },
+    { label: 'Name', met: !!artisan.business_name, points: 10 },
     { label: 'Description', met: !!artisan.description && artisan.description.length > 50, points: 15 },
-    { label: 'Téléphone', met: !!artisan.phone, points: 10 },
+    { label: 'Phone', met: !!artisan.phone, points: 10 },
     { label: 'Email', met: !!artisan.email, points: 5 },
-    { label: 'Vérifié', met: !!artisan.is_verified, points: 15 },
+    { label: 'Verified', met: !!artisan.is_verified, points: 15 },
     { label: 'Services', met: artisan.services.length > 0, points: 10 },
-    { label: 'Tarifs', met: artisan.service_prices.length > 0, points: 10 },
+    { label: 'Fees', met: artisan.service_prices.length > 0, points: 10 },
     { label: 'Portfolio', met: !!(artisan.portfolio && artisan.portfolio.length > 0), points: 10 },
-    { label: 'Avis', met: artisan.average_rating > 0, points: 10 },
-    { label: 'Ancienneté', met: !!artisan.creation_date, points: 5 },
+    { label: 'Reviews', met: artisan.average_rating > 0, points: 10 },
+    { label: 'Experience', met: !!artisan.creation_date, points: 5 },
   ]
 
   const score = criteria.reduce((sum, c) => sum + (c.met ? c.points : 0), 0)
@@ -53,7 +53,7 @@ export function AttorneyProfileStrength({ artisan }: { artisan: LegacyArtisan })
     <div className="bg-[#FFFCF8] rounded-2xl border border-stone-200/60 p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-semibold text-gray-900">Force du profil</span>
+        <span className="text-sm font-semibold text-gray-900">Profile strength</span>
         <span className={`text-sm font-bold ${getTextColor(score)}`}>{score}%</span>
       </div>
 

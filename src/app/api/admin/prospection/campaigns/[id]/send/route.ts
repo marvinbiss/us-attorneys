@@ -18,7 +18,7 @@ export async function POST(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -26,7 +26,7 @@ export async function POST(
     const supabase = createAdminClient()
     const { data: campaign } = await supabase.from('prospection_campaigns').select('id, status').eq('id', id).single()
     if (!campaign) {
-      return NextResponse.json({ success: false, error: { message: 'Campagne introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Campaign not found' } }, { status: 404 })
     }
 
     if (!['draft', 'scheduled'].includes(campaign.status)) {
@@ -39,7 +39,7 @@ export async function POST(
     // Enfiler les messages
     const enqueueResult = await enqueueCampaignMessages(id)
 
-    // Lancer le premier batch (le reste sera traité par cron ou polling)
+    // Launch the first batch (the rest will be processed by cron or polling)
     const batchResult = await processBatch(id, 100)
 
     await logAdminAction(authResult.admin.id, 'campaign.send', 'prospection_campaign', id, {
@@ -58,7 +58,7 @@ export async function POST(
   } catch (error) {
     logger.error('Send campaign error', error as Error)
     return NextResponse.json(
-      { success: false, error: { message: (error as Error).message || 'Erreur serveur' } },
+      { success: false, error: { message: (error as Error).message || 'Server error' } },
       { status: 500 }
     )
   }

@@ -1,6 +1,6 @@
 /**
  * Client Lead Detail API — read-only
- * GET: Fetch single devis_request with quotes + event timeline + stats
+ * GET: Fetch singthe consultation_request with quotes + event timeline + stats
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -11,16 +11,16 @@ import { logger } from '@/lib/logger'
 export const dynamic = 'force-dynamic'
 
 const CLIENT_SAFE_EVENT_LABELS: Record<string, string> = {
-  created: 'Demande créée',
-  dispatched: 'Artisans contactés',
-  viewed: 'Artisan intéressé',
-  quoted: 'Devis reçu',
-  declined: 'Artisan indisponible',
-  accepted: 'Devis accepté',
-  refused: 'Devis refusé',
-  completed: 'Mission terminée',
-  expired: 'Demande expirée',
-  reassigned: 'Nouvel artisan contacté',
+  created: 'Request created',
+  dispatched: 'Attorneys contacted',
+  viewed: 'Attorney interested',
+  quoted: 'Consultation received',
+  declined: 'Attorney unavailable',
+  accepted: 'Consultation accepted',
+  refused: 'Consultation declined',
+  completed: 'Case completed',
+  expired: 'Request expired',
+  reassigned: 'New attorney contacted',
 }
 
 export async function GET(
@@ -33,7 +33,7 @@ export async function GET(
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     // Fetch the devis_request — RLS ensures client_id = auth.uid()
@@ -45,7 +45,7 @@ export async function GET(
       .single()
 
     if (leadError || !lead) {
-      return NextResponse.json({ success: false, error: { message: 'Demande non trouvée' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Request not found' } }, { status: 404 })
     }
 
     // Use admin client for tables restricted by RLS to providers only
@@ -82,7 +82,7 @@ export async function GET(
       logger.error('Client lead detail events error:', eventsError)
     }
 
-    // Fetch lead_assignments stats — how many artisans have seen this lead
+    // Fetch lead_assignments stats — how many attorneys have seen this lead
     const { data: assignments, error: assignmentsError } = await adminClient
       .from('lead_assignments')
       .select('id, status')
@@ -149,7 +149,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Client lead detail GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 

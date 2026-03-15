@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     const result = quotesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Fetch lead_assignments for these demandes to show which artisan(s) received each request
+    // Fetch lead_assignments for these requests to show which attorney(s) received each request
     const demandeIds = (demandes || []).map((d) => d.id)
     let assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; attorney_id: string }>> = {}
 
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
             status: a.status,
             assigned_at: a.assigned_at,
             attorney_id: a.attorney_id,
-            provider_name: provider?.name || 'Inconnu',
+            provider_name: provider?.name || 'Unknown',
           }
           if (!assignmentsByLead[a.lead_id]) {
             assignmentsByLead[a.lead_id] = []
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin devis requests list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -141,7 +141,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!id || !isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -163,7 +163,7 @@ export async function DELETE(request: NextRequest) {
     if (error) {
       logger.error('Devis request delete error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la suppression' } },
+        { success: false, error: { message: 'Error during deletion' } },
         { status: 500 }
       )
     }
@@ -174,7 +174,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     logger.error('Devis request delete error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

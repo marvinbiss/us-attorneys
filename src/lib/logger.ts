@@ -1,5 +1,5 @@
 /**
- * Professional Logger - ServicesArtisans
+ * Professional Logger - US Attorneys
  * Centralized logging with environment-aware output
  */
 

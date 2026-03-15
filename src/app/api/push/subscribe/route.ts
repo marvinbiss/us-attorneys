@@ -1,5 +1,5 @@
 /**
- * Push Subscription API - ServicesArtisans
+ * Push Subscription API - US Attorneys
  *
  * NOTE: push_subscriptions table was dropped in migration 100.
  * All endpoints return 503 until the table is re-created.

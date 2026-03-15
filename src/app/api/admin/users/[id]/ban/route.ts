@@ -13,7 +13,7 @@ const banUserSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// POST - Bannir ou débannir un utilisateur
+// POST - Ban or unban a user
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -27,7 +27,7 @@ export async function POST(
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -37,7 +37,7 @@ export async function POST(
     const result = banUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -59,7 +59,7 @@ export async function POST(
       )
     }
 
-    // Si c'est un artisan, désactiver/réactiver également le provider
+    // If it's an attorney, also deactivate/reactivate the provider
     await supabase
       .from('attorneys')
       .update({
@@ -79,12 +79,12 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: isBanning ? 'Utilisateur banni' : 'Utilisateur débanni',
+      message: isBanning ? 'User banned' : 'User unbanned',
     })
   } catch (error) {
     logger.error('Admin user ban error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

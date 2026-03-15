@@ -267,7 +267,7 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               animate="visible"
               className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
             >
-              Trouvez l&#39;artisan idéal près de chez vous. Comparez les profils et obtenez des devis gratuits.
+              Find the ideal attorney near you. Compare profiles and get free consultations.
             </motion.p>
 
             {/* ── SEARCH FORM ─────────────────────────────────── */}
@@ -283,7 +283,7 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               variants={itemVariants}
               className="flex flex-wrap items-center justify-center gap-2.5 mb-14"
             >
-              <span className="text-sm text-white/50 mr-1">Populaire :</span>
+              <span className="text-sm text-white/50 mr-1">Popular:</span>
               {chipServices.map((svc) => (
                 <Link
                   key={svc.slug}
@@ -301,10 +301,10 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto"
             >
               {[
-                { value: attorneyCount, suffix: '', label: 'artisans' },
+                { value: attorneyCount, suffix: '', label: 'attorneys' },
                 { value: cities.length, suffix: '', label: 'cities' },
-                { value: states.length, suffix: '', label: 'départements' },
-                { value: services.length, suffix: '', label: 'métiers' },
+                { value: states.length, suffix: '', label: 'states' },
+                { value: services.length, suffix: '', label: 'practice areas' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-3xl md:text-4xl font-extrabold text-white tracking-tight font-heading">
@@ -405,10 +405,10 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  100% gratuit, sans engagement
+                  100% free, no obligation
                 </div>
                 <div className="text-xs text-slate-500">
-                  Recherche et devis offerts
+                  Search and consultations included
                 </div>
               </div>
             </div>

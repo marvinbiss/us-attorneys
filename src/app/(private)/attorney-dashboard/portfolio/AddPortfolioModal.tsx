@@ -75,7 +75,7 @@ export default function AddPortfolioModal({
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de l\'upload')
+        throw new Error(data.error || 'Error uploading file')
       }
 
       const data = await response.json()
@@ -95,7 +95,7 @@ export default function AddPortfolioModal({
       }
     } catch (err) {
       console.error('Upload error:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'upload')
+      setError(err instanceof Error ? err.message : 'Error uploading file')
     } finally {
       setUploading(false)
     }
@@ -103,17 +103,17 @@ export default function AddPortfolioModal({
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      setError('Le titre est requis')
+      setError('Title is required')
       return
     }
 
     if (mediaType === 'before_after') {
       if (!beforeFile || !afterFile) {
-        setError('Les images avant et après sont requises')
+        setError('Before and after images are required')
         return
       }
     } else if (!mainFile) {
-      setError('Le fichier est requis')
+      setError('File is required')
       return
     }
 
@@ -144,14 +144,14 @@ export default function AddPortfolioModal({
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de la sauvegarde')
+        throw new Error(data.error || 'Error saving')
       }
 
       const data = await response.json()
       onCreated(data.item)
     } catch (err) {
       console.error('Save error:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde')
+      setError(err instanceof Error ? err.message : 'Error saving')
     } finally {
       setSaving(false)
     }
@@ -175,7 +175,7 @@ export default function AddPortfolioModal({
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <h2 className="text-xl font-semibold text-gray-900">
-            {isEditing ? 'Modifier' : 'Ajouter une réalisation'}
+            {isEditing ? 'Edit' : 'Add Portfolio Item'}
           </h2>
           <button
             onClick={onClose}
@@ -198,7 +198,7 @@ export default function AddPortfolioModal({
           {step === 'type' && (
             <div className="space-y-4">
               <p className="text-gray-600 mb-6">
-                Quel type de contenu souhaitez-vous ajouter ?
+                What type of content would you like to add?
               </p>
 
               <button
@@ -214,7 +214,7 @@ export default function AddPortfolioModal({
                 <div>
                   <h3 className="font-semibold text-gray-900">Image</h3>
                   <p className="text-sm text-gray-500">
-                    Photo de vos réalisations
+                    Photo of your work
                   </p>
                 </div>
               </button>
@@ -230,9 +230,9 @@ export default function AddPortfolioModal({
                   <Video className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Vidéo</h3>
+                  <h3 className="font-semibold text-gray-900">Video</h3>
                   <p className="text-sm text-gray-500">
-                    Présentation vidéo de vos travaux
+                    Video presentation of your work
                   </p>
                 </div>
               </button>
@@ -248,9 +248,9 @@ export default function AddPortfolioModal({
                   <Layers className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Avant / Après</h3>
+                  <h3 className="font-semibold text-gray-900">Before / After</h3>
                   <p className="text-sm text-gray-500">
-                    Comparez l'avant et l'après de vos travaux
+                    Compare before and after your work
                   </p>
                 </div>
               </button>
@@ -264,13 +264,13 @@ export default function AddPortfolioModal({
                 <>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Image Avant
+                      Before Image
                     </label>
                     {beforeFile ? (
                       <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
                         <Image
                           src={beforeFile.url}
-                          alt="Avant"
+                          alt="Before"
                           fill
                           className="object-cover"
                           unoptimized
@@ -294,13 +294,13 @@ export default function AddPortfolioModal({
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Image Après
+                      After Image
                     </label>
                     {afterFile ? (
                       <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
                         <Image
                           src={afterFile.url}
-                          alt="Après"
+                          alt="After"
                           fill
                           className="object-cover"
                           unoptimized
@@ -325,7 +325,7 @@ export default function AddPortfolioModal({
               ) : (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {mediaType === 'video' ? 'Vidéo' : 'Image'}
+                    {mediaType === 'video' ? 'Video' : 'Image'}
                   </label>
                   {mainFile ? (
                     <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
@@ -338,7 +338,7 @@ export default function AddPortfolioModal({
                       ) : (
                         <Image
                           src={mainFile.url}
-                          alt="Aperçu"
+                          alt="Preview"
                           fill
                           className="object-cover"
                           unoptimized
@@ -365,13 +365,13 @@ export default function AddPortfolioModal({
               {uploading && (
                 <div className="flex items-center justify-center gap-2 text-blue-600">
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Upload en cours...</span>
+                  <span>Uploading...</span>
                 </div>
               )}
 
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep('type')}>
-                  Retour
+                  Back
                 </Button>
                 <Button
                   variant="primary"
@@ -379,7 +379,7 @@ export default function AddPortfolioModal({
                   disabled={!canProceedToDetails || uploading}
                   className="flex-1"
                 >
-                  Continuer
+                  Continue
                 </Button>
               </div>
             </div>
@@ -390,13 +390,13 @@ export default function AddPortfolioModal({
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Titre *
+                  Title *
                 </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Ex: Rénovation salle de bain"
+                  placeholder="E.g.: Personal Injury Settlement"
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   maxLength={100}
                 />
@@ -409,7 +409,7 @@ export default function AddPortfolioModal({
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Décrivez les travaux réalisés..."
+                  placeholder="Describe the work done..."
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   maxLength={500}
@@ -421,14 +421,14 @@ export default function AddPortfolioModal({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Catégorie
+                  Category
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Sélectionner une catégorie</option>
+                  <option value="">Select a category</option>
                   {PORTFOLIO_CATEGORIES.map((cat) => (
                     <option key={cat.value} value={cat.value}>
                       {cat.label}
@@ -440,7 +440,7 @@ export default function AddPortfolioModal({
               <div className="flex gap-3 pt-4">
                 {!isEditing && (
                   <Button variant="outline" onClick={() => setStep('upload')}>
-                    Retour
+                    Back
                   </Button>
                 )}
                 <Button
@@ -449,7 +449,7 @@ export default function AddPortfolioModal({
                   isLoading={saving}
                   className="flex-1"
                 >
-                  {isEditing ? 'Enregistrer' : 'Ajouter au portfolio'}
+                  {isEditing ? 'Save' : 'Add to Portfolio'}
                 </Button>
               </div>
             </div>

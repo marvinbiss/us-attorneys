@@ -16,14 +16,14 @@ const AVATAR_PHOTOS = [
 ]
 
 const FALLBACK_REVIEWS = [
-  { client_name: 'Jean-Pierre D.', rating: 5, comment: 'Fuite d\'eau un samedi soir. Artisan en 20 min. Bluffant.', created_at: '' },
-  { client_name: 'Camille R.', rating: 5, comment: 'Peintre exceptionnel, salon refait en un week-end.', created_at: '' },
-  { client_name: 'Nicolas P.', rating: 4, comment: 'Maçon très compétent pour la rénovation de façade.', created_at: '' },
-  { client_name: 'Claire M.', rating: 5, comment: 'Serrurier arrivé rapidement, travail propre et efficace.', created_at: '' },
-  { client_name: 'Antoine G.', rating: 5, comment: 'Électricien très sérieux, mise aux normes impeccable.', created_at: '' },
-  { client_name: 'Isabelle F.', rating: 4, comment: 'Carreleur du tonnerre ! Salle de bain transformée.', created_at: '' },
-  { client_name: 'Romain V.', rating: 5, comment: 'Chauffagiste réactif, chaudière réparée en 1h.', created_at: '' },
-  { client_name: 'Lucie B.', rating: 5, comment: 'Menuisier talentueux, mes portes sont magnifiques.', created_at: '' },
+  { client_name: 'James P.', rating: 5, comment: 'Car accident case on a Saturday night. Attorney responded in 20 min. Amazing.', created_at: '' },
+  { client_name: 'Rachel R.', rating: 5, comment: 'Exceptional divorce attorney, everything settled in a week.', created_at: '' },
+  { client_name: 'David K.', rating: 4, comment: 'Very competent real estate attorney for our property dispute.', created_at: '' },
+  { client_name: 'Claire M.', rating: 5, comment: 'Criminal defense attorney arrived quickly, thorough and effective work.', created_at: '' },
+  { client_name: 'Anthony G.', rating: 5, comment: 'Very serious immigration attorney, paperwork handled flawlessly.', created_at: '' },
+  { client_name: 'Isabel F.', rating: 4, comment: 'Outstanding estate planning attorney! Trust and will done perfectly.', created_at: '' },
+  { client_name: 'Robert V.', rating: 5, comment: 'Responsive personal injury attorney, claim resolved in 1 month.', created_at: '' },
+  { client_name: 'Lucy B.', rating: 5, comment: 'Talented employment attorney, my wrongful termination case was a success.', created_at: '' },
 ]
 
 function StarIcon({ filled }: { filled: boolean }) {
@@ -48,7 +48,7 @@ export function ClayReviewsCarousel({ reviews }: Props) {
     <div
       className="relative"
       role="region"
-      aria-label="Avis clients en défilement"
+      aria-label="Client reviews carousel"
       aria-roledescription="carousel"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -77,7 +77,7 @@ export function ClayReviewsCarousel({ reviews }: Props) {
             <div className="flex items-center gap-2">
               <Image
                 src={AVATAR_PHOTOS[idx % AVATAR_PHOTOS.length]}
-                alt={review.client_name || 'Client vérifié'}
+                alt={review.client_name || 'Verified client'}
                 width={36}
                 height={36}
                 sizes="36px"
@@ -86,8 +86,8 @@ export function ClayReviewsCarousel({ reviews }: Props) {
                 style={{ border: '2px solid rgba(255,255,255,.15)' }}
               />
               <div>
-                <p className="text-white text-sm font-medium">{review.client_name || 'Client vérifié'}</p>
-                <p className="text-white/70 text-xs">Client vérifié</p>
+                <p className="text-white text-sm font-medium">{review.client_name || 'Verified client'}</p>
+                <p className="text-white/70 text-xs">Verified client</p>
               </div>
             </div>
           </div>

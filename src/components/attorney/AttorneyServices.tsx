@@ -22,14 +22,14 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
           <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
             <Wrench className="w-4.5 h-4.5 text-clay-400" aria-hidden="true" />
           </div>
-          Services et Tarifs
+          Services and Fees
         </h2>
       </div>
 
       <div className="px-6 pb-6">
         {/* Services tags */}
         {artisan.services.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services propos&#233;s">
+          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services offered">
             {artisan.services.map((service, i) => (
               <span
                 key={i}
@@ -45,9 +45,9 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
 
         {/* Pricing table — only show real prices from the artisan */}
         {artisan.service_prices.length > 0 ? (
-          <div className="space-y-2.5 mt-4" role="list" aria-label="Tarifs des services">
+          <div className="space-y-2.5 mt-4" role="list" aria-label="Service fees">
             {artisan.service_prices[0]?.price?.startsWith('À partir') && (
-              <p className="text-xs text-slate-400 italic mb-3">* Tarifs indicatifs, le prix final d&eacute;pend de la nature exacte de l&apos;intervention. Demandez un devis pour un prix pr&eacute;cis.</p>
+              <p className="text-xs text-slate-400 italic mb-3">* Indicative fees, the final price depends on the exact nature of the consultation. Request a consultation for a precise quote.</p>
             )}
             {artisan.service_prices.map((service, index) => (
               <motion.div
@@ -69,12 +69,12 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
 
                 <div className="flex items-center gap-4 ml-4">
                   {service.duration && (
-                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Durée : ${service.duration}`}>
+                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Duration: ${service.duration}`}>
                       <Clock className="w-4 h-4" aria-hidden="true" />
                       <span>{service.duration}</span>
                     </div>
                   )}
-                  <div className="flex items-center gap-1 text-lg font-bold text-clay-600 whitespace-nowrap bg-clay-50 px-3 py-1 rounded-lg" aria-label={`Prix : ${service.price} euros`}>
+                  <div className="flex items-center gap-1 text-lg font-bold text-clay-600 whitespace-nowrap bg-clay-50 px-3 py-1 rounded-lg" aria-label={`Price: ${service.price}`}>
                     <Euro className="w-4 h-4" aria-hidden="true" />
                     <span>{service.price}</span>
                   </div>
@@ -84,14 +84,14 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
           </div>
         ) : (
           <div className="bg-clay-50 rounded-xl border border-clay-200 p-6 text-center mt-4">
-            <p className="text-slate-700 font-medium mb-2">Tarifs sur devis personnalis&eacute;</p>
-            <p className="text-sm text-slate-500 mb-4">Cet artisan propose des tarifs adapt&eacute;s &agrave; chaque projet. Demandez un devis gratuit pour conna&icirc;tre ses prix.</p>
+            <p className="text-slate-700 font-medium mb-2">Fees upon consultation</p>
+            <p className="text-sm text-slate-500 mb-4">This attorney offers fees tailored to each case. Request a free consultation to learn their rates.</p>
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event('sa:open-estimation'))}
               className="inline-flex items-center gap-2 bg-clay-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-clay-600 transition-colors"
             >
-              Demander un devis gratuit
+              Request a Free Consultation
             </button>
           </div>
         )}

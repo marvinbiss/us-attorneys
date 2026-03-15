@@ -38,13 +38,13 @@ const securityHeaders = {
 }
 
 /**
- * Endpoint public de désinscription RGPD
- * Accessible sans authentification via token signé
+ * Public GDPR unsubscribe endpoint
+ * Accessible without authentication via signed token
  */
 export async function GET(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
   if (!checkRateLimit(ip)) {
-    return new NextResponse('Trop de requêtes. Réessayez plus tard.', {
+    return new NextResponse('Too many requests. Please try again later.', {
       status: 429,
       headers: { 'Retry-After': '60' },
     })
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     const token = request.nextUrl.searchParams.get('token')
 
     if (!token) {
-      return new NextResponse(unsubscribePage('Token manquant', false), {
+      return new NextResponse(unsubscribePage('Missing token', false), {
         status: 400,
         headers: securityHeaders,
       })
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     const payload = verifyUnsubscribeToken(token)
 
     if (!payload) {
-      return new NextResponse(unsubscribePage('Lien invalide ou expiré', false), {
+      return new NextResponse(unsubscribePage('Invalid or expired link', false), {
         status: 400,
         headers: securityHeaders,
       })
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
 
     logger.info('Contact unsubscribed', { contactId: payload.cid, channel: payload.ch })
 
-    return new NextResponse(unsubscribePage('Désinscription confirmée', true), {
+    return new NextResponse(unsubscribePage('Unsubscription confirmed', true), {
       status: 200,
       headers: securityHeaders,
     })
@@ -110,7 +110,7 @@ function unsubscribePage(message: string, success: boolean): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Désinscription - ServicesArtisans</title>
+  <title>Unsubscribe - US Attorneys</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f5f5f5; }
     .card { background: white; border-radius: 12px; padding: 40px; max-width: 400px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -125,7 +125,7 @@ function unsubscribePage(message: string, success: boolean): string {
     <h1>${escapeHtml(message)}</h1>
     <p>${success
       ? 'Vous ne recevrez plus de communications de notre part.'
-      : 'Veuillez réessayer ou contacter support@us-attorneys.com'
+      : 'Please try again or contact support@us-attorneys.com'
     }</p>
   </div>
 </body>

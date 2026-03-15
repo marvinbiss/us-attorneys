@@ -9,22 +9,22 @@ import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
 
 export const metadata: Metadata = {
-  title: 'Questions fréquentes (FAQ)',
-  description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
+  title: 'Frequently Asked Questions (FAQ)',
+  description: 'Find answers to the most frequently asked questions about USAttorneys: registration, consultations, how the attorney directory works.',
   alternates: {
     canonical: `${SITE_URL}/faq`,
   },
   openGraph: {
-    title: 'Questions fréquentes (FAQ)',
-    description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
+    title: 'Frequently Asked Questions (FAQ)',
+    description: 'Find answers to frequently asked questions about USAttorneys.',
     url: `${SITE_URL}/faq`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — FAQ' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Questions fréquentes (FAQ)',
-    description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
+    title: 'Frequently Asked Questions (FAQ)',
+    description: 'Find answers to frequently asked questions about USAttorneys.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 export const revalidate = 86400
 
 const breadcrumbSchema = getBreadcrumbSchema([
-  { name: 'Accueil', url: '/' },
+  { name: 'Home', url: '/' },
   { name: 'FAQ', url: '/faq' },
 ])
 

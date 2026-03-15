@@ -18,12 +18,12 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
     >
       <p className="text-sm font-semibold text-gray-900">
         {context.artisan
-          ? `Envoyer ma demande à ${context.artisan.name}`
-          : 'Recevoir mon estimation personnalisée'}
+          ? `Send my request to ${context.artisan.name}`
+          : 'Receive my personalized estimate'}
       </p>
       <input
         type="text"
-        placeholder="Votre nom (optionnel)"
+        placeholder="Your name (optional)"
         value={lead.leadName}
         onChange={(e) => lead.setLeadName(e.target.value)}
         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
@@ -34,7 +34,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           inputMode="tel"
           autoComplete="tel"
           required
-          placeholder="Votre téléphone *"
+          placeholder="Your phone number *"
           value={lead.leadPhone}
           onChange={(e) => {
             lead.setLeadPhone(e.target.value)
@@ -54,7 +54,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
       </div>
       <input
         type="email"
-        placeholder="Votre email (optionnel)"
+        placeholder="Your email (optional)"
         value={lead.leadEmail}
         onChange={(e) => lead.setLeadEmail(e.target.value)}
         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
@@ -68,19 +68,19 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           className="mt-0.5"
         />
         <span>
-          J&apos;accepte que mes données soient traitées pour recevoir une estimation.{' '}
+          I agree to have my data processed to receive an estimate.{' '}
           <a
             href="/privacy"
             target="_blank"
             className="underline"
           >
-            Politique de confidentialité
+            Privacy Policy
           </a>
         </span>
       </label>
       {lead.leadError && (
         <p className="text-xs text-red-600 text-center">
-          Une erreur est survenue. Veuillez réessayer.
+          An error occurred. Please try again.
         </p>
       )}
       <button
@@ -94,8 +94,8 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           <>
             <ArrowRight className="h-4 w-4" />
             {context.artisan
-              ? `Envoyer à ${context.artisan.name}`
-              : 'Être mis en relation'}
+              ? `Send to ${context.artisan.name}`
+              : 'Get connected'}
           </>
         )}
       </button>

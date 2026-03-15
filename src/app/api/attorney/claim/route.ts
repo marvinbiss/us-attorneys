@@ -1,5 +1,5 @@
 /**
- * Artisan Claim API
+ * Attorney Claim API
  * POST: Submit a claim request for a provider page (SIRET verification + admin review)
  * Auth is OPTIONAL — anonymous claims are supported (account created on admin approval)
  */
@@ -14,12 +14,12 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 const claimSchema = z.object({
-  attorneyId: z.string().uuid('ID artisan invalide'),
+  attorneyId: z.string().uuid('Invalid attorney ID'),
   siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir exactement 14 chiffres'),
-  fullName: z.string().min(2, 'Le nom est requis (min. 2 caractères)'),
-  email: z.string().email('Email invalide'),
-  phone: z.string().min(10, 'Numéro de téléphone invalide'),
-  position: z.string().min(2, 'Le poste est requis'),
+  fullName: z.string().min(2, 'Name is required (min. 2 characters)'),
+  email: z.string().email('Invalid email'),
+  phone: z.string().min(10, 'Invalid phone number'),
+  position: z.string().min(2, 'Position is required'),
 })
 
 export async function POST(request: Request) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const rl = await checkRateLimit(`claim:${ip}`, { window: 300_000, max: 20 })
     if (!rl.allowed) {
       return NextResponse.json(
-        { error: 'Trop de demandes. Réessayez dans quelques minutes.' },
+        { error: 'Too many requests. Please try again in a few minutes.' },
         { status: 429 }
       )
     }
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       body = await request.json()
     } catch {
       return NextResponse.json(
-        { error: 'Corps de requête invalide' },
+        { error: 'Invalid request body' },
         { status: 400 }
       )
     }
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     const validation = claimSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: validation.error.flatten() },
+        { error: 'Invalid data', details: validation.error.flatten() },
         { status: 400 }
       )
     }
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
 
       if (existingProvider) {
         return NextResponse.json(
-          { error: 'Vous avez déjà une fiche artisan associée à votre compte' },
+          { error: 'You already have an attorney listing associated with your account' },
           { status: 409 }
         )
       }
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
 
       if (pendingClaims && pendingClaims.length > 0) {
         return NextResponse.json(
-          { error: 'Vous avez déjà une demande de revendication en cours de validation' },
+          { error: 'You already have a pending claim request' },
           { status: 409 }
         )
       }
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
 
       if (emailPendingClaims && emailPendingClaims.length > 0) {
         return NextResponse.json(
-          { error: 'Une demande de revendication est déjà en cours avec cet email' },
+          { error: 'A claim request is already in progress with this email' },
           { status: 409 }
         )
       }
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
 
     if (providerPendingClaims && providerPendingClaims.length > 0) {
       return NextResponse.json(
-        { error: 'Une demande de revendication est déjà en cours pour cette fiche' },
+        { error: 'A claim request is already in progress for this listing' },
         { status: 409 }
       )
     }
@@ -134,21 +134,21 @@ export async function POST(request: Request) {
 
     if (attorneyError || !provider) {
       return NextResponse.json(
-        { error: 'Fiche artisan introuvable' },
+        { error: 'Fiche attorney not found' },
         { status: 404 }
       )
     }
 
     if (provider.user_id) {
       return NextResponse.json(
-        { error: 'Cette fiche a déjà été revendiquée par un autre utilisateur' },
+        { error: 'This listing has already been claimed by another user' },
         { status: 409 }
       )
     }
 
     if (!provider.siret) {
       return NextResponse.json(
-        { error: 'Cette fiche ne contient pas de numéro SIRET. Contactez-nous à support@us-attorneys.com pour revendiquer cette fiche manuellement.' },
+        { error: 'This listing does not have a bar number. Contact us at support@us-attorneys.com to claim this listing manually.' },
         { status: 400 }
       )
     }
@@ -168,7 +168,7 @@ export async function POST(request: Request) {
       })
 
       return NextResponse.json(
-        { error: 'Le numéro SIRET ne correspond pas à celui enregistré pour cet artisan' },
+        { error: 'The bar number does not match the one registered for this attorney' },
         { status: 403 }
       )
     }
@@ -190,13 +190,13 @@ export async function POST(request: Request) {
     if (insertError) {
       if (insertError.code === '23505') {
         return NextResponse.json(
-          { error: 'Vous avez déjà soumis une demande pour cette fiche' },
+          { error: 'You have already submitted a claim for this listing' },
           { status: 409 }
         )
       }
       logger.error('Claim insert error', { error: insertError, userId: user?.id, attorneyId })
       return NextResponse.json(
-        { error: 'Erreur lors de la soumission de la demande', debug: { message: insertError.message, code: insertError.code, details: insertError.details } },
+        { error: 'Error submitting the claim request', debug: { message: insertError.message, code: insertError.code, details: insertError.details } },
         { status: 500 }
       )
     }
@@ -221,12 +221,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Votre demande de revendication a été soumise. Un administrateur la validera sous 24 à 48 heures.',
+      message: 'Your claim request has been submitted. An administrator will review it within 24 to 48 hours.',
     })
   } catch (err) {
     logger.error('Claim API unexpected error', { error: err })
     return NextResponse.json(
-      { error: 'Erreur serveur', debug: String(err) },
+      { error: 'Server error', debug: String(err) },
       { status: 500 }
     )
   }

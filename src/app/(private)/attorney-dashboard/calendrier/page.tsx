@@ -81,7 +81,7 @@ const formatDateLocal = (d: Date): string => {
   return `${y}-${m}-${day}`
 }
 
-// Génération des jours du mois
+// Generate days of the month
 function getDaysInMonth(year: number, month: number) {
   const date = new Date(year, month, 1)
   const days = []
@@ -92,7 +92,7 @@ function getDaysInMonth(year: number, month: number) {
   return days
 }
 
-// Composant pour l'affichage des créneaux horaires par défaut
+// Default time slots
 const defaultSlots = [
   { start: '08:00', end: '10:00' },
   { start: '10:00', end: '12:00' },
@@ -124,7 +124,7 @@ export default function CalendrierPage() {
   const [settings, setSettings] = useState({
     emailNotifications: true,
     smsReminders: true,
-    serviceRadius: 'Paris et petite couronne (20km)',
+    serviceRadius: 'Local area (20 miles)',
   })
 
   const [settingsSaved, setSettingsSaved] = useState(false)
@@ -202,7 +202,7 @@ export default function CalendrierPage() {
       )
 
       if (!response.ok) {
-        throw new Error('Erreur lors du chargement du calendrier')
+        throw new Error('Error loading calendar')
       }
 
       const data = await response.json()
@@ -240,7 +240,7 @@ export default function CalendrierPage() {
       setSchedule(scheduleArray)
     } catch (err) {
       console.error('Error fetching schedule:', err)
-      setError('Impossible de charger le calendrier')
+      setError('Unable to load calendar')
     } finally {
       setIsLoadingSlots(false)
     }
@@ -306,7 +306,7 @@ export default function CalendrierPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de l\'ajout du créneau')
+        throw new Error(data.error || 'Error adding time slot')
       }
 
       // Refresh schedule
@@ -317,7 +317,7 @@ export default function CalendrierPage() {
       setRepeatWeekly(false)
     } catch (err) {
       console.error('Error adding slot:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'ajout')
+      setError(err instanceof Error ? err.message : 'Error adding slot')
     } finally {
       setIsSaving(false)
     }
@@ -334,14 +334,14 @@ export default function CalendrierPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de la suppression')
+        throw new Error(data.error || 'Error deleting slot')
       }
 
       // Refresh schedule
       await fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
     } catch (err) {
       console.error('Error deleting slot:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de la suppression')
+      setError(err instanceof Error ? err.message : 'Error deleting slot')
     }
   }
 
@@ -365,7 +365,7 @@ export default function CalendrierPage() {
       setShowSettingsModal(false)
     } catch (err) {
       console.error('Error saving settings:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde')
+      setError(err instanceof Error ? err.message : 'Error saving settings')
     } finally {
       setIsSaving(false)
     }
@@ -377,11 +377,11 @@ export default function CalendrierPage() {
   const firstDayOfMonth = new Date(year, month, 1).getDay()
 
   const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ]
 
-  const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   const previousMonth = () => {
     setCurrentDate(new Date(year, month - 1, 1))
@@ -422,8 +422,8 @@ export default function CalendrierPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/attorney-dashboard' },
-            { label: 'Calendrier' }
+            { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
+            { label: 'Calendar' }
           ]} />
         </div>
       </div>
@@ -433,7 +433,7 @@ export default function CalendrierPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold">Espace Artisan</h1>
+              <h1 className="text-2xl font-bold">Attorney Dashboard</h1>
               <p className="text-blue-100">{profile?.full_name}</p>
             </div>
             <div className="flex items-center gap-4">
@@ -455,21 +455,21 @@ export default function CalendrierPage() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <TrendingUp className="w-5 h-5" />
-                Tableau de bord
+                Dashboard
               </Link>
               <Link
                 href="/attorney-dashboard/calendrier"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
               >
                 <Calendar className="w-5 h-5" />
-                Calendrier
+                Calendar
               </Link>
               <Link
                 href="/attorney-dashboard/demandes-recues"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
-                Demandes
+                Cases
               </Link>
               <Link
                 href="/attorney-dashboard/messages"
@@ -483,26 +483,26 @@ export default function CalendrierPage() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Star className="w-5 h-5" />
-                Avis reçus
+                Reviews
               </Link>
               <Link
                 href="/attorney-dashboard/profil"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Settings className="w-5 h-5" />
-                Mon profil
+                My Profile
               </Link>
               <Link
                 href="/attorney-dashboard/abonnement"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Euro className="w-5 h-5" />
-                Mon compte
+                My Account
               </Link>
               <LogoutButton />
             </nav>
 
-            {/* Voir mon profil public */}
+            {/* View public profile */}
             {provider && (
               <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
                 <Link
@@ -515,7 +515,7 @@ export default function CalendrierPage() {
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Voir mon profil public
+                  View my public profile
                 </Link>
               </div>
             )}
@@ -527,15 +527,15 @@ export default function CalendrierPage() {
 
             {/* Additional links */}
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
+              <h4 className="font-medium text-gray-900 mb-3">Useful Links</h4>
               <div className="space-y-2 text-sm">
                 <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
                   <Search className="w-4 h-4" />
-                  Parcourir les services
+                  Browse Services
                 </Link>
                 <Link href="/search" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
                   <Search className="w-4 h-4" />
-                  Rechercher un artisan
+                  Find an Attorney
                 </Link>
               </div>
             </div>
@@ -547,7 +547,7 @@ export default function CalendrierPage() {
             {settingsSaved && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
                 <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                <p className="text-sm text-green-700 font-medium">Paramètres sauvegardés avec succès</p>
+                <p className="text-sm text-green-700 font-medium">Settings saved successfully</p>
               </div>
             )}
 
@@ -556,10 +556,10 @@ export default function CalendrierPage() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <h2 className="text-xl font-bold text-gray-900">
-                    Mon Calendrier
+                    My Calendar
                   </h2>
                   <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                    Réservation en ligne activée
+                    Online booking enabled
                   </span>
                 </div>
                 <button
@@ -567,7 +567,7 @@ export default function CalendrierPage() {
                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
                 >
                   <Settings className="w-5 h-5" />
-                  Paramètres
+                  Settings
                 </button>
               </div>
 
@@ -594,7 +594,7 @@ export default function CalendrierPage() {
               {isLoadingSlots && (
                 <div className="flex items-center justify-center py-4">
                   <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
-                  <span className="ml-2 text-sm text-gray-500">Chargement des créneaux...</span>
+                  <span className="ml-2 text-sm text-gray-500">Loading time slots...</span>
                 </div>
               )}
 
@@ -640,10 +640,10 @@ export default function CalendrierPage() {
                       {!past && (
                         <div className="flex justify-center gap-0.5 mt-1">
                           {hasBookings && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-red-500" title="RDV confirmés" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500" title="Confirmed appointments" />
                           )}
                           {hasAvailable && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" title="Créneaux disponibles" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" title="Available slots" />
                           )}
                         </div>
                       )}
@@ -656,11 +656,11 @@ export default function CalendrierPage() {
               <div className="flex flex-wrap items-center gap-3 sm:gap-6 mt-4 pt-4 border-t text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-gray-600">Disponible</span>
+                  <span className="text-gray-600">Available</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="text-gray-600">Réservé</span>
+                  <span className="text-gray-600">Booked</span>
                 </div>
               </div>
             </div>
@@ -670,10 +670,10 @@ export default function CalendrierPage() {
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold text-gray-900">
-                    {selectedDate.toLocaleDateString('fr-FR', {
+                    {selectedDate.toLocaleDateString('en-US', {
                       weekday: 'long',
-                      day: 'numeric',
                       month: 'long',
+                      day: 'numeric',
                       year: 'numeric'
                     })}
                   </h3>
@@ -682,7 +682,7 @@ export default function CalendrierPage() {
                     className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                   >
                     <Plus className="w-4 h-4" />
-                    Ajouter un créneau
+                    Add Time Slot
                   </button>
                 </div>
 
@@ -722,11 +722,11 @@ export default function CalendrierPage() {
                       <div className="flex items-center gap-2">
                         {slot.available ? (
                           <>
-                            <span className="text-green-600 text-sm font-medium">Disponible</span>
+                            <span className="text-green-600 text-sm font-medium">Available</span>
                             <button
                               onClick={() => handleDeleteSlot(slot.id)}
                               className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg"
-                              title="Supprimer ce créneau"
+                              title="Delete this slot"
                             >
                               <X className="w-4 h-4" />
                             </button>
@@ -734,7 +734,7 @@ export default function CalendrierPage() {
                         ) : (
                           <>
                             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                              Réservé
+                              Booked
                             </span>
                             <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
                               <Users className="w-4 h-4" />
@@ -751,12 +751,12 @@ export default function CalendrierPage() {
             {/* Upcoming bookings */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Prochains rendez-vous
+                Upcoming Appointments
               </h3>
               <div className="space-y-3">
                 {upcomingBookings.length === 0 ? (
                   <p className="text-gray-500 text-center py-4">
-                    Aucun rendez-vous à venir
+                    No upcoming appointments
                   </p>
                 ) : (
                   upcomingBookings.map(booking => (
@@ -779,9 +779,9 @@ export default function CalendrierPage() {
                       </div>
                       <div className="text-right">
                         <div className="font-medium text-gray-900">
-                          {booking.slot?.date && new Date(booking.slot.date).toLocaleDateString('fr-FR', {
-                            day: 'numeric',
-                            month: 'short'
+                          {booking.slot?.date && new Date(booking.slot.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric'
                           })}
                         </div>
                         <div className="text-sm text-gray-500">
@@ -798,28 +798,28 @@ export default function CalendrierPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.monthlyBookings}</div>
-                <div className="text-sm text-gray-500">RDV ce mois</div>
+                <div className="text-sm text-gray-500">Bookings this month</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-green-600">{stats.fillRate}%</div>
-                <div className="text-sm text-gray-500">Taux de remplissage</div>
+                <div className="text-sm text-gray-500">Fill rate</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.avgRating || '-'}</div>
-                <div className="text-sm text-gray-500">Note moyenne</div>
+                <div className="text-sm text-gray-500">Average rating</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal Ajout de créneau */}
+      {/* Add Slot Modal */}
       {showSlotModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">
-                Ajouter un créneau
+                Add Time Slot
               </h3>
               <button
                 onClick={() => setShowSlotModal(false)}
@@ -838,7 +838,7 @@ export default function CalendrierPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Heure de début
+                    Start Time
                   </label>
                   <input
                     type="time"
@@ -850,7 +850,7 @@ export default function CalendrierPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Heure de fin
+                    End Time
                   </label>
                   <input
                     type="time"
@@ -869,7 +869,7 @@ export default function CalendrierPage() {
                     onChange={(e) => setRepeatWeekly(e.target.checked)}
                     className="rounded border-gray-300"
                   />
-                  <span className="text-sm text-gray-700">Répéter chaque semaine (4 semaines)</span>
+                  <span className="text-sm text-gray-700">Repeat weekly (4 weeks)</span>
                 </label>
               </div>
               <div className="flex gap-3 pt-4">
@@ -879,7 +879,7 @@ export default function CalendrierPage() {
                   className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
                   disabled={isSaving}
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   type="submit"
@@ -887,7 +887,7 @@ export default function CalendrierPage() {
                   className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                  Ajouter
+                  Add
                 </button>
               </div>
             </form>
@@ -895,13 +895,13 @@ export default function CalendrierPage() {
         </div>
       )}
 
-      {/* Modal Paramètres */}
+      {/* Settings Modal */}
       {showSettingsModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-[95vw] sm:max-w-lg w-full mx-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">
-                Paramètres du calendrier
+                Calendar Settings
               </h3>
               <button
                 onClick={() => setShowSettingsModal(false)}
@@ -912,7 +912,7 @@ export default function CalendrierPage() {
             </div>
             <div className="space-y-6">
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Créneaux par défaut</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Default Slots</h4>
                 <div className="space-y-2">
                   {defaultSlots.map((slot, i) => (
                     <div key={i} className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg">
@@ -928,7 +928,7 @@ export default function CalendrierPage() {
                 <h4 className="font-medium text-gray-900 mb-3">Notifications</h4>
                 <div className="space-y-3">
                   <label className="flex items-center justify-between">
-                    <span className="text-gray-700">Email pour nouvelle réservation</span>
+                    <span className="text-gray-700">Email for new bookings</span>
                     <input
                       type="checkbox"
                       checked={settings.emailNotifications}
@@ -937,7 +937,7 @@ export default function CalendrierPage() {
                     />
                   </label>
                   <label className="flex items-center justify-between">
-                    <span className="text-gray-700">SMS de rappel (J-1)</span>
+                    <span className="text-gray-700">SMS reminder (1 day before)</span>
                     <input
                       type="checkbox"
                       checked={settings.smsReminders}
@@ -946,7 +946,7 @@ export default function CalendrierPage() {
                     />
                   </label>
                   <div className="flex items-center justify-between opacity-60">
-                    <span className="text-gray-500">Synchronisation Google Calendar — Bientôt disponible</span>
+                    <span className="text-gray-500">Google Calendar Sync — Coming Soon</span>
                     <input
                       type="checkbox"
                       checked={false}
@@ -957,10 +957,10 @@ export default function CalendrierPage() {
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Zone d&apos;intervention</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Service Area</h4>
                 <input
                   type="text"
-                  placeholder="Ex: Paris et petite couronne (20km)"
+                  placeholder="E.g.: Local area (20 miles)"
                   value={settings.serviceRadius}
                   onChange={(e) => setSettings({ ...settings, serviceRadius: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2"
@@ -972,7 +972,7 @@ export default function CalendrierPage() {
                 className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                Enregistrer les paramètres
+                Save Settings
               </button>
             </div>
           </div>

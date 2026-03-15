@@ -1,5 +1,5 @@
 /**
- * GDPR Account Deletion API - ServicesArtisans
+ * GDPR Account Deletion API - US Attorneys
  * Allows users to request account deletion
  */
 
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = deletePostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
     }
     const { reason, password, confirmText: _confirmText } = result.data
 
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     if (signInError) {
       return NextResponse.json(
-        { success: false, error: { message: 'Mot de passe invalide' } },
+        { success: false, error: { message: 'Invalid password' } },
         { status: 401 }
       )
     }
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
     if (existingRequest) {
       return NextResponse.json(
         {
-          success: false, error: { message: 'Vous avez déjà une demande de suppression en cours' },
+          success: false, error: { message: 'You already have a deletion request in progress' },
           scheduledDate: existingRequest.scheduled_deletion_at,
         },
         { status: 400 }
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     if (pendingBookings && pendingBookings.length > 0) {
       return NextResponse.json(
         {
-          success: false, error: { message: 'Vous avez des réservations en cours. Veuillez les annuler ou les terminer avant de supprimer votre compte.' },
+          success: false, error: { message: 'You have active bookings. Please cancel or complete them before deleting your account.' },
           pendingBookingsCount: pendingBookings.length,
         },
         { status: 400 }
@@ -110,12 +110,12 @@ export async function POST(request: Request) {
       success: true,
       requestId: deletionRequest.id,
       scheduledDate: scheduledDate.toISOString(),
-      message: `Votre compte est programmé pour suppression le ${scheduledDate.toLocaleDateString('fr-FR')}. Vous pouvez annuler cette demande avant cette date.`,
+      message: `Your account is scheduled for deletion on ${scheduledDate.toLocaleDateString('en-US')}. You can cancel this request before that date.`,
     })
   } catch (error) {
     logger.error('GDPR deletion error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec du traitement de la demande de suppression' } },
+      { success: false, error: { message: 'Failed to process deletion request' } },
       { status: 500 }
     )
   }
@@ -130,7 +130,7 @@ export async function DELETE() {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -150,19 +150,19 @@ export async function DELETE() {
 
     if (error || !deletionRequest) {
       return NextResponse.json(
-        { success: false, error: { message: 'Aucune demande de suppression en cours trouvée' } },
+        { success: false, error: { message: 'No pending deletion request found' } },
         { status: 404 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Votre demande de suppression a été annulée',
+      message: 'Your deletion request has been cancelled',
     })
   } catch (error) {
     logger.error('GDPR cancel deletion error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec de l\'annulation de la demande de suppression' } },
+      { success: false, error: { message: 'Failed to cancel deletion request' } },
       { status: 500 }
     )
   }
@@ -177,7 +177,7 @@ export async function GET() {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -198,7 +198,7 @@ export async function GET() {
   } catch (error) {
     logger.error('GDPR deletion status error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec de la récupération du statut de suppression' } },
+      { success: false, error: { message: 'Failed to retrieve deletion status' } },
       { status: 500 }
     )
   }

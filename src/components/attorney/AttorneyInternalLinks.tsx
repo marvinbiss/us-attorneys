@@ -53,14 +53,14 @@ export default function AttorneyInternalLinks({
   return (
     <section className="py-12 bg-sand-100 border-t border-stone-200/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">Voir aussi</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-8">See also</h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Column 1: Same service, nearby cities */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-clay-400" />
-              {specialtyName} dans d&apos;autres cities
+              {specialtyName} in other cities
             </h3>
             {nearbyCities.length > 0 ? (
               <div className="flex flex-wrap gap-2">
@@ -75,13 +75,13 @@ export default function AttorneyInternalLinks({
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-500">Aucune ville proche disponible</p>
+              <p className="text-sm text-gray-500">No nearby cities available</p>
             )}
             <Link
               href={`/practice-areas/${specialtySlug}`}
               className="inline-block mt-3 text-clay-400 hover:text-clay-600 text-sm font-medium"
             >
-              Toutes les cities →
+              All cities →
             </Link>
           </div>
 
@@ -89,7 +89,7 @@ export default function AttorneyInternalLinks({
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Wrench className="w-4 h-4 text-clay-400" />
-              Autres artisans à {cityName}
+              Other attorneys in {cityName}
             </h3>
             <div className="flex flex-wrap gap-2">
               {otherServices.map(s => (
@@ -106,7 +106,7 @@ export default function AttorneyInternalLinks({
               href={`/cities/${locationSlug}`}
               className="inline-block mt-3 text-clay-400 hover:text-clay-600 text-sm font-medium"
             >
-              Tous les artisans à {cityName} →
+              All attorneys in {cityName} →
             </Link>
           </div>
 
@@ -114,7 +114,7 @@ export default function AttorneyInternalLinks({
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Compass className="w-4 h-4 text-clay-400" />
-              Explorer par zone
+              Explore by area
             </h3>
             <div className="space-y-2">
               {region && (
@@ -122,7 +122,7 @@ export default function AttorneyInternalLinks({
                   href={`/regions/${regionSlug || slugify(region)}`}
                   className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
-                  Artisans en {region}
+                  Attorneys in {region}
                 </Link>
               )}
               {dept && (
@@ -130,7 +130,7 @@ export default function AttorneyInternalLinks({
                   href={`/states/${dept.slug}`}
                   className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
-                  Artisans dans {departmentName || dept.name} ({dept.code})
+                  Attorneys in {departmentName || dept.name} ({dept.code})
                 </Link>
               )}
               {dept && (
@@ -138,33 +138,33 @@ export default function AttorneyInternalLinks({
                   href={`/states/${dept.slug}/${specialtySlug}`}
                   className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
-                  {specialtyName} dans le {dept.code}
+                  {specialtyName} in {dept.code}
                 </Link>
               )}
               <Link
                 href={`/cities/${locationSlug}`}
                 className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
-                Tous les artisans à {cityName}
+                All attorneys in {cityName}
               </Link>
               <Link
                 href={`/practice-areas/${specialtySlug}`}
                 className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
-                {specialtyName} en France
+                {specialtyName} nationwide
               </Link>
               <Link
                 href={`/pricing/${specialtySlug}`}
                 className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
-                Tarifs {specialtyName} en France
+                {specialtyName} fees nationwide
               </Link>
-              {['plombier', 'electricien', 'serrurier', 'chauffagiste', 'vitrier', 'couvreur'].includes(specialtySlug) && (
+              {['criminal-defense', 'personal-injury', 'family-law', 'immigration', 'dui-dwi', 'bankruptcy'].includes(specialtySlug) && (
                 <Link
                   href={`/emergency/${specialtySlug}`}
                   className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
-                  Urgence {specialtyName}
+                  Emergency {specialtyName}
                 </Link>
               )}
             </div>

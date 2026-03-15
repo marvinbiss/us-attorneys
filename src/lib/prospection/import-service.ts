@@ -292,7 +292,7 @@ export async function checkDuplicates(
     }
   }
 
-  // Vérifier chaque contact
+  // Verify chaque contact
   const seenEmails = new Set<string>()
   const seenPhones = new Set<string>()
 
@@ -409,7 +409,7 @@ export async function importContacts(
 }
 
 /**
- * Synchroniser les artisans existants de la base vers prospection_contacts
+ * Synchroniser the attorneys existants de la base vers prospection_contacts
  */
 export async function syncArtisansFromDatabase(
   filters?: { department?: string; service?: string }
@@ -437,7 +437,7 @@ export async function syncArtisansFromDatabase(
   let skipped = 0
 
   for (const provider of providers) {
-    // Vérifier si déjà importé
+    // Verify si déjà importé
     const { data: existing } = await supabase
       .from('prospection_contacts')
       .select('id')

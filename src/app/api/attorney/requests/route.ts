@@ -1,6 +1,6 @@
 /**
- * Artisan Demandes (Quote Requests) API
- * GET: Fetch quote requests for the artisan
+ * Attorney Quote Requests API
+ * GET: Fetch quote requests for the attorney
  */
 
 import { NextResponse } from 'next/server'
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     }
     const { status } = result.data
 
-    // Resolve provider for this artisan
+    // Resolve provider for this attorney
     const { data: provider } = await supabase
       .from('attorneys')
       .select('id')
@@ -65,7 +65,7 @@ export async function GET(request: Request) {
     if (allDemandesError) {
       logger.error('Error fetching demandes for stats:', allDemandesError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des demandes' },
+        { error: 'Error retrieving claims' },
         { status: 500 }
       )
     }
@@ -96,7 +96,7 @@ export async function GET(request: Request) {
     if (demandesError) {
       logger.error('Error fetching demandes:', demandesError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des demandes' },
+        { error: 'Error retrieving claims' },
         { status: 500 }
       )
     }
@@ -108,7 +108,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Demandes GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

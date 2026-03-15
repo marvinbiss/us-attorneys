@@ -186,7 +186,7 @@ export function MessageBubble({
             )}
           >
             <span className="font-medium">
-              {replyToMessage.sender_type === 'artisan' ? 'Artisan' : 'Client'}
+              {replyToMessage.sender_type === 'attorney' ? 'Attorney' : 'Client'}
             </span>
             <p className="truncate">{replyToMessage.content}</p>
           </div>

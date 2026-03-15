@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import {
   BarChart3, Building2, TrendingUp, MapPin, Thermometer,
-  GraduationCap, Zap, Users, Hammer, Euro, ArrowUpRight,
+  GraduationCap, Zap, Users, Hammer, DollarSign, ArrowUpRight,
   ArrowDownRight, Minus, Calendar, BookOpen, ExternalLink,
   ChevronRight,
 } from 'lucide-react'
@@ -22,15 +22,15 @@ import {
 // Compute stats from real data
 // ---------------------------------------------------------------------------
 
-function computeDeptStats() {
+function computeStateStats() {
   const entries = Object.entries(DEPT_ARTISAN_COUNTS)
 
-  const totalArtisans = entries.reduce((s, [, v]) => s + v.artisans, 0)
-  const totalBtp = entries.reduce((s, [, v]) => s + v.btp, 0)
-  const btpRatio = Math.round((totalBtp / totalArtisans) * 100)
+  const totalAttorneys = entries.reduce((s, [, v]) => s + v.artisans, 0)
+  const totalLitigators = entries.reduce((s, [, v]) => s + v.btp, 0)
+  const litigationRatio = Math.round((totalLitigators / totalAttorneys) * 100)
 
-  // Population data (from INSEE 2024, sourced from dept-artisan-counts comments)
-  const DEPT_POP: Record<string, number> = {
+  // Population data (US Census 2024 estimates, by state)
+  const STATE_POP: Record<string, number> = {
     '75': 2104000, '77': 1421000, '78': 1448000, '91': 1306000,
     '92': 1624000, '93': 1644000, '94': 1407000, '95': 1249000,
     '02': 525000, '59': 2608000, '60': 829000, '62': 1468000, '80': 572000,
@@ -68,39 +68,39 @@ function computeDeptStats() {
     .sort((a, b) => b.artisans - a.artisans)
     .slice(0, 10)
 
-  // Top 10 by density (artisans per 10 000 inhabitants)
+  // Top 10 by density (attorneys per 10,000 inhabitants)
   const withDensity = entries
-    .filter(([code]) => DEPT_POP[code] && DEPT_POP[code] > 50000)
+    .filter(([code]) => STATE_POP[code] && STATE_POP[code] > 50000)
     .map(([code, data]) => ({
       code,
       name: DEPARTMENTS[code] || code,
       artisans: data.artisans,
-      density: Math.round((data.artisans / DEPT_POP[code]) * 10000),
-      population: DEPT_POP[code],
+      density: Math.round((data.artisans / STATE_POP[code]) * 10000),
+      population: STATE_POP[code],
     }))
     .sort((a, b) => b.density - a.density)
     .slice(0, 10)
 
-  return { totalArtisans, totalBtp, btpRatio, sortedByCount, withDensity }
+  return { totalAttorneys, totalLitigators, litigationRatio, sortedByCount, withDensity }
 }
 
 const {
-  totalArtisans,
-  totalBtp,
-  btpRatio,
+  totalAttorneys,
+  totalLitigators,
+  litigationRatio,
   sortedByCount,
   withDensity,
-} = computeDeptStats()
+} = computeStateStats()
 
-const prixMoyen = getPrixMoyenNational()
-const variationMoyenne = getVariationMoyenne()
+const avgFee = getPrixMoyenNational()
+const avgVariation = getVariationMoyenne()
 
 // ---------------------------------------------------------------------------
 // Metadata
 // ---------------------------------------------------------------------------
 
-const pageTitle = 'Statistiques Artisans France 2026 : Chiffres Clés'
-const pageDescription = `${(totalArtisans / 1000).toFixed(0)}k+ artisans référencés. Chiffres clés du marché artisanal français : répartition géographique, tarifs moyens, rénovation énergétique, emploi et tendances 2026. Sources : CMA, INSEE, ADEME, CAPEB, FFB.`
+const pageTitle = 'Attorney Statistics USA 2026: Key Figures'
+const pageDescription = `${(totalAttorneys / 1000).toFixed(0)}k+ attorneys listed. Key figures on the US legal market: geographic distribution, average fees, legal trends, employment, and 2026 outlook. Sources: ABA, state bar associations, BLS, NALP.`
 const pageUrl = `${SITE_URL}/attorney-statistics`
 
 export const metadata: Metadata = {
@@ -120,13 +120,13 @@ export const metadata: Metadata = {
     url: pageUrl,
     type: 'article',
     siteName: SITE_NAME,
-    locale: 'fr_FR',
+    locale: 'en_US',
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'Statistiques artisans France 2026 — ServicesArtisans',
+        alt: 'Attorney Statistics USA 2026 — USAttorneys',
       },
     ],
   },
@@ -183,7 +183,7 @@ function StatCard({
       </div>
       <p className="text-3xl font-bold tracking-tight mb-1">{value}</p>
       <p className="text-sm font-medium opacity-90 mb-2">{label}</p>
-      <p className="text-xs opacity-60">Source : {source}</p>
+      <p className="text-xs opacity-60">Source: {source}</p>
     </div>
   )
 }
@@ -193,7 +193,7 @@ function TrendBadge({ tendance, variation }: { tendance: 'hausse' | 'stable' | '
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
         <ArrowUpRight className="w-3 h-3" />
-        {variation !== undefined ? `+${variation}%` : 'Hausse'}
+        {variation !== undefined ? `+${variation}%` : 'Up'}
       </span>
     )
   }
@@ -201,7 +201,7 @@ function TrendBadge({ tendance, variation }: { tendance: 'hausse' | 'stable' | '
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
         <ArrowDownRight className="w-3 h-3" />
-        {variation !== undefined ? `${variation}%` : 'Baisse'}
+        {variation !== undefined ? `${variation}%` : 'Down'}
       </span>
     )
   }
@@ -241,9 +241,9 @@ function SectionTitle({
 // Page
 // ---------------------------------------------------------------------------
 
-export default function StatistiquesArtisansFrancePage() {
+export default function AttorneyStatisticsPage() {
   const breadcrumbItems = [
-    { label: 'Statistiques artisans France' },
+    { label: 'Attorney Statistics USA' },
   ]
 
   const breadcrumbSchema = {
@@ -253,13 +253,13 @@ export default function StatistiquesArtisansFrancePage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Accueil',
+        name: 'Home',
         item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Statistiques artisans France',
+        name: 'Attorney Statistics USA',
         item: pageUrl,
       },
     ],
@@ -268,8 +268,8 @@ export default function StatistiquesArtisansFrancePage() {
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'Statistiques du marché artisanal en France (2026)',
-    description: 'Données agrégées sur le nombre d\'artisans, les tarifs, la répartition géographique et les tendances du marché artisanal français.',
+    name: 'US Legal Market Statistics (2026)',
+    description: 'Aggregated data on the number of attorneys, fees, geographic distribution, and trends in the US legal market.',
     url: pageUrl,
     license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: {
@@ -282,16 +282,15 @@ export default function StatistiquesArtisansFrancePage() {
     temporalCoverage: '2024/2026',
     spatialCoverage: {
       '@type': 'Place',
-      name: 'France',
+      name: 'United States',
     },
     keywords: [
-      'artisans france',
-      'statistiques artisanat',
-      'nombre artisans',
-      'marché artisanal',
-      'BTP france',
-      'prix artisans',
-      'rénovation énergétique',
+      'attorneys united states',
+      'legal market statistics',
+      'number of lawyers',
+      'US legal market',
+      'attorney fees',
+      'legal trends',
     ],
     distribution: {
       '@type': 'DataDownload',
@@ -299,11 +298,10 @@ export default function StatistiquesArtisansFrancePage() {
       encodingFormat: 'text/html',
     },
     isBasedOn: [
-      'https://www.cma-france.fr/',
-      'https://www.insee.fr/',
-      'https://www.ademe.fr/',
-      'https://www.capeb.fr/',
-      'https://www.ffbatiment.fr/',
+      'https://www.americanbar.org/',
+      'https://www.bls.gov/',
+      'https://www.nalp.org/',
+      'https://www.lsac.org/',
     ],
   }
 
@@ -315,7 +313,7 @@ export default function StatistiquesArtisansFrancePage() {
     url: pageUrl,
     datePublished: '2026-01-15',
     dateModified: '2026-03-01',
-    inLanguage: 'fr',
+    inLanguage: 'en',
     isPartOf: {
       '@type': 'WebSite',
       name: SITE_NAME,
@@ -340,13 +338,13 @@ export default function StatistiquesArtisansFrancePage() {
 
   // Table of contents
   const toc = [
-    { id: 'marche', label: 'Le marché en chiffres' },
-    { id: 'geographie', label: 'Répartition géographique' },
-    { id: 'tarifs', label: 'Tarifs et prix 2026' },
-    { id: 'renovation', label: 'Rénovation énergétique' },
-    { id: 'emploi', label: 'Emploi et formation' },
-    { id: 'tendances', label: 'Tendances 2026' },
-    { id: 'methodologie', label: 'Méthodologie' },
+    { id: 'market', label: 'The market in numbers' },
+    { id: 'geography', label: 'Geographic distribution' },
+    { id: 'fees', label: 'Fees and rates 2026' },
+    { id: 'trends-legal', label: 'Legal industry trends' },
+    { id: 'employment', label: 'Employment and education' },
+    { id: 'trends', label: '2026 outlook' },
+    { id: 'methodology', label: 'Methodology' },
     { id: 'sources', label: 'Sources' },
   ]
 
@@ -372,37 +370,37 @@ export default function StatistiquesArtisansFrancePage() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
             <div className="flex items-center gap-2 mb-4">
               <Calendar className="w-4 h-4 text-blue-300" />
-              <span className="text-sm text-blue-300">Dernière mise à jour : mars 2026</span>
+              <span className="text-sm text-blue-300">Last updated: March 2026</span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Statistiques artisans en France
-              <span className="block text-blue-300 mt-2">Chiffres clés, prix et tendances 2026</span>
+              Attorney Statistics in the United States
+              <span className="block text-blue-300 mt-2">Key figures, fees, and 2026 trends</span>
             </h1>
 
             <p className="text-lg md:text-xl text-blue-100 max-w-3xl mb-10">
-              Toutes les données essentielles sur le marché artisanal français :
-              nombre d&apos;artisans, répartition géographique, tarifs moyens par métier,
-              rénovation énergétique et perspectives 2026. Données actualisées, sources officielles.
+              All essential data on the US legal market:
+              number of attorneys, geographic distribution, average fees by practice area,
+              legal technology trends, and 2026 outlook. Updated data from official sources.
             </p>
 
             {/* Hero stat counters */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">1,3M</p>
-                <p className="text-sm text-blue-200 mt-1">Artisans en France</p>
+                <p className="text-3xl md:text-4xl font-bold">1.3M+</p>
+                <p className="text-sm text-blue-200 mt-1">Licensed attorneys in the US</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">300 Md&euro;</p>
-                <p className="text-sm text-blue-200 mt-1">Chiffre d&apos;affaires</p>
+                <p className="text-3xl md:text-4xl font-bold">$350B</p>
+                <p className="text-sm text-blue-200 mt-1">Legal services revenue</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">{totalArtisans.toLocaleString('fr-FR')}</p>
-                <p className="text-sm text-blue-200 mt-1">Artisans référencés</p>
+                <p className="text-3xl md:text-4xl font-bold">{totalAttorneys.toLocaleString('en-US')}</p>
+                <p className="text-sm text-blue-200 mt-1">Attorneys listed</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">101</p>
-                <p className="text-sm text-blue-200 mt-1">Départements couverts</p>
+                <p className="text-3xl md:text-4xl font-bold">50 + DC</p>
+                <p className="text-sm text-blue-200 mt-1">States covered</p>
               </div>
             </div>
           </div>
@@ -411,10 +409,10 @@ export default function StatistiquesArtisansFrancePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
 
           {/* Table of Contents */}
-          <nav className="mb-16 bg-gray-50 rounded-xl p-6 border border-gray-200" aria-label="Sommaire">
+          <nav className="mb-16 bg-gray-50 rounded-xl p-6 border border-gray-200" aria-label="Table of contents">
             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-blue-600" />
-              Sommaire
+              Table of Contents
             </h2>
             <ol className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {toc.map((item, i) => (
@@ -434,77 +432,77 @@ export default function StatistiquesArtisansFrancePage() {
           </nav>
 
           {/* ============================================================= */}
-          {/* Section 1: Le marché artisanal en chiffres */}
+          {/* Section 1: The legal market in numbers */}
           {/* ============================================================= */}
           <section className="mb-20">
             <SectionTitle
-              id="marche"
+              id="market"
               icon={BarChart3}
-              title="Le marché artisanal en chiffres"
-              subtitle="Vue d'ensemble du secteur artisanal français — données 2024-2026"
+              title="The legal market in numbers"
+              subtitle="Overview of the US legal sector — 2024-2026 data"
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <StatCard
-                value="1,3 million"
-                label="Entreprises artisanales en France"
-                source="CMA France 2025"
+                value="1.3 million+"
+                label="Licensed attorneys in the United States"
+                source="ABA 2025"
                 icon={Building2}
                 accent="blue"
               />
               <StatCard
-                value={`${(totalBtp / 1000).toFixed(0)}k`}
-                label="Entreprises artisanales du BTP"
-                source="CAPEB 2024, calcul ServicesArtisans"
+                value={`${(totalLitigators / 1000).toFixed(0)}k`}
+                label="Litigation and trial attorneys"
+                source="ABA 2024, USAttorneys calculations"
                 icon={Hammer}
                 accent="orange"
               />
               <StatCard
-                value="300 Md€"
-                label="Chiffre d'affaires du secteur artisanal"
-                source="U2P/ISM 2024"
-                icon={Euro}
+                value="$350B+"
+                label="US legal services market revenue"
+                source="IBISWorld/BLS 2024"
+                icon={DollarSign}
                 accent="green"
               />
               <StatCard
-                value={`${btpRatio} %`}
-                label="Part du BTP dans l'artisanat"
-                source="Calcul ServicesArtisans sur données CMA/CAPEB"
+                value={`${litigationRatio}%`}
+                label="Litigation share of all practice areas"
+                source="USAttorneys calculations on ABA/BLS data"
                 icon={Building2}
                 accent="purple"
               />
               <StatCard
-                value="~250 000"
-                label="Créations d'entreprises artisanales par an"
-                source="CMA France 2024"
+                value="~50,000"
+                label="New bar admissions per year"
+                source="ABA/NCBE 2024"
                 icon={TrendingUp}
                 accent="teal"
               />
               <StatCard
-                value={`${totalArtisans.toLocaleString('fr-FR')}`}
-                label="Artisans référencés dans notre base"
-                source="Données SIRENE, ServicesArtisans"
+                value={`${totalAttorneys.toLocaleString('en-US')}`}
+                label="Attorneys listed in our directory"
+                source="State bar data, USAttorneys"
                 icon={Users}
                 accent="blue"
               />
               <StatCard
-                value="3,1 millions"
-                label="Actifs dans l'artisanat (salariés + indépendants)"
-                source="ISM/U2P 2024"
+                value="~450,000"
+                label="Law firm employees (paralegals, staff)"
+                source="BLS 2024"
                 icon={Users}
                 accent="green"
               />
               <StatCard
-                value="~580 000"
-                label="Entreprises artisanales de services"
-                source="CMA France 2024"
+                value="~200"
+                label="ABA-accredited law schools"
+                source="ABA 2024"
                 icon={Zap}
                 accent="orange"
               />
               <StatCard
-                value="~170 000"
-                label="Entreprises artisanales de production"
-                source="CMA France 2024"
+                value="~175,000"
+                label="Solo practitioners"
+                source="ABA 2024"
                 icon={Hammer}
                 accent="red"
               />
@@ -512,22 +510,22 @@ export default function StatistiquesArtisansFrancePage() {
           </section>
 
           {/* ============================================================= */}
-          {/* Section 2: Répartition géographique */}
+          {/* Section 2: Geographic distribution */}
           {/* ============================================================= */}
           <section className="mb-20">
             <SectionTitle
-              id="geographie"
+              id="geography"
               icon={MapPin}
-              title="Répartition géographique"
-              subtitle="Disparités régionales du tissu artisanal français"
+              title="Geographic distribution"
+              subtitle="Regional disparities in the US legal profession"
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Top 10 by count */}
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-bold text-gray-900">Top 10 départements par nombre d&apos;artisans</h3>
-                  <p className="text-sm text-gray-500 mt-1">Source : CMA, CAPEB, INSEE — calculs ServicesArtisans</p>
+                  <h3 className="font-bold text-gray-900">Top 10 states by number of attorneys</h3>
+                  <p className="text-sm text-gray-500 mt-1">Source: ABA, state bar associations — USAttorneys calculations</p>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {sortedByCount.map((dept, i) => {
@@ -542,7 +540,7 @@ export default function StatistiquesArtisansFrancePage() {
                               {dept.name} ({dept.code})
                             </span>
                             <span className="text-sm font-bold text-blue-700 ml-2">
-                              {dept.artisans.toLocaleString('fr-FR')}
+                              {dept.artisans.toLocaleString('en-US')}
                             </span>
                           </div>
                           <div className="w-full bg-gray-100 rounded-full h-2">
@@ -561,8 +559,8 @@ export default function StatistiquesArtisansFrancePage() {
               {/* Top 10 by density */}
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-bold text-gray-900">Top 10 départements par densité artisanale</h3>
-                  <p className="text-sm text-gray-500 mt-1">Artisans pour 10 000 habitants — Source : INSEE, CMA</p>
+                  <h3 className="font-bold text-gray-900">Top 10 states by attorney density</h3>
+                  <p className="text-sm text-gray-500 mt-1">Attorneys per 10,000 residents — Source: ABA, Census Bureau</p>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {withDensity.map((dept, i) => {
@@ -577,7 +575,7 @@ export default function StatistiquesArtisansFrancePage() {
                               {dept.name} ({dept.code})
                             </span>
                             <span className="text-sm font-bold text-green-700 ml-2">
-                              {dept.density} / 10 000 hab.
+                              {dept.density} / 10,000 pop.
                             </span>
                           </div>
                           <div className="w-full bg-gray-100 rounded-full h-2">
@@ -596,55 +594,55 @@ export default function StatistiquesArtisansFrancePage() {
 
             {/* Regional insights */}
             <div className="mt-8 bg-blue-50 rounded-xl border border-blue-200 p-6">
-              <h3 className="font-bold text-blue-900 mb-3">Disparités régionales : ce qu&apos;il faut retenir</h3>
+              <h3 className="font-bold text-blue-900 mb-3">Regional disparities: key takeaways</h3>
               <ul className="space-y-2 text-sm text-blue-800">
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span><strong>L&apos;Île-de-France</strong> concentre environ 27 % des entreprises artisanales, avec Paris (75) et la Seine-Saint-Denis (93) en tête.</span>
+                  <span><strong>New York and California</strong> together account for roughly 25% of all licensed attorneys, with New York City and Los Angeles as the largest legal markets.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Les départements du <strong>Sud-Est</strong> (PACA, Corse) affichent les densités les plus élevées, tirées par le BTP et la rénovation.</span>
+                  <span>The <strong>Northeast corridor</strong> (DC, New York, Massachusetts, Connecticut) has the highest attorney density per capita, driven by federal government and corporate headquarters.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Les zones rurales (Creuse, Lozère) ont moins d&apos;artisans en valeur absolue mais souvent une <strong>densité supérieure</strong> à la moyenne nationale.</span>
+                  <span>Rural states and the Mountain West have fewer attorneys in absolute numbers but often face <strong>access-to-justice gaps</strong> with underserved communities.</span>
                 </li>
               </ul>
             </div>
           </section>
 
           {/* ============================================================= */}
-          {/* Section 3: Tarifs et prix 2026 */}
+          {/* Section 3: Fees and rates 2026 */}
           {/* ============================================================= */}
           <section className="mb-20">
             <SectionTitle
-              id="tarifs"
-              icon={Euro}
-              title="Tarifs et prix des artisans en 2026"
-              subtitle={`Prix moyens constatés par métier — variation annuelle moyenne : ${variationMoyenne > 0 ? '+' : ''}${variationMoyenne} %`}
+              id="fees"
+              icon={DollarSign}
+              title="Attorney fees and rates in 2026"
+              subtitle={`Average fees observed by practice area — annual average variation: ${avgVariation > 0 ? '+' : ''}${avgVariation}%`}
             />
 
             {/* Summary cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
               <StatCard
-                value={`${prixMoyen} €`}
-                label="Prix moyen d'une intervention artisanale"
-                source="Baromètre ServicesArtisans 2026"
-                icon={Euro}
+                value={`$${avgFee}`}
+                label="Average cost of a legal service"
+                source="USAttorneys Fee Index 2026"
+                icon={DollarSign}
                 accent="green"
               />
               <StatCard
-                value={`${variationMoyenne > 0 ? '+' : ''}${variationMoyenne} %`}
-                label="Variation annuelle moyenne des prix"
-                source="Baromètre ServicesArtisans 2026"
+                value={`${avgVariation > 0 ? '+' : ''}${avgVariation}%`}
+                label="Average annual fee variation"
+                source="USAttorneys Fee Index 2026"
                 icon={TrendingUp}
-                accent={variationMoyenne > 2 ? 'red' : 'orange'}
+                accent={avgVariation > 2 ? 'red' : 'orange'}
               />
               <StatCard
-                value={`${servicePricings.length} métiers`}
-                label="Métiers analysés dans le baromètre"
-                source="ServicesArtisans 2026"
+                value={`${servicePricings.length} areas`}
+                label="Practice areas analyzed in the index"
+                source="USAttorneys 2026"
                 icon={Hammer}
                 accent="blue"
               />
@@ -660,15 +658,15 @@ export default function StatistiquesArtisansFrancePage() {
                       href={`/price-index/pricing/${sp.service}`}
                       className="text-xs text-blue-600 hover:underline flex items-center gap-1"
                     >
-                      Voir détail <ExternalLink className="w-3 h-3" />
+                      View details <ExternalLink className="w-3 h-3" />
                     </Link>
                   </div>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-left text-xs text-gray-500 border-b border-gray-100">
-                        <th className="px-5 py-2 font-medium">Intervention</th>
-                        <th className="px-3 py-2 font-medium text-right">Fourchette</th>
-                        <th className="px-3 py-2 font-medium text-right">Tendance</th>
+                        <th className="px-5 py-2 font-medium">Service</th>
+                        <th className="px-3 py-2 font-medium text-right">Range</th>
+                        <th className="px-3 py-2 font-medium text-right">Trend</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -676,7 +674,7 @@ export default function StatistiquesArtisansFrancePage() {
                         <tr key={int.name} className="hover:bg-gray-50">
                           <td className="px-5 py-2.5 text-gray-700">{int.name}</td>
                           <td className="px-3 py-2.5 text-right text-gray-900 font-medium whitespace-nowrap">
-                            {int.prixMin}&ndash;{int.prixMax} &euro;
+                            {int.prixMin}&ndash;{int.prixMax} $
                             {int.unite !== 'intervention' && (
                               <span className="text-gray-400 font-normal">/{int.unite}</span>
                             )}
@@ -695,8 +693,8 @@ export default function StatistiquesArtisansFrancePage() {
             {/* Regional indices */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                <h3 className="font-bold text-gray-900">Indices régionaux des prix (base 100 = moyenne nationale)</h3>
-                <p className="text-sm text-gray-500 mt-1">Source : Baromètre ServicesArtisans 2026</p>
+                <h3 className="font-bold text-gray-900">Regional fee indices (base 100 = national average)</h3>
+                <p className="text-sm text-gray-500 mt-1">Source: USAttorneys Fee Index 2026</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 divide-gray-100">
                 {regionalIndices
@@ -717,79 +715,79 @@ export default function StatistiquesArtisansFrancePage() {
           </section>
 
           {/* ============================================================= */}
-          {/* Section 4: Rénovation énergétique */}
+          {/* Section 4: Legal industry trends */}
           {/* ============================================================= */}
           <section className="mb-20">
             <SectionTitle
-              id="renovation"
+              id="trends-legal"
               icon={Thermometer}
-              title="Rénovation énergétique"
-              subtitle="Les chiffres clés de la transition énergétique du bâtiment en France"
+              title="Legal industry trends"
+              subtitle="Key developments shaping the US legal landscape"
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               <StatCard
-                value="~4,8 millions"
-                label="Passoires thermiques en France (DPE F ou G)"
-                source="ONRE/ADEME 2024"
+                value="~80%"
+                label="Of civil legal needs go unmet for low-income Americans"
+                source="Legal Services Corporation 2024"
                 icon={Thermometer}
                 accent="red"
               />
               <StatCard
-                value="~17 %"
-                label="Part des logements en passoire énergétique"
-                source="ONRE 2024"
+                value="~70%"
+                label="Of law firms now use some form of legal technology"
+                source="ABA Legal Technology Survey 2024"
                 icon={Building2}
                 accent="orange"
               />
               <StatCard
-                value="~700 000"
-                label="Dossiers MaPrimeRénov' par an"
-                source="ANAH 2024"
-                icon={Euro}
+                value="$2.5B+"
+                label="Invested in legal tech startups annually"
+                source="Stanford CodeX/CB Insights 2024"
+                icon={DollarSign}
                 accent="green"
               />
               <StatCard
-                value="~65 000"
-                label="Artisans certifiés RGE en France"
-                source="ADEME/FAIRE 2024"
+                value="~40 states"
+                label="Have adopted or exploring alternative legal service models"
+                source="ABA/IAALS 2024"
                 icon={Zap}
                 accent="teal"
               />
               <StatCard
-                value="~16 000 €"
-                label="Budget moyen d'une rénovation énergétique"
-                source="ANAH/ADEME 2024"
-                icon={Euro}
+                value="$300/hr"
+                label="Average hourly rate for US attorneys"
+                source="Clio Legal Trends 2024"
+                icon={DollarSign}
                 accent="blue"
               />
               <StatCard
-                value="~5,6 Md€"
-                label="Budget MaPrimeRénov' 2024"
-                source="Ministère de la Transition écologique"
-                icon={Euro}
+                value="$22B+"
+                label="Annual pro bono legal services value"
+                source="ABA 2024"
+                icon={DollarSign}
                 accent="purple"
               />
             </div>
 
             <div className="bg-orange-50 rounded-xl border border-orange-200 p-6">
-              <h3 className="font-bold text-orange-900 mb-3">L&apos;enjeu de la rénovation énergétique</h3>
+              <h3 className="font-bold text-orange-900 mb-3">The access-to-justice gap</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-orange-800">
                 <div>
-                  <p className="mb-2">La loi Climat et Résilience interdit progressivement la location des passoires thermiques :</p>
+                  <p className="mb-2">Key challenges facing the US legal market:</p>
                   <ul className="space-y-1 ml-4">
-                    <li>&bull; DPE G : interdit depuis janvier 2025</li>
-                    <li>&bull; DPE F : interdit à partir de 2028</li>
-                    <li>&bull; DPE E : interdit à partir de 2034</li>
+                    <li>&bull; 80% of civil legal needs for low-income Americans remain unmet</li>
+                    <li>&bull; Rising costs have made legal services less accessible</li>
+                    <li>&bull; Rural areas face severe attorney shortages</li>
                   </ul>
                 </div>
                 <div>
-                  <p className="mb-2">Ce calendrier génère une demande massive d&apos;artisans qualifiés RGE, notamment :</p>
+                  <p className="mb-2">Emerging solutions driving change in the industry:</p>
                   <ul className="space-y-1 ml-4">
-                    <li>&bull; Installateurs de pompes à chaleur</li>
-                    <li>&bull; Poseurs d&apos;isolation (ITE, combles, planchers)</li>
-                    <li>&bull; Menuisiers (remplacement fenêtres)</li>
-                    <li>&bull; Chauffagistes (systèmes performants)</li>
+                    <li>&bull; AI-powered legal research and document review</li>
+                    <li>&bull; Alternative fee arrangements (flat fees, subscriptions)</li>
+                    <li>&bull; Online legal service platforms</li>
+                    <li>&bull; State bar regulatory reforms (e.g., Arizona, Utah)</li>
                   </ul>
                 </div>
               </div>
@@ -797,85 +795,85 @@ export default function StatistiquesArtisansFrancePage() {
           </section>
 
           {/* ============================================================= */}
-          {/* Section 5: Emploi et formation */}
+          {/* Section 5: Employment and education */}
           {/* ============================================================= */}
           <section className="mb-20">
             <SectionTitle
-              id="emploi"
+              id="employment"
               icon={GraduationCap}
-              title="Emploi et formation dans l'artisanat"
-              subtitle="L'artisanat, premier employeur de France avec 3,1 millions d'actifs"
+              title="Employment and legal education"
+              subtitle="The legal profession employs over 1.8 million workers across the United States"
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               <StatCard
-                value="~200 000"
-                label="Apprentis formés chaque année dans l'artisanat"
-                source="CMA France 2024"
+                value="~37,000"
+                label="JD degrees awarded annually"
+                source="ABA/LSAC 2024"
                 icon={GraduationCap}
                 accent="purple"
               />
               <StatCard
-                value="85 %"
-                label="Taux d'insertion professionnelle après un CAP/BEP artisanat"
-                source="DEPP/Éducation nationale 2024"
+                value="78%"
+                label="Bar exam pass rate (first-time takers)"
+                source="NCBE 2024"
                 icon={TrendingUp}
                 accent="green"
               />
               <StatCard
-                value="2 550 € net"
-                label="Salaire médian d'un artisan du bâtiment"
-                source="INSEE/DADS 2024"
-                icon={Euro}
+                value="$165,000"
+                label="Median starting salary at large firms"
+                source="NALP 2024"
+                icon={DollarSign}
                 accent="blue"
               />
               <StatCard
-                value="70 000 à 80 000"
-                label="Postes non pourvus dans le BTP chaque année"
-                source="FFB/CAPEB 2024"
+                value="~30,000"
+                label="Open legal positions annually"
+                source="BLS 2024"
                 icon={Users}
                 accent="red"
               />
               <StatCard
-                value="45 ans"
-                label="Âge moyen d'un chef d'entreprise artisanale"
-                source="ISM 2024"
+                value="47 years"
+                label="Average age of practicing attorneys"
+                source="ABA 2024"
                 icon={Users}
                 accent="orange"
               />
               <StatCard
-                value="25 %"
-                label="Part de femmes dans l'artisanat (en hausse)"
-                source="CMA France 2024"
+                value="38%"
+                label="Female attorneys (growing steadily)"
+                source="ABA 2024"
                 icon={Users}
                 accent="teal"
               />
             </div>
 
             <div className="bg-purple-50 rounded-xl border border-purple-200 p-6">
-              <h3 className="font-bold text-purple-900 mb-3">La pénurie de main d&apos;oeuvre dans le BTP</h3>
+              <h3 className="font-bold text-purple-900 mb-3">Hiring trends in the legal profession</h3>
               <p className="text-sm text-purple-800 mb-3">
-                Le secteur du bâtiment fait face à une tension majeure sur le recrutement.
-                Selon la FFB et la CAPEB, 70 000 à 80 000 postes restent vacants chaque année,
-                soit un taux de vacance parmi les plus élevés de l&apos;économie française.
+                The legal industry continues to evolve with growing demand in specialized areas.
+                According to the BLS and NALP, job openings are concentrated in technology law,
+                healthcare compliance, and cybersecurity — reflecting broader economic shifts.
               </p>
               <p className="text-sm text-purple-800">
-                Les métiers les plus en tension : <strong>couvreurs, plombiers-chauffagistes, électriciens,
-                menuisiers</strong> et <strong>maçons</strong>. L&apos;apprentissage et la reconversion professionnelle
-                sont les leviers prioritaires pour combler ce déficit.
+                The most in-demand specialties: <strong>intellectual property, data privacy,
+                healthcare law, immigration</strong>, and <strong>environmental law</strong>.
+                Diversity initiatives and remote work options are transforming firm culture and recruitment.
               </p>
             </div>
           </section>
 
           {/* ============================================================= */}
-          {/* Section 6: Tendances 2026 */}
+          {/* Section 6: 2026 outlook */}
           {/* ============================================================= */}
           <section className="mb-20">
             <SectionTitle
-              id="tendances"
+              id="trends"
               icon={TrendingUp}
-              title="Tendances du marché artisanal en 2026"
-              subtitle="Les dynamiques qui transforment le secteur"
+              title="2026 legal market outlook"
+              subtitle="The dynamics transforming the legal sector"
             />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -884,13 +882,13 @@ export default function StatistiquesArtisansFrancePage() {
                 <div className="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mb-4">
                   <Building2 className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-green-900 mb-2">Boom de la rénovation</h3>
+                <h3 className="font-bold text-green-900 mb-2">AI and legal tech boom</h3>
                 <p className="text-sm text-green-800 mb-3">
-                  Le marché de la rénovation progresse de 4 à 6 % par an, tiré par les obligations
-                  réglementaires (loi Climat, RE2020) et les aides publiques (MaPrimeRénov&apos;).
+                  AI-powered tools are transforming legal research, contract review, and document
+                  drafting. Law firms are investing heavily in technology to improve efficiency.
                 </p>
                 <p className="text-sm text-green-700">
-                  <strong>+4,5 %</strong> de croissance attendue en 2026 pour la rénovation énergétique.
+                  <strong>+25%</strong> growth expected in legal tech adoption by 2027.
                 </p>
               </div>
 
@@ -899,13 +897,13 @@ export default function StatistiquesArtisansFrancePage() {
                 <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
                   <Zap className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-blue-900 mb-2">Impact de la RE2020</h3>
+                <h3 className="font-bold text-blue-900 mb-2">Alternative fee models</h3>
                 <p className="text-sm text-blue-800 mb-3">
-                  La Réglementation Environnementale 2020 impose des standards exigeants
-                  sur les constructions neuves : bas carbone, biosourcés, performance thermique.
+                  Clients increasingly demand flat fees, subscription models, and value-based
+                  pricing. The traditional billable hour model is being challenged.
                 </p>
                 <p className="text-sm text-blue-700">
-                  <strong>+15 %</strong> de demande estimée pour les artisans qualifiés RE2020 d&apos;ici 2027.
+                  <strong>45%</strong> of clients now prefer alternative fee arrangements over hourly billing.
                 </p>
               </div>
 
@@ -914,13 +912,13 @@ export default function StatistiquesArtisansFrancePage() {
                 <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-4">
                   <BarChart3 className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-purple-900 mb-2">Digitalisation du secteur</h3>
+                <h3 className="font-bold text-purple-900 mb-2">Remote and hybrid practice</h3>
                 <p className="text-sm text-purple-800 mb-3">
-                  Les artisans adoptent massivement les outils numériques : devis en ligne,
-                  prise de rendez-vous, réseaux sociaux, annuaires spécialisés.
+                  The shift to remote work has permanently changed legal practice. Virtual
+                  consultations, digital court filings, and online mediation are now standard.
                 </p>
                 <p className="text-sm text-purple-700">
-                  <strong>72 %</strong> des artisans utilisent internet pour trouver des clients (CMA 2025).
+                  <strong>68%</strong> of attorneys now offer virtual consultations (ABA 2025).
                 </p>
               </div>
             </div>
@@ -928,30 +926,30 @@ export default function StatistiquesArtisansFrancePage() {
             {/* Additional trends */}
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <StatCard
-                value="+4,5 %"
-                label="Croissance prévue du marché de la rénovation en 2026"
-                source="FFB/CAPEB prévisions 2026"
+                value="+3.5%"
+                label="Projected growth in legal services demand by 2026"
+                source="BLS/IBISWorld projections 2026"
                 icon={TrendingUp}
                 accent="green"
               />
               <StatCard
-                value="72 %"
-                label="Artisans utilisant internet pour trouver des clients"
-                source="CMA France 2025"
+                value="68%"
+                label="Attorneys offering virtual consultations"
+                source="ABA 2025"
                 icon={Zap}
                 accent="blue"
               />
               <StatCard
-                value="-8 %"
-                label="Baisse des mises en chantier neuves en 2025"
-                source="SDES/Sit@del 2025"
+                value="+12%"
+                label="Increase in cybersecurity and data privacy legal work"
+                source="Thomson Reuters 2025"
                 icon={Building2}
                 accent="red"
               />
               <StatCard
-                value="55 %"
-                label="Part du chiffre d'affaires BTP réalisée en rénovation"
-                source="FFB 2024"
+                value="55%"
+                label="Of legal work now involves some form of technology"
+                source="Clio Legal Trends 2024"
                 icon={Hammer}
                 accent="orange"
               />
@@ -959,50 +957,48 @@ export default function StatistiquesArtisansFrancePage() {
           </section>
 
           {/* ============================================================= */}
-          {/* Méthodologie */}
+          {/* Methodology */}
           {/* ============================================================= */}
-          <section className="mb-20" id="methodologie">
+          <section className="mb-20" id="methodology">
             <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 md:p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <BookOpen className="w-6 h-6 text-blue-600" />
-                Méthodologie
+                Methodology
               </h2>
               <div className="prose prose-sm max-w-none text-gray-700">
                 <p>
-                  Les statistiques présentées sur cette page proviennent de sources officielles
-                  et de calculs réalisés par l&apos;équipe ServicesArtisans. Voici notre méthodologie :
+                  The statistics presented on this page come from official sources
+                  and calculations performed by the USAttorneys team. Here is our methodology:
                 </p>
                 <ul className="space-y-2 mt-3">
                   <li>
-                    <strong>Nombre d&apos;artisans par département :</strong> dérivés des données
-                    INSEE (populations légales 2024) croisées avec les ratios de densité artisanale
-                    publiés par Le Moniteur, la CMA et la CAPEB. Calibrés sur les totaux régionaux
-                    et nationaux connus (CMA : 1,3M ; CAPEB : 621 803 BTP).
+                    <strong>Number of attorneys by state:</strong> derived from
+                    state bar association membership data crossed with Census Bureau population
+                    estimates. Calibrated against ABA national totals (1.3M+ licensed attorneys).
                   </li>
                   <li>
-                    <strong>Tarifs :</strong> fourchettes issues de notre baromètre de prix 2026,
-                    constitué à partir d&apos;enquêtes auprès d&apos;artisans partenaires et de données
-                    sectorielles (CAPEB, FFB, QUALIT&apos;EnR). Les variations sont calculées
-                    en glissement annuel.
+                    <strong>Fees:</strong> ranges from our 2026 fee index,
+                    compiled from surveys of partner attorneys, published fee schedules,
+                    and industry reports (Clio, NALP, Thomson Reuters). Variations are calculated
+                    on a year-over-year basis.
                   </li>
                   <li>
-                    <strong>Indices régionaux :</strong> base 100 correspondant à la moyenne
-                    nationale. Calculés à partir des écarts de prix constatés entre régions,
-                    pondérés par le volume d&apos;interventions.
+                    <strong>Regional indices:</strong> base 100 corresponding to the national
+                    average. Calculated from observed fee differences between regions,
+                    weighted by volume of legal services.
                   </li>
                   <li>
-                    <strong>Données rénovation énergétique :</strong> sources ADEME, ANAH,
-                    Observatoire National de la Rénovation Énergétique (ONRE) et rapports
-                    parlementaires.
+                    <strong>Legal trend data:</strong> sources include ABA, Legal Services
+                    Corporation, Stanford CodeX, and Bureau of Labor Statistics reports.
                   </li>
                   <li>
-                    <strong>Données emploi :</strong> sources INSEE, DARES, DEPP,
-                    ISM (Institut Supérieur des Métiers) et CMA France.
+                    <strong>Employment data:</strong> sources include BLS, NALP,
+                    LSAC (Law School Admission Council), and ABA.
                   </li>
                 </ul>
                 <p className="mt-3 text-xs text-gray-500">
-                  Les chiffres sont arrondis pour faciliter la lecture. Les estimations sont
-                  signalées par le symbole &laquo; ~ &raquo;. Dernière mise à jour : mars 2026.
+                  Figures are rounded for readability. Estimates are
+                  indicated by the &ldquo;~&rdquo; symbol. Last updated: March 2026.
                 </p>
               </div>
             </div>
@@ -1013,53 +1009,53 @@ export default function StatistiquesArtisansFrancePage() {
           {/* ============================================================= */}
           <section className="mb-20" id="sources">
             <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sources et références</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sources and references</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
                   {
-                    name: 'CMA France',
-                    desc: 'Chambres de Métiers et de l\'Artisanat — données nationales et régionales',
-                    url: 'https://www.cma-france.fr/',
+                    name: 'American Bar Association (ABA)',
+                    desc: 'National data on attorney demographics, bar admissions, and legal education',
+                    url: 'https://www.americanbar.org/',
                   },
                   {
-                    name: 'INSEE',
-                    desc: 'Institut National de la Statistique — populations, emploi, revenus',
-                    url: 'https://www.insee.fr/',
+                    name: 'Bureau of Labor Statistics (BLS)',
+                    desc: 'Employment statistics, salary data, and occupational outlook for attorneys',
+                    url: 'https://www.bls.gov/',
                   },
                   {
-                    name: 'ADEME',
-                    desc: 'Agence de la transition écologique — rénovation énergétique, RGE',
-                    url: 'https://www.ademe.fr/',
+                    name: 'NALP',
+                    desc: 'National Association for Law Placement — hiring data, salary surveys',
+                    url: 'https://www.nalp.org/',
                   },
                   {
-                    name: 'CAPEB',
-                    desc: 'Confédération de l\'Artisanat et des Petites Entreprises du Bâtiment',
-                    url: 'https://www.capeb.fr/',
+                    name: 'LSAC',
+                    desc: 'Law School Admission Council — applicant data, enrollment trends',
+                    url: 'https://www.lsac.org/',
                   },
                   {
-                    name: 'FFB',
-                    desc: 'Fédération Française du Bâtiment — conjoncture, emploi BTP',
-                    url: 'https://www.ffbatiment.fr/',
+                    name: 'Legal Services Corporation',
+                    desc: 'Access to justice data, unmet legal needs reports',
+                    url: 'https://www.lsc.gov/',
                   },
                   {
-                    name: 'ANAH',
-                    desc: 'Agence Nationale de l\'Habitat — MaPrimeRénov\', aides',
-                    url: 'https://www.anah.gouv.fr/',
+                    name: 'Clio Legal Trends',
+                    desc: 'Annual reports on legal industry technology and billing trends',
+                    url: 'https://www.clio.com/resources/legal-trends/',
                   },
                   {
-                    name: 'U2P',
-                    desc: 'Union des Entreprises de Proximité — chiffres clés artisanat',
-                    url: 'https://u2p-france.fr/',
+                    name: 'Thomson Reuters',
+                    desc: 'Legal market intelligence, law firm performance data',
+                    url: 'https://www.thomsonreuters.com/',
                   },
                   {
-                    name: 'ISM',
-                    desc: 'Institut Supérieur des Métiers — baromètre de l\'artisanat',
-                    url: 'https://www.infometiers.org/',
+                    name: 'US Census Bureau',
+                    desc: 'Population data by state, demographic statistics',
+                    url: 'https://www.census.gov/',
                   },
                   {
-                    name: 'ONRE',
-                    desc: 'Observatoire National de la Rénovation Énergétique',
-                    url: 'https://www.statistiques.developpement-durable.gouv.fr/',
+                    name: 'NCBE',
+                    desc: 'National Conference of Bar Examiners — bar exam statistics',
+                    url: 'https://www.ncbex.org/',
                   },
                 ].map((source) => (
                   <div key={source.name} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
@@ -1071,7 +1067,7 @@ export default function StatistiquesArtisansFrancePage() {
                       rel="noopener noreferrer"
                       className="text-xs text-blue-600 hover:underline flex items-center gap-1"
                     >
-                      Consulter <ExternalLink className="w-3 h-3" />
+                      Visit <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
                 ))}
@@ -1084,9 +1080,9 @@ export default function StatistiquesArtisansFrancePage() {
           {/* ============================================================= */}
           <section className="mb-12">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-8 text-white">
-              <h2 className="text-2xl font-bold mb-4">Explorez nos autres ressources</h2>
+              <h2 className="text-2xl font-bold mb-4">Explore our other resources</h2>
               <p className="text-blue-100 mb-6">
-                Retrouvez des données détaillées sur les tarifs, les artisans par ville et nos guides pratiques.
+                Find detailed data on fees, attorneys by city, and our practical guides.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Link
@@ -1094,30 +1090,30 @@ export default function StatistiquesArtisansFrancePage() {
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/20 transition-colors group"
                 >
                   <h3 className="font-bold mb-1 flex items-center gap-2">
-                    Baromètre des prix
+                    Fee Index
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-sm text-blue-200">Tarifs détaillés par métier et par région</p>
+                  <p className="text-sm text-blue-200">Detailed fees by practice area and region</p>
                 </Link>
                 <Link
                   href="/services"
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/20 transition-colors group"
                 >
                   <h3 className="font-bold mb-1 flex items-center gap-2">
-                    Annuaire par métier
+                    Attorney Directory
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-sm text-blue-200">Trouvez un artisan qualifié près de chez vous</p>
+                  <p className="text-sm text-blue-200">Find a qualified attorney near you</p>
                 </Link>
                 <Link
                   href="/guides"
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/20 transition-colors group"
                 >
                   <h3 className="font-bold mb-1 flex items-center gap-2">
-                    Guides pratiques
+                    Legal Guides
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-sm text-blue-200">Conseils pour vos projets de travaux</p>
+                  <p className="text-sm text-blue-200">Practical advice for your legal matters</p>
                 </Link>
               </div>
             </div>

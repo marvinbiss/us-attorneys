@@ -1,7 +1,7 @@
 /**
- * Artisan Profile API
- * GET: Fetch artisan profile
- * PUT: Update artisan profile
+ * Attorney Profile API
+ * GET: Fetch attorney profile
+ * PUT: Update attorney profile
  */
 
 import { NextResponse } from 'next/server'
@@ -43,7 +43,7 @@ export async function GET() {
     if (profileError) {
       logger.error('Error fetching profile:', profileError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération du profil' },
+        { error: 'Error retrieving profile' },
         { status: 500 }
       )
     }
@@ -59,7 +59,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Profile GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -106,7 +106,7 @@ export async function PUT(request: Request) {
       if (updateError) {
         logger.error('Error updating profile:', updateError)
         return NextResponse.json(
-          { error: 'Erreur lors de la mise à jour du profil' },
+          { error: 'Error updating profile' },
           { status: 500 }
         )
       }
@@ -135,21 +135,21 @@ export async function PUT(request: Request) {
       if (attorneyError) {
         logger.error('Error updating provider:', attorneyError)
         return NextResponse.json(
-          { error: 'Erreur lors de la mise à jour du profil artisan' },
+          { error: 'Error updating attorney profile' },
           { status: 500 }
         )
       }
       provider = data
     }
 
-    // Revalidation on-demand des pages affectées (non-bloquant)
+    // On-demand revalidation of affected pages (non-blocking)
     if (provider) {
       try {
-        const specialtySlug = slugify(provider.specialty || 'artisan')
+        const specialtySlug = slugify(provider.specialty || 'attorney')
         const locationSlug = slugify(provider.address_city || 'france')
         const publicId = provider.slug || provider.stable_id
 
-        // Page profil artisan
+        // Attorney profile page
         if (publicId) {
           revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
         }
@@ -167,7 +167,7 @@ export async function PUT(request: Request) {
           ],
         })
       } catch (revalError) {
-        // Ne pas bloquer la réponse si la revalidation échoue
+        // Don't block the response if revalidation fails
         logger.error('Revalidation failed after profile update:', revalError)
       }
     }
@@ -176,12 +176,12 @@ export async function PUT(request: Request) {
       success: true,
       profile,
       provider,
-      message: 'Profil mis à jour avec succès'
+      message: 'Profile updated successfully'
     })
   } catch (error) {
     logger.error('Profile PUT error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

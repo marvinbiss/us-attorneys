@@ -18,8 +18,8 @@ export function AttorneyBreadcrumb({ artisan }: AttorneyBreadcrumbProps) {
   // Build breadcrumb with 5 levels for SEO clarity
   // Structure: Accueil > Services > {Service} > {City} > {Nom artisan}
   const items: Array<{ label: string; href?: string; icon?: typeof Home }> = [
-    { label: 'Accueil', href: '/', icon: Home },
-    { label: 'Services', href: '/services' },
+    { label: 'Home', href: '/', icon: Home },
+    { label: 'Practice Areas', href: '/services' },
     { label: artisan.specialty, href: `/practice-areas/${specialtySlug}` },
   ]
 
@@ -32,7 +32,7 @@ export function AttorneyBreadcrumb({ artisan }: AttorneyBreadcrumbProps) {
   items.push({ label: displayName })
 
   return (
-    <nav className="flex items-center gap-1 text-sm text-gray-500 overflow-x-auto pb-2 scrollbar-hide" aria-label="Fil d'Ariane">
+    <nav className="flex items-center gap-1 text-sm text-gray-500 overflow-x-auto pb-2 scrollbar-hide" aria-label="Breadcrumb">
       <ol className="flex items-center gap-1">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-1 whitespace-nowrap">

@@ -13,20 +13,20 @@ export async function GET(_request: NextRequest) {
       return authResult.error
     }
 
-    // La table data_export_requests a été supprimée en migration 100.
-    // La fonctionnalité de file d'attente RGPD est désactivée.
+    // The data_export_requests table was removed in migration 100.
+    // The GDPR queue feature is disabled.
     return NextResponse.json({
       success: true,
       requests: [],
       total: 0,
       page: 1,
       totalPages: 1,
-      message: 'Fonctionnalité de demandes RGPD désactivée — table non disponible',
+      message: 'GDPR request feature disabled — table not available',
     })
   } catch (error) {
     logger.error('Admin GDPR requests error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

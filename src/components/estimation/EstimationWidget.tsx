@@ -161,7 +161,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
           <motion.div
             ref={widgetRef}
             role="dialog"
-            aria-label={`Estimation ${context.metier} à ${context.ville}`}
+            aria-label={`Estimate ${context.metier} in ${context.ville}`}
             aria-modal="true"
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -186,17 +186,17 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 <div className="min-w-0">
                   <p className="text-sm font-semibold truncate">
                     {context.artisan
-                      ? `Devis avec ${context.artisan.name}`
-                      : `${context.metier} à ${context.ville}`}
+                      ? `Consultation with ${context.artisan.name}`
+                      : `${context.metier} in ${context.ville}`}
                   </p>
                   <p className="text-[11px] text-white/80">
-                    Estimation gratuite IA
+                    Free AI estimate
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                aria-label="Fermer le chat"
+                aria-label="Close chat"
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-white/20 transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -214,7 +214,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                     : 'text-gray-500 hover:text-gray-700')
                 }
               >
-                Estimer mon projet
+                Estimate my case
               </button>
               <button
                 onClick={() => setActiveTab('callback')}
@@ -225,7 +225,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                     : 'text-gray-500 hover:text-gray-700')
                 }
               >
-                Demande de rappel
+                Request a callback
               </button>
             </div>
 
@@ -247,23 +247,23 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             {/* Footer with privacy link */}
             <div className="border-t border-gray-100 px-4 py-2 text-center shrink-0">
               <p className="text-[11px] text-gray-400">
-                Propulsé par{' '}
+                Powered by{' '}
                 <a
                   href="https://us-attorneys.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-500 transition-colors"
                 >
-                  ServicesArtisans.fr
+                  US Attorneys
                 </a>
-                {' · '}Estimation non contractuelle
+                {' · '}Non-binding estimate
                 {' · '}
                 <a
                   href="/privacy"
                   target="_blank"
                   className="hover:text-gray-500"
                 >
-                  Confidentialité
+                  Privacy
                 </a>
               </p>
             </div>

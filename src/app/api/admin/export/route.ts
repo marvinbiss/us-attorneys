@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     const result = exportQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -71,12 +71,12 @@ export async function GET(request: NextRequest) {
       }
       default:
         return NextResponse.json(
-          { success: false, error: { message: 'Type d\'export invalide' } },
+          { success: false, error: { message: 'Invalid export type' } },
           { status: 400 }
         )
     }
 
-    // Log d'audit pour l'export de données
+    // Audit log for data export
     await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, { format, recordCount: data.length })
 
     if (format === 'csv') {
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin export error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

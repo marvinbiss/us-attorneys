@@ -44,7 +44,7 @@ export default function AttorneyCard({
       <Link
         href={providerUrl}
         className="absolute inset-0 z-10 md:hidden"
-        aria-label={`Voir le profil de ${provider.name}`}
+        aria-label={`View ${provider.name}'s profile`}
       />
       {/* Mobile: right arrow indicator */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden z-0">
@@ -70,8 +70,8 @@ export default function AttorneyCard({
             {provider.is_verified && (
               <span
                 className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-clay-400 to-clay-600"
-                aria-label="Artisan référencé"
-                title="Artisan référencé"
+                aria-label="Verified Attorney"
+                title="Verified Attorney"
               >
                 <svg
                   className="w-3.5 h-3.5 text-white relative z-10"
@@ -98,7 +98,7 @@ export default function AttorneyCard({
               </span>
             </div>
             <div className="flex items-center gap-1 justify-end mt-0.5">
-              <span className="text-xs text-gray-500">{reviewCount} avis</span>
+              <span className="text-xs text-gray-500">{reviewCount} reviews</span>
               {reviewCount > 10 && (
                 <span className="text-2xs font-semibold text-clay-600 bg-clay-50 px-1.5 py-0.5 rounded-full">10+</span>
               )}
@@ -106,7 +106,7 @@ export default function AttorneyCard({
           </div>
         ) : (
           <span className="flex-shrink-0 inline-flex items-center px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">
-            Nouveau
+            New
           </span>
         )}
       </div>
@@ -136,7 +136,7 @@ export default function AttorneyCard({
           href={`${providerUrl}#devis`}
           className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
         >
-          Demander un devis
+          Request a Consultation
         </Link>
         {isValidPhone(provider.phone) && (
           <a
@@ -144,7 +144,7 @@ export default function AttorneyCard({
             className="group flex-1 flex items-center justify-center gap-2 py-3 min-h-[48px] border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
           >
             <Phone className="w-5 h-5" />
-            Appeler
+            Call
           </a>
         )}
       </div>

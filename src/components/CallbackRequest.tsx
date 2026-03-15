@@ -9,10 +9,11 @@ interface CallbackRequestProps {
   cityName?: string
 }
 
-function isValidFrenchPhone(phone: string): boolean {
+function isValidUSPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
+  if (/^\d{10}$/.test(cleaned)) return true
+  if (/^1\d{10}$/.test(cleaned)) return true
+  if (/^\+1\d{10}$/.test(cleaned)) return true
   return false
 }
 
@@ -27,11 +28,11 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
     setError('')
 
     if (!phone.trim()) {
-      setError('Veuillez entrer votre numéro')
+      setError('Please enter your phone number')
       return
     }
-    if (!isValidFrenchPhone(phone.trim())) {
-      setError('Numéro de téléphone français invalide')
+    if (!isValidUSPhone(phone.trim())) {
+      setError('Invalid US phone number')
       return
     }
 
@@ -46,27 +47,27 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
           telephone: phone.trim(),
           nom: '',
           email: '',
-          description: 'Demande de rappel',
-          urgency: 'semaine',
+          description: 'Callback request',
+          urgency: 'week',
           budget: '',
           codePostal: '',
         }),
       })
 
-      if (!res.ok) throw new Error('Erreur')
+      if (!res.ok) throw new Error('Error')
 
       trackEvent('devis_submitted', {
         source: 'callback_request',
         service: specialtySlug || '',
         city: cityName || '',
         value: 30,
-        currency: 'EUR',
+        currency: 'USD',
       })
       trackConversion('generate_lead', 30)
 
       setSuccess(true)
     } catch {
-      setError('Une erreur est survenue. Veuillez réessayer.')
+      setError('An error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -76,8 +77,8 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
     return (
       <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
         <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-        <p className="text-sm font-semibold text-green-900">Demande envoyée !</p>
-        <p className="text-xs text-green-700 mt-1">Un artisan vous rappellera sous 24h.</p>
+        <p className="text-sm font-semibold text-green-900">Request sent!</p>
+        <p className="text-xs text-green-700 mt-1">An attorney will call you back within 24 hours.</p>
       </div>
     )
   }
@@ -86,14 +87,14 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
     <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/60 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-3">
         <Phone className="w-4 h-4 text-amber-600" />
-        <span className="text-sm font-semibold text-amber-900">Être rappelé gratuitement</span>
+        <span className="text-sm font-semibold text-amber-900">Get a free callback</span>
       </div>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="tel"
           inputMode="tel"
           autoComplete="tel"
-          placeholder="06 12 34 56 78"
+          placeholder="(555) 123-4567"
           value={phone}
           onChange={(e) => { setPhone(e.target.value); setError('') }}
           style={{ fontSize: '16px' }}
@@ -104,12 +105,12 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
           disabled={loading}
           className="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
         >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Rappel gratuit'}
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Free callback'}
         </button>
       </form>
       {error && <p className="text-xs text-red-600 mt-1.5">{error}</p>}
       <p className="text-[10px] text-amber-700/60 mt-2">
-        Gratuit et sans engagement. Vos données restent confidentielles.
+        Free and no obligation. Your information remains confidential.
       </p>
     </div>
   )

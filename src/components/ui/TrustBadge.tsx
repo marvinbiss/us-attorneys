@@ -104,9 +104,9 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
 
   const formatMontant = (montant: number | null) => {
     if (montant === null) return null
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'USD',
       maximumFractionDigits: 0
     }).format(montant)
   }
@@ -117,13 +117,13 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
         {entreprise.badges.entrepriseSaine && (
           <span className="inline-flex items-center gap-1 text-green-600">
             <CheckCircle className="w-4 h-4" />
-            Entreprise saine
+            Verified business
           </span>
         )}
         {anciennete !== null && anciennete > 0 && (
           <span className="inline-flex items-center gap-1 text-gray-600">
             <Calendar className="w-4 h-4" />
-            {anciennete} an{anciennete > 1 ? 's' : ''}
+            {anciennete} year{anciennete > 1 ? 's' : ''}
           </span>
         )}
         {entreprise.effectif && (
@@ -143,7 +143,7 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
         <div>
           <h3 className="font-semibold text-gray-900">{entreprise.nom}</h3>
           <p className="text-sm text-gray-500">
-            SIRET: {entreprise.siret} • {entreprise.formeJuridique}
+            Bar #: {entreprise.siret} • {entreprise.formeJuridique}
           </p>
         </div>
 
@@ -158,16 +158,16 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
             }
             label={
               entreprise.badges.plusDe5Ans && entreprise.badges.caSuperieur100k
-                ? 'Établie'
+                ? 'Established'
                 : entreprise.badges.plusDe5Ans
-                ? 'Confirmée'
-                : 'Vérifiée'
+                ? 'Confirmed'
+                : 'Verified'
             }
           />
         ) : (
           <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-50 text-red-600 text-xs rounded-full">
             <AlertTriangle className="w-3 h-3" />
-            Attention
+            Warning
           </span>
         )}
       </div>
@@ -182,7 +182,7 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
         {anciennete !== null && (
           <div className="flex items-center gap-2 text-gray-600">
             <Calendar className="w-4 h-4 text-gray-400" />
-            <span>Créée en {entreprise.dateCreationFormate} ({anciennete} an{anciennete > 1 ? 's' : ''})</span>
+            <span>Established {entreprise.dateCreationFormate} ({anciennete} year{anciennete > 1 ? 's' : ''})</span>
           </div>
         )}
 
@@ -196,7 +196,7 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
         {entreprise.effectif && (
           <div className="flex items-center gap-2 text-gray-600">
             <Users className="w-4 h-4 text-gray-400" />
-            <span>Effectif: {entreprise.effectif}</span>
+            <span>Team: {entreprise.effectif}</span>
           </div>
         )}
       </div>
@@ -204,7 +204,7 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
       {/* Dirigeants */}
       {entreprise.dirigeants.length > 0 && (
         <div className="pt-3 border-t border-gray-100">
-          <p className="text-xs text-gray-500 mb-1">Dirigeant{entreprise.dirigeants.length > 1 ? 's' : ''}</p>
+          <p className="text-xs text-gray-500 mb-1">Director{entreprise.dirigeants.length > 1 ? 's' : ''}</p>
           <div className="flex flex-wrap gap-2">
             {entreprise.dirigeants.slice(0, 2).map((d, i) => (
               <span key={i} className="text-sm text-gray-700">
@@ -220,7 +220,7 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
       {entreprise.procedureCollective && (
         <div className="flex items-center gap-2 p-2 bg-red-50 rounded-lg text-red-700 text-sm">
           <AlertTriangle className="w-4 h-4" />
-          <span>Procédure collective en cours: {entreprise.procedureEnCours}</span>
+          <span>Active legal proceeding: {entreprise.procedureEnCours}</span>
         </div>
       )}
     </div>
@@ -242,33 +242,33 @@ export function SiretVerificationStatus({
     return (
       <span className="inline-flex items-center gap-1 text-gray-500 text-sm">
         <AlertTriangle className="w-4 h-4" />
-        SIRET non contrôlé
+        Bar number not verified
       </span>
     )
   }
 
   const dateVerif = verifiedAt
-    ? new Date(verifiedAt).toLocaleDateString('fr-FR')
+    ? new Date(verifiedAt).toLocaleDateString('en-US')
     : null
 
   return (
     <div className="flex items-center gap-2">
       <span className="inline-flex items-center gap-1 text-green-600 text-sm">
         <CheckCircle className="w-4 h-4" />
-        SIRET contrôlé
+        Bar number verified
       </span>
       {dateVerif && (
-        <span className="text-xs text-gray-400">le {dateVerif}</span>
+        <span className="text-xs text-gray-400">on {dateVerif}</span>
       )}
       {badgeNiveau !== 'none' && (
         <TrustBadge
           niveau={badgeNiveau}
           label={
             badgeNiveau === 'gold'
-              ? 'Établie'
+              ? 'Established'
               : badgeNiveau === 'silver'
-              ? 'Confirmée'
-              : 'Vérifiée'
+              ? 'Confirmed'
+              : 'Verified'
           }
           size="sm"
         />

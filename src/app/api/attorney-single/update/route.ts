@@ -17,7 +17,7 @@ export const PATCH = createApiHandler(
       .single()
 
     if (fetchError || !provider) {
-      throw new NotFoundError('Profil artisan')
+      throw new NotFoundError('Attorney profile')
     }
 
     // Update provider

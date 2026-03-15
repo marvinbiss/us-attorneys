@@ -1,87 +1,75 @@
 // ---------------------------------------------------------------------------
-// Quick prompts par metier
+// Quick prompts per practice area
 // ---------------------------------------------------------------------------
 
 export const quickPrompts: Record<string, string[]> = {
-  plombier: [
-    "J'ai une fuite d'eau",
-    'Refaire ma salle de bain',
-    'Chauffe-eau en panne',
-    'WC suspendu à installer',
+  'personal-injury': [
+    'I was in a car accident',
+    'Slip and fall injury',
+    'Medical malpractice',
+    'Workers compensation claim',
   ],
-  serrurier: [
-    'Enfermé dehors',
-    'Serrure cassée',
-    'Porte blindée',
-    'Changer le cylindre',
+  'criminal-defense': [
+    'I need a criminal defense attorney',
+    'DUI/DWI charge',
+    'Drug possession charges',
+    'Assault charges',
   ],
-  electricien: [
-    'Tableau qui disjoncte',
-    'Mise aux normes',
-    'Ajouter des prises',
-    'Installer une borne de recharge',
+  'family-law': [
+    'Filing for divorce',
+    'Child custody dispute',
+    'Child support modification',
+    'Prenuptial agreement',
   ],
-  chauffagiste: [
-    'Chaudière en panne',
-    'Installer un radiateur',
-    'Entretien chaudière',
-    'Pompe à chaleur',
+  immigration: [
+    'Green card application',
+    'Visa issues',
+    'Deportation defense',
+    'Citizenship application',
   ],
-  couvreur: [
-    'Fuite toiture',
-    'Rénovation toiture',
-    'Nettoyage toiture',
-    'Gouttières',
+  'real-estate': [
+    'Home purchase closing',
+    'Property dispute',
+    'Landlord-tenant issue',
+    'Zoning problems',
   ],
-  peintre: [
-    'Peindre un appartement',
-    'Ravalement de façade',
-    'Repeindre une pièce',
-    'Traitement humidité murs',
+  'employment-law': [
+    'Wrongful termination',
+    'Workplace discrimination',
+    'Wage dispute',
+    'Non-compete agreement',
   ],
-  menuisier: [
-    'Porte sur mesure',
-    'Placard intégré',
-    'Escalier bois',
-    'Fenêtres à changer',
+  'estate-planning': [
+    'Create a will',
+    'Set up a trust',
+    'Probate issues',
+    'Power of attorney',
   ],
-  carreleur: [
-    'Carrelage salle de bain',
-    'Carrelage terrasse',
-    'Faïence cuisine',
-    'Pose de parquet',
+  bankruptcy: [
+    'Chapter 7 bankruptcy',
+    'Chapter 13 bankruptcy',
+    'Debt relief options',
+    'Creditor harassment',
   ],
-  maçon: [
-    'Extension maison',
-    'Mur de clôture',
-    'Terrasse béton',
-    'Ouverture mur porteur',
+  'business-law': [
+    'LLC formation',
+    'Partnership agreement',
+    'Contract dispute',
+    'Business litigation',
   ],
-  vitrier: [
-    'Vitre cassée',
-    'Double vitrage',
-    'Porte vitrée',
-    'Miroir sur mesure',
-  ],
-  'pompe-a-chaleur': [
-    'Installation pompe à chaleur',
-    'Remplacement chaudière par PAC',
-    'Entretien PAC annuel',
-    'Devis PAC air-eau',
-  ],
-  'isolation-thermique': [
-    'Isolation des combles',
-    'Isolation extérieure (ITE)',
-    'Isolation murs intérieurs',
-    'Devis isolation maison',
+  'tax-law': [
+    'IRS audit defense',
+    'Tax debt resolution',
+    'Back taxes owed',
+    'Tax fraud charges',
   ],
 }
 
 export const defaultPrompts = [
-  'Estimer mon projet',
-  'Demander un devis',
-  'Besoin urgent',
-  'Question sur les prix',
+  'Estimate my case',
+  'Request a consultation',
+  'Urgent matter',
+  'Question about fees',
 ]
 
 // ---------------------------------------------------------------------------
@@ -93,24 +81,20 @@ export const RETURN_VISITOR_KEY = 'sa_estimation_visited'
 export const CONVERSATION_STORAGE_KEY = 'sa_estimation_conversation'
 
 // ---------------------------------------------------------------------------
-// Prix d'appel réalistes par métier (min €) pour le teaser
+// Realistic starting fees per practice area for teaser
 // ---------------------------------------------------------------------------
 
 export const priceTeasers: Record<string, string> = {
-  plombier: 'Fuite d’eau : à partir de 80€',
-  serrurier: 'Ouverture de porte : à partir de 90€',
-  electricien: 'Panne électrique : à partir de 70€',
-  chauffagiste: 'Entretien chaudière : à partir de 90€',
-  couvreur: 'Réparation toiture : à partir de 150€',
-  peintre: 'Peinture pièce : à partir de 25€/m²',
-  menuisier: 'Porte sur mesure : à partir de 200€',
-  carreleur: 'Carrelage : à partir de 30€/m²',
-  maçon: 'Mur de clôture : à partir de 100€/ml',
-  vitrier: 'Remplacement vitre : à partir de 80€',
-  climaticien: 'Installation clim : à partir de 800€',
-  cuisiniste: 'Cuisine équipée : à partir de 3 000€',
-  'pompe-a-chaleur': 'PAC air-eau : à partir de 10 000€',
-  'isolation-thermique': 'Isolation combles : à partir de 20€/m²',
+  'personal-injury': 'Car accident case: Free consultation',
+  'criminal-defense': 'DUI defense: Starting at $2,500',
+  'family-law': 'Divorce filing: Starting at $1,500',
+  immigration: 'Green card: Starting at $3,000',
+  'real-estate': 'Home closing: Starting at $1,000',
+  'employment-law': 'Wrongful termination: Free consultation',
+  'estate-planning': 'Will preparation: Starting at $500',
+  bankruptcy: 'Chapter 7: Starting at $1,200',
+  'business-law': 'LLC formation: Starting at $800',
+  'tax-law': 'IRS audit defense: Starting at $3,000',
 }
 
 // ---------------------------------------------------------------------------
@@ -118,9 +102,9 @@ export const priceTeasers: Record<string, string> = {
 // ---------------------------------------------------------------------------
 
 export const LEAD_TRIGGER_KEYWORDS = [
-  'mise en relation',
-  'rappel',
-  'mettre en contact',
-  'contacter un',
-  'souhaitez-vous',
+  'connect me',
+  'callback',
+  'put me in touch',
+  'contact an',
+  'would you like',
 ]

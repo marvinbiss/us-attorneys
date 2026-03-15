@@ -79,10 +79,10 @@ export default function LeadDetailPage() {
         window.location.href = '/login?redirect=/attorney-dashboard/leads'
         return
       } else {
-        setError(data.error || 'Erreur')
+        setError(data.error || 'Error')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -135,10 +135,10 @@ export default function LeadDetailPage() {
         router.push('/attorney-dashboard/leads')
       } else {
         const data = await res.json()
-        setError(data.error || 'Erreur')
+        setError(data.error || 'Error')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setActionLoading(null)
     }
@@ -147,7 +147,7 @@ export default function LeadDetailPage() {
   const handleQuoteSubmit = () => {
     const amount = parseFloat(quoteAmount)
     if (isNaN(amount) || amount <= 0) {
-      setError('Montant invalide')
+      setError('Invalid amount')
       return
     }
     handleAction('quote', { amount, description: quoteDesc })
@@ -158,7 +158,7 @@ export default function LeadDetailPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+          <p className="text-sm text-gray-500 mt-2">Loading...</p>
         </div>
       </div>
     )
@@ -171,7 +171,7 @@ export default function LeadDetailPage() {
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p className="text-red-700 font-medium">{error}</p>
           <Link href="/attorney-dashboard/leads" className="text-blue-600 hover:underline text-sm mt-4 block">
-            Retour aux opportunités
+            Back to Leads
           </Link>
         </div>
       </div>
@@ -189,11 +189,11 @@ export default function LeadDetailPage() {
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/attorney-dashboard" className="hover:text-gray-900">Espace Artisan</Link>
+            <Link href="/attorney-dashboard" className="hover:text-gray-900">Attorney Dashboard</Link>
             <span>/</span>
-            <Link href="/attorney-dashboard/leads" className="hover:text-gray-900">Opportunités</Link>
+            <Link href="/attorney-dashboard/leads" className="hover:text-gray-900">Leads</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">Détail</span>
+            <span className="text-gray-900 font-medium">Detail</span>
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@ export default function LeadDetailPage() {
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour aux opportunités
+          Back to Leads
         </Link>
 
         {error && (
@@ -237,7 +237,7 @@ export default function LeadDetailPage() {
                 {lead.budget && (
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 p-3 bg-green-50 rounded-lg border border-green-100">
                     <Euro className="w-4 h-4 text-green-600" />
-                    <span><strong>Budget indicatif :</strong> {lead.budget}</span>
+                    <span><strong>Estimated Budget:</strong> {lead.budget}</span>
                   </div>
                 )}
 
@@ -245,10 +245,10 @@ export default function LeadDetailPage() {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Calendar className="w-4 h-4 text-gray-400" />
                     <div>
-                      <p className="text-xs text-gray-400">Reçu le</p>
+                      <p className="text-xs text-gray-400">Received</p>
                       <p className="text-sm text-gray-700">
-                        {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                          day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                        {new Date(lead.created_at).toLocaleDateString('en-US', {
+                          month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
                         })}
                       </p>
                     </div>
@@ -257,7 +257,7 @@ export default function LeadDetailPage() {
                     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                       <MapPin className="w-4 h-4 text-gray-400" />
                       <div>
-                        <p className="text-xs text-gray-400">Localisation</p>
+                        <p className="text-xs text-gray-400">Location</p>
                         <p className="text-sm text-gray-700">
                           {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                         </p>
@@ -274,7 +274,7 @@ export default function LeadDetailPage() {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Phone className="w-4 h-4 text-gray-400" />
                     <div>
-                      <p className="text-xs text-gray-400">Téléphone</p>
+                      <p className="text-xs text-gray-400">Phone</p>
                       <p className="text-sm text-gray-700">{lead.client_phone}</p>
                     </div>
                   </div>
@@ -303,7 +303,7 @@ export default function LeadDetailPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Montant du devis (€)
+                        Quote Amount ($)
                       </label>
                       <input
                         type="number"
@@ -312,19 +312,19 @@ export default function LeadDetailPage() {
                         value={quoteAmount}
                         onChange={(e) => setQuoteAmount(e.target.value)}
                         className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="ex: 350.00"
+                        placeholder="e.g.: 350.00"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Description du devis
+                        Quote Description
                       </label>
                       <textarea
                         value={quoteDesc}
                         onChange={(e) => setQuoteDesc(e.target.value)}
                         rows={4}
                         className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Détails de l'intervention, matériaux, délais..."
+                        placeholder="Details of the service, scope, timeline..."
                       />
                     </div>
                     <div className="flex gap-3">
@@ -338,13 +338,13 @@ export default function LeadDetailPage() {
                         ) : (
                           <Send className="w-4 h-4" />
                         )}
-                        Envoyer le devis
+                        Send Quote
                       </button>
                       <button
                         onClick={() => setShowQuoteForm(false)}
                         className="px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                       >
-                        Annuler
+                        Cancel
                       </button>
                     </div>
                   </div>
@@ -357,7 +357,7 @@ export default function LeadDetailPage() {
                         className="flex items-center gap-2 px-4 py-2.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg text-sm font-medium hover:bg-yellow-100 disabled:opacity-50 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
-                        Marquer comme vu
+                        Mark as Viewed
                       </button>
                     )}
                     <button
@@ -365,7 +365,7 @@ export default function LeadDetailPage() {
                       className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
                     >
                       <FileText className="w-4 h-4" />
-                      Envoyer un devis
+                      Send a Quote
                     </button>
                     <button
                       onClick={() => handleAction('decline')}
@@ -377,7 +377,7 @@ export default function LeadDetailPage() {
                       ) : (
                         <X className="w-4 h-4" />
                       )}
-                      Décliner
+                      Decline
                     </button>
                   </div>
                 )}
@@ -390,7 +390,7 @@ export default function LeadDetailPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <History className="w-5 h-5 text-gray-400" />
-                Historique
+                History
               </h3>
               {eventsLoading ? (
                 <div className="flex justify-center py-6">
@@ -403,26 +403,26 @@ export default function LeadDetailPage() {
 
             {/* Quick info */}
             <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Informations</h3>
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Information</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">ID Assignment</span>
                   <span className="text-gray-700 font-mono text-xs">{id.slice(0, 8)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Assigné le</span>
+                  <span className="text-gray-500">Assigned</span>
                   <span className="text-gray-700">
-                    {new Date(assignment.assigned_at).toLocaleDateString('fr-FR', {
-                      day: 'numeric', month: 'short'
+                    {new Date(assignment.assigned_at).toLocaleDateString('en-US', {
+                      month: 'short', day: 'numeric'
                     })}
                   </span>
                 </div>
                 {assignment.viewed_at && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Vu le</span>
+                    <span className="text-gray-500">Viewed</span>
                     <span className="text-gray-700">
-                      {new Date(assignment.viewed_at).toLocaleDateString('fr-FR', {
-                        day: 'numeric', month: 'short'
+                      {new Date(assignment.viewed_at).toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric'
                       })}
                     </span>
                   </div>

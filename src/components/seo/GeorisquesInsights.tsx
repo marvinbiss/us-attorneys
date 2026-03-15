@@ -32,29 +32,29 @@ function getServiceCategory(slug: string): ServiceCategory {
 }
 
 const INONDATION_INSIGHTS: Record<ServiceCategory, string> = {
-  plombier: 'Risque d\'humidité en sous-sol et remontées d\'eau — un plombier expérimenté peut installer des clapets anti-retour et pompes de relevage.',
-  maçon: 'Les fondations doivent être adaptées au risque d\'inondation — cuvelage et drainage périphérique recommandés.',
-  couvreur: 'Les toitures doivent résister aux épisodes de pluies intenses — vérification de l\'étanchéité et des évacuations pluviales essentielle.',
-  electricien: 'Le tableau électrique doit être placé en hauteur et les circuits protégés par des différentiels adaptés aux zones inondables.',
-  chauffagiste: 'Les équipements de chauffage en sous-sol nécessitent une protection spécifique contre les inondations.',
-  peintre: 'Les revêtements en zone inondable doivent résister à l\'humidité — peintures hydrofuges et enduits spéciaux recommandés.',
-  menuisier: 'Les menuiseries en zone inondable doivent être en matériaux résistants à l\'eau (PVC, aluminium) plutôt qu\'en bois non traité.',
-  carreleur: 'Privilégier des revêtements de sol résistants à l\'eau et facilement nettoyables après une inondation.',
-  terrassier: 'Un bon drainage du terrain est crucial — fossés, tranchées drainantes et puits de décompression peuvent réduire le risque.',
-  default: 'Zone exposée au risque d\'inondation — les travaux doivent prendre en compte la gestion des eaux.',
+  plombier: 'Risk of basement moisture and water backup — an experienced plumber can install backflow valves and sump pumps.',
+  maçon: 'Foundations must be adapted to flood risk — waterproofing and perimeter drainage recommended.',
+  couvreur: 'Roofing must withstand heavy rainfall — checking waterproofing and storm drains is essential.',
+  electricien: 'Electrical panels should be elevated and circuits protected with GFCI breakers suitable for flood zones.',
+  chauffagiste: 'Basement heating equipment requires specific flood protection measures.',
+  peintre: 'Coatings in flood zones must be moisture-resistant — waterproof paints and special finishes recommended.',
+  menuisier: 'Woodwork in flood zones should use water-resistant materials (PVC, aluminum) rather than untreated wood.',
+  carreleur: 'Choose water-resistant, easily cleanable flooring for flood-prone areas.',
+  terrassier: 'Proper site drainage is crucial — ditches, drain trenches, and relief wells can reduce risk.',
+  default: 'Area exposed to flood risk — construction work must account for water management.',
 }
 
 const ARGILE_INSIGHTS: Record<ServiceCategory, string> = {
-  plombier: 'Le retrait-gonflement des argiles peut endommager les canalisations enterrées — joints souples et raccords flexibles recommandés.',
-  maçon: 'Fondations renforcées nécessaires (semelles rigides, longrines) pour prévenir les fissures liées au mouvement du sol argileux.',
-  couvreur: 'Les mouvements de terrain argileux peuvent déformer la charpente — vérification régulière de l\'alignement de la toiture conseillée.',
-  electricien: 'Les gaines enterrées doivent être flexibles pour résister aux mouvements de terrain argileux.',
-  chauffagiste: 'Les réseaux de chauffage au sol doivent être dimensionnés pour absorber les micro-mouvements de la dalle.',
-  peintre: 'Les fissures liées au retrait-gonflement des argiles nécessitent un traitement préalable avant toute mise en peinture (bandes armées, enduits souples).',
-  menuisier: 'Les mouvements de terrain peuvent déformer les ouvertures — privilégier des menuiseries avec réglage possible des gonds et des joints.',
-  carreleur: 'Utiliser des colles souples et des joints de dilatation adaptés pour absorber les mouvements de la dalle sur sol argileux.',
-  terrassier: 'Le terrassement sur sol argileux exige des précautions : drainage, couche de forme stabilisée et compactage adapté.',
-  default: 'Sol argileux sujet au retrait-gonflement — les travaux doivent intégrer cette contrainte.',
+  plombier: 'Clay shrink-swell can damage buried pipes — flexible joints and connections recommended.',
+  maçon: 'Reinforced foundations needed (rigid footings, grade beams) to prevent cracks from clay soil movement.',
+  couvreur: 'Clay soil movement can warp the roof structure — regular alignment checks advised.',
+  electricien: 'Buried conduits should be flexible to withstand clay soil movement.',
+  chauffagiste: 'Radiant floor heating systems must be designed to absorb micro-movements in the slab.',
+  peintre: 'Cracks from clay shrink-swell require pre-treatment before painting (reinforcement tape, flexible coatings).',
+  menuisier: 'Soil movement can warp openings — choose woodwork with adjustable hinges and seals.',
+  carreleur: 'Use flexible adhesives and expansion joints to absorb slab movement on clay soil.',
+  terrassier: 'Excavation on clay soil requires precautions: drainage, stabilized base course, and proper compaction.',
+  default: 'Clay soil subject to shrink-swell — construction must account for this constraint.',
 }
 
 // ---------------------------------------------------------------------------
@@ -63,22 +63,22 @@ const ARGILE_INSIGHTS: Record<ServiceCategory, string> = {
 
 function getSismiqueLabel(zone: number): string {
   const labels: Record<number, string> = {
-    1: 'Très faible',
-    2: 'Faible',
-    3: 'Modérée',
-    4: 'Moyenne',
-    5: 'Forte',
+    1: 'Very low',
+    2: 'Low',
+    3: 'Moderate',
+    4: 'Medium',
+    5: 'High',
   }
   return labels[zone] || `Zone ${zone}`
 }
 
 function getRadonLabel(level: number): string {
   const labels: Record<number, string> = {
-    1: 'Faible',
-    2: 'Moyen',
-    3: 'Élevé',
+    1: 'Low',
+    2: 'Medium',
+    3: 'High',
   }
-  return labels[level] || `Niveau ${level}`
+  return labels[level] || `Level ${level}`
 }
 
 function getRiskColor(level: 'high' | 'medium' | 'low'): string {
@@ -117,9 +117,9 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
           <Droplets className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-gray-900">Risque d&apos;inondation</h4>
+              <h4 className="font-semibold text-gray-900">Flood risk</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor('high')}`}>
-                Zone exposée
+                Exposed zone
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
@@ -142,9 +142,9 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
           <Mountain className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-700" />
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-gray-900">Retrait-gonflement des argiles</h4>
+              <h4 className="font-semibold text-gray-900">Clay shrink-swell</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(argileLevel)}`}>
-                Risque {locationData.risque_argile}
+                {locationData.risque_argile} risk
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
@@ -167,15 +167,15 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
           <Activity className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-gray-900">Zone sismique</h4>
+              <h4 className="font-semibold text-gray-900">Seismic zone</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(sismiqueLevel)}`}>
                 {getSismiqueLabel(locationData.zone_sismique)} (zone {locationData.zone_sismique})
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
               {locationData.zone_sismique >= 3
-                ? `Les constructions à ${villeName} doivent respecter les normes parasismiques (Eurocode 8). Tout artisan intervenant sur le bâti doit en tenir compte.`
-                : `Sismicité faible mais présente — les travaux structurels doivent respecter les règles de construction parasismique de base.`
+                ? `Construction in ${villeName} must comply with seismic building codes (IBC). Any contractor working on the structure must account for this.`
+                : `Low but present seismicity — structural work must follow basic seismic construction standards.`
               }
             </p>
           </div>
@@ -196,13 +196,13 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
             <div className="flex items-center gap-2">
               <h4 className="font-semibold text-gray-900">Radon</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(radonLevel)}`}>
-                Potentiel {getRadonLabel(locationData.risque_radon)}
+                {getRadonLabel(locationData.risque_radon)} potential
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
               {locationData.risque_radon === 3
-                ? `${villeName} est en zone à potentiel radon élevé (catégorie 3). Un diagnostic radon est recommandé, surtout avant des travaux de rénovation en sous-sol ou rez-de-chaussée. Des systèmes de ventilation adaptés peuvent réduire l'exposition.`
-                : `Potentiel radon moyen à ${villeName}. Une mesure de la concentration en radon peut être pertinente lors de travaux de rénovation.`
+                ? `${villeName} is in a high radon potential zone (category 3). A radon test is recommended, especially before basement or ground-floor renovations. Proper ventilation systems can reduce exposure.`
+                : `Medium radon potential in ${villeName}. Measuring radon concentration may be relevant during renovation work.`
               }
             </p>
           </div>
@@ -222,16 +222,15 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
           <Shield className="mt-0.5 h-5 w-5 flex-shrink-0 text-gray-600" />
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-gray-900">Catastrophes naturelles</h4>
+              <h4 className="font-semibold text-gray-900">Natural disasters</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(catnatLevel)}`}>
-                {locationData.nb_catnat} arrêté{locationData.nb_catnat > 1 ? 's' : ''}
+                {locationData.nb_catnat} declaration{locationData.nb_catnat > 1 ? 's' : ''}
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
-              {locationData.nb_catnat} arrêté{locationData.nb_catnat > 1 ? 's' : ''} de catastrophe naturelle
-              {locationData.nb_catnat > 1 ? ' ont été pris' : ' a été pris'} à {villeName} depuis 2000.
+              {locationData.nb_catnat} natural disaster declaration{locationData.nb_catnat > 1 ? 's have' : ' has'} been issued for {villeName} since 2000.
               {locationData.nb_catnat >= 5
-                ? ' Ce nombre significatif souligne l\'importance de choisir des artisans connaissant les contraintes locales.'
+                ? ' This significant number underscores the importance of choosing contractors familiar with local constraints.'
                 : ''
               }
             </p>
@@ -247,15 +246,15 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
     return (
       <section className="mt-8">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
-          Risques naturels à {villeName}
+          Natural hazards in {villeName}
         </h3>
         <div className={`rounded-lg border-l-4 p-4 ${getRiskColor('low')}`}>
           <div className="flex items-start gap-3">
             <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
             <div>
-              <h4 className="font-semibold text-gray-900">Risques naturels faibles</h4>
+              <h4 className="font-semibold text-gray-900">Low natural hazard risk</h4>
               <p className="mt-1 text-sm text-gray-700">
-                {villeName} présente un profil de risques naturels globalement faible, ce qui est favorable pour les travaux de construction et rénovation.
+                {villeName} has an overall low natural hazard profile, which is favorable for construction and renovation work.
               </p>
             </div>
           </div>
@@ -273,7 +272,7 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
         {cards}
       </div>
       <p className="mt-3 text-xs text-gray-500">
-        Source : Géorisques (BRGM / Ministère de la Transition écologique)
+        Source: FEMA / USGS Natural Hazards data
       </p>
     </section>
   )

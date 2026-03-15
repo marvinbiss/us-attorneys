@@ -1,6 +1,6 @@
 /**
- * API pour récupérer un artisan par ID
- * Cherche dans providers (données scrapées) et profiles (utilisateurs inscrits)
+ * API to retrieve an attorney by ID
+ * Searches in providers (scraped data) and profiles (registered users)
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -12,14 +12,14 @@ import { z } from 'zod'
 
 export const revalidate = 300 // ISR - revalidate every 5 minutes
 
-// Schema for artisan ID (UUID or slug)
+// Schema for attorney ID (UUID or slug)
 const attorneyIdSchema = z.string().min(1).max(255).regex(
   /^[a-zA-Z0-9-]+$/,
-  'ID artisan invalide'
+  'Invalid attorney ID'
 )
 
-// Type pour les données artisan enrichies
-interface ArtisanDetails {
+// Type for enriched attorney data
+interface AttorneyDetails {
   id: string
   slug?: string
   business_name: string | null
@@ -89,9 +89,9 @@ interface Review {
 // Generate a description for a provider based on their data (WITHOUT fake ratings)
 function generateDescription(name: string, specialty: string, city: string): string {
   const descriptions = [
-    `${name} est un ${specialty.toLowerCase()} professionnel basé à ${city}. Nous garantissons un service de qualité pour tous vos travaux. Contactez-nous pour un devis gratuit.`,
-    `Votre ${specialty.toLowerCase()} de confiance à ${city}. ${name} intervient rapidement pour tous vos besoins. Devis gratuit et sans engagement.`,
-    `${name} - ${specialty.toLowerCase()} à ${city}. Fort de nombreuses interventions réussies, nous vous garantissons un travail soigné et professionnel.`,
+    `${name} is a professional ${specialty.toLowerCase()} based in ${city}. We guarantee quality service for all your legal needs. Contact us for a free consultation.`,
+    `Your trusted ${specialty.toLowerCase()} in ${city}. ${name} provides prompt service for all your needs. Free consultation, no obligation.`,
+    `${name} - ${specialty.toLowerCase()} in ${city}. With numerous successful cases, we guarantee thorough and professional work.`,
   ]
 
   // Use provider name to pick a consistent description
@@ -109,7 +109,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Validate artisan ID parameter
+    // Validate attorney ID parameter
     const idValidation = attorneyIdSchema.safeParse(params.id)
     if (!idValidation.success) {
       return NextResponse.json(
@@ -117,7 +117,7 @@ export async function GET(
           success: false,
           error: {
             code: 'VALIDATION_ERROR',
-            message: 'ID artisan invalide',
+            message: 'Invalid attorney ID',
             details: idValidation.error.flatten()
           }
         },
@@ -128,13 +128,13 @@ export async function GET(
     const supabase = createAdminClient()
     const attorneyId = idValidation.data
 
-    logger.debug(`Fetching artisan: ${attorneyId}`)
+    logger.debug(`Fetching attorney: ${attorneyId}`)
 
-    let artisan: ArtisanDetails | null = null
+    let attorney: AttorneyDetails | null = null
     let reviews: Review[] = []
     let source: 'provider' | 'profile' = 'provider'
 
-    // 1. Chercher d'abord dans la table providers (données scrapées/Pappers)
+    // 1. First search in the providers table (scraped/Pappers data)
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(attorneyId)
 
     // First, try a simple query to find the provider
@@ -201,7 +201,7 @@ export async function GET(
         .order('created_at', { ascending: false })
         .limit(100)
 
-      // Calculer la note moyenne
+      // Calculate la note moyenne
       let averageRating = 0
       let reviewCount = 0
       if (providerReviews && providerReviews.length > 0) {
@@ -226,10 +226,10 @@ export async function GET(
         return null
       }).filter(Boolean) || []
 
-      // Récupérer le portfolio réel (filtrer les données de démo avec images Unsplash)
+      // Retrieve the real portfolio (filter demo data with Unsplash images)
       const portfolio = (provider.portfolio_items || [])
         .filter((item: { image_url?: string }) => {
-          // Exclure les images de démo (Unsplash, placeholder, etc.)
+          // Exclude demo images (Unsplash, placeholder, etc.)
           const imageUrl = item.image_url || ''
           return !imageUrl.includes('unsplash.com') &&
                  !imageUrl.includes('placeholder') &&
@@ -244,7 +244,7 @@ export async function GET(
           category?: string
         }) => ({
           id: item.id,
-          title: item.title || 'Réalisation',
+          title: item.title || 'Case Result',
           description: item.description || '',
           imageUrl: item.image_url || '',
           category: item.category || 'Travaux',
@@ -260,19 +260,19 @@ export async function GET(
 
       const finalRating = averageRating > 0 ? averageRating : 0
       const finalReviewCount = reviewCount
-      const finalSpecialty = provider.specialty || services[0] || 'Artisan'
+      const finalSpecialty = provider.specialty || services[0] || 'Attorney'
 
       // Generate description if not available
       const existingDescription = provider.description || provider.meta_description
       const finalDescription = (existingDescription && existingDescription.length > 50)
         ? existingDescription
         : generateDescription(
-            provider.name || 'Cet artisan',
+            provider.name || 'This attorney',
             finalSpecialty,
-            provider.address_city || 'votre région'
+            provider.address_city || 'your area'
           )
 
-      artisan = {
+      attorney = {
         id: provider.id,
         slug: provider.slug || undefined,
         business_name: provider.name,
@@ -303,9 +303,9 @@ export async function GET(
           name: ps.service?.name || 'Service',
           description: '',
           price: ps.price_min && ps.price_max
-            ? `${ps.price_min}-${ps.price_max}€`
+            ? `${ps.price_min}-${ps.price_max}$`
             : ps.price_min
-              ? `A partir de ${ps.price_min}€`
+              ? `Starting from ${ps.price_min}$`
               : 'Sur devis',
           duration: undefined
         })) || [],
@@ -327,13 +327,13 @@ export async function GET(
         longitude: provider.longitude,
       }
 
-      // Transformer les avis réels
+      // Transform real reviews
       if (providerReviews && providerReviews.length > 0) {
         reviews = providerReviews.map(r => ({
           id: r.id,
           author: r.client_name || 'Client',
           rating: r.rating,
-          date: new Date(r.created_at).toLocaleDateString('fr-FR', {
+          date: new Date(r.created_at).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
@@ -348,19 +348,19 @@ export async function GET(
       // NO fake reviews! Return empty array if no real reviews in database
     }
 
-    // 2. Si pas trouvé dans providers, chercher dans profiles (utilisateurs inscrits)
-    if (!artisan) {
+    // 2. If not found in providers, search in profiles (registered users)
+    if (!attorney) {
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('id, full_name, email, phone_e164, average_rating, review_count, created_at, role')
         .eq('id', attorneyId)
-        .eq('role', 'artisan')
+        .eq('role', 'attorney')
         .single()
 
       if (profile && !profileError) {
         source = 'profile'
 
-        // Récupérer les avis pour ce profil
+        // Retrieve reviews for this profile
         const { data: profileReviews } = await supabase
           .from('reviews')
           .select('id, rating, comment, client_name, created_at')
@@ -368,7 +368,7 @@ export async function GET(
           .order('created_at', { ascending: false })
           .limit(20)
 
-        // Récupérer le portfolio (filtrer les données de démo)
+        // Retrieve the portfolio (filter demo data)
         const { data: portfolioData } = await supabase
           .from('portfolio_items')
           .select('id, title, description, image_url, category, created_at')
@@ -377,7 +377,7 @@ export async function GET(
 
         const portfolio = (portfolioData || [])
           .filter((item: { image_url?: string }) => {
-            // Exclure les images de démo (Unsplash, placeholder, etc.)
+            // Exclude demo images (Unsplash, placeholder, etc.)
             const imageUrl = item.image_url || ''
             return !imageUrl.includes('unsplash.com') &&
                    !imageUrl.includes('placeholder') &&
@@ -392,16 +392,16 @@ export async function GET(
             category?: string
           }) => ({
             id: item.id,
-            title: item.title || 'Réalisation',
+            title: item.title || 'Case Result',
             description: item.description || '',
             imageUrl: item.image_url || '',
             category: item.category || 'Travaux',
           }))
 
-        // artisan_faq table does not exist in migrations — return empty
+        // attorney_faq table does not exist in migrations — return empty
         const faq: Array<{ question: string; answer: string }> = []
 
-        // Calculer la note moyenne
+        // Calculate la note moyenne
         let averageRating = 0
         let reviewCount = 0
         if (profileReviews && profileReviews.length > 0) {
@@ -413,7 +413,7 @@ export async function GET(
         const firstName = nameParts[0] || null
         const lastName = nameParts.slice(1).join(' ') || null
 
-        artisan = {
+        attorney = {
           id: profile.id,
           business_name: profile.full_name,
           first_name: firstName,
@@ -421,7 +421,7 @@ export async function GET(
           city: '',
           postal_code: '',
           address: null,
-          specialty: 'Artisan',
+          specialty: 'Attorney',
           description: null,
           average_rating: Math.round(averageRating * 10) / 10,
           review_count: reviewCount,
@@ -453,7 +453,7 @@ export async function GET(
           id: r.id,
           author: r.client_name || 'Client',
           rating: r.rating,
-          date: new Date(r.created_at).toLocaleDateString('fr-FR', {
+          date: new Date(r.created_at).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
@@ -467,14 +467,14 @@ export async function GET(
       }
     }
 
-    // 3. Si toujours pas trouvé, retourner 404
-    if (!artisan) {
+    // 3. If still not found, return 404
+    if (!attorney) {
       return NextResponse.json(
         {
           success: false,
           error: {
             code: 'NOT_FOUND',
-            message: 'Artisan non trouvé'
+            message: 'Attorney not found'
           }
         },
         { status: 404 }
@@ -483,7 +483,7 @@ export async function GET(
 
     const response = NextResponse.json({
       success: true,
-      artisan,
+      attorney,
       reviews,
       source,
     })
@@ -493,13 +493,13 @@ export async function GET(
     return response
 
   } catch (error) {
-    logger.error('Error fetching artisan', error)
+    logger.error('Error fetching attorney', error)
     return NextResponse.json(
       {
         success: false,
         error: {
           code: 'SERVER_ERROR',
-          message: 'Erreur serveur'
+          message: 'Server error'
         }
       },
       { status: 500 }

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const parsed = generateSchema.safeParse(body)
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     const supabase = createAdminClient()
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (!conversation) {
-      return NextResponse.json({ success: false, error: { message: 'Conversation non trouvée' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Conversation not found' } }, { status: 404 })
     }
 
     const { data: messages } = await supabase
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       (provider === 'claude' ? aiSettings?.claude_model : aiSettings?.openai_model) ||
       'claude-sonnet-4-20250514'
 
-    // Choisir le prompt système selon le type de contact
+    // Choose the system prompt based on contact type
     let systemPrompt = conversation.campaign?.ai_system_prompt || ''
     if (!systemPrompt && aiSettings) {
       switch (contact.contact_type) {
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('AI generate error', error as Error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

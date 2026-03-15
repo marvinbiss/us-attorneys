@@ -103,7 +103,7 @@ export default function AttorneyList({
         ref={listRef}
         className="flex-1 overflow-y-auto p-4 space-y-4"
         role="region"
-        aria-label="Liste des artisans"
+        aria-label="Attorney listing"
         aria-busy={isLoading}
       >
         {isLoading ? (
@@ -144,9 +144,9 @@ export default function AttorneyList({
             role="status"
             aria-live="polite"
           >
-            <p className="text-gray-500 text-lg">Aucun artisan trouvé</p>
+            <p className="text-gray-500 text-lg">No attorney found</p>
             <p className="text-gray-400 text-sm mt-2">
-              Essayez de modifier vos filtres
+              Try adjusting your filters
             </p>
           </div>
         )}

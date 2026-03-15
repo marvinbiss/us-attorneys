@@ -2,14 +2,14 @@ import type { BlogArticle } from './articles'
 
 export const guidesDiversArticles: Record<string, BlogArticle> = {
   'diy-travaux-soi-meme-ou-artisan': {
-    title: 'Quels travaux faire soi-même et quand appeler un artisan ?',
+    title: 'Quels travaux faire soi-même et quand appeler an attorney ?',
     excerpt: 'Peinture, plomberie, électricité… Découvrez quels travaux vous pouvez réaliser en DIY et ceux qui exigent un professionnel qualifié. Guide complet avec budgets comparatifs.',
     image: '/images/blog/diy-travaux-soi-meme-ou-artisan.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-01-18',
     readTime: '13 min',
     category: 'DIY',
-    tags: ['DIY', 'bricolage', 'travaux maison', 'artisan', 'normes électricité', 'assurance travaux', 'rénovation', 'budget travaux'],
+    tags: ['DIY', 'bricolage', 'travaux maison', 'attorney', 'normes électricité', 'assurance travaux', 'rénovation', 'budget travaux'],
     keyTakeaways: [
       'La peinture, le papier peint et le carrelage mural sont des travaux accessibles à tout bricoleur motivé, avec un budget réduit de 40 à 70 % par rapport au recours à un professionnel.',
       'L\'électricité au-delà du remplacement d\'un interrupteur, le gaz et la structure porteuse exigent l\'intervention d\'un professionnel certifié — c\'est la loi, pas un choix.',
@@ -27,14 +27,14 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
       },
       {
         question: 'Combien économise-t-on en faisant les travaux soi-même ?',
-        answer: 'L\'économie varie selon le type de travaux. Pour la peinture, comptez 5 à 15 €/m² en DIY contre 25 à 45 €/m² avec un artisan (économie de 50 à 70 %). Pour le carrelage, 20 à 35 €/m² en DIY contre 50 à 90 €/m² posé (économie de 40 à 60 %). En revanche, les erreurs de pose peuvent coûter plus cher que l\'intervention initiale d\'un professionnel.'
+        answer: 'L\'économie varie selon le type de travaux. Pour la peinture, comptez 5 à 15 €/m² en DIY contre 25 à 45 €/m² avec an attorney (économie de 50 à 70 %). Pour le carrelage, 20 à 35 €/m² en DIY contre 50 à 90 €/m² posé (économie de 40 à 60 %). En revanche, les erreurs de pose peuvent coûter plus cher que l\'intervention initiale d\'un professionnel.'
       },
       {
         question: 'Faut-il une assurance spécifique pour faire ses travaux soi-même ?',
         answer: 'Votre assurance habitation couvre généralement les petits travaux d\'entretien. Pour des travaux plus importants (rénovation de salle de bain, réfection de toiture), il est recommandé de prévenir votre assureur et de vérifier que votre responsabilité civile couvre les éventuels dégâts. Certains assureurs proposent des extensions de garantie « travaux DIY » pour 30 à 80 € par an.'
       },
       {
-        question: 'Comment trouver un artisan fiable pour les travaux que je ne peux pas faire ?',
+        question: 'Comment trouver an attorney fiable pour les travaux que je ne peux pas faire ?',
         answer: 'Consultez notre [annuaire d\'artisans vérifiés](/practice-areas/) pour trouver un professionnel certifié près de chez vous. Demandez systématiquement trois devis détaillés, vérifiez les assurances décennale et RC Pro, et consultez les avis clients. Pour les travaux réglementés (électricité, gaz, structure), exigez les certifications obligatoires (Qualifelec, Qualigaz, etc.).'
       }
     ],
@@ -96,7 +96,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
       '### Installation électrique complète (T3, 60 m²)',
       '| Poste | Budget DIY | Budget artisan |\n|-------|-----------|----------------|\n| Matériel (tableau, câbles, prises) | 1 500 – 2 500 € | Inclus |\n| Consuel | 130 – 180 € | Inclus |\n| Main d\'œuvre | 0 € | 3 000 – 6 000 € |\n| **Total** | **1 630 – 2 680 €** | **4 500 – 8 500 €** |\n\n⚠️ **Non recommandé en DIY**. Économie théorique de 50 à 65 %, mais le risque de non-conformité, de refus Consuel et de danger est trop élevé. Faites appel à un [électricien certifié](/practice-areas/electricien).',
 
-      '## Quand le DIY vous coûte plus cher qu\'un artisan',
+      '## Quand le DIY vous coûte plus cher qu\'an attorney',
 
       'Le piège du DIY, c\'est la fausse économie. Voici les situations les plus fréquentes :\n\n- **Mauvaise préparation du support** avant peinture ou carrelage : le revêtement se décolle après quelques mois. Coût de la reprise : 2 à 3 fois le budget initial.\n- **Fuite mal réparée en plomberie** : un raccord mal serré qui fuit derrière un meuble pendant des semaines peut provoquer des dégâts des eaux chiffrés en milliers d\'euros.\n- **Carrelage mal posé** : des carreaux qui sonnent creux, des joints qui fissurent, un sol pas plan. Le coût de dépose + repose par un professionnel est souvent supérieur au prix initial d\'une pose professionnelle.\n- **Matériel inadapté** : acheter des outils de mauvaise qualité qui cassent ou donnent un résultat médiocre.',
 
@@ -116,7 +116,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
     title: 'Tendances rénovation salle de bain 2026 : styles, matériaux et budget',
     excerpt: 'Douche à l\'italienne, vasque suspendue, carrelage grand format, robinetterie noire mate… Toutes les tendances salle de bain 2026 avec budgets détaillés par gamme.',
     image: '/images/blog/tendances-salle-de-bain-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-01-25',
     readTime: '12 min',
     category: 'Inspiration',
@@ -142,7 +142,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
       },
       {
         question: 'Combien de temps durent les travaux de rénovation d\'une salle de bain ?',
-        answer: 'Pour une rénovation complète (dépose, plomberie, électricité, carrelage, pose sanitaires), comptez 2 à 3 semaines de travaux avec un artisan expérimenté. Ce délai peut s\'étendre à 4 à 6 semaines en cas de modification de l\'agencement, de création de douche à l\'italienne nécessitant des travaux de chape, ou de commandes de matériaux sur mesure. Prévoyez toujours une salle d\'eau temporaire.'
+        answer: 'Pour une rénovation complète (dépose, plomberie, électricité, carrelage, pose sanitaires), comptez 2 à 3 semaines de travaux avec an attorney expérimenté. Ce délai peut s\'étendre à 4 à 6 semaines en cas de modification de l\'agencement, de création de douche à l\'italienne nécessitant des travaux de chape, ou de commandes de matériaux sur mesure. Prévoyez toujours une salle d\'eau temporaire.'
       },
       {
         question: 'Faut-il un architecte pour rénover sa salle de bain ?',
@@ -223,7 +223,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
     title: 'Prix installation domotique 2026 : budget complet détaillé',
     excerpt: 'KNX, Zigbee, Matter, Z-Wave : comparatif des protocoles domotiques et prix détaillés par poste. Budget complet pour une maison connectée de 100 m² en 2026.',
     image: '/images/blog/prix-domotique-maison-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-12',
     readTime: '14 min',
     category: 'Tarifs',
@@ -323,7 +323,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
     title: 'Préparer sa maison pour la revente : les travaux les plus rentables',
     excerpt: 'DPE, cuisine, salle de bain, façade, home staging : découvrez les travaux qui maximisent la plus-value à la revente et ceux à éviter. ROI détaillé par poste.',
     image: '/images/blog/preparer-maison-revente-travaux-rentables.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-03-05',
     readTime: '13 min',
     category: 'Conseils',
@@ -414,7 +414,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
       '### Le calendrier des interdictions de location',
       'La loi Climat et Résilience de 2021 a instauré un calendrier progressif d\'interdiction de mise en location des passoires thermiques :\n\n- **1er janvier 2025** : interdiction de louer les logements classés **G**.\n- **1er janvier 2028** : interdiction pour les logements classés **F**.\n- **1er janvier 2034** : interdiction pour les logements classés **E**.\n\nCes interdictions ne concernent que la location, pas la vente. Mais elles impactent directement le prix de vente pour deux raisons :\n\n1. **Les investisseurs locatifs** (qui représentent 25 à 30 % des acquéreurs) ne peuvent plus acheter un bien F ou G sans intégrer le coût de la rénovation dans leur calcul de rentabilité.\n2. **Les acquéreurs en résidence principale** savent que le bien sera plus difficile à revendre plus tard si le DPE reste mauvais.\n\nRésultat : les biens F et G se vendent **15 à 25 % moins cher** que les biens équivalents classés D, selon les dernières statistiques des notaires.',
 
-      ':::warning Passoires thermiques : attention à la décote\nSi votre bien est classé F ou G, vous avez deux options : rénover avant de vendre (investissement 15 000 à 35 000 €, plus-value 20 000 à 45 000 €) ou vendre en l\'état avec une décote (perte de 15 à 25 % du prix). Dans la grande majorité des cas, la rénovation est plus rentable, surtout si vous bénéficiez des aides MaPrimeRénov\'. Consultez un [artisan RGE](/practice-areas/) pour un devis gratuit.\n:::',
+      ':::warning Passoires thermiques : attention à la décote\nSi votre bien est classé F ou G, vous avez deux options : rénover avant de vendre (investissement 15 000 à 35 000 €, plus-value 20 000 à 45 000 €) ou vendre en l\'état avec une décote (perte de 15 à 25 % du prix). Dans la grande majorité des cas, la rénovation est plus rentable, surtout si vous bénéficiez des aides MaPrimeRénov\'. Consultez un [artisan RGE](/practice-areas/) pour a consultation gratuit.\n:::',
 
       '## Les travaux à éviter avant une revente',
 

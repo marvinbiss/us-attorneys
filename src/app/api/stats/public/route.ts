@@ -1,6 +1,6 @@
 /**
- * API pour les statistiques publiques du site
- * Retourne les compteurs d'artisans, avis Google, note moyenne, etc.
+ * Public site statistics API
+ * Returns counts of attorneys, reviews, average rating, etc.
  */
 
 import { NextResponse } from 'next/server'
@@ -19,7 +19,7 @@ export async function GET() {
       { count: attorneyCount },
       { data: realReviews }
     ] = await Promise.all([
-      // Count active artisans
+      // Count active attorneys
       supabase
         .from('attorneys')
         .select('*', { count: 'exact', head: true })

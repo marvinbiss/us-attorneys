@@ -16,7 +16,7 @@ export async function POST() {
           success: false,
           error: {
             code: 1004,
-            message: 'Erreur lors de la deconnexion'
+            message: 'Error during logout'
           }
         },
         { status: 500 }
@@ -34,7 +34,7 @@ export async function POST() {
         success: false,
         error: {
           code: 9999,
-          message: 'Erreur serveur'
+          message: 'Server error'
         }
       },
       { status: 500 }

@@ -22,7 +22,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
+        { success: false, error: { message: 'Unauthorized' } },
         { status: 401 }
       )
     }
@@ -36,7 +36,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!provider) {
       return NextResponse.json(
-        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { success: false, error: { message: 'Profil attorney not found' } },
         { status: 404 }
       )
     }
@@ -46,7 +46,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides' } },
+        { success: false, error: { message: 'Invalid data' } },
         { status: 400 }
       )
     }
@@ -89,7 +89,7 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     logger.error('Bulk update quotes error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -103,7 +103,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
+        { success: false, error: { message: 'Unauthorized' } },
         { status: 401 }
       )
     }
@@ -117,7 +117,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!provider) {
       return NextResponse.json(
-        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { success: false, error: { message: 'Profil attorney not found' } },
         { status: 404 }
       )
     }
@@ -127,7 +127,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides' } },
+        { success: false, error: { message: 'Invalid data' } },
         { status: 400 }
       )
     }
@@ -149,7 +149,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     logger.error('Bulk delete quotes error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

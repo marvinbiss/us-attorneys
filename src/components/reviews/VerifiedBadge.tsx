@@ -17,19 +17,19 @@ interface VerifiedBadgeProps {
 const badgeConfig = {
   identity: {
     icon: Shield,
-    label: 'Identité contrôlée',
+    label: 'Identity verified',
     className: 'verified-badge-identity',
     color: 'text-blue-600',
   },
   insurance: {
     icon: FileCheck,
-    label: 'Assurance contrôlée',
+    label: 'Insurance verified',
     className: 'verified-badge-insurance',
     color: 'text-green-600',
   },
   certification: {
     icon: Award,
-    label: 'Qualifié',
+    label: 'Qualified',
     className: 'verified-badge-certification',
     color: 'text-purple-600',
   },
@@ -41,13 +41,13 @@ const badgeConfig = {
   },
   enterprise: {
     icon: Building2,
-    label: 'Entreprise référencée',
+    label: 'Listed firm',
     className: 'verified-badge-enterprise',
     color: 'text-slate-600',
   },
   review: {
     icon: CheckCircle,
-    label: 'Avis authentique',
+    label: 'Authentic review',
     className: 'verified-badge-identity',
     color: 'text-blue-600',
   },
@@ -135,9 +135,9 @@ interface VerificationLevelBadgeProps {
 }
 
 const levelConfig = {
-  none: { label: 'Non référencé', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
-  basic: { label: 'Vérifié', className: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle },
-  standard: { label: 'Référencé+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
+  none: { label: 'Not listed', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
+  basic: { label: 'Verified', className: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle },
+  standard: { label: 'Listed+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
   premium: { label: 'Premium', className: 'bg-amber-100 text-amber-700 border-amber-200', icon: Star },
   enterprise: { label: 'Entreprise', className: 'bg-slate-100 text-slate-700 border-slate-200', icon: Building2 },
 }
@@ -189,10 +189,10 @@ export function VerifiedReviewBadge({
         sizeConf.text,
         className
       )}
-      title="Cet avis provient d'un client ayant utilisé la plateforme"
+      title="This review comes from a client who used the platform"
     >
       <CheckCircle size={sizeConf.icon} />
-      <span>Avis vérifié</span>
+      <span>Verified review</span>
     </span>
   )
 }
@@ -205,9 +205,9 @@ interface KYCStatusBadgeProps {
 }
 
 const kycStatusConfig = {
-  verified: { label: 'Vérifié', className: 'kyc-status-verified', icon: CheckCircle },
+  verified: { label: 'Verified', className: 'kyc-status-verified', icon: CheckCircle },
   pending: { label: 'En cours', className: 'kyc-status-pending', icon: null },
-  rejected: { label: 'Rejeté', className: 'kyc-status-rejected', icon: null },
+  rejected: { label: 'Rejected', className: 'kyc-status-rejected', icon: null },
   not_started: { label: 'Non soumis', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
 }
 

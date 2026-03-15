@@ -1,5 +1,5 @@
 /**
- * Review Vote API - ServicesArtisans
+ * Review Vote API - US Attorneys
  * Handles "Was this review helpful?" votes with deduplication
  */
 
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     const result = voteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Requête invalide', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid request', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
 
     if (fetchError || !review) {
       return NextResponse.json(
-        { success: false, error: { message: 'Avis non trouvé ou non publié' } },
+        { success: false, error: { message: 'Review not found or not published' } },
         { status: 404 }
       )
     }

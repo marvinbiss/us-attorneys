@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides' } },
+        { success: false, error: { message: 'Invalid parameters' } },
         { status: 400 }
       )
     }
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Campaigns GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       logger.error('Create campaign error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during creation' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'campaign.create', 'prospection_campaign', data.id, {
@@ -135,6 +135,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {
     logger.error('Campaigns POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Accessibility Utilities for Booking System - ServicesArtisans
+ * Accessibility Utilities for Booking System - US Attorneys
  * WCAG 2.1 AA Compliant
  * Best practices from Doctolib, Calendly, and ARIA guidelines
  */
@@ -49,28 +49,28 @@ export const calendarAnnouncements = {
     announce(`Calendrier: ${month} ${year}`),
 
   dateSelected: (date: Date, slotsCount: number) => {
-    const dateStr = date.toLocaleDateString('fr-FR', {
+    const dateStr = date.toLocaleDateString('en-US', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
     })
     const slotsText =
       slotsCount === 0
-        ? 'Aucun créneau disponible'
+        ? 'No slots available'
         : slotsCount === 1
-        ? '1 créneau disponible'
-        : `${slotsCount} créneaux disponibles`
+        ? '1 slot available'
+        : `${slotsCount} slots available`
     announce(`${dateStr}. ${slotsText}`)
   },
 
   slotSelected: (time: string, artisan: string) =>
-    announce(`Créneau sélectionné: ${time} avec ${artisan}`, 'assertive'),
+    announce(`Slot selected: ${time} with ${artisan}`, 'assertive'),
 
   slotUnavailable: () =>
-    announce('Ce créneau n\'est plus disponible', 'assertive'),
+    announce('This slot is no longer available', 'assertive'),
 
   bookingConfirmed: (date: string, time: string) =>
-    announce(`Réservation confirmée pour le ${date} à ${time}`, 'assertive'),
+    announce(`Booking confirmed for ${date} at ${time}`, 'assertive'),
 
   formError: (errorMessage: string) =>
     announce(`Erreur: ${errorMessage}`, 'assertive'),
@@ -186,7 +186,7 @@ export function getCalendarCellAttributes(
   isDisabled: boolean,
   hasSlots: boolean
 ): Record<string, string | boolean | number> {
-  const dateStr = date.toLocaleDateString('fr-FR', {
+  const dateStr = date.toLocaleDateString('en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -196,9 +196,9 @@ export function getCalendarCellAttributes(
   const labels: string[] = [dateStr]
   if (isToday) labels.push("aujourd'hui")
   if (isDisabled) labels.push('indisponible')
-  else if (!hasSlots) labels.push('aucun créneau')
+  else if (!hasSlots) labels.push('no slots')
   else labels.push('disponible')
-  if (isSelected) labels.push('sélectionné')
+  if (isSelected) labels.push('selected')
 
   return {
     role: 'gridcell',
@@ -220,8 +220,8 @@ export function getSlotAttributes(
   const labels: string[] = [time]
   if (!isAvailable) labels.push('indisponible')
   if (isPopular) labels.push('populaire')
-  if (isRecommended) labels.push('recommandé')
-  if (isSelected) labels.push('sélectionné')
+  if (isRecommended) labels.push('recommended')
+  if (isSelected) labels.push('selected')
 
   return {
     role: 'option',

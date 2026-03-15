@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to calculate-trust-badges')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     logger.info('[Cron] Starting review metrics recalculation')
@@ -92,11 +92,11 @@ export async function GET(request: Request) {
         totalErrors++
       } else {
         // Group reviews by attorney_id
-        const reviewsByArtisan = new Map<string, number[]>()
+        const reviewsByAttorney = new Map<string, number[]>()
         for (const r of allReviews || []) {
-          const existing = reviewsByArtisan.get(r.attorney_id) || []
+          const existing = reviewsByAttorney.get(r.attorney_id) || []
           existing.push(r.rating || 0)
-          reviewsByArtisan.set(r.attorney_id, existing)
+          reviewsByAttorney.set(r.attorney_id, existing)
         }
 
         // Prepare batch updates
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
         for (const provider of providers) {
           if (!provider.user_id) continue
 
-          const ratings = reviewsByArtisan.get(provider.user_id) || []
+          const ratings = reviewsByAttorney.get(provider.user_id) || []
           const reviewCount = ratings.length
           const ratingAverage = reviewCount > 0
             ? ratings.reduce((sum, r) => sum + r, 0) / reviewCount
@@ -159,7 +159,7 @@ export async function GET(request: Request) {
       `[Cron] Review metrics recalculation complete: ${totalUpdated} updated, ${totalSkipped} skipped, ${totalErrors} errors`
     )
 
-    // Refresh de la vue matérialisée mv_provider_stats
+    // Refresh materialized view mv_provider_stats
     let mvRefreshed = false
     try {
       const { error: mvError } = await supabase.rpc('refresh_provider_stats')
@@ -184,7 +184,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors du recalcul des métriques d\'avis' } },
+      { success: false, error: { message: 'Error recalculating review metrics' } },
       { status: 500 }
     )
   }

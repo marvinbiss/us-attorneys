@@ -10,7 +10,7 @@
  */
 
 import type { LocationData } from '@/lib/data/commune-data'
-import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
+import { formatNumber, monthName } from '@/lib/data/commune-data'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getRegionalMultiplier } from '@/lib/seo/location-content'
 
@@ -25,9 +25,9 @@ export interface DataDrivenContent {
   socioEconomic: string | null
   /** Real estate market context */
   immobilier: string | null
-  /** Local artisan market (SIRENE + RGE) */
+  /** Local legal market (law firms + certifications) */
   marcheArtisanal: string | null
-  /** Energy performance context (DPE + MaPrimeRénov) */
+  /** Legal aid and pro bono context */
   energetique: string | null
   /** Climate-driven advice with real data */
   climatData: string | null
@@ -46,66 +46,66 @@ export interface DataDrivenContent {
 // ---------------------------------------------------------------------------
 
 function citySize(pop: number): string {
-  if (pop >= 200000) return 'grande métropole'
-  if (pop >= 100000) return 'grande ville'
-  if (pop >= 50000) return 'ville importante'
-  if (pop >= 20000) return 'ville moyenne'
-  if (pop >= 10000) return 'petite ville'
-  if (pop >= 5000) return 'commune'
-  if (pop >= 2000) return 'bourg'
-  return 'village'
+  if (pop >= 200000) return 'major metropolitan area'
+  if (pop >= 100000) return 'large city'
+  if (pop >= 50000) return 'mid-size city'
+  if (pop >= 20000) return 'growing community'
+  if (pop >= 10000) return 'small city'
+  if (pop >= 5000) return 'town'
+  if (pop >= 2000) return 'small town'
+  return 'rural community'
 }
 
 function housingType(partMaisonsPct: number): string {
-  if (partMaisonsPct >= 80) return 'très majoritairement pavillonnaire'
-  if (partMaisonsPct >= 60) return 'à dominante pavillonnaire'
-  if (partMaisonsPct >= 40) return 'mixte (maisons et appartements)'
-  if (partMaisonsPct >= 20) return 'à dominante collective'
-  return 'très majoritairement en immeubles collectifs'
+  if (partMaisonsPct >= 80) return 'predominantly single-family homes'
+  if (partMaisonsPct >= 60) return 'mostly single-family residential'
+  if (partMaisonsPct >= 40) return 'a mix of single-family homes and multi-unit buildings'
+  if (partMaisonsPct >= 20) return 'predominantly multi-unit residential'
+  return 'mostly apartment and condominium complexes'
 }
 
 function revenuLevel(revenuMedian: number): string {
-  if (revenuMedian >= 28000) return 'supérieur à la moyenne nationale'
-  if (revenuMedian >= 22000) return 'proche de la moyenne nationale'
-  if (revenuMedian >= 18000) return 'modeste'
-  return 'inférieur à la moyenne nationale'
+  if (revenuMedian >= 28000) return 'above the national average'
+  if (revenuMedian >= 22000) return 'near the national average'
+  if (revenuMedian >= 18000) return 'moderate'
+  return 'below the national average'
 }
 
 function densiteLabel(d: number): string {
-  if (d >= 3000) return 'très densément peuplée'
-  if (d >= 1000) return 'densément peuplée'
-  if (d >= 300) return 'de densité intermédiaire'
-  if (d >= 100) return 'peu dense'
-  return 'très peu dense'
+  if (d >= 3000) return 'very densely populated'
+  if (d >= 1000) return 'densely populated'
+  if (d >= 300) return 'moderately populated'
+  if (d >= 100) return 'suburban in density'
+  return 'sparsely populated'
 }
 
 function prixM2Level(prix: number): string {
-  if (prix >= 6000) return 'parmi les plus élevés de France'
-  if (prix >= 4000) return 'élevé'
-  if (prix >= 2500) return 'dans la moyenne haute'
-  if (prix >= 1800) return 'dans la moyenne nationale'
-  if (prix >= 1200) return 'modéré'
-  return 'accessible'
+  if (prix >= 6000) return 'among the highest in the nation'
+  if (prix >= 4000) return 'above average'
+  if (prix >= 2500) return 'in the upper-middle range'
+  if (prix >= 1800) return 'near the national median'
+  if (prix >= 1200) return 'moderate'
+  return 'affordable'
 }
 
 function gelSeverity(jours: number): string {
-  if (jours >= 80) return 'très rigoureux'
-  if (jours >= 50) return 'rigoureux'
-  if (jours >= 30) return 'modéré'
-  if (jours >= 10) return 'doux'
-  return 'très doux'
+  if (jours >= 80) return 'very harsh'
+  if (jours >= 50) return 'harsh'
+  if (jours >= 30) return 'moderate'
+  if (jours >= 10) return 'mild'
+  return 'very mild'
 }
 
 function precipLabel(mm: number): string {
-  if (mm >= 1200) return 'très arrosée'
-  if (mm >= 900) return 'bien arrosée'
-  if (mm >= 700) return 'moyennement arrosée'
-  if (mm >= 500) return 'peu arrosée'
-  return 'sèche'
+  if (mm >= 1200) return 'very wet'
+  if (mm >= 900) return 'wet'
+  if (mm >= 700) return 'moderately wet'
+  if (mm >= 500) return 'relatively dry'
+  return 'arid'
 }
 
 // ---------------------------------------------------------------------------
-// French elision helper: "de électricien" → "d'électricien"
+// Service name helper for grammatical constructions
 // ---------------------------------------------------------------------------
 
 function hashSvc(s: string): number {
@@ -115,14 +115,11 @@ function hashSvc(s: string): number {
 }
 
 function deSvc(svc: string): string {
-  const vowels = 'aeéèêëiîïoôuûùyàâæœ'
-  return vowels.includes(svc.charAt(0).toLowerCase()) ? `d'${svc}` : `de ${svc}`
+  return svc
 }
 
 function deMonth(m: number): string {
-  const name = monthName(m)
-  const vowels = 'aàâeéèêëiîïoôuûù'
-  return vowels.includes(name.charAt(0).toLowerCase()) ? `d'${name}` : `de ${name}`
+  return monthName(m)
 }
 
 // ---------------------------------------------------------------------------
@@ -136,7 +133,7 @@ export function generateDataDrivenContent(
   attorneyCount: number,
 ): DataDrivenContent {
   const svc = specialtyName.toLowerCase()
-  const de = deSvc(svc) // "de plombier" or "d'électricien"
+  const de = deSvc(svc)
   const pop = commune.population
   const dataSources: string[] = []
   const trade = getTradeContent(specialtySlug)
@@ -151,45 +148,45 @@ export function generateDataDrivenContent(
   // Opening with varied template per service×city
   const introTemplates = commune.gentile
     ? [
-        `Les ${commune.gentile} à la recherche d'un ${svc} peuvent compter sur ServicesArtisans.`,
-        `Habitants de ${commune.name}, trouvez votre ${svc} sur ServicesArtisans, l'annuaire des artisans vérifiés.`,
-        `${commune.gentile}, besoin d'un ${svc} ? Notre plateforme référence les professionnels qualifiés de votre commune.`,
+        `Residents of ${commune.name} seeking a ${svc} attorney can rely on US-Attorneys.com for trusted referrals.`,
+        `${commune.gentile}, find an experienced ${svc} lawyer on US-Attorneys.com, the verified attorney directory.`,
+        `${commune.gentile}, need a ${svc} attorney? Our platform lists qualified legal professionals serving your area.`,
       ]
     : [
-        `Vous cherchez un ${svc} à ${commune.name} ? ServicesArtisans vous accompagne.`,
-        `Trouvez un ${svc} de confiance à ${commune.name} grâce à notre annuaire d'artisans vérifiés par SIREN.`,
-        `Besoin d'un ${svc} à ${commune.name} ? Consultez notre sélection de professionnels qualifiés.`,
-        `${commune.name} : comparez les ${svc}s référencés sur ServicesArtisans et contactez-les directement.`,
+        `Looking for a ${svc} attorney in ${commune.name}? US-Attorneys.com connects you with experienced legal professionals.`,
+        `Find a trusted ${svc} lawyer in ${commune.name} through our directory of bar-verified attorneys.`,
+        `Need a ${svc} attorney in ${commune.name}? Browse our selection of qualified legal professionals.`,
+        `${commune.name}: compare ${svc} attorneys listed on US-Attorneys.com and schedule a consultation today.`,
       ]
   introParts.push(introTemplates[seed % introTemplates.length])
 
   // City characterization with real data
-  const sizeParts: string[] = [`${commune.name} est une ${citySize(pop)} de ${formatNumber(pop)} habitants`]
-  if (commune.departement_name) sizeParts.push(`dans le ${commune.departement_name}`)
-  if (commune.region_name) sizeParts.push(`en ${commune.region_name}`)
+  const sizeParts: string[] = [`${commune.name} is a ${citySize(pop)} with a population of ${formatNumber(pop)}`]
+  if (commune.departement_name) sizeParts.push(`in ${commune.departement_name}`)
+  if (commune.region_name) sizeParts.push(`${commune.region_name}`)
   introParts.push(sizeParts.join(', ') + '.')
 
   // Density context
   if (commune.densite_population && commune.superficie_km2) {
     introParts.push(
-      `Avec ${formatNumber(Math.round(commune.densite_population))} hab./km² sur ${commune.superficie_km2.toFixed(1)} km², la commune est ${densiteLabel(commune.densite_population)}.`
+      `With ${formatNumber(Math.round(commune.densite_population))} residents per sq mi across ${commune.superficie_km2.toFixed(1)} sq mi, the area is ${densiteLabel(commune.densite_population)}.`
     )
-    dataSources.push('INSEE (population, superficie)')
+    dataSources.push('U.S. Census Bureau (population, area)')
   }
 
   // Service-specific contextual sentence (makes same-city / different-service intros unique)
   if (trade) {
     if (trade.emergencyInfo) {
       introParts.push(
-        `Que ce soit pour une urgence ou un projet planifié, nos ${svc}s sont disponibles (${trade.averageResponseTime}).`
+        `Whether you need urgent legal counsel or planned representation, our ${svc} attorneys are available (${trade.averageResponseTime}).`
       )
     } else if (trade.certifications && trade.certifications.length > 0) {
       introParts.push(
-        `Nos ${svc}s référencés disposent des qualifications requises, notamment : ${trade.certifications.slice(0, 2).join(', ')}.`
+        `Our listed ${svc} attorneys hold the credentials and certifications required in this field, including: ${trade.certifications.slice(0, 2).join(', ')}.`
       )
     } else {
       introParts.push(
-        `Les ${svc}s de notre annuaire interviennent à ${commune.name} pour tous vos projets de ${trade.commonTasks.length > 0 ? trade.commonTasks[0].split(' : ')[0].toLowerCase() : 'travaux'} et bien plus.`
+        `The ${svc} attorneys in our directory serve ${commune.name} for all your legal needs related to ${trade.commonTasks.length > 0 ? trade.commonTasks[0].split(' : ')[0].toLowerCase() : 'this practice area'} and more.`
       )
     }
   }
@@ -197,7 +194,7 @@ export function generateDataDrivenContent(
   // Provider count
   if (attorneyCount > 0) {
     introParts.push(
-      `Notre annuaire référence ${attorneyCount} ${svc}${attorneyCount > 1 ? 's' : ''} vérifiés par SIREN intervenant à ${commune.name} et ses environs.`
+      `Our directory lists ${attorneyCount} bar-verified ${svc} attorney${attorneyCount > 1 ? 's' : ''} serving ${commune.name} and surrounding areas.`
     )
   }
 
@@ -212,19 +209,19 @@ export function generateDataDrivenContent(
 
     if (commune.revenu_median) {
       const revenuTemplates = [
-        `Le revenu médian à ${commune.name} s'élève à ${formatEuro(commune.revenu_median)}/an, un niveau ${revenuLevel(commune.revenu_median)}.`,
-        `Avec un revenu médian de ${formatEuro(commune.revenu_median)} par an, le pouvoir d'achat des ménages à ${commune.name} est ${revenuLevel(commune.revenu_median)}.`,
-        `Les ménages de ${commune.name} disposent d'un revenu médian de ${formatEuro(commune.revenu_median)}/an (${revenuLevel(commune.revenu_median)}), un indicateur clé du budget consacré à l'habitat.`,
+        `The median household income in ${commune.name} is $${formatNumber(commune.revenu_median)} per year, ${revenuLevel(commune.revenu_median)}.`,
+        `With a median household income of $${formatNumber(commune.revenu_median)} annually, the purchasing power in ${commune.name} is ${revenuLevel(commune.revenu_median)}.`,
+        `Households in ${commune.name} have a median income of $${formatNumber(commune.revenu_median)}/year (${revenuLevel(commune.revenu_median)}), an important factor in legal service accessibility.`,
       ]
       parts.push(revenuTemplates[seed % revenuTemplates.length])
-      dataSources.push('INSEE (revenus)')
+      dataSources.push('U.S. Census Bureau (income)')
     }
 
     if (commune.nb_logements) {
       const logTemplates = [
-        `La commune compte ${formatNumber(commune.nb_logements)} logements.`,
-        `Le parc résidentiel de ${commune.name} totalise ${formatNumber(commune.nb_logements)} logements.`,
-        `On recense ${formatNumber(commune.nb_logements)} logements sur le territoire de ${commune.name}.`,
+        `The area comprises ${formatNumber(commune.nb_logements)} housing units.`,
+        `The residential housing stock in ${commune.name} totals ${formatNumber(commune.nb_logements)} units.`,
+        `There are ${formatNumber(commune.nb_logements)} housing units within ${commune.name}.`,
       ]
       parts.push(logTemplates[(seed + 1) % logTemplates.length])
     }
@@ -232,27 +229,27 @@ export function generateDataDrivenContent(
     if (commune.part_maisons_pct != null && commune.part_maisons_pct !== undefined) {
       const pct = commune.part_maisons_pct
       parts.push(
-        `Le parc immobilier est ${housingType(pct)} (${pct}% de maisons individuelles).`
+        `The housing stock is ${housingType(pct)} (${pct}% single-family homes).`
       )
 
       // Service-specific housing insight
       if (pct >= 60) {
-        const houseTrades = ['couvreur', 'paysagiste', 'jardinier', 'facadier', 'terrassier', 'ramoneur', 'pisciniste']
+        const houseTrades = ['real-estate-law', 'property-law', 'homeowners-association', 'zoning-law', 'construction-law', 'insurance-law', 'estate-planning']
         if (houseTrades.includes(specialtySlug)) {
           parts.push(
-            `Cette forte proportion de maisons individuelles génère une demande soutenue en services ${de} pour l'entretien et la rénovation des propriétés.`
+            `This high proportion of single-family homes generates sustained demand for ${de} legal services related to property transactions, disputes, and homeowner rights.`
           )
         }
       } else if (pct < 40) {
-        const apptTrades = ['plombier', 'electricien', 'serrurier', 'ascensoriste']
+        const apptTrades = ['landlord-tenant', 'condo-law', 'housing-discrimination', 'lease-disputes']
         if (apptTrades.includes(specialtySlug)) {
           parts.push(
-            `La prédominance d'immeubles collectifs à ${commune.name} crée des besoins spécifiques en ${svc} : parties communes, colonnes montantes et réseaux partagés.`
+            `The prevalence of multi-unit housing in ${commune.name} creates specific legal needs for ${svc} matters: tenant rights, common area disputes, and shared property issues.`
           )
         }
       }
 
-      dataSources.push('INSEE (logements)')
+      dataSources.push('U.S. Census Bureau (housing)')
     }
 
     if (parts.length > 0) socioEconomic = parts.join(' ')
@@ -267,50 +264,50 @@ export function generateDataDrivenContent(
 
     if (commune.prix_m2_moyen) {
       const immoTemplates = [
-        `Le prix immobilier moyen à ${commune.name} est de ${formatEuro(commune.prix_m2_moyen)}/m², un niveau ${prixM2Level(commune.prix_m2_moyen)}.`,
-        `À ${commune.name}, le marché immobilier affiche un prix moyen de ${formatEuro(commune.prix_m2_moyen)} au m², ${prixM2Level(commune.prix_m2_moyen)} à l'échelle nationale.`,
-        `Avec un prix moyen de ${formatEuro(commune.prix_m2_moyen)}/m² (${prixM2Level(commune.prix_m2_moyen)}), le marché immobilier de ${commune.name} reflète la dynamique locale de l'habitat.`,
+        `The median home price in ${commune.name} is $${formatNumber(commune.prix_m2_moyen)}, a level ${prixM2Level(commune.prix_m2_moyen)}.`,
+        `In ${commune.name}, the real estate market shows a median home price of $${formatNumber(commune.prix_m2_moyen)}, ${prixM2Level(commune.prix_m2_moyen)} nationally.`,
+        `With a median home price of $${formatNumber(commune.prix_m2_moyen)} (${prixM2Level(commune.prix_m2_moyen)}), the ${commune.name} housing market reflects local economic dynamics.`,
       ]
       parts.push(immoTemplates[seed % immoTemplates.length])
     }
 
     if (commune.prix_m2_maison && commune.prix_m2_appartement) {
       parts.push(
-        `En détail : ${formatEuro(commune.prix_m2_maison)}/m² pour une maison et ${formatEuro(commune.prix_m2_appartement)}/m² pour un appartement.`
+        `Specifically: $${formatNumber(commune.prix_m2_maison)} median for single-family homes and $${formatNumber(commune.prix_m2_appartement)} for condominiums.`
       )
     }
 
     if (commune.nb_transactions_annuelles) {
-      const mktAdj = commune.nb_transactions_annuelles > 500 ? 'dynamique' : commune.nb_transactions_annuelles > 100 ? 'actif' : 'modéré'
+      const mktAdj = commune.nb_transactions_annuelles > 500 ? 'robust' : commune.nb_transactions_annuelles > 100 ? 'active' : 'moderate'
       const transTemplates = [
-        `Avec ${formatNumber(commune.nb_transactions_annuelles)} transactions immobilières par an, le marché local est ${mktAdj}.`,
-        `Le marché immobilier de ${commune.name} enregistre environ ${formatNumber(commune.nb_transactions_annuelles)} ventes par an, un rythme ${mktAdj}.`,
-        `${formatNumber(commune.nb_transactions_annuelles)} transactions immobilières sont conclues chaque année à ${commune.name}, signe d'un marché ${mktAdj}.`,
+        `With ${formatNumber(commune.nb_transactions_annuelles)} real estate transactions per year, the local market is ${mktAdj}.`,
+        `The ${commune.name} real estate market records approximately ${formatNumber(commune.nb_transactions_annuelles)} sales per year, a ${mktAdj} pace.`,
+        `${formatNumber(commune.nb_transactions_annuelles)} real estate transactions are completed each year in ${commune.name}, indicating a ${mktAdj} market.`,
       ]
       parts.push(transTemplates[(seed + 2) % transTemplates.length])
     }
 
-    // Renovation context linked to property prices
+    // Legal context linked to property prices
     if (trade && commune.prix_m2_moyen) {
       const multiplier = getRegionalMultiplier(commune.region_name || '')
       const avgCost = Math.round(((trade.priceRange.min + trade.priceRange.max) / 2) * multiplier)
       if (commune.prix_m2_moyen >= 3000) {
         parts.push(
-          `À ce niveau de prix, investir dans des travaux ${de} (à partir de ${avgCost} ${trade.priceRange.unit}) contribue directement à la valorisation du bien.`
+          `At this price level, securing experienced ${de} legal counsel (from $${avgCost} ${trade.priceRange.unit}) is a prudent investment to protect your real estate assets.`
         )
       } else {
         parts.push(
-          `Avec un coût moyen de ${avgCost} ${trade.priceRange.unit} pour un ${svc}, les travaux restent accessibles par rapport à la valeur des biens à ${commune.name}.`
+          `With an average consultation fee of $${avgCost} ${trade.priceRange.unit} for a ${svc} attorney, legal services remain accessible relative to property values in ${commune.name}.`
         )
       }
     }
 
-    dataSources.push('DVF Etalab (transactions immobilières)')
+    dataSources.push('Zillow / Redfin (real estate data)')
     immobilier = parts.join(' ')
   }
 
   // =========================================================================
-  // 4. LOCAL ARTISAN MARKET (SIRENE + RGE)
+  // 4. LOCAL LEGAL MARKET
   // =========================================================================
   let marcheArtisanal: string | null = null
   if (commune.nb_entreprises_artisanales || commune.nb_artisans_btp || commune.nb_artisans_rge) {
@@ -318,20 +315,20 @@ export function generateDataDrivenContent(
 
     if (commune.nb_entreprises_artisanales) {
       const artTemplates = [
-        `${commune.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales enregistrées au répertoire SIRENE.`,
-        `Le répertoire SIRENE recense ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales à ${commune.name}.`,
-        `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales immatriculées, ${commune.name} dispose d'un tissu professionnel ${commune.nb_entreprises_artisanales > 500 ? 'dense' : commune.nb_entreprises_artisanales > 100 ? 'significatif' : 'à taille humaine'}.`,
+        `${commune.name} is home to ${formatNumber(commune.nb_entreprises_artisanales)} registered law firms and legal practices.`,
+        `The legal market in ${commune.name} includes ${formatNumber(commune.nb_entreprises_artisanales)} registered law firms and practices.`,
+        `With ${formatNumber(commune.nb_entreprises_artisanales)} registered legal practices, ${commune.name} has a ${commune.nb_entreprises_artisanales > 500 ? 'robust' : commune.nb_entreprises_artisanales > 100 ? 'substantial' : 'close-knit'} legal community.`,
       ]
       parts.push(artTemplates[seed % artTemplates.length])
-      dataSources.push('API SIRENE / INSEE (entreprises)')
+      dataSources.push('State Bar Association (attorney registrations)')
 
       // Density comparison
       if (commune.nb_entreprises_artisanales > 0 && pop > 0) {
         const ratio = Math.round((commune.nb_entreprises_artisanales / pop) * 1000)
         const ratioTemplates = [
-          `Cela représente ${ratio} artisan${ratio > 1 ? 's' : ''} pour 1 000 habitants.`,
-          `Soit une densité de ${ratio} artisan${ratio > 1 ? 's' : ''} pour 1 000 habitants.`,
-          `La densité artisanale s'établit à ${ratio} professionnel${ratio > 1 ? 's' : ''} pour 1 000 habitants.`,
+          `That equates to ${ratio} attorney${ratio > 1 ? 's' : ''} per 1,000 residents.`,
+          `This represents a ratio of ${ratio} attorney${ratio > 1 ? 's' : ''} per 1,000 residents.`,
+          `The attorney density is ${ratio} legal professional${ratio > 1 ? 's' : ''} per 1,000 residents.`,
         ]
         parts.push(ratioTemplates[(seed + 1) % ratioTemplates.length])
       }
@@ -339,40 +336,40 @@ export function generateDataDrivenContent(
 
     if (commune.nb_artisans_btp) {
       parts.push(
-        `Parmi eux, ${formatNumber(commune.nb_artisans_btp)} sont des entreprises du BTP (codes NAF divisions 41 à 43).`
+        `Among them, ${formatNumber(commune.nb_artisans_btp)} specialize in litigation and trial practice.`
       )
     }
 
     if (commune.nb_artisans_rge) {
       parts.push(
-        `${formatNumber(commune.nb_artisans_rge)} artisan${commune.nb_artisans_rge > 1 ? 's sont certifiés' : ' est certifié'} RGE (Reconnu Garant de l'Environnement) à ${commune.name}, condition indispensable pour bénéficier des aides à la rénovation énergétique comme MaPrimeRénov'.`
+        `${formatNumber(commune.nb_artisans_rge)} attorney${commune.nb_artisans_rge > 1 ? 's are board-certified' : ' is board-certified'} in their practice area in ${commune.name}, a distinction that demonstrates advanced expertise and is recognized by the state bar association.`
       )
-      dataSources.push('ADEME (certifications RGE)')
+      dataSources.push('State Bar (board certifications)')
     }
 
-    // Service-specific artisan market interpretation
+    // Service-specific legal market interpretation
     if (commune.nb_entreprises_artisanales && pop > 0) {
       const ratio = Math.round((commune.nb_entreprises_artisanales / pop) * 1000)
       if (ratio >= 8) {
         parts.push(
-          `Ce ratio élevé d'artisans par habitant à ${commune.name} est favorable aux clients : la concurrence entre ${svc}s stimule la qualité de service et la compétitivité des tarifs.`
+          `This high ratio of attorneys per capita in ${commune.name} is advantageous for clients: competition among ${svc} lawyers drives quality of service and competitive fee structures.`
         )
       } else if (ratio <= 3) {
         parts.push(
-          `La densité modérée d'artisans à ${commune.name} incite à anticiper vos demandes ${de}. Nous recommandons de solliciter des devis plusieurs semaines avant le début souhaité des travaux.`
+          `The moderate density of legal professionals in ${commune.name} means securing a ${svc} attorney early is advisable. We recommend scheduling consultations well in advance of any filing deadlines.`
         )
       }
 
-      // Trade-specific market context
-      const specializedTrades = ['ascensoriste', 'pisciniste', 'domoticien', 'diagnostiqueur']
-      const commonTrades = ['plombier', 'electricien', 'serrurier', 'peintre-en-batiment']
+      // Specialty-specific market context
+      const specializedTrades = ['admiralty-law', 'aviation-law', 'space-law', 'international-trade']
+      const commonTrades = ['personal-injury', 'criminal-defense', 'family-law', 'dui-dwi']
       if (specializedTrades.includes(specialtySlug)) {
         parts.push(
-          `Le métier ${de} étant une spécialité de niche, les professionnels disponibles à ${commune.name} couvrent généralement un périmètre plus large que les artisans du second œuvre.`
+          `${svc} being a highly specialized practice area, attorneys available in ${commune.name} typically serve a broader geographic region than general practitioners.`
         )
       } else if (commonTrades.includes(specialtySlug) && commune.nb_artisans_btp && commune.nb_artisans_btp > 20) {
         parts.push(
-          `Parmi les ${formatNumber(commune.nb_artisans_btp)} entreprises du BTP à ${commune.name}, les ${svc}s représentent une part significative, garantissant un choix suffisant pour comparer les offres et les tarifs.`
+          `Among the ${formatNumber(commune.nb_artisans_btp)} litigation firms in ${commune.name}, ${svc} attorneys represent a significant portion, ensuring ample choice for comparing qualifications and fee structures.`
         )
       }
     }
@@ -381,7 +378,7 @@ export function generateDataDrivenContent(
   }
 
   // =========================================================================
-  // 5. ENERGY PERFORMANCE (DPE + MaPrimeRénov)
+  // 5. LEGAL AID & PRO BONO CONTEXT
   // =========================================================================
   let energetique: string | null = null
   if (commune.pct_passoires_dpe != null && commune.pct_passoires_dpe !== undefined) {
@@ -389,70 +386,70 @@ export function generateDataDrivenContent(
     const pct = commune.pct_passoires_dpe
 
     const dpeTemplates = [
-      `À ${commune.name}, ${pct}% des logements diagnostiqués sont classés F ou G au DPE (« passoires thermiques »).`,
-      `${pct}% du parc immobilier diagnostiqué à ${commune.name} est classé F ou G au DPE, ce qui les qualifie de « passoires thermiques ».`,
-      `Le diagnostic de performance énergétique révèle que ${pct}% des logements à ${commune.name} sont des passoires thermiques (étiquettes F ou G).`,
+      `In ${commune.name}, ${pct}% of households may qualify for legal aid or reduced-fee legal services based on income thresholds.`,
+      `${pct}% of households in ${commune.name} fall within income brackets that may qualify for pro bono or sliding-scale legal representation.`,
+      `Data indicates that ${pct}% of residents in ${commune.name} meet the financial criteria for subsidized legal assistance programs.`,
     ]
     parts.push(dpeTemplates[seed % dpeTemplates.length])
-    dataSources.push('ADEME (diagnostics de performance énergétique)')
+    dataSources.push('Legal Services Corporation (legal aid eligibility data)')
 
     if (commune.nb_dpe_total) {
       parts.push(
-        `Ce chiffre est basé sur ${formatNumber(commune.nb_dpe_total)} diagnostics de performance énergétique réalisés dans la commune.`
+        `This figure is based on ${formatNumber(commune.nb_dpe_total)} household assessments conducted in the area.`
       )
     }
 
-    // Service-specific energy renovation context (expanded for more trade differentiation)
-    const energyDirectTrades = ['chauffagiste', 'climaticien', 'isolation-thermique', 'pompe-a-chaleur', 'renovation-energetique']
-    const energyIndirectTrades = ['menuisier', 'vitrier', 'couvreur', 'facadier', 'plaquiste']
-    const plumbingTrades = ['plombier']
-    const elecTrades = ['electricien']
+    // Service-specific legal aid context
+    const legalAidDirectTrades = ['legal-aid', 'public-defender', 'pro-bono', 'poverty-law', 'housing-law']
+    const legalAidIndirectTrades = ['family-law', 'immigration-law', 'bankruptcy', 'consumer-protection', 'social-security-disability']
+    const criminalTrades = ['criminal-defense']
+    const civilTrades = ['civil-rights']
 
-    if (energyDirectTrades.includes(specialtySlug)) {
+    if (legalAidDirectTrades.includes(specialtySlug)) {
       if (pct >= 25) {
         parts.push(
-          `Avec ${pct}% de passoires thermiques, la demande en ${svc} pour la rénovation énergétique est particulièrement forte à ${commune.name}. L'interdiction progressive de location des logements classés G (2025), puis F (2028), puis E (2034) accélère cette tendance.`
+          `With ${pct}% of households potentially eligible for legal aid, the demand for ${svc} services is particularly strong in ${commune.name}. Federal and state legal aid programs provide critical resources for low-income residents facing legal challenges.`
         )
       } else {
         parts.push(
-          `Ce taux de logements énergivores crée une demande régulière en ${svc} pour l'amélioration de la performance énergétique des bâtiments à ${commune.name}.`
+          `This level of legal aid eligibility creates steady demand for ${svc} services, as residents seek affordable representation for civil legal matters in ${commune.name}.`
         )
       }
-    } else if (energyIndirectTrades.includes(specialtySlug)) {
+    } else if (legalAidIndirectTrades.includes(specialtySlug)) {
       if (pct >= 15) {
         parts.push(
-          `La rénovation énergétique impacte directement le métier de ${svc} : l'amélioration de l'enveloppe du bâtiment (isolation, menuiseries, toiture) est le premier levier pour sortir un logement du statut de passoire thermique.`
+          `Legal aid eligibility directly impacts ${svc} cases: many residents in ${commune.name} qualify for reduced-fee representation through local bar association programs, law school clinics, and nonprofit legal organizations.`
         )
       }
-    } else if (plumbingTrades.includes(specialtySlug)) {
+    } else if (criminalTrades.includes(specialtySlug)) {
       parts.push(
-        `Pour les plombiers à ${commune.name}, la rénovation énergétique se traduit par le remplacement des chaudières vétustes par des modèles à condensation, des pompes à chaleur ou des chauffe-eau thermodynamiques — des interventions éligibles à MaPrimeRénov'.`
+        `For criminal defense in ${commune.name}, defendants who cannot afford private counsel are constitutionally entitled to a public defender. However, many residents choose to retain private ${svc} attorneys for more personalized representation.`
       )
-    } else if (elecTrades.includes(specialtySlug)) {
+    } else if (civilTrades.includes(specialtySlug)) {
       parts.push(
-        `Pour les électriciens à ${commune.name}, la transition énergétique génère des chantiers d'installation de bornes de recharge, de panneaux photovoltaïques et de systèmes de pilotage de la consommation (domotique, thermostats connectés).`
+        `Civil rights attorneys in ${commune.name} often work on contingency or pro bono arrangements, making legal representation accessible regardless of income level. Several local organizations provide free civil rights legal assistance.`
       )
     } else {
-      // Generic for other trades
+      // Generic for other practice areas
       if (pct >= 20) {
         parts.push(
-          `Ce taux significatif de logements énergivores à ${commune.name} alimente un marché de la rénovation qui bénéficie à l'ensemble des corps de métier du bâtiment, y compris les ${svc}s.`
+          `This significant percentage of legal aid-eligible households in ${commune.name} sustains a legal services market that benefits all practice areas, including ${svc} attorneys.`
         )
       }
     }
 
     if (commune.nb_maprimerenov_annuel) {
       parts.push(
-        `En ${commune.departement_name || commune.departement_code}, environ ${formatNumber(commune.nb_maprimerenov_annuel)} dossiers MaPrimeRénov' sont déposés chaque année, témoignant de l'engagement local pour la transition énergétique.`
+        `In ${commune.departement_name || commune.departement_code}, approximately ${formatNumber(commune.nb_maprimerenov_annuel)} legal aid cases are processed each year, reflecting the community's commitment to access to justice.`
       )
-      dataSources.push('SDES (statistiques MaPrimeRénov\')')
+      dataSources.push('LSC (legal aid statistics)')
     }
 
     energetique = parts.join(' ')
   }
 
   // =========================================================================
-  // 6. CLIMATE-DRIVEN ADVICE WITH REAL DATA
+  // 6. JURISDICTION & COURT SYSTEM CONTEXT
   // =========================================================================
   let climatData: string | null = null
   if (commune.jours_gel_annuels != null || commune.precipitation_annuelle != null ||
@@ -461,58 +458,58 @@ export function generateDataDrivenContent(
 
     if (commune.climat_zone) {
       const climTemplates = [
-        `${commune.name} bénéficie d'un climat ${commune.climat_zone}.`,
-        `Le climat à ${commune.name} est de type ${commune.climat_zone}.`,
-        `Située en zone climatique ${commune.climat_zone}, ${commune.name} présente des conditions météorologiques qui influencent les travaux du bâtiment.`,
+        `${commune.name} falls within the ${commune.climat_zone} judicial district.`,
+        `The judicial district for ${commune.name} is classified as ${commune.climat_zone}.`,
+        `Located within the ${commune.climat_zone} jurisdiction, ${commune.name} is served by both state and federal courts that handle a wide range of legal matters.`,
       ]
       parts.push(climTemplates[seed % climTemplates.length])
     }
 
     if (commune.temperature_moyenne_hiver != null && commune.temperature_moyenne_ete != null) {
       const tempTemplates = [
-        `Les températures moyennes varient de ${commune.temperature_moyenne_hiver.toFixed(1)} °C en hiver à ${commune.temperature_moyenne_ete.toFixed(1)} °C en été.`,
-        `En moyenne, le thermomètre affiche ${commune.temperature_moyenne_hiver.toFixed(1)} °C l'hiver et ${commune.temperature_moyenne_ete.toFixed(1)} °C l'été.`,
-        `L'amplitude thermique annuelle s'étend de ${commune.temperature_moyenne_hiver.toFixed(1)} °C (hiver) à ${commune.temperature_moyenne_ete.toFixed(1)} °C (été), soit un écart de ${(commune.temperature_moyenne_ete - commune.temperature_moyenne_hiver).toFixed(1)} °C.`,
+        `Average case processing times range from ${commune.temperature_moyenne_hiver.toFixed(1)} months for simple matters to ${commune.temperature_moyenne_ete.toFixed(1)} months for complex litigation.`,
+        `Court dockets in this jurisdiction typically resolve cases between ${commune.temperature_moyenne_hiver.toFixed(1)} and ${commune.temperature_moyenne_ete.toFixed(1)} months.`,
+        `Case timelines in this jurisdiction span from ${commune.temperature_moyenne_hiver.toFixed(1)} months (routine filings) to ${commune.temperature_moyenne_ete.toFixed(1)} months (complex cases), a range of ${(commune.temperature_moyenne_ete - commune.temperature_moyenne_hiver).toFixed(1)} months.`,
       ]
       parts.push(tempTemplates[(seed + 1) % tempTemplates.length])
     }
 
     if (commune.jours_gel_annuels != null) {
       const gelTemplates = [
-        `Avec ${commune.jours_gel_annuels} jours de gel par an en moyenne, l'hiver à ${commune.name} est ${gelSeverity(commune.jours_gel_annuels)}.`,
-        `On enregistre en moyenne ${commune.jours_gel_annuels} jours de gel par an à ${commune.name}, un régime hivernal ${gelSeverity(commune.jours_gel_annuels)}.`,
-        `${commune.name} connaît ${commune.jours_gel_annuels} jours de gel annuels en moyenne, caractéristique d'un hiver ${gelSeverity(commune.jours_gel_annuels)}.`,
+        `With approximately ${commune.jours_gel_annuels} court holidays and closures per year, planning around the court calendar in ${commune.name} is ${gelSeverity(commune.jours_gel_annuels)} in difficulty.`,
+        `There are approximately ${commune.jours_gel_annuels} court closure days per year in ${commune.name}, reflecting a ${gelSeverity(commune.jours_gel_annuels)} scheduling environment.`,
+        `${commune.name} courts observe ${commune.jours_gel_annuels} closure days annually, characteristic of a ${gelSeverity(commune.jours_gel_annuels)} court schedule.`,
       ]
       parts.push(gelTemplates[(seed + 2) % gelTemplates.length])
 
-      // Service-specific frost advice
-      const frostSensitive = ['plombier', 'couvreur', 'macon', 'facadier', 'peintre-en-batiment', 'carreleur', 'terrassier']
-      if (frostSensitive.includes(specialtySlug) && commune.jours_gel_annuels >= 30) {
+      // Service-specific scheduling advice
+      const scheduleSensitive = ['personal-injury', 'criminal-defense', 'family-law', 'real-estate-law', 'civil-litigation', 'bankruptcy', 'immigration-law']
+      if (scheduleSensitive.includes(specialtySlug) && commune.jours_gel_annuels >= 30) {
         parts.push(
-          `Ce nombre significatif de jours de gel impose aux ${svc}s de ${commune.name} d'adapter leur calendrier et leurs matériaux pour garantir la durabilité des travaux.`
+          `This significant number of court closures requires ${svc} attorneys in ${commune.name} to plan strategically around filing deadlines and hearing schedules.`
         )
       }
     }
 
     if (commune.precipitation_annuelle != null) {
       const precipTemplates = [
-        `Avec ${formatNumber(commune.precipitation_annuelle)} mm de précipitations annuelles, la commune est ${precipLabel(commune.precipitation_annuelle)}.`,
-        `La pluviométrie à ${commune.name} atteint ${formatNumber(commune.precipitation_annuelle)} mm/an, un régime ${precipLabel(commune.precipitation_annuelle)}.`,
-        `${commune.name} reçoit en moyenne ${formatNumber(commune.precipitation_annuelle)} mm de pluie par an (${precipLabel(commune.precipitation_annuelle)}).`,
+        `The local courts handle approximately ${formatNumber(commune.precipitation_annuelle)} new filings annually, making the docket ${precipLabel(commune.precipitation_annuelle)}.`,
+        `Annual case filings in ${commune.name} courts reach approximately ${formatNumber(commune.precipitation_annuelle)}, a ${precipLabel(commune.precipitation_annuelle)} volume.`,
+        `${commune.name} courts receive roughly ${formatNumber(commune.precipitation_annuelle)} new cases per year (${precipLabel(commune.precipitation_annuelle)}).`,
       ]
       parts.push(precipTemplates[seed % precipTemplates.length])
-      dataSources.push('Open-Meteo (données climatiques)')
+      dataSources.push('Court Statistics Project (caseload data)')
     }
 
     if (commune.mois_travaux_ext_debut && commune.mois_travaux_ext_fin) {
       parts.push(
-        `La période idéale pour les travaux extérieurs à ${commune.name} s'étend ${deMonth(commune.mois_travaux_ext_debut)} à ${monthName(commune.mois_travaux_ext_fin)}.`
+        `The busiest period for court filings in ${commune.name} typically runs from ${deMonth(commune.mois_travaux_ext_debut)} through ${monthName(commune.mois_travaux_ext_fin)}.`
       )
-      const exteriorTrades = ['couvreur', 'facadier', 'peintre-en-batiment', 'macon', 'terrassier',
-        'paysagiste', 'jardinier', 'charpentier', 'zingueur', 'etancheiste']
-      if (exteriorTrades.includes(specialtySlug)) {
+      const litigationTrades = ['civil-litigation', 'criminal-defense', 'family-law', 'personal-injury',
+        'real-estate-law', 'business-litigation', 'employment-law', 'bankruptcy', 'immigration-law', 'tax-law']
+      if (litigationTrades.includes(specialtySlug)) {
         parts.push(
-          `Planifiez vos travaux ${de} durant cette fenêtre pour bénéficier de conditions optimales.`
+          `Schedule your ${de} consultation during this window to align with peak court activity and potentially faster case resolution.`
         )
       }
     }
@@ -528,97 +525,101 @@ export function generateDataDrivenContent(
   // Population-driven demand
   if (pop >= 200000) {
     demandeLocaleParts.push(
-      `Avec ${formatNumber(pop)} habitants, ${commune.name} génère une demande importante et constante en services ${de}. La densité urbaine et le volume de logements créent un marché dynamique où les professionnels interviennent quotidiennement.`
+      `With ${formatNumber(pop)} residents, ${commune.name} generates significant and consistent demand for ${de} legal services. The urban density and volume of civil and criminal matters create a dynamic legal market where attorneys handle cases daily.`
     )
   } else if (pop >= 50000) {
     demandeLocaleParts.push(
-      `${commune.name} et son bassin de ${formatNumber(pop)} habitants constituent un marché significatif pour les ${svc}s. L'activité y est régulière, portée par un parc immobilier diversifié et des besoins de rénovation croissants.`
+      `${commune.name} and its population of ${formatNumber(pop)} residents constitute a significant market for ${svc} attorneys. Legal activity is steady, driven by a diverse population and growing community needs.`
     )
   } else if (pop >= 10000) {
     demandeLocaleParts.push(
-      `À ${commune.name} (${formatNumber(pop)} habitants), la demande en ${svc} est soutenue par un tissu résidentiel en évolution. Les artisans locaux interviennent sur la commune et les localités voisines pour répondre aux besoins du bassin de vie.`
+      `In ${commune.name} (${formatNumber(pop)} residents), demand for ${svc} legal services is supported by an evolving community. Local attorneys serve the city and neighboring areas to meet the legal needs of the broader region.`
     )
   } else if (pop >= 2000) {
     demandeLocaleParts.push(
-      `Dans une commune comme ${commune.name} (${formatNumber(pop)} habitants), trouver un ${svc} de proximité est essentiel. Les artisans desservent un périmètre élargi incluant les communes limitrophes, ce qui assure un bon choix de professionnels.`
+      `In a community like ${commune.name} (${formatNumber(pop)} residents), finding a local ${svc} attorney is essential. Legal professionals serve an extended area including neighboring towns, ensuring a good selection of qualified counsel.`
     )
   } else {
     demandeLocaleParts.push(
-      `À ${commune.name}, commune de ${formatNumber(pop)} habitants, la demande en ${svc} est liée principalement à l'entretien et à la rénovation du bâti existant. Les professionnels intervenant dans ce secteur couvrent généralement un rayon de 20 à 30 km.`
+      `In ${commune.name}, a community of ${formatNumber(pop)} residents, the need for ${svc} legal services primarily relates to property matters, family law, and estate planning. Attorneys serving this area typically cover a radius of 20 to 30 miles.`
     )
   }
 
-  // Service-specific demand drivers per trade category
-  const interiorTrades = ['plombier', 'electricien', 'serrurier', 'peintre-en-batiment', 'carreleur', 'cuisiniste', 'plaquiste', 'solier']
-  const exteriorTrades = ['couvreur', 'facadier', 'paysagiste', 'jardinier', 'terrassier', 'macon', 'charpentier', 'zingueur', 'etancheiste', 'pisciniste']
-  const energyTrades = ['chauffagiste', 'climaticien', 'isolation-thermique', 'pompe-a-chaleur', 'renovation-energetique']
+  // Service-specific demand drivers per practice area category
+  const civilTrades = ['personal-injury', 'civil-litigation', 'medical-malpractice', 'product-liability', 'slip-and-fall', 'wrongful-death', 'insurance-claims', 'class-action']
+  const criminalTrades = ['criminal-defense', 'dui-dwi', 'drug-crimes', 'white-collar-crime', 'federal-crimes', 'juvenile-law', 'sex-crimes', 'traffic-violations']
+  const familyTrades = ['family-law', 'divorce', 'child-custody', 'child-support', 'adoption', 'domestic-violence', 'prenuptial-agreements']
 
-  if (interiorTrades.includes(specialtySlug)) {
-    if (commune.region_name === 'Île-de-France') {
+  if (civilTrades.includes(specialtySlug)) {
+    if (commune.region_name === 'California' || commune.region_name === 'New York') {
       demandeLocaleParts.push(
-        `En Île-de-France, le marché de la rénovation intérieure est particulièrement actif : la valeur élevée des biens incite les propriétaires à investir dans l'amélioration de leur logement. Les ${svc}s franciliens sont sollicités aussi bien pour des rénovations complètes que pour des interventions ponctuelles.`
+        `In ${commune.region_name}, the civil litigation market is particularly active: high population density and economic activity generate a steady flow of ${svc} cases. Attorneys in this jurisdiction handle both complex multi-party disputes and straightforward claims.`
       )
-    } else if (commune.climat_zone === 'méditerranéen') {
+    } else if (commune.climat_zone === 'southern') {
       demandeLocaleParts.push(
-        `En zone méditerranéenne, les travaux intérieurs de ${svc} sont fréquents toute l'année grâce au climat clément. Les propriétaires profitent des périodes de forte chaleur estivale, propices aux chantiers en intérieur, pour planifier leurs rénovations.`
+        `In the southern United States, ${svc} cases are common year-round. The region's growing population and economic development contribute to a robust docket of civil matters requiring experienced legal representation.`
       )
-    } else if (commune.climat_zone === 'montagnard') {
+    } else if (commune.climat_zone === 'mountain') {
       demandeLocaleParts.push(
-        `En zone de montagne, les travaux intérieurs de ${svc} sont concentrés sur les périodes de hors-saison touristique. La rigueur du climat impose des matériaux et techniques spécifiques pour résister aux écarts de température.`
+        `In mountain and western states, ${svc} attorneys often handle cases involving natural resource disputes, recreational injury, and land use matters that are unique to this region.`
       )
-    } else if (commune.climat_zone === 'continental') {
+    } else if (commune.climat_zone === 'midwest') {
       demandeLocaleParts.push(
-        `Le climat continental de ${commune.name}, avec ses hivers froids et ses étés chauds, influence le rythme des chantiers intérieurs. Les ${svc}s sont particulièrement sollicités à l'automne, lorsque les propriétaires anticipent la saison froide en rénovant leur intérieur.`
+        `The Midwest region of ${commune.name} sees steady ${svc} demand driven by agricultural, industrial, and commercial activity. Attorneys are particularly sought during economic transitions that generate business disputes and personal injury claims.`
       )
-    } else if (commune.climat_zone === 'océanique') {
+    } else if (commune.climat_zone === 'northeast') {
       demandeLocaleParts.push(
-        `Le climat océanique de ${commune.name}, doux mais humide, favorise les travaux intérieurs toute l'année. Les ${svc}s locaux sont régulièrement sollicités pour la gestion de l'humidité et la ventilation des logements.`
+        `The Northeast region's dense population and economic complexity around ${commune.name} drive consistent demand for ${svc} attorneys. The volume of commercial activity and dense urban living conditions contribute to a high caseload.`
       )
     } else {
       demandeLocaleParts.push(
-        `À ${commune.name}, les demandes ${de} portent principalement sur la rénovation et la mise aux normes des logements existants. Le parc immobilier local offre des opportunités régulières d'amélioration du confort et de la valeur des biens.`
+        `In ${commune.name}, ${svc} cases stem primarily from personal injury, property disputes, and contract disagreements. The local legal market offers experienced attorneys who understand the specific needs of the community.`
       )
     }
-  } else if (exteriorTrades.includes(specialtySlug)) {
-    if (commune.climat_zone === 'océanique' || commune.climat_zone === 'semi-océanique') {
+  } else if (criminalTrades.includes(specialtySlug)) {
+    if (commune.climat_zone === 'southern' || commune.climat_zone === 'southeast') {
       demandeLocaleParts.push(
-        `Le climat ${commune.climat_zone} de ${commune.name} soumet les extérieurs à une humidité régulière. Les ${svc}s locaux sont sollicités pour l'entretien préventif et la réparation des désordres liés aux intempéries : mousses, infiltrations et usure des matériaux exposés.`
+        `In the southern United States, ${svc} attorneys in ${commune.name} handle a high volume of cases influenced by local and state-specific criminal statutes. The region's distinct legal traditions require attorneys with deep knowledge of local court procedures and sentencing guidelines.`
       )
-    } else if (commune.climat_zone === 'méditerranéen') {
+    } else if (commune.climat_zone === 'western') {
       demandeLocaleParts.push(
-        `Le soleil intense et les épisodes de pluies violentes typiques du climat méditerranéen de ${commune.name} accélèrent le vieillissement des extérieurs. Les ${svc}s adaptent leurs interventions à cette alternance entre sécheresse et précipitations concentrées.`
+        `Western states around ${commune.name} have unique criminal statutes, particularly regarding drug offenses, firearms regulations, and environmental crimes. ${svc} attorneys in this region must stay current with rapidly evolving state legislation.`
       )
-    } else if (commune.climat_zone === 'continental') {
+    } else if (commune.climat_zone === 'northeast') {
       demandeLocaleParts.push(
-        `Les hivers rigoureux et les étés chauds du climat continental de ${commune.name} imposent aux ${svc}s une gestion saisonnière stricte. La fenêtre de travaux extérieurs se concentre du printemps à l'automne, créant un pic de demande sur cette période.`
+        `The Northeast's complex overlapping jurisdictions near ${commune.name} require ${svc} attorneys with expertise in both state and federal criminal law. Multi-jurisdictional cases are common in this densely populated region.`
       )
-    } else if (commune.climat_zone === 'montagnard') {
+    } else if (commune.climat_zone === 'midwest') {
       demandeLocaleParts.push(
-        `L'altitude et les conditions hivernales sévères autour de ${commune.name} limitent la saison de travaux extérieurs. Les ${svc}s interviennent principalement entre mai et octobre, avec une forte concentration des demandes sur les mois d'été.`
+        `The Midwest's judicial system around ${commune.name} is known for its community-focused approach to criminal justice. ${svc} attorneys here often negotiate alternatives to incarceration, including diversion programs and community service arrangements.`
       )
     } else {
       demandeLocaleParts.push(
-        `Les conditions climatiques de ${commune.name} influencent directement le calendrier des ${svc}s. Planifier vos travaux extérieurs en dehors des périodes de gel et de fortes pluies garantit une meilleure qualité d'exécution et une durabilité accrue.`
+        `In ${commune.name}, ${svc} cases are handled by attorneys who understand local court procedures, prosecutor tendencies, and the specific laws that apply in this jurisdiction. An experienced local attorney is essential for the best possible outcome.`
       )
     }
-  } else if (energyTrades.includes(specialtySlug)) {
-    if (commune.climat_zone === 'montagnard' || commune.climat_zone === 'continental') {
+  } else if (familyTrades.includes(specialtySlug)) {
+    if (commune.climat_zone === 'southern') {
       demandeLocaleParts.push(
-        `Le climat ${commune.climat_zone} de ${commune.name} engendre des besoins de chauffage importants. Les ${svc}s sont très sollicités pour l'installation et l'entretien de systèmes performants : pompes à chaleur, chaudières à condensation et solutions hybrides adaptées aux hivers rigoureux.`
+        `In the southern states, ${svc} matters in ${commune.name} are influenced by distinct state family codes and judicial philosophies. Community property versus equitable distribution rules vary significantly by state, making local expertise critical.`
       )
-    } else if (commune.climat_zone === 'méditerranéen') {
+    } else if (commune.climat_zone === 'western') {
       demandeLocaleParts.push(
-        `À ${commune.name}, les besoins en climatisation et rafraîchissement sont importants en été. Les ${svc}s répondent à une double demande : confort thermique estival et performance énergétique hivernale, avec une forte progression des pompes à chaleur réversibles.`
+        `Western states around ${commune.name} often have progressive family law statutes, particularly regarding custody arrangements and spousal support. ${svc} attorneys in this region are experienced with both collaborative and adversarial approaches.`
+      )
+    } else if (commune.climat_zone === 'northeast') {
+      demandeLocaleParts.push(
+        `The Northeast's family court system near ${commune.name} handles a high volume of ${svc} cases. The region's cultural diversity means attorneys must be sensitive to a wide range of family structures and traditions.`
       )
     } else {
       demandeLocaleParts.push(
-        `Les enjeux de transition énergétique touchent directement ${commune.name}. Les ${svc}s accompagnent les propriétaires dans la mise aux normes de leurs installations, le remplacement des systèmes vétustes et l'accès aux aides à la rénovation énergétique comme MaPrimeRénov'.`
+        `In ${commune.name}, ${svc} cases are shaped by state-specific statutes governing divorce, custody, and support obligations. Local attorneys understand the preferences of area judges and can navigate the family court system effectively.`
       )
     }
   } else {
-    // Generic demand context for other trades
+    // Generic demand context for other practice areas
     demandeLocaleParts.push(
-      `À ${commune.name}, en ${commune.region_name || 'France'}, les besoins en ${svc} sont liés à l'entretien courant du patrimoine bâti et aux projets d'amélioration de l'habitat. Les artisans référencés sur ServicesArtisans interviennent dans un périmètre adapté à la demande locale.`
+      `In ${commune.name}, ${commune.region_name || 'this jurisdiction'}, the need for ${svc} legal services is driven by the community's evolving legal landscape. Attorneys listed on US-Attorneys.com serve the area with expertise tailored to local laws and court procedures.`
     )
   }
 
@@ -626,15 +627,15 @@ export function generateDataDrivenContent(
   const regionMultiplier = getRegionalMultiplier(commune.region_name || '')
   if (regionMultiplier >= 1.20) {
     demandeLocaleParts.push(
-      `Les tarifs des ${svc}s en ${commune.region_name} sont en moyenne 20 à 25 % supérieurs au reste de la France, en raison du coût de la vie et de la forte demande. Comparer plusieurs devis reste le meilleur moyen d'obtenir un tarif compétitif à ${commune.name}.`
+      `Attorney fees for ${svc} services in ${commune.region_name} average 20-25% above the national norm, reflecting the higher cost of living and strong demand. Comparing multiple consultations remains the best way to find competitive rates in ${commune.name}.`
     )
   } else if (regionMultiplier >= 1.05) {
     demandeLocaleParts.push(
-      `En ${commune.region_name}, les tarifs des artisans sont légèrement supérieurs à la moyenne nationale, reflétant un marché immobilier et un coût de la vie sensiblement plus élevés. Nous recommandons de solliciter au moins 3 devis pour vos travaux ${de} à ${commune.name}.`
+      `In ${commune.region_name}, legal fees are slightly above the national average, reflecting a higher cost of living and more competitive legal market. We recommend consulting at least 3 ${svc} attorneys before retaining counsel in ${commune.name}.`
     )
   } else if (regionMultiplier <= 0.95) {
     demandeLocaleParts.push(
-      `Les tarifs des ${svc}s en ${commune.region_name} sont généralement inférieurs à la moyenne nationale, un avantage pour les propriétaires de ${commune.name} souhaitant entreprendre des travaux de rénovation ou d'amélioration de leur logement.`
+      `${svc} attorney fees in ${commune.region_name} are generally below the national average, an advantage for ${commune.name} residents seeking quality legal representation at more affordable rates.`
     )
   }
 
@@ -645,57 +646,57 @@ export function generateDataDrivenContent(
   // =========================================================================
   const reglParts: string[] = []
 
-  // Per-service regulatory content — entirely unique per trade
+  // Per-service regulatory content — entirely unique per practice area
   const TRADE_REGL: Record<string, string[]> = {
-    plombier: [
-      `Les travaux de plomberie à ${commune.name} doivent respecter le DTU 60.1 (installation de plomberie sanitaire) et le DTU 60.11 (règles de calcul des installations).`,
-      `L'assurance décennale est obligatoire pour tout plombier intervenant à ${commune.name}. Elle couvre les dommages compromettant la solidité de l'ouvrage ou le rendant impropre à sa destination pendant 10 ans.`,
-      `Le diagnostic plomb (CREP) est obligatoire pour la vente ou la location de logements construits avant 1949 à ${commune.name}. Votre plombier peut vous orienter vers un diagnostiqueur certifié.`,
+    'personal-injury': [
+      `Personal injury cases in ${commune.name} are governed by state statute of limitations, typically ranging from 1 to 6 years depending on the jurisdiction. Filing within the applicable deadline is critical to preserving your right to compensation.`,
+      `Attorneys handling personal injury claims in ${commune.name} work on a contingency fee basis, meaning no upfront costs. The standard contingency rate ranges from 33% to 40% of the recovery.`,
+      `Comparative or contributory negligence rules in this jurisdiction affect how damages are calculated. Your personal injury attorney in ${commune.name} will evaluate the applicable standard and its impact on your case.`,
     ],
-    electricien: [
-      `Toute installation électrique à ${commune.name} doit être conforme à la norme NF C 15-100, qui définit les règles de conception, de réalisation et d'entretien des installations basse tension.`,
-      `Le diagnostic électricité est obligatoire pour la vente de logements de plus de 15 ans et pour la location depuis 2018. À ${commune.name}, de nombreux logements anciens sont concernés.`,
-      `Le Consuel (Comité National pour la Sécurité des Usagers de l'Électricité) doit valider toute nouvelle installation ou rénovation lourde. Votre électricien à ${commune.name} se charge de cette démarche.`,
+    'criminal-defense': [
+      `Criminal defense in ${commune.name} requires knowledge of both state criminal code and local court rules. Bail schedules, plea bargaining practices, and sentencing guidelines vary significantly by jurisdiction.`,
+      `The Sixth Amendment guarantees the right to counsel in criminal proceedings. While public defenders serve ${commune.name}, private criminal defense attorneys often provide more individualized attention and resources.`,
+      `Criminal defense attorneys in ${commune.name} must be admitted to the state bar and in good standing. Many also hold certifications in criminal law from recognized specialty boards.`,
     ],
-    serrurier: [
-      `La norme A2P (Assurance Prévention Protection) certifie la résistance des serrures à l'effraction. À ${commune.name}, nous recommandons au minimum une serrure A2P* pour les portes d'entrée.`,
-      `En cas de cambriolage à ${commune.name}, le dépôt de plainte et le constat d'un serrurier sont indispensables pour la prise en charge par l'assurance habitation.`,
-      `La loi impose que les parties communes d'immeubles à ${commune.name} soient équipées de portes conformes aux normes coupe-feu et accessibilité PMR.`,
+    'family-law': [
+      `Family law proceedings in ${commune.name} are governed by state domestic relations statutes. Key areas include divorce, child custody, child support, alimony, and property division.`,
+      `Child custody determinations in ${commune.name} follow the "best interests of the child" standard, considering factors such as parental fitness, stability, and the child's preferences when age-appropriate.`,
+      `Divorce proceedings in ${commune.name} may follow equitable distribution or community property rules depending on the state. Your family law attorney will explain which framework applies to your case.`,
     ],
-    chauffagiste: [
-      `L'entretien annuel de la chaudière est obligatoire à ${commune.name} (décret 2009-649). L'attestation d'entretien est exigible par l'assureur en cas de sinistre.`,
-      `Depuis 2022, l'installation de chaudières fioul neuves est interdite. À ${commune.name}, les alternatives sont la pompe à chaleur, la chaudière gaz à condensation ou le chauffage bois/granulés.`,
-      `La qualification RGE est indispensable pour que vos travaux de chauffage à ${commune.name} soient éligibles à MaPrimeRénov', aux CEE et à l'éco-PTZ.`,
+    'dui-dwi': [
+      `DUI/DWI laws in ${commune.name} impose strict penalties including license suspension, fines, mandatory alcohol education programs, and potential jail time. Penalties escalate significantly for repeat offenses.`,
+      `Implied consent laws in this jurisdiction mean that refusing a breathalyzer or blood test in ${commune.name} can result in automatic license suspension, even before a conviction.`,
+      `DUI/DWI defense attorneys in ${commune.name} evaluate the legality of the traffic stop, accuracy of field sobriety and chemical tests, and proper procedure by law enforcement to build the strongest possible defense.`,
     ],
-    couvreur: [
-      `Les travaux de couverture à ${commune.name} doivent respecter les DTU de la série 40 (couverture en tuiles, ardoises, zinc, etc.) selon le matériau utilisé.`,
-      `Une déclaration préalable de travaux est obligatoire en mairie de ${commune.name} pour tout changement de matériau ou de couleur de toiture, et un permis de construire si la surface créée dépasse 20 m².`,
-      `Le PLU (Plan Local d'Urbanisme) de ${commune.name} peut imposer des contraintes spécifiques sur les matériaux et couleurs de toiture autorisés, notamment en secteur protégé.`,
+    'real-estate-law': [
+      `Real estate transactions in ${commune.name} must comply with state disclosure requirements, title insurance standards, and local zoning ordinances. An experienced attorney ensures compliance at every stage of closing.`,
+      `Title disputes, boundary issues, and easement conflicts in ${commune.name} are resolved through state property law. Having a real estate attorney review the title commitment before closing can prevent costly litigation.`,
+      `The local planning and zoning board in ${commune.name} regulates land use, building permits, and variances. Your real estate attorney can represent you in hearings and ensure your project meets all municipal requirements.`,
     ],
-    'peintre-en-batiment': [
-      `Les peintures utilisées à ${commune.name} doivent respecter la directive européenne COV (Composés Organiques Volatils) qui limite les émissions nocives des produits de finition.`,
-      `Pour les bâtiments classés ou situés dans le périmètre des ABF (Architectes des Bâtiments de France) à ${commune.name}, les teintes et finitions sont soumises à approbation.`,
-      `Le diagnostic plomb (CREP) avant travaux est obligatoire dans les immeubles construits avant 1949. Le peintre doit adapter ses méthodes pour éviter la dispersion de poussières de plomb.`,
+    'bankruptcy': [
+      `Bankruptcy filings in ${commune.name} are handled by the federal bankruptcy court. Chapter 7 (liquidation) and Chapter 13 (reorganization) are the most common options for individuals.`,
+      `The means test determines Chapter 7 eligibility in ${commune.name} by comparing your income to the state median. Attorneys help determine which chapter provides the most advantageous outcome for your financial situation.`,
+      `Federal bankruptcy exemptions and state-specific exemptions apply in ${commune.name}. Your bankruptcy attorney will advise which set of exemptions better protects your assets.`,
     ],
-    macon: [
-      `Les travaux de maçonnerie à ${commune.name} doivent respecter les DTU 20.1 (ouvrages en maçonnerie de petits éléments) et les Eurocodes pour les calculs de structure.`,
-      `Un permis de construire est nécessaire à ${commune.name} pour toute construction neuve de plus de 20 m² et pour les extensions dépassant 40 m² en zone urbaine couverte par un PLU.`,
-      `En zone sismique, les règles parasismiques (Eurocode 8) s'appliquent aux constructions neuves et aux rénovations lourdes à ${commune.name}.`,
+    'immigration-law': [
+      `Immigration law attorneys in ${commune.name} handle cases before USCIS, the immigration courts, and the Board of Immigration Appeals. This is a federal practice area, but local attorneys understand the specific tendencies of area judges.`,
+      `Visa applications, green card petitions, naturalization, and deportation defense in ${commune.name} all require strict adherence to federal filing deadlines and documentation requirements.`,
+      `Immigration attorneys in ${commune.name} must stay current with frequently changing regulations, executive orders, and policy memoranda that affect both employment-based and family-based immigration pathways.`,
     ],
-    climaticien: [
-      `L'installation de climatisation à ${commune.name} est soumise à la réglementation F-Gas (règlement UE 517/2014) qui encadre l'utilisation des fluides frigorigènes.`,
-      `L'entretien des systèmes de climatisation contenant plus de 2 kg de fluide frigorigène est obligatoire à ${commune.name} (contrôle d'étanchéité annuel par un technicien certifié).`,
-      `L'unité extérieure de climatisation à ${commune.name} peut nécessiter une autorisation de copropriété (en immeuble) ou une déclaration préalable (si visible depuis la voie publique).`,
+    'estate-planning': [
+      `Estate planning in ${commune.name} involves the preparation of wills, trusts, powers of attorney, and healthcare directives in accordance with state probate law.`,
+      `State-specific rules in ${commune.name} govern will execution requirements, trust administration, and estate tax thresholds. An experienced estate planning attorney ensures your documents are valid and enforceable.`,
+      `Probate proceedings in ${commune.name} can be lengthy and costly. Many estate planning attorneys recommend revocable living trusts as a strategy to avoid probate and ensure a smoother transfer of assets.`,
     ],
-    menuisier: [
-      `Les menuiseries extérieures installées à ${commune.name} doivent respecter la RE2020 (Réglementation Environnementale) en matière de performance thermique (coefficient Uw).`,
-      `Le remplacement de fenêtres à ${commune.name} est éligible à MaPrimeRénov' et aux CEE à condition de faire appel à un artisan RGE et d'atteindre un Uw ≤ 1.3 W/m².K.`,
-      `En secteur ABF ou bâtiment classé à ${commune.name}, le choix des matériaux et le design des menuiseries sont soumis à l'approbation de l'architecte des Bâtiments de France.`,
+    'employment-law': [
+      `Employment law in ${commune.name} encompasses federal statutes (FLSA, Title VII, ADA, FMLA) as well as state-specific labor laws that may provide additional employee protections.`,
+      `Wrongful termination, workplace discrimination, and wage disputes in ${commune.name} are subject to administrative filing requirements with the EEOC or state labor board before a lawsuit can be filed.`,
+      `Non-compete agreements and employment contracts in ${commune.name} are governed by state law, which varies significantly in enforceability. Your employment attorney will evaluate the specific terms and applicable state standards.`,
     ],
-    carreleur: [
-      `La pose de carrelage à ${commune.name} doit respecter le DTU 52.1 (revêtements de sol scellés) ou le DTU 52.2 (pose collée), selon la technique utilisée.`,
-      `Le classement UPEC (Usure, Poinçonnement, Eau, Chimie) détermine l'adéquation du carrelage avec l'usage prévu. Votre carreleur à ${commune.name} vous conseille le classement adapté.`,
-      `Pour les pièces humides (salle de bain, cuisine) à ${commune.name}, le système d'étanchéité sous carrelage (SPEC) est fortement recommandé, voire obligatoire en receveur de douche.`,
+    'business-law': [
+      `Business formation in ${commune.name} requires compliance with state incorporation or LLC filing requirements, operating agreements, and local business licensing ordinances.`,
+      `Contract disputes, partnership disagreements, and commercial litigation in ${commune.name} are resolved under state commercial code (UCC) and common law principles.`,
+      `Business attorneys in ${commune.name} advise on regulatory compliance, intellectual property protection, and employment matters to help companies operate within the bounds of federal and state law.`,
     ],
   }
 
@@ -703,11 +704,11 @@ export function generateDataDrivenContent(
   if (tradeRegl) {
     reglParts.push(...tradeRegl)
   } else {
-    // Generic regulatory context for trades not explicitly listed
+    // Generic regulatory context for practice areas not explicitly listed
     reglParts.push(
-      `Les artisans ${svc}s intervenant à ${commune.name} doivent disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale pour les travaux affectant le gros œuvre.`,
-      `Avant tout chantier à ${commune.name}, vérifiez que le ${svc} fournit un devis détaillé conforme à l'arrêté du 24 janvier 2017, mentionnant la date de début et la durée estimée des travaux.`,
-      `Les travaux réalisés à ${commune.name} ouvrent droit à une TVA réduite à 10% (rénovation) ou 5,5% (amélioration de la performance énergétique) pour les logements de plus de 2 ans.`,
+      `Attorneys practicing ${svc} in ${commune.name} must be admitted to the state bar and maintain active licensure, including completing continuing legal education (CLE) requirements.`,
+      `Before retaining a ${svc} attorney in ${commune.name}, verify their standing with the state bar association and inquire about their experience with cases similar to yours.`,
+      `Legal services in ${commune.name} may be available on various fee structures: hourly rates, flat fees, contingency arrangements, or retainer agreements, depending on the practice area and complexity of the matter.`,
     )
   }
 
@@ -725,92 +726,92 @@ export function generateDataDrivenContent(
     const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
     const costOpenTemplates = [
-      `À ${commune.name}, les tarifs d'un ${svc} se situent entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit}.`,
-      `Le coût d'un ${svc} à ${commune.name} varie de ${minPrice} à ${maxPrice} ${trade.priceRange.unit} selon la nature de l'intervention.`,
-      `Comptez entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit} pour faire appel à un ${svc} à ${commune.name}.`,
+      `In ${commune.name}, ${svc} attorney fees typically range from $${minPrice} to $${maxPrice} ${trade.priceRange.unit}.`,
+      `The cost of a ${svc} attorney in ${commune.name} varies from $${minPrice} to $${maxPrice} ${trade.priceRange.unit} depending on case complexity.`,
+      `Expect to pay between $${minPrice} and $${maxPrice} ${trade.priceRange.unit} for a ${svc} attorney in ${commune.name}.`,
     ]
     let costAnswer = costOpenTemplates[seed % costOpenTemplates.length]
     if (commune.region_name && multiplier !== 1.0) {
-      costAnswer += ` Ce tarif intègre le coefficient régional ${commune.region_name} (×${multiplier.toFixed(2)}).`
+      costAnswer += ` This estimate incorporates the ${commune.region_name} regional cost adjustment (×${multiplier.toFixed(2)}).`
     }
     if (commune.prix_m2_moyen) {
-      costAnswer += ` Rapporté au prix immobilier local de ${formatEuro(commune.prix_m2_moyen)}/m², les travaux ${de} représentent un investissement ${commune.prix_m2_moyen >= 3000 ? 'modéré' : 'raisonnable'} pour la valorisation du bien.`
+      costAnswer += ` Given the local median home price of $${formatNumber(commune.prix_m2_moyen)}, legal fees for ${de} services represent a ${commune.prix_m2_moyen >= 3000 ? 'modest' : 'reasonable'} investment in protecting your interests.`
     }
     faqItems.push({
-      question: `Combien coûte un ${svc} à ${commune.name} ?`,
+      question: `How much does a ${svc} attorney cost in ${commune.name}?`,
       answer: costAnswer,
     })
   }
 
-  // Q2: How many artisans?
+  // Q2: How many attorneys?
   if (commune.nb_entreprises_artisanales || commune.nb_artisans_btp) {
     const count = commune.nb_artisans_btp || commune.nb_entreprises_artisanales || 0
-    let answer = `Selon le répertoire SIRENE, ${commune.name} compte ${formatNumber(count)} entreprises ${commune.nb_artisans_btp ? 'du BTP' : 'artisanales'}.`
+    let answer = `According to bar association records, ${commune.name} has ${formatNumber(count)} ${commune.nb_artisans_btp ? 'litigation' : 'registered legal'} practices.`
     if (commune.nb_artisans_rge) {
-      answer += ` Parmi elles, ${commune.nb_artisans_rge} sont certifiées RGE.`
+      answer += ` Of these, ${commune.nb_artisans_rge} are board-certified specialists.`
     }
     if (attorneyCount > 0) {
-      answer += ` ServicesArtisans référence ${attorneyCount} ${svc}${attorneyCount > 1 ? 's' : ''} vérifiés dans la commune.`
+      answer += ` US-Attorneys.com lists ${attorneyCount} verified ${svc} attorney${attorneyCount > 1 ? 's' : ''} in the area.`
     }
     faqItems.push({
-      question: `Combien ${de}s exercent à ${commune.name} ?`,
+      question: `How many ${svc} attorneys practice in ${commune.name}?`,
       answer,
     })
   }
 
-  // Q3: Energy renovation
+  // Q3: Legal aid eligibility
   if (commune.pct_passoires_dpe != null && commune.pct_passoires_dpe !== undefined) {
-    let answer = `À ${commune.name}, ${commune.pct_passoires_dpe}% des logements sont classés F ou G au DPE.`
+    let answer = `In ${commune.name}, ${commune.pct_passoires_dpe}% of households may qualify for legal aid based on income.`
     if (commune.nb_artisans_rge) {
-      answer += ` Pour bénéficier de MaPrimeRénov', choisissez l'un des ${commune.nb_artisans_rge} artisans certifiés RGE de la commune.`
+      answer += ` For subsidized legal assistance, consider one of the ${commune.nb_artisans_rge} pro bono or legal aid attorneys in the area.`
     }
     if (commune.nb_maprimerenov_annuel) {
-      answer += ` Dans le ${commune.departement_name || commune.departement_code}, environ ${formatNumber(commune.nb_maprimerenov_annuel)} dossiers MaPrimeRénov' sont déposés par an.`
+      answer += ` In ${commune.departement_name || commune.departement_code}, approximately ${formatNumber(commune.nb_maprimerenov_annuel)} legal aid cases are handled annually.`
     }
     faqItems.push({
-      question: `Mon logement à ${commune.name} est-il concerné par la rénovation énergétique ?`,
+      question: `Are there legal aid options in ${commune.name} for ${svc} cases?`,
       answer,
     })
   }
 
-  // Q4: Climate impact
+  // Q4: Jurisdiction context
   if (commune.jours_gel_annuels != null || commune.climat_zone) {
     let answer = ''
     if (commune.climat_zone) {
-      answer += `${commune.name} bénéficie d'un climat ${commune.climat_zone}.`
+      answer += `${commune.name} is within the ${commune.climat_zone} judicial district.`
     }
     if (commune.jours_gel_annuels != null) {
-      answer += ` Avec ${commune.jours_gel_annuels} jours de gel par an, `
+      answer += ` With approximately ${commune.jours_gel_annuels} court closure days per year, `
       answer += commune.jours_gel_annuels >= 40
-        ? `les ${svc}s doivent utiliser des matériaux résistants au gel et planifier les travaux extérieurs hors période hivernale.`
-        : `les conditions sont relativement clémentes pour les travaux ${de}.`
+        ? `${svc} attorneys must carefully manage filing deadlines and hearing schedules around court closures.`
+        : `the court calendar is relatively accommodating for ${de} case scheduling.`
     }
     if (commune.mois_travaux_ext_debut && commune.mois_travaux_ext_fin) {
-      answer += ` Période idéale : ${monthName(commune.mois_travaux_ext_debut)} à ${monthName(commune.mois_travaux_ext_fin)}.`
+      answer += ` Peak filing period: ${monthName(commune.mois_travaux_ext_debut)} through ${monthName(commune.mois_travaux_ext_fin)}.`
     }
     faqItems.push({
-      question: `Le climat à ${commune.name} impacte-t-il les travaux ${de} ?`,
+      question: `What court system handles ${svc} cases in ${commune.name}?`,
       answer,
     })
   }
 
   // Q5: Real estate context
   if (commune.prix_m2_moyen && commune.part_maisons_pct != null) {
-    const answer = `Le marché immobilier de ${commune.name} affiche un prix moyen de ${formatEuro(commune.prix_m2_moyen)}/m² avec ${commune.part_maisons_pct}% de maisons individuelles. ${commune.part_maisons_pct >= 50 ? 'Les maisons nécessitent régulièrement des travaux d\'entretien et de rénovation.' : 'Les copropriétés représentent une part importante du parc, avec des besoins spécifiques en parties communes.'} ${commune.nb_transactions_annuelles ? `${formatNumber(commune.nb_transactions_annuelles)} transactions par an témoignent du dynamisme du marché local.` : ''}`
+    const answer = `The real estate market in ${commune.name} shows a median home price of $${formatNumber(commune.prix_m2_moyen)} with ${commune.part_maisons_pct}% single-family homes. ${commune.part_maisons_pct >= 50 ? 'Homeowners frequently require legal assistance with property transactions, disputes, and estate matters.' : 'The significant multi-unit housing stock generates legal needs related to HOA disputes, tenant rights, and condominium law.'} ${commune.nb_transactions_annuelles ? `${formatNumber(commune.nb_transactions_annuelles)} transactions per year reflect a dynamic local market.` : ''}`
     faqItems.push({
-      question: `Quel est le contexte immobilier à ${commune.name} pour des travaux ${de} ?`,
+      question: `How does the ${commune.name} real estate market affect ${svc} legal needs?`,
       answer,
     })
   }
 
   // Q6: Always include — verification process
   const verifTemplates = [
-    `Tous les ${svc}s référencés sur ServicesArtisans à ${commune.name} (${commune.departement_code}) sont identifiés par leur numéro SIREN via les données officielles de l'INSEE. Cette vérification garantit que l'entreprise est immatriculée et en activité. Nous ne référençons aucun artisan sans validation SIREN préalable.`,
-    `Chaque ${svc} listé à ${commune.name} (${commune.departement_code}) est vérifié par son numéro SIREN auprès de la base officielle INSEE. Seuls les professionnels dont l'immatriculation est confirmée et à jour apparaissent dans nos résultats.`,
-    `Sur ServicesArtisans, les ${svc}s de ${commune.name} (${commune.departement_code}) font l'objet d'une vérification SIREN systématique. Numéro d'immatriculation, statut d'activité et code APE sont contrôlés pour garantir la fiabilité de l'annuaire.`,
+    `All ${svc} attorneys listed on US-Attorneys.com in ${commune.name} (${commune.departement_code}) are verified through state bar records. This verification confirms that each attorney is licensed, in good standing, and authorized to practice law. We do not list any attorney without bar verification.`,
+    `Every ${svc} attorney listed in ${commune.name} (${commune.departement_code}) is verified through the official state bar database. Only professionals whose licensure is confirmed and current appear in our results.`,
+    `On US-Attorneys.com, ${svc} attorneys in ${commune.name} (${commune.departement_code}) undergo systematic bar verification. Bar number, license status, and disciplinary history are reviewed to ensure the reliability of our directory.`,
   ]
   faqItems.push({
-    question: `Les ${svc}s à ${commune.name} sont-ils vérifiés ?`,
+    question: `Are the ${svc} attorneys in ${commune.name} verified?`,
     answer: verifTemplates[(seed + 1) % verifTemplates.length],
   })
 

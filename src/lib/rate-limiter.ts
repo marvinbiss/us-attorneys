@@ -1,5 +1,5 @@
 /**
- * Rate Limiter Service - ServicesArtisans
+ * Rate Limiter Service - US Attorneys
  * Uses Redis (Upstash) for distributed rate limiting in production
  * Falls back to in-memory for development
  */

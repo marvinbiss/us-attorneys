@@ -30,13 +30,13 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nLes plombiers frauduleux ciblent particulièrement les interventions de nuit et de week-end, quand les victimes sont vulnérables. Selon la DGCCRF, les plaintes pour facturation abusive en plomberie d'urgence ont augmenté de 25 % entre 2023 et 2025. Les prix d'appel « à partir de 29 € » cachent souvent des factures finales de 600 à 1 500 €.\n:::",
 
       "### Les bons réflexes avant d'appeler",
-      "1. **Coupez l'eau** immédiatement au compteur — cela stoppe la fuite et vous donne le temps de réfléchir\n2. **Demandez un devis téléphonique** avec une fourchette de prix avant que le plombier ne se déplace\n3. **Vérifiez le SIRET** de l'entreprise sur societe.com\n4. **Appelez votre assurance** : de nombreux contrats multirisques habitation incluent un service d'assistance 24h/24 qui envoie un plombier agréé à tarif encadré\n5. **Consultez notre [annuaire de plombiers vérifiés](/practice-areas/plombier)** pour trouver un professionnel fiable dans votre ville",
+      "1. **Coupez l'eau** immédiatement au compteur — cela stoppe la fuite et vous donne le temps de réfléchir\n2. **Demandez a consultation téléphonique** avec une fourchette de prix avant que le plombier ne se déplace\n3. **Vérifiez le SIRET** de l'entreprise sur societe.com\n4. **Appelez votre assurance** : de nombreux contrats multirisques habitation incluent un service d'assistance 24h/24 qui envoie un plombier agréé à tarif encadré\n5. **Consultez notre [annuaire de plombiers vérifiés](/practice-areas/plombier)** pour trouver un professionnel fiable dans votre ville",
 
       "## Votre assurance peut-elle couvrir l'intervention ?",
       "La plupart des contrats multirisques habitation couvrent les dégâts des eaux et proposent une assistance d'urgence 24h/24. Le plombier envoyé par l'assurance effectue une **recherche de fuite** et un **colmatage provisoire** sans frais pour l'assuré (hors franchise, généralement 150 à 300 €). La réparation définitive reste souvent à votre charge, mais est remboursée si le dégât est couvert. Appelez le numéro d'assistance figurant sur votre contrat **avant** de chercher un plombier vous-même."
     ],
     image: "/images/blog/plombier-urgence-nuit-tarifs.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-09",
     readTime: "8 min",
     category: "Urgences",
@@ -46,13 +46,13 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       "Une fuite réparée la nuit coûte entre 200 et 450 € en moyenne.",
       "Coupez toujours l'eau au compteur avant d'appeler — cela limite les dégâts et vous laisse le temps de comparer.",
       "Votre assurance habitation inclut souvent une assistance plomberie 24h/24 à tarif encadré.",
-      "Exigez un devis téléphonique et vérifiez le SIRET avant toute intervention nocturne."
+      "Exigez a consultation téléphonique et vérifiez le SIRET avant toute intervention nocturne."
     ],
     faq: [
       { question: "Un plombier peut-il refuser de se déplacer la nuit ?", answer: "Oui, aucun plombier n'est obligé d'intervenir la nuit. Seuls les services d'urgence organisés (entreprises avec astreinte) proposent des interventions nocturnes. Si votre plombier habituel ne répond pas, contactez le numéro d'assistance de votre assurance habitation." },
       { question: "La majoration de nuit est-elle légale ?", answer: "Oui, la majoration pour travail de nuit est encadrée par le Code du travail et les conventions collectives du bâtiment. Elle est généralement de 50 à 100 % du tarif horaire. Cependant, le professionnel doit vous informer du montant total estimé avant l'intervention." },
       { question: "Combien coûte un plombier d'urgence un dimanche ?", answer: "Les tarifs du dimanche sont similaires aux tarifs de nuit : majoration de 50 à 100 %. Pour une fuite simple, comptez 200 à 400 € tout compris. Les jours fériés peuvent entraîner une majoration de 100 %, soit le double du tarif normal." },
-      { question: "Que faire si la facture du plombier est abusive ?", answer: "Vous pouvez contester la facture auprès de la DGCCRF (direction départementale de la protection des populations). Conservez tous les documents (devis, facture, photos). Si le devis n'a pas été signé avant intervention, la facture peut être contestée. Vous pouvez aussi saisir le médiateur de la consommation." }
+      { question: "Que faire si la facture du plombier est abusive ?", answer: "Vous pouvez contester la facture auprès de la DGCCRF (direction départementale de la protection des populations). Conservez tous les documents (devis, facture, photos). Si the consultation n'a pas été signé avant intervention, la facture peut être contestée. Vous pouvez aussi saisir le médiateur de la consommation." }
     ]
   },
 
@@ -86,7 +86,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nSouscrivez un **contrat d'entretien avec dépannage inclus** (150 à 300 €/an selon l'équipement). Ces contrats garantissent une intervention prioritaire sous 24 h en cas de panne, pièces d'usure incluses. C'est le meilleur investissement pour passer l'hiver sereinement.\n:::"
     ],
     image: "/images/blog/chauffagiste-urgence-hiver.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-11",
     readTime: "7 min",
     category: "Urgences",
@@ -136,7 +136,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nSi votre climatisation a plus de 12 ans et utilise du R410A, anticipez son remplacement. Le R410A sera progressivement interdit (règlement F-Gas révisé 2024), rendant les recharges de plus en plus coûteuses. Les nouveaux modèles au R32 consomment 10 à 15 % d'énergie en moins.\n:::"
     ],
     image: "/images/blog/climatisation-panne-canicule.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-13",
     readTime: "7 min",
     category: "Urgences",
@@ -150,7 +150,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
     ],
     faq: [
       { question: "Peut-on recharger soi-même sa climatisation ?", answer: "Non. La manipulation de fluides frigorigènes est réservée aux techniciens titulaires d'une attestation de capacité (règlement F-Gas). Tenter une recharge soi-même est illégal, dangereux et peut endommager le compresseur. Seul un professionnel peut détecter la fuite et recharger correctement le circuit." },
-      { question: "Combien coûte le remplacement complet d'un climatiseur split ?", answer: "Un climatiseur monosplit (une unité intérieure + une unité extérieure) de 2,5 à 3,5 kW coûte entre 1 500 et 3 000 € pose comprise en 2026. Un multisplit (2 à 4 unités intérieures) revient entre 3 000 et 7 000 €. Comparez les devis sur notre annuaire pour obtenir le meilleur prix." },
+      { question: "Combien coûte le remplacement complet d'un climatiseur split ?", answer: "Un climatiseur monosplit (une unité intérieure + une unité extérieure) de 2,5 à 3,5 kW coûte entre 1 500 et 3 000 € pose comprise en 2026. Un multisplit (2 à 4 unités intérieures) revient entre 3 000 et 7 000 €. Comparez the consultations sur notre annuaire pour obtenir le meilleur prix." },
       { question: "Ma clim fait du bruit : est-ce une panne ?", answer: "Un bruit anormal (claquement, sifflement, vibration) peut indiquer un roulement de ventilateur usé, un compresseur en fin de vie, ou simplement une unité extérieure mal fixée. Un diagnostic par un technicien (60-120 €) permet d'identifier la cause avant qu'elle ne provoque une panne complète." }
     ]
   },
@@ -185,7 +185,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nUn conduit non ramoné peut provoquer un **feu de cheminée** (température des suies enflammées : 1 000 °C) ou une **intoxication au monoxyde de carbone** (gaz incolore et inodore). Si votre détecteur de CO se déclenche, évacuez immédiatement et appelez les pompiers (18 ou 112). Le CO tue en quelques minutes dans un espace confiné.\n:::"
     ],
     image: "/images/blog/ramonage-obligatoire-avant-hiver.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-15",
     readTime: "6 min",
     category: "Saisonnier",
@@ -234,7 +234,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nSi vous vous absentez en hiver plus de 48 heures, coupez l'arrivée d'eau générale et vidangez le circuit (ouvrez tous les robinets). C'est la seule protection à 100 % contre le gel. Réglez le chauffage en mode hors-gel (8 °C minimum) pour protéger les canalisations non vidangeables (circuit de chauffage, chauffe-eau).\n:::"
     ],
     image: "/images/blog/degats-gel-canalisation.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-17",
     readTime: "7 min",
     category: "Saisonnier",
@@ -278,7 +278,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nLors du nettoyage, inspectez l'état des joints, des fixations et de la pente des gouttières. Une gouttière doit avoir une pente de **5 mm par mètre** vers la descente. Si l'eau stagne en certains points, resserrez les crochets ou recalez la pente. C'est le moment idéal pour repérer les fissures avant qu'elles ne provoquent des infiltrations.\n:::"
     ],
     image: "/images/blog/nettoyage-gouttiere-automne.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-19",
     readTime: "6 min",
     category: "Saisonnier",
@@ -327,7 +327,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nSans attestation d'entretien valide, votre assureur peut refuser l'indemnisation en cas de sinistre lié au chauffage (incendie, intoxication CO, dégât des eaux). De plus, en cas d'accident mortel dû au CO, l'absence d'entretien peut engager la responsabilité pénale du locataire ou du propriétaire.\n:::"
     ],
     image: "/images/blog/entretien-chaudiere-annuel.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-21",
     readTime: "6 min",
     category: "Saisonnier",
@@ -370,10 +370,10 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       "## Extérieurs et jardin",
       "- **Rangez** le mobilier de jardin ou protégez-le avec des housses\n- **Hivernez la piscine** (bouchons d'hivernage, produit antigel, bâche)\n- **Protégez les plantes gélives** (voile d'hivernage, paillage au pied)\n- **Stockez le bois de chauffage** à l'abri, surélevé et ventilé\n- **Vérifiez l'éclairage extérieur** : les journées courtes augmentent le risque d'effraction",
 
-      ":::tip Conseil pro\nFaites un tour complet de votre maison avec cette checklist fin octobre. Notez les travaux à réaliser, hiérarchisez par urgence (chauffage et plomberie d'abord, esthétique ensuite) et demandez des [devis à des artisans locaux](/services). La plupart des travaux de préparation hivernale ont un ROI immédiat en économies d'énergie.\n:::"
+      ":::tip Conseil pro\nFaites un tour complet de votre maison avec cette checklist fin octobre. Notez les travaux à réaliser, hiérarchisez par urgence (chauffage et plomberie d'abord, esthétique ensuite) et demandez des [devis à attorneys locaux](/services). La plupart des travaux de préparation hivernale ont un ROI immédiat en économies d'énergie.\n:::"
     ],
     image: "/images/blog/preparer-maison-hiver.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-23",
     readTime: "8 min",
     category: "Saisonnier",
@@ -387,7 +387,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
     ],
     faq: [
       { question: "Quel budget prévoir pour préparer sa maison pour l'hiver ?", answer: "Pour une maison individuelle, comptez entre 200 et 600 € pour les opérations courantes : entretien chaudière (80-200 €), ramonage (50-120 €), joints de fenêtres (50-100 €), isolation canalisations (30-80 €), et produits divers (50-100 €). Les travaux d'isolation plus importants (combles, fenêtres) sont un investissement à part." },
-      { question: "Quand commencer à préparer sa maison pour l'hiver ?", answer: "Idéalement en octobre, quand les températures sont encore clémentes et les artisans disponibles. L'entretien de la chaudière et le ramonage doivent être programmés en septembre-octobre. Les travaux d'isolation peuvent se faire jusqu'en novembre. La protection antigel des canalisations doit être en place avant les premières gelées annoncées." },
+      { question: "Quand commencer à préparer sa maison pour l'hiver ?", answer: "Idéalement en octobre, quand les températures sont encore clémentes et the attorneys disponibles. L'entretien de la chaudière et le ramonage doivent être programmés en septembre-octobre. Les travaux d'isolation peuvent se faire jusqu'en novembre. La protection antigel des canalisations doit être en place avant les premières gelées annoncées." },
       { question: "Quels sont les travaux les plus rentables pour économiser sur le chauffage ?", answer: "Par ordre de rentabilité : l'isolation des combles perdus (ROI en 3-5 ans), le remplacement des joints de fenêtres (ROI immédiat), la pose d'un thermostat programmable (économie de 10-15 %), et la purge des radiateurs (gratuit, efficacité immédiate). L'isolation des murs par l'extérieur est très efficace mais avec un ROI de 10-15 ans." }
     ]
   },
@@ -420,7 +420,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nDemandez à votre technicien de mesurer le **SEER** (coefficient d'efficacité énergétique saisonnière) réel de votre installation lors de l'entretien. Si le SEER a chuté de plus de 20 % par rapport aux spécifications d'origine, une recharge de gaz ou un nettoyage approfondi s'impose. Un SEER en baisse constante sur 2-3 ans annonce une fin de vie du compresseur.\n:::"
     ],
     image: "/images/blog/entretien-climatisation-printemps.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-25",
     readTime: "6 min",
     category: "Saisonnier",
@@ -467,7 +467,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nDemandez à votre paysagiste un **plan d'entretien annuel** avec les interventions mois par mois. Cela permet de budgétiser l'entretien sur l'année et d'anticiper les périodes clés (taille, traitement, fertilisation). Un jardin bien entretenu valorise votre bien immobilier de 5 à 15 %.\n:::"
     ],
     image: "/images/blog/jardin-printemps-paysagiste.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-02-27",
     readTime: "7 min",
     category: "Saisonnier",
@@ -516,7 +516,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nPlanifiez le nettoyage et le traitement de votre terrasse en **avril-mai**, quand les températures sont douces (10-25 °C) et les précipitations modérées. Les produits de traitement (saturateur, huile, hydrofuge) nécessitent un temps de séchage de 24 à 48 h sans pluie. Évitez l'application en plein soleil qui provoque un séchage trop rapide et des traces.\n:::"
     ],
     image: "/images/blog/terrasse-ete-preparation.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-03-01",
     readTime: "6 min",
     category: "Saisonnier",
@@ -558,10 +558,10 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Comment éviter les arnaques",
 
-      ":::warning Attention\nLes serruriers frauduleux utilisent des techniques éprouvées : **prix d'appel à 39 €** sur internet, diagnostic alarmiste (« il faut changer toute la serrure »), remplacement de pièces inutiles, facturation de fournitures au triple du prix, et paiement exigé en espèces. Règle d'or : **si le devis dépasse 400 € pour une ouverture de porte simple**, demandez une justification détaillée ou appelez un second serrurier.\n:::",
+      ":::warning Attention\nLes serruriers frauduleux utilisent des techniques éprouvées : **prix d'appel à 39 €** sur internet, diagnostic alarmiste (« il faut changer toute la serrure »), remplacement de pièces inutiles, facturation de fournitures au triple du prix, et paiement exigé en espèces. Règle d'or : **si the consultation dépasse 400 € pour une ouverture de porte simple**, demandez une justification détaillée ou appelez un second serrurier.\n:::",
 
       "### Les bons réflexes",
-      "1. **Demandez un prix ferme au téléphone** avant le déplacement (fourchette haute et basse)\n2. **Exigez un devis écrit** avant le début de l'intervention\n3. **Vérifiez le SIRET** sur societe.com ou infogreffe.fr\n4. **Refusez le paiement en espèces** — payez par carte ou chèque pour garder une trace\n5. **Ne signez rien sous pression** — vous avez 14 jours de droit de rétractation pour les travaux à domicile non sollicités\n6. **Identifiez un serrurier de confiance à l'avance** via notre [annuaire vérifié](/practice-areas/serrurier) et gardez son numéro dans votre téléphone",
+      "1. **Demandez un prix ferme au téléphone** avant le déplacement (fourchette haute et basse)\n2. **Exigez a consultation écrit** avant le début de l'intervention\n3. **Vérifiez le SIRET** sur societe.com ou infogreffe.fr\n4. **Refusez le paiement en espèces** — payez par carte ou chèque pour garder une trace\n5. **Ne signez rien sous pression** — vous avez 14 jours de droit de rétractation pour les travaux à domicile non sollicités\n6. **Identifiez un serrurier de confiance à l'avance** via notre [annuaire vérifié](/practice-areas/serrurier) et gardez son numéro dans votre téléphone",
 
       "## Prise en charge par l'assurance",
       "Votre assurance multirisques habitation couvre généralement : l'ouverture de porte après **perte de clés** (souvent plafonnée à 300-500 €), le remplacement de serrure après **effraction ou tentative** (intégralement, sur présentation du dépôt de plainte), et le **gardiennage ou relogement temporaire** si la porte ne peut être sécurisée dans la nuit. Contactez le numéro d'assistance de votre contrat **avant** d'appeler un serrurier — l'assureur envoie souvent un professionnel agréé à tarif encadré.",
@@ -569,22 +569,22 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       ":::tip Conseil pro\nFaites faire un **double de vos clés** et confiez-le à une personne de confiance (voisin, famille). Coût : 5 à 30 € pour une clé standard, 20 à 80 € pour une clé protégée (avec carte de propriété). C'est la meilleure assurance contre la porte claquée.\n:::"
     ],
     image: "/images/blog/serrure-bloquee-nuit-weekend.webp",
-    author: "L'équipe ServicesArtisans",
+    author: "L'équipe US Attorneys",
     date: "2026-03-03",
     readTime: "7 min",
     category: "Urgences",
     tags: ["Serrurier", "Urgence", "Nuit", "Tarifs 2026"],
     keyTakeaways: [
       "Une ouverture de porte claquée coûte 150 à 300 € la nuit — méfiez-vous des prix supérieurs à 400 €.",
-      "Exigez toujours un devis écrit et un prix ferme au téléphone avant le déplacement du serrurier.",
+      "Exigez toujours a consultation écrit et un prix ferme au téléphone avant le déplacement du serrurier.",
       "Votre assurance habitation couvre souvent l'ouverture de porte et envoie un serrurier agréé.",
       "Après une tentative d'effraction, déposez plainte avant de faire remplacer la serrure.",
       "Faites un double de clé (5 à 80 €) et confiez-le à quelqu'un de confiance — prévention n°1."
     ],
     faq: [
       { question: "Un serrurier peut-il ouvrir une porte sans casser la serrure ?", answer: "Oui, dans 80 à 90 % des cas. Un serrurier qualifié utilise des techniques non destructives (crochetage, by-pass, décodeur) pour ouvrir sans endommager la serrure. L'ouverture destructive (perçage du cylindre) n'est nécessaire que pour les serrures haute sécurité ou bloquées après effraction. Méfiez-vous d'un serrurier qui propose systématiquement le perçage — c'est souvent pour facturer un remplacement inutile." },
-      { question: "Peut-on contester la facture d'un serrurier ?", answer: "Oui. Si le devis n'a pas été signé avant l'intervention (obligatoire au-delà de 150 € TTC), la facture peut être contestée. Signalez l'abus à la DGCCRF via le site signal.conso.gouv.fr. Vous pouvez aussi saisir le tribunal de proximité pour les litiges inférieurs à 5 000 €. Conservez tous les documents et prenez des photos de l'intervention." },
-      { question: "Comment trouver un serrurier fiable à 3 heures du matin ?", answer: "Privilégiez dans l'ordre : le numéro d'assistance de votre assurance habitation (24h/24), un serrurier que vous avez identifié à l'avance et dont vous avez le numéro, ou un professionnel référencé sur un annuaire vérifié comme ServicesArtisans. Évitez les premiers résultats sponsorisés sur Google qui sont souvent des centrales d'appels sans artisans propres." }
+      { question: "Peut-on contester la facture d'un serrurier ?", answer: "Oui. Si the consultation n'a pas été signé avant l'intervention (obligatoire au-delà de 150 € TTC), la facture peut être contestée. Signalez l'abus à la DGCCRF via le site signal.conso.gouv.fr. Vous pouvez aussi saisir le tribunal de proximité pour les litiges inférieurs à 5 000 €. Conservez tous les documents et prenez des photos de l'intervention." },
+      { question: "Comment trouver un serrurier fiable à 3 heures du matin ?", answer: "Privilégiez dans l'ordre : le numéro d'assistance de votre assurance habitation (24h/24), un serrurier que vous avez identifié à l'avance et dont vous avez le numéro, ou un professionnel référencé sur un annuaire vérifié comme US Attorneys. Évitez les premiers résultats sponsorisés sur Google qui sont souvent des centrales d'appels sans artisans propres." }
     ]
   }
 }

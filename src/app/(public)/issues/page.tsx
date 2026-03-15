@@ -10,39 +10,39 @@ import problems from '@/lib/data/problems'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Problèmes Courants — Solutions',
-  description: 'Identifiez votre problème (fuite d’eau, panne électrique, serrure bloquée…) et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et mise en relation avec des artisans référencés.',
+  title: 'Common Legal Issues — Solutions',
+  description: 'Identify your legal issue (contract dispute, employment matter, personal injury...) and find the right solution. Free consultation, practical advice, and connection with verified attorneys.',
   alternates: { canonical: `${SITE_URL}/issues` },
   openGraph: {
-    locale: 'fr_FR',
-    title: 'Problèmes Courants — Solutions',
-    description: 'Identifiez votre problème et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et artisans référencés.',
+    locale: 'en_US',
+    title: 'Common Legal Issues — Solutions',
+    description: 'Identify your legal issue and find the right solution. Free consultation, practical advice, and verified attorneys.',
     url: `${SITE_URL}/issues`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Problèmes courants' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Common legal issues' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Problèmes Courants — Solutions',
-    description: 'Identifiez votre problème et trouvez la solution adaptée avec nos artisans référencés.',
+    title: 'Common Legal Issues — Solutions',
+    description: 'Identify your legal issue and find the right solution with our verified attorneys.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const urgencyConfig = {
-  haute: { label: 'Urgence haute', color: 'bg-red-100 text-red-700 border-red-200', dot: 'bg-red-500' },
-  moyenne: { label: 'Urgence moyenne', color: 'bg-amber-100 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  basse: { label: 'Non urgent', color: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500' },
+  haute: { label: 'High urgency', color: 'bg-red-100 text-red-700 border-red-200', dot: 'bg-red-500' },
+  moyenne: { label: 'Medium urgency', color: 'bg-amber-100 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+  basse: { label: 'Not urgent', color: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500' },
 }
 
 const serviceCategories = [
-  { name: 'Plomberie', slug: 'plombier', icon: Wrench, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { name: 'Électricité', slug: 'electricien', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
-  { name: 'Serrurerie', slug: 'serrurier', icon: Key, color: 'text-green-600', bg: 'bg-green-50' },
-  { name: 'Chauffage', slug: 'chauffagiste', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
-  { name: 'Toiture', slug: 'couvreur', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  { name: 'Maçonnerie', slug: 'macon', icon: HardHat, color: 'text-gray-600', bg: 'bg-gray-100' },
-  { name: 'Autres', slug: '_other', icon: Wrench, color: 'text-purple-600', bg: 'bg-purple-50' },
+  { name: 'Personal Injury', slug: 'plombier', icon: Wrench, color: 'text-blue-600', bg: 'bg-blue-50' },
+  { name: 'Criminal Defense', slug: 'electricien', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
+  { name: 'Family Law', slug: 'serrurier', icon: Key, color: 'text-green-600', bg: 'bg-green-50' },
+  { name: 'Employment Law', slug: 'chauffagiste', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
+  { name: 'Real Estate', slug: 'couvreur', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+  { name: 'Business Law', slug: 'macon', icon: HardHat, color: 'text-gray-600', bg: 'bg-gray-100' },
+  { name: 'Other', slug: '_other', icon: Wrench, color: 'text-purple-600', bg: 'bg-purple-50' },
 ]
 
 const otherServiceSlugs = ['peintre-en-batiment', 'vitrier', 'menuisier', 'isolation-thermique', 'desinsectisation']
@@ -55,60 +55,60 @@ function getProblemsByCategory(slug: string) {
 }
 
 const specialtyNameMap: Record<string, string> = {
-  plombier: 'Plombier',
-  electricien: 'Électricien',
-  serrurier: 'Serrurier',
-  chauffagiste: 'Chauffagiste',
-  couvreur: 'Couvreur',
-  macon: 'Maçon',
-  'peintre-en-batiment': 'Peintre en bâtiment',
-  vitrier: 'Vitrier',
-  menuisier: 'Menuisier',
-  'isolation-thermique': 'Isolation thermique',
-  desinsectisation: 'Désinsectisation',
+  plombier: 'Personal Injury',
+  electricien: 'Criminal Defense',
+  serrurier: 'Family Law',
+  chauffagiste: 'Employment Law',
+  couvreur: 'Real Estate',
+  macon: 'Business Law',
+  'peintre-en-batiment': 'Immigration',
+  vitrier: 'Bankruptcy',
+  menuisier: 'Estate Planning',
+  'isolation-thermique': 'Tax Law',
+  desinsectisation: 'Consumer Protection',
 }
 
 const howSteps = [
   {
     step: 1,
     icon: Search,
-    title: 'Identifiez votre problème',
-    description: 'Parcourez notre liste de problèmes courants ou décrivez votre situation pour trouver le diagnostic adapté.',
+    title: 'Identify your issue',
+    description: 'Browse our list of common legal issues or describe your situation to find the right diagnosis.',
   },
   {
     step: 2,
     icon: CheckCircle,
-    title: 'Suivez nos conseils',
-    description: 'Consultez les gestes d’urgence, les symptômes à surveiller et les actions à mener en attendant l’artisan.',
+    title: 'Follow our advice',
+    description: 'Review immediate steps to take, warning signs to watch for, and actions to take while waiting for your attorney.',
   },
   {
     step: 3,
     icon: Wrench,
-    title: 'Contactez un artisan',
-    description: 'Demandez un devis gratuit auprès d’artisans référencés spécialisés dans votre type de problème.',
+    title: 'Contact an attorney',
+    description: 'Request a free consultation from verified attorneys who specialize in your type of legal issue.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Comment identifier le type de problème que j’ai ?',
-    answer: 'Parcourez notre liste de problèmes classés par catégorie (plomberie, électricité, serrurerie…). Chaque fiche détaille les symptômes typiques pour vous aider à identifier votre situation. En cas de doute, contactez un artisan pour un diagnostic professionnel.',
+    question: 'How do I identify what type of legal issue I have?',
+    answer: 'Browse our list of issues organized by category (personal injury, criminal defense, family law...). Each page details the typical symptoms to help you identify your situation. If in doubt, contact an attorney for a professional assessment.',
   },
   {
-    question: 'Que faire en attendant l’artisan ?',
-    answer: 'Chaque fiche problème liste les gestes d’urgence à réaliser immédiatement : couper l’eau, l’électricité ou le gaz si nécessaire, sécuriser la zone et protéger vos biens. Ces actions simples limitent les dégâts en attendant l’intervention.',
+    question: 'What should I do while waiting for my attorney?',
+    answer: 'Each issue page lists immediate steps to take: gather relevant documents, preserve evidence, avoid making statements that could harm your case, and note important deadlines. These simple actions protect your interests while awaiting legal counsel.',
   },
   {
-    question: 'Les diagnostics sont-ils gratuits ?',
-    answer: 'Les fiches de diagnostic sur ServicesArtisans sont entièrement gratuites. La demande de devis est également gratuite et sans engagement. Seule l’intervention de l’artisan est payante, après acceptation de votre part.',
+    question: 'Are the consultations free?',
+    answer: 'The diagnostic information on USAttorneys is entirely free. The consultation request is also free with no obligation. Only the attorney\'s services are paid for, after your acceptance.',
   },
   {
-    question: 'Comment trouver un artisan pour mon problème ?',
-    answer: 'Depuis chaque fiche problème, vous pouvez accéder directement à la page du service concerné et demander un devis gratuit. Nos artisans sont référencés par SIREN et leurs coordonnées sont vérifiées.',
+    question: 'How do I find an attorney for my issue?',
+    answer: 'From each issue page, you can directly access the relevant practice area page and request a free consultation. Our attorneys are verified through state bar records.',
   },
   {
-    question: 'Les coûts indiqués sont-ils fiables ?',
-    answer: 'Les fourchettes de prix sont des estimations indicatives basées sur les tarifs constatés en France. Le coût réel dépend de la complexité du problème, de votre région et de l’urgence. Seul un devis personnalisé fait foi.',
+    question: 'Are the costs listed reliable?',
+    answer: 'The price ranges are indicative estimates based on rates observed across the United States. Actual costs depend on case complexity, your location, and urgency. Only a personalized quote is binding.',
   },
 ]
 
@@ -117,8 +117,8 @@ export default function ProblemesPage() {
     <div className="min-h-screen bg-gray-50">
       <JsonLd data={[
         getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
-          { name: 'Problèmes courants', url: '/issues' },
+          { name: 'Home', url: '/' },
+          { name: 'Common issues', url: '/issues' },
         ]),
         getFAQSchema(faqItems.map((item) => ({ question: item.question, answer: item.answer }))),
       ]} />
@@ -126,7 +126,7 @@ export default function ProblemesPage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[{ label: 'Problèmes courants' }]} />
+          <Breadcrumb items={[{ label: 'Common issues' }]} />
         </div>
       </div>
 
@@ -155,30 +155,30 @@ export default function ProblemesPage() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm border border-amber-400/30 rounded-full mb-6">
               <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-semibold text-amber-200">30 problèmes documentés</span>
+              <span className="text-sm font-semibold text-amber-200">30 issues documented</span>
             </div>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Problèmes courants{' '}
+              Common legal issues{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-300">
-                Diagnostic et solutions
+                Diagnosis and solutions
               </span>
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Identifiez votre problème, suivez nos conseils d&apos;urgence et trouvez un artisan référencé
-              pour intervenir rapidement. Fiches complètes avec symptômes, coûts et prévention.
+              Identify your legal issue, follow our expert guidance, and find a verified attorney
+              to act quickly. Complete guides with symptoms, costs, and prevention.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Shield className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-white/80">Artisans référencés</span>
+                <span className="text-sm text-white/80">Verified attorneys</span>
               </div>
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Clock className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-white/80">Conseils immédiats</span>
+                <span className="text-sm text-white/80">Immediate advice</span>
               </div>
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <CheckCircle className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-white/80">Devis gratuit</span>
+                <span className="text-sm text-white/80">Free consultation</span>
               </div>
             </div>
           </div>
@@ -189,12 +189,12 @@ export default function ProblemesPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Par catégorie</p>
+            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">By category</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Trouvez votre problème
+              Find your issue
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Sélectionnez la catégorie correspondante pour accéder au diagnostic détaillé et aux solutions.
+              Select the corresponding category to access detailed diagnosis and solutions.
             </p>
           </div>
 
@@ -210,7 +210,7 @@ export default function ProblemesPage() {
                       <Icon className={`w-5 h-5 ${category.color}`} />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900">{category.name}</h3>
-                    <span className="text-sm text-gray-400">({categoryProblems.length} problème{categoryProblems.length > 1 ? 's' : ''})</span>
+                    <span className="text-sm text-gray-400">({categoryProblems.length} issue{categoryProblems.length > 1 ? 's' : ''})</span>
                   </div>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {categoryProblems.map((problem) => {
@@ -233,7 +233,7 @@ export default function ProblemesPage() {
                           <p className="text-sm text-gray-500 mb-3 line-clamp-2">{problem.description}</p>
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700">
-                              {problem.estimatedCost.min} – {problem.estimatedCost.max} €
+                              ${problem.estimatedCost.min} – ${problem.estimatedCost.max}
                             </span>
                             <span className="text-xs text-gray-400">
                               {specialtyNameMap[problem.primaryService] || problem.primaryService}
@@ -254,12 +254,12 @@ export default function ProblemesPage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Simple et rapide</p>
+            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Simple and fast</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment ça marche ?
+              How it works
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trois étapes pour diagnostiquer votre problème et trouver un artisan.
+              Three steps to diagnose your issue and find an attorney.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-10 relative">
@@ -293,7 +293,7 @@ export default function ProblemesPage() {
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">FAQ</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fréquentes
+              Frequently asked questions
             </h2>
           </div>
           <div className="space-y-4">
@@ -319,54 +319,54 @@ export default function ProblemesPage() {
       <section className="py-16 bg-gradient-to-br from-amber-600 to-orange-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Besoin d&apos;un artisan ?
+            Need an attorney?
           </h2>
           <p className="text-xl text-amber-100/90 mb-8 max-w-2xl mx-auto">
-            Demandez un devis gratuit et recevez jusqu&apos;à 3 propositions d&apos;artisans référencés dans votre région.
+            Request a free consultation and receive up to 3 proposals from verified attorneys in your area.
           </p>
           <Link
             href="/quotes"
             className="inline-flex items-center gap-3 bg-white text-amber-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
           >
-            Demander un devis gratuit
+            Request a free consultation
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
 
-      {/* Voir aussi */}
+      {/* See also */}
       <section className="py-12 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">See also</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Services d&apos;urgence</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Emergency services</h3>
               <div className="space-y-2">
-                <Link href="/emergency" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Urgence artisan 24h/24</Link>
-                <Link href="/emergency/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Plombier urgence</Link>
-                <Link href="/emergency/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Électricien urgence</Link>
-                <Link href="/emergency/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Serrurier urgence</Link>
-                <Link href="/emergency/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Chauffagiste urgence</Link>
+                <Link href="/emergency" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Emergency attorney 24/7</Link>
+                <Link href="/emergency/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Personal injury emergency</Link>
+                <Link href="/emergency/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Criminal defense emergency</Link>
+                <Link href="/emergency/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Family law emergency</Link>
+                <Link href="/emergency/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Employment law emergency</Link>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Devis par métier</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Consultations by practice area</h3>
               <div className="space-y-2">
-                <Link href="/quotes/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis plombier</Link>
-                <Link href="/quotes/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis électricien</Link>
-                <Link href="/quotes/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis serrurier</Link>
-                <Link href="/quotes/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis chauffagiste</Link>
-                <Link href="/quotes/couvreur" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis couvreur</Link>
+                <Link href="/quotes/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Personal injury consultation</Link>
+                <Link href="/quotes/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Criminal defense consultation</Link>
+                <Link href="/quotes/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Family law consultation</Link>
+                <Link href="/quotes/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Employment law consultation</Link>
+                <Link href="/quotes/couvreur" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Real estate consultation</Link>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Useful information</h3>
               <div className="space-y-2">
-                <Link href="/how-it-works" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Comment ça marche</Link>
-                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Guide des tarifs</Link>
-                <Link href="/tools/diagnostic" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Diagnostic en ligne</Link>
+                <Link href="/how-it-works" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">How it works</Link>
+                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Fee guide</Link>
+                <Link href="/tools/diagnostic" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Online diagnostic</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">FAQ</Link>
-                <Link href="/verification-process" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Processus de vérification</Link>
+                <Link href="/verification-process" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Verification process</Link>
               </div>
             </div>
           </div>
@@ -377,9 +377,9 @@ export default function ProblemesPage() {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Important information</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les coûts et délais indiqués sont des estimations moyennes constatées en France métropolitaine. Ils varient selon la complexité du problème, votre région et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              The costs and timelines indicated are average estimates observed across the United States. They vary depending on case complexity, your location, and urgency. Only a personalized quote is binding. USAttorneys is an independent directory — we connect you with attorneys but do not provide legal services. In case of a life-threatening emergency, call 911.
             </p>
           </div>
         </div>

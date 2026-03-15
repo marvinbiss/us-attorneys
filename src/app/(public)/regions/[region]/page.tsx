@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const region = getRegionBySlug(regionSlug)
   if (!region) return { title: 'Region not found' }
 
-  const metaContent = generateRegionContent(region as never)
+  const metaContent = generateRegionContent(region)
   const stateCount = region.states.length
   const cityCount = region.states.reduce((acc, d) => acc + getCitiesByState(d.code).length, 0)
   const attorneyCount = await getAttorneyCountByRegion(region.name)
@@ -96,7 +96,7 @@ export default async function RegionPage({ params }: PageProps) {
   )
   const allCities = region.states.flatMap(st => stateCitiesMap[st.code])
   const cityCount = allCities.length
-  const content = generateRegionContent(region as never, cityCount)
+  const content = generateRegionContent(region, cityCount)
   const regionArtisanCount = await getAttorneyCountByRegion(region.name)
 
   // Reorder services by climate-based priority

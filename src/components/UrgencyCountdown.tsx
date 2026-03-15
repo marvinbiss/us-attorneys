@@ -43,7 +43,7 @@ export default function UrgencyCountdown({ specialtyName, cityName }: UrgencyCou
           </span>
         </div>
         <span className="text-sm font-bold text-red-900">
-          {cityName ? `Urgence ${specialtyName.toLowerCase()} à ${cityName}` : `Urgence ${specialtyName.toLowerCase()}`}
+          {cityName ? `Emergency ${specialtyName.toLowerCase()} in ${cityName}` : `Emergency ${specialtyName.toLowerCase()}`}
         </span>
       </div>
 
@@ -54,19 +54,19 @@ export default function UrgencyCountdown({ specialtyName, cityName }: UrgencyCou
             <span className="text-2xl font-bold text-red-700">{minutesLeft}</span>
             <span className="text-sm text-red-600 font-medium">min</span>
           </div>
-          <p className="text-xs text-gray-600">Temps de réponse moyen</p>
+          <p className="text-xs text-gray-600">Average response time</p>
         </div>
         <div className="bg-white/80 rounded-lg p-3 text-center">
           <div className="flex items-center justify-center gap-1.5 mb-1">
             <Zap className="w-4 h-4 text-amber-600" />
             <span className="text-2xl font-bold text-amber-700">{recentRequests}</span>
           </div>
-          <p className="text-xs text-gray-600">Demandes dans l&apos;heure</p>
+          <p className="text-xs text-gray-600">Requests in the last hour</p>
         </div>
       </div>
 
       <p className="text-xs text-red-700/70 mt-3 text-center">
-        Les artisans d&apos;urgence sont disponibles 24h/24 et 7j/7
+        Emergency attorneys are available 24/7
       </p>
     </div>
   )

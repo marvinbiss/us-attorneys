@@ -14,26 +14,26 @@ interface AvailabilityFilterProps {
 const OPTIONS: { value: AvailabilityOption; label: string; sublabel: string; icon: React.ElementType }[] = [
   {
     value: 'any',
-    label: 'Tous',
-    sublabel: 'Pas de filtre',
+    label: 'All',
+    sublabel: 'No filter',
     icon: Calendar,
   },
   {
     value: 'today',
-    label: 'Aujourd\'hui',
-    sublabel: 'Disponible maintenant',
+    label: 'Today',
+    sublabel: 'Available now',
     icon: Clock,
   },
   {
     value: 'tomorrow',
-    label: 'Demain',
-    sublabel: 'Disponible demain',
+    label: 'Tomorrow',
+    sublabel: 'Available tomorrow',
     icon: Calendar,
   },
   {
     value: 'this_week',
-    label: 'Cette semaine',
-    sublabel: 'Dans les 7 jours',
+    label: 'This week',
+    sublabel: 'Within 7 days',
     icon: Calendar,
   },
 ]

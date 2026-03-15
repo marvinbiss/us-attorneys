@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const result = oauthSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Provider invalide', details: result.error.flatten() },
+        { error: 'Invalid provider', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('OAuth error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

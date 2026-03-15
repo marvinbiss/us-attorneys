@@ -26,7 +26,7 @@ export async function GET() {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -41,7 +41,7 @@ export async function GET() {
     if (profileError) {
       logger.error('Error fetching profile:', profileError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération du profil' },
+        { error: 'Error retrieving profile' },
         { status: 500 }
       )
     }
@@ -50,7 +50,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Profile GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -65,7 +65,7 @@ export async function PUT(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -99,7 +99,7 @@ export async function PUT(request: Request) {
     if (updateError) {
       logger.error('Error updating profile:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour du profil' },
+        { error: 'Error updating profile' },
         { status: 500 }
       )
     }
@@ -107,12 +107,12 @@ export async function PUT(request: Request) {
     return NextResponse.json({
       success: true,
       profile,
-      message: 'Profil mis à jour avec succès'
+      message: 'Profile updated successfully'
     })
   } catch (error) {
     logger.error('Profile PUT error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

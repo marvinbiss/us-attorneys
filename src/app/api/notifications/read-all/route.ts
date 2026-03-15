@@ -15,7 +15,7 @@ export async function POST() {
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     // RLS ensures user can only update their own notifications
@@ -27,12 +27,12 @@ export async function POST() {
 
     if (error) {
       logger.error('Mark all read error:', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Read-all POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

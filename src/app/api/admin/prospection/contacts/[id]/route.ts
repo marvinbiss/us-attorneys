@@ -32,7 +32,7 @@ export async function GET(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -47,7 +47,7 @@ export async function GET(
 
     if (error || !data) {
       return NextResponse.json(
-        { success: false, error: { message: 'Contact non trouvé' } },
+        { success: false, error: { message: 'Contact not found' } },
         { status: 404 }
       )
     }
@@ -55,7 +55,7 @@ export async function GET(
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Get contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -70,7 +70,7 @@ export async function PATCH(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -80,7 +80,7 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -104,7 +104,7 @@ export async function PATCH(
 
     if (error) {
       logger.error('Update contact error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'contact.update', 'prospection_contact', id, {
@@ -114,7 +114,7 @@ export async function PATCH(
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Patch contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -129,7 +129,7 @@ export async function DELETE(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -142,10 +142,10 @@ export async function DELETE(
       const { error } = await supabase.rpc('prospection_gdpr_erase', { p_contact_id: id })
       if (error) {
         logger.error('GDPR erase error', error)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
       }
       await logAdminAction(authResult.admin.id, 'gdpr_erasure', 'prospection_contact', id, {
-        reason: 'RGPD Article 17 - Droit à l\'effacement'
+        reason: 'GDPR Article 17 - Right to erasure'
       })
     } else {
       // Soft delete
@@ -155,7 +155,7 @@ export async function DELETE(
         .eq('id', id)
       if (error) {
         logger.error('Soft delete contact error', error)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
       }
       await logAdminAction(authResult.admin.id, 'contact.delete', 'prospection_contact', id, {
         method: 'soft_delete',
@@ -165,6 +165,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Delete contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

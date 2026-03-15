@@ -50,11 +50,11 @@ const serviceCategories = [
 ]
 
 const sortOptions = [
-  { value: 'relevance', label: 'Pertinence' },
-  { value: 'rating', label: 'Meilleures notes' },
-  { value: 'reviews', label: 'Plus d\'avis' },
-  { value: 'price_asc', label: 'Prix croissant' },
-  { value: 'price_desc', label: 'Prix decroissant' },
+  { value: 'relevance', label: 'Relevance' },
+  { value: 'rating', label: 'Highest rated' },
+  { value: 'reviews', label: 'Most reviews' },
+  { value: 'price_asc', label: 'Price: low to high' },
+  { value: 'price_desc', label: 'Price: high to low' },
 ]
 
 export default function AdvancedSearch({
@@ -205,7 +205,7 @@ export default function AdvancedSearch({
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => setShowSuggestions(true)}
               onKeyDown={handleKeyDown}
-              placeholder="Rechercher un artisan, un service..."
+              placeholder="Search for an attorney, a practice area..."
               className={`w-full outline-none text-gray-900 placeholder-gray-400 ${
                 variant === 'hero' ? 'py-3 text-lg' : 'py-2'
               }`}
@@ -258,7 +258,7 @@ export default function AdvancedSearch({
               variant === 'hero' ? 'px-8 py-3' : 'px-6 py-2'
             }`}
           >
-            Rechercher
+            Search
           </button>
         </div>
 
@@ -277,7 +277,7 @@ export default function AdvancedSearch({
                 <div className="p-3 border-b border-gray-100">
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                     <History className="w-4 h-4" />
-                    Recherches recentes
+                    Recent searches
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {recentSearches.map((search, i) => (
@@ -326,7 +326,7 @@ export default function AdvancedSearch({
                       </div>
                       <span className="text-xs text-gray-400 capitalize">
                         {suggestion.type === 'service' ? 'Service' :
-                         suggestion.type === 'artisan' ? 'Artisan' : 'City'}
+                         suggestion.type === 'artisan' ? 'Attorney' : 'City'}
                       </span>
                     </button>
                   ))}
@@ -350,7 +350,7 @@ export default function AdvancedSearch({
               {/* Service Category */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Categorie de service
+                  Service category
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {serviceCategories.map((service) => (
@@ -378,7 +378,7 @@ export default function AdvancedSearch({
                 {/* Rating Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Note minimum
+                    Minimum rating
                   </label>
                   <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((rating) => (
@@ -408,7 +408,7 @@ export default function AdvancedSearch({
                 {/* Availability Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Disponibilite
+                    Availability
                   </label>
                   <select
                     value={filters.availability || ''}
@@ -420,16 +420,16 @@ export default function AdvancedSearch({
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Toutes</option>
-                    <option value="today">Aujourd'hui</option>
-                    <option value="week">Cette semaine</option>
+                    <option value="">Any time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This week</option>
                   </select>
                 </div>
 
                 {/* Sort By */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Trier par
+                    Sort by
                   </label>
                   <select
                     value={filters.sortBy || 'relevance'}
@@ -451,7 +451,7 @@ export default function AdvancedSearch({
                   onClick={clearFilters}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
-                  Effacer les filtres
+                  Clear filters
                 </button>
                 <button
                   onClick={() => {
@@ -460,7 +460,7 @@ export default function AdvancedSearch({
                   }}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
                 >
-                  Appliquer
+                  Apply
                 </button>
               </div>
             </div>

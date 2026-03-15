@@ -52,7 +52,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
             {provider.is_verified && (
               <div
                 className="p-1 rounded-full"
-                title="Référencé"
+                title="Verified"
                 style={{ backgroundColor: '#1877f2' }}
               >
                 <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
@@ -78,7 +78,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
                 </span>
               </div>
               <span className="text-gray-500 text-xs">
-                ({provider.review_count} avis)
+                ({provider.review_count} reviews)
               </span>
             </div>
           )}
@@ -102,7 +102,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
           {/* Quick status */}
           <div className="flex items-center gap-1.5 text-xs text-green-600">
             <Clock className="w-3 h-3 flex-shrink-0" />
-            <span>Disponible</span>
+            <span>Available</span>
           </div>
         </div>
 

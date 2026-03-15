@@ -79,7 +79,7 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
         }
       } catch (err) {
         console.error('Error fetching providers:', err)
-        setError('Impossible de charger la carte')
+        setError('Unable to load the map')
       } finally {
         setLoading(false)
       }
@@ -101,7 +101,7 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
     <section className="mb-16">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <MapPin className="w-6 h-6 text-blue-600" />
-        Artisans sur la carte à {cityName}
+        Attorneys on the map in {cityName}
       </h2>
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <GeographicMap
@@ -115,7 +115,7 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
         {providers.length > 0 && (
           <div className="p-4 border-t bg-gray-50">
             <p className="text-sm text-gray-600">
-              {providers.length} artisan{providers.length > 1 ? 's' : ''} trouvé{providers.length > 1 ? 's' : ''} à {cityName}
+              {providers.length} attorney{providers.length > 1 ? 's' : ''} found in {cityName}
             </p>
           </div>
         )}

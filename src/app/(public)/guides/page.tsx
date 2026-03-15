@@ -9,253 +9,253 @@ import { SITE_URL } from "@/lib/seo/config"
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "Guides Pratiques pour vos Travaux | ServicesArtisans",
+  title: "Practical Legal Guides | USAttorneys",
   description:
-    "Guides complets pour vos travaux : aides financières, rénovation énergétique, MaPrimeRénov 2026, conseils artisans. Informations fiables et à jour.",
+    "Comprehensive legal guides: understanding your rights, choosing an attorney, fee structures, legal procedures, and more. Reliable and up-to-date information.",
   alternates: {
     canonical: `${SITE_URL}/guides`,
   },
   openGraph: {
-    title: "Guides Pratiques pour vos Travaux",
+    title: "Practical Legal Guides",
     description:
-      "Guides complets pour vos travaux : aides financières, rénovation énergétique, MaPrimeRénov 2026, conseils artisans.",
+      "Comprehensive legal guides: understanding your rights, choosing an attorney, fee structures, and legal procedures.",
     url: `${SITE_URL}/guides`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Guides Pratiques pour vos Travaux",
+    title: "Practical Legal Guides",
     description:
-      "Guides complets pour vos travaux : aides financières, rénovation énergétique, MaPrimeRénov 2026, conseils artisans.",
+      "Comprehensive legal guides: understanding your rights, choosing an attorney, fee structures, and legal procedures.",
   },
 }
 
 const guides = [
   {
-    title: "MaPrimeRénov 2026 : Guide Complet",
+    title: "MaPrimeRénov 2026: Complete Guide",
     description:
-      "Tout savoir sur MaPrimeRénov en 2026 : montants, conditions, parcours accompagné et par geste, barèmes de revenus et démarches.",
+      "Everything you need to know about MaPrimeRénov in 2026: amounts, conditions, assisted and per-gesture pathways, income brackets and procedures.",
     href: "/guides/maprimerenov-2026",
     icon: Euro,
-    badge: "Populaire",
+    badge: "Popular",
     badgeColor: "bg-green-100 text-green-800",
   },
   {
-    title: "Aides Rénovation Énergétique 2026",
+    title: "Energy Renovation Assistance 2026",
     description:
-      "Toutes les aides financières pour vos travaux de rénovation énergétique : MaPrimeRénov, CEE, éco-PTZ, TVA réduite et aides locales.",
+      "All financial assistance for your energy renovation work: MaPrimeRénov, CEE, eco-PTZ, reduced VAT and local grants.",
     href: "/guides/aides-renovation-2026",
     icon: Building2,
     badge: undefined,
     badgeColor: "",
   },
   {
-    title: "Artisan RGE : Vérifier et Trouver un Certifié",
+    title: "RGE Certified Contractor: Verify and Find One",
     description:
-      "Comment vérifier la certification RGE, pourquoi choisir un artisan RGE et où trouver un professionnel certifié près de chez vous.",
+      "How to verify RGE certification, why choose an RGE contractor, and where to find a certified professional near you.",
     href: "/guides/artisan-rge",
     icon: ShieldCheck,
     badge: undefined,
     badgeColor: "",
   },
   {
-    title: "Permis de Construire 2026",
+    title: "Building Permits 2026",
     description:
-      "Quand le permis de construire est obligatoire (>20 m², >40 m² en zone PLU), documents requis, délais et cas spéciaux.",
+      "When a building permit is required (>20 sq m, >40 sq m in PLU zones), required documents, timelines, and special cases.",
     href: "/guides/permis-construire",
     icon: Scale,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Normes Électriques NF C 15-100",
+    title: "Electrical Standards NF C 15-100",
     description:
-      "Guide de la norme NF C 15-100 : nombre de prises par pièce, protection des circuits, zones salle de bain et mise aux normes.",
+      "Guide to NF C 15-100 standard: number of outlets per room, circuit protection, bathroom zones, and bringing up to code.",
     href: "/guides/regulations-electriques",
     icon: Zap,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Déclaration Préalable de Travaux",
+    title: "Prior Declaration of Work",
     description:
-      "Quand la déclaration préalable est nécessaire, formulaire Cerfa 13703, délai d\"instruction d\"un mois et accord tacite.",
+      "When a prior declaration is needed, Cerfa 13703 form, one-month review period, and tacit approval.",
     href: "/guides/declaration-prealable-travaux",
     icon: FileText,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Garantie Décennale : Tout Comprendre",
+    title: "Ten-Year Warranty: Full Guide",
     description:
-      "Définition, durée de 10 ans, travaux couverts, exclusions, vérification de l'attestation et démarches en cas de sinistre.",
+      "Definition, 10-year duration, covered work, exclusions, certificate verification, and claims process.",
     href: "/guides/guarantee-decennale",
     icon: ShieldCheck,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Devis Travaux : Guide pour Bien Comparer",
+    title: "Work Quotes: How to Compare Properly",
     description:
-      "Mentions obligatoires, combien de devis demander, comment comparer, négocier et éviter les pièges.",
+      "Required information, how many quotes to request, how to compare, negotiate, and avoid pitfalls.",
     href: "/guides/quotes-travaux",
     icon: Hammer,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Travaux en Copropriété : Règles et Démarches",
+    title: "Condo Renovation: Rules and Procedures",
     description:
-      "Parties communes vs privatives, vote en AG, majorités requises, autorisations et gros travaux obligatoires.",
+      "Common vs. private areas, general assembly voting, required majorities, approvals, and mandatory major work.",
     href: "/guides/travaux-copropriete",
     icon: Users,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Assurance Dommage-Ouvrage : Est-ce Obligatoire ?",
+    title: "Builder's Risk Insurance: Is It Required?",
     description:
-      "Définition, obligation légale, coût (1 à 5 % du chantier), souscription et conséquences en cas d'absence.",
+      "Definition, legal obligation, cost (1-5% of project), how to subscribe, and consequences of not having it.",
     href: "/guides/assurance-dommage-ouvrage",
     icon: ShieldCheck,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Comment Trouver un Artisan de Confiance en 2026",
+    title: "How to Find a Trusted Attorney in 2026",
     description:
-      "Vérifications SIRET, décennale, RGE, comparaison de devis, labels, droits du client et recours. Le guide complet pour éviter les mauvaises surprises.",
+      "Bar verification, malpractice insurance, certifications, comparing quotes, credentials, client rights, and recourse. The complete guide to avoiding bad experiences.",
     href: "/guides/trouver-artisan",
     icon: Search,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
+    title: "Legal Scams: How to Spot and Protect Yourself",
     description:
-      "Les 10 arnaques les plus fréquentes, signaux d'alerte, vérifications et recours en cas de fraude. Témoignages et organismes de protection.",
+      "The 10 most common scams, warning signs, verifications, and recourse in case of fraud. Testimonials and consumer protection agencies.",
     href: "/guides/eviter-arnaques-artisan",
     icon: ShieldAlert,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?",
+    title: "Renovation Budget: How Much Do Your Projects Cost in 2026?",
     description:
-      "Prix au m² par type de rénovation, budget par pièce, aides financières (MaPrimeRénov', CEE, éco-PTZ) et conseils pour maîtriser votre budget.",
+      "Cost per sq ft by renovation type, budget by room, financial assistance, and tips for managing your budget.",
     href: "/guides/budget-renovation",
     icon: Calculator,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Rénovation Salle de Bain : Étapes, Prix et Conseils 2026",
+    title: "Bathroom Renovation: Steps, Costs, and Tips 2026",
     description:
-      "Guide complet : les 7 étapes d'une rénovation SDB, prix par poste (douche italienne, carrelage, plomberie), budget total et erreurs à éviter.",
+      "Complete guide: 7 steps of a bathroom renovation, costs by item (walk-in shower, tile, plumbing), total budget, and common mistakes.",
     href: "/guides/renovation-salle-de-bain",
     icon: ShowerHead,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Rénovation Cuisine : Guide Complet des Étapes et Prix 2026",
+    title: "Kitchen Renovation: Complete Guide to Steps and Costs 2026",
     description:
-      "De la conception à la pose : étapes, prix par poste (meubles, plan de travail, électroménager), types d'implantation et comparatif des matériaux.",
+      "From design to installation: steps, costs by item (cabinets, countertop, appliances), layout types, and material comparisons.",
     href: "/guides/renovation-cuisine",
     icon: ChefHat,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Rénovation Énergétique : Guide Complet pour Votre Maison",
+    title: "Energy Renovation: Complete Guide for Your Home",
     description:
-      "Les 4 piliers (isolation, chauffage, ventilation, fenêtres), l'ordre optimal des travaux, toutes les aides 2026 et le retour sur investissement.",
+      "The 4 pillars (insulation, heating, ventilation, windows), optimal work order, all 2026 grants, and return on investment.",
     href: "/guides/renovation-energetique-complete",
     icon: Leaf,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Pompe à Chaleur : Guide Complet Prix, Aides et Installation 2026",
+    title: "Heat Pump: Complete Guide — Prices, Grants, and Installation 2026",
     description:
-      "Types de PAC (air-eau, air-air, géothermique), prix d'achat et pose, COP, aides MaPrimeRénov' et CEE, entretien et rentabilité.",
+      "Types (air-water, air-air, geothermal), purchase and installation costs, COP, grants, maintenance, and profitability.",
     href: "/guides/pompe-a-chaleur",
     icon: Leaf,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Isolation Thermique : Guide Complet Prix, Matériaux et Aides 2026",
+    title: "Thermal Insulation: Complete Guide — Prices, Materials, and Grants 2026",
     description:
-      "Comparatif des isolants (laine de verre, polyuréthane, ouate de cellulose), prix au m², résistance thermique R, aides financières et techniques de pose.",
+      "Insulation material comparison, cost per sq ft, thermal resistance R, financial assistance, and installation techniques.",
     href: "/guides/isolation-thermique",
     icon: Leaf,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Isolation des Combles : Guide Prix, Techniques et Aides 2026",
+    title: "Attic Insulation: Prices, Techniques, and Grants 2026",
     description:
-      "Isolation combles perdus et aménageables : soufflage, panneaux, sarking, prix au m² (20-80€), aides MaPrimeRénov' et CEE, économies d'énergie.",
+      "Lost and convertible attic insulation: blown-in, panels, sarking, cost per sq ft, grants, and energy savings.",
     href: "/guides/isolation-combles",
     icon: Leaf,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Extension de Maison : Démarches, Prix et Conseils 2026",
+    title: "Home Extension: Procedures, Costs, and Tips 2026",
     description:
-      "Types d'extensions (latérale, surélévation, véranda), démarches DP ou permis selon la surface, prix au m² (800-2500€) et matériaux.",
+      "Types of extensions (lateral, raising, conservatory), permits by surface area, cost per sq ft, and materials.",
     href: "/guides/extension-maison",
     icon: Building2,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Diagnostics Immobiliers : Le Guide Complet",
+    title: "Property Diagnostics: The Complete Guide",
     description:
-      "Les 10 diagnostics obligatoires (DPE, amiante, plomb, termites, électricité, gaz), durée de validité, prix et qui peut les réaliser.",
+      "The 10 mandatory diagnostics (EPC, asbestos, lead, termites, electrical, gas), validity periods, costs, and qualified inspectors.",
     href: "/guides/diagnostics-immobiliers",
     icon: FileCheck,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Rénovation de Toiture : Travaux et Prix 2026",
+    title: "Roof Renovation: Work and Costs 2026",
     description:
-      "Signes d'usure, types de couverture (tuile, ardoise, zinc, bac acier), prix (60-200€/m²), isolation et aides MaPrimeRénov.",
+      "Signs of wear, types of covering (tile, slate, zinc, metal), cost per sq ft, insulation, and grants.",
     href: "/guides/renovation-toiture",
     icon: Home,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
   {
-    title: "Changer ses Fenêtres : Matériaux, Prix et Aides 2026",
+    title: "Window Replacement: Materials, Costs, and Grants 2026",
     description:
-      "Matériaux (PVC, bois, alu, mixte), types de vitrage, pose en rénovation vs dépose totale, prix et aides financières (MaPrimeRénov, CEE, TVA 5,5%).",
+      "Materials (PVC, wood, aluminum, hybrid), glazing types, renovation vs. full replacement, costs, and financial assistance.",
     href: "/guides/renovation-fenetres",
     icon: Home,
-    badge: "Nouveau",
+    badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
   },
 ]
 
 const relatedPages = [
   {
-    title: "Questions fréquentes",
-    description: "Réponses aux questions les plus posées sur les travaux et les artisans.",
+    title: "Frequently Asked Questions",
+    description: "Answers to the most commonly asked questions about legal services and attorneys.",
     href: "/faq",
     icon: HelpCircle,
   },
   {
     title: "Blog",
-    description: "Actualités, conseils et tendances du secteur de l'artisanat.",
+    description: "News, tips, and trends in the legal industry.",
     href: "/blog",
     icon: Newspaper,
   },
   {
-    title: "Baromètre des prix",
-    description: "Tarifs moyens, indices régionaux et tendances pour les métiers du bâtiment.",
+    title: "Price Index",
+    description: "Average fees, regional indices, and trends for legal practice areas.",
     href: "/price-index",
     icon: BarChart3,
   },
@@ -263,7 +263,7 @@ const relatedPages = [
 
 export default function GuidesPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: "Accueil", url: "/" },
+    { name: "Home", url: "/" },
     { name: "Guides", url: "/guides" },
   ])
 
@@ -285,18 +285,18 @@ export default function GuidesPage() {
             <div className="flex items-center gap-3 mb-4">
               <BookOpen className="w-8 h-8 text-blue-600" />
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-heading">
-                Guides Pratiques
+                Practical Guides
               </h1>
             </div>
             <p className="text-lg text-gray-600 max-w-2xl">
-              {"Retrouvez nos guides complets pour vous accompagner dans vos projets de travaux : aides financières, rénovation énergétique, choix d'un artisan et bien plus."}
+              {"Browse our comprehensive guides to help you with your legal matters: understanding your rights, choosing an attorney, fee structures, and more."}
             </p>
           </div>
         </div>
 
         {/* Guides list */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Nos guides</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Our guides</h2>
           <div className="grid gap-6 md:grid-cols-2">
             {guides.map((guide) => (
               <Link
@@ -321,7 +321,7 @@ export default function GuidesPage() {
                     </div>
                     <p className="text-gray-600 text-sm">{guide.description}</p>
                     <span className="inline-flex items-center gap-1 mt-3 text-sm font-medium text-blue-600 group-hover:gap-2 transition-all">
-                      Lire le guide <ArrowRight className="w-4 h-4" />
+                      Read the guide <ArrowRight className="w-4 h-4" />
                     </span>
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export default function GuidesPage() {
 
           {/* Related pages */}
           <div className="mt-16">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">{"Ressources complémentaires"}</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">{"Additional resources"}</h2>
             <div className="grid gap-4 md:grid-cols-3">
               {relatedPages.map((page) => (
                 <Link

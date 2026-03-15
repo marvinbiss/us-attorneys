@@ -1,5 +1,5 @@
 /**
- * Artisan Subscription API
+ * Attorney Subscription API
  * GET: Fetch current subscription info + member date
  */
 
@@ -40,7 +40,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Subscription GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

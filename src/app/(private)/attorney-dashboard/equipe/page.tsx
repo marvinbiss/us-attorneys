@@ -29,11 +29,11 @@ interface TeamMember {
 }
 
 const COLORS = [
-  { name: 'Bleu', value: '#3b82f6' },
-  { name: 'Vert', value: '#22c55e' },
-  { name: 'Violet', value: '#8b5cf6' },
+  { name: 'Blue', value: '#3b82f6' },
+  { name: 'Green', value: '#22c55e' },
+  { name: 'Purple', value: '#8b5cf6' },
   { name: 'Orange', value: '#f97316' },
-  { name: 'Rose', value: '#ec4899' },
+  { name: 'Pink', value: '#ec4899' },
   { name: 'Cyan', value: '#06b6d4' },
 ]
 
@@ -72,7 +72,7 @@ export default function EquipePage() {
         }
 
         if (!res.ok) {
-          setError('Impossible de charger l\'équipe')
+          setError('Unable to load team')
           setIsLoading(false)
           return
         }
@@ -81,7 +81,7 @@ export default function EquipePage() {
         setMembers(data.members ?? [])
       } catch (err) {
         console.error('Error fetching team:', err)
-        setError('Impossible de charger l\'équipe')
+        setError('Unable to load team')
       } finally {
         setIsLoading(false)
       }
@@ -114,7 +114,7 @@ export default function EquipePage() {
 
         if (!res.ok) {
           const body = await res.json()
-          throw new Error(body.error ?? 'Erreur lors de la mise à jour')
+          throw new Error(body.error ?? 'Error updating member')
         }
 
         setMembers(members.map(m =>
@@ -138,7 +138,7 @@ export default function EquipePage() {
 
         if (!res.ok) {
           const body = await res.json()
-          throw new Error(body.error ?? 'Erreur lors de l\'ajout')
+          throw new Error(body.error ?? 'Error adding member')
         }
 
         const body = await res.json()
@@ -156,7 +156,7 @@ export default function EquipePage() {
       })
     } catch (err) {
       console.error('Error saving member:', err)
-      setError('Erreur lors de la sauvegarde')
+      setError('Error saving member')
     } finally {
       setIsSaving(false)
     }
@@ -164,7 +164,7 @@ export default function EquipePage() {
 
   // Delete team member
   const handleDelete = async (memberId: string) => {
-    if (!confirm('Supprimer ce membre de l\'équipe ?')) return
+    if (!confirm('Remove this team member?')) return
 
     try {
       const res = await fetch(`/api/attorney/equipe/${memberId}`, {
@@ -173,13 +173,13 @@ export default function EquipePage() {
 
       if (!res.ok && res.status !== 204) {
         const body = await res.json()
-        throw new Error(body.error ?? 'Erreur lors de la suppression')
+        throw new Error(body.error ?? 'Error deleting member')
       }
 
       setMembers(members.filter(m => m.id !== memberId))
     } catch (err) {
       console.error('Error deleting member:', err)
-      setError('Erreur lors de la suppression')
+      setError('Error deleting member')
     }
   }
 
@@ -201,7 +201,7 @@ export default function EquipePage() {
 
       if (!res.ok) {
         const body = await res.json()
-        throw new Error(body.error ?? 'Erreur lors de la mise à jour')
+        throw new Error(body.error ?? 'Error updating member')
       }
 
       setMembers(members.map(m =>
@@ -248,8 +248,8 @@ export default function EquipePage() {
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold">Gestion de l&apos;équipe</h1>
-              <p className="text-blue-100">Gérez les membres de votre équipe et leurs créneaux</p>
+              <h1 className="text-2xl font-bold">Team Management</h1>
+              <p className="text-blue-100">Manage your team members and their availability</p>
             </div>
           </div>
         </div>
@@ -268,10 +268,10 @@ export default function EquipePage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
-              Membres de l&apos;équipe ({members.length})
+              Team Members ({members.length})
             </h2>
             <p className="text-sm text-gray-500">
-              Ajoutez des membres pour leur assigner des créneaux
+              Add members to assign them availability slots
             </p>
           </div>
           <button
@@ -289,7 +289,7 @@ export default function EquipePage() {
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           >
             <Plus className="w-4 h-4" />
-            Ajouter un membre
+            Add Member
           </button>
         </div>
 
@@ -298,17 +298,17 @@ export default function EquipePage() {
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">
             <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucun membre dans l&apos;équipe
+              No team members yet
             </h3>
             <p className="text-gray-500 mb-6">
-              Ajoutez des membres pour leur assigner des créneaux de disponibilité
+              Add members to assign them availability slots
             </p>
             <button
               onClick={() => setShowAddModal(true)}
               className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
             >
               <Plus className="w-4 h-4" />
-              Ajouter le premier membre
+              Add First Member
             </button>
           </div>
         ) : (
@@ -365,7 +365,7 @@ export default function EquipePage() {
 
                 <div className="mt-4 pt-4 border-t flex items-center justify-between">
                   <span className={`text-sm ${member.is_active ? 'text-green-600' : 'text-gray-400'}`}>
-                    {member.is_active ? 'Actif' : 'Inactif'}
+                    {member.is_active ? 'Active' : 'Inactive'}
                   </span>
                   <button
                     onClick={() => toggleActive(member)}
@@ -375,7 +375,7 @@ export default function EquipePage() {
                         : 'bg-green-100 text-green-700 hover:bg-green-200'
                     }`}
                   >
-                    {member.is_active ? 'Désactiver' : 'Activer'}
+                    {member.is_active ? 'Deactivate' : 'Activate'}
                   </button>
                 </div>
               </div>
@@ -385,12 +385,12 @@ export default function EquipePage() {
 
         {/* Info box */}
         <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-          <h4 className="font-medium text-blue-900 mb-2">Comment ça fonctionne ?</h4>
+          <h4 className="font-medium text-blue-900 mb-2">How it works</h4>
           <ul className="text-sm text-blue-700 space-y-1">
-            <li>1. Ajoutez les membres de votre équipe</li>
-            <li>2. Assignez-leur des créneaux de disponibilité dans le calendrier</li>
-            <li>3. Les clients peuvent choisir un membre spécifique lors de la réservation</li>
-            <li>4. Chaque membre reçoit ses propres notifications</li>
+            <li>1. Add your team members</li>
+            <li>2. Assign them availability slots in the calendar</li>
+            <li>3. Clients can choose a specific member when booking</li>
+            <li>4. Each member receives their own notifications</li>
           </ul>
         </div>
       </div>
@@ -401,7 +401,7 @@ export default function EquipePage() {
           <div className="bg-white rounded-xl max-w-md w-full shadow-2xl">
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="text-lg font-semibold text-gray-900">
-                {editingMember ? 'Modifier le membre' : 'Ajouter un membre'}
+                {editingMember ? 'Edit Member' : 'Add Member'}
               </h3>
               <button
                 onClick={() => {
@@ -417,7 +417,7 @@ export default function EquipePage() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom complet *
+                  Full Name *
                 </label>
                 <input
                   type="text"
@@ -443,7 +443,7 @@ export default function EquipePage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Téléphone
+                  Phone
                 </label>
                 <input
                   type="tel"
@@ -455,13 +455,13 @@ export default function EquipePage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Rôle / Spécialité *
+                  Role / Specialty *
                 </label>
                 <input
                   type="text"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  placeholder="Ex: Coiffeur senior, Apprenti..."
+                  placeholder="E.g.: Senior Associate, Paralegal..."
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
@@ -469,7 +469,7 @@ export default function EquipePage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Couleur dans le calendrier
+                  Calendar Color
                 </label>
                 <div className="flex gap-2">
                   {COLORS.map((color) => (
@@ -499,7 +499,7 @@ export default function EquipePage() {
                   className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-50"
                   disabled={isSaving}
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   type="submit"
@@ -507,7 +507,7 @@ export default function EquipePage() {
                   className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {editingMember ? 'Enregistrer' : 'Ajouter'}
+                  {editingMember ? 'Save' : 'Add'}
                 </button>
               </div>
             </form>

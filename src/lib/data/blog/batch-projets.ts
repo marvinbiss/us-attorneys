@@ -27,7 +27,7 @@ export const projetsArticles: Record<string, {
       "## 4. Déposer l\'existant",
       "La dépose de l\'ancienne cuisine dure un à deux jours. Elle comprend le démontage des meubles, la déconnexion de la plomberie et de l\'électricité, et l\'évacuation des gravats. Coût moyen : 500 à 1 500 euros si vous confiez cette étape à un professionnel. Pensez à prévoir un coin repas temporaire pendant la durée du chantier.",
       "## 5. Reprendre les réseaux",
-      "C\'est l\'étape la plus technique. La mise en conformité de l\'électricité (circuit dédié pour le four, prises en nombre suffisant) coûte de 500 à 2 000 euros. Le déplacement des arrivées et évacuations d\'eau revient à 300 à 1 500 euros selon la distance. Faites appel à des artisans qualifiés : un électricien NF C 15-100 et un plombier assuré.",
+      "C\'est l\'étape la plus technique. La mise en conformité de l\'électricité (circuit dédié pour le four, prises en nombre suffisant) coûte de 500 à 2 000 euros. Le déplacement des arrivées et évacuations d\'eau revient à 300 à 1 500 euros selon la distance. Faites appel à attorneys qualifiés : un électricien NF C 15-100 et un plombier assuré.",
       "## 6. Poser le carrelage et les revêtements",
       "Le carrelage de sol se pose avant l\'installation des meubles. Comptez 40 à 100 euros/m² pose comprise pour un grès cérame. La crédence murale (faïence, verre laqué ou inox) coûte de 30 à 150 euros/m². Prévoyez deux à trois jours de séchage avant de poursuivre.",
       "## 7. Installer les meubles et l\'électroménager",
@@ -152,7 +152,7 @@ export const projetsArticles: Record<string, {
       "Une PAC air-eau coûte 8 000 à 16 000 € TTC posée et réduit la facture de chauffage de 40 à 60 %.",
       "Les aides cumulées (MaPrimeRénov' + CEE + éco-PTZ) peuvent couvrir 40 à 70 % du coût.",
       "Le dimensionnement par un bilan thermique est indispensable pour éviter sur ou sous-dimensionnement.",
-      "Un artisan QualiPAC et RGE est obligatoire pour bénéficier des aides financières."
+      "An attorney QualiPAC et RGE est obligatoire pour bénéficier des aides financières."
     ]
   },
   'installer-panneau-solaire-maison-2026': {
@@ -199,7 +199,7 @@ export const projetsArticles: Record<string, {
       "Une installation photovoltaïque de 3 kWc coûte entre 7 000 et 12 000 € et produit environ 3 500 kWh/an.",
       "L'autoconsommation avec vente du surplus offre le meilleur retour sur investissement en 2026.",
       "Le tarif d'achat du surplus par EDF OA est garanti pendant 20 ans et actualisé chaque trimestre.",
-      "L'installation doit être réalisée par un artisan QualiPV/RGE pour bénéficier de la prime à l'autoconsommation."
+      "L'installation doit être réalisée par an attorney QualiPV/RGE pour bénéficier de la prime à l'autoconsommation."
     ]
   },
   'creer-salle-de-bain-sous-combles': {
@@ -779,7 +779,7 @@ export const projetsArticles: Record<string, {
     title: 'Remplacer ses Fenêtres 2026 : Économies',
     excerpt: 'Double ou triple vitrage, matériaux de menuiserie, aides financières et retour sur investissement : le guide pour changer vos fenêtres.',
     content: [
-      "Les fenêtres représentent 10 à 15 % des déperditions thermiques d\'un logement. Le remplacement de fenêtres simple vitrage par du double ou triple vitrage réduit considérablement les pertes de chaleur, améliore le confort acoustique et valorise le bien immobilier. Comparez les devis de [menuisiers qualifiés](/practice-areas/menuisier) pour votre remplacement de fenêtres.",
+      "Les fenêtres représentent 10 à 15 % des déperditions thermiques d\'un logement. Le remplacement de fenêtres simple vitrage par du double ou triple vitrage réduit considérablement les pertes de chaleur, améliore le confort acoustique et valorise le bien immobilier. Comparez the consultations de [menuisiers qualifiés](/practice-areas/menuisier) pour votre remplacement de fenêtres.",
       "## 1. Évaluer le besoin de remplacement",
       "Signes d\'usure : condensation entre les vitres (joint d\'étanchéité défaillant), courants d\'air au niveau des joints, difficulté à ouvrir ou fermer, boiseries pourries ou aluminium oxydé. Un simple vitrage a un coefficient de transmission thermique (Uw) de 5 à 6 W/m².K, contre 1,1 à 1,4 pour un double vitrage performant.",
       "## 2. Choisir le vitrage",
@@ -814,7 +814,7 @@ export const projetsArticles: Record<string, {
     faq: [
       { question: 'Double ou triple vitrage : que choisir ?', answer: 'Le double vitrage ITR (isolation thermique renforcée) avec gaz argon est le standard actuel (Uw de 1,1 à 1,4). Le triple vitrage (Uw de 0,6 à 0,8) est recommandé pour les façades nord et les régions froides, mais son surcoût de 30 à 50 % n\'est pas toujours justifié en climat tempéré.' },
       { question: 'PVC, aluminium ou bois : quel matériau pour les fenêtres ?', answer: 'Le PVC est le plus isolant et le plus économique (200-600 €/fenêtre), sans entretien. L\'aluminium est esthétique avec des profilés fins (400-900 €) mais moins isolant. Le bois est chaleureux et écologique (350-800 €) mais demande un entretien. Le mixte bois-aluminium (500-1 200 €) cumule les avantages.' },
-      { question: 'Quelles aides pour remplacer ses fenêtres ?', answer: 'MaPrimeRénov\' : 40 à 100 € par fenêtre selon les revenus. CEE : 40 à 100 € par fenêtre (selon profil de revenus). TVA réduite à 5,5 %. Éco-PTZ sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double ou triple vitrage, posé par un artisan RGE.' },
+      { question: 'Quelles aides pour remplacer ses fenêtres ?', answer: 'MaPrimeRénov\' : 40 à 100 € par fenêtre selon les revenus. CEE : 40 à 100 € par fenêtre (selon profil de revenus). TVA réduite à 5,5 %. Éco-PTZ sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double ou triple vitrage, posé par an attorney RGE.' },
       { question: 'Pose en rénovation ou dépose totale ?', answer: 'La pose en rénovation (sur le dormant existant) est rapide et économique mais réduit la surface vitrée de 10 à 15 %. La dépose totale offre de meilleures performances thermiques et ne perd pas de surface vitrée, mais nécessite des travaux de maçonnerie et de finition plus importants.' }
     ],
     keyTakeaways: [

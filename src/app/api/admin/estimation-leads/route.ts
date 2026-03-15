@@ -1,6 +1,6 @@
 /**
  * Admin API — Estimation Leads
- * Liste et gestion des leads capturés par le widget estimation IA
+ * List and management of leads captured by the AI estimation widget
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Paramètres invalides', details: parsed.error.flatten() },
+        { error: 'Invalid parameters', details: parsed.error.flatten() },
         { status: 400 },
       )
     }
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       return NextResponse.json(
-        { error: 'Erreur base de données', details: error.message },
+        { error: 'Database error', details: error.message },
         { status: 500 },
       )
     }
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 },
     )
   }
@@ -116,7 +116,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const { id } = await request.json()
     if (!id) {
-      return NextResponse.json({ error: 'ID requis' }, { status: 400 })
+      return NextResponse.json({ error: 'ID required' }, { status: 400 })
     }
 
     const supabase = createAdminClient()
@@ -134,6 +134,6 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

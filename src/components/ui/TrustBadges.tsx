@@ -8,29 +8,29 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
   const badges = [
     {
       icon: Database,
-      label: 'Données SIREN officielles',
-      description: 'Chaque artisan référencé via les registres officiels de l\'État',
+      label: 'State bar verified',
+      description: 'Every attorney verified through official state bar records',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },
     {
       icon: Shield,
-      label: 'Artisans référencés SIREN',
-      description: 'Base d\'artisans référencés via les données officielles de France',
+      label: 'Licensed attorneys',
+      description: 'Database of attorneys verified through official US records',
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
     {
       icon: MapPin,
-      label: '101 départements',
-      description: 'Couverture complète de la France métropolitaine et DOM',
+      label: '50 states + DC',
+      description: 'Complete coverage across all US states and territories',
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
     },
     {
       icon: CheckCircle,
-      label: '100% gratuit',
-      description: 'Recherche, comparaison et devis sans aucun frais',
+      label: '100% free',
+      description: 'Search, compare, and get consultations at no cost',
       color: 'text-amber-600',
       bgColor: 'bg-amber-50',
     },
@@ -108,8 +108,8 @@ export function CertificationBadge() {
         <CheckCircle className="w-5 h-5 text-white" />
       </div>
       <div className="text-left">
-        <div className="text-xs text-green-600 font-medium">Plateforme certifiée</div>
-        <div className="text-sm font-semibold text-green-800">Qualité & Confiance</div>
+        <div className="text-xs text-green-600 font-medium">Certified platform</div>
+        <div className="text-sm font-semibold text-green-800">Quality & Trust</div>
       </div>
     </motion.div>
   )
@@ -143,7 +143,7 @@ export function SocialProofCounter({
         viewport={{ once: true }}
         className="text-3xl md:text-4xl font-bold text-slate-900 mb-1"
       >
-        {value.toLocaleString('fr-FR')}{suffix}
+        {value.toLocaleString('en-US')}{suffix}
       </motion.div>
       <div className="text-slate-500">{label}</div>
     </motion.div>
@@ -163,7 +163,7 @@ export function AvailabilityBadge({ count = 0 }: { count?: number }) {
         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
       </span>
       <span className="text-sm text-white/80 font-medium">
-        {count > 0 ? `${count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France` : 'Artisans référencés via données SIREN officielles'}
+        {count > 0 ? `${count.toLocaleString('en-US')}+ attorneys listed across the US` : 'Attorneys verified through official state bar records'}
       </span>
     </motion.div>
   )
@@ -178,7 +178,7 @@ export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   }
 
   return (
-    <div className="inline-flex items-center gap-1" title="Profil référencé">
+    <div className="inline-flex items-center gap-1" title="Verified profile">
       <BadgeCheck className={`${sizes[size]} text-blue-500`} />
     </div>
   )
@@ -210,7 +210,7 @@ export function RatingStars({
       </span>
       {showCount && reviewCount !== undefined && (
         <span className={`text-slate-500 ${sizes[size].text}`}>
-          ({reviewCount.toLocaleString('fr-FR')} avis)
+          ({reviewCount.toLocaleString('en-US')} reviews)
         </span>
       )}
     </div>

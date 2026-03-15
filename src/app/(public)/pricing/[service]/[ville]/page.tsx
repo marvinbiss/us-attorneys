@@ -177,7 +177,7 @@ export async function generateMetadata({
   const descTemplates = [
     `Prix ${tradeLower} à ${villeData.name} en 2026 : ${minPrice}–${maxPrice} ${unit}. Tarifs locaux, facteurs de prix et devis gratuit.`,
     `Tarif ${tradeLower} à ${villeData.name} (${dept}) : de ${minPrice} à ${maxPrice} ${unit}. Comparez les artisans et demandez un devis.`,
-    `Quel est le prix d’un ${tradeLower} à ${villeData.name} ? De ${minPrice} à ${maxPrice} ${unit} en 2026. Guide complet et devis gratuit.`,
+    `Quel est le prix d'un ${tradeLower} à ${villeData.name} ? De ${minPrice} à ${maxPrice} ${unit} en 2026. Guide complet et devis gratuit.`,
     `Guide des tarifs ${tradeLower} à ${villeData.name} en 2026. Prix moyen : ${minPrice}–${maxPrice} ${unit}. Conseils et devis sans engagement.`,
     `Tarifs ${tradeLower} ${villeData.name} en 2026 : ${minPrice} à ${maxPrice} ${unit}. Découvrez les prix locaux et obtenez un devis gratuit.`,
   ]

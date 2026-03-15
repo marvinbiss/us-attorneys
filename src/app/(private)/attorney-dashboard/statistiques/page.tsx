@@ -100,20 +100,20 @@ export default function StatistiquesPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">Aucun profil artisan trouve</h2>
-          <p className="text-gray-500">Vous devez creer votre profil artisan pour acceder aux statistiques.</p>
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">No attorney profile found</h2>
+          <p className="text-gray-500">You must create your attorney profile to access statistics.</p>
           <Link
             href="/attorney-dashboard/profil"
             className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            Creer mon profil
+            Create My Profile
           </Link>
         </div>
       </div>
     )
   }
 
-  if (!stats) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">Aucune donnee disponible</div>
+  if (!stats) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">No data available</div>
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -128,8 +128,8 @@ export default function StatistiquesPage() {
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold">Statistiques</h1>
-              <p className="text-blue-100">Analysez les performances de votre activite</p>
+              <h1 className="text-2xl font-bold">Statistics</h1>
+              <p className="text-blue-100">Analyze your practice performance</p>
             </div>
           </div>
         </div>
@@ -139,9 +139,9 @@ export default function StatistiquesPage() {
         {/* Period selector */}
         <div className="flex gap-2 mb-6">
           {[
-            { id: 'week', label: 'Semaine' },
-            { id: 'month', label: 'Mois' },
-            { id: 'year', label: 'Annee' },
+            { id: 'week', label: 'Week' },
+            { id: 'month', label: 'Month' },
+            { id: 'year', label: 'Year' },
           ].map((p) => (
             <button
               key={p.id}
@@ -166,7 +166,7 @@ export default function StatistiquesPage() {
               <ChangeIndicator value={stats.totalLeadsChange} />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats.totalLeads}</div>
-            <div className="text-sm text-gray-500">Demandes recues</div>
+            <div className="text-sm text-gray-500">Cases Received</div>
           </div>
 
           {/* Devis sent */}
@@ -176,19 +176,19 @@ export default function StatistiquesPage() {
               <ChangeIndicator value={stats.devisSentChange} />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats.devisSent}</div>
-            <div className="text-sm text-gray-500">Devis envoyes</div>
+            <div className="text-sm text-gray-500">Quotes Sent</div>
           </div>
 
           {/* Average rating */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
               <Star className="w-8 h-8 text-yellow-500" />
-              <span className="text-sm text-gray-500">{stats.totalReviews} avis</span>
+              <span className="text-sm text-gray-500">{stats.totalReviews} reviews</span>
             </div>
             <div className="text-3xl font-bold text-gray-900">
               {stats.averageRating > 0 ? stats.averageRating.toFixed(1) : '-'}
             </div>
-            <div className="text-sm text-gray-500">Note moyenne</div>
+            <div className="text-sm text-gray-500">Average Rating</div>
           </div>
 
           {/* Profile views */}
@@ -198,7 +198,7 @@ export default function StatistiquesPage() {
               <ChangeIndicator value={stats.profileViewsChangeNum} />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats.profileViewsCount}</div>
-            <div className="text-sm text-gray-500">Vues du profil</div>
+            <div className="text-sm text-gray-500">Profile Views</div>
           </div>
         </div>
 
@@ -209,7 +209,7 @@ export default function StatistiquesPage() {
               <div className="flex items-center gap-3">
                 <Phone className="w-6 h-6 text-emerald-600" />
                 <div>
-                  <div className="text-sm text-gray-500">Telephone revele</div>
+                  <div className="text-sm text-gray-500">Phone Reveals</div>
                   <div className="text-2xl font-bold text-gray-900">{stats.phoneRevealsCount}</div>
                 </div>
               </div>
@@ -221,7 +221,7 @@ export default function StatistiquesPage() {
               <div className="flex items-center gap-3">
                 <Phone className="w-6 h-6 text-teal-600" />
                 <div>
-                  <div className="text-sm text-gray-500">Clics sur telephone</div>
+                  <div className="text-sm text-gray-500">Phone Clicks</div>
                   <div className="text-2xl font-bold text-gray-900">{stats.phoneClicksCount}</div>
                 </div>
               </div>
@@ -235,10 +235,10 @@ export default function StatistiquesPage() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
-              Demandes par mois (6 derniers mois)
+              Cases per Month (Last 6 Months)
             </h3>
             {stats.monthlyTrend.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">Aucune donnee</p>
+              <p className="text-gray-500 text-center py-8">No data</p>
             ) : (
               <div className="flex items-end justify-between h-32 sm:h-40">
                 {stats.monthlyTrend.map((month, i) => {
@@ -265,10 +265,10 @@ export default function StatistiquesPage() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <PieChart className="w-5 h-5 text-purple-600" />
-              Services les plus demandes
+              Most Requested Services
             </h3>
             {stats.topServices.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">Aucune donnee</p>
+              <p className="text-gray-500 text-center py-8">No data</p>
             ) : (
               <div className="space-y-4">
                 {stats.topServices.map((service, i) => {

@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 interface ChatWindowProps {
   conversationId: string
   currentUserId: string
-  currentUserType: 'client' | 'artisan'
+  currentUserType: 'client' | 'attorney'
   otherUserName: string
   otherUserAvatar?: string
 }

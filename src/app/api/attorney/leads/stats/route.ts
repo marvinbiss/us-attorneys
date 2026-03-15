@@ -1,5 +1,5 @@
 /**
- * GET /api/attorney/leads/stats — Lead-specific stats for artisan dashboard
+ * GET /api/attorney/leads/stats — Lead-specific stats for attorney dashboard
  * Returns lead KPIs: counts, conversion, response time, monthly trend.
  */
 
@@ -23,7 +23,7 @@ export async function GET() {
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'No attorney profile found' } }, { status: 403 })
     }
 
     const adminClient = createAdminClient()
@@ -42,7 +42,7 @@ export async function GET() {
 
     if (assignmentsError) {
       logger.error('Leads stats assignments error:', assignmentsError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
     const all = assignments || []
@@ -60,7 +60,7 @@ export async function GET() {
 
     if (eventsError) {
       logger.error('Leads stats events error:', eventsError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
     const allEvents = events || []
@@ -104,7 +104,7 @@ export async function GET() {
         (a) => new Date(a.assigned_at) >= d && new Date(a.assigned_at) < end
       ).length
       return {
-        month: d.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' }),
+        month: d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
         count,
       }
     })
@@ -127,7 +127,7 @@ export async function GET() {
       monthlyTrend,
     })
   } catch (error) {
-    logger.error('Artisan leads stats GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney leads stats GET error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

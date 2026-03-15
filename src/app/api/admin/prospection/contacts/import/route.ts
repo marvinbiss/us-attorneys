@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       formData = await request.formData()
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Invalid data' } },
         { status: 400 }
       )
     }
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Invalid data' } },
         { status: 400 }
       )
     }
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { success: false, error: { message: 'Fichier requis' } },
+        { success: false, error: { message: 'File required' } },
         { status: 400 }
       )
     }
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       mapping = JSON.parse(mappingJson)
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Mapping JSON invalide' } },
+        { success: false, error: { message: 'Invalid JSON mapping' } },
         { status: 400 }
       )
     }
@@ -115,6 +115,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Import contacts error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

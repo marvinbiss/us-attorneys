@@ -1,5 +1,5 @@
 /**
- * Error Handling System - ServicesArtisans
+ * Error Handling System - US Attorneys
  * World-class error handling with user-friendly messages
  * Includes retry logic, offline detection, and error tracking
  */
@@ -35,56 +35,56 @@ export interface BookingError {
 // User-friendly error messages
 const errorMessages: Record<BookingErrorCode, { message: string; action?: string }> = {
   SLOT_UNAVAILABLE: {
-    message: "Désolé, ce créneau vient d'être réservé par quelqu'un d'autre.",
-    action: 'Veuillez choisir un autre créneau.',
+    message: "Sorry, this slot has just been booked by someone else.",
+    action: 'Please choose another slot.',
   },
   BOOKING_CONFLICT: {
-    message: 'Vous avez déjà une réservation à cette date/heure.',
-    action: 'Consultez vos réservations existantes.',
+    message: 'You already have a booking at this date/time.',
+    action: 'Check your existing bookings.',
   },
   ARTISAN_UNAVAILABLE: {
-    message: "L'artisan n'est plus disponible pour cette date.",
+    message: "The attorney n'est plus disponible pour cette date.",
     action: 'Essayez une autre date ou un autre artisan.',
   },
   INVALID_DATA: {
     message: 'Certaines informations sont incorrectes.',
-    action: 'Vérifiez les champs du formulaire.',
+    action: 'Check the form fields.',
   },
   PAYMENT_FAILED: {
-    message: "Le paiement n'a pas pu être traité.",
-    action: 'Vérifiez vos informations de paiement et réessayez.',
+    message: "The payment could not be processed.",
+    action: 'Check your payment information and try again.',
   },
   PAYMENT_CANCELLED: {
-    message: 'Le paiement a été annulé.',
-    action: 'Vous pouvez réessayer à tout moment.',
+    message: 'The payment has been cancelled.',
+    action: 'You can try again at any time.',
   },
   NETWORK_ERROR: {
-    message: 'Problème de connexion internet.',
-    action: 'Vérifiez votre connexion et réessayez.',
+    message: 'Internet connection problem.',
+    action: 'Check your connection and try again.',
   },
   SERVER_ERROR: {
     message: 'Une erreur technique est survenue.',
-    action: 'Veuillez réessayer dans quelques instants.',
+    action: 'Please try again in a few moments.',
   },
   UNAUTHORIZED: {
-    message: 'Session expirée.',
+    message: 'Session expired.',
     action: 'Veuillez vous reconnecter.',
   },
   NOT_FOUND: {
     message: 'Cette ressource est introuvable.',
-    action: 'Elle a peut-être été supprimée.',
+    action: 'It may have been deleted.',
   },
   RATE_LIMITED: {
-    message: 'Trop de requêtes.',
+    message: 'Too many requests.',
     action: 'Veuillez patienter quelques secondes.',
   },
   VALIDATION_ERROR: {
-    message: 'Les données saisies sont invalides.',
-    action: 'Vérifiez le formulaire.',
+    message: 'The entered data is invalid.',
+    action: 'Check the form.',
   },
   UNKNOWN: {
     message: 'Une erreur inattendue est survenue.',
-    action: "Contactez le support si le problème persiste.",
+    action: "Contact support if the problem persists.",
   },
 }
 
@@ -114,7 +114,7 @@ export function createBookingError(
     switch (status) {
       case 400:
         // Check for specific error codes
-        if (message.includes('créneau') || message.includes('slot')) {
+        if (message.includes('slot') || message.includes('slot')) {
           return {
             code: 'SLOT_UNAVAILABLE',
             message,

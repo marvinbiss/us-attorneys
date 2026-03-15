@@ -17,9 +17,9 @@ const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner')
 const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
 
 export const metadata: Metadata = {
-  title: 'Devis Artisan Gratuit — Comparez les Offres',
+  title: 'Free Attorney Consultation — Compare Offers',
   description:
-    "Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. Jusqu'à 3 devis en 24h. 100% gratuit, sans engagement.",
+    "Request a free attorney consultation: personal injury, family law, criminal defense, and 50+ practice areas. Up to 3 quotes in 24h. 100% free, no obligation.",
   alternates: {
     canonical: `${SITE_URL}/quotes`,
   },
@@ -31,80 +31,80 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Devis Artisan Gratuit — Comparez les Offres',
-    description: "Demandez un devis artisan gratuit. Jusqu'à 3 devis d'artisans vérifiés en 24h. 100% gratuit, sans engagement.",
+    title: 'Free Attorney Consultation — Compare Offers',
+    description: "Request a free attorney consultation. Up to 3 quotes from verified attorneys in 24h. 100% free, no obligation.",
     url: `${SITE_URL}/quotes`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Free consultation' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Devis Artisan Gratuit — Comparez les Offres',
-    description: "Demandez un devis artisan gratuit. Jusqu'à 3 devis d'artisans vérifiés en 24h.",
+    title: 'Free Attorney Consultation — Compare Offers',
+    description: "Request a free attorney consultation. Up to 3 quotes from verified attorneys in 24h.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const trustBadges = [
-  { icon: Shield, label: 'Gratuit', sublabel: 'Aucun frais caché' },
-  { icon: Clock, label: 'Sans engagement', sublabel: 'Réponse sous 24 h' },
-  { icon: Users, label: 'Artisans référencés', sublabel: 'SIREN contrôlé' },
+  { icon: Shield, label: 'Free', sublabel: 'No hidden fees' },
+  { icon: Clock, label: 'No obligation', sublabel: 'Response within 24h' },
+  { icon: Users, label: 'Verified attorneys', sublabel: 'Bar-verified' },
 ]
 
 const howSteps = [
   {
     number: '1',
     icon: Search,
-    title: 'Décrivez votre projet',
+    title: 'Describe your case',
     description:
-      'Sélectionnez le type de service, indiquez votre ville et décrivez votre besoin en quelques lignes. Formulaire rapide en 2 minutes.',
+      'Select the type of service, enter your city, and describe your legal needs in a few lines. Quick form in 2 minutes.',
   },
   {
     number: '2',
     icon: FileText,
-    title: 'Recevez vos devis',
+    title: 'Receive your quotes',
     description:
-      'Votre demande est transmise aux artisans qualifiés proches de chez vous. Vous recevez jusqu’à 3 devis détaillés sous 24 à 48 h.',
+      'Your request is sent to qualified attorneys near you. You receive up to 3 detailed quotes within 24 to 48 hours.',
   },
   {
     number: '3',
     icon: CheckCircle,
-    title: 'Choisissez librement',
+    title: 'Choose freely',
     description:
-      'Comparez les tarifs, consultez les profils et choisissez l’artisan qui vous convient. Aucune obligation d’accepter.',
+      'Compare rates, review profiles, and choose the attorney that suits you. No obligation to accept.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Le service est-il vraiment gratuit ?',
+    question: 'Is the service really free?',
     answer:
-      'Oui, la demande de devis est 100 % gratuite et sans aucun engagement. Vous ne payez rien pour recevoir les propositions des artisans.',
+      'Yes, requesting a consultation is 100% free with no obligation. You pay nothing to receive proposals from attorneys.',
   },
   {
-    question: 'Combien de devis vais-je recevoir ?',
+    question: 'How many quotes will I receive?',
     answer:
-      'Vous pouvez recevoir jusqu’à 3 devis d’artisans différents, selon la disponibilité dans votre zone géographique. Chaque devis est personnalisé en fonction de votre projet.',
+      'You can receive up to 3 quotes from different attorneys, depending on availability in your area. Each quote is customized based on your case.',
   },
   {
-    question: 'En combien de temps suis-je contacté ?',
+    question: 'How quickly will I be contacted?',
     answer:
-      'Les artisans disponibles vous contactent généralement sous 24 à 48 h après l’envoi de votre demande. En cas d’urgence, précisez-le dans le formulaire pour accélérer le traitement.',
+      'Available attorneys typically contact you within 24 to 48 hours after submitting your request. For urgent matters, specify this in the form to expedite processing.',
   },
   {
-    question: 'Comment les artisans sont-ils référencés ?',
+    question: 'How are attorneys verified?',
     answer:
-      'Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous contrôlons leur numéro d’entreprise et leur activité déclarée auprès des données officielles de l’INSEE.',
+      'All attorneys listed on USAttorneys are verified through state bar records. We check their bar number and standing with the official state bar association.',
   },
   {
-    question: 'Suis-je obligé d’accepter un devis ?',
+    question: 'Am I obligated to accept a quote?',
     answer:
-      'Non, vous êtes entièrement libre. Comparez les devis reçus à votre rythme et choisissez celui qui correspond le mieux à vos attentes et à votre budget. Aucune obligation d’accepter.',
+      'No, you are completely free. Compare the quotes you receive at your own pace and choose the one that best fits your needs and budget. No obligation to accept.',
   },
   {
-    question: 'Quelles données personnelles sont partagées ?',
+    question: 'What personal data is shared?',
     answer:
-      'Seuls votre nom, numéro de téléphone et la description de votre projet sont transmis aux artisans sélectionnés. Votre adresse e-mail reste confidentielle et vos données ne sont jamais revendues à des tiers.',
+      'Only your name, phone number, and case description are shared with selected attorneys. Your email address remains confidential and your data is never sold to third parties.',
   },
 ]
 
@@ -137,14 +137,14 @@ export default async function DevisPage() {
       <JsonLd
         data={[
           getBreadcrumbSchema([
-            { name: 'Accueil', url: '/' },
-            { name: 'Demander un devis', url: '/quotes' },
+            { name: 'Home', url: '/' },
+            { name: 'Request a consultation', url: '/quotes' },
           ]),
           getFAQSchema(faqItems.map(item => ({ question: item.question, answer: item.answer }))),
         ]}
       />
 
-      {/* ─── HERO ─────────────────────────────────────────────── */}
+      {/* HERO */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
@@ -170,22 +170,22 @@ export default async function DevisPage() {
           {/* Breadcrumb */}
           <div className="mb-10">
             <Breadcrumb
-              items={[{ label: 'Demander un devis' }]}
+              items={[{ label: 'Request a consultation' }]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
             />
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Recevez <span className="whitespace-nowrap">jusqu&apos;à</span>{' '}
+              Receive up to{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300 whitespace-nowrap">
-                3&nbsp;devis gratuits
+                3&nbsp;free consultations
               </span>{' '}
-              <span className="whitespace-nowrap">d&apos;artisans</span> référencés
+              from verified attorneys
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Remplissez le formulaire ci-dessous et comparez les offres de professionnels
-              qualifiés près de chez vous. Service 100&nbsp;% gratuit, sans engagement.
+              Fill out the form below and compare offers from qualified professionals
+              near you. Service 100&nbsp;% free, no obligation.
             </p>
 
             {/* Trust badges */}
@@ -209,31 +209,31 @@ export default async function DevisPage() {
         </div>
       </section>
 
-      {/* ─── SOCIAL PROOF ────────────────────────────────────── */}
+      {/* SOCIAL PROOF */}
       <div className="relative z-10 -mt-6 mb-4 max-w-3xl mx-auto px-4">
         <SocialProofBanner variant="card" />
       </div>
 
-      {/* ─── RECENT SEARCHES (personalization) ─────────────── */}
+      {/* RECENT SEARCHES */}
       <div className="relative z-10 -mt-8 mb-4 max-w-3xl mx-auto px-4">
         <RecentSearches />
       </div>
 
-      {/* ─── FORM ─────────────────────────────────────────────── */}
+      {/* FORM */}
       <section id="formulaire" className="relative -mt-16 z-10 px-4 pb-20">
         <DevisForm />
       </section>
 
-      {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
+      {/* HOW IT WORKS */}
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Simple et rapide</p>
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Simple and fast</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment ça marche&nbsp;?
+              How it works
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trois étapes suffisent pour recevoir des devis personnalisés d&apos;artisans de confiance.
+              Three steps are all it takes to receive personalized quotes from trusted attorneys.
             </p>
           </div>
 
@@ -268,16 +268,16 @@ export default async function DevisPage() {
         </div>
       </section>
 
-      {/* ─── FAQ ──────────────────────────────────────────────── */}
+      {/* FAQ */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">FAQ</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fréquentes
+              Frequently asked questions
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Tout ce que vous devez savoir avant de demander votre devis gratuit.
+              Everything you need to know before requesting your free consultation.
             </p>
           </div>
 
@@ -300,15 +300,15 @@ export default async function DevisPage() {
         </div>
       </section>
 
-      {/* ─── DEVIS PAR MÉTIER ─────────────────────────────────── */}
+      {/* CONSULTATIONS BY PRACTICE AREA */}
       <section className="py-16 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Devis par m&eacute;tier
+              Consultations by practice area
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              S&eacute;lectionnez un m&eacute;tier pour obtenir un devis adapt&eacute; &agrave; votre projet.
+              Select a practice area to get a consultation tailored to your case.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -330,38 +330,38 @@ export default async function DevisPage() {
         </div>
       </section>
 
-      {/* ─── TRUST GUARANTEE ────────────────────────────────────── */}
+      {/* TRUST GUARANTEE */}
       <section className="py-8 bg-white">
         <div className="max-w-3xl mx-auto px-4">
           <TrustGuarantee variant="compact" />
         </div>
       </section>
 
-      {/* ─── BOTTOM CTA ───────────────────────────────────────── */}
+      {/* BOTTOM CTA */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-heading text-xl md:text-2xl font-bold text-slate-900 mb-3">
-            Prêt à démarrer votre projet&nbsp;?
+            Ready to start your case?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
-            Comparez gratuitement les devis d&apos;artisans qualifiés et trouvez le bon professionnel pour vos travaux.
+            Compare free quotes from qualified attorneys and find the right professional for your legal needs.
           </p>
           <a
             href="#formulaire"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             <ArrowUp className="w-5 h-5" />
-            Remplir le formulaire
+            Fill out the form
           </a>
         </div>
       </section>
 
-      {/* ─── DEVIS PAR VILLE ──────────────────────────────────── */}
+      {/* CONSULTATIONS BY CITY */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
-            Devis artisan par ville
+            Attorney consultations by city
           </h2>
           <div className="flex flex-wrap gap-2">
             {cities.slice(0, 20).map((ville) => (
@@ -377,17 +377,17 @@ export default async function DevisPage() {
         </div>
       </section>
 
-      {/* ─── DEVIS PAR SERVICE ET VILLE (MATRICE) ─────────────── */}
+      {/* CONSULTATIONS BY SERVICE AND CITY (MATRIX) */}
       <section className="py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">
-            Devis par m&eacute;tier et ville
+            Consultations by practice area and city
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.slice(0, 8).map((service) => (
               <div key={service.slug}>
                 <h3 className="font-semibold text-gray-900 mb-3">
-                  Devis {service.name.toLowerCase()}
+                  {service.name} consultation
                 </h3>
                 <div className="space-y-1.5">
                   {cities.slice(0, 6).map((ville) => (
@@ -407,13 +407,13 @@ export default async function DevisPage() {
         </div>
       </section>
 
-      {/* ─── VOIR AUSSI (CROSS-INTENT) ────────────────────────── */}
+      {/* SEE ALSO (CROSS-INTENT) */}
       <section className="py-12 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">See also</h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">Avis artisans</h3>
+              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">Attorney reviews</h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -422,13 +422,13 @@ export default async function DevisPage() {
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                   >
                     <ChevronRight className="w-3 h-3" />
-                    Avis {s.name.toLowerCase()}
+                    {s.name} reviews
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">Tarifs artisans</h3>
+              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">Attorney fees</h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -437,13 +437,13 @@ export default async function DevisPage() {
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                   >
                     <ChevronRight className="w-3 h-3" />
-                    Tarifs {s.name.toLowerCase()}
+                    {s.name} fees
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">Urgence artisans</h3>
+              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">Emergency attorneys</h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -452,7 +452,7 @@ export default async function DevisPage() {
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                   >
                     <ChevronRight className="w-3 h-3" />
-                    Urgence {s.name.toLowerCase()}
+                    Emergency {s.name.toLowerCase()}
                   </Link>
                 ))}
               </div>
@@ -462,19 +462,19 @@ export default async function DevisPage() {
               <div className="space-y-1.5">
                 <Link href="/services" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Tous les services
+                  All services
                 </Link>
                 <Link href="/cities" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Toutes les cities
+                  All cities
                 </Link>
                 <Link href="/states" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Tous les d&eacute;partements
+                  All states
                 </Link>
                 <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Toutes les r&eacute;gions
+                  All regions
                 </Link>
                 <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
@@ -482,15 +482,15 @@ export default async function DevisPage() {
                 </Link>
                 <Link href="/pricing" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Tarifs artisans
+                  Attorney fees
                 </Link>
                 <Link href="/emergency" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Urgence artisans
+                  Emergency attorneys
                 </Link>
                 <Link href="/reviews" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Avis artisans
+                  Attorney reviews
                 </Link>
               </div>
             </div>

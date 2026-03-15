@@ -5,7 +5,7 @@ export const diyArticles: Record<string, BlogArticle> = {
     title: 'Peindre son intérieur soi-même : guide complet',
     excerpt: 'Choix de peinture, préparation des murs, technique d\'application au rouleau… Tout ce qu\'il faut savoir pour réussir sa peinture intérieure en DIY, avec les erreurs à éviter et les cas où appeler un professionnel.',
     image: '/images/blog/peinture-interieure-diy-guide.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-01-20',
     readTime: '12 min',
     category: 'DIY',
@@ -67,7 +67,7 @@ export const diyArticles: Record<string, BlogArticle> = {
 
       '## 6. Budget : combien coûte une peinture intérieure en DIY ?',
 
-      'Le budget est le principal argument en faveur du DIY. Voici une estimation réaliste pour une pièce de 15 m² (environ 45 m² de surface à peindre, murs + plafond) :\n\n| Poste | Budget DIY | Avec un peintre pro |\n|-------|-----------|--------------------|\n| Peinture (2 couches) | 60 à 120 € | Inclus |\n| Sous-couche | 20 à 35 € | Inclus |\n| Enduit + ponçage | 10 à 20 € | Inclus |\n| Outillage | 40 à 80 € | — |\n| Bâches + ruban | 15 à 25 € | Inclus |\n| **Total** | **145 à 280 €** | **1 100 à 2 000 €** |\n| **Prix au m²** | **5 à 15 €/m²** | **25 à 45 €/m²** |\n\nL\'économie est significative : **60 à 70 %** en moyenne. Mais attention, ce calcul ne tient pas compte de votre temps. Comptez 2 à 3 jours de travail pour une pièce de 15 m² (préparation incluse), contre une journée pour un professionnel expérimenté.\n\nPour les chantiers importants (appartement complet, plus de 100 m²), l\'écart de coût justifie souvent un comparatif sérieux. [Demandez des devis gratuits](/practice-areas/peintre) pour comparer.',
+      'Le budget est le principal argument en faveur du DIY. Voici une estimation réaliste pour une pièce de 15 m² (environ 45 m² de surface à peindre, murs + plafond) :\n\n| Poste | Budget DIY | Avec un peintre pro |\n|-------|-----------|--------------------|\n| Peinture (2 couches) | 60 à 120 € | Inclus |\n| Sous-couche | 20 à 35 € | Inclus |\n| Enduit + ponçage | 10 à 20 € | Inclus |\n| Outillage | 40 à 80 € | — |\n| Bâches + ruban | 15 à 25 € | Inclus |\n| **Total** | **145 à 280 €** | **1 100 à 2 000 €** |\n| **Prix au m²** | **5 à 15 €/m²** | **25 à 45 €/m²** |\n\nL\'économie est significative : **60 à 70 %** en moyenne. Mais attention, ce calcul ne tient pas compte de votre temps. Comptez 2 à 3 jours de travail pour une pièce de 15 m² (préparation incluse), contre une journée pour un professionnel expérimenté.\n\nPour les chantiers importants (appartement complet, plus de 100 m²), l\'écart de coût justifie souvent un comparatif sérieux. [Demandez consultations gratuits](/practice-areas/peintre) pour comparer.',
 
       '## 7. Quand appeler un peintre professionnel ?',
 
@@ -77,7 +77,7 @@ export const diyArticles: Record<string, BlogArticle> = {
 
       '## 8. Checklist récapitulative avant de commencer',
 
-      'Avant de vous lancer, passez en revue cette liste :\n\n- ☐ Surface à peindre calculée (longueur × hauteur de chaque mur, moins les ouvertures)\n- ☐ Type de peinture choisi (acrylique pour pièces sèches, alkyde pour pièces humides)\n- ☐ Finition sélectionnée (mat plafond, satin murs, brillant boiseries)\n- ☐ Quantité de peinture achetée (1 litre couvre environ 10 m² en deux couches)\n- ☐ Sous-couche prévue si nécessaire (murs neufs, poreux ou changement de couleur)\n- ☐ Enduit et papier abrasif pour la préparation\n- ☐ Outillage complet (rouleau, pinceaux, bac, grille, ruban, bâche, escabeau)\n- ☐ Pièce vidée et protégée\n- ☐ Météo vérifiée (température entre 10 et 25 °C, pas de pluie si ventilation par les fenêtres)\n- ☐ Temps bloqué (minimum 2 jours pour une pièce standard)\n\nAvec cette préparation méthodique et les techniques décrites dans ce guide, vous avez toutes les clés pour obtenir un résultat digne d\'un professionnel — et réaliser une belle économie au passage. Et si le chantier vous semble trop ambitieux, n\'hésitez pas à [consulter un peintre qualifié](/practice-areas/peintre) pour un devis gratuit.'
+      'Avant de vous lancer, passez en revue cette liste :\n\n- ☐ Surface à peindre calculée (longueur × hauteur de chaque mur, moins les ouvertures)\n- ☐ Type de peinture choisi (acrylique pour pièces sèches, alkyde pour pièces humides)\n- ☐ Finition sélectionnée (mat plafond, satin murs, brillant boiseries)\n- ☐ Quantité de peinture achetée (1 litre couvre environ 10 m² en deux couches)\n- ☐ Sous-couche prévue si nécessaire (murs neufs, poreux ou changement de couleur)\n- ☐ Enduit et papier abrasif pour la préparation\n- ☐ Outillage complet (rouleau, pinceaux, bac, grille, ruban, bâche, escabeau)\n- ☐ Pièce vidée et protégée\n- ☐ Météo vérifiée (température entre 10 et 25 °C, pas de pluie si ventilation par les fenêtres)\n- ☐ Temps bloqué (minimum 2 jours pour une pièce standard)\n\nAvec cette préparation méthodique et les techniques décrites dans ce guide, vous avez toutes les clés pour obtenir un résultat digne d\'un professionnel — et réaliser une belle économie au passage. Et si le chantier vous semble trop ambitieux, n\'hésitez pas à [consulter un peintre qualifié](/practice-areas/peintre) pour a consultation gratuit.'
     ]
   },
 
@@ -85,7 +85,7 @@ export const diyArticles: Record<string, BlogArticle> = {
     title: 'Poser du parquet flottant soi-même : tutoriel pas à pas',
     excerpt: 'Stratifié ou contrecollé, sous-couche, acclimatation, pose clipsée, découpes et plinthes : le guide complet pour poser votre parquet flottant en DIY sans mauvaise surprise.',
     image: '/images/blog/poser-parquet-flottant-diy.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-08',
     readTime: '13 min',
     category: 'DIY',
@@ -163,7 +163,7 @@ export const diyArticles: Record<string, BlogArticle> = {
     title: 'Installer étagères et rangements muraux : guide pratique',
     excerpt: 'Chevilles Molly, Fischer, chimiques : quel système de fixation pour quel type de mur ? Guide complet pour installer vos étagères et rangements muraux en toute sécurité.',
     image: '/images/blog/installer-etageres-rangement-diy.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-22',
     readTime: '11 min',
     category: 'DIY',

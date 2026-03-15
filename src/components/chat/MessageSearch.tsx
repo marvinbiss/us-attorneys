@@ -163,7 +163,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  {message.sender_type === 'artisan' ? 'Artisan' : 'Client'}
+                  {message.sender_type === 'attorney' ? 'Attorney' : 'Client'}
                 </span>
                 <span className="text-xs text-gray-400">
                   {formatDate(message.created_at)}

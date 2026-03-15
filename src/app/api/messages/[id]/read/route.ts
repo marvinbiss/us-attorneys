@@ -19,7 +19,7 @@ export async function POST(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     // Verify user has access to the conversation
@@ -31,7 +31,7 @@ export async function POST(
 
     if (!message) {
       return NextResponse.json(
-        { success: false, error: { message: 'Message non trouvé' } },
+        { success: false, error: { message: 'Message not found' } },
         { status: 404 }
       )
     }
@@ -61,7 +61,7 @@ export async function POST(
   } catch (error) {
     logger.error('Mark as read error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

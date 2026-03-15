@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Mail, ArrowRight, ArrowLeft, CheckCircle, Loader2, AlertCircle } from 'lucide-react'
 
-export default function MotDePasseOubliePage() {
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -25,12 +25,12 @@ export default function MotDePasseOubliePage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'envoi')
+        throw new Error(data.error || 'Error sending email')
       }
 
       setIsSubmitted(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi')
+      setError(err instanceof Error ? err.message : 'Error sending email')
     } finally {
       setIsLoading(false)
     }
@@ -44,21 +44,21 @@ export default function MotDePasseOubliePage() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Email envoyé !
+            Email Sent!
           </h1>
           <p className="text-gray-600 mb-8">
-            Si un compte existe avec l'adresse <strong>{email}</strong>,
-            vous recevrez un email avec les instructions pour réinitialiser votre mot de passe.
+            If an account exists with the address <strong>{email}</strong>,
+            you will receive an email with instructions to reset your password.
           </p>
           <p className="text-sm text-gray-500 mb-6">
-            Vérifiez également votre dossier spam si vous ne voyez pas l'email.
+            Also check your spam folder if you don't see the email.
           </p>
           <Link
             href="/login"
             className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            Retour à la connexion
+            Back to Sign In
           </Link>
         </div>
       </div>
@@ -72,17 +72,17 @@ export default function MotDePasseOubliePage() {
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center space-x-2 mb-6">
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">SA</span>
+                <span className="text-white font-bold text-xl">UA</span>
               </div>
               <span className="text-2xl font-bold text-gray-900">
-                Services<span className="text-blue-600">Artisans</span>
+                US<span className="text-blue-600">Attorneys</span>
               </span>
             </Link>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Mot de passe oublié ?
+              Forgot Password?
             </h1>
             <p className="text-gray-600">
-              Entrez votre email pour recevoir un lien de réinitialisation
+              Enter your email to receive a password reset link
             </p>
           </div>
 
@@ -96,7 +96,7 @@ export default function MotDePasseOubliePage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Adresse email
+                Email Address
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -107,7 +107,7 @@ export default function MotDePasseOubliePage() {
                   required
                   disabled={isLoading}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
-                  placeholder="votre@email.com"
+                  placeholder="you@email.com"
                 />
               </div>
             </div>
@@ -120,11 +120,11 @@ export default function MotDePasseOubliePage() {
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Envoi en cours...
+                  Sending...
                 </>
               ) : (
                 <>
-                  Envoyer le lien
+                  Send Reset Link
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -137,15 +137,15 @@ export default function MotDePasseOubliePage() {
               className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
-              Retour à la connexion
+              Back to Sign In
             </Link>
           </div>
         </div>
 
         <p className="mt-6 text-center text-sm text-gray-500">
-          Vous n'avez pas de compte ?{' '}
+          Don't have an account?{' '}
           <Link href="/register" className="text-blue-600 hover:underline">
-            Créer un compte
+            Create Account
           </Link>
         </p>
       </div>

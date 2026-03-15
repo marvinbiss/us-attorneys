@@ -6,7 +6,7 @@ import { isValidUuid } from '@/lib/sanitize'
 
 export const dynamic = 'force-dynamic'
 
-// POST - Exporter les données d'un utilisateur (RGPD)
+// POST - Export user data (GDPR)
 export async function POST(
   _request: NextRequest,
   { params }: { params: { userId: string } }
@@ -15,7 +15,7 @@ export async function POST(
     // Validate userId parameter
     if (!isValidUuid(params.userId)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -29,7 +29,7 @@ export async function POST(
     const supabase = createAdminClient()
     const userId = params.userId
 
-    // Récupérer toutes les données de l'utilisateur
+    // Retrieve all user data
     const [
       { data: profile },
       { data: bookings },
@@ -46,7 +46,7 @@ export async function POST(
       reviews: reviews || [],
       // La table conversations n'est pas disponible dans ce contexte d'export.
       conversations: null,
-      _note: 'Données de conversations non disponibles dans cet export',
+      _note: 'Conversation data not available in this export',
       exportedAt: new Date().toISOString(),
       exportedBy: authResult.admin.id,
     }
@@ -57,12 +57,12 @@ export async function POST(
     return NextResponse.json({
       success: true,
       data: exportData,
-      message: 'Export RGPD généré',
+      message: 'GDPR export generated',
     })
   } catch (error) {
     logger.error('Admin GDPR export error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

@@ -32,7 +32,7 @@ export const LauncherButton = memo(function LauncherButton({
           : { type: 'spring', stiffness: 260, damping: 20 }
       }
       onClick={onClick}
-      aria-label="Ouvrir le chat d'estimation"
+      aria-label="Open estimation chat"
       className={
         'relative flex items-center justify-center bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2 transition-all duration-500 ' +
         (isExpanded
@@ -60,7 +60,7 @@ export const LauncherButton = memo(function LauncherButton({
           animate={{ opacity: 1, width: 'auto' }}
           className="text-sm font-semibold whitespace-nowrap overflow-hidden"
         >
-          Estimation gratuite
+          Free estimate
         </motion.span>
       )}
     </motion.button>

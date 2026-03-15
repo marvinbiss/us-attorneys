@@ -35,29 +35,29 @@ function truncateTitle(title: string, maxLen = 42): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { ville: villeSlug, quartier: quartierSlug } = await params
   const result = getNeighborhoodBySlug(villeSlug, quartierSlug)
-  if (!result) return { title: 'Quartier non trouvé' }
+  if (!result) return { title: 'Neighborhood Not Found' }
 
   const { city, neighborhoodName } = result
-  const metaContent = generateQuartierContent(city as never, neighborhoodName)
+  const metaContent = generateQuartierContent(city, neighborhoodName)
   const cityImage = getCityImage(villeSlug)
 
   const titleHash = Math.abs(hashCode(`title-quartier-${villeSlug}-${quartierSlug}`))
   const titleTemplates = [
-    `Artisans à ${neighborhoodName}, ${city.name}`,
-    `${neighborhoodName} (${city.name}) — Artisans`,
-    `Trouver un artisan à ${neighborhoodName}`,
-    `${neighborhoodName}, ${city.name} : devis gratuit`,
-    `Artisans qualifiés — ${neighborhoodName}`,
+    `Attorneys in ${neighborhoodName}, ${city.name}`,
+    `${neighborhoodName} (${city.name}) — Attorneys`,
+    `Find an Attorney in ${neighborhoodName}`,
+    `${neighborhoodName}, ${city.name}: Free Consultation`,
+    `Qualified Attorneys — ${neighborhoodName}`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-quartier-${villeSlug}-${quartierSlug}`))
   const descTemplates = [
-    `Trouvez un artisan qualifié à ${neighborhoodName}, ${city.name}. ${metaContent.profile.eraLabel}, ${practiceAreas.length} corps de métier. Devis gratuits.`,
-    `${neighborhoodName} à ${city.name} (${city.stateCode}) : artisans référencés SIREN. ${metaContent.profile.eraLabel}. Comparez les devis.`,
-    `Artisans à ${neighborhoodName}, ${city.name}. ${metaContent.profile.densityLabel}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit en ligne.`,
-    `${practiceAreas.length} métiers à ${neighborhoodName} (${city.name}). ${city.stateName}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit.`,
-    `Tous les artisans de ${neighborhoodName}, ${city.name} (${city.stateCode}). ${metaContent.profile.eraLabel}. Comparez gratuitement.`,
+    `Find a qualified attorney in ${neighborhoodName}, ${city.name}. ${metaContent.profile.eraLabel}, ${practiceAreas.length} practice areas. Free consultations.`,
+    `${neighborhoodName} in ${city.name} (${city.stateCode}): verified attorneys. ${metaContent.profile.eraLabel}. Compare profiles.`,
+    `Attorneys in ${neighborhoodName}, ${city.name}. ${metaContent.profile.densityLabel}, ${metaContent.profile.eraLabel.toLowerCase()}. Free consultation online.`,
+    `${practiceAreas.length} practice areas in ${neighborhoodName} (${city.name}). ${city.stateName}, ${metaContent.profile.eraLabel.toLowerCase()}. Free consultation.`,
+    `All attorneys in ${neighborhoodName}, ${city.name} (${city.stateCode}). ${metaContent.profile.eraLabel}. Compare for free.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -66,13 +66,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     // All quartier pages indexed — each has unique content (profil bâti, FAQ, données)
     openGraph: {
-      locale: 'fr_FR',
+      locale: 'en_US',
       title,
       description,
       type: 'website',
       images: [cityImage
         ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
-        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Artisans à ${neighborhoodName}, ${city.name}` }
+        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Attorneys in ${neighborhoodName}, ${city.name}` }
       ],
     },
     twitter: {
@@ -97,7 +97,7 @@ export default async function QuartierPage({ params }: PageProps) {
   const regionSlug = stateData?.region ? getRegionSlugByName(stateData.region) : undefined
   const deptSlug = stateData?.slug
   const cityImage = getCityImage(villeSlug)
-  const content = generateQuartierContent(city as never, neighborhoodName)
+  const content = generateQuartierContent(city, neighborhoodName)
 
   // Reorder services based on quartier building profile
   const orderedServices = [...practiceAreas].sort((a, b) => {
@@ -109,14 +109,14 @@ export default async function QuartierPage({ params }: PageProps) {
 
   // JSON-LD
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Villes', url: '/cities' },
+    { name: 'Home', url: '/' },
+    { name: 'Cities', url: '/cities' },
     { name: city.name, url: `/cities/${villeSlug}` },
     { name: neighborhoodName, url: `/cities/${villeSlug}/${quartierSlug}` },
   ])
   const collectionSchema = getCollectionPageSchema({
-    name: `Artisans à ${neighborhoodName}, ${city.name}`,
-    description: `Annuaire d'artisans qualifiés dans le quartier ${neighborhoodName} à ${city.name}. ${practiceAreas.length} corps de métier disponibles.`,
+    name: `Attorneys in ${neighborhoodName}, ${city.name}`,
+    description: `Directory of qualified attorneys in the ${neighborhoodName} neighborhood of ${city.name}. ${practiceAreas.length} practice areas available.`,
     url: `/cities/${villeSlug}/${quartierSlug}`,
     itemCount: practiceAreas.length,
   })
@@ -159,7 +159,7 @@ export default async function QuartierPage({ params }: PageProps) {
           <div className="mb-10">
             <Breadcrumb
               items={[
-                { label: 'Villes', href: '/cities' },
+                { label: 'Cities', href: '/cities' },
                 { label: city.name, href: `/cities/${villeSlug}` },
                 { label: neighborhoodName },
               ]}
@@ -171,7 +171,7 @@ export default async function QuartierPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3 mb-5">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
                 <MapPin className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">Quartier</span>
+                <span className="text-sm font-medium text-emerald-200">Neighborhood</span>
                 <span className="w-1 h-1 rounded-full bg-emerald-400/50" />
                 <span className="text-sm font-medium text-white/90">{city.name}</span>
               </div>
@@ -184,11 +184,11 @@ export default async function QuartierPage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-quartier-${city.slug}-${quartierSlug}`))
               const h1Templates = [
-                `Artisans à ${neighborhoodName}, ${city.name}`,
-                `Trouver un artisan à ${neighborhoodName} (${city.name})`,
-                `${neighborhoodName}, ${city.name} : artisans qualifiés`,
-                `Artisans dans le quartier ${neighborhoodName} à ${city.name}`,
-                `${city.name} ${neighborhoodName} — artisans de confiance`,
+                `Attorneys in ${neighborhoodName}, ${city.name}`,
+                `Find an Attorney in ${neighborhoodName} (${city.name})`,
+                `${neighborhoodName}, ${city.name}: Qualified Attorneys`,
+                `Attorneys in the ${neighborhoodName} Neighborhood of ${city.name}`,
+                `${city.name} ${neighborhoodName} — Trusted Attorneys`,
               ]
               return (
                 <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -197,7 +197,7 @@ export default async function QuartierPage({ params }: PageProps) {
               )
             })()}
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {practiceAreas.length} corps de métier disponibles dans le quartier {neighborhoodName}. {content.profile.eraLabel} en {content.profile.densityLabel.toLowerCase()}. Devis gratuits.
+              {practiceAreas.length} practice areas available in the {neighborhoodName} neighborhood. {content.profile.eraLabel} in {content.profile.densityLabel.toLowerCase()}. Free consultations.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
@@ -211,16 +211,16 @@ export default async function QuartierPage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Users className="w-4 h-4 text-emerald-400" />
-                <span>{city.population} habitants</span>
+                <span>{city.population} residents</span>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Bar-verified profiles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Free consultations</span>
               </div>
             </div>
           </div>
@@ -236,7 +236,7 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Caractéristiques du quartier {neighborhoodName}
+                Characteristics of the {neighborhoodName} Neighborhood
               </h2>
               <p className="text-sm text-slate-500">{content.profile.eraLabel} · {content.profile.densityLabel}</p>
             </div>
@@ -248,7 +248,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <Building2 className="w-4 h-4 text-amber-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">Type de bâti</p>
+                  <p className="text-sm font-semibold text-slate-900">Building Type</p>
                   <p className="text-sm text-slate-500">{content.profile.eraLabel}</p>
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <MapPin className="w-4 h-4 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">Densité urbaine</p>
+                  <p className="text-sm font-semibold text-slate-900">Urban Density</p>
                   <p className="text-sm text-slate-500">{content.profile.densityLabel}</p>
                 </div>
               </div>
@@ -267,13 +267,13 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Population</p>
-                  <p className="text-sm text-slate-500">{city.population} habitants</p>
+                  <p className="text-sm text-slate-500">{city.population} residents</p>
                 </div>
               </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed mb-4">{content.profile.architecturalNote}</p>
             <div>
-              <p className="text-sm font-semibold text-slate-900 mb-2">Problématiques courantes à {neighborhoodName} :</p>
+              <p className="text-sm font-semibold text-slate-900 mb-2">Common Issues in {neighborhoodName}:</p>
               <ul className="grid sm:grid-cols-2 gap-2">
                 {(() => {
                   const issueHash = Math.abs(hashCode(`issues-${villeSlug}-${quartierSlug}`))
@@ -291,7 +291,7 @@ export default async function QuartierPage({ params }: PageProps) {
               </ul>
             </div>
             <p className="text-xs text-gray-400 mt-3 italic">
-              * Profil estimé à partir des caractéristiques urbaines de la ville. Les données réelles peuvent varier selon les constructions du quartier.
+              * Profile estimated from the city&apos;s urban characteristics. Actual data may vary by neighborhood construction.
             </p>
           </div>
         </section>
@@ -304,9 +304,9 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Services recommandés à {neighborhoodName}
+                Recommended Services in {neighborhoodName}
               </h2>
-              <p className="text-sm text-slate-500">{practiceAreas.length} corps de métier · classés par pertinence pour ce bâti</p>
+              <p className="text-sm text-slate-500">{practiceAreas.length} practice areas · ranked by relevance for this area</p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -317,9 +317,9 @@ export default async function QuartierPage({ params }: PageProps) {
                 className={`rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-emerald-50 border-2 border-emerald-200' : 'bg-white border border-gray-100'}`}
               >
                 <h3 className="font-semibold text-slate-800 group-hover:text-emerald-600 transition-colors text-sm">{service.name}</h3>
-                <p className="text-xs text-slate-400 mt-1.5">à {neighborhoodName}</p>
+                <p className="text-xs text-slate-400 mt-1.5">in {neighborhoodName}</p>
                 {topServiceSlugs.has(service.slug) && (
-                  <span className="inline-block mt-2 text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Prioritaire</span>
+                  <span className="inline-block mt-2 text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Top Priority</span>
                 )}
               </Link>
             ))}
@@ -329,27 +329,27 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── SEO CONTENT (5 unique sections per profile) ──── */}
         <section className="mb-16 prose prose-slate max-w-none">
           <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-            Trouver un artisan dans le quartier {neighborhoodName}
+            Find an Attorney in the {neighborhoodName} Neighborhood
           </h2>
           <p className="text-slate-600 leading-relaxed">{content.intro}</p>
 
           <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Le bâti à {neighborhoodName} : ce qu&apos;il faut savoir
+            The {neighborhoodName} Area: What You Need to Know
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.batimentContext}</p>
 
           <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Services les plus demandés à {neighborhoodName}
+            Most Requested Services in {neighborhoodName}
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.servicesDemandes}</p>
 
           <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Conseils pour vos travaux à {neighborhoodName}
+            Tips for Legal Services in {neighborhoodName}
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.conseils}</p>
 
           <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Pourquoi choisir un artisan proche de {neighborhoodName} ?
+            Why Choose an Attorney Near {neighborhoodName}?
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.proximite}</p>
         </section>
@@ -364,7 +364,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <Home className="w-4 h-4 text-amber-600" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Immobilier dans le quartier {neighborhoodName}
+                  Real Estate in the {neighborhoodName} Neighborhood
                 </h3>
               </div>
               <p className="text-slate-600 leading-relaxed">{content.dataDriven.immobilierQuartier}</p>
@@ -372,12 +372,12 @@ export default async function QuartierPage({ params }: PageProps) {
                 <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                   <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
                     <div className="text-lg font-bold text-amber-700">{formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²</div>
-                    <div className="text-xs text-slate-500 mt-1">Prix estimé quartier</div>
+                    <div className="text-xs text-slate-500 mt-1">Est. Neighborhood Price</div>
                   </div>
                   {content.dataDriven.statCards.artisansProximite > 0 && (
                     <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
                       <div className="text-lg font-bold text-amber-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
-                      <div className="text-xs text-slate-500 mt-1">Artisans à proximité</div>
+                      <div className="text-xs text-slate-500 mt-1">Attorneys Nearby</div>
                     </div>
                   )}
                 </div>
@@ -391,7 +391,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <BarChart3 className="w-4 h-4 text-emerald-600" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Artisans autour de {neighborhoodName}
+                  Legal Professionals Around {neighborhoodName}
                 </h3>
               </div>
               <p className="text-slate-600 leading-relaxed">{content.dataDriven.marcheArtisanalQuartier}</p>
@@ -399,12 +399,12 @@ export default async function QuartierPage({ params }: PageProps) {
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
                     <div className="text-lg font-bold text-emerald-700">{formatNumber(content.dataDriven.statCards.artisansBtp)}</div>
-                    <div className="text-xs text-slate-500 mt-1">Artisans BTP du secteur</div>
+                    <div className="text-xs text-slate-500 mt-1">Law Firms in the Area</div>
                   </div>
                   {content.dataDriven.statCards.artisansProximite > 0 && (
                     <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
                       <div className="text-lg font-bold text-emerald-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
-                      <div className="text-xs text-slate-500 mt-1">Entreprises artisanales</div>
+                      <div className="text-xs text-slate-500 mt-1">Legal Practices</div>
                     </div>
                   )}
                 </div>
@@ -418,7 +418,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <Zap className="w-4 h-4 text-orange-600" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Performance énergétique à {neighborhoodName}
+                  Energy Performance in {neighborhoodName}
                 </h3>
               </div>
               <p className="text-slate-600 leading-relaxed">{content.dataDriven.energetiqueQuartier}</p>
@@ -426,7 +426,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
                     <div className="text-lg font-bold text-orange-700">{content.dataDriven.statCards.passoiresDpe} %</div>
-                    <div className="text-xs text-slate-500 mt-1">Passoires thermiques estimées</div>
+                    <div className="text-xs text-slate-500 mt-1">Est. Energy-Inefficient</div>
                   </div>
                 </div>
               )}
@@ -439,7 +439,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <Thermometer className="w-4 h-4 text-sky-600" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Climat et travaux à {neighborhoodName}
+                  Climate and Conditions in {neighborhoodName}
                 </h3>
               </div>
               <p className="text-slate-600 leading-relaxed">{content.dataDriven.climatQuartier}</p>
@@ -447,13 +447,13 @@ export default async function QuartierPage({ params }: PageProps) {
                 {content.dataDriven.statCards.joursGel != null && (
                   <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
                     <div className="text-lg font-bold text-sky-700">{content.dataDriven.statCards.joursGel}</div>
-                    <div className="text-xs text-slate-500 mt-1">Jours de gel/an</div>
+                    <div className="text-xs text-slate-500 mt-1">Frost Days/yr</div>
                   </div>
                 )}
                 {content.dataDriven.statCards.periodeTravaux && (
                   <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
                     <div className="text-sm font-bold text-sky-700">{content.dataDriven.statCards.periodeTravaux}</div>
-                    <div className="text-xs text-slate-500 mt-1">Période travaux ext.</div>
+                    <div className="text-xs text-slate-500 mt-1">Best Period for Ext. Work</div>
                   </div>
                 )}
               </div>
@@ -464,15 +464,15 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-16">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial Methodology</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les informations de cette page sont compilées à partir de données publiques (INSEE, base SIRENE, cadastre).
-              Le profil de bâti est estimé selon les caractéristiques urbaines de {city.name} et peut varier d&apos;un immeuble à l&apos;autre.
+              The information on this page is compiled from public sources (census data, bar association records, public records).
+              The area profile is estimated based on the urban characteristics of {city.name} and may vary from one building to another.
               {content.dataDriven?.statCards.prixM2Quartier
-                ? <> Le prix immobilier estimé à {neighborhoodName} ({formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) est dérivé des moyennes communales ajustées par époque de construction ({content.profile.eraLabel.toLowerCase()}) et densité urbaine ({content.profile.densityLabel.toLowerCase()}).</>
-                : <> Les tarifs sont indicatifs et basés sur des moyennes régionales ({stateData?.region}).</>
+                ? <> The estimated real estate price in {neighborhoodName} ({formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) is derived from city averages adjusted by construction era ({content.profile.eraLabel.toLowerCase()}) and urban density ({content.profile.densityLabel.toLowerCase()}).</>
+                : <> Fees are indicative and based on regional averages ({stateData?.region}).</>
               }{' '}
-              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations des artisans référencés.
+              US Attorneys is an independent directory — we do not provide legal services and do not guarantee the services of listed attorneys.
             </p>
             {content.dataDriven?.dataSources && content.dataDriven.dataSources.length > 0 && (
               <p className="text-xs text-slate-400 mt-2">
@@ -492,9 +492,9 @@ export default async function QuartierPage({ params }: PageProps) {
               </div>
               <div>
                 <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                  Autres quartiers à {city.name}
+                  Other Neighborhoods in {city.name}
                 </h2>
-                <p className="text-sm text-slate-500">{quartiers.length} autres quartiers</p>
+                <p className="text-sm text-slate-500">{quartiers.length} other neighborhoods</p>
               </div>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-6">
@@ -521,7 +521,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 <Building2 className="w-5 h-5 text-violet-600" />
               </div>
               <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                Villes proches de {city.name}
+                Cities Near {city.name}
               </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -530,7 +530,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <MapPin className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 flex-shrink-0 transition-colors" />
                   <div className="min-w-0">
                     <span className="block text-sm font-medium text-slate-800 group-hover:text-emerald-600 truncate transition-colors">{v.name}</span>
-                    <span className="text-xs text-slate-400">{v.population} hab.</span>
+                    <span className="text-xs text-slate-400">{v.population} pop.</span>
                   </div>
                 </Link>
               ))}
@@ -545,7 +545,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <HelpCircle className="w-5 h-5 text-amber-600" />
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              Questions fréquentes
+              Frequently Asked Questions
             </h2>
           </div>
           <div className="space-y-4">
@@ -568,9 +568,9 @@ export default async function QuartierPage({ params }: PageProps) {
           {(() => {
             const ctaHash = Math.abs(hashCode(`cta-${villeSlug}-${quartierSlug}`))
             const ctaTemplates = [
-              { h: `Besoin d'un artisan à ${neighborhoodName} ?`, p: `Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés à ${city.name}.` },
-              { h: `Travaux sur du ${content.profile.eraLabel.toLowerCase()} à ${neighborhoodName} ?`, p: `Nos artisans connaissent les spécificités du bâti de votre quartier. Devis gratuit et sans engagement.` },
-              { h: `Rénovation à ${neighborhoodName}, ${city.name}`, p: `Trouvez l'artisan adapté au ${content.profile.eraLabel.toLowerCase()} de votre quartier. ${practiceAreas.length} métiers disponibles.` },
+              { h: `Need an Attorney in ${neighborhoodName}?`, p: `Describe your legal needs and receive free consultations from qualified attorneys in ${city.name}.` },
+              { h: `Legal Issues in ${content.profile.eraLabel.toLowerCase()} Area of ${neighborhoodName}?`, p: `Our attorneys know the specifics of your neighborhood. Free consultation, no obligation.` },
+              { h: `Legal Services in ${neighborhoodName}, ${city.name}`, p: `Find the right attorney for the ${content.profile.eraLabel.toLowerCase()} area of your neighborhood. ${practiceAreas.length} practice areas available.` },
             ]
             const cta = ctaTemplates[ctaHash % ctaTemplates.length]
             return (
@@ -586,10 +586,10 @@ export default async function QuartierPage({ params }: PageProps) {
           })()}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Demander un devis gratuit
+              Request a Free Consultation
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              Voir les services <ArrowRight className="w-4 h-4" />
+              View Practice Areas <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -599,39 +599,39 @@ export default async function QuartierPage({ params }: PageProps) {
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
-            Voir aussi
+            See Also
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {neighborhoodName}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Practice Areas in {neighborhoodName}</h3>
               <div className="space-y-2">
                 {practiceAreas.slice(0, 6).map((s) => (
                   <Link key={s.slug} href={`/practice-areas/${s.slug}/${villeSlug}/${quartierSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    {s.name} à {neighborhoodName}
+                    {s.name} in {neighborhoodName}
                   </Link>
                 ))}
                 {practiceAreas.slice(6, 10).map((s) => (
                   <Link key={s.slug} href={`/practice-areas/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    {s.name} à {city.name}
+                    {s.name} in {city.name}
                   </Link>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {stateData?.region}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Cities in {stateData?.region}</h3>
               <div className="space-y-2">
                 {regionVilles.map((v) => (
                   <Link key={v.slug} href={`/cities/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Artisans à {v.name}
+                    Attorneys in {v.name}
                   </Link>
                 ))}
               </div>
               <Link href="/cities" className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 text-sm font-medium mt-3">
-                Toutes les cities <ArrowRight className="w-4 h-4" />
+                All Cities <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -640,12 +640,12 @@ export default async function QuartierPage({ params }: PageProps) {
               <div className="space-y-2">
                 <Link href={`/cities/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Artisans à {city.name}
+                  Attorneys in {city.name}
                 </Link>
                 {regionSlug && (
                   <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Région {stateData?.region}
+                    Region {stateData?.region}
                   </Link>
                 )}
                 {deptSlug && (
@@ -656,19 +656,19 @@ export default async function QuartierPage({ params }: PageProps) {
                 )}
                 <Link href={`/quotes/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Devis plombier à {city.name}
+                  Family Law Consultation in {city.name}
                 </Link>
                 <Link href={`/quotes/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Devis électricien à {city.name}
+                  Personal Injury Consultation in {city.name}
                 </Link>
                 <Link href="/services" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Tous les services
+                  All Practice Areas
                 </Link>
                 <Link href="/quotes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Demander un devis
+                  Request a Consultation
                 </Link>
               </div>
             </div>
@@ -679,19 +679,19 @@ export default async function QuartierPage({ params }: PageProps) {
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>
           <div className="flex flex-wrap gap-4">
             <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Processus de vérification
+              Verification Process
             </Link>
             <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Politique d&apos;avis
+              Review Policy
             </Link>
             <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Médiation
+              Mediation
             </Link>
             <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              CGV
+              Terms of Service
             </Link>
           </div>
         </div>

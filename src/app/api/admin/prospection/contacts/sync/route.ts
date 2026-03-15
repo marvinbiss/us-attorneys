@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     const parsed = syncSchema.safeParse(rawBody)
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Donnees invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     const department = parsed.data.department
@@ -42,6 +42,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Sync artisans error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

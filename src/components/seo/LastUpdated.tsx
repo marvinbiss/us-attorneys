@@ -2,7 +2,7 @@ import { Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface LastUpdatedProps {
-  /** Label before the date. Default: "Tarifs vérifiés et mis à jour le" */
+  /** Label before the date. Default: "Fees verified and updated on" */
   label?: string
   className?: string
 }
@@ -12,11 +12,11 @@ interface LastUpdatedProps {
  * Uses <time datetime="..."> for SEO structured data.
  */
 export default function LastUpdated({
-  label = 'Tarifs vérifiés et mis à jour le',
+  label = 'Fees verified and updated on',
   className,
 }: LastUpdatedProps) {
   const now = new Date()
-  const formatted = now.toLocaleDateString('fr-FR', {
+  const formatted = now.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',

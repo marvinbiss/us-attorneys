@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 
 interface ConversationListProps {
   userId: string
-  userType: 'client' | 'artisan'
+  userType: 'client' | 'attorney'
   selectedId?: string
   onSelect: (conversation: Conversation) => void
 }

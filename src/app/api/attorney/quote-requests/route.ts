@@ -1,6 +1,6 @@
 /**
- * Artisan Devis (Quotes) API
- * GET: Get quotes sent by the artisan (from `quotes` table)
+ * Attorney Quotes API
+ * GET: Get quotes sent by the attorney (from `quotes` table)
  * POST: Send a quote to a client for a given devis_request
  */
 
@@ -20,7 +20,7 @@ const createQuoteSchema = z.object({
   description: z.string().min(1).max(5000),
   valid_until: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD required')
     .optional(),
 })
 
@@ -37,7 +37,7 @@ export async function GET() {
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
     }
 
     // Fetch quotes sent by this provider
@@ -60,15 +60,15 @@ export async function GET() {
     if (quotesError) {
       logger.error('Error fetching quotes:', quotesError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des devis' } },
+        { success: false, error: { message: 'Error retrieving consultations' } },
         { status: 500 }
       )
     }
 
     return NextResponse.json({ devis: quotes || [] })
   } catch (error) {
-    logger.error('Artisan devis GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney quote GET error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -85,14 +85,14 @@ export async function POST(request: Request) {
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
     }
 
     const body = await request.json()
     const result = createQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       today.setHours(0, 0, 0, 0)
       if (validUntilDate < today) {
         return NextResponse.json(
-          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
+          { success: false, error: { message: 'The expiration date must be in the future' } },
           { status: 400 }
         )
       }
@@ -140,7 +140,7 @@ export async function POST(request: Request) {
 
     if (existing) {
       return NextResponse.json(
-        { success: false, error: { message: 'Un devis a déjà été envoyé pour cette demande' } },
+        { success: false, error: { message: 'A consultation has already been sent for this request' } },
         { status: 409 }
       )
     }
@@ -162,7 +162,7 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Error inserting quote:', insertError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la création du devis' } },
+        { success: false, error: { message: 'Error creating the consultation' } },
         { status: 500 }
       )
     }
@@ -170,11 +170,11 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       devis: quote,
-      message: 'Devis envoyé avec succès',
+      message: 'Consultation sent successfully',
     })
   } catch (error) {
-    logger.error('Artisan devis POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney quote POST error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -184,7 +184,7 @@ const updateQuoteSchema = z.object({
   description: z.string().min(1).max(5000).optional(),
   valid_until: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD required')
     .optional(),
 })
 
@@ -200,14 +200,14 @@ export async function PUT(request: Request) {
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
     }
 
     const body = await request.json()
     const result = updateQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -220,7 +220,7 @@ export async function PUT(request: Request) {
       today.setHours(0, 0, 0, 0)
       if (validDate <= today) {
         return NextResponse.json(
-          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
+          { success: false, error: { message: 'The expiration date must be in the future' } },
           { status: 400 }
         )
       }
@@ -235,11 +235,11 @@ export async function PUT(request: Request) {
       .single()
 
     if (!existingQuote) {
-      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
     }
     if (existingQuote.status !== 'pending') {
       return NextResponse.json(
-        { success: false, error: { message: 'Seul un devis en attente peut être modifié' } },
+        { success: false, error: { message: 'Only a pending consultation can be modified' } },
         { status: 403 }
       )
     }
@@ -260,14 +260,14 @@ export async function PUT(request: Request) {
     if (updateError) {
       logger.error('Error updating quote:', updateError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la mise à jour du devis' } },
+        { success: false, error: { message: 'Error updating the consultation' } },
         { status: 500 }
       )
     }
 
     return NextResponse.json({ success: true, devis: quote })
   } catch (error) {
-    logger.error('Artisan devis PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney quote PUT error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

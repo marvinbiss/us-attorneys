@@ -1,5 +1,5 @@
 /**
- * User Signin API - ServicesArtisans
+ * User Signin API - US Attorneys
  * Handles user authentication with proper cookie management
  */
 
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     // Validate environment
     if (!supabaseUrl || !supabaseAnonKey) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Configuration serveur manquante'),
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Missing server configuration'),
         { status: 500 }
       )
     }
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Donnees invalides',
+          'Invalid data',
           { fields: formatZodErrors(validation.errors) }
         ),
         { status: 400 }
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       // Handle specific error types
       if (error.message.includes('Invalid login credentials')) {
         return NextResponse.json(
-          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Email ou mot de passe incorrect'),
+          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Incorrect email or password'),
           { status: 401 }
         )
       }
@@ -102,11 +102,11 @@ export async function POST(request: Request) {
       .eq('id', data.user.id)
       .single()
 
-    // Déterminer si l'utilisateur est un artisan basé sur role
-    const isArtisan = profile?.role === 'artisan'
+    // Determine if the user is an attorney based on role
+    const isAttorney = profile?.role === 'attorney'
 
-    // SECURITY FIX: Ne pas exposer le refresh token dans la réponse JSON
-    // Le refresh token est géré par les cookies HTTP-only de Supabase
+    // SECURITY FIX: Do not expose the refresh token in the JSON response
+    // The refresh token is managed by Supabase HTTP-only cookies
     const response = NextResponse.json(
       createSuccessResponse({
         user: {
@@ -114,8 +114,8 @@ export async function POST(request: Request) {
           email: data.user.email,
           fullName: profile?.full_name || data.user.user_metadata?.full_name || `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() || null,
           role: profile?.role || 'user',
-          userType: profile?.role === 'artisan' ? 'artisan' : 'client',
-          isArtisan,
+          userType: profile?.role === 'attorney' ? 'attorney' : 'client',
+          isAttorney,
         },
         session: {
           accessToken: data.session.access_token,
@@ -138,7 +138,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Signin error:', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la connexion'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during connection'),
       { status: 500 }
     )
   }

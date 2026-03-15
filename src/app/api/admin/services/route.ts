@@ -65,13 +65,13 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin services list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// POST - Créer un service
+// POST - Create a service
 export async function POST(request: NextRequest) {
   try {
     // Verify admin with services:write permission
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     const result = createServiceSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     const meta_title = rawMetaTitle?.replace(/<[^>]*>/g, '').trim()
     const meta_description = rawMetaDescription?.replace(/<[^>]*>/g, '').trim()
 
-    // Générer le slug
+    // Generate the slug
     const slug = name
       .toLowerCase()
       .normalize('NFD')
@@ -124,13 +124,13 @@ export async function POST(request: NextRequest) {
     if (error) {
       if (error.code === '23505') {
         return NextResponse.json(
-          { success: false, error: { message: 'Un service avec ce nom existe déjà' } },
+          { success: false, error: { message: 'A service with this name already exists' } },
           { status: 409 }
         )
       }
       logger.error('Service create error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la création du service' } },
+        { success: false, error: { message: 'Error creating service' } },
         { status: 500 }
       )
     }
@@ -147,12 +147,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       service: data,
-      message: 'Service créé avec succès',
+      message: 'Service created successfully',
     })
   } catch (error) {
     logger.error('Admin service create error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

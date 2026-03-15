@@ -7,7 +7,7 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Loader2, Wrench, User
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
-export default function ConnexionPage() {
+export default function SignInPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect')
@@ -15,7 +15,7 @@ export default function ConnexionPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const [userType, setUserType] = useState<'particulier' | 'artisan'>('particulier')
+  const [userType, setUserType] = useState<'client' | 'attorney'>('client')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -38,7 +38,7 @@ export default function ConnexionPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error?.message || 'Erreur de connexion')
+        setError(data.error?.message || 'Sign in failed')
         return
       }
 
@@ -59,7 +59,7 @@ export default function ConnexionPage() {
         router.push('/client-dashboard')
       }
     } catch (_err) {
-      setError('Erreur de connexion au serveur')
+      setError('Unable to connect to server')
     } finally {
       setIsLoading(false)
     }
@@ -77,10 +77,10 @@ export default function ConnexionPage() {
       if (data.url) {
         window.location.href = data.url
       } else {
-        setError('Connexion Google temporairement indisponible')
+        setError('Google sign in temporarily unavailable')
       }
     } catch {
-      setError('Erreur de connexion Google')
+      setError('Google sign in error')
     } finally {
       setIsLoading(false)
     }
@@ -95,50 +95,50 @@ export default function ConnexionPage() {
           <div className="max-w-md w-full">
             {/* Breadcrumb */}
             <Breadcrumb
-              items={[{ label: 'Connexion' }]}
+              items={[{ label: 'Sign In' }]}
               className="mb-6 text-gray-400 [&_a]:text-gray-400 [&_a:hover]:text-white [&_svg]:text-gray-500"
             />
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">SA</span>
+                  <span className="text-white font-bold text-xl">UA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  Services<span className="text-blue-400">Artisans</span>
+                  US<span className="text-blue-400">Attorneys</span>
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">
-                Connexion
+                Sign In
               </h1>
               <p className="text-gray-400">
-                Accédez à votre espace personnel
+                Access your personal account
               </p>
             </div>
 
             {/* User type toggle */}
             <div className="bg-slate-800/50 rounded-2xl p-1.5 flex mb-8 border border-slate-700">
               <button
-                onClick={() => setUserType('particulier')}
+                onClick={() => setUserType('client')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
-                  userType === 'particulier'
+                  userType === 'client'
                     ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <User className="w-4 h-4" />
-                Particulier
+                Client
               </button>
               <button
-                onClick={() => setUserType('artisan')}
+                onClick={() => setUserType('attorney')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
-                  userType === 'artisan'
+                  userType === 'attorney'
                     ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <Wrench className="w-4 h-4" />
-                Artisan
+                Attorney
               </button>
             </div>
 
@@ -162,14 +162,14 @@ export default function ConnexionPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="votre@email.com"
+                    placeholder="you@email.com"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Mot de passe
+                  Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -185,7 +185,7 @@ export default function ConnexionPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                    aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -200,10 +200,10 @@ export default function ConnexionPage() {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-400">Se souvenir de moi</span>
+                  <span className="text-sm text-gray-400">Remember me</span>
                 </label>
                 <Link href="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300">
-                  Mot de passe oublié ?
+                  Forgot Password?
                 </Link>
               </div>
 
@@ -211,7 +211,7 @@ export default function ConnexionPage() {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
-                  userType === 'artisan'
+                  userType === 'attorney'
                     ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30'
                     : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-blue-600/30'
                 }`}
@@ -220,7 +220,7 @@ export default function ConnexionPage() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Se connecter
+                    Sign In
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -229,12 +229,12 @@ export default function ConnexionPage() {
 
             <div className="mt-8 text-center">
               <p className="text-gray-400">
-                Pas encore de compte ?{' '}
+                Don't have an account?{' '}
                 <Link
-                  href={`${userType === 'artisan' ? '/register-attorney' : '/register'}${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-                  className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'}`}
+                  href={`${userType === 'attorney' ? '/register-attorney' : '/register'}${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
+                  className={`font-medium ${userType === 'attorney' ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'}`}
                 >
-                  Créer un compte
+                  Create Account
                 </Link>
               </p>
             </div>
@@ -246,7 +246,7 @@ export default function ConnexionPage() {
                   <div className="w-full border-t border-slate-700" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-slate-900 px-4 text-gray-500">Ou continuer avec</span>
+                  <span className="bg-slate-900 px-4 text-gray-500">Or continue with</span>
                 </div>
               </div>
               <div className="mt-6">
@@ -260,23 +260,23 @@ export default function ConnexionPage() {
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                   </svg>
-                  Continuer avec Google
+                  Continue with Google
                 </button>
               </div>
             </div>
 
             {/* Contextual Links */}
             <div className="mt-8 pt-8 border-t border-slate-700">
-              <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
+              <p className="text-gray-400 text-sm mb-3">Useful links:</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
                 <Link href="/how-it-works" className="text-blue-400 hover:text-blue-300">
-                  Comment ça marche ?
+                  How It Works
                 </Link>
                 <Link href="/faq" className="text-blue-400 hover:text-blue-300">
-                  Questions fréquentes
+                  FAQ
                 </Link>
                 <Link href="/contact" className="text-blue-400 hover:text-blue-300">
-                  Nous contacter
+                  Contact Us
                 </Link>
               </div>
             </div>
@@ -295,15 +295,15 @@ export default function ConnexionPage() {
               <Wrench className="w-12 h-12" />
             </div>
             <h2 className="text-4xl font-bold mb-6">
-              Bienvenue sur ServicesArtisans
+              Welcome to US Attorneys
             </h2>
             <p className="text-blue-100 text-lg mb-8">
-              Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer votre compte.
+              Sign in to access your personal dashboard, track your cases, and manage your account.
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">2500+</div>
-                <div className="text-sm text-blue-200">Artisans</div>
+                <div className="text-sm text-blue-200">Attorneys</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">50K+</div>
@@ -311,7 +311,7 @@ export default function ConnexionPage() {
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">4.8</div>
-                <div className="text-sm text-blue-200">Note moyenne</div>
+                <div className="text-sm text-blue-200">Avg Rating</div>
               </div>
             </div>
           </div>
@@ -322,7 +322,7 @@ export default function ConnexionPage() {
       <section className="bg-slate-800/50 py-10 border-t border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-semibold text-white mb-6">
-            Explorez nos services
+            Explore Our Services
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />

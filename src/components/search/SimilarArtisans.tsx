@@ -84,11 +84,11 @@ export function SimilarArtisans({
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-purple-500" />
           <h3 className="font-semibold text-gray-900 dark:text-white">
-            Artisans similaires
+            Similar attorneys
           </h3>
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Basé sur le service et la localisation
+          Based on practice area and location
         </p>
       </div>
 
@@ -107,7 +107,7 @@ export function SimilarArtisans({
                 {artisan.avatarUrl ? (
                   <Image
                     src={artisan.avatarUrl}
-                    alt={`${artisan.name} - ${artisan.specialty} à ${artisan.city}`}
+                    alt={`${artisan.name} - ${artisan.specialty} in ${artisan.city}`}
                     width={48}
                     height={48}
                     sizes="48px"
@@ -161,7 +161,7 @@ export function SimilarArtisans({
           href={`/practice-areas/${specialtySlug}/${locationSlug}`}
           className="flex items-center justify-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700"
         >
-          Voir tous les artisans
+          View all attorneys
           <ChevronRight className="w-4 h-4" />
         </Link>
       </div>

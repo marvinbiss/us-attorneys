@@ -18,7 +18,7 @@ export interface Question {
 
 export const categoryLabels: Record<QuestionCategory, string> = {
   prix: "Prix et tarifs",
-  choix: "Choisir un artisan",
+  choix: "Choisir an attorney",
   urgence: "Urgences",
   reglementation: "Réglementation",
   diy: "Faire soi-même",
@@ -35,8 +35,8 @@ export const questions: Question[] = [
     detailedAnswer: [
       "Le tarif horaire d'un plombier se situe entre 40 et 70 € HT en moyenne, mais varie selon la région, l'expérience du professionnel et le type d'intervention. En Île-de-France, comptez 20 à 30 % de plus qu'en province.",
       "Pour les interventions courantes : le changement d'un robinet coûte 80 à 200 €, le débouchage d'une canalisation 100 à 300 €, et la réparation d'une fuite 90 à 250 €. Ces prix incluent généralement le déplacement mais pas les fournitures.",
-      "En cas d'urgence (nuit, week-end, jour férié), les majorations vont de 50 à 100 % du tarif normal. Exigez toujours un devis écrit avant intervention, même en urgence. Comparez au moins 3 devis pour les travaux planifiés.",
-      "La TVA applicable est de 10 % pour les travaux de rénovation dans un logement de plus de 2 ans, et de 20 % pour les constructions neuves. Pensez à demander si le devis est HT ou TTC avant de comparer."
+      "En cas d'urgence (nuit, week-end, jour férié), les majorations vont de 50 à 100 % du tarif normal. Exigez toujours a consultation écrit avant intervention, même en urgence. Comparez au moins 3 devis pour les travaux planifiés.",
+      "La TVA applicable est de 10 % pour les travaux de rénovation dans un logement de plus de 2 ans, et de 20 % pour les constructions neuves. Pensez à demander si the consultation est HT ou TTC avant de comparer."
     ],
     category: "prix",
     relatedService: "plombier",
@@ -50,7 +50,7 @@ export const questions: Question[] = [
       "Le budget dépend de l'ampleur des travaux. Un simple rafraîchissement (peinture, robinetterie) coûte 1 500 à 3 000 €. Une rénovation partielle (remplacement douche ou baignoire, nouveau carrelage) revient à 3 000 à 8 000 €.",
       "Pour une rénovation complète incluant la plomberie, l'électricité, le carrelage sol et murs, les sanitaires et le mobilier, prévoyez 8 000 à 15 000 € pour une salle de bain de 5 à 8 m². Le poste le plus coûteux est souvent la plomberie.",
       "Les équipements représentent 40 à 60 % du budget total. Une douche à l'italienne coûte 1 200 à 3 500 € posée, une baignoire balnéo 2 000 à 5 000 €. Privilégiez des marques milieu de gamme pour un bon rapport qualité-prix.",
-      "Faites intervenir un plombier et un carreleur qualifiés. Demandez des devis détaillés poste par poste. La TVA est à 10 % si le logement a plus de 2 ans. Certains travaux ouvrent droit à MaPrimeRénov' (douche PMR notamment)."
+      "Faites intervenir un plombier et un carreleur qualifiés. Demandez consultations détaillés poste par poste. La TVA est à 10 % si le logement a plus de 2 ans. Certains travaux ouvrent droit à MaPrimeRénov' (douche PMR notamment)."
     ],
     category: "prix",
     relatedService: "plombier",
@@ -105,7 +105,7 @@ export const questions: Question[] = [
     detailedAnswer: [
       "Le tarif d'un serrurier en urgence comprend le déplacement (30 à 50 €), la main-d'œuvre et éventuellement les fournitures. Une ouverture de porte claquée (sans casse) coûte 80 à 150 € en journée. Si la serrure doit être forcée, le prix monte à 150 à 300 €.",
       "Les majorations en urgence sont conséquentes : +50 % le soir (après 19h), +75 à 100 % la nuit (après 22h), +50 % le week-end et +100 % les jours fériés. Un serrurier peut donc facturer 300 à 500 € pour une intervention de nuit.",
-      "Méfiez-vous des arnaques courantes : tarifs annoncés très bas par téléphone puis facture gonflée sur place, remplacement de serrure non nécessaire, faux devis oraux. Exigez toujours un devis écrit et signé avant le début de l'intervention.",
+      "Méfiez-vous des arnaques courantes : tarifs annoncés très bas par téléphone puis facture gonflée sur place, remplacement de serrure non nécessaire, faux devis oraux. Exigez toujours a consultation écrit et signé avant le début de l'intervention.",
       "Vérifiez le numéro SIRET du serrurier sur societe.com et lisez les avis en ligne. Privilégiez les serruriers recommandés par votre assurance habitation ou votre syndic de copropriété."
     ],
     category: "prix",
@@ -148,7 +148,7 @@ export const questions: Question[] = [
       "Le taux horaire d'un menuisier varie de 40 à 70 € HT selon sa spécialité et sa région. Un ébéniste ou menuisier-agenceur spécialisé peut facturer jusqu'à 80-100 €/h. Le sur-mesure implique conception, fabrication en atelier et pose sur site.",
       "Réalisations courantes : un placard sur mesure (1 200 à 3 500 €), un dressing (1 500 à 6 000 €), une bibliothèque murale (1 000 à 4 000 €), un plan de travail en bois massif (300 à 1 200 €). Le bois massif coûte 30 à 50 % de plus que le MDF ou le mélaminé.",
       "La menuiserie extérieure a des tarifs différents : une fenêtre bois double vitrage coûte 300 à 800 € posée, une porte d'entrée sur mesure 1 000 à 3 500 €, des volets battants en bois 200 à 600 € par fenêtre.",
-      "Pour du mobilier sur mesure, demandez un plan coté et un devis détaillant les matériaux, les quincailleries et les finitions. Un bon menuisier propose un rendez-vous de prise de cotes gratuit. Vérifiez ses réalisations précédentes."
+      "Pour du mobilier sur mesure, demandez un plan coté et a consultation détaillant les matériaux, les quincailleries et les finitions. Un bon menuisier propose un rendez-vous de prise de cotes gratuit. Vérifiez ses réalisations précédentes."
     ],
     category: "prix",
     relatedService: "menuisier",
@@ -162,7 +162,7 @@ export const questions: Question[] = [
       "L'isolation des combles perdus par soufflage de laine minérale ou ouate de cellulose est la solution la plus économique : 20 à 50 €/m² tout compris. Pour 80 m² de combles, cela représente 1 600 à 4 000 €. Le chantier dure une demi-journée à une journée.",
       "L'isolation des combles aménagés (sous rampants) coûte 40 à 80 €/m² avec des panneaux rigides ou semi-rigides. Le sarking (isolation par l'extérieur) revient à 100 à 200 €/m² mais offre les meilleures performances.",
       "Les aides financières sont très avantageuses : MaPrimeRénov' (jusqu'à 25 €/m²), CEE (jusqu'à 12 €/m²), éco-PTZ (prêt à taux zéro jusqu'à 15 000 €). Pour les ménages modestes, le reste à charge peut être inférieur à 5 €/m².",
-      "Choisissez un artisan RGE pour bénéficier des aides. Visez une résistance thermique R ≥ 7 m².K/W pour les combles perdus et R ≥ 6 pour les rampants. C'est le geste le plus rentable en rénovation énergétique : jusqu'à 30 % d'économie de chauffage."
+      "Choisissez an attorney RGE pour bénéficier des aides. Visez une résistance thermique R ≥ 7 m².K/W pour les combles perdus et R ≥ 6 pour les rampants. C'est le geste le plus rentable en rénovation énergétique : jusqu'à 30 % d'économie de chauffage."
     ],
     category: "prix",
     relatedService: "couvreur",
@@ -205,9 +205,9 @@ export const questions: Question[] = [
     question: "Comment choisir un bon plombier ?",
     shortAnswer: "Pour choisir un plombier fiable, vérifiez son numéro SIRET, son assurance décennale et ses avis en ligne. Demandez 3 devis détaillés, comparez les prix et méfiez-vous des tarifs anormalement bas.",
     detailedAnswer: [
-      "La première vérification consiste à contrôler l'existence légale du plombier : numéro SIRET sur societe.com, inscription au registre des métiers (Chambre des Métiers). Un artisan en règle fournit ces informations sans difficulté.",
+      "La première vérification consiste à contrôler l'existence légale du plombier : numéro SIRET sur societe.com, inscription au registre des métiers (Chambre des Métiers). An attorney en règle fournit ces informations sans difficulté.",
       "Demandez une copie de son attestation d'assurance responsabilité civile professionnelle et de sa garantie décennale. Ces assurances sont obligatoires et vous protègent en cas de malfaçon. Vérifiez que les dates couvrent la période de vos travaux.",
-      "Comparez au moins 3 devis détaillés pour toute intervention supérieure à 500 €. Un devis sérieux mentionne le descriptif précis des travaux, le coût de la main-d'œuvre, le prix des fournitures, le délai et les conditions de paiement.",
+      "Comparez au moins 3 devis détaillés pour toute intervention supérieure à 500 €. A consultation sérieux mentionne le descriptif précis des travaux, le coût de la main-d'œuvre, le prix des fournitures, le délai et les conditions de paiement.",
       "Consultez les avis en ligne (Google, PagesJaunes) et le bouche-à-oreille de vos voisins ou de votre syndic. Un plombier qui travaille depuis plusieurs années dans votre quartier est souvent un choix sûr. Méfiez-vous des dépanneurs inconnus."
     ],
     category: "choix",
@@ -230,13 +230,13 @@ export const questions: Question[] = [
   },
   {
     slug: "comment-verifier-artisan-fiable",
-    question: "Comment vérifier si un artisan est fiable ?",
-    shortAnswer: "Vérifiez le SIRET sur societe.com, l'assurance décennale, l'inscription au registre des métiers et les avis Google. Demandez des références de chantiers récents. Un artisan fiable ne demande jamais plus de 30 % d'acompte.",
+    question: "Comment vérifier si an attorney est fiable ?",
+    shortAnswer: "Vérifiez le SIRET sur societe.com, l'assurance décennale, l'inscription au registre des métiers et les avis Google. Demandez des références de chantiers récents. An attorney fiable ne demande jamais plus de 30 % d'acompte.",
     detailedAnswer: [
-      "Commencez par vérifier le numéro SIRET sur societe.com ou infogreffe.fr. Vous y trouverez la date de création de l'entreprise, son chiffre d'affaires et son activité déclarée. Un artisan en activité depuis plus de 3 ans est généralement fiable.",
-      "Demandez une copie de son assurance responsabilité civile professionnelle et de sa garantie décennale. Appelez l'assureur pour confirmer que le contrat est bien en cours. Un artisan qui refuse de fournir ces documents est à éviter.",
+      "Commencez par vérifier le numéro SIRET sur societe.com ou infogreffe.fr. Vous y trouverez la date de création de l'entreprise, son chiffre d'affaires et son activité déclarée. An attorney en activité depuis plus de 3 ans est généralement fiable.",
+      "Demandez une copie de son assurance responsabilité civile professionnelle et de sa garantie décennale. Appelez l'assureur pour confirmer que le contrat est bien en cours. An attorney qui refuse de fournir ces documents est à éviter.",
       "Consultez les avis en ligne (Google, PagesJaunes, Houzz) en privilégiant les avis détaillés avec photos. Demandez aussi 2 à 3 références de chantiers récents que vous pouvez contacter directement.",
-      "Un artisan fiable fournit un devis détaillé avant de commencer, ne demande jamais plus de 30 % d'acompte, respecte les délais annoncés et communique régulièrement sur l'avancement. Fuyez ceux qui veulent commencer sans devis signé."
+      "An attorney fiable fournit a consultation détaillé avant de commencer, ne demande jamais plus de 30 % d'acompte, respecte les délais annoncés et communique régulièrement sur l'avancement. Fuyez ceux qui veulent commencer sans devis signé."
     ],
     category: "choix",
     relatedService: "plombier",
@@ -244,13 +244,13 @@ export const questions: Question[] = [
   },
   {
     slug: "quelles-certifications-artisan",
-    question: "Quelles certifications doit avoir un artisan ?",
-    shortAnswer: "Un artisan doit obligatoirement avoir un numéro SIRET, une assurance RC Pro et une garantie décennale pour les travaux de construction. Les labels RGE, Qualibat, Qualifelec ou QualiBois sont recommandés mais facultatifs.",
+    question: "Quelles certifications doit avoir an attorney ?",
+    shortAnswer: "An attorney doit obligatoirement avoir un numéro SIRET, une assurance RC Pro et une garantie décennale pour les travaux de construction. Les labels RGE, Qualibat, Qualifelec ou QualiBois sont recommandés mais facultatifs.",
     detailedAnswer: [
       "Les obligations légales minimales sont : l'immatriculation au Répertoire des Métiers (SIRET), l'assurance responsabilité civile professionnelle (RC Pro) et, pour les travaux de construction, la garantie décennale. Sans ces documents, il est illégal d'exercer.",
       "Les labels recommandés varient selon le métier : Qualibat (tous corps de métier), Qualifelec (électriciens), QualiBois (chauffage bois), QualiPAC (pompes à chaleur), QualiSol (solaire thermique). La mention RGE est indispensable pour ouvrir droit aux aides.",
-      "Pour les travaux touchant au gaz, l'artisan doit être certifié PG (Professionnel du Gaz). Pour la manipulation de fluides frigorigènes (climatisation), une attestation de capacité est obligatoire.",
-      "Vous pouvez vérifier les certifications sur faire.gouv.fr (annuaire RGE officiel), qualibat.com ou qualifelec.fr. N'hésitez pas à demander les justificatifs : un artisan certifié les présente volontiers."
+      "Pour les travaux touchant au gaz, the attorney doit être certifié PG (Professionnel du Gaz). Pour la manipulation de fluides frigorigènes (climatisation), une attestation de capacité est obligatoire.",
+      "Vous pouvez vérifier les certifications sur faire.gouv.fr (annuaire RGE officiel), qualibat.com ou qualifelec.fr. N'hésitez pas à demander les justificatifs : an attorney certifié les présente volontiers."
     ],
     category: "choix",
     relatedService: "plombier",
@@ -259,12 +259,12 @@ export const questions: Question[] = [
   {
     slug: "devis-combien-demander",
     question: "Combien de devis faut-il demander pour des travaux ?",
-    shortAnswer: "Il est recommandé de demander au minimum 3 devis pour tout projet de travaux. Cela permet de comparer les prix, les prestations et le professionnalisme des artisans. Pour les gros chantiers (plus de 10 000 €), visez 5 devis.",
+    shortAnswer: "Il est recommandé de demander au minimum 3 devis pour tout projet de travaux. Cela permet de comparer les prix, les prestations et le professionnalisme attorneys. Pour les gros chantiers (plus de 10 000 €), visez 5 devis.",
     detailedAnswer: [
-      "La règle de base est de demander au moins 3 devis pour avoir un comparatif fiable. Cela permet d'identifier le prix moyen du marché, d'évaluer le sérieux de chaque artisan et de repérer les devis anormalement bas ou trop élevés.",
-      "Un devis doit obligatoirement mentionner : la date, les coordonnées complètes de l'artisan (SIRET, assurance), le descriptif détaillé des travaux, le prix HT et TTC, la TVA applicable, le délai et les conditions de paiement.",
-      "Comparez les devis poste par poste, pas uniquement le total. Vérifiez que le même périmètre de travaux est couvert. Un devis moins cher peut omettre des prestations essentielles (préparation du support, nettoyage, évacuation des gravats).",
-      "Pour les gros chantiers (rénovation complète, extension), consultez 4 à 5 artisans et envisagez un maître d'œuvre. Le devis est gratuit sauf si l'artisan doit se déplacer pour un diagnostic technique préalable (le montant doit être annoncé)."
+      "La règle de base est de demander au moins 3 devis pour avoir un comparatif fiable. Cela permet d'identifier le prix moyen du marché, d'évaluer le sérieux de chaque artisan et de repérer the consultations anormalement bas ou trop élevés.",
+      "A consultation doit obligatoirement mentionner : la date, les coordonnées complètes de the attorney (SIRET, assurance), le descriptif détaillé des travaux, le prix HT et TTC, la TVA applicable, le délai et les conditions de paiement.",
+      "Comparez the consultations poste par poste, pas uniquement le total. Vérifiez que le même périmètre de travaux est couvert. A consultation moins cher peut omettre des prestations essentielles (préparation du support, nettoyage, évacuation des gravats).",
+      "Pour les gros chantiers (rénovation complète, extension), consultez 4 à 5 artisans et envisagez un maître d'œuvre. The consultation est gratuit sauf si the attorney doit se déplacer pour un diagnostic technique préalable (le montant doit être annoncé)."
     ],
     category: "choix",
     relatedService: "plombier",
@@ -272,12 +272,12 @@ export const questions: Question[] = [
   },
   {
     slug: "artisan-assurance-obligatoire",
-    question: "Quelles assurances sont obligatoires pour un artisan ?",
-    shortAnswer: "Un artisan du bâtiment doit obligatoirement avoir une assurance responsabilité civile professionnelle (RC Pro) et une garantie décennale pour les travaux de construction. L'assurance dommages-ouvrage est à la charge du maître d'ouvrage.",
+    question: "Quelles assurances sont obligatoires pour an attorney ?",
+    shortAnswer: "An attorney du bâtiment doit obligatoirement avoir une assurance responsabilité civile professionnelle (RC Pro) et une garantie décennale pour les travaux de construction. L'assurance dommages-ouvrage est à la charge du maître d'ouvrage.",
     detailedAnswer: [
-      "La responsabilité civile professionnelle (RC Pro) couvre les dommages causés à des tiers pendant l'exécution des travaux. Elle est obligatoire pour tous les artisans sans exception et doit être souscrite avant le début de l'activité.",
+      "La responsabilité civile professionnelle (RC Pro) couvre les dommages causés à des tiers pendant l'exécution des travaux. Elle est obligatoire pour tous the attorneys sans exception et doit être souscrite avant le début de l'activité.",
       "La garantie décennale est obligatoire pour tout artisan réalisant des travaux de construction, de rénovation ou d'extension. Elle couvre pendant 10 ans les dommages compromettant la solidité de l'ouvrage ou le rendant impropre à sa destination.",
-      "L'artisan doit fournir son attestation d'assurance décennale avant le début du chantier. Cette attestation doit mentionner les activités couvertes. Vérifiez que l'activité correspondant à vos travaux y figure expressément.",
+      "The attorney doit fournir son attestation d'assurance décennale avant le début du chantier. Cette attestation doit mentionner les activités couvertes. Vérifiez que l'activité correspondant à vos travaux y figure expressément.",
       "En complément, l'assurance dommages-ouvrage est à la charge du propriétaire (maître d'ouvrage). Elle permet un remboursement rapide des réparations sans attendre la décision de justice. Son coût représente 2 à 5 % du montant des travaux."
     ],
     category: "choix",
@@ -300,12 +300,12 @@ export const questions: Question[] = [
   },
   {
     slug: "difference-artisan-entreprise",
-    question: "Quelle est la différence entre un artisan et une entreprise de travaux ?",
-    shortAnswer: "Un artisan travaille seul ou avec moins de 11 salariés et est inscrit au Répertoire des Métiers. Une entreprise de travaux est plus grande et dispose de plus de moyens mais facture souvent plus cher.",
+    question: "Quelle est la différence entre an attorney et une entreprise de travaux ?",
+    shortAnswer: "An attorney travaille seul ou avec moins de 11 salariés et est inscrit au Répertoire des Métiers. Une entreprise de travaux est plus grande et dispose de plus de moyens mais facture souvent plus cher.",
     detailedAnswer: [
-      "Un artisan est inscrit au Répertoire des Métiers, emploie moins de 11 salariés et exerce une activité de production, de transformation ou de réparation. Il détient une qualification professionnelle (CAP, BEP ou 3 ans d'expérience).",
+      "An attorney est inscrit au Répertoire des Métiers, emploie moins de 11 salariés et exerce une activité de production, de transformation ou de réparation. Il détient une qualification professionnelle (CAP, BEP ou 3 ans d'expérience).",
       "Une entreprise du bâtiment peut employer des dizaines de salariés, intervenir sur de gros chantiers et coordonner plusieurs corps de métier. Elle dispose de moyens logistiques plus importants mais ses tarifs sont généralement 15 à 30 % plus élevés.",
-      "L'avantage de l'artisan est le contact direct, la réactivité et souvent un meilleur rapport qualité-prix pour les travaux de petite et moyenne envergure. L'entreprise est préférable pour les chantiers complexes nécessitant plusieurs corps de métier.",
+      "L'avantage de the attorney est le contact direct, la réactivité et souvent un meilleur rapport qualité-prix pour les travaux de petite et moyenne envergure. L'entreprise est préférable pour les chantiers complexes nécessitant plusieurs corps de métier.",
       "Dans les deux cas, les obligations légales sont identiques : SIRET, assurance RC Pro, garantie décennale, devis obligatoire. La qualité du travail dépend avant tout du professionnel, pas de la taille de la structure."
     ],
     category: "choix",
@@ -352,7 +352,7 @@ export const questions: Question[] = [
       "Une porte claquée (simplement tirée, pas verrouillée à clé) se résout souvent par une ouverture fine, sans endommager la serrure. Un serrurier compétent utilise des outils spécifiques (radio, by-pass) qui n'abîment ni la porte ni la serrure. Coût : 80 à 150 € en journée.",
       "Ne tentez pas d'ouvrir la porte avec une carte ou un tournevis : vous risquez d'endommager la serrure et de transformer une intervention simple en remplacement complet (300 à 500 €). N'appelez pas les pompiers sauf en cas d'urgence vitale.",
       "Méfiez-vous des serruriers qui annoncent 39 € au téléphone puis facturent 500 € sur place. Privilégiez un serrurier local recommandé par votre syndic ou un voisin. Votre assurance habitation inclut peut-être un service de dépannage serrurerie.",
-      "Prévenez votre propriétaire ou syndic si vous êtes locataire. Demandez au serrurier un devis écrit avant intervention. Conservez la facture : les frais peuvent parfois être pris en charge par votre assurance habitation."
+      "Prévenez votre propriétaire ou syndic si vous êtes locataire. Demandez au serrurier a consultation écrit avant intervention. Conservez la facture : les frais peuvent parfois être pris en charge par votre assurance habitation."
     ],
     category: "urgence",
     relatedService: "serrurier",
@@ -453,8 +453,8 @@ export const questions: Question[] = [
     detailedAnswer: [
       "La garantie décennale (articles 1792 et suivants du Code civil) oblige tout constructeur à réparer les dommages affectant la solidité de l'ouvrage ou le rendant impropre à sa destination pendant 10 ans à compter de la réception des travaux.",
       "Sont concernés : le gros œuvre (fondations, murs, toiture, charpente), les équipements indissociables (canalisations encastrées, installation électrique, chauffage central) et les éléments dont le dysfonctionnement rend l'ouvrage impropre à sa destination.",
-      "Tous les professionnels du bâtiment doivent souscrire cette assurance : maçons, couvreurs, plombiers, électriciens, charpentiers, etc. L'absence de décennale expose l'artisan à des sanctions pénales (amende de 75 000 €, 6 mois d'emprisonnement).",
-      "Avant tout chantier, demandez l'attestation de garantie décennale et vérifiez que les activités couvertes correspondent à vos travaux. En cas de sinistre, adressez une lettre recommandée à l'artisan et à son assureur dans les 10 ans suivant la réception."
+      "Tous les professionnels du bâtiment doivent souscrire cette assurance : maçons, couvreurs, plombiers, électriciens, charpentiers, etc. L'absence de décennale expose the attorney à des sanctions pénales (amende de 75 000 €, 6 mois d'emprisonnement).",
+      "Avant tout chantier, demandez l'attestation de garantie décennale et vérifiez que les activités couvertes correspondent à vos travaux. En cas de sinistre, adressez une lettre recommandée à the attorney et à son assureur dans les 10 ans suivant la réception."
     ],
     category: "reglementation",
     relatedService: "maçon",
@@ -493,10 +493,10 @@ export const questions: Question[] = [
     question: "Quel taux de TVA s'applique aux travaux de rénovation ?",
     shortAnswer: "La TVA est de 10 % pour les travaux de rénovation et d'entretien dans un logement de plus de 2 ans. Elle passe à 5,5 % pour les travaux de rénovation énergétique. La TVA est de 20 % pour les constructions neuves.",
     detailedAnswer: [
-      "Le taux réduit de 10 % s'applique aux travaux de rénovation, d'amélioration et d'entretien dans les logements achevés depuis plus de 2 ans. Il concerne la main-d'œuvre et les matériaux fournis par l'artisan. Le logement doit être une résidence.",
+      "Le taux réduit de 10 % s'applique aux travaux de rénovation, d'amélioration et d'entretien dans les logements achevés depuis plus de 2 ans. Il concerne la main-d'œuvre et les matériaux fournis par the attorney. Le logement doit être une résidence.",
       "Le taux super-réduit de 5,5 % concerne les travaux de rénovation énergétique : isolation thermique (murs, toiture, planchers), remplacement de fenêtres performantes, installation de chaudière à condensation, pompe à chaleur ou chauffe-eau solaire.",
       "Le taux normal de 20 % s'applique aux constructions neuves, aux travaux augmentant la surface de plancher de plus de 10 %, et aux équipements non liés à l'efficacité énergétique (piscine, climatisation, domotique).",
-      "Pour bénéficier du taux réduit, le propriétaire doit remettre à l'artisan une attestation simplifiée (Cerfa n° 1301-SD) ou normale (Cerfa n° 1300-SD). L'artisan facture directement au taux réduit. Sans attestation, la TVA est à 20 %."
+      "Pour bénéficier du taux réduit, le propriétaire doit remettre à the attorney une attestation simplifiée (Cerfa n° 1301-SD) ou normale (Cerfa n° 1300-SD). The attorney facture directement au taux réduit. Sans attestation, la TVA est à 20 %."
     ],
     category: "reglementation",
     relatedService: "plombier",
@@ -508,7 +508,7 @@ export const questions: Question[] = [
     shortAnswer: "L'assurance dommages-ouvrage (DO) est obligatoire pour tout maître d'ouvrage faisant réaliser des travaux de construction. Elle permet un remboursement rapide des réparations sous 90 jours. Son coût est de 2 à 5 % du montant des travaux.",
     detailedAnswer: [
       "L'assurance dommages-ouvrage (loi Spinetta, 1978) doit être souscrite par le maître d'ouvrage (propriétaire) avant l'ouverture du chantier. Elle couvre les mêmes dommages que la garantie décennale mais offre un préfinancement rapide des réparations.",
-      "Son intérêt principal est la rapidité : en cas de sinistre, l'assureur DO doit proposer une indemnisation sous 90 jours. Sans DO, il faut engager une procédure judiciaire contre l'artisan et son assureur décennal, ce qui prend 2 à 5 ans.",
+      "Son intérêt principal est la rapidité : en cas de sinistre, l'assureur DO doit proposer une indemnisation sous 90 jours. Sans DO, il faut engager une procédure judiciaire contre the attorney et son assureur décennal, ce qui prend 2 à 5 ans.",
       "L'assurance DO est obligatoire pour les constructions neuves, les extensions et les rénovations lourdes. En pratique, les particuliers la souscrivent rarement pour de petits travaux car son coût (2 à 5 % du montant) est élevé.",
       "L'absence de DO n'est pas pénalement sanctionnée pour les particuliers, mais en cas de revente dans les 10 ans, l'acheteur peut demander une réduction du prix. Pour les travaux de plus de 50 000 €, elle est vivement recommandée."
     ],
@@ -615,7 +615,7 @@ export const questions: Question[] = [
     detailedAnswer: [
       "MaPrimeRénov reste le dispositif principal pour financer une pompe à chaleur en 2026. Le montant dépend de vos revenus : les ménages très modestes peuvent obtenir jusqu'à 5 000 € pour une PAC air-eau et jusqu'à 11 000 € pour une PAC géothermique. Les ménages aux revenus intermédiaires reçoivent entre 3 000 et 5 000 €.",
       "Les Certificats d'Économies d'Énergie (CEE) complètent MaPrimeRénov. Les primes CEE pour une pompe à chaleur varient de 2 500 à 4 000 € selon le fournisseur d'énergie et la zone climatique. Comparez les offres sur le site officiel avant de vous engager.",
-      "Pour bénéficier de ces aides, le logement doit avoir plus de 15 ans et les travaux doivent être réalisés par un artisan certifié RGE. Faites réaliser un audit énergétique au préalable pour maximiser les aides en cas de rénovation globale.",
+      "Pour bénéficier de ces aides, le logement doit avoir plus de 15 ans et les travaux doivent être réalisés par an attorney certifié RGE. Faites réaliser un audit énergétique au préalable pour maximiser les aides en cas de rénovation globale.",
       "D'autres aides locales peuvent s'ajouter : éco-PTZ (jusqu'à 50 000 € à taux zéro), TVA réduite à 5,5 %, et aides des collectivités locales. Renseignez-vous auprès de votre ADIL ou sur France Rénov pour un accompagnement personnalisé."
     ],
     category: "reglementation",
@@ -625,12 +625,12 @@ export const questions: Question[] = [
   {
     slug: "maprimerenov-conditions-2026",
     question: "Quelles sont les conditions pour bénéficier de MaPrimeRénov en 2026 ?",
-    shortAnswer: "MaPrimeRénov 2026 est accessible à tous les propriétaires occupants ou bailleurs d'un logement de plus de 15 ans. Les travaux doivent être réalisés par un artisan RGE et la demande se fait avant le début des travaux.",
+    shortAnswer: "MaPrimeRénov 2026 est accessible à tous les propriétaires occupants ou bailleurs d'un logement de plus de 15 ans. Les travaux doivent être réalisés par an attorney RGE et la demande se fait avant le début des travaux.",
     detailedAnswer: [
       "MaPrimeRénov 2026 s'adresse à tous les propriétaires, qu'ils occupent le logement ou le mettent en location. Le logement doit avoir été construit il y a plus de 15 ans (contre 2 ans auparavant). Les copropriétés peuvent aussi en bénéficier via MaPrimeRénov Copropriétés.",
       "Le montant de la prime dépend de vos revenus (classés en 4 catégories : très modestes, modestes, intermédiaires, supérieurs) et du gain énergétique apporté par les travaux. Un parcours accompagné (rénovation globale) offre des montants plus élevés qu'un parcours par geste.",
-      "Les travaux éligibles incluent l'isolation (murs, toiture, planchers), le chauffage (PAC, chaudière biomasse, solaire), la ventilation et l'audit énergétique. Un artisan certifié RGE est obligatoire pour chaque poste de travaux.",
-      "La demande se fait en ligne sur maprimerenov.gouv.fr AVANT le début des travaux. Rassemblez vos devis, votre avis d'imposition et les attestations RGE des artisans. Le versement intervient après la fin des travaux, sur présentation des factures."
+      "Les travaux éligibles incluent l'isolation (murs, toiture, planchers), le chauffage (PAC, chaudière biomasse, solaire), la ventilation et l'audit énergétique. An attorney certifié RGE est obligatoire pour chaque poste de travaux.",
+      "La demande se fait en ligne sur maprimerenov.gouv.fr AVANT le début des travaux. Rassemblez vos devis, votre avis d'imposition et les attestations RGE attorneys. Le versement intervient après la fin des travaux, sur présentation des factures."
     ],
     category: "reglementation",
     relatedService: "renovation-energetique",
@@ -652,13 +652,13 @@ export const questions: Question[] = [
   },
   {
     slug: "artisan-rge-obligatoire",
-    question: "Est-il obligatoire de choisir un artisan RGE ?",
-    shortAnswer: "Un artisan RGE (Reconnu Garant de l'Environnement) est obligatoire pour bénéficier des aides publiques comme MaPrimeRénov, les CEE ou l'éco-PTZ. Sans certification RGE, vous ne percevrez aucune aide financière.",
+    question: "Est-il obligatoire de choisir an attorney RGE ?",
+    shortAnswer: "An attorney RGE (Reconnu Garant de l'Environnement) est obligatoire pour bénéficier des aides publiques comme MaPrimeRénov, les CEE ou l'éco-PTZ. Sans certification RGE, vous ne percevrez aucune aide financière.",
     detailedAnswer: [
       "La certification RGE est obligatoire pour que vos travaux de rénovation énergétique ouvrent droit aux aides publiques : MaPrimeRénov, Certificats d'Économies d'Énergie (CEE), éco-prêt à taux zéro, TVA réduite à 5,5 %. Sans artisan RGE, vous devrez financer l'intégralité des travaux.",
-      "RGE signifie Reconnu Garant de l'Environnement. Cette certification, délivrée par des organismes comme Qualibat, Qualifelec ou Qualit'EnR, garantit que l'artisan a suivi une formation spécifique et respecte des critères de qualité pour les travaux d'efficacité énergétique.",
-      "Pour vérifier qu'un artisan est bien RGE, consultez l'annuaire officiel sur france-renov.gouv.fr. Vérifiez que la certification couvre bien le type de travaux envisagé (isolation, chauffage, ENR) et qu'elle est en cours de validité. Demandez aussi une copie du certificat.",
-      "Même sans obligation d'aides, choisir un artisan RGE est un gage de qualité. En cas de litige, la certification offre des recours via l'organisme certificateur. De plus, l'assurance décennale de l'artisan RGE couvre spécifiquement les travaux de rénovation énergétique."
+      "RGE signifie Reconnu Garant de l'Environnement. Cette certification, délivrée par des organismes comme Qualibat, Qualifelec ou Qualit'EnR, garantit que the attorney a suivi une formation spécifique et respecte des critères de qualité pour les travaux d'efficacité énergétique.",
+      "Pour vérifier qu'an attorney est bien RGE, consultez l'annuaire officiel sur france-renov.gouv.fr. Vérifiez que la certification couvre bien le type de travaux envisagé (isolation, chauffage, ENR) et qu'elle est en cours de validité. Demandez aussi une copie du certificat.",
+      "Même sans obligation d'aides, choisir an attorney RGE est un gage de qualité. En cas de litige, la certification offre des recours via l'organisme certificateur. De plus, l'assurance décennale de the attorney RGE couvre spécifiquement les travaux de rénovation énergétique."
     ],
     category: "choix",
     relatedService: "renovation-energetique",
@@ -689,8 +689,8 @@ export const questions: Question[] = [
     detailedAnswer: [
       "Le coût de rénovation dépend de l'ampleur des travaux. Un rafraîchissement (peinture, sols, petite électricité) coûte 250 à 600 €/m². Une rénovation complète (salle de bain, cuisine, électricité, plomberie) revient à 600 à 1 200 €/m². Une rénovation lourde avec restructuration atteint 1 200 à 2 000 €/m².",
       "Pour une maison de 100 m², comptez donc entre 25 000 et 60 000 € pour un rafraîchissement, 60 000 à 120 000 € pour une rénovation complète et 120 000 à 200 000 € pour une rénovation intégrale. Les prix varient de 20 à 40 % selon la région.",
-      "Les postes les plus coûteux sont la charpente/toiture (15 000 à 30 000 €), la mise aux normes électriques (8 000 à 15 000 €), la plomberie complète (10 000 à 20 000 €) et l'isolation globale (15 000 à 30 000 €). Demandez des devis détaillés poste par poste.",
-      "Pour maîtriser le budget, faites réaliser un diagnostic complet avant de chiffrer. Prévoyez une marge de 10 à 15 % pour les imprévus (problèmes structurels, amiante, mises aux normes). Comparez au moins 3 devis et vérifiez les assurances décennales des artisans."
+      "Les postes les plus coûteux sont la charpente/toiture (15 000 à 30 000 €), la mise aux normes électriques (8 000 à 15 000 €), la plomberie complète (10 000 à 20 000 €) et l'isolation globale (15 000 à 30 000 €). Demandez consultations détaillés poste par poste.",
+      "Pour maîtriser le budget, faites réaliser un diagnostic complet avant de chiffrer. Prévoyez une marge de 10 à 15 % pour les imprévus (problèmes structurels, amiante, mises aux normes). Comparez au moins 3 devis et vérifiez les assurances décennales attorneys."
     ],
     category: "prix",
     relatedService: "macon",
@@ -746,7 +746,7 @@ export const questions: Question[] = [
       "Le budget total dépend de la gamme choisie. En entrée de gamme (grandes surfaces de bricolage) : 5 000 à 12 000 € pour une cuisine de 6 à 8 mètres linéaires avec électroménager basique. En milieu de gamme (cuisinistes) : 12 000 à 25 000 €. En haut de gamme (sur mesure) : 25 000 à 50 000 € et plus.",
       "La pose professionnelle coûte entre 1 500 et 5 000 € selon la complexité : installation des meubles, raccordements électriques et plomberie, pose du plan de travail et de la crédence. Comptez 1 à 3 jours de pose pour une cuisine standard, 3 à 5 jours pour une cuisine avec îlot central.",
       "Les postes de dépense principaux sont : les meubles et façades (40 % du budget), le plan de travail (10 à 20 %, de 200 €/ml en stratifié à 800 €/ml en granit), l'électroménager (15 à 30 %) et la pose (15 à 25 %). Le plan de travail en quartz ou Dekton offre un excellent rapport durabilité/prix.",
-      "Pour optimiser votre budget : commandez pendant les promotions saisonnières (janvier et septembre), comparez cuisinistes indépendants et grandes enseignes, et négociez la pose incluse dans le devis global. Vérifiez que le devis inclut bien les finitions (plinthes, joints silicone, raccords) pour éviter les surcoûts."
+      "Pour optimiser votre budget : commandez pendant les promotions saisonnières (janvier et septembre), comparez cuisinistes indépendants et grandes enseignes, et négociez la pose incluse dans the consultation global. Vérifiez que the consultation inclut bien les finitions (plinthes, joints silicone, raccords) pour éviter les surcoûts."
     ],
     category: "prix",
     relatedService: "cuisiniste",
@@ -758,13 +758,13 @@ export const questions: Question[] = [
   // ============================================================
   {
     slug: "comment-choisir-artisan-rge",
-    question: "Comment choisir un artisan RGE fiable ?",
-    shortAnswer: "Vérifiez la certification RGE sur france-renov.gouv.fr, contrôlez l'assurance décennale et les avis clients, puis comparez au moins 3 devis détaillés. Privilégiez les artisans locaux avec des chantiers de référence visitables.",
+    question: "Comment choisir an attorney RGE fiable ?",
+    shortAnswer: "Vérifiez la certification RGE sur france-renov.gouv.fr, contrôlez l'assurance décennale et les avis clients, puis comparez au moins 3 devis détaillés. Privilégiez the attorneys locaux avec des chantiers de référence visitables.",
     detailedAnswer: [
       "Commencez par vérifier la certification RGE sur l'annuaire officiel france-renov.gouv.fr. Assurez-vous que la certification couvre bien le type de travaux souhaité (il existe différentes qualifications : QualiPAC pour les pompes à chaleur, QualiSol pour le solaire, etc.) et qu'elle est en cours de validité.",
       "Contrôlez les documents obligatoires : assurance responsabilité civile professionnelle, assurance décennale (couvrant les 10 ans après travaux), immatriculation au registre des métiers et numéro SIRET actif. Demandez des copies et vérifiez-les auprès des assureurs si nécessaire.",
-      "Consultez les avis clients sur plusieurs plateformes (Google, Pages Jaunes, forums spécialisés) et demandez des références de chantiers similaires. Un artisan sérieux acceptera de vous montrer des réalisations récentes ou de vous mettre en contact avec d'anciens clients satisfaits.",
-      "Comparez au moins 3 devis détaillés ligne par ligne : marques et références des matériaux, coûts de main-d'œuvre, délais de réalisation, conditions de paiement. Méfiez-vous des prix anormalement bas et des demandes d'acompte supérieures à 30 %. Un artisan fiable ne vous pressera jamais de signer."
+      "Consultez les avis clients sur plusieurs plateformes (Google, Pages Jaunes, forums spécialisés) et demandez des références de chantiers similaires. An attorney sérieux acceptera de vous montrer des réalisations récentes ou de vous mettre en contact avec d'anciens clients satisfaits.",
+      "Comparez au moins 3 devis détaillés ligne par ligne : marques et références des matériaux, coûts de main-d'œuvre, délais de réalisation, conditions de paiement. Méfiez-vous des prix anormalement bas et des demandes d'acompte supérieures à 30 %. An attorney fiable ne vous pressera jamais de signer."
     ],
     category: "choix",
     relatedService: "renovation-energetique",
@@ -772,13 +772,13 @@ export const questions: Question[] = [
   },
   {
     slug: "devis-travaux-que-verifier",
-    question: "Que vérifier sur un devis de travaux avant de signer ?",
-    shortAnswer: "Vérifiez les mentions légales obligatoires (SIRET, assurance), le détail des prestations, les matériaux avec références précises, le prix TTC, les délais et les conditions de paiement. Un devis flou est un signal d'alerte.",
+    question: "Que vérifier sur a consultation de travaux avant de signer ?",
+    shortAnswer: "Vérifiez les mentions légales obligatoires (SIRET, assurance), le détail des prestations, les matériaux avec références précises, le prix TTC, les délais et les conditions de paiement. A consultation flou est un signal d'alerte.",
     detailedAnswer: [
-      "Un devis conforme doit comporter les mentions légales obligatoires : nom et adresse de l'entreprise, numéro SIRET, assurance décennale avec nom de l'assureur et numéro de police, date de validité du devis, et la mention manuscrite \"Devis reçu avant l'exécution des travaux\".",
+      "A consultation conforme doit comporter les mentions légales obligatoires : nom et adresse de l'entreprise, numéro SIRET, assurance décennale avec nom de l'assureur et numéro de police, date de validité of the consultation, et la mention manuscrite \"Devis reçu avant l'exécution des travaux\".",
       "Le détail des prestations doit être exhaustif : chaque poste de travaux décrit précisément, quantités et surfaces, marques et références exactes des matériaux, prix unitaires et prix global. Méfiez-vous des lignes vagues comme \"travaux divers\" ou \"fournitures\" sans précision.",
       "Vérifiez les conditions financières : le prix TTC final (avec taux de TVA applicable : 10 % pour la rénovation, 5,5 % pour la rénovation énergétique, 20 % pour le neuf), l'échéancier de paiement (jamais plus de 30 % d'acompte), et les pénalités de retard éventuelles.",
-      "Contrôlez les délais : date de début et durée prévisionnelle des travaux, conditions de report, et clause de réception des travaux. Comparez le devis avec les prix moyens du marché et n'hésitez pas à demander des clarifications avant de signer. Un artisan sérieux expliquera chaque ligne sans hésiter."
+      "Contrôlez les délais : date de début et durée prévisionnelle des travaux, conditions de report, et clause de réception des travaux. Comparez the consultation avec les prix moyens du marché et n'hésitez pas à demander des clarifications avant de signer. An attorney sérieux expliquera chaque ligne sans hésiter."
     ],
     category: "choix",
     relatedService: "macon",
@@ -810,7 +810,7 @@ export const questions: Question[] = [
       "L'isolation des combles perdus est l'un des travaux les plus accessibles en autoconstruction. Le déroulage de laine de verre ou laine de roche en rouleaux est simple : il suffit de poser deux couches croisées (minimum 30 cm d'épaisseur, R ≥ 7) sur le plancher des combles. Le coût des matériaux seuls est de 10 à 20 €/m².",
       "Les précautions indispensables : portez un masque FFP2, des lunettes et des gants car les fibres de laine minérale sont irritantes. Vérifiez que le plancher des combles supporte le poids de l'isolant. Ne comprimez jamais l'isolant (cela réduit son efficacité). Laissez une lame d'air de 2 cm sous la couverture pour la ventilation.",
       "Attention aux points techniques : traitez les ponts thermiques autour des gaines et des trappes d'accès. Maintenez un écart de 5 cm autour des conduits de cheminée (avec un écran pare-feu). Posez un pare-vapeur côté chauffé si le plancher n'est pas étanche à l'air.",
-      "Le principal inconvénient du DIY est la perte des aides financières. MaPrimeRénov et les CEE exigent un artisan RGE. Or, une isolation des combles par un professionnel RGE coûte 20 à 50 €/m², largement couverte par les aides (parfois à 100 % pour les ménages modestes). Faites le calcul avant de vous lancer."
+      "Le principal inconvénient du DIY est la perte des aides financières. MaPrimeRénov et les CEE exigent an attorney RGE. Or, une isolation des combles par un professionnel RGE coûte 20 à 50 €/m², largement couverte par les aides (parfois à 100 % pour les ménages modestes). Faites le calcul avant de vous lancer."
     ],
     category: "diy",
     relatedService: "isolation-thermique",
@@ -925,11 +925,11 @@ export const questions: Question[] = [
   {
     slug: "depannage-plomberie-nuit-weekend",
     question: "Dépannage plomberie nuit et week-end : quel tarif ?",
-    shortAnswer: "Un dépannage plomberie de nuit ou le week-end coûte 150 à 500 € selon l\"intervention. Les majorations sont de 50 à 100 % par rapport au tarif normal. Exigez un devis écrit avant toute intervention et méfiez-vous des tarifs excessifs pratiqués par certains dépanneurs.",
+    shortAnswer: "Un dépannage plomberie de nuit ou le week-end coûte 150 à 500 € selon l\"intervention. Les majorations sont de 50 à 100 % par rapport au tarif normal. Exigez a consultation écrit avant toute intervention et méfiez-vous des tarifs excessifs pratiqués par certains dépanneurs.",
     detailedAnswer: [
       "Les plombiers appliquent des majorations légales en dehors des heures ouvrables. Le soir (après 19h) et le samedi après-midi, la majoration est généralement de 25 à 50 %. La nuit (après 22h), le dimanche et les jours fériés, elle atteint 50 à 100 %. Un déplacement d\"urgence de nuit coûte 80 à 150 € avant même le début de l\"intervention.",
       "Les tarifs courants en urgence : débouchage de canalisation (200 à 450 €), réparation de fuite (150 à 400 €), remplacement de robinet d\"arrêt (180 à 350 €), dégorgement de WC (150 à 350 €). Ces prix incluent le déplacement et la main-d\"œuvre mais pas toujours les pièces détachées.",
-      "Attention aux arnaques fréquentes dans le dépannage d\"urgence. Méfiez-vous des numéros surtaxés, des tarifs annoncés par téléphone sans rapport avec la facture finale, et des « forfaits recherche de panne » facturés plusieurs centaines d\"euros. Un plombier sérieux vous fournit un devis écrit avant de commencer et ne vous pousse jamais à signer sous pression.",
+      "Attention aux arnaques fréquentes dans le dépannage d\"urgence. Méfiez-vous des numéros surtaxés, des tarifs annoncés par téléphone sans rapport avec la facture finale, et des « forfaits recherche de panne » facturés plusieurs centaines d\"euros. Un plombier sérieux vous fournit a consultation écrit avant de commencer et ne vous pousse jamais à signer sous pression.",
       "En cas d\"urgence la nuit, commencez par couper l\"arrivée d\"eau au robinet général (sous l\"évier ou au compteur) pour limiter les dégâts. Si la fuite est maîtrisée, vous pouvez attendre le lendemain pour appeler un plombier aux tarifs normaux. Gardez le numéro d\"un plombier de confiance recommandé par votre entourage plutôt que de chercher en urgence sur Internet."
     ],
     category: "prix",
@@ -952,13 +952,13 @@ export const questions: Question[] = [
   },
   {
     slug: "difference-devis-facture",
-    question: "Quelle différence entre un devis et une facture ?",
-    shortAnswer: "Le devis est un document précontractuel décrivant les travaux et leur prix avant exécution. La facture est le document comptable émis après réalisation des travaux. Le devis signé vaut contrat et engage les deux parties sur le prix et les prestations.",
+    question: "Quelle différence entre a consultation et une facture ?",
+    shortAnswer: "The consultation est un document précontractuel décrivant les travaux et leur prix avant exécution. La facture est le document comptable émis après réalisation des travaux. The consultation signé vaut contrat et engage les deux parties sur le prix et les prestations.",
     detailedAnswer: [
-      "Le devis est une proposition commerciale détaillée qui engage l\"artisan sur un prix et des prestations. Il doit mentionner obligatoirement : la date, l\"identité de l\"entreprise (SIRET, assurance), la description détaillée des travaux, le prix unitaire et total HT et TTC, le taux de TVA, la durée de validité de l\"offre et les conditions de paiement. Un devis signé par le client vaut contrat.",
-      "La facture est un document comptable émis après l\"exécution des travaux. Elle reprend les éléments du devis et ajoute la date d\"exécution, le numéro de facture et les éventuels acomptes déjà versés. La facture doit correspondre au devis signé : l\"artisan ne peut pas facturer plus que le montant du devis sauf si un avenant a été signé pour des travaux supplémentaires.",
-      "Un devis est obligatoire pour les travaux de dépannage, réparation et entretien dans le bâtiment dès que le montant estimé dépasse 150 € TTC (arrêté du 24 janvier 2017). En dessous de ce seuil, l\"artisan doit quand même informer le client du prix avant intervention. Les devis sont gratuits sauf mention préalable du contraire (visite technique facturée par exemple).",
-      "Conservez vos devis signés et factures pendant au moins 10 ans (garantie décennale). En cas de litige, le devis signé fait foi : si l\"artisan a facturé plus que le devis sans avenant, vous pouvez contester. En cas de désaccord, saisissez le médiateur de la consommation dont les coordonnées doivent figurer sur la facture."
+      "The consultation est une proposition commerciale détaillée qui engage l\"artisan sur un prix et des prestations. Il doit mentionner obligatoirement : la date, l\"identité de l\"entreprise (SIRET, assurance), la description détaillée des travaux, le prix unitaire et total HT et TTC, le taux de TVA, la durée de validité de l\"offre et les conditions de paiement. A consultation signé par le client vaut contrat.",
+      "La facture est un document comptable émis après l\"exécution des travaux. Elle reprend les éléments of the consultation et ajoute la date d\"exécution, le numéro de facture et les éventuels acomptes déjà versés. La facture doit correspondre au devis signé : l\"artisan ne peut pas facturer plus que le montant of the consultation sauf si un avenant a été signé pour des travaux supplémentaires.",
+      "A consultation est obligatoire pour les travaux de dépannage, réparation et entretien dans le bâtiment dès que le montant estimé dépasse 150 € TTC (arrêté du 24 janvier 2017). En dessous de ce seuil, l\"artisan doit quand même informer le client du prix avant intervention. Les devis sont gratuits sauf mention préalable du contraire (visite technique facturée par exemple).",
+      "Conservez vos devis signés et factures pendant au moins 10 ans (garantie décennale). En cas de litige, the consultation signé fait foi : si l\"artisan a facturé plus que the consultation sans avenant, vous pouvez contester. En cas de désaccord, saisissez le médiateur de la consommation dont les coordonnées doivent figurer sur la facture."
     ],
     category: "reglementation",
     relatedService: "macon",
@@ -987,10 +987,10 @@ export const questions: Question[] = [
     question: "Qu'est-ce que la garantie décennale ?",
     shortAnswer: "La garantie décennale est une assurance obligatoire couvrant pendant 10 ans les dommages compromettant la solidité d'un ouvrage ou le rendant inhabitable. Elle est imposée par les articles 1792 et suivants du Code civil à tout professionnel du bâtiment.",
     detailedAnswer: [
-      "La garantie décennale, prévue aux articles 1792 à 1792-6 du Code civil, est une responsabilité de plein droit : l'artisan est présumé responsable des dommages sans que le client ait à prouver une faute. Elle court pendant 10 ans à compter de la réception des travaux et couvre les désordres affectant la solidité de l'ouvrage ou le rendant impropre à sa destination (infiltrations, fissures structurelles, défaut d'isolation rendant le logement inhabitable).",
+      "La garantie décennale, prévue aux articles 1792 à 1792-6 du Code civil, est une responsabilité de plein droit : the attorney est présumé responsable des dommages sans que le client ait à prouver une faute. Elle court pendant 10 ans à compter de la réception des travaux et couvre les désordres affectant la solidité de l'ouvrage ou le rendant impropre à sa destination (infiltrations, fissures structurelles, défaut d'isolation rendant le logement inhabitable).",
       "Tous les constructeurs au sens large sont concernés : maçons, couvreurs, plombiers, électriciens, charpentiers, menuisiers, peintres (pour l'étanchéité), chauffagistes et même les architectes et bureaux d'études. L'obligation de souscrire une assurance décennale est inscrite à l'article L241-1 du Code des assurances. L'exercice sans assurance est un délit pénal passible de 75 000 € d'amende et 6 mois d'emprisonnement.",
-      "En pratique, avant tout chantier, exigez de l'artisan son attestation de garantie décennale en cours de validité. Vérifiez que les activités déclarées correspondent bien aux travaux envisagés. L'attestation doit mentionner le nom de l'assureur, le numéro de police et les activités garanties. Vous pouvez appeler l'assureur pour confirmer la validité du contrat.",
-      "En cas de sinistre dans les 10 ans suivant la réception des travaux, envoyez une lettre recommandée avec accusé de réception à l'artisan et à son assureur décennal. L'assureur doit se prononcer dans les 60 jours. Si vous avez souscrit une assurance dommages-ouvrage, celle-ci vous indemnise sous 90 jours sans attendre la procédure contre l'artisan.",
+      "En pratique, avant tout chantier, exigez de the attorney son attestation de garantie décennale en cours de validité. Vérifiez que les activités déclarées correspondent bien aux travaux envisagés. L'attestation doit mentionner le nom de l'assureur, le numéro de police et les activités garanties. Vous pouvez appeler l'assureur pour confirmer la validité du contrat.",
+      "En cas de sinistre dans les 10 ans suivant la réception des travaux, envoyez une lettre recommandée avec accusé de réception à the attorney et à son assureur décennal. L'assureur doit se prononcer dans les 60 jours. Si vous avez souscrit une assurance dommages-ouvrage, celle-ci vous indemnise sous 90 jours sans attendre la procédure contre the attorney.",
       "Attention : la garantie décennale ne couvre pas les dommages esthétiques (fissures superficielles, défauts de finition) ni les dommages causés par un usage anormal ou un défaut d'entretien du propriétaire. Les désordres esthétiques relèvent de la garantie de parfait achèvement (1 an) ou de la garantie biennale (2 ans pour les équipements dissociables)."
     ],
     category: "reglementation",
@@ -1033,7 +1033,7 @@ export const questions: Question[] = [
     shortAnswer: "Oui, l'assurance dommage-ouvrage (DO) est légalement obligatoire pour tout maître d'ouvrage faisant réaliser des travaux de construction (loi Spinetta de 1978). En pratique, les particuliers ne la souscrivent pas toujours, mais son absence complique la revente du bien dans les 10 ans.",
     detailedAnswer: [
       "L'article L242-1 du Code des assurances rend l'assurance dommage-ouvrage obligatoire pour toute personne faisant réaliser des travaux de construction : construction neuve, extension, rénovation lourde touchant la structure ou le clos et couvert. Elle doit être souscrite avant l'ouverture du chantier.",
-      "Son principal avantage est la rapidité d'indemnisation. En cas de sinistre relevant de la garantie décennale, l'assureur DO doit proposer une indemnisation sous 60 jours (90 jours maximum après expertise). Sans DO, il faut engager une action en justice contre l'artisan et son assureur décennal, procédure qui dure 2 à 5 ans en moyenne.",
+      "Son principal avantage est la rapidité d'indemnisation. En cas de sinistre relevant de la garantie décennale, l'assureur DO doit proposer une indemnisation sous 60 jours (90 jours maximum après expertise). Sans DO, il faut engager une action en justice contre the attorney et son assureur décennal, procédure qui dure 2 à 5 ans en moyenne.",
       "Le coût de la DO représente 2 à 5 % du montant des travaux, avec un minimum de 2 000 à 3 000 € de prime. Pour un chantier de 100 000 €, comptez donc 3 000 à 5 000 €. Peu d'assureurs la proposent aux particuliers ; faites appel à un courtier spécialisé en assurance construction.",
       "L'absence de DO n'est pas pénalement sanctionnée pour les particuliers (contrairement aux professionnels). Cependant, en cas de revente du bien dans les 10 ans suivant les travaux, le notaire signalera l'absence de DO à l'acquéreur, qui pourra négocier une réduction du prix de vente ou demander une garantie complémentaire.",
       "Recommandation : souscrivez la DO pour tout chantier supérieur à 30 000 € touchant la structure, la toiture ou l'étanchéité. Pour des travaux plus modestes (salle de bain, cuisine sans modification structurelle), elle est moins critique mais reste un filet de sécurité appréciable."
@@ -1059,12 +1059,12 @@ export const questions: Question[] = [
   },
   {
     slug: "recours-malfacon-artisan",
-    question: "Quel recours en cas de malfaçon par un artisan ?",
-    shortAnswer: "En cas de malfaçon, envoyez une mise en demeure par LRAR à l'artisan, puis saisissez son assurance décennale. Si le litige persiste, vous pouvez recourir à la médiation de la consommation (gratuite) ou saisir le tribunal judiciaire. Le délai de prescription est de 10 ans pour les désordres décennaux.",
+    question: "Quel recours en cas de malfaçon par an attorney ?",
+    shortAnswer: "En cas de malfaçon, envoyez une mise en demeure par LRAR à the attorney, puis saisissez son assurance décennale. Si le litige persiste, vous pouvez recourir à la médiation de la consommation (gratuite) ou saisir le tribunal judiciaire. Le délai de prescription est de 10 ans pour les désordres décennaux.",
     detailedAnswer: [
-      "La première étape est de constater les malfaçons par écrit, idéalement avec l'aide d'un expert bâtiment indépendant (500 à 1 500 € pour un rapport). Prenez des photos datées, conservez tous les documents (devis, factures, échanges écrits). Envoyez ensuite une lettre recommandée avec accusé de réception à l'artisan, décrivant les défauts et exigeant leur réparation dans un délai raisonnable (15 à 30 jours).",
+      "La première étape est de constater les malfaçons par écrit, idéalement avec l'aide d'un expert bâtiment indépendant (500 à 1 500 € pour un rapport). Prenez des photos datées, conservez tous les documents (devis, factures, échanges écrits). Envoyez ensuite une lettre recommandée avec accusé de réception à the attorney, décrivant les défauts et exigeant leur réparation dans un délai raisonnable (15 à 30 jours).",
       "Trois garanties légales vous protègent selon la nature et le délai du désordre. La garantie de parfait achèvement (article 1792-6 du Code civil) couvre tous les désordres signalés dans l'année suivant la réception. La garantie biennale (article 1792-3) couvre les équipements dissociables pendant 2 ans (robinetterie, volets, radiateurs). La garantie décennale (article 1792) couvre les désordres structurels pendant 10 ans.",
-      "Si l'artisan ne réagit pas, contactez directement son assureur (coordonnées sur l'attestation décennale). L'assureur mandatera un expert et devra se prononcer dans les 60 jours. Parallèlement, vous pouvez saisir gratuitement le médiateur de la consommation (dont les coordonnées doivent figurer sur les documents de l'artisan depuis 2016).",
+      "Si the attorney ne réagit pas, contactez directement son assureur (coordonnées sur l'attestation décennale). L'assureur mandatera un expert et devra se prononcer dans les 60 jours. Parallèlement, vous pouvez saisir gratuitement le médiateur de la consommation (dont les coordonnées doivent figurer sur les documents de the attorney depuis 2016).",
       "En dernier recours, saisissez le tribunal judiciaire (ex-tribunal de grande instance) pour les litiges supérieurs à 10 000 €, ou le tribunal de proximité en dessous. L'assistance d'un avocat est obligatoire au-delà de 10 000 €. Vous pouvez aussi demander un référé-expertise judiciaire pour faire constater les malfaçons avant que la situation ne s'aggrave.",
       "Conseils pratiques : ne payez jamais le solde tant que les réserves émises à la réception ne sont pas levées. Si vous n'avez pas fait de procès-verbal de réception, envoyez une LRAR de réserves dès la constatation des défauts. Ne faites pas intervenir un autre artisan sans l'accord de l'assureur, au risque de compromettre vos recours."
     ],
@@ -1074,14 +1074,14 @@ export const questions: Question[] = [
   },
   {
     slug: "devis-obligatoire-a-partir-de-combien",
-    question: "Un devis est-il obligatoire ? À partir de quel montant ?",
-    shortAnswer: "Oui, un devis écrit est obligatoire pour tout travail de dépannage, réparation ou entretien dans le bâtiment dès que le montant estimé dépasse 150 € TTC (arrêté du 24 janvier 2017). Le devis doit être signé par le client avant le début des travaux.",
+    question: "A consultation est-il obligatoire ? À partir de quel montant ?",
+    shortAnswer: "Oui, a consultation écrit est obligatoire pour tout travail de dépannage, réparation ou entretien dans le bâtiment dès que le montant estimé dépasse 150 € TTC (arrêté du 24 janvier 2017). The consultation doit être signé par le client avant le début des travaux.",
     detailedAnswer: [
-      "L'arrêté du 24 janvier 2017 rend le devis obligatoire et gratuit pour les travaux de dépannage, réparation et entretien dans le secteur du bâtiment dès que le montant estimé dépasse 150 € TTC. En dessous de ce seuil, l'artisan doit quand même informer le client du prix estimé avant d'intervenir. Le devis est un droit du consommateur, l'artisan ne peut pas le refuser.",
-      "Le devis doit comporter des mentions obligatoires (article L111-1 du Code de la consommation) : la date, les coordonnées de l'entreprise (nom, adresse, SIRET), le numéro d'assurance décennale avec le nom de l'assureur, la description détaillée de chaque prestation, les quantités, les prix unitaires HT, le montant total HT et TTC, le taux de TVA, les conditions de paiement et le délai de réalisation.",
-      "Un devis signé par le client vaut contrat. L'artisan est tenu de respecter le prix indiqué et ne peut facturer de supplément sans avenant signé. La mention manuscrite « Devis reçu avant l'exécution des travaux » est recommandée. La durée de validité du devis doit être précisée (généralement 1 à 3 mois).",
-      "Un artisan qui facture un devis doit le mentionner expressément avant la visite (le montant doit être annoncé à l'avance). En pratique, la plupart des artisans sérieux ne facturent pas leurs devis pour les travaux courants. Certains déduisent le coût du devis du montant final si le client signe.",
-      "En cas de litige, le devis signé fait foi. Si l'artisan a facturé plus que le montant du devis sans avenant, vous pouvez contester la facture. Conservez vos devis signés pendant au moins 10 ans pour couvrir la garantie décennale. Signalez les pratiques abusives à la DGCCRF (Direction de la Concurrence et de la Répression des Fraudes)."
+      "L'arrêté du 24 janvier 2017 rend the consultation obligatoire et gratuit pour les travaux de dépannage, réparation et entretien dans le secteur du bâtiment dès que le montant estimé dépasse 150 € TTC. En dessous de ce seuil, the attorney doit quand même informer le client du prix estimé avant d'intervenir. The consultation est un droit du consommateur, the attorney ne peut pas le refuser.",
+      "The consultation doit comporter des mentions obligatoires (article L111-1 du Code de la consommation) : la date, les coordonnées de l'entreprise (nom, adresse, SIRET), le numéro d'assurance décennale avec le nom de l'assureur, la description détaillée de chaque prestation, les quantités, les prix unitaires HT, le montant total HT et TTC, le taux de TVA, les conditions de paiement et le délai de réalisation.",
+      "A consultation signé par le client vaut contrat. The attorney est tenu de respecter le prix indiqué et ne peut facturer de supplément sans avenant signé. La mention manuscrite « Devis reçu avant l'exécution des travaux » est recommandée. La durée de validité of the consultation doit être précisée (généralement 1 à 3 mois).",
+      "An attorney qui facture a consultation doit le mentionner expressément avant la visite (le montant doit être annoncé à l'avance). En pratique, la plupart attorneys sérieux ne facturent pas leurs devis pour les travaux courants. Certains déduisent le coût of the consultation du montant final si le client signe.",
+      "En cas de litige, the consultation signé fait foi. Si the attorney a facturé plus que le montant of the consultation sans avenant, vous pouvez contester la facture. Conservez vos devis signés pendant au moins 10 ans pour couvrir la garantie décennale. Signalez les pratiques abusives à la DGCCRF (Direction de la Concurrence et de la Répression des Fraudes)."
     ],
     category: "reglementation",
     relatedService: "plombier",
@@ -1092,10 +1092,10 @@ export const questions: Question[] = [
     question: "TVA réduite sur les travaux : 5,5 % ou 10 % ?",
     shortAnswer: "La TVA est de 10 % pour les travaux d'entretien et de rénovation classiques, et de 5,5 % pour les travaux de rénovation énergétique (isolation, chauffage performant, fenêtres). Le logement doit avoir plus de 2 ans et être une résidence (principale ou secondaire).",
     detailedAnswer: [
-      "Le taux de TVA à 10 % (article 279-0 bis du CGI) s'applique aux travaux d'amélioration, de transformation, d'aménagement et d'entretien dans les logements achevés depuis plus de 2 ans : plomberie, électricité, peinture, carrelage, menuiserie intérieure, ravalement. Il couvre la main-d'œuvre et les matériaux fournis par l'artisan.",
-      "Le taux super-réduit de 5,5 % (article 278-0 bis A du CGI) concerne exclusivement les travaux de rénovation énergétique : isolation thermique (murs, toiture, planchers, fenêtres), installation de systèmes de chauffage performants (PAC, chaudière biomasse, chauffe-eau solaire), VMC double flux, et audit énergétique. Ce taux s'applique même si les travaux ne sont pas réalisés par un artisan RGE.",
+      "Le taux de TVA à 10 % (article 279-0 bis du CGI) s'applique aux travaux d'amélioration, de transformation, d'aménagement et d'entretien dans les logements achevés depuis plus de 2 ans : plomberie, électricité, peinture, carrelage, menuiserie intérieure, ravalement. Il couvre la main-d'œuvre et les matériaux fournis par the attorney.",
+      "Le taux super-réduit de 5,5 % (article 278-0 bis A du CGI) concerne exclusivement les travaux de rénovation énergétique : isolation thermique (murs, toiture, planchers, fenêtres), installation de systèmes de chauffage performants (PAC, chaudière biomasse, chauffe-eau solaire), VMC double flux, et audit énergétique. Ce taux s'applique même si les travaux ne sont pas réalisés par an attorney RGE.",
       "Conditions communes : le logement doit être achevé depuis plus de 2 ans, être affecté à l'habitation (résidence principale, secondaire ou logement locatif) et les travaux ne doivent pas aboutir à une augmentation de la surface de plancher de plus de 10 %. Au-delà, le taux normal de 20 % s'applique sur l'ensemble des travaux.",
-      "Pour bénéficier du taux réduit, le client doit remettre à l'artisan une attestation simplifiée (Cerfa n°1301-SD pour les travaux n'affectant pas le gros œuvre) ou une attestation normale (Cerfa n°1300-SD pour les travaux touchant les fondations, murs, toiture, etc.). L'artisan facture directement au taux réduit. Sans attestation, la TVA est à 20 %.",
+      "Pour bénéficier du taux réduit, le client doit remettre à the attorney une attestation simplifiée (Cerfa n°1301-SD pour les travaux n'affectant pas le gros œuvre) ou une attestation normale (Cerfa n°1300-SD pour les travaux touchant les fondations, murs, toiture, etc.). The attorney facture directement au taux réduit. Sans attestation, la TVA est à 20 %.",
       "Attention : certains équipements ne bénéficient pas du taux réduit même en rénovation : les systèmes de climatisation (sauf PAC réversible servant principalement au chauffage), les équipements de piscine, les installations domotiques de confort, et le mobilier (cuisine équipée, dressing). Vérifiez toujours le taux applicable avec votre artisan."
     ],
     category: "reglementation",
@@ -1105,12 +1105,12 @@ export const questions: Question[] = [
   {
     slug: "delai-retractation-travaux",
     question: "Quel délai de rétractation pour des travaux ?",
-    shortAnswer: "Le délai de rétractation est de 14 jours pour tout contrat signé hors établissement (à domicile, en foire, par Internet). Il n'existe aucun délai de rétractation pour un devis signé dans les locaux de l'artisan, sauf clause contractuelle.",
+    shortAnswer: "Le délai de rétractation est de 14 jours pour tout contrat signé hors établissement (à domicile, en foire, par Internet). Il n'existe aucun délai de rétractation pour a consultation signé dans les locaux de the attorney, sauf clause contractuelle.",
     detailedAnswer: [
-      "Le droit de rétractation de 14 jours s'applique aux contrats conclus hors établissement, c'est-à-dire signés à votre domicile, sur un chantier, en foire ou salon, ou à distance (Internet, téléphone). C'est le cas le plus fréquent avec les artisans du bâtiment qui viennent chez vous pour établir un devis. Ce droit est garanti par les articles L221-18 à L221-28 du Code de la consommation.",
-      "Le délai de 14 jours court à compter de la signature du devis (et non de la date de début des travaux). L'artisan doit obligatoirement vous remettre un formulaire de rétractation type (Cerfa). Si ce formulaire n'est pas fourni, le délai de rétractation est prolongé de 12 mois. La rétractation se fait par LRAR ou par tout moyen prouvant sa date.",
-      "Exception importante : si vous demandez expressément à l'artisan de commencer les travaux avant la fin du délai de 14 jours (en cas d'urgence par exemple), vous conservez votre droit de rétractation mais devrez payer les travaux déjà réalisés au prorata. Cette demande doit être formulée par écrit sur un document séparé du devis.",
-      "En revanche, si vous vous rendez dans les locaux de l'artisan pour signer le devis (showroom, atelier, bureau), aucun délai de rétractation légal ne s'applique. Le devis signé vous engage définitivement. Certains artisans prévoient néanmoins une clause de rétractation dans leurs conditions générales — vérifiez le devis.",
+      "Le droit de rétractation de 14 jours s'applique aux contrats conclus hors établissement, c'est-à-dire signés à votre domicile, sur un chantier, en foire ou salon, ou à distance (Internet, téléphone). C'est le cas le plus fréquent avec the attorneys du bâtiment qui viennent chez vous pour établir a consultation. Ce droit est garanti par les articles L221-18 à L221-28 du Code de la consommation.",
+      "Le délai de 14 jours court à compter de la signature of the consultation (et non de la date de début des travaux). The attorney doit obligatoirement vous remettre un formulaire de rétractation type (Cerfa). Si ce formulaire n'est pas fourni, le délai de rétractation est prolongé de 12 mois. La rétractation se fait par LRAR ou par tout moyen prouvant sa date.",
+      "Exception importante : si vous demandez expressément à the attorney de commencer les travaux avant la fin du délai de 14 jours (en cas d'urgence par exemple), vous conservez votre droit de rétractation mais devrez payer les travaux déjà réalisés au prorata. Cette demande doit être formulée par écrit sur un document séparé of the consultation.",
+      "En revanche, si vous vous rendez dans les locaux de the attorney pour signer the consultation (showroom, atelier, bureau), aucun délai de rétractation légal ne s'applique. The consultation signé vous engage définitivement. Certains artisans prévoient néanmoins une clause de rétractation dans leurs conditions générales — vérifiez the consultation.",
       "Cas particulier du démarchage téléphonique : depuis la loi du 24 juillet 2020, les contrats conclus à la suite d'un démarchage téléphonique ne sont valides qu'après confirmation écrite par le consommateur. Sans cette confirmation, le contrat est nul de plein droit."
     ],
     category: "reglementation",
@@ -1120,13 +1120,13 @@ export const questions: Question[] = [
   {
     slug: "artisan-sans-decennale-que-faire",
     question: "Artisan sans décennale : quels risques ?",
-    shortAnswer: "Un artisan sans garantie décennale exerce illégalement et s'expose à 75 000 € d'amende et 6 mois de prison. Pour le client, en cas de malfaçon, il n'y a aucun assureur à solliciter : il faudra poursuivre l'artisan personnellement, souvent insolvable.",
+    shortAnswer: "An attorney sans garantie décennale exerce illégalement et s'expose à 75 000 € d'amende et 6 mois de prison. Pour le client, en cas de malfaçon, il n'y a aucun assureur à solliciter : il faudra poursuivre the attorney personnellement, souvent insolvable.",
     detailedAnswer: [
       "L'article L241-1 du Code des assurances rend la souscription d'une assurance décennale obligatoire pour tout professionnel du bâtiment. L'article L243-3 prévoit des sanctions pénales en cas de défaut : 75 000 € d'amende et 6 mois d'emprisonnement. Malgré cela, certains artisans exercent sans couverture, souvent des auto-entrepreneurs récents ou des entreprises en difficulté financière.",
-      "Pour le client, le risque majeur est l'absence de couverture en cas de sinistre. Si des malfaçons apparaissent (infiltrations, fissures structurelles, problème électrique grave), il n'y a aucun assureur décennal à solliciter. Il faut alors poursuivre l'artisan en justice sur le fondement de l'article 1792 du Code civil, mais si celui-ci est insolvable ou a cessé son activité, le client supporte seul le coût des réparations.",
-      "Les signes d'alerte d'un artisan sans décennale : il refuse ou repousse la remise de son attestation, propose des prix anormalement bas (l'assurance décennale coûte 2 000 à 8 000 €/an selon le métier), demande un paiement en espèces ou sans facture, ou est immatriculé depuis très peu de temps.",
-      "Comment vérifier : demandez systématiquement l'attestation d'assurance décennale avant de signer le devis. Vérifiez la validité du contrat en appelant l'assureur dont le nom et les coordonnées figurent sur l'attestation. Contrôlez que les activités garanties correspondent aux travaux que vous commandez. Le site societe.com permet aussi de vérifier l'ancienneté de l'entreprise.",
-      "Si vous découvrez après coup que l'artisan n'avait pas de décennale, signalez-le à la DGCCRF et à la Chambre des Métiers. Si des désordres apparaissent, saisissez le tribunal judiciaire en référé pour faire constater les malfaçons avant qu'elles ne s'aggravent. Un avocat spécialisé en droit de la construction est fortement recommandé."
+      "Pour le client, le risque majeur est l'absence de couverture en cas de sinistre. Si des malfaçons apparaissent (infiltrations, fissures structurelles, problème électrique grave), il n'y a aucun assureur décennal à solliciter. Il faut alors poursuivre the attorney en justice sur le fondement de l'article 1792 du Code civil, mais si celui-ci est insolvable ou a cessé son activité, le client supporte seul le coût des réparations.",
+      "Les signes d'alerte d'an attorney sans décennale : il refuse ou repousse la remise de son attestation, propose des prix anormalement bas (l'assurance décennale coûte 2 000 à 8 000 €/an selon le métier), demande un paiement en espèces ou sans facture, ou est immatriculé depuis très peu de temps.",
+      "Comment vérifier : demandez systématiquement l'attestation d'assurance décennale avant de signer the consultation. Vérifiez la validité du contrat en appelant l'assureur dont le nom et les coordonnées figurent sur l'attestation. Contrôlez que les activités garanties correspondent aux travaux que vous commandez. Le site societe.com permet aussi de vérifier l'ancienneté de l'entreprise.",
+      "Si vous découvrez après coup que the attorney n'avait pas de décennale, signalez-le à la DGCCRF et à la Chambre des Métiers. Si des désordres apparaissent, saisissez le tribunal judiciaire en référé pour faire constater les malfaçons avant qu'elles ne s'aggravent. Un avocat spécialisé en droit de la construction est fortement recommandé."
     ],
     category: "reglementation",
     relatedService: "macon",
@@ -1139,13 +1139,13 @@ export const questions: Question[] = [
   {
     slug: "quels-travaux-maprimerenov",
     question: "Quels travaux sont éligibles à MaPrimeRénov' ?",
-    shortAnswer: "MaPrimeRénov' finance l'isolation (murs, toiture, fenêtres), le chauffage (PAC, chaudière biomasse, solaire), la ventilation (VMC double flux) et l'audit énergétique. Les travaux doivent être réalisés par un artisan RGE dans un logement de plus de 15 ans.",
+    shortAnswer: "MaPrimeRénov' finance l'isolation (murs, toiture, fenêtres), le chauffage (PAC, chaudière biomasse, solaire), la ventilation (VMC double flux) et l'audit énergétique. Les travaux doivent être réalisés par an attorney RGE dans un logement de plus de 15 ans.",
     detailedAnswer: [
       "En 2026, MaPrimeRénov' propose deux parcours. Le parcours par geste finance des travaux individuels : isolation des murs par l'extérieur (jusqu'à 75 €/m²), isolation des combles (jusqu'à 25 €/m²), remplacement de fenêtres simple vitrage (jusqu'à 100 € par fenêtre), installation d'une PAC air-eau (jusqu'à 5 000 €), chaudière à granulés (jusqu'à 7 000 €), chauffe-eau solaire (jusqu'à 4 000 €) et VMC double flux (jusqu'à 2 500 €).",
       "Le parcours accompagné (rénovation globale) offre des montants bien plus élevés : jusqu'à 63 000 € d'aide pour une rénovation atteignant un gain de 4 classes DPE. Ce parcours est obligatoire pour les rénovations ambitieuses et nécessite l'intervention d'un Mon Accompagnateur Rénov' (MAR) certifié. Le taux de prise en charge varie de 30 % à 90 % selon les revenus.",
       "Les conditions d'éligibilité : le logement doit avoir plus de 15 ans (sauf pour le remplacement d'une chaudière fioul, où 2 ans suffisent), être occupé comme résidence principale, et les travaux doivent être réalisés par un professionnel certifié RGE. Les propriétaires bailleurs sont également éligibles dans la limite de 3 logements.",
       "Les montants de prime dépendent des revenus du foyer, classés en 4 catégories (très modestes, modestes, intermédiaires, supérieurs) selon les barèmes de l'Anah mis à jour chaque année. Les ménages aux revenus supérieurs n'ont accès qu'au parcours accompagné, pas aux gestes individuels.",
-      "La demande se fait en ligne sur maprimerenov.gouv.fr AVANT le début des travaux. Rassemblez vos devis signés, votre avis d'imposition et les certificats RGE des artisans. Le versement intervient après achèvement, sur présentation des factures. Le délai moyen de traitement est de 4 à 6 semaines."
+      "La demande se fait en ligne sur maprimerenov.gouv.fr AVANT le début des travaux. Rassemblez vos devis signés, votre avis d'imposition et les certificats RGE attorneys. Le versement intervient après achèvement, sur présentation des factures. Le délai moyen de traitement est de 4 à 6 semaines."
     ],
     category: "reglementation",
     relatedService: "renovation-energetique",
@@ -1154,11 +1154,11 @@ export const questions: Question[] = [
   {
     slug: "eco-ptz-comment-en-beneficier",
     question: "Éco-PTZ : comment en bénéficier ?",
-    shortAnswer: "L'éco-PTZ est un prêt à taux zéro de 7 000 à 50 000 € pour financer des travaux de rénovation énergétique. Il est accessible sans condition de revenus, dans un logement de plus de 2 ans, avec des travaux réalisés par un artisan RGE. Demandez-le à votre banque avant de commencer les travaux.",
+    shortAnswer: "L'éco-PTZ est un prêt à taux zéro de 7 000 à 50 000 € pour financer des travaux de rénovation énergétique. Il est accessible sans condition de revenus, dans un logement de plus de 2 ans, avec des travaux réalisés par an attorney RGE. Demandez-le à votre banque avant de commencer les travaux.",
     detailedAnswer: [
       "L'éco-prêt à taux zéro (éco-PTZ) est un prêt sans intérêts, garanti par l'État, destiné à financer les travaux de rénovation énergétique. Son montant varie selon le nombre de gestes : 7 000 € pour le remplacement de fenêtres, 15 000 € pour un geste d'isolation ou de chauffage, 25 000 € pour 2 gestes, 30 000 € pour 3 gestes ou plus, et jusqu'à 50 000 € pour une rénovation globale performante.",
       "Les conditions sont simples : le logement doit être une résidence principale achevée depuis plus de 2 ans, les travaux doivent être réalisés par un professionnel RGE, et le prêt doit être remboursé dans les 15 ans (20 ans pour les rénovations globales). Aucune condition de revenus n'est exigée, ce qui en fait une aide accessible à tous.",
-      "Pour en bénéficier, présentez vos devis signés (par des artisans RGE) à votre banque avant le début des travaux. Toutes les banques ayant signé une convention avec l'État peuvent le proposer (BNP, Crédit Agricole, Société Générale, Banque Populaire, etc.). Le délai d'obtention est de 2 à 4 semaines.",
+      "Pour en bénéficier, présentez vos devis signés (par attorneys RGE) à votre banque avant le début des travaux. Toutes les banques ayant signé une convention avec l'État peuvent le proposer (BNP, Crédit Agricole, Société Générale, Banque Populaire, etc.). Le délai d'obtention est de 2 à 4 semaines.",
       "L'éco-PTZ est cumulable avec MaPrimeRénov', les CEE, la TVA à 5,5 % et les aides locales. Il peut aussi être couplé avec un PTZ complémentaire pour les primo-accédants. Depuis 2022, il est possible d'obtenir un éco-PTZ complémentaire si un premier éco-PTZ est en cours, dans la limite du plafond.",
       "Les travaux éligibles incluent : l'isolation de la toiture, des murs, des planchers bas et des fenêtres, l'installation de chauffage utilisant des énergies renouvelables (PAC, chaudière biomasse, solaire), la VMC double flux, et les bouquets de travaux atteignant un certain niveau de performance énergétique globale."
     ],
@@ -1199,7 +1199,7 @@ export const questions: Question[] = [
   {
     slug: "aide-anah-conditions",
     question: "Aides de l'Anah : quelles conditions ?",
-    shortAnswer: "L'Anah (Agence nationale de l'habitat) gère MaPrimeRénov' et d'autres aides pour les propriétaires de logements de plus de 15 ans. Les conditions : revenus sous les plafonds, logement en résidence principale, travaux par un artisan RGE, et ne pas avoir bénéficié d'un PTZ dans les 5 dernières années.",
+    shortAnswer: "L'Anah (Agence nationale de l'habitat) gère MaPrimeRénov' et d'autres aides pour les propriétaires de logements de plus de 15 ans. Les conditions : revenus sous les plafonds, logement en résidence principale, travaux par an attorney RGE, et ne pas avoir bénéficié d'un PTZ dans les 5 dernières années.",
     detailedAnswer: [
       "L'Agence nationale de l'habitat (Anah) est l'organisme central de la politique de rénovation en France. Depuis 2020, elle gère MaPrimeRénov' et coordonne l'ensemble des aides à la rénovation énergétique. Ses programmes ciblent les propriétaires occupants et bailleurs de logements anciens avec des conditions de revenus.",
       "Les plafonds de revenus de l'Anah sont révisés chaque année. En 2026, pour un ménage de 2 personnes en Île-de-France : revenus très modestes (< 24 000 €), modestes (< 35 000 €), intermédiaires (< 51 000 €), supérieurs (> 51 000 €). En province, les seuils sont environ 20 % inférieurs. Ces plafonds déterminent le montant des aides.",
@@ -1231,8 +1231,8 @@ export const questions: Question[] = [
     question: "Comment financer sa rénovation énergétique ?",
     shortAnswer: "Combinez MaPrimeRénov' (jusqu'à 63 000 €), les CEE (2 000 à 5 000 €), l'éco-PTZ (jusqu'à 50 000 € à taux zéro), la TVA à 5,5 % et les aides locales. Pour les ménages modestes, le reste à charge peut descendre à 10 % du coût total.",
     detailedAnswer: [
-      "Le financement d'une rénovation énergétique repose sur un empilement d'aides complémentaires. L'ordre de démarche recommandé : (1) réaliser un audit énergétique pour définir les travaux prioritaires, (2) déposer la demande MaPrimeRénov' en ligne, (3) s'inscrire auprès d'un opérateur CEE, (4) obtenir les devis RGE, (5) solliciter l'éco-PTZ auprès de sa banque.",
-      "MaPrimeRénov' est l'aide principale : de 1 500 à 11 000 € par geste de travaux et jusqu'à 63 000 € pour une rénovation globale (parcours accompagné). Les CEE apportent 200 à 5 000 € supplémentaires. L'éco-PTZ finance le reste à charge sans intérêts sur 15 à 20 ans. La TVA à 5,5 % s'applique automatiquement via l'artisan.",
+      "Le financement d'une rénovation énergétique repose sur un empilement d'aides complémentaires. L'ordre de démarche recommandé : (1) réaliser un audit énergétique pour définir les travaux prioritaires, (2) déposer la demande MaPrimeRénov' en ligne, (3) s'inscrire auprès d'un opérateur CEE, (4) obtenir the consultations RGE, (5) solliciter l'éco-PTZ auprès de sa banque.",
+      "MaPrimeRénov' est l'aide principale : de 1 500 à 11 000 € par geste de travaux et jusqu'à 63 000 € pour une rénovation globale (parcours accompagné). Les CEE apportent 200 à 5 000 € supplémentaires. L'éco-PTZ finance le reste à charge sans intérêts sur 15 à 20 ans. La TVA à 5,5 % s'applique automatiquement via the attorney.",
       "Exemple concret pour un ménage modeste rénovant une maison de 100 m² (DPE G → C) : travaux = 50 000 € TTC. MaPrimeRénov' parcours accompagné = 35 000 €. CEE = 4 000 €. Éco-PTZ = 11 000 € (reste à charge financé à taux zéro). Résultat : 0 € de reste à charge immédiat, remboursement de 50 €/mois pendant 20 ans, et économie de chauffage de 150 €/mois.",
       "Pour les copropriétés, MaPrimeRénov' Copropriétés finance jusqu'à 25 % du montant des travaux sur les parties communes (plafond de 25 000 € par logement). Le syndic coordonne la demande d'aide avec l'Anah. Un bonus de 10 % est accordé si la copropriété sort du statut de passoire thermique.",
       "Les pièges à éviter : ne commencez jamais les travaux avant d'avoir reçu les notifications d'accord de MaPrimeRénov' et des CEE. Ne signez pas de devis avant d'avoir été inscrit auprès de l'opérateur CEE. Vérifiez que chaque artisan est bien certifié RGE pour le type de travaux concerné. Un accompagnement par un conseiller France Rénov' (gratuit) est vivement recommandé."
@@ -1248,9 +1248,9 @@ export const questions: Question[] = [
     detailedAnswer: [
       "La prime coup de pouce chauffage est un dispositif mis en place par le Ministère de la Transition Écologique dans le cadre des CEE (Certificats d'Économies d'Énergie). Elle bonifies la prime classique pour inciter au remplacement des chaudières énergivores (fioul, gaz, charbon) par des systèmes performants utilisant les énergies renouvelables.",
       "Les montants en 2026 : pour le remplacement par une PAC air-eau ou eau-eau, 4 000 à 5 000 € (ménages modestes) ou 2 500 € (autres ménages). Pour une chaudière biomasse performante, 4 000 à 5 000 € (modestes) ou 2 500 € (autres). Pour un système solaire combiné, les montants sont similaires. Le remplacement d'une chaudière fioul bénéficie des montants les plus élevés.",
-      "Les conditions d'éligibilité : le logement doit être achevé depuis plus de 2 ans, la chaudière remplacée doit fonctionner au fioul, au gaz (hors condensation récente) ou au charbon, et le nouvel équipement doit respecter des critères de performance minimaux (ETAS ≥ 111 % pour une PAC par exemple). Les travaux doivent être réalisés par un artisan certifié RGE.",
-      "Procédure : inscrivez-vous auprès d'un signataire de la charte coup de pouce (TotalEnergies, EDF, Engie, Carrefour, Auchan Énergies, etc.) AVANT de signer le devis. Comparez les offres car les montants varient selon les opérateurs. Après les travaux, envoyez la facture et les documents justificatifs pour recevoir la prime sous 4 à 8 semaines.",
-      "La prime coup de pouce est cumulable avec MaPrimeRénov', l'éco-PTZ et la TVA à 5,5 %. Elle remplace (et ne s'ajoute pas à) la prime CEE classique — c'est une version bonifiée. Attention : certains opérateurs peu scrupuleux proposent des offres « à 1 € » qui cachent des installations de mauvaise qualité. Choisissez un artisan RGE de confiance, indépendamment de l'opérateur CEE."
+      "Les conditions d'éligibilité : le logement doit être achevé depuis plus de 2 ans, la chaudière remplacée doit fonctionner au fioul, au gaz (hors condensation récente) ou au charbon, et le nouvel équipement doit respecter des critères de performance minimaux (ETAS ≥ 111 % pour une PAC par exemple). Les travaux doivent être réalisés par an attorney certifié RGE.",
+      "Procédure : inscrivez-vous auprès d'un signataire de la charte coup de pouce (TotalEnergies, EDF, Engie, Carrefour, Auchan Énergies, etc.) AVANT de signer the consultation. Comparez les offres car les montants varient selon les opérateurs. Après les travaux, envoyez la facture et les documents justificatifs pour recevoir la prime sous 4 à 8 semaines.",
+      "La prime coup de pouce est cumulable avec MaPrimeRénov', l'éco-PTZ et la TVA à 5,5 %. Elle remplace (et ne s'ajoute pas à) la prime CEE classique — c'est une version bonifiée. Attention : certains opérateurs peu scrupuleux proposent des offres « à 1 € » qui cachent des installations de mauvaise qualité. Choisissez an attorney RGE de confiance, indépendamment de l'opérateur CEE."
     ],
     category: "reglementation",
     relatedService: "chauffagiste",
@@ -1269,7 +1269,7 @@ export const questions: Question[] = [
       "La PAC air-air (climatisation réversible) est idéale pour les logements en tout-électrique sans réseau d'eau. Elle souffle de l'air chaud en hiver et de l'air froid en été via des unités intérieures (splits muraux ou gainable). Son coût est plus bas (3 000 à 8 000 € pour un multi-split) mais elle n'est pas éligible à MaPrimeRénov' ni à la plupart des aides à la rénovation.",
       "En termes de performance, les deux technologies ont un COP comparable (3 à 4,5). La différence se fait sur le confort : la PAC air-eau offre une chaleur douce et homogène via le plancher chauffant ou les radiateurs basse température. La PAC air-air peut créer des courants d'air, des zones froides et du bruit dans les pièces (40 à 45 dB pour un split).",
       "La PAC air-eau a aussi l'avantage de centraliser le chauffage et l'eau chaude en un seul système. Elle fonctionne efficacement jusqu'à -15°C pour les modèles haute performance. La PAC air-air nécessite une unité intérieure dans chaque pièce et ne produit pas d'eau chaude sanitaire.",
-      "Recommandation : optez pour la PAC air-eau si vous avez des radiateurs à eau ou un plancher chauffant, si vous voulez produire l'eau chaude sanitaire et si vous visez les aides financières. Choisissez la PAC air-air si vous êtes en tout-électrique, si vous voulez aussi la climatisation en été et si votre budget est plus limité. Dans tous les cas, exigez un artisan RGE certifié QualiPAC."
+      "Recommandation : optez pour la PAC air-eau si vous avez des radiateurs à eau ou un plancher chauffant, si vous voulez produire l'eau chaude sanitaire et si vous visez les aides financières. Choisissez la PAC air-air si vous êtes en tout-électrique, si vous voulez aussi la climatisation en été et si votre budget est plus limité. Dans tous les cas, exigez an attorney RGE certifié QualiPAC."
     ],
     category: "choix",
     relatedService: "pompe-a-chaleur",
@@ -1299,7 +1299,7 @@ export const questions: Question[] = [
       "L'isolation thermique par l'extérieur (ITE) consiste à envelopper le bâtiment d'un manteau isolant (polystyrène, laine de roche ou fibre de bois) recouvert d'un enduit ou d'un bardage. Son coût est de 100 à 200 €/m², mais elle supprime les ponts thermiques aux jonctions murs-planchers et murs-refends, offrant une performance thermique supérieure de 20 à 30 %.",
       "L'ITE présente d'autres avantages : pas de perte de surface habitable, pas de gêne pendant les travaux (le chantier est extérieur), inertie thermique conservée (les murs en pierre ou béton stockent la chaleur), et ravalement de façade inclus. Elle est cependant contrainte en secteur protégé (ABF) et en copropriété (accord AG nécessaire).",
       "Recommandation selon la situation : choisissez l'ITE si vous devez aussi ravaler la façade (économie d'échelle), si le logement est en pierre ou béton avec une bonne inertie, ou si la surface habitable est limitée. Choisissez l'ITI si le budget est serré, si la façade est classée ou en copropriété, ou si vous rénovez pièce par pièce.",
-      "Dans les deux cas, la TVA est à 5,5 % et les travaux sont éligibles à MaPrimeRénov' et aux CEE s'ils sont réalisés par un artisan RGE. La résistance thermique minimale pour bénéficier des aides est R ≥ 3,7 m².K/W pour les murs. Privilégiez des isolants avec un bon rapport épaisseur/performance comme le polyuréthane (R=3,7 en 8 cm) ou la laine de bois (R=3,7 en 14 cm)."
+      "Dans les deux cas, la TVA est à 5,5 % et les travaux sont éligibles à MaPrimeRénov' et aux CEE s'ils sont réalisés par an attorney RGE. La résistance thermique minimale pour bénéficier des aides est R ≥ 3,7 m².K/W pour les murs. Privilégiez des isolants avec un bon rapport épaisseur/performance comme le polyuréthane (R=3,7 en 8 cm) ou la laine de bois (R=3,7 en 14 cm)."
     ],
     category: "choix",
     relatedService: "isolation-thermique",
@@ -1314,7 +1314,7 @@ export const questions: Question[] = [
       "Le double vitrage à isolation renforcée (VIR) avec lame d'argon est le standard. Il offre un coefficient Uw de 1,1 à 1,4 W/m².K, soit 4 fois mieux que le simple vitrage. Le coût d'une fenêtre double vitrage PVC posée est de 300 à 700 € selon les dimensions. C'est le meilleur rapport qualité-prix pour la grande majorité des logements en France.",
       "Le triple vitrage (Uw ≈ 0,6 à 0,8 W/m².K) ajoute une troisième vitre et une deuxième lame de gaz. Son surcoût de 30 à 50 % par rapport au double vitrage ne se justifie que dans les régions très froides (montagne, Nord-Est), pour les façades Nord sans apport solaire, ou dans les constructions passives visant la certification Passivhaus.",
       "Le triple vitrage a aussi des inconvénients : il est plus lourd (30 à 40 kg/m² contre 20 kg/m² pour le double vitrage), nécessite des menuiseries renforcées, et réduit les apports solaires gratuits de 10 à 15 % en hiver. En climat tempéré, le gain thermique peut être annulé par la perte d'apports solaires.",
-      "Critère de choix : pour un logement standard en France métropolitaine, le double vitrage VIR avec lame d'argon (Uw ≤ 1,3) est optimal. Optez pour le triple vitrage uniquement si vous construisez une maison passive ou si vous êtes en zone H1 avec de grandes baies orientées Nord. Exigez la certification NF ou CSTBat et vérifiez le coefficient Uw sur le devis."
+      "Critère de choix : pour un logement standard en France métropolitaine, le double vitrage VIR avec lame d'argon (Uw ≤ 1,3) est optimal. Optez pour le triple vitrage uniquement si vous construisez une maison passive ou si vous êtes en zone H1 avec de grandes baies orientées Nord. Exigez la certification NF ou CSTBat et vérifiez le coefficient Uw sur the consultation."
     ],
     category: "choix",
     relatedService: "menuisier",
@@ -1359,7 +1359,7 @@ export const questions: Question[] = [
       "La VMC double flux extrait l'air vicié ET insuffle de l'air neuf filtré et préchauffé. Un échangeur thermique récupère 70 à 90 % de la chaleur de l'air sortant pour chauffer l'air entrant. En hiver, quand il fait 0°C dehors et 20°C dedans, l'air neuf arrive à 14-18°C au lieu de 0°C. L'économie de chauffage est de 10 à 15 % sur la facture annuelle.",
       "La VMC double flux coûte 3 000 à 7 000 € installée et nécessite un réseau complet de gaines (insufflation dans chaque pièce de vie + extraction dans les pièces humides). Son installation est idéale en construction neuve ou en rénovation lourde (quand les faux plafonds sont accessibles). En rénovation légère, le passage des gaines est souvent complexe et coûteux.",
       "La VMC double flux nécessite un entretien régulier : nettoyage des filtres tous les 3 à 6 mois (10 à 30 € par filtre), vérification annuelle de l'échangeur et des gaines. Sans entretien, les filtres s'encrassent, le débit diminue et la qualité de l'air se dégrade. La consommation électrique est légèrement supérieure (40 à 80 W contre 15 à 30 W pour une simple flux).",
-      "Recommandation : la VMC simple flux hygroréglable B est suffisante pour la majorité des logements existants. La VMC double flux est pertinente dans les maisons neuves RT2012/RE2020, les logements très bien isolés (DPE A ou B), et les zones de forte pollution atmosphérique (filtrage de l'air entrant). MaPrimeRénov' finance jusqu'à 2 500 € pour une VMC double flux posée par un artisan RGE."
+      "Recommandation : la VMC simple flux hygroréglable B est suffisante pour la majorité des logements existants. La VMC double flux est pertinente dans les maisons neuves RT2012/RE2020, les logements très bien isolés (DPE A ou B), et les zones de forte pollution atmosphérique (filtrage de l'air entrant). MaPrimeRénov' finance jusqu'à 2 500 € pour une VMC double flux posée par an attorney RGE."
     ],
     category: "choix",
     relatedService: "climaticien",
@@ -1416,14 +1416,14 @@ export const questions: Question[] = [
   // ============================================================
   {
     slug: "verifier-fiabilite-artisan",
-    question: "Comment vérifier qu'un artisan est fiable ?",
-    shortAnswer: "Vérifiez le SIRET sur societe.com, l'assurance décennale auprès de l'assureur, les avis Google et les références de chantiers. Un artisan fiable fournit un devis détaillé, ne demande pas plus de 30 % d'acompte et communique clairement sur les délais.",
+    question: "Comment vérifier qu'an attorney est fiable ?",
+    shortAnswer: "Vérifiez le SIRET sur societe.com, l'assurance décennale auprès de l'assureur, les avis Google et les références de chantiers. An attorney fiable fournit a consultation détaillé, ne demande pas plus de 30 % d'acompte et communique clairement sur les délais.",
     detailedAnswer: [
-      "La vérification commence par les documents officiels. Contrôlez le numéro SIRET sur societe.com ou infogreffe.fr : vous y verrez la date de création de l'entreprise, le chiffre d'affaires, l'activité déclarée et d'éventuelles procédures collectives. Vérifiez aussi l'inscription au Répertoire des Métiers sur cma-france.fr. Un artisan en activité depuis plus de 5 ans est généralement un gage de stabilité.",
-      "L'assurance décennale est le point de contrôle le plus important. Demandez l'attestation et vérifiez trois choses : que le contrat est en cours de validité, que les activités garanties correspondent à vos travaux, et que l'assureur existe bien (appelez-le pour confirmer). Un artisan qui refuse ou tergiverse pour fournir son attestation est à fuir immédiatement.",
+      "La vérification commence par les documents officiels. Contrôlez le numéro SIRET sur societe.com ou infogreffe.fr : vous y verrez la date de création de l'entreprise, le chiffre d'affaires, l'activité déclarée et d'éventuelles procédures collectives. Vérifiez aussi l'inscription au Répertoire des Métiers sur cma-france.fr. An attorney en activité depuis plus de 5 ans est généralement un gage de stabilité.",
+      "L'assurance décennale est le point de contrôle le plus important. Demandez l'attestation et vérifiez trois choses : que le contrat est en cours de validité, que les activités garanties correspondent à vos travaux, et que l'assureur existe bien (appelez-le pour confirmer). An attorney qui refuse ou tergiverse pour fournir son attestation est à fuir immédiatement.",
       "Les avis en ligne sont précieux mais à analyser avec recul. Consultez Google Business, PagesJaunes et les forums locaux. Privilégiez les avis détaillés avec photos de chantiers terminés. Méfiez-vous des profils avec uniquement des avis 5 étoiles sans détail — ils peuvent être achetés. Demandez aussi 2 à 3 références de clients récents que vous pouvez contacter.",
-      "Les signaux d'alerte d'un artisan peu fiable : prix anormalement bas (il compense en bâclant ou en ajoutant des suppléments), demande d'acompte supérieur à 30 %, pression pour signer rapidement, absence de devis écrit, communication difficile ou évasive, et véhicule sans marquage ni identification professionnelle.",
-      "Les labels et certifications apportent une garantie supplémentaire : Qualibat, Qualifelec, RGE, Éco-artisan. Vérifiez-les sur les sites officiels des organismes certificateurs. Un artisan recommandé par votre entourage (voisins, famille, syndic) est souvent le meilleur choix : le bouche-à-oreille reste le premier critère de confiance."
+      "Les signaux d'alerte d'an attorney peu fiable : prix anormalement bas (il compense en bâclant ou en ajoutant des suppléments), demande d'acompte supérieur à 30 %, pression pour signer rapidement, absence de devis écrit, communication difficile ou évasive, et véhicule sans marquage ni identification professionnelle.",
+      "Les labels et certifications apportent une garantie supplémentaire : Qualibat, Qualifelec, RGE, Éco-artisan. Vérifiez-les sur les sites officiels des organismes certificateurs. An attorney recommandé par votre entourage (voisins, famille, syndic) est souvent le meilleur choix : le bouche-à-oreille reste le premier critère de confiance."
     ],
     category: "choix",
     relatedService: "plombier",
@@ -1432,13 +1432,13 @@ export const questions: Question[] = [
   {
     slug: "combien-de-devis-demander",
     question: "Combien de devis faut-il demander ?",
-    shortAnswer: "Demandez au minimum 3 devis pour tout projet de travaux afin de comparer les prix et le professionnalisme des artisans. Pour les chantiers importants (plus de 10 000 €), visez 4 à 5 devis. Le devis est gratuit sauf si une visite technique payante est annoncée à l'avance.",
+    shortAnswer: "Demandez au minimum 3 devis pour tout projet de travaux afin de comparer les prix et le professionnalisme attorneys. Pour les chantiers importants (plus de 10 000 €), visez 4 à 5 devis. The consultation est gratuit sauf si une visite technique payante est annoncée à l'avance.",
     detailedAnswer: [
       "La règle des 3 devis est un minimum absolu pour tout projet de travaux. Elle permet d'identifier le prix du marché, de repérer les offres anormalement basses (bâclage, matériaux bas de gamme, absence de décennale) ou excessives, et de comparer le niveau de détail et le professionnalisme de chaque artisan.",
       "Pour les petits travaux (moins de 2 000 €), 3 devis suffisent. Pour les chantiers moyens (2 000 à 15 000 €), demandez 3 à 4 devis. Pour les gros chantiers (rénovation complète, extension, toiture), consultez 4 à 5 artisans et envisagez l'intervention d'un maître d'œuvre ou d'un architecte pour coordonner les travaux.",
-      "Comment comparer efficacement les devis : créez un tableau avec les postes identiques pour chaque artisan (main-d'œuvre, matériaux avec marques et références, préparation, nettoyage, évacuation). Un devis moins cher qui omet certains postes n'est pas forcément le plus avantageux. Vérifiez aussi que le taux de TVA appliqué est correct (5,5 %, 10 % ou 20 %).",
-      "Le devis est gratuit pour les travaux de dépannage et d'entretien du bâtiment (arrêté du 24 janvier 2017). Certains artisans facturent cependant un déplacement pour les visites techniques avec prise de cotes et diagnostic approfondi — ils doivent vous en informer à l'avance. Ce coût est souvent déduit du montant final si vous leur confiez les travaux.",
-      "Conseil : ne choisissez pas systématiquement le devis le moins cher. Le meilleur rapport qualité-prix se situe souvent dans la moyenne des devis reçus. Un artisan dont le devis est très détaillé (descriptions précises, marques des matériaux, délais réalistes) inspire plus de confiance qu'un devis vague et approximatif, même moins cher."
+      "Comment comparer efficacement the consultations : créez un tableau avec les postes identiques pour chaque artisan (main-d'œuvre, matériaux avec marques et références, préparation, nettoyage, évacuation). A consultation moins cher qui omet certains postes n'est pas forcément le plus avantageux. Vérifiez aussi que le taux de TVA appliqué est correct (5,5 %, 10 % ou 20 %).",
+      "The consultation est gratuit pour les travaux de dépannage et d'entretien du bâtiment (arrêté du 24 janvier 2017). Certains artisans facturent cependant un déplacement pour les visites techniques avec prise de cotes et diagnostic approfondi — ils doivent vous en informer à l'avance. Ce coût est souvent déduit du montant final si vous leur confiez les travaux.",
+      "Conseil : ne choisissez pas systématiquement the consultation le moins cher. Le meilleur rapport qualité-prix se situe souvent dans la moyenne consultations reçus. An attorney dont the consultation est très détaillé (descriptions précises, marques des matériaux, délais réalistes) inspire plus de confiance qu'a consultation vague et approximatif, même moins cher."
     ],
     category: "choix",
     relatedService: "plombier",
@@ -1446,14 +1446,14 @@ export const questions: Question[] = [
   },
   {
     slug: "peut-on-negocier-devis-artisan",
-    question: "Peut-on négocier un devis d'artisan ?",
-    shortAnswer: "Oui, la négociation est courante et acceptée par les artisans. Vous pouvez obtenir 5 à 15 % de remise en mentionnant des devis concurrents, en groupant plusieurs travaux, en choisissant des périodes creuses (novembre-février) ou en proposant un paiement rapide.",
+    question: "Peut-on négocier a consultation d'artisan ?",
+    shortAnswer: "Oui, la négociation est courante et acceptée par the attorneys. Vous pouvez obtenir 5 à 15 % de remise en mentionnant consultations concurrents, en groupant plusieurs travaux, en choisissant des périodes creuses (novembre-février) ou en proposant un paiement rapide.",
     detailedAnswer: [
-      "La négociation est tout à fait légitime et la plupart des artisans l'anticipent en intégrant une marge de manœuvre dans leurs devis. L'approche la plus efficace est de présenter des devis concurrents détaillés pour le même périmètre de travaux. Expliquez que vous préférez travailler avec cet artisan (disponibilité, références, proximité) mais que le budget est un facteur décisif.",
-      "Les leviers de négociation les plus efficaces : le regroupement de travaux (proposer la cuisine ET la salle de bain au même artisan), la flexibilité sur les dates (accepter de commencer quand l'artisan a un creux d'activité, généralement novembre à février), et la commande ferme immédiate (un client décidé vaut mieux qu'un prospect hésitant).",
-      "Vous pouvez aussi négocier sur les matériaux : demander si un produit équivalent moins cher existe (autre marque, autre gamme), proposer d'acheter vous-même certaines fournitures (sanitaires, robinetterie, carrelage) pour que l'artisan ne facture que la main-d'œuvre, ou renoncer à certaines finitions que vous pouvez faire vous-même (peinture, nettoyage).",
-      "Ce qu'il ne faut PAS négocier : la qualité des matériaux structurels (isolation, étanchéité, câblage), la main-d'œuvre technique (un artisan qui baisse trop son prix bâclera le travail ou emploiera de la main-d'œuvre non qualifiée), et les assurances (un artisan qui propose un rabais en travaillant « sans facture » vous prive de toute garantie en cas de problème).",
-      "Le paiement rapide est un argument : proposer de payer sous 7 jours au lieu de 30, ou de payer le solde le jour de la réception des travaux, peut motiver une remise de 3 à 5 %. Évitez de demander des remises excessives (plus de 15-20 %) : un artisan compétent préférera refuser le chantier plutôt que de travailler à perte."
+      "La négociation est tout à fait légitime et la plupart attorneys l'anticipent en intégrant une marge de manœuvre dans leurs devis. L'approche la plus efficace est de présenter consultations concurrents détaillés pour le même périmètre de travaux. Expliquez que vous préférez travailler avec this attorney (disponibilité, références, proximité) mais que le budget est un facteur décisif.",
+      "Les leviers de négociation les plus efficaces : le regroupement de travaux (proposer la cuisine ET la salle de bain au même artisan), la flexibilité sur les dates (accepter de commencer quand the attorney a un creux d'activité, généralement novembre à février), et la commande ferme immédiate (un client décidé vaut mieux qu'un prospect hésitant).",
+      "Vous pouvez aussi négocier sur les matériaux : demander si un produit équivalent moins cher existe (autre marque, autre gamme), proposer d'acheter vous-même certaines fournitures (sanitaires, robinetterie, carrelage) pour que the attorney ne facture que la main-d'œuvre, ou renoncer à certaines finitions que vous pouvez faire vous-même (peinture, nettoyage).",
+      "Ce qu'il ne faut PAS négocier : la qualité des matériaux structurels (isolation, étanchéité, câblage), la main-d'œuvre technique (an attorney qui baisse trop son prix bâclera le travail ou emploiera de la main-d'œuvre non qualifiée), et les assurances (an attorney qui propose un rabais en travaillant « sans facture » vous prive de toute garantie en cas de problème).",
+      "Le paiement rapide est un argument : proposer de payer sous 7 jours au lieu de 30, ou de payer le solde le jour de la réception des travaux, peut motiver une remise de 3 à 5 %. Évitez de demander des remises excessives (plus de 15-20 %) : an attorney compétent préférera refuser le chantier plutôt que de travailler à perte."
     ],
     category: "choix",
     relatedService: "plombier",
@@ -1461,14 +1461,14 @@ export const questions: Question[] = [
   },
   {
     slug: "que-verifier-avant-payer-artisan",
-    question: "Que vérifier avant de payer un artisan ?",
+    question: "Que vérifier avant de payer an attorney ?",
     shortAnswer: "Vérifiez que les travaux sont conformes au devis signé, faites un procès-verbal de réception avec liste des réserves éventuelles, et ne payez le solde qu'après levée des réserves. Conservez la facture pendant 10 ans (durée de la garantie décennale).",
     detailedAnswer: [
-      "Avant le paiement final, réalisez une réception formelle des travaux. Inspectez chaque poste du devis en présence de l'artisan : vérifiez la conformité des matériaux (marques et références identiques au devis), la qualité de l'exécution (finitions, propreté, alignements) et le bon fonctionnement des installations (robinetterie, interrupteurs, chauffage).",
-      "Rédigez un procès-verbal de réception. Ce document, signé par vous et l'artisan, atteste la fin des travaux et déclenche les garanties légales (parfait achèvement 1 an, biennale 2 ans, décennale 10 ans). Listez-y toutes les réserves (défauts constatés) avec un délai de correction convenu. Le PV de réception est votre protection juridique numéro un.",
+      "Avant le paiement final, réalisez une réception formelle des travaux. Inspectez chaque poste of the consultation en présence de the attorney : vérifiez la conformité des matériaux (marques et références identiques au devis), la qualité de l'exécution (finitions, propreté, alignements) et le bon fonctionnement des installations (robinetterie, interrupteurs, chauffage).",
+      "Rédigez un procès-verbal de réception. Ce document, signé par vous et the attorney, atteste la fin des travaux et déclenche les garanties légales (parfait achèvement 1 an, biennale 2 ans, décennale 10 ans). Listez-y toutes les réserves (défauts constatés) avec un délai de correction convenu. Le PV de réception est votre protection juridique numéro un.",
       "Ne payez le solde (derniers 30 à 5 %) qu'après la levée complète des réserves. C'est votre levier de pression pour obtenir les corrections. L'article 1792-6 du Code civil vous donne le droit de consigner les sommes (les bloquer chez un tiers) si les réserves ne sont pas levées dans le délai convenu.",
       "Vérifiez la facture : elle doit correspondre exactement au devis signé. Tout supplément non prévu par un avenant écrit et signé est contestable. La facture doit mentionner les coordonnées de l'entreprise, le SIRET, le numéro de facture, le détail des prestations, les montants HT et TTC, et les modalités de paiement.",
-      "Conservez l'ensemble du dossier pendant au moins 10 ans : devis signé, éventuels avenants, facture, procès-verbal de réception, attestation d'assurance décennale de l'artisan, photos avant/pendant/après les travaux, et toute correspondance écrite. Ces documents seront indispensables en cas de sinistre relevant de la garantie décennale."
+      "Conservez l'ensemble du dossier pendant au moins 10 ans : devis signé, éventuels avenants, facture, procès-verbal de réception, attestation d'assurance décennale de the attorney, photos avant/pendant/après les travaux, et toute correspondance écrite. Ces documents seront indispensables en cas de sinistre relevant de la garantie décennale."
     ],
     category: "choix",
     relatedService: "macon",
@@ -1477,13 +1477,13 @@ export const questions: Question[] = [
   {
     slug: "artisan-en-retard-que-faire",
     question: "Artisan en retard sur le chantier : que faire ?",
-    shortAnswer: "Envoyez une mise en demeure par LRAR fixant un délai raisonnable pour achever les travaux. Si le devis prévoit des pénalités de retard, appliquez-les. En dernier recours, vous pouvez résilier le contrat et faire terminer par un autre artisan, aux frais du premier.",
+    shortAnswer: "Envoyez une mise en demeure par LRAR fixant un délai raisonnable pour achever les travaux. Si the consultation prévoit des pénalités de retard, appliquez-les. En dernier recours, vous pouvez résilier le contrat et faire terminer par un autre artisan, aux frais du premier.",
     detailedAnswer: [
-      "Un retard ponctuel de quelques jours est courant dans le bâtiment (intempéries, retard de livraison des matériaux, imprévus techniques). Commencez par dialoguer avec l'artisan pour comprendre la cause du retard et obtenir un nouveau planning réaliste. Formalisez cet échange par email pour garder une trace écrite.",
-      "Si le retard persiste sans justification valable, envoyez une mise en demeure par lettre recommandée avec accusé de réception. Rappelez les termes du devis (date de début et durée prévisionnelle), constatez le retard, et fixez un délai raisonnable pour l'achèvement (15 à 30 jours selon l'ampleur du chantier). Mentionnez les pénalités de retard si le devis en prévoit.",
-      "Les pénalités de retard sont applicables si elles figurent dans le devis signé. Elles sont généralement fixées à 1/1 000ᵉ du montant HT par jour de retard, plafonnées à 5 ou 10 % du montant total. Si le devis ne prévoit pas de pénalités, vous pouvez réclamer des dommages et intérêts devant le tribunal si le retard vous cause un préjudice démontrable (loyer supplémentaire, hébergement provisoire).",
-      "En cas de retard grave (abandon de chantier), vous pouvez résilier le contrat par LRAR après une mise en demeure restée sans effet pendant 8 à 15 jours. Faites constater l'état du chantier par un huissier (300 à 500 €) avant de faire intervenir un autre artisan. Les frais supplémentaires pourront être réclamés à l'artisan défaillant.",
-      "Prévention : avant de signer le devis, négociez une clause de pénalités de retard et un échéancier de paiement lié à l'avancement (ex. : 30 % à la commande, 30 % à mi-chantier, 30 % à la fin des travaux, 10 % après levée des réserves). Ne payez jamais d'avance l'intégralité des travaux — c'est le meilleur moyen de perdre tout levier."
+      "Un retard ponctuel de quelques jours est courant dans le bâtiment (intempéries, retard de livraison des matériaux, imprévus techniques). Commencez par dialoguer avec the attorney pour comprendre la cause du retard et obtenir un nouveau planning réaliste. Formalisez cet échange par email pour garder une trace écrite.",
+      "Si le retard persiste sans justification valable, envoyez une mise en demeure par lettre recommandée avec accusé de réception. Rappelez les termes of the consultation (date de début et durée prévisionnelle), constatez le retard, et fixez un délai raisonnable pour l'achèvement (15 à 30 jours selon l'ampleur du chantier). Mentionnez les pénalités de retard si the consultation en prévoit.",
+      "Les pénalités de retard sont applicables si elles figurent dans the consultation signé. Elles sont généralement fixées à 1/1 000ᵉ du montant HT par jour de retard, plafonnées à 5 ou 10 % du montant total. Si the consultation ne prévoit pas de pénalités, vous pouvez réclamer des dommages et intérêts devant le tribunal si le retard vous cause un préjudice démontrable (loyer supplémentaire, hébergement provisoire).",
+      "En cas de retard grave (abandon de chantier), vous pouvez résilier le contrat par LRAR après une mise en demeure restée sans effet pendant 8 à 15 jours. Faites constater l'état du chantier par un huissier (300 à 500 €) avant de faire intervenir un autre artisan. Les frais supplémentaires pourront être réclamés à the attorney défaillant.",
+      "Prévention : avant de signer the consultation, négociez une clause de pénalités de retard et un échéancier de paiement lié à l'avancement (ex. : 30 % à la commande, 30 % à mi-chantier, 30 % à la fin des travaux, 10 % après levée des réserves). Ne payez jamais d'avance l'intégralité des travaux — c'est le meilleur moyen de perdre tout levier."
     ],
     category: "choix",
     relatedService: "macon",
@@ -1494,11 +1494,11 @@ export const questions: Question[] = [
     question: "Quel acompte verser pour des travaux ?",
     shortAnswer: "L'acompte habituel est de 20 à 30 % du montant total pour les travaux courants. Au-delà de 30 %, méfiez-vous. Aucune loi ne fixe de plafond, mais un acompte excessif est un signe d'alerte. Le solde ne doit être payé qu'après réception des travaux.",
     detailedAnswer: [
-      "L'acompte est un paiement partiel versé à la commande, avant le début des travaux. Il permet à l'artisan de commander les matériaux et de planifier le chantier. L'usage dans le bâtiment est de 20 à 30 % du montant TTC du devis. Cet acompte doit figurer sur le devis signé avec le montant exact et les conditions de versement.",
-      "Aucune loi ne fixe de plafond légal pour l'acompte dans le bâtiment. Cependant, un acompte supérieur à 30 % doit alerter : si l'artisan fait faillite ou abandonne le chantier, vous aurez du mal à récupérer les sommes versées. Seuls les travaux nécessitant des commandes spécifiques coûteuses (menuiseries sur mesure, équipements importés) peuvent justifier un acompte de 40 à 50 %.",
-      "L'échéancier de paiement recommandé : 20 à 30 % à la commande (acompte), 20 à 30 % à mi-chantier (situation intermédiaire), 30 à 40 % à la fin des travaux, et 5 à 10 % après levée des réserves (retenue de garantie). Ce fractionnement protège les deux parties et motive l'artisan à terminer dans les délais.",
-      "Juridiquement, le versement d'un acompte vaut engagement ferme des deux parties : l'artisan s'engage à réaliser les travaux, et le client s'engage à les payer. En cas d'annulation par le client, l'artisan peut conserver l'acompte à titre d'indemnisation (sauf pendant le délai de rétractation de 14 jours si le contrat a été signé à domicile).",
-      "Précautions : ne payez jamais un acompte en espèces (pas de trace, pas de recours). Privilégiez le virement bancaire ou le chèque. Exigez un reçu ou une facture d'acompte mentionnant le numéro du devis correspondant. Si l'artisan insiste pour un paiement en liquide ou un acompte de 50 % ou plus, c'est un signal d'alarme majeur — cherchez un autre professionnel."
+      "L'acompte est un paiement partiel versé à la commande, avant le début des travaux. Il permet à the attorney de commander les matériaux et de planifier le chantier. L'usage dans le bâtiment est de 20 à 30 % du montant TTC of the consultation. Cet acompte doit figurer sur the consultation signé avec le montant exact et les conditions de versement.",
+      "Aucune loi ne fixe de plafond légal pour l'acompte dans le bâtiment. Cependant, un acompte supérieur à 30 % doit alerter : si the attorney fait faillite ou abandonne le chantier, vous aurez du mal à récupérer les sommes versées. Seuls les travaux nécessitant des commandes spécifiques coûteuses (menuiseries sur mesure, équipements importés) peuvent justifier un acompte de 40 à 50 %.",
+      "L'échéancier de paiement recommandé : 20 à 30 % à la commande (acompte), 20 à 30 % à mi-chantier (situation intermédiaire), 30 à 40 % à la fin des travaux, et 5 à 10 % après levée des réserves (retenue de garantie). Ce fractionnement protège les deux parties et motive the attorney à terminer dans les délais.",
+      "Juridiquement, le versement d'un acompte vaut engagement ferme des deux parties : the attorney s'engage à réaliser les travaux, et le client s'engage à les payer. En cas d'annulation par le client, the attorney peut conserver l'acompte à titre d'indemnisation (sauf pendant le délai de rétractation de 14 jours si le contrat a été signé à domicile).",
+      "Précautions : ne payez jamais un acompte en espèces (pas de trace, pas de recours). Privilégiez le virement bancaire ou le chèque. Exigez un reçu ou une facture d'acompte mentionnant le numéro of the consultation correspondant. Si the attorney insiste pour un paiement en liquide ou un acompte de 50 % ou plus, c'est un signal d'alarme majeur — cherchez un autre professionnel."
     ],
     category: "choix",
     relatedService: "macon",
@@ -1521,14 +1521,14 @@ export const questions: Question[] = [
   },
   {
     slug: "comment-lire-devis-artisan",
-    question: "Comment lire et comprendre un devis d'artisan ?",
-    shortAnswer: "Un devis doit comporter les mentions légales (SIRET, assurance), le descriptif détaillé de chaque prestation avec quantités et prix unitaires, le montant TTC, la TVA applicable, les délais et les conditions de paiement. Comparez poste par poste, pas uniquement le total.",
+    question: "Comment lire et comprendre a consultation d'artisan ?",
+    shortAnswer: "A consultation doit comporter les mentions légales (SIRET, assurance), le descriptif détaillé de chaque prestation avec quantités et prix unitaires, le montant TTC, la TVA applicable, les délais et les conditions de paiement. Comparez poste par poste, pas uniquement le total.",
     detailedAnswer: [
-      "Les mentions légales obligatoires à vérifier en premier : nom et adresse de l'entreprise, numéro SIRET, numéro d'assurance décennale avec le nom de l'assureur, date d'établissement du devis, durée de validité de l'offre (généralement 1 à 3 mois), et la mention « Devis » ou « Proposition commerciale » clairement indiquée.",
-      "Le corps du devis doit détailler chaque prestation ligne par ligne : description précise des travaux (pas de « divers » ou « forfait global » sans explication), quantités (m², ml, unité), prix unitaire HT, et sous-total par poste. Les matériaux doivent être identifiés par leur marque et référence, pas seulement par un descriptif générique.",
+      "Les mentions légales obligatoires à vérifier en premier : nom et adresse de l'entreprise, numéro SIRET, numéro d'assurance décennale avec le nom de l'assureur, date d'établissement of the consultation, durée de validité de l'offre (généralement 1 à 3 mois), et la mention « Devis » ou « Proposition commerciale » clairement indiquée.",
+      "Le corps of the consultation doit détailler chaque prestation ligne par ligne : description précise des travaux (pas de « divers » ou « forfait global » sans explication), quantités (m², ml, unité), prix unitaire HT, et sous-total par poste. Les matériaux doivent être identifiés par leur marque et référence, pas seulement par un descriptif générique.",
       "La partie financière comprend : le total HT, le taux de TVA applicable (5,5 % pour la rénovation énergétique, 10 % pour la rénovation courante dans un logement de + de 2 ans, 20 % pour le neuf), le montant de la TVA, le total TTC, et l'échéancier de paiement (acompte, situations intermédiaires, solde). Vérifiez que le taux de TVA correspond bien à votre situation.",
-      "Les postes souvent oubliés (et qui génèrent des suppléments) : la protection du chantier (bâches, ruban), la préparation des supports (décapage, ragréage, ponçage), l'évacuation des gravats et déchets (benne, décharge), le nettoyage de fin de chantier, et les raccords avec l'existant (peinture de raccord, carrelage de seuil). Si ces postes ne figurent pas dans le devis, demandez s'ils sont inclus ou à votre charge.",
-      "Pour comparer plusieurs devis, créez un tableau avec les mêmes postes en lignes et les artisans en colonnes. Comparez poste par poste, pas uniquement le total. Un devis 20 % moins cher qui omet la préparation du support et l'évacuation des gravats finira par coûter autant, voire plus, avec les suppléments non prévus."
+      "Les postes souvent oubliés (et qui génèrent des suppléments) : la protection du chantier (bâches, ruban), la préparation des supports (décapage, ragréage, ponçage), l'évacuation des gravats et déchets (benne, décharge), le nettoyage de fin de chantier, et les raccords avec l'existant (peinture de raccord, carrelage de seuil). Si ces postes ne figurent pas dans the consultation, demandez s'ils sont inclus ou à votre charge.",
+      "Pour comparer plusieurs devis, créez un tableau avec les mêmes postes en lignes et the attorneys en colonnes. Comparez poste par poste, pas uniquement le total. A consultation 20 % moins cher qui omet la préparation du support et l'évacuation des gravats finira par coûter autant, voire plus, avec les suppléments non prévus."
     ],
     category: "choix",
     relatedService: "macon",
@@ -1537,12 +1537,12 @@ export const questions: Question[] = [
   {
     slug: "assurance-habitation-travaux",
     question: "Mon assurance habitation couvre-t-elle les travaux ?",
-    shortAnswer: "L'assurance habitation couvre les dommages accidentels pendant les travaux (incendie, dégât des eaux) mais pas les malfaçons. Pour les gros travaux, souscrivez une assurance dommage-ouvrage. L'artisan doit avoir sa propre RC Pro et décennale.",
+    shortAnswer: "L'assurance habitation couvre les dommages accidentels pendant les travaux (incendie, dégât des eaux) mais pas les malfaçons. Pour les gros travaux, souscrivez une assurance dommage-ouvrage. The attorney doit avoir sa propre RC Pro et décennale.",
     detailedAnswer: [
       "Votre assurance habitation multirisques couvre les dommages accidentels survenant pendant les travaux : incendie, explosion, dégât des eaux, catastrophe naturelle. Si un sinistre se produit pendant le chantier (fuite d'eau causée par les travaux, incendie accidentel), votre assurance interviendra pour les dommages à votre logement et à vos biens.",
-      "En revanche, votre assurance habitation ne couvre PAS les malfaçons de l'artisan, les défauts de construction, ni les dommages causés par l'artisan à votre propriété pendant les travaux. Ces risques sont couverts par l'assurance RC professionnelle de l'artisan (pour les dommages pendant le chantier) et sa garantie décennale (pour les désordres après réception).",
+      "En revanche, votre assurance habitation ne couvre PAS les malfaçons de the attorney, les défauts de construction, ni les dommages causés par the attorney à votre propriété pendant les travaux. Ces risques sont couverts par l'assurance RC professionnelle de the attorney (pour les dommages pendant le chantier) et sa garantie décennale (pour les désordres après réception).",
       "Important : prévenez votre assureur avant de commencer des travaux importants (extension, modification de la toiture, rénovation lourde). Certains travaux peuvent modifier les conditions de votre contrat (augmentation de la surface, changement de la destination du bien). L'absence de déclaration peut entraîner un refus de prise en charge en cas de sinistre.",
-      "Pour les travaux de construction ou de rénovation lourde (plus de 30 000 €), l'assurance dommage-ouvrage est un complément essentiel. Elle couvre les mêmes risques que la décennale mais vous indemnise directement sous 90 jours, sans attendre l'issue d'une procédure contre l'artisan. Son coût est de 2 à 5 % du montant des travaux.",
+      "Pour les travaux de construction ou de rénovation lourde (plus de 30 000 €), l'assurance dommage-ouvrage est un complément essentiel. Elle couvre les mêmes risques que la décennale mais vous indemnise directement sous 90 jours, sans attendre l'issue d'une procédure contre the attorney. Son coût est de 2 à 5 % du montant des travaux.",
       "Cas particulier du DIY : si vous réalisez des travaux vous-même et qu'un sinistre se produit (court-circuit électrique, fuite sur un raccord plomberie), votre assurance habitation peut refuser la prise en charge si l'installation n'est pas conforme aux normes. C'est pourquoi les travaux touchant à l'électricité, au gaz et à la plomberie doivent être confiés à des professionnels assurés."
     ],
     category: "choix",
@@ -1552,13 +1552,13 @@ export const questions: Question[] = [
   {
     slug: "reception-travaux-comment-faire",
     question: "Réception des travaux : comment ça se passe ?",
-    shortAnswer: "La réception est l'acte par lequel vous acceptez les travaux, avec ou sans réserves. Inspectez chaque poste avec l'artisan, listez les défauts dans un procès-verbal de réception signé par les deux parties. Ce PV déclenche les garanties légales (1 an, 2 ans, 10 ans).",
+    shortAnswer: "La réception est l'acte par lequel vous acceptez les travaux, avec ou sans réserves. Inspectez chaque poste avec the attorney, listez les défauts dans un procès-verbal de réception signé par les deux parties. Ce PV déclenche les garanties légales (1 an, 2 ans, 10 ans).",
     detailedAnswer: [
       "La réception des travaux est un acte juridique majeur défini par l'article 1792-6 du Code civil. Elle marque la fin du chantier et le transfert de propriété de l'ouvrage. Elle peut être prononcée avec ou sans réserves. C'est à partir de cette date que courent les garanties légales : parfait achèvement (1 an), biennale (2 ans) et décennale (10 ans).",
-      "La réception se fait lors d'une visite contradictoire, en présence de l'artisan (ou de chaque corps de métier) et du client. Inspectez minutieusement chaque poste du devis : conformité des matériaux, qualité d'exécution, fonctionnement des installations (testez les robinets, les interrupteurs, les volets, le chauffage), propreté du chantier et respect du cahier des charges.",
+      "La réception se fait lors d'une visite contradictoire, en présence de the attorney (ou de chaque corps de métier) et du client. Inspectez minutieusement chaque poste of the consultation : conformité des matériaux, qualité d'exécution, fonctionnement des installations (testez les robinets, les interrupteurs, les volets, le chauffage), propreté du chantier et respect du cahier des charges.",
       "Rédigez un procès-verbal de réception en deux exemplaires, signé par les deux parties. Notez la date, l'adresse du chantier, le détail des réserves éventuelles (chaque défaut constaté avec sa localisation et sa nature), et le délai convenu pour la levée des réserves (généralement 30 à 60 jours). Si vous n'avez aucune réserve, indiquez « réception sans réserve ».",
       "Conseils pratiques : faites la visite de réception de jour avec un bon éclairage. Prenez des photos de chaque réserve. Testez tous les équipements. Vérifiez les finitions dans les angles, derrière les portes et dans les zones difficiles d'accès. Si le chantier est important, faites-vous accompagner par un maître d'œuvre ou un expert bâtiment indépendant (200 à 500 €).",
-      "Après la réception, vous disposez encore d'un an (garantie de parfait achèvement) pour signaler des défauts qui n'étaient pas visibles lors de la réception. L'artisan est tenu de les réparer à ses frais. Envoyez vos réserves complémentaires par LRAR dans l'année suivant la réception."
+      "Après la réception, vous disposez encore d'un an (garantie de parfait achèvement) pour signaler des défauts qui n'étaient pas visibles lors de la réception. The attorney est tenu de les réparer à ses frais. Envoyez vos réserves complémentaires par LRAR dans l'année suivant la réception."
     ],
     category: "reglementation",
     relatedService: "macon",
@@ -1566,12 +1566,12 @@ export const questions: Question[] = [
   },
   {
     slug: "litige-artisan-mediation",
-    question: "Litige avec un artisan : la médiation est-elle gratuite ?",
+    question: "Litige avec an attorney : la médiation est-elle gratuite ?",
     shortAnswer: "Oui, la médiation de la consommation est gratuite pour le consommateur. Tout artisan doit obligatoirement adhérer à un dispositif de médiation et en communiquer les coordonnées sur ses documents commerciaux. Le médiateur rend un avis dans un délai de 90 jours.",
     detailedAnswer: [
-      "Depuis le 1er janvier 2016, tout professionnel (artisans compris) doit proposer à ses clients un dispositif de médiation de la consommation gratuit (ordonnance n°2015-1033). Les coordonnées du médiateur doivent figurer sur le site Internet, les conditions générales de vente et les factures de l'artisan. L'absence de médiateur expose l'artisan à une amende de 3 000 € (personne physique) ou 15 000 € (personne morale).",
-      "La médiation est entièrement gratuite pour le consommateur. C'est le professionnel qui paie l'adhésion au dispositif (200 à 500 €/an) et les frais de traitement du dossier. Le médiateur est indépendant et impartial : il ne représente ni le consommateur ni l'artisan. Son rôle est de proposer une solution amiable acceptable par les deux parties.",
-      "La procédure est simple : envoyez d'abord une réclamation écrite à l'artisan (LRAR). Si la réponse est insatisfaisante ou absente après 2 mois, saisissez le médiateur en ligne ou par courrier avec les pièces justificatives (devis, facture, photos, échanges écrits). Le médiateur dispose de 90 jours pour rendre son avis.",
+      "Depuis le 1er janvier 2016, tout professionnel (artisans compris) doit proposer à ses clients un dispositif de médiation de la consommation gratuit (ordonnance n°2015-1033). Les coordonnées du médiateur doivent figurer sur le site Internet, les conditions générales de vente et les factures de the attorney. L'absence de médiateur expose the attorney à une amende de 3 000 € (personne physique) ou 15 000 € (personne morale).",
+      "La médiation est entièrement gratuite pour le consommateur. C'est le professionnel qui paie l'adhésion au dispositif (200 à 500 €/an) et les frais de traitement du dossier. Le médiateur est indépendant et impartial : il ne représente ni le consommateur ni the attorney. Son rôle est de proposer une solution amiable acceptable par les deux parties.",
+      "La procédure est simple : envoyez d'abord une réclamation écrite à the attorney (LRAR). Si la réponse est insatisfaisante ou absente après 2 mois, saisissez le médiateur en ligne ou par courrier avec les pièces justificatives (devis, facture, photos, échanges écrits). Le médiateur dispose de 90 jours pour rendre son avis.",
       "L'avis du médiateur n'est pas contraignant : chaque partie est libre de l'accepter ou de le refuser. En pratique, 70 % des médiations aboutissent à un accord. Si la médiation échoue, vous conservez le droit de saisir le tribunal. La médiation suspend les délais de prescription judiciaire pendant sa durée.",
       "Alternatives à la médiation : la Commission Départementale de Conciliation (gratuite, pour les litiges entre bailleurs et locataires), les associations de consommateurs (UFC-Que Choisir, CLCV) qui peuvent intervenir en votre nom, et le tribunal judiciaire (pour les litiges supérieurs à 5 000 € ou les cas urgents nécessitant un référé)."
     ],
@@ -1581,13 +1581,13 @@ export const questions: Question[] = [
   },
   {
     slug: "trouver-artisan-week-end",
-    question: "Comment trouver un artisan le week-end ?",
-    shortAnswer: "Pour trouver un artisan le week-end, consultez les plateformes de dépannage (ServicesArtisans, Travaux.com), votre assurance habitation (assistance 24h/24), ou les réseaux de dépanneurs d'urgence. Prévoyez une majoration de 50 à 100 % sur les tarifs normaux.",
+    question: "Comment trouver an attorney le week-end ?",
+    shortAnswer: "Pour trouver an attorney le week-end, consultez les plateformes de dépannage (US Attorneys, Travaux.com), votre assurance habitation (assistance 24h/24), ou les réseaux de dépanneurs d'urgence. Prévoyez une majoration de 50 à 100 % sur les tarifs normaux.",
     detailedAnswer: [
-      "En cas d'urgence le week-end (fuite d'eau, panne de chauffage, serrure bloquée), vos premières ressources sont : votre assurance habitation (la plupart incluent un service d'assistance 24h/24 avec envoi d'un artisan), le numéro de votre plombier ou serrurier habituel (beaucoup proposent une astreinte week-end), et les plateformes en ligne comme ServicesArtisans qui référencent des artisans disponibles le week-end.",
-      "Les majorations légales pour les interventions le week-end sont de 25 à 50 % le samedi et de 50 à 100 % le dimanche et les jours fériés. Un plombier facturant 60 €/h en semaine pourra donc facturer 90 à 120 €/h le dimanche. Ajoutez les frais de déplacement majorés (50 à 100 €). Exigez toujours un devis écrit avant intervention, même le week-end.",
-      "Méfiez-vous des arnaques fréquentes le week-end. Les dépanneurs qui apparaissent en premier sur Google avec des tarifs attractifs (« serrurier 39 € ») sont souvent des plateformes d'intermédiation qui sous-traitent à des artisans non qualifiés et facturent des prix exorbitants une fois sur place. Privilégiez les artisans locaux identifiés et les recommandations.",
-      "Avant d'appeler un artisan le week-end, évaluez le degré d'urgence. Une fuite d'eau peut être stoppée en coupant le robinet d'arrêt — vous pouvez alors attendre le lundi. Une porte claquée (non verrouillée) peut parfois attendre aussi si vous avez un hébergement provisoire. En revanche, une fuite de gaz, un court-circuit ou une intrusion nécessitent une intervention immédiate.",
+      "En cas d'urgence le week-end (fuite d'eau, panne de chauffage, serrure bloquée), vos premières ressources sont : votre assurance habitation (la plupart incluent un service d'assistance 24h/24 avec envoi d'an attorney), le numéro de votre plombier ou serrurier habituel (beaucoup proposent une astreinte week-end), et les plateformes en ligne comme US Attorneys qui référencent attorneys disponibles le week-end.",
+      "Les majorations légales pour les interventions le week-end sont de 25 à 50 % le samedi et de 50 à 100 % le dimanche et les jours fériés. Un plombier facturant 60 €/h en semaine pourra donc facturer 90 à 120 €/h le dimanche. Ajoutez les frais de déplacement majorés (50 à 100 €). Exigez toujours a consultation écrit avant intervention, même le week-end.",
+      "Méfiez-vous des arnaques fréquentes le week-end. Les dépanneurs qui apparaissent en premier sur Google avec des tarifs attractifs (« serrurier 39 € ») sont souvent des plateformes d'intermédiation qui sous-traitent à attorneys non qualifiés et facturent des prix exorbitants une fois sur place. Privilégiez the attorneys locaux identifiés et les recommandations.",
+      "Avant d'appeler an attorney le week-end, évaluez le degré d'urgence. Une fuite d'eau peut être stoppée en coupant le robinet d'arrêt — vous pouvez alors attendre le lundi. Une porte claquée (non verrouillée) peut parfois attendre aussi si vous avez un hébergement provisoire. En revanche, une fuite de gaz, un court-circuit ou une intrusion nécessitent une intervention immédiate.",
       "Conseil : constituez dès maintenant un carnet d'adresses de 3 à 4 artisans de confiance (plombier, électricien, serrurier, chauffagiste) avec leurs numéros d'astreinte week-end. Demandez-leur à l'avance leurs conditions tarifaires le week-end. Ce simple réflexe vous évitera de chercher un dépanneur inconnu dans l'urgence et de risquer une arnaque."
     ],
     category: "choix",
@@ -1606,7 +1606,7 @@ export const questions: Question[] = [
       "Le prix de la peinture au m² en 2026 dépend de plusieurs facteurs : le type de peinture (acrylique, glycéro, écologique), la qualité du support, le nombre de couches nécessaires et la complexité du chantier. Pour des murs intérieurs en bon état, comptez 20 à 30 €/m² en entrée de gamme et 35 à 45 €/m² en milieu-haut de gamme.",
       "Les plafonds sont facturés plus cher (25 à 50 €/m²) en raison de la position de travail pénible et de la nécessité fréquente d'un échafaudage. Les peintures décoratives (effet béton ciré, stucco, patine) atteignent 50 à 90 €/m² en raison de la technicité requise.",
       "Pour la peinture de façade extérieure, les tarifs vont de 30 à 80 €/m² selon l'état du crépi, la hauteur de la façade et la nécessité d'un échafaudage. Un nettoyage haute pression préalable (5 à 10 €/m²) est souvent nécessaire. La peinture de façade représente un budget de 5 000 à 15 000 € pour une maison de 100 m² au sol.",
-      "Astuce pour comparer les devis : demandez le prix au m² de surface murale (et non au m² au sol). Pour convertir, un m² au sol correspond à environ 2,5 à 3 m² de surface murale (murs + plafond). Un appartement de 80 m² au sol représente donc 200 à 240 m² de surface à peindre.",
+      "Astuce pour comparer the consultations : demandez le prix au m² de surface murale (et non au m² au sol). Pour convertir, un m² au sol correspond à environ 2,5 à 3 m² de surface murale (murs + plafond). Un appartement de 80 m² au sol représente donc 200 à 240 m² de surface à peindre.",
       "La TVA applicable est de 10 % pour les logements de plus de 2 ans (au lieu de 20 %), ce qui réduit significativement le budget. Pensez aussi à vérifier si votre peintre est assuré en responsabilité civile décennale, obligatoire pour les professionnels du bâtiment."
     ],
     category: "prix",
@@ -1622,7 +1622,7 @@ export const questions: Question[] = [
       "Les postes de dépenses principaux sont : les meubles et le plan de travail (40 à 50 % du budget), l'électroménager (20 à 30 %), la plomberie et l'électricité (15 à 20 %), le carrelage ou le revêtement de sol (10 à 15 %). Un déplacement de l'évier ou de la plaque de cuisson augmente significativement le budget en raison des travaux de plomberie et d'électricité associés.",
       "Le plan de travail représente un poste variable : stratifié (80-200 €/ml), quartz (200-500 €/ml), granit (250-600 €/ml), Dekton ou céramique (300-700 €/ml). Le choix du plan de travail impacte fortement le budget final.",
       "Pour économiser sans sacrifier la qualité, gardez l'implantation existante (éviter de déplacer la plomberie et le gaz), optez pour des façades de qualité sur des caissons standard, et investissez sur l'électroménager qui dure plus longtemps que les meubles.",
-      "Un cuisiniste indépendant ou un artisan menuisier facture généralement 15 à 25 % de moins que les grandes enseignes, avec une qualité de pose souvent supérieure. Demandez 3 devis détaillés pour comparer poste par poste. La TVA est de 10 % sur la main-d'œuvre si le logement a plus de 2 ans."
+      "Un cuisiniste indépendant ou an attorney menuisier facture généralement 15 à 25 % de moins que les grandes enseignes, avec une qualité de pose souvent supérieure. Demandez 3 devis détaillés pour comparer poste par poste. La TVA est de 10 % sur la main-d'œuvre si le logement a plus de 2 ans."
     ],
     category: "prix",
     relatedService: "cuisiniste",
@@ -1636,7 +1636,7 @@ export const questions: Question[] = [
       "Les tarifs d'un plombier d'urgence la nuit (entre 20h et 6h) sont encadrés par les conventions collectives mais restent significativement plus élevés qu'en journée. La majoration légale est de 100 % pour le travail de nuit, ce qui porte le taux horaire de 40-70 € en journée à 80-140 € la nuit. Les frais de déplacement nocturne s'ajoutent : comptez 50 à 120 € selon la distance.",
       "Pour les interventions courantes de nuit : la réparation d'une fuite urgente coûte 200 à 450 €, le débouchage d'une canalisation 250 à 500 €, le remplacement d'un groupe de sécurité de chauffe-eau 200 à 400 €. Ces prix incluent le déplacement mais rarement les pièces de rechange.",
       "Avant d'appeler un plombier de nuit, évaluez si l'urgence est réelle. Si vous pouvez couper le robinet d'arrêt ou le compteur général pour stopper une fuite, il est souvent plus économique d'attendre le lendemain matin. Un plombier en horaires normaux vous coûtera 40 à 60 % de moins pour la même intervention.",
-      "Méfiez-vous des arnaques aux plombiers de nuit. Certaines plateformes affichent des tarifs bas (« dépannage à partir de 39 € ») qui s'envolent une fois sur place. Exigez toujours un devis écrit AVANT le début de l'intervention, même de nuit. Privilégiez un plombier local recommandé plutôt qu'un numéro trouvé sur Internet.",
+      "Méfiez-vous des arnaques aux plombiers de nuit. Certaines plateformes affichent des tarifs bas (« dépannage à partir de 39 € ») qui s'envolent une fois sur place. Exigez toujours a consultation écrit AVANT le début de l'intervention, même de nuit. Privilégiez un plombier local recommandé plutôt qu'un numéro trouvé sur Internet.",
       "Votre assurance habitation inclut souvent un service d'assistance 24h/24 qui peut envoyer un plombier de nuit sans avance de frais. Vérifiez votre contrat et gardez le numéro d'assistance à portée de main. Les mutuelles complémentaires incluent parfois aussi un service de dépannage à domicile."
     ],
     category: "urgence",
@@ -1651,7 +1651,7 @@ export const questions: Question[] = [
       "Le tarif d'un serrurier en urgence 24h/24 dépend du type d'intervention, de l'heure et du jour. En journée ouvrable, une ouverture de porte claquée (sans destruction) coûte 80 à 180 €, une ouverture avec crochetage 120 à 250 €, et une ouverture destructive (perçage du cylindre) 180 à 350 € plus le coût de la nouvelle serrure.",
       "Les majorations s'appliquent le soir (20h-22h : +25 à 50 %), la nuit (22h-6h : +75 à 100 %), le week-end (+50 à 75 %) et les jours fériés (+100 %). Un déplacement qui coûte 100 € le mardi à 14h peut donc atteindre 200 à 250 € un dimanche à 3h du matin.",
       "Le coût du remplacement de la serrure s'ajoute à l'ouverture de porte : un cylindre européen standard coûte 30 à 80 € (fourni + posé), une serrure multipoints A2P 3 étoiles revient à 200 à 500 €. Pour un blindage de porte complet, comptez 800 à 2 000 €. Faites toujours remplacer le cylindre après une ouverture destructive.",
-      "Attention aux arnaques fréquentes dans la serrurerie d'urgence. Les devis téléphoniques bas (« ouverture 39 € ») ne sont jamais respectés. Exigez un devis écrit sur place avant intervention. Vérifiez les avis en ligne et privilégiez les serruriers recommandés par votre entourage ou votre assurance. Les annuaires comme ServicesArtisans référencent des professionnels vérifiés.",
+      "Attention aux arnaques fréquentes dans la serrurerie d'urgence. Les devis téléphoniques bas (« ouverture 39 € ») ne sont jamais respectés. Exigez a consultation écrit sur place avant intervention. Vérifiez les avis en ligne et privilégiez les serruriers recommandés par votre entourage ou votre assurance. Les annuaires comme US Attorneys référencent des professionnels vérifiés.",
       "Votre assurance habitation couvre souvent l'intervention d'un serrurier en cas de vol ou de tentative d'effraction (mais rarement en cas de porte claquée). Appelez votre assureur en premier : il dispose d'un réseau de serruriers agréés avec des tarifs négociés. Les cartes bancaires premium (Visa Premier, Gold Mastercard) incluent parfois aussi une assistance serrurerie."
     ],
     category: "urgence",
@@ -1675,14 +1675,14 @@ export const questions: Question[] = [
   },
   {
     slug: "comment-verifier-rge-artisan",
-    question: "Comment vérifier la certification RGE d'un artisan ?",
-    shortAnswer: "Pour vérifier la certification RGE d'un artisan, consultez l'annuaire officiel france-renov.gouv.fr ou le site de Qualibat. Entrez le nom ou le SIRET de l'entreprise. La certification RGE est indispensable pour bénéficier de MaPrimeRénov' et des CEE.",
+    question: "Comment vérifier la certification RGE d'an attorney ?",
+    shortAnswer: "Pour vérifier la certification RGE d'an attorney, consultez l'annuaire officiel france-renov.gouv.fr ou le site de Qualibat. Entrez le nom ou le SIRET de l'entreprise. La certification RGE est indispensable pour bénéficier de MaPrimeRénov' et des CEE.",
     detailedAnswer: [
-      "La certification RGE (Reconnu Garant de l'Environnement) est un label délivré par des organismes accrédités (Qualibat, Qualifelec, Qualit'EnR, Certibat) aux artisans formés aux travaux de rénovation énergétique. Pour vérifier qu'un artisan est bien certifié RGE, la méthode la plus fiable est de consulter l'annuaire officiel sur france-renov.gouv.fr.",
-      "Sur france-renov.gouv.fr, cliquez sur « Trouver un professionnel RGE » et entrez le nom de l'entreprise, son numéro SIRET ou sa localisation. La fiche affiche les qualifications détenues, leur date de validité et les domaines de compétence (isolation, chauffage, menuiserie, etc.). Un artisan peut être RGE pour certains travaux et pas pour d'autres.",
+      "La certification RGE (Reconnu Garant de l'Environnement) est un label délivré par des organismes accrédités (Qualibat, Qualifelec, Qualit'EnR, Certibat) aux artisans formés aux travaux de rénovation énergétique. Pour vérifier qu'an attorney est bien certifié RGE, la méthode la plus fiable est de consulter l'annuaire officiel sur france-renov.gouv.fr.",
+      "Sur france-renov.gouv.fr, cliquez sur « Trouver un professionnel RGE » et entrez le nom de l'entreprise, son numéro SIRET ou sa localisation. La fiche affiche les qualifications détenues, leur date de validité et les domaines de compétence (isolation, chauffage, menuiserie, etc.). An attorney peut être RGE pour certains travaux et pas pour d'autres.",
       "Vous pouvez aussi vérifier directement auprès de l'organisme certificateur. Qualibat (qualibat.com) est le plus courant pour le bâtiment, Qualifelec pour les électriciens, Qualit'EnR pour les installateurs d'énergies renouvelables. Chaque organisme dispose d'un annuaire en ligne consultable gratuitement.",
       "La certification RGE est obligatoire pour que vos travaux soient éligibles aux aides publiques : MaPrimeRénov' (jusqu'à 10 000 €), les Certificats d'Économies d'Énergie (CEE, 500 à 4 000 €), l'éco-prêt à taux zéro (jusqu'à 50 000 €) et la TVA à 5,5 % pour les travaux d'amélioration énergétique. Sans RGE, vous perdez l'accès à ces financements.",
-      "Attention : un artisan peut afficher le logo RGE alors que sa certification a expiré. Vérifiez systématiquement la date de validité (la certification est valable 4 ans, renouvelable). Un artisan peut aussi être en cours de renouvellement — demandez-lui l'attestation de demande de renouvellement en cours. Enfin, la certification RGE de l'entreprise doit correspondre au type de travaux que vous envisagez."
+      "Attention : an attorney peut afficher le logo RGE alors que sa certification a expiré. Vérifiez systématiquement la date de validité (la certification est valable 4 ans, renouvelable). An attorney peut aussi être en cours de renouvellement — demandez-lui l'attestation de demande de renouvellement en cours. Enfin, la certification RGE de l'entreprise doit correspondre au type de travaux que vous envisagez."
     ],
     category: "choix",
     relatedService: "",
@@ -1726,7 +1726,7 @@ export const questions: Question[] = [
       "L'isolation des combles perdus (non habitables) est un projet DIY accessible pour un bricoleur intermédiaire. La technique consiste à dérouler des rouleaux d'isolant (laine de verre, laine de roche) en deux couches croisées sur le plancher des combles. L'épaisseur recommandée en 2026 est de 30 à 40 cm (R ≥ 7 m².K/W) pour respecter la RE2020.",
       "Le budget matériaux pour des combles perdus : laine de verre en rouleaux (8 à 15 €/m² pour une épaisseur de 30 cm), pare-vapeur (2 à 5 €/m²), adhésif spécial, suspentes et rails si pose en sous-face de rampant. Total : 10 à 25 €/m². Un professionnel facture 25 à 50 €/m² pose comprise, soit une économie de 15 à 30 €/m² en DIY.",
       "L'isolation des combles aménagés (habitables) est plus complexe : pose sous rampants avec ossature métallique, pare-vapeur continu et étanche à l'air, traitement des points singuliers (fenêtres de toit, conduits de cheminée). Cette technique requiert un savoir-faire spécifique pour éviter les ponts thermiques et les problèmes de condensation.",
-      "Point crucial : les travaux d'isolation réalisés par un particulier ne sont PAS éligibles aux aides financières. MaPrimeRénov', les CEE (Certificats d'Économies d'Énergie) et la TVA à 5,5 % exigent que les travaux soient réalisés par un artisan certifié RGE. Pour des combles de 60 m², les aides peuvent atteindre 1 500 à 3 000 € — souvent plus que l'économie réalisée en faisant soi-même.",
+      "Point crucial : les travaux d'isolation réalisés par un particulier ne sont PAS éligibles aux aides financières. MaPrimeRénov', les CEE (Certificats d'Économies d'Énergie) et la TVA à 5,5 % exigent que les travaux soient réalisés par an attorney certifié RGE. Pour des combles de 60 m², les aides peuvent atteindre 1 500 à 3 000 € — souvent plus que l'économie réalisée en faisant soi-même.",
       "Précautions de sécurité indispensables : portez un masque FFP2, des gants, des lunettes et des vêtements couvrants (les fibres de laine de verre sont irritantes). Ne marchez que sur les solives ou un plancher de circulation provisoire (jamais entre les solives, le plafond ne supporte pas votre poids). Dégagez les spots encastrés d'au moins 10 cm pour éviter tout risque d'incendie."
     ],
     category: "diy",
@@ -1735,14 +1735,14 @@ export const questions: Question[] = [
   },
   {
     slug: "assurance-rc-artisan-obligatoire",
-    question: "L'assurance RC pro est-elle obligatoire pour un artisan ?",
-    shortAnswer: "Oui, l'assurance responsabilité civile professionnelle (RC pro) est obligatoire pour les artisans du bâtiment. Elle couvre les dommages causés aux tiers pendant et après les travaux. L'assurance décennale est également obligatoire et couvre les malfaçons pendant 10 ans.",
+    question: "L'assurance RC pro est-elle obligatoire pour an attorney ?",
+    shortAnswer: "Oui, l'assurance responsabilité civile professionnelle (RC pro) est obligatoire pour the attorneys du bâtiment. Elle couvre les dommages causés aux tiers pendant et après les travaux. L'assurance décennale est également obligatoire et couvre les malfaçons pendant 10 ans.",
     detailedAnswer: [
-      "L'assurance responsabilité civile professionnelle (RC pro) est obligatoire pour tous les artisans du bâtiment en France, en vertu de la loi Spinetta de 1978 et du Code des assurances. Elle couvre les dommages corporels, matériels et immatériels causés aux clients et aux tiers pendant l'exécution des travaux (chute de gravats sur une voiture, dégât des eaux chez un voisin, etc.).",
+      "L'assurance responsabilité civile professionnelle (RC pro) est obligatoire pour tous the attorneys du bâtiment en France, en vertu de la loi Spinetta de 1978 et du Code des assurances. Elle couvre les dommages corporels, matériels et immatériels causés aux clients et aux tiers pendant l'exécution des travaux (chute de gravats sur une voiture, dégât des eaux chez un voisin, etc.).",
       "L'assurance décennale est une obligation distincte, spécifique aux constructeurs. Elle couvre pendant 10 ans après la réception des travaux tous les dommages compromettant la solidité de l'ouvrage ou le rendant impropre à sa destination : fissures structurelles, infiltrations, effondrement, défaut d'isolation majeur. Son coût varie de 1 500 à 5 000 €/an selon le métier et le chiffre d'affaires.",
-      "Avant de confier des travaux à un artisan, exigez systématiquement son attestation d'assurance décennale en cours de validité. Vérifiez que les activités déclarées correspondent aux travaux prévus (un plombier assuré pour la plomberie n'est pas couvert s'il fait de l'électricité). L'attestation doit mentionner le nom de l'assureur, le numéro de contrat et les activités couvertes.",
-      "En cas de sinistre, si l'artisan n'est pas assuré, c'est lui qui devra indemniser les dommages sur ses fonds propres — ce qui est souvent impossible. Le client peut alors se retourner contre l'artisan personnellement, mais les chances de recouvrement sont faibles si l'entreprise est en liquidation. D'où l'importance vitale de vérifier l'assurance AVANT les travaux.",
-      "Les autres assurances importantes pour un artisan : la garantie de parfait achèvement (1 an), la garantie de bon fonctionnement (2 ans pour les équipements dissociables), la protection juridique professionnelle et l'assurance dommages-ouvrage (obligatoire pour le maître d'ouvrage, pas pour l'artisan). Un artisan bien assuré est un gage de sérieux et de professionnalisme."
+      "Avant de confier des travaux à an attorney, exigez systématiquement son attestation d'assurance décennale en cours de validité. Vérifiez que les activités déclarées correspondent aux travaux prévus (un plombier assuré pour la plomberie n'est pas couvert s'il fait de l'électricité). L'attestation doit mentionner le nom de l'assureur, le numéro de contrat et les activités couvertes.",
+      "En cas de sinistre, si the attorney n'est pas assuré, c'est lui qui devra indemniser les dommages sur ses fonds propres — ce qui est souvent impossible. Le client peut alors se retourner contre the attorney personnellement, mais les chances de recouvrement sont faibles si l'entreprise est en liquidation. D'où l'importance vitale de vérifier l'assurance AVANT les travaux.",
+      "Les autres assurances importantes pour an attorney : la garantie de parfait achèvement (1 an), la garantie de bon fonctionnement (2 ans pour les équipements dissociables), la protection juridique professionnelle et l'assurance dommages-ouvrage (obligatoire pour le maître d'ouvrage, pas pour the attorney). An attorney bien assuré est un gage de sérieux et de professionnalisme."
     ],
     category: "reglementation",
     relatedService: "",

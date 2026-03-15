@@ -212,7 +212,7 @@ const steps = [
   {
     step: '2',
     title: 'Comparez',
-    description: 'Consultez les profils détaillés, les informations officielles et les tarifs. Choisissez l\'artisan qui correspond à vos attentes.',
+    description: 'View detailed profiles, credentials, and fees. Choose the attorney that matches your needs.',
     icon: ClipboardList,
     color: 'from-amber-500 to-amber-600',
     bg: 'bg-amber-50',
@@ -220,8 +220,8 @@ const steps = [
   },
   {
     step: '3',
-    title: 'Contactez',
-    description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous contacte pour vous faire une proposition détaillée.',
+    title: 'Contact',
+    description: 'Request a free consultation with no obligation. The attorney contacts you to provide a detailed proposal.',
     icon: CheckCircle,
     color: 'from-emerald-500 to-emerald-600',
     bg: 'bg-emerald-50',
@@ -242,14 +242,14 @@ export function HowItWorksSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-sm font-medium mb-5">
             <CheckCircle className="w-3.5 h-3.5" />
-            Simple et rapide
+            Simple and fast
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-3 mb-1" />
-            Comment ça marche ?
+            How does it work?
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            En 3 étapes simples, trouvez l&apos;artisan idéal pour votre projet.
+            In 3 simple steps, find the ideal attorney for your case.
           </p>
         </motion.div>
 
@@ -309,7 +309,7 @@ export function HowItWorksSection() {
             href="/quotes"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
-            Demander un devis gratuit <ArrowRight className="w-5 h-5" />
+            Request a Free Consultation <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>
       </div>
@@ -320,9 +320,9 @@ export function HowItWorksSection() {
 // ─── ARTISAN CTA → PREMIUM DESIGN ───────────────────────────────
 
 const artisanBenefits = [
-  { icon: TrendingUp, text: 'Visibilité auprès de milliers de clients' },
-  { icon: Users, text: 'Recevez des demandes de devis qualifiées' },
-  { icon: Banknote, text: 'Inscription gratuite, sans engagement' },
+  { icon: TrendingUp, text: 'Visibility to thousands of clients' },
+  { icon: Users, text: 'Receive qualified consultation requests' },
+  { icon: Banknote, text: 'Free registration, no obligation' },
 ]
 
 export function ArtisanCTASection() {
@@ -353,18 +353,18 @@ export function ArtisanCTASection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium mb-6 border border-white/10">
             <Users className="w-3.5 h-3.5" />
-            Rejoignez les artisans référencés SIREN
+            Join verified attorneys on our platform
           </div>
 
           <h2 className="font-heading text-3xl md:text-[2.75rem] lg:text-5xl font-bold mb-5 tracking-tight leading-tight">
-            Vous êtes artisan ?{' '}
+            Are you an attorney?{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400">
-              Rendez-vous visible
+              Get listed today
             </span>
           </h2>
           <p className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Votre entreprise est déjà dans notre base grâce aux registres officiels.
-            Réclamez votre profil et recevez des demandes de devis qualifiées.
+            Your practice may already be in our database from official records.
+            Claim your profile and receive qualified consultation requests.
           </p>
 
           <motion.div
@@ -393,13 +393,13 @@ export function ArtisanCTASection() {
               href="/register-attorney"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
-              Inscrire mon entreprise <ArrowRight className="w-5 h-5" />
+              Register my practice <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/how-it-works"
               className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
-              En savoir plus
+              Learn more
             </Link>
           </div>
         </motion.div>
@@ -413,31 +413,31 @@ export function ArtisanCTASection() {
 const trustPoints = [
   {
     icon: Database,
-    title: 'Données officielles SIREN',
-    description: 'Chaque artisan provient des registres SIREN de l\'État français via l\'API Annuaire des Entreprises. Pas de fausses fiches, pas de doublons.',
+    title: 'Official Bar Records',
+    description: 'Every attorney is sourced from official state bar records. No fake profiles, no duplicates.',
     stat: '100%',
-    statLabel: 'données officielles',
+    statLabel: 'official data',
   },
   {
     icon: Shield,
-    title: 'Entreprises actives référencées',
-    description: 'Seules les entreprises avec un SIREN actif et valide sont référencées. Radiations exclues automatiquement.',
+    title: 'Active Licensed Attorneys',
+    description: 'Only attorneys with active bar licenses are listed. Suspended or disbarred attorneys are automatically excluded.',
     stat: '350k+',
-    statLabel: 'artisans actifs',
+    statLabel: 'active attorneys',
   },
   {
     icon: FileCheck,
-    title: 'Devis gratuits, sans engagement',
-    description: 'Demandez autant de devis que vous souhaitez. Aucun frais, aucune commission cachée. Ni pour les particuliers, ni pour les artisans.',
+    title: 'Free Consultations, No Obligation',
+    description: 'Request as many consultations as you want. No fees, no hidden commissions. Neither for clients nor for attorneys.',
     stat: '0€',
-    statLabel: 'toujours gratuit',
+    statLabel: 'always free',
   },
   {
     icon: Globe,
-    title: 'Couverture nationale complète',
-    description: 'De la métropole aux DOM-TOM, chaque département est couvert. La plus grande base d\'artisans de France pour les métiers du bâtiment.',
-    stat: '101',
-    statLabel: 'départements couverts',
+    title: 'Complete National Coverage',
+    description: 'Every state is covered from coast to coast. The largest attorney database in the US across all practice areas.',
+    stat: '50+',
+    statLabel: 'states covered',
   },
 ]
 
@@ -454,18 +454,18 @@ export function TrustSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
             <Shield className="w-3.5 h-3.5" />
-            Pourquoi ServicesArtisans ?
+            Why US Attorneys?
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-3 mb-1" />
-            Des données que vous pouvez{' '}
+            Data you can{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
-              vérifier
+              verify
             </span>
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Contrairement aux annuaires classiques, nos données proviennent directement
-            des registres officiels de l&apos;État français. Transparence et fiabilité garanties.
+            Unlike traditional directories, our data comes directly
+            from official state bar records. Transparency and reliability guaranteed.
           </p>
         </motion.div>
 
@@ -509,7 +509,7 @@ export function TrustSection() {
           <div className="inline-flex items-center gap-3 px-5 py-3 bg-slate-50 rounded-full border border-slate-100">
             <BadgeCheck className="w-5 h-5 text-blue-500" />
             <span className="text-sm text-slate-600">
-              Source : <strong className="text-slate-900">API Annuaire des Entreprises</strong> — données ouvertes du gouvernement français
+              Source: <strong className="text-slate-900">State Bar Associations</strong> — verified official records
             </span>
           </div>
         </motion.div>

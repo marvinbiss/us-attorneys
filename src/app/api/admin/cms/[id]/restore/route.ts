@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 // --- Schema ---
 
 const restoreSchema = z.object({
-  version_id: z.string().uuid('ID de version invalide'),
+  version_id: z.string().uuid('Invalid version ID'),
 })
 
 // --- POST: Restore a specific version ---
@@ -29,7 +29,7 @@ export async function POST(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -39,7 +39,7 @@ export async function POST(
       body = await request.json()
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Corps de requête JSON invalide' } },
+        { success: false, error: { message: 'Invalid JSON request body' } },
         { status: 400 }
       )
     }
@@ -47,7 +47,7 @@ export async function POST(
     const parsed = restoreSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -65,7 +65,7 @@ export async function POST(
 
     if (versionError || !version) {
       return NextResponse.json(
-        { success: false, error: { message: 'Version non trouvée' } },
+        { success: false, error: { message: 'Version not found' } },
         { status: 404 }
       )
     }
@@ -95,7 +95,7 @@ export async function POST(
     if (updateError || !page) {
       logger.error('CMS page restore error', updateError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la restauration de la version' } },
+        { success: false, error: { message: 'Error restoring version' } },
         { status: 500 }
       )
     }
@@ -115,7 +115,7 @@ export async function POST(
   } catch (error) {
     logger.error('CMS page restore error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

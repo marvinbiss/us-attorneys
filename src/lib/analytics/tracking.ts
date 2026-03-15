@@ -1,5 +1,5 @@
 /**
- * Analytics & Conversion Tracking - ServicesArtisans
+ * Analytics & Conversion Tracking - US Attorneys
  * World-class tracking for conversion optimization
  * Based on best practices from Calendly, Acuity, and Booksy
  */

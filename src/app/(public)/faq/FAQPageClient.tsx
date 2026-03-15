@@ -49,10 +49,10 @@ export default function FAQPageClient() {
           <div className="text-center">
             <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-60" />
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Questions fr&eacute;quentes
+              Frequently Asked Questions
             </h1>
             <p className="text-xl text-slate-400 mb-8">
-              Trouvez rapidement les r&eacute;ponses &agrave; vos questions
+              Quickly find answers to your questions
             </p>
 
             {/* Search */}
@@ -62,7 +62,7 @@ export default function FAQPageClient() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher une question..."
+                  placeholder="Search for a question..."
                   className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-300"
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -114,7 +114,7 @@ export default function FAQPageClient() {
 
           {filteredCategories.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500">Aucun résultat pour "{searchQuery}"</p>
+              <p className="text-gray-500">No results for "{searchQuery}"</p>
             </div>
           )}
         </div>
@@ -124,43 +124,43 @@ export default function FAQPageClient() {
       <section className="py-12 bg-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Ressources utiles
+            Helpful resources
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Link
               href="/how-it-works"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Comment ça marche ?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">How it works</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Découvrez le fonctionnement de notre service en 3 étapes.
+                Learn how our service works in 3 simple steps.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
-                En savoir plus <ArrowRight className="w-4 h-4" />
+                Learn more <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
             <Link
               href="/quotes"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Request a consultation</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Obtenez jusqu'à 3 devis gratuits d'artisans qualifiés.
+                Get up to 3 free consultations from qualified attorneys.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
-                Demander <ArrowRight className="w-4 h-4" />
+                Request <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
             <Link
               href="/register"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Créer un compte</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Create an account</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Inscrivez-vous pour suivre vos demandes et réservations.
+                Sign up to track your requests and bookings.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
-                S'inscrire <ArrowRight className="w-4 h-4" />
+                Sign up <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
           </div>
@@ -171,16 +171,16 @@ export default function FAQPageClient() {
       <section className="py-16 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Vous n'avez pas trouvé votre réponse ?
+            Didn't find your answer?
           </h2>
           <p className="text-gray-600 mb-8">
-            Notre équipe est là pour vous aider
+            Our team is here to help you
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
-            Contactez-nous
+            Contact us
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -190,7 +190,7 @@ export default function FAQPageClient() {
       <section className="bg-gray-50 py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Trouvez un artisan près de chez vous
+            Find an attorney near you
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />

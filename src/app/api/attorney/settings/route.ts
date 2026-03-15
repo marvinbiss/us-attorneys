@@ -1,5 +1,5 @@
 /**
- * GET/PUT /api/attorney/settings — Artisan private settings
+ * GET/PUT /api/attorney/settings — Attorney private settings
  * No SEO, INSEE, Pappers, or Google reviews data.
  */
 
@@ -38,7 +38,7 @@ export async function GET() {
     })
   } catch (error) {
     logger.error('Settings GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -51,7 +51,7 @@ export async function PUT(request: NextRequest) {
     const result = settingsUpdateSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -77,7 +77,7 @@ export async function PUT(request: NextRequest) {
 
         if (updateError) {
           logger.error('Settings PUT provider update error:', updateError)
-          return NextResponse.json({ success: false, error: { message: 'Erreur mise à jour' } }, { status: 500 })
+          return NextResponse.json({ success: false, error: { message: 'Update error' } }, { status: 500 })
         }
       }
     }
@@ -91,13 +91,13 @@ export async function PUT(request: NextRequest) {
 
       if (profileError) {
         logger.error('Settings PUT profile update error:', profileError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur mise à jour profil' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Profile update error' } }, { status: 500 })
       }
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Settings PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

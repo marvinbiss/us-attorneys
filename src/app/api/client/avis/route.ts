@@ -44,7 +44,7 @@ export async function GET() {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -74,7 +74,7 @@ export async function GET() {
     if (avisError) {
       logger.error('Error fetching reviews:', avisError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des avis' },
+        { error: 'Error retrieving reviews' },
         { status: 500 }
       )
     }
@@ -85,7 +85,7 @@ export async function GET() {
     // Format published reviews
     const formattedAvisPublies = avisPublies?.map(r => ({
       id: r.id,
-      artisan: r.artisan?.full_name || 'Artisan',
+      artisan: r.artisan?.full_name || 'Attorney',
       attorney_id: r.attorney_id,
       service: (r.booking as { service_name?: string } | null)?.service_name || null,
       date: r.created_at,
@@ -101,7 +101,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Client avis GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -155,12 +155,12 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Error inserting review:', insertError)
       return NextResponse.json(
-        { error: 'Erreur lors de la publication de l\'avis' },
+        { error: 'Error publishing review' },
         { status: 500 }
       )
     }
 
-    // Revalidation on-demand des pages affectées (non-bloquant)
+    // On-demand revalidation of affected pages (non-blocking)
     try {
       const { data: attorneyData } = await supabase
         .from('attorneys')
@@ -169,7 +169,7 @@ export async function POST(request: Request) {
         .single()
 
       if (attorneyData) {
-        const specialtySlug = slugify(attorneyData.specialty || 'artisan')
+        const specialtySlug = slugify(attorneyData.specialty || 'attorney')
         const locationSlug = slugify(attorneyData.address_city || 'france')
         const publicId = attorneyData.slug || attorneyData.stable_id
 
@@ -191,12 +191,12 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       review,
-      message: 'Avis publié avec succès',
+      message: 'Review published successfully',
     })
   } catch (error) {
     logger.error('Client avis POST error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -211,7 +211,7 @@ export async function PUT(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -235,7 +235,7 @@ export async function PUT(request: Request) {
 
     if (!existingReview) {
       return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
+        { error: 'Review not found or unauthorized' },
         { status: 403 }
       )
     }
@@ -249,7 +249,7 @@ export async function PUT(request: Request) {
 
     if (!ownerBooking) {
       return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
+        { error: 'Review not found or unauthorized' },
         { status: 403 }
       )
     }
@@ -266,19 +266,19 @@ export async function PUT(request: Request) {
     if (updateError) {
       logger.error('Error updating review:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour de l\'avis' },
+        { error: 'Error updating the review' },
         { status: 500 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Avis mis à jour avec succès',
+      message: 'Review updated successfully',
     })
   } catch (error) {
     logger.error('Client avis PUT error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -293,7 +293,7 @@ export async function DELETE(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -320,7 +320,7 @@ export async function DELETE(request: Request) {
 
     if (!existingReview) {
       return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
+        { error: 'Review not found or unauthorized' },
         { status: 403 }
       )
     }
@@ -334,7 +334,7 @@ export async function DELETE(request: Request) {
 
     if (!ownerBooking) {
       return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
+        { error: 'Review not found or unauthorized' },
         { status: 403 }
       )
     }
@@ -348,19 +348,19 @@ export async function DELETE(request: Request) {
     if (deleteError) {
       logger.error('Error deleting review:', deleteError)
       return NextResponse.json(
-        { error: 'Erreur lors de la suppression de l\'avis' },
+        { error: 'Error deleting review' },
         { status: 500 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Avis supprimé avec succès',
+      message: 'Review deleted successfully',
     })
   } catch (error) {
     logger.error('Client avis DELETE error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

@@ -37,16 +37,16 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
       <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
-          Artisans similaires
+          Similar Attorneys
         </h2>
         <p className="text-gray-600 mb-4">
-          Découvrez d&apos;autres {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city}
+          Discover other {_artisan.specialty?.toLowerCase() || 'attorneys'} in {_artisan.city}
         </p>
         <Link
           href={hubUrl}
           className="text-clay-400 hover:text-clay-600 font-medium"
         >
-          Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
+          See all {_artisan.specialty?.toLowerCase() || 'attorneys'} in {_artisan.city} →
         </Link>
       </div>
     )
@@ -74,17 +74,17 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
-          Artisans similaires
+          Similar Attorneys
         </h2>
 
         {/* Navigation buttons */}
-        <div className="flex gap-2" role="group" aria-label="Navigation du carrousel">
+        <div className="flex gap-2" role="group" aria-label="Carousel navigation">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('left')}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
-            aria-label="Voir les artisans precedents"
+            aria-label="View previous attorneys"
           >
             <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden="true" />
           </motion.button>
@@ -93,7 +93,7 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('right')}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
-            aria-label="Voir les artisans suivants"
+            aria-label="View next attorneys"
           >
             <ChevronRight className="w-5 h-5 text-gray-600" aria-hidden="true" />
           </motion.button>
@@ -106,7 +106,7 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
         className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2"
         style={{ scrollSnapType: 'x mandatory' }}
         role="list"
-        aria-label="Liste des artisans similaires"
+        aria-label="Similar attorneys list"
       >
         {similar.map((item, index) => (
           <motion.div
@@ -119,7 +119,7 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
           >
             <Link
               href={getAttorneyUrl({ stable_id: item.stable_id, slug: item.slug, specialty: item.specialty, city: item.city })}
-              aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
+              aria-label={`View ${item.name}'s profile, ${item.specialty} in ${item.city}, rated ${item.rating} out of 5`}
             >
               <motion.article
                 whileHover={{ y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
@@ -141,14 +141,14 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
                   {item.is_verified && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-clay-50 text-clay-700 text-xs font-medium">
                       <BadgeCheck className="w-3 h-3" aria-hidden="true" />
-                      Vérifié
+                      Verified
                     </span>
                   )}
                 </div>
 
                 {/* Info */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1" aria-label={`Note: ${item.rating} sur 5, ${item.reviews} avis`}>
+                  <div className="flex items-center gap-1" aria-label={`Rating: ${item.rating} out of 5, ${item.reviews} reviews`}>
                     <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
                     <span className="font-semibold text-gray-900">{item.rating}</span>
                     <span className="text-gray-500 text-sm">({item.reviews})</span>

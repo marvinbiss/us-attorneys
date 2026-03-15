@@ -1,5 +1,5 @@
 /**
- * GDPR Data Export API - ServicesArtisans
+ * GDPR Data Export API - US Attorneys
  * Allows users to request and download their personal data
  */
 
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = exportPostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
     }
     const { format } = result.data
 
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
     if (existingRequest) {
       return NextResponse.json(
-        { success: false, error: { message: 'Vous avez déjà une demande d\'export en cours' }, requestId: existingRequest.id },
+        { success: false, error: { message: 'You already have an export request in progress' }, requestId: existingRequest.id },
         { status: 400 }
       )
     }
@@ -85,12 +85,12 @@ export async function POST(request: Request) {
       success: true,
       requestId: exportRequest.id,
       data: exportData,
-      message: 'Votre export de données est prêt',
+      message: 'Your data export is ready',
     })
   } catch (error) {
     logger.error('GDPR export error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec du traitement de la demande d\'export' } },
+      { success: false, error: { message: 'Failed to process export request' } },
       { status: 500 }
     )
   }
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -143,7 +143,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('GDPR export status error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec de la récupération du statut d\'export' } },
+      { success: false, error: { message: 'Failed to retrieve export status' } },
       { status: 500 }
     )
   }

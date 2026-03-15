@@ -22,20 +22,20 @@ export function SearchForm() {
       <div className="flex flex-col md:flex-row gap-3 bg-white dark:bg-gray-800 rounded-xl p-2 shadow-lg">
         <Input
           type="text"
-          placeholder="Quel métier ?"
+          placeholder="What practice area?"
           value={service}
           onChange={(e) => setService(e.target.value)}
           className="flex-1 border-0 dark:bg-gray-700"
         />
         <Input
           type="text"
-          placeholder="Où ?"
+          placeholder="Where?"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="flex-1 border-0 dark:bg-gray-700"
         />
         <Button type="submit" size="lg">
-          Rechercher
+          Search
         </Button>
       </div>
     </form>

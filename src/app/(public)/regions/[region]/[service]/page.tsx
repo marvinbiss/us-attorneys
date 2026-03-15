@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const descTemplates = [
     `Trouvez un ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${stateCount} départements couverts. Devis gratuit.`,
     `${trade.name} en ${region.name} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${stateCount} départements.`,
-    `Besoin d’un ${trade.name.toLowerCase()} en ${region.name} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
+    `Besoin d'un ${trade.name.toLowerCase()} en ${region.name} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
     `${region.name} : ${trade.name.toLowerCase()} disponible dans ${stateCount} départements. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuits.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -91,7 +91,7 @@ export default async function RegionServicePage({ params }: PageProps) {
   const trade = getTradeContent(specialtySlug)
   if (!region || !trade) notFound()
 
-  const content = generateRegionContent(region as never)
+  const content = generateRegionContent(region)
   const stateCount = region.states.length
   const stateCitiesMap = Object.fromEntries(
     region.states.map(st => [st.code, getCitiesByState(st.code)])

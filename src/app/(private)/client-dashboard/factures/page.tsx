@@ -11,8 +11,8 @@ export default function FacturesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
-              { label: 'Espace Client', href: '/client-dashboard' },
-              { label: 'Factures et paiements' }
+              { label: 'Client Dashboard', href: '/client-dashboard' },
+              { label: 'Invoices & Payments' }
             ]}
             className="mb-4"
           />
@@ -21,8 +21,8 @@ export default function FacturesPage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Factures et paiements</h1>
-              <p className="text-gray-600">Historique de vos transactions</p>
+              <h1 className="text-2xl font-bold text-gray-900">Invoices & Payments</h1>
+              <p className="text-gray-600">Your transaction history</p>
             </div>
           </div>
         </div>
@@ -32,10 +32,10 @@ export default function FacturesPage() {
         <div className="bg-white rounded-xl p-10 text-center shadow-sm">
           <FileText className="w-14 h-14 text-gray-300 mx-auto mb-5" />
           <h2 className="text-xl font-semibold text-gray-900 mb-3">
-            Fonctionnalité en cours de développement
+            Feature Under Development
           </h2>
           <p className="text-gray-600">
-            Les factures seront disponibles prochainement.
+            Invoices will be available soon.
           </p>
         </div>
 

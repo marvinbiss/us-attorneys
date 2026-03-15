@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentication required' }
         },
         { status: 401 }
       )
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: { code: 1003, message: 'Profil artisan non trouve' }
+            error: { code: 1003, message: 'Attorney profile not found' }
           },
           { status: 404 }
         )
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Server error' }
       },
       { status: 500 }
     )
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentication required' }
         },
         { status: 401 }
       )
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1003, message: 'Seuls les artisans peuvent creer des devis' }
+          error: { code: 1003, message: 'Seuls the attorneys peuvent creer consultations' }
         },
         { status: 403 }
       )
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 2001,
-            message: 'Donnees invalides',
+            message: 'Invalid data',
             details: validation.error.issues,
           }
         },
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Server error' }
       },
       { status: 500 }
     )

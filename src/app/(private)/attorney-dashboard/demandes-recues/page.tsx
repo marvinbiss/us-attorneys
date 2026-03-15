@@ -48,18 +48,18 @@ interface PaginationInfo {
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  pending: { label: 'Nouveau', color: 'bg-red-100 text-red-700' },
-  viewed: { label: 'Vu', color: 'bg-yellow-100 text-yellow-700' },
-  quoted: { label: 'Devis envoy\u00e9', color: 'bg-green-100 text-green-700' },
-  declined: { label: 'Refus\u00e9', color: 'bg-gray-100 text-gray-700' },
-  accepted: { label: 'Accept\u00e9', color: 'bg-green-100 text-green-700' },
+  pending: { label: 'New', color: 'bg-red-100 text-red-700' },
+  viewed: { label: 'Viewed', color: 'bg-yellow-100 text-yellow-700' },
+  quoted: { label: 'Quote Sent', color: 'bg-green-100 text-green-700' },
+  declined: { label: 'Declined', color: 'bg-gray-100 text-gray-700' },
+  accepted: { label: 'Accepted', color: 'bg-green-100 text-green-700' },
 }
 
 const quoteStatusLabels: Record<string, { label: string; color: string }> = {
-  pending: { label: 'En attente', color: 'text-yellow-600 bg-yellow-50' },
-  accepted: { label: 'Accept\u00e9', color: 'text-green-600 bg-green-50' },
-  refused: { label: 'Refus\u00e9', color: 'text-red-600 bg-red-50' },
-  expired: { label: 'Expir\u00e9', color: 'text-gray-500 bg-gray-50' },
+  pending: { label: 'Pending', color: 'text-yellow-600 bg-yellow-50' },
+  accepted: { label: 'Accepted', color: 'text-green-600 bg-green-50' },
+  refused: { label: 'Declined', color: 'text-red-600 bg-red-50' },
+  expired: { label: 'Expired', color: 'text-gray-500 bg-gray-50' },
 }
 
 export default function DemandesRecuesPage() {
@@ -215,9 +215,9 @@ export default function DemandesRecuesPage() {
           }))
           setShowDevisModal(false)
           setSelectedLead(null)
-          setToast({ message: 'Devis mis \u00e0 jour avec succ\u00e8s !', type: 'success' })
+          setToast({ message: 'Quote updated successfully!', type: 'success' })
         } else {
-          const errorMsg = data.error?.message || data.error || 'Erreur lors de la mise \u00e0 jour du devis'
+          const errorMsg = data.error?.message || data.error || 'Error updating quote'
           setToast({ message: errorMsg, type: 'error' })
         }
       } else {
@@ -253,18 +253,18 @@ export default function DemandesRecuesPage() {
 
           setShowDevisModal(false)
           setSelectedLead(null)
-          setToast({ message: 'Devis envoy\u00e9 avec succ\u00e8s !', type: 'success' })
+          setToast({ message: 'Quote sent successfully!', type: 'success' })
 
           // Background refetch to sync with server (non-blocking)
           fetchLeads(pagination.page, filterStatus)
         } else {
-          const errorMsg = data.error?.message || data.error || 'Erreur lors de l\'envoi du devis'
+          const errorMsg = data.error?.message || data.error || 'Error sending quote'
           setToast({ message: errorMsg, type: 'error' })
         }
       }
     } catch (error) {
       console.error('Error sending devis:', error)
-      setToast({ message: 'Erreur lors de l\'envoi du devis', type: 'error' })
+      setToast({ message: 'Error sending quote', type: 'error' })
     } finally {
       setSubmitting(false)
     }
@@ -277,9 +277,9 @@ export default function DemandesRecuesPage() {
   const pendingCount = leads.filter(l => l.status === 'pending').length
 
   const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'USD',
     }).format(amount)
   }
 
@@ -291,7 +291,7 @@ export default function DemandesRecuesPage() {
           toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
         }`}>
           <span>{toast.message}</span>
-          <button onClick={() => setToast(null)} aria-label="Fermer la notification" className="ml-2 hover:opacity-75">
+          <button onClick={() => setToast(null)} aria-label="Close notification" className="ml-2 hover:opacity-75">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -301,8 +301,8 @@ export default function DemandesRecuesPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/attorney-dashboard' },
-            { label: 'Demandes re\u00e7ues' }
+            { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
+            { label: 'Cases Received' }
           ]} />
         </div>
       </div>
@@ -311,12 +311,12 @@ export default function DemandesRecuesPage() {
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
-            <Link href="/attorney-dashboard/dashboard" className="text-white/80 hover:text-white" aria-label="Retour au tableau de bord">
+            <Link href="/attorney-dashboard/dashboard" className="text-white/80 hover:text-white" aria-label="Back to dashboard">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold">Demandes re\u00e7ues</h1>
-              <p className="text-blue-100">G\u00e9rez vos demandes entrantes et suivez vos devis</p>
+              <h1 className="text-2xl font-bold">Cases Received</h1>
+              <p className="text-blue-100">Manage your incoming cases and track your quotes</p>
             </div>
           </div>
         </div>
@@ -338,11 +338,11 @@ export default function DemandesRecuesPage() {
                 <Filter className="w-5 h-5 text-gray-400" />
                 <div className="flex flex-wrap gap-2">
                   {[
-                    { key: 'all', label: `Toutes (${filterStatus === 'all' ? totalItems : '\u2014'})` },
-                    { key: 'pending', label: 'Nouvelles' },
-                    { key: 'quoted', label: 'Devis envoy\u00e9s' },
-                    { key: 'accepted', label: 'Accept\u00e9es' },
-                    { key: 'declined', label: 'Refus\u00e9es' },
+                    { key: 'all', label: `All (${filterStatus === 'all' ? totalItems : '\u2014'})` },
+                    { key: 'pending', label: 'New' },
+                    { key: 'quoted', label: 'Quotes Sent' },
+                    { key: 'accepted', label: 'Accepted' },
+                    { key: 'declined', label: 'Declined' },
                   ].map(({ key, label }) => (
                     <button
                       key={key}
@@ -363,7 +363,7 @@ export default function DemandesRecuesPage() {
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600">Chargement des demandes...</p>
+                <p className="text-gray-600">Loading cases...</p>
               </div>
             ) : (
               <>
@@ -399,7 +399,7 @@ export default function DemandesRecuesPage() {
                               )}
                               {lead.urgency === 'tres_urgent' && (
                                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                                  Tr\u00e8s urgent
+                                  Very Urgent
                                 </span>
                               )}
                             </div>
@@ -414,11 +414,11 @@ export default function DemandesRecuesPage() {
                                 </span>
                                 <span className="flex items-center gap-1 text-xs text-gray-500">
                                   <Calendar className="w-3 h-3" />
-                                  Envoy\u00e9 le {new Date(quote.created_at).toLocaleDateString('fr-FR')}
+                                  Sent on {new Date(quote.created_at).toLocaleDateString('en-US')}
                                 </span>
                                 <span className="flex items-center gap-1 text-xs text-gray-500">
                                   <Clock className="w-3 h-3" />
-                                  Valide jusqu&apos;au {new Date(quote.valid_until).toLocaleDateString('fr-FR')}
+                                  Valid until {new Date(quote.valid_until).toLocaleDateString('en-US')}
                                 </span>
                                 {quoteStatusLabels[quote.status] && (
                                   <span className={`px-2 py-0.5 rounded text-xs font-medium ${quoteStatusLabels[quote.status].color}`}>
@@ -432,11 +432,11 @@ export default function DemandesRecuesPage() {
                               <span className="font-medium text-gray-900">{lead.client_name}</span>
                               <span className="flex items-center gap-1">
                                 <MapPin className="w-4 h-4" />
-                                {lead.city || lead.postal_code || 'Non pr\u00e9cis\u00e9'}
+                                {lead.city || lead.postal_code || 'Not specified'}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(lead.created_at).toLocaleDateString('fr-FR')}
+                                {new Date(lead.created_at).toLocaleDateString('en-US')}
                               </span>
                             </div>
                           </div>
@@ -444,38 +444,38 @@ export default function DemandesRecuesPage() {
                             {(item.status === 'pending' || item.status === 'viewed') && (
                               <button
                                 onClick={() => openDevisModal(item)}
-                                aria-label="Envoyer un devis"
+                                aria-label="Send a quote"
                                 className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                               >
                                 <Send className="w-4 h-4" />
-                                <span className="hidden sm:inline">Envoyer devis</span>
+                                <span className="hidden sm:inline">Send Quote</span>
                               </button>
                             )}
                             {item.status === 'quoted' && (
                               <span className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-lg font-medium text-sm">
                                 <CheckCircle2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Devis envoy\u00e9</span>
+                                <span className="hidden sm:inline">Quote Sent</span>
                               </span>
                             )}
                             {(item.status === 'viewed' || item.status === 'quoted') && (
                               <button
                                 onClick={handleContact}
-                                aria-label="Contacter le client"
+                                aria-label="Contact client"
                                 className="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                               >
                                 <MessageSquare className="w-4 h-4" />
-                                <span className="hidden sm:inline">Contacter</span>
+                                <span className="hidden sm:inline">Contact</span>
                               </button>
                             )}
                             {item.status === 'accepted' && (
-                              <span className="text-green-600 font-medium">Mission confirm\u00e9e</span>
+                              <span className="text-green-600 font-medium">Case Confirmed</span>
                             )}
                             {item.status === 'declined' && (
-                              <span className="text-gray-500 font-medium">Refus\u00e9</span>
+                              <span className="text-gray-500 font-medium">Declined</span>
                             )}
                             <button
                               onClick={() => openDetailModal(item)}
-                              aria-label="Voir les d\u00e9tails"
+                              aria-label="View details"
                               className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
                             >
                               <Eye className="w-5 h-5" />
@@ -491,8 +491,8 @@ export default function DemandesRecuesPage() {
                 {leads.length === 0 && (
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                     <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="font-medium text-gray-900 mb-2">Aucune demande</h3>
-                    <p className="text-gray-500">Aucune demande ne correspond \u00e0 ce filtre.</p>
+                    <h3 className="font-medium text-gray-900 mb-2">No cases</h3>
+                    <p className="text-gray-500">No cases match this filter.</p>
                   </div>
                 )}
 
@@ -515,11 +515,11 @@ export default function DemandesRecuesPage() {
           <div className="bg-white rounded-2xl max-w-[95vw] sm:max-w-lg w-full p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">
-                {isRevising ? 'R\u00e9viser le devis' : 'Envoyer un devis'}
+                {isRevising ? 'Revise Quote' : 'Send a Quote'}
               </h2>
               <button
                 onClick={() => setShowDevisModal(false)}
-                aria-label="Fermer"
+                aria-label="Close"
                 className="p-2 hover:bg-gray-100 rounded-lg"
               >
                 <X className="w-5 h-5" />
@@ -530,20 +530,20 @@ export default function DemandesRecuesPage() {
               <h3 className="font-medium text-gray-900 mb-2">{selectedLead.lead.service_name}</h3>
               <p className="text-sm text-gray-600 mb-2">{selectedLead.lead.description}</p>
               <div className="text-sm text-gray-500">
-                <span className="font-medium">{selectedLead.lead.client_name}</span> &mdash; {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non pr\u00e9cis\u00e9'}
+                <span className="font-medium">{selectedLead.lead.client_name}</span> &mdash; {selectedLead.lead.city || selectedLead.lead.postal_code || 'Not specified'}
               </div>
             </div>
 
             {isRevising && selectedLead.quote && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-sm text-yellow-800">
-                Devis actuel : {formatAmount(selectedLead.quote.amount)} &mdash; Envoyez une version r\u00e9vis\u00e9e ci-dessous.
+                Current quote: {formatAmount(selectedLead.quote.amount)} &mdash; Submit a revised version below.
               </div>
             )}
 
             <form onSubmit={handleSendDevis} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Montant du devis (EUR) *
+                  Quote Amount (USD) *
                 </label>
                 <input
                   type="number"
@@ -559,30 +559,30 @@ export default function DemandesRecuesPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description / D\u00e9tails du devis
+                  Description / Quote Details
                 </label>
                 <textarea
                   value={devisForm.description}
                   onChange={(e) => setDevisForm({ ...devisForm, description: e.target.value })}
                   rows={3}
-                  placeholder="D\u00e9taillez les prestations incluses..."
+                  placeholder="Detail the services included..."
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Validit\u00e9 du devis
+                  Quote Validity
                 </label>
                 <select
                   value={devisForm.validity_days}
                   onChange={(e) => setDevisForm({ ...devisForm, validity_days: parseInt(e.target.value) })}
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value={7}>7 jours</option>
-                  <option value={15}>15 jours</option>
-                  <option value={30}>30 jours</option>
-                  <option value={60}>60 jours</option>
+                  <option value={7}>7 days</option>
+                  <option value={15}>15 days</option>
+                  <option value={30}>30 days</option>
+                  <option value={60}>60 days</option>
                 </select>
               </div>
 
@@ -592,7 +592,7 @@ export default function DemandesRecuesPage() {
                   onClick={() => setShowDevisModal(false)}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   type="submit"
@@ -601,7 +601,7 @@ export default function DemandesRecuesPage() {
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   <Send className="w-4 h-4" />
-                  {isRevising ? 'Mettre \u00e0 jour' : 'Envoyer le devis'}
+                  {isRevising ? 'Update' : 'Send Quote'}
                 </button>
               </div>
             </form>
@@ -615,11 +615,11 @@ export default function DemandesRecuesPage() {
           <div className="bg-white rounded-2xl max-w-[95vw] sm:max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">
-                D\u00e9tails de la demande
+                Case Details
               </h2>
               <button
                 onClick={() => setShowDetailModal(false)}
-                aria-label="Fermer"
+                aria-label="Close"
                 className="p-2 hover:bg-gray-100 rounded-lg"
               >
                 <X className="w-5 h-5" />
@@ -636,11 +636,11 @@ export default function DemandesRecuesPage() {
 
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium text-gray-700 mb-2">Description</h4>
-                <p className="text-gray-600">{selectedLead.lead.description || 'Non pr\u00e9cis\u00e9'}</p>
+                <p className="text-gray-600">{selectedLead.lead.description || 'Not specified'}</p>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-medium text-gray-700 mb-3">Contact client</h4>
+                <h4 className="font-medium text-gray-700 mb-3">Client Contact</h4>
                 <div className="space-y-2">
                   <p className="font-medium text-gray-900">{selectedLead.lead.client_name}</p>
                   <p className="flex items-center gap-2 text-gray-600">
@@ -651,20 +651,20 @@ export default function DemandesRecuesPage() {
                   </p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non pr\u00e9cis\u00e9'}
+                    {selectedLead.lead.city || selectedLead.lead.postal_code || 'Not specified'}
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="bg-gray-50 rounded-lg p-3">
-                  <span className="text-gray-500">Urgence</span>
-                  <p className="font-medium text-gray-900 capitalize">{selectedLead.lead.urgency || 'Non pr\u00e9cis\u00e9'}</p>
+                  <span className="text-gray-500">Urgency</span>
+                  <p className="font-medium text-gray-900 capitalize">{selectedLead.lead.urgency || 'Not specified'}</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-3">
-                  <span className="text-gray-500">Date de demande</span>
+                  <span className="text-gray-500">Request Date</span>
                   <p className="font-medium text-gray-900">
-                    {new Date(selectedLead.lead.created_at).toLocaleDateString('fr-FR', {
+                    {new Date(selectedLead.lead.created_at).toLocaleDateString('en-US', {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',
@@ -678,25 +678,25 @@ export default function DemandesRecuesPage() {
                 <div className="border border-green-200 bg-green-50 rounded-lg p-4">
                   <h4 className="font-medium text-green-800 mb-3 flex items-center gap-2">
                     <FileText className="w-4 h-4" />
-                    Votre devis
+                    Your Quote
                   </h4>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Montant</span>
+                      <span className="text-sm text-gray-600">Amount</span>
                       <span className="text-lg font-bold text-green-700">
                         {formatAmount(selectedLead.quote.amount)}
                       </span>
                     </div>
                     {selectedLead.quote.description && (
                       <div>
-                        <span className="text-sm text-gray-600">D\u00e9tails</span>
+                        <span className="text-sm text-gray-600">Details</span>
                         <p className="text-sm text-gray-800 mt-1">{selectedLead.quote.description}</p>
                       </div>
                     )}
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Envoy\u00e9 le</span>
+                      <span className="text-gray-600">Sent on</span>
                       <span className="text-gray-800">
-                        {new Date(selectedLead.quote.created_at).toLocaleDateString('fr-FR', {
+                        {new Date(selectedLead.quote.created_at).toLocaleDateString('en-US', {
                           day: 'numeric',
                           month: 'long',
                           year: 'numeric',
@@ -704,9 +704,9 @@ export default function DemandesRecuesPage() {
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Valide jusqu&apos;au</span>
+                      <span className="text-gray-600">Valid until</span>
                       <span className="text-gray-800">
-                        {new Date(selectedLead.quote.valid_until).toLocaleDateString('fr-FR', {
+                        {new Date(selectedLead.quote.valid_until).toLocaleDateString('en-US', {
                           day: 'numeric',
                           month: 'long',
                           year: 'numeric',
@@ -714,7 +714,7 @@ export default function DemandesRecuesPage() {
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Statut</span>
+                      <span className="text-gray-600">Status</span>
                       {quoteStatusLabels[selectedLead.quote.status] && (
                         <span className={`px-2 py-1 rounded text-xs font-medium ${quoteStatusLabels[selectedLead.quote.status].color}`}>
                           {quoteStatusLabels[selectedLead.quote.status].label}
@@ -730,7 +730,7 @@ export default function DemandesRecuesPage() {
                   onClick={() => setShowDetailModal(false)}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
-                  Fermer
+                  Close
                 </button>
                 {(selectedLead.status === 'pending' || selectedLead.status === 'viewed') && (
                   <button
@@ -741,7 +741,7 @@ export default function DemandesRecuesPage() {
                     className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    Envoyer un devis
+                    Send a Quote
                   </button>
                 )}
                 {selectedLead.status === 'quoted' && selectedLead.quote?.status === 'pending' && (
@@ -750,7 +750,7 @@ export default function DemandesRecuesPage() {
                     className="flex-1 bg-yellow-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2"
                   >
                     <Pencil className="w-4 h-4" />
-                    R\u00e9viser le devis
+                    Revise Quote
                   </button>
                 )}
               </div>

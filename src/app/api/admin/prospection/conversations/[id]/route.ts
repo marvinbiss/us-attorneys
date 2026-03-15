@@ -23,7 +23,7 @@ export async function GET(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -37,7 +37,7 @@ export async function GET(
       .single()
 
     if (convError || !conversation) {
-      return NextResponse.json({ success: false, error: { message: 'Conversation non trouvée' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Conversation not found' } }, { status: 404 })
     }
 
     const { data: messages, error: msgError } = await supabase
@@ -56,7 +56,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Get conversation error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -71,7 +71,7 @@ export async function PATCH(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -81,7 +81,7 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -97,13 +97,13 @@ export async function PATCH(
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
       }
       logger.error('Update conversation error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
     }
     if (!data) {
-      return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
     }
 
     await logAdminAction(authResult.admin.id, 'conversation.update', 'prospection_conversation', id, {
@@ -114,6 +114,6 @@ export async function PATCH(
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Patch conversation error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

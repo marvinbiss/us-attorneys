@@ -141,7 +141,7 @@ export function ClayHeroSearch() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3" role="search" aria-label="Rechercher un artisan" onKeyDown={handleKeyDown}>
+    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3" role="search" aria-label="Search for an attorney" onKeyDown={handleKeyDown}>
       {/* Service input */}
       <div ref={serviceRef} className="relative flex-1 min-w-0">
         <div className="flex items-center gap-2.5 bg-white border border-stone-200 rounded-2xl px-4 h-[48px] md:h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
@@ -154,7 +154,7 @@ export function ClayHeroSearch() {
             value={service}
             onChange={e => handleServiceChange(e.target.value)}
             onFocus={() => { setActiveField('service'); setHighlightedIndex(-1); setServiceSuggestions(searchServices(service)) }}
-            placeholder="Quel service ?"
+            placeholder="What service?"
             className="w-0 flex-1 bg-transparent text-stone-800 placeholder-stone-400 text-base outline-none"
             role="combobox"
             aria-expanded={activeField === 'service' && serviceSuggestions.length > 0}
@@ -164,7 +164,7 @@ export function ClayHeroSearch() {
           />
         </div>
         {activeField === 'service' && serviceSuggestions.length > 0 && (
-          <ul id="service-suggestions" role="listbox" aria-label="Services suggérés" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden max-h-64 overflow-y-auto">
+          <ul id="service-suggestions" role="listbox" aria-label="Suggested services" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden max-h-64 overflow-y-auto">
             {serviceSuggestions.map((s, i) => (
               <li
                 key={s.slug}
@@ -195,7 +195,7 @@ export function ClayHeroSearch() {
             value={ville}
             onChange={e => handleCityChange(e.target.value)}
             onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(ville)) }}
-            placeholder="City ou code postal"
+            placeholder="City or ZIP code"
             className="w-0 flex-1 bg-transparent text-stone-800 placeholder-stone-400 text-base outline-none"
             role="combobox"
             aria-expanded={activeField === 'city' && citySuggestions.length > 0}
@@ -205,7 +205,7 @@ export function ClayHeroSearch() {
           />
         </div>
         {activeField === 'city' && citySuggestions.length > 0 && (
-          <ul id="city-suggestions" role="listbox" aria-label="Villes suggérées" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden max-h-64 overflow-y-auto">
+          <ul id="city-suggestions" role="listbox" aria-label="Suggested cities" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden max-h-64 overflow-y-auto">
             {citySuggestions.map((v, i) => (
               <li
                 key={v.slug}
@@ -229,10 +229,10 @@ export function ClayHeroSearch() {
       {/* Submit */}
       <button
         type="submit"
-        aria-label="Rechercher un artisan"
+        aria-label="Search for an attorney"
         className="bg-clay-400 hover:bg-clay-600 text-white font-bold text-base px-7 h-[48px] md:h-[60px] rounded-2xl shrink-0 transition-colors duration-200 w-full md:w-auto"
       >
-        Trouver
+        Search
       </button>
     </form>
   )

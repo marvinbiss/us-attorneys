@@ -31,39 +31,39 @@ const initialFormData: FormData = {
 }
 
 const urgencyOptions = [
-  { value: 'flexible', label: 'Pas urgent' },
-  { value: 'mois', label: 'Ce mois-ci' },
-  { value: 'semaine', label: 'Cette semaine' },
-  { value: 'urgent', label: 'Urgent (sous 24h)' },
+  { value: 'flexible', label: 'Not urgent' },
+  { value: 'mois', label: 'This month' },
+  { value: 'semaine', label: 'This week' },
+  { value: 'urgent', label: 'Urgent (within 24h)' },
 ]
 
 const budgetOptions = [
-  { value: 'moins-500', label: 'Moins de 500 €' },
-  { value: '500-2000', label: '500‑2 000 €' },
-  { value: '2000-5000', label: '2 000‑5 000 €' },
-  { value: 'plus-5000', label: 'Plus de 5 000 €' },
-  { value: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { value: 'moins-500', label: 'Under $500' },
+  { value: '500-2000', label: '$500–$2,000' },
+  { value: '2000-5000', label: '$2,000–$5,000' },
+  { value: 'plus-5000', label: 'Over $5,000' },
+  { value: 'ne-sais-pas', label: 'I don\'t know' },
 ]
 
-/** Common project types per service for quick selection */
+/** Common case types per practice area for quick selection */
 const serviceSubcategories: Record<string, string[]> = {
-  plombier: ['Fuite d\'eau', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'WC / Sanitaires', 'Tuyauterie'],
-  electricien: ['Panne électrique', 'Installation prise/interrupteur', 'Tableau électrique', 'Éclairage', 'Mise aux normes', 'Domotique'],
-  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte'],
-  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur'],
-  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond'],
-  menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet'],
-  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure'],
-  couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage'],
-  macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition'],
-  jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture'],
+  'personal-injury': ['Car accident', 'Slip and fall', 'Medical malpractice', 'Wrongful death', 'Workers compensation', 'Product liability'],
+  'criminal-defense': ['DUI/DWI', 'Drug charges', 'Assault', 'Theft/Fraud', 'White collar crime', 'Federal charges'],
+  'family-law': ['Divorce', 'Child custody', 'Child support', 'Prenuptial agreement', 'Adoption'],
+  'estate-planning': ['Will drafting', 'Trust creation', 'Probate', 'Power of attorney', 'Estate administration'],
+  'business-law': ['Business formation', 'Contract disputes', 'Partnership issues', 'Mergers & acquisitions', 'Compliance'],
+  'immigration': ['Green card', 'Work visa', 'Citizenship', 'Deportation defense', 'Family sponsorship'],
+  'real-estate': ['Home purchase', 'Commercial lease', 'Zoning issues', 'Title disputes', 'Foreclosure'],
+  'employment-law': ['Wrongful termination', 'Discrimination', 'Harassment', 'Wage disputes', 'Non-compete'],
+  'bankruptcy': ['Chapter 7', 'Chapter 13', 'Debt negotiation', 'Creditor harassment', 'Asset protection'],
+  'tax-law': ['Tax audit', 'IRS disputes', 'Tax planning', 'Back taxes', 'Tax liens'],
 }
 
 function isValidFrenchPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^0033[1-9]\d{8}$/.test(cleaned)) return true
+  if (/^\d{10}$/.test(cleaned)) return true
+  if (/^\+1\d{10}$/.test(cleaned)) return true
+  if (/^1\d{10}$/.test(cleaned)) return true
   return false
 }
 
@@ -78,7 +78,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
       {/* Progress bar */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-blue-600">
-          Étape {currentStep} sur 4
+          Step {currentStep} of 4
         </span>
         <span className="text-sm font-semibold text-blue-600">{progress}%</span>
       </div>
@@ -181,17 +181,17 @@ export default function DevisForm({
       const next = { ...prev }
       switch (field) {
         case 'nom':
-          if (!formData.nom.trim()) next.nom = 'Veuillez entrer votre nom'
+          if (!formData.nom.trim()) next.nom = 'Please enter your name'
           else delete next.nom
           break
         case 'telephone':
-          if (!formData.telephone.trim()) next.telephone = 'Veuillez entrer votre numéro de téléphone'
-          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Veuillez entrer un numéro de téléphone français valide'
+          if (!formData.telephone.trim()) next.telephone = 'Please enter your phone number'
+          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Please enter a valid US phone number'
           else delete next.telephone
           break
         case 'email':
-          if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
-          else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide'
+          if (!formData.email.trim()) next.email = 'Please enter your email address'
+          else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) next.email = 'Please enter a valid email address'
           else delete next.email
           break
         default:
@@ -249,23 +249,23 @@ export default function DevisForm({
 
   const validateStep1 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.service) newErrors.service = 'Veuillez choisir un service'
+    if (!formData.service) newErrors.service = 'Please choose a service'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const validateStep2 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
+    if (!formData.ville) newErrors.ville = 'Please enter your city'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const validateStep3 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
+    if (!formData.urgence) newErrors.urgence = 'Please indicate your preferred timeline'
     if (formData.description.trim().length > 0 && formData.description.trim().length < 10) {
-      newErrors.description = 'Veuillez détailler davantage (10 caractères minimum) ou laisser le champ vide'
+      newErrors.description = 'Please provide more detail (10 characters minimum) or leave the field empty'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -273,19 +273,19 @@ export default function DevisForm({
 
   const validateStep4 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
+    if (!formData.nom.trim()) newErrors.nom = 'Please enter your name'
     if (!formData.telephone.trim()) {
-      newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
+      newErrors.telephone = 'Please enter your phone number'
     } else if (!isValidFrenchPhone(formData.telephone.trim())) {
-      newErrors.telephone = 'Veuillez entrer un numéro de téléphone français valide'
+      newErrors.telephone = 'Please enter a valid US phone number'
     }
     if (!formData.email.trim()) {
-      newErrors.email = 'Veuillez entrer votre adresse e-mail'
+      newErrors.email = 'Please enter your email address'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = 'Veuillez entrer une adresse e-mail valide'
+      newErrors.email = 'Please enter a valid email address'
     }
     if (!formData.consentement) {
-      newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
+      newErrors.consentement = "Please agree to be contacted by attorneys"
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -340,7 +340,7 @@ export default function DevisForm({
 
       if (!res.ok) {
         const body = await res.json().catch(() => null)
-        throw new Error(body?.error || "Erreur lors de l'envoi")
+        throw new Error(body?.error || "Error sending request")
       }
 
       trackEvent('devis_submitted', {
@@ -350,9 +350,9 @@ export default function DevisForm({
         urgency: formData.urgence || '',
         source: 'devis_form',
         value: 45,
-        currency: 'EUR',
+        currency: 'USD',
       })
-      trackConversion('generate_lead', 45, 'EUR', {
+      trackConversion('generate_lead', 45, 'USD', {
         event_label: `devis_${formData.service}_${formData.ville}`,
         service: formData.service,
         city: formData.ville,
@@ -361,7 +361,7 @@ export default function DevisForm({
       localStorage.removeItem(STORAGE_KEY)
     } catch (err) {
       setSubmitError(
-        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
+        err instanceof Error ? err.message : 'An error occurred. Please try again.'
       )
     } finally {
       setSubmitting(false)
@@ -375,7 +375,7 @@ export default function DevisForm({
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
         <h3 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-4">
-          Votre demande a bien été envoyée !
+          Your request has been submitted!
         </h3>
 
         {/* Timeline next steps */}
@@ -385,8 +385,8 @@ export default function DevisForm({
               <span className="text-sm font-bold text-blue-600">1</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-800">Analyse de votre demande</p>
-              <p className="text-xs text-slate-500">Nous recherchons les artisans les plus adaptés à votre projet</p>
+              <p className="text-sm font-semibold text-slate-800">Reviewing your request</p>
+              <p className="text-xs text-slate-500">We are finding the best attorneys for your case</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -394,8 +394,8 @@ export default function DevisForm({
               <span className="text-sm font-bold text-blue-600">2</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-800">Réception des devis sous 24h</p>
-              <p className="text-xs text-slate-500">Jusqu&apos;à 3 artisans qualifiés vous contactent par email ou téléphone</p>
+              <p className="text-sm font-semibold text-slate-800">Receive consultations within 24h</p>
+              <p className="text-xs text-slate-500">Up to 3 qualified attorneys will contact you by email or phone</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -403,8 +403,8 @@ export default function DevisForm({
               <span className="text-sm font-bold text-blue-600">3</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-800">Comparez et choisissez</p>
-              <p className="text-xs text-slate-500">Comparez les devis, consultez les avis et choisissez librement</p>
+              <p className="text-sm font-semibold text-slate-800">Compare and choose</p>
+              <p className="text-xs text-slate-500">Compare consultations, read reviews, and choose freely</p>
             </div>
           </div>
         </div>
@@ -414,13 +414,13 @@ export default function DevisForm({
             href="/services"
             className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
           >
-            Trouver d&apos;autres artisans
+            Find more attorneys
           </Link>
           <Link
             href="/"
             className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-50 transition-colors"
           >
-            Retour à l&apos;accueil
+            Back to home
           </Link>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default function DevisForm({
       className="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-2xl mx-auto"
     >
       <p className="text-center text-sm text-gray-500 mb-4">
-        Formulaire rapide — moins de 60 secondes
+        Quick form — less than 60 seconds
       </p>
       <StepIndicator currentStep={step} />
 
@@ -447,15 +447,15 @@ export default function DevisForm({
         {step === 1 && (
           <div className="space-y-6">
             <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-              Quel service recherchez-vous ?
+              What service are you looking for?
             </h3>
             <p className="text-slate-500 text-sm mb-4">
-              Sélectionnez le type de prestation dont vous avez besoin.
+              Select the type of legal service you need.
             </p>
 
             <div>
               <label htmlFor="service" className="block text-sm font-semibold text-slate-700 mb-2">
-                Type de service <span className="text-red-500">*</span>
+                Service type <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <select
@@ -469,7 +469,7 @@ export default function DevisForm({
                     errors.service ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
                 >
-                  <option value="">Choisissez un service...</option>
+                  <option value="">Choose a service...</option>
                   {services.map((s) => (
                     <option key={s.slug} value={s.slug}>
                       {s.name}
@@ -488,7 +488,7 @@ export default function DevisForm({
               onClick={handleNext}
               className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
             >
-              Suivant <ArrowRight className="w-5 h-5" />
+              Next <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         )}
@@ -503,10 +503,10 @@ export default function DevisForm({
         {step === 2 && (
           <div className="space-y-6">
             <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-              Où se situe votre projet ?
+              Where is your case located?
             </h3>
             <p className="text-slate-500 text-sm mb-4">
-              Indiquez votre ville pour trouver des artisans proches de chez vous.
+              Enter your city to find attorneys near you.
             </p>
 
             <div>
@@ -518,7 +518,7 @@ export default function DevisForm({
                   id="ville"
                   type="text"
                   autoComplete="address-level2"
-                  placeholder="Ex : Paris, Lyon, Marseille..."
+                  placeholder="E.g.: New York, Los Angeles, Chicago..."
                   value={villeQuery}
                   onChange={(e) => {
                     const newValue = e.target.value
@@ -572,7 +572,7 @@ export default function DevisForm({
                 className="mt-2 inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors disabled:opacity-50"
               >
                 <MapPin className="w-4 h-4" />
-                {geoLoading ? 'Localisation en cours…' : 'Utiliser ma position'}
+                {geoLoading ? 'Locating...' : 'Use my location'}
               </button>
               {errors.ville && (
                 <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
@@ -585,14 +585,14 @@ export default function DevisForm({
                 onClick={handlePrev}
                 className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
               >
-                <ArrowLeft className="w-5 h-5" /> Précédent
+                <ArrowLeft className="w-5 h-5" /> Previous
               </button>
               <button
                 type="button"
                 onClick={handleNext}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
               >
-                Suivant <ArrowRight className="w-5 h-5" />
+                Next <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -608,16 +608,16 @@ export default function DevisForm({
         {step === 3 && (
           <div className="space-y-6">
             <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-              Détails du projet
+              Case details
             </h3>
             <p className="text-slate-500 text-sm mb-4">
-              Précisez votre besoin pour recevoir des devis adaptés.
+              Specify your needs to receive tailored consultations.
             </p>
 
             {/* Urgency */}
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-3">
-                Délai souhaité <span className="text-red-500">*</span>
+                Preferred timeline <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {urgencyOptions.map((opt) => (
@@ -650,7 +650,7 @@ export default function DevisForm({
             {formData.service && serviceSubcategories[formData.service] && (
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Type de projet <span className="text-slate-400 font-normal">(cliquez pour sélectionner)</span>
+                  Case type <span className="text-slate-400 font-normal">(click to select)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {serviceSubcategories[formData.service].map((cat) => {
@@ -683,14 +683,14 @@ export default function DevisForm({
             {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
-                Décrivez votre projet <span className="text-slate-400 font-normal">(optionnel)</span>
+                Describe your case <span className="text-slate-400 font-normal">(optional)</span>
               </label>
               <textarea
                 id="description"
                 rows={3}
                 placeholder={formData.service && serviceSubcategories[formData.service]
-                  ? "Précisions supplémentaires (optionnel)..."
-                  : "Ex : fuite robinet cuisine, remplacement chaudière..."}
+                  ? "Additional details (optional)..."
+                  : "E.g.: car accident injury, custody dispute..."}
                 value={formData.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 aria-describedby={errors.description ? 'description-error' : undefined}
@@ -712,7 +712,7 @@ export default function DevisForm({
                       formData.description.trim().length >= 10 ? 'text-green-600' : 'text-gray-400'
                     }`}
                   >
-                    {formData.description.length}/10 caract.
+                    {formData.description.length}/10 chars
                   </span>
                 )}
               </div>
@@ -721,7 +721,7 @@ export default function DevisForm({
             {/* Budget — optional */}
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-3">
-                Budget estimé <span className="text-slate-400 font-normal">(optionnel)</span>
+                Estimated budget <span className="text-slate-400 font-normal">(optional)</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {budgetOptions.map((opt) => (
@@ -754,7 +754,7 @@ export default function DevisForm({
                   onClick={handlePrev}
                   className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
                 >
-                  <ArrowLeft className="w-5 h-5" /> Précédent
+                  <ArrowLeft className="w-5 h-5" /> Previous
                 </button>
               )}
               <button
@@ -762,7 +762,7 @@ export default function DevisForm({
                 onClick={handleNext}
                 className={`${isPrefilled ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300`}
               >
-                Suivant <ArrowRight className="w-5 h-5" />
+                Next <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -778,23 +778,23 @@ export default function DevisForm({
         {step === 4 && (
           <div className="space-y-6">
             <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-              Vos coordonnées
+              Your contact information
             </h3>
             <p className="text-slate-500 text-sm mb-4">
-              Pour que les artisans puissent vous contacter avec leurs devis.
+              So attorneys can reach out to you with their consultations.
             </p>
 
             {/* Nom */}
             <div>
               <label htmlFor="nom" className="block text-sm font-semibold text-slate-700 mb-2">
-                Nom complet <span className="text-red-500">*</span>
+                Full name <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
                   id="nom"
                   type="text"
                   autoComplete="name"
-                  placeholder="Jean Dupont"
+                  placeholder="John Smith"
                   value={formData.nom}
                   onChange={(e) => updateField('nom', e.target.value)}
                   onBlur={() => validateField('nom')}
@@ -819,14 +819,14 @@ export default function DevisForm({
             {/* Phone */}
             <div>
               <label htmlFor="telephone" className="block text-sm font-semibold text-slate-700 mb-2">
-                Téléphone <span className="text-red-500">*</span>
+                Phone <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
                   id="telephone"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="06 12 34 56 78"
+                  placeholder="(555) 123-4567"
                   value={formData.telephone}
                   onChange={(e) => updateField('telephone', e.target.value)}
                   onBlur={() => validateField('telephone')}
@@ -851,14 +851,14 @@ export default function DevisForm({
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-                Adresse e-mail <span className="text-red-500">*</span>
+                Email address <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
                   id="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="jean.dupont@email.fr"
+                  placeholder="john.smith@email.com"
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   onBlur={() => validateField('email')}
@@ -890,9 +890,9 @@ export default function DevisForm({
                   className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-slate-600 leading-relaxed">
-                  J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
-                  en lien avec ma demande.{' '}
-                  <span className="text-gray-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
+                  I agree to be contacted by attorneys to receive consultations
+                  related to my request.{' '}
+                  <span className="text-gray-400">Only your name, phone number, and case description are shared with matched attorneys.</span>
                 </span>
               </label>
               {errors.consentement && (
@@ -913,18 +913,18 @@ export default function DevisForm({
                 disabled={submitting}
                 className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300 disabled:opacity-50"
               >
-                <ArrowLeft className="w-5 h-5" /> Précédent
+                <ArrowLeft className="w-5 h-5" /> Previous
               </button>
               <button
                 type="submit"
                 disabled={submitting}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
               >
-                {submitting ? 'Envoi en cours…' : 'Recevoir mes devis gratuits'} {!submitting && <ArrowRight className="w-5 h-5" />}
+                {submitting ? 'Submitting...' : 'Get my free consultations'} {!submitting && <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
             <p className="text-center text-xs text-gray-400 mt-3">
-              Gratuit et sans engagement · Réponse sous 24h · Vos données restent confidentielles
+              Free, no obligation · Response within 24h · Your data stays confidential
             </p>
           </div>
         )}

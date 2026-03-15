@@ -81,7 +81,7 @@ const authenticator = {
 
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const APP_NAME = 'ServicesArtisans'
+const APP_NAME = 'US Attorneys'
 
 export interface TwoFactorSetup {
   secret: string

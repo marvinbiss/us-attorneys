@@ -1,5 +1,5 @@
 /**
- * SMS Notification System - ServicesArtisans
+ * SMS Notification System - US Attorneys
  * World-class SMS reminders using Twilio
  * Based on best practices: 98% open rate, responses within 90 seconds
  */
@@ -56,15 +56,15 @@ function formatPhoneNumber(phone: string): string {
 const smsTemplates = {
   // Immediate confirmation
   bookingConfirmation: (data: SMSData) =>
-    `RDV confirmé ✓
-${data.date} à ${data.time}
+    `Booking confirmed ✓
+${data.date} at ${data.time}
 ${data.attorneyName}
-Gérer: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
+Manage: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 24h reminder (highest impact)
   reminder24h: (data: SMSData) =>
     `Rappel: RDV demain
-${data.date} à ${data.time}
+${data.date} at ${data.time}
 ${data.attorneyName}
 Confirmer/Annuler: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
@@ -77,27 +77,27 @@ ${data.specialtyName}`,
   // Cancellation
   cancellation: (data: SMSData) =>
     `RDV annulé
-${data.date} à ${data.time}
+${data.date} at ${data.time}
 ${data.attorneyName}
 Reprogrammer: us-attorneys.com`,
 
   // Reschedule confirmation
   reschedule: (data: SMSData) =>
     `RDV reporté ✓
-Nouveau: ${data.date} à ${data.time}
+Nouveau: ${data.date} at ${data.time}
 ${data.attorneyName}
-Gérer: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
+Manage: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // Waitlist notification
   waitlistAvailable: (data: SMSData) =>
-    `Créneau dispo !
+    `Slot available!
 ${data.attorneyName}
 ${data.date}
-Réservez vite: us-attorneys.com`,
+Book now: us-attorneys.com`,
 
   // Review request (post-appointment)
   reviewRequest: (data: SMSData) =>
-    `Comment s'est passé votre RDV avec ${data.attorneyName}?
+    `How was your appointment with ${data.attorneyName}?
 Donnez votre avis: us-attorneys.com/leave-review/${data.bookingId.slice(0, 8)}`,
 }
 

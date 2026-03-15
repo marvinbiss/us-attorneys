@@ -1,8 +1,8 @@
 /**
- * Voice Lead Routing — ServicesArtisans
+ * Voice Lead Routing — US Attorneys
  *
  * Creates a lead (devis_request) from a qualified voice call,
- * dispatches it to a matching artisan, and notifies via SMS.
+ * dispatches it to a matching attorney, and notifies via SMS.
  *
  * Server-side only — uses createAdminClient() (service_role, bypasses RLS).
  */
@@ -41,7 +41,7 @@ const VERTICAL_SERVICE_MAP: Record<string, string> = {
 // ---------------------------------------------------------------------------
 
 /**
- * Create a devis_request from a qualified voice call, find a matching artisan,
+ * Create a devis_request from a qualified voice call, find a matching attorney,
  * assign the lead, and notify the artisan via SMS.
  */
 export async function createVoiceLead(
@@ -195,7 +195,7 @@ export async function createVoiceLead(
   if (artisan.phone) {
     const location = postalCode ? ` (${postalCode})` : ''
     const smsMessage =
-      `Nouveau lead ServicesArtisans !\n` +
+      `Nouveau lead US Attorneys !\n` +
       `${specialtyName}${location}\n` +
       `Client : ${callerName}\n` +
       `Connectez-vous pour répondre : us-attorneys.com/attorney-dashboard/leads`

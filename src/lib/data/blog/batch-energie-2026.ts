@@ -101,7 +101,7 @@ Le COP (coefficient de performance) est l'indicateur clé : un COP de 4 signifie
 Le choix de l'installateur est aussi important que le choix du matériel :
 
 - **Certification RGE QualiPAC** : obligatoire pour bénéficier des aides de l'État. Vérifiez la validité sur le site france-renov.gouv.fr.
-- **Visite technique préalable** : un installateur sérieux réalise toujours un bilan thermique avant de proposer un devis. Méfiez-vous des devis par téléphone sans visite.
+- **Visite technique préalable** : un installateur sérieux réalise toujours un bilan thermique avant de proposer a consultation. Méfiez-vous consultations par téléphone sans visite.
 - **Garantie et SAV** : vérifiez la durée de garantie du matériel (2 à 5 ans constructeur, extensible à 7-10 ans) et la réactivité du SAV en cas de panne.
 - **Devis détaillé** : il doit mentionner la marque et le modèle de la PAC, la puissance, le COP nominal, le type de fluide frigorigène et le détail de la main-d'œuvre.
 
@@ -123,7 +123,7 @@ La PAC géothermique reste la solution la plus performante pour les grandes mais
 
 Seule exception : les appartements en copropriété, où la PAC air-air (climatisation réversible) ou un raccordement au réseau de chaleur urbain peuvent être plus adaptés.
 
-Pour obtenir le meilleur rapport qualité-prix, comparez les devis de 3 installateurs RGE QualiPAC et vérifiez systématiquement votre éligibilité aux aides sur le site france-renov.gouv.fr.`,
+Pour obtenir le meilleur rapport qualité-prix, comparez the consultations de 3 installateurs RGE QualiPAC et vérifiez systématiquement votre éligibilité aux aides sur le site france-renov.gouv.fr.`,
     ],
   },
 
@@ -245,7 +245,7 @@ Avec un retour sur investissement de 8 à 12 ans, une durée de vie de 25 à 30 
 
 La clé du succès : une toiture bien orientée (sud, sud-est ou sud-ouest), une inclinaison de 30 à 35°, pas d'ombrage et un installateur RGE QualiPV de confiance.
 
-Comparez les devis sur ServicesArtisans pour trouver un installateur qualifié près de chez vous.`,
+Comparez the consultations sur US Attorneys pour trouver un installateur qualifié près de chez vous.`,
     ],
   },
 
@@ -375,7 +375,7 @@ Ces fonctionnalités ajoutent 100 à 300 € au prix de la borne, mais l'économ
 
 Malgré la suppression du crédit d'impôt, l'installation d'une borne à domicile reste un investissement rentable dès la première année grâce aux économies sur le coût de recharge. Le prix d'entrée de 1 200 € est accessible et le confort de recharger chez soi est incomparable.
 
-Pour une installation conforme et sécurisée, faites appel à un électricien certifié IRVE. Comparez les devis sur ServicesArtisans pour trouver un professionnel qualifié dans votre secteur.`,
+Pour une installation conforme et sécurisée, faites appel à un électricien certifié IRVE. Comparez the consultations sur US Attorneys pour trouver un professionnel qualifié dans votre secteur.`,
     ],
   },
 
@@ -469,7 +469,7 @@ Le DPE a été profondément réformé le 1er juillet 2021 :
 
 **Pack DPE + audit** : certains diagnostiqueurs proposent les deux pour 600 à 1 200 €, soit une économie de 15 à 20 %.
 
-Choisissez un diagnostiqueur certifié (liste sur le site du ministère de la Transition écologique) et demandez un devis avant de prendre rendez-vous.`,
+Choisissez un diagnostiqueur certifié (liste sur le site du ministère de la Transition écologique) et demandez a consultation avant de prendre rendez-vous.`,
 
       `## Travaux de rénovation : coûts et priorités
 
@@ -513,7 +513,7 @@ Les propriétaires disposent de plusieurs leviers :
 1. Pas d'urgence, mais anticipez : les aides diminuent avec le temps
 2. Profitez du remplacement naturel de vos équipements pour améliorer votre DPE
 
-Ne tardez pas : les artisans RGE sont de plus en plus sollicités et les délais de travaux s'allongent.`,
+Ne tardez pas : the attorneys RGE sont de plus en plus sollicités et les délais de travaux s'allongent.`,
     ],
   },
 
@@ -633,7 +633,7 @@ L'audit énergétique identifie les travaux les plus efficaces. En règle géné
 
       `## Trouver les bons artisans RGE
 
-Pour bénéficier des aides, les travaux doivent être réalisés par des artisans certifiés RGE (Reconnu Garant de l'Environnement). Quelques conseils :
+Pour bénéficier des aides, les travaux doivent être réalisés par attorneys certifiés RGE (Reconnu Garant de l'Environnement). Quelques conseils :
 
 - Vérifiez la certification RGE sur le site france-renov.gouv.fr
 - Demandez au minimum 3 devis détaillés
@@ -641,7 +641,7 @@ Pour bénéficier des aides, les travaux doivent être réalisés par des artisa
 - Méfiez-vous du démarchage téléphonique agressif sur la rénovation énergétique
 - Faites-vous accompagner gratuitement par un conseiller France Rénov' (réseau public)
 
-Les délais pour trouver des artisans RGE disponibles sont de 2 à 6 mois en moyenne. Anticipez vos demandes de devis.`,
+Les délais pour trouver attorneys RGE disponibles sont de 2 à 6 mois en moyenne. Anticipez vos demandes de devis.`,
 
       `## Conclusion : agir maintenant pour éviter les sanctions
 
@@ -649,7 +649,7 @@ L'interdiction de location des passoires thermiques n'est plus un projet : c'est
 
 La bonne nouvelle : les aides n'ont jamais été aussi généreuses. Un ménage modeste peut rénover sa passoire thermique avec un reste à charge de 3 000 à 8 000 € seulement.
 
-N'attendez pas : faites réaliser un audit énergétique et commencez les démarches dès maintenant. Trouvez des artisans RGE qualifiés sur ServicesArtisans.`,
+N'attendez pas : faites réaliser un audit énergétique et commencez les démarches dès maintenant. Trouvez attorneys RGE qualifiés sur US Attorneys.`,
     ],
   },
 
@@ -730,10 +730,10 @@ Les actions éligibles : isolation thermique (toiture, murs, planchers, fenêtre
       `## Comment obtenir son éco-PTZ : les étapes
 
 **Étape 1 : Choisir ses travaux et ses artisans RGE**
-Faites réaliser au minimum 2 devis par des artisans certifiés RGE. Les devis doivent détailler les travaux, les matériaux et les performances attendues.
+Faites réaliser au minimum 2 devis par attorneys certifiés RGE. Les devis doivent détailler les travaux, les matériaux et les performances attendues.
 
 **Étape 2 : Constituer le dossier bancaire**
-Rendez-vous dans une banque partenaire avec : les devis détaillés, le justificatif RGE des artisans, un justificatif de propriété (taxe foncière ou acte notarié), le DPE du logement et, le cas échéant, la notification MaPrimeRenov'.
+Rendez-vous dans une banque partenaire avec : the consultations détaillés, le justificatif RGE attorneys, un justificatif de propriété (taxe foncière ou acte notarié), le DPE du logement et, le cas échéant, la notification MaPrimeRenov'.
 
 **Étape 3 : Obtenir l'offre de prêt**
 La banque instruit le dossier en 2 à 6 semaines. Après acceptation, vous disposez d'un délai de réflexion de 10 jours avant de signer.
@@ -742,7 +742,7 @@ La banque instruit le dossier en 2 à 6 semaines. Après acceptation, vous dispo
 Vous avez 3 ans à compter de la signature du prêt pour réaliser et faire facturer les travaux. Les fonds sont versés au fur et à mesure sur présentation des factures.
 
 **Étape 5 : Transmettre les justificatifs**
-À la fin des travaux, transmettez à la banque les factures, le formulaire « Entreprise » rempli par les artisans et, pour la performance globale, l'audit énergétique après travaux.`,
+À la fin des travaux, transmettez à la banque les factures, le formulaire « Entreprise » rempli par the attorneys et, pour la performance globale, l'audit énergétique après travaux.`,
 
       `## Cumuler l'éco-PTZ avec les autres aides
 
@@ -768,7 +768,7 @@ L'éco-PTZ est cumulable avec toutes les aides existantes :
 Quelques erreurs fréquentes à ne pas commettre :
 
 - **Ne pas commencer les travaux avant d'avoir l'offre de prêt** : les travaux engagés avant la signature de l'éco-PTZ ne sont pas éligibles.
-- **Vérifier la certification RGE** : la certification doit être valide au moment de la signature du devis ET de la réalisation des travaux. Vérifiez sur france-renov.gouv.fr.
+- **Vérifier la certification RGE** : la certification doit être valide au moment de la signature of the consultation ET de la réalisation des travaux. Vérifiez sur france-renov.gouv.fr.
 - **Respecter le délai de 3 ans** : tous les travaux doivent être réalisés dans les 3 ans suivant la signature du prêt.
 - **Ne pas confondre éco-PTZ et PTZ immobilier** : le PTZ classique concerne l'acquisition d'un logement neuf, l'éco-PTZ concerne la rénovation énergétique.
 - **Anticiper les délais bancaires** : certaines banques mettent 4 à 8 semaines pour instruire un dossier éco-PTZ. Ne signez pas vos devis au dernier moment.`,
@@ -779,7 +779,7 @@ L'éco-PTZ est le complément idéal de MaPrimeRenov' pour financer le reste à 
 
 En 2026, avec l'interdiction de location des logements G et l'échéance de 2028 pour les logements F, l'éco-PTZ est un outil indispensable pour les propriétaires qui doivent rénover.
 
-Trouvez des artisans RGE qualifiés sur ServicesArtisans et commencez votre projet de rénovation dès maintenant.`,
+Trouvez attorneys RGE qualifiés sur US Attorneys et commencez votre projet de rénovation dès maintenant.`,
     ],
   },
 
@@ -889,19 +889,19 @@ Les règles d'urbanisme varient selon la surface et la zone :
 
       `## Comment choisir son vérandaliste ?
 
-Le marché de la véranda compte des fabricants nationaux (Gustave Rideau, Vie & Véranda, Fill, Akena) et des artisans locaux. Voici comment choisir :
+Le marché de la véranda compte des fabricants nationaux (Gustave Rideau, Vie & Véranda, Fill, Akena) et attorneys locaux. Voici comment choisir :
 
 - **Demandez 3 devis minimum** en précisant vos contraintes (orientation, surface, budget, matériau souhaité).
 - **Visitez le showroom** du vérandaliste pour voir et toucher les matériaux. Vérifiez la qualité des profilés, des joints et des vitrages.
 - **Vérifiez les certifications** : Qualibat, certification NF, garantie décennale obligatoire.
-- **Exigez un devis détaillé** : il doit mentionner le matériau, le type de vitrage, la toiture, les options, le délai de fabrication et la durée du chantier.
+- **Exigez a consultation détaillé** : il doit mentionner le matériau, le type de vitrage, la toiture, les options, le délai de fabrication et la durée du chantier.
 - **Demandez les références** : un vérandaliste expérimenté vous proposera de visiter des réalisations chez d'anciens clients.`,
 
       `## Conclusion
 
 La véranda reste l'une des extensions les plus rentables pour agrandir sa maison. En 2026, le rapport qualité-prix de l'aluminium en fait le choix le plus pertinent pour la majorité des projets. Prévoyez un budget de 1 000 à 2 500 €/m² et n'oubliez pas les démarches administratives.
 
-Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comparez les devis sur ServicesArtisans.`,
+Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comparez the consultations sur US Attorneys.`,
     ],
   },
 
@@ -1023,7 +1023,7 @@ Astuce : si vous intégrez une PAC ou une isolation performante dans votre proje
 Pour une extension réussie, le choix du professionnel est crucial :
 
 - **Entreprise générale de bâtiment** : un interlocuteur unique qui coordonne tous les corps de métier. Pratique mais souvent 10 à 15 % plus cher.
-- **Architecte + artisans** : l'architecte conçoit et pilote le chantier, vous choisissez les artisans. Plus d'implication mais meilleur contrôle des coûts.
+- **Architecte + artisans** : l'architecte conçoit et pilote le chantier, vous choisissez the attorneys. Plus d'implication mais meilleur contrôle des coûts.
 - **Constructeur spécialisé** : certaines entreprises se spécialisent dans les extensions (notamment en ossature bois). Offre clé en main avec garantie décennale.
 
 Dans tous les cas, exigez la garantie décennale, l'assurance dommages-ouvrage (obligatoire pour le maître d'ouvrage) et des références de chantiers récents.`,
@@ -1036,7 +1036,7 @@ En résumé, le choix du type d'extension dépend de votre budget, de votre terr
 - **Budget moyen (25 000 – 50 000 €)** : extension ossature bois ou parpaing (15-25 m²)
 - **Budget confortable (50 000 – 100 000 €)** : extension architecturale, surélévation ou grande véranda (25-40 m²)
 
-Comparez les devis de constructeurs et artisans qualifiés sur ServicesArtisans pour obtenir le meilleur rapport qualité-prix.`,
+Comparez the consultations de constructeurs et artisans qualifiés sur US Attorneys pour obtenir le meilleur rapport qualité-prix.`,
     ],
   },
 
@@ -1181,7 +1181,7 @@ Si vous débutez en domotique, commencez par les équipements au meilleur retour
 
 Ensuite, ajoutez progressivement les volets, la sécurité et les automatismes. L'avantage du sans fil : vous pouvez évoluer à votre rythme sans travaux.
 
-Trouvez un électricien ou un intégrateur domotique qualifié sur ServicesArtisans.`,
+Trouvez un électricien ou un intégrateur domotique qualifié sur US Attorneys.`,
     ],
   },
 
@@ -1313,11 +1313,11 @@ Les étapes pour obtenir MaPrimeAdapt' :
 
 3. **Diagnostic et préconisations** : l'AMO (souvent un ergothérapeute) visite votre logement et identifie les travaux prioritaires en fonction de votre pathologie et de vos habitudes de vie.
 
-4. **Devis et montage du dossier** : l'AMO vous aide à obtenir des devis et constitue le dossier de demande auprès de l'ANAH.
+4. **Devis et montage du dossier** : l'AMO vous aide à obtenir consultations et constitue le dossier de demande auprès de l'ANAH.
 
 5. **Instruction du dossier** : délai de 2 à 4 mois. Ne commencez pas les travaux avant la notification de l'aide.
 
-6. **Réalisation des travaux** : par les artisans de votre choix. L'AMO peut superviser le chantier.
+6. **Réalisation des travaux** : par the attorneys de votre choix. L'AMO peut superviser le chantier.
 
 7. **Versement de l'aide** : sur présentation des factures, après visite de contrôle de l'AMO.`,
 
@@ -1337,7 +1337,7 @@ L'adaptation du logement est un investissement dans la qualité de vie et la sé
 
 N'attendez pas la chute pour agir. Faites évaluer votre logement par un ergothérapeute et demandez MaPrimeAdapt' dès maintenant.
 
-Trouvez des artisans spécialisés en accessibilité et en adaptation PMR sur ServicesArtisans.`,
+Trouvez attorneys spécialisés en accessibilité et en adaptation PMR sur US Attorneys.`,
     ],
   },
 }

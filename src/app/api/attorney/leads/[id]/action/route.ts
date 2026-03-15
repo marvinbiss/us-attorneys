@@ -1,9 +1,9 @@
 /**
- * POST /api/attorney/leads/:id/action — Lead actions for authenticated artisan
+ * POST /api/attorney/leads/:id/action — Lead actions for authenticated attorney
  * Actions: view, quote, decline
  *
  * RLS note: lead_assignments has policy "lead_assignments_provider_update" (migration 103)
- * allowing artisans to UPDATE their own assignments. The authenticated `supabase` client
+ * allowing attorneys to UPDATE their own assignments. The authenticated `supabase` client
  * is therefore used for mutations instead of adminClient, which would bypass RLS.
  */
 
@@ -44,7 +44,7 @@ export async function POST(
     const result = actionSchema.safeParse(rawBody)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Action invalide. Valeurs: view, quote, decline', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid action. Valid values: view, quote, decline', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -59,12 +59,12 @@ export async function POST(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'No attorney profile found' } }, { status: 403 })
     }
 
     // Verify assignment exists and belongs to this provider.
     // adminClient used for SELECT only (read across RLS boundary is harmless here;
-    // the attorney_id check ensures the artisan only sees their own record).
+    // the attorney_id check ensures the attorney only sees their own record).
     const adminClient = createAdminClient()
     const { data: assignment, error: assignError } = await adminClient
       .from('lead_assignments')
@@ -74,7 +74,7 @@ export async function POST(
       .single()
 
     if (assignError || !assignment) {
-      return NextResponse.json({ success: false, error: { message: 'Lead non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Lead not found' } }, { status: 404 })
     }
 
     const now = new Date().toISOString()
@@ -92,7 +92,7 @@ export async function POST(
       }
 
       // Bug 1 fix: use authenticated supabase client (RLS policy "lead_assignments_provider_update"
-      // from migration 103 allows the artisan to UPDATE their own assignments).
+      // from migration 103 allows the attorney to UPDATE their own assignments).
       const { error: updateError } = await supabase
         .from('lead_assignments')
         .update({ status: 'viewed', viewed_at: now })
@@ -100,7 +100,7 @@ export async function POST(
 
       if (updateError) {
         logger.error('Lead view update error:', updateError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour du lead' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error updating lead' } }, { status: 500 })
       }
 
       await logLeadEvent(assignment.lead_id, 'viewed', {
@@ -121,7 +121,7 @@ export async function POST(
 
       if (existingQuote) {
         return NextResponse.json(
-          { success: false, error: { message: 'Un devis existe déjà pour ce lead' } },
+          { success: false, error: { message: 'A consultation already exists for this lead' } },
           { status: 409 }
         )
       }
@@ -144,7 +144,7 @@ export async function POST(
 
       if (updateError) {
         logger.error('Lead quote status update error:', updateError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour du lead' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error updating lead' } }, { status: 500 })
       }
 
       // Step 2: INSERT quote — if this fails, roll back assignment status
@@ -166,7 +166,7 @@ export async function POST(
           .from('lead_assignments')
           .update({ status: assignment.status })
           .eq('id', id)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création du devis' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error creating the consultation' } }, { status: 500 })
       }
 
       await logLeadEvent(assignment.lead_id, 'quoted', {
@@ -185,7 +185,7 @@ export async function POST(
 
       if (updateError) {
         logger.error('Lead decline update error:', updateError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour du lead' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error updating lead' } }, { status: 500 })
       }
 
       await logLeadEvent(assignment.lead_id, 'declined', {
@@ -198,6 +198,6 @@ export async function POST(
     return NextResponse.json({ success: true, action: body.action })
   } catch (error) {
     logger.error('Lead action POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

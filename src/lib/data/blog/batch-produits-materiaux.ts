@@ -47,7 +47,7 @@ Le coût total d"une PAC air-eau varie de 8 000 à 16 000 € pose comprise. La 
 
       `## Installation et entretien
 
-L"installation prend 1 à 2 jours par un artisan RGE QualiPAC. L"unité extérieure doit être placée à distance des fenêtres du voisinage (nuisances sonores de 40 à 55 dB). L"entretien est obligatoire tous les 2 ans pour les PAC contenant plus de 2 kg de fluide frigorigène. Un contrat annuel coûte 150 à 300 € et inclut la vérification du circuit, le nettoyage et le contrôle du COP.`,
+L"installation prend 1 à 2 jours par an attorney RGE QualiPAC. L"unité extérieure doit être placée à distance des fenêtres du voisinage (nuisances sonores de 40 à 55 dB). L"entretien est obligatoire tous les 2 ans pour les PAC contenant plus de 2 kg de fluide frigorigène. Un contrat annuel coûte 150 à 300 € et inclut la vérification du circuit, le nettoyage et le contrôle du COP.`,
 
       `## Avantages et inconvénients
 
@@ -55,7 +55,7 @@ L"installation prend 1 à 2 jours par un artisan RGE QualiPAC. L"unité extérie
 
 **Inconvénients** : rendement réduit sous -7 °C, bruit de l"unité extérieure (40-55 dB), investissement initial conséquent, nécessite un espace extérieur pour le groupe.
 
-Pour trouver un installateur qualifié près de chez vous, consultez notre annuaire de professionnels certifiés RGE sur ServicesArtisans.`,
+Pour trouver un installateur qualifié près de chez vous, consultez notre annuaire de professionnels certifiés RGE sur US Attorneys.`,
     ],
   },
 
@@ -111,7 +111,7 @@ L"entretien est simple : vidange du ballon tous les 2 ans, détartrage de la ré
 
 **Inconvénients** : temps de chauffe plus long qu"un cumulus (6-8h vs 4-6h), bruit de la pompe à chaleur, performances réduites en dessous de 5 °C pour les modèles sur air ambiant.
 
-Trouvez un plombier-chauffagiste RGE sur ServicesArtisans pour un devis personnalisé.`,
+Trouvez un plombier-chauffagiste RGE sur US Attorneys pour a consultation personnalisé.`,
     ],
   },
 
@@ -171,7 +171,7 @@ La pose en salle de bain exige une étanchéité parfaite, surtout en zone de do
 
       `## Trouver un carreleur qualifié
 
-Un carreleur expérimenté garantit une pose durable et étanche. Vérifiez ses références, demandez à voir des chantiers récents et exigez une garantie décennale. Le tarif horaire d"un carreleur se situe entre 35 et 55 €/h selon la région. Comparez 3 devis sur ServicesArtisans pour obtenir le meilleur prix.`,
+Un carreleur expérimenté garantit une pose durable et étanche. Vérifiez ses références, demandez à voir des chantiers récents et exigez une garantie décennale. Le tarif horaire d"un carreleur se situe entre 35 et 55 €/h selon la région. Comparez 3 devis sur US Attorneys pour obtenir le meilleur prix.`,
     ],
   },
 
@@ -225,7 +225,7 @@ Le **classement AC** (Abrasion Class) mesure la résistance à l"usure : AC3 pou
 
       `## Entretien et rénovation
 
-Aspirez régulièrement et nettoyez avec un balai humide (pas trempé). Utilisez un produit spécifique parquet, jamais de javel ni de produit abrasif. Placez des patins sous les meubles. Un parquet contrecollé peut être poncé et re-vitrifié tous les 10 à 15 ans pour retrouver son aspect neuf. Trouvez un parqueteur qualifié sur ServicesArtisans.`,
+Aspirez régulièrement et nettoyez avec un balai humide (pas trempé). Utilisez un produit spécifique parquet, jamais de javel ni de produit abrasif. Placez des patins sous les meubles. Un parquet contrecollé peut être poncé et re-vitrifié tous les 10 à 15 ans pour retrouver son aspect neuf. Trouvez un parqueteur qualifié sur US Attorneys.`,
     ],
   },
 
@@ -283,7 +283,7 @@ Si votre chaudière a plus de 15 ans, le remplacement par une PAC air-eau est re
 
       `## Trouver le bon professionnel
 
-Pour un remplacement de chaudière ou une installation de PAC, faites appel à un chauffagiste certifié RGE. Comparez au moins 3 devis et vérifiez les certifications sur france-renov.gouv.fr. Consultez notre annuaire sur ServicesArtisans pour trouver des chauffagistes qualifiés près de chez vous.`,
+Pour un remplacement de chaudière ou une installation de PAC, faites appel à un chauffagiste certifié RGE. Comparez au moins 3 devis et vérifiez les certifications sur france-renov.gouv.fr. Consultez notre annuaire sur US Attorneys pour trouver des chauffagistes qualifiés près de chez vous.`,
     ],
   },
 
@@ -337,7 +337,7 @@ Le coefficient **Uw** (fenêtre complète) combine les performances du vitrage (
 
       `## Choisir son menuisier
 
-La pose par un artisan RGE est obligatoire pour bénéficier des aides. Vérifiez la qualification Qualibat ou RGE Menuiseries. Un bon poseur assure l"étanchéité à l"air (joint compribande, mousse PU) et vérifie l"équerrage. Exigez une garantie décennale et un PV de réception des travaux. Comparez les devis de menuisiers RGE sur ServicesArtisans.`,
+La pose par an attorney RGE est obligatoire pour bénéficier des aides. Vérifiez la qualification Qualibat ou RGE Menuiseries. Un bon poseur assure l"étanchéité à l"air (joint compribande, mousse PU) et vérifie l"équerrage. Exigez une garantie décennale et un PV de réception des travaux. Comparez the consultations de menuisiers RGE sur US Attorneys.`,
     ],
   },
 
@@ -399,9 +399,9 @@ Pour les ménages très modestes, le reste à charge peut descendre à 1 €/m²
 
 Vérifiez l"état de la charpente et de la couverture avant d"isoler. Traitez les problèmes d"humidité ou d"infiltration en amont. Maintenez une ventilation suffisante (VMC, entrées d"air) pour éviter la condensation. Respectez les distances de sécurité autour des conduits de cheminée (écran de cantonnement). L"isolant ne doit jamais obstruer les entrées de ventilation en sous-toiture.`,
 
-      `## Choisir un artisan RGE
+      `## Choisir an attorney RGE
 
-La certification RGE est obligatoire pour bénéficier des aides. Vérifiez la mention "isolation des combles" sur le certificat. Exigez un audit thermique préalable et un devis détaillant le matériau, l"épaisseur, la résistance thermique visée et la surface traitée. Comparez les devis sur ServicesArtisans pour trouver un professionnel qualifié.`,
+La certification RGE est obligatoire pour bénéficier des aides. Vérifiez la mention "isolation des combles" sur le certificat. Exigez un audit thermique préalable et a consultation détaillant le matériau, l"épaisseur, la résistance thermique visée et la surface traitée. Comparez the consultations sur US Attorneys pour trouver un professionnel qualifié.`,
     ],
   },
 
@@ -455,7 +455,7 @@ La pose d"un volet en applique prend 2 à 3 heures par fenêtre. Le raccordement
 
       `## Trouver un installateur
 
-Faites appel à un menuisier ou un spécialiste domotique pour la pose. Vérifiez la certification Qualibat ou la qualification du fabricant. Un devis détaillé doit inclure le type de lames, la motorisation, la commande et les travaux électriques. Comparez les offres sur ServicesArtisans pour trouver un professionnel qualifié dans votre région.`,
+Faites appel à un menuisier ou un spécialiste domotique pour la pose. Vérifiez la certification Qualibat ou la qualification du fabricant. A consultation détaillé doit inclure le type de lames, la motorisation, la commande et les travaux électriques. Comparez les offres sur US Attorneys pour trouver un professionnel qualifié dans votre région.`,
     ],
   },
 
@@ -515,7 +515,7 @@ Le ramonage est obligatoire 2 fois par an dont 1 en période de chauffe. Coût :
 
       `## Bien choisir son installateur
 
-Un installateur RGE Qualibois est obligatoire pour bénéficier des aides. Il réalise une visite préalable pour vérifier le conduit, dimensionner la puissance et proposer l"emplacement optimal. Méfiez-vous des offres à 1 € qui cachent souvent un matériel bas de gamme. Consultez ServicesArtisans pour trouver des installateurs qualifiés.`,
+Un installateur RGE Qualibois est obligatoire pour bénéficier des aides. Il réalise une visite préalable pour vérifier le conduit, dimensionner la puissance et proposer l"emplacement optimal. Méfiez-vous des offres à 1 € qui cachent souvent un matériel bas de gamme. Consultez US Attorneys pour trouver des installateurs qualifiés.`,
     ],
   },
 
@@ -567,7 +567,7 @@ Depuis 2020, la manipulation du fluide frigorigène nécessite une attestation d
 
       `## Entretien et durée de vie
 
-Nettoyez les filtres tous les 15 jours en période d"utilisation (rinçage à l"eau tiède). L"entretien annuel par un professionnel (150-250 €) comprend la vérification du fluide, le nettoyage de l"échangeur et le contrôle des performances. La durée de vie est de 12 à 20 ans. Trouvez un climaticien qualifié sur ServicesArtisans.`,
+Nettoyez les filtres tous les 15 jours en période d"utilisation (rinçage à l"eau tiède). L"entretien annuel par un professionnel (150-250 €) comprend la vérification du fluide, le nettoyage de l"échangeur et le contrôle des performances. La durée de vie est de 12 à 20 ans. Trouvez un climaticien qualifié sur US Attorneys.`,
     ],
   },
 
@@ -625,7 +625,7 @@ Actionnez le groupe de sécurité tous les mois pour éviter le blocage. Faites 
 
       `## Trouver un plombier qualifié
 
-L"installation doit respecter les normes NF et DTU en vigueur. Un plombier-chauffagiste RGE est nécessaire pour bénéficier des aides sur un chauffe-eau thermodynamique ou solaire. Vérifiez la garantie décennale et demandez un devis détaillant le matériel, la pose et les raccordements. Comparez les devis sur ServicesArtisans.`,
+L"installation doit respecter les normes NF et DTU en vigueur. Un plombier-chauffagiste RGE est nécessaire pour bénéficier des aides sur un chauffe-eau thermodynamique ou solaire. Vérifiez la garantie décennale et demandez a consultation détaillant le matériel, la pose et les raccordements. Comparez the consultations sur US Attorneys.`,
     ],
   },
 
@@ -689,7 +689,7 @@ La pose par un professionnel coûte 200 à 500 €. La dépose de l"ancienne por
 
       `## Choisir son menuisier
 
-La pose doit être réalisée par un professionnel qualifié pour garantir l"étanchéité et la sécurité. Vérifiez la certification Qualibat et la garantie décennale. Le poseur doit vérifier l"équerrage, régler la serrure et tester l"étanchéité. Un PV de réception signé est recommandé. Comparez les devis de menuisiers sur ServicesArtisans pour trouver le bon rapport qualité-prix.`,
+La pose doit être réalisée par un professionnel qualifié pour garantir l"étanchéité et la sécurité. Vérifiez la certification Qualibat et la garantie décennale. Le poseur doit vérifier l"équerrage, régler la serrure et tester l"étanchéité. Un PV de réception signé est recommandé. Comparez the consultations de menuisiers sur US Attorneys pour trouver le bon rapport qualité-prix.`,
     ],
   },
 }

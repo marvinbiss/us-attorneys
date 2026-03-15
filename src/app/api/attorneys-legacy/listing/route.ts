@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   })
 
   if (!parsed.success) {
-    return NextResponse.json({ success: false, error: { message: 'Paramètres invalides' } }, { status: 400 })
+    return NextResponse.json({ success: false, error: { message: 'Invalid parameters' } }, { status: 400 })
   }
 
   const { service, location, offset, limit } = parsed.data
@@ -34,6 +34,6 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch {
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

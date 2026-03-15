@@ -126,7 +126,7 @@ export async function GET(request: NextRequest) {
   // Validate Luhn checksum
   if (!validateSiretLuhn(cleanSiret)) {
     return NextResponse.json(
-      { error: "Ce numero SIRET est invalide (somme de controle incorrecte)." },
+      { error: "This SIRET number is invalid (checksum mismatch)." },
       { status: 400 }
     )
   }
@@ -208,7 +208,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           found: false,
           siret: cleanSiret,
-          message: "Aucune entreprise trouvee pour ce numero SIRET.",
+          message: "No business found for this SIRET number.",
         })
       }
       throw new Error(`data.gouv.fr API error: ${res.status}`)
@@ -221,7 +221,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         found: false,
         siret: cleanSiret,
-        message: "Aucune entreprise trouvee pour ce numero SIRET.",
+        message: "No business found for this SIRET number.",
       })
     }
 
@@ -256,7 +256,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error("SIRET public verification error", error)
     return NextResponse.json(
-      { error: "Erreur lors de la verification. Veuillez reessayer." },
+      { error: "Verification error. Please try again." },
       { status: 500 }
     )
   }

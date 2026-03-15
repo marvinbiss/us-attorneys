@@ -11,7 +11,7 @@ interface FormErrors {
   [key: string]: string
 }
 
-export default function InscriptionPage() {
+export default function SignUpPage() {
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect')
   const [formData, setFormData] = useState({
@@ -40,10 +40,10 @@ export default function InscriptionPage() {
       if (data.url) {
         window.location.href = data.url
       } else {
-        setGeneralError('Connexion Google temporairement indisponible')
+        setGeneralError('Google sign in temporarily unavailable')
       }
     } catch {
-      setGeneralError('Erreur de connexion Google')
+      setGeneralError('Google sign in error')
     } finally {
       setIsLoading(false)
     }
@@ -62,48 +62,48 @@ export default function InscriptionPage() {
   }
 
   const passwordStrength = getPasswordStrength(formData.password)
-  const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
+  const strengthLabels = ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong']
   const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-400', 'bg-green-600']
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'Le prénom est requis'
+      newErrors.firstName = 'First name is required'
     } else if (formData.firstName.length < 2) {
-      newErrors.firstName = 'Le prénom doit contenir au moins 2 caractères'
+      newErrors.firstName = 'First name must be at least 2 characters'
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Le nom est requis'
+      newErrors.lastName = 'Last name is required'
     } else if (formData.lastName.length < 2) {
-      newErrors.lastName = 'Le nom doit contenir au moins 2 caractères'
+      newErrors.lastName = 'Last name must be at least 2 characters'
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'L\'email est requis'
+      newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email invalide'
+      newErrors.email = 'Invalid email address'
     }
 
     if (!formData.password) {
-      newErrors.password = 'Le mot de passe est requis'
+      newErrors.password = 'Password is required'
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères'
+      newErrors.password = 'Password must be at least 8 characters'
     } else if (!/[A-Z]/.test(formData.password)) {
-      newErrors.password = 'Le mot de passe doit contenir au moins une majuscule'
+      newErrors.password = 'Password must contain at least one uppercase letter'
     } else if (!/[a-z]/.test(formData.password)) {
-      newErrors.password = 'Le mot de passe doit contenir au moins une minuscule'
+      newErrors.password = 'Password must contain at least one lowercase letter'
     } else if (!/[0-9]/.test(formData.password)) {
-      newErrors.password = 'Le mot de passe doit contenir au moins un chiffre'
+      newErrors.password = 'Password must contain at least one number'
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Les mots de passe ne correspondent pas'
+      newErrors.confirmPassword = 'Passwords do not match'
     }
 
     if (!acceptTerms) {
-      newErrors.terms = 'Vous devez accepter les conditions'
+      newErrors.terms = 'You must accept the terms'
     }
 
     setErrors(newErrors)
@@ -138,14 +138,14 @@ export default function InscriptionPage() {
         if (data.error?.details?.fields) {
           setErrors(data.error.details.fields)
         } else {
-          setGeneralError(data.error?.message || 'Une erreur est survenue')
+          setGeneralError(data.error?.message || 'An error occurred')
         }
         return
       }
 
       setIsSubmitted(true)
     } catch (_error) {
-      setGeneralError('Erreur de connexion au serveur')
+      setGeneralError('Unable to connect to server')
     } finally {
       setIsLoading(false)
     }
@@ -159,17 +159,17 @@ export default function InscriptionPage() {
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Inscription réussie !
+            Registration Successful!
           </h1>
           <p className="text-gray-600 mb-8">
-            Un email de confirmation a été envoyé à <strong>{formData.email}</strong>.
-            Cliquez sur le lien pour activer votre compte.
+            A confirmation email has been sent to <strong>{formData.email}</strong>.
+            Click the link to activate your account.
           </p>
           <Link
             href={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg"
           >
-            Se connecter
+            Sign In
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -189,26 +189,26 @@ export default function InscriptionPage() {
           </div>
           <div className="max-w-md text-white text-center relative z-10">
             <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-8">
-              <span className="text-4xl font-bold">SA</span>
+              <span className="text-4xl font-bold">UA</span>
             </div>
             <h2 className="text-4xl font-bold mb-6">
-              Rejoignez ServicesArtisans
+              Join US Attorneys
             </h2>
             <p className="text-blue-100 text-lg mb-10">
-              Créez votre compte gratuitement et trouvez les meilleurs artisans pour vos projets.
+              Create your free account and find the best attorneys for your legal needs.
             </p>
             <div className="space-y-4 text-left">
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Demandes de devis gratuites et illimitées</span>
+                <span>Free and unlimited consultation requests</span>
               </div>
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Artisans référencés et qualifiés</span>
+                <span>Verified and qualified attorneys</span>
               </div>
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Réservation en ligne simple et rapide</span>
+                <span>Simple and fast online booking</span>
               </div>
             </div>
           </div>
@@ -219,24 +219,24 @@ export default function InscriptionPage() {
           <div className="max-w-md w-full">
             {/* Breadcrumb */}
             <Breadcrumb
-              items={[{ label: 'Inscription' }]}
+              items={[{ label: 'Sign Up' }]}
               className="mb-6 text-gray-400 [&_a]:text-gray-400 [&_a:hover]:text-white [&_svg]:text-gray-500"
             />
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">SA</span>
+                  <span className="text-white font-bold text-xl">UA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  Services<span className="text-blue-400">Artisans</span>
+                  US<span className="text-blue-400">Attorneys</span>
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">
-                Créer un compte
+                Create Account
               </h1>
               <p className="text-gray-400">
-                Inscrivez-vous gratuitement
+                Sign up for free
               </p>
             </div>
 
@@ -251,7 +251,7 @@ export default function InscriptionPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Prénom
+                    First Name
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -260,21 +260,21 @@ export default function InscriptionPage() {
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.firstName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
-                      placeholder="Jean"
+                      placeholder="John"
                     />
                   </div>
                   {errors.firstName && <p className="mt-1 text-sm text-red-400">{errors.firstName}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Nom
+                    Last Name
                   </label>
                   <input
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     className={`w-full px-4 py-3 bg-slate-800 border ${errors.lastName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
-                    placeholder="Dupont"
+                    placeholder="Smith"
                   />
                   {errors.lastName && <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>}
                 </div>
@@ -291,7 +291,7 @@ export default function InscriptionPage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
-                    placeholder="jean.dupont@email.com"
+                    placeholder="john.smith@email.com"
                   />
                 </div>
                 {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
@@ -299,7 +299,7 @@ export default function InscriptionPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Mot de passe
+                  Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -308,7 +308,7 @@ export default function InscriptionPage() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className={`w-full pl-10 pr-12 py-3 bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
-                    placeholder="8 caractères minimum"
+                    placeholder="8 characters minimum"
                   />
                   <button
                     type="button"
@@ -329,7 +329,7 @@ export default function InscriptionPage() {
                       ))}
                     </div>
                     <p className="text-xs text-gray-500">
-                      Force: {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
+                      Strength: {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Very weak'}
                     </p>
                   </div>
                 )}
@@ -338,7 +338,7 @@ export default function InscriptionPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Confirmer le mot de passe
+                  Confirm Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -347,7 +347,7 @@ export default function InscriptionPage() {
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                     className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
-                    placeholder="Confirmez votre mot de passe"
+                    placeholder="Confirm your password"
                   />
                 </div>
                 {errors.confirmPassword && <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>}
@@ -361,13 +361,13 @@ export default function InscriptionPage() {
                   className="mt-1 rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-400">
-                  J'accepte les{' '}
+                  I accept the{' '}
                   <Link href="/terms" className="text-blue-400 hover:underline">
-                    conditions générales
+                    Terms of Service
                   </Link>{' '}
-                  et la{' '}
+                  and the{' '}
                   <Link href="/privacy" className="text-blue-400 hover:underline">
-                    politique de confidentialité
+                    Privacy Policy
                   </Link>
                 </span>
               </label>
@@ -382,7 +382,7 @@ export default function InscriptionPage() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Créer mon compte
+                    Create My Account
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -396,7 +396,7 @@ export default function InscriptionPage() {
                   <div className="w-full border-t border-slate-700" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-slate-900 px-4 text-gray-500">Ou s'inscrire avec</span>
+                  <span className="bg-slate-900 px-4 text-gray-500">Or sign up with</span>
                 </div>
               </div>
               <div className="mt-6">
@@ -411,39 +411,39 @@ export default function InscriptionPage() {
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                   </svg>
-                  S'inscrire avec Google
+                  Sign up with Google
                 </button>
               </div>
             </div>
 
             <div className="mt-8 text-center">
               <p className="text-gray-400">
-                Déjà un compte ?{' '}
+                Already have an account?{' '}
                 <Link href={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-blue-400 hover:text-blue-300 font-medium">
-                  Se connecter
+                  Sign In
                 </Link>
               </p>
             </div>
 
             <p className="mt-6 text-center text-sm text-gray-500">
-              Vous êtes artisan ?{' '}
+              Are you an attorney?{' '}
               <Link href="/register-attorney" className="text-blue-400 hover:underline">
-                Inscrivez votre entreprise
+                Register your practice
               </Link>
             </p>
 
             {/* Contextual Links */}
             <div className="mt-8 pt-8 border-t border-slate-700">
-              <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
+              <p className="text-gray-400 text-sm mb-3">Useful links:</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
                 <Link href="/how-it-works" className="text-blue-400 hover:text-blue-300">
-                  Comment ça marche ?
+                  How It Works
                 </Link>
                 <Link href="/faq" className="text-blue-400 hover:text-blue-300">
-                  Questions fréquentes
+                  FAQ
                 </Link>
                 <Link href="/quotes" className="text-blue-400 hover:text-blue-300">
-                  Demander un devis
+                  Request a Consultation
                 </Link>
               </div>
             </div>
@@ -455,7 +455,7 @@ export default function InscriptionPage() {
       <section className="bg-slate-800/50 py-10 border-t border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-semibold text-white mb-6">
-            Découvrez nos services
+            Discover Our Services
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />

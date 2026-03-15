@@ -18,7 +18,7 @@ export async function POST(
     const { id } = await params
     if (!isValidUuid(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -26,12 +26,12 @@ export async function POST(
     const supabase = createAdminClient()
     const { data: campaign } = await supabase.from('prospection_campaigns').select('id, status').eq('id', id).single()
     if (!campaign) {
-      return NextResponse.json({ success: false, error: { message: 'Campagne introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Campaign not found' } }, { status: 404 })
     }
 
     if (campaign.status !== 'paused') {
       return NextResponse.json(
-        { success: false, error: { message: 'Seules les campagnes en pause peuvent être relancées' } },
+        { success: false, error: { message: 'Only paused campaigns can be resumed' } },
         { status: 400 }
       )
     }
@@ -43,6 +43,6 @@ export async function POST(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Resume campaign error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

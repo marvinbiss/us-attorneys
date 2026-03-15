@@ -1,9 +1,9 @@
 import { CacheService } from '@/lib/cache/redis-client'
 
-// L1: in-memory (fast path, même invocation Lambda)
+// L1: in-memory (fast path, same Lambda invocation)
 const memoryCache = new Map<string, { data: unknown; expiry: number }>()
 
-// L2: Redis (partagé entre toutes les instances Vercel)
+// L2: Redis (shared across all Vercel instances)
 const redisCache = new CacheService('sa:cache:')
 
 // Cache TTL configurations (in seconds)
@@ -12,7 +12,7 @@ export const CACHE_TTL = {
   artisans: 3600,   // 1 hour — les profils artisans changent rarement
   reviews: 3600,    // 1 hour — les avis changent rarement
   locations: 604800,// 7 days — les communes ne changent jamais
-  stats: 86400,     // 24 hours — stats recalculées par cron quotidien
+  stats: 86400,     // 24 hours — stats recalculated by daily cron
   cms: 3600,        // 1 hour — contenu CMS change rarement
 } as const
 

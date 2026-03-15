@@ -68,9 +68,9 @@ export function DesktopResultsSidebar({
           <div className="p-4 border-b bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
             <div>
               <p className="font-semibold text-gray-900">
-                {providers.length} artisans
+                {providers.length} attorneys
               </p>
-              <p className="text-sm text-gray-500">dans cette zone</p>
+              <p className="text-sm text-gray-500">in this area</p>
             </div>
             {loading && (
               <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
@@ -134,7 +134,7 @@ export function DesktopResultsSidebar({
                     </div>
 
                     <p className="text-sm text-blue-600 font-medium">
-                      {provider.specialty || 'Artisan'}
+                      {provider.specialty || 'Attorney'}
                     </p>
 
                     <div className="flex items-center gap-3 mt-1">
@@ -150,7 +150,7 @@ export function DesktopResultsSidebar({
                       {provider.is_verified && (
                         <span className="flex items-center gap-1 text-green-600 text-xs">
                           <Shield className="w-3 h-3" />
-                          Vérifié
+                          Verified
                         </span>
                       )}
                     </div>
@@ -167,7 +167,7 @@ export function DesktopResultsSidebar({
                         onClick={(e) => e.stopPropagation()}
                         className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                       >
-                        Voir profil
+                        View profile
                       </Link>
                       {provider.phone && (
                         <a
@@ -188,9 +188,9 @@ export function DesktopResultsSidebar({
             {providers.length === 0 && !loading && (
               <div className="p-8 text-center">
                 <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium">Aucun artisan trouvé</p>
+                <p className="text-gray-600 font-medium">No attorneys found</p>
                 <p className="text-sm text-gray-400 mt-1">
-                  Déplacez la carte ou modifiez vos filtres
+                  Move the map or adjust your filters
                 </p>
               </div>
             )}
@@ -238,7 +238,7 @@ export function MobileResultsToggle({
       >
         <div>
           <span className="font-bold text-lg">{attorneyCount}</span>
-          <span className="text-gray-600 ml-1">artisans trouvés</span>
+          <span className="text-gray-600 ml-1">attorneys found</span>
         </div>
         {mobileDrawerOpen ? (
           <ChevronDown className="w-6 h-6 text-gray-400" />
@@ -276,7 +276,7 @@ export function MobileResultsDrawer({
           <div className="p-4 border-b">
             <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-lg">{providers.length} artisans</h2>
+              <h2 className="font-bold text-lg">{providers.length} attorneys</h2>
               <button onClick={onClose}>
                 <X className="w-6 h-6 text-gray-400" />
               </button>

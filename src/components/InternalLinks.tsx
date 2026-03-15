@@ -50,7 +50,7 @@ export function PopularServicesLinks({
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <Star className="w-4 h-4 text-amber-500" />
-          Services populaires
+          Popular services
         </h3>
       )}
       <div className="flex flex-wrap gap-2">
@@ -72,7 +72,7 @@ export function PopularServicesLinks({
         href="/services"
         className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
       >
-        {services.length} métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
+        All {services.length} practice areas <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -93,7 +93,7 @@ export function PopularCitiesLinks({
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <MapPin className="w-4 h-4 text-clay-400" />
-          Villes populaires
+          Popular cities
         </h3>
       )}
       <div className="flex flex-wrap gap-2">
@@ -111,7 +111,7 @@ export function PopularCitiesLinks({
         href="/cities"
         className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
       >
-        Artisans dans {cities.length} cities <ArrowRight className="w-4 h-4" />
+        Attorneys in {cities.length} cities <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -129,8 +129,8 @@ export function GeographicNavigation({ className = '' }: { className?: string })
           <Building2 className="w-5 h-5 text-clay-400" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 group-hover:text-clay-400">Par région</div>
-          <div className="text-sm text-gray-500">{usRegions.length} régions</div>
+          <div className="font-semibold text-gray-900 group-hover:text-clay-400">By region</div>
+          <div className="text-sm text-gray-500">{usRegions.length} regions</div>
         </div>
       </Link>
       <Link
@@ -141,8 +141,8 @@ export function GeographicNavigation({ className = '' }: { className?: string })
           <MapPin className="w-5 h-5 text-green-600" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 group-hover:text-green-600">Par département</div>
-          <div className="text-sm text-gray-500">101 départements</div>
+          <div className="font-semibold text-gray-900 group-hover:text-green-600">By state</div>
+          <div className="text-sm text-gray-500">50 states + DC</div>
         </div>
       </Link>
       <Link
@@ -153,7 +153,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
           <Users className="w-5 h-5 text-amber-600" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 group-hover:text-amber-600">Par ville</div>
+          <div className="font-semibold text-gray-900 group-hover:text-amber-600">By city</div>
           <div className="text-sm text-gray-500">{cities.length} cities</div>
         </div>
       </Link>
@@ -183,7 +183,7 @@ export function PopularServiceCityLinks({
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <Wrench className="w-4 h-4 text-clay-400" />
-          Recherches populaires
+          Popular searches
         </h3>
       )}
       <div className="flex flex-wrap gap-2">
@@ -217,7 +217,7 @@ export function ServiceCityMatrix({
   return (
     <div className={className}>
       <h3 className="font-semibold text-gray-900 mb-3">
-        {specialtyData.name} par ville
+        {specialtyData.name} by city
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {cities.map((city) => (
@@ -238,28 +238,28 @@ export function ServiceCityMatrix({
 export function QuickSiteLinks({ className = '' }: { className?: string }) {
   return (
     <div className={`bg-gray-50 rounded-xl p-4 ${className}`}>
-      <h4 className="font-medium text-gray-900 mb-3">Naviguer sur le site</h4>
+      <h4 className="font-medium text-gray-900 mb-3">Browse the site</h4>
       <div className="grid grid-cols-2 gap-2 text-sm">
         <Link href="/" className="text-gray-600 hover:text-clay-400 py-1">
-          Accueil
+          Home
         </Link>
         <Link href="/services" className="text-gray-600 hover:text-clay-400 py-1">
-          {services.length} métiers d&apos;artisanat
+          {services.length} practice areas
         </Link>
         <Link href="/cities" className="text-gray-600 hover:text-clay-400 py-1">
-          {cities.length} cities de France
+          {cities.length} cities
         </Link>
         <Link href="/regions" className="text-gray-600 hover:text-clay-400 py-1">
-          Par région
+          By region
         </Link>
         <Link href="/search" className="text-gray-600 hover:text-clay-400 py-1">
-          Rechercher
+          Search
         </Link>
         <Link href="/quotes" className="text-gray-600 hover:text-clay-400 py-1">
-          Demander un devis
+          Request a consultation
         </Link>
         <Link href="/how-it-works" className="text-gray-600 hover:text-clay-400 py-1">
-          Comment ça marche
+          How it works
         </Link>
         <Link href="/contact" className="text-gray-600 hover:text-clay-400 py-1">
           Contact
@@ -280,7 +280,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
           <div>
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-green-500" />
-              Par région
+              By region
             </h3>
             <div className="space-y-1">
               {popularRegions.map((region) => (
@@ -297,7 +297,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
               href="/regions"
               className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
             >
-              Artisans par région <ArrowRight className="w-4 h-4" />
+              Attorneys by region <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

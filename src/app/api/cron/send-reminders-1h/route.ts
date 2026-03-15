@@ -1,5 +1,5 @@
 /**
- * 1-Hour Reminder Cron Job - ServicesArtisans
+ * 1-Hour Reminder Cron Job - US Attorneys
  * Sends SMS reminders 1 hour before appointments
  * Best practice: SMS has 98% open rate, ideal for last-minute reminders
  */
@@ -102,18 +102,18 @@ export async function GET(request: Request) {
       })
     }
 
-    // Fetch artisan details
+    // Fetch attorney details
     const attorneyIds = Array.from(new Set(bookingsToRemind.map((b) => b.attorney_id).filter(Boolean)))
-    const { data: artisans } = await supabase
+    const { data: attorneys } = await supabase
       .from('profiles')
       .select('id, full_name')
       .in('id', attorneyIds)
 
-    const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
+    const attorneyMap = new Map(attorneys?.map((a) => [a.id, a]) || [])
 
     // Prepare notification payloads
     const payloads: NotificationPayload[] = bookingsToRemind.map((booking) => {
-      const artisan = artisanMap.get(booking.attorney_id || '')
+      const attorney = attorneyMap.get(booking.attorney_id || '')
       const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
 
       return {
@@ -121,9 +121,9 @@ export async function GET(request: Request) {
         clientName: client?.full_name || '',
         clientEmail: client?.email || '',
         clientPhone: client?.phone_e164 || '',
-        attorneyName: artisan?.full_name || 'Artisan',
+        attorneyName: attorney?.full_name || 'Attorney',
         specialtyName: booking.service_name || 'Service',
-        date: booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
+        date: booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('en-US', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',

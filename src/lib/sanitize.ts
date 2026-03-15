@@ -1,5 +1,5 @@
 /**
- * Input Sanitization Utilities - ServicesArtisans
+ * Input Sanitization Utilities - US Attorneys
  * Prevents SQL injection and XSS attacks
  */
 

@@ -67,10 +67,10 @@ export default function ParametresClientPage() {
   })
 
   const [display, setDisplay] = useState<DisplayPreferences>({
-    language: 'fr',
+    language: 'en',
     theme: 'light',
-    timezone: 'Europe/Paris',
-    currency: 'EUR',
+    timezone: 'America/New_York',
+    currency: 'USD',
   })
 
   const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'privacy' | 'display' | 'data'>('profile')
@@ -118,10 +118,10 @@ export default function ParametresClientPage() {
             allow_reviews: p.allow_reviews ?? true,
           })
           setDisplay({
-            language: p.language ?? 'fr',
+            language: p.language ?? 'en',
             theme: p.theme ?? 'light',
-            timezone: p.timezone ?? 'Europe/Paris',
-            currency: p.currency ?? 'EUR',
+            timezone: p.timezone ?? 'America/New_York',
+            currency: p.currency ?? 'USD',
           })
         }
       }
@@ -238,7 +238,7 @@ export default function ParametresClientPage() {
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = `mes-donnees-${new Date().toISOString().split('T')[0]}.json`
+        a.download = `my-data-${new Date().toISOString().split('T')[0]}.json`
         a.click()
         URL.revokeObjectURL(url)
       }
@@ -289,11 +289,11 @@ export default function ParametresClientPage() {
   }
 
   const tabs = [
-    { id: 'profile', label: 'Profil', icon: User },
+    { id: 'profile', label: 'Profile', icon: User },
     { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'privacy', label: 'Confidentialité', icon: Shield },
-    { id: 'display', label: 'Affichage', icon: Palette },
-    { id: 'data', label: 'Mes données', icon: Download },
+    { id: 'privacy', label: 'Privacy', icon: Shield },
+    { id: 'display', label: 'Display', icon: Palette },
+    { id: 'data', label: 'My Data', icon: Download },
   ]
 
   if (isLoading) {
@@ -311,8 +311,8 @@ export default function ParametresClientPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
-              { label: 'Espace Client', href: '/client-dashboard' },
-              { label: 'Paramètres' }
+              { label: 'Client Dashboard', href: '/client-dashboard' },
+              { label: 'Settings' }
             ]}
             className="mb-4"
           />
@@ -322,13 +322,13 @@ export default function ParametresClientPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-                <p className="text-gray-600">Gérez vos informations et préférences</p>
+                <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+                <p className="text-gray-600">Manage your information and preferences</p>
               </div>
             </div>
             {saveSuccess && (
               <span className="text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                Enregistré
+                Saved
               </span>
             )}
           </div>
@@ -360,7 +360,7 @@ export default function ParametresClientPage() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
-                Mes demandes
+                My Cases
               </Link>
               <LogoutButton />
             </nav>
@@ -383,13 +383,13 @@ export default function ParametresClientPage() {
                     <div className="bg-white rounded-xl shadow-sm p-6">
                       <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
                         <User className="w-5 h-5" />
-                        Informations personnelles
+                        Personal Information
                       </h2>
                       <form onSubmit={handleProfileSubmit} className="space-y-6">
                         <div className="grid md:grid-cols-2 gap-6">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Prénom
+                              First Name
                             </label>
                             <input
                               type="text"
@@ -400,7 +400,7 @@ export default function ParametresClientPage() {
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Nom
+                              Last Name
                             </label>
                             <input
                               type="text"
@@ -425,7 +425,7 @@ export default function ParametresClientPage() {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             <Phone className="w-4 h-4 inline mr-2" />
-                            Téléphone
+                            Phone
                           </label>
                           <input
                             type="tel"
@@ -439,7 +439,7 @@ export default function ParametresClientPage() {
                           disabled={isSaving}
                           className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                         >
-                          {isSaving ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                          {isSaving ? 'Saving...' : 'Save Changes'}
                         </button>
                       </form>
                     </div>
@@ -447,12 +447,12 @@ export default function ParametresClientPage() {
                     <div className="bg-white rounded-xl shadow-sm p-6">
                       <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
                         <Lock className="w-5 h-5" />
-                        Mot de passe
+                        Password
                       </h2>
                       <form className="space-y-6">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Mot de passe actuel
+                            Current Password
                           </label>
                           <input
                             type="password"
@@ -463,7 +463,7 @@ export default function ParametresClientPage() {
                         <div className="grid md:grid-cols-2 gap-6">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Nouveau mot de passe
+                              New Password
                             </label>
                             <input
                               type="password"
@@ -473,7 +473,7 @@ export default function ParametresClientPage() {
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Confirmer le mot de passe
+                              Confirm Password
                             </label>
                             <input
                               type="password"
@@ -486,7 +486,7 @@ export default function ParametresClientPage() {
                           type="submit"
                           className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                         >
-                          Modifier le mot de passe
+                          Change Password
                         </button>
                       </form>
                     </div>
@@ -498,28 +498,28 @@ export default function ParametresClientPage() {
                   <div className="bg-white rounded-xl shadow-sm p-6 space-y-8">
                     <div>
                       <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                        Notifications par email
+                        Email Notifications
                       </h2>
                       <div className="space-y-4">
                         <ToggleSetting
-                          label="Confirmation de réservation"
-                          description="Recevez un email de confirmation pour chaque réservation"
+                          label="Booking Confirmation"
+                          description="Receive a confirmation email for each booking"
                           checked={notifications.email_booking_confirmation}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_booking_confirmation: checked })
                           }
                         />
                         <ToggleSetting
-                          label="Rappels de rendez-vous"
-                          description="Rappel 24h avant votre rendez-vous"
+                          label="Appointment Reminders"
+                          description="Reminder 24h before your appointment"
                           checked={notifications.email_booking_reminder}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_booking_reminder: checked })
                           }
                         />
                         <ToggleSetting
-                          label="Offres et actualités"
-                          description="Promotions et nouveautés des artisans"
+                          label="Offers and News"
+                          description="Promotions and updates from attorneys"
                           checked={notifications.email_marketing}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_marketing: checked })
@@ -527,7 +527,7 @@ export default function ParametresClientPage() {
                         />
                         <ToggleSetting
                           label="Newsletter"
-                          description="Recevez notre newsletter mensuelle"
+                          description="Receive our monthly newsletter"
                           checked={notifications.email_newsletter}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_newsletter: checked })
@@ -540,17 +540,17 @@ export default function ParametresClientPage() {
 
                     <div>
                       <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                        Notifications push
+                        Push Notifications
                       </h2>
                       {!pushNotifications.isSupported ? (
                         <p className="text-sm text-gray-500">
-                          Les notifications push ne sont pas supportées par votre navigateur.
+                          Push notifications are not supported by your browser.
                         </p>
                       ) : (
                         <div className="space-y-4">
                           <ToggleSetting
-                            label="Activer les notifications push"
-                            description="Recevez des notifications en temps réel"
+                            label="Enable Push Notifications"
+                            description="Receive real-time notifications"
                             checked={notifications.push_enabled}
                             onChange={handlePushToggle}
                             loading={pushNotifications.isLoading}
@@ -558,8 +558,8 @@ export default function ParametresClientPage() {
                           {notifications.push_enabled && (
                             <>
                               <ToggleSetting
-                                label="Mises à jour de réservation"
-                                description="Confirmations, modifications et rappels"
+                                label="Booking Updates"
+                                description="Confirmations, changes, and reminders"
                                 checked={notifications.push_booking_updates}
                                 onChange={(checked) =>
                                   setNotifications({ ...notifications, push_booking_updates: checked })
@@ -567,7 +567,7 @@ export default function ParametresClientPage() {
                               />
                               <ToggleSetting
                                 label="Messages"
-                                description="Nouveaux messages des artisans"
+                                description="New messages from attorneys"
                                 checked={notifications.push_messages}
                                 onChange={(checked) =>
                                   setNotifications({ ...notifications, push_messages: checked })
@@ -575,7 +575,7 @@ export default function ParametresClientPage() {
                               />
                               <ToggleSetting
                                 label="Promotions"
-                                description="Offres spéciales et réductions"
+                                description="Special offers and discounts"
                                 checked={notifications.push_promotions}
                                 onChange={(checked) =>
                                   setNotifications({ ...notifications, push_promotions: checked })
@@ -591,20 +591,20 @@ export default function ParametresClientPage() {
 
                     <div>
                       <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                        Notifications SMS
+                        SMS Notifications
                       </h2>
                       <div className="space-y-4">
                         <ToggleSetting
-                          label="Rappels de rendez-vous"
-                          description="SMS de rappel 2h avant le rendez-vous"
+                          label="Appointment Reminders"
+                          description="SMS reminder 2h before your appointment"
                           checked={notifications.sms_booking_reminder}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, sms_booking_reminder: checked })
                           }
                         />
                         <ToggleSetting
-                          label="Offres par SMS"
-                          description="Promotions et offres spéciales par SMS"
+                          label="SMS Offers"
+                          description="Promotions and special offers via SMS"
                           checked={notifications.sms_marketing}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, sms_marketing: checked })
@@ -618,7 +618,7 @@ export default function ParametresClientPage() {
                       disabled={isSaving}
                       className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
-                      {isSaving ? 'Enregistrement...' : 'Enregistrer'}
+                      {isSaving ? 'Saving...' : 'Save'}
                     </button>
                   </div>
                 )}
@@ -627,28 +627,28 @@ export default function ParametresClientPage() {
                 {activeTab === 'privacy' && (
                   <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Paramètres de confidentialité
+                      Privacy Settings
                     </h2>
                     <div className="space-y-4">
                       <ToggleSetting
-                        label="Profil public"
-                        description="Les artisans peuvent voir votre profil"
+                        label="Public Profile"
+                        description="Attorneys can see your profile"
                         checked={privacy.profile_public}
                         onChange={(checked) =>
                           setPrivacy({ ...privacy, profile_public: checked })
                         }
                       />
                       <ToggleSetting
-                        label="Statut en ligne visible"
-                        description="Les artisans peuvent voir si vous êtes en ligne"
+                        label="Online Status Visible"
+                        description="Attorneys can see if you are online"
                         checked={privacy.show_online_status}
                         onChange={(checked) =>
                           setPrivacy({ ...privacy, show_online_status: checked })
                         }
                       />
                       <ToggleSetting
-                        label="Autoriser les avis"
-                        description="Les artisans peuvent déposer des avis sur vous"
+                        label="Allow Reviews"
+                        description="Attorneys can leave reviews about you"
                         checked={privacy.allow_reviews}
                         onChange={(checked) =>
                           setPrivacy({ ...privacy, allow_reviews: checked })
@@ -661,7 +661,7 @@ export default function ParametresClientPage() {
                       disabled={isSaving}
                       className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
-                      {isSaving ? 'Enregistrement...' : 'Enregistrer'}
+                      {isSaving ? 'Saving...' : 'Save'}
                     </button>
                   </div>
                 )}
@@ -670,13 +670,13 @@ export default function ParametresClientPage() {
                 {activeTab === 'display' && (
                   <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Préférences d&apos;affichage
+                      Display Preferences
                     </h2>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         <Globe className="w-4 h-4 inline mr-2" />
-                        Langue
+                        Language
                       </label>
                       <select
                         value={display.language}
@@ -685,7 +685,7 @@ export default function ParametresClientPage() {
                         }
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="fr">Français</option>
+                        <option value="fr">French</option>
                         <option value="en">English</option>
                         <option value="es">Español</option>
                         <option value="de">Deutsch</option>
@@ -694,7 +694,7 @@ export default function ParametresClientPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Thème
+                        Theme
                       </label>
                       <div className="grid grid-cols-3 gap-3">
                         {(['light', 'dark', 'system'] as const).map((theme) => (
@@ -711,7 +711,7 @@ export default function ParametresClientPage() {
                               {theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '💻'}
                             </div>
                             <div className="text-sm font-medium">
-                              {theme === 'light' ? 'Clair' : theme === 'dark' ? 'Sombre' : 'Système'}
+                              {theme === 'light' ? 'Light' : theme === 'dark' ? 'Dark' : 'System'}
                             </div>
                           </button>
                         ))}
@@ -720,7 +720,7 @@ export default function ParametresClientPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Fuseau horaire
+                        Timezone
                       </label>
                       <select
                         value={display.timezone}
@@ -738,7 +738,7 @@ export default function ParametresClientPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Devise
+                        Currency
                       </label>
                       <select
                         value={display.currency}
@@ -749,7 +749,7 @@ export default function ParametresClientPage() {
                       >
                         <option value="EUR">EUR — Euro</option>
                         <option value="USD">USD — Dollar</option>
-                        <option value="GBP">GBP — Livre sterling</option>
+                        <option value="GBP">GBP — British Pound</option>
                       </select>
                     </div>
 
@@ -758,7 +758,7 @@ export default function ParametresClientPage() {
                       disabled={isSaving}
                       className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
-                      {isSaving ? 'Enregistrement...' : 'Enregistrer'}
+                      {isSaving ? 'Saving...' : 'Save'}
                     </button>
                   </div>
                 )}
@@ -769,11 +769,11 @@ export default function ParametresClientPage() {
                     <div className="bg-white rounded-xl shadow-sm p-6">
                       <h2 className="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
                         <Download className="w-5 h-5" />
-                        Exporter mes données
+                        Export My Data
                       </h2>
                       <p className="text-gray-600 mb-4">
-                        Téléchargez une copie de toutes vos données personnelles conformément au RGPD.
-                        Le fichier contient votre profil, vos réservations, avis et messages.
+                        Download a copy of all your personal data in compliance with privacy regulations.
+                        The file contains your profile, bookings, reviews, and messages.
                       </p>
                       <button
                         onClick={requestDataExport}
@@ -783,12 +783,12 @@ export default function ParametresClientPage() {
                         {isExporting ? (
                           <>
                             <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                            Export en cours...
+                            Exporting...
                           </>
                         ) : (
                           <>
                             <Download className="w-4 h-4" />
-                            Télécharger mes données
+                            Download My Data
                           </>
                         )}
                       </button>
@@ -797,27 +797,27 @@ export default function ParametresClientPage() {
                     <div className="bg-white rounded-xl shadow-sm p-6 border border-red-200">
                       <h2 className="text-lg font-semibold text-red-600 mb-4 flex items-center gap-2">
                         <Trash2 className="w-5 h-5" />
-                        Supprimer mon compte
+                        Delete My Account
                       </h2>
                       <p className="text-gray-600 mb-4">
-                        La suppression de votre compte est irréversible. Toutes vos données seront
-                        définitivement effacées après un délai de 30 jours, pendant lequel vous
-                        pouvez annuler votre demande.
+                        Account deletion is irreversible. All your data will be
+                        permanently erased after a 30-day period, during which you
+                        can cancel your request.
                       </p>
 
                       {deletionStatus?.status === 'scheduled' ? (
                         <div className="rounded-lg bg-red-50 border border-red-200 p-4">
                           <p className="text-sm text-red-700 mb-3">
-                            Votre compte est programmé pour suppression le{' '}
+                            Your account is scheduled for deletion on{' '}
                             <strong>
-                              {new Date(deletionStatus.scheduled_deletion_at ?? '').toLocaleDateString('fr-FR')}
+                              {new Date(deletionStatus.scheduled_deletion_at ?? '').toLocaleDateString('en-US')}
                             </strong>.
                           </p>
                           <button
                             onClick={cancelDeletion}
                             className="rounded-lg bg-white border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
                           >
-                            Annuler la suppression
+                            Cancel Deletion
                           </button>
                         </div>
                       ) : (
@@ -826,7 +826,7 @@ export default function ParametresClientPage() {
                           className="flex items-center gap-2 text-red-600 border border-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
-                          Supprimer mon compte
+                          Delete My Account
                         </button>
                       )}
                     </div>
@@ -847,30 +847,30 @@ export default function ParametresClientPage() {
             className="bg-white rounded-2xl max-w-md w-full p-6"
           >
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Supprimer votre compte
+              Delete Your Account
             </h2>
             <p className="text-gray-600 mb-6">
-              Cette action est irréversible. Votre compte sera supprimé dans 30 jours,
-              vous pouvez annuler pendant cette période.
+              This action is irreversible. Your account will be deleted in 30 days.
+              You can cancel during this period.
             </p>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Pourquoi nous quittez-vous ? (optionnel)
+                  Why are you leaving? (optional)
                 </label>
                 <textarea
                   value={deleteReason}
                   onChange={(e) => setDeleteReason(e.target.value)}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2"
                   rows={2}
-                  placeholder="Votre retour nous aide à nous améliorer..."
+                  placeholder="Your feedback helps us improve..."
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Votre mot de passe
+                  Your Password
                 </label>
                 <input
                   type="password"
@@ -883,7 +883,7 @@ export default function ParametresClientPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tapez <strong>SUPPRIMER MON COMPTE</strong> pour confirmer
+                  Type <strong>DELETE MY ACCOUNT</strong> to confirm
                 </label>
                 <input
                   type="text"
@@ -899,14 +899,14 @@ export default function ParametresClientPage() {
                 onClick={() => setShowDeleteModal(false)}
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
               >
-                Annuler
+                Cancel
               </button>
               <button
                 onClick={requestAccountDeletion}
-                disabled={deleteConfirmText !== 'SUPPRIMER MON COMPTE' || !deletePassword}
+                disabled={deleteConfirmText !== 'DELETE MY ACCOUNT' || !deletePassword}
                 className="flex-1 bg-red-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
               >
-                Confirmer
+                Confirm
               </button>
             </div>
           </motion.div>

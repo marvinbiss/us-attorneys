@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     const parsed = listQuerySchema.safeParse(queryParams)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -109,7 +109,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('CMS pages list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
@@ -133,7 +133,7 @@ export async function POST(request: Request) {
       body = await request.json()
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Corps de requête JSON invalide' } },
+        { success: false, error: { message: 'Invalid JSON request body' } },
         { status: 400 }
       )
     }
@@ -141,7 +141,7 @@ export async function POST(request: Request) {
     const parsed = createPageSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -159,13 +159,13 @@ export async function POST(request: Request) {
     // Guard against oversized JSON payloads
     if (validated.content_json && JSON.stringify(validated.content_json).length > 500000) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le contenu JSON dépasse la taille maximale autorisée' } },
+        { success: false, error: { message: 'JSON content exceeds maximum allowed size' } },
         { status: 400 }
       )
     }
     if (validated.structured_data && JSON.stringify(validated.structured_data).length > 100000) {
       return NextResponse.json(
-        { success: false, error: { message: 'Les données structurées dépassent la taille maximale autorisée' } },
+        { success: false, error: { message: 'Structured data exceeds maximum allowed size' } },
         { status: 400 }
       )
     }
@@ -185,13 +185,13 @@ export async function POST(request: Request) {
     if (error) {
       if (error.code === '23505') {
         return NextResponse.json(
-          { success: false, error: { message: 'Un slug identique existe déjà pour ce type de page' } },
+          { success: false, error: { message: 'A page with this slug already exists for this page type' } },
           { status: 409 }
         )
       }
       logger.error('CMS page create error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la création de la page' } },
+        { success: false, error: { message: 'Error creating page' } },
         { status: 500 }
       )
     }
@@ -203,7 +203,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('CMS page create error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

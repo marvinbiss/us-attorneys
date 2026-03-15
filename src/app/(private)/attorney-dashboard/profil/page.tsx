@@ -18,16 +18,16 @@ import { getAttorneyUrl } from '@/lib/utils'
 type TabId = 'identite' | 'contact' | 'localisation' | 'presentation' | 'services' | 'qualifications' | 'disponibilite' | 'faq' | 'preferences' | 'avatar'
 
 const TABS = [
-  { id: 'identite' as const, label: 'Identité', icon: Building2 },
+  { id: 'identite' as const, label: 'Identity', icon: Building2 },
   { id: 'contact' as const, label: 'Contact', icon: Phone },
-  { id: 'localisation' as const, label: 'Localisation', icon: MapPin },
-  { id: 'presentation' as const, label: 'Présentation', icon: FileText },
-  { id: 'services' as const, label: 'Services & Tarifs', icon: Euro },
+  { id: 'localisation' as const, label: 'Location', icon: MapPin },
+  { id: 'presentation' as const, label: 'About', icon: FileText },
+  { id: 'services' as const, label: 'Services & Fees', icon: Euro },
   { id: 'qualifications' as const, label: 'Qualifications', icon: Award },
-  { id: 'disponibilite' as const, label: 'Disponibilité', icon: Clock },
+  { id: 'disponibilite' as const, label: 'Availability', icon: Clock },
   { id: 'faq' as const, label: 'FAQ', icon: HelpCircle },
-  { id: 'preferences' as const, label: 'Préférences', icon: Settings2 },
-  { id: 'avatar' as const, label: 'Photo de profil', icon: Camera },
+  { id: 'preferences' as const, label: 'Preferences', icon: Settings2 },
+  { id: 'avatar' as const, label: 'Profile Photo', icon: Camera },
 ]
 
 export default function ProfilArtisanPage() {
@@ -43,7 +43,7 @@ export default function ProfilArtisanPage() {
         if (data.error) throw new Error(data.error)
         setProvider(data.provider)
       })
-      .catch(err => setError(err instanceof Error ? err.message : 'Erreur de chargement'))
+      .catch(err => setError(err instanceof Error ? err.message : 'Loading error'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -90,7 +90,7 @@ export default function ProfilArtisanPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Chargement du profil...</p>
+          <p className="text-gray-600">Loading profile...</p>
         </div>
       </div>
     )
@@ -102,8 +102,8 @@ export default function ProfilArtisanPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
-            <h2 className="font-semibold mb-2">Profil introuvable</h2>
-            <p className="text-sm">{error || 'Aucun profil artisan associé à votre compte. Contactez le support.'}</p>
+            <h2 className="font-semibold mb-2">Profile Not Found</h2>
+            <p className="text-sm">{error || 'No attorney profile associated with your account. Contact support.'}</p>
           </div>
         </div>
       </div>
@@ -115,8 +115,8 @@ export default function ProfilArtisanPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-2xl font-bold">Mon profil public</h1>
-          <p className="text-blue-100">Gérez les informations visibles sur votre page artisan</p>
+          <h1 className="text-2xl font-bold">My Public Profile</h1>
+          <p className="text-blue-100">Manage the information visible on your attorney page</p>
         </div>
       </div>
 
@@ -127,7 +127,7 @@ export default function ProfilArtisanPage() {
             <AttorneySidebar activePage="profil" publicUrl={showPublicUrl} />
 
             {/* Tab navigation */}
-            <nav className="bg-white rounded-xl shadow-sm p-4 mt-4 space-y-1" aria-label="Sections du profil" role="tablist" aria-orientation="vertical">
+            <nav className="bg-white rounded-xl shadow-sm p-4 mt-4 space-y-1" aria-label="Profile sections" role="tablist" aria-orientation="vertical">
               {TABS.map((tab, index) => (
                 <button
                   key={tab.id}

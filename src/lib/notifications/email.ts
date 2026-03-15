@@ -6,7 +6,7 @@ import { getResendClient } from '@/lib/api/resend-client'
 const getResend = () => getResendClient()
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@us-attorneys.com'
-const SITE_NAME = 'ServicesArtisans'
+const SITE_NAME = 'US Attorneys'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
 
 export interface BookingEmailData {
@@ -44,7 +44,7 @@ export interface CancellationEmailData {
   date: string
   startTime: string
   endTime: string
-  cancelledBy: 'client' | 'artisan'
+  cancelledBy: 'client' | 'attorney'
   reason?: string
 }
 
@@ -66,23 +66,23 @@ const templates = {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Confirmation de réservation</title>
+          <title>Booking Confirmation</title>
         </head>
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">Rendez-vous confirmé</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">Appointment Confirmed</h1>
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
                 Bonjour <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Votre rendez-vous avec <strong>${data.attorneyName}</strong> a bien été confirmé.
+                Your appointment with <strong>${data.attorneyName}</strong> has been confirmed.
               </p>
 
               <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #2563eb;">
-                <h3 style="margin: 0 0 15px 0; color: #1e40af; font-size: 16px;">Détails du rendez-vous</h3>
+                <h3 style="margin: 0 0 15px 0; color: #1e40af; font-size: 16px;">Appointment Details</h3>
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
@@ -105,18 +105,18 @@ const templates = {
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${SITE_URL}/booking/${data.bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Gérer ma réservation
+                  Manage my booking
                 </a>
               </div>
 
               <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                Besoin de modifier ou annuler votre rendez-vous ? Utilisez le lien ci-dessus ou contactez directement l'artisan.
+                Besoin de modifier ou annuler votre rendez-vous ? Utilisez le lien ci-dessus ou contactez directement the attorney.
               </p>
 
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
               <p style="color: #999; font-size: 12px; text-align: center;">
-                ${SITE_NAME} - Trouvez des artisans qualifiés près de chez vous
+                ${SITE_NAME} - Find qualified attorneys near you
               </p>
             </div>
           </div>
@@ -126,24 +126,24 @@ const templates = {
     text: `
 Bonjour ${data.clientName},
 
-Votre rendez-vous avec ${data.attorneyName} a bien été confirmé.
+Your appointment with ${data.attorneyName} has been confirmed.
 
-DÉTAILS DU RENDEZ-VOUS
+APPOINTMENT DETAILS
 Service: ${data.specialtyName}
 Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 Artisan: ${data.attorneyName}
 
-Gérer votre réservation: ${SITE_URL}/booking/${data.bookingId}
+Manage your booking: ${SITE_URL}/booking/${data.bookingId}
 
-Besoin de modifier ou annuler ? Utilisez le lien ci-dessus ou contactez directement l'artisan.
+Besoin de modifier ou annuler ? Utilisez le lien ci-dessus ou contactez directement the attorney.
 
 ${SITE_NAME}
     `,
   }),
 
   bookingNotificationArtisan: (data: BookingEmailData) => ({
-    subject: `Nouvelle réservation - ${data.clientName}`,
+    subject: `New booking - ${data.clientName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -154,25 +154,25 @@ ${SITE_NAME}
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">Nouvelle réservation</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">New Booking</h1>
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
                 Bonjour <strong>${data.attorneyName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Vous avez reçu une nouvelle réservation de la part de <strong>${data.clientName}</strong>.
+                You have received a new booking from <strong>${data.clientName}</strong>.
               </p>
 
               <div style="background: #f0fdf4; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #059669;">
-                <h3 style="margin: 0 0 15px 0; color: #047857; font-size: 16px;">Détails du rendez-vous</h3>
+                <h3 style="margin: 0 0 15px 0; color: #047857; font-size: 16px;">Appointment Details</h3>
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Client:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.clientName}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Téléphone:</td>
+                    <td style="padding: 8px 0; color: #666;">Phone:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.clientPhone}</td>
                   </tr>
                   <tr>
@@ -209,7 +209,7 @@ ${SITE_NAME}
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
               <p style="color: #999; font-size: 12px; text-align: center;">
-                ${SITE_NAME} - Votre partenaire pour développer votre activité
+                ${SITE_NAME} - Your partner for growing your practice
               </p>
             </div>
           </div>
@@ -219,11 +219,11 @@ ${SITE_NAME}
     text: `
 Bonjour ${data.attorneyName},
 
-Vous avez reçu une nouvelle réservation.
+You have received a new booking.
 
-DÉTAILS DU RENDEZ-VOUS
+APPOINTMENT DETAILS
 Client: ${data.clientName}
-Téléphone: ${data.clientPhone}
+Phone: ${data.clientPhone}
 Email: ${data.clientEmail}
 Service: ${data.specialtyName}
 Date: ${data.date}
@@ -255,7 +255,7 @@ ${SITE_NAME}
                 Bonjour <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Nous vous rappelons votre rendez-vous prévu <strong>demain</strong> avec <strong>${data.attorneyName}</strong>.
+                This is a reminder for your appointment <strong>tomorrow</strong> with <strong>${data.attorneyName}</strong>.
               </p>
 
               <div style="background: #fffbeb; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #f59e0b;">
@@ -277,12 +277,12 @@ ${SITE_NAME}
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${SITE_URL}/booking/${data.bookingId}" style="display: inline-block; background: #f59e0b; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Gérer ma réservation
+                  Manage my booking
                 </a>
               </div>
 
               <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                Si vous ne pouvez plus honorer ce rendez-vous, merci de l'annuler le plus tôt possible.
+                If you can no longer attend this appointment, please cancel it as soon as possible.
               </p>
 
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
@@ -304,9 +304,9 @@ Service: ${data.specialtyName}
 Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 
-Gérer votre réservation: ${SITE_URL}/booking/${data.bookingId}
+Manage your booking: ${SITE_URL}/booking/${data.bookingId}
 
-Si vous ne pouvez plus honorer ce rendez-vous, merci de l'annuler le plus tôt possible.
+If you can no longer attend this appointment, please cancel it as soon as possible.
 
 ${SITE_NAME}
     `,
@@ -324,25 +324,25 @@ ${SITE_NAME}
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">Rendez-vous annulé</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">Appointment Cancelled</h1>
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
                 Bonjour,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Le rendez-vous prévu le <strong>${data.date}</strong> a été annulé par ${data.cancelledBy === 'client' ? 'le client' : 'l\'artisan'}.
+                The appointment scheduled for <strong>${data.date}</strong> has been cancelled by ${data.cancelledBy === 'client' ? 'the client' : 'the attorney'}.
               </p>
 
               <div style="background: #fef2f2; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #dc2626;">
-                <h3 style="margin: 0 0 15px 0; color: #b91c1c; font-size: 16px;">Détails de l'annulation</h3>
+                <h3 style="margin: 0 0 15px 0; color: #b91c1c; font-size: 16px;">Cancellation Details</h3>
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.specialtyName}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Date prévue:</td>
+                    <td style="padding: 8px 0; color: #666;">Scheduled date:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.date}</td>
                   </tr>
                   <tr>
@@ -369,10 +369,10 @@ ${SITE_NAME}
       </html>
     `,
     text: `
-Le rendez-vous prévu le ${data.date} a été annulé par ${data.cancelledBy === 'client' ? 'le client' : 'l\'artisan'}.
+The appointment scheduled for ${data.date} has been cancelled by ${data.cancelledBy === 'client' ? 'the client' : 'the attorney'}.
 
 Service: ${data.specialtyName}
-Date prévue: ${data.date}
+Scheduled date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 ${data.reason ? `Raison: ${data.reason}` : ''}
 
@@ -381,7 +381,7 @@ ${SITE_NAME}
   }),
 
   paymentFailed: (data: PaymentFailedEmailData) => ({
-    subject: `Action requise: Échec de paiement - ${SITE_NAME}`,
+    subject: `Action required: Payment failed - ${SITE_NAME}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -392,7 +392,7 @@ ${SITE_NAME}
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">Échec de paiement</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">Payment Failed</h1>
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
@@ -403,7 +403,7 @@ ${SITE_NAME}
               </p>
 
               <div style="background: #fef2f2; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #dc2626;">
-                <h3 style="margin: 0 0 15px 0; color: #b91c1c; font-size: 16px;">Détails</h3>
+                <h3 style="margin: 0 0 15px 0; color: #b91c1c; font-size: 16px;">Details</h3>
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
@@ -423,12 +423,12 @@ ${SITE_NAME}
               </div>
 
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Veuillez mettre à jour vos informations de paiement pour continuer à bénéficier de votre abonnement.
+                Please update your payment information to continue your subscription.
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${SITE_URL}/attorney-dashboard/parametres/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Mettre à jour le paiement
+                  Update payment
                 </a>
               </div>
 
@@ -451,9 +451,9 @@ Service: ${data.specialtyName}
 Date: ${data.date}
 ${data.amount ? `Montant: ${data.amount}` : ''}
 
-Veuillez mettre à jour vos informations de paiement pour continuer à bénéficier de votre abonnement.
+Please update your payment information to continue your subscription.
 
-Mettre à jour: ${SITE_URL}/attorney-dashboard/parametres/facturation
+Update: ${SITE_URL}/attorney-dashboard/parametres/facturation
 
 ${SITE_NAME}
     `,

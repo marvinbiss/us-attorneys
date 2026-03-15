@@ -1,5 +1,5 @@
 /**
- * GET /api/attorney/leads/:id — Single lead detail for authenticated artisan
+ * GET /api/attorney/leads/:id — Single lead detail for authenticated attorney
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -26,7 +26,7 @@ export async function GET(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'No attorney profile found' } }, { status: 403 })
     }
 
     // Fetch assignment with full lead data
@@ -57,12 +57,12 @@ export async function GET(
       .single()
 
     if (assignError || !assignment) {
-      return NextResponse.json({ success: false, error: { message: 'Lead non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Lead not found' } }, { status: 404 })
     }
 
     return NextResponse.json({ assignment })
   } catch (error) {
     logger.error('Lead detail GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

@@ -6,7 +6,7 @@ export const saisonnierArticles: Record<string, BlogArticle> = {
     excerpt:
       'Chauffage, isolation, toiture, plomberie… Suivez notre check-list en 8 étapes pour hiverner votre maison sereinement et éviter les mauvaises surprises dès les premiers froids.',
     image: '/images/blog/preparer-maison-hiver-checklist.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-03-06',
     readTime: '12 min',
     category: 'Saisonnier',
@@ -15,7 +15,7 @@ export const saisonnierArticles: Record<string, BlogArticle> = {
       'La révision annuelle de la chaudière est obligatoire (décret 2009-649) et doit être réalisée par un professionnel certifié avant le début de la saison de chauffe.',
       'Le ramonage du conduit de cheminée est exigé 1 à 2 fois par an selon les arrêtés préfectoraux ; le certificat est indispensable pour votre assurance habitation.',
       'Calorifuger les tuyaux exposés au gel et purger les robinets extérieurs permet d\'éviter des dégâts des eaux pouvant coûter plusieurs milliers d\'euros.',
-      'Un planning d\'intervention étalé entre octobre et mi-novembre vous garantit la disponibilité des artisans et des tarifs plus compétitifs.',
+      'Un planning d\'intervention étalé entre octobre et mi-novembre vous garantit la disponibilité attorneys et des tarifs plus compétitifs.',
     ],
     faq: [
       {
@@ -220,10 +220,10 @@ Une bonne préparation hivernale s'organise et se budgétise. Voici un planning 
 | **Total estimé** | **310 – 690 €** |
 
 :::tip
-En anticipant vos interventions dès octobre, vous bénéficiez d'une meilleure disponibilité des artisans et de tarifs souvent plus avantageux qu'en pleine période de rush (novembre-décembre). Regroupez les interventions pour réduire les frais de déplacement.
+En anticipant vos interventions dès octobre, vous bénéficiez d'une meilleure disponibilité attorneys et de tarifs souvent plus avantageux qu'en pleine période de rush (novembre-décembre). Regroupez les interventions pour réduire les frais de déplacement.
 :::
 
-En suivant cette check-list méthodiquement, vous aborderez l'hiver l'esprit tranquille, avec un logement sûr, confortable et économe en énergie. N'hésitez pas à faire appel aux artisans de confiance référencés sur ServicesArtisans pour chaque étape de votre préparation hivernale.`,
+En suivant cette check-list méthodiquement, vous aborderez l'hiver l'esprit tranquille, avec un logement sûr, confortable et économe en énergie. N'hésitez pas à faire appel aux artisans de confiance référencés sur US Attorneys pour chaque étape de votre préparation hivernale.`,
     ],
   },
 }

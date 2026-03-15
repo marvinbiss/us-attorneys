@@ -211,13 +211,13 @@ export default async function AvisServicePage({
     },
     {
       question: `Combien coûte un ${tradeLower} ?`,
-      answer: `Les tarifs d’un ${tradeLower} varient généralement de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexité de l’intervention et votre région. Demandez plusieurs devis pour comparer.`,
+      answer: `Les tarifs d'un ${tradeLower} varient généralement de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexité de l'intervention et votre région. Demandez plusieurs devis pour comparer.`,
     },
     {
       question: `Quelles certifications vérifier pour un ${tradeLower} ?`,
       answer: trade.certifications.length > 0
-        ? `Pour un ${tradeLower}, les certifications à vérifier sont : ${trade.certifications.join(', ')}. Vérifiez également l’assurance décennale et la responsabilité civile professionnelle.`
-        : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux fournit ces documents sans difficulté.`,
+        ? `Pour un ${tradeLower}, les certifications à vérifier sont : ${trade.certifications.join(', ')}. Vérifiez également l'assurance décennale et la responsabilité civile professionnelle.`
+        : `Vérifiez au minimum l'assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -288,8 +288,8 @@ export default async function AvisServicePage({
       title: 'Qualifications et certifications',
       description:
         trade.certifications.length > 0
-          ? `Vérifiez que votre ${tradeLower} possède les certifications suivantes : ${trade.certifications.join(', ')}. L’assurance décennale et la RC pro sont obligatoires.`
-          : `Vérifiez que votre ${tradeLower} dispose d’une assurance décennale et d’une responsabilité civile professionnelle. Ces garanties sont obligatoires pour tout artisan du bâtiment.`,
+          ? `Vérifiez que votre ${tradeLower} possède les certifications suivantes : ${trade.certifications.join(', ')}. L'assurance décennale et la RC pro sont obligatoires.`
+          : `Vérifiez que votre ${tradeLower} dispose d'une assurance décennale et d'une responsabilité civile professionnelle. Ces garanties sont obligatoires pour tout artisan du bâtiment.`,
     },
     {
       icon: Euro,

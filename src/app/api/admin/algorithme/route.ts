@@ -46,7 +46,7 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Essayer d'abord le schema app
+    // Try d'abord le schema app
     const { data, error } = await supabase
       .from('algorithm_config')
       .select('id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
@@ -54,7 +54,7 @@ export async function GET() {
       .single()
 
     if (error || !data) {
-      // Retourner les defaults si la table n'existe pas encore
+      // Return les defaults si la table n'existe pas encore
       return NextResponse.json({
         config: {
           id: 'default',
@@ -89,15 +89,15 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json()
     const supabase = createAdminClient()
 
-    // Supprimer les champs non-modifiables avant validation
+    // Delete les champs non-modifiables avant validation
     const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<string, unknown>
 
-    // Valider avec Zod
+    // Validate avec Zod
     const parsed = algorithmConfigSchema.safeParse(fieldsToValidate)
     if (!parsed.success) {
       return NextResponse.json(
         {
-          success: false, error: { message: 'Données invalides', details: parsed.error.flatten().fieldErrors },
+          success: false, error: { message: 'Invalid data', details: parsed.error.flatten().fieldErrors },
         },
         { status: 400 }
       )
@@ -105,11 +105,11 @@ export async function PATCH(request: NextRequest) {
 
     const updates: Record<string, unknown> = { ...parsed.data }
 
-    // Ajouter le metadata
+    // Add le metadata
     updates.updated_by = auth.admin.id
     updates.updated_at = new Date().toISOString()
 
-    // Récupérer l'ID de la config actuelle
+    // Retrieve l'ID de la config actuelle
     const { data: current } = await supabase
       .from('algorithm_config')
       .select('id')
@@ -117,7 +117,7 @@ export async function PATCH(request: NextRequest) {
       .single()
 
     if (!current) {
-      // Insert si pas encore de config
+      // Insert if no config exists yet
       const { data, error } = await supabase
         .from('algorithm_config')
         .insert(updates)
@@ -126,7 +126,7 @@ export async function PATCH(request: NextRequest) {
 
       if (error) {
         logger.error('Algorithm config insert error', { message: error.message })
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la sauvegarde de la configuration' } }, { status: 500 })
+        return NextResponse.json({ success: false, error: { message: 'Error saving configuration' } }, { status: 500 })
       }
 
       await logAdminAction(
@@ -140,7 +140,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ config: data, action: 'created' })
     }
 
-    // Update la config existante
+    // Update the existing config
     const { data, error } = await supabase
       .from('algorithm_config')
       .update(updates)
@@ -150,7 +150,7 @@ export async function PATCH(request: NextRequest) {
 
     if (error) {
       logger.error('Algorithm config update error', { message: error.message })
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour de la configuration' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error updating configuration' } }, { status: 500 })
     }
 
     await logAdminAction(
@@ -164,6 +164,6 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ config: data, action: 'updated' })
   } catch (error) {
     logger.error('Algorithm config PATCH error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

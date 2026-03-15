@@ -14,16 +14,16 @@ export interface Filters {
 }
 
 export const SERVICES = [
-  { value: 'plombier', label: 'Plombier', icon: '🔧' },
-  { value: 'electricien', label: 'Électricien', icon: '⚡' },
-  { value: 'chauffagiste', label: 'Chauffagiste', icon: '🔥' },
-  { value: 'serrurier', label: 'Serrurier', icon: '🔑' },
-  { value: 'peintre', label: 'Peintre', icon: '🎨' },
-  { value: 'menuisier', label: 'Menuisier', icon: '🪚' },
-  { value: 'maçon', label: 'Maçon', icon: '🧱' },
-  { value: 'carreleur', label: 'Carreleur', icon: '🔲' },
-  { value: 'couvreur', label: 'Couvreur', icon: '🏠' },
-  { value: 'jardinier', label: 'Jardinier', icon: '🌱' },
+  { value: 'personal-injury', label: 'Personal Injury', icon: '🏥' },
+  { value: 'criminal-defense', label: 'Criminal Defense', icon: '⚖️' },
+  { value: 'family-law', label: 'Family Law', icon: '👨‍👩‍👧' },
+  { value: 'estate-planning', label: 'Estate Planning', icon: '📜' },
+  { value: 'business-law', label: 'Business Law', icon: '🏢' },
+  { value: 'immigration', label: 'Immigration', icon: '🌍' },
+  { value: 'real-estate', label: 'Real Estate', icon: '🏠' },
+  { value: 'employment-law', label: 'Employment Law', icon: '💼' },
+  { value: 'bankruptcy', label: 'Bankruptcy', icon: '📊' },
+  { value: 'tax-law', label: 'Tax Law', icon: '💰' },
 ]
 
 interface MapFiltersProps {
@@ -55,7 +55,7 @@ export default function MapFilters({
         <div className="flex items-center gap-3">
           {/* Logo/Back */}
           <Link href="/" className="flex-shrink-0 hidden md:block">
-            <span className="text-xl font-bold text-blue-600">ServicesArtisans</span>
+            <span className="text-xl font-bold text-blue-600">US Attorneys</span>
           </Link>
 
           {/* Search Input */}
@@ -65,7 +65,7 @@ export default function MapFilters({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Rechercher un artisan, une spécialité..."
+              placeholder="Search for an attorney, a practice area..."
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
           </div>
@@ -101,7 +101,7 @@ export default function MapFilters({
             }`}
           >
             <Filter className="w-4 h-4" />
-            <span className="hidden sm:inline">Filtres</span>
+            <span className="hidden sm:inline">Filters</span>
             {activeFilterCount > 0 && (
               <span className="bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {activeFilterCount}
@@ -114,21 +114,21 @@ export default function MapFilters({
             <button
               onClick={() => onViewModeChange('split')}
               className={`p-2 rounded-full transition-colors ${viewMode === 'split' ? 'bg-white shadow' : ''}`}
-              title="Vue mixte"
+              title="Split view"
             >
               <Layers className="w-4 h-4" />
             </button>
             <button
               onClick={() => onViewModeChange('list')}
               className={`p-2 rounded-full transition-colors ${viewMode === 'list' ? 'bg-white shadow' : ''}`}
-              title="Liste"
+              title="List"
             >
               <List className="w-4 h-4" />
             </button>
             <button
               onClick={() => onViewModeChange('map')}
               className={`p-2 rounded-full transition-colors ${viewMode === 'map' ? 'bg-white shadow' : ''}`}
-              title="Carte"
+              title="Map"
             >
               <MapIcon className="w-4 h-4" />
             </button>
@@ -153,7 +153,7 @@ export default function MapFilters({
                     onChange={(e) => onFiltersChange({ ...filters, service: e.target.value })}
                     className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 bg-white"
                   >
-                    <option value="">Tous les services</option>
+                    <option value="">All practice areas</option>
                     {SERVICES.map((service) => (
                       <option key={service.value} value={service.value}>
                         {service.icon} {service.label}
@@ -167,7 +167,7 @@ export default function MapFilters({
                     onChange={(e) => onFiltersChange({ ...filters, minRating: Number(e.target.value) })}
                     className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 bg-white"
                   >
-                    <option value={0}>Toutes notes</option>
+                    <option value={0}>All ratings</option>
                     <option value={3}>⭐ 3+</option>
                     <option value={4}>⭐ 4+</option>
                     <option value={4.5}>⭐ 4.5+</option>
@@ -183,7 +183,7 @@ export default function MapFilters({
                     }`}
                   >
                     <Shield className="w-4 h-4" />
-                    Vérifiés
+                    Verified
                   </button>
 
                   <button
@@ -195,7 +195,7 @@ export default function MapFilters({
                     }`}
                   >
                     <Zap className="w-4 h-4" />
-                    Urgence 24/7
+                    24/7 Emergency
                   </button>
 
                   {/* Clear Filters */}
@@ -209,7 +209,7 @@ export default function MapFilters({
                       })}
                       className="text-sm text-gray-500 hover:text-gray-700 underline"
                     >
-                      Réinitialiser
+                      Reset
                     </button>
                   )}
                 </div>

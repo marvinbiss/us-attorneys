@@ -19,25 +19,25 @@ export const metiersArticles: Record<string, {
     content: [
       "L'électricité est un domaine où l'approximation n'a pas sa place. Chaque année en France, **50 000 incendies** sont d'origine électrique et **3 000 personnes** sont victimes d'électrisation. Une installation mal réalisée met en danger votre famille et votre patrimoine. Choisir le bon électricien est donc une décision capitale, que vous envisagiez une mise aux normes, une rénovation complète ou une simple intervention de dépannage. Ce guide vous donne **toutes les clés** pour faire le bon choix et éviter les mauvaises surprises. Consultez notre annuaire d'[électriciens vérifiés près de chez vous](/practice-areas/electricien).",
       "## Vérifiez les qualifications et certifications",
-      "Un électricien professionnel doit impérativement détenir une habilitation électrique délivrée par son employeur ou par un organisme agréé. Au-delà de cette obligation légale, recherchez les labels de qualité : Qualifelec est la certification de référence dans le domaine de l'électricité. Elle atteste que l'artisan maîtrise les normes en vigueur et suit régulièrement des formations. Pour les travaux liés à l'énergie (installation de panneaux solaires, bornes de recharge), le label RGE (Reconnu Garant de l'Environnement) est indispensable pour bénéficier des aides de l'État. La norme NF C 15-100 est le cadre réglementaire de toute installation électrique résidentielle en France : un bon électricien la connaît sur le bout des doigts et vous l'explique clairement.",
+      "Un électricien professionnel doit impérativement détenir une habilitation électrique délivrée par son employeur ou par un organisme agréé. Au-delà de cette obligation légale, recherchez les labels de qualité : Qualifelec est la certification de référence dans le domaine de l'électricité. Elle atteste que the attorney maîtrise les normes en vigueur et suit régulièrement des formations. Pour les travaux liés à l'énergie (installation de panneaux solaires, bornes de recharge), le label RGE (Reconnu Garant de l'Environnement) est indispensable pour bénéficier des aides de l'État. La norme NF C 15-100 est le cadre réglementaire de toute installation électrique résidentielle en France : un bon électricien la connaît sur le bout des doigts et vous l'explique clairement.",
       "## Comparez au moins trois devis détaillés",
-      "Un devis d'électricien doit détailler chaque poste : main-d'œuvre, fournitures (marques et modèles des composants), frais de déplacement et durée estimée des travaux. Méfiez-vous des devis trop vagues (\"mise aux normes électriques : forfait 3 000 euros\") qui cachent souvent des surprises. Comparez au moins trois propositions en vérifiant que le périmètre des travaux est identique. Sur ServicesArtisans, vous pouvez [trouver un électricien à Paris](/practice-areas/electricien/paris) ou dans votre ville et comparer facilement les offres.",
+      "A consultation d'électricien doit détailler chaque poste : main-d'œuvre, fournitures (marques et modèles des composants), frais de déplacement et durée estimée des travaux. Méfiez-vous consultations trop vagues (\"mise aux normes électriques : forfait 3 000 euros\") qui cachent souvent des surprises. Comparez au moins trois propositions en vérifiant que le périmètre des travaux est identique. Sur US Attorneys, vous pouvez [trouver un électricien à Paris](/practice-areas/electricien/paris) ou dans votre ville et comparer facilement les offres.",
       "## Les questions à poser absolument",
       "Avant de vous engager, posez ces questions essentielles : Disposez-vous d'une assurance responsabilité civile professionnelle et d'une garantie décennale ? Êtes-vous certifié Qualifelec ? Quel est le délai d'intervention ? Fournissez-vous un certificat de conformité Consuel après les travaux ? Un professionnel sérieux répondra sans hésiter et pourra produire les justificatifs correspondants.",
       "## Les red flags à repérer immédiatement",
-      "Certains signaux doivent vous alerter sans délai : un artisan qui refuse de fournir son numéro SIRET, qui propose un prix anormalement bas par rapport au marché, qui demande un paiement intégral avant le début des travaux ou qui ne propose pas de contrat écrit. De même, méfiez-vous d'un électricien qui minimise l'importance du diagnostic préalable ou qui promet de \"faire passer\" une installation non conforme.",
+      "Certains signaux doivent vous alerter sans délai : an attorney qui refuse de fournir son numéro SIRET, qui propose un prix anormalement bas par rapport au marché, qui demande un paiement intégral avant le début des travaux ou qui ne propose pas de contrat écrit. De même, méfiez-vous d'un électricien qui minimise l'importance du diagnostic préalable ou qui promet de \"faire passer\" une installation non conforme.",
       "## Vérifiez l'assurance décennale et le Consuel",
-      "Pour tous les travaux d'électricité intégrés au bâti (encastrement de câbles, tableau électrique, raccordement), la garantie décennale est obligatoire. Cette assurance vous couvre pendant dix ans contre les dommages compromettant la solidité de l'ouvrage. Demandez systématiquement l'attestation avant la signature du devis. Après une installation neuve ou une rénovation lourde, l'obtention du certificat de conformité délivré par le Consuel est obligatoire : un électricien professionnel intègre cette démarche dans sa prestation.",
+      "Pour tous les travaux d'électricité intégrés au bâti (encastrement de câbles, tableau électrique, raccordement), la garantie décennale est obligatoire. Cette assurance vous couvre pendant dix ans contre les dommages compromettant la solidité de l'ouvrage. Demandez systématiquement l'attestation avant la signature of the consultation. Après une installation neuve ou une rénovation lourde, l'obtention du certificat de conformité délivré par le Consuel est obligatoire : un électricien professionnel intègre cette démarche dans sa prestation.",
       "## Le diagnostic électrique : un préalable utile",
       "Avant de lancer des travaux importants, faites réaliser un diagnostic électrique par un professionnel certifié. Ce bilan identifie les anomalies de votre installation et hiérarchise les interventions nécessaires. C'est un investissement modeste (entre 100 et 200 euros) qui peut vous faire économiser beaucoup en évitant des travaux inutiles.",
       ":::warning Attention\nMéfiez-vous des électriciens qui proposent un prix anormalement bas, qui refusent de fournir leur numéro SIRET, qui demandent un paiement intégral avant le début des travaux, ou qui ne proposent pas de contrat écrit. De même, un électricien qui minimise l'importance du diagnostic préalable ou qui promet de « faire passer » une installation non conforme est à **fuir immédiatement**.\n:::",
 
-      ":::tip Conseil pro\nNe versez **jamais plus de 30 % d'acompte** à la signature du devis. Le solde doit être payé à la réception des travaux, après vérification du bon fonctionnement de l'installation. Conservez toujours le certificat Consuel et l'attestation de garantie décennale dans vos documents importants.\n:::",
+      ":::tip Conseil pro\nNe versez **jamais plus de 30 % d'acompte** à la signature of the consultation. Le solde doit être payé à la réception des travaux, après vérification du bon fonctionnement de l'installation. Conservez toujours le certificat Consuel et l'attestation de garantie décennale dans vos documents importants.\n:::",
 
       ":::takeaway\n- Vérifier le **SIRET** et la certification **Qualifelec**\n- Exiger l'**attestation d'assurance décennale** à jour\n- Comparer **trois devis détaillés** (marques, modèles, prix unitaires)\n- Exiger le certificat **Consuel** après installation neuve\n- Ne jamais verser plus de **30 % d'acompte**\n:::"
     ],
     image: "/images/blog/choisir-electricien.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-20",
     readTime: "14 min",
     category: "Conseils",
@@ -46,12 +46,12 @@ export const metiersArticles: Record<string, {
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelles certifications doit avoir un bon électricien ?", answer: "Un bon électricien doit détenir au minimum une habilitation électrique à jour. La certification Qualifelec est le label de référence attestant de la maîtrise des normes. Le label RGE est indispensable pour les travaux liés aux énergies renouvelables (panneaux solaires, bornes de recharge) et pour bénéficier des aides de l'État." },
-      { question: "Comment vérifier l'assurance décennale d'un électricien ?", answer: "Demandez l'attestation d'assurance décennale avant la signature du devis. Vérifiez sa date de validité, les activités couvertes (électricité, domotique) et le nom de l'entreprise. Vous pouvez contacter directement l'assureur pour confirmer la validité. La garantie décennale est obligatoire pour tous les travaux d'électricité intégrés au bâti." },
+      { question: "Comment vérifier l'assurance décennale d'un électricien ?", answer: "Demandez l'attestation d'assurance décennale avant la signature of the consultation. Vérifiez sa date de validité, les activités couvertes (électricité, domotique) et le nom de l'entreprise. Vous pouvez contacter directement l'assureur pour confirmer la validité. La garantie décennale est obligatoire pour tous les travaux d'électricité intégrés au bâti." },
       { question: "Qu'est-ce que le certificat Consuel et est-il obligatoire ?", answer: "Le Consuel (Comité National pour la Sécurité des Usagers de l'Électricité) délivre un certificat de conformité après vérification d'une installation neuve ou rénovée. Il est obligatoire pour la mise en service par le fournisseur d'énergie. Un électricien professionnel intègre cette démarche dans sa prestation." },
-      { question: "Combien de devis faut-il demander pour des travaux d'électricité ?", answer: "Comparez au minimum trois devis détaillés. Un bon devis précise : le détail de chaque poste (main-d'œuvre, fournitures avec marques et modèles), les frais de déplacement, la durée estimée et les conditions de paiement. Méfiez-vous des devis trop vagues ou forfaitaires sans détail." }
+      { question: "Combien de devis faut-il demander pour des travaux d'électricité ?", answer: "Comparez au minimum trois devis détaillés. Un bon devis précise : le détail de chaque poste (main-d'œuvre, fournitures avec marques et modèles), les frais de déplacement, la durée estimée et les conditions de paiement. Méfiez-vous consultations trop vagues ou forfaitaires sans détail." }
     ],
     keyTakeaways: [
-      "Vérifiez le SIRET, la certification Qualifelec et l'assurance décennale avant de signer un devis.",
+      "Vérifiez le SIRET, la certification Qualifelec et l'assurance décennale avant de signer a consultation.",
       "Comparez au minimum trois devis détaillés mentionnant marques, modèles et prix unitaires.",
       "Le certificat Consuel est obligatoire après toute installation neuve ou rénovation électrique lourde.",
       "Ne versez jamais plus de 30 % d'acompte et payez le solde après vérification du bon fonctionnement."
@@ -61,27 +61,27 @@ export const metiersArticles: Record<string, {
     title: "Choisir son Serrurier 2026 : Conseils",
     excerpt: "Porte claquée, serrure bloquée, effraction : comment trouver un serrurier honnête et éviter les arnaques en urgence. Comparez.",
     content: [
-      "La serrurerie est l'un des secteurs de l'artisanat les plus exposés aux arnaques. En situation d'urgence — porte claquée, clé cassée dans la serrure, cambriolage — le stress pousse à appeler le premier numéro trouvé sur internet, souvent à des tarifs astronomiques. Ce guide vous arme pour faire le bon choix, même dans l'urgence. Commencez par identifier un [serrurier de confiance](/practice-areas/serrurier) dès maintenant.",
+      "La serrurerie est l'un des secteurs de the attorneyat les plus exposés aux arnaques. En situation d'urgence — porte claquée, clé cassée dans la serrure, cambriolage — le stress pousse à appeler le premier numéro trouvé sur internet, souvent à des tarifs astronomiques. Ce guide vous arme pour faire le bon choix, même dans l'urgence. Commencez par identifier un [serrurier de confiance](/practice-areas/serrurier) dès maintenant.",
       "## Anticipez : trouvez votre serrurier avant l'urgence",
-      "Le meilleur conseil que l'on puisse vous donner est de repérer un serrurier de confiance avant d'en avoir besoin. Conservez ses coordonnées dans votre téléphone. Sur ServicesArtisans, vous pouvez identifier les [serruriers vérifiés à Lyon](/practice-areas/serrurier/lyon) ou dans votre quartier et consulter les avis de clients précédents. Un serrurier digne de ce nom détient au minimum un CAP Serrurier-métallier ou un diplôme équivalent. Le label A2P (Assurance Prévention Protection) délivré par le CNPP est un gage de sérieux supplémentaire.",
+      "Le meilleur conseil que l'on puisse vous donner est de repérer un serrurier de confiance avant d'en avoir besoin. Conservez ses coordonnées dans votre téléphone. Sur US Attorneys, vous pouvez identifier les [serruriers vérifiés à Lyon](/practice-areas/serrurier/lyon) ou dans votre quartier et consulter les avis de clients précédents. Un serrurier digne de ce nom détient au minimum un CAP Serrurier-métallier ou un diplôme équivalent. Le label A2P (Assurance Prévention Protection) délivré par le CNPP est un gage de sérieux supplémentaire.",
       "## Les tarifs normaux à connaître",
       "Pour éviter de vous faire piéger, connaissez les fourchettes de prix habituelles : une ouverture de porte simple (sans destruction) coûte entre 80 et 150 euros en journée. Un changement de serrure standard va de 100 à 300 euros selon le modèle. La majoration pour intervention de nuit ou le week-end est généralement de 50 à 80 %. Si un serrurier annonce 500 euros pour ouvrir une porte claquée, fuyez.",
       "## Les pièges classiques à éviter",
-      "Le secteur regorge de pratiques douteuses : le serrurier qui prétend que votre serrure est irréparable et qu'il faut tout changer (alors qu'un simple crochetage suffirait) ; celui qui facture des \"frais de déplacement urgence\" de 200 euros ; celui qui démonte votre cylindre et vous facture un modèle haut de gamme sans vous avoir consulté. Beaucoup de faux serruriers investissent massivement dans la publicité en ligne pour apparaître en tête des résultats de recherche : le fait d'être premier sur Google ne garantit en rien le sérieux de l'artisan.",
+      "Le secteur regorge de pratiques douteuses : le serrurier qui prétend que votre serrure est irréparable et qu'il faut tout changer (alors qu'un simple crochetage suffirait) ; celui qui facture des \"frais de déplacement urgence\" de 200 euros ; celui qui démonte votre cylindre et vous facture un modèle haut de gamme sans vous avoir consulté. Beaucoup de faux serruriers investissent massivement dans la publicité en ligne pour apparaître en tête des résultats de recherche : le fait d'être premier sur Google ne garantit en rien le sérieux de the attorney.",
       "## Les questions à poser au téléphone",
       "Avant qu'il ne se déplace, posez ces questions : Quel est le coût du déplacement ? Pouvez-vous me donner une fourchette de prix pour mon problème ? Êtes-vous inscrit au registre des métiers ? Acceptez-vous les paiements par carte bancaire ? Un professionnel sérieux répondra clairement. Celui qui reste évasif ou refuse de donner un ordre de prix cherche probablement à vous facturer un montant exorbitant sur place.",
-      "## Exigez un devis écrit avant intervention",
-      "Depuis 2017, la loi impose aux serruriers de fournir un devis écrit avant toute intervention dépassant 150 euros TTC. Ce devis doit mentionner le détail des prestations, le prix de la main-d'œuvre, le coût des pièces et le montant total TTC. Ne laissez jamais un serrurier commencer les travaux sans avoir signé ce devis. En cas de refus, cherchez un autre professionnel.",
+      "## Exigez a consultation écrit avant intervention",
+      "Depuis 2017, la loi impose aux serruriers de fournir a consultation écrit avant toute intervention dépassant 150 euros TTC. This consultation doit mentionner le détail des prestations, le prix de la main-d'œuvre, le coût des pièces et le montant total TTC. Ne laissez jamais un serrurier commencer les travaux sans avoir signé this consultation. En cas de refus, cherchez un autre professionnel.",
       "## Après l'intervention : les vérifications",
       "Une fois les travaux terminés, vérifiez que la facture correspond au devis signé. Testez la serrure plusieurs fois. Demandez les clés supplémentaires et la carte de propriété de la serrure (si changement de cylindre). Si vous devez changer votre serrure, optez pour un modèle certifié A2P : cette norme classe les serrures en trois niveaux de résistance à l'effraction (A2P*, A2P**, A2P***). Les assureurs reconnaissent cette certification.",
       ":::warning Attention\nLe secteur de la serrurerie d'urgence est l'un des plus touchés par les arnaques en France. La DGCCRF reçoit des centaines de plaintes chaque année. Les techniques les plus courantes : **prix d'appel à 39 €** suivi d'une facture de 800 €, diagnostic alarmiste (« il faut tout changer »), facturation de pièces haut de gamme sans accord préalable, et paiement exigé en espèces. Ne cédez **jamais** à la pression.\n:::",
 
       ":::tip Conseil pro\nLe meilleur réflexe anti-arnaque : **identifiez un serrurier de confiance AVANT l'urgence** et enregistrez ses coordonnées dans votre téléphone. En situation de stress, vous appellerez directement un professionnel vérifié au lieu de chercher en catastrophe sur internet, terrain de chasse des faux serruriers.\n:::",
 
-      ":::takeaway\n- Trouver un serrurier **avant** l'urgence via ServicesArtisans\n- Connaître les prix normaux : ouverture simple **80 – 150 €** en journée\n- Exiger un **devis écrit** avant toute intervention (obligatoire au-delà de 150 €)\n- Se méfier des tarifs excessifs et des diagnostics alarmistes\n- Vérifier le **SIRET** et demander une **facture détaillée**\n:::"
+      ":::takeaway\n- Trouver un serrurier **avant** l'urgence via US Attorneys\n- Connaître les prix normaux : ouverture simple **80 – 150 €** en journée\n- Exiger un **devis écrit** avant toute intervention (obligatoire au-delà de 150 €)\n- Se méfier des tarifs excessifs et des diagnostics alarmistes\n- Vérifier le **SIRET** et demander une **facture détaillée**\n:::"
     ],
     image: "/images/blog/choisir-serrurier.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-22",
     readTime: "13 min",
     category: "Conseils",
@@ -89,16 +89,16 @@ export const metiersArticles: Record<string, {
     authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
     updatedDate: "2026-03-01",
     faq: [
-      { question: "Comment trouver un serrurier honnête en urgence ?", answer: "Le meilleur moyen est de repérer un serrurier de confiance avant d'en avoir besoin. Consultez les avis vérifiés sur ServicesArtisans, demandez des recommandations à votre entourage, et enregistrez les coordonnées dans votre téléphone. En urgence, appelez directement ce contact plutôt que de chercher sur internet." },
-      { question: "Un serrurier peut-il refuser de fournir un devis ?", answer: "Non, depuis 2017, la loi impose aux serruriers de fournir un devis écrit avant toute intervention dépassant 150 € TTC. Le devis doit détailler les prestations, la main-d'œuvre, le coût des pièces et le montant total TTC. Un serrurier qui refuse de fournir un devis est en infraction." },
-      { question: "Que faire si un serrurier me facture un montant excessif ?", answer: "Si la facture dépasse largement le devis signé, vous pouvez contester. Payez sous réserve (mentionnez-le par écrit), conservez tous les documents, et saisissez la DGCCRF (direction départementale de la protection des populations) ou le médiateur de la consommation. Vous pouvez aussi contacter une association de consommateurs." },
+      { question: "Comment trouver un serrurier honnête en urgence ?", answer: "Le meilleur moyen est de repérer un serrurier de confiance avant d'en avoir besoin. Consultez les avis vérifiés sur US Attorneys, demandez des recommandations à votre entourage, et enregistrez les coordonnées dans votre téléphone. En urgence, appelez directement ce contact plutôt que de chercher sur internet." },
+      { question: "Un serrurier peut-il refuser de fournir a consultation ?", answer: "Non, depuis 2017, la loi impose aux serruriers de fournir a consultation écrit avant toute intervention dépassant 150 € TTC. The consultation doit détailler les prestations, la main-d'œuvre, le coût des pièces et le montant total TTC. Un serrurier qui refuse de fournir a consultation est en infraction." },
+      { question: "Que faire si un serrurier me facture un montant excessif ?", answer: "Si la facture dépasse largement the consultation signé, vous pouvez contester. Payez sous réserve (mentionnez-le par écrit), conservez tous les documents, et saisissez la DGCCRF (direction départementale de la protection des populations) ou le médiateur de la consommation. Vous pouvez aussi contacter une association de consommateurs." },
       { question: "La serrure A2P est-elle vraiment nécessaire ?", answer: "La certification A2P n'est pas obligatoire mais fortement recommandée pour les portes d'entrée. C'est la seule norme reconnue par les assureurs en France : certains contrats exigent une serrure A2P pour une couverture optimale contre le cambriolage. Le surcoût (80 – 250 € pour le cylindre) est un investissement de sécurité judicieux." }
     ],
     keyTakeaways: [
       "Identifiez un serrurier de confiance avant l'urgence et enregistrez ses coordonnées dans votre téléphone.",
       "Connaissez les prix normaux : une ouverture de porte simple coûte 80 à 150 € en journée.",
-      "Exigez un devis écrit avant toute intervention, obligatoire au-delà de 150 € TTC depuis 2017.",
-      "Vérifiez le SIRET de l'artisan et refusez de payer en espèces pour éviter les arnaques."
+      "Exigez a consultation écrit avant toute intervention, obligatoire au-delà de 150 € TTC depuis 2017.",
+      "Vérifiez le SIRET de the attorney et refusez de payer en espèces pour éviter les arnaques."
     ]
   },
   "comment-choisir-chauffagiste-guide": {
@@ -108,14 +108,14 @@ export const metiersArticles: Record<string, {
       "Le choix d'un chauffagiste est déterminant pour votre confort thermique et votre facture énergétique. Qu'il s'agisse d'installer une pompe à chaleur, de remplacer une chaudière vieillissante ou d'assurer l'entretien annuel obligatoire, un professionnel compétent fait toute la différence. Trouvez un [chauffagiste certifié RGE](/practice-areas/chauffagiste) sur notre annuaire.",
       "## Le label RGE et les certifications spécifiques",
       "Le label RGE (Reconnu Garant de l'Environnement) est la première qualification à vérifier. Il est obligatoire pour que vos travaux soient éligibles aux aides financières : MaPrimeRénov', certificats d'économies d'énergie (CEE), éco-prêt à taux zéro. Selon le type d'équipement, recherchez aussi : QualiPAC pour les pompes à chaleur, QualiBois pour le chauffage au bois, QualiSol pour le solaire thermique. Ces qualifications spécialisées attestent d'une formation pointue et garantissent une installation dans les règles de l'art.",
-      "## Comparez les devis avec méthode",
-      "Un devis de chauffagiste doit détailler : la marque et le modèle de l'équipement proposé, sa puissance, son coefficient de performance (COP pour les pompes à chaleur), le coût de la main-d'œuvre, les raccordements nécessaires et la mise en service. Comparez au minimum trois devis en vérifiant que les équipements proposés sont de qualité équivalente. Un écart de prix important pour un même modèle doit vous interroger.",
+      "## Comparez the consultations avec méthode",
+      "A consultation de chauffagiste doit détailler : la marque et le modèle de l'équipement proposé, sa puissance, son coefficient de performance (COP pour les pompes à chaleur), le coût de la main-d'œuvre, les raccordements nécessaires et la mise en service. Comparez au minimum trois devis en vérifiant que les équipements proposés sont de qualité équivalente. Un écart de prix important pour un même modèle doit vous interroger.",
       "## Les questions essentielles à poser",
       "Demandez : Quelle puissance recommandez-vous pour mon logement et pourquoi ? Quel est le COP ou le rendement de l'appareil proposé ? Prenez-vous en charge les démarches administratives (déclaration préalable, demande d'aides) ? Assurez-vous le SAV et l'entretien annuel ? Un chauffagiste compétent dimensionne l'installation en fonction de la surface, de l'isolation et de la zone climatique — pas au doigt mouillé.",
       "## Les red flags à ne pas ignorer",
       "Un chauffagiste qui ne réalise pas de visite préalable pour évaluer votre logement, qui propose un équipement surdimensionné (ou sous-dimensionné), qui ne mentionne pas les aides auxquelles vous avez droit, ou qui refuse de vous fournir les fiches techniques de l'appareil : autant de signaux qui doivent vous inciter à chercher ailleurs.",
       "## Le dimensionnement et les contraintes acoustiques",
-      "Un équipement de chauffage mal dimensionné est source de surconsommation et d'inconfort. Un bon chauffagiste réalise un bilan thermique avant de vous proposer un équipement. Si vous optez pour une [pompe à chaleur](/practice-areas/pompe-a-chaleur) air-eau ou air-air, assurez-vous que votre chauffagiste prend en compte les contraintes acoustiques : le bloc extérieur émet un bruit qui peut gêner le voisinage, et l'artisan doit respecter la réglementation sur les nuisances sonores.",
+      "Un équipement de chauffage mal dimensionné est source de surconsommation et d'inconfort. Un bon chauffagiste réalise un bilan thermique avant de vous proposer un équipement. Si vous optez pour une [pompe à chaleur](/practice-areas/pompe-a-chaleur) air-eau ou air-air, assurez-vous que votre chauffagiste prend en compte les contraintes acoustiques : le bloc extérieur émet un bruit qui peut gêner le voisinage, et the attorney doit respecter la réglementation sur les nuisances sonores.",
       "## L'entretien annuel et les aides financières",
       "L'entretien annuel de la chaudière est obligatoire depuis 2009, et celui des pompes à chaleur depuis 2020. Un chauffagiste sérieux propose un contrat d'entretien incluant la visite annuelle et une priorité d'intervention en cas de panne (120 à 250 euros par an). En 2026, MaPrimeRénov' peut atteindre 5 000 euros pour une PAC air-eau, les CEE ajoutent 2 000 à 4 000 euros, et l'éco-PTZ finance le reste sans intérêts.",
       ":::warning Attention\nUn chauffagiste qui ne réalise pas de **visite préalable**, qui propose un équipement sans **bilan thermique**, qui ne mentionne pas les aides financières auxquelles vous avez droit, ou qui refuse de fournir les fiches techniques de l'appareil : autant de signaux qui doivent vous inciter à chercher ailleurs. Méfiez-vous aussi des démarcheurs téléphoniques promettant des « PAC à 1 € ».\n:::",
@@ -125,7 +125,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Exiger le label **RGE** et les certifications spécifiques (QualiPAC, QualiBois)\n- Vérifier l'**assurance décennale** avant signature\n- Exiger un **bilan thermique** avant tout dimensionnement\n- Comparer **trois devis** incluant marque, modèle et COP\n- Privilégier un professionnel proposant l'**entretien** sur le long terme\n:::"
     ],
     image: "/images/blog/choisir-chauffagiste.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-25",
     readTime: "14 min",
     category: "Conseils",
@@ -148,13 +148,13 @@ export const metiersArticles: Record<string, {
     title: "Choisir son Menuisier 2026 : Critères",
     excerpt: "Fenêtres, portes, escaliers, agencement sur mesure... Les clés pour sélectionner un menuisier compétent, du bois à l'aluminium.",
     content: [
-      "Le menuisier est l'artisan de la précision et du détail. Qu'il travaille le bois, l'aluminium ou le PVC, il façonne les éléments qui structurent votre intérieur et conditionnent l'isolation de votre logement. Fenêtres, portes, escaliers, placards sur mesure : le choix du bon menuisier a un impact direct sur votre confort quotidien et la valeur de votre bien. Consultez notre annuaire de [menuisiers qualifiés](/practice-areas/menuisier) pour comparer les profils.",
+      "Le menuisier est the attorney de la précision et du détail. Qu'il travaille le bois, l'aluminium ou le PVC, il façonne les éléments qui structurent votre intérieur et conditionnent l'isolation de votre logement. Fenêtres, portes, escaliers, placards sur mesure : le choix du bon menuisier a un impact direct sur votre confort quotidien et la valeur de votre bien. Consultez notre annuaire de [menuisiers qualifiés](/practice-areas/menuisier) pour comparer les profils.",
       "## Identifiez le type de menuisier dont vous avez besoin",
       "Le terme « menuisier » recouvre plusieurs spécialités distinctes. Le menuisier d'intérieur conçoit et pose les escaliers, placards, dressings et agencements sur mesure. Le menuisier extérieur installe fenêtres, portes d'entrée, volets et baies vitrées. L'ébéniste travaille le bois massif pour des pièces de mobilier haut de gamme. Identifiez clairement votre besoin avant de chercher un professionnel.",
       "## Les qualifications à vérifier",
       "Un menuisier qualifié détient au minimum un CAP Menuisier-installateur ou un CAP Menuisier-fabricant. Pour les installations de fenêtres performantes, le label RGE est indispensable si vous souhaitez bénéficier des aides à la rénovation énergétique. La certification Qualibat dans la catégorie menuiserie atteste d'un savoir-faire reconnu. Pour les menuiseries aluminium, la qualification Technal ou Schüco apporte une garantie supplémentaire.",
-      "## Le devis : les points de vigilance",
-      "Un devis de menuiserie doit préciser : le matériau (essence de bois, type d'aluminium, qualité du PVC), les dimensions exactes, le vitrage proposé (double ou triple, coefficient Uw), le type de pose (en rénovation ou en dépose totale), les finitions et accessoires. Un professionnel sérieux prend les mesures sur place — jamais à distance. En menuiserie, un millimètre compte.",
+      "## The consultation : les points de vigilance",
+      "A consultation de menuiserie doit préciser : le matériau (essence de bois, type d'aluminium, qualité du PVC), les dimensions exactes, le vitrage proposé (double ou triple, coefficient Uw), le type de pose (en rénovation ou en dépose totale), les finitions et accessoires. Un professionnel sérieux prend les mesures sur place — jamais à distance. En menuiserie, un millimètre compte.",
       "## Les questions à poser",
       "Quelles essences de bois recommandez-vous pour mon projet et pourquoi ? Quel est le coefficient d'isolation thermique (Uw) des menuiseries proposées ? Réalisez-vous la fabrication en atelier ou sous-traitez-vous ? Quelle est la garantie sur la pose et sur les matériaux ? Proposez-vous un SAV en cas de problème de réglage ?",
       "## Bois, aluminium ou PVC : comment choisir ?",
@@ -163,12 +163,12 @@ export const metiersArticles: Record<string, {
       "Un menuisier qui prend les mesures au téléphone, qui ne propose qu'une seule marque sans justification technique, qui refuse de montrer des réalisations antérieures ou qui ne mentionne pas la conformité au DTU applicable : autant de raisons de poursuivre vos recherches. Les menuiseries sont soumises à la garantie décennale (éléments structurels et étanchéité) et à la garantie biennale (ferrures et mécanismes). Vérifiez que votre menuisier dispose de ces assurances.",
       ":::warning Attention\nUn menuisier qui prend les mesures **au téléphone**, qui ne propose qu'une seule marque sans justification technique, qui refuse de montrer des réalisations antérieures ou qui ne mentionne pas la conformité au DTU applicable : autant de raisons de poursuivre vos recherches. En menuiserie, **un millimètre compte**.\n:::",
 
-      ":::tip Conseil pro\nPour les fenêtres, exigez le coefficient **Uw** (performance thermique de la fenêtre complète) sur le devis. Un Uw ≤ 1,3 W/m².K est nécessaire pour bénéficier de la TVA à 5,5 % et des aides MaPrimeRénov'. Pour les escaliers, demandez à visiter un chantier terminé ou à voir des photos de réalisations similaires à votre projet.\n:::",
+      ":::tip Conseil pro\nPour les fenêtres, exigez le coefficient **Uw** (performance thermique de la fenêtre complète) sur the consultation. Un Uw ≤ 1,3 W/m².K est nécessaire pour bénéficier de la TVA à 5,5 % et des aides MaPrimeRénov'. Pour les escaliers, demandez à visiter un chantier terminé ou à voir des photos de réalisations similaires à votre projet.\n:::",
 
       ":::takeaway\n- Identifier votre besoin : menuisier **intérieur**, **extérieur** ou **ébéniste**\n- Vérifier **Qualibat** et **RGE** (pour les fenêtres éligibles aux aides)\n- Exiger une **prise de cotes sur site** (jamais à distance)\n- Comparer trois devis avec **coefficients thermiques** (Uw)\n- Choisir un menuisier proposant un **SAV** sérieux\n:::"
     ],
     image: "/images/blog/choisir-menuisier.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-28",
     readTime: "13 min",
     category: "Conseils",
@@ -178,13 +178,13 @@ export const metiersArticles: Record<string, {
     faq: [
       { question: "Comment choisir entre un menuisier bois, alu ou PVC ?", answer: "Le bois offre esthétique noble et excellentes performances thermiques mais demande un entretien. L'aluminium est robuste et contemporain, idéal pour les grandes baies. Le PVC est le choix économique avec un bon rapport qualité-prix et zéro entretien. Un bon menuisier vous conseille le matériau adapté à votre projet, budget et style." },
       { question: "Le label RGE est-il nécessaire pour un menuisier ?", answer: "Le label RGE est indispensable si vous souhaitez bénéficier des aides à la rénovation énergétique (MaPrimeRénov', CEE, TVA 5,5 %) pour le remplacement de fenêtres. Pour les travaux intérieurs (escaliers, placards), le RGE n'est pas nécessaire mais la certification Qualibat reste un gage de compétence." },
-      { question: "Comment vérifier la qualité du travail d'un menuisier ?", answer: "Demandez des photos de réalisations récentes, et si possible visitez un chantier terminé. Vérifiez la régularité des assemblages, la qualité des finitions, le bon fonctionnement des mécanismes (fenêtres, coulisses). Consultez les avis clients sur ServicesArtisans et demandez des références de clients précédents." }
+      { question: "Comment vérifier la qualité du travail d'un menuisier ?", answer: "Demandez des photos de réalisations récentes, et si possible visitez un chantier terminé. Vérifiez la régularité des assemblages, la qualité des finitions, le bon fonctionnement des mécanismes (fenêtres, coulisses). Consultez les avis clients sur US Attorneys et demandez des références de clients précédents." }
     ],
     keyTakeaways: [
       "Identifiez votre besoin : menuisier intérieur (escaliers, placards), extérieur (fenêtres) ou ébéniste.",
       "Vérifiez les certifications Qualibat et RGE (obligatoire pour les fenêtres ouvrant droit aux aides).",
       "Exigez une prise de cotes sur site : en menuiserie, un millimètre compte.",
-      "Demandez le coefficient Uw sur le devis des fenêtres et comparez les performances thermiques."
+      "Demandez le coefficient Uw sur the consultation des fenêtres et comparez les performances thermiques."
     ]
   },
   "comment-choisir-carreleur-guide": {
@@ -193,9 +193,9 @@ export const metiersArticles: Record<string, {
     content: [
       "Le carrelage est un revêtement exigeant qui ne pardonne pas l'à-peu-près. Une pose mal réalisée se voit immédiatement : joints irréguliers, carreaux décalés, planéité insuffisante. Le choix du carreleur est donc crucial pour un résultat esthétique et durable. Voici les critères à examiner attentivement. Comparez les profils de [carreleurs professionnels](/practice-areas/carreleur) sur notre annuaire.",
       "## Les qualifications professionnelles",
-      "Un carreleur qualifié détient un CAP Carreleur-mosaïste ou un BP dans la même spécialité. La certification Qualibat en carrelage-revêtements est un gage de compétence supplémentaire. Pour les travaux en pièces humides (salle de bain, douche à l'italienne), vérifiez que l'artisan maîtrise les systèmes d'étanchéité sous carrelage (SPEC) conformes au DTU 52.2. Demandez des photos de chantiers récents pour évaluer la régularité des joints et la finition des découpes.",
-      "## Le devis : ce qu'il doit contenir",
-      "Un devis de carrelage complet mentionne : la surface à carreler, le type de pose (droite, diagonale, décalée, en chevron), la préparation du support (ragréage, primaire d'accroche), le type de colle et de joint, le prix au mètre carré pose comprise, et les travaux annexes (dépose ancien revêtement, plinthes, seuils). Méfiez-vous des devis qui omettent la préparation du support : c'est souvent là que les surprises surviennent.",
+      "Un carreleur qualifié détient un CAP Carreleur-mosaïste ou un BP dans la même spécialité. La certification Qualibat en carrelage-revêtements est un gage de compétence supplémentaire. Pour les travaux en pièces humides (salle de bain, douche à l'italienne), vérifiez que the attorney maîtrise les systèmes d'étanchéité sous carrelage (SPEC) conformes au DTU 52.2. Demandez des photos de chantiers récents pour évaluer la régularité des joints et la finition des découpes.",
+      "## The consultation : ce qu'il doit contenir",
+      "A consultation de carrelage complet mentionne : la surface à carreler, le type de pose (droite, diagonale, décalée, en chevron), la préparation du support (ragréage, primaire d'accroche), le type de colle et de joint, le prix au mètre carré pose comprise, et les travaux annexes (dépose ancien revêtement, plinthes, seuils). Méfiez-vous consultations qui omettent la préparation du support : c'est souvent là que les surprises surviennent.",
       "## Les questions à poser impérativement",
       "Réalisez-vous vous-même le ragréage ou faut-il un chapiste ? Quel type de colle utilisez-vous pour mon support (béton, plancher chauffant, ancien carrelage) ? Quelle épaisseur de joint recommandez-vous ? Prenez-vous en charge l'étanchéité sous carrelage en pièces humides ? Combien de temps de séchage faut-il prévoir avant de marcher sur le carrelage ?",
       "## Red flags : les signaux d'alarme",
@@ -210,10 +210,10 @@ export const metiersArticles: Record<string, {
 
       ":::info Bon à savoir\nLe **DTU 52.2** est la norme de référence pour la pose de carrelage en France. Il impose notamment le double encollage pour les formats supérieurs à 30 x 30 cm, l'utilisation d'un primaire d'accrochage adapté au support, et des joints de dilatation tous les 60 m² maximum. Un carreleur qui connaît et respecte le DTU est un professionnel sérieux.\n:::",
 
-      ":::takeaway\n- Vérifier **CAP Carreleur-mosaïste** et certification **Qualibat**\n- Demander des **photos** de réalisations récentes\n- Exiger un devis incluant la **préparation du support**\n- Pour la douche italienne : exiger l'expérience en **étanchéité SPEC**\n- Contrôler les **assurances** (décennale + parfait achèvement)\n:::"
+      ":::takeaway\n- Vérifier **CAP Carreleur-mosaïste** et certification **Qualibat**\n- Demander des **photos** de réalisations récentes\n- Exiger a consultation incluant la **préparation du support**\n- Pour la douche italienne : exiger l'expérience en **étanchéité SPEC**\n- Contrôler les **assurances** (décennale + parfait achèvement)\n:::"
     ],
     image: "/images/blog/choisir-carreleur.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-30",
     readTime: "13 min",
     category: "Conseils",
@@ -236,11 +236,11 @@ export const metiersArticles: Record<string, {
     title: "Choisir son Maçon 2026 : Bons Réflexes",
     excerpt: "Construction, extension, rénovation de structure : les critères essentiels pour sélectionner un maçon compétent et assuré. Devis gratuit.",
     content: [
-      "Le maçon est l'artisan des fondations, au sens propre comme au figuré. C'est lui qui pose les bases de votre projet de construction ou de rénovation. Une erreur de maçonnerie peut avoir des conséquences dramatiques et extrêmement coûteuses : fissures structurelles, problèmes d'humidité, affaissement. Le choix de ce professionnel mérite une attention toute particulière. Trouvez un [maçon qualifié et assuré](/practice-areas/macon) sur notre annuaire.",
+      "Le maçon est the attorney des fondations, au sens propre comme au figuré. C'est lui qui pose les bases de votre projet de construction ou de rénovation. Une erreur de maçonnerie peut avoir des conséquences dramatiques et extrêmement coûteuses : fissures structurelles, problèmes d'humidité, affaissement. Le choix de ce professionnel mérite une attention toute particulière. Trouvez un [maçon qualifié et assuré](/practice-areas/macon) sur notre annuaire.",
       "## Les qualifications et l'assurance décennale",
       "Un maçon professionnel détient au minimum un CAP Maçon ou un BP Maçon. La certification Qualibat dans les métiers du gros œuvre atteste que l'entreprise dispose des compétences techniques et de la solidité financière nécessaires. La garantie décennale est absolument impérative pour tout travail de maçonnerie : demandez l'attestation avant toute signature de devis, vérifiez sa validité et qu'elle couvre le type de travaux envisagés.",
-      "## Le devis : soyez exigeant sur le détail",
-      "Un devis de maçonnerie sérieux détaille : la nature des fondations (type, profondeur, ferraillage), les matériaux utilisés (type de parpaings, béton, armatures), les quantités précises, la main-d'œuvre, la gestion des déblais et gravats, et le délai d'exécution. Attention aux postes souvent oubliés : l'étude de sol, les regards de visite, le hérissonnage et le vide sanitaire.",
+      "## The consultation : soyez exigeant sur le détail",
+      "A consultation de maçonnerie sérieux détaille : la nature des fondations (type, profondeur, ferraillage), les matériaux utilisés (type de parpaings, béton, armatures), les quantités précises, la main-d'œuvre, la gestion des déblais et gravats, et le délai d'exécution. Attention aux postes souvent oubliés : l'étude de sol, les regards de visite, le hérissonnage et le vide sanitaire.",
       "## Les questions à poser",
       "Réalisez-vous une étude de sol préalable ? Quel type de fondations recommandez-vous et pourquoi ? Utilisez-vous des planelles isolantes en about de dalle ? Comment gérez-vous les intempéries pendant le chantier ? Un bon maçon explique clairement ses choix techniques et accepte le contrôle d'un maître d'œuvre.",
       "## Red flags et étude de sol",
@@ -251,10 +251,10 @@ export const metiersArticles: Record<string, {
 
       ":::tip Conseil pro\nÀ la fin du chantier, la **réception des travaux** est un acte juridique essentiel qui marque le point de départ des garanties (parfait achèvement 1 an, biennale 2 ans, décennale 10 ans). Inspectez minutieusement les ouvrages et notez **toutes les réserves** sur le procès-verbal. Ne signez jamais sans réserve sous la pression.\n:::",
 
-      ":::takeaway\n- Vérifier **CAP Maçon** et certification **Qualibat** gros œuvre\n- Exiger l'attestation de **garantie décennale** avant toute signature\n- Demander un devis détaillant **fondations et matériaux**\n- Faire réaliser une **étude de sol** si nécessaire\n- Suivre le chantier de près et formaliser la **réception des travaux**\n:::"
+      ":::takeaway\n- Vérifier **CAP Maçon** et certification **Qualibat** gros œuvre\n- Exiger l'attestation de **garantie décennale** avant toute signature\n- Demander a consultation détaillant **fondations et matériaux**\n- Faire réaliser une **étude de sol** si nécessaire\n- Suivre le chantier de près et formaliser la **réception des travaux**\n:::"
     ],
     image: "/images/blog/choisir-macon.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-01",
     readTime: "14 min",
     category: "Conseils",
@@ -263,12 +263,12 @@ export const metiersArticles: Record<string, {
     updatedDate: "2026-03-01",
     faq: [
       { question: "L'étude de sol est-elle obligatoire avant de construire ?", answer: "Depuis la loi Élan de 2018, l'étude géotechnique est obligatoire pour les maisons individuelles dans les zones exposées au retrait-gonflement des argiles (environ 50 % du territoire). Même hors zone à risque, elle est fortement recommandée. Son coût (800 – 2 000 €) est modeste comparé aux conséquences d'un mauvais dimensionnement des fondations." },
-      { question: "Comment vérifier l'assurance décennale d'un maçon ?", answer: "Demandez l'attestation avant signature du devis. Vérifiez la date de validité, les activités couvertes (maçonnerie, gros œuvre, béton armé) et le nom de l'entreprise. Contactez directement l'assureur en cas de doute. La décennale est absolument impérative pour tout travail de maçonnerie." },
-      { question: "Que doit contenir un devis de maçonnerie sérieux ?", answer: "Un devis complet détaille : la nature des fondations (type, profondeur, ferraillage), les matériaux utilisés (type de parpaings, béton, armatures), les quantités précises, la main-d'œuvre, la gestion des déblais, le délai d'exécution, et les postes souvent oubliés (étude de sol, regards, hérissonnage)." }
+      { question: "Comment vérifier l'assurance décennale d'un maçon ?", answer: "Demandez l'attestation avant signature of the consultation. Vérifiez la date de validité, les activités couvertes (maçonnerie, gros œuvre, béton armé) et le nom de l'entreprise. Contactez directement l'assureur en cas de doute. La décennale est absolument impérative pour tout travail de maçonnerie." },
+      { question: "Que doit contenir a consultation de maçonnerie sérieux ?", answer: "A consultation complet détaille : la nature des fondations (type, profondeur, ferraillage), les matériaux utilisés (type de parpaings, béton, armatures), les quantités précises, la main-d'œuvre, la gestion des déblais, le délai d'exécution, et les postes souvent oubliés (étude de sol, regards, hérissonnage)." }
     ],
     keyTakeaways: [
       "L'assurance décennale est absolument impérative pour tout travail de maçonnerie.",
-      "Exigez un devis détaillant les fondations, matériaux, quantités et délais d'exécution.",
+      "Exigez a consultation détaillant les fondations, matériaux, quantités et délais d'exécution.",
       "L'étude de sol géotechnique est obligatoire dans les zones argileuses depuis la loi Élan de 2018.",
       "Formalisez la réception des travaux avec un procès-verbal écrit pour déclencher les garanties."
     ]
@@ -280,8 +280,8 @@ export const metiersArticles: Record<string, {
       "La toiture est le premier rempart de votre habitation contre les intempéries. Son entretien et sa réparation exigent un savoir-faire spécifique et un respect strict des règles de sécurité. Le choix d'un couvreur compétent conditionne la longévité de votre toit et la protection de l'ensemble de votre logement. Consultez notre annuaire de [couvreurs vérifiés](/practice-areas/couvreur) pour trouver un professionnel sérieux.",
       "## Les qualifications professionnelles et la sécurité",
       "Un couvreur qualifié détient un CAP Couvreur, un BP Couvreur ou un BTS Enveloppe des bâtiments. La certification Qualibat en couverture est un gage de compétence reconnu. Pour l'isolation de toiture par l'extérieur (sarking), le label RGE est nécessaire. Le métier de couvreur étant l'un des plus dangereux du bâtiment, un professionnel sérieux respecte scrupuleusement les règles de sécurité : port du harnais, échafaudage, balisage. Un couvreur qui monte sans équipement de protection n'est pas un professionnel.",
-      "## Le devis : les éléments à vérifier",
-      "Un devis de couverture doit détailler : la surface concernée, le type de matériau (tuiles terre cuite, ardoise naturelle, zinc, bac acier), les travaux de charpente éventuels, l'écran sous-toiture, le traitement des points singuliers (faîtage, rives, noues, solins), les éléments de zinguerie confiés à un [zingueur qualifié](/practice-areas/zingueur) (gouttières, descentes) et la gestion des déchets. Vérifiez la conformité au DTU série 40 applicable.",
+      "## The consultation : les éléments à vérifier",
+      "A consultation de couverture doit détailler : la surface concernée, le type de matériau (tuiles terre cuite, ardoise naturelle, zinc, bac acier), les travaux de charpente éventuels, l'écran sous-toiture, le traitement des points singuliers (faîtage, rives, noues, solins), les éléments de zinguerie confiés à un [zingueur qualifié](/practice-areas/zingueur) (gouttières, descentes) et la gestion des déchets. Vérifiez la conformité au DTU série 40 applicable.",
       "## Les questions essentielles à poser",
       "Quel matériau de couverture recommandez-vous et pourquoi ? Posez-vous un écran sous-toiture ? Comment traitez-vous les points singuliers (cheminée, velux, noues) ? La charpente nécessite-t-elle des réparations ? Quelles garanties offrez-vous sur l'étanchéité ? Comment protégez-vous le chantier en cas de pluie ?",
       "## Red flags et démarchage abusif",
@@ -297,7 +297,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Vérifier **CAP Couvreur**, **Qualibat** et **RGE** (si isolation)\n- Exiger la **montée sur toit** pour le diagnostic (pas de devis depuis le sol)\n- Contrôler la **garantie décennale** couvrant les travaux de couverture\n- **Méfiez-vous du démarchage** abusif au porte-à-porte\n- Choisir un couvreur respectant les **règles de sécurité** (harnais, échafaudage)\n:::"
     ],
     image: "/images/blog/choisir-couvreur.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-03",
     readTime: "14 min",
     category: "Conseils",
@@ -325,8 +325,8 @@ export const metiersArticles: Record<string, {
       "Le jardinier réalise principalement des travaux d'entretien : tonte, taille de haies, désherbage, plantation. Le paysagiste conçoit et réalise des aménagements plus élaborés : création de jardins, terrasses, allées, bassins, systèmes d'arrosage automatique. Certains professionnels cumulent les deux compétences. Identifiez clairement votre besoin avant de chercher.",
       "## Les qualifications à vérifier",
       "Un paysagiste qualifié détient un BTSA Aménagements paysagers, un BP Aménagements paysagers ou un CS (Certificat de Spécialisation). Pour l'élagage, exigez un CS Taille et soins des arbres, car c'est un travail dangereux qui requiert des compétences spécifiques. La certification Qualipaysage est le label de référence du secteur. Vérifiez également l'agrément phytosanitaire si des produits de traitement sont utilisés.",
-      "## Le devis et les questions à poser",
-      "Un devis d'aménagement paysager doit inclure : un plan du projet, la liste des végétaux avec taille et calibre, les matériaux pour surfaces minérales, la préparation du sol, les réseaux (arrosage, éclairage) et un calendrier. Demandez : Quelles plantes pour mon exposition et mon sol ? Prévoyez-vous un arrosage automatique ? Quelle garantie de reprise sur les plantations ? Un bon paysagiste adapte ses propositions à votre budget et à votre capacité d'entretien.",
+      "## The consultation et les questions à poser",
+      "A consultation d'aménagement paysager doit inclure : un plan du projet, la liste des végétaux avec taille et calibre, les matériaux pour surfaces minérales, la préparation du sol, les réseaux (arrosage, éclairage) et un calendrier. Demandez : Quelles plantes pour mon exposition et mon sol ? Prévoyez-vous un arrosage automatique ? Quelle garantie de reprise sur les plantations ? Un bon paysagiste adapte ses propositions à votre budget et à votre capacité d'entretien.",
       "## Red flags",
       "Un paysagiste qui ne visite pas le terrain, qui ne tient pas compte de l'exposition et de la nature du sol, qui propose des essences inadaptées au climat local, ou qui ne mentionne pas la garantie de reprise sur les plantations : autant de signaux négatifs.",
       "## Le crédit d'impôt et l'élagage",
@@ -337,10 +337,10 @@ export const metiersArticles: Record<string, {
 
       ":::warning Attention\nUn paysagiste qui **ne visite pas le terrain**, qui ne tient pas compte de l'exposition et de la nature du sol, qui propose des essences inadaptées au climat local, ou qui ne mentionne pas la **garantie de reprise** sur les plantations : autant de signaux négatifs. Un bon paysagiste adapte ses propositions à votre terrain, pas l'inverse.\n:::",
 
-      ":::takeaway\n- Distinguer **entretien** (jardinier) et **création** (paysagiste)\n- Vérifier **BTSA**, **Qualipaysage** ou **CS élagage** selon le besoin\n- Exiger un **plan et un devis détaillé** pour les aménagements\n- Privilégier les professionnels qui **visitent le terrain** avant de chiffrer\n- Profiter du **crédit d'impôt de 50 %** pour l'entretien courant\n:::"
+      ":::takeaway\n- Distinguer **entretien** (jardinier) et **création** (paysagiste)\n- Vérifier **BTSA**, **Qualipaysage** ou **CS élagage** selon le besoin\n- Exiger un **plan et a consultation détaillé** pour les aménagements\n- Privilégier les professionnels qui **visitent le terrain** avant de chiffrer\n- Profiter du **crédit d'impôt de 50 %** pour l'entretien courant\n:::"
     ],
     image: "/images/blog/choisir-jardinier.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-04",
     readTime: "13 min",
     category: "Conseils",
@@ -363,27 +363,27 @@ export const metiersArticles: Record<string, {
     title: "Choisir son Vitrier 2026 : Guide",
     excerpt: "Bris de glace, remplacement de vitrage, double vitrage : comment trouver un vitrier compétent, même en situation d'urgence.",
     content: [
-      "Qu'il s'agisse d'un bris de glace accidentel, d'une tentative d'effraction ou du remplacement de vos simples vitrages par du double vitrage performant, le vitrier est un artisan spécialisé dont l'intervention demande précision et rapidité. Comme pour la serrurerie, les situations d'urgence rendent le choix plus difficile. Identifiez un [vitrier de confiance](/practice-areas/vitrier) dès maintenant.",
+      "Qu'il s'agisse d'un bris de glace accidentel, d'une tentative d'effraction ou du remplacement de vos simples vitrages par du double vitrage performant, le vitrier est an attorney spécialisé dont l'intervention demande précision et rapidité. Comme pour la serrurerie, les situations d'urgence rendent le choix plus difficile. Identifiez un [vitrier de confiance](/practice-areas/vitrier) dès maintenant.",
       "## Qualifications et réflexes en urgence",
       "Un vitrier qualifié détient un CAP Menuisier-aluminium-verre ou un titre professionnel équivalent. En cas de bris de glace, sécurisez la zone, prenez des photos pour votre assurance et contactez un vitrier rapidement. En attendant l'intervention, protégez l'ouverture avec un panneau de contreplaqué ou un film plastique épais. Prévenez votre assurance habitation : le bris de glace est généralement couvert.",
       "## Les tarifs normaux à connaître",
       "Remplacement d'un simple vitrage : 50 à 100 euros le m2 (hors pose). Double vitrage standard 4/16/4 : 80 à 150 euros le m2. Double vitrage à isolation renforcée (VIR) : 120 à 200 euros le m2. Main-d'œuvre : 40 à 70 euros de l'heure. Déplacement en urgence : 50 à 100 euros de supplément. Si un vitrier vous annonce des tarifs très supérieurs, demandez des explications ou consultez un concurrent.",
-      "## Le devis et les questions à poser",
-      "Le devis doit mentionner : le type de vitrage (composition exacte, épaisseur des verres et lame d'air ou de gaz), les dimensions, le coefficient d'isolation thermique (Ug), le type de pose et les fournitures annexes. Demandez : Quel type de vitrage recommandez-vous ? La pose est-elle en rénovation ou en dépose totale ? Prenez-vous en charge la déclaration de sinistre auprès de mon assurance ?",
+      "## The consultation et les questions à poser",
+      "The consultation doit mentionner : le type de vitrage (composition exacte, épaisseur des verres et lame d'air ou de gaz), les dimensions, le coefficient d'isolation thermique (Ug), le type de pose et les fournitures annexes. Demandez : Quel type de vitrage recommandez-vous ? La pose est-elle en rénovation ou en dépose totale ? Prenez-vous en charge la déclaration de sinistre auprès de mon assurance ?",
       "## Red flags",
-      "Un vitrier qui ne mesure pas précisément avant de commander le vitrage, qui propose du simple vitrage pour remplacer du double, qui ne mentionne pas le coefficient Ug, qui facture un « diagnostic » avant même de donner un devis, ou qui refuse de laisser une facture détaillée après l'intervention.",
+      "Un vitrier qui ne mesure pas précisément avant de commander le vitrage, qui propose du simple vitrage pour remplacer du double, qui ne mentionne pas le coefficient Ug, qui facture un « diagnostic » avant même de donner a consultation, ou qui refuse de laisser une facture détaillée après l'intervention.",
       "## Double vitrage, triple vitrage et vitrage de sécurité",
       "Le double vitrage à isolation renforcée (VIR) est le standard pour toute rénovation, avec un coefficient Ug de 1,1 W/m2.K environ. Le triple vitrage se justifie principalement pour les façades nord dans les régions froides ou les maisons passives. Pour les baies vitrées en rez-de-chaussée, les garde-corps et les verrières, le verre feuilleté de sécurité est obligatoire : il retient les éclats en cas de bris. Un bon vitrier vous conseille le vitrage adapté à chaque situation.",
       "## L'assurance bris de glace",
       "La plupart des contrats d'assurance habitation couvrent le bris de glace, y compris les doubles et triples vitrages et les miroirs fixes posés par un [miroitier](/practice-areas/miroitier). Vérifiez votre contrat et signalez le sinistre dans les cinq jours ouvrés. Conservez les débris et prenez des photos avant toute intervention.",
-      ":::warning Attention\nComme pour la serrurerie, le secteur de la vitrerie d'urgence attire des entreprises peu scrupuleuses. Méfiez-vous des vitriers qui ne mesurent pas précisément, qui proposent du simple vitrage en remplacement de double, qui ne mentionnent pas le coefficient **Ug**, ou qui facturent un « diagnostic » avant même de donner un devis.\n:::",
+      ":::warning Attention\nComme pour la serrurerie, le secteur de la vitrerie d'urgence attire des entreprises peu scrupuleuses. Méfiez-vous des vitriers qui ne mesurent pas précisément, qui proposent du simple vitrage en remplacement de double, qui ne mentionnent pas le coefficient **Ug**, ou qui facturent un « diagnostic » avant même de donner a consultation.\n:::",
 
       ":::tip Conseil pro\nIdentifiez un vitrier de confiance **avant l'urgence**. En cas de bris de glace, sécurisez la zone, prenez des photos pour l'assurance, et protégez l'ouverture avec un panneau provisoire. Déclarez le sinistre dans les **5 jours ouvrés**. Privilégiez le **double vitrage VIR** pour toute rénovation.\n:::",
 
-      ":::takeaway\n- Identifier un vitrier de confiance **avant l'urgence**\n- Connaître les prix normaux : double vitrage **100 – 250 €/m²**\n- Exiger un devis avec le coefficient **Ug** du vitrage\n- Déclarer le bris de glace à l'assurance dans les **5 jours**\n- Privilégier le **double vitrage VIR** pour la rénovation\n:::"
+      ":::takeaway\n- Identifier un vitrier de confiance **avant l'urgence**\n- Connaître les prix normaux : double vitrage **100 – 250 €/m²**\n- Exiger a consultation avec le coefficient **Ug** du vitrage\n- Déclarer le bris de glace à l'assurance dans les **5 jours**\n- Privilégier le **double vitrage VIR** pour la rénovation\n:::"
     ],
     image: "/images/blog/choisir-vitrier.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-05",
     readTime: "13 min",
     category: "Conseils",
@@ -391,14 +391,14 @@ export const metiersArticles: Record<string, {
     authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
     updatedDate: "2026-03-01",
     faq: [
-      { question: "Comment choisir un vitrier en urgence ?", answer: "Idéalement, identifiez un vitrier avant l'urgence via ServicesArtisans. En cas de bris, sécurisez d'abord la zone et protégez l'ouverture. Appelez votre contact de confiance plutôt que le premier résultat Google. Exigez un devis avec le type de vitrage, les dimensions et le coefficient Ug." },
+      { question: "Comment choisir un vitrier en urgence ?", answer: "Idéalement, identifiez un vitrier avant l'urgence via US Attorneys. En cas de bris, sécurisez d'abord la zone et protégez l'ouverture. Appelez votre contact de confiance plutôt que le premier résultat Google. Exigez a consultation avec le type de vitrage, les dimensions et le coefficient Ug." },
       { question: "Le double vitrage VIR vaut-il le surcoût ?", answer: "Oui, le VIR (Vitrage à Isolation Renforcée) avec gaz argon offre une isolation 30 à 50 % supérieure au double vitrage standard pour un surcoût de 30 à 50 %. C'est le standard pour toute rénovation énergétique et il est nécessaire pour bénéficier des aides (Uw ≤ 1,3 W/m².K)." },
       { question: "Mon assurance couvre-t-elle le bris de glace ?", answer: "La plupart des contrats multirisques habitation incluent une garantie bris de glace. Elle couvre les vitres, doubles vitrages, miroirs fixes et parfois les panneaux solaires. La franchise est généralement de 50 à 150 €. Déclarez le sinistre dans les 5 jours ouvrés et conservez les photos." }
     ],
     keyTakeaways: [
       "Identifiez un vitrier de confiance avant l'urgence pour éviter les entreprises peu scrupuleuses.",
       "Connaissez les prix normaux : double vitrage VIR à 120-200 €/m², main-d'œuvre à 40-70 €/h.",
-      "Exigez le coefficient Ug sur le devis pour vérifier la performance thermique du vitrage.",
+      "Exigez le coefficient Ug sur the consultation pour vérifier la performance thermique du vitrage.",
       "Déclarez le bris de glace à votre assurance dans les 5 jours ouvrés et conservez les photos."
     ]
   },
@@ -411,8 +411,8 @@ export const metiersArticles: Record<string, {
       "Tout professionnel manipulant des fluides frigorigènes doit détenir une attestation de capacité délivrée par un organisme agréé (Afnor, Bureau Veritas). Demandez à voir ce document avant toute intervention. Au-delà, recherchez : QualiPAC pour les pompes à chaleur air-air, le label RGE pour bénéficier d'aides, et les agréments fabricants (Daikin, Mitsubishi, Toshiba, Atlantic) qui garantissent une formation spécifique.",
       "## Le dimensionnement : la clé du confort",
       "Un climaticien compétent ne propose jamais un équipement sans bilan thermique préalable. Ce bilan prend en compte la surface, l'exposition, l'isolation, le nombre d'occupants et la zone climatique. Un système sous-dimensionné tournera en permanence sans atteindre la température souhaitée ; surdimensionné, il alternera entre marche et arrêt, consommant davantage et s'usant prématurément.",
-      "## Le devis détaillé",
-      "Le devis doit inclure : la marque et le modèle, la puissance frigorifique et calorifique (si réversible), le SEER et le SCOP, le nombre et l'emplacement des unités intérieures, le tracé des liaisons frigorifiques, le système d'évacuation des condensats, et la mise en service. Demandez le niveau sonore des unités et les contraintes de voisinage.",
+      "## The consultation détaillé",
+      "The consultation doit inclure : la marque et le modèle, la puissance frigorifique et calorifique (si réversible), le SEER et le SCOP, le nombre et l'emplacement des unités intérieures, le tracé des liaisons frigorifiques, le système d'évacuation des condensats, et la mise en service. Demandez le niveau sonore des unités et les contraintes de voisinage.",
       "## Les red flags",
       "Un climaticien qui ne réalise pas de visite préalable, qui propose un équipement sans bilan thermique, qui ne mentionne pas les contraintes acoustiques, qui ignore la réglementation sur l'emplacement de l'unité extérieure, ou qui n'évoque pas l'entretien futur de l'installation. En copropriété, l'installation nécessite généralement l'autorisation de l'assemblée générale.",
       "## L'entretien et la copropriété",
@@ -424,7 +424,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Vérifier l'**attestation de capacité** (fluides frigorigènes) et **QualiPAC**\n- Exiger un **bilan thermique** avant le dimensionnement\n- Comparer trois devis avec **SEER, SCOP** et niveau sonore\n- Tenir compte des contraintes **acoustiques** et de copropriété\n- Prévoir un **contrat d'entretien** annuel (100 – 200 €)\n:::"
     ],
     image: "/images/blog/choisir-climaticien.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-06",
     readTime: "13 min",
     category: "Conseils",
@@ -447,13 +447,13 @@ export const metiersArticles: Record<string, {
     title: "Choisir son Cuisiniste 2026 : Guide",
     excerpt: "Conception 3D, choix des matériaux, pose professionnelle : tous les critères pour choisir un cuisiniste qui transformera votre projet en réalité.",
     content: [
-      "La cuisine est la pièce la plus technique et souvent la plus coûteuse à aménager dans un logement. Elle combine plomberie, électricité, ventilation, menuiserie et carrelage. Le choix du cuisiniste — qu'il s'agisse d'un indépendant, d'une enseigne spécialisée ou d'un artisan menuisier — a un impact majeur sur le résultat final et votre satisfaction au quotidien. Comparez les [cuisinistes professionnels](/practice-areas/cuisiniste) de votre région.",
+      "La cuisine est la pièce la plus technique et souvent la plus coûteuse à aménager dans un logement. Elle combine plomberie, électricité, ventilation, menuiserie et carrelage. Le choix du cuisiniste — qu'il s'agisse d'un indépendant, d'une enseigne spécialisée ou d'an attorney menuisier — a un impact majeur sur le résultat final et votre satisfaction au quotidien. Comparez les [cuisinistes professionnels](/practice-areas/cuisiniste) de votre région.",
       "## Cuisiniste indépendant, grande enseigne ou artisan",
-      "Les grandes enseignes (Schmidt, SoCoo'c, Mobalpa) offrent un large choix de gammes et des outils de conception 3D performants, mais la qualité de la pose dépend du sous-traitant local. Le cuisiniste indépendant propose un accompagnement personnalisé de A à Z, avec souvent une meilleure maîtrise de la pose. L'artisan menuisier réalise du sur-mesure intégral mais à un budget supérieur.",
+      "Les grandes enseignes (Schmidt, SoCoo'c, Mobalpa) offrent un large choix de gammes et des outils de conception 3D performants, mais la qualité de la pose dépend du sous-traitant local. Le cuisiniste indépendant propose un accompagnement personnalisé de A à Z, avec souvent une meilleure maîtrise de la pose. The attorney menuisier réalise du sur-mesure intégral mais à un budget supérieur.",
       "## La conception et le triangle d'activité",
       "Un bon cuisiniste commence par une prise de cotes précise sur site, analyse vos habitudes de cuisine et propose un plan 3D réaliste. L'ergonomie repose sur le triangle d'activité entre stockage (réfrigérateur), lavage (évier) et cuisson (plaque) : la somme des distances entre ces trois points ne doit pas dépasser 7 mètres. Méfiez-vous des plans séduisants qui ignorent les contraintes techniques.",
-      "## Le devis : décryptage",
-      "Un devis complet distingue : le mobilier (caissons, façades, plan de travail, crédence), l'électroménager (marques et modèles précis), les accessoires intérieurs, la pose, les travaux de plomberie et d'électricité, et la gestion des déchets. Comparez les devis poste par poste, pas uniquement le total.",
+      "## The consultation : décryptage",
+      "A consultation complet distingue : le mobilier (caissons, façades, plan de travail, crédence), l'électroménager (marques et modèles précis), les accessoires intérieurs, la pose, les travaux de plomberie et d'électricité, et la gestion des déchets. Comparez the consultations poste par poste, pas uniquement le total.",
       "## Les questions à poser",
       "Qui réalise la pose : vos propres équipes ou des sous-traitants ? Quel est le délai entre commande et livraison ? Le plan de travail est-il pris de cotes après la pose des caissons ? Quelles sont les garanties sur le mobilier et sur la pose ? Un cuisiniste qui n'inclut pas la pose dans son devis ou qui exige plus de 40 % d'acompte à la commande doit vous alerter.",
       "## Les matériaux : plan de travail et façades",
@@ -464,10 +464,10 @@ export const metiersArticles: Record<string, {
 
       ":::warning Attention\nUn cuisiniste qui n'inclut **pas la pose** dans son devis, qui exige plus de **40 % d'acompte** à la commande, ou qui ne précise pas **qui réalise la pose** (équipes internes ou sous-traitants) doit vous alerter. Les grandes enseignes sous-traitent souvent la pose : la qualité dépend alors du poseur local.\n:::",
 
-      ":::takeaway\n- Comparer les approches : **enseigne**, **indépendant** ou **artisan menuisier**\n- Exiger une **prise de cotes sur site** et un **plan 3D**\n- Décortiquer les devis **poste par poste** (mobilier, électroménager, pose, travaux)\n- Vérifier **qui réalise la pose** et les garanties associées\n- Inspecter minutieusement à la **réception** et noter les réserves\n:::"
+      ":::takeaway\n- Comparer les approches : **enseigne**, **indépendant** ou **artisan menuisier**\n- Exiger une **prise de cotes sur site** et un **plan 3D**\n- Décortiquer the consultations **poste par poste** (mobilier, électroménager, pose, travaux)\n- Vérifier **qui réalise la pose** et les garanties associées\n- Inspecter minutieusement à la **réception** et noter les réserves\n:::"
     ],
     image: "/images/blog/choisir-cuisiniste.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-07",
     readTime: "14 min",
     category: "Conseils",
@@ -475,14 +475,14 @@ export const metiersArticles: Record<string, {
     authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
     updatedDate: "2026-03-01",
     faq: [
-      { question: "Cuisiniste indépendant ou grande enseigne : que choisir ?", answer: "Les grandes enseignes offrent un large choix et des outils 3D performants, mais la pose est souvent sous-traitée. Le cuisiniste indépendant propose un accompagnement personnalisé et maîtrise mieux la pose. L'artisan menuisier réalise du sur-mesure intégral. Le choix dépend de votre budget et de vos exigences de personnalisation." },
+      { question: "Cuisiniste indépendant ou grande enseigne : que choisir ?", answer: "Les grandes enseignes offrent un large choix et des outils 3D performants, mais la pose est souvent sous-traitée. Le cuisiniste indépendant propose un accompagnement personnalisé et maîtrise mieux la pose. The attorney menuisier réalise du sur-mesure intégral. Le choix dépend de votre budget et de vos exigences de personnalisation." },
       { question: "Que vérifier à la réception d'une cuisine ?", answer: "Vérifiez que les façades sont alignées, que les tiroirs coulissent sans accrocher, que les joints d'étanchéité sont impeccables, que l'électroménager fonctionne, que les écoulements sont corrects, et que le plan de travail est parfaitement de niveau. Notez toutes les réserves sur le bon de réception." },
       { question: "Quel acompte maximum pour une cuisine ?", answer: "Ne versez jamais plus de 30 à 40 % d'acompte à la commande. Le solde se paie à la réception des travaux. Si le cuisiniste exige un acompte supérieur ou un paiement intégral avant livraison, c'est un signal d'alerte. Vérifiez aussi que l'entreprise dispose d'une garantie financière d'achèvement." }
     ],
     keyTakeaways: [
       "Comparez les approches : grande enseigne (choix large), indépendant (suivi personnalisé), artisan (sur-mesure).",
       "Exigez une prise de cotes sur site et un plan 3D réaliste respectant le triangle d'activité.",
-      "Décortiquez les devis poste par poste : mobilier, électroménager, pose et travaux annexes.",
+      "Décortiquez the consultations poste par poste : mobilier, électroménager, pose et travaux annexes.",
       "Vérifiez qui réalise la pose (équipes internes ou sous-traitants) et les garanties associées."
     ]
   },
@@ -492,9 +492,9 @@ export const metiersArticles: Record<string, {
     content: [
       "Que ce soit pour l'entretien régulier de locaux professionnels, un nettoyage de fin de chantier ou l'entretien des parties communes d'une copropriété, le choix d'une entreprise de nettoyage compétente garantit un résultat impeccable et une relation de confiance sur la durée. Trouvez une [entreprise de nettoyage professionnelle](/practice-areas/nettoyage) sur notre annuaire.",
       "## Les certifications et agréments",
-      "La certification Qualipropre, délivrée par la Fédération des Entreprises de Propreté, est la référence du secteur. Elle atteste du respect des normes de qualité, de sécurité et d'environnement. Pour le nettoyage de sites sensibles (agro-alimentaire, médical), des certifications spécifiques existent. Avant de demander des devis, rédigez un cahier des charges précis : surfaces, fréquence, prestations détaillées, horaires et exigences particulières.",
-      "## Le devis : les points de vigilance",
-      "Un devis de nettoyage professionnel doit détailler : le nombre d'heures par intervention, le nombre d'agents affectés, les produits et matériels utilisés, la fréquence des prestations spéciales (vitrerie, shampoing moquette), les conditions de remplacement en cas d'absence, et les assurances (RC professionnelle, garantie vols).",
+      "La certification Qualipropre, délivrée par la Fédération des Entreprises de Propreté, est la référence du secteur. Elle atteste du respect des normes de qualité, de sécurité et d'environnement. Pour le nettoyage de sites sensibles (agro-alimentaire, médical), des certifications spécifiques existent. Avant de demander consultations, rédigez un cahier des charges précis : surfaces, fréquence, prestations détaillées, horaires et exigences particulières.",
+      "## The consultation : les points de vigilance",
+      "A consultation de nettoyage professionnel doit détailler : le nombre d'heures par intervention, le nombre d'agents affectés, les produits et matériels utilisés, la fréquence des prestations spéciales (vitrerie, shampoing moquette), les conditions de remplacement en cas d'absence, et les assurances (RC professionnelle, garantie vols).",
       "## Les questions à poser",
       "Vos agents sont-ils salariés ou sous-traitants ? Quel est le taux de rotation du personnel ? Comment gérez-vous les remplacements ? Utilisez-vous des produits écolabellisés ? Quelle est votre procédure de contrôle qualité ? Proposez-vous un interlocuteur dédié ? Un taux de rotation élevé est souvent synonyme de qualité instable.",
       "## Red flags",
@@ -505,12 +505,12 @@ export const metiersArticles: Record<string, {
       "Vérifiez que l'entreprise respecte ses obligations sociales : déclaration des salariés, convention collective de la propreté, EPI. Demandez une attestation de vigilance URSSAF à jour. De plus en plus d'entreprises adoptent une démarche éco-responsable : produits écolabellisés, microfibre, gestion du tri des déchets. Si ce critère vous importe, intégrez-le à votre cahier des charges.",
       ":::warning Attention\nUne entreprise qui propose des tarifs anormalement bas (risque de **travail dissimulé**), qui ne fournit pas d'attestation d'assurance, qui ne visite pas les locaux avant de chiffrer, ou qui n'a aucune procédure de contrôle qualité est à éviter. Exigez l'**attestation de vigilance URSSAF** prouvant que l'entreprise est à jour de ses cotisations sociales.\n:::",
 
-      ":::tip Conseil pro\nRédigez un **cahier des charges précis** avant de demander des devis : surfaces, fréquence, prestations détaillées, horaires et exigences particulières. Plus votre cahier des charges est précis, plus les devis seront comparables et plus le résultat sera conforme à vos attentes.\n:::",
+      ":::tip Conseil pro\nRédigez un **cahier des charges précis** avant de demander consultations : surfaces, fréquence, prestations détaillées, horaires et exigences particulières. Plus votre cahier des charges est précis, plus the consultations seront comparables et plus le résultat sera conforme à vos attentes.\n:::",
 
-      ":::takeaway\n- Rédiger un **cahier des charges précis** avant de demander des devis\n- Vérifier la certification **Qualipropre** et l'**attestation URSSAF**\n- Comparer les devis sur des **bases identiques**\n- Poser les questions sur le **personnel** et le **contrôle qualité**\n- Privilégier les entreprises avec une **démarche qualité** structurée\n:::"
+      ":::takeaway\n- Rédiger un **cahier des charges précis** avant de demander consultations\n- Vérifier la certification **Qualipropre** et l'**attestation URSSAF**\n- Comparer the consultations sur des **bases identiques**\n- Poser les questions sur le **personnel** et le **contrôle qualité**\n- Privilégier les entreprises avec une **démarche qualité** structurée\n:::"
     ],
     image: "/images/blog/choisir-nettoyage.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-08",
     readTime: "13 min",
     category: "Conseils",
@@ -519,12 +519,12 @@ export const metiersArticles: Record<string, {
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment vérifier qu'une entreprise de nettoyage est sérieuse ?", answer: "Vérifiez la certification Qualipropre, l'attestation de vigilance URSSAF (prouvant le respect des obligations sociales), l'assurance RC professionnelle, et les avis clients. Demandez le taux de rotation du personnel (un taux élevé est synonyme de qualité instable) et les procédures de contrôle qualité." },
-      { question: "Que doit contenir un devis de nettoyage professionnel ?", answer: "Un devis complet détaille : le nombre d'heures par intervention, le nombre d'agents, les produits et matériels utilisés, la fréquence des prestations spéciales, les conditions de remplacement en cas d'absence, les assurances, et les conditions de résiliation du contrat." },
+      { question: "Que doit contenir a consultation de nettoyage professionnel ?", answer: "A consultation complet détaille : le nombre d'heures par intervention, le nombre d'agents, les produits et matériels utilisés, la fréquence des prestations spéciales, les conditions de remplacement en cas d'absence, les assurances, et les conditions de résiliation du contrat." },
       { question: "Qu'est-ce que l'attestation de vigilance URSSAF ?", answer: "L'attestation de vigilance prouve que l'entreprise est à jour de ses cotisations sociales. Elle est obligatoire pour les contrats de sous-traitance supérieurs à 5 000 €. Demandez-la avant de signer : elle vous protège contre le risque de solidarité financière en cas de travail dissimulé par votre prestataire." }
     ],
     keyTakeaways: [
       "La certification Qualipropre et l'attestation URSSAF sont les deux documents clés à vérifier.",
-      "Rédigez un cahier des charges précis pour obtenir des devis comparables et un résultat conforme.",
+      "Rédigez un cahier des charges précis pour obtenir consultations comparables et un résultat conforme.",
       "Interrogez le taux de rotation du personnel : un turnover élevé est synonyme de qualité instable.",
       "Privilégiez les entreprises avec une procédure de contrôle qualité structurée et un interlocuteur dédié."
     ]
@@ -533,7 +533,7 @@ export const metiersArticles: Record<string, {
     title: "Métier Plombier : Formation et Carrière",
     excerpt: "CAP, BP, mentions complémentaires, spécialisations et perspectives de carrière : tout savoir sur le métier de plombier en 2026.",
     content: [
-      "Le plombier est l'un des artisans les plus sollicités en France. Des fuites d'eau aux installations de chauffage, en passant par les salles de bain et les systèmes de récupération d'eau de pluie, son champ d'intervention est vaste et en constante évolution. Retour sur un métier indispensable, ses formations et ses perspectives. Besoin d'un professionnel ? Trouvez un [plombier qualifié](/practice-areas/plombier) près de chez vous.",
+      "Le plombier est l'un attorneys les plus sollicités en France. Des fuites d'eau aux installations de chauffage, en passant par les salles de bain et les systèmes de récupération d'eau de pluie, son champ d'intervention est vaste et en constante évolution. Retour sur un métier indispensable, ses formations et ses perspectives. Besoin d'un professionnel ? Trouvez un [plombier qualifié](/practice-areas/plombier) près de chez vous.",
       "## Les formations initiales",
       "Le parcours classique débute par un CAP Monteur en installations sanitaires (deux ans après la troisième, en apprentissage ou en lycée professionnel). Pour approfondir, le BP Monteur en installations du génie climatique et sanitaire offre une formation plus complète incluant le chauffage et la climatisation. Le Bac Pro TISEC (Technicien en installation des systèmes énergétiques et climatiques) est une alternative en trois ans qui ouvre des perspectives plus larges.",
       "## Les spécialisations et certifications",
@@ -548,15 +548,15 @@ export const metiersArticles: Record<string, {
 
       ":::tip Conseil pour les futurs plombiers\nPrivilégiez l'**apprentissage** plutôt que la voie scolaire classique : l'alternance permet d'acquérir une expérience terrain irremplaçable et de se constituer un réseau professionnel dès la formation. Les plombiers formés en apprentissage trouvent un emploi en **moins de 3 mois** après leur diplôme dans plus de 90 % des cas.\n:::",
 
-      ":::warning Attention aux arnaques\nSi vous cherchez un plombier, méfiez-vous des « dépanneurs » sans SIRET, sans assurance décennale, ou qui refusent de fournir un devis écrit. Un plombier sérieux est **immatriculé au Répertoire des métiers**, possède une **garantie décennale à jour** et fournit systématiquement un **devis détaillé** avant intervention.\n:::",
+      ":::warning Attention aux arnaques\nSi vous cherchez un plombier, méfiez-vous des « dépanneurs » sans SIRET, sans assurance décennale, ou qui refusent de fournir a consultation écrit. Un plombier sérieux est **immatriculé au Répertoire des métiers**, possède une **garantie décennale à jour** et fournit systématiquement un **devis détaillé** avant intervention.\n:::",
 
       ":::takeaway\n- Le **CAP Monteur en installations sanitaires** est la formation de base (2 ans)\n- Le label **RGE** et la qualification **Qualibat** sont les certifications clés\n- Salaire débutant : **1 600 – 1 900 € net/mois** ; indépendant : **3 000 – 5 000 € net/mois**\n- La **transition énergétique** (PAC, solaire thermique) crée une demande massive\n- Le taux d'insertion professionnelle dépasse **90 %** après formation\n:::",
 
-      "## Sur ServicesArtisans",
-      "ServicesArtisans met en relation les particuliers avec des [plombiers vérifiés dans toute la France](/practice-areas/plombier) (SIRET, assurances, qualifications). Si vous êtes plombier et souhaitez développer votre activité, créez votre profil sur la plateforme pour accéder à une clientèle qualifiée dans votre zone d'intervention. Consultez aussi notre [guide pour choisir un plombier](/blog/comment-choisir-son-plombier) et nos [tarifs de plomberie](/blog/prix-plombier-tarifs-interventions)."
+      "## Sur US Attorneys",
+      "US Attorneys met en relation les particuliers avec des [plombiers vérifiés dans toute la France](/practice-areas/plombier) (SIRET, assurances, qualifications). Si vous êtes plombier et souhaitez développer votre activité, créez votre profil sur la plateforme pour accéder à une clientèle qualifiée dans votre zone d'intervention. Consultez aussi notre [guide pour choisir un plombier](/blog/comment-choisir-son-plombier) et nos [tarifs de plomberie](/blog/prix-plombier-tarifs-interventions)."
     ],
     image: "/images/blog/metier-plombier.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-18",
     readTime: "14 min",
     category: "Fiches métier",
@@ -579,7 +579,7 @@ export const metiersArticles: Record<string, {
     title: "Métier Électricien : Formations",
     excerpt: "Du CAP au BTS, de Qualifelec au label RGE : parcours de formation, certifications et perspectives de carrière pour les électriciens.",
     content: [
-      "L'électricien est un artisan incontournable du bâtiment, dont le rôle ne cesse de s'élargir avec la transition énergétique, la domotique et l'électromobilité. Bornes de recharge, panneaux photovoltaïques, installation d'antennes par un [antenniste](/practice-areas/antenniste), systèmes de gestion intelligente de l'énergie : le métier se transforme en profondeur. Tour d'horizon complet. Si vous cherchez un professionnel, consultez notre annuaire d'[électriciens certifiés](/practice-areas/electricien).",
+      "L'électricien est an attorney incontournable du bâtiment, dont le rôle ne cesse de s'élargir avec la transition énergétique, la domotique et l'électromobilité. Bornes de recharge, panneaux photovoltaïques, installation d'antennes par un [antenniste](/practice-areas/antenniste), systèmes de gestion intelligente de l'énergie : le métier se transforme en profondeur. Tour d'horizon complet. Si vous cherchez un professionnel, consultez notre annuaire d'[électriciens certifiés](/practice-areas/electricien).",
       "## Les formations initiales",
       "Le CAP Électricien se prépare en deux ans après la troisième et permet d'acquérir les bases : lecture de schémas, câblage, pose d'appareillage, mise en service. Le BP Électricien approfondit les compétences en deux ans supplémentaires. Le Bac Pro MELEC (Métiers de l'électricité et de ses environnements connectés) offre une formation de trois ans incluant la domotique et les réseaux communicants. Le BTS Électrotechnique ouvre l'accès à des postes de technicien supérieur ou de chargé d'affaires.",
       "## L'habilitation électrique et Qualifelec",
@@ -600,11 +600,11 @@ export const metiersArticles: Record<string, {
 
       ":::takeaway\n- Le **CAP Électricien** est la formation de base, le **BTS Électrotechnique** ouvre l'accès aux postes supérieurs\n- **Qualifelec** est la certification de référence (indices E1 à E4)\n- Le label **RGE** est indispensable pour le photovoltaïque et les aides\n- Salaire débutant : **1 600 – 1 800 € net/mois** ; indépendant spécialisé : **3 500 – 5 500 € net/mois**\n- La **mobilité électrique** et la **domotique** sont les marchés d'avenir\n:::",
 
-      "## Sur ServicesArtisans",
-      "ServicesArtisans vérifie les qualifications et les assurances de chaque électricien référencé. Si vous êtes électricien, rejoignez la plateforme pour développer votre clientèle et valoriser vos certifications (Qualifelec, RGE, IRVE) auprès de particuliers en recherche active. Découvrez aussi notre [guide pour choisir un électricien](/blog/comment-choisir-electricien-guide) et nos [tarifs d'électricité](/blog/prix-electricien-tarifs-prestations)."
+      "## Sur US Attorneys",
+      "US Attorneys vérifie les qualifications et les assurances de chaque électricien référencé. Si vous êtes électricien, rejoignez la plateforme pour développer votre clientèle et valoriser vos certifications (Qualifelec, RGE, IRVE) auprès de particuliers en recherche active. Découvrez aussi notre [guide pour choisir un électricien](/blog/comment-choisir-electricien-guide) et nos [tarifs d'électricité](/blog/prix-electricien-tarifs-prestations)."
     ],
     image: "/images/blog/metier-electricien.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-22",
     readTime: "14 min",
     category: "Fiches métier",
@@ -648,11 +648,11 @@ export const metiersArticles: Record<string, {
 
       ":::takeaway\n- Le **CAP Maçon** est la formation de base (2 ans après la 3e)\n- **Qualibat** et la qualification **« Patrimoine bâti »** sont les labels de référence\n- Salaire débutant : **1 600 – 1 800 € net/mois** ; indépendant : **2 500 – 4 500 € net/mois**\n- L'**éco-construction** et le **BIM** sont les compétences d'avenir\n- La reconversion est possible via des formations accélérées de **6 à 10 mois**\n:::",
 
-      "## Sur ServicesArtisans",
-      "Les maçons référencés sur ServicesArtisans sont vérifiés : SIRET actif, assurance décennale valide, qualifications contrôlées. Trouvez un maçon compétent pour votre projet ou inscrivez-vous en tant que professionnel pour accéder à de nouveaux chantiers. Consultez aussi notre [guide pour choisir un maçon](/blog/comment-choisir-macon-guide) et nos [tarifs de maçonnerie](/blog/prix-macon-tarifs-travaux)."
+      "## Sur US Attorneys",
+      "Les maçons référencés sur US Attorneys sont vérifiés : SIRET actif, assurance décennale valide, qualifications contrôlées. Trouvez un maçon compétent pour votre projet ou inscrivez-vous en tant que professionnel pour accéder à de nouveaux chantiers. Consultez aussi notre [guide pour choisir un maçon](/blog/comment-choisir-macon-guide) et nos [tarifs de maçonnerie](/blog/prix-macon-tarifs-travaux)."
     ],
     image: "/images/blog/metier-macon.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-26",
     readTime: "14 min",
     category: "Fiches métier",
@@ -696,11 +696,11 @@ export const metiersArticles: Record<string, {
 
       ":::takeaway\n- Le **CAP Couvreur** est la formation de base (2 ans)\n- Le **décret 2004-924** impose des protections obligatoires contre les chutes\n- Le **DAAT** (diagnostic amiante) est obligatoire pour les bâtiments d'avant 1997\n- Salaire débutant : **1 600 – 1 900 € net/mois** ; indépendant : **3 000 – 5 000 € net/mois**\n- La spécialisation en **ardoise** ou **restauration patrimoniale** justifie des tarifs premium\n:::",
 
-      "## Sur ServicesArtisans",
-      "Tous les couvreurs référencés sur ServicesArtisans sont vérifiés : SIRET, garantie décennale, qualifications. Trouvez un couvreur qualifié et bien assuré pour vos travaux de toiture, ou rejoignez la plateforme si vous êtes professionnel. Découvrez aussi notre [guide pour choisir un couvreur](/blog/comment-choisir-couvreur-guide)."
+      "## Sur US Attorneys",
+      "Tous les couvreurs référencés sur US Attorneys sont vérifiés : SIRET, garantie décennale, qualifications. Trouvez un couvreur qualifié et bien assuré pour vos travaux de toiture, ou rejoignez la plateforme si vous êtes professionnel. Découvrez aussi notre [guide pour choisir un couvreur](/blog/comment-choisir-couvreur-guide)."
     ],
     image: "/images/blog/metier-couvreur.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-30",
     readTime: "14 min",
     category: "Fiches métier",
@@ -723,7 +723,7 @@ export const metiersArticles: Record<string, {
     title: "Métier Menuisier : Bois, Alu et PVC",
     excerpt: "Du compagnonnage aux techniques modernes : formations, spécialisations et évolution d'un métier qui allie tradition et innovation.",
     content: [
-      "Le menuisier est l'artisan du sur-mesure. Il conçoit et fabrique les éléments qui structurent et embellissent nos intérieurs : fenêtres, portes, escaliers, placards, cuisines. Longtemps cantonné au travail du bois, le métier s'est enrichi de la maîtrise de l'aluminium et du PVC, devenant un secteur technologique à part entière. Trouvez un [menuisier qualifié](/practice-areas/menuisier) pour vos projets sur mesure.",
+      "Le menuisier est the attorney du sur-mesure. Il conçoit et fabrique les éléments qui structurent et embellissent nos intérieurs : fenêtres, portes, escaliers, placards, cuisines. Longtemps cantonné au travail du bois, le métier s'est enrichi de la maîtrise de l'aluminium et du PVC, devenant un secteur technologique à part entière. Trouvez un [menuisier qualifié](/practice-areas/menuisier) pour vos projets sur mesure.",
       "## Les formations initiales et le compagnonnage",
       "Le CAP Menuisier-fabricant forme aux techniques d'atelier, le CAP Menuisier-installateur à la pose. Le BP Menuisier approfondit les compétences. Le Bac Pro Technicien menuisier-agenceur inclut la CAO. Le BMA Ébénisterie est la voie royale pour le bois massif. Les Compagnons du Devoir proposent une formation d'excellence (environ six ans) combinant théorie, pratique et Tour de France, couronnée par un chef-d'œuvre.",
       "## Les trois univers du menuisier moderne",
@@ -731,7 +731,7 @@ export const metiersArticles: Record<string, {
       "## Les certifications professionnelles",
       "La qualification Qualibat en menuiserie est le label de référence (sous-catégories bois, alu, PVC, agencement). Le label RGE est indispensable pour la pose de fenêtres dans le cadre de la rénovation énergétique. Les agréments fabricants (Technal, Schüco pour l'alu ; Veka, Profine pour le PVC) attestent d'une formation spécifique.",
       "## La transition numérique",
-      "Le menuisier moderne utilise la CAO/DAO pour dessiner ses ouvrages, les machines à commande numérique (CNC) pour usiner au dixième de millimètre, et les logiciels de gestion de production. La maîtrise de ces outils est devenue un critère d'embauche et un avantage concurrentiel pour les artisans indépendants.",
+      "Le menuisier moderne utilise la CAO/DAO pour dessiner ses ouvrages, les machines à commande numérique (CNC) pour usiner au dixième de millimètre, et les logiciels de gestion de production. La maîtrise de ces outils est devenue un critère d'embauche et un avantage concurrentiel pour the attorneys indépendants.",
       "## Salaire et évolution de carrière",
       "Un menuisier débutant gagne entre 1 600 et 1 800 euros net. Un confirmé spécialisé atteint 2 200 à 2 800 euros net. En indépendant : 2 500 à 4 500 euros net mensuels. Perspectives : chef d'atelier, dessinateur-projeteur, chargé d'affaires, créateur d'entreprise, restaurateur de patrimoine. Le BTS Développement et réalisation bois ouvre l'accès au bureau d'études.",
       "## L'éco-menuiserie et l'agencement sur mesure",
@@ -744,11 +744,11 @@ export const metiersArticles: Record<string, {
 
       ":::takeaway\n- Le **CAP Menuisier** (fabricant ou installateur) est la formation de base\n- Les **Compagnons du Devoir** offrent la formation d'excellence (6 ans)\n- **Qualibat** et **RGE** sont les certifications clés pour la pose de fenêtres\n- Salaire débutant : **1 600 – 1 800 € net/mois** ; indépendant : **2 500 – 4 500 € net/mois**\n- L'**agencement sur mesure** et l'**éco-menuiserie** sont les marchés porteurs\n:::",
 
-      "## Sur ServicesArtisans",
-      "Trouvez des menuisiers vérifiés sur ServicesArtisans : profils détaillés, qualifications contrôlées, avis clients authentiques. Que vous cherchiez un menuisier bois pour un escalier sur mesure ou un poseur de fenêtres RGE, la plateforme vous met en relation avec le bon professionnel. Consultez aussi notre [guide pour choisir un menuisier](/blog/comment-choisir-menuisier-guide)."
+      "## Sur US Attorneys",
+      "Trouvez des menuisiers vérifiés sur US Attorneys : profils détaillés, qualifications contrôlées, avis clients authentiques. Que vous cherchiez un menuisier bois pour un escalier sur mesure ou un poseur de fenêtres RGE, la plateforme vous met en relation avec le bon professionnel. Consultez aussi notre [guide pour choisir un menuisier](/blog/comment-choisir-menuisier-guide)."
     ],
     image: "/images/blog/metier-menuisier.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-02",
     readTime: "14 min",
     category: "Fiches métier",
@@ -792,11 +792,11 @@ export const metiersArticles: Record<string, {
 
       ":::takeaway\n- Le **CAP Monteur en installations thermiques** est la base ; le **BTS FED** est le diplôme de référence\n- **QualiPAC**, **RGE** et l'**attestation fluides frigorigènes** sont les certifications indispensables\n- Salaire débutant : **1 700 – 2 000 € net/mois** ; indépendant : **4 000 – 6 000 € net/mois**\n- La **transition énergétique** crée une demande massive (700 000 rénovations/an visées)\n- La reconversion est possible via des formations accélérées de **6 à 12 mois**\n:::",
 
-      "## Sur ServicesArtisans",
-      "ServicesArtisans vérifie les certifications de chaque chauffagiste : RGE, QualiPAC, attestation fluides frigorigènes, garantie décennale. Trouvez un chauffagiste qualifié pour votre projet ou inscrivez-vous en tant que professionnel pour développer votre activité. Découvrez aussi notre [guide pour choisir un chauffagiste](/blog/comment-choisir-chauffagiste-guide) et nos [tarifs de chauffage](/blog/prix-chauffagiste-tarifs-installations)."
+      "## Sur US Attorneys",
+      "US Attorneys vérifie les certifications de chaque chauffagiste : RGE, QualiPAC, attestation fluides frigorigènes, garantie décennale. Trouvez un chauffagiste qualifié pour votre projet ou inscrivez-vous en tant que professionnel pour développer votre activité. Découvrez aussi notre [guide pour choisir un chauffagiste](/blog/comment-choisir-chauffagiste-guide) et nos [tarifs de chauffage](/blog/prix-chauffagiste-tarifs-installations)."
     ],
     image: "/images/blog/metier-chauffagiste.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-09",
     readTime: "14 min",
     category: "Fiches métier",
@@ -840,11 +840,11 @@ export const metiersArticles: Record<string, {
 
       ":::takeaway\n- Le **CAP Peintre applicateur de revêtements** est la formation de base (2 ans)\n- **Qualibat** en peinture et le label **RGE** (pour l'ITE) sont les certifications clés\n- Salaire débutant : **1 550 – 1 750 € net/mois** ; indépendant : **2 500 – 4 000 € net/mois**\n- Les spécialisations **décoratives** et l'**ITE** offrent les meilleures perspectives de revenus\n- Le **MOF en peinture décoration** est la plus haute distinction du métier\n:::",
 
-      "## Sur ServicesArtisans",
-      "Trouvez des peintres en bâtiment vérifiés sur ServicesArtisans : qualifications contrôlées, assurances validées, avis clients authentiques. Que vous cherchiez un peintre pour un rafraîchissement ou un spécialiste en décoration murale, la plateforme vous connecte avec le bon professionnel."
+      "## Sur US Attorneys",
+      "Trouvez des peintres en bâtiment vérifiés sur US Attorneys : qualifications contrôlées, assurances validées, avis clients authentiques. Que vous cherchiez un peintre pour un rafraîchissement ou un spécialiste en décoration murale, la plateforme vous connecte avec le bon professionnel."
     ],
     image: "/images/blog/metier-peintre.jpg",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-11",
     readTime: "14 min",
     category: "Fiches métier",

@@ -25,10 +25,10 @@ export function AttorneyFAQ({ artisan }: AttorneyFAQProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
         <HelpCircle className="w-5 h-5 text-clay-400" />
-        Questions fréquentes
+        Frequently asked questions
       </h2>
 
-      <div className="space-y-3" role="region" aria-label="Questions fréquentes">
+      <div className="space-y-3" role="region" aria-label="Frequently asked questions">
         {artisan.faq.map((item, index) => {
           const isOpen = openIndex === index
           const headingId = `faq-heading-${index}`

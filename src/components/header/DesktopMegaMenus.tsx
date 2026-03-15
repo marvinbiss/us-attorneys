@@ -52,7 +52,7 @@ export default function DesktopMegaMenus({
       {/* ===== SERVICES MEGA MENU ===== */}
       {openMenu === 'services' && (
         <div
-          data-menu-content="services" role="menu" aria-label="Services artisans"
+          data-menu-content="services" role="menu" aria-label="Attorney services"
           className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
           onMouseEnter={() => openMenuOnHover('services')}
@@ -61,13 +61,13 @@ export default function DesktopMegaMenus({
           <div className="max-w-7xl mx-auto">
             <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
               <div>
-                <h3 className="text-white font-heading font-bold text-lg">Tous nos services artisans</h3>
-                <p className="text-slate-300 text-sm mt-0.5">{allServicesCount} métiers, des milliers d&apos;artisans qualifiés partout en France</p>
+                <h3 className="text-white font-heading font-bold text-lg">All our legal services</h3>
+                <p className="text-slate-300 text-sm mt-0.5">{allServicesCount} practice areas, thousands of qualified attorneys across the US</p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{attorneyCount > 0 ? `${attorneyCount.toLocaleString('fr-FR')}+` : 'Des milliers d\'artisans'} référencés</span>
+                  <span>{attorneyCount > 0 ? `${attorneyCount.toLocaleString('en-US')}+` : 'Thousands of attorneys'} listed</span>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function DesktopMegaMenus({
                   onClick={closeMenus}
                   className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
                 >
-                  Voir tous les services
+                  View all services
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <Link
@@ -137,7 +137,7 @@ export default function DesktopMegaMenus({
                   className="flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 font-semibold transition-all duration-200 hover:shadow-md"
                 >
                   <Phone className="w-4 h-4" />
-                  Urgence ? Artisan disponible maintenant
+                  Emergency? Attorney available now
                 </Link>
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function DesktopMegaMenus({
       {/* ===== VILLES MEGA MENU ===== */}
       {openMenu === 'cities' && (
         <div
-          data-menu-content="cities" role="menu" aria-label="Villes"
+          data-menu-content="cities" role="menu" aria-label="Cities"
           className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
           onMouseEnter={() => openMenuOnHover('cities')}
@@ -157,8 +157,8 @@ export default function DesktopMegaMenus({
           <div className="max-w-7xl mx-auto">
             <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
               <div>
-                <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
-                <p className="text-slate-300 text-sm mt-0.5">{villesCount} cities couvertes dans toute la France</p>
+                <h3 className="text-white font-heading font-bold text-lg">Find an attorney by city</h3>
+                <p className="text-slate-300 text-sm mt-0.5">{villesCount} cities covered across the US</p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <Link
@@ -167,7 +167,7 @@ export default function DesktopMegaMenus({
                   className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
                 >
                   <Map className="w-4 h-4" />
-                  Voir par région
+                  View by region
                 </Link>
                 <Link
                   href="/states"
@@ -175,7 +175,7 @@ export default function DesktopMegaMenus({
                   className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
                 >
                   <MapPin className="w-4 h-4" />
-                  Par département
+                  By state
                 </Link>
               </div>
             </div>
@@ -218,12 +218,12 @@ export default function DesktopMegaMenus({
                   onClick={closeMenus}
                   className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
                 >
-                  Voir toutes les cities
+                  View all cities
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <ShieldCheck className="w-4 h-4 text-green-500" />
-                  Artisans référencés dans chaque ville
+                  Attorneys listed in every city
                 </div>
               </div>
             </div>
@@ -234,7 +234,7 @@ export default function DesktopMegaMenus({
       {/* ===== RÉGIONS MEGA MENU ===== */}
       {openMenu === 'regions' && (
         <div
-          data-menu-content="regions" role="menu" aria-label="Régions"
+          data-menu-content="regions" role="menu" aria-label="States"
           className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
           onMouseEnter={() => openMenuOnHover('regions')}
@@ -243,8 +243,8 @@ export default function DesktopMegaMenus({
           <div className="max-w-7xl mx-auto">
             <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
               <div>
-                <h3 className="text-white font-heading font-bold text-lg">Régions de France</h3>
-                <p className="text-slate-300 text-sm mt-0.5">{regionsCount} régions, {departementsCount} départements couverts</p>
+                <h3 className="text-white font-heading font-bold text-lg">US Regions</h3>
+                <p className="text-slate-300 text-sm mt-0.5">{regionsCount} regions, {departementsCount} states covered</p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <Link
@@ -253,7 +253,7 @@ export default function DesktopMegaMenus({
                   className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
                 >
                   <MapPin className="w-4 h-4" />
-                  Tous les départements
+                  All states
                 </Link>
               </div>
             </div>
@@ -262,7 +262,7 @@ export default function DesktopMegaMenus({
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Map className="w-4 h-4 text-blue-600" />
-                  <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">France métropolitaine</h4>
+                  <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">Continental US</h4>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                   {metroRegions.map((region) => (
@@ -280,7 +280,7 @@ export default function DesktopMegaMenus({
                           {region.name}
                         </div>
                         <div className="text-xs text-slate-400 mt-0.5">
-                          {region.states.length} département{region.states.length > 1 ? 's' : ''}
+                          {region.states.length} state{region.states.length > 1 ? 's' : ''}
                         </div>
                       </div>
                     </Link>
@@ -292,7 +292,7 @@ export default function DesktopMegaMenus({
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <Globe className="w-4 h-4 text-emerald-600" />
-                    <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">Outre-mer</h4>
+                    <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">Territories</h4>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     {domTomRegions.map((region) => (
@@ -320,12 +320,12 @@ export default function DesktopMegaMenus({
                   onClick={closeMenus}
                   className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
                 >
-                  Voir toutes les régions
+                  View all regions
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <Star className="w-4 h-4 text-amber-500" />
-                  Couverture nationale complète
+                  Complete national coverage
                 </div>
               </div>
             </div>

@@ -24,16 +24,16 @@ interface LeadEvent {
 }
 
 const EVENT_CONFIG: Record<string, { label: string; icon: typeof Clock; color: string }> = {
-  created: { label: 'Demande créée', icon: ArrowRight, color: 'text-blue-600 bg-blue-100' },
-  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-indigo-600 bg-indigo-100' },
-  viewed: { label: 'Consulté', icon: Eye, color: 'text-yellow-600 bg-yellow-100' },
-  quoted: { label: 'Devis envoyé', icon: Send, color: 'text-green-600 bg-green-100' },
-  declined: { label: 'Décliné', icon: X, color: 'text-gray-600 bg-gray-100' },
-  accepted: { label: 'Accepté', icon: CheckCircle, color: 'text-green-700 bg-green-100' },
-  refused: { label: 'Refusé', icon: X, color: 'text-red-600 bg-red-100' },
-  completed: { label: 'Terminé', icon: CheckCircle, color: 'text-green-800 bg-green-200' },
-  expired: { label: 'Expiré', icon: Clock, color: 'text-orange-600 bg-orange-100' },
-  reassigned: { label: 'Réassigné', icon: RefreshCw, color: 'text-purple-600 bg-purple-100' },
+  created: { label: 'Lead Created', icon: ArrowRight, color: 'text-blue-600 bg-blue-100' },
+  dispatched: { label: 'Assigned', icon: ArrowRight, color: 'text-indigo-600 bg-indigo-100' },
+  viewed: { label: 'Viewed', icon: Eye, color: 'text-yellow-600 bg-yellow-100' },
+  quoted: { label: 'Quote Sent', icon: Send, color: 'text-green-600 bg-green-100' },
+  declined: { label: 'Declined', icon: X, color: 'text-gray-600 bg-gray-100' },
+  accepted: { label: 'Accepted', icon: CheckCircle, color: 'text-green-700 bg-green-100' },
+  refused: { label: 'Refused', icon: X, color: 'text-red-600 bg-red-100' },
+  completed: { label: 'Completed', icon: CheckCircle, color: 'text-green-800 bg-green-200' },
+  expired: { label: 'Expired', icon: Clock, color: 'text-orange-600 bg-orange-100' },
+  reassigned: { label: 'Reassigned', icon: RefreshCw, color: 'text-purple-600 bg-purple-100' },
 }
 
 export default function LeadHistoryPage() {
@@ -55,10 +55,10 @@ export default function LeadHistoryPage() {
         window.location.href = '/login?redirect=/attorney-dashboard/leads'
         return
       } else {
-        setError(data.error || 'Erreur')
+        setError(data.error || 'Error')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -80,13 +80,13 @@ export default function LeadHistoryPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b">
         <div className="max-w-3xl mx-auto px-4 py-3 text-sm text-gray-500">
-          <Link href="/attorney-dashboard" className="hover:text-gray-900">Espace Artisan</Link>
+          <Link href="/attorney-dashboard" className="hover:text-gray-900">Attorney Dashboard</Link>
           <span className="mx-2">/</span>
-          <Link href="/attorney-dashboard/leads" className="hover:text-gray-900">Opportunités</Link>
+          <Link href="/attorney-dashboard/leads" className="hover:text-gray-900">Leads</Link>
           <span className="mx-2">/</span>
-          <Link href={`/attorney-dashboard/leads/${id}`} className="hover:text-gray-900">Détail</Link>
+          <Link href={`/attorney-dashboard/leads/${id}`} className="hover:text-gray-900">Detail</Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">Historique</span>
+          <span className="text-gray-900">History</span>
         </div>
       </div>
 
@@ -96,10 +96,10 @@ export default function LeadHistoryPage() {
           className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour au détail
+          Back to Detail
         </Link>
 
-        <h1 className="text-xl font-bold text-gray-900 mb-6">Historique de la demande</h1>
+        <h1 className="text-xl font-bold text-gray-900 mb-6">Lead History</h1>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
@@ -111,7 +111,7 @@ export default function LeadHistoryPage() {
         {events.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">
             <Clock className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Aucun événement enregistré</p>
+            <p className="text-gray-500">No events recorded</p>
           </div>
         ) : (
           <div className="relative">
@@ -136,8 +136,8 @@ export default function LeadHistoryPage() {
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-gray-900">{config.label}</span>
                         <span className="text-xs text-gray-400">
-                          {new Date(event.created_at).toLocaleString('fr-FR', {
-                            day: 'numeric', month: 'short', year: 'numeric',
+                          {new Date(event.created_at).toLocaleString('en-US', {
+                            month: 'short', day: 'numeric', year: 'numeric',
                             hour: '2-digit', minute: '2-digit',
                           })}
                         </span>
@@ -145,10 +145,10 @@ export default function LeadHistoryPage() {
                       {event.metadata && Object.keys(event.metadata).length > 0 && (
                         <div className="text-sm text-gray-500 mt-1">
                           {'amount' in event.metadata && event.metadata.amount != null && (
-                            <span>Montant : {String(event.metadata.amount)} €</span>
+                            <span>Amount: ${String(event.metadata.amount)}</span>
                           )}
                           {'reason' in event.metadata && event.metadata.reason != null && (
-                            <span>Raison : {String(event.metadata.reason)}</span>
+                            <span>Reason: {String(event.metadata.reason)}</span>
                           )}
                         </div>
                       )}

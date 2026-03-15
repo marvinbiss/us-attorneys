@@ -1,5 +1,5 @@
 /**
- * User Preferences API - ServicesArtisans
+ * User Preferences API - US Attorneys
  * Manages user notification and display preferences
  */
 
@@ -71,7 +71,7 @@ export async function GET() {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -89,7 +89,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Get preferences error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la récupération des préférences' } },
+      { success: false, error: { message: 'Error retrieving preferences' } },
       { status: 500 }
     )
   }
@@ -120,7 +120,7 @@ export async function PUT(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
+        { success: false, error: { message: 'Authentication required' } },
         { status: 401 }
       )
     }
@@ -128,7 +128,7 @@ export async function PUT(request: Request) {
     const body = await request.json()
     const result = preferencesSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
     }
     const { notifications, privacy, display } = result.data
 
@@ -152,7 +152,7 @@ export async function PUT(request: Request) {
   } catch (error) {
     logger.error('Update preferences error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la mise à jour des préférences' } },
+      { success: false, error: { message: 'Error updating preferences' } },
       { status: 500 }
     )
   }

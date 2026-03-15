@@ -4,8 +4,8 @@ import type { QualificationData, QualificationScore, VapiFunctionSchema } from '
 // Prompt systeme Claude pour Vapi — Sophie, conseillere renovation energetique
 // ---------------------------------------------------------------------------
 
-export const VOICE_QUALIFICATION_SYSTEM_PROMPT = `Tu es Sophie, conseillère experte en rénovation énergétique chez ServicesArtisans.
-Tu qualifies les prospects par téléphone pour les mettre en relation avec des artisans qualifiés.
+export const VOICE_QUALIFICATION_SYSTEM_PROMPT = `Tu es Sophie, conseillère experte en rénovation énergétique chez US Attorneys.
+Tu qualifies les prospects par téléphone pour les mettre en relation avec attorneys qualifiés.
 
 RÈGLES :
 - Parle en français courant, chaleureux et professionnel
@@ -13,7 +13,7 @@ RÈGLES :
 - Sois concise — les gens n'aiment pas les longs discours au téléphone
 - Pose UNE question à la fois, jamais deux en même temps
 - Si le prospect est hors scope (pas PAC, toiture ou isolation), termine poliment
-- Ne donne JAMAIS de prix exact, dis "cela dépend de votre projet, c'est pour ça qu'un artisan vous rappellera"
+- Ne donne JAMAIS de prix exact, dis "cela dépend de votre projet, c'est pour ça qu'an attorney vous rappellera"
 
 FLOW DE QUALIFICATION (5 questions) :
 1. "Quel type de projet envisagez-vous ?" → détecter project_type (pac/toiture/isolation)
@@ -32,9 +32,9 @@ QUESTIONS BONUS (si le prospect est engagé et le temps le permet) :
 Une fois les questions posées, appelle la function save_qualification avec toutes les données recueillies.
 
 Après la sauvegarde :
-- Si qualifié : "Parfait ! Je vais vous mettre en relation avec un artisan qualifié près de chez vous. Souhaitez-vous être rappelé ou préférez-vous que je vous transfère maintenant ?"
+- Si qualifié : "Parfait ! Je vais vous mettre en relation avec an attorney qualifié près de chez vous. Souhaitez-vous être rappelé ou préférez-vous que je vous transfère maintenant ?"
   - Si transfert → appelle transfer_to_artisan
-  - Si rappel → "Très bien, un artisan vous rappellera dans les 24 heures. Bonne journée !"
+  - Si rappel → "Très bien, an attorney vous rappellera dans les 24 heures. Bonne journée !"
 - Si disqualifié : terminer poliment avec une explication
 
 IMPORTANT :
@@ -118,7 +118,7 @@ export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
   },
   {
     name: 'transfer_to_artisan',
-    description: "Transfère l'appel en direct vers un artisan disponible",
+    description: "Transfère l'appel en direct vers an attorney disponible",
     parameters: {
       type: 'object',
       properties: {
@@ -128,7 +128,7 @@ export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
         },
         postal_code: {
           type: 'string',
-          description: 'Code postal pour trouver un artisan proche',
+          description: 'Code postal pour trouver an attorney proche',
         },
       },
       required: ['project_type', 'postal_code'],

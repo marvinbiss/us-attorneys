@@ -16,7 +16,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
   if (artisan.accepts_new_clients === true) {
     items.push({
       icon: Zap,
-      label: 'Accepte de nouveaux clients',
+      label: 'Accepting new clients',
       color: 'text-emerald-500',
     })
   }
@@ -24,7 +24,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
   if (artisan.available_24h === true) {
     items.push({
       icon: Clock,
-      label: 'Disponible 24h/7j — Urgences',
+      label: 'Available 24/7 — Emergencies',
       color: 'text-amber-500',
     })
   }
@@ -32,7 +32,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
   if (artisan.free_quote === true) {
     items.push({
       icon: CheckCircle,
-      label: 'Devis gratuit et sans engagement',
+      label: 'Free consultation, no obligation',
       color: 'text-clay-400',
     })
   }
@@ -47,25 +47,25 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
     if (diffHours < 1) {
       items.push({
         icon: RefreshCw,
-        label: 'Actif il y a moins d\'une heure',
+        label: 'Active less than an hour ago',
         color: 'text-green-500',
       })
     } else if (diffHours < 24) {
       items.push({
         icon: RefreshCw,
-        label: `Actif il y a ${diffHours}h`,
+        label: `Active ${diffHours}h ago`,
         color: 'text-green-500',
       })
     } else if (diffDays < 7) {
       items.push({
         icon: RefreshCw,
-        label: `Actif il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`,
+        label: `Active ${diffDays} day${diffDays > 1 ? 's' : ''} ago`,
         color: 'text-blue-500',
       })
     } else if (diffDays < 30) {
       items.push({
         icon: RefreshCw,
-        label: 'Profil mis à jour ce mois',
+        label: 'Profile updated this month',
         color: 'text-blue-500',
       })
     }
@@ -90,7 +90,7 @@ export function AttorneyUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
       <div className="hidden sm:flex flex-wrap items-center gap-x-6 gap-y-2">
         {items.map((item) => (
           <div key={item.label} className="flex items-center gap-2 text-sm font-medium text-gray-900">
-            {item.label === 'Accepte de nouveaux clients' ? (
+            {item.label === 'Accepting new clients' ? (
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
@@ -107,7 +107,7 @@ export function AttorneyUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
       <div className="grid grid-cols-2 gap-3 sm:hidden">
         {items.map((item) => (
           <div key={item.label} className="flex items-center gap-2 text-xs font-medium text-gray-900">
-            {item.label === 'Accepte de nouveaux clients' ? (
+            {item.label === 'Accepting new clients' ? (
               <span className="relative flex h-2 w-2 flex-shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />

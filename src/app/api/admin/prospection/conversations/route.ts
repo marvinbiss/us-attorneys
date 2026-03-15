@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const parsed = querySchema.safeParse(params)
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Paramètres invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid parameters' } }, { status: 400 })
     }
 
     const { page, limit, status, channel } = parsed.data
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('List conversations error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error retrieving data' } }, { status: 500 })
     }
 
     return NextResponse.json({
@@ -57,6 +57,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Conversations GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

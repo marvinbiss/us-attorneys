@@ -78,19 +78,19 @@ export function getGreetingMessage(
   // Returning visitor — message personnalisé
   if (isReturning) {
     if (context.artisan) {
-      return `De retour ? Obtenez votre devis gratuit avec ${context.artisan.name}`
+      return `Welcome back! Get your free consultation with ${context.artisan.name}`
     }
-    return `De retour ? Votre estimation ${metier} à ${ville} vous attend`
+    return `Welcome back! Your ${metier} estimate in ${ville} is ready`
   }
 
   if (context.artisan) {
-    return `Demandez un devis gratuit à ${context.artisan.name}`
+    return `Request a free consultation with ${context.artisan.name}`
   }
   if (pageUrl.includes('/emergency/')) {
-    return `Urgence ${metier} à ${ville} ? Estimez le coût et soyez rappelé immédiatement`
+    return `${metier} emergency in ${ville}? Estimate the cost and get a callback immediately`
   }
   if (pageUrl.includes('/pricing/')) {
-    return `Ces prix correspondent à votre projet ? Vérifiez gratuitement`
+    return `Do these prices match your case? Check for free`
   }
-  return `Besoin d'un ${metier} à ${ville} ? Estimez le prix gratuitement`
+  return `Need a ${metier} in ${ville}? Estimate the cost for free`
 }

@@ -23,21 +23,21 @@ const PAGE_URL = `${SITE_URL}/glossary`
 export const revalidate = 86400 // CDN cache: 24 h (ISR)
 
 export const metadata: Metadata = {
-  title: 'Glossaire du bâtiment — 150+ termes expliqués simplement',
+  title: 'Legal Glossary — 150+ Terms Explained Simply',
   description:
-    'Glossaire complet du bâtiment et de la rénovation : 150+ termes techniques expliqués simplement pour les particuliers. Gros œuvre, plomberie, électricité, isolation, menuiserie et plus.',
+    'Complete legal glossary: 150+ legal and technical terms explained in plain English for clients. Practice areas, procedures, contracts, litigation, and more.',
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: 'Glossaire du bâtiment — 150+ termes expliqués',
+    title: 'Legal Glossary — 150+ Terms Explained',
     description:
-      'Tous les termes techniques du bâtiment expliqués simplement. Comprenez les devis de vos artisans et prenez les bonnes décisions pour vos travaux.',
+      'All legal terms explained in plain English. Understand your attorney\'s language and make informed decisions about your case.',
     url: PAGE_URL,
     type: 'website',
     siteName: SITE_NAME,
   },
 }
 
-const breadcrumbItems = [{ label: 'Glossaire du bâtiment' }]
+const breadcrumbItems = [{ label: 'Legal Glossary' }]
 
 const categoryIcons: Record<string, typeof Layers> = {
   'Gros œuvre': Layers,
@@ -75,13 +75,13 @@ export default function GlossairePage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Accueil',
+        name: 'Home',
         item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Glossaire du bâtiment',
+        name: 'Legal Glossary',
       },
     ],
   }
@@ -89,9 +89,9 @@ export default function GlossairePage() {
   const definedTermSetSchema = {
     '@context': 'https://schema.org',
     '@type': 'DefinedTermSet',
-    name: 'Glossaire du bâtiment',
+    name: 'Legal Glossary',
     description:
-      'Glossaire complet des termes techniques du bâtiment et de la rénovation pour les particuliers.',
+      'Complete glossary of legal terms and procedures for clients and the general public.',
     url: PAGE_URL,
     hasDefinedTerm: glossaireTerms.map((t) => ({
       '@type': 'DefinedTerm',
@@ -119,7 +119,7 @@ export default function GlossairePage() {
             .toUpperCase() === letter
       )
       if (matching.length > 0) {
-        acc[letter] = matching.sort((a, b) => a.term.localeCompare(b.term, 'fr'))
+        acc[letter] = matching.sort((a, b) => a.term.localeCompare(b.term, 'en'))
       }
       return acc
     },
@@ -140,14 +140,14 @@ export default function GlossairePage() {
         <section className="max-w-6xl mx-auto px-4 py-12 md:py-16 text-center">
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <BookOpen className="w-4 h-4" />
-            Référence bâtiment
+            Legal reference
           </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 font-heading leading-tight">
-            {'Glossaire du bâtiment — 150+ termes expliqués'}
+            {'Legal Glossary — 150+ Terms Explained'}
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             {
-              'Vous ne comprenez pas un terme sur votre devis ? Ce glossaire vous explique simplement tous les mots techniques du bâtiment, de la rénovation et de la construction.'
+              'Don\'t understand a term in your legal documents? This glossary explains all the technical legal terminology in plain English.'
             }
           </p>
 
@@ -155,15 +155,15 @@ export default function GlossairePage() {
           <div className="flex flex-wrap justify-center gap-6 mt-10">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4">
               <div className="text-2xl font-extrabold text-blue-600">{glossaireTerms.length}</div>
-              <div className="text-sm text-gray-500">termes définis</div>
+              <div className="text-sm text-gray-500">terms defined</div>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4">
               <div className="text-2xl font-extrabold text-blue-600">{glossaireCategories.length}</div>
-              <div className="text-sm text-gray-500">catégories</div>
+              <div className="text-sm text-gray-500">categories</div>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4">
-              <div className="text-2xl font-extrabold text-blue-600">100 %</div>
-              <div className="text-sm text-gray-500">gratuit</div>
+              <div className="text-2xl font-extrabold text-blue-600">100%</div>
+              <div className="text-sm text-gray-500">free</div>
             </div>
           </div>
         </section>
@@ -173,7 +173,7 @@ export default function GlossairePage() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
               <Search className="w-4 h-4" />
-              Index alphabétique
+              Alphabetical index
             </h2>
             <div className="flex flex-wrap gap-2">
               {alphabet.map((letter) => {
@@ -202,7 +202,7 @@ export default function GlossairePage() {
         {/* Category navigation */}
         <section className="max-w-6xl mx-auto px-4 py-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
-            Parcourir par catégorie
+            Browse by category
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {termsByCategory.map(({ category, terms }) => {
@@ -221,7 +221,7 @@ export default function GlossairePage() {
                     <div className="font-semibold text-gray-900 text-sm group-hover:text-blue-700 transition-colors">
                       {category}
                     </div>
-                    <div className="text-xs text-gray-500">{terms.length} termes</div>
+                    <div className="text-xs text-gray-500">{terms.length} terms</div>
                   </div>
                 </a>
               )
@@ -248,13 +248,13 @@ export default function GlossairePage() {
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading">
                     {category}
                   </h2>
-                  <p className="text-sm text-gray-500">{terms.length} termes</p>
+                  <p className="text-sm text-gray-500">{terms.length} terms</p>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 {terms
-                  .sort((a, b) => a.term.localeCompare(b.term, 'fr'))
+                  .sort((a, b) => a.term.localeCompare(b.term, 'en'))
                   .map((t) => (
                     <div
                       key={t.slug}
@@ -268,7 +268,7 @@ export default function GlossairePage() {
                           href={`/practice-areas/${t.relatedService}`}
                           className="inline-flex items-center gap-1.5 mt-3 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
                         >
-                          Trouver un artisan
+                          Find an attorney
                           <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       )}
@@ -282,7 +282,7 @@ export default function GlossairePage() {
         {/* Alphabetical listing */}
         <section className="max-w-6xl mx-auto px-4 py-12">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
-            Tous les termes de A à Z
+            All terms from A to Z
           </h2>
           <div className="space-y-10">
             {Object.entries(termsByLetter).map(([letter, terms]) => (
@@ -315,7 +315,7 @@ export default function GlossairePage() {
         {/* Cross-links */}
         <section className="max-w-6xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
-            Ressources complémentaires
+            Additional resources
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Link
@@ -327,9 +327,9 @@ export default function GlossairePage() {
               </div>
               <div>
                 <span className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors text-sm">
-                  Guide artisan RGE
+                  Attorney verification guide
                 </span>
-                <p className="text-xs text-gray-500">Certification et aides</p>
+                <p className="text-xs text-gray-500">Certifications and credentials</p>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-green-600 transition-colors" />
             </Link>
@@ -342,9 +342,9 @@ export default function GlossairePage() {
               </div>
               <div>
                 <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors text-sm">
-                  Calendrier des travaux
+                  Legal planning timeline
                 </span>
-                <p className="text-xs text-gray-500">Quand faire quoi ?</p>
+                <p className="text-xs text-gray-500">When to do what?</p>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-blue-600 transition-colors" />
             </Link>
@@ -359,7 +359,7 @@ export default function GlossairePage() {
                 <span className="font-semibold text-gray-900 group-hover:text-amber-700 transition-colors text-sm">
                   FAQ
                 </span>
-                <p className="text-xs text-gray-500">Questions fréquentes</p>
+                <p className="text-xs text-gray-500">Frequently asked questions</p>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-amber-600 transition-colors" />
             </Link>
@@ -370,11 +370,11 @@ export default function GlossairePage() {
         <section className="max-w-6xl mx-auto px-4 py-12">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              {'Besoin d\'un artisan pour vos travaux ?'}
+              {'Need an attorney for your case?'}
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Maintenant que vous maîtrisez le vocabulaire, trouvez un professionnel qualifié près de chez vous et demandez un devis gratuit.'
+                'Now that you understand the terminology, find a qualified professional near you and request a free consultation.'
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -383,13 +383,13 @@ export default function GlossairePage() {
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
-                Trouver un artisan
+                Find an attorney
               </Link>
               <Link
                 href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
-                Demander un devis gratuit
+                Request a free consultation
               </Link>
             </div>
           </div>

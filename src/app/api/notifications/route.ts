@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     const url = request.nextUrl
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
     const limit = parsed.data.limit
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('Notifications fetch error:', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
     // Count unread
@@ -68,6 +68,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Notifications GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

@@ -32,7 +32,7 @@ export const GreetingBubble = memo(function GreetingBubble({
           onDismiss()
         }}
         className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 transition-colors shadow-sm"
-        aria-label="Fermer"
+        aria-label="Close"
       >
         <X className="h-3.5 w-3.5" />
       </button>
@@ -48,7 +48,7 @@ export const GreetingBubble = memo(function GreetingBubble({
       <div className="flex items-center mt-1.5">
         <p className="text-xs text-[#E07040] font-semibold flex items-center gap-1">
           <Sparkles className="h-3 w-3" />
-          Estimation IA gratuite
+          Free AI estimate
         </p>
       </div>
     </motion.div>

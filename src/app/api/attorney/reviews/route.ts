@@ -1,6 +1,6 @@
 /**
- * Artisan Reviews API
- * GET: Fetch reviews for the artisan
+ * Attorney Reviews API
+ * GET: Fetch reviews for the attorney
  * POST: Reply to a review
  */
 
@@ -22,7 +22,7 @@ export async function GET() {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    // Fetch reviews for this artisan — explicit columns only (no fraud/scoring fields)
+    // Fetch reviews for this attorney — explicit columns only (no fraud/scoring fields)
     const { data: reviews, error: reviewsError } = await supabase
       .from('reviews')
       .select('id, attorney_id, rating, comment, artisan_response, artisan_responded_at, client_name, booking_id, created_at, updated_at')
@@ -33,7 +33,7 @@ export async function GET() {
     if (reviewsError) {
       logger.error('Error fetching reviews:', reviewsError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des avis' },
+        { error: 'Error retrieving reviews' },
         { status: 500 }
       )
     }
@@ -75,7 +75,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Reviews GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
     }
     const { review_id, response } = result.data
 
-    // Verify the review belongs to this artisan and has no existing response
+    // Verify the review belongs to this attorney and has no existing response
     const { data: review } = await supabase
       .from('reviews')
       .select('attorney_id, artisan_response')
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
 
     if (!review || review.attorney_id !== user!.id) {
       return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
+        { error: 'Review not found or unauthorized' },
         { status: 403 }
       )
     }
@@ -113,7 +113,7 @@ export async function POST(request: Request) {
     // Guard against double-response
     if (review.artisan_response !== null) {
       return NextResponse.json(
-        { error: 'Une réponse existe déjà pour cet avis' },
+        { error: 'A response already exists for this review' },
         { status: 409 }
       )
     }
@@ -127,19 +127,19 @@ export async function POST(request: Request) {
     if (updateError) {
       logger.error('Error updating review:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la réponse' },
+        { error: 'Error submitting response' },
         { status: 500 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Réponse enregistrée',
+      message: 'Response recorded',
     })
   } catch (error) {
     logger.error('Reviews POST error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

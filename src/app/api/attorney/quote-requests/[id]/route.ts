@@ -1,5 +1,5 @@
 /**
- * Artisan Devis (Quotes) — per-quote operations
+ * Attorney Quotes — per-quote operations
  * DELETE /api/attorney/quotes/[id] — retract a pending quote
  * PATCH  /api/attorney/quotes/[id] — update amount / description / valid_until of a pending quote
  */
@@ -14,7 +14,7 @@ const patchQuoteSchema = z.object({
   description: z.string().min(1).max(5000).optional(),
   valid_until: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD required')
     .optional(),
 })
 
@@ -37,7 +37,7 @@ export async function DELETE(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
     }
 
     // Fetch the quote and verify ownership
@@ -48,12 +48,12 @@ export async function DELETE(
       .single()
 
     if (!quote || quote.attorney_id !== provider.id) {
-      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
     }
 
     if (quote.status !== 'pending') {
       return NextResponse.json(
-        { success: false, error: { message: 'Seul un devis en attente peut être rétracté' } },
+        { success: false, error: { message: 'Only a pending consultation can be retracted' } },
         { status: 403 }
       )
     }
@@ -67,15 +67,15 @@ export async function DELETE(
     if (deleteError) {
       logger.error('Error deleting quote:', deleteError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la suppression du devis' } },
+        { success: false, error: { message: 'Error deleting the consultation' } },
         { status: 500 }
       )
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    logger.error('Artisan devis DELETE error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney quote DELETE error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -98,14 +98,14 @@ export async function PATCH(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
     }
 
     const body = await req.json()
     const result = patchQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -118,7 +118,7 @@ export async function PATCH(
       today.setHours(0, 0, 0, 0)
       if (validUntilDate < today) {
         return NextResponse.json(
-          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
+          { success: false, error: { message: 'The expiration date must be in the future' } },
           { status: 400 }
         )
       }
@@ -132,12 +132,12 @@ export async function PATCH(
       .single()
 
     if (!existing || existing.attorney_id !== provider.id) {
-      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
     }
 
     if (existing.status !== 'pending') {
       return NextResponse.json(
-        { success: false, error: { message: 'Seul un devis en attente peut être modifié' } },
+        { success: false, error: { message: 'Only a pending consultation can be modified' } },
         { status: 403 }
       )
     }
@@ -149,7 +149,7 @@ export async function PATCH(
 
     if (Object.keys(patch).length === 0) {
       return NextResponse.json(
-        { success: false, error: { message: 'Aucun champ modifiable fourni' } },
+        { success: false, error: { message: 'No modifiable fields provided' } },
         { status: 400 }
       )
     }
@@ -165,14 +165,14 @@ export async function PATCH(
     if (updateError) {
       logger.error('Error patching quote:', updateError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la mise à jour du devis' } },
+        { success: false, error: { message: 'Error updating the consultation' } },
         { status: 500 }
       )
     }
 
     return NextResponse.json({ success: true, devis: updated })
   } catch (error) {
-    logger.error('Artisan devis PATCH error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    logger.error('Attorney quote PATCH error:', error)
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

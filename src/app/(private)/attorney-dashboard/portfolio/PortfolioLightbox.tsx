@@ -75,7 +75,7 @@ export default function PortfolioLightbox({
             <button
               onClick={onClose}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-              aria-label="Fermer"
+              aria-label="Close"
             >
               <X className="w-6 h-6" />
             </button>
@@ -89,7 +89,7 @@ export default function PortfolioLightbox({
             <button
               onClick={goToPrevious}
               className="absolute left-4 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-              aria-label="Précédent"
+              aria-label="Previous"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </button>
@@ -137,7 +137,7 @@ export default function PortfolioLightbox({
             <button
               onClick={goToNext}
               className="absolute right-4 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-              aria-label="Suivant"
+              aria-label="Next"
             >
               <ChevronRight className="w-6 h-6 text-white" />
             </button>

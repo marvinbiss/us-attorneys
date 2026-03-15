@@ -50,13 +50,13 @@ function formatRelative(dateStr: string): string {
   const now = new Date()
   const diffMs = now.getTime() - d.getTime()
   const diffMin = Math.floor(diffMs / 60000)
-  if (diffMin < 1) return "À l'instant"
-  if (diffMin < 60) return `il y a ${diffMin} min`
+  if (diffMin < 1) return "Just now"
+  if (diffMin < 60) return `${diffMin}m ago`
   const diffH = Math.floor(diffMin / 60)
-  if (diffH < 24) return `il y a ${diffH}h`
+  if (diffH < 24) return `${diffH}h ago`
   const diffD = Math.floor(diffH / 24)
-  if (diffD < 7) return `il y a ${diffD}j`
-  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  if (diffD < 7) return `${diffD}d ago`
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 export default function AttorneyLeadsInbox() {
@@ -81,10 +81,10 @@ export default function AttorneyLeadsInbox() {
         window.location.href = '/login?redirect=/attorney-dashboard/leads'
         return
       } else {
-        setError(data.error || 'Erreur lors du chargement')
+        setError(data.error || 'Error loading leads')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -122,11 +122,11 @@ export default function AttorneyLeadsInbox() {
   }
 
   const tabs = [
-    { key: 'all', label: 'Tous', count: statusCounts.all },
-    { key: 'pending', label: 'Nouveaux', count: statusCounts.pending },
-    { key: 'viewed', label: 'Consultés', count: statusCounts.viewed },
-    { key: 'quoted', label: 'Devis envoyé', count: statusCounts.quoted },
-    { key: 'declined', label: 'Déclinés', count: statusCounts.declined },
+    { key: 'all', label: 'All', count: statusCounts.all },
+    { key: 'pending', label: 'New', count: statusCounts.pending },
+    { key: 'viewed', label: 'Viewed', count: statusCounts.viewed },
+    { key: 'quoted', label: 'Quote Sent', count: statusCounts.quoted },
+    { key: 'declined', label: 'Declined', count: statusCounts.declined },
   ]
 
   if (loading) {
@@ -134,7 +134,7 @@ export default function AttorneyLeadsInbox() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement des opportunités...</p>
+          <p className="text-sm text-gray-500 mt-2">Loading leads...</p>
         </div>
       </div>
     )
@@ -147,9 +147,9 @@ export default function AttorneyLeadsInbox() {
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Link href="/attorney-dashboard" className="hover:text-gray-900">Espace Artisan</Link>
+              <Link href="/attorney-dashboard" className="hover:text-gray-900">Attorney Dashboard</Link>
               <span>/</span>
-              <span className="text-gray-900 font-medium">Opportunités</span>
+              <span className="text-gray-900 font-medium">Leads</span>
             </div>
             <div className="flex items-center gap-3">
               <Link
@@ -157,12 +157,12 @@ export default function AttorneyLeadsInbox() {
                 className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium"
               >
                 <BarChart3 className="w-4 h-4" />
-                Statistiques
+                Statistics
               </Link>
               <button
                 onClick={fetchLeads}
-                aria-label="Actualiser les opportunités"
-                title="Actualiser"
+                aria-label="Refresh leads"
+                title="Refresh"
                 className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -176,25 +176,25 @@ export default function AttorneyLeadsInbox() {
         {/* Quick stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <StatCard
-            title="Total reçus"
+            title="Total Received"
             value={statusCounts.all}
             icon={<Inbox className="w-5 h-5" />}
             color="blue"
           />
           <StatCard
-            title="Nouveaux"
+            title="New"
             value={statusCounts.pending}
             icon={<Clock className="w-5 h-5" />}
             color="yellow"
           />
           <StatCard
-            title="Devis envoyés"
+            title="Quotes Sent"
             value={statusCounts.quoted}
             icon={<Send className="w-5 h-5" />}
             color="green"
           />
           <StatCard
-            title="Taux réponse"
+            title="Response Rate"
             value={`${statusCounts.all > 0 ? Math.round(((statusCounts.quoted + statusCounts.viewed) / statusCounts.all) * 100) : 0}%`}
             icon={<Eye className="w-5 h-5" />}
             color="indigo"
@@ -214,10 +214,10 @@ export default function AttorneyLeadsInbox() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Rechercher..."
+              placeholder="Search..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setPage(1) }}
-              aria-label="Rechercher des demandes"
+              aria-label="Search leads"
               className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -236,9 +236,9 @@ export default function AttorneyLeadsInbox() {
             <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <FileText className="w-7 h-7 text-gray-400" />
             </div>
-            <p className="text-gray-500 font-medium text-lg">Aucune opportunité</p>
+            <p className="text-gray-500 font-medium text-lg">No leads yet</p>
             <p className="text-gray-400 text-sm mt-2">
-              {searchQuery ? 'Aucun résultat pour cette recherche.' : 'Les demandes de devis vous seront attribuées automatiquement.'}
+              {searchQuery ? 'No results for this search.' : 'Case inquiries will be assigned to you automatically.'}
             </p>
           </div>
         ) : (

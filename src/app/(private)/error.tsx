@@ -12,7 +12,7 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error('Espace privé — erreur:', error)
+    console.error('Private area — error:', error)
   }, [error])
 
   return (
@@ -22,10 +22,10 @@ export default function Error({
           <AlertTriangle className="w-10 h-10 text-red-600" />
         </div>
         <h1 className="font-heading text-2xl font-bold text-gray-900 mb-3 tracking-tight">
-          Une erreur est survenue
+          An error occurred
         </h1>
         <p className="text-gray-600 mb-8">
-          Impossible de charger cette page. Réessayez ou revenez à votre tableau de bord.
+          Unable to load this page. Please try again or return to your dashboard.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -34,20 +34,20 @@ export default function Error({
             className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
             <RefreshCw className="w-5 h-5" />
-            Réessayer
+            Retry
           </button>
           <Link
             href="/client-dashboard"
             className="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
           >
             <LayoutDashboard className="w-5 h-5" />
-            Mon espace
+            My Dashboard
           </Link>
         </div>
 
         {error.digest && (
           <p className="mt-8 text-sm text-gray-400">
-            Code erreur : {error.digest}
+            Error code: {error.digest}
           </p>
         )}
       </div>

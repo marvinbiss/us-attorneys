@@ -15,8 +15,8 @@ export async function OPTIONS() {
 /**
  * GET /api/v1/pricing?metier=plombier&ville=paris
  *
- * Retourne les statistiques agrégées du baromètre pour un métier,
- * optionnellement filtré par ville, département ou région.
+ * Returns aggregated barometer statistics for a practice area,
+ * optionally filtered by city, state, or region.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     if (!metier) {
       return NextResponse.json(
-        { error: 'Le paramètre "metier" est requis. Exemple : ?metier=plombier' },
+        { error: 'The "metier" parameter is required. Example: ?metier=plumber' },
         { status: 400, headers: CORS_HEADERS },
       )
     }
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       return NextResponse.json(
-        { error: 'Erreur interne lors de la récupération des données.' },
+        { error: 'Internal error retrieving data.' },
         { status: 500, headers: CORS_HEADERS },
       )
     }
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
           updated_at: data?.[0]?.updated_at ?? null,
         },
         attribution: {
-          text: `Source : ${SITE_NAME} — Baromètre des Artisans`,
+          text: `Source: ${SITE_NAME} — Attorney Barometer`,
           url: `${SITE_URL}/price-index`,
           licence: 'Attribution obligatoire avec lien vers la source.',
         },

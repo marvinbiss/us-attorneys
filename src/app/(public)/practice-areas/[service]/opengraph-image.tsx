@@ -3,7 +3,7 @@ import { practiceAreas as staticServicesList } from '@/lib/data/usa'
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — Artisans qualifiés en France'
+export const alt = 'US Attorneys — Qualified Attorneys Nationwide'
 export const size = {
   width: 1200,
   height: 630,
@@ -98,7 +98,7 @@ export default async function Image({
               textAlign: 'center',
             }}
           >
-            {`Artisans qualifiés en France`}
+            {`Qualified Attorneys Nationwide`}
           </div>
 
           {/* Sub-subtitle */}
@@ -111,7 +111,7 @@ export default async function Image({
               display: 'flex',
             }}
           >
-            Comparez les profils et demandez un devis gratuit
+            Compare profiles and request a free consultation
           </div>
 
           {/* Accent divider */}

@@ -27,7 +27,7 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   paysagiste: ['7111Z', '8130Z'],             // Architecture + aménagement paysager
   cuisiniste: ['4332C', '3102Z'],             // Agencement + fabrication meubles cuisine
   solier: ['4333Z'],                          // Revêtement des sols et murs
-  nettoyage: ['8121Z', '8122Z'],              // Nettoyage de bâtiments
+  nettoyage: ['8121Z', '8122Z'],              // Cleanup de bâtiments
   terrassier: ['4312A', '4312B'],             // Terrassement
   charpentier: ['4391A'],                     // Charpente
   zingueur: ['4391B'],                        // Couverture (zinguerie = sous-spécialité)

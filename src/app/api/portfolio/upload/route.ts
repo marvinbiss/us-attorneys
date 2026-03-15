@@ -40,21 +40,21 @@ export async function POST(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     const typeValidation = portfolioUploadTypeSchema.safeParse(rawType)
     if (!typeValidation.success) {
       return NextResponse.json(
-        { error: 'Type invalide. Valeurs acceptées: image, video, before, after' },
+        { error: 'Invalid type. Accepted values: image, video, before, after' },
         { status: 400 }
       )
     }
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { error: 'Aucun fichier fourni' },
+        { error: 'No file provided' },
         { status: 400 }
       )
     }
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: `Type de fichier non supporté. Types acceptés: ${allowedTypes.join(', ')}` },
+        { error: `Unsupported file type. Accepted types: ${allowedTypes.join(', ')}` },
         { status: 400 }
       )
     }

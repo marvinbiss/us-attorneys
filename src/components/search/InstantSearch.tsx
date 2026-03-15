@@ -26,7 +26,7 @@ interface InstantSearchProps {
 export function InstantSearch({
   onSearch,
   onSuggestionSelect,
-  placeholder = 'Rechercher un artisan, un service, une ville...',
+  placeholder = 'Search for an attorney, service, or city...',
   className,
 }: InstantSearchProps) {
   const [query, setQuery] = useState('')
@@ -206,7 +206,7 @@ export function InstantSearch({
         <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
           {suggestions.length === 0 && query && !isLoading ? (
             <div className="p-4 text-center text-gray-500 dark:text-gray-400">
-              Aucune suggestion pour "{query}"
+              No suggestions for "{query}"
             </div>
           ) : (
             <ul>
@@ -245,7 +245,7 @@ export function InstantSearch({
                             <span> · {suggestion.metadata.city}</span>
                           )}
                           {suggestion.metadata.resultCount && (
-                            <span> · {suggestion.metadata.resultCount} résultats</span>
+                            <span> · {suggestion.metadata.resultCount} results</span>
                           )}
                         </div>
                       )}
@@ -264,7 +264,7 @@ export function InstantSearch({
                 className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <Search className="w-4 h-4" />
-                Rechercher "{query}"
+                Search "{query}"
               </button>
             </div>
           )}

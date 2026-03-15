@@ -25,7 +25,7 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, spec
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-4 border-amber-500 pl-4">
-                Questions fréquentes — {service.name.toLowerCase()} à {location.name}
+                Frequently Asked Questions — {service.name.toLowerCase()} in {location.name}
               </h2>
               <div className="space-y-3">
                 {combinedFaq.map((item, i) => (
@@ -57,23 +57,23 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, spec
             <svg className="w-5 h-5 text-clay-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
-            Guides et conseils
+            Guides and Resources
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {isPlombier ? (
               <>
-                <BlogLink href="/blog/comment-choisir-son-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les critères essentiels pour trouver un plombier fiable et compétent." />
-                <BlogLink href="/blog/fuite-eau-urgence-guide-complet-gestes-couts" emoji="&#128680;" title="Urgence plomberie : que faire ?" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
+                <BlogLink href="/blog/comment-choisir-son-plombier" emoji="&#128295;" title="How to Choose the Right Attorney" desc="Essential criteria for finding a reliable and competent attorney." />
+                <BlogLink href="/blog/fuite-eau-urgence-guide-complet-gestes-couts" emoji="&#128680;" title="Legal Emergency: What to Do?" desc="The right steps to take in an urgent legal situation." />
               </>
             ) : isBatiment ? (
               <>
-                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Aides rénovation énergétique 2026" desc="MaPrimeRénov', CEE, éco-PTZ... Toutes les aides pour financer vos travaux." />
-                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#128705;" title="Tendances salle de bain 2026" desc="Douche à l'italienne, vasque suspendue, matériaux et budget détaillé." />
+                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Understanding Legal Fees in 2026" desc="Hourly rates, flat fees, contingency — all fee structures explained." />
+                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#128705;" title="Legal Trends 2026" desc="Key legal developments, new regulations, and what to expect this year." />
               </>
             ) : (
               <>
-                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#128705;" title="Tendances salle de bain 2026" desc="Douche à l'italienne, vasque suspendue, matériaux et budget détaillé." />
-                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Aides rénovation énergétique 2026" desc="MaPrimeRénov', CEE, éco-PTZ... Toutes les aides pour financer vos travaux." />
+                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#128705;" title="Legal Trends 2026" desc="Key legal developments, new regulations, and what to expect this year." />
+                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Understanding Legal Fees in 2026" desc="Hourly rates, flat fees, contingency — all fee structures explained." />
               </>
             )}
           </div>

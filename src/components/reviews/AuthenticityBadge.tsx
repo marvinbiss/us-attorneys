@@ -22,28 +22,28 @@ const getAuthenticityLevel = (score: number) => {
 const AUTHENTICITY_CONFIG = {
   high: {
     icon: ShieldCheck,
-    label: 'Avis authentique',
+    label: 'Authentic review',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
   },
   medium: {
     icon: BadgeCheck,
-    label: 'Probablement authentique',
+    label: 'Likely authentic',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
   },
   low: {
     icon: HelpCircle,
-    label: 'Non référencé',
+    label: 'Not listed',
     color: 'text-gray-500',
     bgColor: 'bg-gray-50',
     borderColor: 'border-gray-200',
   },
   suspicious: {
     icon: AlertTriangle,
-    label: 'À vérifier',
+    label: 'Needs review',
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
@@ -88,7 +88,7 @@ export function AuthenticityBadge({
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('fr-FR', {
+    return date.toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -106,13 +106,13 @@ export function AuthenticityBadge({
       )}
       title={
         isVerifiedPurchase && bookingDate
-          ? `Prestation réalisée le ${formatDate(bookingDate)}`
-          : `Score d'authenticité: ${effectiveScore}%`
+          ? `Service performed on ${formatDate(bookingDate)}`
+          : `Authenticity score: ${effectiveScore}%`
       }
     >
       <Icon className={cn(sizeConfig.icon, config.color)} />
       <span className={cn(sizeConfig.text, config.color, 'font-medium')}>
-        {isVerifiedPurchase ? 'Achat confirmé' : config.label}
+        {isVerifiedPurchase ? 'Confirmed purchase' : config.label}
       </span>
       {showScore && !isVerifiedPurchase && (
         <span className={cn(sizeConfig.text, 'text-gray-400')}>
@@ -152,7 +152,7 @@ export function AuthenticityDetails({
     <div className={cn('p-4 rounded-lg border', className)}>
       <div className="flex items-center justify-between mb-3">
         <h4 className="font-medium text-gray-900 dark:text-white">
-          Authenticité de l'avis
+          Review authenticity
         </h4>
         <AuthenticityBadge
           score={score}
@@ -183,11 +183,11 @@ export function AuthenticityDetails({
         <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-3">
           <div className="flex items-center gap-2 text-green-700 dark:text-green-400 text-sm font-medium mb-1">
             <ShieldCheck className="w-4 h-4" />
-            Achat confirmé
+            Confirmed purchase
           </div>
           {bookingDate && (
             <p className="text-sm text-green-600 dark:text-green-500">
-              Prestation réalisée le {new Date(bookingDate).toLocaleDateString('fr-FR')}
+              Service performed on {new Date(bookingDate).toLocaleDateString('en-US')}
             </p>
           )}
         </div>
@@ -196,30 +196,30 @@ export function AuthenticityDetails({
       {/* Flags */}
       {flags && Object.values(flags).some(Boolean) && (
         <div className="space-y-1 mb-3">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Signaux détectés:</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Detected signals:</p>
           <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-0.5">
             {flags.suspected_fake && (
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                Contenu potentiellement généré
+                Potentially generated content
               </li>
             )}
             {flags.unusual_pattern && (
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
-                Pattern inhabituel détecté
+                Unusual pattern detected
               </li>
             )}
             {flags.ip_match && (
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                IP correspondant à d'autres avis
+                IP matching other reviews
               </li>
             )}
             {flags.review_velocity && (
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                Fréquence de publication élevée
+                High posting frequency
               </li>
             )}
           </ul>

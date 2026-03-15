@@ -23,9 +23,9 @@ function formatPopulation(pop: string): string {
   const cleaned = pop.replace(/\s/g, '')
   const num = parseInt(cleaned, 10)
   if (isNaN(num)) return pop
-  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace('.0', '')} M hab.`
-  if (num >= 1_000) return `${Math.round(num / 1_000).toLocaleString('fr-FR')} k hab.`
-  return `${num.toLocaleString('fr-FR')} hab.`
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace('.0', '')}M pop.`
+  if (num >= 1_000) return `${Math.round(num / 1_000).toLocaleString('en-US')}k pop.`
+  return `${num.toLocaleString('en-US')} pop.`
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
@@ -92,22 +92,22 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
 
 // ── Popular cities for empty state ──────────────────────────────────
 const popularCities: { name: string; slug: string; stateName: string; pop: string }[] = [
-  { name: 'Paris', slug: 'paris', stateName: 'Paris (75)', pop: '2.1M' },
-  { name: 'Lyon', slug: 'lyon', stateName: 'Rhône (69)', pop: '522k' },
-  { name: 'Marseille', slug: 'marseille', stateName: 'Bouches-du-Rhône (13)', pop: '870k' },
-  { name: 'Toulouse', slug: 'toulouse', stateName: 'Haute-Garonne (31)', pop: '493k' },
-  { name: 'Bordeaux', slug: 'bordeaux', stateName: 'Gironde (33)', pop: '260k' },
-  { name: 'Lille', slug: 'lille', stateName: 'Nord (59)', pop: '236k' },
+  { name: 'New York', slug: 'new-york', stateName: 'New York (NY)', pop: '8.3M' },
+  { name: 'Los Angeles', slug: 'los-angeles', stateName: 'California (CA)', pop: '3.9M' },
+  { name: 'Chicago', slug: 'chicago', stateName: 'Illinois (IL)', pop: '2.7M' },
+  { name: 'Houston', slug: 'houston', stateName: 'Texas (TX)', pop: '2.3M' },
+  { name: 'Phoenix', slug: 'phoenix', stateName: 'Arizona (AZ)', pop: '1.6M' },
+  { name: 'Miami', slug: 'miami', stateName: 'Florida (FL)', pop: '442k' },
 ]
 
 // ── Fallback cities for "no results" state ──────────────────────────
 const fallbackCities = [
-  { name: 'Paris', dept: '75' },
-  { name: 'Lyon', dept: '69' },
-  { name: 'Marseille', dept: '13' },
-  { name: 'Toulouse', dept: '31' },
-  { name: 'Bordeaux', dept: '33' },
-  { name: 'Lille', dept: '59' },
+  { name: 'New York', dept: 'NY' },
+  { name: 'Los Angeles', dept: 'CA' },
+  { name: 'Chicago', dept: 'IL' },
+  { name: 'Houston', dept: 'TX' },
+  { name: 'Phoenix', dept: 'AZ' },
+  { name: 'Miami', dept: 'FL' },
 ]
 
 export default function SearchBar({ size = 'compact' }: SearchBarProps) {
@@ -306,7 +306,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
 
   return (
     <div ref={containerRef} className={`w-full ${isLarge ? 'max-w-3xl mx-auto' : ''}`}>
-      <form onSubmit={handleSubmit} role="search" aria-label="Rechercher un artisan">
+      <form onSubmit={handleSubmit} role="search" aria-label="Search for an attorney">
         <div
           className={`
             flex bg-white
@@ -326,7 +326,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 setShowCityDropdown(false)
               }}
               onKeyDown={handleServiceKeyDown}
-              aria-label="Choisir un service"
+              aria-label="Choose a service"
               aria-expanded={showServiceDropdown}
               aria-haspopup="listbox"
               className={`
@@ -339,7 +339,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
             >
               <Search className={`text-gray-400 flex-shrink-0 ${isLarge ? 'w-5 h-5' : 'w-4 h-4'}`} />
               <span className={`truncate ${selectedService ? 'text-gray-900 font-medium' : 'text-gray-400'} ${isLarge ? '' : 'text-sm'}`}>
-                {selectedService || 'Service ?'}
+                {selectedService || 'Practice area?'}
               </span>
               <ChevronDown className={`ml-auto text-gray-400 flex-shrink-0 transition-transform duration-200 ${showServiceDropdown ? 'rotate-180' : ''} ${isLarge ? 'w-5 h-5' : 'w-3.5 h-3.5'}`} />
             </button>
@@ -357,7 +357,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                     value={serviceFilter}
                     onChange={(e) => setServiceFilter(e.target.value)}
                     onKeyDown={handleServiceKeyDown}
-                    placeholder="Filtrer..."
+                    placeholder="Filter..."
                     autoComplete="off"
                     className={`w-full bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 text-gray-900 placeholder:text-gray-400 ${
                       isLarge ? 'px-3 py-2 text-sm' : 'px-2.5 py-1.5 text-xs'
@@ -367,7 +367,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 <div className={`max-h-56 overflow-y-auto ${isLarge ? '' : 'max-h-48'}`}>
                   {filteredServices.length === 0 && (
                     <div className="px-3 py-4 text-center text-gray-400 text-xs">
-                      Aucun service trouvé
+                      No service found
                     </div>
                   )}
                   {filteredServices.map((service, idx) => {
@@ -421,9 +421,9 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                   setShowServiceDropdown(false)
                 }}
                 onKeyDown={handleCityKeyDown}
-                placeholder={isLarge ? 'Où ? (ville)' : 'City...'}
+                placeholder={isLarge ? 'Where? (city)' : 'City...'}
                 autoComplete="off"
-                aria-label="City ou code postal"
+                aria-label="City or ZIP code"
                 className={`
                   w-full transition-all outline-none text-gray-900 placeholder:text-gray-400
                   ${isLarge
@@ -443,7 +443,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {!hasTypedCity && (
                   <>
                     <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
-                      Villes populaires
+                      Popular cities
                     </div>
                     {popularCities.map((city, idx) => {
                       const isHighlighted = idx === highlightedCityIndex
@@ -478,7 +478,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {hasTypedCity && filteredCities.length > 0 && (
                   <>
                     <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
-                      {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv{filteredCities.length > 1 ? 'ées' : 'ée'}
+                      {filteredCities.length} cit{filteredCities.length > 1 ? 'ies' : 'y'} found
                     </div>
                     {filteredCities.map((city, idx) => {
                       const isHighlighted = idx === highlightedCityIndex
@@ -516,10 +516,10 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {hasNoResults && (
                   <div className={`text-center ${isLarge ? 'py-4 px-3' : 'py-3 px-2.5'}`}>
                     <div className={`text-gray-500 mb-1 ${isLarge ? 'text-sm' : 'text-xs'}`}>
-                      Aucune ville trouv&eacute;e pour <span className="font-semibold text-gray-700">&laquo;&thinsp;{cityQuery}&thinsp;&raquo;</span>
+                      No city found for <span className="font-semibold text-gray-700">&ldquo;{cityQuery}&rdquo;</span>
                     </div>
                     <div className={`text-gray-400 mb-3 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
-                      Essayez une ville voisine :
+                      Try a nearby city:
                     </div>
                     <div className="flex flex-wrap items-center justify-center gap-1.5">
                       {fallbackCities.map((fc) => (
@@ -554,7 +554,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
             `}
           >
             <Search className={isLarge ? 'w-5 h-5' : 'w-4 h-4'} />
-            {isLarge && <span>Rechercher</span>}
+            {isLarge && <span>Search</span>}
           </button>
         </div>
       </form>

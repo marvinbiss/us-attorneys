@@ -25,9 +25,9 @@ interface ExitIntentPopupProps {
 
 export default function ExitIntentPopup({
   sessionKey = 'sa:exit-intent-shown',
-  title = 'Avant de partir...',
-  description = 'Recevez jusqu\'à 3 devis gratuits d\'artisans qualifiés en moins de 60 secondes.',
-  ctaText = 'Recevoir mes devis gratuits',
+  title = 'Before you go...',
+  description = 'Receive up to 3 free consultations from qualified attorneys in less than 60 seconds.',
+  ctaText = 'Get my free consultations',
   ctaHref = '/quotes',
   onCtaClick,
 }: ExitIntentPopupProps) {
@@ -110,7 +110,7 @@ export default function ExitIntentPopup({
         <button
           onClick={close}
           className="absolute top-3 right-3 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-gray-100 transition-colors"
-          aria-label="Fermer"
+          aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
@@ -141,7 +141,7 @@ export default function ExitIntentPopup({
         )}
 
         <p className="text-[10px] text-gray-400 text-center mt-2">
-          Gratuit · Sans engagement · Réponse sous 24h
+          Free · No obligation · Response within 24h
         </p>
       </div>
     </div>

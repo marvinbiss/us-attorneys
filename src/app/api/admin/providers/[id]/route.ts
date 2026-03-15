@@ -1,7 +1,7 @@
 /**
- * API Admin Provider - CRUD complet
- * GET: Récupérer un provider avec toutes ses relations
- * PATCH: Mise à jour complète
+ * Admin Provider API - Full CRUD
+ * GET: Retrieve a provider with all relations
+ * PATCH: Full update
  * DELETE: Soft delete
  */
 
@@ -105,7 +105,7 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
   return data
 }
 
-// GET - Récupérer un provider complet
+// GET - Retrieve a complete provider
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -117,7 +117,7 @@ export async function GET(
     const attorneyId = params.id
     if (!isValidUuid(attorneyId)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -131,7 +131,7 @@ export async function GET(
       .single()
 
     if (error || !provider) {
-      return NextResponse.json({ success: false, error: { message: 'Provider non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Provider not found' } }, { status: 404 })
     }
 
     const response = NextResponse.json({
@@ -171,11 +171,11 @@ export async function GET(
     return response
   } catch (error) {
     logger.error('Admin provider GET error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération du profil' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Error retrieving profile' } }, { status: 500 })
   }
 }
 
-// PATCH - Mise à jour complète du provider
+// PATCH - Full provider update
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -188,7 +188,7 @@ export async function PATCH(
 
     if (!isValidUuid(attorneyId)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -200,13 +200,13 @@ export async function PATCH(
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ success: false, error: { message: 'JSON invalide dans le body' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid JSON in request body' } }, { status: 400 })
     }
 
     const validationResult = updateAttorneySchema.safeParse(body)
     if (!validationResult.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: validationResult.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: validationResult.error.flatten() } },
         { status: 400 }
       )
     }
@@ -226,7 +226,7 @@ export async function PATCH(
 
     if (error) {
       logger.error('Database update failed', { code: error.code, message: error.message })
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
     }
 
     // Audit log
@@ -237,13 +237,13 @@ export async function PATCH(
     }
 
     return NextResponse.json(
-      { success: true, data, message: 'Artisan mis à jour avec succès' },
+      { success: true, data, message: 'Attorney updated successfully' },
       { headers: NO_CACHE_HEADERS }
     )
   } catch (error) {
     const err = error as Error
     logger.error('Unexpected PATCH error', { message: err.message })
-    return NextResponse.json({ success: false, error: { message: 'Erreur inattendue lors de la mise à jour' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Unexpected error during update' } }, { status: 500 })
   }
 }
 
@@ -260,7 +260,7 @@ export async function DELETE(
 
     if (!isValidUuid(attorneyId)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -274,7 +274,7 @@ export async function DELETE(
 
     if (error) {
       logger.error('Database delete failed', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
     }
 
     try {
@@ -283,10 +283,10 @@ export async function DELETE(
       logger.warn('Audit log failed')
     }
 
-    return NextResponse.json({ success: true, message: 'Artisan supprimé' })
+    return NextResponse.json({ success: true, message: 'Attorney deleted' })
   } catch (error) {
     const err = error as Error
     logger.error('Unexpected DELETE error', { message: err.message })
-    return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
   }
 }

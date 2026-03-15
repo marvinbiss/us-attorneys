@@ -3,7 +3,7 @@ import { practiceAreas as staticPracticeAreas, getCityBySlug } from '@/lib/data/
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — Artisan qualifié près de chez vous'
+export const alt = 'US Attorneys — Qualified Attorney Near You'
 export const size = {
   width: 1200,
   height: 630,
@@ -102,7 +102,7 @@ export default async function Image({
               textAlign: 'center',
             }}
           >
-            {`à ${cityName}`}
+            {`in ${cityName}`}
           </div>
 
           {/* Department */}

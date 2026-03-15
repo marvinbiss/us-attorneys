@@ -12,7 +12,7 @@ const gdprDeleteSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// POST - Supprimer/Anonymiser les données d'un utilisateur (RGPD)
+// POST - Delete/Anonymize user data (GDPR)
 export async function POST(
   request: NextRequest,
   { params }: { params: { userId: string } }
@@ -26,7 +26,7 @@ export async function POST(
 
     if (!isValidUuid(params.userId)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -37,7 +37,7 @@ export async function POST(
     const result = gdprDeleteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Confirmation requise (SUPPRIMER)', details: result.error.flatten() } },
+        { success: false, error: { message: 'Confirmation required (DELETE)', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -45,7 +45,7 @@ export async function POST(
     const completedSteps: string[] = []
 
     try {
-      // Étape 1 — Récupérer l'email du profil pour anonymiser les avis client
+      // Step 1 — Retrieve profile email to anonymize client reviews
       completedSteps.push('fetch_profile')
       const { data: profileData } = await supabase
         .from('profiles')
@@ -53,7 +53,7 @@ export async function POST(
         .eq('id', userId)
         .maybeSingle()
 
-      // Étape 2 — Vérifier si l'utilisateur est un artisan
+      // Step 2 — Check if user is an attorney
       completedSteps.push('check_artisan')
       const { data: artisanRecord } = await supabase
         .from('attorneys')
@@ -61,30 +61,30 @@ export async function POST(
         .eq('user_id', userId)
         .maybeSingle()
 
-      // Étape 3 — Anonymiser le profil (seules les colonnes qui existent sur profiles)
+      // Step 3 — Anonymize profile (only columns that exist on profiles)
       completedSteps.push('anonymize_profile')
       await supabase
         .from('profiles')
         .update({
           email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
-          full_name: 'Utilisateur supprimé',
+          full_name: 'Deleted user',
           phone_e164: null,
         })
         .eq('id', userId)
 
-      // Étape 4 — Anonymiser les avis client (filtrés par client_email)
+      // Step 4 — Anonymize client reviews (filtered by client_email)
       completedSteps.push('anonymize_client_reviews')
       if (profileData?.email) {
         await supabase
           .from('reviews')
           .update({
-            client_name: 'Utilisateur supprimé',
+            client_name: 'Deleted user',
             client_email: 'deleted@anonymized.local',
           })
           .eq('client_email', profileData.email)
       }
 
-      // Étape 5 — Anonymiser les réponses d'avis uniquement si l'utilisateur est un artisan
+      // Step 5 — Anonymize review responses only if user is an attorney
       completedSteps.push('anonymize_artisan_reviews')
       if (artisanRecord) {
         await supabase
@@ -96,7 +96,7 @@ export async function POST(
           .eq('attorney_id', userId)
       }
 
-      // Étape 6 — Désactiver le provider si c'est un artisan
+      // Step 6 — Deactivate provider if user is an attorney
       completedSteps.push('deactivate_provider')
       if (artisanRecord) {
         await supabase
@@ -108,7 +108,7 @@ export async function POST(
           .eq('user_id', userId)
       }
 
-      // Étape 7 — Log d'audit
+      // Step 7 — Audit log
       completedSteps.push('audit_log')
       await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
     } catch (stepError) {
@@ -118,7 +118,7 @@ export async function POST(
         {
           success: false,
           error: {
-            message: `Suppression partielle — étape échouée: ${failedStep}`,
+            message: `Partial deletion — failed step: ${failedStep}`,
             completedSteps,
           },
         },
@@ -128,12 +128,12 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: 'Données utilisateur anonymisées conformément au RGPD',
+      message: 'User data anonymized in compliance with GDPR',
     })
   } catch (error) {
     logger.error('Admin GDPR delete error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

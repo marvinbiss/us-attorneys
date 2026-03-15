@@ -28,7 +28,7 @@ export function AttorneyAbout({ artisan }: AttorneyAboutProps) {
           <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
             <User className="w-4.5 h-4.5 text-clay-400" />
           </div>
-          &Agrave; propos
+          About
         </h2>
       </div>
 
@@ -54,7 +54,7 @@ export function AttorneyAbout({ artisan }: AttorneyAboutProps) {
               aria-controls="about-description"
               className="mt-2 text-clay-400 font-medium text-sm flex items-center gap-1 hover:text-clay-600 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 rounded transition-colors"
             >
-              {expanded ? 'Voir moins' : 'Voir plus'}
+              {expanded ? 'Show less' : 'Show more'}
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
             </button>
           )}

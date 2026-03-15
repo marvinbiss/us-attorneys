@@ -32,7 +32,7 @@ export async function POST(
     // Auth check
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     // Parse body
@@ -40,7 +40,7 @@ export async function POST(
     const result = refuseSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètre quote_id invalide', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid quote_id parameter', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -55,7 +55,7 @@ export async function POST(
       .single()
 
     if (leadError || !lead) {
-      return NextResponse.json({ success: false, error: { message: 'Demande non trouvée' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Request not found' } }, { status: 404 })
     }
 
     // Use admin client for write operations on quotes (providers-only RLS)
@@ -70,12 +70,12 @@ export async function POST(
       .single()
 
     if (quoteError || !quote) {
-      return NextResponse.json({ success: false, error: { message: 'Devis non trouvé pour cette demande' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Consultation not found pour cette demande' } }, { status: 404 })
     }
 
     if (quote.status !== 'pending') {
       return NextResponse.json(
-        { success: false, error: { message: `Ce devis ne peut plus être refusé (statut : ${quote.status})` } },
+        { success: false, error: { message: `This consultation can no longer be declined (status: ${quote.status})` } },
         { status: 409 }
       )
     }
@@ -88,7 +88,7 @@ export async function POST(
 
     if (refuseError) {
       logger.error('Refuse quote update error:', refuseError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors du refus du devis' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error declining the consultation' } }, { status: 500 })
     }
 
     // Log the refused event
@@ -100,10 +100,10 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: 'Devis refusé',
+      message: 'Consultation declined',
     })
   } catch (error) {
     logger.error('Refuse quote POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

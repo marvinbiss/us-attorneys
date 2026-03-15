@@ -104,7 +104,7 @@ export function ResponseTimeDisplay({
           sizeConfig.container,
           className
         )}
-        title={`Temps de réponse moyen: ${formatTime(avgResponseTimeHours)}`}
+        title={`Average response time: ${formatTime(avgResponseTimeHours)}`}
       >
         <Icon className={cn(sizeConfig.icon, speedConfig.color)} />
         <span className={cn(sizeConfig.text, speedConfig.color, 'font-medium')}>
@@ -121,12 +121,12 @@ export function ResponseTimeDisplay({
         <div className="flex items-center gap-1">
           <Icon className={cn('w-4 h-4', speedConfig.color)} />
           <span className="text-sm text-gray-600 dark:text-gray-400">
-            Répond en ~{formatTime(avgResponseTimeHours)}
+            Responds in ~{formatTime(avgResponseTimeHours)}
           </span>
         </div>
         {responseRate >= 90 && (
           <span className="text-sm text-green-600 font-medium">
-            {responseRate}% de réponse
+            {responseRate}% response rate
           </span>
         )}
       </div>
@@ -138,7 +138,7 @@ export function ResponseTimeDisplay({
     <div className={cn('p-4 rounded-lg border bg-white dark:bg-gray-800', className)}>
       <div className="flex items-center justify-between mb-4">
         <h4 className="font-medium text-gray-900 dark:text-white">
-          Réactivité aux avis
+          Review responsiveness
         </h4>
         <div
           className={cn(
@@ -160,7 +160,7 @@ export function ResponseTimeDisplay({
         <div>
           <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mb-1">
             <Clock className="w-4 h-4" />
-            Temps moyen
+            Avg. time
           </div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
             {formatTime(avgResponseTimeHours)}
@@ -171,7 +171,7 @@ export function ResponseTimeDisplay({
         <div>
           <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mb-1">
             <TrendingUp className="w-4 h-4" />
-            Taux de réponse
+            Response rate
           </div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
             {responseRate}%
@@ -197,7 +197,7 @@ export function ResponseTimeDisplay({
       {/* Review count */}
       {totalReviews !== undefined && reviewsWithResponse !== undefined && (
         <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-          {reviewsWithResponse} réponses sur {totalReviews} avis
+          {reviewsWithResponse} responses out of {totalReviews} reviews
         </p>
       )}
     </div>

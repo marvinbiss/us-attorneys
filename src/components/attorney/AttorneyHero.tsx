@@ -39,7 +39,7 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
       role="banner"
-      aria-label={`Profil de ${displayName}`}
+      aria-label={`${displayName}'s profile`}
     >
       {/* Premium gradient accent bar */}
       <div className="h-1.5 bg-gradient-to-r from-clay-400 via-clay-300 to-clay-500" />
@@ -82,8 +82,8 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
                 <Link
                   href="/verification-process"
                   className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-br from-clay-400 to-clay-600 text-white p-1.5 rounded-full shadow-lg ring-2 ring-white hover:ring-clay-200 transition-all"
-                  aria-label="Artisan vérifié - voir le processus de vérification"
-                  title="Voir notre processus de vérification"
+                  aria-label="Verified attorney - view verification process"
+                  title="View our verification process"
                 >
                   <CheckCircle className="w-5 h-5" aria-hidden="true" />
                 </Link>
@@ -92,7 +92,7 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
               {artisan.team_size && artisan.team_size > 1 && (
                 <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 bg-white px-2.5 py-0.5 rounded-full shadow-md border border-stone-200 text-xs font-medium text-slate-700 whitespace-nowrap">
                   <Users className="w-3 h-3 text-clay-400" aria-hidden="true" />
-                  Équipe de {artisan.team_size}
+                  Team of {artisan.team_size}
                 </div>
               )}
             </div>
@@ -101,14 +101,14 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
           {/* Info */}
           <div className="flex-1 min-w-0">
             {/* Top Badges Row */}
-            <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges et certifications">
+            <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges and certifications">
               <VerificationLevelBadge level={verificationLevel} size="sm" />
             </div>
 
             {/* Name & Specialty */}
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight">
               {displayName}
-              <span className="sr-only"> — {artisan.specialty} à {artisan.city}</span>
+              <span className="sr-only"> — {artisan.specialty} in {artisan.city}</span>
             </h1>
             <p className="text-lg text-slate-600 mb-3 font-medium">{artisan.specialty}</p>
 
@@ -119,7 +119,7 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
               {artisan.intervention_radius_km && (
                 <>
                   <span className="text-slate-300" aria-hidden="true">•</span>
-                  <span className="text-slate-400">Rayon : {artisan.intervention_radius_km} km</span>
+                  <span className="text-slate-400">Radius: {artisan.intervention_radius_km} mi</span>
                 </>
               )}
             </div>
@@ -138,10 +138,10 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
                   }
                 }}
                 className="inline-flex items-center gap-2 text-clay-400 hover:text-clay-600 font-medium mb-4 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 rounded"
-                aria-label={showPhone ? `Appeler au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
+                aria-label={showPhone ? `Call ${artisan.phone}` : 'Show phone number'}
               >
                 <Phone className="w-4 h-4" />
-                <span>{showPhone ? artisan.phone : 'Afficher le numéro'}</span>
+                <span>{showPhone ? artisan.phone : 'Show number'}</span>
               </button>
             )}
 
@@ -154,18 +154,18 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
 
             {/* Rating & Stats Row */}
             <div className="flex items-center gap-4 flex-wrap">
-              <div className="flex items-center gap-2" role="group" aria-label="Note moyenne">
+              <div className="flex items-center gap-2" role="group" aria-label="Average rating">
                 {artisan.average_rating !== null && artisan.average_rating > 0 && (
                   <div className="flex items-center gap-1.5 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
                     <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
-                    <span className="font-bold text-gray-900" aria-label={`Note de ${artisan.average_rating.toFixed(1)} sur 5`}>
+                    <span className="font-bold text-gray-900" aria-label={`Rating ${artisan.average_rating.toFixed(1)} out of 5`}>
                       {artisan.average_rating.toFixed(1)}
                     </span>
                   </div>
                 )}
                 {artisan.review_count > 0 && (
-                  <a href="#reviews" className="text-slate-600 hover:text-clay-600 transition-colors duration-200" aria-label={`${artisan.review_count} avis clients`}>
-                    ({artisan.review_count} avis)
+                  <a href="#reviews" className="text-slate-600 hover:text-clay-600 transition-colors duration-200" aria-label={`${artisan.review_count} client reviews`}>
+                    ({artisan.review_count} reviews)
                   </a>
                 )}
               </div>
@@ -173,21 +173,21 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
               {artisan.team_size && artisan.team_size > 1 && (
                 <div className="flex items-center gap-1.5 text-slate-600">
                   <Users className="w-4 h-4 text-slate-400" aria-hidden="true" />
-                  <span>Équipe de {artisan.team_size}</span>
+                  <span>Team of {artisan.team_size}</span>
                 </div>
               )}
 
               {artisan.member_since && (
                 <div className="flex items-center gap-1.5 text-slate-600">
                   <CalendarCheck className="w-4 h-4 text-slate-400" aria-hidden="true" />
-                  <span>Inscrit depuis {artisan.member_since}</span>
+                  <span>Member since {artisan.member_since}</span>
                 </div>
               )}
 
               {artisan.updated_at && (
                 <div className="flex items-center gap-1.5 text-sm text-slate-500">
                   <Clock className="w-4 h-4 text-clay-400" />
-                  <span>Mis à jour {new Date(artisan.updated_at).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}</span>
+                  <span>Updated {new Date(artisan.updated_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                 </div>
               )}
             </div>
@@ -201,7 +201,7 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-clay-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-clay-500" />
                     </span>
-                    Profil actif
+                    Active profile
                   </span>
                 )}
               </div>

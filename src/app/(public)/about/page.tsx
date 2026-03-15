@@ -14,8 +14,8 @@ import { teamMembers, getAllAuthors } from '@/lib/data/team'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'À propos de ServicesArtisans',
-  description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+  title: 'About USAttorneys',
+  description: 'USAttorneys lists thousands of attorneys using public bar records. Free, transparent, and reliable attorney directory.',
   alternates: {
     canonical: `${SITE_URL}/about`,
   },
@@ -27,16 +27,16 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'À propos — Annuaire d\'artisans en France',
-    description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+    title: 'About — Attorney Directory in the United States',
+    description: 'USAttorneys lists thousands of attorneys using public bar records. Free, transparent, and reliable attorney directory.',
     url: `${SITE_URL}/about`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Attorney Directory' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'À propos — Annuaire d\'artisans en France',
-    description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement.',
+    title: 'About — Attorney Directory in the United States',
+    description: 'USAttorneys lists thousands of attorneys using public bar records.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -106,42 +106,42 @@ async function getStats() {
 const verificationSteps = [
   {
     icon: Database,
-    title: 'Données SIREN officielles',
-    description: 'Chaque artisan provient de l\'API Annuaire des Entreprises du gouvernement. Numéro SIREN, activité et adresse sont issus des données publiques officielles.',
+    title: 'Official bar records',
+    description: 'Every attorney is sourced from state bar association public records. Bar number, practice areas, and office address are verified against official data.',
   },
   {
     icon: Shield,
-    title: 'Assurance RC professionnelle',
-    description: 'Nous demandons une attestation d\'assurance responsabilité civile professionnelle en cours de validité.',
+    title: 'Malpractice insurance',
+    description: 'We verify that attorneys carry active professional liability (malpractice) insurance coverage.',
   },
   {
     icon: Lock,
-    title: 'Garantie décennale',
-    description: 'Pour les métiers du bâtiment concernés, la garantie décennale est contrôlée avant toute mise en ligne.',
+    title: 'Bar standing verification',
+    description: 'Active bar membership and good standing status are verified before any attorney profile is listed.',
   },
   {
     icon: Eye,
-    title: 'Avis authentiques',
-    description: 'Seuls les clients ayant fait appel à un artisan via la plateforme peuvent laisser un avis.',
+    title: 'Authentic reviews',
+    description: 'Only clients who have engaged an attorney through the platform can leave a review.',
   },
 ]
 
 const commitments = [
   {
-    title: 'Zéro information inventée',
-    description: 'Toutes les données proviennent des registres officiels SIREN. Aucun profil inventé sur la plateforme.',
+    title: 'Zero fabricated information',
+    description: 'All data comes from official state bar records. No fabricated profiles on the platform.',
   },
   {
-    title: 'Données protégées',
-    description: 'Conformité RGPD, données hébergées en Europe, DPO joignable à dpo@us-attorneys.com.',
+    title: 'Data protection',
+    description: 'Full compliance with data privacy laws, secure hosting, privacy officer reachable at privacy@us-attorneys.com.',
   },
   {
-    title: 'Transparence tarifaire',
-    description: 'Service entièrement gratuit pour tous les utilisateurs, particuliers comme artisans.',
+    title: 'Fee transparency',
+    description: 'Completely free service for all users, both clients and attorneys.',
   },
   {
-    title: 'Pas de revente de données',
-    description: 'Vos données personnelles ne sont jamais vendues à des tiers. Jamais.',
+    title: 'No data resale',
+    description: 'Your personal data is never sold to third parties. Ever.',
   },
 ]
 
@@ -157,7 +157,7 @@ export default async function AProposPage() {
         ])} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <Breadcrumb items={[{ label: 'À propos' }]} className="mb-4" />
+            <Breadcrumb items={[{ label: 'About' }]} className="mb-4" />
             <h1 className="font-heading text-3xl font-bold text-gray-900">
               {cmsPage.title}
             </h1>
@@ -174,7 +174,7 @@ export default async function AProposPage() {
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">
-              Notre équipe
+              Our team
             </h2>
             {(() => {
               const editorial = teamMembers[0]
@@ -211,8 +211,8 @@ export default async function AProposPage() {
 
   const orgSchema = getOrganizationSchema()
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'À propos', url: '/about' },
+    { name: 'Home', url: '/' },
+    { name: 'About', url: '/about' },
   ])
 
   return (
@@ -233,17 +233,17 @@ export default async function AProposPage() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
-            items={[{ label: 'À propos' }]}
+            items={[{ label: 'About' }]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <div className="text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-            Annuaire des artisans de France
+            US Attorney Directory
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Nous avons construit un annuaire d&apos;artisans en France
-            en exploitant les donn&eacute;es ouvertes du gouvernement.
-            {stats.attorneyCount > 0 ? ` ${stats.attorneyCount.toLocaleString('fr-FR')}+ professionnels référencés,` : ' Des milliers de professionnels référencés,'} accessibles gratuitement.
+            We built an attorney directory for the United States
+            using public bar association records.
+            {stats.attorneyCount > 0 ? ` ${stats.attorneyCount.toLocaleString('en-US')}+ verified professionals,` : ' Thousands of verified professionals,'} accessible for free.
           </p>
           </div>
         </div>
@@ -254,11 +254,11 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Comment nous référençons les artisans
+              How we verify attorneys
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Chaque artisan référencé sur la plateforme passe par un processus
-              de vérification en plusieurs étapes.
+              Every attorney listed on the platform goes through a multi-step
+              verification process.
             </p>
           </div>
 
@@ -297,37 +297,37 @@ export default async function AProposPage() {
                 />
               </div>
               <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Notre technologie</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Our technology</h2>
               <div className="space-y-4 text-gray-600">
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">1</span>
                   </div>
-                  <p>Données artisans issues de l&apos;<strong>API Annuaire des Entreprises</strong> du gouvernement (données ouvertes SIREN).</p>
+                  <p>Attorney data sourced from <strong>state bar association</strong> public records and verified databases.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">2</span>
                   </div>
-                  <p>Plateforme construite avec <strong>Next.js</strong> pour des performances optimales et un référencement naturel de qualité.</p>
+                  <p>Platform built with <strong>Next.js</strong> for optimal performance and search engine visibility.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">3</span>
                   </div>
-                  <p>Données hébergées en Europe via <strong>Supabase</strong> (PostgreSQL).</p>
+                  <p>Data securely hosted via <strong>Supabase</strong> (PostgreSQL).</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">4</span>
                   </div>
-                  <p>Paiements sécurisés via <strong>Stripe</strong>, certifié PCI-DSS.</p>
+                  <p>Secure payments via <strong>Stripe</strong>, PCI-DSS certified.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">5</span>
                   </div>
-                  <p>Monitoring et gestion des erreurs via <strong>Sentry</strong>.</p>
+                  <p>Monitoring and error management via <strong>Sentry</strong>.</p>
                 </div>
               </div>
               </div>
@@ -348,27 +348,27 @@ export default async function AProposPage() {
                 <div className="absolute inset-0 bg-gradient-to-b from-blue-600/60 to-blue-700/90" />
               </div>
               <div className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Notre modèle économique</h2>
+              <h2 className="text-2xl font-bold mb-6">Our business model</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold">Gratuit pour les particuliers</p>
-                    <p className="text-blue-100 text-sm">Recherche d&apos;artisans, demandes de devis, comparaison : tout est gratuit.</p>
+                    <p className="font-semibold">Free for clients</p>
+                    <p className="text-blue-100 text-sm">Search for attorneys, request consultations, compare: everything is free.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold">Gratuit pour les artisans</p>
-                    <p className="text-blue-100 text-sm">Les artisans peuvent créer leur profil et recevoir des demandes de devis gratuitement.</p>
+                    <p className="font-semibold">Free for attorneys</p>
+                    <p className="text-blue-100 text-sm">Attorneys can create their profile and receive consultation requests for free.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Lock className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold">Aucune revente de données</p>
-                    <p className="text-blue-100 text-sm">Vos données personnelles ne sont jamais vendues à des tiers.</p>
+                    <p className="font-semibold">No data resale</p>
+                    <p className="text-blue-100 text-sm">Your personal data is never sold to third parties.</p>
                   </div>
                 </div>
               </div>
@@ -384,27 +384,27 @@ export default async function AProposPage() {
           {hasArtisans ? (
             <>
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                L&apos;annuaire en chiffres
+                The directory in numbers
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto">
                 <div>
                   <div className="text-3xl font-bold text-blue-600">
-                    {stats.attorneyCount.toLocaleString('fr-FR')}
+                    {stats.attorneyCount.toLocaleString('en-US')}
                   </div>
-                  <div className="text-gray-600 mt-1">Artisans référencés</div>
+                  <div className="text-gray-600 mt-1">Verified attorneys</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-blue-600">
                     {stats.cityCount}
                   </div>
-                  <div className="text-gray-600 mt-1">Villes couvertes</div>
+                  <div className="text-gray-600 mt-1">Cities covered</div>
                 </div>
                 {stats.reviewCount > 0 && (
                   <div>
                     <div className="text-3xl font-bold text-blue-600">
-                      {stats.reviewCount.toLocaleString('fr-FR')}
+                      {stats.reviewCount.toLocaleString('en-US')}
                     </div>
-                    <div className="text-gray-600 mt-1">Avis authentiques</div>
+                    <div className="text-gray-600 mt-1">Authentic reviews</div>
                   </div>
                 )}
               </div>
@@ -413,18 +413,18 @@ export default async function AProposPage() {
             <div className="max-w-xl mx-auto">
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                  Annuaire en cours de constitution
+                  Directory under construction
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Nous importons les données de l&apos;API Annuaire des Entreprises pour constituer
-                  le plus grand répertoire d&apos;artisans de France. Les premiers professionnels
-                  référencés seront bientôt accessibles.
+                  We are importing data from state bar association records to build
+                  the most comprehensive attorney directory in the US. The first verified professionals
+                  will be accessible soon.
                 </p>
                 <Link
                   href="/register-attorney"
                   className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
-                  Devenir artisan partenaire
+                  Join as an attorney partner
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -438,10 +438,10 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Nos engagements
+              Our commitments
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Des engagements concrets et vérifiables.
+              Concrete and verifiable commitments.
             </p>
           </div>
 
@@ -461,7 +461,7 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              En savoir plus sur nos engagements
+              Learn more about our commitments
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <Link
@@ -469,10 +469,10 @@ export default async function AProposPage() {
                 className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  Processus de vérification
+                  Verification process
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Détails sur la vérification SIRET, assurances et suivi continu des artisans.
+                  Details on bar verification, insurance, and ongoing attorney monitoring.
                 </p>
               </Link>
               <Link
@@ -480,10 +480,10 @@ export default async function AProposPage() {
                 className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  Politique d'avis
+                  Review policy
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Notre politique de collecte, modération et publication des avis clients.
+                  Our policy for collecting, moderating, and publishing client reviews.
                 </p>
               </Link>
               <Link
@@ -491,10 +491,10 @@ export default async function AProposPage() {
                 className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  Résolution des litiges
+                  Dispute resolution
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Processus de réclamation et médiation en cas de différend.
+                  Claims process and mediation in case of disputes.
                 </p>
               </Link>
               <Link
@@ -502,10 +502,10 @@ export default async function AProposPage() {
                 className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  Mentions légales
+                  Legal notices
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Informations juridiques, éditeur et hébergeur du site.
+                  Legal information, publisher, and site hosting details.
                 </p>
               </Link>
               <Link
@@ -516,7 +516,7 @@ export default async function AProposPage() {
                   Contact
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Une question ? Contactez notre équipe.
+                  Have a question? Contact our team.
                 </p>
               </Link>
             </div>
@@ -529,10 +529,10 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Notre équipe
+              Our team
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Les experts derrière nos contenus et notre plateforme.
+              The experts behind our content and platform.
             </p>
           </div>
 
@@ -592,7 +592,7 @@ export default async function AProposPage() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">{author.yearsExperience} ans d&apos;expérience</p>
+                  <p className="text-xs text-gray-400 mt-2">{author.yearsExperience} years of experience</p>
                 </div>
               )
             })}
@@ -604,16 +604,16 @@ export default async function AProposPage() {
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Une question ?
+            Have a question?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Contactez-nous à <strong>{companyIdentity.email}</strong> ou via notre page de contact.
+            Contact us at <strong>{companyIdentity.email}</strong> or through our contact page.
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
           >
-            Nous contacter
+            Contact us
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

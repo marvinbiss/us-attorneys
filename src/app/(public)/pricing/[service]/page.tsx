@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
+import { ArrowRight, CheckCircle, DollarSign, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema, getHowToSchema } from '@/lib/seo/jsonld'
@@ -33,14 +33,14 @@ const ExitIntentPopup = dynamic(
 const tradeSlugs = getTradesSlugs()
 
 const REGIONAL_PRICING = [
-  { region: 'Île-de-France', multiplier: 1.25, label: 'Paris et banlieue' },
-  { region: 'PACA', multiplier: 1.10, label: "Côte d'Azur et Provence" },
-  { region: 'Auvergne-Rhône-Alpes', multiplier: 1.10, label: 'Lyon, Grenoble, Annecy' },
-  { region: 'Occitanie', multiplier: 1.05, label: 'Toulouse, Montpellier' },
-  { region: 'Nouvelle-Aquitaine', multiplier: 1.00, label: 'Bordeaux, Limoges' },
-  { region: 'Hauts-de-France', multiplier: 0.95, label: 'Lille, Amiens' },
-  { region: 'Grand Est', multiplier: 0.95, label: 'Strasbourg, Metz' },
-  { region: 'Bretagne', multiplier: 1.00, label: 'Rennes, Brest' },
+  { region: 'Northeast', multiplier: 1.25, label: 'New York, Boston, DC' },
+  { region: 'West Coast', multiplier: 1.20, label: 'Los Angeles, San Francisco, Seattle' },
+  { region: 'Southeast', multiplier: 0.95, label: 'Atlanta, Miami, Charlotte' },
+  { region: 'Midwest', multiplier: 0.90, label: 'Chicago, Detroit, Minneapolis' },
+  { region: 'Southwest', multiplier: 1.00, label: 'Dallas, Houston, Phoenix' },
+  { region: 'Mountain', multiplier: 0.95, label: 'Denver, Salt Lake City' },
+  { region: 'Pacific NW', multiplier: 1.05, label: 'Portland, Seattle' },
+  { region: 'South Central', multiplier: 0.90, label: 'Nashville, New Orleans' },
 ]
 
 export function generateStaticParams() {
@@ -64,21 +64,21 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const titleHash = Math.abs(hashCode(`tarif-title-${service}`))
   const titleTemplates = [
-    `Prix ${tradeLower} 2026 — Tarifs détaillés`,
-    `Prix ${tradeLower} 2026 : guide complet`,
-    `Tarif ${tradeLower} 2026 : grille des prix`,
-    `Prix ${tradeLower} : combien ça coûte ?`,
-    `Tarifs ${tradeLower} 2026 — Barème et devis`,
+    `${tradeLower} fees 2026 — Detailed rates`,
+    `${tradeLower} fees 2026: complete guide`,
+    `${tradeLower} rates 2026: fee schedule`,
+    `${tradeLower} fees: how much does it cost?`,
+    `${tradeLower} rates 2026 — Schedule and quotes`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}`))
   const descTemplates = [
-    `Tarifs ${tradeLower} 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Prix détaillés par prestation, comparatif régional. Devis gratuit.`,
-    `Prix ${tradeLower} en 2026 : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Grille tarifaire complète et devis en ligne.`,
-    `Combien coûte un ${tradeLower} ? ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} en 2026. Tarifs par région et devis gratuit.`,
-    `Guide des tarifs ${tradeLower} 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparez les prix et demandez un devis.`,
-    `Tarifs ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Prix par prestation, variations régionales. Devis gratuit.`,
+    `${tradeLower} fees 2026: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Detailed rates by service, regional comparison. Free consultation.`,
+    `${tradeLower} rates in 2026: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Complete fee schedule and online consultation.`,
+    `How much does a ${tradeLower} cost? ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} in 2026. Rates by region and free consultation.`,
+    `${tradeLower} fee guide 2026: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Compare rates and request a consultation.`,
+    `${tradeLower} fees: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Rates by service, regional variations. Free consultation.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -89,13 +89,13 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     description,
     alternates: { canonical: `${SITE_URL}/pricing/${service}` },
     openGraph: {
-      locale: 'fr_FR',
+      locale: 'en_US',
       title,
       description,
       url: `${SITE_URL}/pricing/${service}`,
       type: 'website',
-      siteName: 'ServicesArtisans',
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Tarifs ${trade.name}` }],
+      siteName: 'USAttorneys',
+      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} fees` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -138,9 +138,9 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   if (!trade) notFound()
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Tarifs artisans', url: '/pricing' },
-    { name: `Tarifs ${trade.name.toLowerCase()}`, url: `/pricing/${service}` },
+    { name: 'Home', url: '/' },
+    { name: 'Attorney Fees', url: '/pricing' },
+    { name: `${trade.name} fees`, url: `/pricing/${service}` },
   ])
 
   const faqSchema = getFAQSchema(
@@ -155,21 +155,21 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${trade.name} en France`,
-    description: `Guide des tarifs ${trade.name.toLowerCase()} 2026. Prix horaire, tarifs par prestation et variations régionales.`,
+    name: `${trade.name} in the United States`,
+    description: `${trade.name} fee guide 2026. Hourly rates, fees by service, and regional variations.`,
     dateModified,
     provider: {
       '@type': 'Organization',
-      name: 'ServicesArtisans',
+      name: 'USAttorneys',
       url: SITE_URL,
     },
     areaServed: {
       '@type': 'Country',
-      name: 'France',
+      name: 'United States',
     },
     offers: {
       '@type': 'AggregateOffer',
-      priceCurrency: 'EUR',
+      priceCurrency: 'USD',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
       offerCount: trade.commonTasks.length,
@@ -185,8 +185,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   const pricingItemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `Tarifs ${trade.name} en France`,
-    description: `Liste des prestations et prix indicatifs pour ${trade.name}`,
+    name: `${trade.name} Fees in the United States`,
+    description: `List of services and indicative rates for ${trade.name}`,
     numberOfItems: trade.commonTasks.length,
     itemListElement: trade.commonTasks.map((task, i) => {
       const parts = task.split(':')
@@ -203,7 +203,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             priceSpecification: {
               '@type': 'PriceSpecification',
               price: priceMatch[1],
-              priceCurrency: 'EUR',
+              priceCurrency: 'USD',
             }
           } : {}),
           description: task,
@@ -217,10 +217,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   const pricingSchema = getServicePricingSchema({
     specialtyName: trade.name,
     specialtySlug: service,
-    description: `Tarifs ${trade.name} en France : ${trade.priceRange.min}-${trade.priceRange.max} ${trade.priceRange.unit}. Grille tarifaire complète et prix des interventions courantes.`,
+    description: `${trade.name} fees in the United States: ${trade.priceRange.min}-${trade.priceRange.max} ${trade.priceRange.unit}. Complete fee schedule and common service rates.`,
     lowPrice: trade.priceRange.min,
     highPrice: trade.priceRange.max,
-    priceCurrency: 'EUR',
+    priceCurrency: 'USD',
     priceUnit: trade.priceRange.unit,
     offerCount: trade.commonTasks.length,
     url: `${SITE_URL}/pricing/${service}`,
@@ -229,15 +229,15 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `Tarifs ${trade.name} par ville`,
-    description: `Guide des tarifs ${trade.name.toLowerCase()} 2026 par ville. Prix horaire : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    name: `${trade.name} Fees by City`,
+    description: `${trade.name} fee guide 2026 by city. Hourly rate: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/pricing/${service}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: topCities.map((ville, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        name: `Tarifs ${trade.name.toLowerCase()} à ${ville.name}`,
+        name: `${trade.name} fees in ${ville.name}`,
         url: `${SITE_URL}/practice-areas/${service}/${ville.slug}`,
       })),
     },
@@ -245,32 +245,32 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
 
   const speakableSchema = getSpeakableSchema({
     url: `${SITE_URL}/pricing/${service}`,
-    title: `Tarifs ${trade.name.toLowerCase()} en France`,
+    title: `${trade.name} fees in the United States`,
   })
 
   const tradeLowerHowTo = trade.name.toLowerCase()
   const howToSchema = getHowToSchema(
     [
       {
-        name: 'Comparer les tarifs moyens',
-        text: `Consultez notre grille tarifaire pour connaître les prix moyens d'un ${tradeLowerHowTo} en France : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+        name: 'Compare average fees',
+        text: `Review our fee schedule to learn the average rates for a ${tradeLowerHowTo} in the United States: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}.`,
       },
       {
-        name: 'Vérifier les qualifications',
-        text: `Assurez-vous que le ${tradeLowerHowTo} possède un numéro SIRET valide et les certifications requises${trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''}.`,
+        name: 'Verify qualifications',
+        text: `Make sure the ${tradeLowerHowTo} has a valid bar number and the required certifications${trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''}.`,
       },
       {
-        name: 'Demander plusieurs devis',
-        text: `Comparez au moins 3 devis détaillés de ${tradeLowerHowTo}s différents. Vérifiez que chaque devis inclut le détail des fournitures, la main-d'œuvre et les éventuels frais de déplacement.`,
+        name: 'Request multiple consultations',
+        text: `Compare at least 3 detailed quotes from different ${tradeLowerHowTo}s. Verify that each quote includes a breakdown of services, hourly rates, and any additional fees.`,
       },
       {
-        name: 'Choisir le meilleur rapport qualité-prix',
-        text: `Ne choisissez pas uniquement le moins cher. Privilégiez un ${tradeLowerHowTo} avec de bons avis clients, une assurance décennale à jour et un devis clair et détaillé.`,
+        name: 'Choose the best value',
+        text: `Don't just pick the cheapest option. Look for a ${tradeLowerHowTo} with good client reviews, up-to-date malpractice insurance, and a clear, detailed fee agreement.`,
       },
     ],
     {
-      name: `Comment trouver un ${tradeLowerHowTo} au meilleur prix`,
-      description: `Guide étape par étape pour comparer les tarifs et choisir un ${tradeLowerHowTo} qualifié au meilleur rapport qualité-prix en France.`,
+      name: `How to find a ${tradeLowerHowTo} at the best rate`,
+      description: `Step-by-step guide to comparing fees and choosing a qualified ${tradeLowerHowTo} with the best value in the United States.`,
     }
   )
 
@@ -295,8 +295,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
             items={[
-              { label: 'Tarifs artisans', href: '/pricing' },
-              { label: `Tarifs ${trade.name.toLowerCase()}` },
+              { label: 'Attorney Fees', href: '/pricing' },
+              { label: `${trade.name} fees` },
             ]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
@@ -306,22 +306,22 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                 const h1Hash = Math.abs(hashCode(`tarif-h1-${service}`))
                 const tradeLower = trade.name.toLowerCase()
                 const h1Templates = [
-                  `Tarifs ${tradeLower} 2026`,
-                  `Prix ${tradeLower} : guide complet 2026`,
-                  `Combien coûte un ${tradeLower} ?`,
-                  `Guide des tarifs ${tradeLower} en 2026`,
-                  `Tarifs et prix d'un ${tradeLower}`,
+                  `${tradeLower} fees 2026`,
+                  `${tradeLower} rates: complete guide 2026`,
+                  `How much does a ${tradeLower} cost?`,
+                  `${tradeLower} fee guide 2026`,
+                  `${tradeLower} rates and pricing`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Guide complet des prix {trade.name.toLowerCase()} en France.
-              Tarif horaire : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
+              Complete {trade.name.toLowerCase()} fee guide in the United States.
+              Hourly rate: {trade.priceRange.min} to {trade.priceRange.max} {trade.priceRange.unit}.
             </p>
-            <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-slate-500 mb-4" />
+            <LastUpdated label="Fees verified and updated on" className="justify-center text-slate-500 mb-4" />
             <p className="text-sm text-slate-500">
-              Tarifs vérifiés par{' '}
+              Fees verified by{' '}
               <Link href="/about" className="underline hover:text-white transition-colors">
                 {author.name}
               </Link>
@@ -329,12 +329,12 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
-                <Euro className="w-4 h-4 text-amber-400" />
-                <span>Prix actualisés 2026</span>
+                <DollarSign className="w-4 h-4 text-amber-400" />
+                <span>Updated 2026 rates</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <TrendingUp className="w-4 h-4 text-amber-400" />
-                <span>{trade.commonTasks.length} prestations détaillées</span>
+                <span>{trade.commonTasks.length} services detailed</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Clock className="w-4 h-4 text-amber-400" />
@@ -351,7 +351,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">Tarif horaire moyen</h2>
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">Average hourly rate</h2>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
                 {trade.priceRange.min} — {trade.priceRange.max}
@@ -359,16 +359,16 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse
+              Average rate observed across the United States, service fees included
             </p>
           </div>
 
           <SpeakableAnswerBox
-            answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join('. ')}. Prix constatés auprès de 940 000+ artisans référencés.`}
+            answer={`${trade.name} fees in the United States: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join('. ')}. Rates verified across 1,300,000+ licensed attorneys.`}
           />
 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Détail des prestations courantes
+            Common service details
           </h2>
           <PriceTableHTML
             tasks={trade.commonTasks}
@@ -379,46 +379,46 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      {/* Questions fréquentes — PAA optimisé */}
+      {/* Frequently asked — PAA optimized */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <h2 className="text-xl font-heading font-semibold text-gray-900">
-            Combien coûte un {trade.name.toLowerCase()} en France ?
+            How much does a {trade.name.toLowerCase()} cost in the United States?
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            Le tarif horaire moyen d&apos;un {trade.name.toLowerCase()} en France se situe entre {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}.
-            Ce prix varie selon la région, la complexité de l&apos;intervention et les matériaux nécessaires.
-            En Île-de-France, comptez une majoration de 20 à 25 % par rapport à la moyenne nationale.
+            The average hourly rate for a {trade.name.toLowerCase()} in the United States ranges from {trade.priceRange.min} to {trade.priceRange.max} {trade.priceRange.unit}.
+            This rate varies by region, case complexity, and the attorney&apos;s experience level.
+            In major metro areas like New York and Los Angeles, expect rates 20 to 25% above the national average.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-gray-900">
-            Comment choisir son {trade.name.toLowerCase()} ?
+            How to choose your {trade.name.toLowerCase()}?
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            Pour bien choisir votre {trade.name.toLowerCase()}, vérifiez son numéro SIRET sur le site de l&apos;INSEE,
-            demandez une copie de son assurance décennale et comparez au moins 3 devis détaillés.
-            Privilégiez les artisans certifiés{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez les avis clients en ligne.
+            To choose the right {trade.name.toLowerCase()}, verify their bar number with the state bar association,
+            request proof of malpractice insurance, and compare at least 3 detailed fee agreements.
+            Look for attorneys with relevant certifications{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} and check client reviews online.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-gray-900">
-            Quels sont les tarifs moyens d&apos;un {trade.name.toLowerCase()} ?
+            What are the average fees for a {trade.name.toLowerCase()}?
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            Les tarifs d&apos;un {trade.name.toLowerCase()} dépendent du type de prestation.
-            Pour les interventions courantes : {trade.commonTasks.slice(0, 2).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
-            Le tarif horaire de base est de {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}, hors fournitures et déplacement.
+            Fees for a {trade.name.toLowerCase()} depend on the type of service.
+            Common services include: {trade.commonTasks.slice(0, 2).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
+            The base hourly rate is {trade.priceRange.min} to {trade.priceRange.max} {trade.priceRange.unit}, excluding court fees and filing costs.
           </p>
         </div>
       </section>
 
-      {/* Liens vers les pages par travail et ville */}
+      {/* Links to service and city pages */}
       <section className="py-16 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            Prix détaillés par prestation et par ville
+            Detailed rates by service and city
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Découvrez les tarifs précis pour chaque type d&apos;intervention dans les principales cities de France.
+            Discover precise rates for each type of service in major cities across the United States.
           </p>
           <div className="space-y-6">
             {trade.commonTasks.slice(0, 8).map((task) => {
@@ -434,7 +434,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                         href={`/pricing/${service}/${ville.slug}/${taskSlug}`}
                         className="text-xs text-blue-700 hover:text-blue-900 hover:underline bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
                       >
-                        Prix {taskName.toLowerCase()} à {ville.name} →
+                        {taskName} in {ville.name} →
                       </Link>
                     ))}
                   </div>
@@ -449,10 +449,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            Variation des tarifs par région
+            Fee variations by region
           </h3>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Les prix {trade.name.toLowerCase()} varient selon la région. Voici une estimation ajustée.
+            {trade.name} rates vary by region. Here is an adjusted estimate.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {REGIONAL_PRICING.map((r) => {
@@ -483,7 +483,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                     {adjustedMin} — {adjustedMax} <span className="text-sm font-normal text-gray-500">{trade.priceRange.unit}</span>
                   </div>
                   <span className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${badgeColor}`}>
-                    {pct === 0 ? 'Moyenne nationale' : `${sign}${pct} % vs moyenne`}
+                    {pct === 0 ? 'National average' : `${sign}${pct}% vs average`}
                   </span>
                 </div>
               )
@@ -492,11 +492,11 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      {/* Conseils */}
+      {/* Tips */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Conseils pour choisir un {trade.name.toLowerCase()}
+            Tips for choosing a {trade.name.toLowerCase()}
           </h2>
           <div className="space-y-4">
             {trade.tips.map((tip, i) => (
@@ -516,10 +516,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Certifications et qualifications
+              Certifications and qualifications
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              Vérifiez que votre {trade.name.toLowerCase()} possède les certifications adaptées à votre projet.
+              Verify that your {trade.name.toLowerCase()} holds the certifications relevant to your case.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -537,7 +537,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fréquentes — {trade.name}
+            Frequently Asked Questions — {trade.name}
           </h2>
           <div className="space-y-4">
             {trade.faq.map((item, i) => (
@@ -559,7 +559,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Trouver un {trade.name.toLowerCase()} près de chez vous
+            Find a {trade.name.toLowerCase()} near you
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             {topCities.map((ville) => (
@@ -569,26 +569,26 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                 className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                  {trade.name} à {ville.name}
+                  {trade.name} in {ville.name}
                 </div>
               </Link>
             ))}
           </div>
           <div className="text-center mt-6">
             <Link href={`/practice-areas/${service}`} className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">
-              Voir tous les {trade.name.toLowerCase()}s
+              View all {trade.name.toLowerCase()} attorneys
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Urgence */}
+      {/* Emergency */}
       {trade.emergencyInfo && (
         <section className="py-16 bg-red-50 border-y border-red-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {trade.name} en urgence ?
+              Need an emergency {trade.name.toLowerCase()}?
             </h2>
             <p className="text-gray-700 mb-6 max-w-2xl mx-auto text-sm leading-relaxed">
               {trade.emergencyInfo}
@@ -597,7 +597,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               href={`/emergency/${service}`}
               className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors"
             >
-              {trade.name} urgence 24h/24
+              Emergency {trade.name.toLowerCase()} — 24/7
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -607,7 +607,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       {/* Other trades */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Tarifs d&apos;autres corps de métier</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Fees for other practice areas</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
@@ -634,24 +634,24 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Obtenez un devis précis pour votre projet
+            Get a precise quote for your case
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Les prix varient selon votre situation. Demandez un devis gratuit à un {trade.name.toLowerCase()} référencé.
+            Fees vary depending on your situation. Request a free consultation from a verified {trade.name.toLowerCase()}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href={`/quotes/${service}`}
               className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
-              Obtenir mon prix exact
+              Get my exact rate
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href={`/practice-areas/${service}`}
               className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
             >
-              Trouver un {trade.name.toLowerCase()}
+              Find a {trade.name.toLowerCase()}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -662,51 +662,51 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie tarifaire</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Fee methodology</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
+              The fees displayed are indicative ranges based on averages observed across the United States. They vary by region, case complexity, and urgency. Only a personalized consultation provides a binding quote. USAttorneys is an independent directory.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Voir aussi */}
+      {/* See also */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">See also</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">This service</h3>
               <div className="space-y-2">
-                <Link href={`/practice-areas/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} — tous les artisans</Link>
+                <Link href={`/practice-areas/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} — all attorneys</Link>
                 {trade.emergencyInfo && (
-                  <Link href={`/emergency/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} urgence</Link>
+                  <Link href={`/emergency/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} emergency</Link>
                 )}
                 {topCities.slice(0, 4).map((v) => (
                   <Link key={v.slug} href={`/practice-areas/${service}/${v.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                    {trade.name} à {v.name}
+                    {trade.name} in {v.name}
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Tarifs associés</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Related fees</h3>
               <div className="space-y-2">
                 {otherTrades.slice(0, 6).map((slug) => (
                   <Link key={slug} href={`/pricing/${slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                    Tarifs {tradeContent[slug].name.toLowerCase()}
+                    {tradeContent[slug].name} fees
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Helpful information</h3>
               <div className="space-y-2">
-                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
-                <Link href="/how-it-works" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
-                <Link href="/quotes" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Demander un devis</Link>
+                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Complete fee guide</Link>
+                <Link href="/how-it-works" className="block text-sm text-gray-600 hover:text-blue-600 py-1">How it works</Link>
+                <Link href="/quotes" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Request a consultation</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
-                <Link href="/verification-process" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Processus de vérification</Link>
+                <Link href="/verification-process" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Verification process</Link>
               </div>
             </div>
           </div>
@@ -717,17 +717,17 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
+            Trust &amp; Safety
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
-              Comment nous référençons les artisans
+              How we verify attorneys
             </Link>
             <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
-              Notre politique des avis
+              Our review policy
             </Link>
             <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
-              Service de médiation
+              Mediation service
             </Link>
           </nav>
         </div>
@@ -738,14 +738,14 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <EstimationWidget context={{
         metier: trade.name,
         metierSlug: service,
-        ville: 'France',
+        ville: 'United States',
         departement: '',
         pageUrl: `/pricing/${service}`,
       }} />
 
       <ExitIntentPopup
         sessionKey="sa:exit-tarifs"
-        description="Obtenez le prix exact pour votre projet — comparez jusqu'à 3 devis gratuits."
+        description="Get the exact rate for your case — compare up to 3 free consultations."
         ctaHref={`/quotes/${service}`}
       />
     </div>

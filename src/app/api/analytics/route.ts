@@ -5,7 +5,7 @@
  * Stores in analytics_events table for admin dashboard reporting
  *
  * Supported events:
- * - artisan_profile_view, phone_reveal, phone_click (artisan interactions)
+ * - artisan_profile_view, phone_reveal, phone_click (attorney interactions)
  * - page_view (page navigation tracking with visitor_id)
  */
 
@@ -90,9 +90,9 @@ export async function POST(request: Request) {
 
     const { event, properties, sessionId, visitorId } = validation.data
 
-    // For artisan-specific events, attorneyId is required
-    const ARTISAN_EVENTS = ['artisan_profile_view', 'phone_reveal', 'phone_click']
-    if (ARTISAN_EVENTS.includes(event) && !properties.attorneyId) {
+    // For attorney-specific events, attorneyId is required
+    const ATTORNEY_EVENTS = ['artisan_profile_view', 'phone_reveal', 'phone_click']
+    if (ATTORNEY_EVENTS.includes(event) && !properties.attorneyId) {
       return new NextResponse(null, { status: 400 })
     }
 

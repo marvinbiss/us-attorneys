@@ -30,9 +30,9 @@ function formatCreationDate(dateStr: string): string {
   try {
     const date = new Date(dateStr)
     if (isNaN(date.getTime())) return dateStr
-    return date.toLocaleDateString('fr-FR', {
-      day: 'numeric',
+    return date.toLocaleDateString('en-US', {
       month: 'long',
+      day: 'numeric',
       year: 'numeric',
     })
   } catch {
@@ -54,9 +54,9 @@ function getYearsSinceCreation(dateStr: string): number | null {
 
 /** Format employee / team size to a readable label */
 function formatTeamSize(size: number): string {
-  if (size === 0) return 'Indépendant'
-  if (size === 1) return '1 salarié'
-  return `${size} salariés`
+  if (size === 0) return 'Solo practitioner'
+  if (size === 1) return '1 employee'
+  return `${size} employees`
 }
 
 export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
@@ -92,17 +92,17 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900 font-heading">
-                Fiche entreprise
+                Business profile
               </h3>
               <p className="text-sm text-slate-500">
-                Donn&eacute;es v&eacute;rifi&eacute;es par l&apos;API gouvernementale
+                Verified through state bar records
               </p>
             </div>
           </div>
           {hasSiret && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-semibold border border-green-200 shadow-sm flex-shrink-0">
               <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
-              V&eacute;rifi&eacute;e
+              Verified
             </span>
           )}
         </div>
@@ -120,7 +120,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  SIRET
+                  Bar Number
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-gray-900 font-mono tracking-widest">
                   {formatSiret(artisan.siret)}
@@ -137,7 +137,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-amber-600/90 uppercase tracking-wide">
-                  Cr&eacute;&eacute;e le
+                  Established
                 </dt>
                 <dd className="mt-0.5">
                   <span className="text-sm font-bold text-gray-900">
@@ -146,7 +146,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                   {yearsSinceCreation !== null && yearsSinceCreation > 0 && (
                     <span className="mt-1.5 flex">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold border border-amber-200">
-                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d&apos;activit&eacute;
+                        {yearsSinceCreation}&nbsp;year{yearsSinceCreation > 1 ? 's' : ''}&nbsp;in practice
                       </span>
                     </span>
                   )}
@@ -163,7 +163,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Forme juridique
+                  Legal structure
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-gray-900">
                   {artisan.legal_form}
@@ -180,14 +180,14 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-clay-600/90 uppercase tracking-wide">
-                  Effectif
+                  Team size
                 </dt>
                 <dd className="mt-0.5">
                   <span className="text-sm font-bold text-gray-900">
                     {formatTeamSize(artisan.team_size!)}
                   </span>
                   <span className="mt-1 block text-xs text-slate-400">
-                    Source : SIRENE (INSEE)
+                    Source: State bar records
                   </span>
                 </dd>
               </div>
@@ -203,7 +203,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                 <a
                   href={`mailto:${artisan.email}`}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-slate-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-                  aria-label={`Envoyer un email à ${artisan.email}`}
+                  aria-label={`Send email to ${artisan.email}`}
                 >
                   <Briefcase className="w-4 h-4 text-slate-400" aria-hidden="true" />
                   <span className="truncate max-w-[200px]">{artisan.email}</span>

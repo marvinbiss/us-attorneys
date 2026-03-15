@@ -37,12 +37,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-blue-50',
     lightText: 'text-blue-700',
     problems: [
-      'Fuite d\'eau importante',
-      'Canalisation bouchée',
-      'Dégât des eaux',
-      'Chauffe-eau en panne',
-      'WC bouché',
-      'Rupture de tuyau',
+      'Urgent criminal charges',
+      'DUI / DWI arrest',
+      'Domestic violence accusation',
+      'Wrongful arrest or detention',
+      'Emergency restraining order',
+      'Bail hearing needed',
     ],
   },
   electricien: {
@@ -50,12 +50,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-amber-50',
     lightText: 'text-amber-700',
     problems: [
-      'Panne de courant',
-      'Court-circuit',
-      'Tableau électrique défaillant',
-      'Prise qui chauffe',
-      'Odeur de brûlé électrique',
-      'Fil dénudé dangereux',
+      'Workplace injury',
+      'Wrongful termination',
+      'Employment discrimination',
+      'Wage theft emergency',
+      'Harassment complaint',
+      'Whistleblower retaliation',
     ],
   },
   serrurier: {
@@ -63,12 +63,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-green-50',
     lightText: 'text-green-700',
     problems: [
-      'Porte claquée',
-      'Clé perdue ou volée',
-      'Serrure bloquée',
-      'Cambriolage (sécurisation)',
-      'Changement de serrure urgent',
-      'Porte blindée bloquée',
+      'Eviction notice received',
+      'Landlord lockout',
+      'Lease dispute emergency',
+      'Housing code violation',
+      'Emergency tenant rights',
+      'Security deposit dispute',
     ],
   },
   chauffagiste: {
@@ -76,12 +76,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-red-50',
     lightText: 'text-red-700',
     problems: [
-      'Panne de chauffage',
-      'Fuite de gaz',
-      'Chaudière en panne',
-      'Radiateur qui fuit',
-      'Ballon d\'eau chaude HS',
-      'Problème de thermostat',
+      'Serious car accident',
+      'Medical malpractice',
+      'Slip and fall injury',
+      'Product liability injury',
+      'Dog bite attack',
+      'Workers compensation claim',
     ],
   },
   vitrier: {
@@ -89,12 +89,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-cyan-50',
     lightText: 'text-cyan-700',
     problems: [
-      'Vitre cassée',
-      'Baie vitrée brisée',
-      'Vitrine commerciale endommagée',
-      'Double vitrage fissuré',
-      'Effraction / cambriolage',
-      'Tempête / grêle',
+      'Business partner dispute',
+      'Contract breach emergency',
+      'Intellectual property theft',
+      'Commercial lease dispute',
+      'Business fraud',
+      'Partnership dissolution',
     ],
   },
   couvreur: {
@@ -102,12 +102,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-orange-50',
     lightText: 'text-orange-700',
     problems: [
-      'Fuite de toiture urgente',
-      'Toiture arrachée par le vent',
-      'Infiltration après tempête',
-      'Tuiles cassées après grêle',
-      'Gouttière arrachée',
-      'Bâche d\'urgence à poser',
+      'Child custody emergency',
+      'Protective order needed',
+      'Emergency child support',
+      'Parental kidnapping',
+      'Divorce filing urgency',
+      'Spousal abuse protection',
     ],
   },
   climaticien: {
@@ -115,12 +115,12 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     lightBg: 'bg-indigo-50',
     lightText: 'text-indigo-700',
     problems: [
-      'Panne de climatisation',
-      'Climatisation qui ne refroidit plus',
-      'Fuite de fluide frigorigène',
-      'Unité extérieure en panne',
-      'Bruit anormal',
-      'Climatisation en panne pendant la canicule',
+      'Immigration detention',
+      'Deportation threat',
+      'Visa emergency',
+      'Asylum application urgent',
+      'Green card issue',
+      'Work permit emergency',
     ],
   },
 }
@@ -143,21 +143,21 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const titleHash = Math.abs(hashCode(`urgence-title-${service}`))
   const titleTemplates = [
-    `${trade.name} urgence — Intervention rapide`,
-    `${trade.name} d'urgence — Soir & week-end`,
-    `Urgence ${tradeLower} — Dépannage rapide`,
-    `${trade.name} urgence — Devis gratuit`,
-    `Dépannage ${tradeLower} urgent — 24h/24`,
+    `Emergency ${trade.name} — Immediate Help`,
+    `Emergency ${trade.name} — 24/7 Available`,
+    `Urgent ${tradeLower} help — Fast response`,
+    `Emergency ${trade.name} — Free consultation`,
+    `${trade.name} emergency — Available now`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`urgence-desc-${service}`))
   const descTemplates = [
-    `Besoin d'un ${tradeLower} en urgence ? Disponible selon les artisans de votre secteur partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
-    `${trade.name} urgence : dépannage rapide jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,
-    `Urgence ${tradeLower} ? Trouvez un professionnel disponible dans votre secteur. Intervention rapide, artisans qualifiés, devis gratuit.`,
-    `Dépannage ${tradeLower} en urgence, y compris le week-end. Artisans référencés par SIREN, intervention sous ${trade.averageResponseTime}. Gratuit.`,
-    `${trade.name} d'urgence soir & week-end : artisans disponibles partout en France. Devis rapide, intervention ${trade.averageResponseTime}.`,
+    `Need an emergency ${tradeLower}? Available attorneys across the US. ${trade.averageResponseTime}. Verified attorneys.`,
+    `Emergency ${tradeLower}: fast response day and night. ${trade.averageResponseTime}. Free consultation, bar-verified attorneys.`,
+    `Urgent ${tradeLower} matter? Find an available attorney in your area. Fast response, qualified attorneys, free consultation.`,
+    `Emergency ${tradeLower} help, including weekends. Bar-verified attorneys, response within ${trade.averageResponseTime}. Free.`,
+    `${trade.name} emergency nights & weekends: attorneys available across the US. Free consultation, response ${trade.averageResponseTime}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
   const serviceImage = getServiceImage(service)
@@ -167,12 +167,12 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     description,
     alternates: { canonical: `${SITE_URL}/emergency/${service}` },
     openGraph: {
-      locale: 'fr_FR',
+      locale: 'en_US',
       title,
       description,
       url: `${SITE_URL}/emergency/${service}`,
       type: 'website',
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} urgence` }],
+      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Emergency ${trade.name}` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -218,17 +218,17 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
   const otherEmergencies = emergencySlugs.filter((s) => s !== service)
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Urgence', url: '/emergency' },
-    { name: `${trade.name} urgence`, url: `/emergency/${service}` },
+    { name: 'Home', url: '/' },
+    { name: 'Emergency', url: '/emergency' },
+    { name: `Emergency ${trade.name}`, url: `/emergency/${service}` },
   ])
 
   const tradeLowerFaq = trade.name.toLowerCase()
   const emergencyFaqItems = [
-    { question: `Combien coûte un ${tradeLowerFaq} en urgence la nuit ?`, answer: `Les interventions d'urgence de nuit (après 20h) sont majorées de 50 à 100% par rapport aux tarifs de journée. Pour un ${tradeLowerFaq}, comptez environ ${Math.round((trade.priceRange?.min || 60) * 1.5)} à ${Math.round((trade.priceRange?.max || 90) * 2)} €/h en urgence nocturne. Demandez toujours un devis avant intervention.` },
-    { question: `Quel est le délai d'intervention d'un ${tradeLowerFaq} en urgence ?`, answer: `${trade.averageResponseTime}. Les artisans d'urgence pouvant intervenir le soir et le week-end. Le délai varie selon votre localisation et la disponibilité des professionnels.` },
-    { question: `Que faire en attendant le ${tradeLowerFaq} d'urgence ?`, answer: `En attendant l'arrivée du professionnel : sécurisez la zone, coupez l'arrivée d'eau ou le disjoncteur si nécessaire, et ne tentez pas de réparation vous-même. Protégez vos biens des dégâts éventuels.` },
-    { question: `Un ${tradeLowerFaq} d'urgence est-il assuré ?`, answer: `Tout ${tradeLowerFaq} professionnel doit disposer d'une assurance responsabilité civile professionnelle (RC Pro). Pour les travaux de bâtiment concernés par la loi Spinetta (art. 1792 du Code civil), une garantie décennale est également obligatoire. Exigez les attestations d'assurance avant le début des travaux, même en urgence.` },
+    { question: `How much does an emergency ${tradeLowerFaq} cost at night?`, answer: `Emergency night consultations (after 8 PM) are typically 50 to 100% more than standard rates. For a ${tradeLowerFaq}, expect approximately $${Math.round((trade.priceRange?.min || 60) * 1.5)} to $${Math.round((trade.priceRange?.max || 90) * 2)}/hr for emergency night service. Always request a fee estimate before engaging.` },
+    { question: `What is the response time for an emergency ${tradeLowerFaq}?`, answer: `${trade.averageResponseTime}. Emergency attorneys may be available evenings and weekends. Response time varies based on your location and attorney availability.` },
+    { question: `What should I do while waiting for the emergency ${tradeLowerFaq}?`, answer: `While waiting for the attorney: document everything, do not make any statements to authorities, preserve all evidence, and do not sign any documents without legal review.` },
+    { question: `Is an emergency ${tradeLowerFaq} licensed and insured?`, answer: `Every professional ${tradeLowerFaq} must be licensed by the state bar association and carry malpractice insurance. Verify their bar number and standing before engaging, even in emergencies.` },
   ]
 
   const allFaqItems = [
@@ -242,44 +242,44 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
   const howToSchema = getHowToSchema(
     [
       {
-        name: 'Sécuriser la zone',
-        text: `En cas d'urgence ${tradeLowerHowTo}, commencez par sécuriser la zone : coupez l'arrivée d'eau, le disjoncteur ou le gaz selon la situation. Éloignez les personnes et les objets de valeur.`,
+        name: 'Assess your situation',
+        text: `In a ${tradeLowerHowTo} emergency, start by assessing the urgency: determine if you need immediate legal intervention or if it can wait until business hours.`,
       },
       {
-        name: 'Évaluer la gravité',
-        text: `Déterminez s'il s'agit d'une urgence vitale (fuite de gaz, risque d'électrocution) nécessitant les pompiers (18 ou 112), ou d'une urgence technique nécessitant un ${tradeLowerHowTo}.`,
+        name: 'Evaluate the severity',
+        text: `Determine if this is an emergency requiring immediate action (arrest, detention, imminent deadline) or a matter that can be handled within 24-48 hours.`,
       },
       {
-        name: `Contacter un ${tradeLowerHowTo} d'urgence`,
-        text: `Recherchez un ${tradeLowerHowTo} d'urgence disponible dans votre secteur. Privilégiez les artisans référencés avec un SIRET vérifié. Décrivez précisément le problème pour obtenir un diagnostic rapide.`,
+        name: `Contact an emergency ${tradeLowerHowTo}`,
+        text: `Search for an emergency ${tradeLowerHowTo} available in your area. Choose bar-verified attorneys with confirmed credentials. Describe your situation precisely for a quick assessment.`,
       },
       {
-        name: 'Demander un devis avant intervention',
-        text: `Même en urgence, exigez un devis écrit ou une estimation tarifaire avant le début des travaux. Vérifiez les majorations éventuelles (nuit, week-end, jours fériés).`,
+        name: 'Discuss fees before engagement',
+        text: `Even in emergencies, discuss fees and billing arrangements before retaining an attorney. Ask about payment plans and any additional charges for emergency or after-hours services.`,
       },
       {
-        name: 'Conserver les justificatifs',
-        text: `Gardez la facture détaillée et les photos des dégâts pour votre assurance. En cas de dégât des eaux ou de sinistre, déclarez à votre assureur dans les 5 jours ouvrés.`,
+        name: 'Preserve all documentation',
+        text: `Keep all relevant documents, correspondence, and evidence organized. Take notes of any conversations and keep records of all legal proceedings for your case file.`,
       },
     ],
     {
-      name: `Comment gérer une urgence ${tradeLowerHowTo}`,
-      description: `Les étapes essentielles pour réagir efficacement face à une urgence ${tradeLowerHowTo} : sécurisation, contact professionnel et démarches.`,
+      name: `How to handle a ${tradeLowerHowTo} emergency`,
+      description: `Essential steps for effectively responding to a ${tradeLowerHowTo} emergency: assessment, finding legal help, and next steps.`,
     }
   )
 
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${trade.name} urgence par ville`,
-    description: `Trouvez un ${trade.name.toLowerCase()} d'urgence dans votre ville. ${trade.averageResponseTime}. Artisans référencés disponibles soir et week-end.`,
+    name: `Emergency ${trade.name} by city`,
+    description: `Find an emergency ${trade.name.toLowerCase()} in your city. ${trade.averageResponseTime}. Verified attorneys available evenings and weekends.`,
     url: `${SITE_URL}/emergency/${service}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: topCities.map((ville, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        name: `${trade.name} urgence à ${ville.name}`,
+        name: `Emergency ${trade.name} in ${ville.name}`,
         url: `${SITE_URL}/emergency/${service}/${ville.slug}`,
       })),
     },
@@ -293,10 +293,10 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <JsonLd data={[breadcrumbSchema, faqSchema, howToSchema, collectionPageSchema, {
         '@context': 'https://schema.org',
         '@type': 'Service',
-        name: `${trade.name} urgence soir & week-end`,
+        name: `Emergency ${trade.name} nights & weekends`,
         description: trade.emergencyInfo,
-        provider: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
-        areaServed: { '@type': 'Country', name: 'France' },
+        provider: { '@type': 'Organization', name: 'USAttorneys', url: SITE_URL },
+        areaServed: { '@type': 'Country', name: 'United States' },
         hoursAvailable: {
           '@type': 'OpeningHoursSpecification',
           dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -309,8 +309,8 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={[
-            { label: 'Urgence', href: '/emergency' },
-            { label: `${trade.name} urgence` },
+            { label: 'Emergency', href: '/emergency' },
+            { label: `Emergency ${trade.name}` },
           ]} />
         </div>
       </div>
@@ -324,22 +324,22 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           <div className="flex items-center gap-2 mb-6">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
-              <span className="text-sm font-semibold">Disponible soir et week-end</span>
+              <span className="text-sm font-semibold">Available evenings and weekends</span>
             </div>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
             {(() => {
               const h1Hash = Math.abs(hashCode(`urgence-h1-${service}`))
               const h1Templates = [
-                `${trade.name} urgence`,
-                `Urgence ${trade.name.toLowerCase()} soir & week-end`,
-                `Dépannage ${trade.name.toLowerCase()} urgent`,
-                `${trade.name} d'urgence — y compris le week-end`,
-                `Intervention ${trade.name.toLowerCase()} en urgence`,
+                `Emergency ${trade.name}`,
+                `Emergency ${trade.name.toLowerCase()} — nights & weekends`,
+                `Urgent ${trade.name.toLowerCase()} help`,
+                `${trade.name} emergency — including weekends`,
+                `${trade.name.toLowerCase()} emergency response`,
               ]
               return h1Templates[h1Hash % h1Templates.length]
             })()}<br />
-            <span className="opacity-80">Trouvez rapidement un professionnel.</span>
+            <span className="opacity-80">Find a qualified attorney fast.</span>
           </h1>
           <p className="text-xl opacity-90 max-w-2xl mb-8">
             {trade.emergencyInfo}
@@ -351,15 +351,15 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                 className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="w-6 h-6" />
-                Appeler l&apos;assistance
+                Call for assistance
               </a>
-              <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+              <span className="text-sm text-white/60 mt-2">Attorney referral service</span>
             </div>
             <Link
               href={`/practice-areas/${service}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
-              Intervention rapide — Devis gratuit
+              Fast response — Free consultation
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -370,11 +370,11 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Shield className="w-4 h-4" />
-              <span className="text-sm">Artisans référencés</span>
+              <span className="text-sm">Bar-verified attorneys</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <CheckCircle className="w-4 h-4" />
-              <span className="text-sm">Devis gratuit</span>
+              <span className="text-sm">Free consultation</span>
             </div>
           </div>
         </div>
@@ -390,10 +390,10 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Urgences {trade.name.toLowerCase()} les plus courantes
+              Most common {trade.name.toLowerCase()} emergencies
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Les {trade.name.toLowerCase()}s d&apos;urgence référencés interviennent rapidement pour tous ces problèmes.
+              Verified emergency {trade.name.toLowerCase()} attorneys can respond quickly to all these situations.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -414,11 +414,11 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-3 text-center">
-            Tarifs {trade.name.toLowerCase()} urgence
+            Emergency {trade.name.toLowerCase()} fees
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-center mb-10">
-            Prix indicatifs pour les interventions d&apos;urgence. Tarif horaire standard : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
-            Les majorations d&apos;urgence varient de +50% à +100%.
+            Indicative pricing for emergency legal services. Standard hourly rate: ${trade.priceRange.min} to ${trade.priceRange.max} {trade.priceRange.unit}.
+            Emergency surcharges typically range from +50% to +100%.
           </p>
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {trade.commonTasks.map((task, i) => (
@@ -433,7 +433,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               href="/pricing"
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
             >
-              Guide complet des tarifs
+              Complete fee guide
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -445,7 +445,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Certifications à vérifier
+              Credentials to verify
             </h2>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -459,11 +459,11 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         </section>
       )}
 
-      {/* Urgence par ville */}
+      {/* Emergency by city */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            {trade.name} urgence par ville
+            Emergency {trade.name} by city
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {topCities.map((ville) => (
@@ -478,9 +478,9 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
-                      {trade.name} à {ville.name}
+                      {trade.name} in {ville.name}
                     </div>
-                    <div className="text-xs text-gray-500">Urgence soir & week-end</div>
+                    <div className="text-xs text-gray-500">Emergency nights & weekends</div>
                   </div>
                 </div>
               </Link>
@@ -488,7 +488,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </div>
           <div className="text-center mt-6">
             <Link href="/cities" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">
-              Toutes les cities <ArrowRight className="w-4 h-4" />
+              All cities <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -498,7 +498,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Questions fréquentes — {trade.name} urgence
+            Frequently asked questions — Emergency {trade.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
@@ -520,7 +520,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Conseils pratiques
+            Practical tips
           </h2>
           <div className="space-y-4">
             {trade.tips.slice(0, 3).map((tip, i) => (
@@ -538,7 +538,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       {/* Other emergencies */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Autres urgences</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Other emergencies</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {otherEmergencies.map((slug) => {
               const t = tradeContent[slug]
@@ -549,7 +549,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                   className="bg-gray-50 hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-xl p-4 transition-all group text-center"
                 >
                   <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
-                    {t.name} urgence
+                    Emergency {t.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">{t.averageResponseTime}</div>
                 </Link>
@@ -559,52 +559,52 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         </div>
       </section>
 
-      {/* Voir aussi */}
+      {/* See also */}
       <section className="py-12 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">See also</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Services associés</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Related services</h3>
               <div className="space-y-2">
-                <Link href={`/practice-areas/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} — page principale</Link>
-                <Link href={`/pricing/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">Tarifs {trade.name.toLowerCase()}</Link>
+                <Link href={`/practice-areas/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} — main page</Link>
+                <Link href={`/pricing/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} fees</Link>
                 {relatedServices.map((s) => (
                   <Link key={s.slug} href={`/practice-areas/${s.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{s.name}</Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">{trade.name} par ville</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">{trade.name} by city</h3>
               <div className="space-y-2">
                 {topCities.slice(0, 6).map((v) => (
                   <Link key={v.slug} href={`/emergency/${service}/${v.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                    {trade.name} à {v.name}
+                    {trade.name} in {v.name}
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Useful information</h3>
               <div className="space-y-2">
-                <Link href="/emergency" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Toutes les urgences</Link>
-                <Link href="/how-it-works" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
-                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide des tarifs</Link>
+                <Link href="/emergency" className="block text-sm text-gray-600 hover:text-blue-600 py-1">All emergencies</Link>
+                <Link href="/how-it-works" className="block text-sm text-gray-600 hover:text-blue-600 py-1">How it works</Link>
+                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Fee guide</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
-                <Link href="/verification-process" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Processus de vérification</Link>
+                <Link href="/verification-process" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Verification process</Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      {/* Editorial credibility */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Important information</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les délais d&apos;intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Response times are estimates based on typical attorney availability and may vary. USAttorneys is a directory — we connect you with attorneys but do not provide legal representation. In a life-threatening emergency, call 911.
             </p>
           </div>
         </div>
@@ -614,17 +614,17 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
+            Trust &amp; Safety
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
-              Comment nous référençons les artisans
+              How we verify attorneys
             </Link>
             <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
-              Notre politique des avis
+              Our review policy
             </Link>
             <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
-              Service de médiation
+              Dispute resolution
             </Link>
           </nav>
         </div>
@@ -641,10 +641,10 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <section className={`bg-gradient-to-br ${meta.gradient} text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Besoin d&apos;un {trade.name.toLowerCase()} en urgence ?
+            Need an emergency {trade.name.toLowerCase()}?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Les {trade.name.toLowerCase()}s référencés sur ServicesArtisans sont disponibles selon leurs horaires, y compris parfois les jours fériés.
+            Verified {trade.name.toLowerCase()} attorneys on USAttorneys are available based on their schedules, including evenings and holidays.
           </p>
           <div className="flex flex-col items-center">
             <a
@@ -652,18 +652,18 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               <Phone className="w-6 h-6" />
-              Appeler l&apos;assistance
+              Call for assistance
             </a>
-            <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+            <span className="text-sm text-white/60 mt-2">Attorney referral service</span>
           </div>
         </div>
       </section>
 
       <ExitIntentPopup
         sessionKey="sa:exit-urgence"
-        title="Besoin d'aide urgente ?"
-        description="Un artisan qualifié peut intervenir rapidement. Demandez un devis maintenant."
-        ctaText="Demander une intervention"
+        title="Need urgent legal help?"
+        description="A qualified attorney can respond quickly. Request a consultation now."
+        ctaText="Request a consultation"
         ctaHref={`/quotes/${service}`}
       />
     </div>

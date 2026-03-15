@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const parsed = searchSchema.safeParse(queryParams)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
     if (!conversation) {
       return NextResponse.json(
-        { success: false, error: { message: 'Conversation non trouvée ou non autorisée' } },
+        { success: false, error: { message: 'Conversation not found or unauthorized' } },
         { status: 404 }
       )
     }
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Search error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

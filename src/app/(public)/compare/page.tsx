@@ -10,16 +10,16 @@ import { comparisons } from "@/lib/data/comparisons"
 export const revalidate = false
 
 export const metadata: Metadata = {
-  title: "Comparatifs Travaux 2026 : 30 Guides pour Choisir",
+  title: "Service Comparisons 2026: 30 Guides to Choose",
   description:
-    "30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages, inconvénients et verdict pour chaque solution.",
+    "30 detailed comparisons for your legal and home service needs: heat pumps, insulation, carpentry, flooring. 2026 prices, pros, cons, and expert verdict for each solution.",
   alternates: {
     canonical: `${SITE_URL}/compare`,
   },
   openGraph: {
-    title: "Comparatifs Travaux 2026 : 30 Guides pour Bien Choisir",
+    title: "Service Comparisons 2026: 30 Guides to Choose Wisely",
     description:
-      "30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages et verdict.",
+      "30 detailed comparisons for your projects: heat pumps, insulation, carpentry, flooring. 2026 prices, pros, and expert verdict.",
     url: `${SITE_URL}/compare`,
     type: "website",
   },
@@ -27,25 +27,25 @@ export const metadata: Metadata = {
 
 const categories = [
   {
-    name: "Chauffage / Énergie",
+    name: "Heating / Energy",
     icon: Flame,
     color: "bg-orange-100 text-orange-700",
     iconBg: "bg-orange-50",
   },
   {
-    name: "Menuiserie",
+    name: "Carpentry",
     icon: DoorOpen,
     color: "bg-amber-100 text-amber-700",
     iconBg: "bg-amber-50",
   },
   {
-    name: "Revêtements",
+    name: "Flooring",
     icon: PaintBucket,
     color: "bg-violet-100 text-violet-700",
     iconBg: "bg-violet-50",
   },
   {
-    name: "Extérieur",
+    name: "Exterior",
     icon: TreePine,
     color: "bg-green-100 text-green-700",
     iconBg: "bg-green-50",
@@ -57,7 +57,7 @@ const categories = [
     iconBg: "bg-blue-50",
   },
   {
-    name: "Isolation",
+    name: "Insulation",
     icon: ShieldCheck,
     color: "bg-cyan-100 text-cyan-700",
     iconBg: "bg-cyan-50",
@@ -66,8 +66,8 @@ const categories = [
 
 export default function ComparaisonPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: "Accueil", url: "/" },
-    { name: "Comparatifs", url: "/compare" },
+    { name: "Home", url: "/" },
+    { name: "Comparisons", url: "/compare" },
   ])
 
   return (
@@ -78,7 +78,7 @@ export default function ComparaisonPage() {
         {/* Header */}
         <div className="bg-white border-b">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <Breadcrumb items={[{ label: "Comparatifs" }]} />
+            <Breadcrumb items={[{ label: "Comparisons" }]} />
           </div>
         </div>
 
@@ -88,11 +88,11 @@ export default function ComparaisonPage() {
             <div className="flex items-center gap-3 mb-4">
               <Scale className="w-8 h-8 text-blue-600" />
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-heading">
-                Comparatifs Travaux
+                Service Comparisons
               </h1>
             </div>
             <p className="text-lg text-gray-600 max-w-2xl">
-              {"30 comparatifs détaillés pour vous aider à choisir les meilleures solutions pour vos travaux. Prix 2026, avantages, inconvénients et verdict d'experts."}
+              {"30 detailed comparisons to help you choose the best solutions for your projects. 2026 prices, pros, cons, and expert verdicts."}
             </p>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function ComparaisonPage() {
                   <span
                     className={`text-xs font-medium px-2 py-0.5 rounded-full ${category.color}`}
                   >
-                    {categoryComparisons.length} comparatif{categoryComparisons.length > 1 ? "s" : ""}
+                    {categoryComparisons.length} comparison{categoryComparisons.length > 1 ? "s" : ""}
                   </span>
                 </div>
 
@@ -139,10 +139,10 @@ export default function ComparaisonPage() {
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-gray-500">
-                          {comparison.options.length} options comparées
+                          {comparison.options.length} options compared
                         </span>
                         <span className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 group-hover:gap-2 transition-all">
-                          Voir le comparatif <ArrowRight className="w-4 h-4" />
+                          View comparison <ArrowRight className="w-4 h-4" />
                         </span>
                       </div>
                     </Link>
@@ -157,16 +157,16 @@ export default function ComparaisonPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              {"Besoin d'un artisan pour vos travaux ?"}
+              {"Need an attorney for your case?"}
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              {"Trouvez des professionnels qualifiés près de chez vous et demandez un devis gratuit."}
+              {"Find qualified professionals near you and request a free consultation."}
             </p>
             <Link
               href="/quotes"
               className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
             >
-              Demander un devis gratuit
+              Request a free consultation
             </Link>
           </div>
         </div>

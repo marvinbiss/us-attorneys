@@ -67,13 +67,13 @@ function formatRelative(dateStr: string): string {
   const now = new Date()
   const diffMs = now.getTime() - d.getTime()
   const diffMin = Math.floor(diffMs / 60000)
-  if (diffMin < 1) return "À l'instant"
-  if (diffMin < 60) return `il y a ${diffMin} min`
+  if (diffMin < 1) return "Just now"
+  if (diffMin < 60) return `${diffMin}m ago`
   const diffH = Math.floor(diffMin / 60)
-  if (diffH < 24) return `il y a ${diffH}h`
+  if (diffH < 24) return `${diffH}h ago`
   const diffD = Math.floor(diffH / 24)
-  if (diffD < 7) return `il y a ${diffD}j`
-  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  if (diffD < 7) return `${diffD}d ago`
+  return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
 }
 
 export default function MesDemandesPage() {
@@ -106,10 +106,10 @@ export default function MesDemandesPage() {
         window.location.href = '/login?redirect=/client-dashboard/mes-demandes'
         return
       } else {
-        setError(data.error || 'Erreur lors du chargement')
+        setError(data.error || 'Failed to load data')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -132,11 +132,11 @@ export default function MesDemandesPage() {
     : leads
 
   const tabs = [
-    { key: 'all', label: 'Toutes', count: stats?.total || 0 },
-    { key: 'en_attente', label: 'En attente', count: stats?.en_attente || 0 },
-    { key: 'en_traitement', label: 'En cours', count: stats?.en_traitement || 0 },
-    { key: 'devis_recus', label: 'Devis reçus', count: stats?.devis_recus || 0 },
-    { key: 'termine', label: 'Terminées', count: stats?.termine || 0 },
+    { key: 'all', label: 'All', count: stats?.total || 0 },
+    { key: 'en_attente', label: 'Pending', count: stats?.en_attente || 0 },
+    { key: 'en_traitement', label: 'In Progress', count: stats?.en_traitement || 0 },
+    { key: 'devis_recus', label: 'Quotes Received', count: stats?.devis_recus || 0 },
+    { key: 'termine', label: 'Completed', count: stats?.termine || 0 },
   ]
 
   return (
@@ -147,18 +147,18 @@ export default function MesDemandesPage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <Link href="/client-dashboard" className="hover:text-gray-900">Espace Client</Link>
+                <Link href="/client-dashboard" className="hover:text-gray-900">Client Dashboard</Link>
                 <span>/</span>
-                <span className="text-gray-900 font-medium">Mes demandes</span>
+                <span className="text-gray-900 font-medium">My Cases</span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Mes demandes de devis</h1>
+              <h1 className="text-2xl font-bold text-gray-900">My Consultation Requests</h1>
             </div>
             <button
               onClick={fetchLeads}
               className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
             >
               <RefreshCw className="w-4 h-4" />
-              Actualiser
+              Refresh
             </button>
           </div>
         </div>
@@ -181,19 +181,19 @@ export default function MesDemandesPage() {
                   color="blue"
                 />
                 <StatCard
-                  title="En attente"
+                  title="Pending"
                   value={stats.en_attente}
                   icon={<Clock className="w-5 h-5" />}
                   color="yellow"
                 />
                 <StatCard
-                  title="Devis reçus"
+                  title="Quotes Received"
                   value={stats.devis_recus}
                   icon={<FileText className="w-5 h-5" />}
                   color="green"
                 />
                 <StatCard
-                  title="Terminées"
+                  title="Completed"
                   value={stats.termine}
                   icon={<CheckCircle className="w-5 h-5" />}
                   color="green"
@@ -214,7 +214,7 @@ export default function MesDemandesPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Rechercher..."
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -232,18 +232,18 @@ export default function MesDemandesPage() {
             {loading ? (
               <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-                <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+                <p className="text-sm text-gray-500 mt-2">Loading...</p>
               </div>
             ) : filtered.length === 0 ? (
               <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
                 <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FileText className="w-7 h-7 text-gray-400" />
                 </div>
-                <p className="text-gray-500 font-medium text-lg">Aucune demande</p>
+                <p className="text-gray-500 font-medium text-lg">No cases</p>
                 <p className="text-gray-400 text-sm mt-2">
                   {searchQuery
-                    ? 'Aucun résultat pour cette recherche.'
-                    : 'Vos demandes de devis apparaîtront ici.'}
+                    ? 'No results for this search.'
+                    : 'Your consultation requests will appear here.'}
                 </p>
               </div>
             ) : (
@@ -291,7 +291,7 @@ export default function MesDemandesPage() {
                                 )}
                                 {lead.event_count > 0 && (
                                   <span className="text-gray-400">
-                                    {lead.event_count} événement{lead.event_count > 1 ? 's' : ''}
+                                    {lead.event_count} event{lead.event_count > 1 ? 's' : ''}
                                   </span>
                                 )}
                               </div>

@@ -31,10 +31,10 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
 
   // Google Maps search link — used as CTA when no GPS coordinates are available
   const mapsQuery = artisan.address
-    ? `${artisan.address}, ${artisan.postal_code} ${artisan.city}, France`
+    ? `${artisan.address}, ${artisan.city}, ${artisan.postal_code}`
     : artisan.postal_code
-    ? `${artisan.city} ${artisan.postal_code} France`
-    : `${artisan.city} France`
+    ? `${artisan.city} ${artisan.postal_code}`
+    : `${artisan.city}`
   const mapsLink = `https://www.google.com/maps/search/${encodeURIComponent(mapsQuery)}`
 
   // Provider marker for the map
@@ -57,7 +57,7 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <MapPin className="w-5 h-5 text-clay-400" aria-hidden="true" />
-        Zone d&apos;intervention
+        Service area
       </h2>
 
       {/* Leaflet map when GPS coordinates are available */}
@@ -79,14 +79,14 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-between gap-3 p-4 rounded-xl bg-clay-50 border border-clay-100 mb-4 hover:bg-clay-100 transition-colors group"
-          aria-label={`Voir ${artisan.city} sur Google Maps`}
+          aria-label={`View ${artisan.city} on Google Maps`}
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-clay-400 flex items-center justify-center flex-shrink-0">
               <MapPin className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">Voir sur Google Maps</p>
+              <p className="font-semibold text-gray-900 text-sm">View on Google Maps</p>
               <p className="text-xs text-slate-500">
                 {artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}
               </p>
@@ -110,8 +110,8 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
       {/* Intervention zones */}
       {artisan.intervention_zones && artisan.intervention_zones.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Communes desservies</h3>
-          <div className="flex flex-wrap gap-2" role="list" aria-label="Communes desservies">
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Areas served</h3>
+          <div className="flex flex-wrap gap-2" role="list" aria-label="Areas served">
             {artisan.intervention_zones.map((zone, i) => (
               <span
                 key={i}
@@ -131,7 +131,7 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-gray-600">
             <Navigation className="w-4 h-4" aria-hidden="true" />
-            <span>Rayon d&apos;intervention : <strong>{artisan.intervention_zone}</strong></span>
+            <span>Service radius: <strong>{artisan.intervention_zone}</strong></span>
           </div>
         </div>
       )}

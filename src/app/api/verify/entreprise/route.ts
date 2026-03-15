@@ -39,8 +39,8 @@ const entreprisePostSchema = z.object({
 })
 
 /**
- * API de vérification d'entreprise
- * Combine les données INSEE et Pappers pour une vérification complète
+ * Business verification API
+ * Combines INSEE and Pappers data for comprehensive verification
  */
 
 export async function GET(request: NextRequest) {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
 
   try {
     switch (action) {
-      // Vérification complète par SIRET
+      // Complete verification by SIRET
       case 'verify': {
         const queryParams = {
           action: 'verify' as const,
@@ -58,24 +58,24 @@ export async function GET(request: NextRequest) {
         const result = verifySchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'SIRET requis (14 chiffres)', details: result.error.flatten() } },
+            { success: false, error: { message: 'SIRET required (14 digits)', details: result.error.flatten() } },
             { status: 400 }
           )
         }
         const { siret } = result.data
 
-        // Récupérer les infos Pappers
+        // Retrieve les infos Pappers
         const entreprise = await getEntrepriseParSiret(siret)
 
         if (!entreprise) {
           return NextResponse.json({
             success: false,
-            error: { message: 'Entreprise non trouvée' },
+            error: { message: 'Company not found' },
             code: 'NOT_FOUND'
           })
         }
 
-        // Vérifier la santé
+        // Check health status
         const sante = await verifierSanteEntreprise(siret)
         const badge = getBadgeConfiance(entreprise)
 
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
         })
       }
 
-      // Vérification par SIREN
+      // Verification par SIREN
       case 'siren': {
         const queryParams = {
           action: 'siren' as const,
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
         const result = sirenSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'SIREN requis (9 chiffres)', details: result.error.flatten() } },
+            { success: false, error: { message: 'SIREN required (9 digits)', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
         if (!entreprise) {
           return NextResponse.json({
             success: false,
-            error: { message: 'Entreprise non trouvée' },
+            error: { message: 'Company not found' },
             code: 'NOT_FOUND'
           })
         }
@@ -133,7 +133,7 @@ export async function GET(request: NextRequest) {
         const result = searchSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Requête trop courte (min 2 caractères)', details: result.error.flatten() } },
+            { success: false, error: { message: 'Query too short (min 2 characters)', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -150,7 +150,7 @@ export async function GET(request: NextRequest) {
         })
       }
 
-      // Vérification santé rapide
+      // Quick health check
       case 'health': {
         const queryParams = {
           action: 'health' as const,
@@ -159,7 +159,7 @@ export async function GET(request: NextRequest) {
         const result = healthSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'SIRET requis (14 chiffres)', details: result.error.flatten() } },
+            { success: false, error: { message: 'SIRET required (14 digits)', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -175,21 +175,21 @@ export async function GET(request: NextRequest) {
 
       default:
         return NextResponse.json(
-          { success: false, error: { message: 'Action invalide' } },
+          { success: false, error: { message: 'Invalid action' } },
           { status: 400 }
         )
     }
   } catch (error) {
     logger.error('Erreur API entreprise', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
 /**
- * POST - Enrichir un profil artisan avec les données Pappers
+ * POST - Enrich attorney profile with Pappers data
  */
 export async function POST(request: NextRequest) {
   try {
@@ -197,27 +197,27 @@ export async function POST(request: NextRequest) {
     const result = entreprisePostSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
     const { siret, attorneyId } = result.data
 
-    // Récupérer les données Pappers
+    // Retrieve Pappers data
     const entreprise = await getEntrepriseParSiret(siret)
 
     if (!entreprise) {
       return NextResponse.json({
         success: false,
-        error: { message: 'Entreprise non trouvée' }
+        error: { message: 'Company not found' }
       })
     }
 
-    // Vérifier la santé
+    // Check health status
     const sante = await verifierSanteEntreprise(siret)
     const badge = getBadgeConfiance(entreprise)
 
-    // Si un attorneyId est fourni, mettre à jour le profil
+    // If an attorneyId is provided, update the profile
     if (attorneyId) {
       const { createClient } = await import('@supabase/supabase-js')
       const supabase = createClient(
@@ -250,7 +250,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Erreur enrichissement entreprise', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

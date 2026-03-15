@@ -27,7 +27,7 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "Pour les logements de plus de 15 ans, certains travaux de rénovation de salle de bain ouvrent droit à la TVA réduite à 10 %. Les personnes en situation de handicap ou les seniors peuvent bénéficier de MaPrimeAdapt pour adapter leur salle de bain (douche accessible, barres de maintien). Renseignez-vous auprès de votre mairie ou de l'ANAH."
     ],
     image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-03-02",
     readTime: "8 min",
     category: "Tarifs",
@@ -49,7 +49,7 @@ export const renovationArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Faut-il un architecte pour rénover sa salle de bain ?",
-        answer: "Un architecte n'est pas obligatoire sauf si vous modifiez la structure du bâtiment. Un artisan plombier qualifié suffit pour la plupart des projets. Pour les projets haut de gamme, un architecte d'intérieur peut optimiser l'agencement."
+        answer: "Un architecte n'est pas obligatoire sauf si vous modifiez la structure du bâtiment. An attorney plombier qualifié suffit pour la plupart des projets. Pour les projets haut de gamme, un architecte d'intérieur peut optimiser l'agencement."
       },
       {
         question: "Quelles aides pour rénover sa salle de bain en 2026 ?",
@@ -78,13 +78,13 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "Les prix au m² varient significativement selon la localisation. En Île-de-France, ajoutez 20 à 30 % par rapport à la moyenne nationale. Les grandes métropoles (Lyon, Marseille, Bordeaux) affichent un surcoût de 10 à 15 %. En zone rurale, les prix peuvent être inférieurs de 10 à 20 %, mais les délais sont parfois plus longs en raison du manque d'artisans.",
 
       "## Comment estimer précisément son budget ?",
-      "Pour obtenir une estimation fiable, demandez au minimum 3 devis détaillés à des artisans différents. Chaque devis doit mentionner le prix des matériaux et de la main-d'oeuvre séparément. Prévoyez une marge de 10 à 15 % pour les imprévus, surtout dans l'ancien où les surprises sont fréquentes (amiante, plomb, termites).",
+      "Pour obtenir une estimation fiable, demandez au minimum 3 devis détaillés à attorneys différents. Chaque devis doit mentionner le prix des matériaux et de la main-d'oeuvre séparément. Prévoyez une marge de 10 à 15 % pour les imprévus, surtout dans l'ancien où les surprises sont fréquentes (amiante, plomb, termites).",
 
       "## Financement et aides à la rénovation",
       "MaPrimeRénov reste le dispositif phare pour les travaux d'amélioration énergétique. L'éco-PTZ permet d'emprunter jusqu'à 50 000 euros à taux zéro pour financer une rénovation globale. Les CEE (Certificats d'Économie d'Énergie) offrent des primes pour l'isolation et le changement de chauffage. Cumuler ces aides peut couvrir 30 à 50 % du coût total."
     ],
     image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-03-05",
     readTime: "8 min",
     category: "Tarifs",
@@ -135,13 +135,13 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "La pose comprend plusieurs interventions : la dépose de l'ancienne cuisine (300 à 800 euros), le montage et la fixation des meubles (1 500 à 3 000 euros), les raccordements plomberie (500 à 1 500 euros), les branchements électriques (300 à 800 euros) et la pose du plan de travail (500 à 1 200 euros). Un cuisiniste tout-en-un facture généralement un forfait global plus avantageux.",
 
       "## Les erreurs à éviter",
-      "Ne choisissez pas votre cuisine uniquement sur le prix des meubles : la qualité de la pose est déterminante pour la durabilité. Vérifiez que le devis inclut bien la garantie décennale pour les travaux de plomberie et électricité. Méfiez-vous des promotions trop agressives qui cachent souvent des surcoûts sur la pose ou les accessoires.",
+      "Ne choisissez pas votre cuisine uniquement sur le prix des meubles : la qualité de la pose est déterminante pour la durabilité. Vérifiez que the consultation inclut bien la garantie décennale pour les travaux de plomberie et électricité. Méfiez-vous des promotions trop agressives qui cachent souvent des surcoûts sur la pose ou les accessoires.",
 
       "## Comment choisir son cuisiniste ?",
       "Comparez au minimum 3 devis en vérifiant que chacun détaille les mêmes prestations. Demandez à visiter des réalisations récentes. Un bon cuisiniste propose une visite technique à domicile gratuite pour prendre les mesures et identifier les contraintes. Vérifiez les avis en ligne et demandez des références."
     ],
     image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-03-08",
     readTime: "8 min",
     category: "Tarifs",
@@ -150,7 +150,7 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "Cuisine entrée de gamme posée : 5 000 à 8 000 euros pour un modèle fonctionnel",
       "Cuisine milieu de gamme posée : 8 000 à 15 000 euros avec matériaux de qualité",
       "La pose représente 30 à 40 % du budget total d'une cuisine équipée",
-      "Toujours vérifier que le devis inclut la garantie décennale pour plomberie et électricité"
+      "Toujours vérifier que the consultation inclut la garantie décennale pour plomberie et électricité"
     ],
     faq: [
       {
@@ -192,13 +192,13 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "Ne négligez pas les postes complémentaires : gouttières (30 à 60 euros/ml posées), zinguerie de raccord (500 à 2 000 euros), velux ou fenêtres de toit (500 à 1 500 euros pose comprise), et échafaudage (15 à 25 euros/m² de façade). Le nettoyage de chantier et l'évacuation des gravats ajoutent 500 à 1 500 euros au devis.",
 
       "## Choisir son couvreur : les points de vigilance",
-      "Exigez la qualification RGE si vous souhaitez bénéficier des aides à la rénovation énergétique. Vérifiez l'assurance décennale du couvreur (obligatoire). Demandez un devis détaillé mentionnant la marque et le type de tuiles, le nombre de m², et le détail de la main-d'oeuvre. Comparez au moins 3 devis avant de vous engager.",
+      "Exigez la qualification RGE si vous souhaitez bénéficier des aides à la rénovation énergétique. Vérifiez l'assurance décennale du couvreur (obligatoire). Demandez a consultation détaillé mentionnant la marque et le type de tuiles, le nombre de m², et le détail de la main-d'oeuvre. Comparez au moins 3 devis avant de vous engager.",
 
       "## Aides financières pour la rénovation de toiture",
       "MaPrimeRénov finance l'isolation de toiture (jusqu'à 75 euros/m² selon les revenus). L'éco-PTZ permet d'emprunter à taux zéro pour financer les travaux. Les CEE offrent des primes allant de 10 à 25 euros/m² pour l'isolation des combles. La TVA est réduite à 5,5 % pour les travaux d'isolation et à 10 % pour la réfection de couverture."
     ],
     image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-03-10",
     readTime: "8 min",
     category: "Tarifs",
@@ -207,7 +207,7 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "Tuiles terre cuite : 80 à 150 euros/m² posées, le choix le plus courant en France",
       "Réfection complète : 150 à 350 euros/m² avec dépose et nouvelle couverture",
       "L'isolation de toiture réduit la facture de chauffage de 30 % en moyenne",
-      "Exiger la qualification RGE et l'assurance décennale avant de signer un devis"
+      "Exiger la qualification RGE et l'assurance décennale avant de signer a consultation"
     ],
     faq: [
       {
@@ -231,31 +231,31 @@ export const renovationArticles: Record<string, BlogArticle> = {
 
   "devis-travaux-guide-complet": {
     title: "Devis Travaux : Guide pour Comparer et Négocier",
-    excerpt: "Savoir lire, comparer et négocier un devis travaux est essentiel pour éviter les mauvaises surprises. Notre guide vous donne les clés pour analyser chaque ligne et obtenir le meilleur rapport qualité-prix.",
+    excerpt: "Savoir lire, comparer et négocier a consultation travaux est essentiel pour éviter les mauvaises surprises. Notre guide vous donne les clés pour analyser chaque ligne et obtenir le meilleur rapport qualité-prix.",
     content: [
-      "## Pourquoi bien comparer les devis est indispensable",
-      "Un devis mal compris peut coûter des milliers d'euros de surcoût. En 2026, les artisans sont tenus par la loi de fournir un devis détaillé et gratuit pour tout chantier dépassant 150 euros. Pourtant, tous les devis ne se valent pas : certains cachent des coûts, d'autres omettent des prestations essentielles. Apprendre à les décrypter est la meilleure protection du consommateur.",
+      "## Pourquoi bien comparer the consultations est indispensable",
+      "A consultation mal compris peut coûter des milliers d'euros de surcoût. En 2026, the attorneys sont tenus par la loi de fournir a consultation détaillé et gratuit pour tout chantier dépassant 150 euros. Pourtant, tous the consultations ne se valent pas : certains cachent des coûts, d'autres omettent des prestations essentielles. Apprendre à les décrypter est la meilleure protection du consommateur.",
 
-      "## Les mentions obligatoires d'un devis",
-      "Un devis conforme doit comporter : les coordonnées complètes de l'entreprise (SIRET, assurance), la date et la durée de validité, le descriptif détaillé de chaque prestation, le prix unitaire et la quantité, le taux de TVA applicable, le montant total HT et TTC, et les conditions de paiement. Un devis sans ces mentions est un signal d'alerte.",
+      "## Les mentions obligatoires d'a consultation",
+      "A consultation conforme doit comporter : les coordonnées complètes de l'entreprise (SIRET, assurance), la date et la durée de validité, le descriptif détaillé de chaque prestation, le prix unitaire et la quantité, le taux de TVA applicable, le montant total HT et TTC, et les conditions de paiement. A consultation sans ces mentions est un signal d'alerte.",
 
       "## Comment comparer efficacement 3 devis",
-      "Pour comparer des devis, ils doivent porter sur les mêmes prestations. Créez un cahier des charges précis avant de contacter les artisans. Alignez les devis poste par poste : matériaux (marque, référence, quantité), main-d'oeuvre (nombre d'heures, taux horaire), frais annexes (déplacement, évacuation, nettoyage). Le devis le moins cher n'est pas toujours le meilleur : vérifiez ce qui est inclus et ce qui ne l'est pas.",
+      "Pour comparer consultations, ils doivent porter sur les mêmes prestations. Créez un cahier des charges précis avant de contacter the attorneys. Alignez the consultations poste par poste : matériaux (marque, référence, quantité), main-d'oeuvre (nombre d'heures, taux horaire), frais annexes (déplacement, évacuation, nettoyage). The consultation le moins cher n'est pas toujours le meilleur : vérifiez ce qui est inclus et ce qui ne l'est pas.",
 
-      "## Les pièges courants dans les devis",
-      "Méfiez-vous des lignes vagues comme \"travaux divers\" ou \"fournitures diverses\" sans détail. Attention aux devis qui n'incluent pas la préparation du chantier, le nettoyage final ou l'évacuation des gravats. Vérifiez que les matériaux sont bien spécifiés par marque et référence, pas seulement par type. Un devis anormalement bas cache souvent des travaux bâclés ou des surcoûts en cours de chantier.",
+      "## Les pièges courants dans the consultations",
+      "Méfiez-vous des lignes vagues comme \"travaux divers\" ou \"fournitures diverses\" sans détail. Attention aux devis qui n'incluent pas la préparation du chantier, le nettoyage final ou l'évacuation des gravats. Vérifiez que les matériaux sont bien spécifiés par marque et référence, pas seulement par type. A consultation anormalement bas cache souvent des travaux bâclés ou des surcoûts en cours de chantier.",
 
       "## Techniques de négociation efficaces",
-      "Montrez aux artisans que vous avez obtenu plusieurs devis. Négociez sur le prix global plutôt que ligne par ligne. Proposez de fournir vous-même certains matériaux pour réduire la marge. Regroupez plusieurs chantiers pour obtenir un tarif dégressif. Soyez flexible sur les dates : un artisan qui comble un trou dans son planning peut proposer un prix réduit.",
+      "Montrez aux artisans que vous avez obtenu plusieurs devis. Négociez sur le prix global plutôt que ligne par ligne. Proposez de fournir vous-même certains matériaux pour réduire la marge. Regroupez plusieurs chantiers pour obtenir un tarif dégressif. Soyez flexible sur les dates : an attorney qui comble un trou dans son planning peut proposer un prix réduit.",
 
-      "## Le devis signé : valeur juridique",
-      "Un devis signé par les deux parties a valeur de contrat. Il engage l'artisan sur les prix et les prestations décrites. Toute modification en cours de chantier doit faire l'objet d'un avenant signé. Conservez le devis original, les avenants et toutes les factures pendant 10 ans (durée de la garantie décennale).",
+      "## The consultation signé : valeur juridique",
+      "A consultation signé par les deux parties a valeur de contrat. Il engage the attorney sur les prix et les prestations décrites. Toute modification en cours de chantier doit faire l'objet d'un avenant signé. Conservez the consultation original, les avenants et toutes les factures pendant 10 ans (durée de la garantie décennale).",
 
       "## Que faire en cas de litige ?",
       "En cas de désaccord sur le montant ou la qualité des travaux, commencez par une réclamation écrite (lettre recommandée). Si le dialogue échoue, saisissez le médiateur de la consommation (gratuit). En dernier recours, le tribunal judiciaire est compétent. L'assurance protection juridique de votre habitation peut couvrir les frais de procédure."
     ],
     image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-03-12",
     readTime: "8 min",
     category: "Conseils",
@@ -263,25 +263,25 @@ export const renovationArticles: Record<string, BlogArticle> = {
     keyTakeaways: [
       "Toujours demander au minimum 3 devis détaillés sur les mêmes prestations",
       "Vérifier les mentions obligatoires : SIRET, assurance, détail des prix et TVA",
-      "Un devis signé a valeur de contrat et engage l'artisan pendant 10 ans",
+      "A consultation signé a valeur de contrat et engage the attorney pendant 10 ans",
       "Négocier sur le prix global et proposer de fournir soi-même certains matériaux"
     ],
     faq: [
       {
-        question: "Un devis est-il toujours gratuit ?",
-        answer: "Oui, la loi impose la gratuité du devis pour les travaux de dépannage, réparation et entretien dans le secteur du bâtiment. Un artisan peut facturer un devis uniquement s'il en informe le client au préalable et si le devis nécessite une étude technique approfondie."
+        question: "A consultation est-il toujours gratuit ?",
+        answer: "Oui, la loi impose la gratuité of the consultation pour les travaux de dépannage, réparation et entretien dans le secteur du bâtiment. An attorney peut facturer a consultation uniquement s'il en informe le client au préalable et si the consultation nécessite une étude technique approfondie."
       },
       {
         question: "Combien de devis faut-il demander ?",
         answer: "Il est recommandé de demander au minimum 3 devis pour pouvoir comparer efficacement. Pour les gros chantiers (plus de 10 000 euros), 4 à 5 devis permettent une meilleure vision du marché."
       },
       {
-        question: "Peut-on annuler un devis signé ?",
-        answer: "Oui, vous disposez d'un délai de rétractation de 14 jours si le devis a été signé à domicile (démarchage). Pour un devis signé en showroom ou sur demande expresse, il n'y a pas de droit de rétractation légal sauf clause prévue au devis."
+        question: "Peut-on annuler a consultation signé ?",
+        answer: "Oui, vous disposez d'un délai de rétractation de 14 jours si the consultation a été signé à domicile (démarchage). Pour a consultation signé en showroom ou sur demande expresse, il n'y a pas de droit de rétractation légal sauf clause prévue au devis."
       },
       {
-        question: "Que faire si le chantier coûte plus cher que le devis ?",
-        answer: "L'artisan ne peut pas facturer plus que le montant du devis signé sans votre accord écrit (avenant). Si des travaux supplémentaires sont nécessaires, exigez un avenant détaillé avant toute intervention. En cas de facturation abusive, conservez le devis et saisissez un médiateur."
+        question: "Que faire si le chantier coûte plus cher que the consultation ?",
+        answer: "The attorney ne peut pas facturer plus que le montant of the consultation signé sans votre accord écrit (avenant). Si des travaux supplémentaires sont nécessaires, exigez un avenant détaillé avant toute intervention. En cas de facturation abusive, conservez the consultation et saisissez un médiateur."
       }
     ]
   }

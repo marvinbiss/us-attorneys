@@ -28,48 +28,48 @@ interface SubscriptionData {
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const FREE_FEATURES = [
-  'Réception de leads et demandes de devis',
-  'Envoi de devis aux clients',
-  'Messagerie avec les clients',
-  'Portfolio photos de vos réalisations',
-  'Gestion des avis clients',
-  'Gestion de votre équipe',
-  'Badge profil vérifié (après vérification SIRET)',
-  'Statistiques de votre activité',
-  'Support par email',
+  'Receive leads and consultation requests',
+  'Send quotes to clients',
+  'Messaging with clients',
+  'Portfolio photos of your work',
+  'Client review management',
+  'Team management',
+  'Verified profile badge (after Bar Number verification)',
+  'Activity statistics',
+  'Email support',
 ]
 
 const PRO_FEATURES = [
-  'Tout le plan Gratuit',
-  'Mise en avant dans les résultats de recherche',
-  'Badge "Artisan Pro" sur votre profil',
-  'Statistiques avancées et rapports',
-  'Priorité sur les leads de votre zone',
-  'Support prioritaire par téléphone',
+  'Everything in Free plan',
+  'Featured placement in search results',
+  '"Pro Attorney" badge on your profile',
+  'Advanced statistics and reports',
+  'Priority on leads in your area',
+  'Priority phone support',
 ]
 
 const PREMIUM_FEATURES = [
-  'Tout le plan Pro',
-  'Position garantie en tête des résultats',
-  'Badge "Artisan Premium" doré',
-  'Leads exclusifs dans votre zone',
-  'Page profil personnalisée',
-  'Account manager dédié',
-  'Accès anticipé aux nouvelles fonctionnalités',
+  'Everything in Pro plan',
+  'Guaranteed top position in results',
+  'Gold "Premium Attorney" badge',
+  'Exclusive leads in your area',
+  'Custom profile page',
+  'Dedicated account manager',
+  'Early access to new features',
 ]
 
 // ─── SWR Fetcher ─────────────────────────────────────────────────────────────
 
 const fetcher = (url: string): Promise<SubscriptionData> =>
   fetch(url).then((r) => {
-    if (!r.ok) throw new Error('Erreur chargement')
+    if (!r.ok) throw new Error('Loading error')
     return r.json()
   })
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('fr-FR', {
+  return new Date(dateStr).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -114,9 +114,9 @@ export default function AbonnementArtisanPage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold">Mon abonnement</h1>
+              <h1 className="text-2xl font-bold">My Subscription</h1>
               <p className="text-blue-100">
-                Gérez votre plan et vos fonctionnalités
+                Manage your plan and features
               </p>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function AbonnementArtisanPage() {
             {isLoading && (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-                <span className="ml-3 text-gray-600">Chargement...</span>
+                <span className="ml-3 text-gray-600">Loading...</span>
               </div>
             )}
 
@@ -148,19 +148,19 @@ export default function AbonnementArtisanPage() {
                       </div>
                       <div>
                         <p className="text-green-100 text-sm font-medium">
-                          Plan actuel
+                          Current Plan
                         </p>
-                        <h2 className="text-2xl font-bold">Gratuit</h2>
+                        <h2 className="text-2xl font-bold">Free</h2>
                       </div>
                     </div>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 text-white">
-                      Actif
+                      Active
                     </span>
                   </div>
                   {data?.memberSince && (
                     <div className="mt-4 flex items-center gap-2 text-green-100 text-sm">
                       <Calendar className="w-4 h-4" />
-                      <span>Membre depuis le {formatDate(data.memberSince)}</span>
+                      <span>Member since {formatDate(data.memberSince)}</span>
                     </div>
                   )}
                 </div>
@@ -168,7 +168,7 @@ export default function AbonnementArtisanPage() {
                 {/* Free plan features */}
                 <div className="p-6">
                   <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
-                    Fonctionnalités incluses
+                    Included Features
                   </h3>
                   <FeatureList features={FREE_FEATURES} />
                 </div>
@@ -179,7 +179,7 @@ export default function AbonnementArtisanPage() {
             {!isLoading && data?.hasUpgradePlans && (
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  Plans disponibles prochainement
+                  Upcoming Plans
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Pro plan */}
@@ -194,7 +194,7 @@ export default function AbonnementArtisanPage() {
                             Pro
                           </h3>
                           <p className="text-sm text-gray-500">
-                            Pour les artisans ambitieux
+                            For ambitious attorneys
                           </p>
                         </div>
                       </div>
@@ -206,7 +206,7 @@ export default function AbonnementArtisanPage() {
                         className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-400 rounded-lg font-medium cursor-not-allowed"
                       >
                         <Lock className="w-4 h-4" />
-                        Bientôt disponible
+                        Coming Soon
                       </button>
                     </div>
                   </div>
@@ -226,7 +226,7 @@ export default function AbonnementArtisanPage() {
                             Premium
                           </h3>
                           <p className="text-sm text-gray-500">
-                            Visibilité maximale
+                            Maximum visibility
                           </p>
                         </div>
                       </div>
@@ -238,7 +238,7 @@ export default function AbonnementArtisanPage() {
                         className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-400 rounded-lg font-medium cursor-not-allowed"
                       >
                         <Lock className="w-4 h-4" />
-                        Bientôt disponible
+                        Coming Soon
                       </button>
                     </div>
                   </div>
@@ -255,11 +255,11 @@ export default function AbonnementArtisanPage() {
                   </div>
                   <div>
                     <h3 className="text-base font-semibold text-gray-900">
-                      Besoin d&apos;aide ?
+                      Need Help?
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      Notre équipe est disponible pour répondre à vos questions
-                      sur votre compte et vos fonctionnalités.
+                      Our team is available to answer your questions
+                      about your account and features.
                     </p>
                     <a
                       href="mailto:contact@us-attorneys.com"

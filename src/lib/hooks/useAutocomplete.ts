@@ -350,7 +350,7 @@ export function useSiretValidation() {
         )
       } catch (_err) {
         setIsValid(null)
-        setError('Erreur de vérification')
+        setError('Verification error')
       } finally {
         setIsLoading(false)
       }
@@ -402,7 +402,7 @@ export function useGeolocation() {
 
   const getCurrentPosition = useCallback(() => {
     if (!navigator.geolocation) {
-      setError('La géolocalisation n\'est pas supportée par votre navigateur')
+      setError('Geolocation is not supported by your browser')
       return
     }
 
@@ -433,16 +433,16 @@ export function useGeolocation() {
       (err) => {
         switch (err.code) {
           case err.PERMISSION_DENIED:
-            setError('Accès à la géolocalisation refusé')
+            setError('Geolocation access denied')
             break
           case err.POSITION_UNAVAILABLE:
             setError('Position indisponible')
             break
           case err.TIMEOUT:
-            setError('Délai de géolocalisation dépassé')
+            setError('Geolocation timeout exceeded')
             break
           default:
-            setError('Erreur de géolocalisation')
+            setError('Geolocation error')
         }
         setIsLoading(false)
       },

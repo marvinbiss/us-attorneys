@@ -3,7 +3,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 /**
  * GET /api/v1/docs
  *
- * Page de documentation HTML de l'API Baromètre des Artisans
+ * HTML documentation page for the Attorney Barometer API
  */
 export async function GET() {
   const html = `<!DOCTYPE html>
@@ -11,7 +11,7 @@ export async function GET() {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>API Baromètre des Artisans — Documentation | ${SITE_NAME}</title>
+  <title>Attorney Barometer API — Documentation | ${SITE_NAME}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1e293b; background: #f8fafc; }
@@ -39,27 +39,27 @@ export async function GET() {
 </head>
 <body>
   <div class="container">
-    <h1>API Baromètre des Artisans</h1>
-    <p class="subtitle">Accédez aux statistiques agrégées de ${SITE_NAME} sur les artisans du bâtiment en France.</p>
+    <h1>Attorney Barometer API</h1>
+    <p class="subtitle">Access aggregated statistics from ${SITE_NAME} on attorneys across the United States.</p>
 
     <div class="warn">
-      <strong>Attribution obligatoire</strong> — Toute utilisation des données de cette API doit inclure un lien visible vers
+      <strong>Required attribution</strong> — Any use of data from this API must include a visible link to
       <a href="${SITE_URL}/price-index">${SITE_URL}/price-index</a> avec la mention
-      « Source : ${SITE_NAME} — Baromètre des Artisans ».
+      "Source: ${SITE_NAME} — Attorney Barometer".
     </div>
 
     <h2>Endpoints</h2>
 
     <div class="endpoint">
       <p><span class="badge badge-get">GET</span> <span class="endpoint-url">/api/v1/pricing</span></p>
-      <p>Statistiques par métier, optionnellement filtré par localisation.</p>
-      <h3>Paramètres</h3>
+      <p>Statistics by practice area, optionally filtered by location.</p>
+      <h3>Parameters</h3>
       <table>
         <tr><th>Param</th><th>Type</th><th>Requis</th><th>Description</th></tr>
-        <tr><td><code>metier</code></td><td>string</td><td>Oui</td><td>Slug du métier (ex: <code>plombier</code>)</td></tr>
-        <tr><td><code>ville</code></td><td>string</td><td>Non</td><td>Slug de la ville (ex: <code>paris</code>)</td></tr>
-        <tr><td><code>departement</code></td><td>string</td><td>Non</td><td>Code département (ex: <code>75</code>)</td></tr>
-        <tr><td><code>region</code></td><td>string</td><td>Non</td><td>Slug de la région (ex: <code>ile-de-france</code>)</td></tr>
+        <tr><td><code>metier</code></td><td>string</td><td>Yes</td><td>Practice area slug (e.g. <code>personal-injury</code>)</td></tr>
+        <tr><td><code>ville</code></td><td>string</td><td>No</td><td>Slug de la ville (ex: <code>paris</code>)</td></tr>
+        <tr><td><code>departement</code></td><td>string</td><td>No</td><td>State code (e.g. <code>CA</code>)</td></tr>
+        <tr><td><code>region</code></td><td>string</td><td>No</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
       </table>
       <h3>Exemple</h3>
       <pre><code>curl "${SITE_URL}/api/v1/pricing?metier=plombier&ville=paris"</code></pre>
@@ -75,7 +75,7 @@ export async function GET() {
     "taux_verification": 0.4520
   }],
   "attribution": {
-    "text": "Source : ${SITE_NAME} — Baromètre des Artisans",
+    "text": "Source: ${SITE_NAME} — Attorney Barometer",
     "url": "${SITE_URL}/price-index"
   }
 }</code></pre>
@@ -83,26 +83,26 @@ export async function GET() {
 
     <div class="endpoint">
       <p><span class="badge badge-get">GET</span> <span class="endpoint-url">/api/v1/stats</span></p>
-      <p>Statistiques régionales ou départementales — tous les métiers d'une zone.</p>
-      <h3>Paramètres</h3>
+      <p>Regional or state statistics — all practice areas in a zone.</p>
+      <h3>Parameters</h3>
       <table>
         <tr><th>Param</th><th>Type</th><th>Requis</th><th>Description</th></tr>
-        <tr><td><code>region</code></td><td>string</td><td>Non*</td><td>Slug de la région (ex: <code>ile-de-france</code>)</td></tr>
-        <tr><td><code>departement</code></td><td>string</td><td>Non*</td><td>Code département (ex: <code>75</code>)</td></tr>
+        <tr><td><code>region</code></td><td>string</td><td>Non*</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
+        <tr><td><code>departement</code></td><td>string</td><td>Non*</td><td>State code (e.g. <code>CA</code>)</td></tr>
       </table>
-      <p>* Un des deux paramètres est requis.</p>
+      <p>* One of the two parameters is required.</p>
       <h3>Exemple</h3>
       <pre><code>curl "${SITE_URL}/api/v1/stats?region=ile-de-france"</code></pre>
     </div>
 
     <h2>Cache</h2>
-    <p>Les réponses sont mises en cache pendant 1 heure avec un <code>stale-while-revalidate</code> de 24 heures.
-    Les données sont agrégées quotidiennement depuis notre base de 940 000+ artisans.</p>
+    <p>Responses are cached for 1 hour with a <code>stale-while-revalidate</code> of 24 hours.
+    Data is aggregated daily from our database of 940,000+ attorneys.</p>
 
     <h2>Limitations</h2>
-    <p>Pas de clé API requise. Rate limit : 60 requêtes/minute par IP. Usage commercial : nous contacter.</p>
+    <p>No API key required. Rate limit: 60 requests/minute per IP. Commercial use: contact us.</p>
 
-    <h2>Métiers disponibles</h2>
+    <h2>Available Practice Areas</h2>
     <p><code>plombier</code>, <code>electricien</code>, <code>serrurier</code>, <code>chauffagiste</code>,
     <code>peintre-en-batiment</code>, <code>menuisier</code>, <code>carreleur</code>, <code>couvreur</code>,
     <code>macon</code>, <code>jardinier</code>, <code>vitrier</code>, <code>climaticien</code>,
@@ -113,7 +113,7 @@ export async function GET() {
     <p>Questions ? <a href="${SITE_URL}/contact">Contactez-nous</a></p>
 
     <p style="margin-top: 3rem; font-size: 0.75rem; color: #94a3b8;">
-      &copy; ${new Date().getFullYear()} ${SITE_NAME} — Tous droits réservés
+      &copy; ${new Date().getFullYear()} ${SITE_NAME} — All rights reserved
     </p>
   </div>
 </body>

@@ -35,7 +35,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.average_rating > 0) {
     stats.push({
       icon: Star,
-      label: 'Note moyenne',
+      label: 'Average rating',
       value: artisan.average_rating.toFixed(1),
       subValue: '/ 5',
       color: 'text-amber-600',
@@ -47,7 +47,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.review_count > 0) {
     stats.push({
       icon: MessageCircle,
-      label: 'Avis clients',
+      label: 'Client reviews',
       value: artisan.review_count.toString(),
       color: 'text-clay-600',
       bgColor: 'bg-clay-50 border-clay-100',
@@ -60,7 +60,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
     const age = currentYear - year
     stats.push({
       icon: Calendar,
-      label: age > 1 ? `${age} ans d'expérience` : 'Entreprise créée',
+      label: age > 1 ? `${age} years of experience` : 'Firm established',
       value: year.toString(),
       color: 'text-stone-700',
       bgColor: 'bg-sand-200 border-sand-300',
@@ -69,7 +69,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
     // member_since is the platform join year — only show if it's a meaningful past year
     stats.push({
       icon: Calendar,
-      label: 'Membre depuis',
+      label: 'Member since',
       value: artisan.member_since,
       color: 'text-stone-700',
       bgColor: 'bg-sand-200 border-sand-300',
@@ -80,8 +80,8 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.is_verified) {
     stats.push({
       icon: Shield,
-      label: 'Identité vérifiée',
-      value: 'SIRET',
+      label: 'Identity verified',
+      value: 'Bar #',
       color: 'text-clay-700',
       bgColor: 'bg-clay-50 border-clay-100',
     })
@@ -91,7 +91,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.available_24h) {
     stats.push({
       icon: Clock,
-      label: 'Disponibilité',
+      label: 'Availability',
       value: '24h/7j',
       color: 'text-clay-500',
       bgColor: 'bg-clay-50 border-clay-100',
@@ -102,8 +102,8 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.free_quote) {
     stats.push({
       icon: CheckCircle,
-      label: 'Devis',
-      value: 'Gratuit',
+      label: 'Consultation',
+      value: 'Free',
       color: 'text-stone-700',
       bgColor: 'bg-sand-200 border-sand-300',
     })
@@ -113,7 +113,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.team_size && artisan.team_size > 1) {
     stats.push({
       icon: Users,
-      label: 'Équipe',
+      label: 'Team',
       value: artisan.team_size.toString(),
       subValue: 'pers.',
       color: 'text-stone-700',
@@ -125,7 +125,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   if (artisan.intervention_radius_km) {
     stats.push({
       icon: Navigation,
-      label: "Zone d'action",
+      label: "Service area",
       value: artisan.intervention_radius_km.toString(),
       subValue: 'km',
       color: 'text-clay-600',
@@ -155,7 +155,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
           <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
             <Award className="w-4.5 h-4.5 text-clay-400" aria-hidden="true" />
           </div>
-          En bref
+          At a Glance
         </h2>
       </div>
 
@@ -164,7 +164,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
         <div
           className={`grid grid-cols-2 ${gridCols} gap-3`}
           role="list"
-          aria-label="Informations clés de l'artisan"
+          aria-label="Key information about this attorney"
         >
           {stats.map((stat, index) => (
             <motion.div

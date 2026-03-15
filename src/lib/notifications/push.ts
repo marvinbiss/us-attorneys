@@ -1,5 +1,5 @@
 /**
- * Web Push Notifications - ServicesArtisans
+ * Web Push Notifications - US Attorneys
  * VAPID-based push notifications
  */
 
@@ -67,21 +67,21 @@ export interface PushNotificationPayload {
 // Notification templates
 export const pushTemplates = {
   bookingConfirmed: (attorneyName: string, date: string): PushNotificationPayload => ({
-    title: 'Réservation confirmée ✓',
-    body: `Votre RDV avec ${attorneyName} le ${date} est confirmé`,
+    title: 'Booking confirmed ✓',
+    body: `Your appointment with ${attorneyName} on ${date} is confirmed`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-confirmed',
     vibrate: [100, 50, 100],
     actions: [
-      { action: 'view', title: 'Voir détails' },
+      { action: 'view', title: 'View details' },
       { action: 'calendar', title: 'Ajouter au calendrier' },
     ],
   }),
 
   bookingReminder: (attorneyName: string, time: string): PushNotificationPayload => ({
     title: 'Rappel de RDV',
-    body: `N'oubliez pas votre RDV avec ${attorneyName} à ${time}`,
+    body: `Don't forget your appointment with ${attorneyName} at ${time}`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-reminder',
@@ -89,13 +89,13 @@ export const pushTemplates = {
     vibrate: [200, 100, 200],
     actions: [
       { action: 'view', title: 'Voir' },
-      { action: 'directions', title: 'Itinéraire' },
+      { action: 'directions', title: 'Directions' },
     ],
   }),
 
   bookingCancelled: (attorneyName: string): PushNotificationPayload => ({
-    title: 'RDV annulé',
-    body: `Votre RDV avec ${attorneyName} a été annulé`,
+    title: 'Booking cancelled',
+    body: `Your appointment with ${attorneyName} has been cancelled`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-cancelled',
@@ -104,24 +104,24 @@ export const pushTemplates = {
 
   newMessage: (senderName: string): PushNotificationPayload => ({
     title: 'Nouveau message',
-    body: `${senderName} vous a envoyé un message`,
+    body: `${senderName} sent you a message`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'new-message',
-    actions: [{ action: 'reply', title: 'Répondre' }],
+    actions: [{ action: 'reply', title: 'Reply' }],
   }),
 
   newReview: (rating: number, clientName: string): PushNotificationPayload => ({
     title: `Nouvel avis ${'⭐'.repeat(rating)}`,
-    body: `${clientName} a laissé un avis`,
+    body: `${clientName} left a review`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'new-review',
   }),
 
   newBookingRequest: (clientName: string, service: string): PushNotificationPayload => ({
-    title: 'Nouvelle réservation !',
-    body: `${clientName} a réservé: ${service}`,
+    title: 'New booking!',
+    body: `${clientName} booked: ${service}`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'new-booking',
@@ -134,7 +134,7 @@ export const pushTemplates = {
   }),
 
   videoCallStarting: (clientName: string): PushNotificationPayload => ({
-    title: 'Consultation vidéo',
+    title: 'Video consultation',
     body: `${clientName} attend dans la salle d'attente`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
@@ -145,12 +145,12 @@ export const pushTemplates = {
   }),
 
   slotAvailable: (attorneyName: string, date: string): PushNotificationPayload => ({
-    title: 'Créneau disponible !',
-    body: `${attorneyName} a un créneau le ${date}`,
+    title: 'Slot available!',
+    body: `${attorneyName} has a slot on ${date}`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'slot-available',
-    actions: [{ action: 'book', title: 'Réserver' }],
+    actions: [{ action: 'book', title: 'Book' }],
   }),
 }
 

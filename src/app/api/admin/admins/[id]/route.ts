@@ -28,14 +28,14 @@ export async function GET(
     // Only super_admin can view admin details
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: 'Réservé aux super admins' } },
+        { success: false, error: { code: 'FORBIDDEN', message: 'Reserved for super admins' } },
         { status: 403 }
       )
     }
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -51,7 +51,7 @@ export async function GET(
 
     if (error) {
       logger.error('Admin fetch error', error)
-      return NextResponse.json({ success: false, error: { message: 'Administrateur non trouvé' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Administrator not found' } }, { status: 404 })
     }
 
     return NextResponse.json({
@@ -66,7 +66,7 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Admin fetch error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -84,14 +84,14 @@ export async function PATCH(
     // Only super_admin can modify admins
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent modifier les rôles' } },
+        { success: false, error: { code: 'FORBIDDEN', message: 'Only super admins can modify roles' } },
         { status: 403 }
       )
     }
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -101,7 +101,7 @@ export async function PATCH(
     const result = updateAdminSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -122,10 +122,10 @@ export async function PATCH(
 
     if (error) {
       logger.error('Admin update error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
     }
 
-    // Log audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'admin_updated', 'settings', params.id, { role, is_admin })
 
     return NextResponse.json({
@@ -140,7 +140,7 @@ export async function PATCH(
     })
   } catch (error) {
     logger.error('Admin update error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -158,14 +158,14 @@ export async function DELETE(
     // Only super_admin can delete admins
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent supprimer des administrateurs' } },
+        { success: false, error: { code: 'FORBIDDEN', message: 'Only super admins can delete administrators' } },
         { status: 403 }
       )
     }
 
     if (!isValidUuid(params.id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Identifiant invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -180,15 +180,15 @@ export async function DELETE(
 
     if (error) {
       logger.error('Admin delete error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
     }
 
-    // Log audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'admin_deleted', 'settings', params.id)
 
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Admin delete error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

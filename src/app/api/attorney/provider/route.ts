@@ -1,7 +1,7 @@
 /**
- * Artisan Provider API
- * GET: Fetch artisan's provider data
- * PUT: Update artisan's provider data
+ * Attorney Provider API
+ * GET: Fetch attorney's provider data
+ * PUT: Update attorney's provider data
  */
 
 import { NextResponse } from 'next/server'
@@ -21,12 +21,12 @@ export async function GET() {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('role')
@@ -35,14 +35,14 @@ export async function GET() {
 
     if (profileError || !profile) {
       return NextResponse.json(
-        { error: 'Profil introuvable' },
+        { error: 'Profile not found' },
         { status: 404 }
       )
     }
 
-    if (profile.role !== 'artisan') {
+    if (profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -56,7 +56,7 @@ export async function GET() {
 
     if (attorneyError || !provider) {
       return NextResponse.json(
-        { error: 'Aucun profil artisan trouvé. Contactez le support.' },
+        { error: 'No attorney profile found. Contact support.' },
         { status: 404 }
       )
     }
@@ -65,7 +65,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Provider GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }
@@ -80,12 +80,12 @@ export async function PUT(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('role')
@@ -94,14 +94,14 @@ export async function PUT(request: Request) {
 
     if (profileError || !profile) {
       return NextResponse.json(
-        { error: 'Profil introuvable' },
+        { error: 'Profile not found' },
         { status: 404 }
       )
     }
 
-    if (profile.role !== 'artisan') {
+    if (profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -115,7 +115,7 @@ export async function PUT(request: Request) {
 
     if (attorneyError || !provider) {
       return NextResponse.json(
-        { error: 'Aucun profil artisan trouvé. Contactez le support.' },
+        { error: 'No attorney profile found. Contact support.' },
         { status: 404 }
       )
     }
@@ -126,7 +126,7 @@ export async function PUT(request: Request) {
 
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Erreur de validation', details: result.error.flatten() },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -172,7 +172,7 @@ export async function PUT(request: Request) {
     if (updateError) {
       logger.error('Error updating provider:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour du profil artisan' },
+        { error: 'Error updating attorney profile' },
         { status: 500 }
       )
     }
@@ -206,7 +206,7 @@ export async function PUT(request: Request) {
   } catch (error) {
     logger.error('Provider PUT error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

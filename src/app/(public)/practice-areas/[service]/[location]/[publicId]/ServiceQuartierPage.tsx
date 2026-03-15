@@ -90,7 +90,7 @@ export default async function ServiceQuartierPage({
 
   // 4. Generate content
   const trade = getTradeContent(specialtySlug)
-  const quartierContent = generateQuartierContent(ville as never, quartierName, specialtySlug)
+  const quartierContent = generateQuartierContent(ville, quartierName, specialtySlug)
   const villeRegion = getStateByCode(ville.stateCode)?.region || ''
   const pricingMultiplier = getRegionalMultiplier(villeRegion)
   const svcLower = service.name.toLowerCase()
@@ -99,8 +99,8 @@ export default async function ServiceQuartierPage({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${service.name} à ${quartierName}, ${ville.name}`,
-    description: `Trouvez les meilleurs ${svcLower}s dans le quartier ${quartierName} à ${ville.name}`,
+    name: `${service.name} in ${quartierName}, ${ville.name}`,
+    description: `Find the best ${svcLower}s in the ${quartierName} neighborhood of ${ville.name}`,
     image: getServiceImage(specialtySlug).src,
     areaServed: {
       '@type': 'Place',
@@ -118,8 +118,8 @@ export default async function ServiceQuartierPage({
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Services', url: '/services' },
+    { name: 'Home', url: '/' },
+    { name: 'Practice Areas', url: '/services' },
     { name: service.name, url: `/practice-areas/${specialtySlug}` },
     { name: ville.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
     { name: quartierName, url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}` },
@@ -141,8 +141,8 @@ export default async function ServiceQuartierPage({
 
   const itemListSchema = providers.length > 0
     ? getItemListSchema({
-        name: `${service.name} à ${quartierName}, ${ville.name}`,
-        description: `Liste des ${svcLower}s référencés à ${quartierName}, ${ville.name}`,
+        name: `${service.name} in ${quartierName}, ${ville.name}`,
+        description: `List of verified ${svcLower}s in ${quartierName}, ${ville.name}`,
         url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}`,
         items: providers.slice(0, 20).map((p, i) => ({
           name: p.name,
@@ -165,11 +165,11 @@ export default async function ServiceQuartierPage({
   // 7. Varied H1
   const h1Hash = Math.abs(hashCode(`h1-sq-${specialtySlug}-${locationSlug}-${quartierSlug}`))
   const h1Templates = [
-    `${service.name} à ${quartierName}, ${ville.name}`,
-    `${service.name} — Quartier ${quartierName}, ${ville.name}`,
-    `Trouvez un ${svcLower} à ${quartierName} (${ville.name})`,
-    `${service.name} à ${quartierName} : artisans vérifiés`,
-    `Les meilleurs ${svcLower}s à ${quartierName}, ${ville.name}`,
+    `${service.name} in ${quartierName}, ${ville.name}`,
+    `${service.name} — ${quartierName} Neighborhood, ${ville.name}`,
+    `Find a ${svcLower} in ${quartierName} (${ville.name})`,
+    `${service.name} in ${quartierName}: verified attorneys`,
+    `Best ${svcLower}s in ${quartierName}, ${ville.name}`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
@@ -260,11 +260,11 @@ export default async function ServiceQuartierPage({
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <div className="prose prose-gray max-w-none">
               <h2 className="border-l-4 border-amber-500 pl-4 !mt-0">
-                {service.name} dans le quartier {quartierName} à {ville.name}
+                {service.name} in {quartierName}, {ville.name}
               </h2>
               <p>{quartierContent.intro}</p>
 
-              <h3>Contexte du bâti à {quartierName}</h3>
+              <h3>Building Context in {quartierName}</h3>
               <p>{quartierContent.batimentContext}</p>
               <div className="not-prose grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 my-4">
                 {quartierRealData ? (
@@ -319,7 +319,7 @@ export default async function ServiceQuartierPage({
               {/* Common issues relevant to this service */}
               {profile.commonIssues.length > 0 && (
                 <>
-                  <h3>Problèmes fréquents à {quartierName} pour un {svcLower}</h3>
+                  <h3>Common Issues in {quartierName} for a {svcLower}</h3>
                   <ul>
                     {profile.commonIssues.map((issue, i) => (
                       <li key={i}>{issue}</li>
@@ -328,10 +328,10 @@ export default async function ServiceQuartierPage({
                 </>
               )}
 
-              <h3>Services demandés à {quartierName}</h3>
+              <h3>Services Requested in {quartierName}</h3>
               <p>{quartierContent.servicesDemandes}</p>
 
-              <h3>Conseils pour vos travaux à {quartierName}</h3>
+              <h3>Tips for Your Legal Services in {quartierName}</h3>
               <p>{quartierContent.conseils}</p>
 
               <p>{quartierContent.proximite}</p>
@@ -348,7 +348,7 @@ export default async function ServiceQuartierPage({
             {quartierContent.dataDriven.immobilierQuartier && (
               <div className="bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-2xl border border-amber-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
-                  Immobilier à {quartierName}, {ville.name}
+                  Real Estate in {quartierName}, {ville.name}
                 </h2>
                 <p className="text-gray-700 leading-relaxed">{quartierContent.dataDriven.immobilierQuartier}</p>
                 {quartierContent.dataDriven.statCards.prixM2Quartier > 0 && (
@@ -360,7 +360,7 @@ export default async function ServiceQuartierPage({
                     {quartierContent.dataDriven.statCards.artisansProximite > 0 && (
                       <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
                         <div className="text-lg font-bold text-amber-700">{quartierContent.dataDriven.statCards.artisansProximite}</div>
-                        <div className="text-xs text-gray-500 mt-1">Artisans à proximité</div>
+                        <div className="text-xs text-gray-500 mt-1">Attorneys Nearby</div>
                       </div>
                     )}
                     {quartierContent.dataDriven.statCards.artisansBtp > 0 && (
@@ -378,7 +378,7 @@ export default async function ServiceQuartierPage({
             {quartierContent.dataDriven.statCards.passoiresDpe > 0 && (
               <div className="bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-2xl border border-orange-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-orange-500 pl-4">
-                  Performance énergétique à {quartierName}
+                  Energy Performance in {quartierName}
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
                   On estime que {quartierContent.dataDriven.statCards.passoiresDpe} % des logements du quartier {quartierName} sont classés F ou G au DPE.
@@ -406,7 +406,7 @@ export default async function ServiceQuartierPage({
             {quartierContent.dataDriven.climatQuartier && (
               <div className="bg-gradient-to-br from-sky-50/50 to-cyan-50/30 rounded-2xl border border-sky-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-sky-500 pl-4">
-                  Climat et saisonnalité à {quartierName}
+                  Climate and Seasonality in {quartierName}
                 </h2>
                 <p className="text-gray-700 leading-relaxed">{quartierContent.dataDriven.climatQuartier}</p>
               </div>
@@ -416,7 +416,7 @@ export default async function ServiceQuartierPage({
             {quartierRealData?.risques && quartierRealData.risques.length > 0 && (
               <div className="bg-gradient-to-br from-red-50/50 to-orange-50/30 rounded-2xl border border-red-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-red-500 pl-4">
-                  Risques naturels à {quartierName}
+                  Natural Risks in {quartierName}
                 </h2>
                 <div className="flex flex-wrap gap-3">
                   {quartierRealData.risques.map(risque => (
@@ -427,9 +427,9 @@ export default async function ServiceQuartierPage({
                   ))}
                 </div>
                 <p className="text-sm text-gray-600 mt-4">
-                  Ces risques naturels identifiés à {quartierName} ({ville.name}) peuvent impacter
-                  les travaux et l&apos;entretien de votre logement. Un {svcLower} expérimenté saura
-                  adapter ses interventions en conséquence.
+                  These natural risks identified in {quartierName} ({ville.name}) can impact
+                  maintenance and upkeep of your property. An experienced {svcLower} will know
+                  how to adapt their consultations accordingly.
                 </p>
               </div>
             )}
@@ -438,7 +438,7 @@ export default async function ServiceQuartierPage({
             {quartierRealData?.transport && quartierRealData.transport.length > 0 && quartierRealData.transport[0] !== 'aucun' && (
               <div className="bg-gradient-to-br from-emerald-50/50 to-teal-50/30 rounded-2xl border border-emerald-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-emerald-500 pl-4">
-                  Transports à {quartierName}
+                  Transportation in {quartierName}
                 </h2>
                 <div className="flex flex-wrap gap-3">
                   {quartierRealData.transport.map(t => (
@@ -459,12 +459,12 @@ export default async function ServiceQuartierPage({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
-                Tarifs {svcLower} à {quartierName}, {ville.name}
+                Fees for {svcLower} in {quartierName}, {ville.name}
               </h2>
               <p className="text-gray-600 mb-6 text-sm pl-[calc(1rem+4px)]">
-                Tarif horaire moyen : <strong className="text-gray-900">{Math.round(trade.priceRange.min * pricingMultiplier)}–{Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
-                {pricingMultiplier !== 1.0 && ` Tarifs ajustés pour la zone de ${ville.name}.`}
-                {pricingMultiplier === 1.0 && ` Les prix à ${quartierName} peuvent varier selon la complexité des travaux.`}
+                Average hourly fee : <strong className="text-gray-900">{Math.round(trade.priceRange.min * pricingMultiplier)}–{Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
+                {pricingMultiplier !== 1.0 && ` Fees adjusted for the ${ville.name} area.`}
+                {pricingMultiplier === 1.0 && ` Prices in ${quartierName} may vary depending on case complexity.`}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {trade.commonTasks.slice(0, 6).map((task, i) => {
@@ -486,19 +486,19 @@ export default async function ServiceQuartierPage({
               {trade.emergencyInfo && (
                 <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl">
                   <p className="text-sm text-red-800">
-                    <strong>Urgence {svcLower} à {quartierName} :</strong>{' '}
+                    <strong>Emergency {svcLower} in {quartierName}:</strong>{' '}
                     {trade.averageResponseTime}
                   </p>
                 </div>
               )}
               <p className="text-xs text-gray-400 mt-4">
-                Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {villeRegion} pour un {svcLower} à {quartierName}, {ville.name}.
+                The fees displayed are indicative and based on market averages in {villeRegion} for a {svcLower} in {quartierName}, {ville.name}.
               </p>
               <Link
                 href={`/pricing/${specialtySlug}`}
                 className="inline-flex items-center gap-2 mt-6 text-blue-600 hover:text-blue-800 text-sm font-medium group"
               >
-                Voir tous les tarifs {svcLower} en France
+                View all {svcLower} fees nationwide
                 <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             </div>
@@ -511,12 +511,12 @@ export default async function ServiceQuartierPage({
         <section className="py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
-              Choisir un {svcLower} à {quartierName}
+              Choosing a {svcLower} in {quartierName}
             </h2>
             <div className="mt-6 space-y-4">
               {trade.certifications.length > 0 && (
                 <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                  <h3 className="font-semibold text-emerald-900 mb-2">Certifications recommandées</h3>
+                  <h3 className="font-semibold text-emerald-900 mb-2">Recommended Certifications</h3>
                   <div className="flex flex-wrap gap-2">
                     {trade.certifications.map((cert, i) => (
                       <span key={i} className="text-sm bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
@@ -534,7 +534,7 @@ export default async function ServiceQuartierPage({
                 )
                 return (
                   <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                    <h3 className="font-semibold text-blue-900 mb-2">Conseils pour {quartierName}</h3>
+                    <h3 className="font-semibold text-blue-900 mb-2">Tips for {quartierName}</h3>
                     <ul className="space-y-1">
                       {selectedTips.map((tip, i) => (
                         <li key={i} className="text-sm text-blue-800 flex items-start gap-2">
@@ -557,7 +557,7 @@ export default async function ServiceQuartierPage({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-4 border-amber-500 pl-4">
-                Questions fréquentes — {svcLower} à {quartierName}, {ville.name}
+                Frequently Asked Questions — {svcLower} in {quartierName}, {ville.name}
               </h2>
               <div className="space-y-3">
                 {combinedFaq.map((item, i) => (
@@ -600,7 +600,7 @@ export default async function ServiceQuartierPage({
           {otherQuartiers.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                {service.name} dans d&apos;autres quartiers de {ville.name}
+                {service.name} in Other Neighborhoods of {ville.name}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {otherQuartiers.map(q => (
@@ -620,7 +620,7 @@ export default async function ServiceQuartierPage({
           {otherServices.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                Autres services à {quartierName}, {ville.name}
+                Other Services in {quartierName}, {ville.name}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {otherServices.map(s => (
@@ -640,7 +640,7 @@ export default async function ServiceQuartierPage({
           {nearbyCities.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                {service.name} dans les cities proches
+                {service.name} in Nearby Cities
               </h3>
               <div className="flex flex-wrap gap-2">
                 {nearbyCities.map(c => (
@@ -662,7 +662,7 @@ export default async function ServiceQuartierPage({
       <section className="py-6 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs text-gray-400">
-            Données vérifiées par SIREN/SIRET · Contenu mis à jour régulièrement · Sources : INSEE, ADEME, DVF
+            Bar-verified data · Content updated regularly · Sources: official records
           </p>
         </div>
       </section>

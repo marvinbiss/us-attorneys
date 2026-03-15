@@ -96,11 +96,11 @@ function parseTrend(change: string): { value: number; isPositive: boolean } | un
 
 function getStatusLabel(status: string): string {
   switch (status) {
-    case 'pending': return 'Nouveau'
-    case 'sent': return 'Devis envoyé'
-    case 'accepted': return 'Accepté'
-    case 'refused': return 'Refusé'
-    case 'expired': return 'Expiré'
+    case 'pending': return 'New'
+    case 'sent': return 'Quote Sent'
+    case 'accepted': return 'Accepted'
+    case 'refused': return 'Declined'
+    case 'expired': return 'Expired'
     default: return status
   }
 }
@@ -120,7 +120,7 @@ function getStatusClasses(status: string): string {
 
 function QuickActionsSkeleton() {
   return (
-    <div className="flex flex-wrap gap-3" aria-busy="true" aria-label="Chargement des actions rapides">
+    <div className="flex flex-wrap gap-3" aria-busy="true" aria-label="Loading quick actions">
       <div className="h-10 w-44 rounded-lg bg-gray-200 animate-pulse" />
       <div className="h-10 w-40 rounded-lg bg-gray-200 animate-pulse" />
     </div>
@@ -129,7 +129,7 @@ function QuickActionsSkeleton() {
 
 function StatsSkeleton() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-busy="true" aria-label="Chargement des statistiques">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-busy="true" aria-label="Loading statistics">
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-start justify-between">
@@ -148,7 +148,7 @@ function StatsSkeleton() {
 
 function DemandesSkeleton() {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6" aria-busy="true" aria-label="Chargement des demandes">
+    <div className="bg-white rounded-xl border border-gray-200 p-6" aria-busy="true" aria-label="Loading cases">
       <div className="flex items-center justify-between mb-6">
         <div className="w-40 h-6 rounded bg-gray-200 animate-pulse" />
         <div className="w-16 h-4 rounded bg-gray-200 animate-pulse" />
@@ -187,7 +187,7 @@ function QuickActions({ publicUrl }: { publicUrl: string | null }) {
           className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors shadow-sm"
         >
           <ExternalLink className="w-4 h-4" aria-hidden="true" />
-          Voir mon profil public
+          View My Public Profile
         </Link>
       )}
       <Link
@@ -195,7 +195,7 @@ function QuickActions({ publicUrl }: { publicUrl: string | null }) {
         className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors shadow-sm"
       >
         <Pencil className="w-4 h-4" aria-hidden="true" />
-        Modifier mon profil
+        Edit My Profile
       </Link>
     </div>
   )
@@ -210,30 +210,30 @@ function ProfileCompletionCTA() {
         <div className="p-2.5 rounded-lg bg-blue-50 text-blue-600">
           <UserCheck className="w-5 h-5" aria-hidden="true" />
         </div>
-        <h3 className="font-semibold text-gray-900">Complétez votre profil</h3>
+        <h3 className="font-semibold text-gray-900">Complete Your Profile</h3>
       </div>
       <p className="text-sm text-gray-500 mb-4">
-        Un profil complet et vérifié vous permet d&apos;apparaître en priorité dans les résultats de recherche et d&apos;inspirer confiance aux clients.
+        A complete and verified profile helps you appear higher in search results and builds trust with potential clients.
       </p>
       <ul className="space-y-2 mb-5 text-sm text-gray-600">
         <li className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-          Ajoutez une description détaillée
+          Add a detailed description
         </li>
         <li className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-          Complétez vos coordonnées
+          Complete your contact info
         </li>
         <li className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-          Ajoutez votre logo
+          Add your logo
         </li>
       </ul>
       <Link
         href="/attorney-dashboard/profil"
         className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors w-full justify-center"
       >
-        Compléter mon profil
+        Complete My Profile
         <ArrowRight className="w-4 h-4" aria-hidden="true" />
       </Link>
     </div>
@@ -250,19 +250,19 @@ interface OnboardingChecklistProps {
 function OnboardingChecklist({ provider, portfolioPhotoCount }: OnboardingChecklistProps) {
   const checks = [
     {
-      label: 'Photo de profil ajoutée',
+      label: 'Profile photo added',
       done: portfolioPhotoCount > 0,
     },
     {
-      label: 'Description rédigée',
+      label: 'Description written',
       done: !!provider?.description && provider.description.length > 10,
     },
     {
-      label: 'Spécialité renseignée',
+      label: 'Specialty specified',
       done: !!provider?.specialty,
     },
     {
-      label: 'Profil vérifié (SIRET)',
+      label: 'Profile verified (Bar Number)',
       done: !!provider?.is_verified,
     },
   ]
@@ -275,16 +275,16 @@ function OnboardingChecklist({ provider, portfolioPhotoCount }: OnboardingCheckl
         <Sparkles className="w-8 h-8 text-blue-500" aria-hidden="true" />
       </div>
       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-        Bienvenue ! Complétez votre profil pour recevoir vos premières demandes.
+        Welcome! Complete your profile to start receiving cases.
       </h3>
       <p className="text-sm text-gray-500 max-w-md mx-auto mb-6">
-        Un profil complet vous rend visible dans les résultats de recherche et inspire confiance aux clients potentiels.
+        A complete profile makes you visible in search results and builds trust with potential clients.
       </p>
 
       {/* Progress bar */}
       <div className="max-w-xs mx-auto mb-6">
         <div className="flex items-center justify-between text-xs text-gray-500 mb-1.5">
-          <span>Progression</span>
+          <span>Progress</span>
           <span>{completedCount}/{checks.length}</span>
         </div>
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -315,7 +315,7 @@ function OnboardingChecklist({ provider, portfolioPhotoCount }: OnboardingCheckl
         href="/attorney-dashboard/profil"
         className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
       >
-        Compléter mon profil
+        Complete My Profile
         <ArrowRight className="w-4 h-4" aria-hidden="true" />
       </Link>
     </div>
@@ -324,7 +324,7 @@ function OnboardingChecklist({ provider, portfolioPhotoCount }: OnboardingCheckl
 
 // ─── Main Page Component ─────────────────────────────────────────────────────
 
-export default function DashboardArtisanPage() {
+export default function AttorneyDashboardPage() {
   const router = useRouter()
 
   const { data, error, isLoading, mutate } = useSWR<DashboardData, FetchError>(
@@ -357,15 +357,15 @@ export default function DashboardArtisanPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Accès réservé</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Restricted</h2>
           <p className="text-gray-600 mb-6">
-            Accès réservé aux artisans. Veuillez vous inscrire en tant qu&apos;artisan.
+            This area is restricted to attorneys. Please register as an attorney.
           </p>
           <Link
             href="/register-attorney"
             className="inline-block bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
           >
-            S&apos;inscrire en tant qu&apos;artisan
+            Register as an Attorney
           </Link>
         </div>
       </div>
@@ -376,7 +376,7 @@ export default function DashboardArtisanPage() {
   const hasGenericError = error && (error as FetchError).status !== 401 && (error as FetchError).status !== 403
 
   const firstName = profile?.full_name?.split(' ')[0] || null
-  const displayName = profile?.full_name || 'Mon entreprise'
+  const displayName = profile?.full_name || 'My Practice'
   const displayCity = provider?.address_city || ''
   const publicUrl = provider
     ? getAttorneyUrl({
@@ -390,28 +390,28 @@ export default function DashboardArtisanPage() {
   const statsCards = stats
     ? [
         {
-          title: 'Vues du profil',
+          title: 'Profile Views',
           value: stats.profileViews.value,
           trend: parseTrend(stats.profileViews.change),
           icon: <Eye className="w-5 h-5" aria-hidden="true" />,
           color: 'blue' as const,
         },
         {
-          title: 'Numéros affichés',
+          title: 'Phone Reveals',
           value: stats.phoneReveals.value,
           trend: parseTrend(stats.phoneReveals.change),
           icon: <Phone className="w-5 h-5" aria-hidden="true" />,
           color: 'green' as const,
         },
         {
-          title: 'Appels reçus',
+          title: 'Calls Received',
           value: stats.phoneClicks.value,
           trend: parseTrend(stats.phoneClicks.change),
           icon: <PhoneCall className="w-5 h-5" aria-hidden="true" />,
           color: 'indigo' as const,
         },
         {
-          title: 'Demandes reçues',
+          title: 'Cases Received',
           value: stats.demandesRecues.value,
           trend: parseTrend(stats.demandesRecues.change),
           icon: <FileText className="w-5 h-5" aria-hidden="true" />,
@@ -429,8 +429,8 @@ export default function DashboardArtisanPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
-              { label: 'Espace Artisan', href: '/attorney-dashboard' },
-              { label: 'Tableau de bord' },
+              { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
+              { label: 'Dashboard' },
             ]}
           />
         </div>
@@ -442,7 +442,7 @@ export default function DashboardArtisanPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">
-                {firstName ? `Bonjour ${firstName}` : 'Tableau de bord'}
+                {firstName ? `Hello ${firstName}` : 'Dashboard'}
               </h1>
               <p className="text-blue-100">
                 {displayName}
@@ -455,7 +455,7 @@ export default function DashboardArtisanPage() {
                   className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
                   role="status"
                 >
-                  Profil référencé
+                  Profile Listed
                 </span>
               )}
             </div>
@@ -484,19 +484,19 @@ export default function DashboardArtisanPage() {
               >
                 <AlertCircle className="w-5 h-5 text-red-500 shrink-0" aria-hidden="true" />
                 <p className="text-sm text-red-700 flex-1">
-                  Erreur de connexion. Veuillez vérifier votre connexion internet.
+                  Connection error. Please check your internet connection.
                 </p>
                 <button
                   onClick={() => mutate()}
                   className="text-sm font-medium text-red-700 hover:text-red-800 underline focus-visible:ring-2 focus-visible:ring-red-500 rounded"
                 >
-                  Réessayer
+                  Retry
                 </button>
               </motion.div>
             )}
 
             {/* Quick Actions */}
-            <section aria-label="Actions rapides">
+            <section aria-label="Quick actions">
               {isLoading && !data ? (
                 <QuickActionsSkeleton />
               ) : (
@@ -510,7 +510,7 @@ export default function DashboardArtisanPage() {
             )}
 
             {/* Stats Section */}
-            <section aria-label="Statistiques" aria-live="polite">
+            <section aria-label="Statistics" aria-live="polite">
               {isLoading && !data ? (
                 <StatsSkeleton />
               ) : (
@@ -533,7 +533,7 @@ export default function DashboardArtisanPage() {
             {/* Two-column layout: Demandes + Profile CTA */}
             <div className={showProfileCTA ? 'grid grid-cols-1 lg:grid-cols-3 gap-8' : ''}>
               {/* Dernières demandes */}
-              <section className={showProfileCTA ? 'lg:col-span-2' : ''} aria-label="Dernières demandes">
+              <section className={showProfileCTA ? 'lg:col-span-2' : ''} aria-label="Recent cases">
                 {isLoading && !data ? (
                   <DemandesSkeleton />
                 ) : (
@@ -544,12 +544,12 @@ export default function DashboardArtisanPage() {
                     className="bg-white rounded-xl border border-gray-200 p-6"
                   >
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-lg font-semibold text-gray-900">Dernières demandes</h2>
+                      <h2 className="text-lg font-semibold text-gray-900">Recent Cases</h2>
                       <Link
                         href="/attorney-dashboard/demandes-recues"
                         className="text-blue-600 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
                       >
-                        Voir tout
+                        View All
                       </Link>
                     </div>
                     <div className="space-y-4">
@@ -577,15 +577,15 @@ export default function DashboardArtisanPage() {
                                   </h3>
                                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-gray-500">
                                     <span>{demande.client_name}</span>
-                                    <span>{demande.city || 'Non précisé'}</span>
+                                    <span>{demande.city || 'Not specified'}</span>
                                     <span className="flex items-center gap-1">
                                       <Calendar className="w-4 h-4" aria-hidden="true" />
-                                      {new Date(demande.created_at).toLocaleDateString('fr-FR')}
+                                      {new Date(demande.created_at).toLocaleDateString('en-US')}
                                     </span>
                                   </div>
                                   {demande.postal_code && (
                                     <div className="mt-2 text-sm font-medium text-blue-600">
-                                      Code postal : {demande.postal_code}
+                                      ZIP Code: {demande.postal_code}
                                     </div>
                                   )}
                                 </div>
@@ -614,7 +614,7 @@ export default function DashboardArtisanPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  aria-label="Complétion du profil"
+                  aria-label="Profile completion"
                 >
                   <ProfileCompletionCTA />
                 </motion.aside>

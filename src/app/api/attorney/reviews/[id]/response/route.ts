@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 // POST request schema
 const reviewResponseSchema = z.object({
-  response: z.string().min(10, 'La réponse doit contenir au moins 10 caractères').max(2000),
+  response: z.string().min(10, 'Response must contain at least 10 characters').max(2000),
 })
 
 export const dynamic = 'force-dynamic'
@@ -30,7 +30,7 @@ export async function POST(
     }
     const { response } = result.data
 
-    // Check review belongs to this artisan and has no response yet
+    // Check review belongs to this attorney and has no response yet
     // reviews.attorney_id → profiles.id, which equals user.id directly
     const { data: review } = await supabase
       .from('reviews')
@@ -41,14 +41,14 @@ export async function POST(
 
     if (!review) {
       return NextResponse.json(
-        { success: false, error: { message: 'Avis non trouvé' } },
+        { success: false, error: { message: 'Review not found' } },
         { status: 404 }
       )
     }
 
     if (review.artisan_response) {
       return NextResponse.json(
-        { success: false, error: { message: 'Cet avis a déjà une réponse' } },
+        { success: false, error: { message: 'This review already has a response' } },
         { status: 400 }
       )
     }
@@ -68,7 +68,7 @@ export async function POST(
   } catch (error) {
     logger.error('Review response error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

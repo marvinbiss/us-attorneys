@@ -18,7 +18,7 @@ export async function GET() {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
@@ -44,7 +44,7 @@ export async function GET() {
     if (demandesError) {
       logger.error('Error fetching demandes:', demandesError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des demandes' },
+        { error: 'Error retrieving claims' },
         { status: 500 }
       )
     }
@@ -66,7 +66,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Client demandes GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

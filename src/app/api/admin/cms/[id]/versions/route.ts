@@ -19,7 +19,7 @@ export async function GET(
     const { id } = await params
     if (!UUID_RE.test(id)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID invalide' } },
+        { success: false, error: { message: 'Invalid ID' } },
         { status: 400 }
       )
     }
@@ -35,7 +35,7 @@ export async function GET(
 
     if (!pageExists) {
       return NextResponse.json(
-        { success: false, error: { message: 'Page non trouvée' } },
+        { success: false, error: { message: 'Page not found' } },
         { status: 404 }
       )
     }
@@ -50,7 +50,7 @@ export async function GET(
     if (error) {
       logger.error('CMS page versions error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des versions' } },
+        { success: false, error: { message: 'Error retrieving versions' } },
         { status: 500 }
       )
     }
@@ -59,7 +59,7 @@ export async function GET(
   } catch (error) {
     logger.error('CMS page versions error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

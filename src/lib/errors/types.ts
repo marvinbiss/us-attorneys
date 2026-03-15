@@ -1,5 +1,5 @@
 /**
- * Error Types - ServicesArtisans
+ * Error Types - US Attorneys
  * Standardized error responses for all API routes
  *
  * NOTE: AppError classes (AppError, ValidationError, NotFoundError, etc.) live in
@@ -107,28 +107,28 @@ export function createSuccessResponse<T>(data: T): ApiSuccessResponse<T> {
 }
 
 export const ErrorMessages: Record<ErrorCode, string> = {
-  [ErrorCode.UNAUTHORIZED]: 'Authentification requise',
-  [ErrorCode.INVALID_TOKEN]: 'Token invalide',
-  [ErrorCode.TOKEN_EXPIRED]: 'Session expirée',
+  [ErrorCode.UNAUTHORIZED]: 'Authentication required',
+  [ErrorCode.INVALID_TOKEN]: 'Invalid token',
+  [ErrorCode.TOKEN_EXPIRED]: 'Session expired',
   [ErrorCode.INSUFFICIENT_PERMISSIONS]: 'Permissions insuffisantes',
-  [ErrorCode.VALIDATION_ERROR]: 'Données invalides',
+  [ErrorCode.VALIDATION_ERROR]: 'Invalid data',
   [ErrorCode.MISSING_REQUIRED_FIELD]: 'Champ requis manquant',
-  [ErrorCode.INVALID_FORMAT]: 'Format invalide',
+  [ErrorCode.INVALID_FORMAT]: 'Invalid format',
   [ErrorCode.VALUE_OUT_OF_RANGE]: 'Valeur hors limites',
-  [ErrorCode.NOT_FOUND]: 'Ressource introuvable',
-  [ErrorCode.ALREADY_EXISTS]: 'Cette ressource existe déjà',
-  [ErrorCode.RESOURCE_LOCKED]: 'Ressource verrouillée',
-  [ErrorCode.RESOURCE_DELETED]: 'Ressource supprimée',
-  [ErrorCode.BOOKING_CONFLICT]: 'Conflit de réservation',
-  [ErrorCode.SLOT_UNAVAILABLE]: 'Créneau indisponible',
+  [ErrorCode.NOT_FOUND]: 'Resource not found',
+  [ErrorCode.ALREADY_EXISTS]: 'This resource already exists',
+  [ErrorCode.RESOURCE_LOCKED]: 'Resource locked',
+  [ErrorCode.RESOURCE_DELETED]: 'Resource deleted',
+  [ErrorCode.BOOKING_CONFLICT]: 'Booking conflict',
+  [ErrorCode.SLOT_UNAVAILABLE]: 'Slot unavailable',
   [ErrorCode.CANCELLATION_TOO_LATE]: 'Annulation tardive impossible',
   [ErrorCode.PAYMENT_REQUIRED]: 'Paiement requis',
-  [ErrorCode.REVIEW_ALREADY_EXISTS]: 'Avis déjà déposé',
-  [ErrorCode.PAYMENT_FAILED]: 'Paiement échoué',
-  [ErrorCode.INVALID_PAYMENT_METHOD]: 'Méthode de paiement invalide',
-  [ErrorCode.REFUND_FAILED]: 'Remboursement échoué',
-  [ErrorCode.INTERNAL_ERROR]: 'Erreur interne',
-  [ErrorCode.DATABASE_ERROR]: 'Erreur base de données',
+  [ErrorCode.REVIEW_ALREADY_EXISTS]: 'Review already submitted',
+  [ErrorCode.PAYMENT_FAILED]: 'Payment failed',
+  [ErrorCode.INVALID_PAYMENT_METHOD]: 'Invalid payment method',
+  [ErrorCode.REFUND_FAILED]: 'Refund failed',
+  [ErrorCode.INTERNAL_ERROR]: 'Internal error',
+  [ErrorCode.DATABASE_ERROR]: 'Database error',
   [ErrorCode.EXTERNAL_SERVICE_ERROR]: 'Erreur service externe',
   [ErrorCode.RATE_LIMIT_EXCEEDED]: 'Limite de requetes atteinte',
 }

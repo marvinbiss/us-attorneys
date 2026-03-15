@@ -1,5 +1,5 @@
 /**
- * Reviews API - ServicesArtisans
+ * Reviews API - US Attorneys
  * Handles review submission and retrieval with proper validation
  * World-class review system with fraud detection
  */
@@ -59,13 +59,13 @@ function getSupabaseClient() {
   return createClient(supabaseUrl, supabaseKey)
 }
 
-// Helper to get artisan display name
+// Helper to get attorney display name
 function getAttorneyDisplayName(artisan: AttorneyProfile | AttorneyProfile[] | null): string {
-  if (!artisan) return 'Artisan'
+  if (!artisan) return 'Attorney'
 
   const profile = Array.isArray(artisan) ? artisan[0] : artisan
 
-  return profile?.name || 'Artisan'
+  return profile?.name || 'Attorney'
 }
 
 // Helper to get client info from profiles join
@@ -81,13 +81,13 @@ function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: 
 
 // Query schema for GET request - require full UUID for bookingId to prevent enumeration
 const getQuerySchema = z.object({
-  bookingId: z.string().uuid('ID de réservation invalide').optional(),
+  bookingId: z.string().uuid('Invalid booking ID').optional(),
   attorneyId: z.string().uuid().optional(),
 }).refine(data => data.bookingId || data.attorneyId, {
-  message: 'bookingId ou attorneyId requis',
+  message: 'bookingId or attorneyId required',
 })
 
-// GET /api/reviews - Get booking info for review or artisan reviews
+// GET /api/reviews - Get booking info for review or attorney reviews
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
@@ -103,7 +103,7 @@ export async function GET(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          queryValidation.error.issues[0]?.message || 'Parametres invalides'
+          queryValidation.error.issues[0]?.message || 'Invalid parameters'
         ),
         { status: 400 }
       )
@@ -130,7 +130,7 @@ export async function GET(request: Request) {
       if (error || !booking) {
         // Don't reveal whether the booking exists or not to prevent enumeration
         return NextResponse.json(
-          createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
+          createErrorResponse(ErrorCode.NOT_FOUND, 'Booking not found'),
           { status: 404 }
         )
       }
@@ -153,7 +153,7 @@ export async function GET(request: Request) {
       )
     }
 
-    // Get published reviews for an artisan (only status = 'published')
+    // Get published reviews for an attorney (only status = 'published')
     if (attorneyId) {
       const { data: reviews, error } = await supabase
         .from('reviews')
@@ -174,7 +174,7 @@ export async function GET(request: Request) {
       if (error) {
         logger.error('Database error:', error)
         return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recuperation des avis'),
+          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving reviews'),
           { status: 500 }
         )
       }
@@ -212,13 +212,13 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      createErrorResponse(ErrorCode.VALIDATION_ERROR, 'bookingId ou attorneyId requis'),
+      createErrorResponse(ErrorCode.VALIDATION_ERROR, 'bookingId or attorneyId required'),
       { status: 400 }
     )
   } catch (error) {
     logger.error('Reviews GET error:', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur serveur'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Server error'),
       { status: 500 }
     )
   }
@@ -236,7 +236,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          'Donnees invalides',
+          'Invalid data',
           { fields: formatZodErrors(validation.errors) }
         ),
         { status: 400 }
@@ -255,7 +255,7 @@ export async function POST(request: Request) {
       const provided = Buffer.from(reviewToken, 'hex')
       const expectedBuf = Buffer.from(expected, 'hex')
       if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
-        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), { status: 401 })
+        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Invalid token'), { status: 401 })
       }
     }
     // If no REVIEW_HMAC_SECRET configured, allow without token (backward compat)
@@ -264,7 +264,7 @@ export async function POST(request: Request) {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     if (!uuidRegex.test(bookingId)) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'ID de réservation invalide'),
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Invalid booking ID'),
         { status: 400 }
       )
     }
@@ -287,7 +287,7 @@ export async function POST(request: Request) {
     if (bookingError || !booking) {
       // Generic error to prevent enumeration
       return NextResponse.json(
-        createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
+        createErrorResponse(ErrorCode.NOT_FOUND, 'Booking not found'),
         { status: 404 }
       )
     }
@@ -309,7 +309,7 @@ export async function POST(request: Request) {
 
     if (existingReview) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.REVIEW_ALREADY_EXISTS, 'Vous avez déjà laissé un avis pour cette réservation'),
+        createErrorResponse(ErrorCode.REVIEW_ALREADY_EXISTS, 'You have already left a review for this booking'),
         { status: 409 }
       )
     }
@@ -342,15 +342,15 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Review insert error:', insertError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la creation de l\'avis'),
+        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error creating review'),
         { status: 500 }
       )
     }
 
-    // Update artisan's average rating (non-blocking)
+    // Update attorney's average rating (non-blocking)
     updateArtisanRating(supabase, booking.attorney_id).catch((err) => logger.error('Update rating failed', err))
 
-    // Revalidation on-demand des pages affectées (non-bloquant)
+    // On-demand revalidation of affected pages (non-blocking)
     try {
       const { data: attorneyData } = await supabase
         .from('attorneys')
@@ -359,17 +359,17 @@ export async function POST(request: Request) {
         .single()
 
       if (attorneyData) {
-        const specialtySlug = slugify(attorneyData.specialty || 'artisan')
+        const specialtySlug = slugify(attorneyData.specialty || 'attorney')
         const locationSlug = slugify(attorneyData.address_city || 'france')
         const publicId = attorneyData.slug || attorneyData.stable_id
 
-        // Page profil artisan
+        // Attorney profile page
         if (publicId) {
           revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
         }
-        // Page avis ville
+        // City reviews page
         revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
-        // Listing ville
+        // City listing
         revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
 
         logger.info('Revalidated paths after review submission', {
@@ -396,7 +396,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Reviews POST error:', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de l\'envoi de l\'avis'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error submitting review'),
       { status: 500 }
     )
   }
@@ -436,7 +436,7 @@ function detectFraudIndicators(comment: string, rating: number): string[] {
   return indicators
 }
 
-// Update artisan's average rating (using ALL real reviews, not just published)
+// Update attorney's average rating (using ALL real reviews, not just published)
 async function updateArtisanRating(supabase: SupabaseClientType, attorneyId: string) {
   const { data: reviews } = await supabase
     .from('reviews')

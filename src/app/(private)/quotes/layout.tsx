@@ -2,14 +2,14 @@ import { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Demander un devis gratuit | ServicesArtisans',
-  description: 'Demandez un devis gratuit et recevez jusqu\'à 3 propositions d\'artisans qualifiés près de chez vous. Service 100% gratuit et sans engagement.',
+  title: 'Request a Free Consultation | US Attorneys',
+  description: 'Request a free consultation and receive up to 3 proposals from qualified attorneys near you. 100% free with no obligation.',
   alternates: {
     canonical: `${SITE_URL}/quotes`,
   },
   openGraph: {
-    title: 'Demander un devis gratuit | ServicesArtisans',
-    description: 'Recevez jusqu\'à 3 devis d\'artisans qualifiés. Gratuit et sans engagement.',
+    title: 'Request a Free Consultation | US Attorneys',
+    description: 'Receive up to 3 proposals from qualified attorneys. Free with no obligation.',
     url: `${SITE_URL}/quotes`,
   },
   robots: {

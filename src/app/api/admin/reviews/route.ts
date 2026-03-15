@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     const result = reviewsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -76,9 +76,9 @@ export async function GET(request: NextRequest) {
     // Transform data — map schema columns to frontend fields
     const transformedReviews = (reviews || []).map((review) => ({
       id: review.id,
-      author_name: review.client_name || 'Anonyme',
+      author_name: review.client_name || 'Anonymous',
       author_email: review.client_email || '',
-      provider_name: review.artisan?.full_name || 'Inconnu',
+      provider_name: review.artisan?.full_name || 'Unknown',
       attorney_id: review.attorney_id,
       rating: review.rating,
       comment: review.comment,
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin reviews list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

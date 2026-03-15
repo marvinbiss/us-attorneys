@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to recalculate-quality')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     logger.info('[Cron] Starting data quality score recalculation')
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Cron] Error in recalculate-quality:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors du recalcul des scores de qualité' } },
+      { success: false, error: { message: 'Error recalculating quality scores' } },
       { status: 500 }
     )
   }

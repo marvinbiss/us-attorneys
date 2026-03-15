@@ -14,8 +14,8 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Prix Artisans 2026 — Tarifs et Barèmes',
-  description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon et tous les métiers du bâtiment. Grille tarifaire complète pour estimer votre budget.',
+  title: 'Attorney Fees 2026 — Pricing Guide',
+  description: 'Attorney fees 2026: rates for personal injury, family law, criminal defense, estate planning, and all practice areas. Complete fee schedule to estimate your legal costs.',
   alternates: {
     canonical: `${SITE_URL}/pricing`,
   },
@@ -27,36 +27,36 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Prix Artisans 2026 — Tarifs et Barèmes',
-    description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon. Grille tarifaire complète.',
+    title: 'Attorney Fees 2026 — Pricing Guide',
+    description: 'Attorney fees 2026: rates by practice area. Complete fee schedule for all legal services.',
     url: `${SITE_URL}/pricing`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Attorney Fees' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prix Artisans 2026 — Tarifs et Barèmes',
-    description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon. Grille tarifaire complète.',
+    title: 'Attorney Fees 2026 — Pricing Guide',
+    description: 'Attorney fees 2026: rates by practice area. Complete fee schedule for all legal services.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const tradeFaqs = [
   {
-    question: 'Comment sont calculés les prix affichés ?',
-    answer: 'Les prix affichés sont des fourchettes moyennes observées en France métropolitaine. Ils incluent la main-d\'oeuvre et varient selon la région, la complexité des travaux, l\'urgence et le niveau de qualification de l\'artisan. Demandez toujours plusieurs devis pour obtenir le meilleur prix.',
+    question: 'How are the displayed prices calculated?',
+    answer: 'The prices shown are average ranges observed across the United States. They include attorney fees and vary by region, case complexity, urgency, and the attorney\'s level of experience. Always get multiple consultations to find the best rate.',
   },
   {
-    question: 'Pourquoi les prix varient-ils autant d\'un artisan à l\'autre ?',
-    answer: 'Plusieurs facteurs expliquent les écarts de prix : la localisation géographique (les prix sont plus élevés en Île-de-France), l\'expérience et les certifications de l\'artisan, la complexité du chantier, les matériaux utilisés et la période de l\'année (plus cher en haute saison).',
+    question: 'Why do fees vary so much from one attorney to another?',
+    answer: 'Several factors explain fee differences: geographic location (fees are higher in major metropolitan areas like New York and Los Angeles), the attorney\'s experience and specializations, case complexity, the type of fee arrangement (hourly vs. flat fee vs. contingency), and market demand.',
   },
   {
-    question: 'Comment obtenir un devis gratuit pour mes travaux ?',
-    answer: 'Sur ServicesArtisans, vous pouvez demander un devis gratuit en remplissant notre formulaire en ligne. Vous pouvez aussi contacter directement les artisans référencés sur notre plateforme. Nous recommandons de demander au moins 3 devis pour comparer.',
+    question: 'How can I get a free consultation?',
+    answer: 'On USAttorneys, you can request a free consultation by filling out our online form. You can also contact listed attorneys directly through our platform. We recommend getting at least 3 consultations to compare.',
   },
   {
-    question: 'Les prix incluent-ils la TVA ?',
-    answer: 'Les prix affichés sont généralement TTC (toutes taxes comprises). Le taux de TVA varie selon le type de travaux : 10% pour la rénovation dans un logement de plus de 2 ans, 5,5% pour les travaux d\'amélioration énergétique (isolation, chauffage), et 20% pour les constructions neuves.',
+    question: 'What types of fee arrangements are common?',
+    answer: 'The most common fee arrangements are: hourly rates (typical for most legal work), flat fees (common for simple matters like wills or uncontested divorces), contingency fees (attorney takes a percentage of the settlement, common in personal injury cases), and retainer fees (upfront deposit against future hourly work).',
   },
 ]
 
@@ -103,8 +103,8 @@ export default async function TarifsPage() {
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Tarifs artisans', url: '/pricing' },
+    { name: 'Home', url: '/' },
+    { name: 'Attorney Fees', url: '/pricing' },
   ])
 
   const faqSchema = getFAQSchema(tradeFaqs)
@@ -115,11 +115,11 @@ export default async function TarifsPage() {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: trade.name,
-    provider: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
-    areaServed: { '@type': 'Country', name: 'France' },
+    provider: { '@type': 'Organization', name: 'USAttorneys', url: SITE_URL },
+    areaServed: { '@type': 'Country', name: 'United States' },
     offers: {
       '@type': 'AggregateOffer',
-      priceCurrency: 'EUR',
+      priceCurrency: 'USD',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
       offerCount: trade.commonTasks.length,
@@ -144,29 +144,29 @@ export default async function TarifsPage() {
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pt-10 sm:pb-28 md:pt-14 md:pb-36">
             <Breadcrumb
-              items={[{ label: 'Tarifs artisans' }]}
+              items={[{ label: 'Attorney Fees' }]}
               className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
             />
             <div className="text-center">
               <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 tracking-[-0.025em]">
-                Guide des prix artisans 2026
+                Attorney Fee Guide 2026
               </h1>
               <p className="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-                Tarifs moyens par corps de m&eacute;tier en France. Comparez les prix de {trades.length} m&eacute;tiers
-                du b&acirc;timent pour estimer votre budget travaux avant de demander un devis.
+                Average fees by practice area across the United States. Compare rates for {trades.length} practice
+                areas to estimate your legal budget before requesting a consultation.
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-8">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <Euro className="w-4 h-4 text-amber-400" />
-                  <span>Prix actualis&eacute;s 2026</span>
+                  <span>Updated rates 2026</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <TrendingUp className="w-4 h-4 text-amber-400" />
-                  <span>{trades.length} corps de m&eacute;tier</span>
+                  <span>{trades.length} practice areas</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <CheckCircle className="w-4 h-4 text-amber-400" />
-                  <span>Donn&eacute;es v&eacute;rifi&eacute;es</span>
+                  <span>Verified data</span>
                 </div>
               </div>
             </div>
@@ -195,10 +195,10 @@ export default async function TarifsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Tarifs par corps de métier
+                Fees by practice area
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Prix moyens constatés en France métropolitaine, main-d&apos;oeuvre incluse
+                Average rates observed across the United States, attorney fees included
               </p>
             </div>
 
@@ -232,7 +232,7 @@ export default async function TarifsPage() {
 
                     <div className="p-6">
                       <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                        Prestations courantes
+                        Common services
                       </h4>
                       <ul className="space-y-2 mb-6">
                         {topTasks.map((task, i) => (
@@ -264,7 +264,7 @@ export default async function TarifsPage() {
                         href={`/pricing/${trade.slug}`}
                         className="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
                       >
-                        <span>Voir les tarifs détaillés</span>
+                        <span>View detailed fees</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
@@ -280,19 +280,19 @@ export default async function TarifsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Comment obtenir le meilleur prix ?
+                How to get the best rate?
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Nos conseils pour réduire le coût de vos travaux sans sacrifier la qualité
+                Our tips for managing your legal costs without sacrificing quality
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { n: 1, title: 'Comparez 3 devis minimum', text: 'Ne vous contentez jamais d\'un seul devis. La comparaison permet d\'identifier le juste prix et de négocier.' },
-                { n: 2, title: 'Évitez les urgences', text: 'Les interventions d\'urgence coûtent 50 à 100% plus cher. Anticipez l\'entretien et les réparations.' },
-                { n: 3, title: 'Profitez des aides', text: 'MaPrimeRénov\', CEE, éco-PTZ... Les aides peuvent couvrir 30 à 90% du coût des travaux de rénovation énergétique.' },
-                { n: 4, title: 'Vérifiez l\'artisan', text: 'Un artisan référencé avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.' },
+                { n: 1, title: 'Compare at least 3 quotes', text: 'Never settle for a single quote. Comparing allows you to identify fair pricing and negotiate.' },
+                { n: 2, title: 'Plan ahead', text: 'Emergency legal services cost 50 to 100% more. Plan ahead for routine legal matters when possible.' },
+                { n: 3, title: 'Ask about fee structures', text: 'Flat fees, contingency arrangements, and payment plans can significantly reduce your upfront costs.' },
+                { n: 4, title: 'Verify the attorney', text: 'A bar-verified attorney with malpractice insurance and proper credentials protects you against incompetence and fraud.' },
               ].map(({ n, title, text }) => (
                 <div key={n} className="text-center p-6">
                   <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -311,7 +311,7 @@ export default async function TarifsPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Questions fréquentes sur les tarifs artisans
+                Frequently asked questions about attorney fees
               </h2>
             </div>
 
@@ -337,17 +337,17 @@ export default async function TarifsPage() {
         <section className="py-20 bg-blue-600">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold text-white mb-4">
-              Obtenez un devis précis pour vos travaux
+              Get an accurate quote for your legal matter
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Les prix varient selon votre projet. Demandez un devis gratuit pour connaître le coût exact.
+              Fees vary depending on your case. Request a free consultation to find out the exact cost.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
               >
-                Demander un devis gratuit
+                Request a free consultation
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
@@ -355,20 +355,20 @@ export default async function TarifsPage() {
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-base sm:text-lg border border-blue-400 w-full sm:w-auto"
               >
                 <Search className="w-5 h-5" />
-                Trouver un artisan
+                Find an attorney
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Section A: Tarifs par métier et ville — Service×City matrix */}
+        {/* Section A: Fees by practice area and city */}
         <section className="py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Tarifs par métier et ville</h2>
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Fees by practice area and city</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {services.slice(0, 8).map((service) => (
                 <div key={service.slug}>
-                  <h3 className="font-semibold text-gray-900 mb-3">Tarifs {service.name.toLowerCase()}</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">{service.name} fees</h3>
                   <div className="space-y-1.5">
                     {cities.slice(0, 6).map((ville) => (
                       <Link key={ville.slug} href={`/pricing/${service.slug}/${ville.slug}`}
@@ -383,43 +383,43 @@ export default async function TarifsPage() {
           </div>
         </section>
 
-        {/* Section B: Cross-intent "Voir aussi" */}
+        {/* Section B: See also */}
         <section className="py-12 bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Voir aussi</h2>
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">See also</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Devis */}
+              {/* Consultations */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Demander un devis</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Request a consultation</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
                     <Link key={s.slug} href={`/quotes/${s.slug}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                      <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
+                      <ChevronRight className="w-3 h-3" /> {s.name} consultation
                     </Link>
                   ))}
                 </div>
               </div>
-              {/* Avis */}
+              {/* Reviews */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Avis clients</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Client reviews</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
                     <Link key={s.slug} href={`/reviews/${s.slug}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                      <ChevronRight className="w-3 h-3" /> Avis {s.name.toLowerCase()}
+                      <ChevronRight className="w-3 h-3" /> {s.name} reviews
                     </Link>
                   ))}
                 </div>
               </div>
-              {/* Urgence */}
+              {/* Emergency */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Urgence artisan</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Emergency attorney</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
                     <Link key={s.slug} href={`/emergency/${s.slug}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                      <ChevronRight className="w-3 h-3" /> Urgence {s.name.toLowerCase()}
+                      <ChevronRight className="w-3 h-3" /> Emergency {s.name.toLowerCase()}
                     </Link>
                   ))}
                 </div>
@@ -429,31 +429,31 @@ export default async function TarifsPage() {
                 <h3 className="font-semibold text-gray-900 mb-3">Navigation</h3>
                 <div className="space-y-1.5">
                   <Link href="/services" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Tous les services
+                    <ChevronRight className="w-3 h-3" /> All services
                   </Link>
                   <Link href="/cities" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Toutes les cities
+                    <ChevronRight className="w-3 h-3" /> All cities
                   </Link>
                   <Link href="/states" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Tous les départements
+                    <ChevronRight className="w-3 h-3" /> All states
                   </Link>
                   <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Toutes les régions
+                    <ChevronRight className="w-3 h-3" /> All regions
                   </Link>
                   <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Blog
                   </Link>
                   <Link href="/quotes" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Demander un devis
+                    <ChevronRight className="w-3 h-3" /> Request a consultation
                   </Link>
                   <Link href="/emergency" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Urgence artisan
+                    <ChevronRight className="w-3 h-3" /> Emergency attorney
                   </Link>
                   <Link href="/reviews" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Avis clients
+                    <ChevronRight className="w-3 h-3" /> Client reviews
                   </Link>
                   <Link href="/tools/calculator-prix" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" /> Calculateur de prix
+                    <ChevronRight className="w-3 h-3" /> Fee calculator
                   </Link>
                 </div>
               </div>
@@ -465,7 +465,7 @@ export default async function TarifsPage() {
         <section className="bg-gray-50 py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6">
-              Trouvez un artisan près de chez vous
+              Find an attorney near you
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <PopularServicesLinks />

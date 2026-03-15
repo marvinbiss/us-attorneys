@@ -148,7 +148,7 @@ export function renderTemplate(
   rendered = rendered.replaceAll('{{unsubscribe_link}}', `${siteUrl}/api/prospection/unsubscribe?token=${unsubToken}`)
 
   // Date du jour
-  rendered = rendered.replaceAll('{{date}}', new Date().toLocaleDateString('fr-FR'))
+  rendered = rendered.replaceAll('{{date}}', new Date().toLocaleDateString('en-US'))
 
   return rendered
 }

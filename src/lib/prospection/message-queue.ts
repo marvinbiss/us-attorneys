@@ -122,7 +122,7 @@ export async function enqueueCampaignMessages(
     throw new Error('Messages already enqueued for this campaign')
   }
 
-  // Récupérer les contacts de la liste
+  // Retrieve les contacts de la liste
   const { data: members, error: memberError } = await supabase
     .from('prospection_list_members')
     .select('contact_id')
@@ -145,7 +145,7 @@ export async function enqueueCampaignMessages(
     throw new Error(`Failed to load contacts: ${contactError.message}`)
   }
 
-  // Filtrer les contacts qui ont le canal nécessaire
+  // Filter les contacts qui ont le canal nécessaire
   const validContacts = ((contacts || []) as unknown as ProspectionContact[]).filter(c => {
     if (campaign.channel === 'email') return !!c.email
     return !!c.phone_e164
@@ -188,7 +188,7 @@ export async function enqueueCampaignMessages(
     }
   }
 
-  // Mettre à jour les stats de la campagne
+  // Update les stats de la campagne
   await supabase
     .from('prospection_campaigns')
     .update({
@@ -215,7 +215,7 @@ export async function processBatch(
   // Reconcile any orphaned messages before processing new batch
   await reconcileOrphanedMessages(supabase)
 
-  // Récupérer la campagne pour le canal
+  // Retrieve la campagne pour le canal
   const { data: campaign } = await supabase
     .from('prospection_campaigns')
     .select('channel, status')
@@ -265,7 +265,7 @@ export async function processBatch(
   const rateLimit = CHANNEL_RATE_LIMITS[channel]
   const delayMs = Math.ceil(1000 / rateLimit.perSecond)
 
-  // Envoyer par canal
+  // Send par canal
   if (channel === 'email') {
     // Batch email - separate messages with valid emails from those without
     const emailMessages = messages.filter(m => m.contact?.email)
@@ -280,7 +280,7 @@ export async function processBatch(
 
     const emailParams = emailMessages.map(m => ({
       to: m.contact.email!,
-      subject: m.rendered_subject || 'ServicesArtisans',
+      subject: m.rendered_subject || 'US Attorneys',
       html: m.rendered_body || '',
       tags: [{ name: 'campaign_id', value: campaignId }],
     }))
@@ -406,7 +406,7 @@ export async function processBatch(
     }
   }
 
-  // Mettre à jour les stats de la campagne
+  // Update les stats de la campagne
   try {
     await updateCampaignStats(supabase, campaignId)
   } catch (err) {
@@ -416,7 +416,7 @@ export async function processBatch(
     })
   }
 
-  // Vérifier si la campagne est terminée
+  // Verify si la campagne est terminée
   try {
     await checkCampaignCompletion(supabase, campaignId)
   } catch (err) {

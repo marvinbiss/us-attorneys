@@ -55,7 +55,7 @@ export function ReviewMediaUpload({
 
       // Check max files
       if (files.length + newFiles.length >= maxFiles) {
-        setError(`Maximum ${maxFiles} fichiers autorisés`)
+        setError(`Maximum ${maxFiles} files allowed`)
         break
       }
 
@@ -64,24 +64,24 @@ export function ReviewMediaUpload({
       const isVideo = file.type.startsWith('video/')
 
       if (!isImage && !isVideo) {
-        setError('Type de fichier non supporté')
+        setError('Unsupported file type')
         continue
       }
 
       if (isImage && !acceptedTypes.includes('image')) {
-        setError('Les images ne sont pas acceptées')
+        setError('Images are not accepted')
         continue
       }
 
       if (isVideo && !acceptedTypes.includes('video')) {
-        setError('Les vidéos ne sont pas acceptées')
+        setError('Videos are not accepted')
         continue
       }
 
       // Check file size
       const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE
       if (file.size > maxSize) {
-        setError(`Fichier trop volumineux (max ${isVideo ? '50' : '5'}MB)`)
+        setError(`File too large (max ${isVideo ? '50' : '5'}MB)`)
         continue
       }
 
@@ -198,19 +198,19 @@ export function ReviewMediaUpload({
               )}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-              Glissez-déposez vos fichiers ici ou
+              Drag and drop your files here or
             </p>
             <button
               onClick={() => fileInputRef.current?.click()}
               className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Upload className="w-4 h-4" />
-              Parcourir
+              Browse
             </button>
             <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
               {acceptedTypes.includes('image') && 'Images: JPG, PNG, WebP (max 5MB)'}
               {acceptedTypes.includes('image') && acceptedTypes.includes('video') && ' • '}
-              {acceptedTypes.includes('video') && 'Vidéos: MP4, WebM (max 50MB)'}
+              {acceptedTypes.includes('video') && 'Videos: MP4, WebM (max 50MB)'}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-500">
               Maximum {maxFiles} fichiers
@@ -268,7 +268,7 @@ export function ReviewMediaUpload({
               {/* Caption input */}
               <input
                 type="text"
-                placeholder="Ajouter une légende..."
+                placeholder="Add a caption..."
                 value={file.caption || ''}
                 onChange={(e) => updateCaption(file.id, e.target.value)}
                 className="absolute bottom-0 left-0 right-0 px-2 py-1 text-xs bg-black/50 text-white placeholder-gray-300 border-none focus:outline-none focus:ring-0"

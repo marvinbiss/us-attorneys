@@ -27,7 +27,7 @@ export function validateFile(file: File, type: 'image' | 'video'): { valid: bool
   if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
-      error: `Type de fichier non supporté. Types acceptés: ${allowedTypes.join(', ')}`,
+      error: `Unsupported file type. Accepted types: ${allowedTypes.join(', ')}`,
     }
   }
 

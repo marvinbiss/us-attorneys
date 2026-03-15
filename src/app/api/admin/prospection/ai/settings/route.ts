@@ -36,13 +36,13 @@ export async function GET() {
 
     if (error) {
       logger.error('Get AI settings error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error retrieving data' } }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('AI settings GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
 
@@ -57,12 +57,12 @@ export async function PATCH(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
         { status: 400 }
       )
     }
 
-    // Récupérer l'ID du settings existant
+    // Retrieve l'ID du settings existant
     const { data: existing } = await supabase
       .from('prospection_ai_settings')
       .select('id')
@@ -70,7 +70,7 @@ export async function PATCH(request: NextRequest) {
       .single()
 
     if (!existing) {
-      return NextResponse.json({ success: false, error: { message: 'Settings non trouvés' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Settings not found' } }, { status: 404 })
     }
 
     const { data, error } = await supabase
@@ -82,7 +82,7 @@ export async function PATCH(request: NextRequest) {
 
     if (error) {
       logger.error('Update AI settings error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
     }
 
     await logAdminAction(authResult.admin.id, 'ai_settings.update', 'prospection_ai_settings', existing.id, {
@@ -92,6 +92,6 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('AI settings PATCH error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

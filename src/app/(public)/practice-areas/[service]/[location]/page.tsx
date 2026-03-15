@@ -12,6 +12,7 @@ import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
 import CrossLinks from './_components/CrossLinks'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import type { LocationData } from '@/lib/data/commune-data'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -150,7 +151,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (!specialtyName || !locationName) {
-    return { title: 'Non trouvé', robots: { index: false, follow: false } }
+    return { title: 'Not Found', robots: { index: false, follow: false } }
   }
 
   const hasProviders = attorneyCount > 0
@@ -162,18 +163,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `${specialtyName} ${locationName} — ${attorneyCount} artisans`, h1: `${specialtyName} à ${locationName}` },
-        { title: `${specialtyName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis`, h1: `${specialtyName} à ${locationName} — ${attorneyCount} pros référencés` },
-        { title: `${specialtyName} à ${locationName} — Comparez`, h1: `${specialtyName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${specialtyName} ${locationName} : avis et devis`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${specialtyName} ${locationName} — ${attorneyCount} attorneys`, h1: `${specialtyName} in ${locationName}` },
+        { title: `${specialtyName} in ${locationName} — Free Consultation`, h1: `Find ${naturalTerm.article} in ${locationName}` },
+        { title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Consultation`, h1: `${specialtyName} in ${locationName} — ${attorneyCount} verified pros` },
+        { title: `${specialtyName} in ${locationName} — Compare`, h1: `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${specialtyName} ${locationName}: reviews and consultation`, h1: `Best ${naturalTerm.plural} in ${locationName}` },
       ]
     : [
-        { title: `${specialtyName} ${locationName} — Annuaire`, h1: `${specialtyName} à ${locationName}` },
-        { title: `${specialtyName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${specialtyName} à ${locationName} — Artisans qualifiés` },
-        { title: `${specialtyName} à ${locationName} — Artisans`, h1: `${specialtyName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${specialtyName} ${locationName} : annuaire`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${specialtyName} ${locationName} — Directory`, h1: `${specialtyName} in ${locationName}` },
+        { title: `${specialtyName} in ${locationName} — Free Consultation`, h1: `Find ${naturalTerm.article} in ${locationName}` },
+        { title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${specialtyName} in ${locationName} — Qualified Attorneys` },
+        { title: `${specialtyName} in ${locationName} — Attorneys`, h1: `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${specialtyName} ${locationName}: directory`, h1: `Best ${naturalTerm.plural} in ${locationName}` },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
@@ -183,18 +184,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const deptLabel = departmentName || departmentCode
   const descTemplates = hasProviders
     ? [
-        `${attorneyCount} ${svcLower}s vérifiés SIREN à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Comparez les profils, tarifs et avis. Devis gratuit.`,
-        `${specialtyName} à ${locationName} : ${attorneyCount} artisans référencés. Comparez et demandez un devis gratuit, sans engagement.`,
-        `Trouvez le meilleur ${svcLower} à ${locationName} parmi ${attorneyCount} pros vérifiés. Tarifs, avis et devis gratuit.`,
-        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${attorneyCount} ${svcLower}s vérifiés SIREN. Tarifs, avis et devis gratuit.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? ${attorneyCount} artisans vérifiés. Devis gratuit et réponse rapide.`,
+        `${attorneyCount} bar-verified ${svcLower}s in ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Compare profiles, fees and reviews. Free consultation.`,
+        `${specialtyName} in ${locationName}: ${attorneyCount} verified attorneys. Compare and request a free consultation, no obligation.`,
+        `Find the best ${svcLower} in ${locationName} among ${attorneyCount} verified pros. Fees, reviews and free consultation.`,
+        `${locationName}${departmentCode ? ` (${departmentCode})` : ''}: ${attorneyCount} bar-verified ${svcLower}s. Fees, reviews and free consultation.`,
+        `Need a ${svcLower} in ${locationName}? ${attorneyCount} verified attorneys. Free consultation and fast response.`,
       ]
     : [
-        `Trouvez un ${svcLower} qualifié à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Artisans vérifiés SIREN. Devis gratuit.`,
-        `${specialtyName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans référencés. Devis gratuit, sans engagement.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? Annuaire d'artisans vérifiés. Devis gratuit.`,
-        `${specialtyName} à ${locationName}. Professionnels vérifiés SIREN. Devis gratuit et immédiat.`,
-        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance. Artisans référencés SIREN. Devis gratuit.`,
+        `Find a qualified ${svcLower} in ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Bar-verified attorneys. Free consultation.`,
+        `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}: verified attorneys. Free consultation, no obligation.`,
+        `Need a ${svcLower} in ${locationName}? Directory of verified attorneys. Free consultation.`,
+        `${specialtyName} in ${locationName}. Bar-verified professionals. Free and immediate consultation.`,
+        `${locationName}${deptLabel ? ` (${deptLabel})` : ''}: find a trusted ${svcLower}. Bar-verified attorneys. Free consultation.`,
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -237,14 +238,14 @@ function generateJsonLd(
   const localBusinessSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: `${service.name} à ${location.name}`,
-    description: `Trouvez un ${svcLower} qualifié à ${location.name}. Artisans vérifiés SIREN, devis gratuit et avis clients.`,
+    name: `${service.name} in ${location.name}`,
+    description: `Find a qualified ${svcLower} in ${location.name}. Bar-verified attorneys, free consultation and client reviews.`,
     image: getServiceImage(specialtySlug).src,
     address: {
       '@type': 'PostalAddress',
       addressLocality: location.name,
       ...(location.region_name ? { addressRegion: location.region_name } : {}),
-      addressCountry: 'FR',
+      addressCountry: 'US',
       ...(location.postal_code ? { postalCode: location.postal_code } : {}),
     },
     ...('latitude' in (locationData ?? {}) && 'longitude' in (locationData ?? {}) ? {
@@ -272,8 +273,8 @@ function generateJsonLd(
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${service.name} à ${location.name}`,
-    description: `Trouvez les meilleurs ${svcLower}s à ${location.name}`,
+    name: `${service.name} in ${location.name}`,
+    description: `Find the best ${svcLower}s in ${location.name}`,
     image: getServiceImage(specialtySlug).src,
     areaServed: {
       '@type': 'City',
@@ -290,8 +291,8 @@ function generateJsonLd(
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Services', url: '/services' },
+    { name: 'Home', url: '/' },
+    { name: 'Practice Areas', url: '/services' },
     { name: service.name, url: `/practice-areas/${specialtySlug}` },
     { name: location.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
   ])
@@ -402,7 +403,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
   const ville = getCityBySlug(locationSlug)
   const locationContent = ville
-    ? generateLocationContent(specialtySlug, service.name, ville as never, providers.length, locationData as never)
+    ? generateLocationContent(specialtySlug, service.name, ville, providers.length, locationData)
     : null
 
   // Regional pricing multiplier for localized tariffs
@@ -423,8 +424,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   // Task 2: ItemList JSON-LD for provider listings
   const itemListSchema = providers.length > 0
     ? getItemListSchema({
-        name: `${service.name} à ${location.name}`,
-        description: `Liste des ${service.name.toLowerCase()}s référencés à ${location.name}`,
+        name: `${service.name} in ${location.name}`,
+        description: `List of verified ${service.name.toLowerCase()}s in ${location.name}`,
         url: `/practice-areas/${specialtySlug}/${locationSlug}`,
         items: providers.slice(0, 20).map((p, i) => ({
           name: p.name,
@@ -463,18 +464,18 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   const hasProvidersH1 = attorneyCount > 0
   const h1Variants = hasProvidersH1
     ? [
-        `${service.name} à ${location.name}`,
-        `Trouvez ${naturalTermH1.article} à ${location.name}`,
-        `${service.name} à ${location.name} — ${attorneyCount} pros référencés`,
-        `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
-        `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
+        `${service.name} in ${location.name}`,
+        `Find ${naturalTermH1.article} in ${location.name}`,
+        `${service.name} in ${location.name} — ${attorneyCount} verified pros`,
+        `${service.name} in ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
+        `Best ${naturalTermH1.plural} in ${location.name}`,
       ]
     : [
-        `${service.name} à ${location.name}`,
-        `Trouvez ${naturalTermH1.article} à ${location.name}`,
-        `${service.name} à ${location.name} — Artisans qualifiés`,
-        `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
-        `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
+        `${service.name} in ${location.name}`,
+        `Find ${naturalTermH1.article} in ${location.name}`,
+        `${service.name} in ${location.name} — Qualified Attorneys`,
+        `${service.name} in ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
+        `Best ${naturalTermH1.plural} in ${location.name}`,
       ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 
@@ -508,7 +509,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
       <SearchRecorder
         type="service-ville"
-        label={`${service.name} à ${location.name}`}
+        label={`${service.name} in ${location.name}`}
         href={`/practice-areas/${specialtySlug}/${locationSlug}`}
       />
 
@@ -537,14 +538,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} à ${location.name} : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount} artisans vérifiés SIREN disponibles dans le ${location.department_code}. Délai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
+            answer={`${trade.name} in ${location.name}: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount} bar-verified attorneys available in ${location.department_code}. Average response time: ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Emergency services available 24/7.' : ''}`}
           />
         </div>
       )}
 
       <SeoContent
         locationContent={locationContent}
-        locationData={locationData as never}
+        locationData={locationData as LocationData | null}
         service={service}
         location={location}
         locationSlug={locationSlug}
@@ -580,7 +581,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         nearbyCities={nearbyCities}
         deptCities={deptCities}
         locationContent={locationContent}
-        locationData={locationData as never}
+        locationData={locationData as LocationData | null}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">

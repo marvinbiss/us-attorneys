@@ -84,11 +84,11 @@ function fuzzyMatch(query: string, target: string): number {
 }
 
 // Popular services for quick access
-const popularServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment']
+const popularServices = ['personal-injury', 'criminal-defense', 'family-law', 'immigration', 'estate-planning']
 
 export function MetierAutocomplete({
   value = '',
-  placeholder = 'Quel type d\'artisan cherchez-vous ?',
+  placeholder = 'What type of attorney are you looking for?',
   onSelect,
   onClear,
   showIcon = true,
@@ -282,7 +282,7 @@ export function MetierAutocomplete({
               type="button"
               onClick={handleClear}
               className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label="Effacer"
+              aria-label="Clear"
             >
               <X className="w-4 h-4 text-gray-400" />
             </button>
@@ -304,7 +304,7 @@ export function MetierAutocomplete({
           {/* Header when showing all */}
           {!query && showAllOnFocus && (
             <li className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 border-b">
-              Services populaires
+              Popular services
             </li>
           )}
 
@@ -350,7 +350,7 @@ export function MetierAutocomplete({
                     </span>
                     {isPopular && !query && (
                       <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded-full">
-                        Populaire
+                        Popular
                       </span>
                     )}
                   </div>
@@ -359,7 +359,7 @@ export function MetierAutocomplete({
                 {/* Keyboard hint on highlighted */}
                 {index === highlightedIndex && (
                   <span className="text-xs text-gray-400 hidden sm:block">
-                    Entrée ↵
+                    Enter ↵
                   </span>
                 )}
               </li>
@@ -376,10 +376,10 @@ export function MetierAutocomplete({
           shadow-lg p-4 text-center
         ">
           <div className="text-gray-500">
-            Aucun métier trouvé pour "{query}"
+            No practice area found for "{query}"
           </div>
           <div className="mt-2 text-sm text-gray-400">
-            Essayez : plombier, électricien, serrurier...
+            Try: personal injury, criminal defense, family law...
           </div>
         </div>
       )}

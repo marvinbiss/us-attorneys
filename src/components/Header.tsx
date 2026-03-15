@@ -190,10 +190,10 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
       {/* Plus dropdown inline */}
       {menu === 'plus' && openMenu === 'plus' && (
         <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-          <Link href="/reviews" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
-          <Link href="/pricing" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
+          <Link href="/reviews" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Attorney reviews</Link>
+          <Link href="/pricing" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Fees</Link>
           <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
-          <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides travaux</Link>
+          <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Legal guides</Link>
         </div>
       )}
     </div>
@@ -232,7 +232,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
                 <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
               </svg>
               <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
-                Services<span className="text-clay-400 group-hover/logo:text-clay-300 transition-colors duration-200">Artisans</span>
+                US<span className="text-clay-400 group-hover/logo:text-clay-300 transition-colors duration-200">Attorneys</span>
               </span>
             </div>
           </Link>
@@ -247,18 +247,18 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
           </div>
 
           {/* Navigation Desktop */}
-          <nav className="hidden lg:flex items-center space-x-0.5" aria-label="Navigation principale">
+          <nav className="hidden lg:flex items-center space-x-0.5" aria-label="Main navigation">
             <NavTrigger menu="services" label="Services" />
-            <NavTrigger menu="cities" label="Villes" />
-            <NavTrigger menu="regions" label="Régions" />
-            <NavTrigger menu="plus" label="Plus" />
+            <NavTrigger menu="cities" label="Cities" />
+            <NavTrigger menu="regions" label="States" />
+            <NavTrigger menu="plus" label="More" />
 
             {/* Favoris */}
             <Link
               href="/my-favorites"
               className="relative text-gray-600 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80"
-              aria-label={`Mes favoris${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
-              title="Mes favoris"
+              aria-label={`My favorites${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
+              title="My favorites"
             >
               <Heart className="w-5 h-5" />
               {mounted && favoritesCount > 0 && (
@@ -272,7 +272,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
               href="/login"
               className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.85rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
             >
-              Connexion
+              Sign in
             </Link>
 
             <Link
@@ -283,7 +283,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500" />
               </span>
-              Urgences 24h
+              24/7 Emergency
             </Link>
 
             <Link
@@ -291,7 +291,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
               onClick={() => trackEvent('header_devis_click', {})}
               className="ml-2 px-4 py-2 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
-              Devis gratuit
+              Free consultation
             </Link>
           </nav>
 
@@ -299,7 +299,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
           <button
             type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
             className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
           >

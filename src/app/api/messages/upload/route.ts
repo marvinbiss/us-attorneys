@@ -11,8 +11,8 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 const uploadMetadataSchema = z.object({
-  conversation_id: z.string().uuid('ID de conversation invalide').nullable(),
-  message_id: z.string().uuid('ID de message invalide').nullable(),
+  conversation_id: z.string().uuid('Invalid conversation ID').nullable(),
+  message_id: z.string().uuid('Invalid message ID').nullable(),
 })
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }
 
     const formData = await request.formData()
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     if (!metadataValidation.success) {
       return NextResponse.json(
-        { success: false, error: { message: metadataValidation.error.issues[0]?.message || 'Parametres invalides' } },
+        { success: false, error: { message: metadataValidation.error.issues[0]?.message || 'Invalid parameters' } },
         { status: 400 }
       )
     }
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { success: false, error: { message: 'Fichier requis' } },
+        { success: false, error: { message: 'File required' } },
         { status: 400 }
       )
     }
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Type de fichier non autorisé' } },
+        { success: false, error: { message: 'Unauthorized file type' } },
         { status: 400 }
       )
     }
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
     if (uploadError) {
       logger.error('File upload error', uploadError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de l\'upload' } },
+        { success: false, error: { message: 'Error during upload' } },
         { status: 500 }
       )
     }
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Upload error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

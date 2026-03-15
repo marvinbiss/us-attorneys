@@ -5,7 +5,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
     title: "Alarme maison 2026 : comparatif, prix et installation",
     excerpt: "Guide complet des alarmes maison en 2026 : filaires, sans fil, hybrides. Comparatif des marques (Somfy, Ajax, Daitem, Verisure), certifications NF A2P, prix de 500 à 3 000 € et conseils d'installation.",
     image: "/images/blog/securite-alarme-maison-guide-2026.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-15",
     readTime: "14 min",
     category: "Sécurité",
@@ -140,7 +140,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
     title: "Pompe à chaleur air-eau en 2026 : prix, aides et rentabilité",
     excerpt: "Guide complet sur la pompe à chaleur air-eau en 2026 : fonctionnement, COP/SCOP, dimensionnement, marques (Daikin, Atlantic, Mitsubishi), prix de 8 000 à 18 000 €, aides MaPrimeRénov et CEE.",
     image: "/images/blog/pompe-chaleur-air-eau-guide-2026.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-01-22",
     readTime: "15 min",
     category: "Énergie",
@@ -208,7 +208,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       "### Les risques du surdimensionnement",
       "Un surdimensionnement de la PAC est l'erreur la plus fréquente et la plus coûteuse. Une PAC trop puissante fonctionne en cycles courts (elle atteint rapidement la température de consigne, s'arrête, puis redémarre quand la température baisse). Ces cycles courts provoquent : une usure prématurée du compresseur (réduction de la durée de vie de 30 %), une surconsommation électrique de 10 à 15 % et un confort dégradé (écarts de température). Le surdimensionnement maximal recommandé par les fabricants est de 10 à 15 % par rapport aux besoins calculés.",
 
-      ":::warning Alerte dimensionnement\nRefusez systématiquement un devis qui ne s'appuie pas sur une étude thermique documentée. Un installateur sérieux passe 1 à 2 heures sur site pour mesurer, calculer et dimensionner. Une PAC choisie « au doigt mouillé » ou sur la seule base de la surface habitable est une source garantie de problèmes et de surcoûts.\n:::",
+      ":::warning Alerte dimensionnement\nRefusez systématiquement a consultation qui ne s'appuie pas sur une étude thermique documentée. Un installateur sérieux passe 1 à 2 heures sur site pour mesurer, calculer et dimensionner. Une PAC choisie « au doigt mouillé » ou sur la seule base de la surface habitable est une source garantie de problèmes et de surcoûts.\n:::",
 
       "## Les grandes marques de PAC air-eau en 2026",
 
@@ -236,7 +236,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       "### MaPrimeRénov",
       "MaPrimeRénov est l'aide principale pour l'installation d'une PAC air-eau. En 2026, les montants sont les suivants selon les revenus du ménage :\n- **Ménages très modestes (bleu)** : 11 000 €\n- **Ménages modestes (jaune)** : 9 000 €\n- **Ménages intermédiaires (violet)** : 5 000 €\n- **Ménages aisés (rose)** : 4 000 €",
 
-      "Les conditions d'éligibilité : le logement doit avoir plus de 15 ans, être une résidence principale, et les travaux doivent être réalisés par un artisan certifié **RGE** (Reconnu Garant de l'Environnement). La demande se fait en ligne sur maprimerenov.gouv.fr avant le début des travaux.",
+      "Les conditions d'éligibilité : le logement doit avoir plus de 15 ans, être une résidence principale, et les travaux doivent être réalisés par an attorney certifié **RGE** (Reconnu Garant de l'Environnement). La demande se fait en ligne sur maprimerenov.gouv.fr avant le début des travaux.",
 
       "### Certificats d'Économies d'Énergie (CEE)",
       "Les CEE (ou primes énergie) sont versées par les fournisseurs d'énergie (EDF, TotalEnergies, Engie) en complément de MaPrimeRénov. Le montant varie de **2 500 à 5 000 €** selon la zone climatique, la puissance installée et le fournisseur choisi. Les CEE sont cumulables avec MaPrimeRénov sans plafond de cumul depuis 2024, ce qui permet aux ménages modestes de couvrir jusqu'à **70 %** du coût total.",
@@ -265,7 +265,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
 
       "**Amortissement : 9 000 / 1 427 = 6,3 ans.** Au-delà, la PAC génère un gain net de plus de 1 400 € par an. Sur 15 ans de durée de vie, le bénéfice total dépasse 12 000 €.",
 
-      "Pour obtenir un devis personnalisé adapté à votre logement, demandez un [devis chauffagiste gratuit](/quotes/chauffagiste) auprès de nos artisans certifiés RGE."
+      "Pour obtenir a consultation personnalisé adapté à votre logement, demandez un [devis chauffagiste gratuit](/quotes/chauffagiste) auprès de nos artisans certifiés RGE."
     ]
   },
 
@@ -273,7 +273,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
     title: "Panneaux solaires 2026 : rentabilité réelle et retour sur investissement",
     excerpt: "Analyse complète de la rentabilité des panneaux solaires en 2026 : autoconsommation vs revente EDF OA, prix au Wc, rendement par région, aides, amortissement réel de 8 à 12 ans.",
     image: "/images/blog/panneaux-solaires-rentabilite-2026.webp",
-    author: "ServicesArtisans",
+    author: "US Attorneys",
     date: "2026-02-01",
     readTime: "14 min",
     category: "Énergie",
@@ -395,7 +395,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
 
       "**Garantie décennale** — L'installateur doit fournir une attestation d'assurance décennale couvrant spécifiquement les travaux photovoltaïques. Vérifiez les activités couvertes dans l'attestation.",
 
-      "**Visite technique préalable** — Un devis sérieux ne peut pas être établi sans visite sur site : l'installateur doit vérifier la charpente, la couverture, l'orientation, les masques solaires (ombres portées) et le tableau électrique. Refusez tout devis établi uniquement sur la base de photos ou de Google Maps.",
+      "**Visite technique préalable** — A consultation sérieux ne peut pas être établi sans visite sur site : l'installateur doit vérifier la charpente, la couverture, l'orientation, les masques solaires (ombres portées) et le tableau électrique. Refusez tout devis établi uniquement sur la base de photos ou de Google Maps.",
 
       "Pour trouver un installateur de confiance, consultez notre annuaire d'[électriciens qualifiés](/practice-areas/electricien) ou demandez un [devis électricien gratuit](/quotes/electricien) pour comparer les offres de votre secteur."
     ]

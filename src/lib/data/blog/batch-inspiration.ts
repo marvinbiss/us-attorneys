@@ -6,7 +6,7 @@ export const inspirationArticles: Record<string, BlogArticle> = {
     excerpt:
       'Découvrez les tendances cuisine 2026 : îlot central multifonction, plans de travail en quartz ou céramique, couleurs vert sauge et terracotta, éclairage LED et budget détaillé par gamme.',
     image: '/images/blog/tendances-cuisine-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-01-28',
     readTime: '12 min',
     category: 'Inspiration',
@@ -211,7 +211,7 @@ En combinant les tendances 2026 avec l'expertise d'un professionnel qualifié, v
     excerpt:
       "Toutes les idées pour aménager votre terrasse en 2026 : revêtements, pergola bioclimatique, cuisine d'été, éclairage extérieur et budget détaillé de 3 000 à 20 000 €.",
     image: '/images/blog/amenagement-terrasse-exterieur-2026.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-02-15',
     readTime: '12 min',
     category: 'Inspiration',
@@ -246,7 +246,7 @@ En combinant les tendances 2026 avec l'expertise d'un professionnel qualifié, v
       {
         question: 'Quelle est la meilleure période pour aménager sa terrasse ?',
         answer:
-          "L'automne (septembre-novembre) est la période idéale : les artisans sont moins sollicités, les prix sont souvent négociables et votre terrasse sera prête pour le printemps suivant. Évitez la période mars-juin où la demande explose et les délais s'allongent considérablement.",
+          "L'automne (septembre-novembre) est la période idéale : the attorneys sont moins sollicités, les prix sont souvent négociables et votre terrasse sera prête pour le printemps suivant. Évitez la période mars-juin où la demande explose et les délais s'allongent considérablement.",
       },
     ],
     content: [
@@ -437,7 +437,7 @@ Les règles dépendent de la surface créée :
 En zone protégée (périmètre ABF, monument historique, site classé), toute construction extérieure — même une simple pergola — nécessite l'accord de l'Architecte des Bâtiments de France. Les délais d'instruction sont plus longs (2 à 4 mois). Renseignez-vous en mairie avant de lancer votre projet.
 :::
 
-Demandez toujours plusieurs devis détaillés, vérifiez les assurances des artisans et prévoyez une marge de 10 % sur le budget total pour les imprévus. Avec une bonne planification et les bons professionnels, votre terrasse deviendra la pièce la plus agréable de votre maison.`,
+Demandez toujours plusieurs devis détaillés, vérifiez les assurances attorneys et prévoyez une marge de 10 % sur le budget total pour les imprévus. Avec une bonne planification et les bons professionnels, votre terrasse deviendra la pièce la plus agréable de votre maison.`,
     ],
   },
 
@@ -446,7 +446,7 @@ Demandez toujours plusieurs devis détaillés, vérifiez les assurances des arti
     excerpt:
       "Guide complet pour l'aménagement de combles en 2026 : faisabilité, isolation RE2020, fenêtres de toit, escalier, budget de 800 à 1 500 €/m² et démarches administratives.",
     image: '/images/blog/renovation-combles-amenagement.webp',
-    author: 'ServicesArtisans',
+    author: 'US Attorneys',
     date: '2026-03-02',
     readTime: '13 min',
     category: 'Inspiration',
@@ -489,7 +489,7 @@ Demandez toujours plusieurs devis détaillés, vérifiez les assurances des arti
 
 L'aménagement des combles est l'un des projets de rénovation les plus rentables : il permet de gagner 20 à 50 m² de surface habitable sans agrandir l'emprise au sol de la maison, et valorise le bien de 15 à 25 % en moyenne.
 
-Mais c'est aussi un projet technique qui demande une préparation rigoureuse : faisabilité structurelle, contraintes thermiques, réglementation et choix des artisans. Ce guide détaille toutes les étapes pour réussir votre aménagement de combles en 2026.`,
+Mais c'est aussi un projet technique qui demande une préparation rigoureuse : faisabilité structurelle, contraintes thermiques, réglementation et choix attorneys. Ce guide détaille toutes les étapes pour réussir votre aménagement de combles en 2026.`,
 
       `## 1. Étude de faisabilité : vos combles sont-ils aménageables ?
 

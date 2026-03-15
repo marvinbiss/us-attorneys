@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       .maybeSingle()
 
     if (!assignment) {
-      // No artisan action — mark as expired
+      // No attorney action — mark as expired
       logger.info('Voice lead expired', { callId: call.id, leadId: call.lead_id })
       expiredCount++
     }

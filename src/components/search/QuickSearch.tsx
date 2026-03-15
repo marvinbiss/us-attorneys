@@ -19,9 +19,9 @@ function formatPopulation(pop: string): string {
   const cleaned = pop.replace(/\s/g, '')
   const num = parseInt(cleaned, 10)
   if (isNaN(num)) return pop
-  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace('.0', '')} M hab.`
-  if (num >= 1_000) return `${Math.round(num / 1_000).toLocaleString('fr-FR')} k hab.`
-  return `${num.toLocaleString('fr-FR')} hab.`
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace('.0', '')}M pop.`
+  if (num >= 1_000) return `${Math.round(num / 1_000).toLocaleString('en-US')}k pop.`
+  return `${num.toLocaleString('en-US')} pop.`
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
@@ -139,7 +139,7 @@ function buildSuggestions(input: string): Suggestion[] {
       for (const city of matchingCities) {
         results.push({
           type: 'combined',
-          label: `${bestServiceMatch.name} à ${city.name}`,
+          label: `${bestServiceMatch.name} in ${city.name}`,
           specialtySlug: bestServiceMatch.slug,
           specialtyName: bestServiceMatch.name,
           citySlug: city.slug,
@@ -164,7 +164,7 @@ function buildSuggestions(input: string): Suggestion[] {
       for (const city of topCities) {
         results.push({
           type: 'combined',
-          label: `${bestServiceMatch.name} à ${city.name}`,
+          label: `${bestServiceMatch.name} in ${city.name}`,
           specialtySlug: bestServiceMatch.slug,
           specialtyName: bestServiceMatch.name,
           citySlug: city.slug,
@@ -241,7 +241,7 @@ function buildSuggestions(input: string): Suggestion[] {
             for (const city of matchingCities.slice(0, 3)) {
               results.push({
                 type: 'combined',
-                label: `${service.name} à ${city.name}`,
+                label: `${service.name} in ${city.name}`,
                 specialtySlug: service.slug,
                 specialtyName: service.name,
                 citySlug: city.slug,
@@ -425,7 +425,7 @@ export default function QuickSearch() {
 
   return (
     <div ref={containerRef} className="w-full relative">
-      <form onSubmit={handleSubmit} role="search" aria-label="Recherche rapide">
+      <form onSubmit={handleSubmit} role="search" aria-label="Quick search">
         <div className="relative flex items-center">
           {/* Search icon */}
           <Search className="absolute left-3.5 w-4 h-4 text-gray-400 pointer-events-none" />
@@ -445,9 +445,9 @@ export default function QuickSearch() {
               }
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Rechercher un artisan, un service, une ville..."
+            placeholder="Search for an attorney, service, or city..."
             autoComplete="off"
-            aria-label="Recherche rapide"
+            aria-label="Quick search"
             aria-expanded={showDropdown && suggestions.length > 0}
             aria-haspopup="listbox"
             aria-autocomplete="list"
@@ -464,7 +464,7 @@ export default function QuickSearch() {
                 inputRef.current?.focus()
               }}
               className="absolute right-10 w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
-              aria-label="Effacer"
+              aria-label="Clear"
             >
               <X className="w-3 h-3 text-gray-500" />
             </button>
@@ -474,7 +474,7 @@ export default function QuickSearch() {
           <button
             type="submit"
             className="absolute right-1.5 w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-sm hover:shadow-md hover:scale-105"
-            aria-label="Rechercher"
+            aria-label="Search"
           >
             <Search className="w-3.5 h-3.5" />
           </button>
@@ -537,7 +537,7 @@ export default function QuickSearch() {
 
                     {/* Meta info */}
                     {suggestion.type === 'service' && (
-                      <div className="text-xs text-gray-400 truncate">Service artisan</div>
+                      <div className="text-xs text-gray-400 truncate">Practice area</div>
                     )}
                     {suggestion.type === 'city' && suggestion.cityDept && (
                       <div className="text-xs text-gray-400 truncate">
@@ -572,15 +572,15 @@ export default function QuickSearch() {
           <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-gray-50 border-t border-gray-100 text-[10px] text-gray-400">
             <span className="flex items-center gap-1">
               <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">&#8593;&#8595;</kbd>
-              naviguer
+              navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Entr&eacute;e</kbd>
-              valider
+              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Enter</kbd>
+              select
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">&Eacute;chap</kbd>
-              fermer
+              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Esc</kbd>
+              close
             </span>
           </div>
         </div>

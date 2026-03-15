@@ -49,7 +49,7 @@ function BooleanCell({ value }: { value: boolean | undefined }) {
 
 function RatingCell({ provider }: { provider: CompareProvider }) {
   if (!provider.rating_average) {
-    return <span className="text-gray-400 text-sm">Pas encore noté</span>
+    return <span className="text-gray-400 text-sm">Not yet rated</span>
   }
   return (
     <div className="flex items-center justify-center gap-1.5">
@@ -59,7 +59,7 @@ function RatingCell({ provider }: { provider: CompareProvider }) {
       </span>
       {provider.review_count != null && provider.review_count > 0 && (
         <span className="text-gray-500 text-xs">
-          ({provider.review_count} avis)
+          ({provider.review_count} reviews)
         </span>
       )}
     </div>
@@ -135,12 +135,12 @@ export function CompareView({ onClose }: CompareViewProps) {
               id="compare-title"
               className="text-xl font-bold text-gray-900 font-heading"
             >
-              Comparer les artisans
+              Compare attorneys
             </h2>
             <button
               onClick={onClose}
               className="p-2 -m-2 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
-              aria-label="Fermer"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
@@ -156,7 +156,7 @@ export function CompareView({ onClose }: CompareViewProps) {
                     <button
                       onClick={() => removeFromCompare(provider.id)}
                       className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-sm"
-                      aria-label={`Retirer ${provider.name}`}
+                      aria-label={`Remove ${provider.name}`}
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -180,7 +180,7 @@ export function CompareView({ onClose }: CompareViewProps) {
           <div className="divide-y divide-gray-100">
             {/* Rating */}
             <CompareRow
-              label="Note"
+              label="Rating"
               icon={<Star className="w-4 h-4 text-amber-500" />}
               providers={compareList}
             >
@@ -211,7 +211,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
             {/* Verified */}
             <CompareRow
-              label="Vérifié"
+              label="Verified"
               icon={<Shield className="w-4 h-4 text-green-500" />}
               providers={compareList}
             >
@@ -222,7 +222,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
             {/* Phone */}
             <CompareRow
-              label="Téléphone"
+              label="Phone"
               icon={<Phone className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
@@ -246,7 +246,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
             {/* SIRET */}
             <CompareRow
-              label="SIRET"
+              label="Bar Number"
               icon={<FileText className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
@@ -261,7 +261,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
             {/* Postal code */}
             <CompareRow
-              label="Code postal"
+              label="ZIP code"
               icon={<MapPinned className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
@@ -278,9 +278,9 @@ export function CompareView({ onClose }: CompareViewProps) {
           {/* Footer */}
           <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
             <p className="text-xs text-gray-500 text-center">
-              Les informations affichées sont fournies par les artisans et
-              vérifiées lorsque disponibles. Contactez directement
-              chaque artisan pour un devis personnalisé.
+              The information displayed is provided by attorneys and
+              verified when available. Contact each attorney
+              directly for a personalized consultation.
             </p>
           </div>
         </div>

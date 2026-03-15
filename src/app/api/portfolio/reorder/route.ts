@@ -28,21 +28,21 @@ export async function PUT(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Non authentifié' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify user is an artisan
+    // Verify user is an attorney
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'artisan') {
+    if (!profile || profile.role !== 'attorney') {
       return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
+        { error: 'Access reserved for attorneys' },
         { status: 403 }
       )
     }
@@ -53,7 +53,7 @@ export async function PUT(request: NextRequest) {
 
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: result.error.flatten() },
+        { error: 'Invalid data', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -71,7 +71,7 @@ export async function PUT(request: NextRequest) {
     if (fetchError) {
       logger.error('Error verifying portfolio items:', fetchError)
       return NextResponse.json(
-        { error: 'Erreur de vérification' },
+        { error: 'Verification error' },
         { status: 500 }
       )
     }
@@ -81,7 +81,7 @@ export async function PUT(request: NextRequest) {
 
     if (unauthorizedIds.length > 0) {
       return NextResponse.json(
-        { error: 'Certains éléments ne vous appartiennent pas' },
+        { error: 'Some items do not belong to you' },
         { status: 403 }
       )
     }
@@ -100,19 +100,19 @@ export async function PUT(request: NextRequest) {
     if (errors.length > 0) {
       logger.error('Errors reordering portfolio items:', errors)
       return NextResponse.json(
-        { error: 'Erreur lors du réordonnancement' },
+        { error: 'Error reordering' },
         { status: 500 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Ordre mis à jour',
+      message: 'Order updated',
     })
   } catch (error) {
     logger.error('Portfolio reorder error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

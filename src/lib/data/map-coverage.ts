@@ -1,5 +1,5 @@
 /**
- * Donnees de couverture geographique pour la carte interactive des artisans.
+ * Donnees de couverture geographique pour la carte interactive attorneys.
  * Coordonnees approximatives des principales cities francaises
  * avec un nombre estime d'artisans par ville (base sur la population).
  */

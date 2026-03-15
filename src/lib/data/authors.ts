@@ -16,9 +16,9 @@ export const authors: Record<string, Author> = {
   'sophie-martin': {
     slug: 'sophie-martin',
     name: 'Sophie Martin',
-    role: "Rédactrice spécialisée habitat et rénovation",
-    bio: "Journaliste et rédactrice spécialisée dans le secteur de la rénovation et de l'habitat depuis plus de 8 ans. Sophie accompagne les particuliers dans leurs projets en vulgarisant les aspects techniques et réglementaires des travaux du bâtiment.",
-    expertise: ['Rénovation', 'Habitat', 'Réglementation', 'Conseils travaux'],
+    role: "Legal content writer specializing in property and real estate law",
+    bio: "Journalist and content writer specializing in the property and real estate sector for over 8 years. Sophie helps individuals with their projects by making the technical and regulatory aspects of legal matters accessible.",
+    expertise: ['Real Estate', 'Property', 'Regulations', 'Legal Advice'],
     certifications: ['DU Journalisme scientifique et technique'],
     yearsExperience: 8,
     image: '/images/authors/sophie-martin.svg',
@@ -26,20 +26,20 @@ export const authors: Record<string, Author> = {
   'claire-dubois': {
     slug: 'claire-dubois',
     name: 'Claire Dubois',
-    role: "Experte en économie de la construction",
-    bio: "Économiste de la construction certifiée, Claire analyse les prix du marché et les dispositifs d'aides financières depuis plus de 12 ans. Elle conseille les particuliers sur l'optimisation de leur budget travaux et le cumul des aides à la rénovation.",
-    expertise: ['Économie de la construction', 'Aides financières', 'Prix du marché', 'Budget travaux'],
-    certifications: ['OPQTECC', 'Expert en économie de la construction'],
+    role: "Expert in construction economics",
+    bio: "Certified construction economist, Claire has been analyzing market prices and financial aid programs for over 12 years. She advises individuals on optimizing their project budgets and combining renovation aid programs.",
+    expertise: ['Construction Economics', 'Financial Aid', 'Market Prices', 'Project Budgets'],
+    certifications: ['OPQTECC', 'Construction Economics Expert'],
     yearsExperience: 12,
     image: '/images/authors/claire-dubois.svg',
   },
   'marc-lefebvre': {
     slug: 'marc-lefebvre',
     name: 'Marc Lefebvre',
-    role: "Expert en électricité et domotique",
-    bio: "Électricien certifié et formateur en domotique, Marc possède plus de 18 ans d'expérience dans l'installation électrique résidentielle et les systèmes connectés. Il partage son expertise technique pour aider les particuliers à comprendre leurs installations.",
-    expertise: ['Électricité', 'Domotique', 'Normes électriques', 'Énergies renouvelables'],
-    certifications: ['Qualifelec', 'IRVE', 'Habilitation électrique BR'],
+    role: "Expert in electrical systems and smart home technology",
+    bio: "Certified electrician and smart home trainer, Marc has over 18 years of experience in residential electrical installations and connected systems. He shares his technical expertise to help individuals understand their installations.",
+    expertise: ['Electrical Systems', 'Smart Home', 'Electrical Standards', 'Renewable Energy'],
+    certifications: ['Qualifelec', 'IRVE', 'Electrical Authorization BR'],
     yearsExperience: 18,
     image: '/images/authors/marc-lefebvre.svg',
   },
@@ -47,8 +47,8 @@ export const authors: Record<string, Author> = {
     slug: 'jean-pierre-duval',
     name: 'Jean-Pierre Duval',
     role: "Expert en plomberie et chauffage",
-    bio: "Plombier-chauffagiste certifié avec plus de 20 ans d'expérience, Jean-Pierre est spécialisé dans les installations thermiques et sanitaires. Il intervient régulièrement comme formateur auprès des apprentis du CFA du bâtiment.",
-    expertise: ['Plomberie', 'Chauffage', 'Sanitaire', 'Pompes à chaleur'],
+    bio: "Certified plumber and heating engineer with over 20 years of experience, Jean-Pierre specializes in thermal and sanitary installations. He regularly serves as a trainer for building trade apprentices.",
+    expertise: ['Plumbing', 'Heating', 'Sanitary', 'Heat Pumps'],
     certifications: ['RGE QualiPAC', 'Qualibat', 'PG Professionnel du Gaz'],
     yearsExperience: 20,
     image: '/images/authors/jean-pierre-duval.svg',
@@ -56,19 +56,19 @@ export const authors: Record<string, Author> = {
   'thomas-bernard': {
     slug: 'thomas-bernard',
     name: 'Thomas Bernard',
-    role: "Architecte d'intérieur et consultant en rénovation",
-    bio: "Architecte d'intérieur diplômé, Thomas conseille les propriétaires sur l'optimisation de leur habitat depuis plus de 10 ans. Spécialisé en rénovation de cuisines et salles de bain, il allie esthétique et fonctionnalité dans chacun de ses projets.",
-    expertise: ['Architecture intérieure', 'Rénovation', 'Design', 'Menuiserie'],
-    certifications: ['CFAI', 'Diplôme ENSAD'],
+    role: "Interior architect and renovation consultant",
+    bio: "Graduate interior architect, Thomas has been advising homeowners on optimizing their living spaces for over 10 years. Specializing in kitchen and bathroom renovations, he combines aesthetics and functionality in each of his projects.",
+    expertise: ['Interior Architecture', 'Renovation', 'Design', 'Carpentry'],
+    certifications: ['CFAI', 'ENSAD Diploma'],
     yearsExperience: 10,
     image: '/images/authors/thomas-bernard.svg',
   },
   'isabelle-renault': {
     slug: 'isabelle-renault',
     name: 'Isabelle Renault',
-    role: "Experte en peinture et revêtements",
-    bio: "Peintre en bâtiment et décoratrice certifiée, Isabelle possède 14 ans d'expérience dans les revêtements intérieurs et extérieurs. Elle conseille les particuliers sur le choix des matériaux, les techniques d'application et les tendances couleur.",
-    expertise: ['Peinture', 'Revêtements', 'Décoration', 'Isolation thermique'],
+    role: "Expert in painting and coatings",
+    bio: "Certified building painter and decorator, Isabelle has 14 years of experience in interior and exterior coatings. She advises individuals on material selection, application techniques, and color trends.",
+    expertise: ['Painting', 'Coatings', 'Decoration', 'Thermal Insulation'],
     certifications: ['Qualibat 6111', 'Certification Peintre AFNOR'],
     yearsExperience: 14,
     image: '/images/authors/isabelle-renault.svg',
@@ -77,7 +77,7 @@ export const authors: Record<string, Author> = {
 
 /**
  * Find an author by their display name (as used in articles).
- * Returns undefined for "ServicesArtisans" or unknown names.
+ * Returns undefined for "US Attorneys" or unknown names.
  */
 export function getAuthorByName(name: string): Author | undefined {
   return Object.values(authors).find(a => a.name === name)

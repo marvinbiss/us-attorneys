@@ -1,5 +1,5 @@
 /**
- * Admin Stats API - ServicesArtisans
+ * Admin Stats API - US Attorneys
  * Real platform statistics, trends, activity data, and chart series
  */
 
@@ -108,8 +108,8 @@ export async function GET() {
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart),
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart),
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart),
-      // Revenue: total_amount n'existe pas dans bookings — on compte les réservations payées
-      // pour le calcul de tendance, mais le montant réel retourné sera 0.
+      // Revenue: total_amount doesn't exist in bookings — we count paid bookings
+      // for trend calculation, but the actual amount returned will be 0.
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart).eq('payment_status', 'paid'),
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart).eq('payment_status', 'paid'),
       // Active users (profile updated in last 7 days)
@@ -148,9 +148,9 @@ export async function GET() {
       : 0
 
     // Revenue: total_amount n'existe pas dans bookings.
-    // On utilise le nombre de réservations payées pour la tendance; le montant retourné est 0.
+    // We use the number of paid bookings for the trend; the returned amount is 0.
     const revThisMonth = 0
-    // Tendance basée sur le nombre de réservations payées (pas de montant disponible)
+    // Trend based on number of paid bookings (no amount available)
     const paidThisMonth = safeCount(revThisMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>)
     const paidLastMonth = safeCount(revLastMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>)
 
@@ -164,8 +164,8 @@ export async function GET() {
       activity.push({
         id: `b-${b.id}`,
         type: 'booking',
-        action: 'Nouvelle réservation',
-        details: 'Nouvelle réservation',
+        action: 'New booking',
+        details: 'New booking',
         timestamp: b.created_at,
         status: b.status,
       })
@@ -178,7 +178,7 @@ export async function GET() {
         id: `r-${r.id}`,
         type: 'review',
         action: 'Nouvel avis',
-        details: `${r.client_name || 'Anonyme'} — ${r.rating} étoile${r.rating > 1 ? 's' : ''}`,
+        details: `${r.client_name || 'Anonymous'} — ${r.rating} star${r.rating > 1 ? 's' : ''}`,
         timestamp: r.created_at,
         status: r.status,
       })
@@ -247,7 +247,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Admin stats error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la récupération des statistiques' } },
+      { success: false, error: { message: 'Error retrieving statistics' } },
       { status: 500 }
     )
   }

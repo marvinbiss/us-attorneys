@@ -79,7 +79,7 @@ export async function generateMetadata({
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const description = `Devis ${tradeLower} à ${quartierName}, ${ville.name} : ${minPrice}–${maxPrice} ${unit}. Comparez jusqu’à 3 artisans. Gratuit, sans engagement.`
+  const description = `Devis ${tradeLower} à ${quartierName}, ${ville.name} : ${minPrice}–${maxPrice} ${unit}. Comparez jusqu'à 3 artisans. Gratuit, sans engagement.`
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/quotes/${service}/${location}/${quartier}`
@@ -122,7 +122,7 @@ export default async function DevisQuartierPage({
 
   const { city: ville, neighborhoodName: quartierName } = quartierData
   const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
-  const quartierContent = generateQuartierContent(ville as never, quartierName, service)
+  const quartierContent = generateQuartierContent(ville, quartierName, service)
   const multiplier = getRegionalMultiplier(villeRegion)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)

@@ -23,7 +23,7 @@ const availabilityDeleteSchema = z.object({
   slotId: z.string().uuid(),
 })
 
-// GET /api/availability - Get artisan's availability settings
+// GET /api/availability - Get attorney's availability settings
 // Note: availability_settings table was removed in migration 100
 export const dynamic = 'force-dynamic'
 
@@ -35,14 +35,14 @@ export async function GET(request: Request) {
   const result = availabilityGetSchema.safeParse(queryParams)
   if (!result.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+      { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
       { status: 400 }
     )
   }
 
   return NextResponse.json({
     settings: null,
-    message: 'Paramètres de disponibilité non disponibles',
+    message: 'Availability settings not available',
   })
 }
 
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     const result = availabilityPostSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -65,13 +65,13 @@ export async function POST(request: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
-        { success: false, error: { message: 'Non authentifié' } },
+        { success: false, error: { message: 'Not authenticated' } },
         { status: 401 }
       )
     }
     if (result.data.attorneyId !== user.id) {
       return NextResponse.json(
-        { success: false, error: { message: 'Accès refusé' } },
+        { success: false, error: { message: 'Access denied' } },
         { status: 403 }
       )
     }
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Error updating availability:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la mise à jour de la disponibilité' } },
+      { success: false, error: { message: 'Error updating availability' } },
       { status: 500 }
     )
   }
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
 // Note: availability_settings table was removed in migration 100
 export async function PUT(_request: Request) {
   return NextResponse.json(
-    { success: false, error: { message: 'Fonctionnalité non disponible' } },
+    { success: false, error: { message: 'Feature not available' } },
     { status: 501 }
   )
 }
@@ -130,7 +130,7 @@ export async function DELETE(request: Request) {
   const result = availabilityDeleteSchema.safeParse(queryParams)
   if (!result.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+      { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
       { status: 400 }
     )
   }
@@ -142,7 +142,7 @@ export async function DELETE(request: Request) {
     // Auth guard: require authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
     // Check if slot has a booking
@@ -154,17 +154,17 @@ export async function DELETE(request: Request) {
 
     if (slotError) throw slotError
 
-    // Ownership check: only the artisan who owns the slot can delete it
+    // Ownership check: only the attorney who owns the slot can delete it
     if (slot?.attorney_id !== user.id) {
       return NextResponse.json(
-        { success: false, error: { message: 'Vous n\'êtes pas autorisé à supprimer ce créneau' } },
+        { success: false, error: { message: 'You are not authorized to delete this slot' } },
         { status: 403 }
       )
     }
 
     if (slot?.booking && slot.booking.length > 0) {
       return NextResponse.json(
-        { success: false, error: { message: 'Ce créneau a une réservation et ne peut pas être supprimé' } },
+        { success: false, error: { message: 'This slot has a booking and cannot be deleted' } },
         { status: 400 }
       )
     }
@@ -181,7 +181,7 @@ export async function DELETE(request: Request) {
   } catch (error) {
     logger.error('Error deleting slot:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la suppression du créneau' } },
+      { success: false, error: { message: 'Error deleting slot' } },
       { status: 500 }
     )
   }

@@ -29,8 +29,8 @@ const addressesSchema = z.object({
 })
 
 /**
- * API Route pour le géocodage côté serveur
- * Utile pour le SSR ou les opérations batch
+ * API Route for server-side geocoding
+ * Useful for SSR or batch operations
  */
 
 export async function GET(request: NextRequest) {
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 
   try {
     switch (action) {
-      // Géocodage : Adresse → GPS
+      // Geocoding: Address → GPS
       case 'geocode': {
         const queryParams = {
           action: 'geocode' as const,
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         const result = geocodeSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Adresse requise', details: result.error.flatten() } },
+            { success: false, error: { message: 'Address required', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
         const result = reverseSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Coordonnées lon et lat valides requises', details: result.error.flatten() } },
+            { success: false, error: { message: 'Valid lon and lat coordinates required', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         const result = citiesSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Requête requise', details: result.error.flatten() } },
+            { success: false, error: { message: 'Query required', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
         const result = addressesSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Requête requise', details: result.error.flatten() } },
+            { success: false, error: { message: 'Query required', details: result.error.flatten() } },
             { status: 400 }
           )
         }
@@ -116,14 +116,14 @@ export async function GET(request: NextRequest) {
 
       default:
         return NextResponse.json(
-          { success: false, error: { message: 'Action invalide. Utilisez : geocode, reverse, cities, addresses' } },
+          { success: false, error: { message: 'Invalid action. Use: geocode, reverse, cities, addresses' } },
           { status: 400 }
         )
     }
   } catch (error) {
     logger.error('Geocode API error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

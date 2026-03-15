@@ -32,12 +32,12 @@ export default function ContactPageClient() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'envoi du message')
+        throw new Error(data.error || 'Error sending message')
       }
 
       setIsSubmitted(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi')
+      setError(err instanceof Error ? err.message : 'Error sending message')
     } finally {
       setIsLoading(false)
     }
@@ -51,23 +51,23 @@ export default function ContactPageClient() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <h1 className="font-heading text-2xl font-bold text-gray-900 mb-4">
-            Message envoyé !
+            Message sent!
           </h1>
           <p className="text-gray-600 mb-6">
-            Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.
+            We have received your message and will respond as soon as possible.
           </p>
           <div className="space-y-3">
             <Link
               href="/"
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
-              Retour à l'accueil
+              Back to home
             </Link>
             <Link
               href="/quotes"
               className="block w-full border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
             >
-              Demander un devis
+              Request a consultation
             </Link>
           </div>
         </div>
@@ -97,10 +97,10 @@ export default function ContactPageClient() {
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Contactez-nous
+              Contact Us
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Une question ? Un probl&egrave;me ? Notre &eacute;quipe est l&agrave; pour vous aider.
+              Have a question? Need help? Our team is here to assist you.
             </p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function ContactPageClient() {
           <div className="lg:col-span-1 space-y-8">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Nos coordonnées
+                Our contact information
               </h2>
 
               <div className="space-y-6">
@@ -132,9 +132,9 @@ export default function ContactPageClient() {
                     <Phone className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Téléphone</h3>
-                    <a href="tel:+33651858930" className="text-blue-600 hover:text-blue-700 font-medium">
-                      06 51 85 89 30
+                    <h3 className="font-semibold text-gray-900">Phone</h3>
+                    <a href="tel:+18005551234" className="text-blue-600 hover:text-blue-700 font-medium">
+                      (800) 555-1234
                     </a>
                   </div>
                 </div>
@@ -144,10 +144,10 @@ export default function ContactPageClient() {
                     <Clock className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Horaires</h3>
+                    <h3 className="font-semibold text-gray-900">Hours</h3>
                     <p className="text-gray-600">
-                      Lun - Ven : 9h - 18h<br />
-                      Sam : 9h - 12h
+                      Mon - Fri: 9 AM - 6 PM ET<br />
+                      Sat: 9 AM - 12 PM ET
                     </p>
                   </div>
                 </div>
@@ -157,50 +157,50 @@ export default function ContactPageClient() {
             <div className="bg-blue-50 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-3">
                 <MessageSquare className="w-6 h-6 text-blue-600" />
-                <h3 className="font-semibold text-gray-900">Besoin d'aide rapide ?</h3>
+                <h3 className="font-semibold text-gray-900">Need quick help?</h3>
               </div>
               <p className="text-gray-600 text-sm mb-4">
-                Consultez notre FAQ pour trouver des réponses aux questions les plus fréquentes.
+                Check our FAQ for answers to the most common questions.
               </p>
               <Link
                 href="/faq"
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
               >
-                Voir la FAQ <ArrowRight className="w-4 h-4" />
+                View FAQ <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Contextual Links */}
             <div className="bg-gray-100 rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Liens utiles</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Useful links</h3>
               <div className="space-y-2">
                 <Link
                   href="/how-it-works"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
-                  Comment ça marche ?
+                  How it works
                 </Link>
                 <Link
                   href="/quotes"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
-                  Demander un devis gratuit
+                  Request a free consultation
                 </Link>
                 <Link
                   href="/register-attorney"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
-                  Devenir artisan partenaire
+                  Join as an attorney
                 </Link>
                 <Link
                   href="/login"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
-                  Se connecter
+                  Sign in
                 </Link>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function ContactPageClient() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Envoyez-nous un message
+                Send us a message
               </h2>
 
               {error && (
@@ -224,7 +224,7 @@ export default function ContactPageClient() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="contact-nom" className="block text-sm font-medium text-gray-700 mb-2">
-                      Nom complet *
+                      Full name *
                     </label>
                     <input
                       id="contact-nom"
@@ -235,7 +235,7 @@ export default function ContactPageClient() {
                       required
                       disabled={isLoading}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
-                      placeholder="Jean Dupont"
+                      placeholder="John Smith"
                     />
                   </div>
                   <div>
@@ -251,14 +251,14 @@ export default function ContactPageClient() {
                       required
                       disabled={isLoading}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
-                      placeholder="jean@email.com"
+                      placeholder="john@email.com"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label htmlFor="contact-sujet" className="block text-sm font-medium text-gray-700 mb-2">
-                    Sujet *
+                    Subject *
                   </label>
                   <select
                     id="contact-sujet"
@@ -268,12 +268,12 @@ export default function ContactPageClient() {
                     disabled={isLoading}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
                   >
-                    <option value="">Sélectionnez un sujet</option>
-                    <option value="devis">Question sur un devis</option>
-                    <option value="artisan">Problème avec un artisan</option>
-                    <option value="inscription">Inscription artisan</option>
-                    <option value="partenariat">Partenariat</option>
-                    <option value="autre">Autre</option>
+                    <option value="">Select a subject</option>
+                    <option value="devis">Question about a consultation</option>
+                    <option value="artisan">Issue with an attorney</option>
+                    <option value="inscription">Attorney registration</option>
+                    <option value="partenariat">Partnership</option>
+                    <option value="autre">Other</option>
                   </select>
                 </div>
 
@@ -289,7 +289,7 @@ export default function ContactPageClient() {
                     disabled={isLoading}
                     rows={6}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
-                    placeholder="Décrivez votre demande..."
+                    placeholder="Describe your request..."
                   />
                 </div>
 
@@ -301,12 +301,12 @@ export default function ContactPageClient() {
                   {isLoading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Envoi en cours...
+                      Sending...
                     </>
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      Envoyer le message
+                      Send message
                     </>
                   )}
                 </button>
@@ -320,7 +320,7 @@ export default function ContactPageClient() {
       <section className="bg-gray-100 py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Trouvez un artisan près de chez vous
+            Find an attorney near you
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />

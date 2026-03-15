@@ -16,7 +16,7 @@ export async function OPTIONS() {
  * GET /api/v1/stats?region=ile-de-france
  * GET /api/v1/stats?departement=75
  *
- * Retourne les statistiques régionales ou départementales.
+ * Returns regional or state statistics.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     if (!region && !departement) {
       return NextResponse.json(
-        { error: 'Paramètre "region" ou "departement" requis. Exemple : ?region=ile-de-france ou ?departement=75' },
+        { error: 'Parameter "region" or "state" is required. Example: ?region=california or ?state=CA' },
         { status: 400, headers: CORS_HEADERS },
       )
     }
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       return NextResponse.json(
-        { error: 'Erreur interne lors de la récupération des données.' },
+        { error: 'Internal error retrieving data.' },
         { status: 500, headers: CORS_HEADERS },
       )
     }
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
         },
         data: rows,
         attribution: {
-          text: `Source : ${SITE_NAME} — Baromètre des Artisans`,
+          text: `Source: ${SITE_NAME} — Attorney Barometer`,
           url: `${SITE_URL}/price-index`,
           licence: 'Attribution obligatoire avec lien vers la source.',
         },

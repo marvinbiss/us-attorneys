@@ -201,7 +201,7 @@ export class AnalyticsService {
     // Top services (mock data - would need proper join)
     const topServices = [
       { service: 'Plomberie', count: 150 },
-      { service: 'Électricité', count: 120 },
+      { service: 'Electrical', count: 120 },
       { service: 'Serrurerie', count: 90 },
       { service: 'Chauffage', count: 75 },
       { service: 'Climatisation', count: 60 },

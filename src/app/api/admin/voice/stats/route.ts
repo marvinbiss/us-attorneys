@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Voice stats GET error', error as Error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }

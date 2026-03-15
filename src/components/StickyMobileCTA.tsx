@@ -21,7 +21,7 @@ interface StickyMobileCTAProps {
 export default function StickyMobileCTA({
   specialtySlug,
   citySlug,
-  ctaText = 'Recevoir mes devis gratuits',
+  ctaText = 'Get my free consultations',
   href,
   attorneyCount,
 }: StickyMobileCTAProps) {
@@ -57,14 +57,14 @@ export default function StickyMobileCTA({
             sessionStorage.setItem('stickyMobileCTA_dismissed', '1')
           }}
           className="absolute -top-2 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-gray-600"
-          aria-label="Fermer"
+          aria-label="Close"
         >
           <X className="w-3.5 h-3.5" />
         </button>
 
         {attorneyCount && attorneyCount > 0 && (
           <p className="text-xs text-gray-500 text-center mb-1.5">
-            {attorneyCount} artisan{attorneyCount > 1 ? 's' : ''} disponible{attorneyCount > 1 ? 's' : ''} dans votre zone
+            {attorneyCount} attorney{attorneyCount > 1 ? 's' : ''} available in your area
           </p>
         )}
 
@@ -84,7 +84,7 @@ export default function StickyMobileCTA({
         </Link>
 
         <p className="text-[10px] text-gray-400 text-center mt-1.5">
-          Gratuit · Sans engagement · Réponse sous 24h
+          Free · No obligation · Response within 24h
         </p>
       </div>
     </div>

@@ -1,10 +1,10 @@
 /**
- * Artisan Avatar API
+ * Attorney Avatar API
  *
- * POST  — Upload un nouvel avatar (Supabase Storage, bucket: avatars)
- * DELETE — Supprime l'avatar existant
+ * POST  — Upload a new avatar (Supabase Storage, bucket: avatars)
+ * DELETE — Delete existing avatar
  *
- * Nécessite: migration 326_add_provider_avatar.sql (colonne avatar_url sur providers)
+ * Requires: migration 326_add_provider_avatar.sql (avatar_url column on providers)
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -47,7 +47,7 @@ function storagePathFromUrl(url: string, bucket: string): string | null {
 
 /**
  * Valide les magic bytes du buffer pour confirmer le vrai format du fichier.
- * Protège contre le MIME type spoofing (le client peut envoyer n'importe quel file.type).
+ * Protects against MIME type spoofing (client can send any file.type).
  */
 function validateMagicBytes(bytes: Uint8Array): boolean {
   // JPEG: FF D8 FF
@@ -70,14 +70,14 @@ function validateMagicBytes(bytes: Uint8Array): boolean {
 }
 
 // =============================================================================
-// POST — Upload un nouvel avatar
+// POST — Upload a new avatar
 // =============================================================================
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const { error: guardError, user, supabase } = await requireArtisan()
   if (guardError) return guardError
 
-  // Récupérer le provider lié à cet utilisateur
+  // Retrieve the provider linked to this user
   const { data: provider, error: attorneyError } = await supabase
     .from('attorneys')
     .select('id, avatar_url')
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   if (attorneyError || !provider) {
     return NextResponse.json(
-      { error: 'Profil artisan introuvable.' },
+      { error: 'Attorney profile not found.' },
       { status: 404 }
     )
   }
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     formData = await request.formData()
   } catch {
     return NextResponse.json(
-      { error: 'Corps de requête invalide. Attendu: multipart/form-data.' },
+      { error: 'Invalid request body. Expected: multipart/form-data.' },
       { status: 400 }
     )
   }
@@ -105,16 +105,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const file = formData.get('file')
   if (!(file instanceof File)) {
     return NextResponse.json(
-      { error: 'Champ "file" manquant ou invalide.' },
+      { error: 'Missing or invalid "file" field.' },
       { status: 400 }
     )
   }
 
-  // Valider le type MIME déclaré et la taille
+  // Validate the declared MIME type and size
   if (!isAllowedMimeType(file.type)) {
     return NextResponse.json(
       {
-        error: `Type de fichier non autorisé: ${file.type}. Types acceptés: JPEG, PNG, WebP.`,
+        error: `Unauthorized file type: ${file.type}. Accepted types: JPEG, PNG, WebP.`,
       },
       { status: 422 }
     )
@@ -128,28 +128,28 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   // Bug 1 fix — Validation des magic bytes pour contrer le MIME type spoofing.
-  // Le file.type est fourni par le client et peut être falsifié. On lit les
+  // The file.type is provided by the client and can be spoofed. We read the
   // premiers octets du buffer pour confirmer le vrai format du fichier.
   const buffer = await file.arrayBuffer()
   const bytes = new Uint8Array(buffer)
 
   if (!validateMagicBytes(bytes)) {
     return NextResponse.json(
-      { error: 'Format de fichier invalide' },
+      { error: 'Invalid file format' },
       { status: 400 }
     )
   }
 
-  // Créer un Blob depuis le buffer validé (pas le File original) pour l'upload Storage.
-  // Cela garantit qu'on upload exactement les octets lus côté serveur.
+  // Create a Blob from the validated buffer (not the original File) for Storage upload.
+  // This ensures we upload exactly the bytes read server-side.
   const fileBlob = new Blob([buffer], { type: file.type })
 
-  // Supprimer l'ancien avatar s'il existe
+  // Delete l'ancien avatar s'il existe
   const currentAvatarUrl = provider.avatar_url as string | null
   if (currentAvatarUrl) {
     const oldPath = storagePathFromUrl(currentAvatarUrl, 'avatars')
     if (oldPath) {
-      // Erreur non bloquante: on continue même si la suppression échoue
+      // Non-blocking error: continue even if deletion fails
       await supabase.storage.from('avatars').remove([oldPath])
     }
   }
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   if (uploadError) {
     return NextResponse.json(
-      { error: `Échec de l'upload: ${uploadError.message}` },
+      { error: `Upload failed: ${uploadError.message}` },
       { status: 500 }
     )
   }
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const publicUrl = publicUrlData.publicUrl
 
-  // Mettre à jour la colonne avatar_url dans providers
+  // Update la colonne avatar_url dans providers
   const { error: updateError } = await supabase
     .from('attorneys')
     .update({ avatar_url: publicUrl })
@@ -184,12 +184,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   if (updateError) {
     return NextResponse.json(
-      { error: `Échec de la mise à jour du profil: ${updateError.message}` },
+      { error: `Profile update failed: ${updateError.message}` },
       { status: 500 }
     )
   }
 
-  // Retourner l'URL publique
+  // Return l'URL publique
   return NextResponse.json({ url: publicUrl }, { status: 200 })
 }
 
@@ -201,7 +201,7 @@ export async function DELETE(): Promise<NextResponse> {
   const { error: guardError, user, supabase } = await requireArtisan()
   if (guardError) return guardError
 
-  // Récupérer le provider et son avatar_url actuel
+  // Retrieve le provider et son avatar_url actuel
   const { data: provider, error: attorneyError } = await supabase
     .from('attorneys')
     .select('id, avatar_url')
@@ -210,7 +210,7 @@ export async function DELETE(): Promise<NextResponse> {
 
   if (attorneyError || !provider) {
     return NextResponse.json(
-      { error: 'Profil artisan introuvable.' },
+      { error: 'Attorney profile not found.' },
       { status: 404 }
     )
   }
@@ -219,14 +219,14 @@ export async function DELETE(): Promise<NextResponse> {
 
   if (!currentAvatarUrl) {
     return NextResponse.json(
-      { error: 'Aucun avatar à supprimer.' },
+      { error: 'No avatar to delete.' },
       { status: 404 }
     )
   }
 
   // Bug 2 fix: si storagePathFromUrl retourne null, on ne peut pas localiser le
-  // fichier dans Storage. On refuse de nullifier avatar_url pour éviter un fichier
-  // orphelin (fichier en Storage mais URL supprimée de la DB sans le supprimer).
+  // file in Storage. We refuse to nullify avatar_url to avoid an orphaned
+  // file (file in Storage but URL removed from DB without deleting it).
   const storagePath = storagePathFromUrl(currentAvatarUrl, 'avatars')
 
   if (!storagePath) {
@@ -242,12 +242,12 @@ export async function DELETE(): Promise<NextResponse> {
 
   if (removeError) {
     return NextResponse.json(
-      { error: `Échec de la suppression du fichier: ${removeError.message}` },
+      { error: `File deletion failed: ${removeError.message}` },
       { status: 500 }
     )
   }
 
-  // Mettre avatar_url à NULL dans providers (uniquement après suppression réussie)
+  // Set avatar_url to NULL in providers (only after successful deletion)
   const { error: updateError } = await supabase
     .from('attorneys')
     .update({ avatar_url: null })
@@ -255,11 +255,11 @@ export async function DELETE(): Promise<NextResponse> {
 
   if (updateError) {
     return NextResponse.json(
-      { error: `Échec de la mise à jour du profil: ${updateError.message}` },
+      { error: `Profile update failed: ${updateError.message}` },
       { status: 500 }
     )
   }
 
-  // Retourner succès
+  // Return success
   return NextResponse.json({ success: true }, { status: 200 })
 }

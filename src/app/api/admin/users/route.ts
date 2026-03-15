@@ -19,7 +19,7 @@ const createUserSchema = z.object({
   password: z.string().min(8).max(100),
   full_name: z.string().max(100).optional(),
   phone: z.string().max(20).optional(),
-  user_type: z.enum(['client', 'artisan']).optional().default('client'),
+  user_type: z.enum(['client', 'attorney']).optional().default('client'),
 })
 
 export const dynamic = 'force-dynamic'
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     const result = usersQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     if (authError) {
       logger.warn('Auth users list failed', { message: authError.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des utilisateurs' } },
+        { success: false, error: { message: 'Error retrieving users' } },
         { status: 502 }
       )
     }
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
         email: user.email || '',
         full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: (profile.phone_e164 as string) || user.user_metadata?.phone || null,
-        user_type: Boolean(user.user_metadata?.is_artisan) ? 'artisan' : 'client',
+        user_type: Boolean(user.user_metadata?.is_artisan) ? 'attorney' : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: 'gratuit',
@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
     if (filter === 'clients') {
       users = users.filter(u => u.user_type === 'client')
     } else if (filter === 'artisans') {
-      users = users.filter(u => u.user_type === 'artisan')
+      users = users.filter(u => u.user_type === 'attorney')
     } else if (filter === 'banned') {
       users = users.filter(u => u.is_banned)
     }
@@ -149,13 +149,13 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Admin users list error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
 }
 
-// POST - Créer un nouvel utilisateur (admin only)
+// POST - Create a new user (admin only)
 export async function POST(request: NextRequest) {
   try {
     // Verify admin with users:write permission
@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
     const result = createUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -184,7 +184,7 @@ export async function POST(request: NextRequest) {
       user_metadata: {
         full_name,
         phone,
-        is_artisan: user_type === 'artisan',
+        is_artisan: user_type === 'attorney',
       },
     })
 
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
             id: authData.user.id,
             email,
             full_name,
-            role: user_type === 'artisan' ? 'artisan' : 'client',
+            role: user_type === 'attorney' ? 'attorney' : 'client',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })
@@ -222,12 +222,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       user: authData.user,
-      message: 'Utilisateur créé avec succès',
+      message: 'User created successfully',
     })
   } catch (error) {
     logger.error('Admin user creation error', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
+      { success: false, error: { message: 'Server error' } },
       { status: 500 }
     )
   }
