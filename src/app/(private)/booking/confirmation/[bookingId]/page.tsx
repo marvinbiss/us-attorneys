@@ -24,8 +24,8 @@ interface BookingDetails {
   clientName: string
   clientEmail: string
   clientPhone: string
-  serviceName: string
-  artisanName: string
+  specialtyName: string
+  attorneyName: string
   artisanPhone?: string
   artisanAddress?: string
   date: string
@@ -92,11 +92,11 @@ export default function BookingConfirmationPage() {
 VERSION:2.0
 PRODID:-//ServicesArtisans//FR
 BEGIN:VEVENT
-UID:${booking.id}@servicesartisans.fr
+UID:${booking.id}@us-attorneys.com
 DTSTART:${formatICSDate(startDate)}
 DTEND:${formatICSDate(endDate)}
-SUMMARY:RDV ${booking.serviceName} - ${booking.artisanName}
-DESCRIPTION:Rendez-vous avec ${booking.artisanName}
+SUMMARY:RDV ${booking.specialtyName} - ${booking.attorneyName}
+DESCRIPTION:Rendez-vous avec ${booking.attorneyName}
 LOCATION:${booking.artisanAddress || ''}
 STATUS:CONFIRMED
 END:VEVENT
@@ -106,7 +106,7 @@ END:VCALENDAR`
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `rdv-${booking.artisanName.toLowerCase().replace(/\s+/g, '-')}.ics`
+    link.download = `rdv-${booking.attorneyName.toLowerCase().replace(/\s+/g, '-')}.ics`
     link.click()
     URL.revokeObjectURL(url)
 
@@ -117,8 +117,8 @@ END:VCALENDAR`
     if (!booking) return
 
     const shareData = {
-      title: `RDV ${booking.serviceName}`,
-      text: `J'ai pris RDV avec ${booking.artisanName} le ${booking.date} à ${booking.startTime}`,
+      title: `RDV ${booking.specialtyName}`,
+      text: `J'ai pris RDV avec ${booking.attorneyName} le ${booking.date} à ${booking.startTime}`,
       url: window.location.href,
     }
 
@@ -186,8 +186,8 @@ END:VCALENDAR`
                 <User className="w-8 h-8" />
               </div>
               <div>
-                <h2 className="text-xl font-bold">{booking.artisanName}</h2>
-                <p className="text-violet-200">{booking.serviceName}</p>
+                <h2 className="text-xl font-bold">{booking.attorneyName}</h2>
+                <p className="text-violet-200">{booking.specialtyName}</p>
               </div>
             </div>
           </div>

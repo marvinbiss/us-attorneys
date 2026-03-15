@@ -35,7 +35,7 @@ export async function GET(request: Request) {
   var cap=function(t){return t?t.charAt(0).toUpperCase()+t.slice(1).replace(/-/g,' '):''};
   var ds=cap(s);
   var dv=cap(v);
-  var url='${escapedSiteUrl}'+(s&&v?'/services/'+encodeURIComponent(s)+'/'+encodeURIComponent(v):s?'/services/'+encodeURIComponent(s):'/');
+  var url='${escapedSiteUrl}'+(s&&v?'/practice-areas/'+encodeURIComponent(s)+'/'+encodeURIComponent(v):s?'/practice-areas/'+encodeURIComponent(s):'/');
   var h='<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:320px;border:1px solid #e2e8f0;border-radius:12px;padding:16px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.08)">';
   h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">';
   h+='<svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4L4 18h5v14h8v-8h6v8h8V18h5L20 4z" fill="#2563eb"/><path d="M28 12l-4-4v4h4z" fill="#1d4ed8"/><circle cx="30" cy="30" r="8" fill="#f59e0b"/><path d="M27 30l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';

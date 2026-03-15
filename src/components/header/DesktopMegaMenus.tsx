@@ -12,7 +12,7 @@ import {
 
 interface DesktopMegaMenusProps {
   openMenu: MenuType
-  artisanCount: number
+  attorneyCount: number
   allServicesCount: number
   villesCount: number
   regionsCount: number
@@ -27,7 +27,7 @@ interface DesktopMegaMenusProps {
 
 export default function DesktopMegaMenus({
   openMenu,
-  artisanCount,
+  attorneyCount,
   allServicesCount,
   villesCount,
   regionsCount,
@@ -67,7 +67,7 @@ export default function DesktopMegaMenus({
               <div className="hidden sm:flex items-center gap-3">
                 <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')}+` : 'Des milliers d\'artisans'} référencés</span>
+                  <span>{attorneyCount > 0 ? `${attorneyCount.toLocaleString('fr-FR')}+` : 'Des milliers d\'artisans'} référencés</span>
                 </div>
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function DesktopMegaMenus({
                           return (
                             <Link
                               key={`${cat.category}-${service.slug}`}
-                              href={`/services/${service.slug}`}
+                              href={`/practice-areas/${service.slug}`}
                               onClick={closeMenus}
                               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-200 group/link ${colors.hoverBg} hover:shadow-sm`}
                             >
@@ -132,7 +132,7 @@ export default function DesktopMegaMenus({
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <Link
-                  href="/urgence"
+                  href="/emergency"
                   onClick={closeMenus}
                   className="flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 font-semibold transition-all duration-200 hover:shadow-md"
                 >
@@ -146,19 +146,19 @@ export default function DesktopMegaMenus({
       )}
 
       {/* ===== VILLES MEGA MENU ===== */}
-      {openMenu === 'villes' && (
+      {openMenu === 'cities' && (
         <div
-          data-menu-content="villes" role="menu" aria-label="Villes"
+          data-menu-content="cities" role="menu" aria-label="Villes"
           className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
-          onMouseEnter={() => openMenuOnHover('villes')}
+          onMouseEnter={() => openMenuOnHover('cities')}
           onMouseLeave={closeMenusWithDelay}
         >
           <div className="max-w-7xl mx-auto">
             <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
               <div>
                 <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
-                <p className="text-slate-300 text-sm mt-0.5">{villesCount} villes couvertes dans toute la France</p>
+                <p className="text-slate-300 text-sm mt-0.5">{villesCount} cities couvertes dans toute la France</p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <Link
@@ -170,7 +170,7 @@ export default function DesktopMegaMenus({
                   Voir par région
                 </Link>
                 <Link
-                  href="/departements"
+                  href="/states"
                   onClick={closeMenus}
                   className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
                 >
@@ -192,7 +192,7 @@ export default function DesktopMegaMenus({
                       {group.cities.map((city) => (
                         <Link
                           key={city.slug}
-                          href={`/villes/${city.slug}`}
+                          href={`/cities/${city.slug}`}
                           onClick={closeMenus}
                           className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-blue-50 transition-all duration-200 group/city"
                         >
@@ -214,11 +214,11 @@ export default function DesktopMegaMenus({
 
               <div className="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
                 <Link
-                  href="/villes"
+                  href="/cities"
                   onClick={closeMenus}
                   className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
                 >
-                  Voir toutes les villes
+                  Voir toutes les cities
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-slate-500">
@@ -248,7 +248,7 @@ export default function DesktopMegaMenus({
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <Link
-                  href="/departements"
+                  href="/states"
                   onClick={closeMenus}
                   className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
                 >
@@ -280,7 +280,7 @@ export default function DesktopMegaMenus({
                           {region.name}
                         </div>
                         <div className="text-xs text-slate-400 mt-0.5">
-                          {region.departments.length} département{region.departments.length > 1 ? 's' : ''}
+                          {region.states.length} département{region.states.length > 1 ? 's' : ''}
                         </div>
                       </div>
                     </Link>

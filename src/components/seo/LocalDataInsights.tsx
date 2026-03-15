@@ -1,14 +1,14 @@
 import { Building2, Users, Euro, Zap, CloudRain } from 'lucide-react'
-import { CommuneData, formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
+import { LocationData, formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
 interface LocalDataInsightsProps {
-  communeData: CommuneData | null
-  serviceSlug: string
-  serviceName: string
+  locationData: LocationData | null
+  specialtySlug: string
+  specialtyName: string
   villeName: string
 }
 
@@ -17,13 +17,13 @@ interface LocalDataInsightsProps {
 // ---------------------------------------------------------------------------
 
 export default function LocalDataInsights({
-  communeData,
-  serviceName,
+  locationData,
+  specialtyName,
   villeName,
 }: LocalDataInsightsProps) {
-  if (!communeData) return null
+  if (!locationData) return null
 
-  const c = communeData
+  const c = locationData
   const gentile = c.gentile ? `les ${c.gentile}` : `les habitants de ${villeName}`
 
   // Check if we have enough data to render at least one section
@@ -42,7 +42,7 @@ export default function LocalDataInsights({
           {villeName} en chiffres : donn{'é'}es cl{'é'}s pour vos travaux
         </h2>
         <p className="text-gray-500 text-sm text-center mb-8">
-          Donn{'é'}es locales qui impactent le march{'é'} de la r{'é'}novation et les tarifs de {serviceName.toLowerCase()} {'à'} {villeName}.
+          Donn{'é'}es locales qui impactent le march{'é'} de la r{'é'}novation et les tarifs de {specialtyName.toLowerCase()} {'à'} {villeName}.
         </p>
 
         <div className="grid sm:grid-cols-2 gap-6">

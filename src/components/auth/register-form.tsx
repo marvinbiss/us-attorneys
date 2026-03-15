@@ -135,11 +135,11 @@ export function RegisterForm() {
         />
         <span className="text-sm text-gray-600">
           J'accepte les{' '}
-          <a href="/cgv" className="text-blue-600 underline">
+          <a href="/terms" className="text-blue-600 underline">
             conditions générales d'utilisation
           </a>{' '}
           et la{' '}
-          <a href="/confidentialite" className="text-blue-600 underline">
+          <a href="/privacy" className="text-blue-600 underline">
             politique de confidentialité
           </a>
         </span>

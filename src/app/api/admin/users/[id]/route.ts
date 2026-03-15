@@ -69,14 +69,14 @@ export async function GET(
     }
 
     // Get provider data if exists
-    let providerData = null
+    let attorneyData = null
     try {
       const { data: provider } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
         .eq('user_id', userId)
         .maybeSingle()
-      providerData = provider
+      attorneyData = provider
     } catch {
       // No provider or table doesn't exist
     }
@@ -87,7 +87,7 @@ export async function GET(
       const { count } = await supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
-        .or(`provider_id.eq.${userId},client_id.eq.${userId}`)
+        .or(`attorney_id.eq.${userId},client_id.eq.${userId}`)
       bookingsCount = count || 0
     } catch {
       // bookings table doesn't exist
@@ -122,7 +122,7 @@ export async function GET(
         subscription_status: null,
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at,
-        provider: providerData,
+        provider: attorneyData,
         stats: {
           bookings: bookingsCount,
           reviews: reviewsCount,
@@ -279,7 +279,7 @@ export async function DELETE(
     // Deactivate provider if exists
     try {
       await supabase
-        .from('providers')
+        .from('attorneys')
         .update({
           is_active: false,
           updated_at: new Date().toISOString(),

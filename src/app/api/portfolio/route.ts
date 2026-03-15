@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from('portfolio_items')
       .select('*', { count: 'exact' })
-      .eq('artisan_id', user.id)
+      .eq('attorney_id', user.id)
       .order('display_order', { ascending: true })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
     const { data: lastItem } = await supabase
       .from('portfolio_items')
       .select('display_order')
-      .eq('artisan_id', user.id)
+      .eq('attorney_id', user.id)
       .order('display_order', { ascending: false })
       .limit(1)
       .single()
@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
     const { data: item, error: createError } = await supabase
       .from('portfolio_items')
       .insert({
-        artisan_id: user.id,
+        attorney_id: user.id,
         title: data.title,
         description: data.description,
         image_url: data.image_url,

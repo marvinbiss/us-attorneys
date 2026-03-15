@@ -367,7 +367,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             )}
             {list.filter_criteria.city && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
-                Ville: {list.filter_criteria.city}
+                City: {list.filter_criteria.city}
               </span>
             )}
             {list.filter_criteria.source && (

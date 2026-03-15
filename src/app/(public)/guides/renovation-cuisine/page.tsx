@@ -238,11 +238,11 @@ const tendances2026 = [
 ]
 
 const services = [
-  { label: "Cuisiniste", href: "/services/cuisiniste", icon: ChefHat },
-  { label: "Plombier", href: "/services/plombier", icon: Wrench },
-  { label: "Électricien", href: "/services/electricien", icon: Zap },
-  { label: "Carreleur", href: "/services/carreleur", icon: Hammer },
-  { label: "Peintre", href: "/services/peintre", icon: Home },
+  { label: "Cuisiniste", href: "/practice-areas/cuisiniste", icon: ChefHat },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Wrench },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Zap },
+  { label: "Carreleur", href: "/practice-areas/carreleur", icon: Hammer },
+  { label: "Peintre", href: "/practice-areas/peintre", icon: Home },
 ]
 
 const faqItems = [
@@ -546,7 +546,7 @@ export default function RenovationCuisinePage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Rénovation énergétique"}</h3>
               <p className="text-sm text-gray-500">{"Guide complet : isolation, chauffage, aides 2026."}</p>
             </Link>
-            <Link href="/guides/devis-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/quotes-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Devis travaux"}</h3>
               <p className="text-sm text-gray-500">{"Comment comparer les devis et éviter les pièges."}</p>
             </Link>
@@ -588,14 +588,14 @@ export default function RenovationCuisinePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/recherche"
+                href="/search"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 Trouver un artisan
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

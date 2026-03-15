@@ -17,7 +17,7 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Booking {
   id: string
-  provider_id: string
+  attorney_id: string
   client_id: string
   service_name: string
   scheduled_date: string
@@ -246,7 +246,7 @@ export default function AdminReservationsPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+              <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p className="text-sm text-gray-500">
                   Page {page} sur {totalPages}
                 </p>

@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit
 
     let query = supabase
-      .from('provider_claims')
+      .from('attorney_claims')
       .select(`
         id,
         status,
@@ -69,9 +69,9 @@ export async function GET(request: NextRequest) {
         rejection_reason,
         reviewed_at,
         created_at,
-        provider_id,
+        attorney_id,
         user_id,
-        provider:provider_id(id, name, siret, address_city, stable_id),
+        provider:attorney_id(id, name, siret, address_city, stable_id),
         user:user_id(id, email, full_name)
       `, { count: 'exact' })
       .order('created_at', { ascending: false })
@@ -130,8 +130,8 @@ export async function PATCH(request: NextRequest) {
 
     // Fetch the claim (include contact fields for anonymous claims)
     const { data: claim, error: claimError } = await supabase
-      .from('provider_claims')
-      .select('id, provider_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position')
+      .from('attorney_claims')
+      .select('id, attorney_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position')
       .eq('id', claimId)
       .single()
 
@@ -254,29 +254,29 @@ export async function PATCH(request: NextRequest) {
       }
 
       // 1. Assign the provider to the user atomically: only if user_id IS NULL.
-      const { data: updatedProvider, error: providerError } = await supabase
-        .from('providers')
+      const { data: updatedProvider, error: attorneyError } = await supabase
+        .from('attorneys')
         .update({
           user_id: resolvedUserId,
           claimed_at: now,
           claimed_by: resolvedUserId,
           updated_at: now,
         })
-        .eq('id', claim.provider_id)
+        .eq('id', claim.attorney_id)
         .is('user_id', null)
         .select('id, name')
         .maybeSingle()
 
-      if (providerError) {
+      if (attorneyError) {
         return NextResponse.json(
-          { success: false, error: { message: `Erreur attribution: ${providerError.message} [code=${providerError.code}] [details=${providerError.details}]` } },
+          { success: false, error: { message: `Erreur attribution: ${attorneyError.message} [code=${attorneyError.code}] [details=${attorneyError.details}]` } },
           { status: 500 }
         )
       }
 
       if (!updatedProvider) {
         await supabase
-          .from('provider_claims')
+          .from('attorney_claims')
           .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
           .eq('id', claimId)
 
@@ -288,7 +288,7 @@ export async function PATCH(request: NextRequest) {
 
       // 2. Update the claim status + link to resolved user
       const { error: updateClaimError } = await supabase
-        .from('provider_claims')
+        .from('attorney_claims')
         .update({
           status: 'approved',
           user_id: resolvedUserId,
@@ -328,7 +328,7 @@ export async function PATCH(request: NextRequest) {
       let emailStatus = 'skipped'
       if (!claim.user_id) {
         const claimEmail = claim.claimant_email!.trim().toLowerCase()
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
 
         try {
           const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -349,7 +349,7 @@ export async function PATCH(request: NextRequest) {
             const emailResult = await sendClaimApprovedEmail({
               to: claimEmail,
               name: claim.claimant_name || 'Artisan',
-              providerName: updatedProvider.name || 'Votre fiche',
+              attorneyName: updatedProvider.name || 'Votre fiche',
               passwordLink: safeLink,
             })
 
@@ -364,26 +364,26 @@ export async function PATCH(request: NextRequest) {
 
       // Revalidation on-demand des pages affectées (non-bloquant)
       try {
-        const { data: providerInfo } = await supabase
-          .from('providers')
+        const { data: attorneyInfo } = await supabase
+          .from('attorneys')
           .select('specialty, address_city, slug, stable_id')
-          .eq('id', claim.provider_id)
+          .eq('id', claim.attorney_id)
           .single()
 
-        if (providerInfo) {
-          const serviceSlug = slugify(providerInfo.specialty || 'artisan')
-          const locationSlug = slugify(providerInfo.address_city || 'france')
-          const publicId = providerInfo.slug || providerInfo.stable_id
+        if (attorneyInfo) {
+          const specialtySlug = slugify(attorneyInfo.specialty || 'artisan')
+          const locationSlug = slugify(attorneyInfo.address_city || 'france')
+          const publicId = attorneyInfo.slug || attorneyInfo.stable_id
 
           if (publicId) {
-            revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+            revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
           }
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-          revalidatePath(`/services/${serviceSlug}`, 'page')
+          revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
+          revalidatePath(`/practice-areas/${specialtySlug}`, 'page')
 
           logger.info('Revalidated paths after claim approval', {
             claimId,
-            providerId: claim.provider_id,
+            attorneyId: claim.attorney_id,
           })
         }
       } catch (revalError) {
@@ -392,7 +392,7 @@ export async function PATCH(request: NextRequest) {
 
       logger.info('Claim approved', {
         claimId,
-        providerId: claim.provider_id,
+        attorneyId: claim.attorney_id,
         userId: resolvedUserId,
         adminId: authResult.admin.id,
         accountCreated,
@@ -406,7 +406,7 @@ export async function PATCH(request: NextRequest) {
     } else {
       // Reject
       const { error: rejectError } = await supabase
-        .from('provider_claims')
+        .from('attorney_claims')
         .update({
           status: 'rejected',
           rejection_reason: rejectionReason || null,
@@ -424,7 +424,7 @@ export async function PATCH(request: NextRequest) {
 
       logger.info('Claim rejected', {
         claimId,
-        providerId: claim.provider_id,
+        attorneyId: claim.attorney_id,
         userId: claim.user_id,
         adminId: authResult.admin.id,
         reason: rejectionReason || null,

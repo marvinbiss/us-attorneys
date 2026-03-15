@@ -274,7 +274,7 @@ export default function ContactDetailPage() {
                     <input type="text" value={editFields.postal_code} onChange={(e) => setEditFields(f => ({ ...f, postal_code: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Ville</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">City</label>
                     <input type="text" value={editFields.city} onChange={(e) => setEditFields(f => ({ ...f, city: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                   </div>
                   <div>

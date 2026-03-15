@@ -1,6 +1,6 @@
 import { SITE_URL } from '@/lib/seo/config'
 import { articleSlugs, allArticles } from '@/lib/data/blog/articles'
-import { services } from '@/lib/data/france'
+import { services } from '@/lib/data/usa'
 import { getBlogImage, serviceImages, heroImage, pageImages, cityImages } from '@/lib/data/images'
 
 function escapeXml(s: string): string {
@@ -31,7 +31,7 @@ ${images.map((img) => imageTag(img.loc, img.title, img.caption)).join('\n')}
  * Image sitemap — Next.js 14 ne génère pas les balises <image:image> avec le bon namespace
  * dans MetadataRoute.Sitemap. Ce handler produit le XML correct pour Google Image Search.
  *
- * Contenu : homepage, services, top 20 villes, articles de blog, pages statiques clés.
+ * Contenu : homepage, services, top 20 cities, articles de blog, pages statiques clés.
  */
 export async function GET() {
   const urls: string[] = []
@@ -46,21 +46,21 @@ export async function GET() {
     const img = serviceImages[service.slug]
     if (img) {
       urls.push(
-        urlEntry(`${SITE_URL}/services/${service.slug}`, [
+        urlEntry(`${SITE_URL}/practice-areas/${service.slug}`, [
           { loc: img.src, title: img.alt, caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur ServicesArtisans` },
         ])
       )
     }
   }
 
-  // 3. Top 20 villes — photos géographiques
+  // 3. Top 20 cities — photos géographiques
   for (const [citySlug, img] of Object.entries(cityImages)) {
     const cityName = citySlug
       .split('-')
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join('-')
     urls.push(
-      urlEntry(`${SITE_URL}/villes/${citySlug}`, [
+      urlEntry(`${SITE_URL}/cities/${citySlug}`, [
         { loc: img.src, title: img.alt, caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur ServicesArtisans` },
       ])
     )
@@ -78,9 +78,9 @@ export async function GET() {
 
   // 5. Pages statiques avec images connues
   const staticPageMap: Record<string, { url: string; captionPrefix: string }> = {
-    howItWorks: { url: `${SITE_URL}/comment-ca-marche`, captionPrefix: 'Comment ça marche' },
-    about: { url: `${SITE_URL}/a-propos`, captionPrefix: 'À propos de ServicesArtisans' },
-    verification: { url: `${SITE_URL}/notre-processus-de-verification`, captionPrefix: 'Processus de vérification des artisans' },
+    howItWorks: { url: `${SITE_URL}/how-it-works`, captionPrefix: 'Comment ça marche' },
+    about: { url: `${SITE_URL}/about`, captionPrefix: 'À propos de ServicesArtisans' },
+    verification: { url: `${SITE_URL}/verification-process`, captionPrefix: 'Processus de vérification des artisans' },
   }
 
   for (const [key, { url: pageUrl, captionPrefix }] of Object.entries(staticPageMap)) {

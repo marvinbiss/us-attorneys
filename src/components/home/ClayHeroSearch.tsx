@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { services, villes, type Ville } from '@/lib/data/france'
+import { services, cities, type City } from '@/lib/data/usa'
 
 function normalizeText(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
@@ -21,19 +21,19 @@ function searchServices(query: string, limit = 6): typeof services {
   return [...prefix, ...contains].slice(0, limit)
 }
 
-function searchCities(query: string, limit = 6): Ville[] {
+function searchCities(query: string, limit = 6): City[] {
   if (!query || query.length < 1) return []
   const n = normalizeText(query)
-  const prefix: Ville[] = []
-  const contains: Ville[] = []
-  const postal: Ville[] = []
-  for (const v of villes) {
+  const prefix: City[] = []
+  const contains: City[] = []
+  const postal: City[] = []
+  for (const v of cities) {
     const vn = normalizeText(v.name)
     if (vn.startsWith(n)) prefix.push(v)
     else if (vn.includes(n)) contains.push(v)
-    else if (v.codePostal.startsWith(query.trim())) postal.push(v)
+    else if (v.zipCode.startsWith(query.trim())) postal.push(v)
   }
-  const sortByPop = (a: Ville, b: Ville) => {
+  const sortByPop = (a: City, b: City) => {
     const pa = parseInt(a.population.replace(/\s/g, ''), 10) || 0
     const pb = parseInt(b.population.replace(/\s/g, ''), 10) || 0
     return pb - pa
@@ -49,7 +49,7 @@ export function ClayHeroSearch() {
   const [service, setService] = useState('')
   const [ville, setVille] = useState('')
   const [serviceSuggestions, setServiceSuggestions] = useState<typeof services>([])
-  const [citySuggestions, setCitySuggestions] = useState<Ville[]>([])
+  const [citySuggestions, setCitySuggestions] = useState<City[]>([])
   const [activeField, setActiveField] = useState<'service' | 'city' | null>(null)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [selectedServiceSlug, setSelectedServiceSlug] = useState('')
@@ -98,7 +98,7 @@ export function ClayHeroSearch() {
     cityInputRef.current?.focus()
   }
 
-  function selectCity(v: Ville) {
+  function selectCity(v: City) {
     setVille(v.name)
     setSelectedCitySlug(v.slug)
     setCitySuggestions([])
@@ -129,9 +129,9 @@ export function ClayHeroSearch() {
     const slug = selectedServiceSlug || serviceSuggestions[0]?.slug
     const citySlug = selectedCitySlug || citySuggestions[0]?.slug
     if (slug && citySlug) {
-      router.push(`/services/${slug}/${citySlug}`)
+      router.push(`/practice-areas/${slug}/${citySlug}`)
     } else if (slug) {
-      router.push(`/services/${slug}`)
+      router.push(`/practice-areas/${slug}`)
     } else {
       const params = new URLSearchParams()
       if (service) params.set('q', service)
@@ -182,7 +182,7 @@ export function ClayHeroSearch() {
         )}
       </div>
 
-      {/* Ville input */}
+      {/* City input */}
       <div ref={cityRef} className="relative flex-1 min-w-0">
         <div className="flex items-center gap-2.5 bg-white border border-stone-200 rounded-2xl px-4 h-[48px] md:h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
           <svg className="w-5 h-5 text-clay-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
@@ -195,7 +195,7 @@ export function ClayHeroSearch() {
             value={ville}
             onChange={e => handleCityChange(e.target.value)}
             onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(ville)) }}
-            placeholder="Ville ou code postal"
+            placeholder="City ou code postal"
             className="w-0 flex-1 bg-transparent text-stone-800 placeholder-stone-400 text-base outline-none"
             role="combobox"
             aria-expanded={activeField === 'city' && citySuggestions.length > 0}
@@ -219,7 +219,7 @@ export function ClayHeroSearch() {
                   <span className="w-5 h-5 rounded-md bg-clay-50 flex items-center justify-center text-clay-400 text-xs shrink-0">📍</span>
                   <span className="font-medium">{v.name}</span>
                 </div>
-                <span className="text-xs text-stone-400">{v.departementCode}</span>
+                <span className="text-xs text-stone-400">{v.stateCode}</span>
               </li>
             ))}
           </ul>

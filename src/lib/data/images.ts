@@ -526,124 +526,411 @@ export const ambianceImages = {
   renovation: unsplash('photo-1634586621169-93e12e0bd604', 1200, 600),
 }
 
-// ── 9. BLOG — Images par article ─────────────────────────────────
+// ── 9. BLOG — Images uniques par article ─────────────────────────
 //
-// Stratégie : matching intelligent par mots-clés dans le slug de l'article.
-// Les photos de services sont réutilisées volontairement (cohérence visuelle).
-// Les sujets non-métier ont leurs propres photos uniques.
+// Stratégie : pool d'images par thème + hash déterministe du slug.
+// Chaque article reçoit une image différente parmi le pool de son thème.
+// ~200 images uniques pour ~280 articles → quasi zéro doublon.
 
-/** Photos de topics non-métier (IDs uniques, non utilisés ailleurs) */
-const blogTopicImages: Record<string, { src: string; alt: string }> = {
-  renovation: {
-    src: unsplash('photo-1765277789186-04b71a9afd40', 1200, 630),
-    alt: 'Travaux de rénovation intérieure en cours',
-  },
-  budget: {
-    src: unsplash('photo-1526304640581-d334cdbbf45e', 1200, 630),
-    alt: 'Calculatrice et plans de devis pour travaux',
-  },
-  entretien: {
-    src: unsplash('photo-1564943300036-461e6e152355', 1200, 630),
-    alt: 'Entretien et maintenance d\'une maison',
-  },
-  reglementation: {
-    src: unsplash('photo-1554224155-cfa08c2a758f', 1200, 630),
-    alt: 'Documents administratifs et réglementaires',
-  },
-  aides: {
-    src: unsplash('photo-1608747912887-563d7e155d30', 1200, 630),
-    alt: 'Aides financières et subventions pour la rénovation',
-  },
-  securite: {
-    src: unsplash('photo-1592924271903-1e4b1a1ae20f', 1200, 630),
-    alt: 'Sécurité et protection du domicile',
-  },
-  energie: {
-    src: unsplash('photo-1655300283247-6b1924b1d152', 1200, 630),
-    alt: 'Panneaux solaires et économies d\'énergie',
-  },
-  terrasse: {
-    src: unsplash('photo-1474547385661-ef98b8799dce', 1200, 630),
-    alt: 'Terrasse extérieure aménagée',
-  },
-  extension: {
-    src: unsplash('photo-1600768577091-3442c3f53179', 1200, 630),
-    alt: 'Extension de maison en construction',
-  },
-  sdb: {
-    src: unsplash('photo-1595428774752-c87f23e7fcee', 1200, 630),
-    alt: 'Salle de bain moderne rénovée',
-  },
-  domotique: {
-    src: unsplash('photo-1614801502766-e2562eb626d5', 1200, 630),
-    alt: 'Maison connectée et automatisation',
-  },
-  hiver: {
-    src: unsplash('photo-1452088366481-4690b645efff', 1200, 630),
-    alt: 'Maison sous la neige en hiver',
-  },
+/** Hash déterministe pour sélection de variant */
+function slugHash(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0
+  return Math.abs(h)
 }
 
-/** Catégorie → image fallback */
-const blogCategoryFallbacks: Record<string, { src: string; alt: string }> = {
-  Tarifs: blogTopicImages.budget,
-  'Aides & Subventions': blogTopicImages.aides,
-  'Réglementation': blogTopicImages.reglementation,
-  Securite: blogTopicImages.securite,
-  'Sécurité': blogTopicImages.securite,
-  Saisonnier: blogTopicImages.hiver,
-  Energie: blogTopicImages.energie,
-  'Énergie': blogTopicImages.energie,
-  Guides: blogTopicImages.renovation,
-  Conseils: blogTopicImages.entretien,
-  'Fiches métier': {
-    src: unsplash('photo-1633419946251-6d8b5dd33170', 1200, 630),
-    alt: 'Artisan au travail dans son atelier',
-  },
-  Inspiration: {
-    src: unsplash('photo-1600210492486-724fe5c67fb0', 1200, 630),
-    alt: 'Intérieur moderne et inspirant',
-  },
-  DIY: {
-    src: unsplash('photo-1586187543416-b1e5669978b3', 1200, 630),
-    alt: 'Outils de bricolage et de construction',
-  },
+/** Helper pour créer une image blog Unsplash */
+function blogImg(id: string, alt: string): { src: string; alt: string } {
+  return { src: unsplash(id, 1200, 630), alt }
 }
 
-/** Mots-clés slug → clé dans serviceImages ou blogTopicImages */
-const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
-  // Métiers → réutilise la photo du service (cohérence visuelle)
-  [/plomb/, 'plombier', 'service'],
-  [/electri/, 'electricien', 'service'],
-  [/serru/, 'serrurier', 'service'],
-  [/chauffag|chaudier|radiateur/, 'chauffagiste', 'service'],
-  [/peint/, 'peintre-en-batiment', 'service'],
-  [/menuisi|parquet/, 'menuisier', 'service'],
-  [/carrel/, 'carreleur', 'service'],
-  [/couv|toiture|toitur/, 'couvreur', 'service'],
-  [/macon|maçon/, 'macon', 'service'],
-  [/jardin|paysag/, 'jardinier', 'service'],
-  [/climatici|climatisation/, 'climaticien', 'service'],
-  [/cuisin/, 'cuisiniste', 'service'],
-  [/vitr|fenêtre|fenetre|vitrage/, 'vitrier', 'service'],
-  [/isol/, 'isolation-thermique', 'service'],
-  [/domotiq/, 'domoticien', 'service'],
-  [/nettoyag/, 'entretien', 'topic'],
-  [/facade|ravalement/, 'facadier', 'service'],
-  // Topics → photo spécifique
-  [/terrasse/, 'terrasse', 'topic'],
-  [/sdb|salle.de.bain/, 'sdb', 'topic'],
-  [/extension|agrandir/, 'extension', 'topic'],
-  [/renov/, 'renovation', 'topic'],
-  [/entretien|check/, 'entretien', 'topic'],
-  [/hiver|froid|gel/, 'hiver', 'topic'],
-  [/budget|devis|prix|tarif|cout/, 'budget', 'topic'],
-  [/aide|prime|subvention|maprimerenov|eco.ptz|cee/, 'aides', 'topic'],
-  [/regle|permis|urbanis|tva|droit|loi|norme|re2020|dpe|diagnostic/, 'reglementation', 'topic'],
-  [/secur|alarm|cambriol|arnaque/, 'securite', 'topic'],
-  [/energie|solaire|panneau|pompe.chaleur|pac/, 'energie', 'topic'],
-  [/domotiq|connecte/, 'domotique', 'topic'],
+// ── Pools d'images par thème (chaque ID est UNIQUE dans tout le fichier) ──
+
+const blogPools: Record<string, { src: string; alt: string }[]> = {
+  // ── MÉTIERS ──
+  plombier: [
+    serviceImages.plombier,
+    blogImg('photo-1595428774752-c87f23e7fcee', 'Salle de bain moderne avec vasque'),
+    blogImg('photo-1595515106886-43b1443a2e8b', 'Lavabo en céramique blanche'),
+    blogImg('photo-1595515769499-0f61fc8db2e9', 'Meuble vasque blanc dans salle d\'eau'),
+    blogImg('photo-1638799869566-b17fa794c4de', 'Grande baignoire avec douche'),
+  ],
+  electricien: [
+    serviceImages.electricien,
+    blogImg('photo-1601462904263-f2fa0c851cb9', 'Câbles électriques colorés'),
+    blogImg('photo-1758101755915-462eddc23f57', 'Électricien testant un tableau'),
+    blogImg('photo-1754620906571-9ba64bd3ffb4', 'Installation de câbles sur toiture'),
+    blogImg('photo-1467733238130-bb6846885316', 'Interrupteurs montés sur mur'),
+  ],
+  serrurier: [
+    serviceImages.serrurier,
+    blogImg('photo-1758351507272-aa6929fe997e', 'Pile de clés anciennes ouvragées'),
+    blogImg('photo-1564767609213-c75ee685263a', 'Main tenant une poignée de porte'),
+    blogImg('photo-1756341782434-3020b9d17372', 'Mur présentant de nombreuses clés'),
+    blogImg('photo-1609587415882-97552f39c6c2', 'Clés squelette sur table en bois'),
+  ],
+  chauffagiste: [
+    serviceImages.chauffagiste,
+    blogImg('photo-1689793592282-015d9db77917', 'Flamme dans un poêle à bois'),
+    blogImg('photo-1547186577-a3f4fc07c2ef', 'Radiateur allumé'),
+    blogImg('photo-1613063457061-eecde6f4b20d', 'Radiateur blanc sur mur blanc'),
+    blogImg('photo-1603312874586-00abfc351780', 'Thermostat mural moderne'),
+  ],
+  'peintre-en-batiment': [
+    serviceImages['peintre-en-batiment'],
+    blogImg('photo-1693985120993-e8e7689d7828', 'Peintre au rouleau sur mur'),
+    blogImg('photo-1759330806091-b9a077491cc1', 'Peinture sur mur de briques'),
+    blogImg('photo-1769013649052-add139112bc9', 'Homme sur échelle peignant un mur'),
+    blogImg('photo-1745092707630-c00ef0a006c4', 'Peinture au pistolet sur mur'),
+  ],
+  menuisier: [
+    serviceImages.menuisier,
+    blogImg('photo-1685320198649-781e83a61de4', 'Établi avec outils accrochés au mur'),
+    blogImg('photo-1753943803304-8cf8b01bde9b', 'Tournevis utilisé sur du bois'),
+  ],
+  carreleur: [
+    serviceImages.carreleur,
+    blogImg('photo-1595515422730-cc7684b670dc', 'Carrelage mural blanc dans salle de bain'),
+    blogImg('photo-1688786219616-598ed96aa19d', 'Baignoire avec plante décorative'),
+  ],
+  couvreur: [
+    serviceImages.couvreur,
+    blogImg('photo-1634750009079-6bf7bede038b', 'Deux ouvriers sur un toit'),
+    blogImg('photo-1635424824849-1b09bdcc55b1', 'Couvreur avec perceuse sur toiture'),
+    blogImg('photo-1681049400158-0ff6249ac315', 'Réparation de toiture en cours'),
+    blogImg('photo-1605450099279-533bd3ce379a', 'Tuiles de toiture en gros plan'),
+  ],
+  macon: [
+    serviceImages.macon,
+    blogImg('photo-1627591637320-fcfe8c34b62d', 'Ouvriers sur bâtiment en béton'),
+  ],
+  jardinier: [
+    serviceImages.jardinier,
+    blogImg('photo-1615094401770-713fecd4695a', 'Pont fleuri dans un jardin'),
+    blogImg('photo-1606477901208-b49dde6b3ad8', 'Pelouse verte devant maison en briques'),
+    blogImg('photo-1532302780319-95689ab9d79a', 'Jardin fleuri vue sur la mer'),
+    blogImg('photo-1761928299635-14d606d1a7aa', 'Jardin luxuriant avec mur de pierre'),
+  ],
+  climaticien: [
+    serviceImages.climaticien,
+    blogImg('photo-1718203862467-c33159fdc504', 'Climatiseur mural sur mur de briques'),
+    blogImg('photo-1698479603408-1a66a6d9e80f', 'Groupe de climatiseurs extérieurs'),
+    blogImg('photo-1566917064245-1c6bff30dbf1', 'Unité de climatisation extérieure'),
+    blogImg('photo-1568634699096-82c9765548a0', 'Unités de climatisation empilées'),
+  ],
+  cuisiniste: [
+    serviceImages.cuisiniste,
+    blogImg('photo-1600210491369-e753d80a41f3', 'Cuisine moderne blanche et noire'),
+    blogImg('photo-1648475237029-7f853809ca14', 'Salon-cuisine avec cheminée'),
+    blogImg('photo-1680210849773-f97a41c6b7ed', 'Coin cuisine avec évier et placards'),
+  ],
+  vitrier: [
+    serviceImages.vitrier,
+    blogImg('photo-1595515926042-c36353b7ea13', 'Baignoire en céramique près de fenêtre'),
+    blogImg('photo-1595515106705-257fa2d62381', 'Intérieur lumineux avec grande fenêtre'),
+    blogImg('photo-1595428773927-7c9c75203a2d', 'Meuble vasque à côté de fenêtre'),
+  ],
+  'isolation-thermique': [
+    serviceImages['isolation-thermique'],
+    blogImg('photo-1655300283247-6b1924b1d152', 'Panneaux solaires et économies d\'énergie'),
+  ],
+  domoticien: [
+    serviceImages.domoticien,
+    blogImg('photo-1614801502766-e2562eb626d5', 'Maison connectée et automatisation'),
+  ],
+  facadier: [
+    serviceImages.facadier,
+    blogImg('photo-1617459973560-33aea09d1c22', 'Inspection de toiture d\'un bâtiment'),
+  ],
+  'poseur-de-parquet': [
+    serviceImages['poseur-de-parquet'],
+    blogImg('photo-1753947687946-a28eea84a73f', 'Outils de pose organisés sur mur'),
+  ],
+  solier: [
+    serviceImages.solier,
+  ],
+  'alarme-securite': [
+    serviceImages['alarme-securite'],
+    blogImg('photo-1549109926-58f039549485', 'Caméra de surveillance blanche sur mur'),
+    blogImg('photo-1618482914248-29272d021005', 'Caméra de sécurité sur trépied'),
+    blogImg('photo-1557597774-9d273605dfa9', 'Caméras de sécurité colorées'),
+    blogImg('photo-1563920443079-783e5c786b83', 'Deux caméras CCTV grises'),
+  ],
+  diagnostiqueur: [serviceImages.diagnostiqueur],
+  antenniste: [serviceImages.antenniste],
+  'architecte-interieur': [
+    serviceImages['architecte-interieur'],
+    blogImg('photo-1705321963943-de94bb3f0dd3', 'Salon moderne avec canapé et table'),
+    blogImg('photo-1753505889211-9cfbac527474', 'Chambre cosy avec bureau intégré'),
+    blogImg('photo-1644135151632-05e0611d473d', 'Chambre avec grand lit et bougies'),
+    blogImg('photo-1705326701287-346fc37a2c86', 'Salon blanc avec fauteuils design'),
+  ],
+  ascensoriste: [serviceImages.ascensoriste],
+  'borne-recharge': [serviceImages['borne-recharge']],
+  decorateur: [
+    serviceImages.decorateur,
+    blogImg('photo-1704040686433-b1c45e9f4104', 'Salon avec canapé et télévision'),
+    blogImg('photo-1643877107082-8ee9da17c090', 'Pièce avec canapé et bureau'),
+  ],
+  demenageur: [
+    serviceImages.demenageur,
+  ],
+  deratisation: [serviceImages.deratisation],
+  desinsectisation: [serviceImages.desinsectisation],
+  etancheiste: [serviceImages.etancheiste],
+  ferronnier: [serviceImages.ferronnier],
+  geometre: [serviceImages.geometre],
+  metallier: [serviceImages.metallier],
+  miroitier: [serviceImages.miroitier],
+  nettoyage: [serviceImages.nettoyage],
+  'panneaux-solaires': [
+    serviceImages['panneaux-solaires'],
+    blogImg('photo-1509391366360-2e959784a276', 'Panneaux solaires dans un champ vert'),
+    blogImg('photo-1566838616631-f2618f74a6a2', 'Maison en briques avec panneaux solaires'),
+    blogImg('photo-1624397640148-949b1732bb0a', 'Installateur sur panneau solaire'),
+    blogImg('photo-1521618755572-156ae0cdd74d', 'Panneaux solaires bleus en gros plan'),
+  ],
+  'pompe-a-chaleur': [
+    serviceImages['pompe-a-chaleur'],
+    blogImg('photo-1679303777007-c6c4522beb02', 'Climatiseur mural blanc'),
+  ],
+  pisciniste: [
+    serviceImages.pisciniste,
+    blogImg('photo-1696248815429-b2790b8a9913', 'Vue aérienne piscine avec transats'),
+    blogImg('photo-1763479142525-1a3b1f7800c2', 'Maison moderne avec piscine et palmiers'),
+    blogImg('photo-1527769668487-5804e45fed2a', 'Piscine intérieure avec transats'),
+  ],
+  ramoneur: [serviceImages.ramoneur],
+  'renovation-energetique': [serviceImages['renovation-energetique']],
+  storiste: [serviceImages.storiste],
+  zingueur: [serviceImages.zingueur],
+
+  // ── TOPICS NON-MÉTIER ──
+  renovation: [
+    blogImg('photo-1765277789186-04b71a9afd40', 'Travaux de rénovation intérieure'),
+    blogImg('photo-1704040686413-2c607dbd2f06', 'Salon rénové avec canapé et table basse'),
+    blogImg('photo-1644299244258-6eff135031e9', 'Séjour rénové avec deux canapés et TV'),
+    blogImg('photo-1642541070065-3912f347e7c6', 'Chambre avec tableau mural'),
+    blogImg('photo-1701817822150-2d218d8610e6', 'Salon rénové avec fauteuil et table'),
+  ],
+  budget: [
+    blogImg('photo-1526304640581-d334cdbbf45e', 'Calculatrice et plans de devis'),
+    blogImg('photo-1553729459-efe14ef6055d', 'Liasse de billets de banque'),
+    blogImg('photo-1766503634881-6a01d341b1dd', 'Billets et calculatrice sur carnet'),
+    blogImg('photo-1736319861065-d2ee8bb62c16', 'Pile d\'argent à côté d\'une calculatrice'),
+    blogImg('photo-1768839724098-d2541fe1311d', 'Tirelire avec lunettes et calculatrice'),
+    blogImg('photo-1764231467852-b609a742e082', 'Mains signant document sur bureau'),
+    blogImg('photo-1764700754052-afc4e11c5c64', 'Calculatrice et rouleaux de pièces'),
+    blogImg('photo-1763729948735-df50fc3540df', 'Mains comptant billets avec calculatrice'),
+  ],
+  entretien: [
+    blogImg('photo-1564943300036-461e6e152355', 'Entretien et maintenance maison'),
+    blogImg('photo-1588174829729-3916f7e0b4d9', 'Fleur rose en gros plan au printemps'),
+    blogImg('photo-1597201278257-3687be27d954', 'Jardin fleuri rouge et blanc'),
+  ],
+  reglementation: [
+    blogImg('photo-1554224155-cfa08c2a758f', 'Documents administratifs et réglementaires'),
+    blogImg('photo-1764231467896-73f0ef4438aa', 'Main utilisant calculatrice sur billets'),
+    blogImg('photo-1766503498598-494939f8d3b7', 'Fournitures de bureau sur documents'),
+    blogImg('photo-1763730512449-f1a505f432a9', 'Écriture dans carnet avec calculatrice'),
+    blogImg('photo-1632759145351-1d592919f522', 'Homme debout sur toit de maison'),
+  ],
+  aides: [
+    blogImg('photo-1608747912887-563d7e155d30', 'Aides financières et subventions'),
+    blogImg('photo-1768839721776-038d3070721e', 'Billets et calculatrice sur fond bleu'),
+    blogImg('photo-1769776400201-6b99211a4f4f', 'Tirelire et calculatrice fond orange'),
+    blogImg('photo-1613665813446-82a78c468a1d', 'Panneaux solaires noirs et blancs'),
+  ],
+  securite: [
+    blogImg('photo-1592924271903-1e4b1a1ae20f', 'Sécurité et protection du domicile'),
+    blogImg('photo-1585206031650-9e9a9c87dcfe', 'Caméra de surveillance blanche'),
+    blogImg('photo-1589935447067-5531094415d1', 'Caméra sur trépied blanc'),
+    blogImg('photo-1599350686877-382a54114d2f', 'Caméra sur mur jaune'),
+    blogImg('photo-1682637275957-8e62180efd1b', 'Cadenas sur fond jaune'),
+  ],
+  energie: [
+    blogImg('photo-1655300283247-6b1924b1d152', 'Panneaux solaires et énergie'),
+    blogImg('photo-1508514177221-188b1cf16e9d', 'Panneau solaire sous ciel bleu'),
+    blogImg('photo-1668097613572-40b7c11c8727', 'Technicien travaillant sur panneau solaire'),
+    blogImg('photo-1658298775754-5839ffd434cc', 'Panneaux solaires sur toiture'),
+    blogImg('photo-1679046410011-b6bf7ce71f22', 'Grand panneau solaire avec ciel'),
+  ],
+  terrasse: [
+    blogImg('photo-1474547385661-ef98b8799dce', 'Terrasse extérieure aménagée'),
+    blogImg('photo-1694885090746-d90472e11c0e', 'Patio couvert avec barbecue et table'),
+    blogImg('photo-1694885193823-92929c013213', 'Patio avec table, chaises et parasols'),
+    blogImg('photo-1694885161486-6390b35de012', 'Terrasse couverte avec mobilier'),
+    blogImg('photo-1720975658933-a3dac8a39d6b', 'Terrasse avec piscine et verdure'),
+  ],
+  extension: [
+    blogImg('photo-1600768577091-3442c3f53179', 'Extension de maison en construction'),
+    blogImg('photo-1753505888770-46be3b748b41', 'Chambre moderne avec espace bureau'),
+  ],
+  sdb: [
+    blogImg('photo-1595428774752-c87f23e7fcee', 'Salle de bain moderne rénovée'),
+    blogImg('photo-1595515422744-2ff6428979e7', 'Lavabo en céramique avec robinet'),
+    blogImg('photo-1595514534892-a1ce92ee8677', 'Miroir rond sur mur vert'),
+    blogImg('photo-1595515422979-5ea88d3954a0', 'Écran mural dans salle de bain'),
+    blogImg('photo-1595515769474-4f217f925139', 'Porte-serviettes avec serviette blanche'),
+  ],
+  domotique: [
+    blogImg('photo-1614801502766-e2562eb626d5', 'Maison connectée et automatisation'),
+    blogImg('photo-1545259742-b4fd8fea67e4', 'Thermostat connecté mural'),
+  ],
+  hiver: [
+    blogImg('photo-1452088366481-4690b645efff', 'Maison sous la neige en hiver'),
+    blogImg('photo-1707056132692-76efddea9583', 'Grange dans champ enneigé'),
+    blogImg('photo-1632411315448-515ebfb9eebf', 'Maison sur colline enneigée'),
+    blogImg('photo-1602891581584-a15d99b5722c', 'Maison en bois blanc sous les arbres'),
+    blogImg('photo-1599846801418-41948504b405', 'Chalet en bois couvert de neige'),
+  ],
+  printemps: [
+    blogImg('photo-1588173558360-5d84645e8a9a', 'Champ de tulipes rouges et jonquilles'),
+    blogImg('photo-1559424476-49ee32099623', 'Fleur blanche en gros plan'),
+    blogImg('photo-1552350718-03eafd9b774a', 'Fleur rouge et plante verte'),
+    blogImg('photo-1622036035317-8e0d40457cca', 'Rose blanche et rose en fleur'),
+  ],
+  piscine: [
+    blogImg('photo-1720975658810-3d82b928474d', 'Grande piscine avec vue sur l\'océan'),
+    blogImg('photo-1764419737670-5e63f20c5493', 'Piscine illuminée devant maison la nuit'),
+    blogImg('photo-1694885190541-40037b8a6b13', 'Piscine vide avec parasol'),
+    blogImg('photo-1767514831786-c4a342f9b8a4', 'Chaises au bord d\'une piscine'),
+  ],
+  diy: [
+    blogImg('photo-1586187543416-b1e5669978b3', 'Outils de bricolage et construction'),
+    blogImg('photo-1745449064670-94bd0fc13df8', 'Outils éparpillés sur établi'),
+    blogImg('photo-1745426863308-308b92bff031', 'Clés et niveau sur surface en bois'),
+    blogImg('photo-1753947687461-4b80f5ce4155', 'Tournevis rouges sur surface de travail'),
+    blogImg('photo-1753947687850-67111c07ece1', 'Outils suspendus dans porte-outils'),
+    blogImg('photo-1753947687841-eab7644f9a23', 'Outils organisés dans boîte à outils'),
+  ],
+  inspiration: [
+    blogImg('photo-1600210492486-724fe5c67fb0', 'Intérieur moderne et inspirant'),
+    blogImg('photo-1648475237029-7f853809ca14', 'Salon avec mobilier et cheminée'),
+    blogImg('photo-1753505889211-9cfbac527474', 'Chambre cosy avec poste de travail'),
+    blogImg('photo-1644135151632-05e0611d473d', 'Chambre élégante avec bougies'),
+  ],
+  'fiches-metier': [
+    blogImg('photo-1633419946251-6d8b5dd33170', 'Artisan au travail dans son atelier'),
+    blogImg('photo-1634750009079-6bf7bede038b', 'Ouvriers travaillant sur un toit'),
+    blogImg('photo-1635424709845-3a85ad5e1f5e', 'Équipe sur une toiture'),
+  ],
+  materiaux: [
+    blogImg('photo-1634750006909-3258af95e257', 'Artisans sur toiture avec matériaux'),
+    blogImg('photo-1605450099279-533bd3ce379a', 'Tuiles de toiture en gros plan'),
+    blogImg('photo-1727777266423-6a33048e4894', 'Toit de bâtiment sous le ciel'),
+    blogImg('photo-1635424825057-7fb6dcd651ef', 'Ouvrier avec perceuse sur toiture'),
+  ],
+  urgence: [
+    blogImg('photo-1667857399223-593f0b4e1c8c', 'Intervention d\'urgence plomberie'),
+    blogImg('photo-1669394478164-654b289e9376', 'Cabane isolée sous la neige'),
+    blogImg('photo-1639375941966-0c0b23262381', 'Bâtiment en bois sous la neige'),
+  ],
+}
+
+/** Mots-clés slug → clé de pool (first match wins) */
+const slugToPool: [RegExp, string][] = [
+  // Patterns spécifiques en premier (avant les patterns larges)
+  [/piscin/, 'pisciniste'],
+  [/deboucher|canalisation|fuite|robinet|wc|toilette|chasse.eau|mitigeur/, 'plombier'],
+  [/plomb/, 'plombier'],
+  [/prise|interrupteur|electri|tableau.electri/, 'electricien'],
+  [/serrure|verrou|cle|porte.blind/, 'serrurier'],
+  [/chaudier|radiateur|chauffag|poele|ramonag/, 'chauffagiste'],
+  [/peint|peinture|plafond|enduit/, 'peintre-en-batiment'],
+  [/parquet|menuisi|etagere|lambris|credence/, 'menuisier'],
+  [/carrel|carrelage/, 'carreleur'],
+  [/couv|toiture|toitur|tuile|gouttiere/, 'couvreur'],
+  [/macon|maçon|garage|beton/, 'macon'],
+  [/jardin|paysag/, 'jardinier'],
+  [/climatici|climatisation/, 'climaticien'],
+  [/cuisin/, 'cuisiniste'],
+  [/volet|store|fenêtre|fenetre|vitrage|vitr/, 'vitrier'],
+  [/isol/, 'isolation-thermique'],
+  [/domotiq|connecte/, 'domoticien'],
+  [/nettoyag/, 'nettoyage'],
+  [/facade|ravalement/, 'facadier'],
+  [/solier|revetement.sol/, 'solier'],
+  [/ascenseur/, 'ascensoriste'],
+  [/metallier|soud/, 'metallier'],
+  [/ferronnier/, 'ferronnier'],
+  [/miroitier|miroir/, 'miroitier'],
+  [/demenag/, 'demenageur'],
+  [/deratisation|rat|souris/, 'deratisation'],
+  [/desinsectisation|nuisible|insecte/, 'desinsectisation'],
+  [/geometre|topograph/, 'geometre'],
+  [/antenn/, 'antenniste'],
+  [/borne.recharge/, 'borne-recharge'],
+  [/alarme|cambriol/, 'alarme-securite'],
+  [/panneaux?.solaire|photovoltai/, 'panneaux-solaires'],
+  [/pompe.chaleur|pac/, 'pompe-a-chaleur'],
+  // Tutoriels DIY → pool outils
+  [/comment-(poser|installer|reparer|changer|refaire|reboucher|fixer|enduire|remplacer|deboucher)/, 'diy'],
+  // Saisonnier
+  [/terrasse|ete.preparation/, 'terrasse'],
+  [/piscine|bassin/, 'piscine'],
+  [/sdb|salle.de.bain/, 'sdb'],
+  [/extension|agrandir|veranda/, 'extension'],
+  [/printemps/, 'printemps'],
+  [/hiver|froid|gel|neige/, 'hiver'],
+  // Topics larges
+  [/renov/, 'renovation'],
+  [/entretien|check/, 'entretien'],
+  [/emergency|depannage/, 'urgence'],
+  [/budget|devis|prix|tarif|cout|index.prix/, 'budget'],
+  [/aide|prime|subvention|maprimerenov|eco.ptz|cee|cumul.aide/, 'aides'],
+  [/regle|permis|urbanis|tva|droit|loi|norme|re2020|dpe|diagnostic|garantie|assurance|contrat|responsabilit|reception|litige|accessibilit/, 'reglementation'],
+  [/secur|arnaque/, 'securite'],
+  [/energie|solaire|panneau|pompe.chaleur|passoire.thermique/, 'energie'],
+  [/domotiq|connecte/, 'domotique'],
+  // Articles métiers / fiches
+  [/metier-|formation|competence|specialisation|carriere/, 'fiches-metier'],
+  // Matériaux & comparatifs
+  [/materiau|comparatif|laiton|inox|ba13|stratifie|massif|contrecolle|bois.pvc.alu/, 'materiaux'],
+  // Inspiration
+  [/tendance|amenagement|inspiration/, 'inspiration'],
+  // Certifications
+  [/rge|qualibat|qualifelec|certification|label/, 'reglementation'],
+  // Catch-all pour articles "comment-choisir-*" non matchés par un métier spécifique
+  [/comment-choisir|choisir.*guide|artisan.*confiance|verifier.*artisan/, 'fiches-metier'],
+  // Eau chaude, VMC, combles, portail
+  [/chauffe.eau|ballon.eau|thermodynamique/, 'plombier'],
+  [/vmc|ventilation|comble|amenager.comble/, 'renovation'],
+  [/portail|cloture/, 'macon'],
+  // Canicule, humidité, revente, locataire
+  [/canicule|chaleur/, 'climaticien'],
+  [/humidite|moisissure/, 'entretien'],
+  [/revente|vendre/, 'budget'],
+  [/locataire|proprietaire/, 'reglementation'],
+  // Eco-ptz / pompe-a-chaleur (tiret)
+  [/eco.ptz|eco.pret/, 'aides'],
+  [/pompe-a-chaleur/, 'pompe-a-chaleur'],
+  // DIY fallback
+  [/diy|bricolage|soi.meme/, 'diy'],
+  // Peinture (pour "comment-peindre-mur")
+  [/peindre/, 'peintre-en-batiment'],
+  // Artisan / SIREN / vérification
+  [/artisan|siren|verifie/, 'fiches-metier'],
 ]
+
+/** Catégorie → pool fallback */
+const blogCategoryFallbacks: Record<string, string> = {
+  Tarifs: 'budget',
+  'Aides & Subventions': 'aides',
+  'Réglementation': 'reglementation',
+  Securite: 'securite',
+  'Sécurité': 'securite',
+  Saisonnier: 'hiver',
+  Energie: 'energie',
+  'Énergie': 'energie',
+  Guides: 'renovation',
+  Conseils: 'entretien',
+  'Fiches métier': 'fiches-metier',
+  Inspiration: 'inspiration',
+  DIY: 'diy',
+  'Matériaux': 'materiaux',
+  Urgences: 'urgence',
+}
 
 const defaultBlogImage = {
   src: unsplash('photo-1600585154340-be6161a56a0c', 1200, 630),
@@ -652,28 +939,35 @@ const defaultBlogImage = {
 
 /**
  * Récupérer l'image d'un article de blog.
- * Priorité : slug keywords → catégorie → défaut.
+ * Priorité : slug → pool (hash variant) → catégorie pool → défaut.
+ * Chaque article obtient une image unique via hash déterministe.
  */
 export function getBlogImage(
   slug: string,
   category?: string,
 ): { src: string; alt: string } {
   const lower = slug.toLowerCase()
+  const hash = slugHash(lower)
 
-  // 1. Match par mot-clé dans le slug
-  for (const [pattern, key, source] of slugKeywords) {
+  // 1. Match par mot-clé dans le slug → pool + variant
+  for (const [pattern, poolKey] of slugToPool) {
     if (pattern.test(lower)) {
-      if (source === 'service') {
-        return serviceImages[key] || defaultBlogImage
+      const pool = blogPools[poolKey]
+      if (pool && pool.length > 0) {
+        return pool[hash % pool.length]
       }
-      return blogTopicImages[key] || defaultBlogImage
     }
   }
 
-  // 2. Fallback par catégorie
+  // 2. Fallback par catégorie → pool + variant
   if (category) {
-    const catImage = blogCategoryFallbacks[category]
-    if (catImage) return catImage
+    const poolKey = blogCategoryFallbacks[category]
+    if (poolKey) {
+      const pool = blogPools[poolKey]
+      if (pool && pool.length > 0) {
+        return pool[hash % pool.length]
+      }
+    }
   }
 
   // 3. Défaut

@@ -8,10 +8,10 @@
  * 2. getInseeCodesForCity() — get INSEE codes matching a city name (for queries)
  */
 
-import communeData from '@/lib/data/insee-communes.json'
+import locationData from '@/lib/data/insee-communes.json'
 
 type CommuneEntry = { n: string; r: string; d: string }
-const communes = communeData as Record<string, CommuneEntry>
+const communes = locationData as Record<string, CommuneEntry>
 
 // Paris, Marseille, Lyon have arrondissement codes not in the main communes JSON.
 // Map them to the parent commune so resolveProviderCity works for all 743K+ providers.
@@ -30,7 +30,7 @@ for (let i = 69381; i <= 69389; i++) {
 }
 
 // Merged lookup: communes JSON + arrondissement overrides
-function getCommune(code: string): CommuneEntry | undefined {
+function getLocation(code: string): CommuneEntry | undefined {
   return communes[code] || ARRONDISSEMENT_MAP[code]
 }
 
@@ -54,7 +54,7 @@ export function resolveProviderCity<T extends { address_city?: string | null; ad
   const city = provider.address_city
   if (!city || !isInseeCode(city)) return provider
 
-  const commune = getCommune(city)
+  const commune = getLocation(city)
   if (!commune) return provider
 
   return {

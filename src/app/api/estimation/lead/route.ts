@@ -59,8 +59,8 @@ export async function POST(request: Request) {
 
     const data = validation.data
 
-    // Sanitize page_url: must start with "/" or "https://servicesartisans.fr"
-    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://servicesartisans.fr')) {
+    // Sanitize page_url: must start with "/" or "https://us-attorneys.com"
+    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://us-attorneys.com')) {
       data.page_url = undefined
     }
     const supabase = createAdminClient()
@@ -155,7 +155,7 @@ export async function POST(request: Request) {
 // Admin notification
 // ============================================================
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
 
 async function notifyAdminNewEstimationLead(
   data: z.infer<typeof estimationLeadSchema>,
@@ -200,7 +200,7 @@ async function notifyAdminNewEstimationLead(
         <p style="margin: 0 0 10px 0;"><strong>Téléphone :</strong> ${data.telephone}</p>
         <p style="margin: 0 0 10px 0;"><strong>Email :</strong> ${data.email || '—'}</p>
         <p style="margin: 0 0 10px 0;"><strong>Métier :</strong> ${data.metier}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Ville :</strong> ${data.ville} (${data.departement})</p>
+        <p style="margin: 0 0 10px 0;"><strong>City :</strong> ${data.ville} (${data.departement})</p>
         <p style="margin: 0 0 10px 0;"><strong>Estimation :</strong> ${estimation}</p>
         ${data.artisan_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Artisan :</strong> ${htmlEscape(data.artisan_public_id)}</p>` : ''}
         ${data.page_url ? `<p style="margin: 0;"><strong>Page :</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
@@ -282,7 +282,7 @@ async function sendClientConfirmationEmail(
       <div style="background: #fef7f4; border-left: 4px solid #E07040; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;">
         <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Récapitulatif :</strong></p>
         <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service : <strong>${htmlEscape(data.metier)}</strong></p>
-        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Ville : <strong>${ville}${data.departement ? ` (${htmlEscape(data.departement)})` : ''}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">City : <strong>${ville}${data.departement ? ` (${htmlEscape(data.departement)})` : ''}</strong></p>
         <p style="margin: 0; font-size: 14px; color: #333;">Téléphone : <strong>${htmlEscape(data.telephone)}</strong></p>
       </div>
 
@@ -302,7 +302,7 @@ async function sendClientConfirmationEmail(
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #aaa; font-size: 12px; text-align: center;">
         ServicesArtisans.fr – La plateforme des artisans qualifiés<br>
-        <a href="${SITE_URL}" style="color: #aaa;">servicesartisans.fr</a>
+        <a href="${SITE_URL}" style="color: #aaa;">us-attorneys.com</a>
       </p>
     </div>
   </div>

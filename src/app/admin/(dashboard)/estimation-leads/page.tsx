@@ -132,7 +132,7 @@ export default function AdminEstimationLeadsPage() {
 
   const handleExportCSV = () => {
     if (!leads.length) return
-    const headers = ['Date', 'Source', 'Nom', 'Téléphone', 'Email', 'Métier', 'Ville', 'Département', 'Artisan ID']
+    const headers = ['Date', 'Source', 'Nom', 'Téléphone', 'Email', 'Métier', 'City', 'Département', 'Artisan ID']
     const rows = leads.map(l => [
       formatDate(l.created_at),
       l.source,
@@ -300,7 +300,7 @@ export default function AdminEstimationLeadsPage() {
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Source</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Contact</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Métier</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Ville</th>
+                  <th className="text-left px-4 py-3 font-semibold text-gray-600">City</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Artisan</th>
                   <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
                 </tr>

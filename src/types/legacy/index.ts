@@ -12,7 +12,7 @@
  */
 
 import type { Provider } from '@/types'
-import type { Artisan } from '@/components/artisan/types'
+import type { Artisan } from '@/components/attorney/types'
 
 // ── Provider legacy fields ──────────────────────────────────────────
 

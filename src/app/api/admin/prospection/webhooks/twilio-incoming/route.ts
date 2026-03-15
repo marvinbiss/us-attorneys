@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     // Trouver le contact par numéro de téléphone
     const { data: contact } = await supabase
       .from('prospection_contacts')
-      .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, commune_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
+      .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, location_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
       .eq('phone_e164', from)
       .eq('is_active', true)
       .single()

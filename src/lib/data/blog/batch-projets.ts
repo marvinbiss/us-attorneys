@@ -17,7 +17,7 @@ export const projetsArticles: Record<string, {
     title: 'Rénover sa Cuisine 2026 : Guide Étapes',
     excerpt: 'De la conception à la réception des travaux, toutes les étapes pour réussir la rénovation de votre cuisine. Devis gratuit.',
     content: [
-      "La cuisine est le coeur de la maison. Sa rénovation est l\'un des projets les plus valorisants pour un logement, mais aussi l\'un des plus complexes à orchestrer. Entre la plomberie, l\'électricité, l\'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/services/cuisiniste) pour concevoir votre projet.",
+      "La cuisine est le coeur de la maison. Sa rénovation est l\'un des projets les plus valorisants pour un logement, mais aussi l\'un des plus complexes à orchestrer. Entre la plomberie, l\'électricité, l\'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/practice-areas/cuisiniste) pour concevoir votre projet.",
       "## 1. Définir le projet et le budget",
       "Avant de contacter le moindre artisan, posez-vous les bonnes questions : s\'agit-il d\'un simple rafraîchissement (peinture, crédence, plan de travail) ou d\'une rénovation complète avec modification des réseaux ? Le budget moyen d\'une rénovation de cuisine se situe entre 5 000 et 25 000 euros selon l\'ampleur des travaux. Prévoyez une marge de 10 à 15 % pour les imprévus.",
       "## 2. Concevoir l\'agencement",
@@ -64,7 +64,7 @@ export const projetsArticles: Record<string, {
     title: 'Aménager ses Combles 2026 : Guide',
     excerpt: 'Faisabilité, isolation, plancher, lumière et budget : le guide complet pour aménager vos combles en surface habitable. Devis gratuit.',
     content: [
-      "L\'aménagement des combles est la solution la plus rentable pour gagner de la surface habitable sans agrandir l\'emprise au sol de la maison. Un projet bien mené peut ajouter 20 à 50 m² à votre logement et valoriser votre bien de 15 à 20 %. Faites appel à un [charpentier](/services/charpentier) pour évaluer votre charpente.",
+      "L\'aménagement des combles est la solution la plus rentable pour gagner de la surface habitable sans agrandir l\'emprise au sol de la maison. Un projet bien mené peut ajouter 20 à 50 m² à votre logement et valoriser votre bien de 15 à 20 %. Faites appel à un [charpentier](/practice-areas/charpentier) pour évaluer votre charpente.",
       "## 1. Vérifier la faisabilité",
       "Trois critères déterminent si vos combles sont aménageables : la hauteur sous faîtage (minimum 1,80 m sur au moins un tiers de la surface), la pente du toit (idéalement supérieure à 35°) et la solidité du plancher existant. Un architecte ou un charpentier peut réaliser cette étude de faisabilité pour 500 à 1 500 euros.",
       "## 2. Les démarches administratives",
@@ -112,7 +112,7 @@ export const projetsArticles: Record<string, {
     title: 'Pompe à Chaleur Air-Eau 2026 : Guide',
     excerpt: 'Fonctionnement, dimensionnement, coût d\'installation et aides financières : tout savoir avant d\'installer une PAC air-eau. Comparez.',
     content: [
-      "La pompe à chaleur (PAC) air-eau est devenue la solution de chauffage la plus plébiscitée en France. Elle capte les calories de l\'air extérieur pour chauffer l\'eau de votre circuit de chauffage, avec un rendement trois à cinq fois supérieur à celui d\'un radiateur électrique. En 2026, les aides financières rendent cet investissement particulièrement attractif. Trouvez un [spécialiste pompe à chaleur](/services/pompe-a-chaleur) certifié RGE.",
+      "La pompe à chaleur (PAC) air-eau est devenue la solution de chauffage la plus plébiscitée en France. Elle capte les calories de l\'air extérieur pour chauffer l\'eau de votre circuit de chauffage, avec un rendement trois à cinq fois supérieur à celui d\'un radiateur électrique. En 2026, les aides financières rendent cet investissement particulièrement attractif. Trouvez un [spécialiste pompe à chaleur](/practice-areas/pompe-a-chaleur) certifié RGE.",
       "## 1. Comprendre le fonctionnement",
       "La PAC air-eau fonctionne sur le principe du cycle thermodynamique : un fluide frigorigène capte la chaleur de l\'air extérieur dans l\'évaporateur, la comprime pour augmenter sa température, puis la transmet à l\'eau du circuit de chauffage via le condenseur. Le coefficient de performance (COP) mesure l\'efficacité : un COP de 4 signifie que pour 1 kWh d\'électricité consommé, la PAC produit 4 kWh de chaleur.",
       "## 2. Vérifier la faisabilité",
@@ -159,7 +159,7 @@ export const projetsArticles: Record<string, {
     title: 'Panneaux Solaires 2026 : Installation',
     excerpt: 'Autoconsommation, revente, budget, rentabilité et démarches : le guide pratique pour passer au solaire en 2026.',
     content: [
-      "En 2026, le photovoltaïque résidentiel atteint un niveau de maturité et de rentabilité inédit. Les prix des panneaux ont baissé de 30 % en cinq ans tandis que le tarif de rachat reste attractif. C\'est le moment idéal pour franchir le pas et produire votre propre électricité. Consultez un [installateur de panneaux solaires](/services/panneaux-solaires) qualifié.",
+      "En 2026, le photovoltaïque résidentiel atteint un niveau de maturité et de rentabilité inédit. Les prix des panneaux ont baissé de 30 % en cinq ans tandis que le tarif de rachat reste attractif. C\'est le moment idéal pour franchir le pas et produire votre propre électricité. Consultez un [installateur de panneaux solaires](/practice-areas/panneaux-solaires) qualifié.",
       "## 1. Évaluer le potentiel solaire de votre toiture",
       "L\'orientation idéale est plein sud, avec une inclinaison de 30 à 35°. Une orientation sud-est ou sud-ouest reste très performante (perte de 5 à 10 %). L\'ombrage (arbres, bâtiments voisins, cheminée) réduit significativement la production. Utilisez un simulateur en ligne ou demandez une étude d\'ensoleillement à un installateur certifié.",
       "## 2. Choisir entre autoconsommation et revente totale",
@@ -206,7 +206,7 @@ export const projetsArticles: Record<string, {
     title: 'Salle de Bain sous Combles 2026 : Prix',
     excerpt: 'Contraintes techniques, choix des équipements, étanchéité et budget : tout savoir pour créer une salle de bain fonctionnelle sous les toits.',
     content: [
-      "Créer une salle de bain sous les combles est l\'un des projets les plus demandés lors d\'un aménagement de combles. C\'est aussi l\'un des plus exigeants sur le plan technique : la pente du toit, l\'évacuation des eaux usées et l\'étanchéité imposent des solutions spécifiques. Faites appel à un [plombier qualifié](/services/plombier) et un [spécialiste salle de bain](/services/salle-de-bain) pour ce type de projet.",
+      "Créer une salle de bain sous les combles est l\'un des projets les plus demandés lors d\'un aménagement de combles. C\'est aussi l\'un des plus exigeants sur le plan technique : la pente du toit, l\'évacuation des eaux usées et l\'étanchéité imposent des solutions spécifiques. Faites appel à un [plombier qualifié](/practice-areas/plombier) et un [spécialiste salle de bain](/practice-areas/salle-de-bain) pour ce type de projet.",
       "## 1. Vérifier la faisabilité technique",
       "La hauteur sous plafond minimale est de 1,80 m au droit de la douche et de 2,10 m idéalement au-dessus du lavabo. La pente du toit détermine l\'implantation des équipements : placez la baignoire ou la douche sous la partie la plus haute, et les rangements sous les rampants. Vérifiez que le plancher peut supporter le poids d\'une baignoire pleine (250 à 400 kg).",
       "## 2. Prévoir l\'évacuation des eaux",
@@ -218,7 +218,7 @@ export const projetsArticles: Record<string, {
       "## 5. Assurer la ventilation",
       "Une salle de bain sous combles nécessite impérativement une ventilation mécanique. La VMC simple flux hygroréglable est le minimum. Pour une performance optimale, raccordez la pièce à une VMC double flux si votre logement en est équipé. Prévoyez une bouche d\'extraction de débit 30 m³/h minimum.",
       "## 6. Éclairer intelligemment",
-      "La fenêtre de toit apporte une lumière naturelle incomparable. Choisissez un modèle à vitrage opaque ou équipé d\'un store occultant pour l\'intimité. Complétez avec un éclairage LED encastré (spots IP44 obligatoires au-dessus de la douche) et un miroir rétroéclairé au-dessus du lavabo, posé par un [miroitier](/services/miroitier) pour une finition impeccable.",
+      "La fenêtre de toit apporte une lumière naturelle incomparable. Choisissez un modèle à vitrage opaque ou équipé d\'un store occultant pour l\'intimité. Complétez avec un éclairage LED encastré (spots IP44 obligatoires au-dessus de la douche) et un miroir rétroéclairé au-dessus du lavabo, posé par un [miroitier](/practice-areas/miroitier) pour une finition impeccable.",
       "## 7. Habiller les murs et le sol",
       "Le carrelage grès cérame reste le choix le plus fiable pour le sol et les murs de la zone humide. Le PVC en lames clipsables offre une alternative économique et étanche. Évitez le parquet dans la zone de douche. Pour les parties sèches, le lambris hydrofuge ou la peinture anti-humidité conviennent parfaitement.",
       "## Budget détaillé",
@@ -252,7 +252,7 @@ export const projetsArticles: Record<string, {
     title: 'Agrandir sa Maison 2026 : Les Options',
     excerpt: 'Comparez les trois solutions pour gagner de la surface : extension latérale, surélévation et véranda. Budget, démarches et conseils.',
     content: [
-      "Quand la famille s\'agrandit ou que les besoins évoluent, l\'agrandissement de la maison est souvent préférable à un [déménagement](/services/demenageur). Trois solutions s\'offrent à vous : l\'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/services/macon) pour évaluer la faisabilité.",
+      "Quand la famille s\'agrandit ou que les besoins évoluent, l\'agrandissement de la maison est souvent préférable à un [déménagement](/practice-areas/demenageur). Trois solutions s\'offrent à vous : l\'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/practice-areas/macon) pour évaluer la faisabilité.",
       "## L\'extension latérale : la solution classique",
       "L\'extension au sol est la plus courante. Elle permet de créer une ou plusieurs pièces en prolongement de la maison existante. Les matériaux possibles sont le parpaing (le plus économique), le bois (rapidité de mise en oeuvre) ou l\'ossature métallique (grandes portées). Budget : 1 200 à 2 500 euros/m² selon les matériaux et les finitions.",
       "## La surélévation : quand le terrain manque",
@@ -301,7 +301,7 @@ export const projetsArticles: Record<string, {
     title: 'Ravalement Façade 2026 : Types et Prix',
     excerpt: 'Ravalement obligatoire, techniques de nettoyage, enduits et peintures : le guide complet pour redonner vie à votre façade.',
     content: [
-      "Le ravalement de façade est une obligation légale dans de nombreuses communes (tous les dix ans à Paris). Au-delà de l\'esthétique, une façade en bon état protège la structure du bâtiment contre les infiltrations et améliore l\'isolation thermique du logement. Faites appel à un [façadier professionnel](/services/facadier) pour votre projet.",
+      "Le ravalement de façade est une obligation légale dans de nombreuses communes (tous les dix ans à Paris). Au-delà de l\'esthétique, une façade en bon état protège la structure du bâtiment contre les infiltrations et améliore l\'isolation thermique du logement. Faites appel à un [façadier professionnel](/practice-areas/facadier) pour votre projet.",
       "## 1. Diagnostiquer l\'état de la façade",
       "Repérez les signes de dégradation : fissures (microfissures inférieures à 0,2 mm ou fissures structurelles), décollements d\'enduit, mousses et lichens, efflorescences (traces blanches de salpêtre), faïençage de la peinture. Un diagnostic par un façadier professionnel est indispensable pour choisir le traitement adapté.",
       "## 2. Les techniques de nettoyage",
@@ -347,7 +347,7 @@ export const projetsArticles: Record<string, {
     title: 'Terrasse Extérieure 2026 : Prix',
     excerpt: 'Bois, composite, pierre, carrelage : comparez les matériaux et découvrez les étapes pour créer la terrasse de vos rêves. Devis gratuit.',
     content: [
-      "La terrasse extérieure prolonge l\'espace de vie de la maison et constitue un véritable atout pour la qualité de vie comme pour la valeur du bien. Encore faut-il choisir le bon matériau et respecter les règles de construction pour une terrasse durable et esthétique. Consultez un [paysagiste](/services/paysagiste) pour la conception de votre projet.",
+      "La terrasse extérieure prolonge l\'espace de vie de la maison et constitue un véritable atout pour la qualité de vie comme pour la valeur du bien. Encore faut-il choisir le bon matériau et respecter les règles de construction pour une terrasse durable et esthétique. Consultez un [paysagiste](/practice-areas/paysagiste) pour la conception de votre projet.",
       "## 1. Définir le projet",
       "Quel usage pour votre terrasse ? Coin repas, espace détente, abord de piscine ? La surface minimale recommandée est de 10 à 12 m² pour un coin repas quatre personnes, et de 20 à 30 m² pour un espace polyvalent. La forme (rectangulaire, en L, arrondie) dépend de la configuration du terrain et de l\'architecture de la maison.",
       "## 2. Les démarches administratives",
@@ -393,7 +393,7 @@ export const projetsArticles: Record<string, {
     title: 'Climatisation 2026 : Guide Installation',
     excerpt: 'Split, multisplit, gainable ou réversible : comparez les systèmes de climatisation, leurs coûts et les aides disponibles.',
     content: [
-      "Avec des étés de plus en plus chauds, la climatisation n\'est plus un luxe mais une nécessité dans de nombreuses régions françaises. Le marché propose des solutions adaptées à tous les budgets et à toutes les configurations de logement. Trouvez un [climaticien certifié](/services/climaticien) pour un dimensionnement adapté.",
+      "Avec des étés de plus en plus chauds, la climatisation n\'est plus un luxe mais une nécessité dans de nombreuses régions françaises. Le marché propose des solutions adaptées à tous les budgets et à toutes les configurations de logement. Trouvez un [climaticien certifié](/practice-areas/climaticien) pour un dimensionnement adapté.",
       "## 1. Choisir le type de climatisation",
       "Le monosplit (une unité intérieure, une unité extérieure) convient pour climatiser une pièce de 15 à 35 m² : 1 500 à 3 000 euros posé. Le multisplit (jusqu\'à cinq unités intérieures sur une unité extérieure) traite plusieurs pièces : 3 500 à 8 000 euros. Le gainable (réseau de gaines dans les faux plafonds) offre une discrétion totale : 5 000 à 12 000 euros.",
       "## 2. Dimensionner la puissance",
@@ -439,7 +439,7 @@ export const projetsArticles: Record<string, {
     title: 'Électricité Maison Ancienne 2026',
     excerpt: 'Diagnostic, mise aux normes NF C 15-100, budget par poste et déroulement du chantier : le guide pour rénover votre installation électrique.',
     content: [
-      "En France, sept millions de logements présentent une installation électrique vétuste ou dangereuse. Si votre maison date d\'avant 1990 et n\'a jamais été rénovée électriquement, une mise aux normes s\'impose. C\'est un impératif de sécurité autant qu\'un investissement pour le confort et la valeur du bien. Faites appel à un [électricien certifié](/services/electricien) pour ce type de travaux.",
+      "En France, sept millions de logements présentent une installation électrique vétuste ou dangereuse. Si votre maison date d\'avant 1990 et n\'a jamais été rénovée électriquement, une mise aux normes s\'impose. C\'est un impératif de sécurité autant qu\'un investissement pour le confort et la valeur du bien. Faites appel à un [électricien certifié](/practice-areas/electricien) pour ce type de travaux.",
       "## 1. Faire réaliser un diagnostic",
       "Le diagnostic électrique (obligatoire pour la vente d\'un logement de plus de 15 ans) identifie les anomalies : absence de prise de terre, fils sous gaines textiles, tableau à fusibles, disjoncteur différentiel absent. Coût du diagnostic : 100 à 200 euros. Il constitue la base du cahier des charges de la rénovation.",
       "## 2. Comprendre la norme NF C 15-100",
@@ -487,7 +487,7 @@ export const projetsArticles: Record<string, {
     title: 'Plomberie Maison Ancienne 2026 : Guide',
     excerpt: 'Diagnostic des canalisations, remplacement des tuyaux en plomb, budget par poste et étapes du chantier de rénovation plomberie.',
     content: [
-      "Les canalisations en plomb, les tuyaux en acier galvanisé rouillé ou les joints en fibrociment sont autant de signaux indiquant qu\'une rénovation de la plomberie est nécessaire. Dans une maison d\'avant 1970, la reprise complète des réseaux d\'eau est souvent incontournable pour garantir la salubrité et le confort. Consultez un [plombier professionnel](/services/plombier) pour un diagnostic complet.",
+      "Les canalisations en plomb, les tuyaux en acier galvanisé rouillé ou les joints en fibrociment sont autant de signaux indiquant qu\'une rénovation de la plomberie est nécessaire. Dans une maison d\'avant 1970, la reprise complète des réseaux d\'eau est souvent incontournable pour garantir la salubrité et le confort. Consultez un [plombier professionnel](/practice-areas/plombier) pour un diagnostic complet.",
       "## 1. Diagnostiquer l\'état du réseau",
       "Identifiez les matériaux en place : le plomb (interdit depuis 1995) se reconnaît à sa couleur grise et à sa malléabilité. L\'acier galvanisé présente des dépôts de rouille et des réductions de débit. Le cuivre ancien peut montrer des traces de vert-de-gris aux soudures. Faites réaliser une analyse de la qualité de l\'eau pour détecter d\'éventuelles contaminations.",
       "## 2. Choisir les matériaux de remplacement",
@@ -535,7 +535,7 @@ export const projetsArticles: Record<string, {
     title: 'Poser du Carrelage 2026 : Guide',
     excerpt: 'Pose droite, diagonale, décalée ou en chevrons : maîtrisez les techniques de pose et évitez les erreurs les plus courantes.',
     content: [
-      "Le carrelage est le revêtement le plus résistant et le plus hygiénique pour les sols et les murs. Sa pose demande rigueur et méthode : un carrelage mal posé se fissure, se décolle et vieillit prématurément. Ce guide vous accompagne étape par étape, que vous fassiez appel à un [carreleur professionnel](/services/carreleur) ou que vous posiez vous-même.",
+      "Le carrelage est le revêtement le plus résistant et le plus hygiénique pour les sols et les murs. Sa pose demande rigueur et méthode : un carrelage mal posé se fissure, se décolle et vieillit prématurément. Ce guide vous accompagne étape par étape, que vous fassiez appel à un [carreleur professionnel](/practice-areas/carreleur) ou que vous posiez vous-même.",
       "## 1. Choisir le bon carrelage",
       "Grès cérame pleine masse : le plus résistant (classement UPEC U4P4), idéal pour les pièces à fort passage. Grès cérame émaillé : large choix de décors, adapté aux pièces de vie. Faïence : réservée aux murs, fragile au choc. Terre cuite : aspect authentique, nécessite un traitement hydrofuge. Pierre naturelle : noble mais exigeante en entretien.",
       "## 2. Préparer le support",
@@ -583,7 +583,7 @@ export const projetsArticles: Record<string, {
     title: 'Parquet 2026 : Massif ou Stratifié ?',
     excerpt: 'Comparez les trois types de parquet, leurs techniques de pose et leurs budgets pour faire le choix adapté à votre logement.',
     content: [
-      "Le parquet reste le revêtement de sol préféré des Français. Chaleureux, durable et valorisant pour le bien immobilier, il se décline en trois grandes familles qui répondent à des besoins et des budgets très différents. Ce guide vous aide à faire le bon choix et à comprendre les techniques de pose. Trouvez un [poseur de parquet](/services/poseur-de-parquet) qualifié pour un résultat impeccable.",
+      "Le parquet reste le revêtement de sol préféré des Français. Chaleureux, durable et valorisant pour le bien immobilier, il se décline en trois grandes familles qui répondent à des besoins et des budgets très différents. Ce guide vous aide à faire le bon choix et à comprendre les techniques de pose. Trouvez un [poseur de parquet](/practice-areas/poseur-de-parquet) qualifié pour un résultat impeccable.",
       "## 1. Le parquet massif : l\'authenticité",
       "Fabriqué dans une seule essence de bois (chêne, hêtre, noyer, merisier), le parquet massif offre une durabilité exceptionnelle : il peut être poncé et rénové cinq à huit fois sur une durée de vie de 50 à 100 ans. Épaisseur standard de 14 à 23 mm. Pose clouée sur lambourdes ou collée en plein sur chape.",
       "## 2. Le parquet contrecollé : le compromis",
@@ -633,7 +633,7 @@ export const projetsArticles: Record<string, {
     title: 'Construire un Garage 2026 : Budget',
     excerpt: 'Garage accolé ou indépendant, démarches d\'urbanisme, fondations et budget détaillé : le guide complet pour votre projet de garage.',
     content: [
-      "Le garage protège votre véhicule, augmente l\'espace de rangement et valorise votre propriété de 5 à 10 %. C\'est un projet de construction à part entière qui nécessite des fondations solides, des démarches administratives et un budget bien défini. Faites appel à un [maçon](/services/macon) pour la construction du gros oeuvre.",
+      "Le garage protège votre véhicule, augmente l\'espace de rangement et valorise votre propriété de 5 à 10 %. C\'est un projet de construction à part entière qui nécessite des fondations solides, des démarches administratives et un budget bien défini. Faites appel à un [maçon](/practice-areas/macon) pour la construction du gros oeuvre.",
       "## 1. Choisir le type de garage",
       "Garage accolé à la maison : pratique (accès direct au logement), il partage un mur avec la maison. Garage indépendant : plus de liberté d\'implantation, idéal si le terrain est vaste. Garage enterré ou semi-enterré : exploite la pente naturelle du terrain mais coûte plus cher. Carport (abri ouvert) : solution économique mais sans protection contre le vol.",
       "## 2. Les dimensions standard",
@@ -683,9 +683,9 @@ export const projetsArticles: Record<string, {
     title: 'Jardin Paysagiste 2026 : Idées et Prix',
     excerpt: 'Conception paysagère, choix des végétaux, éclairage et arrosage automatique : le guide pour transformer votre jardin avec un professionnel.',
     content: [
-      "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d\'un aménagement paysager réussi. Trouvez un [paysagiste qualifié](/services/paysagiste) ou un [jardinier](/services/jardinier) près de chez vous.",
+      "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d\'un aménagement paysager réussi. Trouvez un [paysagiste qualifié](/practice-areas/paysagiste) ou un [jardinier](/practice-areas/jardinier) près de chez vous.",
       "## 1. Définir ses besoins et ses envies",
-      "Listez vos priorités : espace détente, coin repas, aire de jeux pour les enfants, potager, [piscine](/services/pisciniste), massifs fleuris. Évaluez l\'ensoleillement de chaque zone, la nature du sol (argileux, sableux, calcaire) et l\'exposition au vent. Un jardin réussi combine esthétique, fonctionnalité et facilité d\'entretien.",
+      "Listez vos priorités : espace détente, coin repas, aire de jeux pour les enfants, potager, [piscine](/practice-areas/pisciniste), massifs fleuris. Évaluez l\'ensoleillement de chaque zone, la nature du sol (argileux, sableux, calcaire) et l\'exposition au vent. Un jardin réussi combine esthétique, fonctionnalité et facilité d\'entretien.",
       "## 2. Le plan de conception paysagère",
       "Le paysagiste réalise un plan d\'ensemble incluant les circulations (allées, chemins), les zones plantées, les surfaces minérales (terrasse, gravier), les clôtures et les points d\'eau. Ce plan, facturé de 500 à 2 000 euros selon la superficie, est la garantie d\'un résultat harmonieux et cohérent.",
       "## 3. Le terrassement et le nivellement",
@@ -731,7 +731,7 @@ export const projetsArticles: Record<string, {
     title: 'Portail Automatique 2026 : Achat et Pose',
     excerpt: 'Battant ou coulissant, motorisation, matériaux et budget : tout savoir pour choisir et installer un portail automatique. Devis gratuit.',
     content: [
-      "Le portail automatique allie confort, sécurité et esthétique. Il valorise l\'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/services/metallier) pour une réalisation sur mesure.",
+      "Le portail automatique allie confort, sécurité et esthétique. Il valorise l\'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/practice-areas/metallier) pour une réalisation sur mesure.",
       "## 1. Battant ou coulissant : le bon choix",
       "Le portail battant (deux vantaux qui s\'ouvrent vers l\'intérieur) est le plus traditionnel. Il nécessite un espace de débattement libre. Le portail coulissant (un vantail qui glisse latéralement sur un rail) est idéal pour les entrées en pente ou les espaces réduits. En terrain plat avec de la place, le battant est moins coûteux. En terrain contraint, le coulissant s\'impose.",
       "## 2. Choisir le matériau",
@@ -779,7 +779,7 @@ export const projetsArticles: Record<string, {
     title: 'Remplacer ses Fenêtres 2026 : Économies',
     excerpt: 'Double ou triple vitrage, matériaux de menuiserie, aides financières et retour sur investissement : le guide pour changer vos fenêtres.',
     content: [
-      "Les fenêtres représentent 10 à 15 % des déperditions thermiques d\'un logement. Le remplacement de fenêtres simple vitrage par du double ou triple vitrage réduit considérablement les pertes de chaleur, améliore le confort acoustique et valorise le bien immobilier. Comparez les devis de [menuisiers qualifiés](/services/menuisier) pour votre remplacement de fenêtres.",
+      "Les fenêtres représentent 10 à 15 % des déperditions thermiques d\'un logement. Le remplacement de fenêtres simple vitrage par du double ou triple vitrage réduit considérablement les pertes de chaleur, améliore le confort acoustique et valorise le bien immobilier. Comparez les devis de [menuisiers qualifiés](/practice-areas/menuisier) pour votre remplacement de fenêtres.",
       "## 1. Évaluer le besoin de remplacement",
       "Signes d\'usure : condensation entre les vitres (joint d\'étanchéité défaillant), courants d\'air au niveau des joints, difficulté à ouvrir ou fermer, boiseries pourries ou aluminium oxydé. Un simple vitrage a un coefficient de transmission thermique (Uw) de 5 à 6 W/m².K, contre 1,1 à 1,4 pour un double vitrage performant.",
       "## 2. Choisir le vitrage",
@@ -791,7 +791,7 @@ export const projetsArticles: Record<string, {
       "## 5. La pose en rénovation ou en dépose totale",
       "Pose en rénovation (sur le dormant existant) : rapide (une à deux heures par fenêtre), pas de travaux de maçonnerie, mais perte de surface vitrée de 10 à 15 %. Pose en dépose totale (remplacement complet du cadre) : performances thermiques optimales, pas de perte de surface vitrée, mais nécessite des travaux de maçonnerie et de finition.",
       "## 6. Les volets et protections solaires",
-      "Le remplacement des fenêtres est l\'occasion de revoir les volets. Un [storiste](/services/storiste) peut vous conseiller sur le choix le plus adapté. Volets roulants en aluminium (motorisés) : 300 à 800 euros par fenêtre. Volets battants en aluminium : 200 à 500 euros par fenêtre. Persiennes : 300 à 600 euros. Les volets roulants motorisés avec coffre intégré offrent une isolation complémentaire (Rw de +3 dB).",
+      "Le remplacement des fenêtres est l\'occasion de revoir les volets. Un [storiste](/practice-areas/storiste) peut vous conseiller sur le choix le plus adapté. Volets roulants en aluminium (motorisés) : 300 à 800 euros par fenêtre. Volets battants en aluminium : 200 à 500 euros par fenêtre. Persiennes : 300 à 600 euros. Les volets roulants motorisés avec coffre intégré offrent une isolation complémentaire (Rw de +3 dB).",
       "## 7. Déroulement du chantier",
       "Un menuisier expérimenté remplace quatre à six fenêtres par jour en pose rénovation. La dépose totale ralentit le rythme à deux ou trois fenêtres par jour. Prévoyez une journée supplémentaire pour les finitions intérieures (plâtre, peinture) et extérieures (enduit, joints). Le chantier se déroule en général sur deux à cinq jours pour une maison complète.",
       "## Budget pour une maison type",
@@ -828,7 +828,7 @@ export const projetsArticles: Record<string, {
     title: 'VMC 2026 : Ventilation et Qualité Air',
     excerpt: 'Simple flux, double flux ou hygroréglable : choisissez la VMC adaptée à votre logement pour un air sain et des économies d\'énergie.',
     content: [
-      "La ventilation mécanique contrôlée (VMC) est indispensable pour renouveler l\'air intérieur, évacuer l\'humidité et les polluants, et préserver la santé des occupants comme la structure du bâtiment. Un logement mal ventilé favorise les moisissures, les acariens et la dégradation des matériaux. Faites appel à un [électricien](/services/electricien) ou un [climaticien](/services/climaticien) pour l\'installation.",
+      "La ventilation mécanique contrôlée (VMC) est indispensable pour renouveler l\'air intérieur, évacuer l\'humidité et les polluants, et préserver la santé des occupants comme la structure du bâtiment. Un logement mal ventilé favorise les moisissures, les acariens et la dégradation des matériaux. Faites appel à un [électricien](/practice-areas/electricien) ou un [climaticien](/practice-areas/climaticien) pour l\'installation.",
       "## 1. Pourquoi une VMC est indispensable",
       "Un adulte respire en moyenne 15 000 litres d\'air par jour. La cuisson, la douche, le séchage du linge et la respiration produisent 10 à 15 litres de vapeur d\'eau par jour et par personne. Sans ventilation efficace, cette humidité se condense sur les parois froides et provoque moisissures, décollements de papier peint et dégradation des enduits.",
       "## 2. La VMC simple flux autoréglable",

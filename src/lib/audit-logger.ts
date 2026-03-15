@@ -144,7 +144,7 @@ export async function auditUserAction(
 
 export async function auditProviderAction(
   action: Extract<AuditAction, `provider.${string}`>,
-  providerId: string,
+  attorneyId: string,
   details?: { oldData?: Record<string, unknown>; newData?: Record<string, unknown> }
 ) {
   const admin = await getAdminInfo()
@@ -155,7 +155,7 @@ export async function auditProviderAction(
     adminEmail: admin.email,
     action,
     entityType: 'provider',
-    entityId: providerId,
+    entityId: attorneyId,
     ...details,
   })
 }

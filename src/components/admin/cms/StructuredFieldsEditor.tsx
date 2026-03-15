@@ -679,7 +679,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
             value={data.heroCtaUrl || ''}
             onChange={(e) => update('heroCtaUrl', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            placeholder="/devis"
+            placeholder="/quotes"
           />
         </div>
       </div>

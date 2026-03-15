@@ -136,7 +136,7 @@ export async function enqueueCampaignMessages(
   const contactIds = members.map(m => m.contact_id)
   const { data: contacts, error: contactError } = await supabase
     .from('prospection_contacts')
-    .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, city, postal_code, department, region, commune_code, custom_fields, is_active, consent_status')
+    .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, city, postal_code, department, region, location_code, custom_fields, is_active, consent_status')
     .in('id', contactIds)
     .eq('is_active', true)
     .eq('consent_status', 'opted_in')

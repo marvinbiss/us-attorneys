@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
 
     // Revalider les pages principales
     const paths = [
-      '/services/plombier/paris',
+      '/practice-areas/plombier/paris',
       '/services',
       '/',
     ]

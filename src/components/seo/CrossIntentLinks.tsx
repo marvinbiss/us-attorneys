@@ -3,35 +3,35 @@ import { Euro, Star, Search, AlertTriangle, FileText } from 'lucide-react'
 
 interface CrossIntentLinksProps {
   service: string
-  serviceName: string
+  specialtyName: string
   ville?: string
   villeName?: string
   currentIntent: 'tarifs' | 'avis' | 'services' | 'urgence' | 'devis'
 }
 
 const intents = [
-  { key: 'tarifs', label: 'Tarifs', icon: Euro, href: (s: string, v?: string) => v ? `/tarifs/${s}/${v}` : `/tarifs/${s}` },
-  { key: 'avis', label: 'Avis', icon: Star, href: (s: string, v?: string) => v ? `/avis/${s}/${v}` : `/avis/${s}` },
-  { key: 'services', label: 'Artisans', icon: Search, href: (s: string, v?: string) => v ? `/services/${s}/${v}` : `/services/${s}` },
-  { key: 'urgence', label: 'Urgence', icon: AlertTriangle, href: (s: string, v?: string) => v ? `/urgence/${s}/${v}` : `/urgence/${s}` },
-  { key: 'devis', label: 'Devis', icon: FileText, href: (s: string, v?: string) => v ? `/devis/${s}/${v}` : `/devis/${s}` },
+  { key: 'tarifs', label: 'Tarifs', icon: Euro, href: (s: string, v?: string) => v ? `/pricing/${s}/${v}` : `/pricing/${s}` },
+  { key: 'avis', label: 'Avis', icon: Star, href: (s: string, v?: string) => v ? `/reviews/${s}/${v}` : `/reviews/${s}` },
+  { key: 'services', label: 'Artisans', icon: Search, href: (s: string, v?: string) => v ? `/practice-areas/${s}/${v}` : `/practice-areas/${s}` },
+  { key: 'urgence', label: 'Urgence', icon: AlertTriangle, href: (s: string, v?: string) => v ? `/emergency/${s}/${v}` : `/emergency/${s}` },
+  { key: 'devis', label: 'Devis', icon: FileText, href: (s: string, v?: string) => v ? `/quotes/${s}/${v}` : `/quotes/${s}` },
 ] as const
 
 export default function CrossIntentLinks({
   service,
-  serviceName,
+  specialtyName,
   ville,
   villeName,
   currentIntent,
 }: CrossIntentLinksProps) {
   return (
     <nav
-      aria-label={`Voir aussi pour ${serviceName}${villeName ? ` a ${villeName}` : ''}`}
+      aria-label={`Voir aussi pour ${specialtyName}${villeName ? ` a ${villeName}` : ''}`}
       className="border-t border-gray-200 bg-gray-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-          {serviceName}{villeName ? ` à ${villeName}` : ''} — voir aussi
+          {specialtyName}{villeName ? ` à ${villeName}` : ''} — voir aussi
         </p>
         <div className="flex flex-wrap gap-2">
           {intents.map(({ key, label, icon: Icon, href }) => {

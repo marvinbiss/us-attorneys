@@ -8,14 +8,21 @@ import { useReportWebVitals } from 'next/web-vitals'
  */
 export function WebVitals() {
   useReportWebVitals((metric) => {
-    // Send to GA4 (already configured via GoogleAnalytics component)
-    if (typeof window !== 'undefined' && 'gtag' in window) {
-      const w = window as typeof window & { gtag: (...args: unknown[]) => void }
-      w.gtag('event', metric.name, {
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-        event_label: metric.id,
-        non_interaction: true,
-      })
+    // Send to GA4 only if user has granted analytics consent
+    if (typeof window !== 'undefined' && window.gtag) {
+      try {
+        const prefs = localStorage.getItem('cookie_preferences')
+        const hasConsent = prefs ? JSON.parse(prefs)?.analytics : false
+        if (!hasConsent) return
+
+        window.gtag('event', metric.name, {
+          value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+          event_label: metric.id,
+          non_interaction: true,
+        })
+      } catch {
+        // Silent failure — analytics should never break the app
+      }
     }
   })
 

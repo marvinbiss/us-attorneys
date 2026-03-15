@@ -9,10 +9,10 @@ export function revalidatePagePaths(page: {
   switch (page.page_type) {
     case 'static': revalidatePath(`/${page.slug}`); break
     case 'blog': revalidatePath(`/blog/${page.slug}`); revalidatePath('/blog'); break
-    case 'service': revalidatePath(`/services/${page.slug}`); break
+    case 'service': revalidatePath(`/practice-areas/${page.slug}`); break
     case 'location':
       if (page.service_slug && page.location_slug) {
-        revalidatePath(`/services/${page.service_slug}/${page.location_slug}`)
+        revalidatePath(`/practice-areas/${page.service_slug}/${page.location_slug}`)
       }
       break
     case 'homepage': revalidatePath('/'); break

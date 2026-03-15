@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       .from('conversations')
       .select('id')
       .eq('id', conversation_id)
-      .or(`client_id.eq.${user.id},provider_id.eq.${user.id}`)
+      .or(`client_id.eq.${user.id},attorney_id.eq.${user.id}`)
       .single()
 
     if (!conversation) {

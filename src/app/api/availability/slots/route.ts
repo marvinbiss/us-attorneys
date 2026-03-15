@@ -11,7 +11,7 @@ import { z } from 'zod'
 
 // GET request query params schema
 const slotsQuerySchema = z.object({
-  artisanIds: z.string().min(1),
+  attorneyIds: z.string().min(1),
   days: z.coerce.number().int().min(1).max(30).optional().default(5),
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
 })
@@ -24,14 +24,14 @@ interface DayAvailability {
   slots: Array<{ time: string; available: boolean }>
 }
 
-// GET /api/availability/slots?artisanIds=id1,id2,id3&days=5
+// GET /api/availability/slots?attorneyIds=id1,id2,id3&days=5
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const queryParams = {
-      artisanIds: searchParams.get('artisanIds'),
+      attorneyIds: searchParams.get('attorneyIds'),
       days: searchParams.get('days') || '5',
       startDate: searchParams.get('startDate'),
     }
@@ -39,17 +39,17 @@ export async function GET(request: Request) {
     if (!result.success) {
       return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
     }
-    const { artisanIds: artisanIdsParam, days, startDate: startDateParam } = result.data
+    const { attorneyIds: attorneyIdsParam, days, startDate: startDateParam } = result.data
 
-    const artisanIds = artisanIdsParam.split(',')
+    const attorneyIds = attorneyIdsParam.split(',')
     const startDate = startDateParam ? new Date(startDateParam) : new Date()
 
     // Return empty availability until real scheduling data is implemented
     // TODO: Fetch real availability from database when scheduling feature is built
     const availabilityMap: Record<string, DayAvailability[]> = {}
 
-    for (const artisanId of artisanIds) {
-      availabilityMap[artisanId] = [] // No fake slots - return empty
+    for (const attorneyId of attorneyIds) {
+      availabilityMap[attorneyId] = [] // No fake slots - return empty
     }
 
     return NextResponse.json({

@@ -29,7 +29,7 @@ export async function PATCH(request: NextRequest) {
 
     // Get provider for this user
     const { data: provider } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id')
       .eq('user_id', user.id)
       .single()
@@ -58,7 +58,7 @@ export async function PATCH(request: NextRequest) {
       .from('quotes')
       .select('id')
       .in('id', quote_ids)
-      .eq('provider_id', provider.id)
+      .eq('attorney_id', provider.id)
 
     if (checkError) throw checkError
 
@@ -78,7 +78,7 @@ export async function PATCH(request: NextRequest) {
       .from('quotes')
       .update(updates)
       .in('id', quote_ids)
-      .eq('provider_id', provider.id)
+      .eq('attorney_id', provider.id)
 
     if (error) throw error
 
@@ -110,7 +110,7 @@ export async function DELETE(request: NextRequest) {
 
     // Get provider for this user
     const { data: provider } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id')
       .eq('user_id', user.id)
       .single()
@@ -138,7 +138,7 @@ export async function DELETE(request: NextRequest) {
       .from('quotes')
       .delete()
       .in('id', quote_ids)
-      .eq('provider_id', provider.id)
+      .eq('attorney_id', provider.id)
 
     if (error) throw error
 

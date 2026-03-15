@@ -29,8 +29,8 @@ describe('getRateLimitConfig', () => {
   })
 
   it('returns devis config for devis routes', () => {
-    expect(getRateLimitConfig('/api/devis/create')).toBe(RATE_LIMITS.devis)
-    expect(getRateLimitConfig('/api/artisan/devis')).toBe(RATE_LIMITS.devis)
+    expect(getRateLimitConfig('/api/quotes/create')).toBe(RATE_LIMITS.devis)
+    expect(getRateLimitConfig('/api/attorney/quotes')).toBe(RATE_LIMITS.devis)
   })
 
   it('returns contact config for contact routes', () => {
@@ -46,8 +46,8 @@ describe('getRateLimitConfig', () => {
   })
 
   it('returns search config for provider listing/by-city routes', () => {
-    expect(getRateLimitConfig('/api/providers/listing')).toBe(RATE_LIMITS.search)
-    expect(getRateLimitConfig('/api/providers/by-city')).toBe(RATE_LIMITS.search)
+    expect(getRateLimitConfig('/api/attorneys/listing')).toBe(RATE_LIMITS.search)
+    expect(getRateLimitConfig('/api/attorneys/by-city')).toBe(RATE_LIMITS.search)
   })
 
   it('returns gdpr config for GDPR routes', () => {
@@ -60,7 +60,7 @@ describe('getRateLimitConfig', () => {
   })
 
   it('returns inscription config for artisan registration route', () => {
-    expect(getRateLimitConfig('/api/inscription-artisan')).toBe(RATE_LIMITS.inscription)
+    expect(getRateLimitConfig('/api/register-attorney')).toBe(RATE_LIMITS.inscription)
   })
 
   it('returns ai config for AI generation routes', () => {
@@ -92,7 +92,7 @@ describe('getRateLimitConfig', () => {
   })
 
   it('returns default config for non-API routes', () => {
-    expect(getRateLimitConfig('/services/plombier/paris')).toBe(RATE_LIMITS.default)
+    expect(getRateLimitConfig('/practice-areas/plombier/paris')).toBe(RATE_LIMITS.default)
     expect(getRateLimitConfig('/')).toBe(RATE_LIMITS.default)
   })
 })

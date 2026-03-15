@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "tableau électrique aux normes",
   ],
   alternates: {
-    canonical: `${SITE_URL}/guides/normes-electriques`,
+    canonical: `${SITE_URL}/guides/regulations-electriques`,
   },
   robots: {
     index: true,
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     title: "Normes Électriques NF C 15-100 : Guide pour les Particuliers",
     description:
       "Tout savoir sur la norme NF C 15-100 : exigences par pièce, mise aux normes obligatoire, coûts et diagnostic électrique.",
-    url: `${SITE_URL}/guides/normes-electriques`,
+    url: `${SITE_URL}/guides/regulations-electriques`,
     type: "article",
     images: [
       {
@@ -226,7 +226,7 @@ export default function NormesElectriquesPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: "Accueil", url: "/" },
     { name: "Guides", url: "/guides" },
-    { name: "Normes Électriques NF C 15-100", url: "/guides/normes-electriques" },
+    { name: "Normes Électriques NF C 15-100", url: "/guides/regulations-electriques" },
   ])
   const faqSchema = getFAQSchema(faqItems)
 
@@ -639,13 +639,13 @@ export default function NormesElectriquesPage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/services/electricien"
+                  href="/practice-areas/electricien"
                   className="inline-flex items-center gap-2 bg-white text-amber-700 px-6 py-3 rounded-lg font-semibold hover:bg-amber-50 transition-colors"
                 >
                   {"Trouver un électricien"} <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/services/diagnostiqueur"
+                  href="/practice-areas/diagnostiqueur"
                   className="inline-flex items-center gap-2 bg-amber-400 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-300 transition-colors"
                 >
                   {"Trouver un diagnostiqueur"} <ArrowRight className="w-4 h-4" />

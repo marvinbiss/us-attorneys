@@ -84,12 +84,12 @@ export async function GET(request: NextRequest) {
 
     // Fetch lead_assignments for these demandes to show which artisan(s) received each request
     const demandeIds = (demandes || []).map((d) => d.id)
-    let assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; provider_id: string }>> = {}
+    let assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; attorney_id: string }>> = {}
 
     if (demandeIds.length > 0) {
       const { data: assignments } = await supabase
         .from('lead_assignments')
-        .select('id, lead_id, status, assigned_at, provider_id, provider:providers(id, name)')
+        .select('id, lead_id, status, assigned_at, attorney_id, provider:providers(id, name)')
         .in('lead_id', demandeIds)
         .order('position', { ascending: true })
 
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
             id: a.id,
             status: a.status,
             assigned_at: a.assigned_at,
-            provider_id: a.provider_id,
+            attorney_id: a.attorney_id,
             provider_name: provider?.name || 'Inconnu',
           }
           if (!assignmentsByLead[a.lead_id]) {

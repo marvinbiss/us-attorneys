@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
         data: rows,
         attribution: {
           text: `Source : ${SITE_NAME} — Baromètre des Artisans`,
-          url: `${SITE_URL}/barometre`,
+          url: `${SITE_URL}/price-index`,
           licence: 'Attribution obligatoire avec lien vers la source.',
         },
       },

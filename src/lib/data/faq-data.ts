@@ -84,7 +84,7 @@ export const faqCategories = [
       },
       {
         q: 'Comment supprimer mon compte ?',
-        a: 'Vous pouvez demander la suppression de votre compte et de vos données en nous contactant à dpo@servicesartisans.fr.',
+        a: 'Vous pouvez demander la suppression de votre compte et de vos données en nous contactant à dpo@us-attorneys.com.',
       },
       {
         q: 'Mes données sont-elles protégées ?',

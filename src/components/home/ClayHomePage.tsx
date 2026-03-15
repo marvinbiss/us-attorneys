@@ -4,13 +4,13 @@ import { Droplets, Zap, HardHat, PaintBucket, Hammer, ShieldCheck, Star, MapPin,
 import { ClayHeroSearch } from './ClayHeroSearch'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
-import { formatProviderCount, type SiteStats, type HomepageProvider, type HomepageReview } from '@/lib/data/stats'
+import { formatAttorneyCount, type SiteStats, type HomepageProvider, type HomepageReview } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface Props {
   stats: SiteStats
-  serviceCounts: Record<string, number>
+  specialtyCounts: Record<string, number>
   topProviders: HomepageProvider[]
   recentReviews: HomepageReview[]
 }
@@ -127,10 +127,10 @@ function ClayFAQSection() {
 }
 
 // ── Main Component ───────────────────────────────────────────────
-export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews }: Props) {
-  const { artisanCount, reviewCount, avgRating, deptCount } = stats
-  const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '—'
-  const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '—'
+export function ClayHomePage({ stats, specialtyCounts, topProviders, recentReviews }: Props) {
+  const { attorneyCount, reviewCount, avgRating, deptCount } = stats
+  const countStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)}+` : '—'
+  const reviewStr = reviewCount > 0 ? `${formatAttorneyCount(reviewCount)}` : '—'
   const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '—'
 
   // Use real top providers from DB when available, fall back to curated list
@@ -200,7 +200,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             {SERVICE_ITEMS.map(({ Icon: ChipIcon, name, slug }) => (
               <Link
                 key={slug}
-                href={`/services/${slug}`}
+                href={`/practice-areas/${slug}`}
                 aria-label={`Rechercher des artisans en ${name}`}
                 className="inline-flex items-center gap-1 md:gap-1.5 text-[11px] md:text-xs font-semibold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full transition-all duration-200 text-white/75 hover:text-white"
                 style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)' }}
@@ -331,14 +331,14 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             {SERVICE_ITEMS.map(({ Icon: SvcIcon, name, slug }, i) => (
               <ScrollReveal key={slug} delay={i * 0.08}>
                 <Link
-                  href={`/services/${slug}`}
+                  href={`/practice-areas/${slug}`}
                   className="group bg-white rounded-2xl p-6 text-center transition-all duration-300 border-[1.5px] border-transparent hover:border-clay-400 hover:-translate-y-1 block"
                   style={{ boxShadow: '0 2px 12px rgba(0,0,0,.05)' }}
                 >
                   <SvcIcon className="w-8 h-8 text-clay-400 mx-auto mb-3" />
                   <div className="text-sm font-extrabold text-stone-900 mb-1">{name}</div>
                   <div className="text-xs text-stone-400">
-                    {serviceCounts[slug] > 0 ? `${formatProviderCount(serviceCounts[slug])} artisans` : 'Artisans disponibles'}
+                    {specialtyCounts[slug] > 0 ? `${formatAttorneyCount(specialtyCounts[slug])} artisans` : 'Artisans disponibles'}
                   </div>
                 </Link>
               </ScrollReveal>
@@ -366,7 +366,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               {artisans.map((a, i) => {
                 const rating = a.rating_average ?? 0
                 const ratingDisplay = rating.toFixed(1).replace('.', ',')
-                const profileHref = a.stable_id ? `/services/${a.slug}/${a.profileCity}/${a.stable_id}` : `/services/${a.slug}`
+                const profileHref = a.stable_id ? `/practice-areas/${a.slug}/${a.profileCity}/${a.stable_id}` : `/practice-areas/${a.slug}`
                 const bgImage = CARD_BG_IMAGES[i % CARD_BG_IMAGES.length]
 
                 return (
@@ -563,7 +563,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 Trouver un artisan
               </Link>
               <Link
-                href="/espace-artisan"
+                href="/attorney-dashboard"
                 className="text-white text-sm font-bold px-7 py-3.5 rounded-full transition-all duration-200 hover:bg-white/10"
                 style={{ border: '1.5px solid rgba(255,255,255,.4)' }}
               >

@@ -101,7 +101,7 @@ export default function BookingPage() {
       const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
 
       const response = await fetch(
-        `/api/bookings?artisanId=${booking.artisan.id}&month=${monthStr}`
+        `/api/bookings?attorneyId=${booking.artisan.id}&month=${monthStr}`
       )
 
       if (!response.ok) throw new Error('Erreur lors du chargement des créneaux')
@@ -405,8 +405,8 @@ export default function BookingPage() {
           bookingId={bookingId}
           bookingDate={formatDate(booking.slot.date)}
           bookingTime={`${booking.slot.start_time} - ${booking.slot.end_time}`}
-          artisanName={booking.artisan.name || booking.artisan.full_name}
-          serviceName={booking.service_description}
+          attorneyName={booking.artisan.name || booking.artisan.full_name}
+          specialtyName={booking.service_description}
           onClose={() => setShowCancelModal(false)}
           onCancelled={() => {
             setShowCancelModal(false)

@@ -67,7 +67,7 @@ export const faqItemSchema = z.object({
 })
 
 // ============================================================
-// Artisan self-service update schema (PUT /api/artisan/provider)
+// Artisan self-service update schema (PUT /api/attorney/provider)
 // Excludes admin-only fields: is_verified, noindex, is_active,
 // rating_average, review_count.
 // ============================================================
@@ -77,9 +77,15 @@ export const providerArtisanUpdateSchema = z.object({
   siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir 14 chiffres').optional().nullable(),
   team_size: z.number().int().min(1).max(1000).optional().nullable(),
 
-  // Contact
-  phone: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/\s/g, '')).optional(),
-  phone_secondary: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/\s/g, '')).optional().nullable(),
+  // Contact — preprocess strips spaces/dots/dashes before validation so "06 12 34 56 78" passes
+  phone: z.preprocess(
+    (v) => typeof v === 'string' ? v.replace(/[-\s.]/g, '') : v,
+    z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide')
+  ).optional(),
+  phone_secondary: z.preprocess(
+    (v) => typeof v === 'string' ? v.replace(/[-\s.]/g, '') : v,
+    z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide')
+  ).optional().nullable(),
   email: z.string().email('Email invalide').optional().nullable(),
   website: z.string().url('URL invalide').optional().nullable(),
 
@@ -110,6 +116,9 @@ export const providerArtisanUpdateSchema = z.object({
 
   // FAQ
   faq: z.array(faqItemSchema).max(15, 'Maximum 15 questions').optional(),
+
+  // Qualifications
+  certifications: z.array(z.string().min(1).max(200)).max(20).optional(),
 })
 
 export type ProviderArtisanUpdateInput = z.infer<typeof providerArtisanUpdateSchema>
@@ -136,5 +145,5 @@ export const photoUploadSchema = z.object({
 })
 
 export type ProviderUpdateInput = z.infer<typeof providerUpdateSchema>
-export type ProviderSearchInput = z.infer<typeof providerSearchSchema>
+export type AttorneySearchInput = z.infer<typeof providerSearchSchema>
 export type PhotoUploadInput = z.infer<typeof photoUploadSchema>

@@ -96,7 +96,7 @@ export async function GET() {
       estimationTotalR, estimationTodayR, recentEstimationLeadsR,
     ] = await Promise.allSettled([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
-      supabase.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('attorneys').select('id', { count: 'exact', head: true }).eq('is_active', true),
       supabase.from('bookings').select('id', { count: 'exact', head: true }),
       supabase.from('user_reports').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
       supabase.from('reviews').select('rating').eq('status', 'published').limit(200),

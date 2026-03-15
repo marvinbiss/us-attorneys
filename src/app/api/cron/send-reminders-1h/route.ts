@@ -49,7 +49,7 @@ export async function GET(request: Request) {
         service_name,
         status,
         scheduled_date,
-        provider_id,
+        attorney_id,
         client:profiles!client_id(full_name, email, phone_e164)
       `)
       .eq('status', 'confirmed')
@@ -103,17 +103,17 @@ export async function GET(request: Request) {
     }
 
     // Fetch artisan details
-    const artisanIds = Array.from(new Set(bookingsToRemind.map((b) => b.provider_id).filter(Boolean)))
+    const attorneyIds = Array.from(new Set(bookingsToRemind.map((b) => b.attorney_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
-      .in('id', artisanIds)
+      .in('id', attorneyIds)
 
     const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
 
     // Prepare notification payloads
     const payloads: NotificationPayload[] = bookingsToRemind.map((booking) => {
-      const artisan = artisanMap.get(booking.provider_id || '')
+      const artisan = artisanMap.get(booking.attorney_id || '')
       const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
 
       return {
@@ -121,8 +121,8 @@ export async function GET(request: Request) {
         clientName: client?.full_name || '',
         clientEmail: client?.email || '',
         clientPhone: client?.phone_e164 || '',
-        artisanName: artisan?.full_name || 'Artisan',
-        serviceName: booking.service_name || 'Service',
+        attorneyName: artisan?.full_name || 'Artisan',
+        specialtyName: booking.service_name || 'Service',
         date: booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
           weekday: 'long',
           day: 'numeric',

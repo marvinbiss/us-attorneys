@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const supabase = createAdminClient()
 
   const { data, error } = await supabase
-    .from('providers')
+    .from('attorneys')
     .select('name, slug, stable_id, specialty, address_city, is_verified, rating_average, review_count')
     .or(`name.ilike.%${q}%,slug.ilike.%${q}%`)
     .eq('is_active', true)

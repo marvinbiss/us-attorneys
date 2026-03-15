@@ -90,7 +90,7 @@ export function useLeadSubmit(
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-        trackEvent('estimation_lead_submitted' as any, {
+        trackEvent('estimation_lead_submitted', {
           source: 'chat',
           metier: context.metierSlug,
           ville: context.ville,
@@ -145,7 +145,7 @@ export function useLeadSubmit(
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-        trackEvent('estimation_lead_submitted' as any, {
+        trackEvent('estimation_lead_submitted', {
           source: 'callback',
           metier: context.metierSlug,
           ville: context.ville,

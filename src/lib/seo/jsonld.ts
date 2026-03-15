@@ -53,14 +53,14 @@ export function getWebsiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
-    alternateName: ['servicesartisans.fr'],
+    alternateName: ['us-attorneys.com'],
     url: SITE_URL,
     publisher: { '@id': `${SITE_URL}#organization` },
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/recherche?q={search_term_string}`,
+        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
@@ -205,7 +205,7 @@ export function getItemListSchema(params: {
   }
 }
 
-// Schema.org City/Place (pour pages villes)
+// Schema.org City/Place (pour pages cities)
 export function getPlaceSchema(city: {
   name: string
   slug: string
@@ -218,7 +218,7 @@ export function getPlaceSchema(city: {
     '@context': 'https://schema.org',
     '@type': 'City',
     name: city.name,
-    url: `${SITE_URL}/villes/${city.slug}`,
+    url: `${SITE_URL}/cities/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
     ...(city.region ? {
@@ -254,8 +254,8 @@ export function getCollectionPageSchema(params: {
 
 // Schema.org Product + AggregateOffer (rich snippets with prices in SERP)
 export function getServicePricingSchema(params: {
-  serviceName: string
-  serviceSlug: string
+  specialtyName: string
+  specialtySlug: string
   description: string
   lowPrice: number
   highPrice: number
@@ -275,8 +275,8 @@ export function getServicePricingSchema(params: {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: params.location
-      ? `${params.serviceName} à ${params.location} — Tarifs`
-      : `${params.serviceName} — Tarifs France`,
+      ? `${params.specialtyName} à ${params.location} — Tarifs`
+      : `${params.specialtyName} — Tarifs France`,
     description: params.description,
     url: params.url,
     dateModified,

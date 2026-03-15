@@ -206,7 +206,7 @@ export default async function MediationPage() {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Link
-              href="/notre-processus-de-verification"
+              href="/verification-process"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
@@ -217,7 +217,7 @@ export default async function MediationPage() {
               </p>
             </Link>
             <Link
-              href="/politique-avis"
+              href="/review-policy"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
@@ -228,7 +228,7 @@ export default async function MediationPage() {
               </p>
             </Link>
             <Link
-              href="/a-propos"
+              href="/about"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
@@ -239,7 +239,7 @@ export default async function MediationPage() {
               </p>
             </Link>
             <Link
-              href="/mentions-legales"
+              href="/legal"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">

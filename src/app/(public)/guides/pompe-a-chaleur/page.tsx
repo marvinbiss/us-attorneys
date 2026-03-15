@@ -190,10 +190,10 @@ const etapesInstallation = [
 ]
 
 const services = [
-  { label: "Chauffagiste", href: "/services/chauffagiste", icon: Thermometer },
-  { label: "Pompe à chaleur", href: "/services/pompe-a-chaleur", icon: Wind },
-  { label: "Climaticien", href: "/services/climaticien", icon: Snowflake },
-  { label: "Plombier", href: "/services/plombier", icon: Wrench },
+  { label: "Chauffagiste", href: "/practice-areas/chauffagiste", icon: Thermometer },
+  { label: "Pompe à chaleur", href: "/practice-areas/pompe-a-chaleur", icon: Wind },
+  { label: "Climaticien", href: "/practice-areas/climaticien", icon: Snowflake },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Wrench },
 ]
 
 const faqItems = [
@@ -578,7 +578,7 @@ export default function PompeAChaleurPage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Artisan RGE"}</h3>
               <p className="text-sm text-gray-500">{"Obligatoire pour bénéficier des aides à l’installation."}</p>
             </Link>
-            <Link href="/guides/garantie-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/guarantee-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Garantie décennale"}</h3>
               <p className="text-sm text-gray-500">{"Vérifiez la décennale de votre installateur avant travaux."}</p>
             </Link>
@@ -620,14 +620,14 @@ export default function PompeAChaleurPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/chauffagiste"
+                href="/practice-areas/chauffagiste"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un chauffagiste RGE"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

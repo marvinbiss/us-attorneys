@@ -65,12 +65,12 @@ const avantages = [
 ]
 
 const services = [
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Charpentier", href: "/services/charpentier", icon: Hammer },
-  { label: "Plombier", href: "/services/plombier", icon: Hammer },
-  { label: "Rénovation intérieure", href: "/services/renovation-interieure", icon: Home },
-  { label: "Extension maison", href: "/services/extension-maison", icon: Building2 },
+  { label: "Maçon", href: "/practice-areas/macon", icon: Building2 },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Charpentier", href: "/practice-areas/charpentier", icon: Hammer },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Hammer },
+  { label: "Rénovation intérieure", href: "/practice-areas/renovation-interieure", icon: Home },
+  { label: "Extension maison", href: "/practice-areas/extension-maison", icon: Building2 },
 ]
 
 const faqItems = [
@@ -406,11 +406,11 @@ export default function AssuranceDommageOuvragePage() {
             Guides complémentaires
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Link href="/guides/garantie-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-teal-200 transition-all">
+            <Link href="/guides/guarantee-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-teal-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors mb-1">{"Garantie décennale"}</h3>
               <p className="text-sm text-gray-500">{"L'assurance côté artisan, complémentaire de la DO."}</p>
             </Link>
-            <Link href="/guides/devis-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-teal-200 transition-all">
+            <Link href="/guides/quotes-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-teal-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors mb-1">{"Devis travaux"}</h3>
               <p className="text-sm text-gray-500">{"Obtenez les devis nécessaires pour votre dossier DO."}</p>
             </Link>
@@ -456,14 +456,14 @@ export default function AssuranceDommageOuvragePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/verifier-artisan"
+                href="/verify-attorney"
                 className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 px-8 py-3.5 rounded-xl font-bold hover:bg-teal-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un artisan"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-teal-400 transition-colors border border-teal-400"
               >
                 <FileCheck className="w-5 h-5" />

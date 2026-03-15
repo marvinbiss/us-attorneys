@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
-import { services, villes, departements } from '@/lib/data/france'
+import { services, cities, states } from '@/lib/data/usa'
 import { heroImage } from '@/lib/data/images'
 import { HeroSearch } from '@/components/search/HeroSearch'
 
@@ -133,7 +133,7 @@ function AnimatedHeadingLine({ text, className }: { text: string; className?: st
 }
 
 // ── Main Hero Component ───────────────────────────────────────────────
-export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
+export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
   return (
     <>
       {/* ── HERO SECTION ────────────────────────────────────── */}
@@ -236,7 +236,7 @@ export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
-                  {artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')} artisans référencés en France` : 'Artisans référencés en France (données SIREN)'}
+                  {attorneyCount > 0 ? `${attorneyCount.toLocaleString('fr-FR')} artisans référencés en France` : 'Artisans référencés en France (données SIREN)'}
                 </span>
               </div>
             </motion.div>
@@ -287,7 +287,7 @@ export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
               {chipServices.map((svc) => (
                 <Link
                   key={svc.slug}
-                  href={`/services/${svc.slug}`}
+                  href={`/practice-areas/${svc.slug}`}
                   className="bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 rounded-full px-4 py-2 text-sm transition-all duration-200"
                 >
                   {svc.name}
@@ -301,9 +301,9 @@ export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
               className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto"
             >
               {[
-                { value: artisanCount, suffix: '', label: 'artisans' },
-                { value: villes.length, suffix: '', label: 'villes' },
-                { value: departements.length, suffix: '', label: 'départements' },
+                { value: attorneyCount, suffix: '', label: 'artisans' },
+                { value: cities.length, suffix: '', label: 'cities' },
+                { value: states.length, suffix: '', label: 'départements' },
                 { value: services.length, suffix: '', label: 'métiers' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">

@@ -56,7 +56,7 @@ export async function POST(
       // Étape 2 — Vérifier si l'utilisateur est un artisan
       completedSteps.push('check_artisan')
       const { data: artisanRecord } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('id')
         .eq('user_id', userId)
         .maybeSingle()
@@ -93,14 +93,14 @@ export async function POST(
             artisan_response: null,
             artisan_responded_at: null,
           })
-          .eq('artisan_id', userId)
+          .eq('attorney_id', userId)
       }
 
       // Étape 6 — Désactiver le provider si c'est un artisan
       completedSteps.push('deactivate_provider')
       if (artisanRecord) {
         await supabase
-          .from('providers')
+          .from('attorneys')
           .update({
             is_active: false,
             updated_at: new Date().toISOString(),

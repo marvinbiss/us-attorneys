@@ -198,7 +198,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                   className="w-full text-sm"
                   onClick={() => {
                     setIsOpen(false)
-                    window.location.href = '/espace-client/notifications'
+                    window.location.href = '/client-dashboard/notifications'
                   }}
                 >
                   Voir toutes les notifications

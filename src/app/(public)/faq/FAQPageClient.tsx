@@ -128,7 +128,7 @@ export default function FAQPageClient() {
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Link
-              href="/comment-ca-marche"
+              href="/how-it-works"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
               <h3 className="font-semibold text-gray-900 mb-2">Comment ça marche ?</h3>
@@ -140,7 +140,7 @@ export default function FAQPageClient() {
               </span>
             </Link>
             <Link
-              href="/devis"
+              href="/quotes"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
               <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
@@ -152,7 +152,7 @@ export default function FAQPageClient() {
               </span>
             </Link>
             <Link
-              href="/inscription"
+              href="/register"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
               <h3 className="font-semibold text-gray-900 mb-2">Créer un compte</h3>

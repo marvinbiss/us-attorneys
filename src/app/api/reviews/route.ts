@@ -22,18 +22,18 @@ interface ClientProfile {
   phone_e164: string | null
 }
 
-interface ArtisanProfile {
+interface AttorneyProfile {
   id: string
   name: string | null
 }
 
 interface BookingWithRelations {
   id: string
-  provider_id: string
+  attorney_id: string
   service_name: string | null
   status: string
   client: ClientProfile | ClientProfile[] | null
-  artisan: ArtisanProfile | ArtisanProfile[] | null
+  artisan: AttorneyProfile | AttorneyProfile[] | null
 }
 
 interface Review {
@@ -60,7 +60,7 @@ function getSupabaseClient() {
 }
 
 // Helper to get artisan display name
-function getArtisanDisplayName(artisan: ArtisanProfile | ArtisanProfile[] | null): string {
+function getAttorneyDisplayName(artisan: AttorneyProfile | AttorneyProfile[] | null): string {
   if (!artisan) return 'Artisan'
 
   const profile = Array.isArray(artisan) ? artisan[0] : artisan
@@ -82,9 +82,9 @@ function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: 
 // Query schema for GET request - require full UUID for bookingId to prevent enumeration
 const getQuerySchema = z.object({
   bookingId: z.string().uuid('ID de réservation invalide').optional(),
-  artisanId: z.string().uuid().optional(),
-}).refine(data => data.bookingId || data.artisanId, {
-  message: 'bookingId ou artisanId requis',
+  attorneyId: z.string().uuid().optional(),
+}).refine(data => data.bookingId || data.attorneyId, {
+  message: 'bookingId ou attorneyId requis',
 })
 
 // GET /api/reviews - Get booking info for review or artisan reviews
@@ -96,7 +96,7 @@ export async function GET(request: Request) {
 
     const queryValidation = getQuerySchema.safeParse({
       bookingId: searchParams.get('bookingId') || undefined,
-      artisanId: searchParams.get('artisanId') || undefined,
+      attorneyId: searchParams.get('attorneyId') || undefined,
     })
 
     if (!queryValidation.success) {
@@ -109,7 +109,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const { bookingId, artisanId } = queryValidation.data
+    const { bookingId, attorneyId } = queryValidation.data
     const supabase = getSupabaseClient()
 
     // Get booking info for review submission - use exact match to prevent enumeration
@@ -118,11 +118,11 @@ export async function GET(request: Request) {
         .from('bookings')
         .select(`
           id,
-          provider_id,
+          attorney_id,
           service_name,
           status,
           client:profiles!client_id(full_name, email, phone_e164),
-          artisan:providers!bookings_provider_id_fkey(id, name)
+          artisan:providers!bookings_attorney_id_fkey(id, name)
         `)
         .eq('id', bookingId)
         .single()
@@ -146,15 +146,15 @@ export async function GET(request: Request) {
 
       return NextResponse.json(
         createSuccessResponse({
-          artisanName: getArtisanDisplayName(typedBooking.artisan),
-          serviceName: typedBooking.service_name || 'Service',
+          attorneyName: getAttorneyDisplayName(typedBooking.artisan),
+          specialtyName: typedBooking.service_name || 'Service',
           alreadyReviewed: !!existingReview,
         })
       )
     }
 
     // Get published reviews for an artisan (only status = 'published')
-    if (artisanId) {
+    if (attorneyId) {
       const { data: reviews, error } = await supabase
         .from('reviews')
         .select(`
@@ -167,7 +167,7 @@ export async function GET(request: Request) {
           artisan_response,
           artisan_responded_at
         `)
-        .eq('artisan_id', artisanId)
+        .eq('attorney_id', attorneyId)
         .eq('status', 'published')
         .order('created_at', { ascending: false })
 
@@ -212,7 +212,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      createErrorResponse(ErrorCode.VALIDATION_ERROR, 'bookingId ou artisanId requis'),
+      createErrorResponse(ErrorCode.VALIDATION_ERROR, 'bookingId ou attorneyId requis'),
       { status: 400 }
     )
   } catch (error) {
@@ -277,7 +277,7 @@ export async function POST(request: Request) {
       .from('bookings')
       .select(`
         id,
-        provider_id,
+        attorney_id,
         status,
         client:profiles!client_id(full_name, email, phone_e164)
       `)
@@ -326,7 +326,7 @@ export async function POST(request: Request) {
       .from('reviews')
       .insert({
         booking_id: booking.id,
-        artisan_id: booking.provider_id,
+        attorney_id: booking.attorney_id,
         client_name: clientInfo.name,
         client_email: clientInfo.email,
         rating,
@@ -348,32 +348,32 @@ export async function POST(request: Request) {
     }
 
     // Update artisan's average rating (non-blocking)
-    updateArtisanRating(supabase, booking.provider_id).catch((err) => logger.error('Update rating failed', err))
+    updateArtisanRating(supabase, booking.attorney_id).catch((err) => logger.error('Update rating failed', err))
 
     // Revalidation on-demand des pages affectées (non-bloquant)
     try {
-      const { data: providerData } = await supabase
-        .from('providers')
+      const { data: attorneyData } = await supabase
+        .from('attorneys')
         .select('specialty, address_city, slug, stable_id')
-        .eq('id', booking.provider_id)
+        .eq('id', booking.attorney_id)
         .single()
 
-      if (providerData) {
-        const serviceSlug = slugify(providerData.specialty || 'artisan')
-        const locationSlug = slugify(providerData.address_city || 'france')
-        const publicId = providerData.slug || providerData.stable_id
+      if (attorneyData) {
+        const specialtySlug = slugify(attorneyData.specialty || 'artisan')
+        const locationSlug = slugify(attorneyData.address_city || 'france')
+        const publicId = attorneyData.slug || attorneyData.stable_id
 
         // Page profil artisan
         if (publicId) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+          revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
         }
         // Page avis ville
-        revalidatePath(`/avis/${serviceSlug}/${locationSlug}`, 'page')
+        revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
         // Listing ville
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+        revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
 
         logger.info('Revalidated paths after review submission', {
-          providerId: booking.provider_id,
+          attorneyId: booking.attorney_id,
           reviewId: review.id,
         })
       }
@@ -437,11 +437,11 @@ function detectFraudIndicators(comment: string, rating: number): string[] {
 }
 
 // Update artisan's average rating (using ALL real reviews, not just published)
-async function updateArtisanRating(supabase: SupabaseClientType, artisanId: string) {
+async function updateArtisanRating(supabase: SupabaseClientType, attorneyId: string) {
   const { data: reviews } = await supabase
     .from('reviews')
     .select('rating')
-    .eq('artisan_id', artisanId)
+    .eq('attorney_id', attorneyId)
     // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
 
   if (reviews && reviews.length > 0) {
@@ -453,6 +453,6 @@ async function updateArtisanRating(supabase: SupabaseClientType, artisanId: stri
         average_rating: Math.round(avgRating * 10) / 10,
         review_count: reviews.length,
       })
-      .eq('id', artisanId)
+      .eq('id', attorneyId)
   }
 }

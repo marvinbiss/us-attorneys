@@ -70,6 +70,8 @@ export interface Provider {
   team_size?: number
   services_offered?: string[]
   bio?: string
+  certifications?: string[]
+  avatar_url?: string | null
   // GUARD: Do NOT add is_premium, trust_badge, trust_score here.
   // Legacy fields live in src/types/legacy/ (LegacyProvider).
   // Relations
@@ -79,7 +81,7 @@ export interface Provider {
 
 export interface ProviderService {
   id: string
-  provider_id: string
+  attorney_id: string
   service_id: string
   experience_years?: number
   is_primary: boolean
@@ -93,7 +95,7 @@ export interface ProviderService {
 
 export interface ProviderLocation {
   id: string
-  provider_id: string
+  attorney_id: string
   location_id: string
   radius_km?: number
   is_primary: boolean
@@ -105,7 +107,7 @@ export interface ProviderLocation {
 
 export interface Review {
   id: string
-  provider_id: string
+  attorney_id: string
   author_name?: string
   rating: number
   comment?: string
@@ -118,9 +120,9 @@ export interface Review {
 }
 
 // Props pour les composants
-export interface ProviderCardProps {
+export interface AttorneyCardProps {
   provider: Provider
-  serviceSlug: string
+  specialtySlug: string
   locationSlug: string
 }
 
@@ -151,12 +153,12 @@ export interface BookingSlot {
   start_time: string
   end_time: string
   is_available: boolean
-  provider_id?: string
+  attorney_id?: string
 }
 
 export interface Booking {
   id: string
-  provider_id: string
+  attorney_id: string
   client_id?: string
   client_email: string
   client_name: string
@@ -184,7 +186,7 @@ export interface CityData {
   city: string
   name?: string
   postal_code?: string
-  provider_count?: number
+  attorney_count?: number
   latitude?: number
   longitude?: number
 }

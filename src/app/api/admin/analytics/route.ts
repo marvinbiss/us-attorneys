@@ -76,7 +76,7 @@ export async function GET(request: Request) {
       fetchAllBatched((from, to) => {
         let q = supabase
           .from('analytics_events')
-          .select('provider_id, event_type, created_at, source, providers!inner(name, address_city, slug, stable_id, specialty)')
+          .select('attorney_id, event_type, created_at, source, providers!inner(name, address_city, slug, stable_id, specialty)')
           .neq('event_type', 'page_view')
           .order('created_at', { ascending: false })
           .range(from, to)
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
       (() => {
         let q = supabase
           .from('analytics_events')
-          .select('id, provider_id, event_type, source, created_at, metadata, providers!inner(name, address_city, slug, stable_id, specialty)')
+          .select('id, attorney_id, event_type, source, created_at, metadata, providers!inner(name, address_city, slug, stable_id, specialty)')
           .neq('event_type', 'page_view')
           .order('created_at', { ascending: false })
           .range(feedOffset, feedOffset + FEED_PER_PAGE - 1)
@@ -175,12 +175,12 @@ export async function GET(request: Request) {
     }>()
 
     for (const event of events) {
-      if (!event.provider_id) continue
+      if (!event.attorney_id) continue
 
-      if (!providerMap.has(event.provider_id)) {
+      if (!providerMap.has(event.attorney_id)) {
         const p = event.providers as unknown as ProviderInfo
-        providerMap.set(event.provider_id, {
-          id: event.provider_id,
+        providerMap.set(event.attorney_id, {
+          id: event.attorney_id,
           name: p?.name || 'Inconnu',
           city: p?.address_city || '',
           specialty: p?.specialty || '',
@@ -193,7 +193,7 @@ export async function GET(request: Request) {
         })
       }
 
-      const entry = providerMap.get(event.provider_id)!
+      const entry = providerMap.get(event.attorney_id)!
       if (event.event_type === 'artisan_profile_view') entry.views++
       else if (event.event_type === 'phone_reveal') entry.reveals++
       else if (event.event_type === 'phone_click') entry.clicks++
@@ -224,9 +224,9 @@ export async function GET(request: Request) {
         type: e.event_type,
         source: e.source,
         date: e.created_at,
-        providerName: p?.name || 'Inconnu',
+        attorneyName: p?.name || 'Inconnu',
         providerCity: p?.address_city || '',
-        providerSlug: p?.slug || '',
+        attorneySlug: p?.slug || '',
         providerStableId: p?.stable_id || '',
         providerSpecialty: p?.specialty || '',
         url: meta?.url || '',

@@ -250,12 +250,12 @@ export default function AdminDashboard() {
 
         {/* Estimation Leads Widget */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between p-6 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 gap-3 border-b border-gray-100">
             <div className="flex items-center gap-3">
               <MessageSquare className="w-5 h-5 text-emerald-600" />
               <h3 className="font-semibold text-gray-900">Leads Estimation IA</h3>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               {!isLoading && (
                 <>
                   <span className="text-sm text-gray-500">
@@ -292,7 +292,7 @@ export default function AdminDashboard() {
           ) : (
             <div className="divide-y divide-gray-50">
               {data?.estimationLeads?.recent?.map((lead) => (
-                <div key={lead.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors">
+                <div key={lead.id} className="flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-gray-50 transition-colors gap-3">
                   <div className="flex items-center gap-4 min-w-0">
                     <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-medium ${
                       lead.source === 'chat' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'

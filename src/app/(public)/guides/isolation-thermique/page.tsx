@@ -170,11 +170,11 @@ const prixParTravaux = [
 ]
 
 const services = [
-  { label: "Isolation thermique", href: "/services/isolation-thermique", icon: Shield },
-  { label: "Façadier", href: "/services/facadier", icon: Building2 },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Plâtrier", href: "/services/platrier", icon: Hammer },
-  { label: "Rénovation énergétique", href: "/services/renovation-energetique", icon: Leaf },
+  { label: "Isolation thermique", href: "/practice-areas/isolation-thermique", icon: Shield },
+  { label: "Façadier", href: "/practice-areas/facadier", icon: Building2 },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Plâtrier", href: "/practice-areas/platrier", icon: Hammer },
+  { label: "Rénovation énergétique", href: "/practice-areas/renovation-energetique", icon: Leaf },
 ]
 
 const faqItems = [
@@ -569,14 +569,14 @@ export default function IsolationThermiquePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/isolation-thermique"
+                href="/practice-areas/isolation-thermique"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un artisan RGE"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

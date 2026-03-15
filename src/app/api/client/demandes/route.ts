@@ -35,7 +35,7 @@ export async function GET() {
           valid_until,
           status,
           created_at,
-          provider:providers!provider_id(id, name)
+          provider:providers!attorney_id(id, name)
         )
       `)
       .eq('client_id', user.id)

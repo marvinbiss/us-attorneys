@@ -23,9 +23,9 @@ interface TimeSlot {
 }
 
 interface BookingCalendarProps {
-  artisanId: string
-  artisanName: string
-  serviceName: string
+  attorneyId: string
+  attorneyName: string
+  specialtyName: string
   onBookingComplete?: (booking: BookingData) => void
 }
 
@@ -49,9 +49,9 @@ function getDaysInMonth(year: number, month: number) {
 }
 
 export default function BookingCalendar({
-  artisanId,
-  artisanName,
-  serviceName,
+  attorneyId,
+  attorneyName,
+  specialtyName,
   onBookingComplete,
 }: BookingCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -87,7 +87,7 @@ export default function BookingCalendar({
     setError(null)
     try {
       const monthStr = `${year}-${String(month + 1).padStart(2, '0')}-01`
-      const response = await fetch(`/api/bookings?artisanId=${artisanId}&month=${monthStr}`)
+      const response = await fetch(`/api/bookings?attorneyId=${attorneyId}&month=${monthStr}`)
 
       if (!response.ok) {
         throw new Error('Erreur lors du chargement des disponibilités')
@@ -101,7 +101,7 @@ export default function BookingCalendar({
     } finally {
       setIsLoadingSlots(false)
     }
-  }, [artisanId])
+  }, [attorneyId])
 
   // Load slots when component mounts or month changes
   useEffect(() => {
@@ -142,12 +142,12 @@ export default function BookingCalendar({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          artisanId,
+          attorneyId,
           slotId: selectedSlot.id,
           clientName: formData.clientName,
           clientPhone: formData.clientPhone,
           clientEmail: formData.clientEmail,
-          serviceDescription: formData.message || serviceName,
+          serviceDescription: formData.message || specialtyName,
         }),
       })
 
@@ -183,7 +183,7 @@ export default function BookingCalendar({
           Réservation confirmée !
         </h3>
         <p className="text-gray-600 mb-6">
-          Votre rendez-vous avec {artisanName} est confirmé.
+          Votre rendez-vous avec {attorneyName} est confirmé.
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
@@ -205,7 +205,7 @@ export default function BookingCalendar({
           <div className="flex items-center gap-3">
             <User className="w-5 h-5 text-blue-600" />
             <span className="font-medium text-gray-900">
-              {serviceName}
+              {specialtyName}
             </span>
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function BookingCalendar({
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
-        <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
+        <p className="text-blue-100 text-sm">{attorneyName} - {specialtyName}</p>
       </div>
 
       {step === 'calendar' && (
@@ -466,7 +466,7 @@ export default function BookingCalendar({
           <div className="flex items-start gap-2 mt-4 p-3 bg-yellow-50 rounded-lg">
             <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-yellow-700">
-              En confirmant, vous acceptez d'être contacté par {artisanName} pour confirmer les détails du rendez-vous.
+              En confirmant, vous acceptez d'être contacté par {attorneyName} pour confirmer les détails du rendez-vous.
             </p>
           </div>
 

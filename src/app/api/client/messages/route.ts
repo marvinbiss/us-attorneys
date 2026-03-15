@@ -17,7 +17,7 @@ const messagesQuerySchema = z.object({
 // POST request schema
 const sendMessageSchema = z.object({
   conversation_id: z.string().uuid().optional().nullable(),
-  provider_id: z.string().uuid().optional().nullable(),
+  attorney_id: z.string().uuid().optional().nullable(),
   content: z.string().min(1).max(5000),
 })
 
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
       // Verify conversation belongs to this client
       const { data: conversation } = await supabase
         .from('conversations')
-        .select('id, client_id, provider_id')
+        .select('id, client_id, attorney_id')
         .eq('id', conversationId)
         .eq('client_id', user.id)
         .single()
@@ -97,11 +97,11 @@ export async function GET(request: Request) {
       .select(`
         id,
         client_id,
-        provider_id,
+        attorney_id,
         status,
         created_at,
         booking_id,
-        provider:providers!provider_id(id, name),
+        provider:providers!attorney_id(id, name),
         booking:bookings!booking_id(service_name)
       `)
       .eq('client_id', user.id)
@@ -175,15 +175,15 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    const { conversation_id, provider_id, content } = result.data
+    const { conversation_id, attorney_id, content } = result.data
 
     let resolvedConversationId = conversation_id
 
     if (!resolvedConversationId) {
       // Try to find existing conversation or create one
-      if (!provider_id) {
+      if (!attorney_id) {
         return NextResponse.json(
-          { error: 'conversation_id ou provider_id requis' },
+          { error: 'conversation_id ou attorney_id requis' },
           { status: 400 }
         )
       }
@@ -192,7 +192,7 @@ export async function POST(request: Request) {
         .from('conversations')
         .select('id')
         .eq('client_id', user.id)
-        .eq('provider_id', provider_id)
+        .eq('attorney_id', attorney_id)
         .single()
 
       if (existingConv) {
@@ -200,7 +200,7 @@ export async function POST(request: Request) {
       } else {
         const { data: newConv, error: convError } = await supabase
           .from('conversations')
-          .insert({ client_id: user.id, provider_id })
+          .insert({ client_id: user.id, attorney_id })
           .select('id')
           .single()
 

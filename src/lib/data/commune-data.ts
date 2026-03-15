@@ -12,7 +12,7 @@ import { getCachedData, CACHE_TTL } from '@/lib/cache'
 // Types
 // ---------------------------------------------------------------------------
 
-export interface CommuneData {
+export interface LocationData {
   // Identity
   code_insee: string
   name: string
@@ -45,7 +45,7 @@ export interface CommuneData {
   description: string | null
 
   // Platform data
-  provider_count: number
+  attorney_count: number
 
   // SIRENE enrichment
   nb_artisans_btp: number | null
@@ -95,7 +95,7 @@ const COMMUNE_COLUMNS = [
   'population', 'densite_population',
   'revenu_median', 'prix_m2_moyen', 'nb_logements', 'part_maisons_pct',
   'climat_zone', 'nb_entreprises_artisanales', 'gentile', 'description',
-  'provider_count',
+  'attorney_count',
   'nb_artisans_btp', 'nb_artisans_rge',
   'pct_passoires_dpe', 'nb_dpe_total',
   'jours_gel_annuels', 'precipitation_annuelle',
@@ -114,9 +114,9 @@ const COMMUNE_COLUMNS = [
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
-export async function getCommuneBySlug(slug: string): Promise<CommuneData | null> {
+export async function getLocationBySlug(slug: string): Promise<LocationData | null> {
   if (IS_BUILD) return null // Skip DB during build — ISR will populate on first visit
-  return getCachedData<CommuneData | null>(
+  return getCachedData<LocationData | null>(
     `commune:${slug}`,
     async () => {
       try {
@@ -125,14 +125,14 @@ export async function getCommuneBySlug(slug: string): Promise<CommuneData | null
         const supabase = createAdminClient()
 
         const { data, error } = await supabase
-          .from('communes')
+          .from('locations_us')
           .select(COMMUNE_COLUMNS)
           .eq('slug', slug)
           .eq('is_active', true)
           .single()
 
         if (error || !data) return null
-        return data as unknown as CommuneData
+        return data as unknown as LocationData
       } catch {
         // DB unavailable or table doesn't exist yet — graceful fallback
         return null
@@ -147,7 +147,7 @@ export async function getCommuneBySlug(slug: string): Promise<CommuneData | null
 // Helper: check if commune has enrichment data (beyond basic demographics)
 // ---------------------------------------------------------------------------
 
-export function hasEnrichmentData(commune: CommuneData): boolean {
+export function hasEnrichmentData(commune: LocationData): boolean {
   return !!(
     commune.nb_artisans_btp ||
     commune.nb_artisans_rge ||
@@ -159,7 +159,7 @@ export function hasEnrichmentData(commune: CommuneData): boolean {
 }
 
 /** Check if commune has Géorisques risk data */
-export function hasGeorisquesData(commune: CommuneData): boolean {
+export function hasGeorisquesData(commune: LocationData): boolean {
   return !!(
     commune.risque_inondation ||
     commune.risque_argile ||
@@ -170,7 +170,7 @@ export function hasGeorisquesData(commune: CommuneData): boolean {
 }
 
 /** Check if commune has at least basic demographic data */
-export function hasDemographicData(commune: CommuneData): boolean {
+export function hasDemographicData(commune: LocationData): boolean {
   return !!(
     commune.revenu_median ||
     commune.prix_m2_moyen ||

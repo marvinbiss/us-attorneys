@@ -110,7 +110,7 @@ export function getRelatedServiceLinks(
       if (term.includes(keyword) && !addedSlugs.has(service.slug)) {
         links.push({
           text: `Trouver un ${service.label} qualifié`,
-          href: `/services/${service.slug}`,
+          href: `/practice-areas/${service.slug}`,
         })
         // Add top-city variants for the first matched service only
         if (!firstServiceSlug) {
@@ -118,7 +118,7 @@ export function getRelatedServiceLinks(
           for (const city of TOP_CITIES) {
             links.push({
               text: `${service.label.charAt(0).toUpperCase() + service.label.slice(1)} à ${city.name}`,
-              href: `/services/${service.slug}/${city.slug}`,
+              href: `/practice-areas/${service.slug}/${city.slug}`,
             })
           }
         }
@@ -129,16 +129,16 @@ export function getRelatedServiceLinks(
 
   // Always add devis link for Tarifs articles
   if (category === 'Tarifs') {
-    links.push({ text: 'Demander un devis gratuit', href: '/devis' })
+    links.push({ text: 'Demander un devis gratuit', href: '/quotes' })
   }
 
   // Add general links based on category
   if (category === 'Réglementation' || category === 'Aides & Subventions') {
-    links.push({ text: 'Comment ça marche ?', href: '/comment-ca-marche' })
+    links.push({ text: 'Comment ça marche ?', href: '/how-it-works' })
   }
 
   if (category === 'Fiches métier') {
-    links.push({ text: 'Devenir artisan partenaire', href: '/inscription-artisan' })
+    links.push({ text: 'Devenir artisan partenaire', href: '/register-attorney' })
   }
 
   // Add urgence link when relevant
@@ -147,7 +147,7 @@ export function getRelatedServiceLinks(
     slug.includes('urgence') ||
     slug.includes('depannage')
   ) {
-    links.push({ text: 'Artisan en urgence', href: '/urgence' })
+    links.push({ text: 'Artisan en urgence', href: '/emergency' })
   }
 
   // Limit to 5 links max

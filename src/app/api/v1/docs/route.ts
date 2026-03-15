@@ -44,14 +44,14 @@ export async function GET() {
 
     <div class="warn">
       <strong>Attribution obligatoire</strong> — Toute utilisation des données de cette API doit inclure un lien visible vers
-      <a href="${SITE_URL}/barometre">${SITE_URL}/barometre</a> avec la mention
+      <a href="${SITE_URL}/price-index">${SITE_URL}/price-index</a> avec la mention
       « Source : ${SITE_NAME} — Baromètre des Artisans ».
     </div>
 
     <h2>Endpoints</h2>
 
     <div class="endpoint">
-      <p><span class="badge badge-get">GET</span> <span class="endpoint-url">/api/v1/tarifs</span></p>
+      <p><span class="badge badge-get">GET</span> <span class="endpoint-url">/api/v1/pricing</span></p>
       <p>Statistiques par métier, optionnellement filtré par localisation.</p>
       <h3>Paramètres</h3>
       <table>
@@ -62,7 +62,7 @@ export async function GET() {
         <tr><td><code>region</code></td><td>string</td><td>Non</td><td>Slug de la région (ex: <code>ile-de-france</code>)</td></tr>
       </table>
       <h3>Exemple</h3>
-      <pre><code>curl "${SITE_URL}/api/v1/tarifs?metier=plombier&ville=paris"</code></pre>
+      <pre><code>curl "${SITE_URL}/api/v1/pricing?metier=plombier&ville=paris"</code></pre>
       <pre><code>{
   "success": true,
   "data": [{
@@ -76,7 +76,7 @@ export async function GET() {
   }],
   "attribution": {
     "text": "Source : ${SITE_NAME} — Baromètre des Artisans",
-    "url": "${SITE_URL}/barometre"
+    "url": "${SITE_URL}/price-index"
   }
 }</code></pre>
     </div>

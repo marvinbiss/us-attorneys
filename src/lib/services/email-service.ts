@@ -17,7 +17,7 @@ export interface EmailOptions {
   from?: string
 }
 
-const DEFAULT_FROM = 'ServicesArtisans <noreply@servicesartisans.fr>'
+const DEFAULT_FROM = 'ServicesArtisans <noreply@us-attorneys.com>'
 
 /**
  * Send an email using Resend API
@@ -99,7 +99,7 @@ export const emailTemplates = {
                 <li>Demander des devis gratuits</li>
                 <li>Réserver directement en ligne</li>
               </ul>
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/recherche" class="button">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/search" class="button">
                 Trouver un artisan
               </a>
             </div>
@@ -159,7 +159,7 @@ export const emailTemplates = {
                 <p style="margin-left: 40px;">Définissez vos disponibilités pour recevoir des demandes</p>
               </div>
 
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/espace-artisan" class="button">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/attorney-dashboard" class="button">
                 Accéder à mon espace
               </a>
             </div>
@@ -173,7 +173,7 @@ export const emailTemplates = {
   }),
 
   // New booking notification
-  newBooking: (artisanName: string, clientName: string, service: string, date: string): EmailTemplate => ({
+  newBooking: (attorneyName: string, clientName: string, service: string, date: string): EmailTemplate => ({
     subject: `Nouvelle réservation de ${clientName}`,
     html: `
       <!DOCTYPE html>
@@ -194,7 +194,7 @@ export const emailTemplates = {
               <h1>Nouvelle réservation !</h1>
             </div>
             <div class="content">
-              <p>Bonjour ${artisanName},</p>
+              <p>Bonjour ${attorneyName},</p>
               <p>Vous avez reçu une nouvelle demande de réservation.</p>
 
               <div class="info">
@@ -205,7 +205,7 @@ export const emailTemplates = {
 
               <p>Répondez rapidement pour augmenter vos chances de conversion !</p>
 
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/espace-artisan/demandes" class="button">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/attorney-dashboard/demandes" class="button">
                 Voir la demande
               </a>
             </div>
@@ -216,8 +216,8 @@ export const emailTemplates = {
   }),
 
   // Review request
-  reviewRequest: (clientName: string, artisanName: string, bookingId: string): EmailTemplate => ({
-    subject: `Donnez votre avis sur ${artisanName}`,
+  reviewRequest: (clientName: string, attorneyName: string, bookingId: string): EmailTemplate => ({
+    subject: `Donnez votre avis sur ${attorneyName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -238,13 +238,13 @@ export const emailTemplates = {
             </div>
             <div class="content">
               <p>Bonjour ${clientName},</p>
-              <p>Votre intervention avec <strong>${artisanName}</strong> est terminée.</p>
+              <p>Votre intervention avec <strong>${attorneyName}</strong> est terminée.</p>
               <p>Prenez 2 minutes pour laisser un avis et aider d'autres clients à choisir.</p>
 
               <div class="stars">⭐⭐⭐⭐⭐</div>
 
               <p style="text-align: center;">
-                <a href="${process.env.NEXT_PUBLIC_APP_URL}/donner-avis/${bookingId}" class="button">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL}/leave-review/${bookingId}" class="button">
                   Donner mon avis
                 </a>
               </p>

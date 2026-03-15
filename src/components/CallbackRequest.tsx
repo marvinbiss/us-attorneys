@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { Phone, CheckCircle, Loader2 } from 'lucide-react'
-import { trackEvent } from '@/lib/analytics/tracking'
+import { trackEvent, trackConversion } from '@/lib/analytics/tracking'
 
 interface CallbackRequestProps {
-  serviceSlug?: string
+  specialtySlug?: string
   cityName?: string
 }
 
@@ -16,7 +16,7 @@ function isValidFrenchPhone(phone: string): boolean {
   return false
 }
 
-export default function CallbackRequest({ serviceSlug, cityName }: CallbackRequestProps) {
+export default function CallbackRequest({ specialtySlug, cityName }: CallbackRequestProps) {
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -37,11 +37,11 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
 
     setLoading(true)
     try {
-      const res = await fetch('/api/devis', {
+      const res = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          service: serviceSlug || 'general',
+          service: specialtySlug || 'general',
           ville: cityName || '',
           telephone: phone.trim(),
           nom: '',
@@ -57,11 +57,12 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
 
       trackEvent('devis_submitted', {
         source: 'callback_request',
-        service: serviceSlug || '',
+        service: specialtySlug || '',
         city: cityName || '',
         value: 30,
         currency: 'EUR',
       })
+      trackConversion('generate_lead', 30)
 
       setSuccess(true)
     } catch {

@@ -181,7 +181,7 @@ describe('Notifications V1 — Lead Event Processor', () => {
   })
 
   it('does not expose provider IDs in client-facing notification messages', () => {
-    // Notification specs for client should not contain raw provider_id references
+    // Notification specs for client should not contain raw attorney_id references
     // The processor builds notification messages without exposing internal IDs
     expect(processorCode).toContain("type: 'lead_created'")
     expect(processorCode).toContain("type: 'quote_received'")

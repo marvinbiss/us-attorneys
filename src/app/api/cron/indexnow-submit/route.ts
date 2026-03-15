@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
-import { services } from '@/lib/data/france'
+import { services } from '@/lib/data/usa'
 
 const TOP_CITIES = ['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille']
 
@@ -22,10 +22,10 @@ export async function GET(request: Request) {
 
   // Top services x top cities
   for (const service of services.slice(0, 10)) {
-    urls.push(`${SITE_URL}/services/${service.slug}`)
+    urls.push(`${SITE_URL}/practice-areas/${service.slug}`)
     for (const city of TOP_CITIES) {
-      urls.push(`${SITE_URL}/services/${service.slug}/${city}`)
-      urls.push(`${SITE_URL}/devis/${service.slug}/${city}`)
+      urls.push(`${SITE_URL}/practice-areas/${service.slug}/${city}`)
+      urls.push(`${SITE_URL}/quotes/${service.slug}/${city}`)
     }
   }
 

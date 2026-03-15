@@ -475,11 +475,11 @@ export const NATURAL_TERMS: Record<string, NaturalTerms> = {
 }
 
 /** Get natural terms for a service slug, with safe fallback */
-export function getNaturalTerm(serviceSlug: string): NaturalTerms {
-  return NATURAL_TERMS[serviceSlug] ?? {
-    singular: serviceSlug.replace(/-/g, ' '),
-    plural: serviceSlug.replace(/-/g, ' ') + 's',
-    article: `un ${serviceSlug.replace(/-/g, ' ')}`,
+export function getNaturalTerm(specialtySlug: string): NaturalTerms {
+  return NATURAL_TERMS[specialtySlug] ?? {
+    singular: specialtySlug.replace(/-/g, ' '),
+    plural: specialtySlug.replace(/-/g, ' ') + 's',
+    article: `un ${specialtySlug.replace(/-/g, ' ')}`,
     feminin: false,
     synonyms: [],
     intentVerbs: SHARED_VERBS,

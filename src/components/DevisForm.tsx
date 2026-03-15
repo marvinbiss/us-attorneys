@@ -2,9 +2,9 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
-import { services, villes } from '@/lib/data/france'
+import { services, cities } from '@/lib/data/usa'
 import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check, MapPin } from 'lucide-react'
-import { trackEvent } from '@/lib/analytics/tracking'
+import { trackEvent, trackConversion } from '@/lib/analytics/tracking'
 
 interface FormData {
   service: string
@@ -69,7 +69,7 @@ function isValidFrenchPhone(phone: string): boolean {
 
 const STORAGE_KEY = 'sa:devis-draft'
 
-const stepLabels = ['Service', 'Ville', 'Projet', 'Contact']
+const stepLabels = ['Service', 'City', 'Projet', 'Contact']
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
   const progress = Math.round(((currentStep - 1) / 3) * 100)
@@ -210,10 +210,10 @@ export default function DevisForm({
   }, [formData, step, villeQuery, selectedVillePostal, submitted])
 
   const filteredVilles = villeQuery.length >= 2
-    ? villes
+    ? cities
         .filter((v) =>
           v.name.toLowerCase().includes(villeQuery.toLowerCase()) ||
-          v.codePostal.startsWith(villeQuery)
+          v.zipCode.startsWith(villeQuery)
         )
         .slice(0, 8)
     : []
@@ -322,7 +322,7 @@ export default function DevisForm({
     setSubmitError(null)
 
     try {
-      const res = await fetch('/api/devis', {
+      const res = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -351,6 +351,11 @@ export default function DevisForm({
         source: 'devis_form',
         value: 45,
         currency: 'EUR',
+      })
+      trackConversion('generate_lead', 45, 'EUR', {
+        event_label: `devis_${formData.service}_${formData.ville}`,
+        service: formData.service,
+        city: formData.ville,
       })
       setSubmitted(true)
       localStorage.removeItem(STORAGE_KEY)
@@ -489,7 +494,7 @@ export default function DevisForm({
         )}
       </div>
 
-      {/* Step 2: Ville */}
+      {/* Step 2: City */}
       <div
         className={`transition-all duration-300 ${
           step === 2 ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'
@@ -506,7 +511,7 @@ export default function DevisForm({
 
             <div>
               <label htmlFor="ville" className="block text-sm font-semibold text-slate-700 mb-2">
-                Ville <span className="text-red-500">*</span>
+                City <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
@@ -546,13 +551,13 @@ export default function DevisForm({
                             e.preventDefault()
                             updateField('ville', v.name)
                             setVilleQuery(v.name)
-                            setSelectedVillePostal(v.codePostal)
+                            setSelectedVillePostal(v.zipCode)
                             setShowVilleSuggestions(false)
                           }}
                         >
                           <span className="font-medium text-slate-900">{v.name}</span>
                           <span className="text-gray-400 ml-2">
-                            ({v.departement}, {v.codePostal})
+                            ({v.stateName}, {v.zipCode})
                           </span>
                         </button>
                       </li>

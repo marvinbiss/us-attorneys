@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const includeInactive = searchParams.get('includeInactive') === 'true'
 
     let query = supabase
-      .from('services')
+      .from('specialties')
       .select('id, name, slug, description, icon, category, is_active, sort_order, created_at')
       .order('name', { ascending: true })
 
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       .replace(/(^-|-$)/g, '')
 
     const { data, error } = await supabase
-      .from('services')
+      .from('specialties')
       .insert({
         name,
         slug,

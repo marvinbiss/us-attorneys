@@ -39,7 +39,7 @@ export default function TrustGuarantee({ variant = 'banner' }: TrustGuaranteePro
             {g.title}
           </span>
         ))}
-        <Link href="/garantie" className="text-blue-600 hover:underline">
+        <Link href="/guarantee" className="text-blue-600 hover:underline">
           En savoir plus
         </Link>
       </div>
@@ -69,7 +69,7 @@ export default function TrustGuarantee({ variant = 'banner' }: TrustGuaranteePro
       </div>
       <div className="mt-4 text-center">
         <Link
-          href="/garantie"
+          href="/guarantee"
           className="text-sm text-green-700 hover:text-green-900 font-medium hover:underline"
         >
           Découvrir notre engagement qualité

@@ -285,7 +285,7 @@ function extractFAQFromBlocks(blocks: ParsedBlock[]): { question: string; answer
     const block = blocks[i]
 
     // Detect FAQ section start
-    if (block.type === 'h2' && /questions?\s+fr[eé]quentes?/i.test(block.text)) {
+    if (block.type === 'h2' && /faq?\s+fr[eé]quentes?/i.test(block.text)) {
       inFaqSection = true
       continue
     }
@@ -588,12 +588,12 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const blocks = parseContentBlocks(article.content)
   const tocItems = extractTocItems(blocks)
 
-  // Derive contextual devis link from service links (first /services/X match -> /devis/X)
+  // Derive contextual devis link from service links (first /practice-areas/X match -> /quotes/X)
   const firstServiceLink = getRelatedServiceLinks(slug, article.category, article.tags)
-    .find((l) => l.href.startsWith('/services/'))
+    .find((l) => l.href.startsWith('/practice-areas/'))
   const devisHref = firstServiceLink
-    ? `/devis/${firstServiceLink.href.split('/services/')[1].split('/')[0]}`
-    : '/devis'
+    ? `/quotes/${firstServiceLink.href.split('/practice-areas/')[1].split('/')[0]}`
+    : '/quotes'
 
   // Index after which to insert mid-article CTA (after ~2nd h2 section)
   const MID_ARTICLE_CTA_AFTER_SECTION = 2
@@ -1093,10 +1093,10 @@ export default async function BlogArticlePage({ params }: PageProps) {
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+            <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
               Notre politique des avis
             </Link>
             <Link href="/mediation" className="text-blue-600 hover:text-blue-800">

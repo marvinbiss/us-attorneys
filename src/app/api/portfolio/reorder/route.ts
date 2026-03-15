@@ -65,7 +65,7 @@ export async function PUT(request: NextRequest) {
     const { data: existingItems, error: fetchError } = await supabase
       .from('portfolio_items')
       .select('id')
-      .eq('artisan_id', user.id)
+      .eq('attorney_id', user.id)
       .in('id', itemIds)
 
     if (fetchError) {

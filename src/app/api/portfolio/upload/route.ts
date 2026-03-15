@@ -19,7 +19,7 @@ const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50MB
 
 export const dynamic = 'force-dynamic'
 
-function generateFilePath(artisanId: string, fileName: string): string {
+function generateFilePath(attorneyId: string, fileName: string): string {
   const timestamp = Date.now()
   const randomStr = Math.random().toString(36).substring(2, 8)
   const extension = fileName.split('.').pop()?.toLowerCase() || 'jpg'
@@ -28,7 +28,7 @@ function generateFilePath(artisanId: string, fileName: string): string {
     .replace(/[^a-zA-Z0-9-_]/g, '_')
     .substring(0, 50)
 
-  return `${artisanId}/${timestamp}-${randomStr}-${sanitizedName}.${extension}`
+  return `${attorneyId}/${timestamp}-${randomStr}-${sanitizedName}.${extension}`
 }
 
 export async function POST(request: NextRequest) {

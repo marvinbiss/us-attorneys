@@ -29,12 +29,12 @@ export default function LogoutButton({ className = '' }: LogoutButtonProps) {
       localStorage.removeItem('refreshToken')
 
       // Redirect to login page
-      router.push('/connexion')
+      router.push('/login')
       router.refresh()
     } catch (error) {
       console.error('Logout error:', error)
       // Still redirect even on error
-      router.push('/connexion')
+      router.push('/login')
     }
   }
 

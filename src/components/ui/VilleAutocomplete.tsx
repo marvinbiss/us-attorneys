@@ -71,7 +71,7 @@ interface VilleAutocompleteProps {
 
 export function VilleAutocomplete({
   value = '',
-  placeholder = 'Ville ou code postal...',
+  placeholder = 'City ou code postal...',
   onSelect,
   onClear,
   showGeolocation = true,

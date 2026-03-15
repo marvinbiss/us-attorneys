@@ -127,7 +127,7 @@ export default function ContactsPage() {
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Téléphone</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ville</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">City</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
             </tr>
           </thead>

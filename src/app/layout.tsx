@@ -8,7 +8,7 @@ import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { getProviderCount } from '@/lib/data/stats'
+import { getAttorneyCount } from '@/lib/data/stats'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const inter = Inter({
@@ -32,10 +32,6 @@ const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
 })
 const ServiceWorkerRegistration = dynamic(
   () => import('@/components/ServiceWorkerRegistration'),
-  { ssr: false }
-)
-const CapacitorInit = dynamic(
-  () => import('@/components/CapacitorInit').then(mod => ({ default: mod.CapacitorInit })),
   { ssr: false }
 )
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
@@ -135,9 +131,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const artisanCount = await getProviderCount()
+  const attorneyCount = await getAttorneyCount()
   return (
-    <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
         <meta name="msapplication-TileColor" content="#E86B4B" />
@@ -181,7 +177,7 @@ export default async function RootLayout({
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         {/* Google Tag Manager */}
-        <Script id="gtm" strategy="lazyOnload">
+        <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -212,22 +208,8 @@ fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
 fbq('track', 'PageView');`}
           </Script>
         )}
-        {/* Google Ads Remarketing */}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && (
-          <Script
-            id="google-ads"
-            strategy="lazyOnload"
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}
-          />
-        )}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && (
-          <Script id="google-ads-config" strategy="lazyOnload">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');`}
-          </Script>
-        )}
+        {/* Contentsquare UX Analytics */}
+        <Script src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js" strategy="lazyOnload" />
         {/* Microsoft Clarity — chargé uniquement après consentement analytics (RGPD) via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
@@ -240,12 +222,11 @@ gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');`}
           >
             Aller au contenu principal
           </a>
-          <Header artisanCount={artisanCount} />
+          <Header attorneyCount={attorneyCount} />
           <main id="main-content" className="pb-16 md:pb-0">{children}</main>
           <Footer />
           <MobileBottomNav />
           <ServiceWorkerRegistration />
-          <CapacitorInit />
           <CookieConsent />
         </MobileMenuProvider>
       </body>

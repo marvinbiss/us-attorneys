@@ -20,7 +20,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
     setError('')
 
     try {
-      const response = await fetch(`/api/artisan/demandes/${quoteId}`, {
+      const response = await fetch(`/api/attorney/demandes/${quoteId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

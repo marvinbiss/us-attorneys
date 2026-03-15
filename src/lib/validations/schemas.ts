@@ -45,9 +45,9 @@ export const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, 'Format d\'heure inv
 // ============================================
 
 export const createBookingSchema = z.object({
-  artisanId: uuidSchema,
+  attorneyId: uuidSchema,
   slotId: uuidSchema,
-  serviceId: z.string().optional(),
+  specialtyId: z.string().optional(),
   clientName: nameSchema,
   clientPhone: phoneSchema,
   clientEmail: emailSchema,
@@ -63,7 +63,7 @@ export const updateBookingSchema = z.object({
 })
 
 export const getBookingsSchema = z.object({
-  artisanId: uuidSchema.optional(),
+  attorneyId: uuidSchema.optional(),
   clientEmail: emailSchema.optional(),
   status: z.enum(['pending', 'confirmed', 'cancelled', 'completed']).optional(),
   startDate: dateSchema.optional(),
@@ -84,7 +84,7 @@ export const createReviewSchema = z.object({
 })
 
 export const getReviewsSchema = z.object({
-  artisanId: uuidSchema.optional(),
+  attorneyId: uuidSchema.optional(),
   minRating: z.coerce.number().min(1).max(5).optional(),
   status: z.enum(['pending', 'published', 'rejected']).optional(),
   page: z.coerce.number().min(1).default(1),
@@ -158,7 +158,7 @@ export const createPaymentIntentSchema = z.object({
   amount: z.number().min(100).max(1000000), // centimes
   currency: z.enum(['eur']).default('eur'),
   bookingId: uuidSchema.optional(),
-  artisanId: uuidSchema,
+  attorneyId: uuidSchema,
   paymentType: z.enum(['full', 'deposit']).default('full'),
   depositPercentage: z.number().min(10).max(50).optional(),
 })
@@ -183,7 +183,7 @@ export const searchSchema = z.object({
 // ============================================
 
 export const createAvailabilitySchema = z.object({
-  artisanId: uuidSchema,
+  attorneyId: uuidSchema,
   date: dateSchema,
   slots: z.array(z.object({
     startTime: timeSchema,
@@ -193,7 +193,7 @@ export const createAvailabilitySchema = z.object({
 })
 
 export const getAvailabilitySchema = z.object({
-  artisanIds: z.string().transform((val) => val.split(',')),
+  attorneyIds: z.string().transform((val) => val.split(',')),
   startDate: dateSchema.optional(),
   days: z.coerce.number().min(1).max(30).default(5),
 })

@@ -212,9 +212,9 @@ const etapesChantier = [
 ]
 
 const services = [
-  { label: "Isolation thermique", href: "/services/isolation-thermique", icon: Thermometer },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Charpentier", href: "/services/charpentier", icon: Hammer },
+  { label: "Isolation thermique", href: "/practice-areas/isolation-thermique", icon: Thermometer },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Charpentier", href: "/practice-areas/charpentier", icon: Hammer },
 ]
 
 const faqItems = [
@@ -628,14 +628,14 @@ export default function IsolationComblesPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/isolation-thermique"
+                href="/practice-areas/isolation-thermique"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un artisan RGE"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

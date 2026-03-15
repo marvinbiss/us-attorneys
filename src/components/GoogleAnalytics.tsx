@@ -16,9 +16,9 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
-      <Script id="google-analytics" strategy="lazyOnload">
+      <Script id="google-analytics" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -33,6 +33,7 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
           gtag('set', 'ads_data_redaction', true);
           gtag('js', new Date());
           gtag('config', '${id}');
+          window.__GA_INITIALIZED = true;
           (function(){
             try {
               var p = localStorage.getItem('cookie_preferences');

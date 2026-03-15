@@ -306,10 +306,10 @@ export default function CookieConsent() {
 
             {/* Links */}
             <div className="mt-4 flex gap-4 text-xs text-gray-500">
-              <a href="/confidentialite" className="hover:text-blue-600 hover:underline">
+              <a href="/privacy" className="hover:text-blue-600 hover:underline">
                 Politique de confidentialité
               </a>
-              <a href="/mentions-legales" className="hover:text-blue-600 hover:underline">
+              <a href="/legal" className="hover:text-blue-600 hover:underline">
                 Mentions légales
               </a>
             </div>

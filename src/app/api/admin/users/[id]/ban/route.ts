@@ -61,7 +61,7 @@ export async function POST(
 
     // Si c'est un artisan, désactiver/réactiver également le provider
     await supabase
-      .from('providers')
+      .from('attorneys')
       .update({
         is_active: !isBanning,
         updated_at: new Date().toISOString(),

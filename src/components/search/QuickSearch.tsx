@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, Wrench, X } from 'lucide-react'
-import { services, villes, type Ville } from '@/lib/data/france'
+import { services, cities, type City } from '@/lib/data/usa'
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
 function normalizeText(text: string): string {
@@ -25,28 +25,28 @@ function formatPopulation(pop: string): string {
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
-function searchCities(query: string, limit = 5): Ville[] {
+function searchCities(query: string, limit = 5): City[] {
   if (!query || query.length < 1) return []
 
   const normalized = normalizeText(query)
 
-  const prefixMatches: Ville[] = []
-  const containsMatches: Ville[] = []
-  const postalMatches: Ville[] = []
+  const prefixMatches: City[] = []
+  const containsMatches: City[] = []
+  const postalMatches: City[] = []
 
-  for (const v of villes) {
+  for (const v of cities) {
     const normalizedName = normalizeText(v.name)
 
     if (normalizedName.startsWith(normalized)) {
       prefixMatches.push(v)
     } else if (normalizedName.includes(normalized)) {
       containsMatches.push(v)
-    } else if (v.codePostal.startsWith(query.trim())) {
+    } else if (v.zipCode.startsWith(query.trim())) {
       postalMatches.push(v)
     }
   }
 
-  const sortByPop = (a: Ville, b: Ville) => {
+  const sortByPop = (a: City, b: City) => {
     const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
     const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
     return popB - popA
@@ -86,8 +86,8 @@ type SuggestionType = 'service' | 'city' | 'combined'
 interface Suggestion {
   type: SuggestionType
   label: string
-  serviceSlug?: string
-  serviceName?: string
+  specialtySlug?: string
+  specialtyName?: string
   citySlug?: string
   cityName?: string
   cityDept?: string
@@ -140,11 +140,11 @@ function buildSuggestions(input: string): Suggestion[] {
         results.push({
           type: 'combined',
           label: `${bestServiceMatch.name} à ${city.name}`,
-          serviceSlug: bestServiceMatch.slug,
-          serviceName: bestServiceMatch.name,
+          specialtySlug: bestServiceMatch.slug,
+          specialtyName: bestServiceMatch.name,
           citySlug: city.slug,
           cityName: city.name,
-          cityDept: `${city.departement} (${city.departementCode})`,
+          cityDept: `${city.stateName} (${city.stateCode})`,
           cityPop: formatPopulation(city.population),
         })
       }
@@ -153,7 +153,7 @@ function buildSuggestions(input: string): Suggestion[] {
     // If no city part remaining, but service matched exactly with trailing space
     if (cityPart.length === 0 && input.endsWith(' ')) {
       // Show top cities for this service
-      const topCities = [...villes]
+      const topCities = [...cities]
         .sort((a, b) => {
           const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
           const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
@@ -165,11 +165,11 @@ function buildSuggestions(input: string): Suggestion[] {
         results.push({
           type: 'combined',
           label: `${bestServiceMatch.name} à ${city.name}`,
-          serviceSlug: bestServiceMatch.slug,
-          serviceName: bestServiceMatch.name,
+          specialtySlug: bestServiceMatch.slug,
+          specialtyName: bestServiceMatch.name,
           citySlug: city.slug,
           cityName: city.name,
-          cityDept: `${city.departement} (${city.departementCode})`,
+          cityDept: `${city.stateName} (${city.stateCode})`,
           cityPop: formatPopulation(city.population),
         })
       }
@@ -183,8 +183,8 @@ function buildSuggestions(input: string): Suggestion[] {
       results.unshift({
         type: 'service',
         label: bestServiceMatch.name,
-        serviceSlug: bestServiceMatch.slug,
-        serviceName: bestServiceMatch.name,
+        specialtySlug: bestServiceMatch.slug,
+        specialtyName: bestServiceMatch.name,
       })
     }
     return results.slice(0, 8)
@@ -198,8 +198,8 @@ function buildSuggestions(input: string): Suggestion[] {
     results.push({
       type: 'service',
       label: s.name,
-      serviceSlug: s.slug,
-      serviceName: s.name,
+      specialtySlug: s.slug,
+      specialtyName: s.name,
     })
   }
 
@@ -211,7 +211,7 @@ function buildSuggestions(input: string): Suggestion[] {
       label: c.name,
       citySlug: c.slug,
       cityName: c.name,
-      cityDept: `${c.departement} (${c.departementCode})`,
+      cityDept: `${c.stateName} (${c.stateCode})`,
       cityPop: formatPopulation(c.population),
     })
   }
@@ -242,11 +242,11 @@ function buildSuggestions(input: string): Suggestion[] {
               results.push({
                 type: 'combined',
                 label: `${service.name} à ${city.name}`,
-                serviceSlug: service.slug,
-                serviceName: service.name,
+                specialtySlug: service.slug,
+                specialtyName: service.name,
                 citySlug: city.slug,
                 cityName: city.name,
-                cityDept: `${city.departement} (${city.departementCode})`,
+                cityDept: `${city.stateName} (${city.stateCode})`,
                 cityPop: formatPopulation(city.population),
               })
             }
@@ -329,12 +329,12 @@ export default function QuickSearch() {
     setShowDropdown(false)
     setInput('')
 
-    if (suggestion.type === 'combined' && suggestion.serviceSlug && suggestion.citySlug) {
-      router.push(`/services/${suggestion.serviceSlug}/${suggestion.citySlug}`)
-    } else if (suggestion.type === 'service' && suggestion.serviceSlug) {
-      router.push(`/services/${suggestion.serviceSlug}`)
+    if (suggestion.type === 'combined' && suggestion.specialtySlug && suggestion.citySlug) {
+      router.push(`/practice-areas/${suggestion.specialtySlug}/${suggestion.citySlug}`)
+    } else if (suggestion.type === 'service' && suggestion.specialtySlug) {
+      router.push(`/practice-areas/${suggestion.specialtySlug}`)
     } else if (suggestion.type === 'city' && suggestion.citySlug) {
-      router.push(`/villes/${suggestion.citySlug}`)
+      router.push(`/cities/${suggestion.citySlug}`)
     }
   }, [router])
 
@@ -349,7 +349,7 @@ export default function QuickSearch() {
       navigateToSuggestion(suggestions[0])
     } else {
       // Fallback: go to search page with query
-      router.push(`/recherche?q=${encodeURIComponent(input.trim())}`)
+      router.push(`/search?q=${encodeURIComponent(input.trim())}`)
       setShowDropdown(false)
       setInput('')
     }
@@ -561,7 +561,7 @@ export default function QuickSearch() {
                         ? 'bg-rose-50 text-rose-600'
                         : 'bg-emerald-50 text-emerald-600'
                   }`}>
-                    {suggestion.type === 'service' ? 'Service' : suggestion.type === 'city' ? 'Ville' : 'Service + Ville'}
+                    {suggestion.type === 'service' ? 'Service' : suggestion.type === 'city' ? 'City' : 'Service + City'}
                   </span>
                 </button>
               )

@@ -20,7 +20,7 @@ export const companyIdentity = {
   tagline: 'Trouvez des artisans qualifiés près de chez vous',
   description:
     'Des artisans référencés dans toute la France grâce aux données SIREN officielles. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com',
 
   // Legal identity (Level 1 — from env vars, null until company registration)
   legalName: process.env.COMPANY_LEGAL_NAME || null,
@@ -35,12 +35,12 @@ export const companyIdentity = {
   foundingDate: process.env.COMPANY_FOUNDING_DATE || null,
 
   // Contact (real and functional)
-  email: 'contact@servicesartisans.fr',
-  supportEmail: 'support@servicesartisans.fr',
-  dpoEmail: 'dpo@servicesartisans.fr',
-  presseEmail: 'presse@servicesartisans.fr',
-  partenairesEmail: 'partenaires@servicesartisans.fr',
-  careersEmail: 'careers@servicesartisans.fr',
+  email: 'contact@us-attorneys.com',
+  supportEmail: 'support@us-attorneys.com',
+  dpoEmail: 'dpo@us-attorneys.com',
+  presseEmail: 'presse@us-attorneys.com',
+  partenairesEmail: 'partenaires@us-attorneys.com',
+  careersEmail: 'careers@us-attorneys.com',
 
   // Social (real profiles)
   social: {
@@ -66,10 +66,10 @@ export const companyIdentity = {
  * Import this in any component that displays platform numbers.
  */
 export const marketingStats = {
-  artisanCount: 'SIREN',
-  artisanCountShort: 'SIREN',
+  attorneyCount: 'SIREN',
+  attorneyCountShort: 'SIREN',
   cityCount: '1 000+',
-  serviceCount: '46',
+  specialtyCount: '46',
   responseTime: 'Variable',
 } as const
 

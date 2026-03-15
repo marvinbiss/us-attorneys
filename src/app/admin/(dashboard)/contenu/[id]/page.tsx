@@ -50,7 +50,7 @@ export default function AdminEditContenuPage() {
   const [structuredData, setStructuredData] = useState<Record<string, unknown>>({})
 
   // Service/location fields
-  const [serviceSlug, setServiceSlug] = useState('')
+  const [specialtySlug, setServiceSlug] = useState('')
   const [locationSlug, setLocationSlug] = useState('')
 
   // Blog-specific fields
@@ -180,7 +180,7 @@ export default function AdminEditContenuPage() {
       tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
       readTime,
       featuredImage,
-      serviceSlug,
+      specialtySlug,
       locationSlug,
       sortOrder,
     })
@@ -191,11 +191,11 @@ export default function AdminEditContenuPage() {
       showToast('Le titre est requis', 'error')
       return
     }
-    if (pageType === 'service' && !serviceSlug.trim()) {
+    if (pageType === 'service' && !specialtySlug.trim()) {
       showToast('Le slug de service est requis pour les pages de type service', 'error')
       return
     }
-    if (pageType === 'location' && (!serviceSlug.trim() || !locationSlug.trim())) {
+    if (pageType === 'location' && (!specialtySlug.trim() || !locationSlug.trim())) {
       showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
       return
     }
@@ -225,7 +225,7 @@ export default function AdminEditContenuPage() {
       setSaving(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, title, pageType, serviceSlug, locationSlug, slug, content, contentJson, structuredData, seoTitle, seoDescription, ogImageUrl, canonicalUrl, excerpt, author, authorBio, category, tags, readTime, featuredImage, sortOrder])
+  }, [id, title, pageType, specialtySlug, locationSlug, slug, content, contentJson, structuredData, seoTitle, seoDescription, ogImageUrl, canonicalUrl, excerpt, author, authorBio, category, tags, readTime, featuredImage, sortOrder])
 
   // Ctrl+S / Cmd+S keyboard shortcut
   useEffect(() => {
@@ -246,11 +246,11 @@ export default function AdminEditContenuPage() {
       showToast('Le titre est requis', 'error')
       return
     }
-    if (pageType === 'service' && !serviceSlug.trim()) {
+    if (pageType === 'service' && !specialtySlug.trim()) {
       showToast('Le slug de service est requis pour les pages de type service', 'error')
       return
     }
-    if (pageType === 'location' && (!serviceSlug.trim() || !locationSlug.trim())) {
+    if (pageType === 'location' && (!specialtySlug.trim() || !locationSlug.trim())) {
       showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
       return
     }
@@ -520,7 +520,7 @@ export default function AdminEditContenuPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Slug du service</label>
                   <input
                     type="text"
-                    value={serviceSlug}
+                    value={specialtySlug}
                     onChange={(e) => { setServiceSlug(e.target.value); setIsDirty(true) }}
                     placeholder="plombier"
                     maxLength={FIELD_LIMITS.slug}

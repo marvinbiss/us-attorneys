@@ -19,7 +19,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
     faq: [
       {
         question: "Pourquoi mes WC se bouchent-ils souvent ?",
-        answer: "Les bouchons fréquents sont souvent causés par un excès de papier toilette, des lingettes jetées dans la cuvette, ou un problème de dimensionnement de la canalisation. Si le problème est récurrent, faites inspecter vos canalisations par un [plombier professionnel](/services/plombier) qui pourra identifier la cause avec une caméra."
+        answer: "Les bouchons fréquents sont souvent causés par un excès de papier toilette, des lingettes jetées dans la cuvette, ou un problème de dimensionnement de la canalisation. Si le problème est récurrent, faites inspecter vos canalisations par un [plombier professionnel](/practice-areas/plombier) qui pourra identifier la cause avec une caméra."
       },
       {
         question: "Peut-on utiliser un déboucheur chimique dans un WC ?",
@@ -55,7 +55,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand appeler un plombier professionnel",
 
-      "Certaines situations dépassent le cadre du DIY et nécessitent l'intervention d'un [plombier professionnel](/services/plombier). Appelez un expert si : le bouchon résiste à toutes les méthodes décrites ci-dessus, l'eau remonte dans d'autres appareils sanitaires (douche, lavabo), vous suspectez un objet dur coincé dans la canalisation, ou si des odeurs nauséabondes persistent. Un plombier dispose d'un furet motorisé et d'une caméra d'inspection pour localiser et traiter le problème efficacement. Comptez entre 80 et 200 euros pour un débouchage professionnel."
+      "Certaines situations dépassent le cadre du DIY et nécessitent l'intervention d'un [plombier professionnel](/practice-areas/plombier). Appelez un expert si : le bouchon résiste à toutes les méthodes décrites ci-dessus, l'eau remonte dans d'autres appareils sanitaires (douche, lavabo), vous suspectez un objet dur coincé dans la canalisation, ou si des odeurs nauséabondes persistent. Un plombier dispose d'un furet motorisé et d'une caméra d'inspection pour localiser et traiter le problème efficacement. Comptez entre 80 et 200 euros pour un débouchage professionnel."
     ]
   },
 
@@ -85,7 +85,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand faut-il appeler un peintre professionnel ?",
-        answer: "Faites appel à un [peintre professionnel](/services/peintre) pour les plafonds hauts (plus de 2,80 m), les finitions laquées exigeantes, les surfaces avec des problèmes d'humidité, ou si vous avez plus de 50 m² à peindre. Un professionnel facture entre 25 et 45 euros/m² tout compris."
+        answer: "Faites appel à un [peintre professionnel](/practice-areas/peintre) pour les plafonds hauts (plus de 2,80 m), les finitions laquées exigeantes, les surfaces avec des problèmes d'humidité, ou si vous avez plus de 50 m² à peindre. Un professionnel facture entre 25 et 45 euros/m² tout compris."
       }
     ],
     content: [
@@ -113,7 +113,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Finitions et nettoyage",
 
-      "Retirez le ruban de masquage lorsque la dernière couche est encore légèrement humide (30 à 45 minutes après), en tirant à 45° pour un bord net. Vérifiez le résultat à la lumière rasante et effectuez les retouches nécessaires. Nettoyez vos outils à l'eau (peinture acrylique) immédiatement après usage. Si le résultat ne vous satisfait pas ou si le chantier est trop important, n'hésitez pas à [consulter un peintre qualifié](/services/peintre) pour un devis gratuit."
+      "Retirez le ruban de masquage lorsque la dernière couche est encore légèrement humide (30 à 45 minutes après), en tirant à 45° pour un bord net. Vérifiez le résultat à la lumière rasante et effectuez les retouches nécessaires. Nettoyez vos outils à l'eau (peinture acrylique) immédiatement après usage. Si le résultat ne vous satisfait pas ou si le chantier est trop important, n'hésitez pas à [consulter un peintre qualifié](/practice-areas/peintre) pour un devis gratuit."
     ]
   },
 
@@ -130,7 +130,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       "Un sol parfaitement plan est la condition numéro un : un ragréage est nécessaire si le dénivelé dépasse 3 mm sous une règle de 2 mètres.",
       "Le double encollage (colle sur le sol ET sur le carreau) est obligatoire pour les formats supérieurs à 30 × 30 cm afin de garantir une adhérence totale.",
       "Les croisillons garantissent des joints réguliers — choisissez 2 mm pour un rendu moderne ou 5 mm pour un style plus rustique.",
-      "Pour les pièces humides ou les grandes surfaces, faites appel à un [carreleur professionnel](/services/carreleur) pour une pose dans les règles de l'art."
+      "Pour les pièces humides ou les grandes surfaces, faites appel à un [carreleur professionnel](/practice-areas/carreleur) pour une pose dans les règles de l'art."
     ],
     faq: [
       {
@@ -171,7 +171,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand faire appel à un carreleur professionnel",
 
-      "Certains chantiers dépassent les compétences du bricoleur occasionnel. Faites appel à un [carreleur professionnel](/services/carreleur) pour : les pièces humides nécessitant une étanchéité (douche à l'italienne, salle de bain), les grands formats (60 × 60 cm ou plus), les poses en diagonale ou en chevron, les sols chauffants, ou les surfaces dépassant 30 m². Un carreleur professionnel facture entre 30 et 60 euros/m² (pose et fournitures), mais garantit un résultat durable et conforme aux normes."
+      "Certains chantiers dépassent les compétences du bricoleur occasionnel. Faites appel à un [carreleur professionnel](/practice-areas/carreleur) pour : les pièces humides nécessitant une étanchéité (douche à l'italienne, salle de bain), les grands formats (60 × 60 cm ou plus), les poses en diagonale ou en chevron, les sols chauffants, ou les surfaces dépassant 30 m². Un carreleur professionnel facture entre 30 et 60 euros/m² (pose et fournitures), mais garantit un résultat durable et conforme aux normes."
     ]
   },
 
@@ -201,7 +201,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand appeler un plombier ?",
-        answer: "Faites appel à un [plombier](/services/plombier) si les vannes d'arrêt sont grippées ou fuient, si les tuyaux sont en plomb (obligation de remplacement), si le perçage de l'évier ne correspond pas au nouveau robinet, ou si vous devez modifier les arrivées d'eau. Comptez 80 à 150 euros pour la pose d'un robinet par un professionnel."
+        answer: "Faites appel à un [plombier](/practice-areas/plombier) si les vannes d'arrêt sont grippées ou fuient, si les tuyaux sont en plomb (obligation de remplacement), si le perçage de l'évier ne correspond pas au nouveau robinet, ou si vous devez modifier les arrivées d'eau. Comptez 80 à 150 euros pour la pose d'un robinet par un professionnel."
       }
     ],
     content: [
@@ -229,7 +229,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand faire appel à un professionnel",
 
-      "Certaines situations nécessitent l'intervention d'un [plombier professionnel](/services/plombier). Appelez un expert si les vannes d'arrêt sont grippées et risquent de casser en forçant, si vos canalisations sont en plomb (remplacement obligatoire), si le perçage de l'évier doit être élargi, ou si vous souhaitez déplacer les arrivées d'eau. Un plombier facture entre 80 et 150 euros pour le remplacement d'un robinet, main-d'œuvre et déplacement inclus."
+      "Certaines situations nécessitent l'intervention d'un [plombier professionnel](/practice-areas/plombier). Appelez un expert si les vannes d'arrêt sont grippées et risquent de casser en forçant, si vos canalisations sont en plomb (remplacement obligatoire), si le perçage de l'évier doit être élargi, ou si vous souhaitez déplacer les arrivées d'eau. Un plombier facture entre 80 et 150 euros pour le remplacement d'un robinet, main-d'œuvre et déplacement inclus."
     ]
   },
 
@@ -251,7 +251,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
     faq: [
       {
         question: "Peut-on installer une prise électrique soi-même ?",
-        answer: "Le remplacement d'une prise existante (à l'identique) est autorisé pour un particulier. En revanche, la création d'un nouveau circuit électrique doit être réalisée par un [électricien qualifié](/services/electricien) et faire l'objet d'une vérification Consuel si nécessaire."
+        answer: "Le remplacement d'une prise existante (à l'identique) est autorisé pour un particulier. En revanche, la création d'un nouveau circuit électrique doit être réalisée par un [électricien qualifié](/practice-areas/electricien) et faire l'objet d'une vérification Consuel si nécessaire."
       },
       {
         question: "À quelle hauteur installer une prise électrique ?",
@@ -259,7 +259,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quels sont les risques si je fais une erreur ?",
-        answer: "Une mauvaise installation électrique peut provoquer un court-circuit, un incendie, une électrocution, ou simplement faire disjoncter le tableau. De plus, une installation non conforme aux normes peut invalider votre assurance habitation. En cas de doute, faites appel à un [électricien professionnel](/services/electricien)."
+        answer: "Une mauvaise installation électrique peut provoquer un court-circuit, un incendie, une électrocution, ou simplement faire disjoncter le tableau. De plus, une installation non conforme aux normes peut invalider votre assurance habitation. En cas de doute, faites appel à un [électricien professionnel](/practice-areas/electricien)."
       },
       {
         question: "Comment savoir si mon installation est aux normes ?",
@@ -291,7 +291,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand faire appel à un électricien",
 
-      "Le remplacement à l'identique d'une prise est accessible à un bricoleur prudent. En revanche, confiez à un [électricien professionnel](/services/electricien) toute modification du tableau électrique, la création d'un nouveau circuit, l'ajout de prises dans une salle de bain (zones réglementées), ou l'installation de prises spécialisées (32A pour plaque de cuisson). Un électricien facture entre 50 et 100 euros pour le remplacement d'une prise, et 150 à 300 euros pour la création d'un nouveau point. La sécurité de votre famille n'a pas de prix."
+      "Le remplacement à l'identique d'une prise est accessible à un bricoleur prudent. En revanche, confiez à un [électricien professionnel](/practice-areas/electricien) toute modification du tableau électrique, la création d'un nouveau circuit, l'ajout de prises dans une salle de bain (zones réglementées), ou l'installation de prises spécialisées (32A pour plaque de cuisson). Un électricien facture entre 50 et 100 euros pour le remplacement d'une prise, et 150 à 300 euros pour la création d'un nouveau point. La sécurité de votre famille n'a pas de prix."
     ]
   },
 
@@ -321,7 +321,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Peut-on refaire un joint de douche soi-même ?",
-        answer: "Oui, c'est un travail accessible à tout bricoleur. Cependant, si le joint de la douche cache un problème d'étanchéité plus profond (fissure dans le bac, membrane abîmée), faites inspecter l'installation par un [plombier](/services/plombier) ou un [carreleur](/services/carreleur) avant de refaire le joint."
+        answer: "Oui, c'est un travail accessible à tout bricoleur. Cependant, si le joint de la douche cache un problème d'étanchéité plus profond (fissure dans le bac, membrane abîmée), faites inspecter l'installation par un [plombier](/practice-areas/plombier) ou un [carreleur](/practice-areas/carreleur) avant de refaire le joint."
       }
     ],
     content: [
@@ -349,7 +349,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand consulter un professionnel",
 
-      "Refaire un joint est simple, mais si l'eau s'infiltre derrière le carrelage ou sous le bac de douche, un joint neuf ne résoudra pas le problème. Faites appel à un [plombier](/services/plombier) ou un [carreleur](/services/carreleur) si vous constatez des dégâts d'humidité sur les murs adjacents, un bac de douche fissuré, ou des moisissures qui réapparaissent rapidement malgré un joint neuf. Ces signes indiquent un défaut d'étanchéité plus profond qui nécessite une intervention professionnelle."
+      "Refaire un joint est simple, mais si l'eau s'infiltre derrière le carrelage ou sous le bac de douche, un joint neuf ne résoudra pas le problème. Faites appel à un [plombier](/practice-areas/plombier) ou un [carreleur](/practice-areas/carreleur) si vous constatez des dégâts d'humidité sur les murs adjacents, un bac de douche fissuré, ou des moisissures qui réapparaissent rapidement malgré un joint neuf. Ces signes indiquent un défaut d'étanchéité plus profond qui nécessite une intervention professionnelle."
     ]
   },
 
@@ -379,7 +379,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand appeler un poseur de parquet ?",
-        answer: "Faites appel à un [poseur de parquet professionnel](/services/poseur-de-parquet) pour les surfaces supérieures à 40 m², la pose en diagonale ou chevron, les sols avec un fort dénivelé nécessitant un ragréage, ou la pose de parquet massif collé ou cloué."
+        answer: "Faites appel à un [poseur de parquet professionnel](/practice-areas/poseur-de-parquet) pour les surfaces supérieures à 40 m², la pose en diagonale ou chevron, les sols avec un fort dénivelé nécessitant un ragréage, ou la pose de parquet massif collé ou cloué."
       }
     ],
     content: [
@@ -407,7 +407,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand faire appel à un professionnel",
 
-      "La pose de parquet flottant est accessible aux bricoleurs pour les petites et moyennes surfaces. Pour les chantiers plus complexes, faites appel à un [poseur de parquet professionnel](/services/poseur-de-parquet) : surfaces supérieures à 40 m² (joints de dilatation intermédiaires nécessaires), poses en diagonale ou chevron, sols très irréguliers, ou parquet massif (pose collée ou clouée). Un professionnel facture entre 15 et 35 euros/m² pour la pose seule."
+      "La pose de parquet flottant est accessible aux bricoleurs pour les petites et moyennes surfaces. Pour les chantiers plus complexes, faites appel à un [poseur de parquet professionnel](/practice-areas/poseur-de-parquet) : surfaces supérieures à 40 m² (joints de dilatation intermédiaires nécessaires), poses en diagonale ou chevron, sols très irréguliers, ou parquet massif (pose collée ou clouée). Un professionnel facture entre 15 et 35 euros/m² pour la pose seule."
     ]
   },
 
@@ -465,7 +465,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand appeler un peintre professionnel",
 
-      "Le plafond est la surface la plus exigeante en peinture. Faites appel à un [peintre professionnel](/services/peintre) pour les plafonds hauts (plus de 2,80 m) où le travail en hauteur est dangereux, les plafonds avec moulures ou corniches nécessitant un rechampissage minutieux, les plafonds présentant des problèmes d'humidité (traitement préalable nécessaire), ou les grandes surfaces (plus de 40 m²) où la fatigue compromet la qualité. Un peintre professionnel facture entre 15 et 30 euros/m² pour un plafond."
+      "Le plafond est la surface la plus exigeante en peinture. Faites appel à un [peintre professionnel](/practice-areas/peintre) pour les plafonds hauts (plus de 2,80 m) où le travail en hauteur est dangereux, les plafonds avec moulures ou corniches nécessitant un rechampissage minutieux, les plafonds présentant des problèmes d'humidité (traitement préalable nécessaire), ou les grandes surfaces (plus de 40 m²) où la fatigue compromet la qualité. Un peintre professionnel facture entre 15 et 30 euros/m² pour un plafond."
     ]
   },
 
@@ -495,7 +495,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Faut-il faire appel à un professionnel ?",
-        answer: "Les fissures structurelles (plus de 2 mm de large, en escalier dans la maçonnerie, ou qui s'agrandissent) doivent être examinées par un [maçon](/services/macon) ou un expert en bâtiment. De même, les dégâts importants (trou de plus de 20 cm, mur porteur endommagé) nécessitent une réparation professionnelle."
+        answer: "Les fissures structurelles (plus de 2 mm de large, en escalier dans la maçonnerie, ou qui s'agrandissent) doivent être examinées par un [maçon](/practice-areas/macon) ou un expert en bâtiment. De même, les dégâts importants (trou de plus de 20 cm, mur porteur endommagé) nécessitent une réparation professionnelle."
       }
     ],
     content: [
@@ -523,7 +523,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand consulter un professionnel",
 
-      "Certaines fissures ne sont pas cosmétiques mais structurelles. Consultez un [maçon](/services/macon) ou un expert en bâtiment si les fissures font plus de 2 mm de large, si elles forment un motif en escalier dans la maçonnerie, si elles s'agrandissent avec le temps, ou si elles apparaissent après un événement (séisme, travaux de terrassement à proximité). Un mur porteur endommagé est une urgence structurelle qui ne se répare pas à l'enduit."
+      "Certaines fissures ne sont pas cosmétiques mais structurelles. Consultez un [maçon](/practice-areas/macon) ou un expert en bâtiment si les fissures font plus de 2 mm de large, si elles forment un motif en escalier dans la maçonnerie, si elles s'agrandissent avec le temps, ou si elles apparaissent après un événement (séisme, travaux de terrassement à proximité). Un mur porteur endommagé est une urgence structurelle qui ne se répare pas à l'enduit."
     ]
   },
 
@@ -553,7 +553,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand remplacer le robinet plutôt que le joint ?",
-        answer: "Remplacez le robinet complet si le siège est rayé ou corrodé (la fuite persiste malgré un joint neuf), si le robinet a plus de 20 ans, ou s'il s'agit d'un mitigeur dont la cartouche n'est plus disponible. Un [plombier](/services/plombier) peut vous conseiller sur le meilleur choix."
+        answer: "Remplacez le robinet complet si le siège est rayé ou corrodé (la fuite persiste malgré un joint neuf), si le robinet a plus de 20 ans, ou s'il s'agit d'un mitigeur dont la cartouche n'est plus disponible. Un [plombier](/practice-areas/plombier) peut vous conseiller sur le meilleur choix."
       }
     ],
     content: [
@@ -581,7 +581,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand appeler un plombier",
 
-      "Faites appel à un [plombier professionnel](/services/plombier) si la fuite persiste malgré un joint neuf (siège usé), si la vanne d'arrêt est grippée, si le robinet est soudé (ancien modèle) et ne se démonte pas, ou si vous souhaitez remplacer le robinet complet. Un plombier facture entre 60 et 120 euros pour un changement de joint, et 80 à 200 euros pour le remplacement complet du robinet."
+      "Faites appel à un [plombier professionnel](/practice-areas/plombier) si la fuite persiste malgré un joint neuf (siège usé), si la vanne d'arrêt est grippée, si le robinet est soudé (ancien modèle) et ne se démonte pas, ou si vous souhaitez remplacer le robinet complet. Un plombier facture entre 60 et 120 euros pour un changement de joint, et 80 à 200 euros pour le remplacement complet du robinet."
     ]
   },
 
@@ -611,7 +611,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Peut-on installer un WC suspendu soi-même ?",
-        answer: "C'est possible pour un bricoleur expérimenté en plomberie et en maçonnerie. Cependant, une erreur d'étanchéité ou de fixation sera très coûteuse à corriger une fois l'habillage terminé. Pour la tranquillité d'esprit, faites appel à un [plombier professionnel](/services/plombier) — comptez 300 à 600 euros de main-d'œuvre."
+        answer: "C'est possible pour un bricoleur expérimenté en plomberie et en maçonnerie. Cependant, une erreur d'étanchéité ou de fixation sera très coûteuse à corriger une fois l'habillage terminé. Pour la tranquillité d'esprit, faites appel à un [plombier professionnel](/practice-areas/plombier) — comptez 300 à 600 euros de main-d'œuvre."
       }
     ],
     content: [
@@ -639,7 +639,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand faire appel à un professionnel",
 
-      "L'installation d'un WC suspendu est l'un des chantiers de plomberie les plus techniques pour un particulier. Faites appel à un [plombier professionnel](/services/plombier) si vous n'avez pas d'expérience en plomberie et en maçonnerie, si l'évacuation doit être déplacée, si le mur n'est pas porteur et nécessite un renforcement, ou simplement pour bénéficier de la garantie décennale. Un professionnel facture entre 300 et 600 euros de main-d'œuvre (hors fournitures), ce qui reste raisonnable au regard de la complexité du chantier."
+      "L'installation d'un WC suspendu est l'un des chantiers de plomberie les plus techniques pour un particulier. Faites appel à un [plombier professionnel](/practice-areas/plombier) si vous n'avez pas d'expérience en plomberie et en maçonnerie, si l'évacuation doit être déplacée, si le mur n'est pas porteur et nécessite un renforcement, ou simplement pour bénéficier de la garantie décennale. Un professionnel facture entre 300 et 600 euros de main-d'œuvre (hors fournitures), ce qui reste raisonnable au regard de la complexité du chantier."
     ]
   },
 
@@ -669,7 +669,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Peut-on fixer une étagère lourde sur du placo ?",
-        answer: "Le placo standard (BA13) supporte très peu de charge en soi. Pour fixer une étagère chargée de livres (20 kg ou plus), il faut impérativement fixer dans les montants métalliques de l'ossature ou utiliser un système de fixation traversant. Si vous avez un doute, faites appel à un [menuisier](/services/menuisier) ou un bricoleur professionnel."
+        answer: "Le placo standard (BA13) supporte très peu de charge en soi. Pour fixer une étagère chargée de livres (20 kg ou plus), il faut impérativement fixer dans les montants métalliques de l'ossature ou utiliser un système de fixation traversant. Si vous avez un doute, faites appel à un [menuisier](/practice-areas/menuisier) ou un bricoleur professionnel."
       }
     ],
     content: [
@@ -697,7 +697,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand appeler un professionnel",
 
-      "Pour les installations complexes (bibliothèque murale lourde, étagères en escalier, fixation sur un mur en pierre naturelle), faites appel à un [menuisier](/services/menuisier) professionnel. De même, si votre mur est en mauvais état (placo humide, brique fissurée) ou si vous devez fixer dans un mur porteur avec des charges importantes, un professionnel saura adapter la fixation et garantir la sécurité. Comptez 50 à 150 euros pour la pose professionnelle d'étagères murales."
+      "Pour les installations complexes (bibliothèque murale lourde, étagères en escalier, fixation sur un mur en pierre naturelle), faites appel à un [menuisier](/practice-areas/menuisier) professionnel. De même, si votre mur est en mauvais état (placo humide, brique fissurée) ou si vous devez fixer dans un mur porteur avec des charges importantes, un professionnel saura adapter la fixation et garantir la sécurité. Comptez 50 à 150 euros pour la pose professionnelle d'étagères murales."
     ]
   },
 
@@ -719,7 +719,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
     faq: [
       {
         question: "Peut-on refaire l'électricité soi-même ?",
-        answer: "Techniquement, un propriétaire peut réaliser les travaux électriques dans son propre logement. Cependant, l'installation doit être conforme à la norme NF C 15-100 et contrôlée par le Consuel avant mise en service. En pratique, la complexité des normes et les risques encourus rendent l'intervention d'un [électricien certifié](/services/electricien) indispensable."
+        answer: "Techniquement, un propriétaire peut réaliser les travaux électriques dans son propre logement. Cependant, l'installation doit être conforme à la norme NF C 15-100 et contrôlée par le Consuel avant mise en service. En pratique, la complexité des normes et les risques encourus rendent l'intervention d'un [électricien certifié](/practice-areas/electricien) indispensable."
       },
       {
         question: "Comment savoir si mon installation électrique doit être refaite ?",
@@ -755,7 +755,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Budget et pourquoi faire appel à un professionnel",
 
-      "Le budget moyen pour refaire l'électricité d'un appartement varie selon la surface : 3 000 à 6 000 euros pour 30 m², 5 000 à 10 000 euros pour 60 m², 8 000 à 15 000 euros pour 100 m². Ces montants incluent la main-d'œuvre et les fournitures. Faire appel à un [électricien certifié](/services/electricien) est indispensable pour la conformité aux normes, la garantie décennale, la validité de votre assurance habitation, et surtout la sécurité de votre famille. Demandez plusieurs devis pour comparer."
+      "Le budget moyen pour refaire l'électricité d'un appartement varie selon la surface : 3 000 à 6 000 euros pour 30 m², 5 000 à 10 000 euros pour 60 m², 8 000 à 15 000 euros pour 100 m². Ces montants incluent la main-d'œuvre et les fournitures. Faire appel à un [électricien certifié](/practice-areas/electricien) est indispensable pour la conformité aux normes, la garantie décennale, la validité de votre assurance habitation, et surtout la sécurité de votre famille. Demandez plusieurs devis pour comparer."
     ]
   },
 
@@ -785,7 +785,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand faut-il remplacer les fenêtres ?",
-        answer: "Le remplacement est recommandé si vos fenêtres sont en simple vitrage, si le cadre est déformé ou pourri (bois) ou si les joints d'étanchéité entre le vitrage et le cadre sont défaillants. Faites appel à un [menuisier](/services/menuisier) ou un [vitrier](/services/vitrier) pour un devis. Des aides financières (MaPrimeRénov', CEE) peuvent couvrir une partie du coût."
+        answer: "Le remplacement est recommandé si vos fenêtres sont en simple vitrage, si le cadre est déformé ou pourri (bois) ou si les joints d'étanchéité entre le vitrage et le cadre sont défaillants. Faites appel à un [menuisier](/practice-areas/menuisier) ou un [vitrier](/practice-areas/vitrier) pour un devis. Des aides financières (MaPrimeRénov', CEE) peuvent couvrir une partie du coût."
       },
       {
         question: "Combien peut-on économiser en isolant ses fenêtres ?",
@@ -817,7 +817,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Étape 6 — Quand envisager le remplacement des fenêtres",
 
-      "Les solutions de calfeutrage sont efficaces mais temporaires. Si vos fenêtres sont en simple vitrage, très anciennes (plus de 30 ans) ou si le cadre est dégradé, le remplacement par du double ou triple vitrage est la solution définitive. Faites appel à un [menuisier](/services/menuisier) ou un [vitrier](/services/vitrier) pour un devis. Le coût moyen est de 300 à 800 euros par fenêtre (pose comprise), mais les aides financières (MaPrimeRénov', certificats d'économies d'énergie) peuvent couvrir 30 à 50 % du montant."
+      "Les solutions de calfeutrage sont efficaces mais temporaires. Si vos fenêtres sont en simple vitrage, très anciennes (plus de 30 ans) ou si le cadre est dégradé, le remplacement par du double ou triple vitrage est la solution définitive. Faites appel à un [menuisier](/practice-areas/menuisier) ou un [vitrier](/practice-areas/vitrier) pour un devis. Le coût moyen est de 300 à 800 euros par fenêtre (pose comprise), mais les aides financières (MaPrimeRénov', certificats d'économies d'énergie) peuvent couvrir 30 à 50 % du montant."
     ]
   },
 
@@ -851,7 +851,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       },
       {
         question: "Quand appeler un plombier ?",
-        answer: "Faites appel à un [plombier](/services/plombier) si le bouchon résiste à toutes les méthodes naturelles, si plusieurs canalisations sont bouchées simultanément (bouchon dans la colonne principale), si des odeurs nauséabondes persistent, ou si l'eau remonte par un autre appareil sanitaire."
+        answer: "Faites appel à un [plombier](/practice-areas/plombier) si le bouchon résiste à toutes les méthodes naturelles, si plusieurs canalisations sont bouchées simultanément (bouchon dans la colonne principale), si des odeurs nauséabondes persistent, ou si l'eau remonte par un autre appareil sanitaire."
       }
     ],
     content: [
@@ -879,7 +879,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       "## Quand appeler un plombier professionnel",
 
-      "Les méthodes naturelles ont leurs limites. Faites appel à un [plombier professionnel](/services/plombier) si le bouchon résiste à plusieurs tentatives, si plusieurs canalisations sont bouchées simultanément (le problème est dans la colonne principale), si des odeurs d'égout persistent malgré le débouchage, ou si l'eau remonte par un autre appareil. Un plombier dispose d'un furet motorisé et d'une caméra d'inspection pour localiser et traiter les bouchons profonds. Comptez 80 à 200 euros pour un débouchage professionnel, un investissement justifié quand les méthodes naturelles ne suffisent pas."
+      "Les méthodes naturelles ont leurs limites. Faites appel à un [plombier professionnel](/practice-areas/plombier) si le bouchon résiste à plusieurs tentatives, si plusieurs canalisations sont bouchées simultanément (le problème est dans la colonne principale), si des odeurs d'égout persistent malgré le débouchage, ou si l'eau remonte par un autre appareil. Un plombier dispose d'un furet motorisé et d'une caméra d'inspection pour localiser et traiter les bouchons profonds. Comptez 80 à 200 euros pour un débouchage professionnel, un investissement justifié quand les méthodes naturelles ne suffisent pas."
     ]
   },
 }

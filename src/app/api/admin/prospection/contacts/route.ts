@@ -25,7 +25,7 @@ const createSchema = z.object({
   city: z.string().max(100).optional(),
   department: z.string().max(10).optional(),
   region: z.string().max(100).optional(),
-  commune_code: z.string().max(10).optional(),
+  location_code: z.string().max(10).optional(),
   tags: z.array(z.string()).optional(),
 })
 

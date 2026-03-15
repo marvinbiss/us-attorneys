@@ -222,7 +222,7 @@ function buildContactContext(contact: ProspectionContact): string {
   parts.push(`Type: "${sanitizeForPrompt(contact.contact_type)}"`)
   if (contact.contact_name) parts.push(`Nom: "${sanitizeForPrompt(contact.contact_name)}"`)
   if (contact.company_name) parts.push(`Entreprise: "${sanitizeForPrompt(contact.company_name)}"`)
-  if (contact.city) parts.push(`Ville: "${sanitizeForPrompt(contact.city)}"`)
+  if (contact.city) parts.push(`City: "${sanitizeForPrompt(contact.city)}"`)
   if (contact.department) parts.push(`Département: "${sanitizeForPrompt(contact.department)}"`)
   if (contact.tags.length > 0) {
     const sanitizedTags = contact.tags.map(t => sanitizeForPrompt(t))

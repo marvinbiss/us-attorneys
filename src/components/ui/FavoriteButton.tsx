@@ -6,8 +6,8 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { cn } from '@/lib/utils'
 
 interface FavoriteButtonProps {
-  providerId: string
-  providerName: string
+  attorneyId: string
+  attorneyName: string
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
@@ -19,8 +19,8 @@ const sizeMap = {
 }
 
 export function FavoriteButton({
-  providerId,
-  providerName,
+  attorneyId,
+  attorneyName,
   size = 'md',
   className,
 }: FavoriteButtonProps) {
@@ -28,7 +28,7 @@ export function FavoriteButton({
   const [animating, setAnimating] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
 
-  const favorited = isFavorite(providerId)
+  const favorited = isFavorite(attorneyId)
   const { button: btnSize, icon: iconSize } = sizeMap[size]
 
   // Clear toast after 2 seconds
@@ -44,7 +44,7 @@ export function FavoriteButton({
       e.stopPropagation()
 
       const willBeFavorite = !favorited
-      toggleFavorite(providerId)
+      toggleFavorite(attorneyId)
 
       // Trigger bounce animation
       setAnimating(true)
@@ -53,11 +53,11 @@ export function FavoriteButton({
       // Show toast
       setToast(
         willBeFavorite
-          ? `${providerName} ajouté aux favoris`
-          : `${providerName} retiré des favoris`,
+          ? `${attorneyName} ajouté aux favoris`
+          : `${attorneyName} retiré des favoris`,
       )
     },
-    [favorited, toggleFavorite, providerId, providerName],
+    [favorited, toggleFavorite, attorneyId, attorneyName],
   )
 
   return (
@@ -67,8 +67,8 @@ export function FavoriteButton({
         onClick={handleClick}
         aria-label={
           favorited
-            ? `Retirer ${providerName} des favoris`
-            : `Ajouter ${providerName} aux favoris`
+            ? `Retirer ${attorneyName} des favoris`
+            : `Ajouter ${attorneyName} aux favoris`
         }
         className={cn(
           btnSize,

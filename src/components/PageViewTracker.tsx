@@ -5,14 +5,19 @@ import { usePathname } from 'next/navigation'
 import { getSessionId } from '@/lib/analytics/tracking'
 import { getVisitorId } from '@/lib/analytics/visitor'
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+  }
+}
+
 /**
  * Tracks page views on every client-side navigation.
  * Mounted once in RootLayout via dynamic import (ssr: false).
  *
- * Sends to /api/analytics with:
- * - visitor_id: persistent anonymous UUID (cookie, 13 months)
- * - session_id: per-tab session (sessionStorage)
- * - page_path: current pathname
+ * Sends to:
+ * 1. /api/analytics (backend tracking)
+ * 2. GA4 via window.gtag (if analytics consent granted)
  *
  * Skips admin and private pages.
  */
@@ -56,6 +61,23 @@ export default function PageViewTracker() {
         }
       } catch {
         // Silent failure — analytics should never break the app
+      }
+
+      // Send page view to GA4 (respecting consent)
+      if (typeof window !== 'undefined') {
+        try {
+          const prefs = localStorage.getItem('cookie_preferences')
+          const hasConsent = prefs ? JSON.parse(prefs)?.analytics : false
+          if (hasConsent && window.gtag) {
+            window.gtag('event', 'page_view', {
+              page_path: pathname,
+              page_title: document.title,
+              page_location: window.location.href,
+            })
+          }
+        } catch {
+          // Silent failure — analytics should never break the app
+        }
       }
     }, 0)
 

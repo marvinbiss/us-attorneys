@@ -14,7 +14,7 @@ import { z } from 'zod'
 
 // Schema for GET request query params
 const getQuerySchema = z.object({
-  artisanId: z.string().uuid('ID artisan invalide'),
+  attorneyId: z.string().uuid('ID artisan invalide'),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   month: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/).optional(),
 })
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
 
     // Validate query parameters
     const queryValidation = getQuerySchema.safeParse({
-      artisanId: searchParams.get('artisanId'),
+      attorneyId: searchParams.get('attorneyId'),
       date: searchParams.get('date') || undefined,
       month: searchParams.get('month') || undefined,
     })
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const { artisanId, date, month } = queryValidation.data
+    const { attorneyId, date, month } = queryValidation.data
     const supabase = await createClient()
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -62,8 +62,8 @@ export async function GET(request: Request) {
 
       const { data: slots, error } = await supabase
         .from('availability_slots')
-        .select('id, artisan_id, date, start_time, end_time, is_available')
-        .eq('artisan_id', artisanId)
+        .select('id, attorney_id, date, start_time, end_time, is_available')
+        .eq('attorney_id', attorneyId)
         .eq('is_available', true)
         .gte('date', startDate.toISOString().split('T')[0])
         .lte('date', endDate.toISOString().split('T')[0])
@@ -108,7 +108,7 @@ export async function GET(request: Request) {
             status
           )
         `)
-        .eq('artisan_id', artisanId)
+        .eq('attorney_id', attorneyId)
         .eq('date', date)
         .order('start_time')
 
@@ -127,12 +127,12 @@ export async function GET(request: Request) {
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
-        id, client_id, provider_id, service_name, status, scheduled_date, payment_status,
+        id, client_id, attorney_id, service_name, status, scheduled_date, payment_status,
         client_name, client_email, client_phone, service_description,
         cancelled_at, cancelled_by, cancellation_reason,
         rescheduled_at, deposit_amount, created_at, updated_at
       `)
-      .eq('provider_id', artisanId)
+      .eq('attorney_id', attorneyId)
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -173,7 +173,7 @@ export async function POST(request: Request) {
     }
 
     const {
-      artisanId,
+      attorneyId,
       slotId,
       clientName,
       clientPhone,
@@ -188,7 +188,7 @@ export async function POST(request: Request) {
 
     // SECURITY FIX: Use atomic transaction to prevent double booking
     const { data: result, error: rpcError } = await supabase.rpc('create_booking_atomic', {
-      p_artisan_id: artisanId,
+      p_attorney_id: attorneyId,
       p_slot_id: slotId,
       p_client_name: clientName.trim(),
       p_client_phone: clientPhone,
@@ -231,7 +231,7 @@ export async function POST(request: Request) {
     const { data: artisan } = await adminSupabase
       .from('profiles')
       .select('full_name, email')
-      .eq('id', artisanId)
+      .eq('id', attorneyId)
       .single()
 
     // Format date for email
@@ -252,9 +252,9 @@ export async function POST(request: Request) {
       clientName: clientName,
       clientEmail: clientEmail,
       clientPhone: clientPhone,
-      artisanName: artisanDisplayName,
+      attorneyName: artisanDisplayName,
       artisanEmail: artisan?.email,
-      serviceName: serviceDescription || 'Service',
+      specialtyName: serviceDescription || 'Service',
       date: formattedDate,
       startTime: slot.start_time,
       endTime: slot.end_time,
@@ -274,7 +274,7 @@ export async function POST(request: Request) {
           date: slot.date,
           startTime: slot.start_time,
           endTime: slot.end_time,
-          artisanName: artisanDisplayName,
+          attorneyName: artisanDisplayName,
         },
         message: 'Réservation confirmée avec succès',
       }),

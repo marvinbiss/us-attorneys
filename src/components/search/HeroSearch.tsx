@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Search, MapPin, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Navigation, ChevronRight, Clock, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { slugify } from '@/lib/utils'
-import { villes, type Ville } from '@/lib/data/france'
+import { cities, type City } from '@/lib/data/usa'
 
 // ── Icon map ─────────────────────────────────────────────────────────
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -46,36 +46,36 @@ function formatPopulation(pop: string): string {
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
-function searchCities(query: string, limit = 8): Ville[] {
+function searchCities(query: string, limit = 8): City[] {
   if (!query || query.length < 2) return []
 
   const normalized = normalizeText(query)
 
   // 1) Exact prefix match (highest priority) — sorted by population desc
-  const prefixMatches: Ville[] = []
+  const prefixMatches: City[] = []
   // 2) Contains match (inside the name but not prefix)
-  const containsMatches: Ville[] = []
+  const containsMatches: City[] = []
   // 3) Postal code match
-  const postalMatches: Ville[] = []
-  // 4) Departement name match
-  const deptMatches: Ville[] = []
+  const postalMatches: City[] = []
+  // 4) State name match
+  const deptMatches: City[] = []
 
-  for (const v of villes) {
+  for (const v of cities) {
     const normalizedName = normalizeText(v.name)
 
     if (normalizedName.startsWith(normalized)) {
       prefixMatches.push(v)
     } else if (normalizedName.includes(normalized)) {
       containsMatches.push(v)
-    } else if (v.codePostal.startsWith(query.trim())) {
+    } else if (v.zipCode.startsWith(query.trim())) {
       postalMatches.push(v)
-    } else if (normalizeText(v.departement).includes(normalized)) {
+    } else if (normalizeText(v.stateName).includes(normalized)) {
       deptMatches.push(v)
     }
   }
 
   // Sort each group by population descending for relevance
-  const sortByPop = (a: Ville, b: Ville) => {
+  const sortByPop = (a: City, b: City) => {
     const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
     const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
     return popB - popA
@@ -158,14 +158,14 @@ const fallbackCities = [
 
 // ── Popular cities for empty state ──────────────────────────────────
 const popularCities = [
-  { name: 'Paris', slug: 'paris', departement: 'Paris (75)', pop: '2.1M' },
-  { name: 'Marseille', slug: 'marseille', departement: 'Bouches-du-Rhône (13)', pop: '870k' },
-  { name: 'Lyon', slug: 'lyon', departement: 'Rhône (69)', pop: '522k' },
-  { name: 'Toulouse', slug: 'toulouse', departement: 'Haute-Garonne (31)', pop: '493k' },
-  { name: 'Nice', slug: 'nice', departement: 'Alpes-Maritimes (06)', pop: '342k' },
-  { name: 'Nantes', slug: 'nantes', departement: 'Loire-Atlantique (44)', pop: '320k' },
-  { name: 'Bordeaux', slug: 'bordeaux', departement: 'Gironde (33)', pop: '260k' },
-  { name: 'Lille', slug: 'lille', departement: 'Nord (59)', pop: '236k' },
+  { name: 'Paris', slug: 'paris', stateName: 'Paris (75)', pop: '2.1M' },
+  { name: 'Marseille', slug: 'marseille', stateName: 'Bouches-du-Rhône (13)', pop: '870k' },
+  { name: 'Lyon', slug: 'lyon', stateName: 'Rhône (69)', pop: '522k' },
+  { name: 'Toulouse', slug: 'toulouse', stateName: 'Haute-Garonne (31)', pop: '493k' },
+  { name: 'Nice', slug: 'nice', stateName: 'Alpes-Maritimes (06)', pop: '342k' },
+  { name: 'Nantes', slug: 'nantes', stateName: 'Loire-Atlantique (44)', pop: '320k' },
+  { name: 'Bordeaux', slug: 'bordeaux', stateName: 'Gironde (33)', pop: '260k' },
+  { name: 'Lille', slug: 'lille', stateName: 'Nord (59)', pop: '236k' },
 ]
 
 // ── Dropdown animation variants ─────────────────────────────────────
@@ -190,7 +190,7 @@ export function HeroSearch() {
   const containerRef = useRef<HTMLDivElement>(null)
   const serviceInputRef = useRef<HTMLInputElement>(null)
   const locationInputRef = useRef<HTMLInputElement>(null)
-  const serviceListRef = useRef<HTMLDivElement>(null)
+  const specialtyListRef = useRef<HTMLDivElement>(null)
   const cityListRef = useRef<HTMLDivElement>(null)
 
   // Load recent searches on mount
@@ -236,8 +236,8 @@ export function HeroSearch() {
 
   // Scroll highlighted service into view
   useEffect(() => {
-    if (highlightedServiceIndex >= 0 && serviceListRef.current) {
-      const items = serviceListRef.current.querySelectorAll('[data-service-item]')
+    if (highlightedServiceIndex >= 0 && specialtyListRef.current) {
+      const items = specialtyListRef.current.querySelectorAll('[data-service-item]')
       items[highlightedServiceIndex]?.scrollIntoView({ block: 'nearest' })
     }
   }, [highlightedServiceIndex])
@@ -287,8 +287,8 @@ export function HeroSearch() {
   // ── Submit ─────────────────────────────────────────────────────────
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     e?.preventDefault()
-    const serviceSlug = services.find(s => normalizeText(s.name) === normalizeText(query))?.slug || slugify(query)
-    const cityMatch = villes.find(v => normalizeText(v.name) === normalizeText(location))
+    const specialtySlug = services.find(s => normalizeText(s.name) === normalizeText(query))?.slug || slugify(query)
+    const cityMatch = cities.find(v => normalizeText(v.name) === normalizeText(location))
     const citySlug = cityMatch?.slug || slugify(location)
 
     // Save to recent searches
@@ -298,11 +298,11 @@ export function HeroSearch() {
     }
 
     if (query && location) {
-      router.push(`/services/${serviceSlug}/${citySlug}`)
+      router.push(`/practice-areas/${specialtySlug}/${citySlug}`)
     } else if (query) {
-      router.push(`/services/${serviceSlug}`)
+      router.push(`/practice-areas/${specialtySlug}`)
     } else {
-      router.push(`/recherche?q=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}`)
+      router.push(`/search?q=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}`)
     }
   }, [query, location, router])
 
@@ -371,14 +371,14 @@ export function HeroSearch() {
     if (!hasTypedCity && recentSearches.length > 0) {
       // Map recent searches to ville objects or placeholders
       return recentSearches.map(name => {
-        const match = villes.find(v => normalizeText(v.name) === normalizeText(name))
-        return match || { name, slug: slugify(name), region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
+        const match = cities.find(v => normalizeText(v.name) === normalizeText(name))
+        return match || { name, slug: slugify(name), stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as City
       })
     }
     // Popular cities
     return popularCities.map(pc => {
-      const match = villes.find(v => v.slug === pc.slug)
-      return match || { name: pc.name, slug: pc.slug, region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
+      const match = cities.find(v => v.slug === pc.slug)
+      return match || { name: pc.name, slug: pc.slug, stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as City
     })
   }, [filteredCities, hasTypedCity, recentSearches])
 
@@ -505,7 +505,7 @@ export function HeroSearch() {
                         <span className="font-medium text-sm">Urgence 24h/24 ?</span>
                         <button
                           type="button"
-                          onClick={() => router.push('/urgence')}
+                          onClick={() => router.push('/emergency')}
                           className="ml-auto text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full transition-colors backdrop-blur-sm"
                         >
                           Trouver maintenant
@@ -515,7 +515,7 @@ export function HeroSearch() {
                     </div>
 
                     {/* Services List */}
-                    <div className="p-2" ref={serviceListRef}>
+                    <div className="p-2" ref={specialtyListRef}>
                       <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
                         <TrendingUp className="w-3 h-3" />
                         {query ? `Résultats pour « ${query} »` : 'Services populaires'}
@@ -618,8 +618,8 @@ export function HeroSearch() {
                     onChange={(e) => setLocation(e.target.value)}
                     onFocus={() => setActiveField('location')}
                     onKeyDown={handleLocationKeyDown}
-                    placeholder="Ville, code postal..."
-                    aria-label="Ville ou code postal"
+                    placeholder="City, code postal..."
+                    aria-label="City ou code postal"
                     aria-expanded={activeField === 'location'}
                     aria-haspopup="listbox"
                     autoComplete="off"
@@ -762,14 +762,14 @@ export function HeroSearch() {
                                   isHighlighted ? 'text-blue-700' : 'text-slate-900'
                                 }`}>
                                   <HighlightedText text={city.name} query={location} />
-                                  <span className="text-slate-400 font-normal ml-1">({city.departementCode})</span>
+                                  <span className="text-slate-400 font-normal ml-1">({city.stateCode})</span>
                                 </div>
                                 <div className="text-xs text-slate-500 truncate">
-                                  {city.departement} &middot; {formatPopulation(city.population)}
+                                  {city.stateName} &middot; {formatPopulation(city.population)}
                                 </div>
                               </div>
                               <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full flex-shrink-0">
-                                {city.codePostal}
+                                {city.zipCode}
                               </span>
                             </button>
                           )
@@ -832,7 +832,7 @@ export function HeroSearch() {
                                   <span className={`font-medium transition-colors ${
                                     isHighlighted ? 'text-blue-700' : 'text-slate-900'
                                   }`}>{city.name}</span>
-                                  <div className="text-[11px] text-slate-400">{city.departement}</div>
+                                  <div className="text-[11px] text-slate-400">{city.stateName}</div>
                                 </div>
                                 <span className="text-xs text-slate-400">{city.pop}</span>
                               </button>

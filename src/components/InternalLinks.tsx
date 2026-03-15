@@ -15,7 +15,7 @@ import {
   popularCities,
   popularRegions
 } from '@/lib/constants/navigation'
-import { villes, services, regions } from '@/lib/data/france'
+import { cities, services, usRegions } from '@/lib/data/usa'
 
 // Re-export for backward compatibility
 export { popularCities, popularRegions }
@@ -59,7 +59,7 @@ export function PopularServicesLinks({
           return (
             <Link
               key={service.slug}
-              href={`/services/${service.slug}`}
+              href={`/practice-areas/${service.slug}`}
               className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
             >
               <Icon className="w-3.5 h-3.5" />
@@ -100,7 +100,7 @@ export function PopularCitiesLinks({
         {popularCities.slice(0, limit).map((city) => (
           <Link
             key={city.slug}
-            href={`/villes/${city.slug}`}
+            href={`/cities/${city.slug}`}
             className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
           >
             {city.name}
@@ -108,10 +108,10 @@ export function PopularCitiesLinks({
         ))}
       </div>
       <Link
-        href="/villes"
+        href="/cities"
         className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
       >
-        Artisans dans {villes.length} villes <ArrowRight className="w-4 h-4" />
+        Artisans dans {cities.length} cities <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -130,11 +130,11 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-clay-400">Par région</div>
-          <div className="text-sm text-gray-500">{regions.length} régions</div>
+          <div className="text-sm text-gray-500">{usRegions.length} régions</div>
         </div>
       </Link>
       <Link
-        href="/departements"
+        href="/states"
         className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
       >
         <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
@@ -146,7 +146,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
       </Link>
       <Link
-        href="/villes"
+        href="/cities"
         className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
       >
         <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
@@ -154,7 +154,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-amber-600">Par ville</div>
-          <div className="text-sm text-gray-500">{villes.length} villes</div>
+          <div className="text-sm text-gray-500">{cities.length} cities</div>
         </div>
       </Link>
     </div>
@@ -174,7 +174,7 @@ export function PopularServiceCityLinks({
   const topCombos = popularServices.slice(0, 4).flatMap(service =>
     popularCities.slice(0, 3).map(city => ({
       label: `${service.name} ${city.name}`,
-      href: `/services/${service.slug}/${city.slug}`,
+      href: `/practice-areas/${service.slug}/${city.slug}`,
     }))
   )
 
@@ -211,22 +211,22 @@ export function ServiceCityMatrix({
   cities?: typeof popularCities
   className?: string
 }) {
-  const serviceData = popularServices.find(s => s.slug === service)
-  if (!serviceData) return null
+  const specialtyData = popularServices.find(s => s.slug === service)
+  if (!specialtyData) return null
 
   return (
     <div className={className}>
       <h3 className="font-semibold text-gray-900 mb-3">
-        {serviceData.name} par ville
+        {specialtyData.name} par ville
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {cities.map((city) => (
           <Link
             key={city.slug}
-            href={`/services/${service}/${city.slug}`}
+            href={`/practice-areas/${service}/${city.slug}`}
             className="px-3 py-2 bg-gray-50 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-lg text-sm transition-colors"
           >
-            {serviceData.name} {city.name}
+            {specialtyData.name} {city.name}
           </Link>
         ))}
       </div>
@@ -246,19 +246,19 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
         <Link href="/services" className="text-gray-600 hover:text-clay-400 py-1">
           {services.length} métiers d&apos;artisanat
         </Link>
-        <Link href="/villes" className="text-gray-600 hover:text-clay-400 py-1">
-          {villes.length} villes de France
+        <Link href="/cities" className="text-gray-600 hover:text-clay-400 py-1">
+          {cities.length} cities de France
         </Link>
         <Link href="/regions" className="text-gray-600 hover:text-clay-400 py-1">
           Par région
         </Link>
-        <Link href="/recherche" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/search" className="text-gray-600 hover:text-clay-400 py-1">
           Rechercher
         </Link>
-        <Link href="/devis" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/quotes" className="text-gray-600 hover:text-clay-400 py-1">
           Demander un devis
         </Link>
-        <Link href="/comment-ca-marche" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/how-it-works" className="text-gray-600 hover:text-clay-400 py-1">
           Comment ça marche
         </Link>
         <Link href="/contact" className="text-gray-600 hover:text-clay-400 py-1">

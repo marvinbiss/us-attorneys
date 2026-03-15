@@ -7,7 +7,7 @@ import {
   Star, CheckCircle, Building2, Wrench,
   ChevronLeft, ChevronRight
 } from 'lucide-react'
-import { getArtisanUrl } from '@/lib/utils'
+import { getAttorneyUrl } from '@/lib/utils'
 
 interface TimeSlot {
   time: string
@@ -72,7 +72,7 @@ export default function ArtisanResultCard({
   const loadAvailability = async (startDate?: Date) => {
     try {
       const params = new URLSearchParams({
-        artisanIds: artisan.id,
+        attorneyIds: artisan.id,
         days: '5',
       })
       if (startDate) {
@@ -104,7 +104,7 @@ export default function ArtisanResultCard({
   }
 
   const handleSlotClick = (date: string, time: string) => {
-    router.push(`/services/reservation?artisanId=${artisan.id}&date=${date}&time=${time}`)
+    router.push(`/practice-areas/reservation?attorneyId=${artisan.id}&date=${date}&time=${time}`)
   }
 
   const formatDistance = (meters?: number) => {
@@ -144,7 +144,7 @@ export default function ArtisanResultCard({
                 {/* Name & Distance */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <Link
-                    href={getArtisanUrl(artisan)}
+                    href={getAttorneyUrl(artisan)}
                     className="text-lg font-semibold text-blue-600 hover:underline"
                   >
                     {displayName}

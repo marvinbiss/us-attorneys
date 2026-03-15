@@ -64,7 +64,7 @@ export async function POST(
     // Verify the quote belongs to this lead and is still pending
     const { data: quote, error: quoteError } = await adminClient
       .from('quotes')
-      .select('id, request_id, provider_id, status')
+      .select('id, request_id, attorney_id, status')
       .eq('id', quote_id)
       .eq('request_id', leadId)
       .single()
@@ -94,7 +94,7 @@ export async function POST(
     // Log the refused event
     await logLeadEvent(leadId, 'refused', {
       actorId: user.id,
-      providerId: quote.provider_id,
+      attorneyId: quote.attorney_id,
       metadata: { quote_id },
     })
 

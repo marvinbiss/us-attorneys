@@ -43,7 +43,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       }
     ],
     content: [
-      "En 2026, la France enregistre plus de 230 000 cambriolages par an selon les chiffres du ministère de l'Intérieur, soit un toutes les deux minutes. Face à cette réalité, l'alarme maison n'est plus un luxe mais un investissement de bon sens. Le marché a profondément évolué : les systèmes connectés pilotables depuis un smartphone côtoient désormais les installations professionnelles certifiées, avec des prix qui ont baissé de 20 % en cinq ans grâce à la concurrence. Ce guide vous donne toutes les clés pour choisir, dimensionner et installer le système qui correspond à votre logement et à votre budget. Si vous envisagez de renforcer également vos accès, consultez notre annuaire de [serruriers qualifiés](/services/serrurier) pour un diagnostic complet de votre sécurité.",
+      "En 2026, la France enregistre plus de 230 000 cambriolages par an selon les chiffres du ministère de l'Intérieur, soit un toutes les deux minutes. Face à cette réalité, l'alarme maison n'est plus un luxe mais un investissement de bon sens. Le marché a profondément évolué : les systèmes connectés pilotables depuis un smartphone côtoient désormais les installations professionnelles certifiées, avec des prix qui ont baissé de 20 % en cinq ans grâce à la concurrence. Ce guide vous donne toutes les clés pour choisir, dimensionner et installer le système qui correspond à votre logement et à votre budget. Si vous envisagez de renforcer également vos accès, consultez notre annuaire de [serruriers qualifiés](/practice-areas/serrurier) pour un diagnostic complet de votre sécurité.",
 
       "## Les différents types d'alarmes maison",
 
@@ -114,7 +114,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       "### L'installation en mode DIY",
       "Les kits sans fil modernes sont conçus pour une installation par le particulier. L'application mobile guide pas à pas : appairage des détecteurs, test de portée, paramétrage des zones. Comptez 1 à 3 heures pour un kit de 6-8 détecteurs. En revanche, vous ne bénéficiez pas de l'étude de vulnérabilité professionnelle ni du PV de mise en service. Les erreurs les plus fréquentes : détecteur de mouvement face à une source de chaleur (fausses alertes), détecteur d'ouverture mal aligné (non-détection), sirène extérieure inaccessible pour le changement de batterie.",
 
-      "Pour trouver un installateur qualifié dans votre secteur, vous pouvez consulter notre annuaire de [serruriers et spécialistes sécurité](/services/serrurier) ou demander un [devis gratuit](/devis) pour comparer les offres.",
+      "Pour trouver un installateur qualifié dans votre secteur, vous pouvez consulter notre annuaire de [serruriers et spécialistes sécurité](/practice-areas/serrurier) ou demander un [devis gratuit](/quotes) pour comparer les offres.",
 
       "## Alarme et assurance habitation : la réduction de 10 %",
 
@@ -178,7 +178,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       }
     ],
     content: [
-      "La pompe à chaleur air-eau s'est imposée comme la solution de chauffage de référence en France. En 2025, plus de 350 000 unités ont été vendues, un chiffre en hausse de 12 % par rapport à 2024 selon l'AFPAC (Association Française pour les Pompes à Chaleur). Cette dynamique s'explique par la convergence de trois facteurs : la flambée des prix des énergies fossiles (+40 % pour le fioul en 3 ans), les aides publiques généreuses (jusqu'à 16 000 € cumulés) et les obligations réglementaires de la RE2020 qui interdisent de fait les chaudières gaz dans le neuf. Ce guide détaille tout ce qu'il faut savoir avant d'investir, des principes de fonctionnement au calcul précis de la rentabilité. Besoin d'un professionnel qualifié ? Trouvez un [chauffagiste certifié RGE](/services/chauffagiste) dans votre secteur.",
+      "La pompe à chaleur air-eau s'est imposée comme la solution de chauffage de référence en France. En 2025, plus de 350 000 unités ont été vendues, un chiffre en hausse de 12 % par rapport à 2024 selon l'AFPAC (Association Française pour les Pompes à Chaleur). Cette dynamique s'explique par la convergence de trois facteurs : la flambée des prix des énergies fossiles (+40 % pour le fioul en 3 ans), les aides publiques généreuses (jusqu'à 16 000 € cumulés) et les obligations réglementaires de la RE2020 qui interdisent de fait les chaudières gaz dans le neuf. Ce guide détaille tout ce qu'il faut savoir avant d'investir, des principes de fonctionnement au calcul précis de la rentabilité. Besoin d'un professionnel qualifié ? Trouvez un [chauffagiste certifié RGE](/practice-areas/chauffagiste) dans votre secteur.",
 
       "## Comment fonctionne une pompe à chaleur air-eau ?",
 
@@ -265,7 +265,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
 
       "**Amortissement : 9 000 / 1 427 = 6,3 ans.** Au-delà, la PAC génère un gain net de plus de 1 400 € par an. Sur 15 ans de durée de vie, le bénéfice total dépasse 12 000 €.",
 
-      "Pour obtenir un devis personnalisé adapté à votre logement, demandez un [devis chauffagiste gratuit](/devis/chauffagiste) auprès de nos artisans certifiés RGE."
+      "Pour obtenir un devis personnalisé adapté à votre logement, demandez un [devis chauffagiste gratuit](/quotes/chauffagiste) auprès de nos artisans certifiés RGE."
     ]
   },
 
@@ -311,7 +311,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       }
     ],
     content: [
-      "Le photovoltaïque résidentiel connaît une croissance sans précédent en France. En 2025, plus de 180 000 installations ont été raccordées, portant le parc total à plus de 900 000 foyers producteurs d'électricité solaire. Cette accélération s'explique par un alignement de planètes favorable : le prix des panneaux a chuté de 80 % en dix ans, le tarif de l'électricité réseau a bondi de 45 % depuis 2022, et les aides publiques restent substantielles. Mais derrière les promesses marketing, quelle est la rentabilité réelle d'une installation solaire en 2026 ? Ce guide décortique les chiffres, compare les options et vous donne les clés pour un investissement éclairé. Pour une installation dans les règles de l'art, faites appel à un [électricien qualifié](/services/electricien) près de chez vous.",
+      "Le photovoltaïque résidentiel connaît une croissance sans précédent en France. En 2025, plus de 180 000 installations ont été raccordées, portant le parc total à plus de 900 000 foyers producteurs d'électricité solaire. Cette accélération s'explique par un alignement de planètes favorable : le prix des panneaux a chuté de 80 % en dix ans, le tarif de l'électricité réseau a bondi de 45 % depuis 2022, et les aides publiques restent substantielles. Mais derrière les promesses marketing, quelle est la rentabilité réelle d'une installation solaire en 2026 ? Ce guide décortique les chiffres, compare les options et vous donne les clés pour un investissement éclairé. Pour une installation dans les règles de l'art, faites appel à un [électricien qualifié](/practice-areas/electricien) près de chez vous.",
 
       "## Autoconsommation vs revente totale : deux modèles économiques",
 
@@ -397,7 +397,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
 
       "**Visite technique préalable** — Un devis sérieux ne peut pas être établi sans visite sur site : l'installateur doit vérifier la charpente, la couverture, l'orientation, les masques solaires (ombres portées) et le tableau électrique. Refusez tout devis établi uniquement sur la base de photos ou de Google Maps.",
 
-      "Pour trouver un installateur de confiance, consultez notre annuaire d'[électriciens qualifiés](/services/electricien) ou demandez un [devis électricien gratuit](/devis/electricien) pour comparer les offres de votre secteur."
+      "Pour trouver un installateur de confiance, consultez notre annuaire d'[électriciens qualifiés](/practice-areas/electricien) ou demandez un [devis électricien gratuit](/quotes/electricien) pour comparer les offres de votre secteur."
     ]
   }
 }

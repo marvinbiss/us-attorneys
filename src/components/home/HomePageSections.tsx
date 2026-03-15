@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getAvatarColor, getInitials } from '@/lib/utils'
-import { services as allServicesFromFrance } from '@/lib/data/france'
+import { practiceAreas as allServicesFromFrance } from '@/lib/data/usa'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 
@@ -94,7 +94,7 @@ export function ServicesShowcase() {
               return (
                 <motion.div key={service.slug} variants={staggerItem}>
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={`/practice-areas/${service.slug}`}
                     className="group relative flex items-center gap-6 p-8 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
                     <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${service.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
@@ -133,7 +133,7 @@ export function ServicesShowcase() {
               return (
                 <motion.div key={service.slug} variants={staggerItem} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={`/practice-areas/${service.slug}`}
                     className="group relative flex flex-col items-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-gradient-to-br ${service.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
@@ -157,7 +157,7 @@ export function ServicesShowcase() {
               return (
                 <motion.div key={service.slug} variants={staggerItem}>
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={`/practice-areas/${service.slug}`}
                     className="group flex items-center gap-4 p-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
                     <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br ${service.color} shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
@@ -306,7 +306,7 @@ export function HowItWorksSection() {
           className="text-center mt-14"
         >
           <Link
-            href="/devis"
+            href="/quotes"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Demander un devis gratuit <ArrowRight className="w-5 h-5" />
@@ -390,13 +390,13 @@ export function ArtisanCTASection() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/inscription-artisan"
+              href="/register-attorney"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Inscrire mon entreprise <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              href="/comment-ca-marche"
+              href="/how-it-works"
               className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               En savoir plus

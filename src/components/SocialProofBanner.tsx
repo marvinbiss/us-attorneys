@@ -59,7 +59,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
   }, [])
 
   const devisCount = data?.devisThisMonth ?? fallbackCount
-  const providerCount = data?.activeProviders ?? 500
+  const attorneyCount = data?.activeProviders ?? 500
 
   // ── Compact variant: minimal inline stats ──
   if (variant === 'compact') {
@@ -71,7 +71,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
         </span>
         <span className="flex items-center gap-1">
           <Users className="w-3.5 h-3.5" />
-          {providerCount.toLocaleString('fr-FR')} artisans actifs
+          {attorneyCount.toLocaleString('fr-FR')} artisans actifs
         </span>
       </div>
     )
@@ -102,7 +102,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
               <Users className="w-4 h-4 text-green-600" />
             </div>
             <div>
-              <p className="text-lg font-bold text-slate-900">{providerCount.toLocaleString('fr-FR')}</p>
+              <p className="text-lg font-bold text-slate-900">{attorneyCount.toLocaleString('fr-FR')}</p>
               <p className="text-xs text-slate-500">artisans disponibles</p>
             </div>
           </div>
@@ -138,7 +138,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
       </span>
       <span className="flex items-center gap-1.5 text-violet-700 bg-violet-50 px-3 py-1.5 rounded-full">
         <Users className="w-3.5 h-3.5" />
-        {providerCount.toLocaleString('fr-FR')} artisans
+        {attorneyCount.toLocaleString('fr-FR')} artisans
       </span>
     </div>
   )

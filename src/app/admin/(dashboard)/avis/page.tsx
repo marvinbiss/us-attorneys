@@ -21,7 +21,7 @@ interface Review {
   client_name: string
   client_email: string
   provider_name: string
-  provider_id: string
+  attorney_id: string
   rating: number
   comment: string
   response?: string

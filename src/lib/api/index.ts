@@ -52,7 +52,7 @@ export {
   autocompleteVille,
   geocoder,
   reverseGeocode,
-  getCommunesByCodePostal,
+  getLocationsByCodePostal,
   geocodeBatch,
   calculerDistance,
   filterByRadius,

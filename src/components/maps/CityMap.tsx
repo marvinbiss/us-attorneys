@@ -66,9 +66,9 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
   const coordinates = CITY_COORDINATES[citySlug] || DEFAULT_CENTER
 
   useEffect(() => {
-    async function fetchProviders() {
+    async function fetchAttorneys() {
       try {
-        const response = await fetch(`/api/providers/by-city?city=${encodeURIComponent(cityName)}&limit=20`)
+        const response = await fetch(`/api/attorneys/by-city?city=${encodeURIComponent(cityName)}&limit=20`)
         if (response.ok) {
           const data = await response.json()
           // Filter providers with valid coordinates
@@ -85,7 +85,7 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
       }
     }
 
-    fetchProviders()
+    fetchAttorneys()
   }, [cityName])
 
   // Don't render if we don't have coordinates

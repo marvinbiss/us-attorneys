@@ -68,7 +68,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
       setInputValue('')
       setIsStreaming(true)
 
-      trackEvent('chat_message_sent' as any, {
+      trackEvent('chat_message_sent', {
         metier: context.metierSlug,
         message_count: updatedMessages.length,
       })
@@ -113,7 +113,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
         // Check if we should show the lead form
         if (shouldShowLeadForm(assistantMessage)) {
           setShowLeadForm(true)
-          trackEvent('chat_lead_form_shown' as any, {
+          trackEvent('chat_lead_form_shown', {
             metier: context.metierSlug,
             messages_before_form: updatedMessages.length + 1,
           })

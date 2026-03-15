@@ -138,7 +138,7 @@ export function ConfirmationModal({
           aria-modal="true"
           aria-labelledby="confirmation-modal-title"
           tabIndex={-1}
-          className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+          className="relative bg-white rounded-xl shadow-xl max-w-[95vw] sm:max-w-md w-full p-6"
         >
           {/* Close button */}
           <button

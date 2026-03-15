@@ -56,17 +56,17 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
  * Build the list of affected URLs when a provider changes.
  * Notifies: the provider page, the service+ville hub page, and the city page.
  */
-export function getProviderAffectedUrls(
-  serviceSlug: string,
+export function getAttorneyAffectedUrls(
+  specialtySlug: string,
   villeSlug: string,
   providerPublicId?: string
 ): string[] {
   const urls = [
-    `/services/${serviceSlug}/${villeSlug}`,
-    `/villes/${villeSlug}`,
+    `/practice-areas/${specialtySlug}/${villeSlug}`,
+    `/cities/${villeSlug}`,
   ]
   if (providerPublicId) {
-    urls.push(`/services/${serviceSlug}/${villeSlug}/${providerPublicId}`)
+    urls.push(`/practice-areas/${specialtySlug}/${villeSlug}/${providerPublicId}`)
   }
   return urls
 }

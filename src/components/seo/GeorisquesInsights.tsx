@@ -1,5 +1,5 @@
 import { AlertTriangle, Droplets, Mountain, Activity, Shield, CheckCircle } from 'lucide-react'
-import type { CommuneData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/commune-data'
 import { hasGeorisquesData } from '@/lib/data/commune-data'
 
 // ---------------------------------------------------------------------------
@@ -7,9 +7,9 @@ import { hasGeorisquesData } from '@/lib/data/commune-data'
 // ---------------------------------------------------------------------------
 
 interface Props {
-  communeData: CommuneData | null
+  locationData: LocationData | null
   villeName: string
-  serviceSlug: string
+  specialtySlug: string
 }
 
 // ---------------------------------------------------------------------------
@@ -101,16 +101,16 @@ function getRiskBadgeColor(level: 'high' | 'medium' | 'low'): string {
 // Component
 // ---------------------------------------------------------------------------
 
-export default function GeorisquesInsights({ communeData, villeName, serviceSlug }: Props) {
-  if (!communeData || !hasGeorisquesData(communeData)) {
+export default function GeorisquesInsights({ locationData, villeName, specialtySlug }: Props) {
+  if (!locationData || !hasGeorisquesData(locationData)) {
     return null
   }
 
-  const serviceCategory = getServiceCategory(serviceSlug)
+  const serviceCategory = getServiceCategory(specialtySlug)
   const cards: React.ReactNode[] = []
 
   // --- Inondation ---
-  if (communeData.risque_inondation) {
+  if (locationData.risque_inondation) {
     cards.push(
       <div key="inondation" className={`rounded-lg border-l-4 p-4 ${getRiskColor('high')}`}>
         <div className="flex items-start gap-3">
@@ -132,9 +132,9 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
   }
 
   // --- Argile ---
-  if (communeData.risque_argile) {
-    const argileLevel = communeData.risque_argile === 'fort' ? 'high'
-      : communeData.risque_argile === 'moyen' ? 'medium' : 'low'
+  if (locationData.risque_argile) {
+    const argileLevel = locationData.risque_argile === 'fort' ? 'high'
+      : locationData.risque_argile === 'moyen' ? 'medium' : 'low'
 
     cards.push(
       <div key="argile" className={`rounded-lg border-l-4 p-4 ${getRiskColor(argileLevel)}`}>
@@ -144,7 +144,7 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
             <div className="flex items-center gap-2">
               <h4 className="font-semibold text-gray-900">Retrait-gonflement des argiles</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(argileLevel)}`}>
-                Risque {communeData.risque_argile}
+                Risque {locationData.risque_argile}
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
@@ -157,9 +157,9 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
   }
 
   // --- Zone sismique ---
-  if (communeData.zone_sismique && communeData.zone_sismique >= 2) {
-    const sismiqueLevel = communeData.zone_sismique >= 4 ? 'high'
-      : communeData.zone_sismique === 3 ? 'medium' : 'low'
+  if (locationData.zone_sismique && locationData.zone_sismique >= 2) {
+    const sismiqueLevel = locationData.zone_sismique >= 4 ? 'high'
+      : locationData.zone_sismique === 3 ? 'medium' : 'low'
 
     cards.push(
       <div key="sismique" className={`rounded-lg border-l-4 p-4 ${getRiskColor(sismiqueLevel)}`}>
@@ -169,11 +169,11 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
             <div className="flex items-center gap-2">
               <h4 className="font-semibold text-gray-900">Zone sismique</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(sismiqueLevel)}`}>
-                {getSismiqueLabel(communeData.zone_sismique)} (zone {communeData.zone_sismique})
+                {getSismiqueLabel(locationData.zone_sismique)} (zone {locationData.zone_sismique})
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
-              {communeData.zone_sismique >= 3
+              {locationData.zone_sismique >= 3
                 ? `Les constructions à ${villeName} doivent respecter les normes parasismiques (Eurocode 8). Tout artisan intervenant sur le bâti doit en tenir compte.`
                 : `Sismicité faible mais présente — les travaux structurels doivent respecter les règles de construction parasismique de base.`
               }
@@ -185,8 +185,8 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
   }
 
   // --- Radon ---
-  if (communeData.risque_radon && communeData.risque_radon >= 2) {
-    const radonLevel = communeData.risque_radon === 3 ? 'high' : 'medium'
+  if (locationData.risque_radon && locationData.risque_radon >= 2) {
+    const radonLevel = locationData.risque_radon === 3 ? 'high' : 'medium'
 
     cards.push(
       <div key="radon" className={`rounded-lg border-l-4 p-4 ${getRiskColor(radonLevel)}`}>
@@ -196,11 +196,11 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
             <div className="flex items-center gap-2">
               <h4 className="font-semibold text-gray-900">Radon</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(radonLevel)}`}>
-                Potentiel {getRadonLabel(communeData.risque_radon)}
+                Potentiel {getRadonLabel(locationData.risque_radon)}
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
-              {communeData.risque_radon === 3
+              {locationData.risque_radon === 3
                 ? `${villeName} est en zone à potentiel radon élevé (catégorie 3). Un diagnostic radon est recommandé, surtout avant des travaux de rénovation en sous-sol ou rez-de-chaussée. Des systèmes de ventilation adaptés peuvent réduire l'exposition.`
                 : `Potentiel radon moyen à ${villeName}. Une mesure de la concentration en radon peut être pertinente lors de travaux de rénovation.`
               }
@@ -212,9 +212,9 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
   }
 
   // --- CatNat ---
-  if (communeData.nb_catnat && communeData.nb_catnat > 0) {
-    const catnatLevel = communeData.nb_catnat >= 10 ? 'high'
-      : communeData.nb_catnat >= 5 ? 'medium' : 'low'
+  if (locationData.nb_catnat && locationData.nb_catnat > 0) {
+    const catnatLevel = locationData.nb_catnat >= 10 ? 'high'
+      : locationData.nb_catnat >= 5 ? 'medium' : 'low'
 
     cards.push(
       <div key="catnat" className={`rounded-lg border-l-4 p-4 ${getRiskColor(catnatLevel)}`}>
@@ -224,13 +224,13 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
             <div className="flex items-center gap-2">
               <h4 className="font-semibold text-gray-900">Catastrophes naturelles</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor(catnatLevel)}`}>
-                {communeData.nb_catnat} arrêté{communeData.nb_catnat > 1 ? 's' : ''}
+                {locationData.nb_catnat} arrêté{locationData.nb_catnat > 1 ? 's' : ''}
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-700">
-              {communeData.nb_catnat} arrêté{communeData.nb_catnat > 1 ? 's' : ''} de catastrophe naturelle
-              {communeData.nb_catnat > 1 ? ' ont été pris' : ' a été pris'} à {villeName} depuis 2000.
-              {communeData.nb_catnat >= 5
+              {locationData.nb_catnat} arrêté{locationData.nb_catnat > 1 ? 's' : ''} de catastrophe naturelle
+              {locationData.nb_catnat > 1 ? ' ont été pris' : ' a été pris'} à {villeName} depuis 2000.
+              {locationData.nb_catnat >= 5
                 ? ' Ce nombre significatif souligne l\'importance de choisir des artisans connaissant les contraintes locales.'
                 : ''
               }

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { MapPin, ArrowRight, Users, Building2, ChevronRight, Globe } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, departements, villes, services, getVillesByDepartement } from '@/lib/data/france'
+import { usRegions, states, cities, services, getCitiesByState } from '@/lib/data/usa'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -51,7 +51,7 @@ export default async function RegionsIndexPage() {
     )
   }
 
-  const totalDepartments = regions.reduce((acc, r) => acc + r.departments.length, 0)
+  const totalDepartments = usRegions.reduce((acc, r) => acc + r.states.length, 0)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -61,7 +61,7 @@ export default async function RegionsIndexPage() {
         name: 'Artisans par région en France',
         description: 'Annuaire d\'artisans référencés dans les 18 régions françaises.',
         url: `${SITE_URL}/regions`,
-        numberOfItems: regions.length,
+        numberOfItems: usRegions.length,
         isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
         breadcrumb: {
           '@type': 'BreadcrumbList',
@@ -105,7 +105,7 @@ export default async function RegionsIndexPage() {
 
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-slate-200 to-white">
-                {regions.length} régions
+                {usRegions.length} régions
               </span>
               , un réseau national
             </h1>
@@ -120,7 +120,7 @@ export default async function RegionsIndexPage() {
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
               <Globe className="w-5 h-5 text-slate-300" />
               <div className="text-left">
-                <div className="text-xl font-bold text-white">{regions.length}</div>
+                <div className="text-xl font-bold text-white">{usRegions.length}</div>
                 <div className="text-xs text-slate-400">Régions</div>
               </div>
             </div>
@@ -154,9 +154,9 @@ export default async function RegionsIndexPage() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {regions.map((region) => {
-            const deptCount = region.departments.length
-            const cityCount = region.departments.reduce((acc, d) => acc + getVillesByDepartement(d.code).length, 0)
+          {usRegions.map((region) => {
+            const deptCount = region.states.length
+            const cityCount = region.states.reduce((acc, d) => acc + getCitiesByState(d.code).length, 0)
 
             return (
               <Link
@@ -190,7 +190,7 @@ export default async function RegionsIndexPage() {
 
                 {/* Preview cities */}
                 <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-gray-100">
-                  {region.departments.flatMap(d => getVillesByDepartement(d.code)).slice(0, 4).map((city) => (
+                  {region.states.flatMap(d => getCitiesByState(d.code)).slice(0, 4).map((city) => (
                     <span key={city.slug} className="text-xs bg-gray-100 text-slate-600 px-2.5 py-1 rounded-full group-hover:bg-slate-100 group-hover:text-slate-800 transition-colors">
                       {city.name}
                     </span>
@@ -220,7 +220,7 @@ export default async function RegionsIndexPage() {
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -241,31 +241,31 @@ export default async function RegionsIndexPage() {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Départements populaires</h3>
               <div className="space-y-2">
-                {departements.slice(0, 8).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                {states.slice(0, 8).map((d) => (
+                  <Link key={d.slug} href={`/states/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
                   </Link>
                 ))}
               </div>
-              <Link href="/departements" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/states" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
                 Tous les départements <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Villes */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Grandes villes</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Grandes cities</h3>
               <div className="space-y-2">
-                {villes.slice(0, 12).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                {cities.slice(0, 12).map((v) => (
+                  <Link key={v.slug} href={`/cities/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Toutes les villes <ArrowRight className="w-4 h-4" />
+              <Link href="/cities" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Toutes les cities <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -274,7 +274,7 @@ export default async function RegionsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/practice-areas/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>

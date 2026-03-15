@@ -7,7 +7,7 @@ export type MediaType = 'image' | 'video' | 'before_after'
 
 export interface PortfolioItem {
   id: string
-  artisan_id: string
+  attorney_id: string
   title: string
   description: string | null
   image_url: string
@@ -28,7 +28,7 @@ export interface PortfolioItem {
 }
 
 export interface PortfolioItemInsert {
-  artisan_id: string
+  attorney_id: string
   title: string
   description?: string | null
   image_url: string

@@ -35,7 +35,7 @@ interface AuditLog {
 interface LeadEvent {
   id: string
   lead_id: string
-  provider_id: string | null
+  attorney_id: string | null
   actor_id: string | null
   event_type: LeadEventType
   metadata: Record<string, unknown>
@@ -139,10 +139,10 @@ export default function AdminAuditPage() {
           const data = await response.json()
           // Map lead_assignments to LeadEvent shape
           const assignments: LeadEvent[] = (data.assignments || []).map(
-            (a: { id: string; lead_id: string; provider_id: string | null; status: string; assigned_at: string }) => ({
+            (a: { id: string; lead_id: string; attorney_id: string | null; status: string; assigned_at: string }) => ({
               id: a.id,
               lead_id: a.lead_id,
-              provider_id: a.provider_id ?? null,
+              attorney_id: a.attorney_id ?? null,
               actor_id: null,
               event_type: (a.status as LeadEventType) || 'dispatched',
               metadata: {},
@@ -323,7 +323,7 @@ export default function AdminAuditPage() {
                               {e.lead_id.slice(0, 8)}
                             </td>
                             <td className="px-4 py-3 font-mono text-xs text-gray-600">
-                              {e.provider_id ? e.provider_id.slice(0, 8) : '—'}
+                              {e.attorney_id ? e.attorney_id.slice(0, 8) : '—'}
                             </td>
                             <td className="px-4 py-3">
                               {Object.keys(e.metadata).length > 0 && (

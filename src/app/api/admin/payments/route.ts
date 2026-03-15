@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
       let activeSubscriptions = 0
       try {
         const { count } = await supabase
-          .from('providers')
+          .from('attorneys')
           .select('*', { count: 'exact', head: true })
           .eq('is_active', true)
         activeSubscriptions = count || 0

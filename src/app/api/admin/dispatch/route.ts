@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
       // Get current assignment
       const { data: current } = await supabase
         .from('lead_assignments')
-        .select('lead_id, provider_id, source_table')
+        .select('lead_id, attorney_id, source_table')
         .eq('id', assignmentId)
         .single()
 
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
       await supabase
         .from('lead_assignments')
         .update({
-          provider_id: newProviderId,
+          attorney_id: newProviderId,
           status: 'pending',
           assigned_at: new Date().toISOString(),
           viewed_at: null,
@@ -142,10 +142,10 @@ export async function POST(request: NextRequest) {
         .eq('id', assignmentId)
 
       await logLeadEvent(current.lead_id, 'reassigned', {
-        providerId: newProviderId,
+        attorneyId: newProviderId,
         actorId: auth.admin.id,
         metadata: {
-          previousProviderId: current.provider_id,
+          previousProviderId: current.attorney_id,
           reason: 'admin_reassign',
         },
       })
@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
         'dispatch_reassign',
         'lead_assignment',
         assignmentId,
-        { from: current.provider_id, to: newProviderId }
+        { from: current.attorney_id, to: newProviderId }
       )
     } else if (action === 'replay') {
       // Re-dispatch using configurable algorithm

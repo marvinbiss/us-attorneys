@@ -112,10 +112,10 @@ export default function ImportPage() {
     { value: 'phone', label: 'Téléphone' },
     { value: 'address', label: 'Adresse' },
     { value: 'postal_code', label: 'Code postal' },
-    { value: 'city', label: 'Ville' },
+    { value: 'city', label: 'City' },
     { value: 'department', label: 'Département' },
     { value: 'region', label: 'Région' },
-    { value: 'commune_code', label: 'Code INSEE' },
+    { value: 'location_code', label: 'Code INSEE' },
     { value: 'population', label: 'Population' },
   ]
 

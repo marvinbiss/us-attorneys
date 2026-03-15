@@ -28,13 +28,13 @@ export interface Artisan {
 /**
  * Get all services
  */
-export async function getServices(): Promise<Service[]> {
+export async function getSpecialties(): Promise<Service[]> {
   return getCachedData(
     'services:all',
     async () => {
       const supabase = await createClient()
       const { data, error } = await supabase
-        .from('services')
+        .from('specialties')
         .select('id, name, slug, description, icon, category, is_active')
         .eq('is_active', true)
         .order('name')
@@ -53,13 +53,13 @@ export async function getServices(): Promise<Service[]> {
 /**
  * Get service by slug
  */
-export async function getServiceBySlug(slug: string): Promise<Service | null> {
+export async function getSpecialtyBySlug(slug: string): Promise<Service | null> {
   return getCachedData(
     `service:${slug}`,
     async () => {
       const supabase = await createClient()
       const { data, error } = await supabase
-        .from('services')
+        .from('specialties')
         .select('id, name, slug, description, icon, category, is_active')
         .eq('slug', slug)
         .eq('is_active', true)
@@ -79,7 +79,7 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
 /**
  * Get artisans by service and location
  */
-export async function getArtisans(params: {
+export async function getAttorneys(params: {
   service?: string
   city?: string
   postalCode?: string
@@ -93,7 +93,7 @@ export async function getArtisans(params: {
     async () => {
       const supabase = await createClient()
       let query = supabase
-        .from('providers')
+        .from('attorneys')
         .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active', { count: 'exact' })
         .eq('is_active', true)
         .eq('is_verified', true)
@@ -152,13 +152,13 @@ export async function getArtisans(params: {
 /**
  * Get artisan by ID
  */
-export async function getArtisanById(id: string): Promise<Artisan | null> {
+export async function getAttorneyById(id: string): Promise<Artisan | null> {
   return getCachedData(
     `artisan:${id}`,
     async () => {
       const supabase = await createClient()
       const { data, error } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active')
         .eq('id', id)
         .eq('is_active', true)
@@ -188,18 +188,18 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
 /**
  * Get reviews for an artisan
  */
-export async function getArtisanReviews(artisanId: string, limit = 10) {
+export async function getAttorneyReviews(attorneyId: string, limit = 10) {
   return getCachedData(
-    `reviews:${artisanId}:${limit}`,
+    `reviews:${attorneyId}:${limit}`,
     async () => {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('reviews')
         .select(`
-          id, provider_id, rating, comment, client_name, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at,
+          id, attorney_id, rating, comment, client_name, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at,
           client:profiles!reviews_client_id_fkey(full_name)
         `)
-        .eq('provider_id', artisanId)
+        .eq('attorney_id', attorneyId)
         // REMOVED: .eq('is_verified', true) to show ALL real reviews
         .order('created_at', { ascending: false })
         .limit(limit)

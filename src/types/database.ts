@@ -148,7 +148,7 @@ export type Database = {
           period_end: string
           period_start: string
           period_type: string
-          provider_id: string | null
+          attorney_id: string | null
           updated_at: string | null
         }
         Insert: {
@@ -158,7 +158,7 @@ export type Database = {
           period_end: string
           period_start: string
           period_type: string
-          provider_id?: string | null
+          attorney_id?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -168,7 +168,7 @@ export type Database = {
           period_end?: string
           period_start?: string
           period_type?: string
-          provider_id?: string | null
+          attorney_id?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -184,7 +184,7 @@ export type Database = {
           id: string
           metadata: Json | null
           page_path: string | null
-          provider_id: string | null
+          attorney_id: string | null
           referrer: string | null
           session_id: string | null
           source: string | null
@@ -200,7 +200,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           page_path?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           referrer?: string | null
           session_id?: string | null
           source?: string | null
@@ -216,7 +216,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           page_path?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           referrer?: string | null
           session_id?: string | null
           source?: string | null
@@ -236,7 +236,7 @@ export type Database = {
           is_dismissed: boolean | null
           is_read: boolean | null
           priority: string | null
-          provider_id: string | null
+          attorney_id: string | null
           title: string
           valid_until: string | null
         }
@@ -251,7 +251,7 @@ export type Database = {
           is_dismissed?: boolean | null
           is_read?: boolean | null
           priority?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           title: string
           valid_until?: string | null
         }
@@ -266,7 +266,7 @@ export type Database = {
           is_dismissed?: boolean | null
           is_read?: boolean | null
           priority?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           title?: string
           valid_until?: string | null
         }
@@ -283,7 +283,7 @@ export type Database = {
           is_accepted: boolean | null
           is_provider: boolean | null
           moderated_at: string | null
-          provider_id: string | null
+          attorney_id: string | null
           question_id: string
           status: string | null
           updated_at: string | null
@@ -299,7 +299,7 @@ export type Database = {
           is_accepted?: boolean | null
           is_provider?: boolean | null
           moderated_at?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           question_id: string
           status?: string | null
           updated_at?: string | null
@@ -315,7 +315,7 @@ export type Database = {
           is_accepted?: boolean | null
           is_provider?: boolean | null
           moderated_at?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           question_id?: string
           status?: string | null
           updated_at?: string | null
@@ -323,8 +323,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "answers_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "answers_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -399,7 +399,7 @@ export type Database = {
           notes: string | null
           payment_status: string | null
           postal_code: string | null
-          provider_id: string | null
+          attorney_id: string | null
           scheduled_date: string | null
           scheduled_time: string | null
           service_id: string | null
@@ -417,7 +417,7 @@ export type Database = {
           notes?: string | null
           payment_status?: string | null
           postal_code?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           scheduled_date?: string | null
           scheduled_time?: string | null
           service_id?: string | null
@@ -435,7 +435,7 @@ export type Database = {
           notes?: string | null
           payment_status?: string | null
           postal_code?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           scheduled_date?: string | null
           scheduled_time?: string | null
           service_id?: string | null
@@ -706,7 +706,7 @@ export type Database = {
           invoice_id: string | null
           invoiced_at: string | null
           paid_at: string | null
-          provider_id: string
+          attorney_id: string
           status: string | null
           transaction_id: string | null
         }
@@ -718,7 +718,7 @@ export type Database = {
           invoice_id?: string | null
           invoiced_at?: string | null
           paid_at?: string | null
-          provider_id: string
+          attorney_id: string
           status?: string | null
           transaction_id?: string | null
         }
@@ -730,7 +730,7 @@ export type Database = {
           invoice_id?: string | null
           invoiced_at?: string | null
           paid_at?: string | null
-          provider_id?: string
+          attorney_id?: string
           status?: string | null
           transaction_id?: string | null
         }
@@ -750,8 +750,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "commissions_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "commissions_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -774,7 +774,7 @@ export type Database = {
           is_billed: boolean | null
           lead_id: string
           provider_feedback: string | null
-          provider_id: string
+          attorney_id: string
           responded_at: string | null
           sent_at: string | null
           status: string | null
@@ -788,7 +788,7 @@ export type Database = {
           is_billed?: boolean | null
           lead_id: string
           provider_feedback?: string | null
-          provider_id: string
+          attorney_id: string
           responded_at?: string | null
           sent_at?: string | null
           status?: string | null
@@ -802,7 +802,7 @@ export type Database = {
           is_billed?: boolean | null
           lead_id?: string
           provider_feedback?: string | null
-          provider_id?: string
+          attorney_id?: string
           responded_at?: string | null
           sent_at?: string | null
           status?: string | null
@@ -817,8 +817,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "contacts_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "contacts_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -915,7 +915,7 @@ export type Database = {
           created_at: string | null
           id: string
           last_message_at: string | null
-          provider_id: string | null
+          attorney_id: string | null
           status: string | null
           subject: string | null
           updated_at: string | null
@@ -926,7 +926,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_message_at?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           status?: string | null
           subject?: string | null
           updated_at?: string | null
@@ -937,7 +937,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_message_at?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           status?: string | null
           subject?: string | null
           updated_at?: string | null
@@ -953,7 +953,7 @@ export type Database = {
           id: string
           is_active: boolean | null
           min_project_value: number | null
-          provider_id: string
+          attorney_id: string
           radius_km: number | null
           travel_fee: number | null
           updated_at: string | null
@@ -968,7 +968,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           min_project_value?: number | null
-          provider_id: string
+          attorney_id: string
           radius_km?: number | null
           travel_fee?: number | null
           updated_at?: string | null
@@ -983,7 +983,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           min_project_value?: number | null
-          provider_id?: string
+          attorney_id?: string
           radius_km?: number | null
           travel_fee?: number | null
           updated_at?: string | null
@@ -992,8 +992,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "coverage_zones_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "coverage_zones_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -1096,7 +1096,7 @@ export type Database = {
       disputes: {
         Row: {
           amount_disputed: number | null
-          artisan_id: string | null
+          attorney_id: string | null
           artisan_responded_at: string | null
           artisan_response: string | null
           booking_id: string | null
@@ -1120,7 +1120,7 @@ export type Database = {
         }
         Insert: {
           amount_disputed?: number | null
-          artisan_id?: string | null
+          attorney_id?: string | null
           artisan_responded_at?: string | null
           artisan_response?: string | null
           booking_id?: string | null
@@ -1144,7 +1144,7 @@ export type Database = {
         }
         Update: {
           amount_disputed?: number | null
-          artisan_id?: string | null
+          attorney_id?: string | null
           artisan_responded_at?: string | null
           artisan_response?: string | null
           booking_id?: string | null
@@ -1168,8 +1168,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "disputes_artisan_id_fkey"
-            columns: ["artisan_id"]
+            foreignKeyName: "disputes_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1247,7 +1247,7 @@ export type Database = {
       escrow_transactions: {
         Row: {
           amount: number
-          artisan_id: string | null
+          attorney_id: string | null
           booking_id: string | null
           client_id: string | null
           completion_notes: string | null
@@ -1268,7 +1268,7 @@ export type Database = {
         }
         Insert: {
           amount: number
-          artisan_id?: string | null
+          attorney_id?: string | null
           booking_id?: string | null
           client_id?: string | null
           completion_notes?: string | null
@@ -1289,7 +1289,7 @@ export type Database = {
         }
         Update: {
           amount?: number
-          artisan_id?: string | null
+          attorney_id?: string | null
           booking_id?: string | null
           client_id?: string | null
           completion_notes?: string | null
@@ -1310,8 +1310,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "escrow_transactions_artisan_id_fkey"
-            columns: ["artisan_id"]
+            foreignKeyName: "escrow_transactions_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1691,7 +1691,7 @@ export type Database = {
           pdf_url: string | null
           period_end: string | null
           period_start: string | null
-          provider_id: string
+          attorney_id: string
           status: string | null
           subtotal: number
           tax_amount: number
@@ -1709,7 +1709,7 @@ export type Database = {
           pdf_url?: string | null
           period_end?: string | null
           period_start?: string | null
-          provider_id: string
+          attorney_id: string
           status?: string | null
           subtotal: number
           tax_amount: number
@@ -1727,7 +1727,7 @@ export type Database = {
           pdf_url?: string | null
           period_end?: string | null
           period_start?: string | null
-          provider_id?: string
+          attorney_id?: string
           status?: string | null
           subtotal?: number
           tax_amount?: number
@@ -1737,8 +1737,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "invoices_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "invoices_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -1865,7 +1865,7 @@ export type Database = {
           id: string
           lead_id: string
           position: number | null
-          provider_id: string
+          attorney_id: string
           score: number | null
           source_table: string
           status: string
@@ -1877,7 +1877,7 @@ export type Database = {
           id?: string
           lead_id: string
           position?: number | null
-          provider_id: string
+          attorney_id: string
           score?: number | null
           source_table?: string
           status?: string
@@ -1889,7 +1889,7 @@ export type Database = {
           id?: string
           lead_id?: string
           position?: number | null
-          provider_id?: string
+          attorney_id?: string
           score?: number | null
           source_table?: string
           status?: string
@@ -1897,8 +1897,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "lead_assignments_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "lead_assignments_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -1912,7 +1912,7 @@ export type Database = {
           id: string
           lead_id: string
           metadata: Json
-          provider_id: string | null
+          attorney_id: string | null
         }
         Insert: {
           created_at?: string
@@ -1920,7 +1920,7 @@ export type Database = {
           id?: string
           lead_id: string
           metadata?: Json
-          provider_id?: string | null
+          attorney_id?: string | null
         }
         Update: {
           created_at?: string
@@ -1928,12 +1928,12 @@ export type Database = {
           id?: string
           lead_id?: string
           metadata?: Json
-          provider_id?: string | null
+          attorney_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "lead_events_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "lead_events_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -2054,11 +2054,11 @@ export type Database = {
           location_id: string
           period_end: string | null
           period_start: string | null
-          provider_count: number | null
+          attorney_count: number | null
           review_count: number | null
           search_count_month: number | null
           service_id: string | null
-          verified_provider_count: number | null
+          verified_attorney_count: number | null
         }
         Insert: {
           avg_price?: number | null
@@ -2070,11 +2070,11 @@ export type Database = {
           location_id: string
           period_end?: string | null
           period_start?: string | null
-          provider_count?: number | null
+          attorney_count?: number | null
           review_count?: number | null
           search_count_month?: number | null
           service_id?: string | null
-          verified_provider_count?: number | null
+          verified_attorney_count?: number | null
         }
         Update: {
           avg_price?: number | null
@@ -2086,11 +2086,11 @@ export type Database = {
           location_id?: string
           period_end?: string | null
           period_start?: string | null
-          provider_count?: number | null
+          attorney_count?: number | null
           review_count?: number | null
           search_count_month?: number | null
           service_id?: string | null
-          verified_provider_count?: number | null
+          verified_attorney_count?: number | null
         }
         Relationships: [
           {
@@ -2472,7 +2472,7 @@ export type Database = {
           page_id: string
           previous_score: number | null
           prices_score: number | null
-          provider_count_score: number | null
+          attorney_count_score: number | null
           qa_score: number | null
           reviews_score: number | null
           score_trend: string | null
@@ -2487,7 +2487,7 @@ export type Database = {
           page_id: string
           previous_score?: number | null
           prices_score?: number | null
-          provider_count_score?: number | null
+          attorney_count_score?: number | null
           qa_score?: number | null
           reviews_score?: number | null
           score_trend?: string | null
@@ -2502,7 +2502,7 @@ export type Database = {
           page_id?: string
           previous_score?: number | null
           prices_score?: number | null
-          provider_count_score?: number | null
+          attorney_count_score?: number | null
           qa_score?: number | null
           reviews_score?: number | null
           score_trend?: string | null
@@ -2537,7 +2537,7 @@ export type Database = {
           location_id: string | null
           meta_description: string | null
           page_type: string
-          provider_id: string | null
+          attorney_id: string | null
           published_at: string | null
           service_id: string | null
           status: string | null
@@ -2557,7 +2557,7 @@ export type Database = {
           location_id?: string | null
           meta_description?: string | null
           page_type: string
-          provider_id?: string | null
+          attorney_id?: string | null
           published_at?: string | null
           service_id?: string | null
           status?: string | null
@@ -2577,7 +2577,7 @@ export type Database = {
           location_id?: string | null
           meta_description?: string | null
           page_type?: string
-          provider_id?: string | null
+          attorney_id?: string | null
           published_at?: string | null
           service_id?: string | null
           status?: string | null
@@ -2595,8 +2595,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pages_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "pages_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -2613,7 +2613,7 @@ export type Database = {
       portfolio_items: {
         Row: {
           after_image_url: string | null
-          artisan_id: string
+          attorney_id: string
           before_image_url: string | null
           category: string | null
           created_at: string | null
@@ -2634,7 +2634,7 @@ export type Database = {
         }
         Insert: {
           after_image_url?: string | null
-          artisan_id: string
+          attorney_id: string
           before_image_url?: string | null
           category?: string | null
           created_at?: string | null
@@ -2655,7 +2655,7 @@ export type Database = {
         }
         Update: {
           after_image_url?: string | null
-          artisan_id?: string
+          attorney_id?: string
           before_image_url?: string | null
           category?: string | null
           created_at?: string | null
@@ -2676,8 +2676,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "portfolio_items_artisan_id_fkey"
-            columns: ["artisan_id"]
+            foreignKeyName: "portfolio_items_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -3009,9 +3009,9 @@ export type Database = {
       prospection_contacts: {
         Row: {
           address: string | null
-          artisan_id: string | null
+          attorney_id: string | null
           city: string | null
-          commune_code: string | null
+          location_code: string | null
           company_name: string | null
           consent_status: string | null
           contact_name: string | null
@@ -3037,9 +3037,9 @@ export type Database = {
         }
         Insert: {
           address?: string | null
-          artisan_id?: string | null
+          attorney_id?: string | null
           city?: string | null
-          commune_code?: string | null
+          location_code?: string | null
           company_name?: string | null
           consent_status?: string | null
           contact_name?: string | null
@@ -3065,9 +3065,9 @@ export type Database = {
         }
         Update: {
           address?: string | null
-          artisan_id?: string | null
+          attorney_id?: string | null
           city?: string | null
-          commune_code?: string | null
+          location_code?: string | null
           company_name?: string | null
           consent_status?: string | null
           contact_name?: string | null
@@ -3093,8 +3093,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "prospection_contacts_artisan_id_fkey"
-            columns: ["artisan_id"]
+            foreignKeyName: "prospection_contacts_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4404,7 +4404,7 @@ export type Database = {
           id: string
           last_updated: string | null
           next_available_date: string | null
-          provider_id: string | null
+          attorney_id: string | null
         }
         Insert: {
           available_this_week?: boolean | null
@@ -4413,7 +4413,7 @@ export type Database = {
           id?: string
           last_updated?: string | null
           next_available_date?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
         }
         Update: {
           available_this_week?: boolean | null
@@ -4422,7 +4422,7 @@ export type Database = {
           id?: string
           last_updated?: string | null
           next_available_date?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
         }
         Relationships: []
       }
@@ -4433,7 +4433,7 @@ export type Database = {
           id: string
           metrics: Json
           percentiles: Json
-          provider_id: string | null
+          attorney_id: string | null
           rank_in_city: number | null
           region: string | null
           service_category: string
@@ -4444,7 +4444,7 @@ export type Database = {
           id?: string
           metrics: Json
           percentiles: Json
-          provider_id?: string | null
+          attorney_id?: string | null
           rank_in_city?: number | null
           region?: string | null
           service_category: string
@@ -4455,18 +4455,18 @@ export type Database = {
           id?: string
           metrics?: Json
           percentiles?: Json
-          provider_id?: string | null
+          attorney_id?: string | null
           rank_in_city?: number | null
           region?: string | null
           service_category?: string
         }
         Relationships: []
       }
-      provider_claims: {
+      attorney_claims: {
         Row: {
           created_at: string
           id: string
-          provider_id: string
+          attorney_id: string
           rejection_reason: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -4477,7 +4477,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          provider_id: string
+          attorney_id: string
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -4488,7 +4488,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
-          provider_id?: string
+          attorney_id?: string
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -4498,21 +4498,21 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "provider_claims_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "attorney_claims_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "provider_claims_reviewed_by_fkey"
+            foreignKeyName: "attorney_claims_reviewed_by_fkey"
             columns: ["reviewed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "provider_claims_user_id_fkey"
+            foreignKeyName: "attorney_claims_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -4530,7 +4530,7 @@ export type Database = {
           nationalite: string | null
           nom: string
           prenom: string | null
-          provider_id: string
+          attorney_id: string
           source: string | null
         }
         Insert: {
@@ -4542,7 +4542,7 @@ export type Database = {
           nationalite?: string | null
           nom: string
           prenom?: string | null
-          provider_id: string
+          attorney_id: string
           source?: string | null
         }
         Update: {
@@ -4554,13 +4554,13 @@ export type Database = {
           nationalite?: string | null
           nom?: string
           prenom?: string | null
-          provider_id?: string
+          attorney_id?: string
           source?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "provider_directors_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_directors_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4579,7 +4579,7 @@ export type Database = {
           id: string
           is_verified: boolean | null
           proof_url: string | null
-          provider_id: string
+          attorney_id: string
           verified_at: string | null
         }
         Insert: {
@@ -4593,7 +4593,7 @@ export type Database = {
           id?: string
           is_verified?: boolean | null
           proof_url?: string | null
-          provider_id: string
+          attorney_id: string
           verified_at?: string | null
         }
         Update: {
@@ -4607,13 +4607,13 @@ export type Database = {
           id?: string
           is_verified?: boolean | null
           proof_url?: string | null
-          provider_id?: string
+          attorney_id?: string
           verified_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "provider_features_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_features_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4628,7 +4628,7 @@ export type Database = {
           effectif: string | null
           fetched_at: string | null
           id: string
-          provider_id: string
+          attorney_id: string
           resultat_net: number | null
           source: string | null
         }
@@ -4639,7 +4639,7 @@ export type Database = {
           effectif?: string | null
           fetched_at?: string | null
           id?: string
-          provider_id: string
+          attorney_id: string
           resultat_net?: number | null
           source?: string | null
         }
@@ -4650,14 +4650,14 @@ export type Database = {
           effectif?: string | null
           fetched_at?: string | null
           id?: string
-          provider_id?: string
+          attorney_id?: string
           resultat_net?: number | null
           source?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "provider_financials_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_financials_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4674,7 +4674,7 @@ export type Database = {
           period_end: string
           period_start: string
           period_type: string
-          provider_id: string | null
+          attorney_id: string | null
           target_value: number
         }
         Insert: {
@@ -4686,7 +4686,7 @@ export type Database = {
           period_end: string
           period_start: string
           period_type: string
-          provider_id?: string | null
+          attorney_id?: string | null
           target_value: number
         }
         Update: {
@@ -4698,7 +4698,7 @@ export type Database = {
           period_end?: string
           period_start?: string
           period_type?: string
-          provider_id?: string | null
+          attorney_id?: string | null
           target_value?: number
         }
         Relationships: []
@@ -4709,7 +4709,7 @@ export type Database = {
           id: string
           is_primary: boolean | null
           location_id: string
-          provider_id: string
+          attorney_id: string
           radius_km: number | null
           travel_fee: number | null
         }
@@ -4718,7 +4718,7 @@ export type Database = {
           id?: string
           is_primary?: boolean | null
           location_id: string
-          provider_id: string
+          attorney_id: string
           radius_km?: number | null
           travel_fee?: number | null
         }
@@ -4727,7 +4727,7 @@ export type Database = {
           id?: string
           is_primary?: boolean | null
           location_id?: string
-          provider_id?: string
+          attorney_id?: string
           radius_km?: number | null
           travel_fee?: number | null
         }
@@ -4740,8 +4740,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "provider_locations_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_locations_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4757,7 +4757,7 @@ export type Database = {
           id: string
           overall_score: number | null
           price_score: number | null
-          provider_id: string
+          attorney_id: string
           quality_score: number | null
           reliability_score: number | null
           repeat_client_rate: number | null
@@ -4772,7 +4772,7 @@ export type Database = {
           id?: string
           overall_score?: number | null
           price_score?: number | null
-          provider_id: string
+          attorney_id: string
           quality_score?: number | null
           reliability_score?: number | null
           repeat_client_rate?: number | null
@@ -4787,7 +4787,7 @@ export type Database = {
           id?: string
           overall_score?: number | null
           price_score?: number | null
-          provider_id?: string
+          attorney_id?: string
           quality_score?: number | null
           reliability_score?: number | null
           repeat_client_rate?: number | null
@@ -4796,8 +4796,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "provider_scores_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_scores_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: true
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4813,7 +4813,7 @@ export type Database = {
           price_max: number | null
           price_min: number | null
           price_unit: string | null
-          provider_id: string
+          attorney_id: string
           service_id: string
         }
         Insert: {
@@ -4824,7 +4824,7 @@ export type Database = {
           price_max?: number | null
           price_min?: number | null
           price_unit?: string | null
-          provider_id: string
+          attorney_id: string
           service_id: string
         }
         Update: {
@@ -4835,13 +4835,13 @@ export type Database = {
           price_max?: number | null
           price_min?: number | null
           price_unit?: string | null
-          provider_id?: string
+          attorney_id?: string
           service_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "provider_services_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_services_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -4866,7 +4866,7 @@ export type Database = {
           lead_count: number | null
           period_end: string
           period_start: string
-          provider_id: string
+          attorney_id: string
           response_rate: number | null
           review_count: number | null
           view_count: number | null
@@ -4881,7 +4881,7 @@ export type Database = {
           lead_count?: number | null
           period_end: string
           period_start: string
-          provider_id: string
+          attorney_id: string
           response_rate?: number | null
           review_count?: number | null
           view_count?: number | null
@@ -4896,15 +4896,15 @@ export type Database = {
           lead_count?: number | null
           period_end?: string
           period_start?: string
-          provider_id?: string
+          attorney_id?: string
           response_rate?: number | null
           review_count?: number | null
           view_count?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "provider_stats_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "provider_stats_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -5135,7 +5135,7 @@ export type Database = {
           id: string
           location_id: string | null
           moderated_at: string | null
-          provider_id: string | null
+          attorney_id: string | null
           service_id: string | null
           status: string | null
           title: string
@@ -5150,7 +5150,7 @@ export type Database = {
           id?: string
           location_id?: string | null
           moderated_at?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           service_id?: string | null
           status?: string | null
           title: string
@@ -5165,7 +5165,7 @@ export type Database = {
           id?: string
           location_id?: string | null
           moderated_at?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           service_id?: string | null
           status?: string | null
           title?: string
@@ -5181,8 +5181,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "questions_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "questions_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -5243,7 +5243,7 @@ export type Database = {
           id: string
           is_important: boolean | null
           metadata: Json | null
-          provider_id: string
+          attorney_id: string
           title: string
         }
         Insert: {
@@ -5253,7 +5253,7 @@ export type Database = {
           id?: string
           is_important?: boolean | null
           metadata?: Json | null
-          provider_id: string
+          attorney_id: string
           title: string
         }
         Update: {
@@ -5263,7 +5263,7 @@ export type Database = {
           id?: string
           is_important?: boolean | null
           metadata?: Json | null
-          provider_id?: string
+          attorney_id?: string
           title?: string
         }
         Relationships: []
@@ -5317,7 +5317,7 @@ export type Database = {
           id: string
           period_end: string | null
           period_start: string | null
-          provider_id: string | null
+          attorney_id: string | null
           report_type: string
           scheduled_report_id: string | null
           status: string | null
@@ -5331,7 +5331,7 @@ export type Database = {
           id?: string
           period_end?: string | null
           period_start?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           report_type: string
           scheduled_report_id?: string | null
           status?: string | null
@@ -5345,7 +5345,7 @@ export type Database = {
           id?: string
           period_end?: string | null
           period_start?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           report_type?: string
           scheduled_report_id?: string | null
           status?: string | null
@@ -5354,7 +5354,7 @@ export type Database = {
       }
       response_metrics: {
         Row: {
-          artisan_id: string
+          attorney_id: string
           avg_response_time_hours: number | null
           id: string
           last_calculated: string | null
@@ -5364,7 +5364,7 @@ export type Database = {
           total_reviews: number | null
         }
         Insert: {
-          artisan_id: string
+          attorney_id: string
           avg_response_time_hours?: number | null
           id?: string
           last_calculated?: string | null
@@ -5374,7 +5374,7 @@ export type Database = {
           total_reviews?: number | null
         }
         Update: {
-          artisan_id?: string
+          attorney_id?: string
           avg_response_time_hours?: number | null
           id?: string
           last_calculated?: string | null
@@ -5532,7 +5532,7 @@ export type Database = {
           keywords: string[] | null
           moderated_at: string | null
           moderated_by: string | null
-          provider_id: string
+          attorney_id: string
           rating: number
           reply: string | null
           reply_date: string | null
@@ -5560,7 +5560,7 @@ export type Database = {
           keywords?: string[] | null
           moderated_at?: string | null
           moderated_by?: string | null
-          provider_id: string
+          attorney_id: string
           rating: number
           reply?: string | null
           reply_date?: string | null
@@ -5588,7 +5588,7 @@ export type Database = {
           keywords?: string[] | null
           moderated_at?: string | null
           moderated_by?: string | null
-          provider_id?: string
+          attorney_id?: string
           rating?: number
           reply?: string | null
           reply_date?: string | null
@@ -5604,8 +5604,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "reviews_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "reviews_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -5698,7 +5698,7 @@ export type Database = {
           last_run: string | null
           name: string
           next_run: string
-          provider_id: string | null
+          attorney_id: string | null
           recipients: string[]
         }
         Insert: {
@@ -5711,7 +5711,7 @@ export type Database = {
           last_run?: string | null
           name: string
           next_run: string
-          provider_id?: string | null
+          attorney_id?: string | null
           recipients: string[]
         }
         Update: {
@@ -5724,7 +5724,7 @@ export type Database = {
           last_run?: string | null
           name?: string
           next_run?: string
-          provider_id?: string | null
+          attorney_id?: string | null
           recipients?: string[]
         }
         Relationships: []
@@ -5782,7 +5782,7 @@ export type Database = {
       }
       search_analytics: {
         Row: {
-          artisan_id: string | null
+          attorney_id: string | null
           created_at: string | null
           device_type: string | null
           filters: Json | null
@@ -5796,7 +5796,7 @@ export type Database = {
           was_contacted: boolean | null
         }
         Insert: {
-          artisan_id?: string | null
+          attorney_id?: string | null
           created_at?: string | null
           device_type?: string | null
           filters?: Json | null
@@ -5810,7 +5810,7 @@ export type Database = {
           was_contacted?: boolean | null
         }
         Update: {
-          artisan_id?: string | null
+          attorney_id?: string | null
           created_at?: string | null
           device_type?: string | null
           filters?: Json | null
@@ -5827,7 +5827,7 @@ export type Database = {
       }
       search_logs: {
         Row: {
-          clicked_provider_id: string | null
+          clicked_attorney_id: string | null
           created_at: string | null
           id: string
           ip_hash: string | null
@@ -5839,7 +5839,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
-          clicked_provider_id?: string | null
+          clicked_attorney_id?: string | null
           created_at?: string | null
           id?: string
           ip_hash?: string | null
@@ -5851,7 +5851,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
-          clicked_provider_id?: string | null
+          clicked_attorney_id?: string | null
           created_at?: string | null
           id?: string
           ip_hash?: string | null
@@ -5864,8 +5864,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "search_logs_clicked_provider_id_fkey"
-            columns: ["clicked_provider_id"]
+            foreignKeyName: "search_logs_clicked_attorney_id_fkey"
+            columns: ["clicked_attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -5897,7 +5897,7 @@ export type Database = {
           is_indexable: boolean | null
           last_verified_at: string | null
           page_type: string
-          provider_count: number | null
+          attorney_count: number | null
           title: string
           updated_at: string | null
           url_path: string
@@ -5912,7 +5912,7 @@ export type Database = {
           is_indexable?: boolean | null
           last_verified_at?: string | null
           page_type: string
-          provider_count?: number | null
+          attorney_count?: number | null
           title: string
           updated_at?: string | null
           url_path: string
@@ -5927,7 +5927,7 @@ export type Database = {
           is_indexable?: boolean | null
           last_verified_at?: string | null
           page_type?: string
-          provider_count?: number | null
+          attorney_count?: number | null
           title?: string
           updated_at?: string | null
           url_path?: string
@@ -6078,7 +6078,7 @@ export type Database = {
           payment_method: string | null
           plan_price: number
           plan_type: string
-          provider_id: string
+          attorney_id: string
           started_at: string
           status: string | null
           stripe_subscription_id: string | null
@@ -6093,7 +6093,7 @@ export type Database = {
           payment_method?: string | null
           plan_price: number
           plan_type: string
-          provider_id: string
+          attorney_id: string
           started_at: string
           status?: string | null
           stripe_subscription_id?: string | null
@@ -6108,7 +6108,7 @@ export type Database = {
           payment_method?: string | null
           plan_price?: number
           plan_type?: string
-          provider_id?: string
+          attorney_id?: string
           started_at?: string
           status?: string | null
           stripe_subscription_id?: string | null
@@ -6116,8 +6116,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "subscriptions_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "subscriptions_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -6132,7 +6132,7 @@ export type Database = {
           currency: string | null
           id: string
           payment_method: string | null
-          provider_id: string
+          attorney_id: string
           status: string | null
           stripe_payment_id: string | null
           subscription_id: string | null
@@ -6145,7 +6145,7 @@ export type Database = {
           currency?: string | null
           id?: string
           payment_method?: string | null
-          provider_id: string
+          attorney_id: string
           status?: string | null
           stripe_payment_id?: string | null
           subscription_id?: string | null
@@ -6158,7 +6158,7 @@ export type Database = {
           currency?: string | null
           id?: string
           payment_method?: string | null
-          provider_id?: string
+          attorney_id?: string
           status?: string | null
           stripe_payment_id?: string | null
           subscription_id?: string | null
@@ -6166,8 +6166,8 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "transactions_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "transactions_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -6183,7 +6183,7 @@ export type Database = {
       }
       trust_badges: {
         Row: {
-          artisan_id: string
+          attorney_id: string
           awarded_at: string | null
           badge_description: string | null
           badge_name: string
@@ -6194,7 +6194,7 @@ export type Database = {
           is_active: boolean | null
         }
         Insert: {
-          artisan_id: string
+          attorney_id: string
           awarded_at?: string | null
           badge_description?: string | null
           badge_name: string
@@ -6205,7 +6205,7 @@ export type Database = {
           is_active?: boolean | null
         }
         Update: {
-          artisan_id?: string
+          attorney_id?: string
           awarded_at?: string | null
           badge_description?: string | null
           badge_name?: string
@@ -6299,7 +6299,7 @@ export type Database = {
           location_id: string | null
           page_type: string | null
           page_url: string | null
-          provider_id: string | null
+          attorney_id: string | null
           service_id: string | null
           session_id: string
         }
@@ -6311,7 +6311,7 @@ export type Database = {
           location_id?: string | null
           page_type?: string | null
           page_url?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           service_id?: string | null
           session_id: string
         }
@@ -6323,7 +6323,7 @@ export type Database = {
           location_id?: string | null
           page_type?: string | null
           page_url?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           service_id?: string | null
           session_id?: string
         }
@@ -6336,8 +6336,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_behaviors_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "user_behaviors_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -6353,7 +6353,7 @@ export type Database = {
       }
       user_search_history: {
         Row: {
-          clicked_provider_id: string | null
+          clicked_attorney_id: string | null
           filters: Json | null
           id: string
           query: string
@@ -6362,7 +6362,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          clicked_provider_id?: string | null
+          clicked_attorney_id?: string | null
           filters?: Json | null
           id?: string
           query: string
@@ -6371,7 +6371,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          clicked_provider_id?: string | null
+          clicked_attorney_id?: string | null
           filters?: Json | null
           id?: string
           query?: string
@@ -6392,7 +6392,7 @@ export type Database = {
           is_active: boolean | null
           last_login_at: string | null
           last_name: string | null
-          provider_id: string | null
+          attorney_id: string | null
           role_id: string | null
           updated_at: string | null
         }
@@ -6406,7 +6406,7 @@ export type Database = {
           is_active?: boolean | null
           last_login_at?: string | null
           last_name?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           role_id?: string | null
           updated_at?: string | null
         }
@@ -6420,7 +6420,7 @@ export type Database = {
           is_active?: boolean | null
           last_login_at?: string | null
           last_name?: string | null
-          provider_id?: string | null
+          attorney_id?: string | null
           role_id?: string | null
           updated_at?: string | null
         }
@@ -6433,8 +6433,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "users_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "users_attorney_id_fkey"
+            columns: ["attorney_id"]
             isOneToOne: false
             referencedRelation: "providers"
             referencedColumns: ["id"]
@@ -6635,7 +6635,7 @@ export type Database = {
           page_id: string | null
           population: number | null
           price_variation: number | null
-          provider_count: number | null
+          attorney_count: number | null
           quality_score: number | null
           service_name: string | null
           service_slug: string | null
@@ -6818,7 +6818,7 @@ export type Database = {
           p_duration_minutes?: number
           p_notes?: string
           p_postal_code?: string
-          p_provider_id: string
+          p_attorney_id: string
           p_scheduled_date: string
           p_scheduled_time: string
           p_service_id: string
@@ -6972,7 +6972,7 @@ export type Database = {
       }
       geomfromewkt: { Args: { "": string }; Returns: unknown }
       get_artisan_dashboard_stats: {
-        Args: { p_period?: string; p_provider_id: string }
+        Args: { p_period?: string; p_attorney_id: string }
         Returns: Json
       }
       gettransactionid: { Args: never; Returns: unknown }

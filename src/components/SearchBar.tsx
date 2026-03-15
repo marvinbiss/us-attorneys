@@ -3,7 +3,8 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ChevronDown } from 'lucide-react'
-import { services, villes, type Ville } from '@/lib/data/france'
+import { services, cities, type City } from '@/lib/data/usa'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface SearchBarProps {
   size?: 'compact' | 'large'
@@ -28,31 +29,31 @@ function formatPopulation(pop: string): string {
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
-function searchCities(query: string, limit = 6): Ville[] {
+function searchCities(query: string, limit = 6): City[] {
   if (!query || query.length < 1) return []
 
   const normalized = normalizeText(query)
 
-  const prefixMatches: Ville[] = []
-  const containsMatches: Ville[] = []
-  const postalMatches: Ville[] = []
-  const deptMatches: Ville[] = []
+  const prefixMatches: City[] = []
+  const containsMatches: City[] = []
+  const postalMatches: City[] = []
+  const deptMatches: City[] = []
 
-  for (const v of villes) {
+  for (const v of cities) {
     const normalizedName = normalizeText(v.name)
 
     if (normalizedName.startsWith(normalized)) {
       prefixMatches.push(v)
     } else if (normalizedName.includes(normalized)) {
       containsMatches.push(v)
-    } else if (v.codePostal.startsWith(query.trim())) {
+    } else if (v.zipCode.startsWith(query.trim())) {
       postalMatches.push(v)
-    } else if (normalizeText(v.departement).includes(normalized)) {
+    } else if (normalizeText(v.stateName).includes(normalized)) {
       deptMatches.push(v)
     }
   }
 
-  const sortByPop = (a: Ville, b: Ville) => {
+  const sortByPop = (a: City, b: City) => {
     const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
     const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
     return popB - popA
@@ -90,13 +91,13 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
 }
 
 // ── Popular cities for empty state ──────────────────────────────────
-const popularCities: { name: string; slug: string; departement: string; pop: string }[] = [
-  { name: 'Paris', slug: 'paris', departement: 'Paris (75)', pop: '2.1M' },
-  { name: 'Lyon', slug: 'lyon', departement: 'Rhône (69)', pop: '522k' },
-  { name: 'Marseille', slug: 'marseille', departement: 'Bouches-du-Rhône (13)', pop: '870k' },
-  { name: 'Toulouse', slug: 'toulouse', departement: 'Haute-Garonne (31)', pop: '493k' },
-  { name: 'Bordeaux', slug: 'bordeaux', departement: 'Gironde (33)', pop: '260k' },
-  { name: 'Lille', slug: 'lille', departement: 'Nord (59)', pop: '236k' },
+const popularCities: { name: string; slug: string; stateName: string; pop: string }[] = [
+  { name: 'Paris', slug: 'paris', stateName: 'Paris (75)', pop: '2.1M' },
+  { name: 'Lyon', slug: 'lyon', stateName: 'Rhône (69)', pop: '522k' },
+  { name: 'Marseille', slug: 'marseille', stateName: 'Bouches-du-Rhône (13)', pop: '870k' },
+  { name: 'Toulouse', slug: 'toulouse', stateName: 'Haute-Garonne (31)', pop: '493k' },
+  { name: 'Bordeaux', slug: 'bordeaux', stateName: 'Gironde (33)', pop: '260k' },
+  { name: 'Lille', slug: 'lille', stateName: 'Nord (59)', pop: '236k' },
 ]
 
 // ── Fallback cities for "no results" state ──────────────────────────
@@ -113,7 +114,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
   const router = useRouter()
 
   const [selectedService, setSelectedService] = useState('')
-  const [serviceSlug, setServiceSlug] = useState('')
+  const [specialtySlug, setServiceSlug] = useState('')
   const [serviceFilter, setServiceFilter] = useState('')
   const [cityQuery, setCityQuery] = useState('')
   const [showServiceDropdown, setShowServiceDropdown] = useState(false)
@@ -149,10 +150,10 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
   const navigableCityItems = useMemo(() => {
     if (filteredCities.length > 0) return filteredCities
     if (!hasTypedCity) {
-      // Return popular cities mapped to Ville objects
+      // Return popular cities mapped to City objects
       return popularCities.map(pc => {
-        const match = villes.find(v => v.slug === pc.slug)
-        return match || { name: pc.name, slug: pc.slug, region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
+        const match = cities.find(v => v.slug === pc.slug)
+        return match || { name: pc.name, slug: pc.slug, stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as City
       })
     }
     return []
@@ -206,18 +207,25 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
 
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     e?.preventDefault()
-    if (!serviceSlug || !cityQuery.trim()) return
+    if (!specialtySlug || !cityQuery.trim()) return
 
-    const cityMatch = villes.find(
+    const cityMatch = cities.find(
       v => normalizeText(v.name) === normalizeText(cityQuery.trim())
     )
     const citySlugValue = cityMatch ? cityMatch.slug : cityQuery.trim().toLowerCase()
 
-    router.push(`/services/${serviceSlug}/${citySlugValue}`)
+    trackEvent('search_query', {
+      service: specialtySlug,
+      city: citySlugValue,
+      service_name: selectedService,
+      city_query: cityQuery.trim(),
+    })
+
+    router.push(`/practice-areas/${specialtySlug}/${citySlugValue}`)
     setShowServiceDropdown(false)
     setShowCityDropdown(false)
     setServiceFilter('')
-  }, [serviceSlug, cityQuery, router])
+  }, [specialtySlug, cityQuery, selectedService, router])
 
   // Keyboard navigation for service dropdown
   const handleServiceKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -374,7 +382,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           w-full text-left rounded-lg transition-all duration-100
                           ${isHighlighted
                             ? 'bg-blue-50 text-blue-700 font-medium'
-                            : serviceSlug === service.slug
+                            : specialtySlug === service.slug
                               ? 'bg-blue-50/50 text-blue-600'
                               : 'text-gray-700 hover:bg-gray-50'
                           }
@@ -413,9 +421,9 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                   setShowServiceDropdown(false)
                 }}
                 onKeyDown={handleCityKeyDown}
-                placeholder={isLarge ? 'Où ? (ville)' : 'Ville...'}
+                placeholder={isLarge ? 'Où ? (ville)' : 'City...'}
                 autoComplete="off"
-                aria-label="Ville ou code postal"
+                aria-label="City ou code postal"
                 className={`
                   w-full transition-all outline-none text-gray-900 placeholder:text-gray-400
                   ${isLarge
@@ -456,7 +464,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                               {city.name}
                             </span>
                             <div className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
-                              {city.departement}
+                              {city.stateName}
                             </div>
                           </div>
                           <span className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>{city.pop}</span>
@@ -489,14 +497,14 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           <div className="flex-1 text-left min-w-0">
                             <div className={`font-medium transition-colors truncate ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
                               <HighlightedText text={city.name} query={cityQuery} />
-                              <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-gray-400`}>({city.departementCode})</span>
+                              <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-gray-400`}>({city.stateCode})</span>
                             </div>
                             <div className={`text-gray-500 truncate ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
-                              {city.departement} &middot; {formatPopulation(city.population)}
+                              {city.stateName} &middot; {formatPopulation(city.population)}
                             </div>
                           </div>
                           <span className={`text-gray-400 bg-gray-100 rounded-full flex-shrink-0 ${isLarge ? 'text-xs px-2 py-0.5' : 'text-[10px] px-1.5 py-0.5'}`}>
-                            {city.codePostal}
+                            {city.zipCode}
                           </span>
                         </button>
                       )

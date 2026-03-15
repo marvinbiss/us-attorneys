@@ -52,7 +52,7 @@ export {
 export { SearchBar } from './SearchBar'
 
 // Artisan Cards (Airbnb-style)
-export { ArtisanCard, ArtisanGrid } from './ArtisanCard'
+export { AttorneyCard, ArtisanGrid } from './AttorneyCard'
 
 // Autocomplete (World-class, Stripe/Doctolib-style)
 export { VilleAutocomplete } from './VilleAutocomplete'

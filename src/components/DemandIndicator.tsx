@@ -2,7 +2,7 @@ import { TrendingUp, Users, Eye } from 'lucide-react'
 
 interface DemandIndicatorProps {
   /** Service slug for deterministic seed */
-  serviceSlug: string
+  specialtySlug: string
   /** Optional city name for context */
   cityName?: string
   /** Variant: 'inline' for subtle, 'banner' for prominent */
@@ -23,9 +23,9 @@ function seededDailyNumber(seed: string, min: number, max: number): number {
   return min + Math.abs(hash % (max - min + 1))
 }
 
-export default function DemandIndicator({ serviceSlug, cityName, variant = 'inline' }: DemandIndicatorProps) {
-  const weeklyRequests = seededDailyNumber(serviceSlug + '-requests', 8, 35)
-  const viewsToday = seededDailyNumber(serviceSlug + '-views', 15, 85)
+export default function DemandIndicator({ specialtySlug, cityName, variant = 'inline' }: DemandIndicatorProps) {
+  const weeklyRequests = seededDailyNumber(specialtySlug + '-requests', 8, 35)
+  const viewsToday = seededDailyNumber(specialtySlug + '-views', 15, 85)
 
   if (variant === 'banner') {
     return (

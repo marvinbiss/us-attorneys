@@ -24,11 +24,11 @@ export interface ServiceCategory {
 export interface CityMenuItem { name: string; slug: string; population: string }
 export interface RegionCities { region: string; cities: CityMenuItem[] }
 export interface PopularCity { name: string; slug: string }
-export interface MetroRegion { slug: string; name: string; departments: { name: string; code: string; slug: string }[] }
-export interface DomTomRegion { slug: string; name: string; departments?: { name: string; code: string; slug: string }[] }
+export interface MetroRegion { slug: string; name: string; states: { name: string; code: string; slug: string }[] }
+export interface DomTomRegion { slug: string; name: string; states?: { name: string; code: string; slug: string }[] }
 
-export type MenuType = 'services' | 'villes' | 'regions' | 'plus' | null
-export type MobileAccordion = 'services' | 'villes' | 'regions' | null
+export type MenuType = 'services' | 'cities' | 'regions' | 'plus' | null
+export type MobileAccordion = 'services' | 'cities' | 'regions' | null
 
 // ── Constants ──────────────────────────────────────────
 

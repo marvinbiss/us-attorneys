@@ -141,7 +141,7 @@ export interface SubscriptionRecord {
 // Booking types for admin
 export interface AdminBooking {
   id: string
-  provider_id: string
+  attorney_id: string
   provider_name?: string
   client_email: string
   client_name?: string
@@ -176,7 +176,7 @@ export interface AdminConversation {
   id: string
   client_id: string
   client_email?: string
-  provider_id: string
+  attorney_id: string
   provider_name?: string
   status: 'active' | 'archived' | 'blocked'
   last_message_at?: string
@@ -258,7 +258,7 @@ export interface AdminService {
   icon?: string
   image?: string
   is_active: boolean
-  provider_count?: number
+  attorney_count?: number
   booking_count?: number
   created_at: string
   updated_at?: string
@@ -356,7 +356,7 @@ export interface AdminCall {
   call_sid: string
   from_number: string
   to_number: string
-  artisan_id?: string
+  attorney_id?: string
   artisan_name?: string
   direction: 'inbound' | 'outbound'
   status: 'ringing' | 'in-progress' | 'completed' | 'busy' | 'no-answer' | 'failed'

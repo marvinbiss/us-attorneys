@@ -1,6 +1,6 @@
 /**
  * API Annuaire des Entreprises (recherche-entreprises.api.gouv.fr)
- * Documentation: https://recherche-entreprises.api.gouv.fr/docs
+ * Documentation: https://search-entreprises.api.gouv.fr/docs
  *
  * API GRATUITE du gouvernement français — pas de clé API requise
  * Rate limit: 7 requêtes/seconde
@@ -12,7 +12,7 @@ import { retry } from '../utils/retry'
 import { APIError, ErrorCode } from '../utils/errors'
 import { apiLogger } from '@/lib/logger'
 
-const API_BASE = 'https://recherche-entreprises.api.gouv.fr'
+const API_BASE = 'https://search-entreprises.api.gouv.fr'
 
 // Rate limit: 7 req/s → 150ms between requests
 const MIN_REQUEST_INTERVAL = 150
@@ -107,7 +107,7 @@ export interface AnnuaireSearchOptions {
   /** Code département (e.g., '75') */
   code_postal?: string
   /** Code commune INSEE */
-  code_commune?: string
+  location_code?: string
   /** Department code for geo filtering */
   departement?: string
   /** Only active businesses */
@@ -219,7 +219,7 @@ export async function searchEntreprises(
   if (options.q) params.q = options.q
   if (options.activite_principale) params.activite_principale = options.activite_principale
   if (options.code_postal) params.code_postal = options.code_postal
-  if (options.code_commune) params.code_commune = options.code_commune
+  if (options.location_code) params.location_code = options.location_code
   if (options.departement) params.departement = options.departement
   if (options.etat_administratif) params.etat_administratif = options.etat_administratif
   if (options.nature_juridique) params.nature_juridique = options.nature_juridique

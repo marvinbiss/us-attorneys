@@ -26,11 +26,11 @@ interface ReviewStats {
 }
 
 interface ReviewsSectionProps {
-  artisanId: string
-  artisanName?: string
+  attorneyId: string
+  attorneyName?: string
 }
 
-export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectionProps) {
+export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSectionProps) {
   const [reviews, setReviews] = useState<Review[]>([])
   const [stats, setStats] = useState<ReviewStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -42,7 +42,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`/api/reviews?artisanId=${artisanId}`)
+        const response = await fetch(`/api/reviews?attorneyId=${attorneyId}`)
         if (!response.ok) throw new Error('Failed to fetch reviews')
         const data = await response.json()
         setReviews(data.reviews || [])
@@ -55,7 +55,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
     }
 
     fetchReviews()
-  }, [artisanId])
+  }, [attorneyId])
 
   const handleVoteHelpful = async (reviewId: string) => {
     if (votedReviews.has(reviewId)) return
@@ -210,7 +210,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
               recommandent
             </p>
             <p className="text-xs text-gray-500">
-              {artisanName || 'cet artisan'}
+              {attorneyName || 'cet artisan'}
             </p>
           </div>
         </div>
@@ -293,7 +293,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
             {review.artisan_response && (
               <div className="bg-violet-50 rounded-lg p-4 mb-4">
                 <p className="text-xs font-medium text-violet-700 mb-1">
-                  Réponse de {artisanName || "l'artisan"}
+                  Réponse de {attorneyName || "l'artisan"}
                 </p>
                 <p className="text-sm text-gray-700">{review.artisan_response}</p>
                 {review.artisan_responded_at && (

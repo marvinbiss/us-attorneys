@@ -1,5 +1,5 @@
 /**
- * Données des problèmes courants pour les pages /problemes/
+ * Données des problèmes courants pour les pages /issues/
  * 46 problèmes avec métadonnées complètes pour le diagnostic SEO.
  */
 
@@ -1068,9 +1068,9 @@ export function getProblemSlugs(): string[] {
   return allProblems.map((p) => p.slug)
 }
 
-export function getProblemsByService(serviceSlug: string): Problem[] {
+export function getProblemsByService(specialtySlug: string): Problem[] {
   return allProblems.filter(
-    (p) => p.primaryService === serviceSlug || p.relatedServices.includes(serviceSlug)
+    (p) => p.primaryService === specialtySlug || p.relatedServices.includes(specialtySlug)
   )
 }
 

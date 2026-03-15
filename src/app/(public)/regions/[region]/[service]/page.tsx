@@ -6,7 +6,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
-import { regions, getRegionBySlug, services as allServices, getVillesByDepartement } from '@/lib/data/france'
+import { usRegions, getRegionBySlug, practiceAreas as allServices, getCitiesByState } from '@/lib/data/usa'
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
@@ -15,7 +15,7 @@ import PriceTable from '@/components/seo/PriceTable'
 export function generateStaticParams() {
   // Pre-render ALL services per region (16 × 46 = 736 pages)
   const allSlugs = getTradesSlugs()
-  return regions.flatMap(r =>
+  return usRegions.flatMap(r =>
     allSlugs.map(s => ({ region: r.slug, service: s }))
   )
 }
@@ -33,17 +33,17 @@ function truncateTitle(title: string, maxLen = 42): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { region: regionSlug, service: serviceSlug } = await params
+  const { region: regionSlug, service: specialtySlug } = await params
   const region = getRegionBySlug(regionSlug)
-  const trade = getTradeContent(serviceSlug)
+  const trade = getTradeContent(specialtySlug)
   if (!region || !trade) return { title: 'Page non trouvée' }
 
   const multiplier = getRegionalMultiplier(region.name)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
-  const deptCount = region.departments.length
+  const stateCount = region.states.length
 
-  const titleHash = Math.abs(hashCode(`title-region-svc-${regionSlug}-${serviceSlug}`))
+  const titleHash = Math.abs(hashCode(`title-region-svc-${regionSlug}-${specialtySlug}`))
   const titleTemplates = [
     `${trade.name} ${region.name} — Devis Gratuit`,
     `${trade.name} ${region.name} — Annuaire`,
@@ -53,27 +53,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const descHash = Math.abs(hashCode(`desc-region-svc-${regionSlug}-${serviceSlug}`))
+  const descHash = Math.abs(hashCode(`desc-region-svc-${regionSlug}-${specialtySlug}`))
   const descTemplates = [
-    `Trouvez un ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts. Devis gratuit.`,
-    `${trade.name} en ${region.name} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${deptCount} départements.`,
+    `Trouvez un ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${stateCount} départements couverts. Devis gratuit.`,
+    `${trade.name} en ${region.name} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${stateCount} départements.`,
     `Besoin d’un ${trade.name.toLowerCase()} en ${region.name} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
-    `${region.name} : ${trade.name.toLowerCase()} disponible dans ${deptCount} départements. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuits.`,
+    `${region.name} : ${trade.name.toLowerCase()} disponible dans ${stateCount} départements. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuits.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
-  const serviceImage = getServiceImage(serviceSlug)
+  const serviceImage = getServiceImage(specialtySlug)
 
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/regions/${regionSlug}/${serviceSlug}` },
+    alternates: { canonical: `${SITE_URL}/regions/${regionSlug}/${specialtySlug}` },
     openGraph: {
       locale: 'fr_FR',
       title,
       description,
       type: 'website',
-      url: `${SITE_URL}/regions/${regionSlug}/${serviceSlug}`,
+      url: `${SITE_URL}/regions/${regionSlug}/${specialtySlug}`,
       images: [{ url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${region.name}` }],
     },
     twitter: {
@@ -86,17 +86,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function RegionServicePage({ params }: PageProps) {
-  const { region: regionSlug, service: serviceSlug } = await params
+  const { region: regionSlug, service: specialtySlug } = await params
   const region = getRegionBySlug(regionSlug)
-  const trade = getTradeContent(serviceSlug)
+  const trade = getTradeContent(specialtySlug)
   if (!region || !trade) notFound()
 
-  const content = generateRegionContent(region)
-  const deptCount = region.departments.length
-  const deptCitiesMap = Object.fromEntries(
-    region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
+  const content = generateRegionContent(region as never)
+  const stateCount = region.states.length
+  const stateCitiesMap = Object.fromEntries(
+    region.states.map(st => [st.code, getCitiesByState(st.code)])
   )
-  const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
+  const allCities = region.states.flatMap(st => stateCitiesMap[st.code])
   const cityCount = allCities.length
   const multiplier = getRegionalMultiplier(region.name)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
@@ -105,13 +105,13 @@ export default async function RegionServicePage({ params }: PageProps) {
   // Other services
   const allTradeSlugs = getTradesSlugs()
   const otherServices = allTradeSlugs
-    .filter(s => s !== serviceSlug)
+    .filter(s => s !== specialtySlug)
     .slice(0, 8)
     .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
     .filter(Boolean) as { slug: string; name: string }[]
 
   // Other regions
-  const otherRegions = regions.filter(r => r.slug !== regionSlug).slice(0, 6)
+  const otherRegions = usRegions.filter(r => r.slug !== regionSlug).slice(0, 6)
 
   // Hash-selected tips
   const selectedTips = trade.tips
@@ -136,14 +136,14 @@ export default async function RegionServicePage({ params }: PageProps) {
     { name: 'Accueil', url: '/' },
     { name: 'Régions', url: '/regions' },
     { name: region.name, url: `/regions/${regionSlug}` },
-    { name: trade.name, url: `/regions/${regionSlug}/${serviceSlug}` },
+    { name: trade.name, url: `/regions/${regionSlug}/${specialtySlug}` },
   ])
 
   const faqSchema = getFAQSchema(allFaq)
 
   const serviceSchema = getServiceSchema({
     name: `${trade.name} en ${region.name}`,
-    description: `Service de ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts.`,
+    description: `Service de ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${stateCount} départements couverts.`,
     areaServed: region.name,
     category: trade.name,
   })
@@ -194,7 +194,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             </div>
 
             {(() => {
-              const h1Hash = Math.abs(hashCode(`h1-region-svc-${regionSlug}-${serviceSlug}`))
+              const h1Hash = Math.abs(hashCode(`h1-region-svc-${regionSlug}-${specialtySlug}`))
               const h1Templates = [
                 `${trade.name} en ${region.name}`,
                 `Trouver un ${trade.name.toLowerCase()} en ${region.name}`,
@@ -210,13 +210,13 @@ export default async function RegionServicePage({ params }: PageProps) {
             })()}
 
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              Trouvez un {trade.name.toLowerCase()} qualifié en {region.name}. {deptCount} départements, {cityCount} villes couvertes. Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}.
+              Trouvez un {trade.name.toLowerCase()} qualifié en {region.name}. {stateCount} départements, {cityCount} cities couvertes. Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-slate-400" />
-                <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
+                <span>{stateCount} département{stateCount > 1 ? 's' : ''}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-slate-400" />
@@ -294,36 +294,36 @@ export default async function RegionServicePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 {trade.name} par département en {region.name}
               </h2>
-              <p className="text-sm text-slate-500">{deptCount} département{deptCount > 1 ? 's' : ''}</p>
+              <p className="text-sm text-slate-500">{stateCount} département{stateCount > 1 ? 's' : ''}</p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {region.departments.map((dept) => (
+            {region.states.map((st) => (
               <Link
-                key={dept.code}
-                href={`/departements/${dept.slug}/${serviceSlug}`}
+                key={st.code}
+                href={`/states/${st.slug}/${specialtySlug}`}
                 className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg hover:border-indigo-300 hover:-translate-y-0.5 transition-all duration-300 group"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-11 h-11 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
-                      <span className="text-indigo-700 font-bold text-sm">{dept.code}</span>
+                      <span className="text-indigo-700 font-bold text-sm">{st.code}</span>
                     </div>
                     <div>
-                      <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">{trade.name} en {dept.name}</h3>
-                      <span className="text-xs text-slate-400">{deptCitiesMap[dept.code].length} ville{deptCitiesMap[dept.code].length > 1 ? 's' : ''}</span>
+                      <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">{trade.name} in {st.name}</h3>
+                      <span className="text-xs text-slate-400">{stateCitiesMap[st.code].length} cit{stateCitiesMap[st.code].length > 1 ? 'ies' : 'y'}</span>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {deptCitiesMap[dept.code].slice(0, 3).map((city) => (
+                  {stateCitiesMap[st.code].slice(0, 3).map((city) => (
                     <span key={city.slug} className="text-xs bg-gray-50 text-slate-500 px-2.5 py-1 rounded-full group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
                       {city.name}
                     </span>
                   ))}
-                  {deptCitiesMap[dept.code].length > 3 && (
-                    <span className="text-xs text-slate-400 px-2 py-1">+{deptCitiesMap[dept.code].length - 3}</span>
+                  {stateCitiesMap[st.code].length > 3 && (
+                    <span className="text-xs text-slate-400 px-2 py-1">+{stateCitiesMap[st.code].length - 3}</span>
                   )}
                 </div>
               </Link>
@@ -339,7 +339,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                {trade.name} dans les principales villes
+                {trade.name} dans les principales cities
               </h2>
               <p className="text-sm text-slate-500">Accès rapide par ville</p>
             </div>
@@ -348,7 +348,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             {allCities.slice(0, 10).map((city) => (
               <Link
                 key={city.slug}
-                href={`/services/${serviceSlug}/${city.slug}`}
+                href={`/practice-areas/${specialtySlug}/${city.slug}`}
                 className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all group text-center"
               >
                 <div className="font-semibold text-slate-800 group-hover:text-emerald-600 transition-colors text-sm">{city.name}</div>
@@ -434,10 +434,10 @@ export default async function RegionServicePage({ params }: PageProps) {
             Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href={`/devis/${serviceSlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href={`/quotes/${specialtySlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
-            <Link href={`/services/${serviceSlug}`} className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
+            <Link href={`/practice-areas/${specialtySlug}`} className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
               Voir le service <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -454,10 +454,10 @@ export default async function RegionServicePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">{trade.name} par département</h3>
               <div className="space-y-2">
-                {region.departments.slice(0, 6).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                {region.states.slice(0, 6).map((st) => (
+                  <Link key={st.slug} href={`/states/${st.slug}/${specialtySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    {trade.name} en {d.name}
+                    {trade.name} in {st.name}
                   </Link>
                 ))}
               </div>
@@ -466,7 +466,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Autres régions</h3>
               <div className="space-y-2">
                 {otherRegions.map((r) => (
-                  <Link key={r.slug} href={`/regions/${r.slug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={r.slug} href={`/regions/${r.slug}/${specialtySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} en {r.name}
                   </Link>
@@ -479,10 +479,10 @@ export default async function RegionServicePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
-                <Link href={`/services/${serviceSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href={`/practice-areas/${specialtySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />{trade.name} en France
                 </Link>
-                <Link href={`/devis/${serviceSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href={`/quotes/${specialtySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Devis {trade.name.toLowerCase()}
                 </Link>
                 <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">

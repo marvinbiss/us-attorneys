@@ -39,7 +39,7 @@ export async function GET(
       .from('bookings')
       .select(`
         *,
-        provider:providers!provider_id (
+        provider:providers!attorney_id (
           id,
           name,
           email,

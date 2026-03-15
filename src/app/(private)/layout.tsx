@@ -17,7 +17,7 @@ export default async function PrivateLayout({
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/connexion')
+    redirect('/login')
   }
 
   return <>{children}</>

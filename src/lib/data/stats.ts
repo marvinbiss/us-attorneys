@@ -13,11 +13,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 /** Nombre total d'artisans actifs dans la base */
-async function _getProviderCount(): Promise<number> {
+async function _getAttorneyCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
     const { count } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
     return count ?? 0
@@ -26,19 +26,19 @@ async function _getProviderCount(): Promise<number> {
   }
 }
 
-export const getProviderCount = unstable_cache(_getProviderCount, ['provider-count'], {
+export const getAttorneyCount = unstable_cache(_getAttorneyCount, ['provider-count'], {
   revalidate: 3600, // 1h — aligné sur le revalidate du root layout
   tags: ['providers'],
 })
 
 /** Nombre d'artisans actifs dans une région (par nom de région) */
-export async function getProviderCountByRegion(regionName: string): Promise<number> {
+export async function getAttorneyCountByRegion(regionName: string): Promise<number> {
   // Fail open at build: default to indexed. ISR will correct with real DB data.
   if (IS_BUILD) return 1
   try {
     const supabase = createAdminClient()
     const { count } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .eq('address_region', regionName)
@@ -49,13 +49,13 @@ export async function getProviderCountByRegion(regionName: string): Promise<numb
 }
 
 /** Nombre d'artisans actifs dans un département (par nom de département) */
-export async function getProviderCountByDepartment(deptName: string): Promise<number> {
+export async function getAttorneyCountByDepartment(deptName: string): Promise<number> {
   // Fail open at build: default to indexed. ISR will correct with real DB data.
   if (IS_BUILD) return 1
   try {
     const supabase = createAdminClient()
     const { count } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .eq('address_department', deptName)
@@ -66,12 +66,12 @@ export async function getProviderCountByDepartment(deptName: string): Promise<nu
 }
 
 /** Formate un nombre d'artisans pour l'affichage (ex: 12 450) */
-export function formatProviderCount(count: number): string {
+export function formatAttorneyCount(count: number): string {
   return count.toLocaleString('fr-FR')
 }
 
 export interface SiteStats {
-  artisanCount: number
+  attorneyCount: number
   reviewCount: number
   avgRating: number
   deptCount: number
@@ -98,7 +98,7 @@ export interface HomepageReview {
 }
 
 export interface HomepageData extends SiteStats {
-  serviceCounts: Record<string, number>
+  specialtyCounts: Record<string, number>
   topProviders: HomepageProvider[]
   recentReviews: HomepageReview[]
 }
@@ -110,7 +110,7 @@ export async function getSiteStats(): Promise<SiteStats> {
 
     const [providerRes, reviewCountRes, ratingsRes, deptRes] = await Promise.all([
       supabase
-        .from('providers')
+        .from('attorneys')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true),
       supabase
@@ -123,14 +123,14 @@ export async function getSiteStats(): Promise<SiteStats> {
         .eq('status', 'published')
         .limit(500),
       supabase
-        .from('communes')
+        .from('locations_us')
         .select('departement_code')
-        .gt('provider_count', 0)
+        .gt('attorney_count', 0)
         .not('departement_code', 'is', null)
         .limit(10000),
     ])
 
-    const artisanCount = providerRes.count ?? 0
+    const attorneyCount = providerRes.count ?? 0
     const reviewCount = reviewCountRes.count ?? 0
 
     let avgRating = 4.9
@@ -143,9 +143,9 @@ export async function getSiteStats(): Promise<SiteStats> {
     const depts = new Set(deptRes.data?.map(c => c.departement_code).filter(Boolean))
     const deptCount = depts.size || 96
 
-    return { artisanCount, reviewCount, avgRating, deptCount }
+    return { attorneyCount, reviewCount, avgRating, deptCount }
   } catch {
-    return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
+    return { attorneyCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
   }
 }
 
@@ -159,22 +159,22 @@ export async function getHomepageData(): Promise<HomepageData> {
   const stats = await getSiteStats()
 
   if (IS_BUILD) {
-    return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
+    return { ...stats, specialtyCounts: {}, topProviders: [], recentReviews: [] }
   }
 
   try {
     const supabase = createAdminClient()
-    const { getProviderCountByService } = await import('@/lib/supabase')
+    const { getAttorneyCountByService } = await import('@/lib/supabase')
 
     const [countsResults, providersRes, reviewsRes] = await Promise.all([
       Promise.all(
         HOMEPAGE_SERVICE_SLUGS.map(async (slug) => {
-          const count = await getProviderCountByService(slug)
+          const count = await getAttorneyCountByService(slug)
           return [slug, count] as const
         })
       ),
       supabase
-        .from('providers')
+        .from('attorneys')
         .select('name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id')
         .eq('is_active', true)
         .eq('is_verified', true)
@@ -196,18 +196,18 @@ export async function getHomepageData(): Promise<HomepageData> {
         .limit(10),
     ])
 
-    const serviceCounts: Record<string, number> = {}
+    const specialtyCounts: Record<string, number> = {}
     for (const [slug, count] of countsResults) {
-      serviceCounts[slug] = count
+      specialtyCounts[slug] = count
     }
 
     return {
       ...stats,
-      serviceCounts,
+      specialtyCounts,
       topProviders: (providersRes.data ?? []) as HomepageProvider[],
       recentReviews: (reviewsRes.data ?? []) as HomepageReview[],
     }
   } catch {
-    return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
+    return { ...stats, specialtyCounts: {}, topProviders: [], recentReviews: [] }
   }
 }

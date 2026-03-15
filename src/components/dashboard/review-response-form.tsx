@@ -22,7 +22,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
     setError('')
 
     try {
-      const res = await fetch(`/api/artisan/avis/${reviewId}/response`, {
+      const res = await fetch(`/api/attorney/reviews/${reviewId}/response`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response }),

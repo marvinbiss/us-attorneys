@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
+import { getCityBySlug as getVilleBySlugImport } from '@/lib/data/usa'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 import { logger } from '@/lib/logger'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
@@ -30,7 +30,7 @@ export const supabase = IS_BUILD
  * Row shape returned by provider listing queries (PROVIDER_LIST_SELECT).
  * Matches the columns selected in the lightweight listing query.
  */
-interface ProviderListRow {
+interface AttorneyListRow {
   id: string
   stable_id: string | null
   name: string
@@ -117,7 +117,7 @@ async function retryWithBackoff<T>(
 
 
 // Lightweight select for listing pages — all required Provider fields + display fields
-// Covers: ProviderCard, ProviderList, GeographicMap, ServiceQuartierPage
+// Covers: AttorneyCard, AttorneyList, GeographicMap, ServiceQuartierPage
 const PROVIDER_LIST_SELECT = [
   'id', 'stable_id', 'name', 'slug', 'specialty',
   'address_street', 'address_postal_code', 'address_city', 'address_region',
@@ -129,12 +129,12 @@ const PROVIDER_LIST_SELECT = [
 ].join(',')
 
 
-export async function getServices() {
+export async function getSpecialties() {
   if (IS_BUILD) return Object.values(staticServices) // Use static data during build
   return withTimeout(
     (async () => {
       const { data, error } = await supabase
-        .from('services')
+        .from('specialties')
         .select('id, name, slug, description, icon, category, is_active')
         .eq('is_active', true)
         .order('name')
@@ -143,22 +143,22 @@ export async function getServices() {
       return data
     })(),
     QUERY_TIMEOUT_MS,
-    'getServices',
+    'getSpecialties',
   )
 }
 
 // Services statiques en fallback — généré depuis france.ts (couvre les 46 métiers)
-import { services as allStaticServices } from '@/lib/data/france'
+import { practiceAreas as allStaticPracticeAreas } from '@/lib/data/usa'
 
 const staticServices: Record<string, { id: string; name: string; slug: string; description: string; category: string; is_active: boolean }> =
   Object.fromEntries(
-    allStaticServices.map(s => [
+    allStaticPracticeAreas.map(s => [
       s.slug,
       { id: s.slug, name: s.name, slug: s.slug, description: `${s.name} professionnel : devis gratuit, artisans qualifiés.`, category: 'Services', is_active: true },
     ])
   )
 
-export async function getServiceBySlug(slug: string) {
+export async function getSpecialtyBySlug(slug: string) {
   // During build, use static data only — no DB hit
   if (IS_BUILD) {
     const staticService = staticServices[slug]
@@ -173,7 +173,7 @@ export async function getServiceBySlug(slug: string) {
         const data = await withTimeout(
           (async () => {
             const { data, error } = await supabase
-              .from('services')
+              .from('specialties')
               .select('id, name, slug, description, icon, category, is_active')
               .eq('slug', slug)
               .single()
@@ -186,7 +186,7 @@ export async function getServiceBySlug(slug: string) {
             return data
           })(),
           QUERY_TIMEOUT_MS,
-          `getServiceBySlug(${slug})`,
+          `getSpecialtyBySlug(${slug})`,
         )
         return data
       } catch (error) {
@@ -203,7 +203,7 @@ export async function getLocationBySlug(slug: string) {
   if (IS_BUILD) {
     // Use static france.ts fallback during build
     const ville = getVilleBySlugImport(slug)
-    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.zipCode }
     return null
   }
 
@@ -214,7 +214,7 @@ export async function getLocationBySlug(slug: string) {
         const data = await retryWithBackoff(
           async () => {
             const { data, error } = await supabase
-              .from('communes')
+              .from('locations_us')
               .select('code_insee, name, slug, code_postal, population, departement_code, departement_name, region_name, latitude, longitude')
               .eq('slug', slug)
               .limit(1)
@@ -240,7 +240,7 @@ export async function getLocationBySlug(slug: string) {
       } catch {
         // Fallback to france.ts static data when DB table is empty/missing
         const ville = getVilleBySlugImport(slug)
-        if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+        if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.zipCode }
         return null
       }
     },
@@ -257,7 +257,7 @@ const PROVIDER_DETAIL_SELECT = PROVIDER_LIST_SELECT
  * Query a single provider by field.
  * Uses PROVIDER_LIST_SELECT (same as listing pages — proven to work).
  */
-async function queryProviderDetail(
+async function queryAttorneyDetail(
   field: 'stable_id' | 'id' | 'slug',
   value: string,
 ) {
@@ -265,7 +265,7 @@ async function queryProviderDetail(
   type Row = Record<string, any>
 
   const { data } = await supabase
-    .from('providers')
+    .from('attorneys')
     .select(PROVIDER_DETAIL_SELECT)
     .eq(field, value)
     .eq('is_active', true)
@@ -275,13 +275,13 @@ async function queryProviderDetail(
 }
 
 // Lookup by stable_id ONLY — no fallback.
-export async function getProviderByStableId(stableId: string) {
+export async function getAttorneyByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      queryProviderDetail('stable_id', stableId),
+      queryAttorneyDetail('stable_id', stableId),
       QUERY_TIMEOUT_MS,
-      `getProviderByStableId(${stableId})`,
+      `getAttorneyByStableId(${stableId})`,
     )
   } catch {
     return null
@@ -289,13 +289,13 @@ export async function getProviderByStableId(stableId: string) {
 }
 
 // Lookup by primary UUID id — fallback for providers with no stable_id/slug.
-export async function getProviderById(id: string) {
+export async function getAttorneyById(id: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      queryProviderDetail('id', id),
+      queryAttorneyDetail('id', id),
       QUERY_TIMEOUT_MS,
-      `getProviderById(${id})`,
+      `getAttorneyById(${id})`,
     )
   } catch {
     return null
@@ -303,13 +303,13 @@ export async function getProviderById(id: string) {
 }
 
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
-export async function getProviderBySlug(slug: string) {
+export async function getAttorneyBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
   try {
     return await withTimeout(
-      queryProviderDetail('slug', slug),
+      queryAttorneyDetail('slug', slug),
       QUERY_TIMEOUT_MS,
-      `getProviderBySlug(${slug})`,
+      `getAttorneyBySlug(${slug})`,
     )
   } catch {
     return null
@@ -319,7 +319,7 @@ export async function getProviderBySlug(slug: string) {
 // Reverse mapping: service slug → provider specialties (for fallback queries)
 // All 46 services must be mapped here — unmapped services can never show providers
 // on quartier pages, causing them to be permanently noindexed.
-export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
+export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
   // === Métiers du bâtiment — correspondance directe NAF ===
   'plombier': ['plombier'],                                        // NAF 43.22A
   'electricien': ['electricien'],                                  // NAF 43.21A
@@ -384,14 +384,14 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   'demenageur': ['demenageur'],                                    // NAF 49.42Z
 }
 
-export async function getProvidersByServiceAndLocation(
-  serviceSlug: string,
+export async function getAttorneysByServiceAndLocation(
+  specialtySlug: string,
   locationSlug: string,
   { limit = 50, offset = 0, postalCode }: { limit?: number; offset?: number; postalCode?: string } = {}
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
 
-  const cacheKey = `providers:svc-loc:${serviceSlug}:${locationSlug}:${limit}:${offset}:${postalCode || ''}`
+  const cacheKey = `providers:svc-loc:${specialtySlug}:${locationSlug}:${limit}:${offset}:${postalCode || ''}`
 
   return getCachedData(
     cacheKey,
@@ -401,7 +401,7 @@ export async function getProvidersByServiceAndLocation(
       const ville = getVilleBySlugImport(locationSlug)
       if (!ville) return []
 
-      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+      const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
       if (!specialties || specialties.length === 0) return []
 
       // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
@@ -410,7 +410,7 @@ export async function getProvidersByServiceAndLocation(
         return await retryWithBackoff(
           async () => {
             const { data, error } = await supabase
-              .from('providers')
+              .from('attorneys')
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
               .eq('address_postal_code', postalCode)
@@ -420,9 +420,9 @@ export async function getProvidersByServiceAndLocation(
               .order('name')
               .range(offset, offset + limit - 1)
             if (error) throw error
-            return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+            return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
           },
-          `getProvidersByServiceAndLocation:postal(${serviceSlug}, ${postalCode})`,
+          `getAttorneysByServiceAndLocation:postal(${specialtySlug}, ${postalCode})`,
         )
       }
 
@@ -433,7 +433,7 @@ export async function getProvidersByServiceAndLocation(
           async () => {
             // Primary: direct specialty + city (fast — uses index + .in())
             const { data: direct, error: directError } = await supabase
-              .from('providers')
+              .from('attorneys')
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
               .in('address_city', cityValues)
@@ -445,19 +445,19 @@ export async function getProvidersByServiceAndLocation(
               .range(offset, offset + limit - 1)
 
             if (directError) {
-              logger.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, { error: directError.message })
+              logger.warn(`[getAttorneysByServiceAndLocation] primary query error for ${specialtySlug}/${locationSlug}:`, { error: directError.message })
             }
 
-            if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as ProviderListRow[])
+            if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as AttorneyListRow[])
 
             return []
           },
-          `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+          `getAttorneysByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
       } catch (err) {
         // Re-throw so ISR keeps stale cached page instead of caching empty results.
         // Page component catches this and renders gracefully on first cold visit.
-        logger.error(`[getProvidersByServiceAndLocation] FAILED for ${serviceSlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+        logger.error(`[getAttorneysByServiceAndLocation] FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
         throw err
       }
     },
@@ -469,10 +469,10 @@ export async function getProvidersByServiceAndLocation(
 /**
  * Lightweight check: does this service+location combo have any providers?
  * Uses head:true + count:exact to avoid fetching rows — much faster than
- * getProvidersByServiceAndLocation during static generation.
+ * getAttorneysByServiceAndLocation during static generation.
  */
 export async function hasProvidersByServiceAndLocation(
-  serviceSlug: string,
+  specialtySlug: string,
   locationSlug: string,
 ): Promise<boolean> {
   // Fail open: assume providers exist during build so pages are indexed by default.
@@ -481,7 +481,7 @@ export async function hasProvidersByServiceAndLocation(
   try {
     return await retryWithBackoff(
       async () => {
-        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+        const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
         if (!specialties || specialties.length === 0) return false
 
         const ville = getVilleBySlugImport(locationSlug)
@@ -490,7 +490,7 @@ export async function hasProvidersByServiceAndLocation(
 
         const cityValues = getCityValues(cityName)
         const { count, error } = await supabase
-          .from('providers')
+          .from('attorneys')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .in('address_city', cityValues)
@@ -499,7 +499,7 @@ export async function hasProvidersByServiceAndLocation(
         if (error) throw error
         return (count ?? 0) > 0
       },
-      `hasProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+      `hasProvidersByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
     )
   } catch {
     // On any failure, conservatively return false (noindex)
@@ -513,8 +513,8 @@ export async function hasProvidersByServiceAndLocation(
  * Fail open: returns 1 during build so pages are indexed by default.
  * ISR will correct with the real count on first revalidation.
  */
-export async function getProviderCountByServiceAndLocation(
-  serviceSlug: string,
+export async function getAttorneyCountByServiceAndLocation(
+  specialtySlug: string,
   locationSlug: string,
 ): Promise<number> {
   // Fail open: default to 1 during build so pages are indexed (not noindexed).
@@ -522,12 +522,12 @@ export async function getProviderCountByServiceAndLocation(
   if (IS_BUILD) return 1
 
   return getCachedData(
-    `provider-count:svc-loc:${serviceSlug}:${locationSlug}`,
+    `provider-count:svc-loc:${specialtySlug}:${locationSlug}`,
     async () => {
       try {
         return await retryWithBackoff(
           async () => {
-            const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+            const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
             if (!specialties || specialties.length === 0) return 0
 
             const ville = getVilleBySlugImport(locationSlug)
@@ -536,7 +536,7 @@ export async function getProviderCountByServiceAndLocation(
 
             const cityValues = getCityValues(cityName)
             const { count, error } = await supabase
-              .from('providers')
+              .from('attorneys')
               .select('id', { count: 'exact', head: true })
               .in('specialty', specialties)
               .in('address_city', cityValues)
@@ -545,7 +545,7 @@ export async function getProviderCountByServiceAndLocation(
             if (error) throw error
             return count ?? 0
           },
-          `getProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+          `getAttorneyCountByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
       } catch {
         return 0
@@ -555,7 +555,7 @@ export async function getProviderCountByServiceAndLocation(
   )
 }
 
-export async function getProvidersByLocation(locationSlug: string) {
+export async function getAttorneysByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
   // Use STATIC data for location — no DB needed
@@ -567,7 +567,7 @@ export async function getProvidersByLocation(locationSlug: string) {
     return await retryWithBackoff(
       async () => {
         const { data, error } = await supabase
-          .from('providers')
+          .from('attorneys')
           .select(PROVIDER_LIST_SELECT)
           .in('address_city', cityValues)
           .eq('is_active', true)
@@ -577,12 +577,12 @@ export async function getProvidersByLocation(locationSlug: string) {
           .limit(500)
 
         if (error) throw error
-        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+        return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
       },
-      `getProvidersByLocation(${locationSlug})`,
+      `getAttorneysByLocation(${locationSlug})`,
     )
   } catch (err) {
-    logger.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+    logger.error(`[getAttorneysByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
     throw err
   }
 }
@@ -596,7 +596,7 @@ export async function getAllProviders() {
       return withTimeout(
         (async () => {
           const { data, error } = await supabase
-            .from('providers')
+            .from('attorneys')
             .select(PROVIDER_LIST_SELECT)
             .eq('is_active', true)
             .order('phone', { ascending: false, nullsFirst: false })
@@ -605,7 +605,7 @@ export async function getAllProviders() {
             .limit(1000)
 
           if (error) throw error
-          return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+          return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
         })(),
         QUERY_TIMEOUT_MS,
         'getAllProviders',
@@ -616,10 +616,10 @@ export async function getAllProviders() {
   )
 }
 
-export async function getProvidersByService(serviceSlug: string, limit?: number) {
+export async function getAttorneysByService(specialtySlug: string, limit?: number) {
   if (IS_BUILD) return [] // Skip during build
 
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
   const effectiveLimit = limit || 50
@@ -627,7 +627,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
     return await withTimeout(
       (async () => {
         const { data, error } = await supabase
-          .from('providers')
+          .from('attorneys')
           .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
           .eq('is_active', true)
@@ -636,25 +636,25 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
           .limit(effectiveLimit)
 
         if (error) throw error
-        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+        return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
       })(),
       QUERY_TIMEOUT_MS,
-      `getProvidersByService(${serviceSlug})`,
+      `getAttorneysByService(${specialtySlug})`,
     )
   } catch {
     return []
   }
 }
 
-export async function getProviderCountByService(serviceSlug: string): Promise<number> {
+export async function getAttorneyCountByService(specialtySlug: string): Promise<number> {
   if (IS_BUILD) return 0
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
   if (!specialties || specialties.length === 0) return 0
   try {
     return await withTimeout(
       (async () => {
         const { count, error } = await supabase
-          .from('providers')
+          .from('attorneys')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .eq('is_active', true)
@@ -662,24 +662,24 @@ export async function getProviderCountByService(serviceSlug: string): Promise<nu
         return count ?? 0
       })(),
       QUERY_TIMEOUT_MS,
-      `getProviderCountByService(${serviceSlug})`,
+      `getAttorneyCountByService(${specialtySlug})`,
     )
   } catch {
     return 0
   }
 }
 
-export async function getLocationsByService(serviceSlug: string) {
+export async function getLocationsByService(specialtySlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
   return retryWithBackoff(
     async () => {
       // Step 1: get distinct cities from active providers with this specialty
       const { data: providerCities, error: citiesError } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('address_city')
         .in('specialty', specialties)
         .eq('is_active', true)
@@ -695,7 +695,7 @@ export async function getLocationsByService(serviceSlug: string) {
 
       // Step 2: look up commune data (slug, dept, region) for those cities
       const { data: communes, error: communesError } = await supabase
-        .from('communes')
+        .from('locations_us')
         .select('code_insee, name, slug, departement_code, region_name')
         .in('name', uniqueCityNames.slice(0, 200))
         .order('population', { ascending: false })
@@ -711,6 +711,6 @@ export async function getLocationsByService(serviceSlug: string) {
         region_name: c.region_name,
       }))
     },
-    `getLocationsByService(${serviceSlug})`,
+    `getLocationsByService(${specialtySlug})`,
   )
 }

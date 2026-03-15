@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ArrowRight, Clock, TrendingUp, X, Navigation, Wrench } from 'lucide-react'
-import { services as allServices } from '@/lib/data/france'
+import { practiceAreas as allServices } from '@/lib/data/usa'
 
 // Simple client-side city autocomplete
 interface CitySuggestion {
@@ -201,7 +201,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
       if (query || location) {
         saveRecentSearch(query, location)
         setRecentSearches(getRecentSearches())
-        router.push(`/recherche?${params.toString()}`)
+        router.push(`/search?${params.toString()}`)
       }
     }
 
@@ -229,7 +229,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
       params.set('location', loc.city)
       saveRecentSearch(query, loc.city)
       setRecentSearches(getRecentSearches())
-      router.push(`/recherche?${params.toString()}`)
+      router.push(`/search?${params.toString()}`)
     }, 100)
   }, [query, router])
 
@@ -240,7 +240,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     const params = new URLSearchParams()
     if (search.service) params.set('q', search.service)
     if (search.location) params.set('location', search.location)
-    router.push(`/recherche?${params.toString()}`)
+    router.push(`/search?${params.toString()}`)
     setShowServiceSuggestions(false)
     setShowLocationSuggestions(false)
   }, [router])
@@ -441,7 +441,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 }}
                 onFocus={() => setShowLocationSuggestions(true)}
                 onKeyDown={handleLocationKeyDown}
-                placeholder="Ville ou code postal"
+                placeholder="City ou code postal"
                 className="w-full pl-12 pr-12 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
                 autoComplete="off"
               />
@@ -522,7 +522,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                                 params.set('location', city.name)
                                 saveRecentSearch(query, city.name)
                                 setRecentSearches(getRecentSearches())
-                                router.push(`/recherche?${params.toString()}`)
+                                router.push(`/search?${params.toString()}`)
                               }, 100)
                             }}
                             className="flex items-center gap-2 px-3 py-2.5 hover:bg-blue-50 rounded-xl text-left transition-colors"

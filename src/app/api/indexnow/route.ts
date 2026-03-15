@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   // IndexNow API - submit to Bing (which shares with Yandex, Seznam, etc.)
   const payload = {
-    host: 'servicesartisans.fr',
+    host: 'us-attorneys.com',
     key: INDEXNOW_KEY,
     keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
     urlList: urls.slice(0, 10000), // IndexNow limit: 10K URLs per request

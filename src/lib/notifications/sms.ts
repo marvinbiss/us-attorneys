@@ -27,8 +27,8 @@ function getTwilioClient(): twilio.Twilio {
 export interface SMSData {
   to: string
   clientName: string
-  artisanName: string
-  serviceName: string
+  attorneyName: string
+  specialtyName: string
   date: string
   time: string
   bookingId: string
@@ -58,47 +58,47 @@ const smsTemplates = {
   bookingConfirmation: (data: SMSData) =>
     `RDV confirmé ✓
 ${data.date} à ${data.time}
-${data.artisanName}
-Gérer: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+${data.attorneyName}
+Gérer: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 24h reminder (highest impact)
   reminder24h: (data: SMSData) =>
     `Rappel: RDV demain
 ${data.date} à ${data.time}
-${data.artisanName}
-Confirmer/Annuler: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+${data.attorneyName}
+Confirmer/Annuler: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 1h reminder
   reminder1h: (data: SMSData) =>
     `RDV dans 1h
-${data.time} - ${data.artisanName}
-${data.serviceName}`,
+${data.time} - ${data.attorneyName}
+${data.specialtyName}`,
 
   // Cancellation
   cancellation: (data: SMSData) =>
     `RDV annulé
 ${data.date} à ${data.time}
-${data.artisanName}
-Reprogrammer: servicesartisans.fr`,
+${data.attorneyName}
+Reprogrammer: us-attorneys.com`,
 
   // Reschedule confirmation
   reschedule: (data: SMSData) =>
     `RDV reporté ✓
 Nouveau: ${data.date} à ${data.time}
-${data.artisanName}
-Gérer: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+${data.attorneyName}
+Gérer: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // Waitlist notification
   waitlistAvailable: (data: SMSData) =>
     `Créneau dispo !
-${data.artisanName}
+${data.attorneyName}
 ${data.date}
-Réservez vite: servicesartisans.fr`,
+Réservez vite: us-attorneys.com`,
 
   // Review request (post-appointment)
   reviewRequest: (data: SMSData) =>
-    `Comment s'est passé votre RDV avec ${data.artisanName}?
-Donnez votre avis: servicesartisans.fr/donner-avis/${data.bookingId.slice(0, 8)}`,
+    `Comment s'est passé votre RDV avec ${data.attorneyName}?
+Donnez votre avis: us-attorneys.com/leave-review/${data.bookingId.slice(0, 8)}`,
 }
 
 // Send SMS function

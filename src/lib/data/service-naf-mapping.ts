@@ -73,12 +73,12 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
 }
 
 /** Get all NAF codes for a service slug */
-export function getNafCodesForService(serviceSlug: string): string[] {
-  return SERVICE_TO_NAF[serviceSlug] || []
+export function getNafCodesForService(specialtySlug: string): string[] {
+  return SERVICE_TO_NAF[specialtySlug] || []
 }
 
 /** Get the primary (first) NAF code for a service slug */
-export function getPrimaryNafCode(serviceSlug: string): string | null {
-  const codes = SERVICE_TO_NAF[serviceSlug]
+export function getPrimaryNafCode(specialtySlug: string): string | null {
+  const codes = SERVICE_TO_NAF[specialtySlug]
   return codes?.[0] || null
 }

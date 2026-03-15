@@ -18,7 +18,7 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 interface Conversation {
   id: string
   client_id: string
-  provider_id: string
+  attorney_id: string
   status: 'active' | 'archived' | 'blocked'
   last_message_at: string | null
   unread_count: number

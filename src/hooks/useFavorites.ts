@@ -58,15 +58,15 @@ export function useFavorites() {
   }, [])
 
   const isFavorite = useCallback(
-    (providerId: string) => favorites.includes(providerId),
+    (attorneyId: string) => favorites.includes(attorneyId),
     [favorites],
   )
 
-  const toggleFavorite = useCallback((providerId: string) => {
+  const toggleFavorite = useCallback((attorneyId: string) => {
     setFavorites((prev) => {
-      const next = prev.includes(providerId)
-        ? prev.filter((id) => id !== providerId)
-        : [...prev, providerId]
+      const next = prev.includes(attorneyId)
+        ? prev.filter((id) => id !== attorneyId)
+        : [...prev, attorneyId]
       writeFavorites(next)
       return next
     })

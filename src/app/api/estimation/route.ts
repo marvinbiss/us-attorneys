@@ -76,20 +76,20 @@ function buildSystemPrompt(
   departement: string,
   coefficient: number,
   formattedGrid: string,
-  artisanName?: string,
+  attorneyName?: string,
 ): string {
-  const artisanLine = artisanName
-    ? `\n• Artisan : ${artisanName}\nLe visiteur consulte la fiche de ${artisanName}, un ${metierName.toLowerCase()} à ${ville}.`
+  const artisanLine = attorneyName
+    ? `\n• Artisan : ${attorneyName}\nLe visiteur consulte la fiche de ${attorneyName}, un ${metierName.toLowerCase()} à ${ville}.`
     : ''
 
-  const ctaLine = artisanName
-    ? `"Souhaitez-vous envoyer votre demande à ${artisanName} ?"`
+  const ctaLine = attorneyName
+    ? `"Souhaitez-vous envoyer votre demande à ${attorneyName} ?"`
     : `"Souhaitez-vous être mis en relation avec un ${metierName.toLowerCase()} vérifié à ${ville} ?"`
 
   return `Tu es l'assistant estimation de ServicesArtisans.fr.
 CONTEXTE :
 • Métier : ${metierName}
-• Ville : ${ville} (${departement})
+• City : ${ville} (${departement})
 • Coefficient géographique : ${coefficient} (OBLIGATOIRE : multiplie TOUJOURS les prix de la grille par ce coefficient)${artisanLine}
 
 GRILLE TARIFAIRE — ${metierName.toUpperCase()} :

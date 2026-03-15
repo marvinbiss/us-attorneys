@@ -73,7 +73,7 @@ export async function GET(request: Request) {
     while (hasMore) {
       // Fetch active providers for quality score calculation
       const { data: providers, error } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, specialty, description, updated_at')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
         const { score, flags } = calculateQualityScore(provider)
 
         const { error: updateError } = await supabase
-          .from('providers')
+          .from('attorneys')
           .update({
             data_quality_score: score,
             data_quality_flags: flags,

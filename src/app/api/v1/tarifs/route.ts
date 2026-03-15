@@ -13,7 +13,7 @@ export async function OPTIONS() {
 }
 
 /**
- * GET /api/v1/tarifs?metier=plombier&ville=paris
+ * GET /api/v1/pricing?metier=plombier&ville=paris
  *
  * Retourne les statistiques agrégées du baromètre pour un métier,
  * optionnellement filtré par ville, département ou région.
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
         },
         attribution: {
           text: `Source : ${SITE_NAME} — Baromètre des Artisans`,
-          url: `${SITE_URL}/barometre`,
+          url: `${SITE_URL}/price-index`,
           licence: 'Attribution obligatoire avec lien vers la source.',
         },
       },

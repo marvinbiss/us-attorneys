@@ -37,7 +37,7 @@ export default function Error({
             Réessayer
           </button>
           <Link
-            href="/espace-client"
+            href="/client-dashboard"
             className="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
           >
             <LayoutDashboard className="w-5 h-5" />

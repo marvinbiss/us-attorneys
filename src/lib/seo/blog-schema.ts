@@ -97,7 +97,7 @@ export function getBlogArticleSchema(article: {
         return {
           '@type': 'Organization' as const,
           name: 'Équipe éditoriale ServicesArtisans',
-          url: `${SITE_URL}/a-propos`,
+          url: `${SITE_URL}/about`,
           '@id': `${SITE_URL}#organization`,
         }
       }

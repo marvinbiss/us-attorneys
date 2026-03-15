@@ -6,13 +6,13 @@
  * page, eliminating the doorway-pages risk of near-identical content.
  */
 
-import type { Ville } from '@/lib/data/france'
+import type { City } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { generateDataDrivenContent, type DataDrivenContent } from '@/lib/seo/data-driven-content'
-import type { CommuneData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 import { getQuartierRealPrix, getVilleRealPrix, getRealDpe } from '@/lib/data/quartier-real-data'
-import { getDeptArtisanCounts } from '@/lib/data/dept-artisan-counts'
+import { getDeptArtisanCounts } from '@/lib/data/dept-attorney-counts'
 import { getQuartierData, type QuartierProfile as QuartierDataProfile } from '@/lib/data/quartier-data'
 
 // ---------------------------------------------------------------------------
@@ -622,11 +622,11 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
 }
 
 // ---------------------------------------------------------------------------
-// Bridge: convert static Ville data to partial CommuneData for data-driven
+// Bridge: convert static City data to partial LocationData for data-driven
 // content even without the communes DB table being populated.
 // ---------------------------------------------------------------------------
 
-function villeToPartialCommuneData(ville: Ville): CommuneData {
+function villeToPartialLocationData(ville: City): LocationData {
   const pop = parseInt(ville.population.replace(/\s/g, ''), 10) || 0
   const regionClimate = REGION_CLIMATE[ville.region] || 'semi-oceanique'
   const mountainDepts = ['73', '74', '05', '38', '09', '65', '04']
@@ -703,7 +703,7 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
   const cityHash = hashCode(ville.slug)
   const perturbation = 0.85 + (cityHash % 31) / 100 // 0.85 to 1.15
 
-  // Departement-level adjustments to climate (northern depts colder, altitude, etc.)
+  // State-level adjustments to climate (northern depts colder, altitude, etc.)
   const DEPT_FROST_ADJUST: Record<string, number> = {
     '59': 1.15, '62': 1.15, '80': 1.10, '02': 1.15, // Hauts-de-France: colder
     '67': 1.20, '68': 1.25, '57': 1.15, '88': 1.30, // Grand Est: colder, Vosges
@@ -816,7 +816,7 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
     nb_entreprises_artisanales: estimatedArtisans,
     gentile: null,
     description: ville.description || null,
-    provider_count: 0,
+    attorney_count: 0,
     nb_artisans_btp: estimatedBtp,
     nb_artisans_rge: null,
     pct_passoires_dpe: estimatedPassoiresDpe,
@@ -875,14 +875,14 @@ const ERA_DPE_MULT: Record<string, number> = {
   'mixte': 1.0,
 }
 
-function deriveQuartierCommuneData(
-  cityData: CommuneData,
+function deriveQuartierLocationData(
+  cityData: LocationData,
   quartierName: string,
   villeSlug: string,
   era: string,
   density: string,
   quartierCount: number,
-): CommuneData {
+): LocationData {
   const qHash = hashCode(`q-${villeSlug}-${quartierName}`)
   const qPerturbation = 0.92 + (qHash % 17) / 100 // 0.92 to 1.08
 
@@ -939,7 +939,7 @@ export function hashCode(s: string): number {
 // City context helpers
 // ---------------------------------------------------------------------------
 
-function getCityContext(ville: Ville): 'coastal' | 'mountain' | 'urban' | 'rural' | 'default' {
+function getCityContext(ville: City): 'coastal' | 'mountain' | 'urban' | 'rural' | 'default' {
   const regionLower = ville.region.toLowerCase()
   const descLower = ville.description.toLowerCase()
   const pop = parseInt(ville.population.replace(/\s/g, ''), 10) || 0
@@ -984,18 +984,18 @@ function getCityContext(ville: Ville): 'coastal' | 'mountain' | 'urban' | 'rural
 // ---------------------------------------------------------------------------
 
 function generateIntroText(
-  serviceSlug: string,
-  serviceName: string,
-  ville: Ville,
-  providerCount: number,
+  specialtySlug: string,
+  specialtyName: string,
+  ville: City,
+  attorneyCount: number,
 ): string {
   const pop = ville.population
   const dep = ville.departement
   const region = ville.region
-  const svcLower = serviceName.toLowerCase()
-  const hash = hashCode(`${serviceSlug}-${ville.slug}`)
-  const count = providerCount > 0 ? providerCount : 'les'
-  const countSpace = providerCount > 0 ? providerCount + ' ' : ''
+  const svcLower = specialtyName.toLowerCase()
+  const hash = hashCode(`${specialtySlug}-${ville.slug}`)
+  const count = attorneyCount > 0 ? attorneyCount : 'les'
+  const countSpace = attorneyCount > 0 ? attorneyCount + ' ' : ''
 
   const templates = [
     // 1 — Fait direct sur le nombre
@@ -1065,19 +1065,19 @@ const PRICING_NOTE_TEMPLATES: ((p: PricingNoteParams) => string)[] = [
 ]
 
 function generatePricingNote(
-  serviceSlug: string,
-  serviceName: string,
-  ville: Ville,
+  specialtySlug: string,
+  specialtyName: string,
+  ville: City,
 ): string {
-  const trade = getTradeContent(serviceSlug)
+  const trade = getTradeContent(specialtySlug)
   if (!trade) return ''
 
   const multiplier = getRegionalMultiplier(ville.region)
-  const seed = Math.abs(hashCode(`pricing-${serviceSlug}-${ville.slug}`))
+  const seed = Math.abs(hashCode(`pricing-${specialtySlug}-${ville.slug}`))
   const template = PRICING_NOTE_TEMPLATES[seed % PRICING_NOTE_TEMPLATES.length]
 
   return template({
-    svc: serviceName.toLowerCase(),
+    svc: specialtyName.toLowerCase(),
     name: ville.name,
     cp: ville.codePostal,
     region: ville.region,
@@ -1094,18 +1094,18 @@ function generatePricingNote(
 // ---------------------------------------------------------------------------
 
 function generateLocalTips(
-  serviceSlug: string,
-  serviceName: string,
-  ville: Ville,
+  specialtySlug: string,
+  specialtyName: string,
+  ville: City,
 ): string[] {
-  const trade = getTradeContent(serviceSlug)
+  const trade = getTradeContent(specialtySlug)
   const context = getCityContext(ville)
   const tips: string[] = []
-  const svcLower = serviceName.toLowerCase()
-  const hash = hashCode(`${serviceSlug}-${ville.slug}-tips`)
+  const svcLower = specialtyName.toLowerCase()
+  const hash = hashCode(`${specialtySlug}-${ville.slug}-tips`)
 
   // 1. Context-specific tip from SEASONAL_TIPS
-  const seasonalForService = SEASONAL_TIPS[serviceSlug]
+  const seasonalForService = SEASONAL_TIPS[specialtySlug]
   if (seasonalForService) {
     tips.push(seasonalForService[context] || seasonalForService.default)
   }
@@ -1143,13 +1143,13 @@ function generateLocalTips(
 // ---------------------------------------------------------------------------
 
 function generateQuartierText(
-  serviceName: string,
-  ville: Ville,
+  specialtyName: string,
+  ville: City,
 ): string {
-  const svcLower = serviceName.toLowerCase()
+  const svcLower = specialtyName.toLowerCase()
 
   if (ville.quartiers.length === 0) {
-    return `Nos ${svcLower}s référencés interviennent dans toute la commune de ${ville.name} ainsi que dans les villes et villages voisins du département ${ville.departement} (${ville.departementCode}). Que vous habitiez au centre-ville ou en périphérie, vous trouverez un professionnel qualifié à proximité de chez vous.`
+    return `Nos ${svcLower}s référencés interviennent dans toute la commune de ${ville.name} ainsi que dans les cities et villages voisins du département ${ville.departement} (${ville.departementCode}). Que vous habitiez au centre-ville ou en périphérie, vous trouverez un professionnel qualifié à proximité de chez vous.`
   }
 
   // Show a subset of quartiers for variety (use all if <= 6, else pick based on slug hash)
@@ -1176,15 +1176,15 @@ function generateQuartierText(
 // ---------------------------------------------------------------------------
 
 function generateConclusion(
-  serviceSlug: string,
-  serviceName: string,
-  ville: Ville,
-  providerCount: number,
+  specialtySlug: string,
+  specialtyName: string,
+  ville: City,
+  attorneyCount: number,
 ): string {
-  const svcLower = serviceName.toLowerCase()
-  const trade = getTradeContent(serviceSlug)
-  const hash = hashCode(`${serviceSlug}-${ville.slug}-cta`)
-  const countSpace = providerCount > 0 ? providerCount + ' ' : ''
+  const svcLower = specialtyName.toLowerCase()
+  const trade = getTradeContent(specialtySlug)
+  const hash = hashCode(`${specialtySlug}-${ville.slug}-cta`)
+  const countSpace = attorneyCount > 0 ? attorneyCount + ' ' : ''
 
   const urgencyLine = trade?.emergencyInfo
     ? ` En cas d'urgence, certains ${svcLower}s de ${ville.name} proposent une intervention rapide : ${trade.averageResponseTime.toLowerCase()}.`
@@ -1369,25 +1369,25 @@ function generateServiceClimateTip(svc: string, cityName: string, climate: Clima
 }
 
 export function generateLocationContent(
-  serviceSlug: string,
-  serviceName: string,
-  ville: Ville,
-  providerCount: number = 0,
-  communeData?: import('@/lib/data/commune-data').CommuneData | null | undefined,
+  specialtySlug: string,
+  specialtyName: string,
+  ville: City,
+  attorneyCount: number = 0,
+  locationData?: import('@/lib/data/commune-data').LocationData | null | undefined,
 ): LocationContent {
-  const svcLower = serviceName.toLowerCase()
+  const svcLower = specialtyName.toLowerCase()
   const regionClimate = REGION_CLIMATE[ville.region] || 'semi-oceanique'
   const climate = CLIMATES.find(c => c.key === regionClimate) || CLIMATES[4]
   const mountainDepts = ['73', '74', '05', '38', '09', '65', '04']
   const finalClimate = mountainDepts.includes(ville.departementCode) ? (CLIMATES.find(c => c.key === 'montagnard') || climate) : climate
   const size = getCitySize(ville.population)
-  const tipSeed = Math.abs(hashCode(`svc-climate-${serviceSlug}-${ville.slug}`))
+  const tipSeed = Math.abs(hashCode(`svc-climate-${specialtySlug}-${ville.slug}`))
   const climateTip = generateServiceClimateTip(svcLower, ville.name, finalClimate.key, tipSeed)
 
   // Select 4 FAQ from pool of 15 via deterministic hash
   const faqParams: SvcLocFaqParams = { svc: svcLower, name: ville.name, dept: ville.departement, deptCode: ville.departementCode, pop: ville.population, region: ville.region, climate: finalClimate.label }
   const faqIndices: number[] = []
-  let faqSeed = Math.abs(hashCode(`faq-svc-${serviceSlug}-${ville.slug}`))
+  let faqSeed = Math.abs(hashCode(`faq-svc-${specialtySlug}-${ville.slug}`))
   while (faqIndices.length < 4) {
     const idx = faqSeed % SVC_LOCATION_FAQ_POOL.length
     if (!faqIndices.includes(idx)) faqIndices.push(idx)
@@ -1398,16 +1398,16 @@ export function generateLocationContent(
     return { question: f.q(faqParams), answer: f.a(faqParams) }
   })
 
-  // Generate data-driven content — ALWAYS, using DB data when available, else static Ville data
-  const effectiveCommuneData = communeData || villeToPartialCommuneData(ville)
-  const dataDriven = generateDataDrivenContent(effectiveCommuneData, serviceSlug, serviceName, providerCount)
+  // Generate data-driven content — ALWAYS, using DB data when available, else static City data
+  const effectiveLocationData = locationData || villeToPartialLocationData(ville)
+  const dataDriven = generateDataDrivenContent(effectiveLocationData, specialtySlug, specialtyName, attorneyCount)
 
   return {
-    introText: dataDriven?.intro || generateIntroText(serviceSlug, serviceName, ville, providerCount),
-    pricingNote: generatePricingNote(serviceSlug, serviceName, ville),
-    localTips: generateLocalTips(serviceSlug, serviceName, ville),
-    quartierText: generateQuartierText(serviceName, ville),
-    conclusion: generateConclusion(serviceSlug, serviceName, ville, providerCount),
+    introText: dataDriven?.intro || generateIntroText(specialtySlug, specialtyName, ville, attorneyCount),
+    pricingNote: generatePricingNote(specialtySlug, specialtyName, ville),
+    localTips: generateLocalTips(specialtySlug, specialtyName, ville),
+    quartierText: generateQuartierText(specialtyName, ville),
+    conclusion: generateConclusion(specialtySlug, specialtyName, ville, attorneyCount),
     climateLabel: finalClimate.label,
     citySizeLabel: size.label,
     climateTip,
@@ -1786,7 +1786,7 @@ function mapDensiteToUrbanDensity(densite: QuartierDataProfile['densite']): Urba
   }
 }
 
-function getQuartierProfile(ville: Ville, quartierName: string): QuartierProfile {
+function getQuartierProfile(ville: City, quartierName: string): QuartierProfile {
   // Try to get enriched data from quartier-data.ts first
   const realData = getQuartierData(ville.slug, toQuartierSlug(quartierName))
   if (realData) {
@@ -1866,13 +1866,13 @@ function getQuartierProfile(ville: Ville, quartierName: string): QuartierProfile
     // Grandes métropoles: old center → modern periphery
     eraKey = posRatio < 0.3 ? 'pre-1950' : posRatio < 0.6 ? '1950-1980' : '1980-2000'
   } else if (pop > 50000) {
-    // Grandes villes: old center → mixed
+    // Grandes cities: old center → mixed
     eraKey = posRatio < 0.4 ? 'pre-1950' : posRatio < 0.7 ? '1950-1980' : '1980-2000'
   } else if (pop > 10000) {
     // Villes moyennes: mostly old with some modern
     eraKey = posRatio < 0.5 ? 'pre-1950' : '1980-2000'
   } else {
-    // Petites villes: predominantly old
+    // Petites cities: predominantly old
     eraKey = 'pre-1950'
   }
 
@@ -1977,13 +1977,13 @@ const ERA_CLIMAT_IMPACT: Record<string, ((q: string) => string)[]> = {
 }
 
 function generateQuartierDataDrivenContent(
-  ville: Ville,
+  ville: City,
   quartierName: string,
   profile: QuartierProfile,
 ): QuartierDataDrivenContent {
-  const cityData = villeToPartialCommuneData(ville)
+  const cityData = villeToPartialLocationData(ville)
   const nQ = ville.quartiers.length
-  const qData = deriveQuartierCommuneData(cityData, quartierName, ville.slug, profile.era, profile.density, nQ)
+  const qData = deriveQuartierLocationData(cityData, quartierName, ville.slug, profile.era, profile.density, nQ)
   const seed = Math.abs(hashCode(`qdd-${ville.slug}-${quartierName}`))
   const dataSources: string[] = []
 
@@ -2159,8 +2159,8 @@ function generateQuartierDataDrivenContent(
   }
 }
 
-export function generateQuartierContent(ville: Ville, quartierName: string, serviceSlug?: string): QuartierContent {
-  const seedSuffix = serviceSlug ? `-${serviceSlug}` : ''
+export function generateQuartierContent(ville: City, quartierName: string, specialtySlug?: string): QuartierContent {
+  const seedSuffix = specialtySlug ? `-${specialtySlug}` : ''
   const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}${seedSuffix}`))
   const profile = getQuartierProfile(ville, quartierName)
 
@@ -2225,7 +2225,7 @@ export function generateQuartierContent(ville: Ville, quartierName: string, serv
 
   // Add data-driven FAQ items with quartier-specific numbers
   if (dataDriven.statCards.prixM2Quartier > 0) {
-    const cityData = villeToPartialCommuneData(ville)
+    const cityData = villeToPartialLocationData(ville)
     const prixCity = cityData.prix_m2_moyen
     if (prixCity) {
       const diff = Math.round(((dataDriven.statCards.prixM2Quartier - prixCity) / prixCity) * 100)
@@ -2615,7 +2615,7 @@ function getDeptHousing(code: string): HousingStock {
   return 'rural-traditionnel'
 }
 
-function getDepartementProfile(dept: import('@/lib/data/france').Departement): DepartementProfile {
+function getDepartementProfile(dept: import('@/lib/data/france').State): DepartementProfile {
   const climateKey = DEPT_CLIMATE_OVERRIDES[dept.code] || REGION_CLIMATE[dept.region] || 'semi-oceanique'
   const finalClimate = CLIMATES.find(c => c.key === climateKey) || CLIMATES[4]
 
@@ -2645,7 +2645,7 @@ function getDepartementProfile(dept: import('@/lib/data/france').Departement): D
   }
 }
 
-export function generateDepartementContent(dept: import('@/lib/data/france').Departement): DepartementContent {
+export function generateDepartementContent(dept: import('@/lib/data/france').State): DepartementContent {
   const seed = Math.abs(hashCode(`dept-${dept.slug}`))
   const profile = getDepartementProfile(dept)
 
@@ -2789,64 +2789,64 @@ const GEO_FACTS: Record<GeoType, string[]> = {
 
 const REGION_CONTEXTS: Record<RegionalEconomy, ((name: string, deptCount: number, cityCount: number) => string)[]> = {
   'metropole-services': [
-    (name, deptCount, cityCount) => `La région ${name}, pôle tertiaire majeur, regroupe ${deptCount} départements et ${cityCount} villes. L'activité économique soutenue génère une forte demande en artisanat : rénovation d'appartements, aménagement de bureaux, entretien d'immeubles collectifs.`,
-    (name, deptCount, cityCount) => `En ${name}, l'économie métropolitaine concentre une population active importante sur ${deptCount} départements. Les ${cityCount} villes couvertes accueillent un parc de logements sous tension : la rénovation est un enjeu majeur.`,
-    (name, deptCount, cityCount) => `Première région économique, ${name} conjugue densité urbaine et dynamisme immobilier. Avec ${deptCount} départements et ${cityCount} villes, la compétition entre artisans est un gage de qualité et de réactivité.`,
-    (name, deptCount, cityCount) => `Le marché immobilier tendu de ${name} pousse les propriétaires à rénover plutôt qu'acheter. Sur ${deptCount} départements et ${cityCount} villes, les artisans répondent à une demande croissante en rénovation d'intérieur et mise aux normes.`,
-    (name, deptCount, cityCount) => `Avec ${deptCount} départements et ${cityCount} villes, ${name} concentre le plus grand bassin de professionnels du bâtiment en France. La densité de population et le parc tertiaire créent un marché artisanal où l'expertise et la disponibilité font la différence.`,
+    (name, deptCount, cityCount) => `La région ${name}, pôle tertiaire majeur, regroupe ${deptCount} départements et ${cityCount} cities. L'activité économique soutenue génère une forte demande en artisanat : rénovation d'appartements, aménagement de bureaux, entretien d'immeubles collectifs.`,
+    (name, deptCount, cityCount) => `En ${name}, l'économie métropolitaine concentre une population active importante sur ${deptCount} départements. Les ${cityCount} cities couvertes accueillent un parc de logements sous tension : la rénovation est un enjeu majeur.`,
+    (name, deptCount, cityCount) => `Première région économique, ${name} conjugue densité urbaine et dynamisme immobilier. Avec ${deptCount} départements et ${cityCount} cities, la compétition entre artisans est un gage de qualité et de réactivité.`,
+    (name, deptCount, cityCount) => `Le marché immobilier tendu de ${name} pousse les propriétaires à rénover plutôt qu'acheter. Sur ${deptCount} départements et ${cityCount} cities, les artisans répondent à une demande croissante en rénovation d'intérieur et mise aux normes.`,
+    (name, deptCount, cityCount) => `Avec ${deptCount} départements et ${cityCount} cities, ${name} concentre le plus grand bassin de professionnels du bâtiment en France. La densité de population et le parc tertiaire créent un marché artisanal où l'expertise et la disponibilité font la différence.`,
   ],
   'industrie-reconversion': [
-    (name, deptCount, cityCount) => `La région ${name} vit une reconversion de son tissu industriel. Ses ${deptCount} départements et ${cityCount} villes concentrent un parc immobilier de la période industrielle nécessitant une rénovation profonde.`,
-    (name, deptCount, cityCount) => `En ${name}, l'héritage industriel a façonné l'habitat : logements ouvriers, grands ensembles. Les ${deptCount} départements (${cityCount} villes) offrent un potentiel de rénovation considérable.`,
-    (name, deptCount, cityCount) => `Le dynamisme de reconversion de ${name} se traduit par une forte demande en rénovation sur ${deptCount} départements et ${cityCount} villes.`,
-    (name, deptCount, cityCount) => `Les programmes de réhabilitation urbaine en ${name} transforment les friches industrielles en logements et espaces de vie. Les artisans des ${deptCount} départements (${cityCount} villes) maîtrisent la reconversion de bâtiments anciens.`,
-    (name, deptCount, cityCount) => `La transition écologique de ${name} stimule la rénovation énergétique des logements ouvriers et HLM sur ${deptCount} départements. Les ${cityCount} villes couvertes bénéficient d'aides spécifiques aux territoires en reconversion.`,
+    (name, deptCount, cityCount) => `La région ${name} vit une reconversion de son tissu industriel. Ses ${deptCount} départements et ${cityCount} cities concentrent un parc immobilier de la période industrielle nécessitant une rénovation profonde.`,
+    (name, deptCount, cityCount) => `En ${name}, l'héritage industriel a façonné l'habitat : logements ouvriers, grands ensembles. Les ${deptCount} départements (${cityCount} cities) offrent un potentiel de rénovation considérable.`,
+    (name, deptCount, cityCount) => `Le dynamisme de reconversion de ${name} se traduit par une forte demande en rénovation sur ${deptCount} départements et ${cityCount} cities.`,
+    (name, deptCount, cityCount) => `Les programmes de réhabilitation urbaine en ${name} transforment les friches industrielles en logements et espaces de vie. Les artisans des ${deptCount} départements (${cityCount} cities) maîtrisent la reconversion de bâtiments anciens.`,
+    (name, deptCount, cityCount) => `La transition écologique de ${name} stimule la rénovation énergétique des logements ouvriers et HLM sur ${deptCount} départements. Les ${cityCount} cities couvertes bénéficient d'aides spécifiques aux territoires en reconversion.`,
   ],
   'agriculture-viticulture': [
-    (name, deptCount, cityCount) => `La région ${name}, terre de terroir, présente un patrimoine bâti rural riche sur ses ${deptCount} départements. Les ${cityCount} villes référencent des artisans spécialisés en habitat traditionnel : longères, corps de ferme, maisons de vignerons.`,
-    (name, deptCount, cityCount) => `En ${name}, l'économie agricole a façonné un paysage architectural unique. Les ${deptCount} départements abritent un patrimoine que les artisans des ${cityCount} villes savent restaurer.`,
-    (name, deptCount, cityCount) => `Le caractère agricole de ${name} se reflète dans son habitat : constructions en matériaux locaux, villages de caractère. Les artisans des ${deptCount} départements (${cityCount} villes) maîtrisent ce patrimoine rural.`,
-    (name, deptCount, cityCount) => `L'attractivité résidentielle de ${name} attire des néo-ruraux qui rénovent granges, moulins et dépendances agricoles. Les artisans des ${deptCount} départements (${cityCount} villes) allient savoir-faire traditionnel et techniques modernes.`,
-    (name, deptCount, cityCount) => `Le patrimoine viticole et agricole de ${name} génère des chantiers spécifiques : rénovation de chais, isolation de longères, restauration de toitures en tuiles plates. ${deptCount} départements et ${cityCount} villes concentrent des artisans experts.`,
+    (name, deptCount, cityCount) => `La région ${name}, terre de terroir, présente un patrimoine bâti rural riche sur ses ${deptCount} départements. Les ${cityCount} cities référencent des artisans spécialisés en habitat traditionnel : longères, corps de ferme, maisons de vignerons.`,
+    (name, deptCount, cityCount) => `En ${name}, l'économie agricole a façonné un paysage architectural unique. Les ${deptCount} départements abritent un patrimoine que les artisans des ${cityCount} cities savent restaurer.`,
+    (name, deptCount, cityCount) => `Le caractère agricole de ${name} se reflète dans son habitat : constructions en matériaux locaux, villages de caractère. Les artisans des ${deptCount} départements (${cityCount} cities) maîtrisent ce patrimoine rural.`,
+    (name, deptCount, cityCount) => `L'attractivité résidentielle de ${name} attire des néo-ruraux qui rénovent granges, moulins et dépendances agricoles. Les artisans des ${deptCount} départements (${cityCount} cities) allient savoir-faire traditionnel et techniques modernes.`,
+    (name, deptCount, cityCount) => `Le patrimoine viticole et agricole de ${name} génère des chantiers spécifiques : rénovation de chais, isolation de longères, restauration de toitures en tuiles plates. ${deptCount} départements et ${cityCount} cities concentrent des artisans experts.`,
   ],
   'tourisme-patrimoine': [
-    (name, deptCount, cityCount) => `La région ${name}, destination touristique majeure, conjugue patrimoine exceptionnel et exigences d'accueil. Les ${deptCount} départements et ${cityCount} villes abritent des artisans rompus à la restauration patrimoniale.`,
-    (name, deptCount, cityCount) => `En ${name}, tourisme et patrimoine appellent un niveau d'exigence élevé. Les ${deptCount} départements (${cityCount} villes) concentrent des artisans habitués aux contraintes patrimoniales.`,
-    (name, deptCount, cityCount) => `L'attractivité touristique de ${name} soutient une forte demande en artisanat de qualité sur ses ${deptCount} départements et ${cityCount} villes.`,
-    (name, deptCount, cityCount) => `Les résidences secondaires en ${name} représentent un marché important pour les artisans locaux. Sur ${deptCount} départements et ${cityCount} villes, la rénovation haut de gamme et l'entretien saisonnier alimentent l'activité tout au long de l'année.`,
-    (name, deptCount, cityCount) => `Le classement au patrimoine de nombreux sites en ${name} impose des contraintes spécifiques : matériaux d'origine, techniques traditionnelles, validation par les ABF. Les artisans des ${deptCount} départements (${cityCount} villes) maîtrisent ces exigences.`,
+    (name, deptCount, cityCount) => `La région ${name}, destination touristique majeure, conjugue patrimoine exceptionnel et exigences d'accueil. Les ${deptCount} départements et ${cityCount} cities abritent des artisans rompus à la restauration patrimoniale.`,
+    (name, deptCount, cityCount) => `En ${name}, tourisme et patrimoine appellent un niveau d'exigence élevé. Les ${deptCount} départements (${cityCount} cities) concentrent des artisans habitués aux contraintes patrimoniales.`,
+    (name, deptCount, cityCount) => `L'attractivité touristique de ${name} soutient une forte demande en artisanat de qualité sur ses ${deptCount} départements et ${cityCount} cities.`,
+    (name, deptCount, cityCount) => `Les résidences secondaires en ${name} représentent un marché important pour les artisans locaux. Sur ${deptCount} départements et ${cityCount} cities, la rénovation haut de gamme et l'entretien saisonnier alimentent l'activité tout au long de l'année.`,
+    (name, deptCount, cityCount) => `Le classement au patrimoine de nombreux sites en ${name} impose des contraintes spécifiques : matériaux d'origine, techniques traditionnelles, validation par les ABF. Les artisans des ${deptCount} départements (${cityCount} cities) maîtrisent ces exigences.`,
   ],
   'economie-diversifiee': [
-    (name, deptCount, cityCount) => `La région ${name} bénéficie d'une économie diversifiée soutenant un marché artisanal dynamique. Ses ${deptCount} départements et ${cityCount} villes accueillent un parc immobilier varié.`,
-    (name, deptCount, cityCount) => `En ${name}, la diversité économique se traduit par un marché de rénovation actif. Les ${deptCount} départements mêlent zones industrielles, pôles technologiques et espaces agricoles. ${cityCount} villes offrent un large choix de professionnels.`,
-    (name, deptCount, cityCount) => `Le tissu économique diversifié de ${name} nourrit une demande artisanale soutenue sur ses ${deptCount} départements (${cityCount} villes).`,
-    (name, deptCount, cityCount) => `La croissance démographique de ${name} entraîne des besoins en construction neuve et rénovation. Les ${deptCount} départements et ${cityCount} villes offrent un vivier d'artisans couvrant tous les corps de métier du bâtiment.`,
-    (name, deptCount, cityCount) => `L'équilibre entre urbain et rural en ${name} diversifie les besoins artisanaux : rénovation d'appartements en centre-ville, construction de maisons individuelles en périphérie. ${deptCount} départements et ${cityCount} villes sont couverts.`,
+    (name, deptCount, cityCount) => `La région ${name} bénéficie d'une économie diversifiée soutenant un marché artisanal dynamique. Ses ${deptCount} départements et ${cityCount} cities accueillent un parc immobilier varié.`,
+    (name, deptCount, cityCount) => `En ${name}, la diversité économique se traduit par un marché de rénovation actif. Les ${deptCount} départements mêlent zones industrielles, pôles technologiques et espaces agricoles. ${cityCount} cities offrent un large choix de professionnels.`,
+    (name, deptCount, cityCount) => `Le tissu économique diversifié de ${name} nourrit une demande artisanale soutenue sur ses ${deptCount} départements (${cityCount} cities).`,
+    (name, deptCount, cityCount) => `La croissance démographique de ${name} entraîne des besoins en construction neuve et rénovation. Les ${deptCount} départements et ${cityCount} cities offrent un vivier d'artisans couvrant tous les corps de métier du bâtiment.`,
+    (name, deptCount, cityCount) => `L'équilibre entre urbain et rural en ${name} diversifie les besoins artisanaux : rénovation d'appartements en centre-ville, construction de maisons individuelles en périphérie. ${deptCount} départements et ${cityCount} cities sont couverts.`,
   ],
 }
 
 type RegionIntroFn = (name: string, deptCount: number, cityCount: number, climate: string, geo: string, economy: string) => string
 const REGION_INTROS: RegionIntroFn[] = [
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `La région ${name} regroupe ${deptCount} départements et ${cityCount} villes. Caractérisée par un ${climate.toLowerCase()} et une ${geo.toLowerCase()}, elle présente une ${economy.toLowerCase()} influençant les besoins en artisanat.`,
+    `La région ${name} regroupe ${deptCount} départements et ${cityCount} cities. Caractérisée par un ${climate.toLowerCase()} et une ${geo.toLowerCase()}, elle présente une ${economy.toLowerCase()} influençant les besoins en artisanat.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `Trouver un artisan en ${name} implique de connaître les spécificités régionales. Avec ${deptCount} départements, ${cityCount} villes et un ${climate.toLowerCase()}, cette région à la ${geo.toLowerCase()} et l'${economy.toLowerCase()} offre un marché riche.`,
+    `Trouver un artisan en ${name} implique de connaître les spécificités régionales. Avec ${deptCount} départements, ${cityCount} cities et un ${climate.toLowerCase()}, cette région à la ${geo.toLowerCase()} et l'${economy.toLowerCase()} offre un marché riche.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `En ${name}, ${deptCount} départements et ${cityCount} villes constituent un bassin de vie majeur. Le ${climate.toLowerCase()} et la ${geo.toLowerCase()} façonnent le parc immobilier, tandis que l'${economy.toLowerCase()} soutient la demande.`,
+    `En ${name}, ${deptCount} départements et ${cityCount} cities constituent un bassin de vie majeur. Le ${climate.toLowerCase()} et la ${geo.toLowerCase()} façonnent le parc immobilier, tandis que l'${economy.toLowerCase()} soutient la demande.`,
   (name, deptCount, cityCount, climate, _geo, economy) =>
-    `La région ${name} offre un réseau dense d'artisans sur ${deptCount} départements et ${cityCount} villes. Son ${climate.toLowerCase()} détermine les priorités de rénovation, dans un contexte d'${economy.toLowerCase()}.`,
+    `La région ${name} offre un réseau dense d'artisans sur ${deptCount} départements et ${cityCount} cities. Son ${climate.toLowerCase()} détermine les priorités de rénovation, dans un contexte d'${economy.toLowerCase()}.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `Avec ${deptCount} départements et ${cityCount} villes, ${name} est un territoire de ${geo.toLowerCase()} au ${climate.toLowerCase()}. L'${economy.toLowerCase()} stimule un marché de l'artisanat où qualité et réactivité sont essentielles.`,
+    `Avec ${deptCount} départements et ${cityCount} cities, ${name} est un territoire de ${geo.toLowerCase()} au ${climate.toLowerCase()}. L'${economy.toLowerCase()} stimule un marché de l'artisanat où qualité et réactivité sont essentielles.`,
   (name, deptCount, cityCount, climate, geo) =>
-    `${name} : ${deptCount} départements, ${cityCount} villes, et un patrimoine bâti façonné par le ${climate.toLowerCase()} et la ${geo.toLowerCase()}. Les artisans régionaux maîtrisent les techniques adaptées.`,
+    `${name} : ${deptCount} départements, ${cityCount} cities, et un patrimoine bâti façonné par le ${climate.toLowerCase()} et la ${geo.toLowerCase()}. Les artisans régionaux maîtrisent les techniques adaptées.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `Région de ${geo.toLowerCase()}, ${name} compte ${deptCount} départements et ${cityCount} villes. Le ${climate.toLowerCase()} dicte ses contraintes, et l'${economy.toLowerCase()} maintient une demande soutenue.`,
+    `Région de ${geo.toLowerCase()}, ${name} compte ${deptCount} départements et ${cityCount} cities. Le ${climate.toLowerCase()} dicte ses contraintes, et l'${economy.toLowerCase()} maintient une demande soutenue.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `Le patrimoine bâti de ${name} reflète son ${climate.toLowerCase()} et sa ${geo.toLowerCase()}. Nos ${cityCount} villes, réparties sur ${deptCount} départements, donnent accès à des artisans formés aux spécificités locales. L'${economy.toLowerCase()} garantit un vivier de professionnels.`,
+    `Le patrimoine bâti de ${name} reflète son ${climate.toLowerCase()} et sa ${geo.toLowerCase()}. Nos ${cityCount} cities, réparties sur ${deptCount} départements, donnent accès à des artisans formés aux spécificités locales. L'${economy.toLowerCase()} garantit un vivier de professionnels.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `Vous cherchez un artisan en ${name} ? La région compte ${deptCount} départements, ${cityCount} villes et un patrimoine bâti influencé par le ${climate.toLowerCase()}. Entre ${geo.toLowerCase()} et ${economy.toLowerCase()}, les besoins artisanaux varient d'un territoire à l'autre.`,
+    `Vous cherchez un artisan en ${name} ? La région compte ${deptCount} départements, ${cityCount} cities et un patrimoine bâti influencé par le ${climate.toLowerCase()}. Entre ${geo.toLowerCase()} et ${economy.toLowerCase()}, les besoins artisanaux varient d'un territoire à l'autre.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `De la ${geo.toLowerCase()} au ${climate.toLowerCase()}, ${name} offre un cadre de vie exigeant pour le bâti. Les artisans répartis sur ${deptCount} départements et ${cityCount} villes adaptent leurs interventions à l'${economy.toLowerCase()} et aux contraintes locales du patrimoine régional.`,
+    `De la ${geo.toLowerCase()} au ${climate.toLowerCase()}, ${name} offre un cadre de vie exigeant pour le bâti. Les artisans répartis sur ${deptCount} départements et ${cityCount} cities adaptent leurs interventions à l'${economy.toLowerCase()} et aux contraintes locales du patrimoine régional.`,
 ]
 
 const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
@@ -2895,7 +2895,7 @@ const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
 }
 
 const REGION_FAQ_POOL: { q: (name: string) => string; a: (name: string, deptCount: number, cityCount: number, climate: string, facts: string[]) => string }[] = [
-  { q: (name) => `Comment trouver un artisan en ${name} ?`, a: (name, deptCount, cityCount) => `Parcourez les ${deptCount} départements de ${name} ou sélectionnez parmi les ${cityCount} villes. Choisissez le service et accédez aux artisans identifiés via les données SIREN. Devis gratuits.` },
+  { q: (name) => `Comment trouver un artisan en ${name} ?`, a: (name, deptCount, cityCount) => `Parcourez les ${deptCount} départements de ${name} ou sélectionnez parmi les ${cityCount} cities. Choisissez le service et accédez aux artisans identifiés via les données SIREN. Devis gratuits.` },
   { q: (name) => `Combien coûte un artisan en ${name} ?`, a: (name) => `Les tarifs en ${name} varient selon le métier (45-90 €/h), la complexité et la zone. Les zones urbaines sont +10-25% vs rurales. Demandez plusieurs devis.` },
   { q: (name) => `Quels travaux prioritaires en ${name} ?`, a: (name, _deptCount, _cityCount, climate, facts) => `Le ${climate.toLowerCase()} de ${name} détermine les priorités : ${facts.slice(0, 2).join(' ; ').toLowerCase()}. L'isolation et la rénovation énergétique sont les investissements les plus rentables.` },
   { q: (name) => `Les devis sont-ils gratuits en ${name} ?`, a: (name) => `Oui, tous les devis via ServicesArtisans pour ${name} sont 100% gratuits et sans engagement. Jusqu'à 3 propositions de professionnels qualifiés.` },
@@ -2906,7 +2906,7 @@ const REGION_FAQ_POOL: { q: (name: string) => string; a: (name: string, deptCoun
   { q: (name) => `Meilleure saison pour rénover en ${name} ?`, a: (name, _deptCount, _cityCount, climate) => `En ${name}, le ${climate.toLowerCase()} influence le calendrier. Extérieurs optimaux au printemps/été. Intérieurs toute l'année. Planifiez 2-3 mois à l'avance.` },
   { q: (name) => `Comment vérifier un artisan en ${name} ?`, a: (name) => `Contrôlez le SIRET sur l'INSEE, demandez assurance décennale et RC pro, vérifiez certifications (RGE, Qualibat), et consultez les avis pour les artisans de ${name}.` },
   { q: (name) => `Certifications importantes en ${name} ?`, a: (name) => `En ${name} : RGE (indispensable pour les aides), Qualibat (qualification), QualiPV/QualiSol (solaire), QualiBois/QualiPAC (chauffage). Labels garantissant un niveau de compétence vérifié.` },
-  { q: (name) => `Combien de départements en ${name} ?`, a: (name, deptCount, cityCount) => `${name} regroupe ${deptCount} départements et ${cityCount} villes référencées. Chaque département dispose d'une page dédiée avec artisans par spécialité.` },
+  { q: (name) => `Combien de départements en ${name} ?`, a: (name, deptCount, cityCount) => `${name} regroupe ${deptCount} départements et ${cityCount} cities référencées. Chaque département dispose d'une page dédiée avec artisans par spécialité.` },
   { q: (name) => `Permis de construire pour rénover en ${name} ?`, a: (name) => `En ${name}, les travaux intérieurs sans modification de structure ne nécessitent aucune autorisation. Modifications de façade ou extensions > 5 m² : déclaration préalable. Secteurs protégés : aval ABF.` },
   { q: (name) => `Comment comparer les devis en ${name} ?`, a: (name) => `Pour comparer en ${name} : même périmètre, vérifiez détail des prestations, marques, délais, prix HT/TTC, conditions de paiement, assurances. Le moins cher n'est pas toujours le meilleur.` },
   { q: (name) => `Artisans les plus demandés en ${name} ?`, a: (name, _deptCount, _cityCount, climate) => `En ${name}, avec le ${climate.toLowerCase()}, plombiers, électriciens et chauffagistes dominent les urgences. Pour les projets planifiés : peintres, menuisiers et maçons.` },
@@ -2985,7 +2985,7 @@ type CitySize = 'metropole' | 'grande-ville' | 'ville-moyenne' | 'petite-ville'
 const CITY_SIZES: { key: CitySize; label: string; minPop: number }[] = [
   { key: 'metropole', label: 'Métropole', minPop: 200000 },
   { key: 'grande-ville', label: 'Grande ville', minPop: 50000 },
-  { key: 'ville-moyenne', label: 'Ville moyenne', minPop: 10000 },
+  { key: 'ville-moyenne', label: 'City moyenne', minPop: 10000 },
   { key: 'petite-ville', label: 'Petite ville', minPop: 0 },
 ]
 
@@ -3049,7 +3049,7 @@ export interface VilleContent {
   faqItems: { question: string; answer: string }[]
 }
 
-function getVilleProfile(ville: import('@/lib/data/france').Ville): VilleProfile {
+function getVilleProfile(ville: import('@/lib/data/france').City): VilleProfile {
   const seed = Math.abs(hashCode(`ville-${ville.slug}`))
   const regionClimate = REGION_CLIMATE[ville.region] || 'semi-oceanique'
   const climate = CLIMATES.find(c => c.key === regionClimate) || CLIMATES[4]
@@ -3116,7 +3116,7 @@ const VILLE_CONTEXTS: Record<CitySize, ((p: VilleCtxParams) => string)[]> = {
     (p) => `Les ${p.pop} habitants de ${p.name} bénéficient d'un tissu artisanal dense et spécialisé. Entre rénovation du centre historique et aménagement des zones résidentielles périphériques, les professionnels du bâtiment sont très sollicités.`,
   ],
   'ville-moyenne': [
-    (p) => `Ville moyenne de ${p.pop} habitants, ${p.name} se caractérise par un habitat principalement pavillonnaire. Les besoins portent sur l'entretien courant, la rénovation énergétique et l'amélioration du confort des maisons individuelles.`,
+    (p) => `City moyenne de ${p.pop} habitants, ${p.name} se caractérise par un habitat principalement pavillonnaire. Les besoins portent sur l'entretien courant, la rénovation énergétique et l'amélioration du confort des maisons individuelles.`,
     (p) => `À ${p.name} (${p.pop} hab.), le parc immobilier mêle constructions traditionnelles et pavillons plus récents. Les artisans locaux sont sollicités pour des travaux d'isolation, de chauffage et de mise aux normes.`,
     (p) => `Commune de ${p.pop} habitants, ${p.name} présente un tissu résidentiel à taille humaine. Les propriétaires y privilégient les artisans de proximité pour leurs travaux de rénovation et d'entretien.`,
     (p) => `${p.name} (${p.pop} hab.) offre un cadre de vie résidentiel où les maisons individuelles dominent. Les demandes portent sur l'extension de logements, la rénovation de cuisines et salles de bain, et l'amélioration de l'isolation thermique.`,
@@ -3243,7 +3243,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   },
 ]
 
-export function generateVilleContent(ville: import('@/lib/data/france').Ville): VilleContent {
+export function generateVilleContent(ville: import('@/lib/data/france').City): VilleContent {
   const seed = Math.abs(hashCode(`ville-${ville.slug}`))
   const profile = getVilleProfile(ville)
   const quartierCount = ville.quartiers?.length || 0

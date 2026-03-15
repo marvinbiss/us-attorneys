@@ -41,7 +41,7 @@ export async function GET(
 
     const { data, error } = await supabase
       .from('prospection_contacts')
-      .select('id, contact_type, company_name, contact_name, email, email_canonical, phone, phone_e164, address, postal_code, city, department, region, commune_code, population, artisan_id, source, source_file, source_row, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
+      .select('id, contact_type, company_name, contact_name, email, email_canonical, phone, phone_e164, address, postal_code, city, department, region, location_code, population, attorney_id, source, source_file, source_row, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
       .eq('id', id)
       .single()
 

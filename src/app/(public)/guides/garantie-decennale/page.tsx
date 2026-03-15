@@ -17,7 +17,7 @@ import {
   Home,
 } from "lucide-react"
 
-const PAGE_URL = `${SITE_URL}/guides/garantie-decennale`
+const PAGE_URL = `${SITE_URL}/guides/guarantee-decennale`
 
 export const revalidate = 86400
 
@@ -64,12 +64,12 @@ const travauxCouverts = [
 ]
 
 const services = [
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Charpentier", href: "/services/charpentier", icon: Hammer },
-  { label: "Plombier", href: "/services/plombier", icon: Hammer },
-  { label: "Électricien", href: "/services/electricien", icon: Hammer },
-  { label: "Rénovation intérieure", href: "/services/renovation-interieure", icon: Home },
+  { label: "Maçon", href: "/practice-areas/macon", icon: Building2 },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Charpentier", href: "/practice-areas/charpentier", icon: Hammer },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Hammer },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Hammer },
+  { label: "Rénovation intérieure", href: "/practice-areas/renovation-interieure", icon: Home },
 ]
 
 const faqItems = [
@@ -342,7 +342,7 @@ export default function GarantieDecennalePage() {
                   {"Consultez le profil détaillé d'un artisan sur notre annuaire : SIRET, assurances, avis clients et coordonnées vérifiées."}
                 </p>
                 <Link
-                  href="/verifier-artisan"
+                  href="/verify-attorney"
                   className="inline-flex items-center gap-2 bg-white text-blue-700 px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
                 >
                   <Search className="w-4 h-4" />
@@ -434,7 +434,7 @@ export default function GarantieDecennalePage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Assurance dommage-ouvrage"}</h3>
               <p className="text-sm text-gray-500">{"Le complément indispensable de la décennale côté client."}</p>
             </Link>
-            <Link href="/guides/devis-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/quotes-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Devis travaux"}</h3>
               <p className="text-sm text-gray-500">{"Comment comparer les devis et vérifier les assurances."}</p>
             </Link>
@@ -480,14 +480,14 @@ export default function GarantieDecennalePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/verifier-artisan"
+                href="/verify-attorney"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Vérifier un artisan"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

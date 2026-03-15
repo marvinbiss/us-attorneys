@@ -61,7 +61,7 @@ function SkeletonCard() {
 export function StatsGrid({ stats, loading }: StatsGridProps) {
   if (loading || !stats) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {Array.from({ length: 4 }, (_, i) => <SkeletonCard key={i} />)}
       </div>
     )
@@ -84,7 +84,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       color: 'bg-indigo-100 text-indigo-600',
       trend: null,
       trendLabel: null,
-      href: '/admin/artisans',
+      href: '/admin/attorneys',
     },
     {
       label: 'Réservations',
@@ -107,7 +107,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {cards.map((card) => (
         <Link
           key={card.label}

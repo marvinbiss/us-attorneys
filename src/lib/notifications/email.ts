@@ -5,18 +5,18 @@ import { getResendClient } from '@/lib/api/resend-client'
 // Lazy getter for Resend client
 const getResend = () => getResendClient()
 
-const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
+const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@us-attorneys.com'
 const SITE_NAME = 'ServicesArtisans'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
 
 export interface BookingEmailData {
   bookingId: string
   clientName: string
   clientEmail: string
   clientPhone: string
-  artisanName: string
+  attorneyName: string
   artisanEmail: string
-  serviceName: string
+  specialtyName: string
   date: string
   startTime: string
   endTime: string
@@ -27,8 +27,8 @@ export interface ReminderEmailData {
   bookingId: string
   clientName: string
   clientEmail: string
-  artisanName: string
-  serviceName: string
+  attorneyName: string
+  specialtyName: string
   date: string
   startTime: string
   endTime: string
@@ -38,9 +38,9 @@ export interface CancellationEmailData {
   bookingId: string
   clientName: string
   clientEmail: string
-  artisanName: string
+  attorneyName: string
   artisanEmail: string
-  serviceName: string
+  specialtyName: string
   date: string
   startTime: string
   endTime: string
@@ -51,7 +51,7 @@ export interface CancellationEmailData {
 export interface PaymentFailedEmailData {
   clientName: string
   clientEmail: string
-  serviceName: string
+  specialtyName: string
   date: string
   amount?: string
 }
@@ -59,7 +59,7 @@ export interface PaymentFailedEmailData {
 // Email templates
 const templates = {
   bookingConfirmationClient: (data: BookingEmailData) => ({
-    subject: `Confirmation de votre rendez-vous - ${data.serviceName}`,
+    subject: `Confirmation de votre rendez-vous - ${data.specialtyName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -78,7 +78,7 @@ const templates = {
                 Bonjour <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Votre rendez-vous avec <strong>${data.artisanName}</strong> a bien été confirmé.
+                Votre rendez-vous avec <strong>${data.attorneyName}</strong> a bien été confirmé.
               </p>
 
               <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #2563eb;">
@@ -86,7 +86,7 @@ const templates = {
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
-                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.serviceName}</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.specialtyName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Date:</td>
@@ -98,7 +98,7 @@ const templates = {
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Artisan:</td>
-                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.artisanName}</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.attorneyName}</td>
                   </tr>
                 </table>
               </div>
@@ -126,13 +126,13 @@ const templates = {
     text: `
 Bonjour ${data.clientName},
 
-Votre rendez-vous avec ${data.artisanName} a bien été confirmé.
+Votre rendez-vous avec ${data.attorneyName} a bien été confirmé.
 
 DÉTAILS DU RENDEZ-VOUS
-Service: ${data.serviceName}
+Service: ${data.specialtyName}
 Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
-Artisan: ${data.artisanName}
+Artisan: ${data.attorneyName}
 
 Gérer votre réservation: ${SITE_URL}/booking/${data.bookingId}
 
@@ -158,7 +158,7 @@ ${SITE_NAME}
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.artisanName}</strong>,
+                Bonjour <strong>${data.attorneyName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
                 Vous avez reçu une nouvelle réservation de la part de <strong>${data.clientName}</strong>.
@@ -181,7 +181,7 @@ ${SITE_NAME}
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
-                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.serviceName}</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.specialtyName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Date:</td>
@@ -201,7 +201,7 @@ ${SITE_NAME}
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/espace-artisan/calendrier" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                <a href="${SITE_URL}/attorney-dashboard/calendrier" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                   Voir mon calendrier
                 </a>
               </div>
@@ -217,7 +217,7 @@ ${SITE_NAME}
       </html>
     `,
     text: `
-Bonjour ${data.artisanName},
+Bonjour ${data.attorneyName},
 
 Vous avez reçu une nouvelle réservation.
 
@@ -225,19 +225,19 @@ DÉTAILS DU RENDEZ-VOUS
 Client: ${data.clientName}
 Téléphone: ${data.clientPhone}
 Email: ${data.clientEmail}
-Service: ${data.serviceName}
+Service: ${data.specialtyName}
 Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 ${data.message ? `Message: ${data.message}` : ''}
 
-Voir votre calendrier: ${SITE_URL}/espace-artisan/calendrier
+Voir votre calendrier: ${SITE_URL}/attorney-dashboard/calendrier
 
 ${SITE_NAME}
     `,
   }),
 
   reminderClient: (data: ReminderEmailData) => ({
-    subject: `Rappel: Votre RDV demain avec ${data.artisanName}`,
+    subject: `Rappel: Votre RDV demain avec ${data.attorneyName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -255,14 +255,14 @@ ${SITE_NAME}
                 Bonjour <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Nous vous rappelons votre rendez-vous prévu <strong>demain</strong> avec <strong>${data.artisanName}</strong>.
+                Nous vous rappelons votre rendez-vous prévu <strong>demain</strong> avec <strong>${data.attorneyName}</strong>.
               </p>
 
               <div style="background: #fffbeb; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #f59e0b;">
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
-                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.serviceName}</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.specialtyName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Date:</td>
@@ -298,9 +298,9 @@ ${SITE_NAME}
     text: `
 Bonjour ${data.clientName},
 
-Rappel: Vous avez un rendez-vous DEMAIN avec ${data.artisanName}.
+Rappel: Vous avez un rendez-vous DEMAIN avec ${data.attorneyName}.
 
-Service: ${data.serviceName}
+Service: ${data.specialtyName}
 Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 
@@ -339,7 +339,7 @@ ${SITE_NAME}
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
-                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.serviceName}</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.specialtyName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Date prévue:</td>
@@ -371,7 +371,7 @@ ${SITE_NAME}
     text: `
 Le rendez-vous prévu le ${data.date} a été annulé par ${data.cancelledBy === 'client' ? 'le client' : 'l\'artisan'}.
 
-Service: ${data.serviceName}
+Service: ${data.specialtyName}
 Date prévue: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 ${data.reason ? `Raison: ${data.reason}` : ''}
@@ -407,7 +407,7 @@ ${SITE_NAME}
                 <table style="width: 100%; font-size: 14px;">
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Service:</td>
-                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.serviceName}</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.specialtyName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Date:</td>
@@ -427,7 +427,7 @@ ${SITE_NAME}
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/espace-artisan/parametres/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                <a href="${SITE_URL}/attorney-dashboard/parametres/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                   Mettre à jour le paiement
                 </a>
               </div>
@@ -447,13 +447,13 @@ Bonjour ${data.clientName},
 
 Nous n'avons pas pu traiter votre paiement pour votre abonnement ${SITE_NAME}.
 
-Service: ${data.serviceName}
+Service: ${data.specialtyName}
 Date: ${data.date}
 ${data.amount ? `Montant: ${data.amount}` : ''}
 
 Veuillez mettre à jour vos informations de paiement pour continuer à bénéficier de votre abonnement.
 
-Mettre à jour: ${SITE_URL}/espace-artisan/parametres/facturation
+Mettre à jour: ${SITE_URL}/attorney-dashboard/parametres/facturation
 
 ${SITE_NAME}
     `,
@@ -540,8 +540,8 @@ export async function sendCancellationEmail(data: {
   bookingId: string
   clientName: string
   clientEmail: string
-  artisanName: string
-  serviceName: string
+  attorneyName: string
+  specialtyName: string
   date: string
   startTime: string
   cancellationReason?: string
@@ -550,9 +550,9 @@ export async function sendCancellationEmail(data: {
     bookingId: data.bookingId,
     clientName: data.clientName,
     clientEmail: data.clientEmail,
-    artisanName: data.artisanName,
+    attorneyName: data.attorneyName,
     artisanEmail: '', // Not needed for client notification
-    serviceName: data.serviceName,
+    specialtyName: data.specialtyName,
     date: data.date,
     startTime: data.startTime,
     endTime: '',

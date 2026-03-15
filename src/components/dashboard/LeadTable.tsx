@@ -9,7 +9,7 @@ interface LeadTableProps {
   assignments: LeadAssignment[]
   basePath: string
   showProvider?: boolean
-  providerNames?: Record<string, string>
+  attorneyNames?: Record<string, string>
 }
 
 function formatRelative(dateStr: string): string {
@@ -26,7 +26,7 @@ function formatRelative(dateStr: string): string {
   return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
 
-export function LeadTable({ assignments, basePath, showProvider, providerNames }: LeadTableProps) {
+export function LeadTable({ assignments, basePath, showProvider, attorneyNames }: LeadTableProps) {
   if (assignments.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
@@ -97,9 +97,9 @@ export function LeadTable({ assignments, basePath, showProvider, providerNames }
                       <span className="text-gray-400">—</span>
                     )}
                   </td>
-                  {showProvider && providerNames && (
+                  {showProvider && attorneyNames && (
                     <td className="px-4 py-3 text-sm text-gray-600">
-                      {providerNames[a.provider_id] || a.provider_id.slice(0, 8)}
+                      {attorneyNames[a.attorney_id] || a.attorney_id.slice(0, 8)}
                     </td>
                   )}
                   <td className="px-4 py-3">

@@ -151,13 +151,13 @@ export default function AdvancedSearch({
     if (onSearch) {
       onSearch(query, filters)
     } else {
-      router.push(`/recherche?${params.toString()}`)
+      router.push(`/search?${params.toString()}`)
     }
   }, [query, filters, onSearch, router])
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     if (suggestion.type === 'artisan' && suggestion.id) {
-      router.push(`/recherche?q=${encodeURIComponent(suggestion.text)}`)
+      router.push(`/search?q=${encodeURIComponent(suggestion.text)}`)
     } else if (suggestion.type === 'location') {
       setFilters({ ...filters, location: suggestion.text })
       setShowSuggestions(false)
@@ -227,7 +227,7 @@ export default function AdvancedSearch({
               type="text"
               value={filters.location || ''}
               onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-              placeholder="Ville ou code postal"
+              placeholder="City ou code postal"
               className={`w-40 outline-none text-gray-900 placeholder-gray-400 ${
                 variant === 'hero' ? 'py-3' : 'py-2'
               }`}
@@ -326,7 +326,7 @@ export default function AdvancedSearch({
                       </div>
                       <span className="text-xs text-gray-400 capitalize">
                         {suggestion.type === 'service' ? 'Service' :
-                         suggestion.type === 'artisan' ? 'Artisan' : 'Ville'}
+                         suggestion.type === 'artisan' ? 'Artisan' : 'City'}
                       </span>
                     </button>
                   ))}

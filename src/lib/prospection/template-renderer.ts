@@ -30,7 +30,7 @@ const CONTACT_VARIABLES: Record<string, (contact: ProspectionContact) => string>
   department: (c) => c.department || '',
   region: (c) => c.region || '',
   contact_type: (c) => c.contact_type,
-  commune_code: (c) => c.commune_code || '',
+  location_code: (c) => c.location_code || '',
 }
 
 const CAMPAIGN_VARIABLES: Record<string, (campaign: ProspectionCampaign) => string> = {
@@ -143,7 +143,7 @@ export function renderTemplate(
   }
 
   // Lien de désinscription with HMAC-signed token to prevent tampering
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
   const unsubToken = generateUnsubscribeToken(contact.id, campaign.channel)
   rendered = rendered.replaceAll('{{unsubscribe_link}}', `${siteUrl}/api/prospection/unsubscribe?token=${unsubToken}`)
 
@@ -206,9 +206,9 @@ export function renderPreview(template: string): string {
     city: 'Paris',
     department: '75',
     region: 'Île-de-France',
-    commune_code: '75101',
+    location_code: '75101',
     population: null,
-    artisan_id: null,
+    attorney_id: null,
     source: 'manual',
     source_file: null,
     source_row: null,

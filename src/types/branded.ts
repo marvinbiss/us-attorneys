@@ -85,7 +85,7 @@ export function isValidPostalCode(value: string): boolean {
 // CONSTRUCTORS (avec validation)
 // ============================================================================
 
-export function createProviderId(value: string): ProviderId {
+export function createAttorneyId(value: string): ProviderId {
   if (!isValidUUID(value)) throw new Error(`Invalid ProviderId: ${value}`)
   return value as ProviderId
 }

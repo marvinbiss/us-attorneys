@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { services, villes } from '@/lib/data/france'
+import { services, cities } from '@/lib/data/usa'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -58,7 +58,7 @@ const _normalize = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0
 const _serviceMap = new Map(services.map(s => [_normalize(s.name), s.slug]))
 // Also map slug → slug for direct matches (provider specialty may already be a slug)
 services.forEach(s => { if (!_serviceMap.has(s.slug)) _serviceMap.set(s.slug, s.slug) })
-const _villeMap = new Map(villes.map(v => [_normalize(v.name), v.slug]))
+const _villeMap = new Map(cities.map(v => [_normalize(v.name), v.slug]))
 
 // Reverse mapping: provider specialty variants → canonical service slug
 // Covers cases where provider.specialty is a synonym (e.g., "peintre" → "peintre-en-batiment")
@@ -114,17 +114,17 @@ const _specialtyToServiceSlug: Record<string, string> = {
 }
 
 // Generate SEO-friendly artisan URL using static slug lookup
-export function getArtisanUrl(artisan: {
+export function getAttorneyUrl(artisan: {
   stable_id?: string | null
   slug?: string | null
   specialty?: string | null
   city?: string | null
 }): string {
   const normalized = _normalize(artisan.specialty || '')
-  const serviceSlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'artisan')
+  const specialtySlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'artisan')
   const locationSlug = _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
   const id = artisan.slug || artisan.stable_id || ''
-  return `/services/${serviceSlug}/${locationSlug}/${id}`
+  return `/practice-areas/${specialtySlug}/${locationSlug}/${id}`
 }
 
 // Truncate text

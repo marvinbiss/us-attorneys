@@ -33,6 +33,8 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 .vercel
 .env*.local
+tmp_*.html
+*.bat
 scripts/.collect-progress.json
 scripts/.enrich-phone-progress.json
 scripts/.enrich-data/

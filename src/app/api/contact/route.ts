@@ -75,8 +75,8 @@ export async function POST(request: Request) {
 
     // Send email to support team
     const { error: sendError } = await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'contact@servicesartisans.fr',
-      to: 'contact@servicesartisans.fr',
+      from: process.env.FROM_EMAIL || 'contact@us-attorneys.com',
+      to: 'contact@us-attorneys.com',
       reply_to: safeEmailHeader,
       subject: `[Contact] ${safeSujet} - ${safeNom}`,
       html: `
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
     // Send confirmation email to user (non-critical — don't fail if this errors)
     try {
       await getResend().emails.send({
-        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+        from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: email,
         subject: 'Votre message a bien été reçu - ServicesArtisans',
         html: `
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
           <hr />
           <p>Cordialement,<br />L'équipe ServicesArtisans</p>
           <p style="color: #666; font-size: 12px;">
-            <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+            <a href="https://us-attorneys.com">us-attorneys.com</a>
           </p>
         `,
       })

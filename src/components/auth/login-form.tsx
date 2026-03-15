@@ -35,7 +35,7 @@ export function LoginForm() {
         return
       }
 
-      router.push('/espace-artisan')
+      router.push('/attorney-dashboard')
       router.refresh()
     } catch (_err) {
       setError('Une erreur est survenue')
@@ -83,7 +83,7 @@ export function LoginForm() {
           <input type="checkbox" className="rounded border-gray-300" />
           <span className="text-sm text-gray-600">Se souvenir de moi</span>
         </label>
-        <a href="/mot-de-passe-oublie" className="text-sm text-blue-600 hover:underline">
+        <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
           Mot de passe oublié ?
         </a>
       </div>

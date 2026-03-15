@@ -2474,7 +2474,7 @@ export function getTradesSlugs(): string[] {
 }
 
 /**
- * Slugifie un nom de tâche pour l'URL /tarifs/[service]/[ville]/[travail].
+ * Slugifie un nom de tâche pour l'URL /pricing/[service]/[ville]/[travail].
  */
 export function slugifyTask(taskName: string): string {
   return taskName
@@ -2497,8 +2497,8 @@ export function parseTask(task: string): { name: string; slug: string; priceText
 }
 
 /** Retourne toutes les taches parsees pour un service */
-export function getTasksForService(serviceSlug: string): { name: string; slug: string; priceText: string }[] {
-  const trade = tradeContent[serviceSlug]
+export function getTasksForService(specialtySlug: string): { name: string; slug: string; priceText: string }[] {
+  const trade = tradeContent[specialtySlug]
   if (!trade) return []
   return trade.commonTasks.map(parseTask)
 }

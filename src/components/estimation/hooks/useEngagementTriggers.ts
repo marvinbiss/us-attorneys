@@ -76,7 +76,7 @@ export function useEngagementTriggers(
       if (scrollPercent >= 0.4) {
         greetingTriggeredRef.current = true
         setShowGreeting(true)
-        trackEvent('chat_opened' as any, {
+        trackEvent('chat_opened', {
           trigger: 'scroll',
           metier: metierSlug,
           ville,
@@ -98,7 +98,7 @@ export function useEngagementTriggers(
       if (e.clientY <= 5 && e.relatedTarget === null) {
         exitIntentFired.current = true
         setShowGreeting(true)
-        trackEvent('chat_opened' as any, {
+        trackEvent('chat_opened', {
           trigger: 'exit_intent_soft',
           metier: metierSlug,
           ville,

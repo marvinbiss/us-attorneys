@@ -126,11 +126,11 @@ const typesOuverture = [
 ]
 
 const services = [
-  { label: "Menuisier", href: "/services/menuisier", icon: Hammer },
-  { label: "Vitrier", href: "/services/vitrier", icon: Home },
-  { label: "Isolation", href: "/services/isolation", icon: Building2 },
-  { label: "Peintre", href: "/services/peintre", icon: Hammer },
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
+  { label: "Menuisier", href: "/practice-areas/menuisier", icon: Hammer },
+  { label: "Vitrier", href: "/practice-areas/vitrier", icon: Home },
+  { label: "Isolation", href: "/practice-areas/isolation", icon: Building2 },
+  { label: "Peintre", href: "/practice-areas/peintre", icon: Hammer },
+  { label: "Maçon", href: "/practice-areas/macon", icon: Building2 },
 ]
 
 const faqItems = [
@@ -536,14 +536,14 @@ export default function RenovationFenetresPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/menuisier"
+                href="/practice-areas/menuisier"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un menuisier"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

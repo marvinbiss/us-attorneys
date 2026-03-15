@@ -36,8 +36,8 @@ export async function POST(
       { data: reviews },
     ] = await Promise.all([
       supabase.from('profiles').select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count').eq('id', userId).single(),
-      supabase.from('bookings').select('id, provider_id, client_id, status, scheduled_date, notes, created_at').or(`provider_id.eq.${userId},client_id.eq.${userId}`),
-      supabase.from('reviews').select('id, booking_id, artisan_id, client_name, client_email, rating, comment, status, created_at').eq('artisan_id', userId),
+      supabase.from('bookings').select('id, attorney_id, client_id, status, scheduled_date, notes, created_at').or(`attorney_id.eq.${userId},client_id.eq.${userId}`),
+      supabase.from('reviews').select('id, booking_id, attorney_id, client_name, client_email, rating, comment, status, created_at').eq('attorney_id', userId),
     ])
 
     const exportData = {

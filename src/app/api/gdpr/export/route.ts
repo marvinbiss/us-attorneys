@@ -171,18 +171,18 @@ async function collectUserData(userId: string) {
   ] = await Promise.all([
     adminSupabase
       .from('bookings')
-      .select('id, client_id, provider_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at')
-      .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
+      .select('id, client_id, attorney_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at')
+      .or(`client_id.eq.${userId},attorney_id.eq.${userId}`),
 
     adminSupabase
       .from('reviews')
-      .select('id, rating, comment, created_at, artisan_id')
-      .eq('artisan_id', userId),
+      .select('id, rating, comment, created_at, attorney_id')
+      .eq('attorney_id', userId),
 
     userEmail
       ? adminSupabase
           .from('reviews')
-          .select('id, rating, comment, created_at, artisan_id')
+          .select('id, rating, comment, created_at, attorney_id')
           .eq('client_email', userEmail)
       : Promise.resolve({ data: [] }),
 

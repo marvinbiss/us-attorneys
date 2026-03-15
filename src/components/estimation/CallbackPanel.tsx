@@ -121,7 +121,7 @@ export const CallbackPanel = memo(function CallbackPanel({
               <span>
                 J&apos;accepte que mes données soient traitées pour recevoir un rappel.{' '}
                 <a
-                  href="/confidentialite"
+                  href="/privacy"
                   target="_blank"
                   className="underline"
                 >

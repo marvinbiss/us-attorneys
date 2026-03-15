@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { villes } from '@/lib/data/france'
+import { cities } from '@/lib/data/usa'
 import { logger } from '@/lib/logger'
 
 export const revalidate = 60 // Cache for 1 minute (ISR)
@@ -16,12 +16,12 @@ export async function GET() {
 
     // Get REAL stats from actual reviews table (NOT from providers table which had fake data)
     const [
-      { count: artisanCount },
+      { count: attorneyCount },
       { data: realReviews }
     ] = await Promise.all([
       // Count active artisans
       supabase
-        .from('providers')
+        .from('attorneys')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true),
 
@@ -48,10 +48,10 @@ export async function GET() {
       : 0 // Return 0 if no real reviews, NOT a fake fallback value
 
     return NextResponse.json({
-      artisanCount: artisanCount || 0,
+      attorneyCount: attorneyCount || 0,
       reviewCount: totalReviews,
       averageRating: averageRating,
-      cityCount: villes.length,
+      cityCount: cities.length,
       updatedAt: new Date().toISOString()
     }, {
       headers: {

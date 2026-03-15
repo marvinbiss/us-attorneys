@@ -16,7 +16,7 @@ export default async function AdminDashboardLayout({
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/admin/connexion')
+    redirect('/admin/login')
   }
 
   // Check admin access: first try profiles table, then fall back to email whitelist

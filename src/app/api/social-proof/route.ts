@@ -19,17 +19,17 @@ export async function GET() {
 
     // Count active providers
     const { count: activeProviders } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
 
     // Minimum display values for credibility
     const devisCount = Math.max(monthlyDevis || 0, 50)
-    const providerCount = activeProviders || 0
+    const attorneyCount = activeProviders || 0
 
     return NextResponse.json({
       devisThisMonth: devisCount,
-      activeProviders: providerCount,
+      activeProviders: attorneyCount,
       updatedAt: new Date().toISOString(),
     }, {
       headers: {

@@ -608,7 +608,7 @@ export default function BudgetRenovationPage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Aides à la rénovation 2026"}</h3>
               <p className="text-sm text-gray-500">{"MaPrimeRénov', CEE, éco-PTZ : le guide complet."}</p>
             </Link>
-            <Link href="/guides/devis-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/quotes-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Devis travaux"}</h3>
               <p className="text-sm text-gray-500">{"Comment comparer et négocier les devis."}</p>
             </Link>
@@ -661,7 +661,7 @@ export default function BudgetRenovationPage() {
                 {"Trouver un artisan"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

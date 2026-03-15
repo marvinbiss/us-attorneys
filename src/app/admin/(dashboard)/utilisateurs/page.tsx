@@ -89,7 +89,7 @@ export default function AdminUsersPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Gestion des Utilisateurs</h1>
             <p className="text-gray-500 mt-1">{total} utilisateurs au total</p>
@@ -254,7 +254,7 @@ export default function AdminUsersPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+              <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p className="text-sm text-gray-500">
                   Page {page} sur {totalPages} ({total} résultats)
                 </p>
@@ -290,7 +290,7 @@ export default function AdminUsersPage() {
               setBanModal({ open: false, userId: '', userName: '' })
               setBanReason('')
             }} />
-            <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-[95vw] sm:max-w-md w-full p-6">
               <h3 id="ban-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
                 Bannir utilisateur
               </h3>

@@ -25,7 +25,7 @@ export interface Lead {
 export interface LeadAssignment {
   id: string
   lead_id: string
-  provider_id: string
+  attorney_id: string
   status: 'pending' | 'viewed' | 'quoted' | 'declined'
   assigned_at: string
   viewed_at: string | null
@@ -35,7 +35,7 @@ export interface LeadAssignment {
 export interface LeadEvent {
   id: string
   lead_id: string
-  provider_id: string | null
+  attorney_id: string | null
   actor_id: string | null
   event_type: LeadEventType
   metadata: Record<string, unknown>
@@ -66,7 +66,7 @@ export interface LeadFilters {
   search?: string
   dateFrom?: string
   dateTo?: string
-  providerId?: string
+  attorneyId?: string
   page?: number
   pageSize?: number
 }

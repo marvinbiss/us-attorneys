@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { X } from 'lucide-react'
 import Link from 'next/link'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 const AUTO_DISMISS_MS = 10_000
 const MOBILE_IDLE_MS = 45_000
@@ -27,7 +28,7 @@ export default function ExitIntentPopup({
   title = 'Avant de partir...',
   description = 'Recevez jusqu\'à 3 devis gratuits d\'artisans qualifiés en moins de 60 secondes.',
   ctaText = 'Recevoir mes devis gratuits',
-  ctaHref = '/devis',
+  ctaHref = '/quotes',
   onCtaClick,
 }: ExitIntentPopupProps) {
   const [visible, setVisible] = useState(false)
@@ -44,7 +45,8 @@ export default function ExitIntentPopup({
     if (shouldSuppress()) return
     sessionStorage.setItem(sessionKey, '1')
     setVisible(true)
-  }, [shouldSuppress, sessionKey])
+    trackEvent('exit_intent_shown', { ctaHref, ctaText })
+  }, [shouldSuppress, sessionKey, ctaHref, ctaText])
 
   const close = useCallback(() => {
     setVisible(false)
@@ -52,9 +54,10 @@ export default function ExitIntentPopup({
   }, [])
 
   const handleCTA = useCallback(() => {
+    trackEvent('exit_intent_click', { ctaHref, ctaText })
     close()
     if (onCtaClick) onCtaClick()
-  }, [close, onCtaClick])
+  }, [close, onCtaClick, ctaHref, ctaText])
 
   // Auto-dismiss after 10s
   useEffect(() => {
@@ -127,7 +130,10 @@ export default function ExitIntentPopup({
         ) : (
           <Link
             href={ctaHref}
-            onClick={close}
+            onClick={() => {
+              trackEvent('exit_intent_click', { ctaHref, ctaText })
+              close()
+            }}
             className="block w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md text-center"
           >
             {ctaText}

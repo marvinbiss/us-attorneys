@@ -8,14 +8,14 @@ const PRIVATE_DISALLOW = [
   '/admin/',
   '/api/',
   '/auth/',
-  '/espace-client/',
-  '/espace-artisan/',
+  '/client-dashboard/',
+  '/attorney-dashboard/',
   '/booking/',
   // Auth pages (no SEO value)
-  '/connexion',
-  '/inscription',
-  '/inscription-artisan',
-  '/mot-de-passe-oublie',
+  '/login',
+  '/register',
+  '/register-attorney',
+  '/forgot-password',
   // Query parameter variations (duplicate content).
   // Pattern /*?*param= covers BOTH first (?param=) and secondary (&param=) occurrences.
   // Google doc example: disallow: /*?*color= (blocks /items?color=x AND /items?cat=y&color=x)

@@ -37,7 +37,7 @@ export default function NotFound() {
         </div>
 
         {/* Search bar */}
-        <form action="/recherche" method="GET" className="mt-8 flex items-center gap-2 max-w-sm mx-auto">
+        <form action="/search" method="GET" className="mt-8 flex items-center gap-2 max-w-sm mx-auto">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
@@ -61,16 +61,16 @@ export default function NotFound() {
             Vous cherchez peut-être :
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            <Link href="/services/plombier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/practice-areas/plombier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Plombier
             </Link>
-            <Link href="/services/electricien" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/practice-areas/electricien" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Électricien
             </Link>
-            <Link href="/services/serrurier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/practice-areas/serrurier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Serrurier
             </Link>
-            <Link href="/devis" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/quotes" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Demande de devis
             </Link>
           </div>

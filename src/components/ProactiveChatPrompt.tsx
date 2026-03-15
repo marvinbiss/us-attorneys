@@ -9,7 +9,7 @@ const SESSION_KEY = 'sa:proactive-prompt-shown'
 
 interface ProactiveChatPromptProps {
   /** Service slug for contextual CTA */
-  serviceSlug?: string
+  specialtySlug?: string
   /** City slug for devis link */
   citySlug?: string
   /** Custom message */
@@ -17,7 +17,7 @@ interface ProactiveChatPromptProps {
 }
 
 export default function ProactiveChatPrompt({
-  serviceSlug,
+  specialtySlug,
   citySlug,
   message = 'Besoin d\'aide pour choisir un artisan ? Nous pouvons vous orienter gratuitement.',
 }: ProactiveChatPromptProps) {
@@ -55,11 +55,11 @@ export default function ProactiveChatPrompt({
 
   if (!visible) return null
 
-  const devisHref = serviceSlug && citySlug
-    ? `/devis/${serviceSlug}/${citySlug}`
-    : serviceSlug
-    ? `/devis/${serviceSlug}`
-    : '/devis'
+  const devisHref = specialtySlug && citySlug
+    ? `/quotes/${specialtySlug}/${citySlug}`
+    : specialtySlug
+    ? `/quotes/${specialtySlug}`
+    : '/quotes'
 
   return (
     <div className="fixed bottom-20 md:bottom-6 left-4 z-40 max-w-xs animate-in slide-in-from-bottom-4 duration-300">

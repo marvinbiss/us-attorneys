@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     if (role === 'provider') {
       const { data: provider } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('id')
         .eq('user_id', user.id)
         .single()
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
         )
       }
 
-      query = query.eq('provider_id', provider.id)
+      query = query.eq('attorney_id', provider.id)
     } else {
       query = query.eq('client_id', user.id)
     }
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
 
     // Verify user is a provider
     const { data: provider } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id')
       .eq('user_id', user.id)
       .single()
@@ -163,9 +163,9 @@ export async function POST(request: NextRequest) {
     // Verify booking exists and belongs to this provider
     const { data: booking } = await supabase
       .from('bookings')
-      .select('id, client_id, provider_id')
+      .select('id, client_id, attorney_id')
       .eq('id', booking_id)
-      .eq('provider_id', provider.id)
+      .eq('attorney_id', provider.id)
       .single()
 
     if (!booking) {
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
       .from('quotes')
       .insert({
         booking_id,
-        provider_id: provider.id,
+        attorney_id: provider.id,
         client_id: booking.client_id,
         amount,
         description,

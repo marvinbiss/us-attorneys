@@ -35,7 +35,7 @@ const healthSchema = z.object({
 // POST request schema
 const entreprisePostSchema = z.object({
   siret: z.string().min(14).max(14),
-  artisanId: z.string().uuid().optional(),
+  attorneyId: z.string().uuid().optional(),
 })
 
 /**
@@ -201,7 +201,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { siret, artisanId } = result.data
+    const { siret, attorneyId } = result.data
 
     // Récupérer les données Pappers
     const entreprise = await getEntrepriseParSiret(siret)
@@ -217,8 +217,8 @@ export async function POST(request: NextRequest) {
     const sante = await verifierSanteEntreprise(siret)
     const badge = getBadgeConfiance(entreprise)
 
-    // Si un artisanId est fourni, mettre à jour le profil
-    if (artisanId) {
+    // Si un attorneyId est fourni, mettre à jour le profil
+    if (attorneyId) {
       const { createClient } = await import('@supabase/supabase-js')
       const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -229,12 +229,12 @@ export async function POST(request: NextRequest) {
       // Dropped columns: company_name, trust_badge, trust_score, etc.
       // Non-existent columns: siret_verified, company_legal_form, company_naf_*, pappers_data
       await supabase
-        .from('providers')
+        .from('attorneys')
         .update({
           siret: siret,
           is_verified: true,
         })
-        .eq('id', artisanId)
+        .eq('id', attorneyId)
     }
 
     return NextResponse.json({

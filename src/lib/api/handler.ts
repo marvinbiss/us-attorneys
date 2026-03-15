@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger'
 interface HandlerContext {
   request: NextRequest
   user?: { id: string; email: string }
-  artisan?: { provider_id: string }
+  artisan?: { attorney_id: string }
   body?: unknown
   params?: Record<string, string>
 }
@@ -73,7 +73,7 @@ export function createApiHandler<T = unknown>(
         // Artisan check
         if (options.requireArtisan) {
           const { data: artisan } = await supabase
-            .from('providers')
+            .from('attorneys')
             .select('id')
             .eq('user_id', user.id)
             .single()
@@ -82,7 +82,7 @@ export function createApiHandler<T = unknown>(
             throw new AuthorizationError('Profil artisan requis')
           }
 
-          context.artisan = { provider_id: artisan.id }
+          context.artisan = { attorney_id: artisan.id }
         }
 
         // Admin check

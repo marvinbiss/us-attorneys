@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     const { data: pendingBookings } = await adminSupabase
       .from('bookings')
       .select('id')
-      .eq('provider_id', user.id)
+      .eq('attorney_id', user.id)
       .in('status', ['pending', 'confirmed'])
       .gte('scheduled_date', new Date().toISOString().split('T')[0])
 

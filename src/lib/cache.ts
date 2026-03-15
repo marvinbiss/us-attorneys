@@ -21,7 +21,7 @@ export const REVALIDATE = {
   services: 86400,
   serviceDetail: 86400,
   serviceLocation: 86400,
-  artisanProfile: 86400,
+  attorneyProfile: 86400,
   locations: 86400,
   blog: 86400,
   staticPages: 86400,

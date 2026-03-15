@@ -23,7 +23,7 @@ export async function logLeadEvent(
   leadId: string,
   eventType: LeadEventType,
   opts?: {
-    providerId?: string
+    attorneyId?: string
     actorId?: string
     metadata?: Record<string, unknown>
   }
@@ -32,7 +32,7 @@ export async function logLeadEvent(
   const { data, error } = await supabase.from('lead_events').insert({
     lead_id: leadId,
     event_type: eventType,
-    provider_id: opts?.providerId ?? null,
+    attorney_id: opts?.attorneyId ?? null,
     actor_id: opts?.actorId ?? null,
     metadata: opts?.metadata ?? {},
   }).select('id').single()
@@ -46,7 +46,7 @@ export async function logLeadEvent(
     id: data.id,
     lead_id: leadId,
     event_type: eventType,
-    provider_id: opts?.providerId ?? null,
+    attorney_id: opts?.attorneyId ?? null,
     actor_id: opts?.actorId ?? null,
     metadata: opts?.metadata ?? {},
   }).catch((err) => {

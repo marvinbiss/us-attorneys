@@ -25,7 +25,7 @@ export type AuditAction =
 export interface AuditLogEntry {
   action: AuditAction
   userId?: string
-  providerId?: string
+  attorneyId?: string
   resourceType?: string
   resourceId?: string
   oldValue?: Record<string, unknown>
@@ -42,7 +42,7 @@ export async function logAudit(entry: AuditLogEntry): Promise<void> {
     await supabase.from('audit_logs').insert({
       action: entry.action,
       user_id: entry.userId,
-      provider_id: entry.providerId,
+      attorney_id: entry.attorneyId,
       resource_type: entry.resourceType,
       resource_id: entry.resourceId,
       old_value: entry.oldValue,
@@ -68,16 +68,16 @@ export function auditLogout(userId: string) {
 
 export function auditProviderUpdate(
   userId: string,
-  providerId: string,
+  attorneyId: string,
   oldValue: Record<string, unknown>,
   newValue: Record<string, unknown>
 ) {
   return logAudit({
     action: 'provider.update',
     userId,
-    providerId,
+    attorneyId,
     resourceType: 'provider',
-    resourceId: providerId,
+    resourceId: attorneyId,
     oldValue,
     newValue,
   })
@@ -85,7 +85,7 @@ export function auditProviderUpdate(
 
 export function auditQuoteStatusChange(
   userId: string,
-  providerId: string,
+  attorneyId: string,
   quoteId: string,
   oldStatus: string,
   newStatus: string
@@ -93,7 +93,7 @@ export function auditQuoteStatusChange(
   return logAudit({
     action: 'quote.status_change',
     userId,
-    providerId,
+    attorneyId,
     resourceType: 'quote',
     resourceId: quoteId,
     oldValue: { status: oldStatus },
@@ -103,14 +103,14 @@ export function auditQuoteStatusChange(
 
 export function auditSubscriptionChange(
   userId: string,
-  providerId: string,
+  attorneyId: string,
   action: 'subscription.created' | 'subscription.cancelled' | 'subscription.upgraded',
   metadata: Record<string, unknown>
 ) {
   return logAudit({
     action,
     userId,
-    providerId,
+    attorneyId,
     resourceType: 'subscription',
     metadata,
   })

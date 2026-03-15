@@ -42,9 +42,9 @@ export interface NotificationPayload {
   clientName: string
   clientEmail: string
   clientPhone?: string
-  artisanName: string
+  attorneyName: string
   artisanEmail?: string
-  serviceName: string
+  specialtyName: string
   date: string
   startTime: string
   endTime?: string
@@ -132,8 +132,8 @@ function toSMSData(payload: NotificationPayload): SMSData {
   return {
     to: payload.clientPhone || '',
     clientName: payload.clientName,
-    artisanName: payload.artisanName,
-    serviceName: payload.serviceName,
+    attorneyName: payload.attorneyName,
+    specialtyName: payload.specialtyName,
     date: payload.date,
     time: payload.startTime,
     bookingId: payload.bookingId,
@@ -199,9 +199,9 @@ export class UnifiedNotificationService {
             clientName: payload.clientName,
             clientEmail: payload.clientEmail,
             clientPhone: payload.clientPhone || '',
-            artisanName: payload.artisanName,
+            attorneyName: payload.attorneyName,
             artisanEmail: payload.artisanEmail || '',
-            serviceName: payload.serviceName,
+            specialtyName: payload.specialtyName,
             date: payload.date,
             startTime: payload.startTime,
             endTime: payload.endTime || '',
@@ -214,8 +214,8 @@ export class UnifiedNotificationService {
             bookingId: payload.bookingId,
             clientName: payload.clientName,
             clientEmail: payload.clientEmail,
-            artisanName: payload.artisanName,
-            serviceName: payload.serviceName,
+            attorneyName: payload.attorneyName,
+            specialtyName: payload.specialtyName,
             date: payload.date,
             startTime: payload.startTime,
             endTime: payload.endTime || '',
@@ -226,8 +226,8 @@ export class UnifiedNotificationService {
             bookingId: payload.bookingId,
             clientName: payload.clientName,
             clientEmail: payload.clientEmail,
-            artisanName: payload.artisanName,
-            serviceName: payload.serviceName,
+            attorneyName: payload.attorneyName,
+            specialtyName: payload.specialtyName,
             date: payload.date,
             startTime: payload.startTime,
             cancellationReason: payload.cancellationReason,
@@ -237,7 +237,7 @@ export class UnifiedNotificationService {
           return await sendPaymentFailedEmail({
             clientName: payload.clientName,
             clientEmail: payload.clientEmail,
-            serviceName: payload.serviceName,
+            specialtyName: payload.specialtyName,
             date: payload.date,
             amount: payload.message,
           })

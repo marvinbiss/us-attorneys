@@ -65,7 +65,7 @@ export interface ReadReceipt {
 export interface Conversation {
   id: string
   client_id: string
-  provider_id: string
+  attorney_id: string
   quote_id?: string
   booking_id?: string
   status: 'active' | 'archived' | 'blocked'
@@ -544,16 +544,16 @@ class ChatService {
    */
   async getOrCreateConversation(
     clientId: string,
-    providerId: string,
+    attorneyId: string,
     quoteId?: string,
     bookingId?: string
   ): Promise<Conversation | null> {
     // Try to find existing conversation
     const { data: existing } = await this.supabase
       .from('conversations')
-      .select('id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at')
+      .select('id, client_id, attorney_id, quote_id, booking_id, status, last_message_at, unread_count, created_at')
       .eq('client_id', clientId)
-      .eq('provider_id', providerId)
+      .eq('attorney_id', attorneyId)
       .eq('status', 'active')
       .single()
 
@@ -564,7 +564,7 @@ class ChatService {
       .from('conversations')
       .insert({
         client_id: clientId,
-        provider_id: providerId,
+        attorney_id: attorneyId,
         quote_id: quoteId,
         booking_id: bookingId,
         status: 'active',
@@ -592,14 +592,14 @@ class ChatService {
       pinnedFirst?: boolean
     }
   ): Promise<Conversation[]> {
-    const column = userType === 'client' ? 'client_id' : 'provider_id'
+    const column = userType === 'client' ? 'client_id' : 'attorney_id'
 
     let query = this.supabase
       .from('conversations')
       .select(`
-        id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
+        id, client_id, attorney_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
         client:profiles!client_id(id, full_name),
-        provider:providers!provider_id(id, name, avatar_url),
+        provider:providers!attorney_id(id, name, avatar_url),
         settings:conversation_settings(is_muted, is_archived, is_pinned, notification_preference)
       `)
       .eq(column, userId)

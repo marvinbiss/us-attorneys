@@ -201,7 +201,7 @@ export async function autocompleteAdresse(
 // ============================================
 
 /**
- * Autocomplete pour recherche de villes uniquement
+ * Autocomplete pour recherche de cities uniquement
  * @param query - Nom de ville ou code postal
  */
 export async function autocompleteVille(
@@ -229,7 +229,7 @@ export async function autocompleteVille(
       label: f.properties.city || f.properties.label,
     }))
   } catch (error) {
-    apiLogger.error('Ville autocomplete failed', error as Error, { query })
+    apiLogger.error('City autocomplete failed', error as Error, { query })
     return []
   }
 }
@@ -332,7 +332,7 @@ export async function reverseGeocode(
  * Récupère toutes les communes d'un code postal
  * @param codePostal - Code postal (ex: "75001")
  */
-export async function getCommunesByCodePostal(
+export async function getLocationsByCodePostal(
   codePostal: string
 ): Promise<AdresseSuggestion[]> {
   if (!isValidCodePostal(codePostal)) {

@@ -41,7 +41,7 @@ export async function GET(
     const supabase = createAdminClient()
 
     const { data: service, error } = await supabase
-      .from('services')
+      .from('specialties')
       .select('id, name, slug, description, icon, category, is_active, sort_order, created_at')
       .eq('id', params.id)
       .single()
@@ -103,7 +103,7 @@ export async function PATCH(
     }
 
     const { data, error } = await supabase
-      .from('services')
+      .from('specialties')
       .update({
         ...sanitizedData,
         updated_at: new Date().toISOString(),
@@ -163,7 +163,7 @@ export async function DELETE(
 
     // Soft delete
     const { error } = await supabase
-      .from('services')
+      .from('specialties')
       .update({ is_active: false })
       .eq('id', params.id)
 

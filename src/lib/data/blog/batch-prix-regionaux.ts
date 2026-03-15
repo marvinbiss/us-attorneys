@@ -47,16 +47,16 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
 
   "prix-artisans-province-vs-paris": {
     title: "Artisans en province vs Paris : les vrais écarts de prix",
-    excerpt: "Paris vs province : quels sont les vrais écarts de prix pour les travaux ? Comparaison détaillée des tarifs artisans 2026 dans les principales villes de France.",
+    excerpt: "Paris vs province : quels sont les vrais écarts de prix pour les travaux ? Comparaison détaillée des tarifs artisans 2026 dans les principales cities de France.",
     content: [
       "« Tout est plus cher à Paris » — c'est un lieu commun, mais est-ce toujours vrai pour les travaux ? Si les tarifs horaires parisiens dépassent effectivement ceux de province de **25 à 50 %**, la réalité est plus nuancée qu'il n'y paraît. Certaines grandes métropoles comme Lyon, Bordeaux ou Nice affichent des prix qui se rapprochent de ceux de la capitale. Et dans certains cas, la province n'est pas forcément synonyme d'économies. Décryptage chiffré.",
 
       "## L'écart réel par corps de métier",
 
-      ":::budget\n| Métier | Paris | Lyon/Bordeaux | Ville moyenne | Zone rurale |\n| Plombier (€/h) | 65 – 95 € | 50 – 75 € | 40 – 60 € | 35 – 55 € |\n| Électricien (€/h) | 55 – 90 € | 45 – 70 € | 35 – 55 € | 30 – 50 € |\n| Maçon (€/h) | 55 – 85 € | 45 – 65 € | 35 – 55 € | 30 – 50 € |\n| Peintre (€/h) | 40 – 70 € | 30 – 50 € | 25 – 40 € | 20 – 35 € |\n| Carreleur (€/h) | 45 – 75 € | 35 – 60 € | 30 – 50 € | 25 – 45 € |\n:::",
+      ":::budget\n| Métier | Paris | Lyon/Bordeaux | City moyenne | Zone rurale |\n| Plombier (€/h) | 65 – 95 € | 50 – 75 € | 40 – 60 € | 35 – 55 € |\n| Électricien (€/h) | 55 – 90 € | 45 – 70 € | 35 – 55 € | 30 – 50 € |\n| Maçon (€/h) | 55 – 85 € | 45 – 65 € | 35 – 55 € | 30 – 50 € |\n| Peintre (€/h) | 40 – 70 € | 30 – 50 € | 25 – 40 € | 20 – 35 € |\n| Carreleur (€/h) | 45 – 75 € | 35 – 60 € | 30 – 50 € | 25 – 45 € |\n:::",
 
       "## Les métropoles régionales : un entre-deux",
-      "Lyon, Marseille, Bordeaux, Toulouse et Nantes affichent des tarifs **15 à 25 %** supérieurs aux villes moyennes, mais restent **15 à 20 %** sous les prix parisiens. La cause principale : ces villes connaissent une forte croissance démographique et un boom immobilier qui tire les prix vers le haut. À Nice et sur la Côte d'Azur, les tarifs rivalisent parfois avec Paris en raison du pouvoir d'achat local et de la clientèle exigeante.",
+      "Lyon, Marseille, Bordeaux, Toulouse et Nantes affichent des tarifs **15 à 25 %** supérieurs aux cities moyennes, mais restent **15 à 20 %** sous les prix parisiens. La cause principale : ces cities connaissent une forte croissance démographique et un boom immobilier qui tire les prix vers le haut. À Nice et sur la Côte d'Azur, les tarifs rivalisent parfois avec Paris en raison du pouvoir d'achat local et de la clientèle exigeante.",
 
       "## Quand la province coûte aussi cher que Paris",
       "Trois situations où l'écart se réduit ou disparaît : les **zones touristiques** (Côte d'Azur, Pays basque, stations alpines) où la demande saisonnière fait flamber les prix, les **zones rurales isolées** où le manque de concurrence et les frais de déplacement compensent le tarif horaire plus bas, et les **travaux spécialisés** (pompe à chaleur, domotique, restauration patrimoine) où peu d'artisans sont qualifiés, quelle que soit la région.",
@@ -80,7 +80,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
     tags: ["Comparatif prix", "Paris", "Province", "Rénovation"],
     keyTakeaways: [
       "L'écart de prix Paris vs province est de 25 à 50 % sur la main-d'œuvre.",
-      "Les métropoles régionales (Lyon, Bordeaux, Nantes) affichent des prix intermédiaires (+15-25 % vs villes moyennes).",
+      "Les métropoles régionales (Lyon, Bordeaux, Nantes) affichent des prix intermédiaires (+15-25 % vs cities moyennes).",
       "Les matériaux ne varient que de 5 à 10 % entre régions — c'est la main-d'œuvre qui fait la différence.",
       "Rénovation T3 : 65 000-130 000 € à Paris vs 35 000-75 000 € en ville moyenne.",
       "Côte d'Azur et zones touristiques : des prix parfois équivalents à Paris."
@@ -136,41 +136,41 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
     ]
   },
 
-  "tarifs-plombier-grandes-villes": {
-    title: "Tarifs plombier dans les grandes villes de France",
-    excerpt: "Combien coûte un plombier à Paris, Lyon, Marseille ou Bordeaux ? Comparatif détaillé des tarifs plombier 2026 dans les 10 plus grandes villes françaises.",
+  "tarifs-plombier-grandes-cities": {
+    title: "Tarifs plombier dans les grandes cities de France",
+    excerpt: "Combien coûte un plombier à Paris, Lyon, Marseille ou Bordeaux ? Comparatif détaillé des tarifs plombier 2026 dans les 10 plus grandes cities françaises.",
     content: [
       "Le prix d'un plombier varie considérablement d'une ville à l'autre. Entre Paris et une ville comme Saint-Étienne, l'écart peut atteindre **50 à 70 %** pour la même prestation. En 2026, avec l'augmentation des charges et le manque de main-d'œuvre qualifiée (la plomberie fait partie des métiers en tension), les tarifs continuent de progresser. Voici le comparatif ville par ville pour les interventions les plus courantes.",
 
       "## Tarifs horaires par grande ville",
 
-      ":::budget\n| Ville | Taux horaire HT | Déplacement | Majoration nuit/WE |\n| Paris | 65 – 95 € | 30 – 60 € | +75 à 100 % |\n| Lyon | 50 – 75 € | 25 – 45 € | +50 à 75 % |\n| Marseille | 45 – 70 € | 25 – 40 € | +50 à 75 % |\n| Toulouse | 45 – 65 € | 20 – 40 € | +50 à 75 % |\n| Bordeaux | 50 – 70 € | 25 – 45 € | +50 à 75 % |\n| Nantes | 45 – 65 € | 20 – 40 € | +50 à 75 % |\n| Lille | 40 – 65 € | 20 – 35 € | +50 à 75 % |\n| Strasbourg | 45 – 70 € | 25 – 40 € | +50 à 75 % |\n| Nice | 55 – 80 € | 25 – 50 € | +50 à 100 % |\n| Rennes | 40 – 60 € | 20 – 35 € | +50 % |\n:::",
+      ":::budget\n| City | Taux horaire HT | Déplacement | Majoration nuit/WE |\n| Paris | 65 – 95 € | 30 – 60 € | +75 à 100 % |\n| Lyon | 50 – 75 € | 25 – 45 € | +50 à 75 % |\n| Marseille | 45 – 70 € | 25 – 40 € | +50 à 75 % |\n| Toulouse | 45 – 65 € | 20 – 40 € | +50 à 75 % |\n| Bordeaux | 50 – 70 € | 25 – 45 € | +50 à 75 % |\n| Nantes | 45 – 65 € | 20 – 40 € | +50 à 75 % |\n| Lille | 40 – 65 € | 20 – 35 € | +50 à 75 % |\n| Strasbourg | 45 – 70 € | 25 – 40 € | +50 à 75 % |\n| Nice | 55 – 80 € | 25 – 50 € | +50 à 100 % |\n| Rennes | 40 – 60 € | 20 – 35 € | +50 % |\n:::",
 
       "## Les interventions courantes : prix comparatifs",
 
       "### Débouchage de canalisation",
-      "Le débouchage simple (ventouse, furet) coûte entre **80 et 150 €** dans les villes moyennes, et **120 à 250 €** à Paris. Le débouchage par hydrocurage (camion haute pression) atteint **200 à 500 €** en province et **300 à 700 €** à Paris. Ces prix incluent généralement le déplacement et la première heure d'intervention.",
+      "Le débouchage simple (ventouse, furet) coûte entre **80 et 150 €** dans les cities moyennes, et **120 à 250 €** à Paris. Le débouchage par hydrocurage (camion haute pression) atteint **200 à 500 €** en province et **300 à 700 €** à Paris. Ces prix incluent généralement le déplacement et la première heure d'intervention.",
 
       "### Installation sanitaire",
-      "La pose d'un WC coûte entre **150 et 350 €** (hors fourniture) à Paris, contre **100 à 250 €** en province. L'installation d'un chauffe-eau électrique (200 L) revient à **300 à 600 €** de main-d'œuvre à Paris, contre **200 à 400 €** dans les villes moyennes. Pour une salle de bain complète, les écarts sont encore plus marqués : **3 000 à 6 000 €** de plomberie à Paris contre **2 000 à 4 000 €** en province.",
+      "La pose d'un WC coûte entre **150 et 350 €** (hors fourniture) à Paris, contre **100 à 250 €** en province. L'installation d'un chauffe-eau électrique (200 L) revient à **300 à 600 €** de main-d'œuvre à Paris, contre **200 à 400 €** dans les cities moyennes. Pour une salle de bain complète, les écarts sont encore plus marqués : **3 000 à 6 000 €** de plomberie à Paris contre **2 000 à 4 000 €** en province.",
 
-      "## Pourquoi certaines villes sont plus chères",
+      "## Pourquoi certaines cities sont plus chères",
       "Paris domine largement en raison de ses contraintes uniques : stationnement payant (200 à 400 €/mois pour un utilitaire), loyer des locaux professionnels, immeubles sans ascenseur, copropriétés strictes. Nice et la Côte d'Azur sont chères à cause de la clientèle aisée et du tourisme. Lyon et Bordeaux voient leurs prix augmenter rapidement sous l'effet de la croissance démographique et de la gentrification.",
 
       "## Comment trouver le bon plombier au bon prix",
-      "Dans chaque ville, les tarifs varient de **30 à 50 %** entre plombiers pour la même prestation. La clé : comparer au moins 3 devis, vérifier les avis en ligne, et privilégier les artisans locaux (même arrondissement ou même quartier à Paris). Consultez notre annuaire pour trouver un [plombier à Paris](/services/plombier/paris), [Lyon](/services/plombier/lyon), [Marseille](/services/plombier/marseille) ou dans votre ville.",
+      "Dans chaque ville, les tarifs varient de **30 à 50 %** entre plombiers pour la même prestation. La clé : comparer au moins 3 devis, vérifier les avis en ligne, et privilégier les artisans locaux (même arrondissement ou même quartier à Paris). Consultez notre annuaire pour trouver un [plombier à Paris](/practice-areas/plombier/paris), [Lyon](/practice-areas/plombier/lyon), [Marseille](/practice-areas/plombier/marseille) ou dans votre ville.",
 
-      ":::tip Conseil pro\nDans les grandes villes, le « plombier de quartier » installé depuis longtemps offre souvent le meilleur rapport qualité/prix. Il a des charges fixes plus basses qu'une grosse entreprise, connaît le bâti local, et soigne sa réputation par le bouche-à-oreille. Demandez à vos voisins ou au gardien de l'immeuble.\n:::"
+      ":::tip Conseil pro\nDans les grandes cities, le « plombier de quartier » installé depuis longtemps offre souvent le meilleur rapport qualité/prix. Il a des charges fixes plus basses qu'une grosse entreprise, connaît le bâti local, et soigne sa réputation par le bouche-à-oreille. Demandez à vos voisins ou au gardien de l'immeuble.\n:::"
     ],
-    image: "/images/blog/tarifs-plombier-grandes-villes.webp",
+    image: "/images/blog/pricing-plombier-grandes-cities.webp",
     author: "L'équipe ServicesArtisans",
     date: "2026-01-28",
     readTime: "7 min",
     category: "Tarifs",
-    tags: ["Plombier", "Tarifs 2026", "Grandes villes", "Comparatif"],
+    tags: ["Plombier", "Tarifs 2026", "Grandes cities", "Comparatif"],
     keyTakeaways: [
       "Taux horaire plombier : de 40-60 € à Rennes/Lille à 65-95 € à Paris.",
-      "L'écart Paris vs villes moyennes atteint 50-70 % pour les mêmes prestations.",
+      "L'écart Paris vs cities moyennes atteint 50-70 % pour les mêmes prestations.",
       "Nice et la Côte d'Azur rivalisent avec Paris sur certaines interventions.",
       "Comparer 3 devis dans une même ville fait économiser 30 à 50 %.",
       "Le plombier de quartier offre souvent le meilleur rapport qualité/prix."
@@ -207,7 +207,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Les **5 départements les plus chers** : Paris (75), Hauts-de-Seine (92), Alpes-Maritimes (06), Corse-du-Sud (2A) et Yvelines (78). Les **5 départements les moins chers** : Creuse (23), Cantal (15), Lozère (48), Ariège (09) et Gers (32). Attention cependant : dans les départements ruraux, le manque de concurrence et les frais de déplacement élevés peuvent compenser les tarifs horaires plus bas.",
 
       "## Comment réduire le coût de vos travaux électriques",
-      "1. **Comparez 3 devis** d'électriciens certifiés dans votre département\n2. **Groupez les travaux** (tableau + prises + éclairage en un seul chantier)\n3. **Préparez le chantier** : dégagez les accès, repérez les passages de câbles\n4. **Choisissez un électricien RGE** pour bénéficier des aides (MaPrimeRénov', CEE)\n5. Consultez notre [annuaire d'électriciens](/services/electricien) par ville et département",
+      "1. **Comparez 3 devis** d'électriciens certifiés dans votre département\n2. **Groupez les travaux** (tableau + prises + éclairage en un seul chantier)\n3. **Préparez le chantier** : dégagez les accès, repérez les passages de câbles\n4. **Choisissez un électricien RGE** pour bénéficier des aides (MaPrimeRénov', CEE)\n5. Consultez notre [annuaire d'électriciens](/practice-areas/electricien) par ville et département",
 
       ":::tip Conseil pro\nPour les travaux de rénovation électrique, exigez une **attestation de conformité Consuel** à la fin du chantier. Ce document certifie que l'installation est conforme à la norme NF C 15-100 et est indispensable pour obtenir la mise en service par Enedis. Tout électricien sérieux inclut cette démarche dans son devis.\n:::"
     ],
@@ -251,7 +251,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
       "Le prix du terrain représente **30 à 50 %** du budget total et varie énormément : de **30 à 60 €/m²** en zone rurale Centre-Val de Loire à **300 à 800 €/m²** en petite couronne parisienne. En PACA et sur le littoral atlantique, les terrains constructibles se raréfient sous l'effet de la loi ZAN (Zéro Artificialisation Nette), faisant grimper les prix.",
 
       "## Budget total réaliste par région",
-      "En ajoutant le terrain (fourchette médiane), les frais de notaire (7-8 %) et les frais de raccordement (3 000-8 000 €), le budget total pour une maison de 100 m² en 2026 est : **Île-de-France** : 350 000 à 550 000 €, **grandes métropoles** : 250 000 à 400 000 €, **villes moyennes** : 200 000 à 320 000 €, **zone rurale** : 150 000 à 250 000 €.",
+      "En ajoutant le terrain (fourchette médiane), les frais de notaire (7-8 %) et les frais de raccordement (3 000-8 000 €), le budget total pour une maison de 100 m² en 2026 est : **Île-de-France** : 350 000 à 550 000 €, **grandes métropoles** : 250 000 à 400 000 €, **cities moyennes** : 200 000 à 320 000 €, **zone rurale** : 150 000 à 250 000 €.",
 
       "## Financer sa construction",
       "Le PTZ (Prêt à Taux Zéro) 2026 est accessible pour les primo-accédants dans toutes les zones, avec un montant maximal de **40 % du coût** en zone tendue et **20 %** en zone détendue. Les aides MaPrimeRénov' ne s'appliquent qu'à la rénovation. En revanche, certaines collectivités proposent des **aides à la construction** (exonération de taxe foncière pendant 2 ans, subventions locales). Comparez les offres de [constructeurs et artisans](/services) de votre région.",
@@ -352,7 +352,7 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nEn Bretagne et Normandie, l'humidité est l'ennemi n°1 du bâtiment. Avant d'engager des travaux de rénovation esthétique (peinture, papier peint), assurez-vous que les problèmes d'humidité sont traités à la source : ventilation, drainage périphérique, hydrofuge. Peindre sur un mur humide, c'est jeter l'argent par les fenêtres.\n:::"
     ],
-    image: "/images/blog/tarifs-artisans-bretagne-normandie.webp",
+    image: "/images/blog/pricing-artisans-bretagne-normandie.webp",
     author: "L'équipe ServicesArtisans",
     date: "2026-02-09",
     readTime: "7 min",

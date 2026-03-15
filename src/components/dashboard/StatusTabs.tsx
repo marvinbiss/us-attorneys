@@ -19,6 +19,7 @@ export function StatusTabs({ tabs, activeTab, onTabChange }: StatusTabsProps) {
         <button
           key={tab.key}
           onClick={() => onTabChange(tab.key)}
+          aria-pressed={activeTab === tab.key}
           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
             activeTab === tab.key
               ? 'bg-blue-600 text-white shadow-sm'

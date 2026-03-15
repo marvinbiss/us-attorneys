@@ -12,7 +12,7 @@ import { sendEmail } from '@/lib/api/resend-client'
 import type { LeadEventType } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
 const SITE_NAME = 'ServicesArtisans'
 
 // ============================================================
@@ -23,7 +23,7 @@ interface LeadEventPayload {
   id: string            // lead_events.id
   lead_id: string
   event_type: LeadEventType
-  provider_id: string | null
+  attorney_id: string | null
   actor_id: string | null
   metadata: Record<string, unknown>
 }
@@ -107,11 +107,11 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
     }
   }
 
-  if (config.targetRoles.includes('artisan') && event.provider_id) {
+  if (config.targetRoles.includes('artisan') && event.attorney_id) {
     const { data: provider } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id, user_id, name, email')
-      .eq('id', event.provider_id)
+      .eq('id', event.attorney_id)
       .single()
 
     if (provider?.user_id) {
@@ -228,14 +228,14 @@ function buildNotificationSpec(
         type: 'lead_created',
         title: 'Demande bien reçue',
         message: `Votre demande pour "${lead.service_name}" à ${location} a été enregistrée. Nous recherchons les meilleurs artisans.`,
-        link: '/espace-client/mes-demandes',
+        link: '/client-dashboard/mes-demandes',
         emailSubject: `Demande reçue – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Demande enregistrée',
           color: '#2563eb',
           greeting: `Bonjour ${target.name}`,
           body: `Votre demande de devis pour <strong>${lead.service_name}</strong> à ${location} a bien été enregistrée. Nous allons contacter les artisans qualifiés de votre zone.`,
-          ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
+          ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes`,
           ctaLabel: 'Suivre ma demande',
           footer: 'Vous recevrez une notification dès qu\'un artisan vous enverra un devis.',
         }),
@@ -246,14 +246,14 @@ function buildNotificationSpec(
         type: 'lead_dispatched',
         title: 'Nouveau lead reçu',
         message: `Demande de ${lead.client_name} pour "${lead.service_name}" à ${location}.`,
-        link: '/espace-artisan/leads',
+        link: '/attorney-dashboard/leads',
         emailSubject: `Nouveau lead – ${lead.service_name} à ${location}`,
         emailHtml: emailTemplate({
           heading: 'Nouveau lead disponible',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `Vous avez reçu une nouvelle demande de <strong>${lead.client_name}</strong> pour <strong>${lead.service_name}</strong> à ${location}. Consultez-la et envoyez votre devis.`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir le lead',
           footer: 'Répondez rapidement pour maximiser vos chances.',
         }),
@@ -264,7 +264,7 @@ function buildNotificationSpec(
         type: 'lead_viewed',
         title: 'Un artisan a consulté votre demande',
         message: `Un artisan a pris connaissance de votre demande pour "${lead.service_name}".`,
-        link: `/espace-client/mes-demandes/${lead.id}`,
+        link: `/client-dashboard/mes-demandes/${lead.id}`,
         emailSubject: '',
         emailHtml: '',
       }
@@ -275,14 +275,14 @@ function buildNotificationSpec(
         type: 'quote_received',
         title: 'Nouveau devis reçu',
         message: `Un artisan vous a envoyé un devis pour "${lead.service_name}"${amount}.`,
-        link: `/espace-client/mes-demandes/${lead.id}`,
+        link: `/client-dashboard/mes-demandes/${lead.id}`,
         emailSubject: `Devis reçu – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Vous avez reçu un devis',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `Un artisan vous a envoyé un devis pour <strong>${lead.service_name}</strong> à ${location}${amount ? `.<br><br>Montant proposé : <strong>${event.metadata.amount} €</strong>` : ''}.`,
-          ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
+          ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes/${lead.id}`,
           ctaLabel: 'Voir le devis',
           footer: 'Consultez le détail et comparez les offres reçues.',
         }),
@@ -294,14 +294,14 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Devis accepté !',
         message: `${lead.client_name} a accepté votre devis pour "${lead.service_name}".`,
-        link: '/espace-artisan/leads',
+        link: '/attorney-dashboard/leads',
         emailSubject: `Devis accepté – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Votre devis a été accepté',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `Bonne nouvelle ! <strong>${lead.client_name}</strong> a accepté votre devis pour <strong>${lead.service_name}</strong>. Vous pouvez le contacter pour organiser l'intervention.`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir le lead',
           footer: '',
         }),
@@ -312,7 +312,7 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Devis refusé',
         message: `Votre devis pour "${lead.service_name}" n'a pas été retenu.`,
-        link: '/espace-artisan/leads',
+        link: '/attorney-dashboard/leads',
         emailSubject: '',
         emailHtml: '',
       }
@@ -323,14 +323,14 @@ function buildNotificationSpec(
           type: 'lead_closed',
           title: 'Mission terminée',
           message: `La mission pour "${lead.service_name}" est terminée. Merci de votre confiance !`,
-          link: `/espace-client/mes-demandes/${lead.id}`,
+          link: `/client-dashboard/mes-demandes/${lead.id}`,
           emailSubject: `Mission terminée – ${lead.service_name}`,
           emailHtml: emailTemplate({
             heading: 'Mission terminée',
             color: '#059669',
             greeting: `Bonjour ${target.name}`,
             body: `La mission pour <strong>${lead.service_name}</strong> à ${location} est terminée. Merci de votre confiance !`,
-            ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
+            ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes/${lead.id}`,
             ctaLabel: 'Voir le détail',
             footer: 'N\'hésitez pas à laisser un avis pour aider d\'autres clients.',
           }),
@@ -340,14 +340,14 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Mission terminée',
         message: `La mission "${lead.service_name}" pour ${lead.client_name} est terminée.`,
-        link: '/espace-artisan/leads',
+        link: '/attorney-dashboard/leads',
         emailSubject: `Mission terminée – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Mission terminée',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `La mission <strong>${lead.service_name}</strong> pour ${lead.client_name} est terminée. Bravo !`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir mes leads',
           footer: '',
         }),
@@ -359,14 +359,14 @@ function buildNotificationSpec(
           type: 'lead_closed',
           title: 'Demande expirée',
           message: `Votre demande pour "${lead.service_name}" a expiré sans réponse.`,
-          link: `/espace-client/mes-demandes/${lead.id}`,
+          link: `/client-dashboard/mes-demandes/${lead.id}`,
           emailSubject: `Demande expirée – ${lead.service_name}`,
           emailHtml: emailTemplate({
             heading: 'Demande expirée',
             color: '#d97706',
             greeting: `Bonjour ${target.name}`,
             body: `Votre demande pour <strong>${lead.service_name}</strong> à ${location} a expiré. Vous pouvez en créer une nouvelle à tout moment.`,
-            ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
+            ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes`,
             ctaLabel: 'Mes demandes',
             footer: '',
           }),
@@ -376,14 +376,14 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Lead expiré',
         message: `Le lead "${lead.service_name}" de ${lead.client_name} a expiré.`,
-        link: '/espace-artisan/leads',
+        link: '/attorney-dashboard/leads',
         emailSubject: `Lead expiré – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Lead expiré',
           color: '#d97706',
           greeting: `Bonjour ${target.name}`,
           body: `Le lead <strong>${lead.service_name}</strong> de ${lead.client_name} a expiré.`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
           ctaLabel: 'Voir mes leads',
           footer: '',
         }),

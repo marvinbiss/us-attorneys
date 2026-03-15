@@ -83,7 +83,7 @@ Un conduit encrassé augmente le risque d'incendie et d'intoxication au monoxyde
 
 ### Le certificat de ramonage
 
-Le [ramoneur](/services/ramoneur) professionnel vous remet un **certificat de ramonage** à l'issue de son intervention. Conservez-le précieusement : votre assureur peut le réclamer en cas de sinistre lié au chauffage. Sans ce document, l'indemnisation peut être réduite voire refusée.
+Le [ramoneur](/practice-areas/ramoneur) professionnel vous remet un **certificat de ramonage** à l'issue de son intervention. Conservez-le précieusement : votre assureur peut le réclamer en cas de sinistre lié au chauffage. Sans ce document, l'indemnisation peut être réduite voire refusée.
 
 :::warning
 Ne tentez jamais de ramoner vous-même un conduit avec des moyens de fortune. Un ramonage chimique (bûche de ramonage) ne se substitue pas au ramonage mécanique obligatoire effectué par un professionnel qualifié.
@@ -115,7 +115,7 @@ La toiture représente jusqu'à 30 % des déperditions thermiques d'une maison m
 
 ### Vérification des tuiles et ardoises
 
-Depuis le sol, avec des jumelles, repérez les tuiles fissurées, déplacées ou manquantes. Après une tempête d'automne, cette vérification est d'autant plus importante. Faites appel à un [couvreur](/services/couvreur) professionnel pour toute réparation en hauteur — les chutes de toit figurent parmi les accidents domestiques les plus graves.
+Depuis le sol, avec des jumelles, repérez les tuiles fissurées, déplacées ou manquantes. Après une tempête d'automne, cette vérification est d'autant plus importante. Faites appel à un [couvreur](/practice-areas/couvreur) professionnel pour toute réparation en hauteur — les chutes de toit figurent parmi les accidents domestiques les plus graves.
 
 ### Nettoyage des gouttières
 
@@ -135,7 +135,7 @@ Tous les tuyaux situés dans des espaces non chauffés (garage, cave, vide sanit
 
 ### Purger les robinets extérieurs
 
-Fermez le robinet d'arrêt intérieur alimentant les points d'eau extérieurs (jardin, terrasse), puis ouvrez le robinet extérieur pour vider entièrement la canalisation. Un [plombier](/services/plombier) peut installer des vannes de purge si votre installation n'en possède pas.
+Fermez le robinet d'arrêt intérieur alimentant les points d'eau extérieurs (jardin, terrasse), puis ouvrez le robinet extérieur pour vider entièrement la canalisation. Un [plombier](/practice-areas/plombier) peut installer des vannes de purge si votre installation n'en possède pas.
 
 ### Localiser le robinet d'arrêt général
 

@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     // Send welcome email (non-blocking — don't crash signup if email fails)
     try {
       await getResend().emails.send({
-        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+        from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: email,
         subject: 'Bienvenue dans la newsletter ServicesArtisans !',
         html: `
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
           <hr />
           <p style="color: #666; font-size: 12px;">
             Pour vous désinscrire, répondez simplement à cet email.<br />
-            <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+            <a href="https://us-attorneys.com">us-attorneys.com</a>
           </p>
         `,
       })

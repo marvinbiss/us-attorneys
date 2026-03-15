@@ -9,7 +9,7 @@ import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { cn } from '@/lib/utils'
-import { villes, regions, departements, services as allServices } from '@/lib/data/france'
+import { cities, usRegions, states, practiceAreas as allServices } from '@/lib/data/usa'
 import {
   getLocationFromCoords,
   type MenuType, type MobileAccordion,
@@ -18,7 +18,7 @@ import {
 import DesktopMegaMenus from './header/DesktopMegaMenus'
 import MobileMenu from './header/MobileMenu'
 
-export default function Header({ artisanCount = 0 }: { artisanCount?: number }) {
+export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }) {
   const router = useRouter()
   const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
@@ -110,7 +110,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
     const params = new URLSearchParams()
     if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
     if (locationQuery.trim()) params.set('location', locationQuery.trim())
-    if (params.toString()) router.push(`/recherche?${params.toString()}`)
+    if (params.toString()) router.push(`/search?${params.toString()}`)
   }, [serviceQuery, locationQuery, router])
 
   // Geolocation for mobile search
@@ -190,8 +190,8 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
       {/* Plus dropdown inline */}
       {menu === 'plus' && openMenu === 'plus' && (
         <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-          <Link href="/avis" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
-          <Link href="/tarifs" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
+          <Link href="/reviews" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
+          <Link href="/pricing" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
           <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
           <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides travaux</Link>
         </div>
@@ -249,13 +249,13 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
           {/* Navigation Desktop */}
           <nav className="hidden lg:flex items-center space-x-0.5" aria-label="Navigation principale">
             <NavTrigger menu="services" label="Services" />
-            <NavTrigger menu="villes" label="Villes" />
+            <NavTrigger menu="cities" label="Villes" />
             <NavTrigger menu="regions" label="Régions" />
             <NavTrigger menu="plus" label="Plus" />
 
             {/* Favoris */}
             <Link
-              href="/mes-favoris"
+              href="/my-favorites"
               className="relative text-gray-600 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80"
               aria-label={`Mes favoris${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
               title="Mes favoris"
@@ -269,14 +269,14 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
             </Link>
 
             <Link
-              href="/connexion"
+              href="/login"
               className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.85rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
 
             <Link
-              href="/urgence"
+              href="/emergency"
               className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors duration-200"
             >
               <span className="relative flex h-1.5 w-1.5">
@@ -287,7 +287,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
             </Link>
 
             <Link
-              href="/devis"
+              href="/quotes"
               onClick={() => trackEvent('header_devis_click', {})}
               className="ml-2 px-4 py-2 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
@@ -316,11 +316,11 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
       {mounted && openMenu && openMenu !== 'plus' && (
         <DesktopMegaMenus
           openMenu={openMenu}
-          artisanCount={artisanCount}
+          attorneyCount={attorneyCount}
           allServicesCount={allServices.length}
-          villesCount={villes.length}
-          regionsCount={regions.length}
-          departementsCount={departements.length}
+          villesCount={cities.length}
+          regionsCount={usRegions.length}
+          departementsCount={states.length}
           citiesByRegion={citiesByRegion}
           metroRegions={metroRegions}
           domTomRegions={domTomRegions}

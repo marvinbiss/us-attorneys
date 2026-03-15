@@ -22,7 +22,7 @@ export async function GET() {
         comment,
         client_name,
         created_at,
-        artisan:profiles!artisan_id (
+        artisan:profiles!attorney_id (
           id,
           full_name
         )

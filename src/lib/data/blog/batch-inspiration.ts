@@ -191,9 +191,9 @@ Attention aux devis incomplets : vérifiez que le prix inclut bien la dépose de
 
 La réussite de votre projet cuisine repose autant sur le choix des matériaux que sur la qualité de la pose. Deux professions sont particulièrement adaptées :
 
-**Le [cuisiniste](/services/cuisiniste)** — Spécialiste de la conception et de l'installation de cuisines, il vous accompagne de la prise de mesures à la livraison finale. Il gère les fournisseurs, coordonne les corps de métier et garantit un résultat clé en main.
+**Le [cuisiniste](/practice-areas/cuisiniste)** — Spécialiste de la conception et de l'installation de cuisines, il vous accompagne de la prise de mesures à la livraison finale. Il gère les fournisseurs, coordonne les corps de métier et garantit un résultat clé en main.
 
-**Le [menuisier](/services/menuisier)** — Pour une cuisine entièrement sur mesure, le menuisier fabrique les caissons, les façades et les aménagements intérieurs selon vos dimensions exactes. Idéal pour les espaces atypiques ou les exigences esthétiques particulières.
+**Le [menuisier](/practice-areas/menuisier)** — Pour une cuisine entièrement sur mesure, le menuisier fabrique les caissons, les façades et les aménagements intérieurs selon vos dimensions exactes. Idéal pour les espaces atypiques ou les exigences esthétiques particulières.
 
 Avant de vous engager, demandez systématiquement :
 - 3 devis détaillés minimum pour comparer
@@ -416,7 +416,7 @@ Voici trois scénarios types pour vous aider à budgétiser votre projet :
 
 ### Le bon interlocuteur
 
-Pour un projet d'aménagement extérieur complet, le [paysagiste](/services/paysagiste) est votre interlocuteur privilégié. Il conçoit le plan d'ensemble, coordonne les différents corps de métier (maçon, électricien, plombier) et assure la cohérence esthétique du projet.
+Pour un projet d'aménagement extérieur complet, le [paysagiste](/practice-areas/paysagiste) est votre interlocuteur privilégié. Il conçoit le plan d'ensemble, coordonne les différents corps de métier (maçon, électricien, plombier) et assure la cohérence esthétique du projet.
 
 Pour des travaux spécifiques :
 - **Maçon** : pour la dalle béton, les murets ou les escaliers
@@ -704,7 +704,7 @@ Les aides financières en 2026 concernent principalement le volet isolation : Ma
 
       `## 8. Trouver le bon artisan : le charpentier en chef d'orchestre
 
-L'aménagement de combles fait intervenir plusieurs corps de métier, mais le [charpentier](/services/charpentier) est l'interlocuteur central. C'est lui qui évalue la faisabilité structurelle, modifie la charpente si nécessaire et garantit la solidité de l'ensemble.
+L'aménagement de combles fait intervenir plusieurs corps de métier, mais le [charpentier](/practice-areas/charpentier) est l'interlocuteur central. C'est lui qui évalue la faisabilité structurelle, modifie la charpente si nécessaire et garantit la solidité de l'ensemble.
 
 **Les corps de métier impliqués :**
 - **Charpentier** : étude structurelle, modification de charpente, plancher, trémie d'escalier

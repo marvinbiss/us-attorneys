@@ -105,7 +105,7 @@ export const SIRENE_CONFIG = {
 
 // Option 2: API SIRENE Open Data (gratuite, sans authentification)
 export const SIRENE_OPEN_CONFIG = {
-  baseUrl: 'https://recherche-entreprises.api.gouv.fr',
+  baseUrl: 'https://search-entreprises.api.gouv.fr',
   rateLimit: 10, // requetes par minute (plus restrictif)
   pageSize: 25, // max 25 par page
   retryDelay: 2000,

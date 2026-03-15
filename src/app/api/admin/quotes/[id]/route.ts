@@ -37,7 +37,7 @@ export async function GET(
 
     const { data: quote, error } = await supabase
       .from('quotes')
-      .select('id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at')
+      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
@@ -85,7 +85,7 @@ export async function PATCH(
     // Get old data for audit
     const { data: _oldQuote } = await supabase
       .from('quotes')
-      .select('id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at')
+      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
@@ -137,7 +137,7 @@ export async function DELETE(
     // Get quote data for audit
     const { data: _quoteToDelete } = await supabase
       .from('quotes')
-      .select('id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at')
+      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
       .eq('id', params.id)
       .single()
 

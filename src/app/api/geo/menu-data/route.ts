@@ -1,19 +1,13 @@
 import { NextResponse } from 'next/server'
-import { villes, regions } from '@/lib/data/france'
+import { cities, usRegions, getStateByCode } from '@/lib/data/usa'
 
-// This route is server-only — france.ts never reaches the client bundle via Header.tsx
+// This route is server-only — usa.ts never reaches the client bundle via Header.tsx
 
 const megaMenuRegions = [
-  'Île-de-France',
-  'Auvergne-Rhône-Alpes',
-  "Provence-Alpes-Côte d'Azur",
-  'Occitanie',
-  'Nouvelle-Aquitaine',
-  'Hauts-de-France',
-  'Grand Est',
-  'Pays de la Loire',
-  'Bretagne',
-  'Normandie',
+  'South',
+  'West',
+  'Northeast',
+  'Midwest',
 ]
 
 function parsePopulation(pop: string): number {
@@ -27,12 +21,12 @@ function formatPop(pop: string): string {
 }
 
 const citiesByRegion = megaMenuRegions.map((regionName) => {
-  const regionVilles = villes
-    .filter((v) => v.region === regionName)
+  const regionVilles = cities
+    .filter((v) => getStateByCode(v.stateCode)?.region === regionName)
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
     .slice(0, 4)
   return {
-    region: regionName === "Provence-Alpes-Côte d'Azur" ? 'PACA' : regionName,
+    region: regionName,
     cities: regionVilles.map((v) => ({
       name: v.name,
       slug: v.slug,
@@ -41,21 +35,21 @@ const citiesByRegion = megaMenuRegions.map((regionName) => {
   }
 })
 
-const popularCities = [...villes]
+const popularCities = [...cities]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
   .slice(0, 12)
   .map((v) => ({ name: v.name, slug: v.slug }))
 
-const metroRegions = regions.slice(0, 13).map((r) => ({
+const metroRegions = usRegions.slice(0, 13).map((r) => ({
   slug: r.slug,
   name: r.name,
-  departments: r.departments.map((d) => ({ name: d.name, code: d.code, slug: d.slug })),
+  states: r.states.map((d) => ({ name: d.name, code: d.code, slug: d.slug })),
 }))
 
-const domTomRegions = regions.slice(13).map((r) => ({
+const domTomRegions = usRegions.slice(13).map((r) => ({
   slug: r.slug,
   name: r.name,
-  departments: r.departments.map((d) => ({ name: d.name, code: d.code, slug: d.slug })),
+  states: r.states.map((d) => ({ name: d.name, code: d.code, slug: d.slug })),
 }))
 
 const payload = { citiesByRegion, popularCities, metroRegions, domTomRegions }

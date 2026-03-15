@@ -70,9 +70,9 @@ export default function AdminClaimsPage() {
     open: boolean
     claimId: string
     action: 'approve' | 'reject'
-    providerName: string
+    attorneyName: string
     userName: string
-  }>({ open: false, claimId: '', action: 'approve', providerName: '', userName: '' })
+  }>({ open: false, claimId: '', action: 'approve', attorneyName: '', userName: '' })
 
   const [rejectionReason, setRejectionReason] = useState('')
 
@@ -88,7 +88,7 @@ export default function AdminClaimsPage() {
           ...(actionModal.action === 'reject' && rejectionReason ? { rejectionReason } : {}),
         },
       })
-      setActionModal({ open: false, claimId: '', action: 'approve', providerName: '', userName: '' })
+      setActionModal({ open: false, claimId: '', action: 'approve', attorneyName: '', userName: '' })
       setRejectionReason('')
       if (result?.message) setActionSuccess(result.message)
       mutate()
@@ -192,9 +192,9 @@ export default function AdminClaimsPage() {
       ) : (
         <div className="space-y-4">
           {claims.map((claim) => (
-            <div key={claim.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between">
-                <div className="space-y-3 flex-1">
+            <div key={claim.id} className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                <div className="space-y-3 flex-1 min-w-0">
                   {/* Provider info */}
                   <div className="flex items-center gap-2">
                     <Building2 className="w-4 h-4 text-gray-400" />
@@ -234,7 +234,7 @@ export default function AdminClaimsPage() {
                   </div>
 
                   {/* SIRET comparison */}
-                  <div className="flex items-center gap-6 text-sm">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 text-sm">
                     <div>
                       <span className="text-gray-500">SIRET en base :</span>{' '}
                       <span className="font-mono font-medium text-gray-900">
@@ -264,7 +264,7 @@ export default function AdminClaimsPage() {
                 </div>
 
                 {/* Status + Actions */}
-                <div className="flex flex-col items-end gap-3 ml-4">
+                <div className="flex flex-row sm:flex-col items-center sm:items-end gap-3 flex-shrink-0">
                   {statusBadge(claim.status)}
 
                   {claim.status === 'pending' && (
@@ -274,7 +274,7 @@ export default function AdminClaimsPage() {
                           open: true,
                           claimId: claim.id,
                           action: 'approve',
-                          providerName: claim.provider?.name || 'Artisan',
+                          attorneyName: claim.provider?.name || 'Artisan',
                           userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
                         })}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
@@ -287,7 +287,7 @@ export default function AdminClaimsPage() {
                           open: true,
                           claimId: claim.id,
                           action: 'reject',
-                          providerName: claim.provider?.name || 'Artisan',
+                          attorneyName: claim.provider?.name || 'Artisan',
                           userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
                         })}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
@@ -335,8 +335,8 @@ export default function AdminClaimsPage() {
         title={actionModal.action === 'approve' ? 'Approuver la revendication' : 'Rejeter la revendication'}
         message={
           actionModal.action === 'approve'
-            ? `Approuver la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche sera attribuée. Si l'artisan n'a pas de compte, un compte sera créé et il recevra un email pour définir son mot de passe.`
-            : `Rejeter la revendication de "${actionModal.providerName}" par ${actionModal.userName} ?`
+            ? `Approuver la revendication de "${actionModal.attorneyName}" par ${actionModal.userName} ? La fiche sera attribuée. Si l'artisan n'a pas de compte, un compte sera créé et il recevra un email pour définir son mot de passe.`
+            : `Rejeter la revendication de "${actionModal.attorneyName}" par ${actionModal.userName} ?`
         }
         confirmText={actionModal.action === 'approve' ? 'Approuver' : 'Rejeter'}
         variant={actionModal.action === 'approve' ? 'success' : 'danger'}

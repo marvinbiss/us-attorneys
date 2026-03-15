@@ -4,7 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
 export interface DispatchOptions {
-  serviceName?: string
+  specialtyName?: string
   city?: string
   postalCode?: string
   urgency?: string
@@ -37,7 +37,7 @@ export async function dispatchLead(
 
     const { data, error } = await supabase.rpc('dispatch_lead', {
       p_lead_id: leadId,
-      p_service_name: opts?.serviceName || null,
+      p_service_name: opts?.specialtyName || null,
       p_city: opts?.city || null,
       p_postal_code: opts?.postalCode || null,
       p_urgency: opts?.urgency || 'normal',

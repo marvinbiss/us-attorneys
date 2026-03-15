@@ -26,7 +26,7 @@ function ensureVapidConfigured(): boolean {
 
   try {
     webpush.setVapidDetails(
-      'mailto:support@servicesartisans.fr',
+      'mailto:support@us-attorneys.com',
       publicKey,
       privateKey
     )
@@ -66,9 +66,9 @@ export interface PushNotificationPayload {
 
 // Notification templates
 export const pushTemplates = {
-  bookingConfirmed: (artisanName: string, date: string): PushNotificationPayload => ({
+  bookingConfirmed: (attorneyName: string, date: string): PushNotificationPayload => ({
     title: 'Réservation confirmée ✓',
-    body: `Votre RDV avec ${artisanName} le ${date} est confirmé`,
+    body: `Votre RDV avec ${attorneyName} le ${date} est confirmé`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-confirmed',
@@ -79,9 +79,9 @@ export const pushTemplates = {
     ],
   }),
 
-  bookingReminder: (artisanName: string, time: string): PushNotificationPayload => ({
+  bookingReminder: (attorneyName: string, time: string): PushNotificationPayload => ({
     title: 'Rappel de RDV',
-    body: `N'oubliez pas votre RDV avec ${artisanName} à ${time}`,
+    body: `N'oubliez pas votre RDV avec ${attorneyName} à ${time}`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-reminder',
@@ -93,9 +93,9 @@ export const pushTemplates = {
     ],
   }),
 
-  bookingCancelled: (artisanName: string): PushNotificationPayload => ({
+  bookingCancelled: (attorneyName: string): PushNotificationPayload => ({
     title: 'RDV annulé',
-    body: `Votre RDV avec ${artisanName} a été annulé`,
+    body: `Votre RDV avec ${attorneyName} a été annulé`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-cancelled',
@@ -144,9 +144,9 @@ export const pushTemplates = {
     actions: [{ action: 'join', title: 'Rejoindre' }],
   }),
 
-  slotAvailable: (artisanName: string, date: string): PushNotificationPayload => ({
+  slotAvailable: (attorneyName: string, date: string): PushNotificationPayload => ({
     title: 'Créneau disponible !',
-    body: `${artisanName} a un créneau le ${date}`,
+    body: `${attorneyName} a un créneau le ${date}`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'slot-available',

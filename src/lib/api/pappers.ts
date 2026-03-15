@@ -320,7 +320,7 @@ export async function rechercherEntreprises(
       }>
     }
 
-    const data = await pappersRequest<SearchResponse>('/recherche', params)
+    const data = await pappersRequest<SearchResponse>('/search', params)
 
     return (data.resultats || []).map(r => ({
       siren: r.siren,

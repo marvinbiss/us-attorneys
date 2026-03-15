@@ -85,7 +85,7 @@ function CompareRow({ label, icon, children }: CompareRowProps) {
   )
 }
 
-function ProviderGrid({
+function AttorneyGrid({
   providers,
   children,
 }: {
@@ -148,7 +148,7 @@ export function CompareView({ onClose }: CompareViewProps) {
 
           {/* Provider headers */}
           <div className="p-6 border-b border-gray-100">
-            <ProviderGrid providers={compareList}>
+            <AttorneyGrid providers={compareList}>
               {(provider, index) => (
                 <div className="flex flex-col items-center gap-3">
                   <div className="relative">
@@ -173,7 +173,7 @@ export function CompareView({ onClose }: CompareViewProps) {
                   </div>
                 </div>
               )}
-            </ProviderGrid>
+            </AttorneyGrid>
           </div>
 
           {/* Comparison table */}
@@ -184,18 +184,18 @@ export function CompareView({ onClose }: CompareViewProps) {
               icon={<Star className="w-4 h-4 text-amber-500" />}
               providers={compareList}
             >
-              <ProviderGrid providers={compareList}>
+              <AttorneyGrid providers={compareList}>
                 {(provider) => <RatingCell provider={provider} />}
-              </ProviderGrid>
+              </AttorneyGrid>
             </CompareRow>
 
             {/* Location */}
             <CompareRow
-              label="Ville"
+              label="City"
               icon={<MapPin className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
-              <ProviderGrid providers={compareList}>
+              <AttorneyGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700">
                     {provider.address_city || '-'}
@@ -206,7 +206,7 @@ export function CompareView({ onClose }: CompareViewProps) {
                     )}
                   </span>
                 )}
-              </ProviderGrid>
+              </AttorneyGrid>
             </CompareRow>
 
             {/* Verified */}
@@ -215,9 +215,9 @@ export function CompareView({ onClose }: CompareViewProps) {
               icon={<Shield className="w-4 h-4 text-green-500" />}
               providers={compareList}
             >
-              <ProviderGrid providers={compareList}>
+              <AttorneyGrid providers={compareList}>
                 {(provider) => <BooleanCell value={provider.is_verified} />}
-              </ProviderGrid>
+              </AttorneyGrid>
             </CompareRow>
 
             {/* Phone */}
@@ -226,7 +226,7 @@ export function CompareView({ onClose }: CompareViewProps) {
               icon={<Phone className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
-              <ProviderGrid providers={compareList}>
+              <AttorneyGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700">
                     {provider.phone ? (
@@ -241,7 +241,7 @@ export function CompareView({ onClose }: CompareViewProps) {
                     )}
                   </span>
                 )}
-              </ProviderGrid>
+              </AttorneyGrid>
             </CompareRow>
 
             {/* SIRET */}
@@ -250,13 +250,13 @@ export function CompareView({ onClose }: CompareViewProps) {
               icon={<FileText className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
-              <ProviderGrid providers={compareList}>
+              <AttorneyGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700 text-xs font-mono">
                     {provider.siret || '-'}
                   </span>
                 )}
-              </ProviderGrid>
+              </AttorneyGrid>
             </CompareRow>
 
             {/* Postal code */}
@@ -265,13 +265,13 @@ export function CompareView({ onClose }: CompareViewProps) {
               icon={<MapPinned className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
-              <ProviderGrid providers={compareList}>
+              <AttorneyGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700">
                     {provider.address_postal_code || '-'}
                   </span>
                 )}
-              </ProviderGrid>
+              </AttorneyGrid>
             </CompareRow>
           </div>
 

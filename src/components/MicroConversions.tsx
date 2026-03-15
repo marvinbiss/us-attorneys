@@ -7,7 +7,7 @@ interface MicroConversionsProps {
   /** Page type for context */
   pageType: string
   /** Service slug */
-  serviceSlug?: string
+  specialtySlug?: string
   /** City name */
   cityName?: string
 }
@@ -18,7 +18,7 @@ interface MicroConversionsProps {
  * - Time on page (30s, 60s, 120s)
  * - Content engagement signals
  */
-export default function MicroConversions({ pageType, serviceSlug, cityName }: MicroConversionsProps) {
+export default function MicroConversions({ pageType, specialtySlug, cityName }: MicroConversionsProps) {
   const scrollMilestones = useRef(new Set<number>())
   const timeMilestones = useRef(new Set<number>())
 
@@ -37,7 +37,7 @@ export default function MicroConversions({ pageType, serviceSlug, cityName }: Mi
             action: 'scroll_depth',
             depth: milestone,
             pageType,
-            serviceSlug,
+            specialtySlug,
             cityName,
           })
         }
@@ -46,7 +46,7 @@ export default function MicroConversions({ pageType, serviceSlug, cityName }: Mi
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [pageType, serviceSlug, cityName])
+  }, [pageType, specialtySlug, cityName])
 
   useEffect(() => {
     // Time on page tracking
@@ -61,7 +61,7 @@ export default function MicroConversions({ pageType, serviceSlug, cityName }: Mi
             action: 'time_on_page',
             seconds,
             pageType,
-            serviceSlug,
+            specialtySlug,
             cityName,
           })
         }
@@ -70,7 +70,7 @@ export default function MicroConversions({ pageType, serviceSlug, cityName }: Mi
     }
 
     return () => timeouts.forEach(clearTimeout)
-  }, [pageType, serviceSlug, cityName])
+  }, [pageType, specialtySlug, cityName])
 
   return null
 }

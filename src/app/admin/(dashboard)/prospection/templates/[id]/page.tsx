@@ -10,7 +10,7 @@ import type { ProspectionTemplate, ProspectionChannel, AudienceType } from '@/ty
 const VARIABLES = [
   { key: 'contact_name', label: 'Nom' },
   { key: 'company_name', label: 'Entreprise' },
-  { key: 'city', label: 'Ville' },
+  { key: 'city', label: 'City' },
   { key: 'department', label: 'Département' },
   { key: 'email', label: 'Email' },
   { key: 'phone', label: 'Téléphone' },

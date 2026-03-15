@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import NextImage from 'next/image'
-import { getArtisanUrl } from '@/lib/utils'
+import { getAttorneyUrl } from '@/lib/utils'
 
 export interface MapProvider {
   id: string
@@ -163,7 +163,7 @@ export function DesktopResultsSidebar({
                     {/* Quick Actions */}
                     <div className="flex gap-2 mt-3">
                       <Link
-                        href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                        href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                         onClick={(e) => e.stopPropagation()}
                         className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                       >
@@ -220,13 +220,13 @@ export function DesktopResultsSidebar({
 /* ─── Mobile Results Toggle (inside map div) ────────────────────── */
 
 interface MobileToggleProps {
-  providerCount: number
+  attorneyCount: number
   mobileDrawerOpen: boolean
   onToggle: () => void
 }
 
 export function MobileResultsToggle({
-  providerCount,
+  attorneyCount,
   mobileDrawerOpen,
   onToggle,
 }: MobileToggleProps) {
@@ -237,7 +237,7 @@ export function MobileResultsToggle({
         className="w-full bg-white shadow-lg rounded-2xl py-4 px-6 flex items-center justify-between"
       >
         <div>
-          <span className="font-bold text-lg">{providerCount}</span>
+          <span className="font-bold text-lg">{attorneyCount}</span>
           <span className="text-gray-600 ml-1">artisans trouvés</span>
         </div>
         {mobileDrawerOpen ? (
@@ -286,7 +286,7 @@ export function MobileResultsDrawer({
             {providers.map((provider) => (
               <Link
                 key={provider.id}
-                href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                 className="flex gap-4 p-4 border-b hover:bg-gray-50"
               >
                 <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">

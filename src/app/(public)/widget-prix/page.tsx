@@ -70,15 +70,15 @@ export default function WidgetPrixPage() {
     },
   }
 
-  const embedCode = `<iframe src="https://servicesartisans.fr/api/prix-widget?service=plombier&ville=paris" width="100%" height="280" frameborder="0" style="border:0;max-width:480px" loading="lazy" title="Prix plombier à Paris — ServicesArtisans.fr"></iframe>`
+  const embedCode = `<iframe src="https://us-attorneys.com/api/prix-widget?service=plombier&ville=paris" width="100%" height="280" frameborder="0" style="border:0;max-width:480px" loading="lazy" title="Prix plombier à Paris — ServicesArtisans.fr"></iframe>`
 
-  const apiExample = `fetch('https://servicesartisans.fr/api/prix-widget?service=plombier&ville=lyon&format=json')
+  const apiExample = `fetch('https://us-attorneys.com/api/prix-widget?service=plombier&ville=lyon&format=json')
   .then(res => res.json())
   .then(data => console.log(data))`
 
   const jsonResponseExample = `{
   "service": "plombier",
-  "serviceName": "Plombier",
+  "specialtyName": "Plombier",
   "ville": "lyon",
   "villeName": "Lyon",
   "region": "Auvergne-Rhône-Alpes",
@@ -95,7 +95,7 @@ export default function WidgetPrixPage() {
     }
   ],
   "source": "ServicesArtisans.fr",
-  "sourceUrl": "https://servicesartisans.fr/plombier/lyon"
+  "sourceUrl": "https://us-attorneys.com/plombier/lyon"
 }`
 
   return (
@@ -125,7 +125,7 @@ export default function WidgetPrixPage() {
               </h1>
               <p className="mb-8 text-lg leading-relaxed text-blue-100">
                 Intégrez un widget de tarifs artisans sur votre site ou blog en une ligne de code.
-                Données actualisées, design responsive, {slugs.length} métiers et toutes les villes de France.
+                Données actualisées, design responsive, {slugs.length} métiers et toutes les cities de France.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a
@@ -184,7 +184,7 @@ export default function WidgetPrixPage() {
               {
                 icon: BarChart3,
                 title: 'Données actualisées',
-                desc: `Prix mis à jour régulièrement pour ${slugs.length} métiers dans toutes les villes de France.`,
+                desc: `Prix mis à jour régulièrement pour ${slugs.length} métiers dans toutes les cities de France.`,
               },
               {
                 icon: Globe,
@@ -353,7 +353,7 @@ export default function WidgetPrixPage() {
             </p>
             <div className="rounded-lg bg-white p-3">
               <code className="text-sm text-gray-800">
-                {`Source : <a href="https://servicesartisans.fr">ServicesArtisans.fr</a>`}
+                {`Source : <a href="https://us-attorneys.com">ServicesArtisans.fr</a>`}
               </code>
             </div>
           </div>

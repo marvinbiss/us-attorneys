@@ -45,10 +45,10 @@ export function ConversationList({
     if (!searchQuery) return true
     // The getConversations join includes provider:providers(id, name, ...) and client:profiles(id, full_name, ...)
     const convAny = conv as unknown as Record<string, unknown>
-    const providerData = convAny.provider as { name?: string } | undefined
+    const attorneyData = convAny.provider as { name?: string } | undefined
     const clientData = convAny.client as { full_name?: string } | undefined
     const displayName = userType === 'client'
-      ? providerData?.name
+      ? attorneyData?.name
       : clientData?.full_name
     return displayName?.toLowerCase().includes(searchQuery.toLowerCase())
   })
@@ -104,10 +104,10 @@ export function ConversationList({
           <div className="divide-y divide-gray-100 dark:divide-gray-800">
             {filteredConversations.map((conversation) => {
               const convAny = conversation as unknown as Record<string, unknown>
-              const providerData = convAny.provider as { id?: string; name?: string } | undefined
+              const attorneyData = convAny.provider as { id?: string; name?: string } | undefined
               const clientData = convAny.client as { id?: string; full_name?: string } | undefined
               const name = userType === 'client'
-                ? providerData?.name
+                ? attorneyData?.name
                 : clientData?.full_name
               // avatar_url was dropped from providers; not reliably available
               const avatar: string | undefined = undefined

@@ -6,15 +6,15 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, getRegionBySlug, services as allServices, getVillesByDepartement } from '@/lib/data/france'
-import { getProviderCountByRegion, formatProviderCount } from '@/lib/data/stats'
+import { usRegions, getRegionBySlug, practiceAreas as allServices, getCitiesByState } from '@/lib/data/usa'
+import { getAttorneyCountByRegion, formatAttorneyCount } from '@/lib/data/stats'
 import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 import problems from '@/lib/data/problems'
 
 export function generateStaticParams() {
-  return regions.map((region) => ({ region: region.slug }))
+  return usRegions.map((region) => ({ region: region.slug }))
 }
 
 export const dynamicParams = false
@@ -34,10 +34,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const region = getRegionBySlug(regionSlug)
   if (!region) return { title: 'Région non trouvée' }
 
-  const metaContent = generateRegionContent(region)
-  const deptCount = region.departments.length
-  const cityCount = region.departments.reduce((acc, d) => acc + getVillesByDepartement(d.code).length, 0)
-  const artisanCount = await getProviderCountByRegion(region.name)
+  const metaContent = generateRegionContent(region as never)
+  const stateCount = region.states.length
+  const cityCount = region.states.reduce((acc, d) => acc + getCitiesByState(d.code).length, 0)
+  const attorneyCount = await getAttorneyCountByRegion(region.name)
 
   const titleHash = Math.abs(hashCode(`title-region-${region.slug}`))
   const titleTemplates = [
@@ -50,13 +50,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
-  const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
+  const artisanStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)} artisans, ` : ''
   const descTemplates = [
-    `Trouvez un artisan en ${region.name}. ${artisanStr}${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
+    `Trouvez un artisan en ${region.name}. ${artisanStr}${stateCount} states, ${cityCount} cities. Devis gratuits.`,
     `${region.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
-    `Artisans en ${region.name} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
-    `Tous les artisans de ${region.name}. ${artisanStr}${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
-    `${region.name} — ${deptCount} dép., ${cityCount} villes${artisanCount > 0 ? `, ${formatProviderCount(artisanCount)} artisans` : ''}. ${metaContent.profile.climateLabel}. Devis gratuits en ligne.`,
+    `Artisans en ${region.name} : ${cityCount} cities couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
+    `Tous les artisans de ${region.name}. ${artisanStr}${stateCount} states, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
+    `${region.name} — ${stateCount} states, ${cityCount} cities${attorneyCount > 0 ? `, ${formatAttorneyCount(attorneyCount)} artisans` : ''}. ${metaContent.profile.climateLabel}. Devis gratuits en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -90,14 +90,14 @@ export default async function RegionPage({ params }: PageProps) {
   const region = getRegionBySlug(regionSlug)
   if (!region) notFound()
 
-  const deptCount = region.departments.length
-  const deptCitiesMap = Object.fromEntries(
-    region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
+  const stateCount = region.states.length
+  const stateCitiesMap = Object.fromEntries(
+    region.states.map(st => [st.code, getCitiesByState(st.code)])
   )
-  const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
+  const allCities = region.states.flatMap(st => stateCitiesMap[st.code])
   const cityCount = allCities.length
-  const content = generateRegionContent(region, cityCount)
-  const regionArtisanCount = await getProviderCountByRegion(region.name)
+  const content = generateRegionContent(region as never, cityCount)
+  const regionArtisanCount = await getAttorneyCountByRegion(region.name)
 
   // Reorder services by climate-based priority
   const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
@@ -108,7 +108,7 @@ export default async function RegionPage({ params }: PageProps) {
   })
 
   // Other regions
-  const otherRegions = regions.filter(r => r.slug !== regionSlug)
+  const otherRegions = usRegions.filter(r => r.slug !== regionSlug)
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -118,7 +118,7 @@ export default async function RegionPage({ params }: PageProps) {
   ])
   const collectionSchema = getCollectionPageSchema({
     name: `Artisans en ${region.name}`,
-    description: `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes.`,
+    description: `Trouvez un artisan qualifié en ${region.name}. ${stateCount} départements, ${cityCount} cities couvertes.`,
     url: `/regions/${regionSlug}`,
     itemCount: cityCount,
   })
@@ -195,12 +195,12 @@ export default async function RegionPage({ params }: PageProps) {
               {regionArtisanCount > 0 && (
                 <div className="flex items-center gap-2 text-slate-300">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatProviderCount(regionArtisanCount)} artisan{regionArtisanCount > 1 ? 's' : ''}</span>
+                  <span>{formatAttorneyCount(regionArtisanCount)} artisan{regionArtisanCount > 1 ? 's' : ''}</span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-slate-400" />
-                <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
+                <span>{stateCount} département{stateCount > 1 ? 's' : ''}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-slate-400" />
@@ -275,7 +275,7 @@ export default async function RegionPage({ params }: PageProps) {
               <div className="bg-amber-50 rounded-xl p-4">
                 <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Couverture</div>
                 <div className="text-sm text-slate-800 font-medium">
-                  {regionArtisanCount > 0 ? `${formatProviderCount(regionArtisanCount)} artisans · ` : ''}{deptCount} dép. · {cityCount} villes
+                  {regionArtisanCount > 0 ? `${formatAttorneyCount(regionArtisanCount)} artisans · ` : ''}{stateCount} dép. · {cityCount} cities
                 </div>
               </div>
             </div>
@@ -329,36 +329,36 @@ export default async function RegionPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Départements de la région {region.name}
               </h2>
-              <p className="text-sm text-slate-500">{deptCount} département{deptCount > 1 ? 's' : ''}</p>
+              <p className="text-sm text-slate-500">{stateCount} département{stateCount > 1 ? 's' : ''}</p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {region.departments.map((dept) => (
+            {region.states.map((st) => (
               <Link
-                key={dept.code}
-                href={`/departements/${dept.slug}`}
+                key={st.code}
+                href={`/states/${st.slug}`}
                 className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-300 group"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-11 h-11 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center group-hover:from-slate-100 group-hover:to-slate-200 transition-colors">
-                      <span className="text-slate-700 font-bold text-sm">{dept.code}</span>
+                      <span className="text-slate-700 font-bold text-sm">{st.code}</span>
                     </div>
                     <div>
-                      <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-slate-700 transition-colors">{dept.name}</h3>
-                      <span className="text-xs text-slate-400">{deptCitiesMap[dept.code].length} ville{deptCitiesMap[dept.code].length > 1 ? 's' : ''}</span>
+                      <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-slate-700 transition-colors">{st.name}</h3>
+                      <span className="text-xs text-slate-400">{stateCitiesMap[st.code].length} ville{stateCitiesMap[st.code].length > 1 ? 's' : ''}</span>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {deptCitiesMap[dept.code].slice(0, 4).map((city) => (
+                  {stateCitiesMap[st.code].slice(0, 4).map((city) => (
                     <span key={city.slug} className="text-xs bg-gray-50 text-slate-500 px-2.5 py-1 rounded-full group-hover:bg-slate-100 group-hover:text-slate-700 transition-colors">
                       {city.name}
                     </span>
                   ))}
-                  {deptCitiesMap[dept.code].length > 4 && (
-                    <span className="text-xs text-slate-400 px-2 py-1">+{deptCitiesMap[dept.code].length - 4}</span>
+                  {stateCitiesMap[st.code].length > 4 && (
+                    <span className="text-xs text-slate-400 px-2 py-1">+{stateCitiesMap[st.code].length - 4}</span>
                   )}
                 </div>
               </Link>
@@ -387,14 +387,14 @@ export default async function RegionPage({ params }: PageProps) {
                   {allServices.map((service) => (
                     <Link
                       key={`${service.slug}-${city.slug}`}
-                      href={`/services/${service.slug}/${city.slug}`}
+                      href={`/practice-areas/${service.slug}/${city.slug}`}
                       className="text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-blue-100"
                     >
                       {service.name}
                     </Link>
                   ))}
                 </div>
-                <Link href={`/villes/${city.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
+                <Link href={`/cities/${city.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
                   Tous les artisans <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -455,7 +455,7 @@ export default async function RegionPage({ params }: PageProps) {
             Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -509,14 +509,14 @@ export default async function RegionPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {region.name}</h3>
               <div className="space-y-2">
                 {allCities.slice(0, 6).map((city) => (
-                  <Link key={city.slug} href={`/villes/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={city.slug} href={`/cities/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {city.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Toutes les villes <ArrowRight className="w-4 h-4" />
+              <Link href="/cities" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Toutes les cities <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -528,7 +528,7 @@ export default async function RegionPage({ params }: PageProps) {
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
-                    <Link key={`devis-${s.slug}-${city.slug}`} href={`/devis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <Link key={`devis-${s.slug}-${city.slug}`} href={`/quotes/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Devis {s.name.toLowerCase()} à {city.name}
                     </Link>
@@ -541,7 +541,7 @@ export default async function RegionPage({ params }: PageProps) {
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
-                    <Link key={`avis-${s.slug}-${city.slug}`} href={`/avis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <Link key={`avis-${s.slug}-${city.slug}`} href={`/reviews/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Avis {s.name.toLowerCase()} à {city.name}
                     </Link>
@@ -554,7 +554,7 @@ export default async function RegionPage({ params }: PageProps) {
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
-                    <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/tarifs/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/pricing/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Tarifs {s.name.toLowerCase()} à {city.name}
                     </Link>
@@ -568,7 +568,7 @@ export default async function RegionPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 6).flatMap((city) =>
                 allServices.slice(0, 5).map((s) => (
-                  <Link key={`urgence-${s.slug}-${city.slug}`} href={`/urgence/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
+                  <Link key={`urgence-${s.slug}-${city.slug}`} href={`/emergency/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
                     Urgence {s.name.toLowerCase()} à {city.name}
                   </Link>
                 ))
@@ -580,7 +580,7 @@ export default async function RegionPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 4).flatMap((city) =>
                 problems.slice(0, 6).map((p) => (
-                  <Link key={`prob-${p.slug}-${city.slug}`} href={`/problemes/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
+                  <Link key={`prob-${p.slug}-${city.slug}`} href={`/issues/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
                     {p.name} à {city.name}
                   </Link>
                 ))
@@ -607,16 +607,16 @@ export default async function RegionPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Processus de vérification
             </Link>
-            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Politique d&apos;avis
             </Link>
             <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Médiation
             </Link>
-            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               CGV
             </Link>
           </div>

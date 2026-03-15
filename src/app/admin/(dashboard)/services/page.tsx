@@ -35,18 +35,18 @@ export default function AdminServicesPage() {
     open: false,
     service: null,
   })
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; serviceId: string; serviceName: string }>({
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; specialtyId: string; specialtyName: string }>({
     open: false,
-    serviceId: '',
-    serviceName: '',
+    specialtyId: '',
+    specialtyName: '',
   })
   const [formData, setFormData] = useState({ name: '', description: '', icon: '' })
 
   useEffect(() => {
-    fetchServices()
+    fetchSpecialties()
   }, [search, showInactive])
 
-  const fetchServices = async () => {
+  const fetchSpecialties = async () => {
     try {
       setLoading(true)
       setError(null)
@@ -74,7 +74,7 @@ export default function AdminServicesPage() {
       const isNew = !editModal.service
       const url = isNew
         ? '/api/admin/services'
-        : `/api/admin/services/${editModal.service?.id}`
+        : `/api/admin/practice-areas/${editModal.service?.id}`
       const method = isNew ? 'POST' : 'PATCH'
 
       const response = await fetch(url, {
@@ -89,7 +89,7 @@ export default function AdminServicesPage() {
 
       setEditModal({ open: false, service: null })
       setFormData({ name: '', description: '', icon: '' })
-      fetchServices()
+      fetchSpecialties()
     } catch (err) {
       console.error('Failed to save service:', err)
       setError('Erreur de connexion au serveur')
@@ -98,7 +98,7 @@ export default function AdminServicesPage() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/admin/services/${deleteModal.serviceId}`, {
+      const response = await fetch(`/api/admin/practice-areas/${deleteModal.specialtyId}`, {
         method: 'DELETE',
       })
 
@@ -106,8 +106,8 @@ export default function AdminServicesPage() {
         setError('Erreur lors de la suppression du service')
       }
 
-      setDeleteModal({ open: false, serviceId: '', serviceName: '' })
-      fetchServices()
+      setDeleteModal({ open: false, specialtyId: '', specialtyName: '' })
+      fetchSpecialties()
     } catch (err) {
       console.error('Failed to delete service:', err)
       setError('Erreur de connexion au serveur')
@@ -176,7 +176,7 @@ export default function AdminServicesPage() {
           <ErrorBanner
             message={error}
             onDismiss={() => setError(null)}
-            onRetry={fetchServices}
+            onRetry={fetchSpecialties}
           />
         )}
 
@@ -230,8 +230,8 @@ export default function AdminServicesPage() {
                     <button
                       onClick={() => setDeleteModal({
                         open: true,
-                        serviceId: service.id,
-                        serviceName: service.name,
+                        specialtyId: service.id,
+                        specialtyName: service.name,
                       })}
                       className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg"
                     >
@@ -315,10 +315,10 @@ export default function AdminServicesPage() {
       {/* Delete Modal */}
       <ConfirmationModal
         isOpen={deleteModal.open}
-        onClose={() => setDeleteModal({ open: false, serviceId: '', serviceName: '' })}
+        onClose={() => setDeleteModal({ open: false, specialtyId: '', specialtyName: '' })}
         onConfirm={handleDelete}
         title="Supprimer le service"
-        message={`Êtes-vous sûr de vouloir désactiver le service "${deleteModal.serviceName}" ?`}
+        message={`Êtes-vous sûr de vouloir désactiver le service "${deleteModal.specialtyName}" ?`}
         confirmText="Désactiver"
         variant="danger"
       />

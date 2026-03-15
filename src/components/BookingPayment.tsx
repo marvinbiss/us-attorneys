@@ -5,16 +5,16 @@ import { CreditCard, Lock, Loader2, AlertCircle, Check } from 'lucide-react'
 
 interface BookingPaymentProps {
   bookingId: string
-  serviceName: string
-  artisanName: string
+  specialtyName: string
+  attorneyName: string
   depositAmount?: number // In euros
   onPaymentComplete?: () => void
 }
 
 export default function BookingPayment({
   bookingId,
-  serviceName,
-  artisanName,
+  specialtyName,
+  attorneyName,
   depositAmount = 10,
   onPaymentComplete: _onPaymentComplete,
 }: BookingPaymentProps) {
@@ -69,11 +69,11 @@ export default function BookingPayment({
       <div className="bg-gray-50 rounded-lg p-4 mb-6">
         <div className="flex justify-between items-center mb-3">
           <span className="text-gray-600">Service</span>
-          <span className="font-medium text-gray-900">{serviceName}</span>
+          <span className="font-medium text-gray-900">{specialtyName}</span>
         </div>
         <div className="flex justify-between items-center mb-3">
           <span className="text-gray-600">Artisan</span>
-          <span className="font-medium text-gray-900">{artisanName}</span>
+          <span className="font-medium text-gray-900">{attorneyName}</span>
         </div>
         <div className="border-t border-gray-200 pt-3 mt-3">
           <div className="flex justify-between items-center">
@@ -125,11 +125,11 @@ export default function BookingPayment({
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-4">
         En procédant au paiement, vous acceptez nos{' '}
-        <a href="/cgv" className="text-blue-600 hover:underline">
+        <a href="/terms" className="text-blue-600 hover:underline">
           conditions générales
         </a>{' '}
         et notre{' '}
-        <a href="/confidentialite" className="text-blue-600 hover:underline">
+        <a href="/privacy" className="text-blue-600 hover:underline">
           politique de remboursement
         </a>.
       </p>

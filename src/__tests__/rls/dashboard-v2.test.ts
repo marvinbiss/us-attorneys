@@ -126,13 +126,13 @@ describe('Dashboard V2 Migration — Schema Constraints', () => {
 
 describe('Dashboard V2 — No Public Imports', () => {
   const dashboardFiles = [
-    'src/app/(private)/espace-artisan/leads/page.tsx',
-    'src/app/(private)/espace-artisan/leads/[id]/page.tsx',
-    'src/app/(private)/espace-artisan/leads/[id]/historique/page.tsx',
-    'src/app/(private)/espace-artisan/parametres/page.tsx',
+    'src/app/(private)/attorney-dashboard/leads/page.tsx',
+    'src/app/(private)/attorney-dashboard/leads/[id]/page.tsx',
+    'src/app/(private)/attorney-dashboard/leads/[id]/historique/page.tsx',
+    'src/app/(private)/attorney-dashboard/parametres/page.tsx',
     'src/app/admin/(dashboard)/leads/page.tsx',
     'src/app/admin/(dashboard)/dispatch/page.tsx',
-    'src/app/admin/(dashboard)/outils/page.tsx',
+    'src/app/admin/(dashboard)/tools/page.tsx',
     'src/app/admin/(dashboard)/journal/page.tsx',
   ]
 
@@ -159,8 +159,8 @@ describe('Dashboard V2 — X-Robots-Tag + Cache-Control', () => {
   it('middleware sets X-Robots-Tag for private routes', () => {
     expect(middleware).toContain('X-Robots-Tag')
     expect(middleware).toContain('noindex, nofollow')
-    expect(middleware).toContain('/espace-artisan')
-    expect(middleware).toContain('/espace-client')
+    expect(middleware).toContain('/attorney-dashboard')
+    expect(middleware).toContain('/client-dashboard')
     expect(middleware).toContain('/admin')
   })
 
@@ -182,10 +182,10 @@ describe('Dashboard V2 — Admin Auth on /api/admin/leads', () => {
 
 describe('Dashboard V2 — No SEO/INSEE/Pappers Data', () => {
   const apiFiles = [
-    'src/app/api/artisan/leads/[id]/route.ts',
-    'src/app/api/artisan/leads/[id]/action/route.ts',
-    'src/app/api/artisan/leads/[id]/history/route.ts',
-    'src/app/api/artisan/settings/route.ts',
+    'src/app/api/attorney/leads/[id]/route.ts',
+    'src/app/api/attorney/leads/[id]/action/route.ts',
+    'src/app/api/attorney/leads/[id]/history/route.ts',
+    'src/app/api/attorney/settings/route.ts',
     'src/app/api/admin/dispatch/route.ts',
     'src/app/api/admin/journal/route.ts',
   ]

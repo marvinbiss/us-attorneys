@@ -10,17 +10,17 @@ import { sendEmail } from '@/lib/notifications/email'
 import { sendReviewRequestSMS, type SMSData } from '@/lib/notifications/sms'
 import { logger } from '@/lib/logger'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
 
 // Review request email template
 function getReviewEmailTemplate(data: {
   clientName: string
-  artisanName: string
-  serviceName: string
+  attorneyName: string
+  specialtyName: string
   reviewUrl: string
 }) {
   return {
-    subject: `Comment s'est passé votre RDV avec ${data.artisanName}?`,
+    subject: `Comment s'est passé votre RDV avec ${data.attorneyName}?`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -38,10 +38,10 @@ function getReviewEmailTemplate(data: {
                 Bonjour <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Comment s'est passé votre rendez-vous avec <strong>${data.artisanName}</strong> pour <strong>${data.serviceName}</strong> ?
+                Comment s'est passé votre rendez-vous avec <strong>${data.attorneyName}</strong> pour <strong>${data.specialtyName}</strong> ?
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Votre avis aide d'autres personnes à trouver les meilleurs artisans et permet à ${data.artisanName} de s'améliorer.
+                Votre avis aide d'autres personnes à trouver les meilleurs artisans et permet à ${data.attorneyName} de s'améliorer.
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
@@ -67,7 +67,7 @@ function getReviewEmailTemplate(data: {
     text: `
 Bonjour ${data.clientName},
 
-Comment s'est passé votre rendez-vous avec ${data.artisanName} pour ${data.serviceName} ?
+Comment s'est passé votre rendez-vous avec ${data.attorneyName} pour ${data.specialtyName} ?
 
 Votre avis aide d'autres personnes à trouver les meilleurs artisans.
 
@@ -113,7 +113,7 @@ export async function GET(request: Request) {
         service_name,
         status,
         scheduled_date,
-        provider_id,
+        attorney_id,
         client:profiles!client_id(full_name, email, phone_e164)
       `)
       .in('status', ['confirmed', 'completed'])
@@ -156,11 +156,11 @@ export async function GET(request: Request) {
     logger.info(`[Review Cron] ${bookingsToRequest.length} need review requests`)
 
     // Fetch artisan details
-    const artisanIds = Array.from(new Set(bookingsToRequest.map((b) => b.provider_id).filter(Boolean)))
+    const attorneyIds = Array.from(new Set(bookingsToRequest.map((b) => b.attorney_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
-      .in('id', artisanIds)
+      .in('id', attorneyIds)
 
     const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
 
@@ -182,15 +182,15 @@ export async function GET(request: Request) {
 
       const results = await Promise.allSettled(
         batch.map(async (booking) => {
-          const artisan = artisanMap.get(booking.provider_id || '')
+          const artisan = artisanMap.get(booking.attorney_id || '')
           const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
-          const artisanName = artisan?.full_name || 'Artisan'
-          const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`
+          const attorneyName = artisan?.full_name || 'Artisan'
+          const reviewUrl = `${SITE_URL}/leave-review/${booking.id.slice(0, 8)}`
 
           const emailTemplate = getReviewEmailTemplate({
             clientName: client?.full_name || '',
-            artisanName,
-            serviceName: booking.service_name || 'Service',
+            attorneyName,
+            specialtyName: booking.service_name || 'Service',
             reviewUrl,
           })
 
@@ -204,8 +204,8 @@ export async function GET(request: Request) {
             const smsData: SMSData = {
               to: client.phone_e164,
               clientName: client?.full_name || '',
-              artisanName,
-              serviceName: booking.service_name || 'Service',
+              attorneyName,
+              specialtyName: booking.service_name || 'Service',
               date: '',
               time: '',
               bookingId: booking.id,

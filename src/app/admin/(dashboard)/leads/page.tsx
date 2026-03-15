@@ -46,7 +46,7 @@ interface LeadRow {
 interface AssignmentRow {
   id: string
   lead_id: string
-  provider_id: string
+  attorney_id: string
   status: string
   assigned_at: string
   viewed_at: string | null
@@ -57,7 +57,7 @@ type ViewTab = 'leads' | 'artisans'
 interface LeadsResponse {
   leads: LeadRow[]
   assignments: AssignmentRow[]
-  providerNames: Record<string, string>
+  attorneyNames: Record<string, string>
   stats: { totalLeads: number; pendingAssignments: number; dispatchedToday: number }
   pagination: { page: number; pageSize: number; total: number; totalPages: number }
 }
@@ -101,7 +101,7 @@ export default function AdminLeadsPage() {
 
   const leads = leadsData?.leads || []
   const assignments = leadsData?.assignments || []
-  const providerNames = leadsData?.providerNames || {}
+  const attorneyNames = leadsData?.attorneyNames || {}
   const stats = leadsData?.stats || { totalLeads: 0, pendingAssignments: 0, dispatchedToday: 0 }
   const pagination = leadsData?.pagination || { page: 1, pageSize: 20, total: 0, totalPages: 1 }
   const artisans = artisansData?.artisans || []
@@ -136,7 +136,7 @@ export default function AdminLeadsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Leads — Vue globale</h1>
             <p className="text-gray-500 mt-1">Gestion des leads et dispatch</p>
@@ -182,7 +182,7 @@ export default function AdminLeadsPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
           <div className="flex flex-wrap gap-4 items-end">
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Ville</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">City</label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -334,7 +334,7 @@ export default function AdminLeadsPage() {
                                       const st = STATUS_META[a.status] || STATUS_META.pending
                                       return (
                                         <span key={a.id} className={`px-1.5 py-0.5 rounded text-xs font-medium ${st.cls}`}>
-                                          {providerNames[a.provider_id]?.split(' ')[0] || a.provider_id.slice(0, 6)}: {st.label}
+                                          {attorneyNames[a.attorney_id]?.split(' ')[0] || a.attorney_id.slice(0, 6)}: {st.label}
                                         </span>
                                       )
                                     })}
@@ -381,7 +381,7 @@ export default function AdminLeadsPage() {
                       <tr className="border-b border-gray-100 bg-gray-50/50">
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métier</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Ville</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">City</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vérifié</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dernier lead</th>
                       </tr>

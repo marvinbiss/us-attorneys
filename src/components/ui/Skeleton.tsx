@@ -111,8 +111,8 @@ export function FormSkeleton() {
   )
 }
 
-// Provider card skeleton - matches ProviderCard layout
-export function ProviderCardSkeleton() {
+// Provider card skeleton - matches AttorneyCard layout
+export function AttorneyCardSkeleton() {
   return (
     <div
       className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm"
@@ -154,11 +154,11 @@ export function ProviderCardSkeleton() {
 }
 
 // Provider list skeleton
-export function ProviderListSkeleton({ count = 5 }: { count?: number }) {
+export function AttorneyListSkeleton({ count = 5 }: { count?: number }) {
   return (
     <div className="space-y-4" role="status" aria-label="Chargement des artisans">
       {Array.from({ length: count }).map((_, i) => (
-        <ProviderCardSkeleton key={i} />
+        <AttorneyCardSkeleton key={i} />
       ))}
       <span className="sr-only">Chargement en cours...</span>
     </div>

@@ -68,12 +68,12 @@ const majorites = [
 ]
 
 const services = [
-  { label: "Plombier", href: "/services/plombier", icon: Hammer },
-  { label: "Électricien", href: "/services/electricien", icon: Hammer },
-  { label: "Peintre", href: "/services/peintre", icon: Hammer },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
-  { label: "Rénovation intérieure", href: "/services/renovation-interieure", icon: Home },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Hammer },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Hammer },
+  { label: "Peintre", href: "/practice-areas/peintre", icon: Hammer },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Maçon", href: "/practice-areas/macon", icon: Building2 },
+  { label: "Rénovation intérieure", href: "/practice-areas/renovation-interieure", icon: Home },
 ]
 
 const faqItems = [
@@ -386,11 +386,11 @@ export default function TravauxCoproprietePage() {
             Guides complémentaires
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Link href="/guides/devis-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-purple-200 transition-all">
+            <Link href="/guides/quotes-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-purple-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors mb-1">{"Devis travaux"}</h3>
               <p className="text-sm text-gray-500">{"Comparez les devis pour les travaux de copropriété."}</p>
             </Link>
-            <Link href="/guides/garantie-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-purple-200 transition-all">
+            <Link href="/guides/guarantee-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-purple-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors mb-1">{"Garantie décennale"}</h3>
               <p className="text-sm text-gray-500">{"Protection essentielle pour les gros travaux."}</p>
             </Link>
@@ -436,14 +436,14 @@ export default function TravauxCoproprietePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/verifier-artisan"
+                href="/verify-attorney"
                 className="inline-flex items-center justify-center gap-2 bg-white text-purple-700 px-8 py-3.5 rounded-xl font-bold hover:bg-purple-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un artisan"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-purple-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-purple-400 transition-colors border border-purple-400"
               >
                 <FileCheck className="w-5 h-5" />

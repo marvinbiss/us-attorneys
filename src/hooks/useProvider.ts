@@ -24,7 +24,7 @@ export interface Provider {
   created_at: string
 }
 
-export interface ProviderStats {
+export interface AttorneyStats {
   totalBookings: number
   completedBookings: number
   pendingBookings: number
@@ -37,22 +37,22 @@ export interface ProviderStats {
 
 interface UseProviderReturn {
   provider: Provider | null
-  stats: ProviderStats | null
+  stats: AttorneyStats | null
   isLoading: boolean
   error: Error | null
   refetch: () => Promise<void>
-  updateProvider: (data: Partial<Provider>) => Promise<void>
+  updateAttorney: (data: Partial<Provider>) => Promise<void>
 }
 
 export function useProvider(): UseProviderReturn {
   const [provider, setProvider] = useState<Provider | null>(null)
-  const [stats, setStats] = useState<ProviderStats | null>(null)
+  const [stats, setStats] = useState<AttorneyStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   const supabase = createClient()
 
-  const fetchProvider = useCallback(async () => {
+  const fetchAttorney = useCallback(async () => {
     try {
       setIsLoading(true)
       setError(null)
@@ -65,35 +65,35 @@ export function useProvider(): UseProviderReturn {
       }
 
       // Fetch provider profile with explicit column list
-      const { data: providerData, error: providerError } = await supabase
-        .from('providers')
+      const { data: attorneyData, error: attorneyError } = await supabase
+        .from('attorneys')
         .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
         .eq('user_id', user.id)
         .single()
 
-      if (providerError) {
-        if (providerError.code === 'PGRST116') {
+      if (attorneyError) {
+        if (attorneyError.code === 'PGRST116') {
           // No provider found
           setProvider(null)
           setStats(null)
           return
         }
-        throw providerError
+        throw attorneyError
       }
 
-      setProvider(providerData)
+      setProvider(attorneyData)
 
       // Fetch provider stats in parallel to avoid N+1 queries
       const [{ data: bookingsData }, { data: reviewsData }] = await Promise.all([
         supabase
           .from('bookings')
           .select('id, status')
-          .eq('provider_id', providerData.id)
+          .eq('attorney_id', attorneyData.id)
           .limit(500),
         supabase
           .from('reviews')
           .select('rating')
-          .eq('artisan_id', user.id)
+          .eq('attorney_id', user.id)
           .limit(500),
       ])
 
@@ -125,12 +125,12 @@ export function useProvider(): UseProviderReturn {
     }
   }, [supabase])
 
-  const updateProvider = useCallback(async (data: Partial<Provider>) => {
+  const updateAttorney = useCallback(async (data: Partial<Provider>) => {
     if (!provider) throw new Error('No provider to update')
 
     try {
       const { error: updateError } = await supabase
-        .from('providers')
+        .from('attorneys')
         .update(data)
         .eq('id', provider.id)
 
@@ -143,16 +143,16 @@ export function useProvider(): UseProviderReturn {
   }, [provider, supabase])
 
   useEffect(() => {
-    fetchProvider()
-  }, [fetchProvider])
+    fetchAttorney()
+  }, [fetchAttorney])
 
   return {
     provider,
     stats,
     isLoading,
     error,
-    refetch: fetchProvider,
-    updateProvider,
+    refetch: fetchAttorney,
+    updateAttorney,
   }
 }
 

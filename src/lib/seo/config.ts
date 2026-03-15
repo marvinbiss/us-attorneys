@@ -1,4 +1,4 @@
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr').trim().replace(/\/+$/, '')
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com').trim().replace(/\/+$/, '')
 export const SITE_NAME = 'ServicesArtisans'
 export const PHONE_NUMBER = '06 51 85 89 30'
 export const PHONE_TEL = 'tel:+33651858930'
@@ -69,14 +69,14 @@ export const defaultSEOConfig = {
 }
 
 // SEO pour les pages de services
-export function getServiceSEO(serviceName: string, location?: string) {
+export function getServiceSEO(specialtyName: string, location?: string) {
   const title = location
-    ? `${serviceName} à ${location} — Annuaire & Devis Gratuit`
-    : `${serviceName} en France — Artisans référencés SIREN`
+    ? `${specialtyName} à ${location} — Annuaire & Devis Gratuit`
+    : `${specialtyName} en France — Artisans référencés SIREN`
 
   const description = location
-    ? `Trouvez un ${serviceName.toLowerCase()} à ${location} parmi des milliers de professionnels référencés. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
-    : `Annuaire des ${serviceName.toLowerCase()}s en France. Professionnels référencés dans 101 départements. Recherche gratuite, devis sans engagement.`
+    ? `Trouvez un ${specialtyName.toLowerCase()} à ${location} parmi des milliers de professionnels référencés. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
+    : `Annuaire des ${specialtyName.toLowerCase()}s en France. Professionnels référencés dans 101 départements. Recherche gratuite, devis sans engagement.`
 
   return {
     title,
@@ -114,11 +114,11 @@ export function getLocationSEO(locationType: 'ville' | 'region' | 'departement',
 }
 
 // SEO pour les artisans
-export function getArtisanSEO(artisanName: string, service: string, location: string, rating?: number) {
-  const title = `${artisanName} — ${service} à ${location}`
+export function getAttorneySEO(attorneyName: string, service: string, location: string, rating?: number) {
+  const title = `${attorneyName} — ${service} à ${location}`
   const description = rating
-    ? `${artisanName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise référencée par SIREN. Consultez le profil et demandez un devis gratuit.`
-    : `${artisanName}, ${service.toLowerCase()} à ${location}. Entreprise référencée par SIREN. Coordonnées, profil et devis gratuit.`
+    ? `${attorneyName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise référencée par SIREN. Consultez le profil et demandez un devis gratuit.`
+    : `${attorneyName}, ${service.toLowerCase()} à ${location}. Entreprise référencée par SIREN. Coordonnées, profil et devis gratuit.`
 
   return {
     title,

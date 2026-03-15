@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
 
     let artisansQuery = supabase
-      .from('providers')
+      .from('attorneys')
       .select('id, stable_id, name, slug, specialty, address_city, is_verified')
       .eq('is_active', true)
       .order('name', { ascending: true })
@@ -93,7 +93,7 @@ export async function GET(request: Request) {
       leadsCreated: leadsCreated || 0,
       leadsAssigned: leadsAssigned || 0,
       artisans: artisans || [],
-      artisanCount: artisans?.length || 0,
+      attorneyCount: artisans?.length || 0,
       filters: { city, service },
     })
   } catch (error) {
@@ -102,7 +102,7 @@ export async function GET(request: Request) {
       leadsCreated: 0,
       leadsAssigned: 0,
       artisans: [],
-      artisanCount: 0,
+      attorneyCount: 0,
       filters: { city: null, service: null },
     })
   }

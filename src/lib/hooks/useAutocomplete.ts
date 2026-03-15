@@ -266,8 +266,8 @@ export function usePostalCodeLookup() {
       setError(null)
 
       try {
-        const { getCommunesByCodePostal } = await import('../api/adresse')
-        const results = await getCommunesByCodePostal(postalCode)
+        const { getLocationsByCodePostal } = await import('../api/adresse')
+        const results = await getLocationsByCodePostal(postalCode)
         setCities(results)
       } catch (err) {
         setError(err as Error)

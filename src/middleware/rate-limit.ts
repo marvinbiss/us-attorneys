@@ -25,11 +25,10 @@ const RATE_LIMITS: Record<string, RateLimitConfig> = {
   '/api/search': { limit: 30, windowSeconds: 60 },
   // Quote requests - strict
   '/api/quotes': { limit: 5, windowSeconds: 60 },
-  '/api/devis': { limit: 5, windowSeconds: 60 },
   // Contact form - very strict
   '/api/contact': { limit: 3, windowSeconds: 300 },
   // Bulk operations - very strict
-  '/api/providers/bulk': { limit: 10, windowSeconds: 60 },
+  '/api/attorneys/bulk': { limit: 10, windowSeconds: 60 },
   '/api/reviews/bulk': { limit: 10, windowSeconds: 60 },
   // Admin routes - moderate
   '/api/admin/': { limit: 60, windowSeconds: 60 },

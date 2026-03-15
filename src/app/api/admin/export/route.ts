@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     switch (type) {
       case 'providers': {
         const { data: providers } = await supabase
-          .from('providers')
+          .from('attorneys')
           .select('id, slug, name, address_city, phone, email, is_active, created_at')
           .order('created_at', { ascending: false })
         data = providers || []
@@ -50,11 +50,11 @@ export async function GET(request: NextRequest) {
         break
       }
       case 'quotes': {
-        // quotes table columns: id, request_id, provider_id, amount, description, valid_until, status
+        // quotes table columns: id, request_id, attorney_id, amount, description, valid_until, status
         // client_name and client_email do not exist on quotes; join with devis_requests for client info if needed
         const { data: quotes } = await supabase
           .from('quotes')
-          .select('id, request_id, provider_id, amount, description, valid_until, status')
+          .select('id, request_id, attorney_id, amount, description, valid_until, status')
           .order('status', { ascending: true })
         data = quotes || []
         filename = 'quotes'
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
       case 'reviews': {
         const { data: reviews } = await supabase
           .from('reviews')
-          .select('id, artisan_id, client_name, rating, comment, status, created_at')
+          .select('id, attorney_id, client_name, rating, comment, status, created_at')
           .order('created_at', { ascending: false })
         data = reviews || []
         filename = 'reviews'

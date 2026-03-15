@@ -54,7 +54,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
     (trigger: string) => {
       setIsOpen(true)
       engagement.dismissGreeting()
-      trackEvent('chat_opened' as any, {
+      trackEvent('chat_opened', {
         trigger,
         metier: context.metierSlug,
         ville: context.ville,
@@ -249,7 +249,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
               <p className="text-[11px] text-gray-400">
                 Propulsé par{' '}
                 <a
-                  href="https://servicesartisans.fr"
+                  href="https://us-attorneys.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-500 transition-colors"
@@ -259,7 +259,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 {' · '}Estimation non contractuelle
                 {' · '}
                 <a
-                  href="/confidentialite"
+                  href="/privacy"
                   target="_blank"
                   className="hover:text-gray-500"
                 >

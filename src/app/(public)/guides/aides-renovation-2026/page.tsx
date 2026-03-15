@@ -483,14 +483,14 @@ export default function AidesRenovation2026Page() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/renovation-energetique"
+                href="/practice-areas/renovation-energetique"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <ArrowRight className="w-5 h-5" />
                 Trouver un artisan RGE
               </Link>
               <Link
-                href="/outils/calculateur-prix"
+                href="/tools/calculator-prix"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <Calculator className="w-5 h-5" />

@@ -33,9 +33,9 @@ export interface ProspectionContact {
   city: string | null
   department: string | null
   region: string | null
-  commune_code: string | null
+  location_code: string | null
   population: number | null
-  artisan_id: string | null
+  attorney_id: string | null
   source: ContactSource
   source_file: string | null
   source_row: number | null
@@ -59,9 +59,9 @@ export interface ProspectionContactInsert {
   city?: string | null
   department?: string | null
   region?: string | null
-  commune_code?: string | null
+  location_code?: string | null
   population?: number | null
-  artisan_id?: string | null
+  attorney_id?: string | null
   source?: ContactSource
   source_file?: string | null
   source_row?: number | null

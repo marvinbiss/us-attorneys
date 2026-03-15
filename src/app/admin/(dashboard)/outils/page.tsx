@@ -14,11 +14,11 @@ import {
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 export default function AdminToolsPage() {
-  const [providerId, setProviderId] = useState('')
+  const [attorneyId, setProviderId] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const [providerInfo, setProviderInfo] = useState<{
+  const [attorneyInfo, setProviderInfo] = useState<{
     id: string
     name: string
     is_active: boolean
@@ -32,13 +32,13 @@ export default function AdminToolsPage() {
   const [disableModal, setDisableModal] = useState(false)
 
   const lookupProvider = async () => {
-    if (!providerId.trim()) return
+    if (!attorneyId.trim()) return
     setLoading(true)
     setError(null)
     setProviderInfo(null)
 
     try {
-      const res = await fetch(`/api/admin/providers/${providerId.trim()}`)
+      const res = await fetch(`/api/admin/providers/${attorneyId.trim()}`)
       if (res.ok) {
         const data = await res.json()
         setProviderInfo({
@@ -58,13 +58,13 @@ export default function AdminToolsPage() {
   }
 
   const toggleProvider = async (action: 'enable' | 'disable') => {
-    if (!providerInfo) return
+    if (!attorneyInfo) return
     setLoading(true)
     setError(null)
     setSuccess(null)
 
     try {
-      const res = await fetch(`/api/admin/providers/${providerInfo.id}`, {
+      const res = await fetch(`/api/admin/providers/${attorneyInfo.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -145,7 +145,7 @@ export default function AdminToolsPage() {
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <input
               type="text"
-              value={providerId}
+              value={attorneyId}
               onChange={(e) => setProviderId(e.target.value)}
               placeholder="UUID de l'artisan"
               aria-label="UUID de l'artisan"
@@ -161,28 +161,28 @@ export default function AdminToolsPage() {
             </button>
           </div>
 
-          {providerInfo && (
+          {attorneyInfo && (
             <div className="border border-gray-200 rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <p className="font-medium text-gray-900">{providerInfo.name}</p>
-                  <p className="text-xs text-gray-400">{providerInfo.id}</p>
+                  <p className="font-medium text-gray-900">{attorneyInfo.name}</p>
+                  <p className="text-xs text-gray-400">{attorneyInfo.id}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    providerInfo.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    attorneyInfo.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                   }`}>
-                    {providerInfo.is_active ? 'Actif' : 'Inactif'}
+                    {attorneyInfo.is_active ? 'Actif' : 'Inactif'}
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    providerInfo.is_verified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                    attorneyInfo.is_verified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
                   }`}>
-                    {providerInfo.is_verified ? 'Référencé' : 'Non référencé'}
+                    {attorneyInfo.is_verified ? 'Référencé' : 'Non référencé'}
                   </span>
                 </div>
               </div>
               <div className="flex gap-3">
-                {providerInfo.is_active ? (
+                {attorneyInfo.is_active ? (
                   <button
                     onClick={() => setDisableModal(true)}
                     disabled={loading}
@@ -237,13 +237,13 @@ export default function AdminToolsPage() {
         </div>
       </div>
 
-      {providerInfo && (
+      {attorneyInfo && (
         <ConfirmationModal
           isOpen={disableModal}
           onClose={() => setDisableModal(false)}
           onConfirm={() => { setDisableModal(false); toggleProvider('disable') }}
           title="Désactiver l'artisan"
-          message={`Êtes-vous sûr de vouloir désactiver l'artisan « ${providerInfo.name} » ?`}
+          message={`Êtes-vous sûr de vouloir désactiver l'artisan « ${attorneyInfo.name} » ?`}
           confirmText="Désactiver"
           variant="warning"
         />

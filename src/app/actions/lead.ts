@@ -8,8 +8,8 @@ import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
 const leadSchema = z.object({
-  providerId: z.string().min(1).optional(),
-  serviceName: z.string().min(1),
+  attorneyId: z.string().min(1).optional(),
+  specialtyName: z.string().min(1),
   name: z.string().min(1, 'Votre nom est requis'),
   email: z.string().email('Email invalide'),
   phone: z.string().regex(
@@ -32,8 +32,8 @@ export async function submitLead(
   formData: FormData
 ): Promise<LeadFormState> {
   const raw = {
-    providerId: formData.get('providerId'),
-    serviceName: formData.get('serviceName'),
+    attorneyId: formData.get('attorneyId'),
+    specialtyName: formData.get('specialtyName'),
     name: formData.get('name'),
     email: formData.get('email'),
     phone: String(formData.get('phone') || '').replace(/\s/g, ''),
@@ -66,7 +66,7 @@ export async function submitLead(
 
     const { data: inserted, error } = await supabase.from('devis_requests').insert({
       client_id: user?.id ?? null,
-      service_name: data.serviceName,
+      service_name: data.specialtyName,
       postal_code: data.postalCode || '',
       city: data.city || null,
       description: data.description,
@@ -86,35 +86,35 @@ export async function submitLead(
     logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch(() => {})
 
     // Determine whether to use direct dispatch or algorithmic dispatch.
-    // If a providerId was given, verify the provider exists and is active.
+    // If a attorneyId was given, verify the provider exists and is active.
     // If the provider is inactive (e.g. deactivated between page load and submission),
     // fall back to algorithmic dispatch instead of returning an error.
     let useDirectDispatch = false
-    if (data.providerId) {
+    if (data.attorneyId) {
       const adminClient = createAdminClient()
 
       const { data: provider } = await adminClient
-        .from('providers')
+        .from('attorneys')
         .select('id, is_active')
-        .eq('id', data.providerId)
+        .eq('id', data.attorneyId)
         .single()
 
       if (provider && provider.is_active) {
         useDirectDispatch = true
         const { error: assignError } = await adminClient.from('lead_assignments').insert({
           lead_id: inserted.id,
-          provider_id: data.providerId,
+          attorney_id: data.attorneyId,
           source_table: 'devis_requests',
         })
         if (!assignError) {
-          logLeadEvent(inserted.id, 'dispatched', { providerId: data.providerId }).catch(() => {})
+          logLeadEvent(inserted.id, 'dispatched', { attorneyId: data.attorneyId }).catch(() => {})
         }
       }
     }
 
     if (!useDirectDispatch) {
       dispatchLead(inserted.id, {
-        serviceName: data.serviceName,
+        specialtyName: data.specialtyName,
         city: data.city,
         postalCode: data.postalCode,
         urgency: data.urgency,

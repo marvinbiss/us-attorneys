@@ -94,12 +94,12 @@ const materiaux = [
 ]
 
 const services = [
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
-  { label: "Charpentier", href: "/services/charpentier", icon: Hammer },
-  { label: "Architecte", href: "/services/architecte", icon: Ruler },
-  { label: "Électricien", href: "/services/electricien", icon: Hammer },
-  { label: "Plombier", href: "/services/plombier", icon: Hammer },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
+  { label: "Maçon", href: "/practice-areas/macon", icon: Building2 },
+  { label: "Charpentier", href: "/practice-areas/charpentier", icon: Hammer },
+  { label: "Architecte", href: "/practice-areas/architecte", icon: Ruler },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Hammer },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Hammer },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
 ]
 
 const faqItems = [
@@ -439,7 +439,7 @@ export default function ExtensionMaisonPage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Déclaration préalable de travaux"}</h3>
               <p className="text-sm text-gray-500">{"Formulaire, délai et cas d'application."}</p>
             </Link>
-            <Link href="/guides/garantie-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/guarantee-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Garantie décennale"}</h3>
               <p className="text-sm text-gray-500">{"Vérifiez l'assurance décennale de vos artisans."}</p>
             </Link>
@@ -481,14 +481,14 @@ export default function ExtensionMaisonPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/macon"
+                href="/practice-areas/macon"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un maçon"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

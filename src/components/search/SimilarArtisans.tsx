@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Sparkles, ChevronRight, Loader2 } from 'lucide-react'
-import { cn, getArtisanUrl } from '@/lib/utils'
+import { cn, getAttorneyUrl } from '@/lib/utils'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface SimilarArtisan {
@@ -26,16 +26,16 @@ interface SimilarArtisan {
 }
 
 interface SimilarArtisansProps {
-  artisanId: string
-  serviceSlug: string
+  attorneyId: string
+  specialtySlug: string
   locationSlug: string
   limit?: number
   className?: string
 }
 
 export function SimilarArtisans({
-  artisanId,
-  serviceSlug,
+  attorneyId,
+  specialtySlug,
   locationSlug,
   limit = 4,
   className,
@@ -48,7 +48,7 @@ export function SimilarArtisans({
       setIsLoading(true)
       try {
         const response = await fetch(
-          `/api/artisans/${artisanId}/similar?limit=${limit}`
+          `/api/attorneys/${attorneyId}/similar?limit=${limit}`
         )
         if (response.ok) {
           const data = await response.json()
@@ -62,7 +62,7 @@ export function SimilarArtisans({
     }
 
     fetchSimilar()
-  }, [artisanId, limit])
+  }, [attorneyId, limit])
 
   if (isLoading) {
     return (
@@ -94,7 +94,7 @@ export function SimilarArtisans({
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         {artisans.map((artisan) => {
-          const providerUrl = getArtisanUrl({ stable_id: artisan.stable_id, slug: artisan.slug, specialty: artisan.specialty, city: artisan.city })
+          const providerUrl = getAttorneyUrl({ stable_id: artisan.stable_id, slug: artisan.slug, specialty: artisan.specialty, city: artisan.city })
 
           return (
             <Link
@@ -158,7 +158,7 @@ export function SimilarArtisans({
       {/* View more link */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <Link
-          href={`/services/${serviceSlug}/${locationSlug}`}
+          href={`/practice-areas/${specialtySlug}/${locationSlug}`}
           className="flex items-center justify-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700"
         >
           Voir tous les artisans

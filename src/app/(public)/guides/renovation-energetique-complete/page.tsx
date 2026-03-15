@@ -283,12 +283,12 @@ const roiParPoste = [
 ]
 
 const services = [
-  { label: "Isolation", href: "/services/isolation", icon: Home },
-  { label: "Chauffagiste", href: "/services/chauffagiste", icon: Thermometer },
-  { label: "Plombier", href: "/services/plombier", icon: Wrench },
-  { label: "Menuisier", href: "/services/menuisier", icon: Hammer },
-  { label: "Électricien", href: "/services/electricien", icon: Zap },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
+  { label: "Isolation", href: "/practice-areas/isolation", icon: Home },
+  { label: "Chauffagiste", href: "/practice-areas/chauffagiste", icon: Thermometer },
+  { label: "Plombier", href: "/practice-areas/plombier", icon: Wrench },
+  { label: "Menuisier", href: "/practice-areas/menuisier", icon: Hammer },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Zap },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
 ]
 
 const faqItems = [
@@ -714,14 +714,14 @@ export default function RenovationEnergetiqueCompletePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/recherche"
+                href="/search"
                 className="inline-flex items-center justify-center gap-2 bg-white text-green-700 px-8 py-3.5 rounded-xl font-bold hover:bg-green-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 Trouver un artisan RGE
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-green-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-green-400 transition-colors border border-green-400"
               >
                 <FileCheck className="w-5 h-5" />

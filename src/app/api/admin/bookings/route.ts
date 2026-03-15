@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       .from('bookings')
       .select(`
         *,
-        provider:providers!provider_id (
+        provider:providers!attorney_id (
           id,
           name,
           email

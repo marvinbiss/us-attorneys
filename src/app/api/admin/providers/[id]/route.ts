@@ -12,7 +12,7 @@ import { isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-const updateProviderSchema = z.object({
+const updateAttorneySchema = z.object({
   name: z.string().max(200).optional(),
   full_name: z.string().max(200).optional(),
   phone: z.string().max(20).optional().nullable(),
@@ -114,8 +114,8 @@ export async function GET(
     const authResult = await requirePermission('providers', 'read')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    const providerId = params.id
-    if (!isValidUuid(providerId)) {
+    const attorneyId = params.id
+    if (!isValidUuid(attorneyId)) {
       return NextResponse.json(
         { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
@@ -125,7 +125,7 @@ export async function GET(
     const supabase = createAdminClient()
 
     const { data: provider, error } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id, user_id, stable_id, name, slug, email, phone, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, rating_average, review_count, created_at, updated_at')
       .eq('id', params.id)
       .single()
@@ -180,13 +180,13 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const providerId = params.id
+  const attorneyId = params.id
 
   try {
     const authResult = await requirePermission('providers', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    if (!isValidUuid(providerId)) {
+    if (!isValidUuid(attorneyId)) {
       return NextResponse.json(
         { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
@@ -203,7 +203,7 @@ export async function PATCH(
       return NextResponse.json({ success: false, error: { message: 'JSON invalide dans le body' } }, { status: 400 })
     }
 
-    const validationResult = updateProviderSchema.safeParse(body)
+    const validationResult = updateAttorneySchema.safeParse(body)
     if (!validationResult.success) {
       return NextResponse.json(
         { success: false, error: { message: 'Erreur de validation', details: validationResult.error.flatten() } },
@@ -218,9 +218,9 @@ export async function PATCH(
     )
 
     const { data, error } = await supabase
-      .from('providers')
+      .from('attorneys')
       .update(updateData)
-      .eq('id', providerId)
+      .eq('id', attorneyId)
       .select()
       .single()
 
@@ -231,7 +231,7 @@ export async function PATCH(
 
     // Audit log
     try {
-      await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
+      await logAdminAction(authResult.admin.id, 'provider.update', 'provider', attorneyId, updateData)
     } catch (auditError) {
       logger.warn('Audit log failed')
     }
@@ -252,13 +252,13 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const providerId = params.id
+  const attorneyId = params.id
 
   try {
     const authResult = await requirePermission('providers', 'delete')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    if (!isValidUuid(providerId)) {
+    if (!isValidUuid(attorneyId)) {
       return NextResponse.json(
         { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
@@ -268,9 +268,9 @@ export async function DELETE(
     const supabase = createAdminClient()
 
     const { error } = await supabase
-      .from('providers')
+      .from('attorneys')
       .update({ is_active: false, updated_at: new Date().toISOString() })
-      .eq('id', providerId)
+      .eq('id', attorneyId)
 
     if (error) {
       logger.error('Database delete failed', error)
@@ -278,7 +278,7 @@ export async function DELETE(
     }
 
     try {
-      await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
+      await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', attorneyId)
     } catch (auditError) {
       logger.warn('Audit log failed')
     }

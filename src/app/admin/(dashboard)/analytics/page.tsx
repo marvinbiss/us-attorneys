@@ -12,7 +12,7 @@ import {
 
 // ─── Types ──────────────────────────────────────────────────────
 
-interface ProviderStats {
+interface AttorneyStats {
   id: string
   name: string
   city: string
@@ -30,9 +30,9 @@ interface RecentEvent {
   type: string
   source: string
   date: string
-  providerName: string
+  attorneyName: string
   providerCity: string
-  providerSlug: string
+  attorneySlug: string
   providerStableId: string
   providerSpecialty: string
   url: string
@@ -50,7 +50,7 @@ interface AnalyticsData {
   totals: { views: number; reveals: number; clicks: number }
   trends: { views: number | null; reveals: number | null; clicks: number | null }
   chartData: ChartPoint[]
-  providers: ProviderStats[]
+  providers: AttorneyStats[]
   recentEvents: RecentEvent[]
   eventTotal: number
   feedPage: number
@@ -127,7 +127,7 @@ function buildArtisanUrl(p: { slug: string; stableId: string; specialty: string;
   const specSlug = p.specialty?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'artisan'
   const citySlug = p.city?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'france'
   const id = p.slug || p.stableId
-  return `/services/${specSlug}/${citySlug}/${id}`
+  return `/practice-areas/${specSlug}/${citySlug}/${id}`
 }
 
 function formatRelativeDate(iso: string): string {
@@ -197,14 +197,14 @@ export default function AnalyticsPage() {
   const [tab, setTab] = useState<TabType>('table')
 
   // Pagination state
-  const [providerPage, setProviderPage] = useState(1)
+  const [providerPage, setAttorneyPage] = useState(1)
   const [feedPage, setFeedPage] = useState(1)
   const [pagesPage, setPagesPage] = useState(1)
   const [journeysPage, setJourneysPage] = useState(1)
 
   // Reset all pages when range changes
   useEffect(() => {
-    setProviderPage(1)
+    setAttorneyPage(1)
     setFeedPage(1)
     setPagesPage(1)
     setJourneysPage(1)
@@ -212,18 +212,18 @@ export default function AnalyticsPage() {
 
   // Reset provider page when search changes
   useEffect(() => {
-    setProviderPage(1)
+    setAttorneyPage(1)
   }, [search])
 
   // Artisan analytics (existing)
-  const artisanUrl = useMemo(() => {
+  const attorneyUrl = useMemo(() => {
     const params = new URLSearchParams({ range })
     if (search.length >= 2) params.set('search', search)
     params.set('feedPage', String(feedPage))
     return `/api/admin/analytics?${params}`
   }, [range, search, feedPage])
 
-  const { data, isLoading, error } = useAdminFetch<AnalyticsData>(artisanUrl)
+  const { data, isLoading, error } = useAdminFetch<AnalyticsData>(attorneyUrl)
 
   // Visitor analytics (lazy — only fetched when audience/parcours tab is active)
   const visitorUrl = useMemo(() => {
@@ -373,7 +373,7 @@ export default function AnalyticsPage() {
             <ArtisanTable
               providers={data.providers}
               page={providerPage}
-              onPageChange={setProviderPage}
+              onPageChange={setAttorneyPage}
             />
           )}
 
@@ -698,7 +698,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
 // ─── Artisan Table ──────────────────────────────────────────────
 
 function ArtisanTable({ providers, page, onPageChange }: {
-  providers: ProviderStats[]
+  providers: AttorneyStats[]
   page: number
   onPageChange: (page: number) => void
 }) {
@@ -734,7 +734,7 @@ function ArtisanTable({ providers, page, onPageChange }: {
           <tbody className="divide-y divide-gray-50">
             {slicedProviders.map((p, i) => {
               const convRate = p.views > 0 ? Math.round((p.clicks / p.views) * 100) : 0
-              const artisanUrl = buildArtisanUrl(p)
+              const attorneyUrl = buildArtisanUrl(p)
               const total = p.views + p.reveals + p.clicks
               const rowIndex = (page - 1) * PER_PAGE + i
 
@@ -746,9 +746,9 @@ function ArtisanTable({ providers, page, onPageChange }: {
                         {rowIndex + 1}
                       </div>
                       <div className="min-w-0">
-                        {artisanUrl ? (
+                        {attorneyUrl ? (
                           <Link
-                            href={artisanUrl}
+                            href={attorneyUrl}
                             target="_blank"
                             className="font-semibold text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1.5 group/link"
                           >
@@ -828,8 +828,8 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
           const config = EVENT_CONFIG[event.type as keyof typeof EVENT_CONFIG]
           if (!config) return null
           const Icon = config.icon
-          const artisanUrl = buildArtisanUrl({
-            slug: event.providerSlug,
+          const attorneyUrl = buildArtisanUrl({
+            slug: event.attorneySlug,
             stableId: event.providerStableId,
             specialty: event.providerSpecialty,
             city: event.providerCity,
@@ -844,12 +844,12 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
                 <p className="text-sm text-gray-700">
                   <span className="text-gray-400">Un visiteur</span>{' '}
                   <span className={`font-medium ${config.color}`}>{config.label}</span>{' '}
-                  {artisanUrl ? (
-                    <Link href={artisanUrl} target="_blank" className="font-semibold text-gray-900 hover:text-blue-600 transition-colors">
-                      {event.providerName}
+                  {attorneyUrl ? (
+                    <Link href={attorneyUrl} target="_blank" className="font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                      {event.attorneyName}
                     </Link>
                   ) : (
-                    <span className="font-semibold text-gray-900">{event.providerName}</span>
+                    <span className="font-semibold text-gray-900">{event.attorneyName}</span>
                   )}
                 </p>
                 <div className="flex items-center gap-3 mt-1">

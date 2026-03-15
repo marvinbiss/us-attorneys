@@ -23,7 +23,7 @@ export default function SetupPasswordPage() {
           <h1 className="text-xl font-bold text-gray-900 mb-2">Lien invalide</h1>
           <p className="text-gray-600">
             Ce lien ne contient pas les informations nécessaires.
-            Contactez-nous à <a href="mailto:support@servicesartisans.fr" className="text-amber-600 underline">support@servicesartisans.fr</a>.
+            Contactez-nous à <a href="mailto:support@us-attorneys.com" className="text-amber-600 underline">support@us-attorneys.com</a>.
           </p>
         </div>
       </div>
@@ -43,7 +43,7 @@ export default function SetupPasswordPage() {
 
       if (verifyError) {
         setError(verifyError.message === 'Token has expired or is invalid'
-          ? 'Ce lien a expiré. Contactez support@servicesartisans.fr pour recevoir un nouveau lien.'
+          ? 'Ce lien a expiré. Contactez support@us-attorneys.com pour recevoir un nouveau lien.'
           : `Erreur : ${verifyError.message}`)
         setLoading(false)
         return

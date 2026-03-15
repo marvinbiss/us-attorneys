@@ -29,9 +29,9 @@ interface TimeSlot {
 }
 
 interface BookingCalendarProps {
-  artisanId: string
-  artisanName: string
-  serviceName?: string
+  attorneyId: string
+  attorneyName: string
+  specialtyName?: string
   serviceDuration?: number // minutes
   servicePrice?: number
   onSlotSelect?: (date: Date, time: string) => void
@@ -68,9 +68,9 @@ function generateMockSlots(date: Date): TimeSlot[] {
 }
 
 export function BookingCalendar({
-  artisanId: _artisanId,
-  artisanName,
-  serviceName = 'Intervention',
+  attorneyId: _attorneyId,
+  attorneyName,
+  specialtyName = 'Intervention',
   serviceDuration = 60,
   servicePrice,
   onSlotSelect,
@@ -157,7 +157,7 @@ export function BookingCalendar({
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-5">
         <h3 className="text-lg font-bold mb-1">Réserver un créneau</h3>
         <p className="text-blue-100 text-sm">
-          {serviceName} • {serviceDuration} min
+          {specialtyName} • {serviceDuration} min
           {servicePrice && ` • ${servicePrice}€`}
         </p>
       </div>
@@ -423,7 +423,7 @@ export function BookingCalendar({
               Réservation confirmée !
             </h3>
             <p className="text-slate-600 mb-4">
-              Votre rendez-vous avec {artisanName}
+              Votre rendez-vous avec {attorneyName}
             </p>
             <div className="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg mb-6">
               <CalendarIcon className="w-5 h-5 text-slate-500" />

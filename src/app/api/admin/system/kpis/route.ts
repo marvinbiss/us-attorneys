@@ -41,8 +41,8 @@ export async function GET() {
       adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'viewed'),
       adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'quoted'),
       adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'declined'),
-      adminClient.from('providers').select('id', { count: 'exact', head: true }),
-      adminClient.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      adminClient.from('attorneys').select('id', { count: 'exact', head: true }),
+      adminClient.from('attorneys').select('id', { count: 'exact', head: true }).eq('is_active', true),
     ])
 
     const totalLeads = totalLeadsRes.count
@@ -74,7 +74,7 @@ export async function GET() {
       provWithLeadsRes, allAssignmentsRes, expiredCountRes, eventTypeCountsRes,
       recentLeadsRes, allLeadServicesRes, allLeadCitiesRes,
     ] = await Promise.all([
-      adminClient.from('lead_assignments').select('provider_id'),
+      adminClient.from('lead_assignments').select('attorney_id'),
       adminClient.from('lead_assignments').select('status, assigned_at, viewed_at'),
       adminClient.from('lead_events').select('id', { count: 'exact', head: true }).eq('event_type', 'expired'),
       adminClient.from('lead_events').select('event_type'),
@@ -84,7 +84,7 @@ export async function GET() {
     ])
 
     // --- Providers with leads ---
-    const uniqueProvWithLeads = new Set((provWithLeadsRes.data || []).map((p) => p.provider_id)).size
+    const uniqueProvWithLeads = new Set((provWithLeadsRes.data || []).map((p) => p.attorney_id)).size
 
     // --- Quality ---
     const allA = allAssignmentsRes.data || []
@@ -131,14 +131,14 @@ export async function GET() {
     }))
 
     // --- Top services ---
-    const serviceCounts: Record<string, number> = {}
+    const specialtyCounts: Record<string, number> = {}
     for (const l of allLeadServicesRes.data || []) {
       if (l.service_name) {
-        serviceCounts[l.service_name] = (serviceCounts[l.service_name] || 0) + 1
+        specialtyCounts[l.service_name] = (specialtyCounts[l.service_name] || 0) + 1
       }
     }
 
-    const topServices = Object.entries(serviceCounts)
+    const topServices = Object.entries(specialtyCounts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 10)
       .map(([service, count]) => ({ service, count }))

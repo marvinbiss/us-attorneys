@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
 
     // Build query with filters
     let query = supabase
-      .from('providers')
+      .from('attorneys')
       .select(SELECT_COLUMNS, { count: 'exact' })
 
     // Apply filters using in() for reliable boolean comparison

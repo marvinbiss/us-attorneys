@@ -38,6 +38,19 @@ export type BookingEvent =
   | 'artisan_website_click'
   | 'blog_cta_click'
   | 'header_devis_click'
+  | 'search_query'
+  | 'service_click'
+  | 'city_click'
+  | 'quote_request_submitted'
+  | 'callback_requested'
+  | 'cta_click'
+  | 'sticky_cta_click'
+  | 'exit_intent_shown'
+  | 'exit_intent_click'
+  | 'generate_lead'
+  | 'purchase'
+  | 'sign_up'
+  | 'contact'
 
 export interface TrackingData {
   event: BookingEvent
@@ -87,9 +100,15 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
   // Send to analytics endpoint
   sendToAnalytics(data)
 
-  // Also send to Google Analytics if available
-  if (typeof window.gtag === 'function') {
-    const gtagParams: Record<string, unknown> = { ...data.properties }
+  // Check consent before sending to GA
+  const prefs = typeof window !== 'undefined' ? localStorage.getItem('cookie_preferences') : null
+  const hasConsent = prefs ? JSON.parse(prefs)?.analytics : false
+  if (hasConsent && typeof window !== 'undefined' && window.gtag) {
+    const gaId = process.env.NEXT_PUBLIC_GA_ID || ''
+    const gtagParams: Record<string, unknown> = {
+      ...data.properties,
+      ...(gaId ? { send_to: gaId } : {}),
+    }
     // Forward conversion value to GA4
     if (properties?.value) {
       gtagParams.value = properties.value
@@ -132,23 +151,46 @@ async function sendToAnalytics(data: TrackingData) {
   }
 }
 
+/**
+ * Track a conversion event with monetary value for GA4
+ * These events should be marked as conversions in GA4 admin
+ */
+export function trackConversion(
+  event: 'generate_lead' | 'purchase' | 'sign_up' | 'contact',
+  value: number,
+  currency: string = 'EUR',
+  properties?: Record<string, unknown>
+) {
+  // Always send conversions to backend
+  trackEvent(event, { ...properties, value, currency })
+
+  // Send to GA4 with proper ecommerce format
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', event, {
+      value,
+      currency,
+      ...properties,
+    })
+  }
+}
+
 // Booking funnel tracking
 export const BookingFunnel = {
   // Step 1: User views artisan profile
-  viewProfile: (artisanId: string, artisanName: string, source?: string) => {
+  viewProfile: (attorneyId: string, attorneyName: string, source?: string) => {
     trackEvent('artisan_profile_view', {
-      artisanId,
-      artisanName,
+      attorneyId,
+      attorneyName,
       source,
       funnelStep: 1,
     })
   },
 
   // Step 1b: User reveals phone number
-  revealPhone: (artisanId: string, artisanName: string, source: string) => {
+  revealPhone: (attorneyId: string, attorneyName: string, source: string) => {
     trackEvent('phone_reveal', {
-      artisanId,
-      artisanName,
+      attorneyId,
+      attorneyName,
       source,
       value: 5,
       currency: 'EUR',
@@ -156,10 +198,10 @@ export const BookingFunnel = {
   },
 
   // Step 1c: User clicks to call
-  clickPhone: (artisanId: string, artisanName: string, source: string) => {
+  clickPhone: (attorneyId: string, attorneyName: string, source: string) => {
     trackEvent('phone_click', {
-      artisanId,
-      artisanName,
+      attorneyId,
+      attorneyName,
       source,
       value: 15,
       currency: 'EUR',
@@ -167,17 +209,17 @@ export const BookingFunnel = {
   },
 
   // Step 2: User opens calendar
-  openCalendar: (artisanId: string) => {
+  openCalendar: (attorneyId: string) => {
     trackEvent('calendar_opened', {
-      artisanId,
+      attorneyId,
       funnelStep: 2,
     })
   },
 
   // Step 3: User selects a date
-  selectDate: (artisanId: string, date: string) => {
+  selectDate: (attorneyId: string, date: string) => {
     trackEvent('date_selected', {
-      artisanId,
+      attorneyId,
       date,
       dayOfWeek: new Date(date).getDay(),
       funnelStep: 3,
@@ -185,9 +227,9 @@ export const BookingFunnel = {
   },
 
   // Step 4: User selects a time slot
-  selectSlot: (artisanId: string, date: string, time: string, slotId: string) => {
+  selectSlot: (attorneyId: string, date: string, time: string, slotId: string) => {
     trackEvent('slot_selected', {
-      artisanId,
+      attorneyId,
       date,
       time,
       slotId,
@@ -196,27 +238,27 @@ export const BookingFunnel = {
   },
 
   // Step 5: User starts filling form
-  startForm: (artisanId: string) => {
+  startForm: (attorneyId: string) => {
     trackEvent('form_started', {
-      artisanId,
+      attorneyId,
       funnelStep: 5,
     })
   },
 
   // Step 6: User completes form
-  completeForm: (artisanId: string, hasMessage: boolean) => {
+  completeForm: (attorneyId: string, hasMessage: boolean) => {
     trackEvent('form_completed', {
-      artisanId,
+      attorneyId,
       hasMessage,
       funnelStep: 6,
     })
   },
 
   // Step 7: Booking initiated (submit clicked)
-  initiateBooking: (artisanId: string, serviceName: string) => {
+  initiateBooking: (attorneyId: string, specialtyName: string) => {
     trackEvent('booking_initiated', {
-      artisanId,
-      serviceName,
+      attorneyId,
+      specialtyName,
       funnelStep: 7,
     })
   },
@@ -224,16 +266,16 @@ export const BookingFunnel = {
   // Step 8: Booking completed successfully
   completeBooking: (
     bookingId: string,
-    artisanId: string,
-    serviceName: string,
+    attorneyId: string,
+    specialtyName: string,
     date: string,
     time: string,
     depositAmount?: number
   ) => {
     trackEvent('booking_completed', {
       bookingId,
-      artisanId,
-      serviceName,
+      attorneyId,
+      specialtyName,
       date,
       time,
       depositAmount,

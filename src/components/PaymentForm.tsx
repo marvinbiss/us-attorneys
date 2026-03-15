@@ -15,7 +15,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 
 interface PaymentFormProps {
   bookingId: string
-  artisanId: string
+  attorneyId: string
   amount: number
   description?: string
   onSuccess?: (paymentIntentId: string) => void
@@ -37,7 +37,7 @@ export default function PaymentForm(props: PaymentFormProps) {
     totalAmount: number
   } | null>(null)
 
-  const { bookingId, artisanId, amount, description } = props
+  const { bookingId, attorneyId, amount, description } = props
 
   const createPaymentIntent = async () => {
     setIsLoading(true)
@@ -47,7 +47,7 @@ export default function PaymentForm(props: PaymentFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bookingId,
-          artisanId,
+          attorneyId,
           amount,
           description,
           paymentType,

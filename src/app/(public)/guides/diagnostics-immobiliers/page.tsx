@@ -138,11 +138,11 @@ const diagnostics = [
 ]
 
 const services = [
-  { label: "Diagnostiqueur immobilier", href: "/services/diagnostiqueur-immobilier", icon: FileCheck },
-  { label: "Électricien", href: "/services/electricien", icon: Zap },
-  { label: "Plombier chauffagiste", href: "/services/plombier", icon: Flame },
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Rénovation intérieure", href: "/services/renovation-interieure", icon: Hammer },
+  { label: "Diagnostiqueur immobilier", href: "/practice-areas/diagnostiqueur-immobilier", icon: FileCheck },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Zap },
+  { label: "Plombier chauffagiste", href: "/practice-areas/plombier", icon: Flame },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Rénovation intérieure", href: "/practice-areas/renovation-interieure", icon: Hammer },
 ]
 
 const faqItems = [
@@ -444,11 +444,11 @@ export default function DiagnosticsImmobiliersPage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Aides rénovation 2026"}</h3>
               <p className="text-sm text-gray-500">{"Toutes les aides pour financer vos travaux de mise aux normes."}</p>
             </Link>
-            <Link href="/guides/normes-electriques" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/regulations-electriques" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Normes électriques NF C 15-100"}</h3>
               <p className="text-sm text-gray-500">{"Guide complet de la norme électrique pour la mise aux normes."}</p>
             </Link>
-            <Link href="/guides/devis-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/quotes-travaux" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Devis travaux"}</h3>
               <p className="text-sm text-gray-500">{"Comment comparer les devis des diagnostiqueurs."}</p>
             </Link>
@@ -490,14 +490,14 @@ export default function DiagnosticsImmobiliersPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/diagnostiqueur-immobilier"
+                href="/practice-areas/diagnostiqueur-immobilier"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un diagnostiqueur"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

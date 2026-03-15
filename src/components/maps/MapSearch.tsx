@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import NextImage from 'next/image'
-import { getArtisanUrl } from '@/lib/utils'
+import { getAttorneyUrl } from '@/lib/utils'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import { useMapSearchCache } from '@/hooks/useMapSearchCache'
 import MapFilters from './MapFilters'
@@ -286,8 +286,8 @@ export default function MapSearch() {
   }, [])
 
   // Scroll to provider in list
-  const scrollToProvider = (providerId: string) => {
-    const element = document.getElementById(`provider-${providerId}`)
+  const scrollToProvider = (attorneyId: string) => {
+    const element = document.getElementById(`provider-${attorneyId}`)
     if (element && listRef.current) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
@@ -432,7 +432,7 @@ export default function MapSearch() {
                         {/* Actions - World Class Design */}
                         <div className="flex gap-2 mt-4">
                           <Link
-                            href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                            href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                             className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
                             Voir le profil
@@ -595,7 +595,7 @@ export default function MapSearch() {
 
           {/* Mobile Results Toggle */}
           <MobileResultsToggle
-            providerCount={providers.length}
+            attorneyCount={providers.length}
             mobileDrawerOpen={mobileDrawerOpen}
             onToggle={() => setMobileDrawerOpen(!mobileDrawerOpen)}
           />

@@ -8,43 +8,43 @@ import { companyIdentity } from '@/lib/config/company-identity'
 const navigationLinks = [
   { name: 'Accueil', href: '/' },
   { name: 'Services', href: '/services' },
-  { name: 'Villes', href: '/villes' },
-  { name: 'Carte des artisans', href: '/carte-artisans' },
-  { name: 'Recherche', href: '/recherche' },
-  { name: 'Comment ça marche', href: '/comment-ca-marche' },
+  { name: 'Villes', href: '/cities' },
+  { name: 'Carte des artisans', href: '/attorney-map' },
+  { name: 'Recherche', href: '/search' },
+  { name: 'Comment ça marche', href: '/how-it-works' },
 ]
 
 // Outils links
 const outilsLinks = [
-  { name: 'Calculateur de prix', href: '/outils/calculateur-prix' },
-  { name: 'Diagnostic artisan', href: '/outils/diagnostic' },
-  { name: 'Carte des artisans', href: '/carte-artisans' },
-  { name: 'Tarifs artisans', href: '/tarifs' },
-  { name: 'Demander un devis', href: '/devis' },
-  { name: 'Urgence artisan', href: '/urgence' },
-  { name: 'Problèmes courants', href: '/problemes' },
-  { name: 'Vérifier un artisan', href: '/verifier-artisan' },
-  { name: 'Statistiques artisans', href: '/statistiques-artisans-france' },
+  { name: 'Calculateur de prix', href: '/tools/calculator-prix' },
+  { name: 'Diagnostic artisan', href: '/tools/diagnostic' },
+  { name: 'Carte des artisans', href: '/attorney-map' },
+  { name: 'Tarifs artisans', href: '/pricing' },
+  { name: 'Demander un devis', href: '/quotes' },
+  { name: 'Urgence artisan', href: '/emergency' },
+  { name: 'Problèmes courants', href: '/issues' },
+  { name: 'Vérifier un artisan', href: '/verify-attorney' },
+  { name: 'Statistiques artisans', href: '/attorney-statistics' },
   { name: 'Widget pour artisans', href: '/widget' },
 ]
 
 // Information links
 const informationLinks = [
-  { name: 'À propos', href: '/a-propos' },
+  { name: 'À propos', href: '/about' },
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
   { name: 'Guides travaux', href: '/guides' },
-  { name: 'Avis artisans', href: '/avis' },
-  { name: 'CGV', href: '/cgv' },
-  { name: 'Mentions légales', href: '/mentions-legales' },
-  { name: 'Confidentialité', href: '/confidentialite' },
+  { name: 'Avis artisans', href: '/reviews' },
+  { name: 'CGV', href: '/terms' },
+  { name: 'Mentions légales', href: '/legal' },
+  { name: 'Confidentialité', href: '/privacy' },
 ]
 
 // Legal/non-SEO pages — rel="nofollow" to preserve PageRank for money pages
 const nofollowPaths = new Set([
-  '/faq', '/cgv', '/mentions-legales', '/confidentialite',
-  '/accessibilite', '/politique-avis', '/mediation',
+  '/faq', '/terms', '/legal', '/privacy',
+  '/accessibility', '/review-policy', '/mediation',
 ])
 
 export default function Footer() {
@@ -131,7 +131,7 @@ export default function Footer() {
                 {popularServices.map((service) => (
                   <li key={service.slug}>
                     <Link
-                      href={`/services/${service.slug}`}
+                      href={`/practice-areas/${service.slug}`}
                       className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {service.name}
@@ -154,7 +154,7 @@ export default function Footer() {
                 {popularCities.map((city) => (
                   <li key={city.slug}>
                     <Link
-                      href={`/villes/${city.slug}`}
+                      href={`/cities/${city.slug}`}
                       className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {city.name}
@@ -162,8 +162,8 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/villes" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Toutes les villes
+                  <Link href="/cities" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                    Toutes les cities
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -194,7 +194,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/departements" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/states" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -248,7 +248,7 @@ export default function Footer() {
                 {popularServices.map((service) => (
                   <li key={service.slug}>
                     <Link
-                      href={`/services/${service.slug}`}
+                      href={`/practice-areas/${service.slug}`}
                       className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
                     >
                       {service.name}
@@ -273,7 +273,7 @@ export default function Footer() {
                 {popularCities.map((city) => (
                   <li key={city.slug}>
                     <Link
-                      href={`/villes/${city.slug}`}
+                      href={`/cities/${city.slug}`}
                       className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
                     >
                       {city.name}
@@ -281,8 +281,8 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/villes" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Toutes les villes
+                  <Link href="/cities" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                    Toutes les cities
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -315,7 +315,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/departements" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/states" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -440,27 +440,27 @@ export default function Footer() {
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Entreprise</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/a-propos" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/about" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   À propos
                 </Link>
               </li>
               <li>
-                <Link href="/inscription-artisan" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/register-attorney" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Devenir partenaire
                 </Link>
               </li>
               <li>
-                <Link href="/notre-processus-de-verification" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/verification-process" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Processus de vérification
                 </Link>
               </li>
               <li>
-                <Link href="/garantie" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/guarantee" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Notre garantie
                 </Link>
               </li>
               <li>
-                <Link href="/politique-avis" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/review-policy" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Politique des avis
                 </Link>
               </li>
@@ -470,17 +470,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/presse" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/press" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Espace presse
                 </Link>
               </li>
               <li>
-                <Link href="/carrieres" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/careers" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Carrières
                 </Link>
               </li>
               <li>
-                <Link href="/partenaires" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/partners" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Partenaires
                 </Link>
               </li>
@@ -492,22 +492,22 @@ export default function Footer() {
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Juridique</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/mentions-legales" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/legal" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Mentions légales
                 </Link>
               </li>
               <li>
-                <Link href="/cgv" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/terms" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   CGV
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialite" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/privacy" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Confidentialité
                 </Link>
               </li>
               <li>
-                <Link href="/accessibilite" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/accessibility" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Accessibilité
                 </Link>
               </li>
@@ -569,16 +569,16 @@ export default function Footer() {
               <span className="hidden sm:inline"> &mdash; Données mises à jour en {new Date().getFullYear()}</span>
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-gray-500">
-              <Link href="/mentions-legales" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/legal" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 Mentions légales
               </Link>
-              <Link href="/confidentialite" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/privacy" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 Confidentialité
               </Link>
-              <Link href="/cgv" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/terms" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 CGV
               </Link>
-              <Link href="/accessibilite" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/accessibility" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 Accessibilité
               </Link>
               <Link href="/faq" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
@@ -587,7 +587,7 @@ export default function Footer() {
               <Link href="/contact" className="hover:text-white transition-colors duration-200 py-1.5">
                 Contact
               </Link>
-              <Link href="/plan-du-site" className="hover:text-white transition-colors duration-200 py-1.5">
+              <Link href="/sitemap-page" className="hover:text-white transition-colors duration-200 py-1.5">
                 Plan du site
               </Link>
             </div>

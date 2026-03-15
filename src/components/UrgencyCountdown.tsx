@@ -5,7 +5,7 @@ import { Clock, Zap } from 'lucide-react'
 
 interface UrgencyCountdownProps {
   /** Service name for context */
-  serviceName: string
+  specialtyName: string
   /** City name for context */
   cityName?: string
 }
@@ -14,7 +14,7 @@ interface UrgencyCountdownProps {
  * Shows a live "average response time" indicator that creates urgency.
  * Uses a deterministic base + small random variation to feel real.
  */
-export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCountdownProps) {
+export default function UrgencyCountdown({ specialtyName, cityName }: UrgencyCountdownProps) {
   const [minutesLeft, setMinutesLeft] = useState<number | null>(null)
   const [recentRequests, setRecentRequests] = useState<number | null>(null)
 
@@ -43,7 +43,7 @@ export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCount
           </span>
         </div>
         <span className="text-sm font-bold text-red-900">
-          {cityName ? `Urgence ${serviceName.toLowerCase()} à ${cityName}` : `Urgence ${serviceName.toLowerCase()}`}
+          {cityName ? `Urgence ${specialtyName.toLowerCase()} à ${cityName}` : `Urgence ${specialtyName.toLowerCase()}`}
         </span>
       </div>
 

@@ -62,7 +62,7 @@ export async function GET(
           date,
           start_time,
           end_time,
-          artisan_id
+          attorney_id
         )
       `)
       .eq('id', bookingId)
@@ -75,14 +75,14 @@ export async function GET(
       )
     }
 
-    const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; artisan_id: string }> | null
+    const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; attorney_id: string }> | null
     const slot = slotData?.[0] || null
 
     // Security check: If user is authenticated, verify they have access to this booking
     // (either as the client who made it, or as the artisan)
     if (user) {
       const isOwner = booking.client_id === user.id
-      const isArtisan = slot?.artisan_id === user.id
+      const isArtisan = slot?.attorney_id === user.id
 
       // For authenticated users, they must be the owner or the artisan
       if (!isOwner && !isArtisan) {
@@ -98,13 +98,13 @@ export async function GET(
 
     // Fetch artisan details (limited info for non-owners)
     let artisan = null
-    if (slot?.artisan_id) {
-      const { data: artisanData } = await adminSupabase
+    if (slot?.attorney_id) {
+      const { data: attorneyData } = await adminSupabase
         .from('profiles')
         .select('id, full_name, phone_e164, email')
-        .eq('id', slot.artisan_id)
+        .eq('id', slot.attorney_id)
         .single()
-      artisan = artisanData
+      artisan = attorneyData
     }
 
     // Format response for confirmation page
@@ -114,7 +114,7 @@ export async function GET(
         clientName: booking.client_name,
         clientEmail: booking.client_email,
         clientPhone: booking.client_phone,
-        serviceName: booking.service_description || 'Service',
+        specialtyName: booking.service_description || 'Service',
         status: booking.status,
         createdAt: booking.created_at,
         cancelledAt: booking.cancelled_at,
@@ -127,8 +127,8 @@ export async function GET(
         startTime: slot?.start_time,
         endTime: slot?.end_time,
         slotId: slot?.id,
-        artisanId: artisan?.id || slot?.artisan_id,
-        artisanName: artisan?.full_name || 'Artisan',
+        attorneyId: artisan?.id || slot?.attorney_id,
+        attorneyName: artisan?.full_name || 'Artisan',
         artisanPhone: artisan?.phone_e164 ?? null,
         artisanEmail: artisan?.email,
         artisanAvatar: null,
@@ -138,7 +138,7 @@ export async function GET(
         client_email: booking.client_email,
         service_description: booking.service_description,
         slot: booking.slot,
-        artisan: artisan || { id: slot?.artisan_id, full_name: 'Artisan' },
+        artisan: artisan || { id: slot?.attorney_id, full_name: 'Artisan' },
       },
     })
   } catch (error) {
@@ -189,7 +189,7 @@ export async function PATCH(
     const adminSupabase = createAdminClient()
     const { data: existingBooking, error: fetchError } = await adminSupabase
       .from('bookings')
-      .select('id, client_id, client_email, slot:availability_slots(artisan_id)')
+      .select('id, client_id, client_email, slot:availability_slots(attorney_id)')
       .eq('id', bookingId)
       .single()
 
@@ -201,9 +201,9 @@ export async function PATCH(
     }
 
     // Check authorization: must be owner or artisan
-    const slotData = existingBooking.slot as Array<{ artisan_id: string }> | null
+    const slotData = existingBooking.slot as Array<{ attorney_id: string }> | null
     const isOwner = existingBooking.client_id === user.id
-    const isArtisan = slotData?.[0]?.artisan_id === user.id
+    const isArtisan = slotData?.[0]?.attorney_id === user.id
     const isEmailMatch = user.email?.toLowerCase() === existingBooking.client_email?.toLowerCase()
 
     if (!isOwner && !isArtisan && !isEmailMatch) {

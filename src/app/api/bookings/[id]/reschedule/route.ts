@@ -46,7 +46,7 @@ export async function POST(
           date,
           start_time,
           end_time,
-          artisan_id
+          attorney_id
         )
       `)
       .eq('id', params.id)
@@ -62,7 +62,7 @@ export async function POST(
     // Ownership check: user must be the client or the assigned artisan
     const bookingSlotForAuth = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot
     const isClient = booking.client_id === user.id
-    const isArtisan = bookingSlotForAuth?.artisan_id === user.id
+    const isArtisan = bookingSlotForAuth?.attorney_id === user.id
     const isEmailMatch = user.email?.toLowerCase() === booking.client_email?.toLowerCase()
     if (!isClient && !isArtisan && !isEmailMatch) {
       return NextResponse.json(
@@ -81,7 +81,7 @@ export async function POST(
     // Verify new slot exists and is available
     const { data: newSlot, error: slotError } = await supabase
       .from('availability_slots')
-      .select('id, artisan_id, date, start_time, end_time, is_available')
+      .select('id, attorney_id, date, start_time, end_time, is_available')
       .eq('id', newSlotId)
       .eq('is_available', true)
       .single()
@@ -95,7 +95,7 @@ export async function POST(
 
     // Verify new slot belongs to the same artisan
     const bookingSlot = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot
-    if (newSlot.artisan_id !== bookingSlot?.artisan_id) {
+    if (newSlot.attorney_id !== bookingSlot?.attorney_id) {
       return NextResponse.json(
         { success: false, error: { message: 'Le créneau doit appartenir au même artisan' } },
         { status: 400 }
@@ -143,7 +143,7 @@ export async function POST(
     const { data: artisan } = await adminSupabase
       .from('profiles')
       .select('full_name, email')
-      .eq('id', bookingSlot?.artisan_id)
+      .eq('id', bookingSlot?.attorney_id)
       .single()
 
     // Format new date for email
@@ -161,9 +161,9 @@ export async function POST(
         clientName: booking.client_name,
         clientEmail: booking.client_email,
         clientPhone: booking.client_phone,
-        artisanName: artisan.full_name || 'Artisan',
+        attorneyName: artisan.full_name || 'Artisan',
         artisanEmail: artisan.email,
-        serviceName: booking.service_description || 'Service',
+        specialtyName: booking.service_description || 'Service',
         date: formattedDate,
         startTime: newSlot.start_time,
         endTime: newSlot.end_time,

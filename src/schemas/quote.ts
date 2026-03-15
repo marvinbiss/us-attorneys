@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const quoteRequestSchema = z.object({
-  provider_id: z.string().uuid('ID artisan invalide'),
+  attorney_id: z.string().uuid('ID artisan invalide'),
   service_slug: z.string().min(1, 'Service requis'),
   client_name: z
     .string()

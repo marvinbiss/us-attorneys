@@ -64,9 +64,9 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     // Fetch portfolio item
     const { data: item, error } = await supabase
       .from('portfolio_items')
-      .select('id, artisan_id, title, description, image_url, thumbnail_url, category, tags, is_featured, display_order, created_at, media_type, video_url, before_image_url, after_image_url, is_visible')
+      .select('id, attorney_id, title, description, image_url, thumbnail_url, category, tags, is_featured, display_order, created_at, media_type, video_url, before_image_url, after_image_url, is_visible')
       .eq('id', id)
-      .eq('artisan_id', user.id)
+      .eq('attorney_id', user.id)
       .single()
 
     if (error || !item) {
@@ -120,7 +120,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       .from('portfolio_items')
       .select('id')
       .eq('id', id)
-      .eq('artisan_id', user.id)
+      .eq('attorney_id', user.id)
       .single()
 
     if (fetchError || !existingItem) {
@@ -208,7 +208,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
       .from('portfolio_items')
       .select('id')
       .eq('id', id)
-      .eq('artisan_id', user.id)
+      .eq('attorney_id', user.id)
       .single()
 
     if (fetchError || !item) {

@@ -5,8 +5,8 @@
  * Parse les commonTasks (format "Label : prix" ou "Label: prix") et applique
  * un multiplicateur regional optionnel aux prix numeriques.
  *
- * Si serviceSlug ET locationSlug sont fournis, chaque nom de tache devient un lien
- * vers /tarifs/[service]/[ville]/[taskSlug].
+ * Si specialtySlug ET locationSlug sont fournis, chaque nom de tache devient un lien
+ * vers /pricing/[service]/[ville]/[taskSlug].
  *
  * Server Component — pas de 'use client'.
  */
@@ -16,8 +16,8 @@ import { slugifyTask } from '@/lib/data/trade-content'
 
 interface PriceTableHTMLProps {
   tasks: string[]           // commonTasks du trade
-  serviceName: string       // ex: "Plombier"
-  serviceSlug?: string      // slug du service pour les liens (ex: "plombier")
+  specialtyName: string       // ex: "Plombier"
+  specialtySlug?: string      // slug du service pour les liens (ex: "plombier")
   location?: string         // ex: "Paris" (optionnel)
   locationSlug?: string     // slug de la ville pour les liens (ex: "paris")
   multiplier?: number       // multiplicateur regional (defaut 1)
@@ -53,8 +53,8 @@ function parseTaskLocal(task: string, multiplier: number): { name: string; price
 
 export default function PriceTableHTML({
   tasks,
-  serviceName,
-  serviceSlug,
+  specialtyName,
+  specialtySlug,
   location,
   locationSlug,
   multiplier = 1,
@@ -62,11 +62,11 @@ export default function PriceTableHTML({
 }: PriceTableHTMLProps) {
   if (!tasks || tasks.length === 0) return null
 
-  const canLink = Boolean(serviceSlug && locationSlug)
+  const canLink = Boolean(specialtySlug && locationSlug)
 
   const captionText = location
-    ? `Tarifs ${serviceName.toLowerCase()} ${location} — 2026`
-    : `Tarifs ${serviceName.toLowerCase()} en France — 2026`
+    ? `Tarifs ${specialtyName.toLowerCase()} ${location} — 2026`
+    : `Tarifs ${specialtyName.toLowerCase()} en France — 2026`
 
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
@@ -104,7 +104,7 @@ export default function PriceTableHTML({
                 <td className="px-5 py-4 text-sm border-t border-gray-100">
                   {canLink ? (
                     <Link
-                      href={`/tarifs/${serviceSlug}/${locationSlug}/${taskSlug}`}
+                      href={`/pricing/${specialtySlug}/${locationSlug}/${taskSlug}`}
                       className="text-blue-700 hover:text-blue-900 hover:underline"
                     >
                       {name}
@@ -117,16 +117,16 @@ export default function PriceTableHTML({
                   {price}
                 </td>
                 <td className="hidden sm:table-cell px-3 py-4 border-t border-gray-100 text-center">
-                  {serviceSlug ? (
+                  {specialtySlug ? (
                     <Link
-                      href={locationSlug ? `/devis/${serviceSlug}/${locationSlug}` : `/devis/${serviceSlug}`}
+                      href={locationSlug ? `/quotes/${specialtySlug}/${locationSlug}` : `/quotes/${specialtySlug}`}
                       className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Devis gratuit
                     </Link>
                   ) : (
                     <Link
-                      href="/devis"
+                      href="/quotes"
                       className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Devis gratuit

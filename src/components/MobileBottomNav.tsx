@@ -8,10 +8,10 @@ import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 const navItems: { href: string; icon: typeof Home; label: string; isPrimary?: boolean }[] = [
   { href: '/', icon: Home, label: 'Accueil' },
-  { href: '/recherche', icon: Search, label: 'Recherche' },
-  { href: '/devis', icon: FileText, label: 'Devis', isPrimary: true },
+  { href: '/search', icon: Search, label: 'Recherche' },
+  { href: '/quotes', icon: FileText, label: 'Devis', isPrimary: true },
   { href: '/services', icon: Wrench, label: 'Services' },
-  { href: '/urgence', icon: AlertTriangle, label: 'Urgence' },
+  { href: '/emergency', icon: AlertTriangle, label: 'Urgence' },
 ]
 
 export default function MobileBottomNav() {
@@ -29,7 +29,7 @@ export default function MobileBottomNav() {
   }, [])
 
   // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
-  const hideOnPages = ['/espace-client', '/espace-artisan', '/admin']
+  const hideOnPages = ['/client-dashboard', '/attorney-dashboard', '/admin']
   const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
 
   // Masquer quand le menu mobile est ouvert ou quand le widget estimation est ouvert

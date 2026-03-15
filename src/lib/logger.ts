@@ -8,7 +8,7 @@ type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 export interface LogContext {
   userId?: string
   bookingId?: string
-  artisanId?: string
+  attorneyId?: string
   action?: string
   [key: string]: unknown
 }

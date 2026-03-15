@@ -64,7 +64,7 @@ export default function ContactPageClient() {
               Retour à l'accueil
             </Link>
             <Link
-              href="/devis"
+              href="/quotes"
               className="block w-full border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
             >
               Demander un devis
@@ -122,7 +122,7 @@ export default function ContactPageClient() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
-                    <p className="text-gray-600">contact@servicesartisans.fr</p>
+                    <p className="text-gray-600">contact@us-attorneys.com</p>
                   </div>
                 </div>
 
@@ -175,28 +175,28 @@ export default function ContactPageClient() {
               <h3 className="font-semibold text-gray-900 mb-4">Liens utiles</h3>
               <div className="space-y-2">
                 <Link
-                  href="/comment-ca-marche"
+                  href="/how-it-works"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
                   Comment ça marche ?
                 </Link>
                 <Link
-                  href="/devis"
+                  href="/quotes"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
                   Demander un devis gratuit
                 </Link>
                 <Link
-                  href="/inscription-artisan"
+                  href="/register-attorney"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
                   Devenir artisan partenaire
                 </Link>
                 <Link
-                  href="/connexion"
+                  href="/login"
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />

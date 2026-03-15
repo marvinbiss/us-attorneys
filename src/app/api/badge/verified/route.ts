@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
   const supabase = createAdminClient()
 
   let query = supabase
-    .from('providers')
+    .from('attorneys')
     .select('name, slug, stable_id, specialty, address_city, is_verified, is_active, rating_average, review_count')
 
   if (slug) {

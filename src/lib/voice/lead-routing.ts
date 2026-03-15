@@ -59,7 +59,7 @@ export async function createVoiceLead(
   const urgency = (qualData.urgency as string) ?? 'normal'
 
   // Map vertical to French service name
-  const serviceName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'Rénovation énergétique'
+  const specialtyName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'Rénovation énergétique'
 
   // ------------------------------------------------------------------
   // 1. Create the devis_request (lead)
@@ -71,15 +71,15 @@ export async function createVoiceLead(
   const { data: lead, error: leadError } = await admin
     .from('devis_requests')
     .insert({
-      service_name: serviceName,
+      service_name: specialtyName,
       postal_code: postalCode || '00000',
       city: (qualData.city as string) ?? null,
-      description: `Demande générée par qualification vocale (score ${voiceCall.qualification_score ?? 'N/A'}). Projet : ${serviceName}.`,
+      description: `Demande générée par qualification vocale (score ${voiceCall.qualification_score ?? 'N/A'}). Projet : ${specialtyName}.`,
       budget: budgetRange,
       urgency: validUrgency,
       status: 'pending',
       client_name: callerName,
-      client_email: (qualData.email as string) ?? `voice+${voiceCall.id.slice(0, 8)}@servicesartisans.fr`,
+      client_email: (qualData.email as string) ?? `voice+${voiceCall.id.slice(0, 8)}@us-attorneys.com`,
       client_phone: voiceCall.caller_phone,
     })
     .select('id')
@@ -122,12 +122,12 @@ export async function createVoiceLead(
   const department = postalCode ? postalCode.slice(0, 2) : null
 
   let matchQuery = admin
-    .from('providers')
+    .from('attorneys')
     .select('id, name, phone, email, user_id')
     .eq('is_active', true)
 
-  if (serviceName) {
-    matchQuery = matchQuery.ilike('specialty', `%${serviceName}%`)
+  if (specialtyName) {
+    matchQuery = matchQuery.ilike('specialty', `%${specialtyName}%`)
   }
 
   if (department) {
@@ -140,20 +140,20 @@ export async function createVoiceLead(
     .order('last_lead_assigned_at', { ascending: true, nullsFirst: true })
     .limit(1)
 
-  const { data: providers, error: providerError } = await matchQuery
+  const { data: providers, error: attorneyError } = await matchQuery
 
-  if (providerError) {
-    log.error('Failed to query matching providers', providerError)
+  if (attorneyError) {
+    log.error('Failed to query matching providers', attorneyError)
     return
   }
 
   if (!providers || providers.length === 0) {
-    log.warn('No matching artisan found', { serviceName, department })
+    log.warn('No matching artisan found', { specialtyName, department })
     return
   }
 
   const artisan = providers[0]
-  log.info('Matched artisan', { artisanId: artisan.id, artisanName: artisan.name })
+  log.info('Matched artisan', { attorneyId: artisan.id, attorneyName: artisan.name })
 
   // ------------------------------------------------------------------
   // 5. Create lead_assignment
@@ -162,7 +162,7 @@ export async function createVoiceLead(
     .from('lead_assignments')
     .insert({
       lead_id: lead.id,
-      provider_id: artisan.id,
+      attorney_id: artisan.id,
       status: 'pending',
       source_table: 'devis_requests',
     })
@@ -174,20 +174,20 @@ export async function createVoiceLead(
 
   // Update round-robin counter
   await admin
-    .from('providers')
+    .from('attorneys')
     .update({ last_lead_assigned_at: new Date().toISOString() })
     .eq('id', artisan.id)
 
   // Log the dispatch event
   await logLeadEvent(lead.id, 'dispatched', {
-    providerId: artisan.id,
+    attorneyId: artisan.id,
     metadata: {
       source: 'voice',
       voice_call_id: voiceCall.id,
     },
   })
 
-  log.info('Lead assigned to artisan', { leadId: lead.id, artisanId: artisan.id })
+  log.info('Lead assigned to artisan', { leadId: lead.id, attorneyId: artisan.id })
 
   // ------------------------------------------------------------------
   // 6. Notify artisan via SMS
@@ -196,18 +196,18 @@ export async function createVoiceLead(
     const location = postalCode ? ` (${postalCode})` : ''
     const smsMessage =
       `Nouveau lead ServicesArtisans !\n` +
-      `${serviceName}${location}\n` +
+      `${specialtyName}${location}\n` +
       `Client : ${callerName}\n` +
-      `Connectez-vous pour répondre : servicesartisans.fr/espace-artisan/leads`
+      `Connectez-vous pour répondre : us-attorneys.com/attorney-dashboard/leads`
 
     const smsResult = await sendSMS(artisan.phone, smsMessage)
 
     if (smsResult.success) {
-      log.info('Artisan notified via SMS', { artisanId: artisan.id, messageId: smsResult.messageId })
+      log.info('Artisan notified via SMS', { attorneyId: artisan.id, messageId: smsResult.messageId })
     } else {
-      log.warn('SMS notification failed', { artisanId: artisan.id, error: smsResult.error })
+      log.warn('SMS notification failed', { attorneyId: artisan.id, error: smsResult.error })
     }
   } else {
-    log.warn('Artisan has no phone number, SMS skipped', { artisanId: artisan.id })
+    log.warn('Artisan has no phone number, SMS skipped', { attorneyId: artisan.id })
   }
 }

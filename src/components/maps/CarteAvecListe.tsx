@@ -5,9 +5,9 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { Star } from 'lucide-react'
 import Link from 'next/link'
-import ProviderCard from '@/components/ProviderCard'
+import AttorneyCard from '@/components/AttorneyCard'
 import type { LegacyProvider } from '@/types/legacy'
-import { getArtisanUrl } from '@/lib/utils'
+import { getAttorneyUrl } from '@/lib/utils'
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
@@ -112,10 +112,10 @@ export default function CarteAvecListe({
     })
   }, [L])
 
-  const handleHover = useCallback((providerId: string | null) => {
-    setHoveredId(providerId)
-    if (providerId) {
-      const provider = providers.find(p => p.id === providerId)
+  const handleHover = useCallback((attorneyId: string | null) => {
+    setHoveredId(attorneyId)
+    if (attorneyId) {
+      const provider = providers.find(p => p.id === attorneyId)
       if (provider && mapRef.current) {
         mapRef.current.setView([provider.latitude, provider.longitude], 13, {
           animate: true,
@@ -147,7 +147,7 @@ export default function CarteAvecListe({
                 onMouseLeave={() => handleHover(null)}
                 className="mb-4"
               >
-                <ProviderCard
+                <AttorneyCard
                   provider={provider}
                   isHovered={isHovered}
                 />
@@ -188,7 +188,7 @@ export default function CarteAvecListe({
                     <p className="text-sm text-gray-600 mb-3">{provider.address_city}</p>
                   )}
                   <Link
-                    href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                    href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                     className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
                   >
                     Voir le profil

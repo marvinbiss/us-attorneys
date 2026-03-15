@@ -6,7 +6,7 @@ import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWra
 import { ClayHomePage } from '@/components/home/ClayHomePage'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
-import { getSiteStats, getHomepageData, formatProviderCount } from '@/lib/data/stats'
+import { getSiteStats, getHomepageData, formatAttorneyCount } from '@/lib/data/stats'
 import { getFAQSchema, getItemListSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
@@ -19,8 +19,8 @@ const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ss
 export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 24h
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { artisanCount: count } = await getSiteStats()
-  const countStr = count > 0 ? `${formatProviderCount(count)}+` : 'Des milliers d\''
+  const { attorneyCount: count } = await getSiteStats()
+  const countStr = count > 0 ? `${formatAttorneyCount(count)}+` : 'Des milliers d\''
   const absoluteTitle = `Artisans de France — ${countStr} Pros Vérifiés | ServicesArtisans`
     const metaDescription = `Trouvez un artisan qualifié parmi ${countStr} professionnels vérifiés SIREN. Plombier, électricien, serrurier : 101 départements couverts. Devis gratuit.`
     return {
@@ -73,7 +73,7 @@ export default async function HomePage() {
     url: '/services',
     items: popularServices.map((s, i) => ({
       name: s.name,
-      url: `/services/${s.slug}`,
+      url: `/practice-areas/${s.slug}`,
       position: i + 1,
     })),
   })
@@ -107,7 +107,7 @@ export default async function HomePage() {
       {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
       <ClayHomePage
         stats={homepageData}
-        serviceCounts={homepageData.serviceCounts}
+        specialtyCounts={homepageData.specialtyCounts}
         topProviders={homepageData.topProviders}
         recentReviews={homepageData.recentReviews}
       />
@@ -152,11 +152,11 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h2 className="font-heading text-lg font-semibold text-stone-800 mb-4">Explorer</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/avis" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Avis artisans</Link>
-            <Link href="/tarifs" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Tarifs artisans</Link>
-            <Link href="/urgence" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Urgence artisan</Link>
+            <Link href="/reviews" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Avis artisans</Link>
+            <Link href="/pricing" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Tarifs artisans</Link>
+            <Link href="/emergency" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Urgence artisan</Link>
             <Link href="/blog" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Blog</Link>
-            <Link href="/problemes" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Problèmes courants</Link>
+            <Link href="/issues" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Problèmes courants</Link>
           </div>
         </div>
       </section>

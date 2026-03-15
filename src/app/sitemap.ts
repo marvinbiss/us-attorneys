@@ -1,9 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, villes, departements, regions } from '@/lib/data/france'
+import { services, cities, states, usRegions } from '@/lib/data/usa'
 import { tradeContent, getTradesSlugs, parseTask } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
-import { getQuestionSlugs } from '@/lib/data/questions'
+import { getQuestionSlugs } from '@/lib/data/faq'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { articleSlugs } from '@/lib/data/blog/articles'
@@ -60,7 +60,7 @@ export async function generateSitemaps() {
     { id: 'problemes' },
     ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `problemes-cities-${i}` })),
     ...Array.from(
-      { length: Math.ceil(departements.length * getTradesSlugs().length / LARGE_BATCH) },
+      { length: Math.ceil(states.length * getTradesSlugs().length / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
     ),
     { id: 'region-services' },
@@ -83,39 +83,39 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
 
     const staticPages: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/a-propos`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/about`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/contact`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/blog`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/comment-ca-marche`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/tarifs`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/urgence`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/devis`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/politique-avis`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/how-it-works`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/pricing`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/emergency`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/quotes`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/verification-process`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/review-policy`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/mediation`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/garantie`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/artisans`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/guarantee`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/tools/calculator-prix`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/tools/diagnostic`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/attorney-map`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/attorneys`, lastModified: BUILD_DATE },
       // Pages outils & contenu
       { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/avant-apres`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/calendrier-travaux`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/checklist-travaux`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/comparaison`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/glossaire`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/normes`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/statistiques-artisans-france`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/badge-artisan`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/verifier-artisan`, lastModified: BUILD_DATE },
-      // /barometre-prix removed — 301 redirects to /barometre (cannibalization fix)
-      { url: `${SITE_URL}/questions`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/barometre`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/barometre/regions`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/barometre/tarifs`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/before-after`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/project-planner`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/project-checklist`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/compare`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/glossary`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/regulations`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/attorney-statistics`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/attorney-badge`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/verify-attorney`, lastModified: BUILD_DATE },
+      // /price-index-prix removed — 301 redirects to /price-index (cannibalization fix)
+      { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/reviews`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/price-index`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/price-index/regions`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/price-index/pricing`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/widget-prix`, lastModified: BUILD_DATE },
     ]
 
@@ -152,13 +152,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     // Question pages
     const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map(slug => ({
-      url: `${SITE_URL}/questions/${slug}`,
+      url: `${SITE_URL}/faq/${slug}`,
       lastModified: BUILD_DATE,
     }))
 
     // Comparison pages
     const comparisonPages: MetadataRoute.Sitemap = comparisons.map(c => ({
-      url: `${SITE_URL}/comparaison/${c.slug}`,
+      url: `${SITE_URL}/compare/${c.slug}`,
       lastModified: BUILD_DATE,
     }))
 
@@ -176,18 +176,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
 
     const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
-      url: `${SITE_URL}/services/${service.slug}`,
+      url: `${SITE_URL}/practice-areas/${service.slug}`,
       lastModified: BUILD_DATE,
     }))
 
     const emergencySlugs = Object.keys(tradeContent)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
-      url: `${SITE_URL}/urgence/${slug}`,
+      url: `${SITE_URL}/emergency/${slug}`,
       lastModified: BUILD_DATE,
     }))
 
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
-      url: `${SITE_URL}/tarifs/${slug}`,
+      url: `${SITE_URL}/pricing/${slug}`,
       lastModified: BUILD_DATE,
     }))
 
@@ -237,18 +237,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const offset = batchIndex * BATCH
 
     // Merge top cities by population + GSC priority cities (deduplicated)
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const phase1Slugs = new Set(phase1Cities.map(v => v.slug))
     const gscExtras = GSC_PRIORITY_CITIES
       .filter(slug => !phase1Slugs.has(slug))
-      .map(slug => villes.find(v => v.slug === slug))
+      .map(slug => cities.find(v => v.slug === slug))
       .filter((v): v is NonNullable<typeof v> => v != null)
     const mergedCities = [...phase1Cities, ...gscExtras]
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
       for (const ville of mergedCities) {
-        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}` })
+        allUrls.push({ url: `${SITE_URL}/practice-areas/${service.slug}/${ville.slug}` })
       }
     }
 
@@ -259,11 +259,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
     const villesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/villes` },
+      { url: `${SITE_URL}/cities` },
     ]
 
-    const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
-      url: `${SITE_URL}/villes/${ville.slug}`,
+    const villePages: MetadataRoute.Sitemap = cities.map((ville) => ({
+      url: `${SITE_URL}/cities/${ville.slug}`,
     }))
 
     return [...villesIndex, ...villePages]
@@ -272,18 +272,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Geo pages (départements + régions) ──────────────────────────────
   if (id === 'geo') {
     const departementsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/departements` },
+      { url: `${SITE_URL}/states` },
     ]
 
-    const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
-      url: `${SITE_URL}/departements/${dept.slug}`,
+    const departementPages: MetadataRoute.Sitemap = states.map((dept) => ({
+      url: `${SITE_URL}/states/${dept.slug}`,
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/regions` },
     ]
 
-    const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
+    const regionPages: MetadataRoute.Sitemap = usRegions.map((region) => ({
       url: `${SITE_URL}/regions/${region.slug}`,
     }))
 
@@ -294,7 +294,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Devis service hub pages ─────────────────────────────────────────
   if (id === 'devis-services') {
     return Object.keys(tradeContent).map((slug) => ({
-      url: `${SITE_URL}/devis/${slug}`,
+      url: `${SITE_URL}/quotes/${slug}`,
       lastModified: BUILD_DATE,
     }))
   }
@@ -305,14 +305,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of services) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/quotes/${svc.slug}/${ville.slug}` })
         count++
       }
     }
@@ -327,14 +327,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const start = batchIndex * BATCH
     const end = start + BATCH
     const emergencySlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of emergencySlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/emergency/${svc}/${v.slug}` })
         count++
       }
     }
@@ -348,14 +348,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/pricing/${svc.slug}/${v.slug}` })
         count++
       }
     }
@@ -369,16 +369,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const BATCH = LARGE_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
-    outer: for (const [serviceSlug, trade] of Object.entries(tradeContent)) {
+    outer: for (const [specialtySlug, trade] of Object.entries(tradeContent)) {
       for (const task of trade.commonTasks) {
         const { slug: taskSlug } = parseTask(task)
         for (const v of phase1Cities) {
           if (count >= end) break outer
-          if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE })
+          if (count >= start) result.push({ url: `${SITE_URL}/pricing/${specialtySlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE })
           count++
         }
       }
@@ -391,8 +391,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'avis-services') {
     const tradeSlugs = Object.keys(tradeContent)
     return [
-      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE },
-      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}`, lastModified: BUILD_DATE })),
+      { url: `${SITE_URL}/reviews`, lastModified: BUILD_DATE },
+      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/reviews/${slug}`, lastModified: BUILD_DATE })),
     ]
   }
 
@@ -403,14 +403,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const start = batchIndex * BATCH
     const end = start + BATCH
     const tradeSlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of tradeSlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/reviews/${svc}/${v.slug}` })
         count++
       }
     }
@@ -422,8 +422,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'problemes') {
     const problemSlugs = getProblemSlugs()
     return [
-      { url: `${SITE_URL}/problemes`, lastModified: BUILD_DATE },
-      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}`, lastModified: BUILD_DATE })),
+      { url: `${SITE_URL}/issues`, lastModified: BUILD_DATE },
+      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/issues/${slug}`, lastModified: BUILD_DATE })),
     ]
   }
 
@@ -434,14 +434,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const start = batchIndex * BATCH
     const end = start + BATCH
     const problemSlugs = getProblemSlugs()
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const problem of problemSlugs) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/issues/${problem}/${ville.slug}` })
         count++
       }
     }
@@ -454,9 +454,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const batchIndex = parseInt(id.split('-').pop()!)
     const tradeSlugs = getTradesSlugs()
     const allUrls: MetadataRoute.Sitemap = []
-    for (const dept of departements) {
+    for (const dept of states) {
       for (const service of tradeSlugs) {
-        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}` })
+        allUrls.push({ url: `${SITE_URL}/states/${dept.slug}/${service}` })
       }
     }
     return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
@@ -465,7 +465,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Region × service pages ──────────────────────────────────────────
   if (id === 'region-services') {
     const tradeSlugs = getTradesSlugs()
-    return regions.flatMap(region =>
+    return usRegions.flatMap(region =>
       tradeSlugs.map(service => ({
         url: `${SITE_URL}/regions/${region.slug}/${service}`,
       }))

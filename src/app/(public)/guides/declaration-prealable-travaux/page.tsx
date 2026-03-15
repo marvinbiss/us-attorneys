@@ -558,13 +558,13 @@ export default function DeclarationPrealablePage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/services/macon"
+                  href="/practice-areas/macon"
                   className="inline-flex items-center gap-2 bg-white text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors"
                 >
                   {"Trouver un maçon"} <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/services/facades"
+                  href="/practice-areas/facades"
                   className="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-400 transition-colors"
                 >
                   {"Trouver un façadier"} <ArrowRight className="w-4 h-4" />
@@ -587,7 +587,7 @@ export default function DeclarationPrealablePage() {
                 <p className="text-sm text-gray-500">{"Quand est-il obligatoire ? Documents, délais et coûts."}</p>
               </Link>
               <Link
-                href="/guides/normes-electriques"
+                href="/guides/regulations-electriques"
                 className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all"
               >
                 <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors mb-1">

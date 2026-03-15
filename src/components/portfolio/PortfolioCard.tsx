@@ -142,6 +142,9 @@ export default function PortfolioCard({
                   e.stopPropagation()
                   setShowMenu(!showMenu)
                 }}
+                aria-label="Actions"
+                aria-expanded={showMenu}
+                title="Actions"
                 className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <MoreVertical className="w-5 h-5" />
@@ -161,6 +164,8 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onEdit()
                         }}
+                        aria-label="Modifier"
+                        title="Modifier"
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         <Pencil className="w-4 h-4" />
@@ -174,6 +179,8 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onToggleFeatured()
                         }}
+                        aria-label="Mettre en avant"
+                        title="Mettre en avant"
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         <Star className={clsx('w-4 h-4', item.is_featured && 'text-amber-500')} />
@@ -187,6 +194,8 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onToggleVisibility()
                         }}
+                        aria-label={item.is_visible ? 'Masquer' : 'Afficher'}
+                        title={item.is_visible ? 'Masquer' : 'Afficher'}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         {item.is_visible ? (
@@ -211,6 +220,8 @@ export default function PortfolioCard({
                             setShowMenu(false)
                             onDelete()
                           }}
+                          aria-label="Supprimer"
+                          title="Supprimer"
                           className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="w-4 h-4" />

@@ -32,7 +32,7 @@ export async function GET(
     const { data: quote, error } = await supabase
       .from('quotes')
       .select(`
-        id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at
+        id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at
       `)
       .eq('id', params.id)
       .single()
@@ -49,12 +49,12 @@ export async function GET(
 
     // Check authorization: is user the provider of this quote?
     const { data: provider } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id')
       .eq('user_id', user.id)
       .single()
 
-    const isProvider = provider?.id === quote.provider_id
+    const isProvider = provider?.id === quote.attorney_id
 
     // Check if user is the client via the devis_request
     const { data: devisRequest } = await supabase
@@ -125,7 +125,7 @@ export async function PATCH(
 
     const { data: quote } = await supabase
       .from('quotes')
-      .select('id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at')
+      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
@@ -141,12 +141,12 @@ export async function PATCH(
 
     // Check authorization and validate action
     const { data: provider } = await supabase
-      .from('providers')
+      .from('attorneys')
       .select('id')
       .eq('user_id', user.id)
       .single()
 
-    const isProvider = provider?.id === quote.provider_id
+    const isProvider = provider?.id === quote.attorney_id
 
     const { data: devisRequest } = await supabase
       .from('devis_requests')

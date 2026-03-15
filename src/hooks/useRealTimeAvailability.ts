@@ -24,7 +24,7 @@ export interface Slot {
 }
 
 interface UseRealTimeAvailabilityOptions {
-  artisanId?: string
+  attorneyId?: string
   month?: string
   enabled?: boolean
 }

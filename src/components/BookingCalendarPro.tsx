@@ -32,9 +32,9 @@ import {
 } from '@/lib/booking/smart-suggestions'
 
 interface BookingCalendarProProps {
-  artisanId: string
-  artisanName: string
-  serviceName: string
+  attorneyId: string
+  attorneyName: string
+  specialtyName: string
   servicePrice?: number
   requireDeposit?: boolean
   depositPercentage?: number
@@ -64,9 +64,9 @@ function getDaysInMonth(year: number, month: number) {
 }
 
 export default function BookingCalendarPro({
-  artisanId,
-  artisanName,
-  serviceName,
+  attorneyId,
+  attorneyName,
+  specialtyName,
   servicePrice,
   requireDeposit = false,
   depositPercentage = 30,
@@ -100,7 +100,7 @@ export default function BookingCalendarPro({
     optimisticallyReserve,
     cancelOptimisticReservation,
   } = useRealTimeAvailability({
-    artisanId,
+    attorneyId,
     month: monthStr,
     enabled: true,
   })
@@ -139,8 +139,8 @@ export default function BookingCalendarPro({
 
   // Track calendar open
   useEffect(() => {
-    BookingFunnel.openCalendar(artisanId)
-  }, [artisanId])
+    BookingFunnel.openCalendar(attorneyId)
+  }, [attorneyId])
 
   const getAvailableSlots = (date: Date): Slot[] => {
     const dateStr = date.toISOString().split('T')[0]
@@ -165,17 +165,17 @@ export default function BookingCalendarPro({
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date)
     setSelectedSlot(null)
-    BookingFunnel.selectDate(artisanId, date.toISOString().split('T')[0])
+    BookingFunnel.selectDate(attorneyId, date.toISOString().split('T')[0])
   }
 
   const handleSlotSelect = (slot: Slot) => {
     setSelectedSlot(slot)
-    BookingFunnel.selectSlot(artisanId, slot.date, slot.startTime, slot.id)
+    BookingFunnel.selectSlot(attorneyId, slot.date, slot.startTime, slot.id)
   }
 
   const handleFormChange = (field: string, value: string) => {
     if (Object.keys(formData).every((k) => !formData[k as keyof typeof formData])) {
-      BookingFunnel.startForm(artisanId)
+      BookingFunnel.startForm(attorneyId)
     }
     setFormData({ ...formData, [field]: value })
   }
@@ -184,8 +184,8 @@ export default function BookingCalendarPro({
     e.preventDefault()
     if (!selectedDate || !selectedSlot) return
 
-    BookingFunnel.completeForm(artisanId, !!formData.message)
-    BookingFunnel.initiateBooking(artisanId, serviceName)
+    BookingFunnel.completeForm(attorneyId, !!formData.message)
+    BookingFunnel.initiateBooking(attorneyId, specialtyName)
 
     setIsSubmitting(true)
     setError(null)
@@ -198,12 +198,12 @@ export default function BookingCalendarPro({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          artisanId,
+          attorneyId,
           slotId: selectedSlot.id,
           clientName: formData.clientName,
           clientPhone: formData.clientPhone,
           clientEmail: formData.clientEmail,
-          serviceDescription: formData.message || serviceName,
+          serviceDescription: formData.message || specialtyName,
         }),
       })
 
@@ -218,8 +218,8 @@ export default function BookingCalendarPro({
       // Track successful booking
       BookingFunnel.completeBooking(
         data.booking.id,
-        artisanId,
-        serviceName,
+        attorneyId,
+        specialtyName,
         selectedSlot.date,
         selectedSlot.startTime,
         servicePrice ? servicePrice * (depositPercentage / 100) : undefined
@@ -276,7 +276,7 @@ export default function BookingCalendarPro({
           Réservation confirmée !
         </h3>
         <p className="text-gray-600 mb-6">
-          Votre rendez-vous avec {artisanName} est confirmé.
+          Votre rendez-vous avec {attorneyName} est confirmé.
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
@@ -297,7 +297,7 @@ export default function BookingCalendarPro({
           </div>
           <div className="flex items-center gap-3">
             <User className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900">{serviceName}</span>
+            <span className="font-medium text-gray-900">{specialtyName}</span>
           </div>
         </div>
         <p className="text-sm text-gray-500 mb-6">
@@ -342,7 +342,7 @@ export default function BookingCalendarPro({
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <div className="flex justify-between mb-2">
             <span className="text-gray-600">Service</span>
-            <span className="font-medium">{serviceName}</span>
+            <span className="font-medium">{specialtyName}</span>
           </div>
           <div className="flex justify-between mb-2">
             <span className="text-gray-600">Prix total</span>
@@ -390,7 +390,7 @@ export default function BookingCalendarPro({
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
-        <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
+        <p className="text-blue-100 text-sm">{attorneyName} - {specialtyName}</p>
         {servicePrice && (
           <p className="text-blue-200 text-sm mt-1">À partir de {servicePrice}EUR</p>
         )}
@@ -690,7 +690,7 @@ export default function BookingCalendarPro({
           <div className="flex items-start gap-2 mt-4 p-3 bg-yellow-50 rounded-lg">
             <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <p className="text-sm text-yellow-700">
-              En confirmant, vous acceptez d'être contacté par {artisanName} pour confirmer les détails du rendez-vous.
+              En confirmant, vous acceptez d'être contacté par {attorneyName} pour confirmer les détails du rendez-vous.
             </p>
           </div>
 

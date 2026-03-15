@@ -32,8 +32,8 @@ export interface CompareProvider {
 interface CompareContextType {
   compareList: CompareProvider[]
   addToCompare: (provider: CompareProvider) => void
-  removeFromCompare: (providerId: string) => void
-  isInCompare: (providerId: string) => boolean
+  removeFromCompare: (attorneyId: string) => void
+  isInCompare: (attorneyId: string) => boolean
   clearCompare: () => void
 }
 
@@ -59,12 +59,12 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
     [warning],
   )
 
-  const removeFromCompare = useCallback((providerId: string) => {
-    setCompareList((prev) => prev.filter((p) => p.id !== providerId))
+  const removeFromCompare = useCallback((attorneyId: string) => {
+    setCompareList((prev) => prev.filter((p) => p.id !== attorneyId))
   }, [])
 
   const isInCompare = useCallback(
-    (providerId: string) => compareList.some((p) => p.id === providerId),
+    (attorneyId: string) => compareList.some((p) => p.id === attorneyId),
     [compareList],
   )
 

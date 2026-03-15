@@ -71,7 +71,7 @@ const guides = [
     title: "Normes Électriques NF C 15-100",
     description:
       "Guide de la norme NF C 15-100 : nombre de prises par pièce, protection des circuits, zones salle de bain et mise aux normes.",
-    href: "/guides/normes-electriques",
+    href: "/guides/regulations-electriques",
     icon: Zap,
     badge: "Nouveau",
     badgeColor: "bg-blue-100 text-blue-800",
@@ -89,7 +89,7 @@ const guides = [
     title: "Garantie Décennale : Tout Comprendre",
     description:
       "Définition, durée de 10 ans, travaux couverts, exclusions, vérification de l'attestation et démarches en cas de sinistre.",
-    href: "/guides/garantie-decennale",
+    href: "/guides/guarantee-decennale",
     icon: ShieldCheck,
     badge: "Nouveau",
     badgeColor: "bg-blue-100 text-blue-800",
@@ -98,7 +98,7 @@ const guides = [
     title: "Devis Travaux : Guide pour Bien Comparer",
     description:
       "Mentions obligatoires, combien de devis demander, comment comparer, négocier et éviter les pièges.",
-    href: "/guides/devis-travaux",
+    href: "/guides/quotes-travaux",
     icon: Hammer,
     badge: "Nouveau",
     badgeColor: "bg-blue-100 text-blue-800",
@@ -244,7 +244,7 @@ const relatedPages = [
   {
     title: "Questions fréquentes",
     description: "Réponses aux questions les plus posées sur les travaux et les artisans.",
-    href: "/questions",
+    href: "/faq",
     icon: HelpCircle,
   },
   {
@@ -256,7 +256,7 @@ const relatedPages = [
   {
     title: "Baromètre des prix",
     description: "Tarifs moyens, indices régionaux et tendances pour les métiers du bâtiment.",
-    href: "/barometre",
+    href: "/price-index",
     icon: BarChart3,
   },
 ]

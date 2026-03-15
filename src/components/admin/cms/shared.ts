@@ -47,7 +47,7 @@ export function buildPayload(formData: {
   tags: string[]
   readTime: string
   featuredImage: string
-  serviceSlug: string
+  specialtySlug: string
   locationSlug: string
   sortOrder: number
 }) {
@@ -69,7 +69,7 @@ export function buildPayload(formData: {
     tags: formData.tags.filter(t => t.trim()),
     read_time: formData.readTime || null,
     featured_image: formData.featuredImage || null,
-    service_slug: (formData.pageType === 'service' || formData.pageType === 'location') ? (formData.serviceSlug || null) : null,
+    service_slug: (formData.pageType === 'service' || formData.pageType === 'location') ? (formData.specialtySlug || null) : null,
     location_slug: formData.pageType === 'location' ? (formData.locationSlug || null) : null,
     sort_order: formData.sortOrder,
   }

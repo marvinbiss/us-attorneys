@@ -125,7 +125,7 @@ function unsubscribePage(message: string, success: boolean): string {
     <h1>${escapeHtml(message)}</h1>
     <p>${success
       ? 'Vous ne recevrez plus de communications de notre part.'
-      : 'Veuillez réessayer ou contacter support@servicesartisans.fr'
+      : 'Veuillez réessayer ou contacter support@us-attorneys.com'
     }</p>
   </div>
 </body>

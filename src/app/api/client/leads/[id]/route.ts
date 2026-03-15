@@ -61,8 +61,8 @@ export async function GET(
         valid_until,
         status,
         created_at,
-        provider_id,
-        provider:providers!provider_id(id, name, specialty, address_city, rating_average)
+        attorney_id,
+        provider:providers!attorney_id(id, name, specialty, address_city, rating_average)
       `)
       .eq('request_id', id)
       .order('created_at', { ascending: true })
@@ -94,7 +94,7 @@ export async function GET(
 
     // Sanitize events for client view:
     // - Use client-friendly labels
-    // - Strip provider_id, actor_id
+    // - Strip attorney_id, actor_id
     // - Expose only safe metadata (amounts, no internal IDs)
     const clientEvents = (events || []).map(e => ({
       id: e.id,
@@ -104,7 +104,7 @@ export async function GET(
       created_at: e.created_at,
     }))
 
-    // Build quotes list — strip provider_id from client response
+    // Build quotes list — strip attorney_id from client response
     const quotes = (quotesRaw || []).map(q => {
       // Supabase returns the join as an array or object depending on FK cardinality
       const providerRaw = Array.isArray(q.provider) ? q.provider[0] : q.provider

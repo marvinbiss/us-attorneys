@@ -6,7 +6,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Loader2 } from 'lucide-react'
-import { getArtisanUrl } from '@/lib/utils'
+import { getAttorneyUrl } from '@/lib/utils'
 import './map-styles.css'
 
 interface Provider {
@@ -35,7 +35,7 @@ interface GeographicMapProps {
   locationName?: string
   height?: string
   className?: string
-  onMarkerHover?: (providerId: string | null) => void
+  onMarkerHover?: (attorneyId: string | null) => void
   onSearchArea?: (bounds: import('leaflet').LatLngBounds) => void
 }
 
@@ -248,7 +248,7 @@ export default function GeographicMap({
           : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim())
         : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
 
-      const profileUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
+      const profileUrl = getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
 
       const phoneBtn = provider.phone
         ? `<a href="tel:${provider.phone}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;background:linear-gradient(to right,#44403c,#292524);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">

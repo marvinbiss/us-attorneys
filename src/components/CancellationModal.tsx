@@ -7,8 +7,8 @@ interface CancellationModalProps {
   bookingId: string
   bookingDate: string
   bookingTime: string
-  artisanName: string
-  serviceName: string
+  attorneyName: string
+  specialtyName: string
   onClose: () => void
   onCancelled: () => void
 }
@@ -17,8 +17,8 @@ export default function CancellationModal({
   bookingId,
   bookingDate,
   bookingTime,
-  artisanName,
-  serviceName,
+  attorneyName,
+  specialtyName,
   onClose,
   onCancelled,
 }: CancellationModalProps) {
@@ -98,7 +98,7 @@ export default function CancellationModal({
                 <span>{bookingTime}</span>
               </div>
               <div className="text-gray-700">
-                <span className="font-medium">{artisanName}</span> - {serviceName}
+                <span className="font-medium">{attorneyName}</span> - {specialtyName}
               </div>
             </div>
           </div>

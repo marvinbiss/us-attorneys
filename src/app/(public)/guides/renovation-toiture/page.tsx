@@ -99,12 +99,12 @@ const typesCouverture = [
 ]
 
 const services = [
-  { label: "Couvreur", href: "/services/couvreur", icon: Home },
-  { label: "Charpentier", href: "/services/charpentier", icon: Hammer },
-  { label: "Zingueur", href: "/services/zingueur", icon: Hammer },
-  { label: "Isolation", href: "/services/isolation", icon: Shield },
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
-  { label: "Électricien", href: "/services/electricien", icon: Hammer },
+  { label: "Couvreur", href: "/practice-areas/couvreur", icon: Home },
+  { label: "Charpentier", href: "/practice-areas/charpentier", icon: Hammer },
+  { label: "Zingueur", href: "/practice-areas/zingueur", icon: Hammer },
+  { label: "Isolation", href: "/practice-areas/isolation", icon: Shield },
+  { label: "Maçon", href: "/practice-areas/macon", icon: Building2 },
+  { label: "Électricien", href: "/practice-areas/electricien", icon: Hammer },
 ]
 
 const faqItems = [
@@ -524,7 +524,7 @@ export default function RenovationToiturePage() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Aides rénovation 2026"}</h3>
               <p className="text-sm text-gray-500">{"Toutes les aides pour financer votre isolation de toiture."}</p>
             </Link>
-            <Link href="/guides/garantie-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+            <Link href="/guides/guarantee-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Garantie décennale"}</h3>
               <p className="text-sm text-gray-500">{"Vérifiez la décennale de votre couvreur avant travaux."}</p>
             </Link>
@@ -570,14 +570,14 @@ export default function RenovationToiturePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/couvreur"
+                href="/practice-areas/couvreur"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Trouver un couvreur"}
               </Link>
               <Link
-                href="/devis"
+                href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />

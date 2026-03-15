@@ -44,9 +44,9 @@ export async function GET(request: Request) {
     let hasMore = true
 
     while (hasMore) {
-      // Fetch active providers with their current metrics (user_id needed to match artisan_id in reviews)
+      // Fetch active providers with their current metrics (user_id needed to match attorney_id in reviews)
       const { data: providers, error } = await supabase
-        .from('providers')
+        .from('attorneys')
         .select('id, user_id, rating_average, review_count')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
@@ -83,20 +83,20 @@ export async function GET(request: Request) {
       // Single query instead of N queries
       const { data: allReviews, error: reviewError } = await supabase
         .from('reviews')
-        .select('artisan_id, rating')
-        .in('artisan_id', userIds)
+        .select('attorney_id, rating')
+        .in('attorney_id', userIds)
         .eq('status', 'published')
 
       if (reviewError) {
         logger.error('[Cron] Error batch-fetching reviews:', reviewError)
         totalErrors++
       } else {
-        // Group reviews by artisan_id
+        // Group reviews by attorney_id
         const reviewsByArtisan = new Map<string, number[]>()
         for (const r of allReviews || []) {
-          const existing = reviewsByArtisan.get(r.artisan_id) || []
+          const existing = reviewsByArtisan.get(r.attorney_id) || []
           existing.push(r.rating || 0)
-          reviewsByArtisan.set(r.artisan_id, existing)
+          reviewsByArtisan.set(r.attorney_id, existing)
         }
 
         // Prepare batch updates
@@ -124,7 +124,7 @@ export async function GET(request: Request) {
           updates.push(
             Promise.resolve(
               supabase
-                .from('providers')
+                .from('attorneys')
                 .update({ rating_average: roundedRating, review_count: reviewCount })
                 .eq('id', provider.id)
             ).then(({ error: updateError }) => {

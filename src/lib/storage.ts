@@ -45,7 +45,7 @@ export function validateFile(file: File, type: 'image' | 'video'): { valid: bool
 /**
  * Generate a unique file path for storage
  */
-export function generateFilePath(artisanId: string, fileName: string): string {
+export function generateFilePath(attorneyId: string, fileName: string): string {
   const timestamp = Date.now()
   const randomStr = Math.random().toString(36).substring(2, 8)
   const extension = fileName.split('.').pop()?.toLowerCase() || 'jpg'
@@ -54,7 +54,7 @@ export function generateFilePath(artisanId: string, fileName: string): string {
     .replace(/[^a-zA-Z0-9-_]/g, '_') // Sanitize
     .substring(0, 50) // Limit length
 
-  return `${artisanId}/${timestamp}-${randomStr}-${sanitizedName}.${extension}`
+  return `${attorneyId}/${timestamp}-${randomStr}-${sanitizedName}.${extension}`
 }
 
 /**
@@ -62,11 +62,11 @@ export function generateFilePath(artisanId: string, fileName: string): string {
  */
 export async function uploadFile(
   file: File,
-  artisanId: string,
+  attorneyId: string,
   _options?: UploadOptions
 ): Promise<UploadedFile> {
   const supabase = createClient()
-  const filePath = generateFilePath(artisanId, file.name)
+  const filePath = generateFilePath(attorneyId, file.name)
 
   // Upload to Supabase Storage
   const { data, error } = await supabase.storage

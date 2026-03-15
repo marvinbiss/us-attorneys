@@ -56,7 +56,7 @@ const faqItems = [
 export default function WidgetPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Partenaires', url: '/partenaires' },
+    { name: 'Partenaires', url: '/partners' },
     { name: 'Widget', url: '/widget' },
   ])
 
@@ -83,7 +83,7 @@ export default function WidgetPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
             items={[
-              { label: 'Partenaires', href: '/partenaires' },
+              { label: 'Partenaires', href: '/partners' },
               { label: 'Widget' },
             ]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
@@ -289,14 +289,14 @@ export default function WidgetPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/inscription-artisan"
+              href="/register-attorney"
               className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
               Creer mon profil artisan
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              href="/partenaires"
+              href="/partners"
               className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
             >
               En savoir plus

@@ -603,13 +603,13 @@ export default function PermisConstruirePage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/services/architecte-interieur"
+                  href="/practice-areas/architecte-interieur"
                   className="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
                 >
                   {"Trouver un architecte"} <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/services/macon"
+                  href="/practice-areas/macon"
                   className="inline-flex items-center gap-2 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-400 transition-colors"
                 >
                   {"Trouver un maçon"} <ArrowRight className="w-4 h-4" />

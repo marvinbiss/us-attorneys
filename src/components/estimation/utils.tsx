@@ -86,10 +86,10 @@ export function getGreetingMessage(
   if (context.artisan) {
     return `Demandez un devis gratuit à ${context.artisan.name}`
   }
-  if (pageUrl.includes('/urgence/')) {
+  if (pageUrl.includes('/emergency/')) {
     return `Urgence ${metier} à ${ville} ? Estimez le coût et soyez rappelé immédiatement`
   }
-  if (pageUrl.includes('/tarifs/')) {
+  if (pageUrl.includes('/pricing/')) {
     return `Ces prix correspondent à votre projet ? Vérifiez gratuitement`
   }
   return `Besoin d'un ${metier} à ${ville} ? Estimez le prix gratuitement`

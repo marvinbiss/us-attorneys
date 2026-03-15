@@ -32,7 +32,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           <NotificationBell userId={userId} />
         </div>
         <Link
-          href="/espace-client/mes-demandes"
+          href="/client-dashboard/mes-demandes"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
             activePage === 'mes-demandes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
@@ -41,7 +41,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           Mes demandes
         </Link>
         <Link
-          href="/espace-client/messages"
+          href="/client-dashboard/messages"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
             activePage === 'messages' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
@@ -53,7 +53,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           )}
         </Link>
         <Link
-          href="/espace-client/avis-donnes"
+          href="/client-dashboard/reviews-donnes"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
             activePage === 'avis-donnes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
@@ -62,7 +62,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           Avis donnés
         </Link>
         <Link
-          href="/espace-client/parametres"
+          href="/client-dashboard/parametres"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
             activePage === 'parametres' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}

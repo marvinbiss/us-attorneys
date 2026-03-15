@@ -40,16 +40,16 @@ function addCspHeaders(response: NextResponse, request: NextRequest, nonce: stri
 
 // Legacy redirects — hoisted to module scope to avoid per-request allocation
 const LEGACY_REDIRECTS: Record<string, string> = {
-  '/problemes-courants': '/problemes',
-  '/outils/diagnostic-artisan': '/outils/diagnostic',
-  '/barometre-prix': '/barometre',
-  '/calculateur': '/outils/calculateur-prix',
+  '/issues-courants': '/issues',
+  '/tools/diagnostic-artisan': '/tools/diagnostic',
+  '/price-index-prix': '/price-index',
+  '/calculator': '/tools/calculator-prix',
 }
 
 // URL canonicalization — all fixes combined into a single 301 hop
 function getCanonicalRedirect(request: NextRequest): string | null {
   const url = request.nextUrl
-  const host = request.headers.get('host') || 'servicesartisans.fr'
+  const host = request.headers.get('host') || 'us-attorneys.com'
 
   let canonicalHost = host
   let pathname = url.pathname
@@ -81,7 +81,7 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   }
 
   // 4. Lowercase normalization — prevent duplicate content from mixed-case URLs
-  //    Exclude artisan publicId paths: /services/{service}/{location}/{publicId}
+  //    Exclude artisan publicId paths: /practice-areas/{service}/{location}/{publicId}
   //    because stable_id contains mixed-case characters (HMAC-SHA256 base64)
   const isArtisanPublicIdPath = /^\/services\/[^/]+\/[^/]+\/[^/]+$/.test(pathname)
   if (!isArtisanPublicIdPath && pathname !== pathname.toLowerCase()) {
@@ -99,10 +99,10 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Redirect /tarifs-artisans → /tarifs (301 permanent, cached at CDN edge)
-  if (pathname.startsWith('/tarifs-artisans')) {
-    const newPath = pathname.replace('/tarifs-artisans', '/tarifs')
-    const host = request.headers.get('host') || 'servicesartisans.fr'
+  // Redirect /pricing-artisans → /pricing (301 permanent, cached at CDN edge)
+  if (pathname.startsWith('/pricing-artisans')) {
+    const newPath = pathname.replace('/pricing-artisans', '/pricing')
+    const host = request.headers.get('host') || 'us-attorneys.com'
     const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
     redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
     redirectResponse.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
@@ -111,7 +111,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirect legacy/mistyped URLs → correct paths (301 permanent, cached at CDN edge)
   if (LEGACY_REDIRECTS[pathname]) {
-    const host = request.headers.get('host') || 'servicesartisans.fr'
+    const host = request.headers.get('host') || 'us-attorneys.com'
     const legacyRedirect = NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
     legacyRedirect.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
     legacyRedirect.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
@@ -128,7 +128,7 @@ export async function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
   // Auth guard for private spaces
-  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
+  if (pathname.startsWith('/client-dashboard') || pathname.startsWith('/attorney-dashboard') || (pathname.startsWith('/admin') && pathname !== '/admin/login')) {
     try {
       const { createServerClient } = await import('@supabase/ssr')
 
@@ -150,7 +150,7 @@ export async function middleware(request: NextRequest) {
 
       if (authError || !user) {
         const redirectUrl = encodeURIComponent(pathname)
-        return NextResponse.redirect(new URL(`/connexion?redirect=${redirectUrl}`, request.url))
+        return NextResponse.redirect(new URL(`/login?redirect=${redirectUrl}`, request.url))
       }
 
       const { data: profile } = await supabase
@@ -160,16 +160,16 @@ export async function middleware(request: NextRequest) {
         .single()
 
       if (profile) {
-        if (pathname.startsWith('/espace-artisan') && profile.role !== 'artisan') {
-          return NextResponse.redirect(new URL('/espace-client', request.url))
+        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') {
+          return NextResponse.redirect(new URL('/client-dashboard', request.url))
         }
-        if (pathname.startsWith('/espace-client') && profile.role === 'artisan') {
-          return NextResponse.redirect(new URL('/espace-artisan', request.url))
+        if (pathname.startsWith('/client-dashboard') && profile.role === 'artisan') {
+          return NextResponse.redirect(new URL('/attorney-dashboard', request.url))
         }
       }
     } catch (error) {
       logger.error('Middleware auth error:', error)
-      const loginUrl = new URL('/connexion', request.url)
+      const loginUrl = new URL('/login', request.url)
       loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
       return NextResponse.redirect(loginUrl)
     }
@@ -223,8 +223,8 @@ export async function middleware(request: NextRequest) {
 
   // X-Robots-Tag + Cache-Control for all private and admin routes
   if (
-    pathname.startsWith('/espace-artisan') ||
-    pathname.startsWith('/espace-client') ||
+    pathname.startsWith('/attorney-dashboard') ||
+    pathname.startsWith('/client-dashboard') ||
     pathname.startsWith('/admin')
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
@@ -238,21 +238,21 @@ export async function middleware(request: NextRequest) {
   // Strategy: prefix-match covers all dynamic/nested routes, exact-match covers leaf pages.
   // Any public route that starts with one of these prefixes gets CDN caching.
   const publicCachePrefixes = [
-    '/services/',
-    '/devis/',
-    '/tarifs/',
-    '/avis/',
-    '/villes/',
-    '/departements/',
+    '/practice-areas/',
+    '/quotes/',
+    '/pricing/',
+    '/reviews/',
+    '/cities/',
+    '/states/',
     '/regions/',
-    '/problemes/',
-    '/urgence/',
+    '/issues/',
+    '/emergency/',
     '/guides/',
-    '/questions/',
+    '/faq/',
     '/blog/',
-    '/comparaison/',
-    '/barometre/',
-    '/outils/',
+    '/compare/',
+    '/price-index/',
+    '/tools/',
   ]
   // Exact-match pages (no sub-routes, or the index page of a prefix group)
   const publicCacheExact = new Set([
@@ -260,43 +260,43 @@ export async function middleware(request: NextRequest) {
     '/blog',
     '/faq',
     '/contact',
-    '/comment-ca-marche',
-    '/comparaison',
-    '/artisans',
-    '/carte-artisans',
-    '/a-propos',
-    '/garantie',
-    '/cgv',
-    '/confidentialite',
-    '/accessibilite',
-    '/avant-apres',
-    '/calendrier-travaux',
-    '/badge-artisan',
-    '/carrieres',
-    '/barometre',
-    '/glossaire',
+    '/how-it-works',
+    '/compare',
+    '/attorneys',
+    '/attorney-map',
+    '/about',
+    '/guarantee',
+    '/terms',
+    '/privacy',
+    '/accessibility',
+    '/before-after',
+    '/project-planner',
+    '/attorney-badge',
+    '/careers',
+    '/price-index',
+    '/glossary',
     '/guides',
-    '/questions',
-    '/avis',
-    '/problemes',
-    '/departements',
+    '/faq',
+    '/reviews',
+    '/issues',
+    '/states',
     '/regions',
-    '/villes',
-    '/normes',
-    '/outils',
-    '/checklist-travaux',
-    '/statistiques-artisans-france',
-    '/presse',
-    '/partenaires',
+    '/cities',
+    '/regulations',
+    '/tools',
+    '/project-checklist',
+    '/attorney-statistics',
+    '/press',
+    '/partners',
     '/mediation',
-    '/mentions-legales',
-    '/politique-avis',
-    '/plan-du-site',
-    '/verifier-artisan',
-    '/notre-processus-de-verification',
-    '/devis',
-    '/tarifs',
-    '/recherche',
+    '/legal',
+    '/review-policy',
+    '/sitemap-page',
+    '/verify-attorney',
+    '/verification-process',
+    '/quotes',
+    '/pricing',
+    '/search',
   ])
   if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')

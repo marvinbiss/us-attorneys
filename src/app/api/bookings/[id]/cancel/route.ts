@@ -43,7 +43,7 @@ export async function POST(
     // Fetch booking info
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select('id, client_id, provider_id, status, scheduled_date, client_name, client_email, service_description')
+      .select('id, client_id, attorney_id, status, scheduled_date, client_name, client_email, service_description')
       .eq('id', id)
       .single()
 
@@ -55,7 +55,7 @@ export async function POST(
     }
 
     // Verify ownership: only the client or the provider can cancel
-    if (booking.client_id !== user.id && booking.provider_id !== user.id) {
+    if (booking.client_id !== user.id && booking.attorney_id !== user.id) {
       return NextResponse.json(
         { error: 'Vous n\'êtes pas autorisé à annuler cette réservation' },
         { status: 403 }
@@ -100,7 +100,7 @@ export async function POST(
     const { data: artisan } = await adminSupabase
       .from('profiles')
       .select('full_name, email')
-      .eq('id', booking.provider_id)
+      .eq('id', booking.attorney_id)
       .single()
 
     // Format date for email
@@ -117,9 +117,9 @@ export async function POST(
         bookingId: id,
         clientName: booking.client_name,
         clientEmail: booking.client_email,
-        artisanName: artisan.full_name || 'Artisan',
+        attorneyName: artisan.full_name || 'Artisan',
         artisanEmail: artisan.email,
-        serviceName: booking.service_description || 'Service',
+        specialtyName: booking.service_description || 'Service',
         date: formattedDate,
         startTime: new Date(booking.scheduled_date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         endTime: '',

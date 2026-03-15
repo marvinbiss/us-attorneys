@@ -37,7 +37,7 @@ describe('client_id on lead creation — server action', () => {
 })
 
 describe('client_id on lead creation — devis API route', () => {
-  const source = readSource('src/app/api/devis/route.ts')
+  const source = readSource('src/app/api/quotes/route.ts')
 
   it('imports server client for auth resolution', () => {
     expect(source).toContain("import { createClient as createServerClient } from '@/lib/supabase/server'")
@@ -116,7 +116,7 @@ describe('claim-lead backfill endpoint', () => {
 describe('No public route contamination', () => {
   const files = [
     'src/app/actions/lead.ts',
-    'src/app/api/devis/route.ts',
+    'src/app/api/quotes/route.ts',
     'src/app/api/client/leads/claim/route.ts',
   ]
 

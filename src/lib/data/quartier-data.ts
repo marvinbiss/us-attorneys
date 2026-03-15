@@ -1,13 +1,13 @@
 /**
  * Enriched quartier-level data for ALL quartiers in france.ts.
  *
- * Computed deterministically at module load time from the villes array.
+ * Computed deterministically at module load time from the cities array.
  * Uses hashCode for reproducible pseudo-random variation.
  *
  * ~8 200 entries covering every ville/quartier combination.
  */
 
-import { villes, type Ville } from './france'
+import { cities, type City } from './france'
 import { QUARTIER_PRIX_REEL } from './quartier-real-data'
 
 // ---------------------------------------------------------------------------
@@ -93,7 +93,7 @@ function parsePop(pop: string): number {
 // ---------------------------------------------------------------------------
 
 function computeCodePostal(
-  ville: Ville,
+  ville: City,
   quartierName: string,
   quartierIndex: number,
   quartierCount: number,
@@ -357,7 +357,7 @@ const TYPE_QUARTIER_PRICE_MULT: Record<QuartierProfile['typeQuartier'], number> 
 }
 
 function computePrixM2(
-  ville: Ville,
+  ville: City,
   quartierName: string,
   typeQuartier: QuartierProfile['typeQuartier'],
   population: number,
@@ -514,7 +514,7 @@ const TRAM_CITIES = new Set([
 const IDF_DEPTS = new Set(['75', '77', '78', '91', '92', '93', '94', '95'])
 
 function computeTransport(
-  ville: Ville,
+  ville: City,
   quartierName: string,
   population: number,
 ): QuartierProfile['transport'] {
@@ -746,7 +746,7 @@ function generateAtout(
 // ---------------------------------------------------------------------------
 
 function computeProfile(
-  ville: Ville,
+  ville: City,
   quartierName: string,
   quartierIndex: number,
 ): QuartierProfile {
@@ -801,7 +801,7 @@ function computeProfile(
 
 function generateAllProfiles(): Record<string, QuartierProfile> {
   const profiles: Record<string, QuartierProfile> = {}
-  for (const ville of villes) {
+  for (const ville of cities) {
     for (let i = 0; i < ville.quartiers.length; i++) {
       const quartierName = ville.quartiers[i]
       const slug = toSlug(quartierName)

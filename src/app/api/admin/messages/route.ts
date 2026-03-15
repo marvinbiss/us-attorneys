@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
           email,
           full_name
         ),
-        provider:providers!provider_id (
+        provider:providers!attorney_id (
           id,
           name
         )

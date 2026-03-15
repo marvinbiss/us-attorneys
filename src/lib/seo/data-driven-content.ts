@@ -9,7 +9,7 @@
  * only have basic demographics).
  */
 
-import type { CommuneData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getRegionalMultiplier } from '@/lib/seo/location-content'
@@ -130,18 +130,18 @@ function deMonth(m: number): string {
 // ---------------------------------------------------------------------------
 
 export function generateDataDrivenContent(
-  commune: CommuneData,
-  serviceSlug: string,
-  serviceName: string,
-  providerCount: number,
+  commune: LocationData,
+  specialtySlug: string,
+  specialtyName: string,
+  attorneyCount: number,
 ): DataDrivenContent {
-  const svc = serviceName.toLowerCase()
+  const svc = specialtyName.toLowerCase()
   const de = deSvc(svc) // "de plombier" or "d'électricien"
   const pop = commune.population
   const dataSources: string[] = []
-  const trade = getTradeContent(serviceSlug)
+  const trade = getTradeContent(specialtySlug)
   // Deterministic seed for template variation per service×city
-  const seed = Math.abs(hashSvc(`${serviceSlug}-${commune.slug}`))
+  const seed = Math.abs(hashSvc(`${specialtySlug}-${commune.slug}`))
 
   // =========================================================================
   // 1. DATA-RICH INTRO
@@ -195,9 +195,9 @@ export function generateDataDrivenContent(
   }
 
   // Provider count
-  if (providerCount > 0) {
+  if (attorneyCount > 0) {
     introParts.push(
-      `Notre annuaire référence ${providerCount} ${svc}${providerCount > 1 ? 's' : ''} vérifiés par SIREN intervenant à ${commune.name} et ses environs.`
+      `Notre annuaire référence ${attorneyCount} ${svc}${attorneyCount > 1 ? 's' : ''} vérifiés par SIREN intervenant à ${commune.name} et ses environs.`
     )
   }
 
@@ -238,14 +238,14 @@ export function generateDataDrivenContent(
       // Service-specific housing insight
       if (pct >= 60) {
         const houseTrades = ['couvreur', 'paysagiste', 'jardinier', 'facadier', 'terrassier', 'ramoneur', 'pisciniste']
-        if (houseTrades.includes(serviceSlug)) {
+        if (houseTrades.includes(specialtySlug)) {
           parts.push(
             `Cette forte proportion de maisons individuelles génère une demande soutenue en services ${de} pour l'entretien et la rénovation des propriétés.`
           )
         }
       } else if (pct < 40) {
         const apptTrades = ['plombier', 'electricien', 'serrurier', 'ascensoriste']
-        if (apptTrades.includes(serviceSlug)) {
+        if (apptTrades.includes(specialtySlug)) {
           parts.push(
             `La prédominance d'immeubles collectifs à ${commune.name} crée des besoins spécifiques en ${svc} : parties communes, colonnes montantes et réseaux partagés.`
           )
@@ -366,11 +366,11 @@ export function generateDataDrivenContent(
       // Trade-specific market context
       const specializedTrades = ['ascensoriste', 'pisciniste', 'domoticien', 'diagnostiqueur']
       const commonTrades = ['plombier', 'electricien', 'serrurier', 'peintre-en-batiment']
-      if (specializedTrades.includes(serviceSlug)) {
+      if (specializedTrades.includes(specialtySlug)) {
         parts.push(
           `Le métier ${de} étant une spécialité de niche, les professionnels disponibles à ${commune.name} couvrent généralement un périmètre plus large que les artisans du second œuvre.`
         )
-      } else if (commonTrades.includes(serviceSlug) && commune.nb_artisans_btp && commune.nb_artisans_btp > 20) {
+      } else if (commonTrades.includes(specialtySlug) && commune.nb_artisans_btp && commune.nb_artisans_btp > 20) {
         parts.push(
           `Parmi les ${formatNumber(commune.nb_artisans_btp)} entreprises du BTP à ${commune.name}, les ${svc}s représentent une part significative, garantissant un choix suffisant pour comparer les offres et les tarifs.`
         )
@@ -408,7 +408,7 @@ export function generateDataDrivenContent(
     const plumbingTrades = ['plombier']
     const elecTrades = ['electricien']
 
-    if (energyDirectTrades.includes(serviceSlug)) {
+    if (energyDirectTrades.includes(specialtySlug)) {
       if (pct >= 25) {
         parts.push(
           `Avec ${pct}% de passoires thermiques, la demande en ${svc} pour la rénovation énergétique est particulièrement forte à ${commune.name}. L'interdiction progressive de location des logements classés G (2025), puis F (2028), puis E (2034) accélère cette tendance.`
@@ -418,17 +418,17 @@ export function generateDataDrivenContent(
           `Ce taux de logements énergivores crée une demande régulière en ${svc} pour l'amélioration de la performance énergétique des bâtiments à ${commune.name}.`
         )
       }
-    } else if (energyIndirectTrades.includes(serviceSlug)) {
+    } else if (energyIndirectTrades.includes(specialtySlug)) {
       if (pct >= 15) {
         parts.push(
           `La rénovation énergétique impacte directement le métier de ${svc} : l'amélioration de l'enveloppe du bâtiment (isolation, menuiseries, toiture) est le premier levier pour sortir un logement du statut de passoire thermique.`
         )
       }
-    } else if (plumbingTrades.includes(serviceSlug)) {
+    } else if (plumbingTrades.includes(specialtySlug)) {
       parts.push(
         `Pour les plombiers à ${commune.name}, la rénovation énergétique se traduit par le remplacement des chaudières vétustes par des modèles à condensation, des pompes à chaleur ou des chauffe-eau thermodynamiques — des interventions éligibles à MaPrimeRénov'.`
       )
-    } else if (elecTrades.includes(serviceSlug)) {
+    } else if (elecTrades.includes(specialtySlug)) {
       parts.push(
         `Pour les électriciens à ${commune.name}, la transition énergétique génère des chantiers d'installation de bornes de recharge, de panneaux photovoltaïques et de systèmes de pilotage de la consommation (domotique, thermostats connectés).`
       )
@@ -487,7 +487,7 @@ export function generateDataDrivenContent(
 
       // Service-specific frost advice
       const frostSensitive = ['plombier', 'couvreur', 'macon', 'facadier', 'peintre-en-batiment', 'carreleur', 'terrassier']
-      if (frostSensitive.includes(serviceSlug) && commune.jours_gel_annuels >= 30) {
+      if (frostSensitive.includes(specialtySlug) && commune.jours_gel_annuels >= 30) {
         parts.push(
           `Ce nombre significatif de jours de gel impose aux ${svc}s de ${commune.name} d'adapter leur calendrier et leurs matériaux pour garantir la durabilité des travaux.`
         )
@@ -510,7 +510,7 @@ export function generateDataDrivenContent(
       )
       const exteriorTrades = ['couvreur', 'facadier', 'peintre-en-batiment', 'macon', 'terrassier',
         'paysagiste', 'jardinier', 'charpentier', 'zingueur', 'etancheiste']
-      if (exteriorTrades.includes(serviceSlug)) {
+      if (exteriorTrades.includes(specialtySlug)) {
         parts.push(
           `Planifiez vos travaux ${de} durant cette fenêtre pour bénéficier de conditions optimales.`
         )
@@ -553,7 +553,7 @@ export function generateDataDrivenContent(
   const exteriorTrades = ['couvreur', 'facadier', 'paysagiste', 'jardinier', 'terrassier', 'macon', 'charpentier', 'zingueur', 'etancheiste', 'pisciniste']
   const energyTrades = ['chauffagiste', 'climaticien', 'isolation-thermique', 'pompe-a-chaleur', 'renovation-energetique']
 
-  if (interiorTrades.includes(serviceSlug)) {
+  if (interiorTrades.includes(specialtySlug)) {
     if (commune.region_name === 'Île-de-France') {
       demandeLocaleParts.push(
         `En Île-de-France, le marché de la rénovation intérieure est particulièrement actif : la valeur élevée des biens incite les propriétaires à investir dans l'amélioration de leur logement. Les ${svc}s franciliens sont sollicités aussi bien pour des rénovations complètes que pour des interventions ponctuelles.`
@@ -579,7 +579,7 @@ export function generateDataDrivenContent(
         `À ${commune.name}, les demandes ${de} portent principalement sur la rénovation et la mise aux normes des logements existants. Le parc immobilier local offre des opportunités régulières d'amélioration du confort et de la valeur des biens.`
       )
     }
-  } else if (exteriorTrades.includes(serviceSlug)) {
+  } else if (exteriorTrades.includes(specialtySlug)) {
     if (commune.climat_zone === 'océanique' || commune.climat_zone === 'semi-océanique') {
       demandeLocaleParts.push(
         `Le climat ${commune.climat_zone} de ${commune.name} soumet les extérieurs à une humidité régulière. Les ${svc}s locaux sont sollicités pour l'entretien préventif et la réparation des désordres liés aux intempéries : mousses, infiltrations et usure des matériaux exposés.`
@@ -601,7 +601,7 @@ export function generateDataDrivenContent(
         `Les conditions climatiques de ${commune.name} influencent directement le calendrier des ${svc}s. Planifier vos travaux extérieurs en dehors des périodes de gel et de fortes pluies garantit une meilleure qualité d'exécution et une durabilité accrue.`
       )
     }
-  } else if (energyTrades.includes(serviceSlug)) {
+  } else if (energyTrades.includes(specialtySlug)) {
     if (commune.climat_zone === 'montagnard' || commune.climat_zone === 'continental') {
       demandeLocaleParts.push(
         `Le climat ${commune.climat_zone} de ${commune.name} engendre des besoins de chauffage importants. Les ${svc}s sont très sollicités pour l'installation et l'entretien de systèmes performants : pompes à chaleur, chaudières à condensation et solutions hybrides adaptées aux hivers rigoureux.`
@@ -699,7 +699,7 @@ export function generateDataDrivenContent(
     ],
   }
 
-  const tradeRegl = TRADE_REGL[serviceSlug]
+  const tradeRegl = TRADE_REGL[specialtySlug]
   if (tradeRegl) {
     reglParts.push(...tradeRegl)
   } else {
@@ -749,8 +749,8 @@ export function generateDataDrivenContent(
     if (commune.nb_artisans_rge) {
       answer += ` Parmi elles, ${commune.nb_artisans_rge} sont certifiées RGE.`
     }
-    if (providerCount > 0) {
-      answer += ` ServicesArtisans référence ${providerCount} ${svc}${providerCount > 1 ? 's' : ''} vérifiés dans la commune.`
+    if (attorneyCount > 0) {
+      answer += ` ServicesArtisans référence ${attorneyCount} ${svc}${attorneyCount > 1 ? 's' : ''} vérifiés dans la commune.`
     }
     faqItems.push({
       question: `Combien ${de}s exercent à ${commune.name} ?`,

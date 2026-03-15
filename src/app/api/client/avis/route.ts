@@ -15,7 +15,7 @@ import { z } from 'zod'
 
 // POST request schema
 const createReviewSchema = z.object({
-  artisan_id: z.string().uuid(),
+  attorney_id: z.string().uuid(),
   booking_id: z.string().uuid().optional().nullable(),
   rating: z.number().int().min(1).max(5),
   comment: z.string().min(10).max(2000),
@@ -65,7 +65,7 @@ export async function GET() {
       .from('reviews')
       .select(`
         *,
-        artisan:profiles!artisan_id(id, full_name),
+        artisan:profiles!attorney_id(id, full_name),
         booking:bookings!booking_id(service_name)
       `)
       .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
@@ -86,7 +86,7 @@ export async function GET() {
     const formattedAvisPublies = avisPublies?.map(r => ({
       id: r.id,
       artisan: r.artisan?.full_name || 'Artisan',
-      artisan_id: r.artisan_id,
+      attorney_id: r.attorney_id,
       service: (r.booking as { service_name?: string } | null)?.service_name || null,
       date: r.created_at,
       note: r.rating,
@@ -129,7 +129,7 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    const { artisan_id, booking_id, rating, comment } = result.data
+    const { attorney_id, booking_id, rating, comment } = result.data
 
     // Fetch client profile to get name and email for the review record
     const { data: clientProfile } = await supabase
@@ -142,7 +142,7 @@ export async function POST(request: Request) {
     const { data: review, error: insertError } = await supabase
       .from('reviews')
       .insert({
-        artisan_id,
+        attorney_id,
         booking_id: booking_id || null,
         client_name: clientProfile?.full_name || user.email || 'Client',
         client_email: clientProfile?.email || user.email || '',
@@ -162,25 +162,25 @@ export async function POST(request: Request) {
 
     // Revalidation on-demand des pages affectées (non-bloquant)
     try {
-      const { data: providerData } = await supabase
-        .from('providers')
+      const { data: attorneyData } = await supabase
+        .from('attorneys')
         .select('specialty, address_city, slug, stable_id')
-        .eq('user_id', artisan_id)
+        .eq('user_id', attorney_id)
         .single()
 
-      if (providerData) {
-        const serviceSlug = slugify(providerData.specialty || 'artisan')
-        const locationSlug = slugify(providerData.address_city || 'france')
-        const publicId = providerData.slug || providerData.stable_id
+      if (attorneyData) {
+        const specialtySlug = slugify(attorneyData.specialty || 'artisan')
+        const locationSlug = slugify(attorneyData.address_city || 'france')
+        const publicId = attorneyData.slug || attorneyData.stable_id
 
         if (publicId) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+          revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
         }
-        revalidatePath(`/avis/${serviceSlug}/${locationSlug}`, 'page')
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+        revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
+        revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
 
         logger.info('Revalidated paths after client review submission', {
-          artisanId: artisan_id,
+          attorneyId: attorney_id,
           reviewId: review.id,
         })
       }

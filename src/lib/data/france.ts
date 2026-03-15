@@ -1,6 +1,6 @@
-// Données complètes des villes et départements français
+// Données complètes des cities et départements français
 
-export interface Ville {
+export interface City {
   slug: string
   name: string
   region: string
@@ -12,7 +12,7 @@ export interface Ville {
   quartiers: string[]
 }
 
-export interface Departement {
+export interface State {
   code: string
   slug: string
   name: string
@@ -20,11 +20,11 @@ export interface Departement {
   chefLieu: string
   population: string
   description: string
-  villes: string[]
+  cities: string[]
 }
 
-// 2280 villes françaises (communes de 5 000+ habitants)
-export const villes: Ville[] = [
+// 2280 cities françaises (communes de 5 000+ habitants)
+export const cities: City[] = [
   {
     slug: 'paris',
     name: 'Paris',
@@ -88,7 +88,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '328 000',
     codePostal: '44000',
-    description: 'Ville dynamique de l\'Ouest, connue pour sa créativité.',
+    description: 'City dynamique de l\'Ouest, connue pour sa créativité.',
     quartiers: ['Centre-ville', 'Île de Nantes', 'Doulon', 'Erdre', 'Chantenay'],
   },
   {
@@ -99,7 +99,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '310 000',
     codePostal: '34000',
-    description: 'Ville étudiante et dynamique du sud de la France.',
+    description: 'City étudiante et dynamique du sud de la France.',
     quartiers: ['Écusson', 'Antigone', 'Port-Marianne', 'Hôpitaux-Facultés', 'Mosson'],
   },
   {
@@ -176,7 +176,7 @@ export const villes: Ville[] = [
     departementCode: '42',
     population: '173 000',
     codePostal: '42000',
-    description: 'Ville design UNESCO, ancien bassin industriel.',
+    description: 'City design UNESCO, ancien bassin industriel.',
     quartiers: ['Centre-ville', 'Châteaucreux', 'Bellevue', 'Terrenoire', 'Montreynaud', 'La Métare'],
   },
   {
@@ -198,7 +198,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '164 000',
     codePostal: '69100',
-    description: 'Ville attenante à Lyon, pôle universitaire majeur.',
+    description: 'City attenante à Lyon, pôle universitaire majeur.',
     quartiers: ['Gratte-Ciel', 'Tonkin', 'Cusset', 'Grandclément', 'Charpennes'],
   },
   {
@@ -220,7 +220,7 @@ export const villes: Ville[] = [
     departementCode: '49',
     population: '159 000',
     codePostal: '49000',
-    description: 'Ville verte au patrimoine médiéval remarquable.',
+    description: 'City verte au patrimoine médiéval remarquable.',
     quartiers: ['Centre-ville', 'Doutre', 'Belle-Beille', 'Monplaisir', 'Roseraie'],
   },
   {
@@ -242,7 +242,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '156 000',
     codePostal: '93200',
-    description: 'Ville royale avec sa basilique des rois de France.',
+    description: 'City royale avec sa basilique des rois de France.',
     quartiers: ['Centre-ville', 'Floréal', 'Pleyel', 'Stade de France', 'Franc-Moisin', 'Basilique'],
   },
   {
@@ -264,7 +264,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '150 000',
     codePostal: '13100',
-    description: 'Ville d\'art, d\'eau et de lumière en Provence.',
+    description: 'City d\'art, d\'eau et de lumière en Provence.',
     quartiers: ['Centre historique', 'Cours Mirabeau', 'Mazarin', 'Jas de Bouffan'],
   },
   {
@@ -286,7 +286,7 @@ export const villes: Ville[] = [
     departementCode: '72',
     population: '146 000',
     codePostal: '72000',
-    description: 'Ville des 24 Heures, patrimoine historique.',
+    description: 'City des 24 Heures, patrimoine historique.',
     quartiers: ['Centre-ville', 'Pontlieue', 'Les Sablons', 'Université', 'Bollée', 'Coulaines'],
   },
   {
@@ -319,7 +319,7 @@ export const villes: Ville[] = [
     departementCode: '80',
     population: '136 000',
     codePostal: '80000',
-    description: 'Ville d\'art et d\'histoire, célèbre pour sa cathédrale.',
+    description: 'City d\'art et d\'histoire, célèbre pour sa cathédrale.',
     quartiers: ['Centre-ville', 'Saint-Leu', 'Henriville', 'Étouvie', 'Saint-Acheul'],
   },
   {
@@ -331,7 +331,7 @@ export const villes: Ville[] = [
     population: '132 000',
     codePostal: '74000',
     description: 'Venise des Alpes, ville au bord du lac.',
-    quartiers: ['Vieille Ville', 'Les Balmettes', 'Annecy-le-Vieux', 'Seynod', 'Cran-Gevrier', 'Novel'],
+    quartiers: ['Vieille City', 'Les Balmettes', 'Annecy-le-Vieux', 'Seynod', 'Cran-Gevrier', 'Novel'],
   },
   {
     slug: 'limoges',
@@ -352,7 +352,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '123 000',
     codePostal: '57000',
-    description: 'Ville d\'art à l\'architecture remarquable.',
+    description: 'City d\'art à l\'architecture remarquable.',
     quartiers: ['Centre-ville', 'Sablon', 'Plantières', 'Queuleu', 'Borny'],
   },
   {
@@ -374,7 +374,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '119 000',
     codePostal: '92100',
-    description: 'Ville aux portes de Paris, pôle économique.',
+    description: 'City aux portes de Paris, pôle économique.',
     quartiers: ['Centre-ville', 'Pont de Sèvres', 'République', 'Les Princes', 'Point-du-Jour', 'Silly', 'Parchamp'],
   },
   {
@@ -418,7 +418,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '112 000',
     codePostal: '93100',
-    description: 'Ville créative aux portes de Paris.',
+    description: 'City créative aux portes de Paris.',
     quartiers: ['Centre-ville', 'Croix de Chavaux', 'Villiers-Barbusse', 'La Noue', 'Bel-Air'],
   },
   {
@@ -451,7 +451,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '106 000',
     codePostal: '95100',
-    description: 'Ville aux impressionnistes en bord de Seine.',
+    description: 'City aux impressionnistes en bord de Seine.',
     quartiers: ['Centre-ville', 'Val d\'Argent', 'Orgemont', 'Joliot-Curie'],
   },
   {
@@ -484,7 +484,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '99 000',
     codePostal: '59200',
-    description: 'Ville industrielle à la frontière belge.',
+    description: 'City industrielle à la frontière belge.',
     quartiers: ['Centre-ville', 'Virolois', 'Croix-Rouge', 'Blanc Seau', 'Pont-de-Neuville', 'Épidème', 'Marlière'],
   },
   {
@@ -517,7 +517,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '94 000',
     codePostal: '94400',
-    description: 'Ville d\'art contemporain en bord de Seine.',
+    description: 'City d\'art contemporain en bord de Seine.',
     quartiers: ['Centre-ville', 'Port-à-l\'Anglais', 'Moulin Vert', 'Plateau', 'Commune-de-Paris', 'Gare', 'Coteau'],
   },
   {
@@ -561,7 +561,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '91 000',
     codePostal: '92700',
-    description: 'Ville résidentielle des Hauts-de-Seine.',
+    description: 'City résidentielle des Hauts-de-Seine.',
     quartiers: ['Centre-ville', 'Petit-Colombes', 'Agent-Sarre', 'Grèves', 'Europe', 'Fossés-Jean', 'Stade'],
   },
   {
@@ -572,7 +572,7 @@ export const villes: Ville[] = [
     departementCode: '86',
     population: '90 000',
     codePostal: '86000',
-    description: 'Ville d\'art roman au riche patrimoine.',
+    description: 'City d\'art roman au riche patrimoine.',
     quartiers: ['Centre-ville', 'Couronneries', 'Gibauderie', 'Beaulieu', 'Trois-Cités', 'Saint-Éloi', 'Montmidi'],
   },
   {
@@ -583,7 +583,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '88 000',
     codePostal: '93300',
-    description: 'Ville de théâtre et culture.',
+    description: 'City de théâtre et culture.',
     quartiers: ['Centre-ville', 'Quatre Chemins', 'Landy', 'Villette', 'Robespierre', 'Maladrerie', 'Presqu\'île'],
   },
   {
@@ -594,7 +594,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '88 000',
     codePostal: '93600',
-    description: 'Ville verte de Seine-Saint-Denis.',
+    description: 'City verte de Seine-Saint-Denis.',
     quartiers: ['Centre-ville', 'Rose des Vents', 'Ambourget', 'Chanteloup', 'Gros-Saule', 'Nonneville', 'Mitry'],
   },
   {
@@ -649,7 +649,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '83 000',
     codePostal: '92400',
-    description: 'Ville d\'affaires aux portes de La Défense.',
+    description: 'City d\'affaires aux portes de La Défense.',
     quartiers: ['Centre-ville', 'Bécon', 'Faubourg de l\'Arche', 'Marceau', 'Regnault', 'Gambetta', 'Voltaire'],
   },
   {
@@ -660,7 +660,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '83 000',
     codePostal: '92500',
-    description: 'Ville impériale aux portes de Paris.',
+    description: 'City impériale aux portes de Paris.',
     quartiers: ['Centre-ville', 'Mont-Valérien', 'Buzenval', 'Jonchère', 'Plaine-Gare', 'Bois-Préau', 'Coteaux'],
   },
   {
@@ -682,7 +682,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '82 000',
     codePostal: '34500',
-    description: 'Ville viticole du Languedoc.',
+    description: 'City viticole du Languedoc.',
     quartiers: ['Centre historique', 'Arènes', 'Devèze', 'La Montagnette', 'Faubourg', 'Iranget', 'Grangette'],
   },
   {
@@ -693,7 +693,7 @@ export const villes: Ville[] = [
     departementCode: '64',
     population: '80 000',
     codePostal: '64000',
-    description: 'Ville royale au pied des Pyrénées.',
+    description: 'City royale au pied des Pyrénées.',
     quartiers: ['Centre-ville', 'Trespoey', 'Saragosse', 'Bosquet', 'Dufau', 'Ousse-des-Bois', 'Université'],
   },
   {
@@ -726,7 +726,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '78 000',
     codePostal: '33700',
-    description: 'Ville aéronautique de la métropole bordelaise.',
+    description: 'City aéronautique de la métropole bordelaise.',
     quartiers: ['Centre-ville', 'Capeyron', 'Arlac', 'Chemin Long', 'Beutre', 'Bourranville', 'Pichey'],
   },
   {
@@ -737,7 +737,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '78 000',
     codePostal: '94500',
-    description: 'Ville dynamique en bord de Marne.',
+    description: 'City dynamique en bord de Marne.',
     quartiers: ['Centre-ville', 'Coeuilly', 'Plant', 'Tremblay', 'Bois-l\'Abbé', 'Musselburgh', 'Mordacs'],
   },
   {
@@ -759,7 +759,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '77 000',
     codePostal: '94100',
-    description: 'Ville résidentielle en bord de Marne.',
+    description: 'City résidentielle en bord de Marne.',
     quartiers: ['Le Parc', 'La Varenne', 'Saint-Hilaire', 'Champignol', 'Adamville', 'La Pie', 'Les Mûriers'],
   },
   {
@@ -825,7 +825,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '72 000',
     codePostal: '93700',
-    description: 'Ville mémorielle de Seine-Saint-Denis.',
+    description: 'City mémorielle de Seine-Saint-Denis.',
     quartiers: ['Centre-ville', 'La Muette', 'Paris-Campagne', 'Village Parisien', 'Économie', 'Avenir Parisien', 'Petit-Drancy'],
   },
   {
@@ -847,7 +847,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '71 000',
     codePostal: '95000',
-    description: 'Ville nouvelle, préfecture du Val-d\'Oise.',
+    description: 'City nouvelle, préfecture du Val-d\'Oise.',
     quartiers: ['Centre', 'Grand Centre', 'Axe Majeur', 'Les Hauts de Cergy', 'Cergy-Préfecture', 'Cergy-Village', 'Cergy-Saint-Christophe'],
   },
   {
@@ -891,7 +891,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '67 000',
     codePostal: '33600',
-    description: 'Ville universitaire de la métropole bordelaise.',
+    description: 'City universitaire de la métropole bordelaise.',
     quartiers: ['Centre-ville', 'Saige', 'Alouette', 'Cap de Bos'],
   },
   {
@@ -924,7 +924,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '66 000',
     codePostal: '69200',
-    description: 'Ville industrielle de la métropole lyonnaise.',
+    description: 'City industrielle de la métropole lyonnaise.',
     quartiers: ['Centre-ville', 'Minguettes', 'Parilly', 'Moulin à Vent'],
   },
   {
@@ -990,7 +990,7 @@ export const villes: Ville[] = [
     departementCode: '18',
     population: '64 000',
     codePostal: '18000',
-    description: 'Ville d\'art au cœur de la France.',
+    description: 'City d\'art au cœur de la France.',
     quartiers: ['Centre historique', 'Asnières', 'Gibjoncs', 'Pignoux', 'Val-d\'Auron', 'Chancellerie', 'Aéroport'],
   },
   {
@@ -1001,8 +1001,8 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '64 000',
     codePostal: '83500',
-    description: 'Ville maritime de la rade de Toulon.',
-    quartiers: ['Centre-ville', 'Tamaris', 'Les Sablettes', 'Berthe', 'Mar Vivo', 'Pont-de-Fabre', 'Jas-de-Ville'],
+    description: 'City maritime de la rade de Toulon.',
+    quartiers: ['Centre-ville', 'Tamaris', 'Les Sablettes', 'Berthe', 'Mar Vivo', 'Pont-de-Fabre', 'Jas-de-City'],
   },
   {
     slug: 'montauban',
@@ -1012,7 +1012,7 @@ export const villes: Ville[] = [
     departementCode: '82',
     population: '63 000',
     codePostal: '82000',
-    description: 'Ville rose du Tarn-et-Garonne.',
+    description: 'City rose du Tarn-et-Garonne.',
     quartiers: ['Centre-ville', 'Villebourbon', 'Pomponne', 'Lalande'],
   },
   {
@@ -1023,8 +1023,8 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '63 000',
     codePostal: '59650',
-    description: 'Ville technologique de la métropole lilloise.',
-    quartiers: ['Hôtel de Ville', 'Pont de Bois', 'Triolo', 'Château', 'Flers', 'Annappes', 'Brigode'],
+    description: 'City technologique de la métropole lilloise.',
+    quartiers: ['Hôtel de City', 'Pont de Bois', 'Triolo', 'Château', 'Flers', 'Annappes', 'Brigode'],
   },
   {
     slug: 'cayenne',
@@ -1067,7 +1067,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '62 000',
     codePostal: '93500',
-    description: 'Ville créative aux portes de Paris.',
+    description: 'City créative aux portes de Paris.',
     quartiers: ['Centre-ville', 'Quatre Chemins', 'Église', 'Courtillières'],
   },
   {
@@ -1133,7 +1133,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '59 000',
     codePostal: '95200',
-    description: 'Ville nouvelle du Val-d\'Oise.',
+    description: 'City nouvelle du Val-d\'Oise.',
     quartiers: ['Village', 'Grand Ensemble', 'Lochères', 'Flanades', 'Chardonnerettes', 'Watteau', 'Chantepie'],
   },
   {
@@ -1155,7 +1155,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '59 000',
     codePostal: '92140',
-    description: 'Ville résidentielle des Hauts-de-Seine.',
+    description: 'City résidentielle des Hauts-de-Seine.',
     quartiers: ['Centre-ville', 'Percy', 'Jardin Parisien', 'Plaine'],
   },
   {
@@ -1166,8 +1166,8 @@ export const villes: Ville[] = [
     departementCode: '56',
     population: '58 000',
     codePostal: '56100',
-    description: 'Ville des cinq ports, festival interceltique.',
-    quartiers: ['Centre-ville', 'Merville', 'Nouvelle Ville', 'Keryado'],
+    description: 'City des cinq ports, festival interceltique.',
+    quartiers: ['Centre-ville', 'Merville', 'Nouvelle City', 'Keryado'],
   },
   {
     slug: 'narbonne',
@@ -1177,7 +1177,7 @@ export const villes: Ville[] = [
     departementCode: '11',
     population: '58 000',
     codePostal: '11100',
-    description: 'Ville romaine du Languedoc.',
+    description: 'City romaine du Languedoc.',
     quartiers: ['Centre-ville', 'Saint-Jean-Saint-Pierre', 'Razimbaud', 'Narbonne-Plage'],
   },
   {
@@ -1221,7 +1221,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '56 000',
     codePostal: '83400',
-    description: 'Ville aux îles d\'Or, station balnéaire historique.',
+    description: 'City aux îles d\'Or, station balnéaire historique.',
     quartiers: ['Centre-ville', 'Giens', 'L\'Ayguade', 'Les Salins', 'Costebelle', 'La Capte', 'La Bayorre'],
   },
   {
@@ -1232,7 +1232,7 @@ export const villes: Ville[] = [
     departementCode: '56',
     population: '56 000',
     codePostal: '56000',
-    description: 'Ville médiévale sur le Golfe du Morbihan.',
+    description: 'City médiévale sur le Golfe du Morbihan.',
     quartiers: ['Centre historique', 'Ménimur', 'Kercado', 'Conleau'],
   },
   {
@@ -1243,7 +1243,7 @@ export const villes: Ville[] = [
     departementCode: '60',
     population: '56 000',
     codePostal: '60000',
-    description: 'Ville de la cathédrale la plus haute de France.',
+    description: 'City de la cathédrale la plus haute de France.',
     quartiers: ['Centre-ville', 'Saint-Jean', 'Saint-Lucien', 'Argentine'],
   },
   {
@@ -1331,7 +1331,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '54 000',
     codePostal: '94120',
-    description: 'Ville verte du Val-de-Marne.',
+    description: 'City verte du Val-de-Marne.',
     quartiers: ['Centre-ville', 'Val de Fontenay', 'Rigollots', 'Bois Cadet'],
   },
   {
@@ -1386,7 +1386,7 @@ export const villes: Ville[] = [
     departementCode: '02',
     population: '53 000',
     codePostal: '02100',
-    description: 'Ville art déco de Picardie.',
+    description: 'City art déco de Picardie.',
     quartiers: ['Centre-ville', 'Europe', 'Vermandois', 'Saint-Martin'],
   },
   {
@@ -1474,7 +1474,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '51 000',
     codePostal: '44800',
-    description: 'Ville de la métropole nantaise.',
+    description: 'City de la métropole nantaise.',
     quartiers: ['Bourg', 'Sillon', 'Joli Mai', 'Bagatelle'],
   },
   {
@@ -1496,7 +1496,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '51 000',
     codePostal: '93140',
-    description: 'Ville dynamique de Seine-Saint-Denis.',
+    description: 'City dynamique de Seine-Saint-Denis.',
     quartiers: ['Centre-ville', 'Nord', 'Mainguy', 'Terre Saint-Blaise'],
   },
   {
@@ -1540,7 +1540,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '49 000',
     codePostal: '69800',
-    description: 'Ville dynamique de l\'Est lyonnais.',
+    description: 'City dynamique de l\'Est lyonnais.',
     quartiers: ['Centre-ville', 'Ménival', 'Bel Air', 'Manissieux'],
   },
   {
@@ -1617,7 +1617,7 @@ export const villes: Ville[] = [
     departementCode: '41',
     population: '47 000',
     codePostal: '41000',
-    description: 'Ville royale des châteaux de la Loire.',
+    description: 'City royale des châteaux de la Loire.',
     quartiers: ['Centre-ville', 'Vienne', 'Les Grouëts', 'Cabochon'],
   },
   {
@@ -1672,7 +1672,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '46 000',
     codePostal: '33400',
-    description: 'Ville étudiante de Bordeaux.',
+    description: 'City étudiante de Bordeaux.',
     quartiers: ['Centre-ville', 'Forum', 'Plume la Poule', 'Raba'],
   },
   {
@@ -1771,7 +1771,7 @@ export const villes: Ville[] = [
     departementCode: '08',
     population: '46 000',
     codePostal: '08000',
-    description: 'Ville du poète Arthur Rimbaud.',
+    description: 'City du poète Arthur Rimbaud.',
     quartiers: ['Centre-ville', 'Manchester', 'La Houillère', 'Montjoly'],
   },
   {
@@ -1815,7 +1815,7 @@ export const villes: Ville[] = [
     departementCode: '71',
     population: '45 000',
     codePostal: '71100',
-    description: 'Ville fluviale, berceau de la photographie.',
+    description: 'City fluviale, berceau de la photographie.',
     quartiers: ['Centre-ville', 'Saint-Jean-des-Vignes', 'Prés Saint-Jean', 'Stade'],
   },
   {
@@ -1837,7 +1837,7 @@ export const villes: Ville[] = [
     departementCode: '65',
     population: '44 000',
     codePostal: '65000',
-    description: 'Ville pyrénéenne, porte des montagnes.',
+    description: 'City pyrénéenne, porte des montagnes.',
     quartiers: ['Centre-ville', 'Laubadère', 'Arsenal', 'Ormeau'],
   },
   {
@@ -1914,8 +1914,8 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '44 000',
     codePostal: '78200',
-    description: 'Besoin d’un professionnel à Mantes-la-Jolie ? Située en Île-de-France, cette ville dynamique du Yvelines bénéficie de un habitat dense nécessitant des artisans réactifs. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Buchelay, Mantes-la-Ville, Magnanville.',
-    quartiers: ['Centre-ville', 'Buchelay', 'Mantes-la-Ville', 'Magnanville', 'Limay', 'Follainville-Dennemont', 'Guerville'],
+    description: 'Besoin d’un professionnel à Mantes-la-Jolie ? Située en Île-de-France, cette ville dynamique du Yvelines bénéficie de un habitat dense nécessitant des artisans réactifs. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Buchelay, Mantes-la-City, Magnanville.',
+    quartiers: ['Centre-ville', 'Buchelay', 'Mantes-la-City', 'Magnanville', 'Limay', 'Follainville-Dennemont', 'Guerville'],
   },
   {
     slug: 'valenciennes',
@@ -1991,7 +1991,7 @@ export const villes: Ville[] = [
     departementCode: '62',
     population: '43 000',
     codePostal: '62000',
-    description: 'Ville aux deux places, patrimoine baroque.',
+    description: 'City aux deux places, patrimoine baroque.',
     quartiers: ['Centre-ville', 'Saint-Sauveur', 'Citadelle', 'Saint-Michel'],
   },
   {
@@ -2002,7 +2002,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '43 000',
     codePostal: '57100',
-    description: 'Ville frontalière du Luxembourg.',
+    description: 'City frontalière du Luxembourg.',
     quartiers: ['Centre-ville', 'Beauregard', 'Côte des Roses', 'Élange'],
   },
   {
@@ -2190,7 +2190,7 @@ export const villes: Ville[] = [
     population: '41 000',
     codePostal: '62200',
     description: 'Premier port de pêche français.',
-    quartiers: ['Haute-Ville', 'Capécure', 'Bréquerecque', 'Saint-Pierre'],
+    quartiers: ['Haute-City', 'Capécure', 'Bréquerecque', 'Saint-Pierre'],
   },
   {
     slug: 'douai',
@@ -2310,7 +2310,7 @@ export const villes: Ville[] = [
     departementCode: '28',
     population: '38 000',
     codePostal: '28000',
-    description: 'Ville de la cathédrale, capitale de la Beauce.',
+    description: 'City de la cathédrale, capitale de la Beauce.',
     quartiers: ['Centre-ville', 'Beaulieu', 'La Madeleine', 'Rechèvres'],
   },
   {
@@ -2365,8 +2365,8 @@ export const villes: Ville[] = [
     departementCode: '74',
     population: '38 000',
     codePostal: '74100',
-    description: 'À Annemasse, ville dynamique du Haute-Savoie (38 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour un patrimoine bâti montagnard et urbain, nos professionnels interviennent dans toute la commune, ainsi que Vétraz-Monthoux, Ambilly, Ville-la-Grand.',
-    quartiers: ['Centre-ville', 'Vétraz-Monthoux', 'Ambilly', 'Ville-la-Grand', 'Gaillard', 'Étrembières', 'Monnetier-Mornex'],
+    description: 'À Annemasse, ville dynamique du Haute-Savoie (38 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour un patrimoine bâti montagnard et urbain, nos professionnels interviennent dans toute la commune, ainsi que Vétraz-Monthoux, Ambilly, City-la-Grand.',
+    quartiers: ['Centre-ville', 'Vétraz-Monthoux', 'Ambilly', 'City-la-Grand', 'Gaillard', 'Étrembières', 'Monnetier-Mornex'],
   },
   {
     slug: 'savigny-sur-orge',
@@ -2662,7 +2662,7 @@ export const villes: Ville[] = [
     departementCode: '89',
     population: '35 000',
     codePostal: '89000',
-    description: 'Ville d\'art et d\'histoire de Bourgogne.',
+    description: 'City d\'art et d\'histoire de Bourgogne.',
     quartiers: ['Centre historique', 'Les Mignottes', 'Sainte-Geneviève', 'Rive Droite'],
   },
   {
@@ -2783,7 +2783,7 @@ export const villes: Ville[] = [
     departementCode: '58',
     population: '33 000',
     codePostal: '58000',
-    description: 'Ville de la faïence et de Bernadette.',
+    description: 'City de la faïence et de Bernadette.',
     quartiers: ['Centre-ville', 'Mouësse', 'Grande Pâture', 'Baratte'],
   },
   {
@@ -3268,7 +3268,7 @@ export const villes: Ville[] = [
     population: '30 000',
     codePostal: '92210',
     description: 'À Saint-Cloud, ville active du Hauts-de-Seine (30 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Garches, Sèvres, Boulogne-Billancourt.',
-    quartiers: ['Centre-ville', 'Garches', 'Sèvres', 'Boulogne-Billancourt', 'Vaucresson', 'Suresnes', 'Ville-d\'Avray'],
+    quartiers: ['Centre-ville', 'Garches', 'Sèvres', 'Boulogne-Billancourt', 'Vaucresson', 'Suresnes', 'City-d\'Avray'],
   },
   {
     slug: 'faaa',
@@ -3829,7 +3829,7 @@ export const villes: Ville[] = [
     population: '26 000',
     codePostal: '83130',
     description: 'La Garde est une ville active de 26 000 habitants située dans le département Var en Provence-Alpes-Côte d\'Azur. Nos artisans qualifiés interviennent à La Garde, ainsi que La Valette-du-Var, Le Pradet, La Farlède pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'La Valette-du-Var', 'Le Pradet', 'La Farlède', 'Carqueiranne', 'Solliès-Ville', 'Toulon'],
+    quartiers: ['Centre-ville', 'La Valette-du-Var', 'Le Pradet', 'La Farlède', 'Carqueiranne', 'Solliès-City', 'Toulon'],
   },
   {
     slug: 'elancourt',
@@ -4070,7 +4070,7 @@ export const villes: Ville[] = [
     departementCode: '17',
     population: '25 000',
     codePostal: '17100',
-    description: 'Ville d\'art et d\'histoire romaine.',
+    description: 'City d\'art et d\'histoire romaine.',
     quartiers: ['Centre-ville', 'Saint-Pallais', 'Bellevue', 'Recouvrance'],
   },
   {
@@ -4114,7 +4114,7 @@ export const villes: Ville[] = [
     departementCode: '03',
     population: '25 000',
     codePostal: '03200',
-    description: 'Reine des villes d\'eaux.',
+    description: 'Reine des cities d\'eaux.',
     quartiers: ['Centre-ville', 'Les Ailes', 'Croix-Saint-Martin', 'France'],
   },
   {
@@ -4180,7 +4180,7 @@ export const villes: Ville[] = [
     departementCode: '25',
     population: '25 000',
     codePostal: '25200',
-    description: 'Ville industrielle et culturelle.',
+    description: 'City industrielle et culturelle.',
     quartiers: ['Centre-ville', 'Petite Hollande', 'Chiffogne', 'Les Fougères'],
   },
   {
@@ -4290,7 +4290,7 @@ export const villes: Ville[] = [
     departementCode: '12',
     population: '24 000',
     codePostal: '12000',
-    description: 'Ville du musée Soulages.',
+    description: 'City du musée Soulages.',
     quartiers: ['Centre-ville', 'Bourran', 'Saint-Éloi', 'Olemps'],
   },
   {
@@ -4334,8 +4334,8 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '24 000',
     codePostal: '83160',
-    description: 'Découvrez les meilleurs artisans à La Valette-du-Var en Var. Avec le climat méditerranéen et 24 000 habitants, cette ville active offre un large choix de professionnels pour tous vos travaux de rénovation et dépannage, ainsi que La Garde, Solliès-Ville, La Farlède.',
-    quartiers: ['Centre-ville', 'La Garde', 'Solliès-Ville', 'La Farlède', 'Toulon', 'Le Revest-les-Eaux', 'Le Pradet'],
+    description: 'Découvrez les meilleurs artisans à La Valette-du-Var en Var. Avec le climat méditerranéen et 24 000 habitants, cette ville active offre un large choix de professionnels pour tous vos travaux de rénovation et dépannage, ainsi que La Garde, Solliès-City, La Farlède.',
+    quartiers: ['Centre-ville', 'La Garde', 'Solliès-City', 'La Farlède', 'Toulon', 'Le Revest-les-Eaux', 'Le Pradet'],
   },
   {
     slug: 'dammarie-les-lys',
@@ -4383,13 +4383,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'combs-la-ville',
-    name: 'Combs-la-Ville',
+    name: 'Combs-la-City',
     region: 'Île-de-France',
     departement: 'Seine-et-Marne',
     departementCode: '77',
     population: '23 000',
     codePostal: '77380',
-    description: 'Vous habitez à Combs-la-Ville ou ses environs ? Nos artisans qualifiés du Seine-et-Marne sont disponibles pour tous vos travaux. Combs-la-Ville, ville active francilienne de 23 000 habitants, mérite des professionnels à la hauteur, ainsi que Lieusaint, Moissy-Cramayel, Brie-Comte-Robert.',
+    description: 'Vous habitez à Combs-la-City ou ses environs ? Nos artisans qualifiés du Seine-et-Marne sont disponibles pour tous vos travaux. Combs-la-City, ville active francilienne de 23 000 habitants, mérite des professionnels à la hauteur, ainsi que Lieusaint, Moissy-Cramayel, Brie-Comte-Robert.',
     quartiers: ['Centre-ville', 'Lieusaint', 'Moissy-Cramayel', 'Brie-Comte-Robert', 'Évry-Grégy-sur-Yerre', 'Servon', 'Réau'],
   },
   {
@@ -4521,7 +4521,7 @@ export const villes: Ville[] = [
     departementCode: '04',
     population: '23 000',
     codePostal: '04100',
-    description: 'Ville de Jean Giono.',
+    description: 'City de Jean Giono.',
     quartiers: ['Centre-ville', 'Saint-Lazare', 'Les Plantiers', 'La Rochette'],
   },
   {
@@ -4614,13 +4614,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'mantes-la-ville',
-    name: 'Mantes-la-Ville',
+    name: 'Mantes-la-City',
     region: 'Île-de-France',
     departement: 'Yvelines',
     departementCode: '78',
     population: '22 000',
     codePostal: '78711',
-    description: 'À Mantes-la-Ville, ville active du Yvelines (22 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Magnanville, Buchelay, Limay.',
+    description: 'À Mantes-la-City, ville active du Yvelines (22 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Magnanville, Buchelay, Limay.',
     quartiers: ['Centre-ville', 'Magnanville', 'Buchelay', 'Limay', 'Mantes-la-Jolie', 'Guerville', 'Porcheville'],
   },
   {
@@ -4631,8 +4631,8 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '22 000',
     codePostal: '92310',
-    description: 'À Sèvres, ville active du Hauts-de-Seine (22 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Chaville, Ville-d\'Avray, Saint-Cloud.',
-    quartiers: ['Centre-ville', 'Chaville', 'Ville-d\'Avray', 'Saint-Cloud', 'Meudon', 'Garches', 'Boulogne-Billancourt'],
+    description: 'À Sèvres, ville active du Hauts-de-Seine (22 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Chaville, City-d\'Avray, Saint-Cloud.',
+    quartiers: ['Centre-ville', 'Chaville', 'City-d\'Avray', 'Saint-Cloud', 'Meudon', 'Garches', 'Boulogne-Billancourt'],
   },
   {
     slug: 'montereau-fault-yonne',
@@ -5225,8 +5225,8 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '21 000',
     codePostal: '92370',
-    description: 'Chaville est une ville active de 21 000 habitants située dans le département Hauts-de-Seine en Île-de-France. Nos artisans qualifiés interviennent à Chaville, ainsi que Ville-d\'Avray, Sèvres, Meudon pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'Ville-d\'Avray', 'Sèvres', 'Meudon', 'Vaucresson', 'Saint-Cloud', 'Garches'],
+    description: 'Chaville est une ville active de 21 000 habitants située dans le département Hauts-de-Seine en Île-de-France. Nos artisans qualifiés interviennent à Chaville, ainsi que City-d\'Avray, Sèvres, Meudon pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
+    quartiers: ['Centre-ville', 'City-d\'Avray', 'Sèvres', 'Meudon', 'Vaucresson', 'Saint-Cloud', 'Garches'],
   },
   {
     slug: 'croix',
@@ -5401,7 +5401,7 @@ export const villes: Ville[] = [
     departementCode: '46',
     population: '20 000',
     codePostal: '46000',
-    description: 'Ville du vin de Cahors et du pont Valentré.',
+    description: 'City du vin de Cahors et du pont Valentré.',
     quartiers: ['Centre historique', 'Cabessut', 'Terre-Rouge', 'Sainte-Valérie'],
   },
   {
@@ -5556,7 +5556,7 @@ export const villes: Ville[] = [
     population: '20 000',
     codePostal: '67600',
     description: 'Trouvez un artisan de confiance à Sélestat (Bas-Rhin). Avec 20 000 habitants, cette commune du Grand Est dispose d’un réseau de professionnels expérimentés pour la rénovation, le dépannage et l’entretien de votre habitat, ainsi que Scherwiller, Muttersholtz, Ebersheim.',
-    quartiers: ['Centre-ville', 'Scherwiller', 'Muttersholtz', 'Ebersheim', 'Châtenois', 'Dambach-la-Ville', 'Hilsenheim'],
+    quartiers: ['Centre-ville', 'Scherwiller', 'Muttersholtz', 'Ebersheim', 'Châtenois', 'Dambach-la-City', 'Hilsenheim'],
   },
   {
     slug: 'la-crau',
@@ -5566,8 +5566,8 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '20 000',
     codePostal: '83260',
-    description: 'La Crau est une commune de 20 000 habitants située dans le département Var en Provence-Alpes-Côte d\'Azur. Nos artisans qualifiés interviennent à La Crau, ainsi que Solliès-Pont, La Farlède, Solliès-Ville pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'Solliès-Pont', 'La Farlède', 'Solliès-Ville', 'La Garde', 'Carqueiranne', 'Cuers'],
+    description: 'La Crau est une commune de 20 000 habitants située dans le département Var en Provence-Alpes-Côte d\'Azur. Nos artisans qualifiés interviennent à La Crau, ainsi que Solliès-Pont, La Farlède, Solliès-City pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
+    quartiers: ['Centre-ville', 'Solliès-Pont', 'La Farlède', 'Solliès-City', 'La Garde', 'Carqueiranne', 'Cuers'],
   },
   {
     slug: 'pertuis',
@@ -5709,8 +5709,8 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '19 000',
     codePostal: '77170',
-    description: 'Besoin d’un professionnel à Brie-Comte-Robert ? Située en Île-de-France, cette commune du Seine-et-Marne bénéficie de un habitat dense nécessitant des artisans réactifs. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Servon, Combs-la-Ville, Évry-Grégy-sur-Yerre.',
-    quartiers: ['Centre-ville', 'Servon', 'Combs-la-Ville', 'Évry-Grégy-sur-Yerre', 'Grisy-Suisnes', 'Chevry-Cossigny', 'Lésigny'],
+    description: 'Besoin d’un professionnel à Brie-Comte-Robert ? Située en Île-de-France, cette commune du Seine-et-Marne bénéficie de un habitat dense nécessitant des artisans réactifs. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Servon, Combs-la-City, Évry-Grégy-sur-Yerre.',
+    quartiers: ['Centre-ville', 'Servon', 'Combs-la-City', 'Évry-Grégy-sur-Yerre', 'Grisy-Suisnes', 'Chevry-Cossigny', 'Lésigny'],
   },
   {
     slug: 'ploemeur',
@@ -5885,8 +5885,8 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '19 000',
     codePostal: '77550',
-    description: 'Vous habitez à Moissy-Cramayel ou ses environs ? Nos artisans qualifiés du Seine-et-Marne sont disponibles pour tous vos travaux. Moissy-Cramayel, commune francilienne de 19 000 habitants, mérite des professionnels à la hauteur, ainsi que Réau, Lieusaint, Combs-la-Ville.',
-    quartiers: ['Centre-ville', 'Réau', 'Lieusaint', 'Combs-la-Ville', 'Évry-Grégy-sur-Yerre', 'Savigny-le-Temple', 'Nandy'],
+    description: 'Vous habitez à Moissy-Cramayel ou ses environs ? Nos artisans qualifiés du Seine-et-Marne sont disponibles pour tous vos travaux. Moissy-Cramayel, commune francilienne de 19 000 habitants, mérite des professionnels à la hauteur, ainsi que Réau, Lieusaint, Combs-la-City.',
+    quartiers: ['Centre-ville', 'Réau', 'Lieusaint', 'Combs-la-City', 'Évry-Grégy-sur-Yerre', 'Savigny-le-Temple', 'Nandy'],
   },
   {
     slug: 'bry-sur-marne',
@@ -6116,8 +6116,8 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '18 000',
     codePostal: '78520',
-    description: 'Artisans référencés à Limay et ses environs. Cette commune francilienne de 18 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mantes-la-Ville, Porcheville, Mantes-la-Jolie.',
-    quartiers: ['Centre-ville', 'Mantes-la-Ville', 'Porcheville', 'Mantes-la-Jolie', 'Issou', 'Guerville', 'Buchelay'],
+    description: 'Artisans référencés à Limay et ses environs. Cette commune francilienne de 18 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mantes-la-City, Porcheville, Mantes-la-Jolie.',
+    quartiers: ['Centre-ville', 'Mantes-la-City', 'Porcheville', 'Mantes-la-Jolie', 'Issou', 'Guerville', 'Buchelay'],
   },
   {
     slug: 'jouy-le-moutier',
@@ -6183,7 +6183,7 @@ export const villes: Ville[] = [
     population: '18 000',
     codePostal: '92380',
     description: 'Garches (Hauts-de-Seine, Île-de-France) est une commune de 18 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Cloud, Vaucresson, Rueil-Malmaison.',
-    quartiers: ['Centre-ville', 'Saint-Cloud', 'Vaucresson', 'Rueil-Malmaison', 'Ville-d\'Avray', 'Sèvres', 'Suresnes'],
+    quartiers: ['Centre-ville', 'Saint-Cloud', 'Vaucresson', 'Rueil-Malmaison', 'City-d\'Avray', 'Sèvres', 'Suresnes'],
   },
   {
     slug: 'sainte-rose',
@@ -6479,7 +6479,7 @@ export const villes: Ville[] = [
     departementCode: '55',
     population: '17 000',
     codePostal: '55100',
-    description: 'Ville de mémoire de la Grande Guerre.',
+    description: 'City de mémoire de la Grande Guerre.',
     quartiers: ['Centre-ville', 'Faubourg Pavé', 'Glorieux', 'Belleville'],
   },
   {
@@ -6534,8 +6534,8 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '17 000',
     codePostal: '78160',
-    description: 'Besoin d’un professionnel à Marly-le-Roi ? Située en Île-de-France, cette commune du Yvelines bénéficie de un habitat dense nécessitant des artisans réactifs. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Mareil-Marly, Louveciennes, L\'Étang-la-Ville.',
-    quartiers: ['Centre-ville', 'Mareil-Marly', 'Louveciennes', 'L\'Étang-la-Ville', 'Le Port-Marly', 'Le Pecq', 'Bailly'],
+    description: 'Besoin d’un professionnel à Marly-le-Roi ? Située en Île-de-France, cette commune du Yvelines bénéficie de un habitat dense nécessitant des artisans réactifs. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Mareil-Marly, Louveciennes, L\'Étang-la-City.',
+    quartiers: ['Centre-ville', 'Mareil-Marly', 'Louveciennes', 'L\'Étang-la-City', 'Le Port-Marly', 'Le Pecq', 'Bailly'],
   },
   {
     slug: 'valserhone',
@@ -6908,8 +6908,8 @@ export const villes: Ville[] = [
     departementCode: '37',
     population: '16 000',
     codePostal: '37700',
-    description: 'Saint-Pierre-des-Corps est une commune de 16 000 habitants située dans le département Indre-et-Loire en Centre-Val de Loire. Nos artisans qualifiés interviennent à Saint-Pierre-des-Corps, ainsi que Tours, La Ville-aux-Dames, Saint-Avertin pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'Tours', 'La Ville-aux-Dames', 'Saint-Avertin', 'Larçay', 'Rochecorbon', 'Chambray-lès-Tours'],
+    description: 'Saint-Pierre-des-Corps est une commune de 16 000 habitants située dans le département Indre-et-Loire en Centre-Val de Loire. Nos artisans qualifiés interviennent à Saint-Pierre-des-Corps, ainsi que Tours, La City-aux-Dames, Saint-Avertin pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
+    quartiers: ['Centre-ville', 'Tours', 'La City-aux-Dames', 'Saint-Avertin', 'Larçay', 'Rochecorbon', 'Chambray-lès-Tours'],
   },
   {
     slug: 'fos-sur-mer',
@@ -7250,7 +7250,7 @@ export const villes: Ville[] = [
     population: '15 000',
     codePostal: '60300',
     description: 'Découvrez les meilleurs artisans à Senlis en Oise. Avec le nord de la France et 15 000 habitants, cette commune offre un large choix de professionnels pour tous vos travaux de rénovation et dépannage, ainsi que Verneuil-en-Halatte, Chantilly, Creil.',
-    quartiers: ['Centre-ville', 'Verneuil-en-Halatte', 'Chantilly', 'Creil', 'Saint-Maximin', 'Orry-la-Ville', 'Pontpoint'],
+    quartiers: ['Centre-ville', 'Verneuil-en-Halatte', 'Chantilly', 'Creil', 'Saint-Maximin', 'Orry-la-City', 'Pontpoint'],
   },
   {
     slug: 'issoire',
@@ -7371,7 +7371,7 @@ export const villes: Ville[] = [
     population: '15 000',
     codePostal: '37550',
     description: 'Saint-Avertin (Indre-et-Loire, Centre-Val de Loire) est une commune de 15 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chambray-lès-Tours, Larçay, Saint-Pierre-des-Corps.',
-    quartiers: ['Centre-ville', 'Chambray-lès-Tours', 'Larçay', 'Saint-Pierre-des-Corps', 'La Ville-aux-Dames', 'Tours', 'Véretz'],
+    quartiers: ['Centre-ville', 'Chambray-lès-Tours', 'Larçay', 'Saint-Pierre-des-Corps', 'La City-aux-Dames', 'Tours', 'Véretz'],
   },
   {
     slug: 'woippy',
@@ -7777,8 +7777,8 @@ export const villes: Ville[] = [
     departementCode: '82',
     population: '14 000',
     codePostal: '82100',
-    description: 'Vous habitez à Castelsarrasin ou ses environs ? Nos artisans qualifiés du Tarn-et-Garonne sont disponibles pour tous vos travaux. Castelsarrasin, commune occitane de 14 000 habitants, mérite des professionnels à la hauteur, ainsi que Saint-Nicolas-de-la-Grave, Moissac, La Ville-Dieu-du-Temple.',
-    quartiers: ['Centre-ville', 'Saint-Nicolas-de-la-Grave', 'Moissac', 'La Ville-Dieu-du-Temple', 'Montbeton', 'Lafrançaise', 'Montech'],
+    description: 'Vous habitez à Castelsarrasin ou ses environs ? Nos artisans qualifiés du Tarn-et-Garonne sont disponibles pour tous vos travaux. Castelsarrasin, commune occitane de 14 000 habitants, mérite des professionnels à la hauteur, ainsi que Saint-Nicolas-de-la-Grave, Moissac, La City-Dieu-du-Temple.',
+    quartiers: ['Centre-ville', 'Saint-Nicolas-de-la-Grave', 'Moissac', 'La City-Dieu-du-Temple', 'Montbeton', 'Lafrançaise', 'Montech'],
   },
   {
     slug: 'montataire',
@@ -7964,8 +7964,8 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '14 000',
     codePostal: '77127',
-    description: 'Découvrez les meilleurs artisans à Lieusaint en Seine-et-Marne. Avec la région parisienne et 14 000 habitants, cette commune offre un large choix de professionnels pour tous vos travaux de rénovation et dépannage, ainsi que Moissy-Cramayel, Combs-la-Ville, Nandy.',
-    quartiers: ['Centre-ville', 'Moissy-Cramayel', 'Combs-la-Ville', 'Nandy', 'Savigny-le-Temple', 'Réau', 'Cesson'],
+    description: 'Découvrez les meilleurs artisans à Lieusaint en Seine-et-Marne. Avec la région parisienne et 14 000 habitants, cette commune offre un large choix de professionnels pour tous vos travaux de rénovation et dépannage, ainsi que Moissy-Cramayel, Combs-la-City, Nandy.',
+    quartiers: ['Centre-ville', 'Moissy-Cramayel', 'Combs-la-City', 'Nandy', 'Savigny-le-Temple', 'Réau', 'Cesson'],
   },
   {
     slug: 'belleville-en-beaujolais',
@@ -8273,7 +8273,7 @@ export const villes: Ville[] = [
     population: '13 000',
     codePostal: '82200',
     description: 'Vous habitez à Moissac ou ses environs ? Nos artisans qualifiés du Tarn-et-Garonne sont disponibles pour tous vos travaux. Moissac, commune occitane de 13 000 habitants, mérite des professionnels à la hauteur, ainsi que Castelsarrasin, Saint-Nicolas-de-la-Grave, Lafrançaise.',
-    quartiers: ['Centre-ville', 'Castelsarrasin', 'Saint-Nicolas-de-la-Grave', 'Lafrançaise', 'La Ville-Dieu-du-Temple', 'Valence', 'Montbeton'],
+    quartiers: ['Centre-ville', 'Castelsarrasin', 'Saint-Nicolas-de-la-Grave', 'Lafrançaise', 'La City-Dieu-du-Temple', 'Valence', 'Montbeton'],
   },
   {
     slug: 'tulle',
@@ -8889,7 +8889,7 @@ export const villes: Ville[] = [
     population: '13 000',
     codePostal: '95380',
     description: 'Louvres est une commune de 13 000 habitants située dans le département Val-d\'Oise en Île-de-France. Nos artisans qualifiés interviennent à Louvres, ainsi que Puiseux-en-France, Goussainville, Fontenay-en-Parisis pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'Puiseux-en-France', 'Goussainville', 'Fontenay-en-Parisis', 'Marly-la-Ville', 'Roissy-en-France', 'Le Thillay'],
+    quartiers: ['Centre-ville', 'Puiseux-en-France', 'Goussainville', 'Fontenay-en-Parisis', 'Marly-la-City', 'Roissy-en-France', 'Le Thillay'],
   },
   {
     slug: 'villetaneuse',
@@ -8910,8 +8910,8 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '13 000',
     codePostal: '83210',
-    description: 'Artisans référencés à Solliès-Pont et ses environs. Cette commune provençale de 13 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Crau, La Farlède, Solliès-Ville.',
-    quartiers: ['Centre-ville', 'La Crau', 'La Farlède', 'Solliès-Ville', 'Cuers', 'Solliès-Toucas', 'La Valette-du-Var'],
+    description: 'Artisans référencés à Solliès-Pont et ses environs. Cette commune provençale de 13 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Crau, La Farlède, Solliès-City.',
+    quartiers: ['Centre-ville', 'La Crau', 'La Farlède', 'Solliès-City', 'Cuers', 'Solliès-Toucas', 'La Valette-du-Var'],
   },
   {
     slug: 'granville',
@@ -9912,7 +9912,7 @@ export const villes: Ville[] = [
     population: '11 000',
     codePostal: '74240',
     description: 'Gaillard est une commune de 11 000 habitants située dans le département Haute-Savoie en Auvergne-Rhône-Alpes. Nos artisans qualifiés interviennent à Gaillard, ainsi que Étrembières, Ambilly, Annemasse pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'Étrembières', 'Ambilly', 'Annemasse', 'Monnetier-Mornex', 'Vétraz-Monthoux', 'Ville-la-Grand'],
+    quartiers: ['Centre-ville', 'Étrembières', 'Ambilly', 'Annemasse', 'Monnetier-Mornex', 'Vétraz-Monthoux', 'City-la-Grand'],
   },
   {
     slug: 'saint-junien',
@@ -9988,8 +9988,8 @@ export const villes: Ville[] = [
     departementCode: '37',
     population: '11 000',
     codePostal: '37270',
-    description: 'Trouvez un artisan de confiance à Montlouis-sur-Loire (Indre-et-Loire). Avec 11 000 habitants, cette commune du Centre dispose d’un réseau de professionnels expérimentés pour la rénovation, le dépannage et l’entretien de votre habitat, ainsi que Véretz, Azay-sur-Cher, La Ville-aux-Dames.',
-    quartiers: ['Centre-ville', 'Véretz', 'Azay-sur-Cher', 'La Ville-aux-Dames', 'Saint-Martin-le-Beau', 'Larçay', 'Vouvray'],
+    description: 'Trouvez un artisan de confiance à Montlouis-sur-Loire (Indre-et-Loire). Avec 11 000 habitants, cette commune du Centre dispose d’un réseau de professionnels expérimentés pour la rénovation, le dépannage et l’entretien de votre habitat, ainsi que Véretz, Azay-sur-Cher, La City-aux-Dames.',
+    quartiers: ['Centre-ville', 'Véretz', 'Azay-sur-Cher', 'La City-aux-Dames', 'Saint-Martin-le-Beau', 'Larçay', 'Vouvray'],
   },
   {
     slug: 'corbas',
@@ -10169,13 +10169,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'ville-d-avray',
-    name: 'Ville-d\'Avray',
+    name: 'City-d\'Avray',
     region: 'Île-de-France',
     departement: 'Hauts-de-Seine',
     departementCode: '92',
     population: '11 000',
     codePostal: '92410',
-    description: 'Vous habitez à Ville-d\'Avray ou ses environs ? Nos artisans qualifiés du Hauts-de-Seine sont disponibles pour tous vos travaux. Ville-d\'Avray, commune francilienne de 11 000 habitants, mérite des professionnels à la hauteur, ainsi que Chaville, Vaucresson, Sèvres.',
+    description: 'Vous habitez à City-d\'Avray ou ses environs ? Nos artisans qualifiés du Hauts-de-Seine sont disponibles pour tous vos travaux. City-d\'Avray, commune francilienne de 11 000 habitants, mérite des professionnels à la hauteur, ainsi que Chaville, Vaucresson, Sèvres.',
     quartiers: ['Centre-ville', 'Chaville', 'Vaucresson', 'Sèvres', 'Garches', 'Saint-Cloud', 'Meudon'],
   },
   {
@@ -10384,8 +10384,8 @@ export const villes: Ville[] = [
     departementCode: '74',
     population: '11 000',
     codePostal: '74100',
-    description: 'Vous habitez à Vétraz-Monthoux ou ses environs ? Nos artisans qualifiés du Haute-Savoie sont disponibles pour tous vos travaux. Vétraz-Monthoux, commune rhônalpine de 11 000 habitants, mérite des professionnels à la hauteur, ainsi que Annemasse, Ville-la-Grand, Ambilly.',
-    quartiers: ['Centre-ville', 'Annemasse', 'Ville-la-Grand', 'Ambilly', 'Étrembières', 'Gaillard', 'Cranves-Sales'],
+    description: 'Vous habitez à Vétraz-Monthoux ou ses environs ? Nos artisans qualifiés du Haute-Savoie sont disponibles pour tous vos travaux. Vétraz-Monthoux, commune rhônalpine de 11 000 habitants, mérite des professionnels à la hauteur, ainsi que Annemasse, City-la-Grand, Ambilly.',
+    quartiers: ['Centre-ville', 'Annemasse', 'City-la-Grand', 'Ambilly', 'Étrembières', 'Gaillard', 'Cranves-Sales'],
   },
   {
     slug: 'saint-saulve',
@@ -10835,8 +10835,8 @@ export const villes: Ville[] = [
     departementCode: '60',
     population: '11 000',
     codePostal: '60500',
-    description: 'Chantilly est une commune de 11 000 habitants située dans le département Oise en Hauts-de-France. Nos artisans qualifiés interviennent à Chantilly, ainsi que Coye-la-Forêt, Orry-la-Ville, Lamorlaye pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
-    quartiers: ['Centre-ville', 'Coye-la-Forêt', 'Orry-la-Ville', 'Lamorlaye', 'Gouvieux', 'Saint-Maximin', 'La Chapelle-en-Serval'],
+    description: 'Chantilly est une commune de 11 000 habitants située dans le département Oise en Hauts-de-France. Nos artisans qualifiés interviennent à Chantilly, ainsi que Coye-la-Forêt, Orry-la-City, Lamorlaye pour tous vos travaux : plomberie, électricité, serrurerie, peinture, rénovation et dépannage urgent.',
+    quartiers: ['Centre-ville', 'Coye-la-Forêt', 'Orry-la-City', 'Lamorlaye', 'Gouvieux', 'Saint-Maximin', 'La Chapelle-en-Serval'],
   },
   {
     slug: 'la-londe-les-maures',
@@ -10847,7 +10847,7 @@ export const villes: Ville[] = [
     population: '11 000',
     codePostal: '83250',
     description: 'Besoin d’un professionnel à La Londe-les-Maures ? Située en Provence-Alpes-Côte d\'Azur, cette commune du Var bénéficie de des besoins en climatisation et rénovation. Comparez les artisans et demandez un devis gratuit pour vos travaux, ainsi que Hyères, Pierrefeu-du-Var, Bormes-les-Mimosas.',
-    quartiers: ['Centre-ville', 'Hyères', 'Pierrefeu-du-Var', 'Bormes-les-Mimosas', 'La Crau', 'Le Lavandou', 'Puget-Ville'],
+    quartiers: ['Centre-ville', 'Hyères', 'Pierrefeu-du-Var', 'Bormes-les-Mimosas', 'La Crau', 'Le Lavandou', 'Puget-City'],
   },
   {
     slug: 'fosses',
@@ -10857,8 +10857,8 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '11 000',
     codePostal: '95470',
-    description: 'À Fosses, commune du Val-d\'Oise (11 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Marly-la-Ville, Survilliers, Puiseux-en-France.',
-    quartiers: ['Centre-ville', 'Marly-la-Ville', 'Survilliers', 'Puiseux-en-France', 'Saint-Witz', 'Luzarches', 'Chaumontel'],
+    description: 'À Fosses, commune du Val-d\'Oise (11 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour le dynamisme économique, nos professionnels interviennent dans toute la commune, ainsi que Marly-la-City, Survilliers, Puiseux-en-France.',
+    quartiers: ['Centre-ville', 'Marly-la-City', 'Survilliers', 'Puiseux-en-France', 'Saint-Witz', 'Luzarches', 'Chaumontel'],
   },
   {
     slug: 'clermont',
@@ -11682,8 +11682,8 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '10 000',
     codePostal: '83210',
-    description: 'À La Farlède, commune du Var (10 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour des bâtiments anciens en pierre, nos professionnels interviennent dans toute la commune, ainsi que Solliès-Ville, Solliès-Pont, La Crau.',
-    quartiers: ['Centre-ville', 'Solliès-Ville', 'Solliès-Pont', 'La Crau', 'La Garde', 'La Valette-du-Var', 'Solliès-Toucas'],
+    description: 'À La Farlède, commune du Var (10 000 hab.), trouvez rapidement un artisan qualifié pour vos projets. Que ce soit pour des bâtiments anciens en pierre, nos professionnels interviennent dans toute la commune, ainsi que Solliès-City, Solliès-Pont, La Crau.',
+    quartiers: ['Centre-ville', 'Solliès-City', 'Solliès-Pont', 'La Crau', 'La Garde', 'La Valette-du-Var', 'Solliès-Toucas'],
   },
   {
     slug: 'neuville-en-ferrain',
@@ -12336,13 +12336,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'ville-la-grand',
-    name: 'Ville-la-Grand',
+    name: 'City-la-Grand',
     region: 'Auvergne-Rhône-Alpes',
     departement: 'Haute-Savoie',
     departementCode: '74',
     population: '9 500',
     codePostal: '74100',
-    description: 'Trouvez des artisans qualifiés à Ville-la-Grand (Haute-Savoie). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
+    description: 'Trouvez des artisans qualifiés à City-la-Grand (Haute-Savoie). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -14679,13 +14679,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'la-ville-du-bois',
-    name: 'La Ville-du-Bois',
+    name: 'La City-du-Bois',
     region: 'Île-de-France',
     departement: 'Essonne',
     departementCode: '91',
     population: '8 000',
     codePostal: '91620',
-    description: 'Trouvez des artisans qualifiés à La Ville-du-Bois (Essonne). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
+    description: 'Trouvez des artisans qualifiés à La City-du-Bois (Essonne). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -20542,13 +20542,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'marly-la-ville',
-    name: 'Marly-la-Ville',
+    name: 'Marly-la-City',
     region: 'Île-de-France',
     departement: 'Val-d\'Oise',
     departementCode: '95',
     population: '6 000',
     codePostal: '95670',
-    description: 'Trouvez des artisans qualifiés à Marly-la-Ville (Val-d\'Oise). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
+    description: 'Trouvez des artisans qualifiés à Marly-la-City (Val-d\'Oise). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -22445,13 +22445,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'la-ville-aux-dames',
-    name: 'La Ville-aux-Dames',
+    name: 'La City-aux-Dames',
     region: 'Centre-Val de Loire',
     departement: 'Indre-et-Loire',
     departementCode: '37',
     population: '5 500',
     codePostal: '37700',
-    description: 'Trouvez des artisans qualifiés à La Ville-aux-Dames (Indre-et-Loire). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
+    description: 'Trouvez des artisans qualifiés à La City-aux-Dames (Indre-et-Loire). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -24183,13 +24183,13 @@ export const villes: Ville[] = [
   },
   {
     slug: 'l-etang-la-ville',
-    name: 'L\'Étang-la-Ville',
+    name: 'L\'Étang-la-City',
     region: 'Île-de-France',
     departement: 'Yvelines',
     departementCode: '78',
     population: '5 000',
     codePostal: '78620',
-    description: 'Trouvez des artisans qualifiés à L\'Étang-la-Ville (Yvelines). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
+    description: 'Trouvez des artisans qualifiés à L\'Étang-la-City (Yvelines). Nos professionnels interviennent dans toute la commune et ses environs pour tous vos travaux.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -24965,132 +24965,132 @@ export const villes: Ville[] = [
 ]
 
 // Tous les départements français
-export const departements: Departement[] = [
-  { code: '01', slug: 'ain', name: 'Ain', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Bourg-en-Bresse', population: '656 000', description: 'Département du Bugey et de la Dombes.', villes: ['Bourg-en-Bresse', 'Oyonnax', 'Ambérieu-en-Bugey'] },
-  { code: '02', slug: 'aisne', name: 'Aisne', region: 'Hauts-de-France', chefLieu: 'Laon', population: '531 000', description: 'Département du nord de la France.', villes: ['Laon', 'Saint-Quentin', 'Soissons'] },
-  { code: '03', slug: 'allier', name: 'Allier', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Moulins', population: '337 000', description: 'Département thermal du Bourbonnais.', villes: ['Moulins', 'Vichy', 'Montluçon'] },
-  { code: '04', slug: 'alpes-de-haute-provence', name: 'Alpes-de-Haute-Provence', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Digne-les-Bains', population: '164 000', description: 'Département alpin de Provence.', villes: ['Digne-les-Bains', 'Manosque', 'Sisteron'] },
-  { code: '05', slug: 'hautes-alpes', name: 'Hautes-Alpes', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Gap', population: '142 000', description: 'Département de haute montagne.', villes: ['Gap', 'Briançon', 'Embrun'] },
-  { code: '06', slug: 'alpes-maritimes', name: 'Alpes-Maritimes', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Nice', population: '1 094 000', description: 'Département de la Côte d\'Azur.', villes: ['Nice', 'Cannes', 'Antibes', 'Grasse'] },
-  { code: '07', slug: 'ardeche', name: 'Ardèche', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Privas', population: '328 000', description: 'Département des gorges et des châtaignes.', villes: ['Privas', 'Annonay', 'Aubenas'] },
-  { code: '08', slug: 'ardennes', name: 'Ardennes', region: 'Grand Est', chefLieu: 'Charleville-Mézières', population: '271 000', description: 'Département frontalier de la Belgique.', villes: ['Charleville-Mézières', 'Sedan', 'Rethel'] },
-  { code: '09', slug: 'ariege', name: 'Ariège', region: 'Occitanie', chefLieu: 'Foix', population: '153 000', description: 'Département pyrénéen.', villes: ['Foix', 'Pamiers', 'Saint-Girons'] },
-  { code: '10', slug: 'aube', name: 'Aube', region: 'Grand Est', chefLieu: 'Troyes', population: '310 000', description: 'Département champenois.', villes: ['Troyes', 'Romilly-sur-Seine', 'Bar-sur-Aube'] },
-  { code: '11', slug: 'aude', name: 'Aude', region: 'Occitanie', chefLieu: 'Carcassonne', population: '374 000', description: 'Département cathare.', villes: ['Carcassonne', 'Narbonne', 'Castelnaudary'] },
-  { code: '12', slug: 'aveyron', name: 'Aveyron', region: 'Occitanie', chefLieu: 'Rodez', population: '279 000', description: 'Département du Roquefort.', villes: ['Rodez', 'Millau', 'Villefranche-de-Rouergue'] },
-  { code: '13', slug: 'bouches-du-rhone', name: 'Bouches-du-Rhône', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Marseille', population: '2 034 000', description: 'Département méditerranéen.', villes: ['Marseille', 'Aix-en-Provence', 'Arles', 'Martigues'] },
-  { code: '14', slug: 'calvados', name: 'Calvados', region: 'Normandie', chefLieu: 'Caen', population: '695 000', description: 'Département normand du débarquement.', villes: ['Caen', 'Lisieux', 'Bayeux', 'Honfleur'] },
-  { code: '15', slug: 'cantal', name: 'Cantal', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Aurillac', population: '145 000', description: 'Département volcanique d\'Auvergne.', villes: ['Aurillac', 'Saint-Flour', 'Mauriac'] },
-  { code: '16', slug: 'charente', name: 'Charente', region: 'Nouvelle-Aquitaine', chefLieu: 'Angoulême', population: '353 000', description: 'Département du cognac.', villes: ['Angoulême', 'Cognac', 'Soyaux'] },
-  { code: '17', slug: 'charente-maritime', name: 'Charente-Maritime', region: 'Nouvelle-Aquitaine', chefLieu: 'La Rochelle', population: '651 000', description: 'Département atlantique.', villes: ['La Rochelle', 'Rochefort', 'Saintes', 'Royan'] },
-  { code: '18', slug: 'cher', name: 'Cher', region: 'Centre-Val de Loire', chefLieu: 'Bourges', population: '304 000', description: 'Département du Berry.', villes: ['Bourges', 'Vierzon', 'Saint-Amand-Montrond'] },
-  { code: '19', slug: 'correze', name: 'Corrèze', region: 'Nouvelle-Aquitaine', chefLieu: 'Tulle', population: '241 000', description: 'Département limousin.', villes: ['Tulle', 'Brive-la-Gaillarde', 'Ussel'] },
-  { code: '21', slug: 'cote-dor', name: 'Côte-d\'Or', region: 'Bourgogne-Franche-Comté', chefLieu: 'Dijon', population: '534 000', description: 'Département viticole de Bourgogne.', villes: ['Dijon', 'Beaune', 'Chenôve'] },
-  { code: '22', slug: 'cotes-darmor', name: 'Côtes-d\'Armor', region: 'Bretagne', chefLieu: 'Saint-Brieuc', population: '598 000', description: 'Département breton de la Côte de Granit Rose.', villes: ['Saint-Brieuc', 'Lannion', 'Dinan'] },
-  { code: '23', slug: 'creuse', name: 'Creuse', region: 'Nouvelle-Aquitaine', chefLieu: 'Guéret', population: '118 000', description: 'Département rural du Limousin.', villes: ['Guéret', 'La Souterraine', 'Aubusson'] },
-  { code: '24', slug: 'dordogne', name: 'Dordogne', region: 'Nouvelle-Aquitaine', chefLieu: 'Périgueux', population: '413 000', description: 'Département du Périgord.', villes: ['Périgueux', 'Bergerac', 'Sarlat'] },
-  { code: '25', slug: 'doubs', name: 'Doubs', region: 'Bourgogne-Franche-Comté', chefLieu: 'Besançon', population: '543 000', description: 'Département horloger.', villes: ['Besançon', 'Montbéliard', 'Pontarlier'] },
-  { code: '26', slug: 'drome', name: 'Drôme', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Valence', population: '516 000', description: 'Département provençal.', villes: ['Valence', 'Montélimar', 'Romans-sur-Isère'] },
-  { code: '27', slug: 'eure', name: 'Eure', region: 'Normandie', chefLieu: 'Évreux', population: '601 000', description: 'Département normand.', villes: ['Évreux', 'Vernon', 'Louviers'] },
-  { code: '28', slug: 'eure-et-loir', name: 'Eure-et-Loir', region: 'Centre-Val de Loire', chefLieu: 'Chartres', population: '433 000', description: 'Département de la Beauce.', villes: ['Chartres', 'Dreux', 'Châteaudun'] },
-  { code: '29', slug: 'finistere', name: 'Finistère', region: 'Bretagne', chefLieu: 'Quimper', population: '909 000', description: 'Département du bout du monde.', villes: ['Quimper', 'Brest', 'Morlaix', 'Concarneau'] },
-  { code: '30', slug: 'gard', name: 'Gard', region: 'Occitanie', chefLieu: 'Nîmes', population: '748 000', description: 'Département romain.', villes: ['Nîmes', 'Alès', 'Bagnols-sur-Cèze'] },
-  { code: '31', slug: 'haute-garonne', name: 'Haute-Garonne', region: 'Occitanie', chefLieu: 'Toulouse', population: '1 400 000', description: 'Département de la ville rose.', villes: ['Toulouse', 'Colomiers', 'Tournefeuille', 'Blagnac'] },
-  { code: '32', slug: 'gers', name: 'Gers', region: 'Occitanie', chefLieu: 'Auch', population: '191 000', description: 'Département gascon.', villes: ['Auch', 'Condom', 'Fleurance'] },
-  { code: '33', slug: 'gironde', name: 'Gironde', region: 'Nouvelle-Aquitaine', chefLieu: 'Bordeaux', population: '1 601 000', description: 'Département viticole bordelais.', villes: ['Bordeaux', 'Mérignac', 'Pessac', 'Talence'] },
-  { code: '34', slug: 'herault', name: 'Hérault', region: 'Occitanie', chefLieu: 'Montpellier', population: '1 175 000', description: 'Département méditerranéen.', villes: ['Montpellier', 'Béziers', 'Sète', 'Agde'] },
-  { code: '35', slug: 'ille-et-vilaine', name: 'Ille-et-Vilaine', region: 'Bretagne', chefLieu: 'Rennes', population: '1 079 000', description: 'Département de la capitale bretonne.', villes: ['Rennes', 'Saint-Malo', 'Fougères', 'Vitré'] },
-  { code: '36', slug: 'indre', name: 'Indre', region: 'Centre-Val de Loire', chefLieu: 'Châteauroux', population: '222 000', description: 'Département berrichon.', villes: ['Châteauroux', 'Issoudun', 'Le Blanc'] },
-  { code: '37', slug: 'indre-et-loire', name: 'Indre-et-Loire', region: 'Centre-Val de Loire', chefLieu: 'Tours', population: '610 000', description: 'Département des châteaux de la Loire.', villes: ['Tours', 'Joué-lès-Tours', 'Amboise'] },
-  { code: '38', slug: 'isere', name: 'Isère', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Grenoble', population: '1 266 000', description: 'Département alpin.', villes: ['Grenoble', 'Saint-Martin-d\'Hères', 'Échirolles', 'Vienne'] },
-  { code: '39', slug: 'jura', name: 'Jura', region: 'Bourgogne-Franche-Comté', chefLieu: 'Lons-le-Saunier', population: '260 000', description: 'Département du vin jaune.', villes: ['Lons-le-Saunier', 'Dole', 'Saint-Claude'] },
-  { code: '40', slug: 'landes', name: 'Landes', region: 'Nouvelle-Aquitaine', chefLieu: 'Mont-de-Marsan', population: '413 000', description: 'Département de la forêt landaise.', villes: ['Mont-de-Marsan', 'Dax', 'Biscarrosse'] },
-  { code: '41', slug: 'loir-et-cher', name: 'Loir-et-Cher', region: 'Centre-Val de Loire', chefLieu: 'Blois', population: '331 000', description: 'Département des châteaux.', villes: ['Blois', 'Vendôme', 'Romorantin-Lanthenay'] },
-  { code: '42', slug: 'loire', name: 'Loire', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Saint-Étienne', population: '762 000', description: 'Département stéphanois.', villes: ['Saint-Étienne', 'Roanne', 'Saint-Chamond'] },
-  { code: '43', slug: 'haute-loire', name: 'Haute-Loire', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Le Puy-en-Velay', population: '227 000', description: 'Département volcanique.', villes: ['Le Puy-en-Velay', 'Yssingeaux', 'Monistrol-sur-Loire'] },
-  { code: '44', slug: 'loire-atlantique', name: 'Loire-Atlantique', region: 'Pays de la Loire', chefLieu: 'Nantes', population: '1 429 000', description: 'Département nantais.', villes: ['Nantes', 'Saint-Nazaire', 'Saint-Herblain', 'Rezé'] },
-  { code: '45', slug: 'loiret', name: 'Loiret', region: 'Centre-Val de Loire', chefLieu: 'Orléans', population: '679 000', description: 'Département orléanais.', villes: ['Orléans', 'Fleury-les-Aubrais', 'Olivet'] },
-  { code: '46', slug: 'lot', name: 'Lot', region: 'Occitanie', chefLieu: 'Cahors', population: '174 000', description: 'Département du Quercy.', villes: ['Cahors', 'Figeac', 'Gourdon'] },
-  { code: '47', slug: 'lot-et-garonne', name: 'Lot-et-Garonne', region: 'Nouvelle-Aquitaine', chefLieu: 'Agen', population: '332 000', description: 'Département du pruneau.', villes: ['Agen', 'Villeneuve-sur-Lot', 'Marmande'] },
-  { code: '48', slug: 'lozere', name: 'Lozère', region: 'Occitanie', chefLieu: 'Mende', population: '77 000', description: 'Département le moins peuplé de France.', villes: ['Mende', 'Marvejols', 'Florac'] },
-  { code: '49', slug: 'maine-et-loire', name: 'Maine-et-Loire', region: 'Pays de la Loire', chefLieu: 'Angers', population: '818 000', description: 'Département angevin.', villes: ['Angers', 'Cholet', 'Saumur'] },
-  { code: '50', slug: 'manche', name: 'Manche', region: 'Normandie', chefLieu: 'Saint-Lô', population: '496 000', description: 'Département du Cotentin.', villes: ['Cherbourg-en-Cotentin', 'Saint-Lô', 'Granville'] },
-  { code: '51', slug: 'marne', name: 'Marne', region: 'Grand Est', chefLieu: 'Châlons-en-Champagne', population: '568 000', description: 'Département du champagne.', villes: ['Reims', 'Châlons-en-Champagne', 'Épernay'] },
-  { code: '52', slug: 'haute-marne', name: 'Haute-Marne', region: 'Grand Est', chefLieu: 'Chaumont', population: '175 000', description: 'Département de la coutellerie.', villes: ['Chaumont', 'Saint-Dizier', 'Langres'] },
-  { code: '53', slug: 'mayenne', name: 'Mayenne', region: 'Pays de la Loire', chefLieu: 'Laval', population: '307 000', description: 'Département mayennais.', villes: ['Laval', 'Mayenne', 'Château-Gontier'] },
-  { code: '54', slug: 'meurthe-et-moselle', name: 'Meurthe-et-Moselle', region: 'Grand Est', chefLieu: 'Nancy', population: '733 000', description: 'Département lorrain.', villes: ['Nancy', 'Vandœuvre-lès-Nancy', 'Lunéville'] },
-  { code: '55', slug: 'meuse', name: 'Meuse', region: 'Grand Est', chefLieu: 'Bar-le-Duc', population: '187 000', description: 'Département de la Grande Guerre.', villes: ['Bar-le-Duc', 'Verdun', 'Commercy'] },
-  { code: '56', slug: 'morbihan', name: 'Morbihan', region: 'Bretagne', chefLieu: 'Vannes', population: '759 000', description: 'Département du golfe.', villes: ['Vannes', 'Lorient', 'Lanester'] },
-  { code: '57', slug: 'moselle', name: 'Moselle', region: 'Grand Est', chefLieu: 'Metz', population: '1 046 000', description: 'Département mosellan.', villes: ['Metz', 'Thionville', 'Forbach', 'Sarreguemines'] },
-  { code: '58', slug: 'nievre', name: 'Nièvre', region: 'Bourgogne-Franche-Comté', chefLieu: 'Nevers', population: '204 000', description: 'Département nivernais.', villes: ['Nevers', 'Cosne-Cours-sur-Loire', 'Decize'] },
-  { code: '59', slug: 'nord', name: 'Nord', region: 'Hauts-de-France', chefLieu: 'Lille', population: '2 604 000', description: 'Département le plus peuplé de France.', villes: ['Lille', 'Roubaix', 'Tourcoing', 'Dunkerque', 'Villeneuve-d\'Ascq'] },
-  { code: '60', slug: 'oise', name: 'Oise', region: 'Hauts-de-France', chefLieu: 'Beauvais', population: '829 000', description: 'Département picard.', villes: ['Beauvais', 'Compiègne', 'Creil', 'Senlis'] },
-  { code: '61', slug: 'orne', name: 'Orne', region: 'Normandie', chefLieu: 'Alençon', population: '283 000', description: 'Département normand.', villes: ['Alençon', 'Flers', 'Argentan'] },
-  { code: '62', slug: 'pas-de-calais', name: 'Pas-de-Calais', region: 'Hauts-de-France', chefLieu: 'Arras', population: '1 466 000', description: 'Département du détroit.', villes: ['Calais', 'Boulogne-sur-Mer', 'Arras', 'Lens'] },
-  { code: '63', slug: 'puy-de-dome', name: 'Puy-de-Dôme', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Clermont-Ferrand', population: '659 000', description: 'Département des volcans.', villes: ['Clermont-Ferrand', 'Cournon-d\'Auvergne', 'Riom'] },
-  { code: '64', slug: 'pyrenees-atlantiques', name: 'Pyrénées-Atlantiques', region: 'Nouvelle-Aquitaine', chefLieu: 'Pau', population: '682 000', description: 'Département basque et béarnais.', villes: ['Pau', 'Bayonne', 'Anglet', 'Biarritz'] },
-  { code: '65', slug: 'hautes-pyrenees', name: 'Hautes-Pyrénées', region: 'Occitanie', chefLieu: 'Tarbes', population: '229 000', description: 'Département pyrénéen.', villes: ['Tarbes', 'Lourdes', 'Bagnères-de-Bigorre'] },
-  { code: '66', slug: 'pyrenees-orientales', name: 'Pyrénées-Orientales', region: 'Occitanie', chefLieu: 'Perpignan', population: '479 000', description: 'Département catalan.', villes: ['Perpignan', 'Canet-en-Roussillon', 'Saint-Estève'] },
-  { code: '67', slug: 'bas-rhin', name: 'Bas-Rhin', region: 'Grand Est', chefLieu: 'Strasbourg', population: '1 140 000', description: 'Département alsacien.', villes: ['Strasbourg', 'Haguenau', 'Schiltigheim', 'Illkirch'] },
-  { code: '68', slug: 'haut-rhin', name: 'Haut-Rhin', region: 'Grand Est', chefLieu: 'Colmar', population: '765 000', description: 'Département viticole alsacien.', villes: ['Mulhouse', 'Colmar', 'Saint-Louis'] },
-  { code: '69', slug: 'rhone', name: 'Rhône', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Lyon', population: '1 876 000', description: 'Département lyonnais.', villes: ['Lyon', 'Villeurbanne', 'Vénissieux', 'Vaulx-en-Velin'] },
-  { code: '70', slug: 'haute-saone', name: 'Haute-Saône', region: 'Bourgogne-Franche-Comté', chefLieu: 'Vesoul', population: '236 000', description: 'Département franc-comtois.', villes: ['Vesoul', 'Héricourt', 'Lure'] },
-  { code: '71', slug: 'saone-et-loire', name: 'Saône-et-Loire', region: 'Bourgogne-Franche-Comté', chefLieu: 'Mâcon', population: '553 000', description: 'Département bourguignon.', villes: ['Chalon-sur-Saône', 'Mâcon', 'Le Creusot'] },
-  { code: '72', slug: 'sarthe', name: 'Sarthe', region: 'Pays de la Loire', chefLieu: 'Le Mans', population: '566 000', description: 'Département des 24 Heures.', villes: ['Le Mans', 'La Flèche', 'Sablé-sur-Sarthe'] },
-  { code: '73', slug: 'savoie', name: 'Savoie', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Chambéry', population: '436 000', description: 'Département des stations de ski.', villes: ['Chambéry', 'Aix-les-Bains', 'Albertville'] },
-  { code: '74', slug: 'haute-savoie', name: 'Haute-Savoie', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Annecy', population: '826 000', description: 'Département du lac d\'Annecy.', villes: ['Annecy', 'Thonon-les-Bains', 'Annemasse'] },
-  { code: '75', slug: 'paris', name: 'Paris', region: 'Île-de-France', chefLieu: 'Paris', population: '2 161 000', description: 'Capitale de la France.', villes: ['Paris'] },
-  { code: '76', slug: 'seine-maritime', name: 'Seine-Maritime', region: 'Normandie', chefLieu: 'Rouen', population: '1 255 000', description: 'Département normand.', villes: ['Rouen', 'Le Havre', 'Dieppe'] },
-  { code: '77', slug: 'seine-et-marne', name: 'Seine-et-Marne', region: 'Île-de-France', chefLieu: 'Melun', population: '1 421 000', description: 'Plus grand département francilien.', villes: ['Meaux', 'Chelles', 'Melun', 'Pontault-Combault'] },
-  { code: '78', slug: 'yvelines', name: 'Yvelines', region: 'Île-de-France', chefLieu: 'Versailles', population: '1 448 000', description: 'Département de Versailles.', villes: ['Versailles', 'Sartrouville', 'Mantes-la-Jolie'] },
-  { code: '79', slug: 'deux-sevres', name: 'Deux-Sèvres', region: 'Nouvelle-Aquitaine', chefLieu: 'Niort', population: '374 000', description: 'Département des mutuelles.', villes: ['Niort', 'Bressuire', 'Thouars'] },
-  { code: '80', slug: 'somme', name: 'Somme', region: 'Hauts-de-France', chefLieu: 'Amiens', population: '572 000', description: 'Département picard.', villes: ['Amiens', 'Abbeville', 'Albert'] },
-  { code: '81', slug: 'tarn', name: 'Tarn', region: 'Occitanie', chefLieu: 'Albi', population: '389 000', description: 'Département occitan.', villes: ['Albi', 'Castres', 'Gaillac'] },
-  { code: '82', slug: 'tarn-et-garonne', name: 'Tarn-et-Garonne', region: 'Occitanie', chefLieu: 'Montauban', population: '262 000', description: 'Département du chasselas.', villes: ['Montauban', 'Castelsarrasin', 'Moissac'] },
-  { code: '83', slug: 'var', name: 'Var', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Toulon', population: '1 076 000', description: 'Département méditerranéen.', villes: ['Toulon', 'Fréjus', 'Hyères', 'Draguignan'] },
-  { code: '84', slug: 'vaucluse', name: 'Vaucluse', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Avignon', population: '560 000', description: 'Département provençal.', villes: ['Avignon', 'Orange', 'Carpentras'] },
-  { code: '85', slug: 'vendee', name: 'Vendée', region: 'Pays de la Loire', chefLieu: 'La Roche-sur-Yon', population: '685 000', description: 'Département atlantique.', villes: ['La Roche-sur-Yon', 'Les Sables-d\'Olonne', 'Challans'] },
-  { code: '86', slug: 'vienne', name: 'Vienne', region: 'Nouvelle-Aquitaine', chefLieu: 'Poitiers', population: '438 000', description: 'Département du Futuroscope.', villes: ['Poitiers', 'Châtellerault', 'Buxerolles'] },
-  { code: '87', slug: 'haute-vienne', name: 'Haute-Vienne', region: 'Nouvelle-Aquitaine', chefLieu: 'Limoges', population: '374 000', description: 'Département de la porcelaine.', villes: ['Limoges', 'Saint-Junien', 'Panazol'] },
-  { code: '88', slug: 'vosges', name: 'Vosges', region: 'Grand Est', chefLieu: 'Épinal', population: '367 000', description: 'Département vosgien.', villes: ['Épinal', 'Saint-Dié-des-Vosges', 'Gérardmer'] },
-  { code: '89', slug: 'yonne', name: 'Yonne', region: 'Bourgogne-Franche-Comté', chefLieu: 'Auxerre', population: '338 000', description: 'Département bourguignon.', villes: ['Auxerre', 'Sens', 'Joigny'] },
-  { code: '90', slug: 'territoire-de-belfort', name: 'Territoire de Belfort', region: 'Bourgogne-Franche-Comté', chefLieu: 'Belfort', population: '142 000', description: 'Plus petit département métropolitain.', villes: ['Belfort', 'Delle', 'Beaucourt'] },
-  { code: '91', slug: 'essonne', name: 'Essonne', region: 'Île-de-France', chefLieu: 'Évry-Courcouronnes', population: '1 301 000', description: 'Département francilien.', villes: ['Évry-Courcouronnes', 'Corbeil-Essonnes', 'Massy'] },
-  { code: '92', slug: 'hauts-de-seine', name: 'Hauts-de-Seine', region: 'Île-de-France', chefLieu: 'Nanterre', population: '1 624 000', description: 'Département de La Défense.', villes: ['Boulogne-Billancourt', 'Nanterre', 'Courbevoie', 'Colombes'] },
-  { code: '93', slug: 'seine-saint-denis', name: 'Seine-Saint-Denis', region: 'Île-de-France', chefLieu: 'Bobigny', population: '1 644 000', description: 'Département du Stade de France.', villes: ['Saint-Denis', 'Montreuil', 'Aubervilliers', 'Aulnay-sous-Bois'] },
-  { code: '94', slug: 'val-de-marne', name: 'Val-de-Marne', region: 'Île-de-France', chefLieu: 'Créteil', population: '1 407 000', description: 'Département francilien.', villes: ['Créteil', 'Vitry-sur-Seine', 'Champigny-sur-Marne'] },
-  { code: '95', slug: 'val-doise', name: 'Val-d\'Oise', region: 'Île-de-France', chefLieu: 'Cergy', population: '1 249 000', description: 'Département au nord de Paris.', villes: ['Argenteuil', 'Sarcelles', 'Cergy'] },
-  { code: '2A', slug: 'corse-du-sud', name: 'Corse-du-Sud', region: 'Corse', chefLieu: 'Ajaccio', population: '158 000', description: 'Département corse.', villes: ['Ajaccio', 'Porto-Vecchio', 'Propriano'] },
-  { code: '2B', slug: 'haute-corse', name: 'Haute-Corse', region: 'Corse', chefLieu: 'Bastia', population: '181 000', description: 'Département corse.', villes: ['Bastia', 'Corte', 'Calvi'] },
-  { code: '971', slug: 'guadeloupe', name: 'Guadeloupe', region: 'Guadeloupe', chefLieu: 'Basse-Terre', population: '384 000', description: 'Département d\'outre-mer des Antilles françaises.', villes: ['Pointe-à-Pitre', 'Les Abymes', 'Baie-Mahault', 'Le Gosier'] },
-  { code: '972', slug: 'martinique', name: 'Martinique', region: 'Martinique', chefLieu: 'Fort-de-France', population: '368 000', description: 'Île des Antilles françaises au patrimoine culturel riche.', villes: ['Fort-de-France', 'Le Lamentin', 'Le Robert', 'Schœlcher'] },
-  { code: '973', slug: 'guyane', name: 'Guyane', region: 'Guyane', chefLieu: 'Cayenne', population: '294 000', description: 'Département d\'outre-mer en Amérique du Sud.', villes: ['Cayenne', 'Saint-Laurent-du-Maroni', 'Matoury', 'Kourou'] },
-  { code: '974', slug: 'la-reunion', name: 'La Réunion', region: 'La Réunion', chefLieu: 'Saint-Denis', population: '873 000', description: 'Île de l\'océan Indien au dynamisme économique important.', villes: ['Saint-Denis', 'Saint-Paul', 'Saint-Pierre', 'Le Tampon'] },
-  { code: '976', slug: 'mayotte', name: 'Mayotte', region: 'Mayotte', chefLieu: 'Mamoudzou', population: '321 000', description: 'Plus jeune département français dans l\'océan Indien.', villes: ['Mamoudzou', 'Koungou', 'Dzaoudzi', 'Dembeni'] },
-  { code: '977', slug: 'saint-barthelemy', name: 'Saint-Barthélemy', region: 'Saint-Barthélemy', chefLieu: 'Gustavia', population: '11 000', description: 'Collectivité d\'outre-mer des Antilles françaises, réputée pour son cadre de vie exceptionnel.', villes: ['Saint-Barthélemy'] },
-  { code: '978', slug: 'saint-martin', name: 'Saint-Martin', region: 'Saint-Martin', chefLieu: 'Marigot', population: '31 000', description: 'Collectivité d\'outre-mer des Antilles, partie française de l\'île de Saint-Martin.', villes: ['Saint-Martin'] },
-  { code: '987', slug: 'polynesie-francaise', name: 'Polynésie française', region: 'Polynésie française', chefLieu: 'Papeete', population: '283 000', description: 'Collectivité d\'outre-mer du Pacifique composée de 118 îles au patrimoine naturel exceptionnel.', villes: ['Papeete', 'Faaa', 'Punaauia', 'Pirae', 'Mahina', 'Paea', 'Papara', 'Teva I Uta', 'Bora-Bora', 'Arue', 'Hitiaa O Te Ra', 'Moorea-Maiao', 'Taiarapu-Est', 'Taiarapu-Ouest', 'Huahine', 'Tahaa', 'Taputapuatea'] },
-  { code: '988', slug: 'nouvelle-caledonie', name: 'Nouvelle-Calédonie', region: 'Nouvelle-Calédonie', chefLieu: 'Nouméa', population: '292 000', description: 'Collectivité sui generis du Pacifique sud, dotée d\'une biodiversité exceptionnelle.', villes: ['Nouméa', 'Dumbéa', 'Païta', 'Le Mont-Dore', 'Lifou', 'Koné', 'Maré', 'Bourail'] },
+export const states: State[] = [
+  { code: '01', slug: 'ain', name: 'Ain', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Bourg-en-Bresse', population: '656 000', description: 'Département du Bugey et de la Dombes.', cities: ['Bourg-en-Bresse', 'Oyonnax', 'Ambérieu-en-Bugey'] },
+  { code: '02', slug: 'aisne', name: 'Aisne', region: 'Hauts-de-France', chefLieu: 'Laon', population: '531 000', description: 'Département du nord de la France.', cities: ['Laon', 'Saint-Quentin', 'Soissons'] },
+  { code: '03', slug: 'allier', name: 'Allier', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Moulins', population: '337 000', description: 'Département thermal du Bourbonnais.', cities: ['Moulins', 'Vichy', 'Montluçon'] },
+  { code: '04', slug: 'alpes-de-haute-provence', name: 'Alpes-de-Haute-Provence', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Digne-les-Bains', population: '164 000', description: 'Département alpin de Provence.', cities: ['Digne-les-Bains', 'Manosque', 'Sisteron'] },
+  { code: '05', slug: 'hautes-alpes', name: 'Hautes-Alpes', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Gap', population: '142 000', description: 'Département de haute montagne.', cities: ['Gap', 'Briançon', 'Embrun'] },
+  { code: '06', slug: 'alpes-maritimes', name: 'Alpes-Maritimes', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Nice', population: '1 094 000', description: 'Département de la Côte d\'Azur.', cities: ['Nice', 'Cannes', 'Antibes', 'Grasse'] },
+  { code: '07', slug: 'ardeche', name: 'Ardèche', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Privas', population: '328 000', description: 'Département des gorges et des châtaignes.', cities: ['Privas', 'Annonay', 'Aubenas'] },
+  { code: '08', slug: 'ardennes', name: 'Ardennes', region: 'Grand Est', chefLieu: 'Charleville-Mézières', population: '271 000', description: 'Département frontalier de la Belgique.', cities: ['Charleville-Mézières', 'Sedan', 'Rethel'] },
+  { code: '09', slug: 'ariege', name: 'Ariège', region: 'Occitanie', chefLieu: 'Foix', population: '153 000', description: 'Département pyrénéen.', cities: ['Foix', 'Pamiers', 'Saint-Girons'] },
+  { code: '10', slug: 'aube', name: 'Aube', region: 'Grand Est', chefLieu: 'Troyes', population: '310 000', description: 'Département champenois.', cities: ['Troyes', 'Romilly-sur-Seine', 'Bar-sur-Aube'] },
+  { code: '11', slug: 'aude', name: 'Aude', region: 'Occitanie', chefLieu: 'Carcassonne', population: '374 000', description: 'Département cathare.', cities: ['Carcassonne', 'Narbonne', 'Castelnaudary'] },
+  { code: '12', slug: 'aveyron', name: 'Aveyron', region: 'Occitanie', chefLieu: 'Rodez', population: '279 000', description: 'Département du Roquefort.', cities: ['Rodez', 'Millau', 'Villefranche-de-Rouergue'] },
+  { code: '13', slug: 'bouches-du-rhone', name: 'Bouches-du-Rhône', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Marseille', population: '2 034 000', description: 'Département méditerranéen.', cities: ['Marseille', 'Aix-en-Provence', 'Arles', 'Martigues'] },
+  { code: '14', slug: 'calvados', name: 'Calvados', region: 'Normandie', chefLieu: 'Caen', population: '695 000', description: 'Département normand du débarquement.', cities: ['Caen', 'Lisieux', 'Bayeux', 'Honfleur'] },
+  { code: '15', slug: 'cantal', name: 'Cantal', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Aurillac', population: '145 000', description: 'Département volcanique d\'Auvergne.', cities: ['Aurillac', 'Saint-Flour', 'Mauriac'] },
+  { code: '16', slug: 'charente', name: 'Charente', region: 'Nouvelle-Aquitaine', chefLieu: 'Angoulême', population: '353 000', description: 'Département du cognac.', cities: ['Angoulême', 'Cognac', 'Soyaux'] },
+  { code: '17', slug: 'charente-maritime', name: 'Charente-Maritime', region: 'Nouvelle-Aquitaine', chefLieu: 'La Rochelle', population: '651 000', description: 'Département atlantique.', cities: ['La Rochelle', 'Rochefort', 'Saintes', 'Royan'] },
+  { code: '18', slug: 'cher', name: 'Cher', region: 'Centre-Val de Loire', chefLieu: 'Bourges', population: '304 000', description: 'Département du Berry.', cities: ['Bourges', 'Vierzon', 'Saint-Amand-Montrond'] },
+  { code: '19', slug: 'correze', name: 'Corrèze', region: 'Nouvelle-Aquitaine', chefLieu: 'Tulle', population: '241 000', description: 'Département limousin.', cities: ['Tulle', 'Brive-la-Gaillarde', 'Ussel'] },
+  { code: '21', slug: 'cote-dor', name: 'Côte-d\'Or', region: 'Bourgogne-Franche-Comté', chefLieu: 'Dijon', population: '534 000', description: 'Département viticole de Bourgogne.', cities: ['Dijon', 'Beaune', 'Chenôve'] },
+  { code: '22', slug: 'cotes-darmor', name: 'Côtes-d\'Armor', region: 'Bretagne', chefLieu: 'Saint-Brieuc', population: '598 000', description: 'Département breton de la Côte de Granit Rose.', cities: ['Saint-Brieuc', 'Lannion', 'Dinan'] },
+  { code: '23', slug: 'creuse', name: 'Creuse', region: 'Nouvelle-Aquitaine', chefLieu: 'Guéret', population: '118 000', description: 'Département rural du Limousin.', cities: ['Guéret', 'La Souterraine', 'Aubusson'] },
+  { code: '24', slug: 'dordogne', name: 'Dordogne', region: 'Nouvelle-Aquitaine', chefLieu: 'Périgueux', population: '413 000', description: 'Département du Périgord.', cities: ['Périgueux', 'Bergerac', 'Sarlat'] },
+  { code: '25', slug: 'doubs', name: 'Doubs', region: 'Bourgogne-Franche-Comté', chefLieu: 'Besançon', population: '543 000', description: 'Département horloger.', cities: ['Besançon', 'Montbéliard', 'Pontarlier'] },
+  { code: '26', slug: 'drome', name: 'Drôme', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Valence', population: '516 000', description: 'Département provençal.', cities: ['Valence', 'Montélimar', 'Romans-sur-Isère'] },
+  { code: '27', slug: 'eure', name: 'Eure', region: 'Normandie', chefLieu: 'Évreux', population: '601 000', description: 'Département normand.', cities: ['Évreux', 'Vernon', 'Louviers'] },
+  { code: '28', slug: 'eure-et-loir', name: 'Eure-et-Loir', region: 'Centre-Val de Loire', chefLieu: 'Chartres', population: '433 000', description: 'Département de la Beauce.', cities: ['Chartres', 'Dreux', 'Châteaudun'] },
+  { code: '29', slug: 'finistere', name: 'Finistère', region: 'Bretagne', chefLieu: 'Quimper', population: '909 000', description: 'Département du bout du monde.', cities: ['Quimper', 'Brest', 'Morlaix', 'Concarneau'] },
+  { code: '30', slug: 'gard', name: 'Gard', region: 'Occitanie', chefLieu: 'Nîmes', population: '748 000', description: 'Département romain.', cities: ['Nîmes', 'Alès', 'Bagnols-sur-Cèze'] },
+  { code: '31', slug: 'haute-garonne', name: 'Haute-Garonne', region: 'Occitanie', chefLieu: 'Toulouse', population: '1 400 000', description: 'Département de la ville rose.', cities: ['Toulouse', 'Colomiers', 'Tournefeuille', 'Blagnac'] },
+  { code: '32', slug: 'gers', name: 'Gers', region: 'Occitanie', chefLieu: 'Auch', population: '191 000', description: 'Département gascon.', cities: ['Auch', 'Condom', 'Fleurance'] },
+  { code: '33', slug: 'gironde', name: 'Gironde', region: 'Nouvelle-Aquitaine', chefLieu: 'Bordeaux', population: '1 601 000', description: 'Département viticole bordelais.', cities: ['Bordeaux', 'Mérignac', 'Pessac', 'Talence'] },
+  { code: '34', slug: 'herault', name: 'Hérault', region: 'Occitanie', chefLieu: 'Montpellier', population: '1 175 000', description: 'Département méditerranéen.', cities: ['Montpellier', 'Béziers', 'Sète', 'Agde'] },
+  { code: '35', slug: 'ille-et-vilaine', name: 'Ille-et-Vilaine', region: 'Bretagne', chefLieu: 'Rennes', population: '1 079 000', description: 'Département de la capitale bretonne.', cities: ['Rennes', 'Saint-Malo', 'Fougères', 'Vitré'] },
+  { code: '36', slug: 'indre', name: 'Indre', region: 'Centre-Val de Loire', chefLieu: 'Châteauroux', population: '222 000', description: 'Département berrichon.', cities: ['Châteauroux', 'Issoudun', 'Le Blanc'] },
+  { code: '37', slug: 'indre-et-loire', name: 'Indre-et-Loire', region: 'Centre-Val de Loire', chefLieu: 'Tours', population: '610 000', description: 'Département des châteaux de la Loire.', cities: ['Tours', 'Joué-lès-Tours', 'Amboise'] },
+  { code: '38', slug: 'isere', name: 'Isère', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Grenoble', population: '1 266 000', description: 'Département alpin.', cities: ['Grenoble', 'Saint-Martin-d\'Hères', 'Échirolles', 'Vienne'] },
+  { code: '39', slug: 'jura', name: 'Jura', region: 'Bourgogne-Franche-Comté', chefLieu: 'Lons-le-Saunier', population: '260 000', description: 'Département du vin jaune.', cities: ['Lons-le-Saunier', 'Dole', 'Saint-Claude'] },
+  { code: '40', slug: 'landes', name: 'Landes', region: 'Nouvelle-Aquitaine', chefLieu: 'Mont-de-Marsan', population: '413 000', description: 'Département de la forêt landaise.', cities: ['Mont-de-Marsan', 'Dax', 'Biscarrosse'] },
+  { code: '41', slug: 'loir-et-cher', name: 'Loir-et-Cher', region: 'Centre-Val de Loire', chefLieu: 'Blois', population: '331 000', description: 'Département des châteaux.', cities: ['Blois', 'Vendôme', 'Romorantin-Lanthenay'] },
+  { code: '42', slug: 'loire', name: 'Loire', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Saint-Étienne', population: '762 000', description: 'Département stéphanois.', cities: ['Saint-Étienne', 'Roanne', 'Saint-Chamond'] },
+  { code: '43', slug: 'haute-loire', name: 'Haute-Loire', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Le Puy-en-Velay', population: '227 000', description: 'Département volcanique.', cities: ['Le Puy-en-Velay', 'Yssingeaux', 'Monistrol-sur-Loire'] },
+  { code: '44', slug: 'loire-atlantique', name: 'Loire-Atlantique', region: 'Pays de la Loire', chefLieu: 'Nantes', population: '1 429 000', description: 'Département nantais.', cities: ['Nantes', 'Saint-Nazaire', 'Saint-Herblain', 'Rezé'] },
+  { code: '45', slug: 'loiret', name: 'Loiret', region: 'Centre-Val de Loire', chefLieu: 'Orléans', population: '679 000', description: 'Département orléanais.', cities: ['Orléans', 'Fleury-les-Aubrais', 'Olivet'] },
+  { code: '46', slug: 'lot', name: 'Lot', region: 'Occitanie', chefLieu: 'Cahors', population: '174 000', description: 'Département du Quercy.', cities: ['Cahors', 'Figeac', 'Gourdon'] },
+  { code: '47', slug: 'lot-et-garonne', name: 'Lot-et-Garonne', region: 'Nouvelle-Aquitaine', chefLieu: 'Agen', population: '332 000', description: 'Département du pruneau.', cities: ['Agen', 'Villeneuve-sur-Lot', 'Marmande'] },
+  { code: '48', slug: 'lozere', name: 'Lozère', region: 'Occitanie', chefLieu: 'Mende', population: '77 000', description: 'Département le moins peuplé de France.', cities: ['Mende', 'Marvejols', 'Florac'] },
+  { code: '49', slug: 'maine-et-loire', name: 'Maine-et-Loire', region: 'Pays de la Loire', chefLieu: 'Angers', population: '818 000', description: 'Département angevin.', cities: ['Angers', 'Cholet', 'Saumur'] },
+  { code: '50', slug: 'manche', name: 'Manche', region: 'Normandie', chefLieu: 'Saint-Lô', population: '496 000', description: 'Département du Cotentin.', cities: ['Cherbourg-en-Cotentin', 'Saint-Lô', 'Granville'] },
+  { code: '51', slug: 'marne', name: 'Marne', region: 'Grand Est', chefLieu: 'Châlons-en-Champagne', population: '568 000', description: 'Département du champagne.', cities: ['Reims', 'Châlons-en-Champagne', 'Épernay'] },
+  { code: '52', slug: 'haute-marne', name: 'Haute-Marne', region: 'Grand Est', chefLieu: 'Chaumont', population: '175 000', description: 'Département de la coutellerie.', cities: ['Chaumont', 'Saint-Dizier', 'Langres'] },
+  { code: '53', slug: 'mayenne', name: 'Mayenne', region: 'Pays de la Loire', chefLieu: 'Laval', population: '307 000', description: 'Département mayennais.', cities: ['Laval', 'Mayenne', 'Château-Gontier'] },
+  { code: '54', slug: 'meurthe-et-moselle', name: 'Meurthe-et-Moselle', region: 'Grand Est', chefLieu: 'Nancy', population: '733 000', description: 'Département lorrain.', cities: ['Nancy', 'Vandœuvre-lès-Nancy', 'Lunéville'] },
+  { code: '55', slug: 'meuse', name: 'Meuse', region: 'Grand Est', chefLieu: 'Bar-le-Duc', population: '187 000', description: 'Département de la Grande Guerre.', cities: ['Bar-le-Duc', 'Verdun', 'Commercy'] },
+  { code: '56', slug: 'morbihan', name: 'Morbihan', region: 'Bretagne', chefLieu: 'Vannes', population: '759 000', description: 'Département du golfe.', cities: ['Vannes', 'Lorient', 'Lanester'] },
+  { code: '57', slug: 'moselle', name: 'Moselle', region: 'Grand Est', chefLieu: 'Metz', population: '1 046 000', description: 'Département mosellan.', cities: ['Metz', 'Thionville', 'Forbach', 'Sarreguemines'] },
+  { code: '58', slug: 'nievre', name: 'Nièvre', region: 'Bourgogne-Franche-Comté', chefLieu: 'Nevers', population: '204 000', description: 'Département nivernais.', cities: ['Nevers', 'Cosne-Cours-sur-Loire', 'Decize'] },
+  { code: '59', slug: 'nord', name: 'Nord', region: 'Hauts-de-France', chefLieu: 'Lille', population: '2 604 000', description: 'Département le plus peuplé de France.', cities: ['Lille', 'Roubaix', 'Tourcoing', 'Dunkerque', 'Villeneuve-d\'Ascq'] },
+  { code: '60', slug: 'oise', name: 'Oise', region: 'Hauts-de-France', chefLieu: 'Beauvais', population: '829 000', description: 'Département picard.', cities: ['Beauvais', 'Compiègne', 'Creil', 'Senlis'] },
+  { code: '61', slug: 'orne', name: 'Orne', region: 'Normandie', chefLieu: 'Alençon', population: '283 000', description: 'Département normand.', cities: ['Alençon', 'Flers', 'Argentan'] },
+  { code: '62', slug: 'pas-de-calais', name: 'Pas-de-Calais', region: 'Hauts-de-France', chefLieu: 'Arras', population: '1 466 000', description: 'Département du détroit.', cities: ['Calais', 'Boulogne-sur-Mer', 'Arras', 'Lens'] },
+  { code: '63', slug: 'puy-de-dome', name: 'Puy-de-Dôme', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Clermont-Ferrand', population: '659 000', description: 'Département des volcans.', cities: ['Clermont-Ferrand', 'Cournon-d\'Auvergne', 'Riom'] },
+  { code: '64', slug: 'pyrenees-atlantiques', name: 'Pyrénées-Atlantiques', region: 'Nouvelle-Aquitaine', chefLieu: 'Pau', population: '682 000', description: 'Département basque et béarnais.', cities: ['Pau', 'Bayonne', 'Anglet', 'Biarritz'] },
+  { code: '65', slug: 'hautes-pyrenees', name: 'Hautes-Pyrénées', region: 'Occitanie', chefLieu: 'Tarbes', population: '229 000', description: 'Département pyrénéen.', cities: ['Tarbes', 'Lourdes', 'Bagnères-de-Bigorre'] },
+  { code: '66', slug: 'pyrenees-orientales', name: 'Pyrénées-Orientales', region: 'Occitanie', chefLieu: 'Perpignan', population: '479 000', description: 'Département catalan.', cities: ['Perpignan', 'Canet-en-Roussillon', 'Saint-Estève'] },
+  { code: '67', slug: 'bas-rhin', name: 'Bas-Rhin', region: 'Grand Est', chefLieu: 'Strasbourg', population: '1 140 000', description: 'Département alsacien.', cities: ['Strasbourg', 'Haguenau', 'Schiltigheim', 'Illkirch'] },
+  { code: '68', slug: 'haut-rhin', name: 'Haut-Rhin', region: 'Grand Est', chefLieu: 'Colmar', population: '765 000', description: 'Département viticole alsacien.', cities: ['Mulhouse', 'Colmar', 'Saint-Louis'] },
+  { code: '69', slug: 'rhone', name: 'Rhône', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Lyon', population: '1 876 000', description: 'Département lyonnais.', cities: ['Lyon', 'Villeurbanne', 'Vénissieux', 'Vaulx-en-Velin'] },
+  { code: '70', slug: 'haute-saone', name: 'Haute-Saône', region: 'Bourgogne-Franche-Comté', chefLieu: 'Vesoul', population: '236 000', description: 'Département franc-comtois.', cities: ['Vesoul', 'Héricourt', 'Lure'] },
+  { code: '71', slug: 'saone-et-loire', name: 'Saône-et-Loire', region: 'Bourgogne-Franche-Comté', chefLieu: 'Mâcon', population: '553 000', description: 'Département bourguignon.', cities: ['Chalon-sur-Saône', 'Mâcon', 'Le Creusot'] },
+  { code: '72', slug: 'sarthe', name: 'Sarthe', region: 'Pays de la Loire', chefLieu: 'Le Mans', population: '566 000', description: 'Département des 24 Heures.', cities: ['Le Mans', 'La Flèche', 'Sablé-sur-Sarthe'] },
+  { code: '73', slug: 'savoie', name: 'Savoie', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Chambéry', population: '436 000', description: 'Département des stations de ski.', cities: ['Chambéry', 'Aix-les-Bains', 'Albertville'] },
+  { code: '74', slug: 'haute-savoie', name: 'Haute-Savoie', region: 'Auvergne-Rhône-Alpes', chefLieu: 'Annecy', population: '826 000', description: 'Département du lac d\'Annecy.', cities: ['Annecy', 'Thonon-les-Bains', 'Annemasse'] },
+  { code: '75', slug: 'paris', name: 'Paris', region: 'Île-de-France', chefLieu: 'Paris', population: '2 161 000', description: 'Capitale de la France.', cities: ['Paris'] },
+  { code: '76', slug: 'seine-maritime', name: 'Seine-Maritime', region: 'Normandie', chefLieu: 'Rouen', population: '1 255 000', description: 'Département normand.', cities: ['Rouen', 'Le Havre', 'Dieppe'] },
+  { code: '77', slug: 'seine-et-marne', name: 'Seine-et-Marne', region: 'Île-de-France', chefLieu: 'Melun', population: '1 421 000', description: 'Plus grand département francilien.', cities: ['Meaux', 'Chelles', 'Melun', 'Pontault-Combault'] },
+  { code: '78', slug: 'yvelines', name: 'Yvelines', region: 'Île-de-France', chefLieu: 'Versailles', population: '1 448 000', description: 'Département de Versailles.', cities: ['Versailles', 'Sartrouville', 'Mantes-la-Jolie'] },
+  { code: '79', slug: 'deux-sevres', name: 'Deux-Sèvres', region: 'Nouvelle-Aquitaine', chefLieu: 'Niort', population: '374 000', description: 'Département des mutuelles.', cities: ['Niort', 'Bressuire', 'Thouars'] },
+  { code: '80', slug: 'somme', name: 'Somme', region: 'Hauts-de-France', chefLieu: 'Amiens', population: '572 000', description: 'Département picard.', cities: ['Amiens', 'Abbeville', 'Albert'] },
+  { code: '81', slug: 'tarn', name: 'Tarn', region: 'Occitanie', chefLieu: 'Albi', population: '389 000', description: 'Département occitan.', cities: ['Albi', 'Castres', 'Gaillac'] },
+  { code: '82', slug: 'tarn-et-garonne', name: 'Tarn-et-Garonne', region: 'Occitanie', chefLieu: 'Montauban', population: '262 000', description: 'Département du chasselas.', cities: ['Montauban', 'Castelsarrasin', 'Moissac'] },
+  { code: '83', slug: 'var', name: 'Var', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Toulon', population: '1 076 000', description: 'Département méditerranéen.', cities: ['Toulon', 'Fréjus', 'Hyères', 'Draguignan'] },
+  { code: '84', slug: 'vaucluse', name: 'Vaucluse', region: 'Provence-Alpes-Côte d\'Azur', chefLieu: 'Avignon', population: '560 000', description: 'Département provençal.', cities: ['Avignon', 'Orange', 'Carpentras'] },
+  { code: '85', slug: 'vendee', name: 'Vendée', region: 'Pays de la Loire', chefLieu: 'La Roche-sur-Yon', population: '685 000', description: 'Département atlantique.', cities: ['La Roche-sur-Yon', 'Les Sables-d\'Olonne', 'Challans'] },
+  { code: '86', slug: 'vienne', name: 'Vienne', region: 'Nouvelle-Aquitaine', chefLieu: 'Poitiers', population: '438 000', description: 'Département du Futuroscope.', cities: ['Poitiers', 'Châtellerault', 'Buxerolles'] },
+  { code: '87', slug: 'haute-vienne', name: 'Haute-Vienne', region: 'Nouvelle-Aquitaine', chefLieu: 'Limoges', population: '374 000', description: 'Département de la porcelaine.', cities: ['Limoges', 'Saint-Junien', 'Panazol'] },
+  { code: '88', slug: 'vosges', name: 'Vosges', region: 'Grand Est', chefLieu: 'Épinal', population: '367 000', description: 'Département vosgien.', cities: ['Épinal', 'Saint-Dié-des-Vosges', 'Gérardmer'] },
+  { code: '89', slug: 'yonne', name: 'Yonne', region: 'Bourgogne-Franche-Comté', chefLieu: 'Auxerre', population: '338 000', description: 'Département bourguignon.', cities: ['Auxerre', 'Sens', 'Joigny'] },
+  { code: '90', slug: 'territoire-de-belfort', name: 'Territoire de Belfort', region: 'Bourgogne-Franche-Comté', chefLieu: 'Belfort', population: '142 000', description: 'Plus petit département métropolitain.', cities: ['Belfort', 'Delle', 'Beaucourt'] },
+  { code: '91', slug: 'essonne', name: 'Essonne', region: 'Île-de-France', chefLieu: 'Évry-Courcouronnes', population: '1 301 000', description: 'Département francilien.', cities: ['Évry-Courcouronnes', 'Corbeil-Essonnes', 'Massy'] },
+  { code: '92', slug: 'hauts-de-seine', name: 'Hauts-de-Seine', region: 'Île-de-France', chefLieu: 'Nanterre', population: '1 624 000', description: 'Département de La Défense.', cities: ['Boulogne-Billancourt', 'Nanterre', 'Courbevoie', 'Colombes'] },
+  { code: '93', slug: 'seine-saint-denis', name: 'Seine-Saint-Denis', region: 'Île-de-France', chefLieu: 'Bobigny', population: '1 644 000', description: 'Département du Stade de France.', cities: ['Saint-Denis', 'Montreuil', 'Aubervilliers', 'Aulnay-sous-Bois'] },
+  { code: '94', slug: 'val-de-marne', name: 'Val-de-Marne', region: 'Île-de-France', chefLieu: 'Créteil', population: '1 407 000', description: 'Département francilien.', cities: ['Créteil', 'Vitry-sur-Seine', 'Champigny-sur-Marne'] },
+  { code: '95', slug: 'val-doise', name: 'Val-d\'Oise', region: 'Île-de-France', chefLieu: 'Cergy', population: '1 249 000', description: 'Département au nord de Paris.', cities: ['Argenteuil', 'Sarcelles', 'Cergy'] },
+  { code: '2A', slug: 'corse-du-sud', name: 'Corse-du-Sud', region: 'Corse', chefLieu: 'Ajaccio', population: '158 000', description: 'Département corse.', cities: ['Ajaccio', 'Porto-Vecchio', 'Propriano'] },
+  { code: '2B', slug: 'haute-corse', name: 'Haute-Corse', region: 'Corse', chefLieu: 'Bastia', population: '181 000', description: 'Département corse.', cities: ['Bastia', 'Corte', 'Calvi'] },
+  { code: '971', slug: 'guadeloupe', name: 'Guadeloupe', region: 'Guadeloupe', chefLieu: 'Basse-Terre', population: '384 000', description: 'Département d\'outre-mer des Antilles françaises.', cities: ['Pointe-à-Pitre', 'Les Abymes', 'Baie-Mahault', 'Le Gosier'] },
+  { code: '972', slug: 'martinique', name: 'Martinique', region: 'Martinique', chefLieu: 'Fort-de-France', population: '368 000', description: 'Île des Antilles françaises au patrimoine culturel riche.', cities: ['Fort-de-France', 'Le Lamentin', 'Le Robert', 'Schœlcher'] },
+  { code: '973', slug: 'guyane', name: 'Guyane', region: 'Guyane', chefLieu: 'Cayenne', population: '294 000', description: 'Département d\'outre-mer en Amérique du Sud.', cities: ['Cayenne', 'Saint-Laurent-du-Maroni', 'Matoury', 'Kourou'] },
+  { code: '974', slug: 'la-reunion', name: 'La Réunion', region: 'La Réunion', chefLieu: 'Saint-Denis', population: '873 000', description: 'Île de l\'océan Indien au dynamisme économique important.', cities: ['Saint-Denis', 'Saint-Paul', 'Saint-Pierre', 'Le Tampon'] },
+  { code: '976', slug: 'mayotte', name: 'Mayotte', region: 'Mayotte', chefLieu: 'Mamoudzou', population: '321 000', description: 'Plus jeune département français dans l\'océan Indien.', cities: ['Mamoudzou', 'Koungou', 'Dzaoudzi', 'Dembeni'] },
+  { code: '977', slug: 'saint-barthelemy', name: 'Saint-Barthélemy', region: 'Saint-Barthélemy', chefLieu: 'Gustavia', population: '11 000', description: 'Collectivité d\'outre-mer des Antilles françaises, réputée pour son cadre de vie exceptionnel.', cities: ['Saint-Barthélemy'] },
+  { code: '978', slug: 'saint-martin', name: 'Saint-Martin', region: 'Saint-Martin', chefLieu: 'Marigot', population: '31 000', description: 'Collectivité d\'outre-mer des Antilles, partie française de l\'île de Saint-Martin.', cities: ['Saint-Martin'] },
+  { code: '987', slug: 'polynesie-francaise', name: 'Polynésie française', region: 'Polynésie française', chefLieu: 'Papeete', population: '283 000', description: 'Collectivité d\'outre-mer du Pacifique composée de 118 îles au patrimoine naturel exceptionnel.', cities: ['Papeete', 'Faaa', 'Punaauia', 'Pirae', 'Mahina', 'Paea', 'Papara', 'Teva I Uta', 'Bora-Bora', 'Arue', 'Hitiaa O Te Ra', 'Moorea-Maiao', 'Taiarapu-Est', 'Taiarapu-Ouest', 'Huahine', 'Tahaa', 'Taputapuatea'] },
+  { code: '988', slug: 'nouvelle-caledonie', name: 'Nouvelle-Calédonie', region: 'Nouvelle-Calédonie', chefLieu: 'Nouméa', population: '292 000', description: 'Collectivité sui generis du Pacifique sud, dotée d\'une biodiversité exceptionnelle.', cities: ['Nouméa', 'Dumbéa', 'Païta', 'Le Mont-Dore', 'Lifou', 'Koné', 'Maré', 'Bourail'] },
 ]
 
 // Fonction pour obtenir une ville par son slug
-export function getVilleBySlug(slug: string): Ville | undefined {
-  return villes.find(v => v.slug === slug)
+export function getCityBySlug(slug: string): City | undefined {
+  return cities.find(v => v.slug === slug)
 }
 
 // Fonction pour obtenir un département par son slug
-export function getDepartementBySlug(slug: string): Departement | undefined {
-  return departements.find(d => d.slug === slug)
+export function getStateBySlug(slug: string): State | undefined {
+  return states.find(d => d.slug === slug)
 }
 
 // Fonction pour obtenir un département par son code
-export function getDepartementByCode(code: string): Departement | undefined {
-  return departements.find(d => d.code === code)
+export function getStateByCode(code: string): State | undefined {
+  return states.find(d => d.code === code)
 }
 
-// Fonction pour obtenir toutes les villes d'un département
-export function getVillesByDepartement(departementCode: string): Ville[] {
-  return villes.filter(v => v.departementCode === departementCode)
+// Fonction pour obtenir toutes les cities d'un département
+export function getCitiesByState(departementCode: string): City[] {
+  return cities.filter(v => v.departementCode === departementCode)
 }
 
 /** Parse population string like '156 000' into a number (156000) */
@@ -25099,15 +25099,15 @@ function parsePopulation(pop: string): number {
 }
 
 /**
- * Retourne les villes proches (même département, puis même région) d'une ville donnée.
+ * Retourne les cities proches (même département, puis même région) d'une ville donnée.
  * Triées par population décroissante pour un maillage interne SEO optimal.
  */
-export function getNearbyCities(villeSlug: string, limit: number = 5): Ville[] {
-  const ville = getVilleBySlug(villeSlug)
+export function getNearbyCities(villeSlug: string, limit: number = 5): City[] {
+  const ville = getCityBySlug(villeSlug)
   if (!ville) return []
 
   // 1. Villes du même département (hors ville actuelle), triées par population
-  const sameDept = villes
+  const sameDept = cities
     .filter(v => v.departementCode === ville.departementCode && v.slug !== villeSlug)
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
 
@@ -25115,11 +25115,11 @@ export function getNearbyCities(villeSlug: string, limit: number = 5): Ville[] {
     return sameDept.slice(0, limit)
   }
 
-  // 2. Compléter avec des villes de la même région (autres départements)
+  // 2. Compléter avec des cities de la même région (autres départements)
   const sameDeptSlugs = new Set(sameDept.map(v => v.slug))
   sameDeptSlugs.add(villeSlug)
 
-  const sameRegion = villes
+  const sameRegion = cities
     .filter(v => v.region === ville.region && !sameDeptSlugs.has(v.slug))
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
 
@@ -25173,15 +25173,15 @@ function toQuartierSlug(text: string): string {
 }
 
 /** Retourne les quartiers d'une ville avec slug généré */
-export function getQuartiersByVille(villeSlug: string): { name: string; slug: string }[] {
-  const ville = getVilleBySlug(villeSlug)
+export function getNeighborhoodsByCity(villeSlug: string): { name: string; slug: string }[] {
+  const ville = getCityBySlug(villeSlug)
   if (!ville) return []
   return ville.quartiers.map(q => ({ name: q, slug: toQuartierSlug(q) }))
 }
 
 /** Retrouve ville + quartier par slugs */
-export function getQuartierBySlug(villeSlug: string, qSlug: string): { ville: Ville; quartierName: string } | null {
-  const ville = getVilleBySlug(villeSlug)
+export function getNeighborhoodBySlug(villeSlug: string, qSlug: string): { ville: City; quartierName: string } | null {
+  const ville = getCityBySlug(villeSlug)
   if (!ville) return null
   const match = ville.quartiers.find(name => toQuartierSlug(name) === qSlug)
   if (!match) return null

@@ -5,12 +5,12 @@ import { z } from 'zod'
 
 // GET query params schema
 const availabilityGetSchema = z.object({
-  artisanId: z.string().uuid(),
+  attorneyId: z.string().uuid(),
 })
 
 // POST request schema
 const availabilityPostSchema = z.object({
-  artisanId: z.string().uuid(),
+  attorneyId: z.string().uuid(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   slots: z.array(z.object({
     start: z.string().regex(/^\d{2}:\d{2}$/),
@@ -30,7 +30,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const queryParams = {
-    artisanId: searchParams.get('artisanId'),
+    attorneyId: searchParams.get('attorneyId'),
   }
   const result = availabilityGetSchema.safeParse(queryParams)
   if (!result.success) {
@@ -57,11 +57,11 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    const { artisanId, slots, date } = result.data
+    const { attorneyId, slots, date } = result.data
 
     const supabase = await createClient()
 
-    // Verify ownership: artisanId must match the authenticated user
+    // Verify ownership: attorneyId must match the authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
         { status: 401 }
       )
     }
-    if (result.data.artisanId !== user.id) {
+    if (result.data.attorneyId !== user.id) {
       return NextResponse.json(
         { success: false, error: { message: 'Accès refusé' } },
         { status: 403 }
@@ -80,12 +80,12 @@ export async function POST(request: Request) {
     await supabase
       .from('availability_slots')
       .delete()
-      .eq('artisan_id', artisanId)
+      .eq('attorney_id', attorneyId)
       .eq('date', date)
 
     // Insert new slots
     const slotsToInsert = slots.map((slot: { start: string; end: string }) => ({
-      artisan_id: artisanId,
+      attorney_id: attorneyId,
       date: date,
       start_time: slot.start,
       end_time: slot.end,
@@ -155,7 +155,7 @@ export async function DELETE(request: Request) {
     if (slotError) throw slotError
 
     // Ownership check: only the artisan who owns the slot can delete it
-    if (slot?.artisan_id !== user.id) {
+    if (slot?.attorney_id !== user.id) {
       return NextResponse.json(
         { success: false, error: { message: 'Vous n\'êtes pas autorisé à supprimer ce créneau' } },
         { status: 403 }

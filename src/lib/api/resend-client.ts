@@ -28,7 +28,7 @@ export function getResendClient(): Resend {
 }
 
 // Default sender
-const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>'
+const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@us-attorneys.com>'
 
 // Types
 export interface EmailParams {
@@ -259,7 +259,7 @@ export async function sendWelcomeEmail(params: {
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Si vous avez des questions, n'hesitez pas a nous contacter a support@servicesartisans.fr
+    Si vous avez des questions, n'hesitez pas a nous contacter a support@us-attorneys.com
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
@@ -342,10 +342,10 @@ export async function sendPasswordResetEmail(params: {
 export async function sendClaimApprovedEmail(params: {
   to: string
   name: string
-  providerName: string
+  attorneyName: string
   passwordLink: string
 }): Promise<EmailResult> {
-  const { to, name, providerName, passwordLink } = params
+  const { to, name, attorneyName, passwordLink } = params
 
   const html = `
 <!DOCTYPE html>
@@ -360,7 +360,7 @@ export async function sendClaimApprovedEmail(params: {
 
   <h2 style="color: #333;">Bonne nouvelle, ${name} !</h2>
 
-  <p>Votre demande de revendication pour <strong>${providerName}</strong> a ete approuvee par notre equipe.</p>
+  <p>Votre demande de revendication pour <strong>${attorneyName}</strong> a ete approuvee par notre equipe.</p>
 
   <p>Votre fiche artisan est desormais active. Pour acceder a votre espace et gerer vos leads, definissez votre mot de passe :</p>
 
@@ -378,7 +378,7 @@ export async function sendClaimApprovedEmail(params: {
 
   <p style="color: #999; font-size: 12px; text-align: center;">
     ServicesArtisans - La plateforme des artisans qualifies<br>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'}" style="color: #999;">us-attorneys.com</a>
   </p>
 </body>
 </html>
@@ -386,7 +386,7 @@ export async function sendClaimApprovedEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Votre fiche "${providerName}" a ete validee - ServicesArtisans`,
+    subject: `Votre fiche "${attorneyName}" a ete validee - ServicesArtisans`,
     html,
     tags: [
       { name: 'type', value: 'claim_approved' },
@@ -400,14 +400,14 @@ export async function sendClaimApprovedEmail(params: {
 export async function sendBookingConfirmationEmail(params: {
   to: string
   clientName: string
-  artisanName: string
-  serviceName: string
+  attorneyName: string
+  specialtyName: string
   date: string
   time: string
   address: string
   bookingId: string
 }): Promise<EmailResult> {
-  const { to, clientName, artisanName, serviceName, date, time, address, bookingId } = params
+  const { to, clientName, attorneyName, specialtyName, date, time, address, bookingId } = params
 
   const html = `
 <!DOCTYPE html>
@@ -424,10 +424,10 @@ export async function sendBookingConfirmationEmail(params: {
 
   <p>Bonjour ${clientName},</p>
 
-  <p>Votre rendez-vous avec <strong>${artisanName}</strong> est confirme.</p>
+  <p>Votre rendez-vous avec <strong>${attorneyName}</strong> est confirme.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service :</strong> ${serviceName}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Service :</strong> ${specialtyName}</p>
     <p style="margin: 0 0 10px 0;"><strong>Date :</strong> ${date}</p>
     <p style="margin: 0 0 10px 0;"><strong>Heure :</strong> ${time}</p>
     <p style="margin: 0;"><strong>Adresse :</strong> ${address}</p>
@@ -454,7 +454,7 @@ export async function sendBookingConfirmationEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Rendez-vous confirme avec ${artisanName} - ${date}`,
+    subject: `Rendez-vous confirme avec ${attorneyName} - ${date}`,
     html,
     tags: [
       { name: 'type', value: 'booking_confirmation' },
@@ -468,13 +468,13 @@ export async function sendBookingConfirmationEmail(params: {
  */
 export async function sendQuoteRequestEmail(params: {
   to: string
-  artisanName: string
+  attorneyName: string
   clientName: string
-  serviceName: string
+  specialtyName: string
   description: string
   quoteId: string
 }): Promise<EmailResult> {
-  const { to, artisanName, clientName, serviceName, description, quoteId } = params
+  const { to, attorneyName, clientName, specialtyName, description, quoteId } = params
 
   const html = `
 <!DOCTYPE html>
@@ -489,18 +489,18 @@ export async function sendQuoteRequestEmail(params: {
 
   <h2>Nouvelle demande de devis !</h2>
 
-  <p>Bonjour ${artisanName},</p>
+  <p>Bonjour ${attorneyName},</p>
 
   <p>Vous avez reçu une nouvelle demande de devis de <strong>${clientName}</strong>.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service demandé :</strong> ${serviceName}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Service demandé :</strong> ${specialtyName}</p>
     <p style="margin: 0;"><strong>Description :</strong></p>
     <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${description}</p>
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/artisan/devis/${quoteId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/artisan/quotes/${quoteId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Repondre a la demande
     </a>
   </div>
@@ -520,7 +520,7 @@ export async function sendQuoteRequestEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Nouvelle demande de devis - ${serviceName}`,
+    subject: `Nouvelle demande de devis - ${specialtyName}`,
     html,
     tags: [
       { name: 'type', value: 'quote_request' },

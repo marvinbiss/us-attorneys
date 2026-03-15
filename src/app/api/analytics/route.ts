@@ -45,8 +45,8 @@ const ALLOWED_EVENTS = [
 const analyticsSchema = z.object({
   event: z.enum(ALLOWED_EVENTS),
   properties: z.object({
-    artisanId: z.string().uuid().optional(),
-    artisanName: z.string().max(200).optional(),
+    attorneyId: z.string().uuid().optional(),
+    attorneyName: z.string().max(200).optional(),
     source: z.string().max(50).optional(),
     url: z.string().max(2000).optional(),
     referrer: z.string().max(2000).optional(),
@@ -90,9 +90,9 @@ export async function POST(request: Request) {
 
     const { event, properties, sessionId, visitorId } = validation.data
 
-    // For artisan-specific events, artisanId is required
+    // For artisan-specific events, attorneyId is required
     const ARTISAN_EVENTS = ['artisan_profile_view', 'phone_reveal', 'phone_click']
-    if (ARTISAN_EVENTS.includes(event) && !properties.artisanId) {
+    if (ARTISAN_EVENTS.includes(event) && !properties.attorneyId) {
       return new NextResponse(null, { status: 400 })
     }
 
@@ -121,10 +121,10 @@ export async function POST(request: Request) {
         screenSize: properties.screenSize,
       }
     } else {
-      insertData.provider_id = properties.artisanId
+      insertData.attorney_id = properties.attorneyId
       insertData.source = properties.source || null
       insertData.metadata = {
-        artisanName: properties.artisanName,
+        attorneyName: properties.attorneyName,
         url: properties.url,
         referrer: properties.referrer,
       }

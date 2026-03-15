@@ -8,7 +8,7 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 export interface AnalyticsEvent {
   event_type: string
   user_id?: string
-  provider_id?: string
+  attorney_id?: string
   metadata?: Record<string, unknown>
   timestamp?: string
 }
@@ -55,7 +55,7 @@ export class AnalyticsService {
     await supabase.from('analytics_events').insert({
       event_type: event.event_type,
       user_id: event.user_id,
-      provider_id: event.provider_id,
+      attorney_id: event.attorney_id,
       metadata: event.metadata,
       created_at: event.timestamp || new Date().toISOString(),
     })
@@ -96,14 +96,14 @@ export class AnalyticsService {
    */
   async trackBooking(
     bookingId: string,
-    providerId: string,
+    attorneyId: string,
     userId: string,
     amount: number
   ): Promise<void> {
     await this.trackEvent({
       event_type: 'booking',
       user_id: userId,
-      provider_id: providerId,
+      attorney_id: attorneyId,
       metadata: { booking_id: bookingId, amount },
     })
   }
@@ -112,14 +112,14 @@ export class AnalyticsService {
    * Track quote request
    */
   async trackQuoteRequest(
-    providerId: string,
+    attorneyId: string,
     userId: string,
     service: string
   ): Promise<void> {
     await this.trackEvent({
       event_type: 'quote_request',
       user_id: userId,
-      provider_id: providerId,
+      attorney_id: attorneyId,
       metadata: { service },
     })
   }
@@ -128,13 +128,13 @@ export class AnalyticsService {
    * Track provider profile view
    */
   async trackProfileView(
-    providerId: string,
+    attorneyId: string,
     userId?: string
   ): Promise<void> {
     await this.trackEvent({
       event_type: 'profile_view',
       user_id: userId,
-      provider_id: providerId,
+      attorney_id: attorneyId,
     })
   }
 
@@ -156,7 +156,7 @@ export class AnalyticsService {
       monthlyUsersResult,
     ] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
-      supabase.from('providers').select('id', { count: 'exact', head: true }),
+      supabase.from('attorneys').select('id', { count: 'exact', head: true }),
       supabase.from('bookings').select('id, total_price, status, created_at').limit(50000),
       supabase
         .from('bookings')
@@ -244,7 +244,7 @@ export class AnalyticsService {
   /**
    * Get metrics for a specific provider
    */
-  async getProviderMetrics(providerId: string): Promise<ProviderMetrics> {
+  async getAttorneyMetrics(attorneyId: string): Promise<ProviderMetrics> {
     const supabase = await createServerClient()
 
     const [bookingsResult, reviewsResult, quotesResult, profileViewsResult] =
@@ -252,23 +252,23 @@ export class AnalyticsService {
         supabase
           .from('bookings')
           .select('id, status, total_price, created_at, service_type')
-          .eq('provider_id', providerId)
+          .eq('attorney_id', attorneyId)
           .limit(50000),
         supabase
           .from('reviews')
           .select('rating')
-          .eq('provider_id', providerId)
+          .eq('attorney_id', attorneyId)
           .limit(50000),
         supabase
           .from('quotes')
           .select('id, status')
-          .eq('provider_id', providerId)
+          .eq('attorney_id', attorneyId)
           .limit(50000),
         // Use count query instead of fetching all rows just to count them
         supabase
           .from('analytics_events')
           .select('id', { count: 'exact', head: true })
-          .eq('provider_id', providerId)
+          .eq('attorney_id', attorneyId)
           .eq('event_type', 'profile_view'),
       ])
 
@@ -282,7 +282,7 @@ export class AnalyticsService {
     const bookingAgg = bookings.reduce(
       (acc, b) => {
         const service = (b.service_type as string) || 'Autre'
-        acc.serviceCount[service] = (acc.serviceCount[service] || 0) + 1
+        acc.specialtyCount[service] = (acc.specialtyCount[service] || 0) + 1
 
         if (b.status === 'completed') {
           acc.completedBookings++
@@ -297,12 +297,12 @@ export class AnalyticsService {
         completedBookings: 0,
         cancelledBookings: 0,
         totalRevenue: 0,
-        serviceCount: {} as Record<string, number>,
+        specialtyCount: {} as Record<string, number>,
       }
     )
     const { completedBookings, cancelledBookings, totalRevenue } = bookingAgg
 
-    const topServices = Object.entries(bookingAgg.serviceCount)
+    const topServices = Object.entries(bookingAgg.specialtyCount)
       .map(([service, count]) => ({ service, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)

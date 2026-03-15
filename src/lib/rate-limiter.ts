@@ -235,7 +235,7 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   if (pathname.startsWith('/api/reviews')) return RATE_LIMITS.reviews
 
   // Quotes / devis — create, list
-  if (pathname.startsWith('/api/devis') || pathname.startsWith('/api/artisan/devis')) return RATE_LIMITS.devis
+  if (pathname.startsWith('/api/quotes') || pathname.startsWith('/api/attorney/quotes')) return RATE_LIMITS.devis
 
   // Contact form — sends email, unauthenticated
   if (pathname.startsWith('/api/contact')) return RATE_LIMITS.contact
@@ -247,7 +247,7 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   if (pathname.startsWith('/api/newsletter')) return RATE_LIMITS.newsletter
 
   // Artisan registration — sends 2 emails, unauthenticated
-  if (pathname.startsWith('/api/inscription-artisan')) return RATE_LIMITS.inscription
+  if (pathname.startsWith('/api/register-attorney')) return RATE_LIMITS.inscription
 
   // SIRET / entreprise verification — external INSEE API calls
   if (pathname.startsWith('/api/verify')) return RATE_LIMITS.verify
@@ -262,7 +262,7 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   if (pathname.startsWith('/api/analytics')) return RATE_LIMITS.analytics
 
   // Search and public listing endpoints — scraping prevention
-  if (pathname.startsWith('/api/search') || pathname.startsWith('/api/providers/listing') || pathname.startsWith('/api/providers/by-city')) return RATE_LIMITS.search
+  if (pathname.startsWith('/api/search') || pathname.startsWith('/api/attorneys/listing') || pathname.startsWith('/api/attorneys/by-city')) return RATE_LIMITS.search
 
   // All other API routes
   if (pathname.startsWith('/api/')) return RATE_LIMITS.api

@@ -130,7 +130,7 @@ describe('timeSchema', () => {
 
 describe('createBookingSchema', () => {
   const validBooking = {
-    artisanId: '550e8400-e29b-41d4-a716-446655440000',
+    attorneyId: '550e8400-e29b-41d4-a716-446655440000',
     slotId: '550e8400-e29b-41d4-a716-446655440001',
     clientName: 'Jean Dupont',
     clientPhone: '0612345678',
@@ -147,7 +147,7 @@ describe('createBookingSchema', () => {
   })
 
   it('rejects invalid artisan UUID', () => {
-    expect(createBookingSchema.safeParse({ ...validBooking, artisanId: 'bad-id' }).success).toBe(false)
+    expect(createBookingSchema.safeParse({ ...validBooking, attorneyId: 'bad-id' }).success).toBe(false)
   })
 
   it('accepts optional fields', () => {

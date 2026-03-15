@@ -13,11 +13,11 @@ const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 export async function getPageContent(
   slug: string,
   pageType: CmsPageType,
-  options?: { serviceSlug?: string; locationSlug?: string }
+  options?: { specialtySlug?: string; locationSlug?: string }
 ): Promise<CmsPage | null> {
   if (!slug || IS_BUILD) return null
 
-  const cacheKey = `cms:${pageType}:${slug}:${options?.serviceSlug ?? ''}:${options?.locationSlug ?? ''}`
+  const cacheKey = `cms:${pageType}:${slug}:${options?.specialtySlug ?? ''}:${options?.locationSlug ?? ''}`
 
   return getCachedData(cacheKey, async () => {
     try {
@@ -30,8 +30,8 @@ export async function getPageContent(
         .eq('status', 'published')
         .eq('is_active', true)
 
-      if (options?.serviceSlug) {
-        query.eq('service_slug', options.serviceSlug)
+      if (options?.specialtySlug) {
+        query.eq('service_slug', options.specialtySlug)
       }
       if (options?.locationSlug) {
         query.eq('location_slug', options.locationSlug)
@@ -78,8 +78,8 @@ export async function getCmsBlogArticles(): Promise<CmsPage[]> {
 /**
  * Fetch structured trade content override from CMS.
  */
-export async function getTradeContentOverride(serviceSlug: string): Promise<Record<string, unknown> | null> {
-  const page = await getPageContent(serviceSlug, 'service')
+export async function getTradeContentOverride(specialtySlug: string): Promise<Record<string, unknown> | null> {
+  const page = await getPageContent(specialtySlug, 'service')
   if (!page?.structured_data) return null
   return page.structured_data
 }

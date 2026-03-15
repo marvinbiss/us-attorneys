@@ -23,7 +23,7 @@ const MAX_ROWS = 500_000
 export const VALID_FIELDS: (keyof ProspectionContactInsert)[] = [
   'contact_type', 'company_name', 'contact_name', 'email', 'phone',
   'address', 'postal_code', 'city', 'department', 'region',
-  'commune_code', 'population',
+  'location_code', 'population',
 ]
 
 /**
@@ -110,7 +110,7 @@ export function suggestColumnMapping(headers: string[]): ColumnMapping {
     city: ['ville', 'city', 'commune', 'localite'],
     department: ['departement', 'department', 'dept', 'dep'],
     region: ['region'],
-    commune_code: ['code_insee', 'insee', 'code_commune'],
+    location_code: ['code_insee', 'insee', 'location_code'],
     contact_type: ['type', 'contact_type', 'categorie'],
     population: ['population', 'habitants'],
   }
@@ -418,7 +418,7 @@ export async function syncArtisansFromDatabase(
 
   // Construire la requête
   let query = supabase
-    .from('providers')
+    .from('attorneys')
     .select('id, name, email, phone, address_street, address_city, address_postal_code, address_department, address_region, siret')
     .eq('is_active', true)
 
@@ -441,7 +441,7 @@ export async function syncArtisansFromDatabase(
     const { data: existing } = await supabase
       .from('prospection_contacts')
       .select('id')
-      .eq('artisan_id', provider.id)
+      .eq('attorney_id', provider.id)
       .eq('is_active', true)
       .limit(1)
 
@@ -461,7 +461,7 @@ export async function syncArtisansFromDatabase(
       city: provider.address_city,
       department: provider.address_department,
       region: provider.address_region,
-      artisan_id: provider.id,
+      attorney_id: provider.id,
       source: 'database',
     }
 

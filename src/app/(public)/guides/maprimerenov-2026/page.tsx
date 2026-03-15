@@ -824,7 +824,7 @@ export default function MaPrimeRenov2026Page() {
               {"Pour bénéficier de MaPrimeRénov', vous devez faire appel à un artisan certifié RGE. Trouvez un professionnel qualifié près de chez vous sur ServicesArtisans."}
             </p>
             <Link
-              href="/services/renovation-energetique"
+              href="/practice-areas/renovation-energetique"
               className="inline-flex items-center gap-2 bg-white text-green-700 font-semibold px-6 py-3 rounded-lg hover:bg-green-50 transition-colors shadow-lg"
             >
               Rechercher un artisan RGE
