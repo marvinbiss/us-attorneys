@@ -32,7 +32,7 @@ const TOP_CITIES_PHASE1 = 300
  */
 export async function generateSitemaps() {
   // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
-  // ALL intent pages (devis, avis, tarifs, urgence, problemes) also use Phase 1 cities.
+  // ALL intent pages (quotes, reviews, pricing, emergency, issues) also use Phase 1 cities.
   // Quartier-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
   const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
@@ -99,7 +99,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/tools/diagnostic`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/attorney-map`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/attorneys`, lastModified: BUILD_DATE },
-      // Pages outils & contenu
+      // Tools & content pages
       { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/before-after`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/project-planner`, lastModified: BUILD_DATE },
@@ -162,7 +162,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    // Blog articles — lastModified réel (seul contenu avec vraie date vérifiable)
+    // Blog articles — real lastModified (only content with verifiable dates)
     const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
       const article = allArticles[slug]
       return {
@@ -191,7 +191,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    // Blog category pages — lastModified = date du dernier article de la catégorie
+    // Blog category pages — lastModified = date of the latest article in the category
     const blogCategoryPages: MetadataRoute.Sitemap = blogCategories
       .filter(c => allArticlesMeta.some(a => categoryToSlug(normalizeCategory(a.category)) === c.slug))
       .map(c => {
@@ -214,7 +214,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     }
     const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map(tagSlug => {
-      // Trouver la date du dernier article ayant ce tag
+      // Find the date of the latest article with this tag
       const tagArticles = allArticlesMeta.filter(a =>
         a.tags.some(t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === tagSlug)
       )

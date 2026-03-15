@@ -20,9 +20,9 @@ export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 2
 
 export async function generateMetadata(): Promise<Metadata> {
   const { attorneyCount: count } = await getSiteStats()
-  const countStr = count > 0 ? `${formatAttorneyCount(count)}+` : 'Des milliers d\''
-  const absoluteTitle = `Artisans de France — ${countStr} Pros Vérifiés | ServicesArtisans`
-    const metaDescription = `Trouvez un artisan qualifié parmi ${countStr} professionnels vérifiés SIREN. Plombier, électricien, serrurier : 101 départements couverts. Devis gratuit.`
+  const countStr = count > 0 ? `${formatAttorneyCount(count)}+` : 'Thousands of'
+  const absoluteTitle = `US Attorneys — ${countStr} Verified Lawyers | US Attorneys`
+    const metaDescription = `Find a qualified attorney among ${countStr} verified lawyers. Personal injury, family law, criminal defense: all 50 states covered. Free consultation.`
     return {
     title: { absolute: absoluteTitle },
     description: metaDescription,
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: metaDescription,
       type: 'website',
       url: SITE_URL,
-      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'US Attorneys — Attorney Directory' }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -53,7 +53,7 @@ export default async function HomePage() {
     return (
       <div className="min-h-screen">
         <h1 className="sr-only">
-          {cmsPage.title || "L'annuaire des artisans qualifiés en France"}
+          {cmsPage.title || "The US Attorney Directory"}
         </h1>
         <section className="py-12">
           <div className="max-w-6xl mx-auto px-4">
@@ -68,8 +68,8 @@ export default async function HomePage() {
   const websiteSchema = getWebsiteSchema()
   const faqSchema = getFAQSchema(faqItems)
   const itemListSchema = getItemListSchema({
-    name: 'Services artisans populaires en France',
-    description: 'Les métiers du bâtiment les plus recherchés sur ServicesArtisans',
+    name: 'Popular practice areas in the US',
+    description: 'The most searched legal practice areas on US Attorneys',
     url: '/services',
     items: popularServices.map((s, i) => ({
       name: s.name,
@@ -81,9 +81,9 @@ export default async function HomePage() {
     ? {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'ServicesArtisans',
+        name: 'US Attorneys',
         url: SITE_URL,
-        description: 'Annuaire d\'artisans en France',
+        description: 'Attorney directory in the United States',
         aggregateRating: {
           '@type': 'AggregateRating',
           ratingValue: homepageData.avgRating,
@@ -101,7 +101,7 @@ export default async function HomePage() {
 
       {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
       <h1 className="sr-only">
-        L&apos;annuaire des artisans qualifi&eacute;s en France
+        The US Attorney Directory — Find Verified Lawyers
       </h1>
 
       {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
@@ -133,13 +133,13 @@ export default async function HomePage() {
             <div className="text-center mb-10">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 text-clay-400 rounded-full text-sm font-medium mb-5" style={{ background: '#FDF1EC' }}>
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
-                Couverture nationale
+                Nationwide coverage
               </div>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-stone-900 mb-2 text-center tracking-tight">
-                Artisans partout en France
+                Attorneys across the US
               </h2>
               <p className="text-stone-500 text-center max-w-lg mx-auto">
-                Trouvez des professionnels dans votre r&eacute;gion, d&eacute;partement ou ville.
+                Find qualified lawyers in your region, state, or city.
               </p>
             </div>
             <GeographicNavigation />
@@ -150,13 +150,13 @@ export default async function HomePage() {
       {/* ─── EXPLORE INTENT HUBS ─────────────────────────────── */}
       <section className="py-10 bg-white border-t border-slate-100">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="font-heading text-lg font-semibold text-stone-800 mb-4">Explorer</h2>
+          <h2 className="font-heading text-lg font-semibold text-stone-800 mb-4">Explore</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/reviews" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Avis artisans</Link>
-            <Link href="/pricing" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Tarifs artisans</Link>
-            <Link href="/emergency" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Urgence artisan</Link>
+            <Link href="/reviews" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Attorney reviews</Link>
+            <Link href="/pricing" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Attorney fees</Link>
+            <Link href="/emergency" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Emergency legal help</Link>
             <Link href="/blog" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Blog</Link>
-            <Link href="/issues" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Problèmes courants</Link>
+            <Link href="/issues" className="inline-block px-4 py-2 text-sm font-medium text-stone-700 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors">Common legal issues</Link>
           </div>
         </div>
       </section>

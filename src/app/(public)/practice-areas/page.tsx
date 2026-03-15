@@ -26,16 +26,16 @@ const validServiceSlugs = new Set(staticPracticeAreas.map(s => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: 'Tous les Métiers Artisans — Devis Gratuit',
-  description: `${staticPracticeAreas.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
+  title: 'Practice Areas | US Attorneys',
+  description: 'Browse attorneys by legal practice area. Personal injury, family law, criminal defense, and more. Find verified attorneys across all 50 states. Free consultations.',
   alternates: {
     canonical: `${SITE_URL}/services`,
   },
   openGraph: {
-    title: 'Tous les Métiers Artisans — Devis Gratuit',
-    description: `${staticPracticeAreas.length} métiers du bâtiment. Artisans référencés dans 101 départements. Trouvez un professionnel qualifié, devis gratuit.`,
+    title: 'Practice Areas | US Attorneys',
+    description: 'Browse attorneys by legal practice area. Personal injury, family law, criminal defense, and more. Find verified attorneys across all 50 states.',
     url: `${SITE_URL}/services`,
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'US Attorneys — All Practice Areas' }],
   },
   robots: {
     index: true,
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tous les Métiers Artisans — Devis Gratuit',
-    description: `${staticPracticeAreas.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
+    title: 'Practice Areas | US Attorneys',
+    description: 'Browse attorneys by legal practice area. Personal injury, family law, criminal defense, and more. Find verified attorneys across all 50 states. Free consultations.',
   },
 }
 
@@ -226,8 +226,8 @@ export default async function ServicesPage() {
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Services', url: '/services' },
+    { name: 'Home', url: '/' },
+    { name: 'Practice Areas', url: '/services' },
   ])
 
   const organizationSchema = getOrganizationSchema()
@@ -237,8 +237,8 @@ export default async function ServicesPage() {
     category.services.filter((s) => validServiceSlugs.has(s.slug))
   )
   const itemListSchema = getItemListSchema({
-    name: 'Tous les métiers artisans',
-    description: `${allServiceItems.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements.`,
+    name: 'All legal practice areas',
+    description: `${allServiceItems.length} practice areas. Find verified attorneys across all 50 states.`,
     url: '/services',
     items: allServiceItems.map((s, index) => ({
       name: s.name,
@@ -265,19 +265,19 @@ export default async function ServicesPage() {
           {/* Trust badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
             <Award className="w-4 h-4 text-amber-400" />
-            <span className="text-sm font-medium text-white/90">{staticPracticeAreas.length} métiers du bâtiment</span>
+            <span className="text-sm font-medium text-white/90">{staticPracticeAreas.length} practice areas</span>
           </div>
 
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-            Tous nos{' '}
+            All{' '}
             <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent">
-              services
+              practice
             </span>{' '}
-            artisans
+            areas
           </h1>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
-            Trouvez le professionnel idéal pour tous vos travaux.
-            Artisans référencés, devis gratuits.
+            Find the right attorney for your legal needs.
+            Verified lawyers, free consultations.
           </p>
 
           {/* Stats */}
@@ -286,7 +286,7 @@ export default async function ServicesPage() {
               <TrendingUp className="w-5 h-5 text-amber-400" />
               <div className="text-left">
                 <div className="text-2xl font-bold text-white">2h</div>
-                <div className="text-xs text-slate-400">Temps de réponse</div>
+                <div className="text-xs text-slate-400">Response time</div>
               </div>
             </div>
           </div>
@@ -296,7 +296,7 @@ export default async function ServicesPage() {
       {/* Breadcrumb + Navigation */}
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Breadcrumb items={[{ label: 'Services' }]} className="mb-4" />
+          <Breadcrumb items={[{ label: 'Practice Areas' }]} className="mb-4" />
           <GeographicNavigation />
         </div>
       </section>
@@ -318,7 +318,7 @@ export default async function ServicesPage() {
                     <h2 className="font-heading text-2xl font-bold text-gray-900 tracking-tight">
                       {category.category}
                     </h2>
-                    <p className="text-sm text-gray-500">{category.services.length} services disponibles</p>
+                    <p className="text-sm text-gray-500">{category.services.length} services available</p>
                   </div>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -356,7 +356,7 @@ export default async function ServicesPage() {
                         className="relative bg-white rounded-2xl border border-gray-100 p-6 opacity-75"
                       >
                         <div className="absolute top-3 right-3 text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
-                          Bientôt
+                          Coming soon
                         </div>
                         <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4`}>
                           <Icon className={`w-6 h-6 ${colors.icon}`} />
@@ -379,7 +379,7 @@ export default async function ServicesPage() {
           <div className="mt-16 pt-12 border-t border-gray-200">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3 tracking-tight">
               <MapPin className="w-6 h-6 text-blue-600" />
-              Trouvez un artisan par ville
+              Find an attorney by city
             </h2>
             <PopularCitiesLinks showTitle={false} limit={10} />
           </div>
@@ -397,20 +397,20 @@ export default async function ServicesPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full border border-amber-500/30 mb-6">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-sm font-medium text-amber-300">Devis gratuit en quelques clics</span>
+            <span className="text-sm font-medium text-amber-300">Free consultation in a few clicks</span>
           </div>
 
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-            Vous ne trouvez pas votre métier ?
+            Can&apos;t find your practice area?
           </h2>
           <p className="text-xl text-slate-300 mb-10 max-w-xl mx-auto">
-            Contactez-nous et nous vous aiderons à trouver le bon artisan pour votre projet.
+            Contact us and we&apos;ll help you find the right attorney for your legal needs.
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:via-amber-500 hover:to-amber-600 transition-all shadow-xl shadow-amber-500/30 hover:shadow-amber-500/40 hover:-translate-y-0.5"
           >
-            Nous contacter
+            Contact us
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

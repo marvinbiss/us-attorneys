@@ -1,6 +1,6 @@
 /**
- * Estimation API - ServicesArtisans
- * Chat streaming avec Claude pour estimer le coût d'une prestation artisan
+ * Estimation API - US Attorneys
+ * Chat streaming with Claude to estimate attorney fees
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -61,11 +61,11 @@ interface CoefficientGeo {
 // ---------------------------------------------------------------------------
 
 function formatGrid(tarifs: Tarif[]): string {
-  if (!tarifs.length) return 'Aucune grille tarifaire disponible pour ce métier.'
+  if (!tarifs.length) return 'No fee schedule available for this practice area.'
 
-  const header = '| Prestation | Prix min | Prix max | Unité |\n|---|---|---|---|'
+  const header = '| Service | Min Price | Max Price | Unit |\n|---|---|---|---|'
   const rows = tarifs
-    .map((t) => `| ${t.prestation} | ${t.prix_min}€ | ${t.prix_max}€ | ${t.unite} |`)
+    .map((t) => `| ${t.prestation} | $${t.prix_min} | $${t.prix_max} | ${t.unite} |`)
     .join('\n')
   return `${header}\n${rows}`
 }
@@ -78,35 +78,35 @@ function buildSystemPrompt(
   formattedGrid: string,
   attorneyName?: string,
 ): string {
-  const artisanLine = attorneyName
-    ? `\n• Artisan : ${attorneyName}\nLe visiteur consulte la fiche de ${attorneyName}, un ${metierName.toLowerCase()} à ${ville}.`
+  const attorneyLine = attorneyName
+    ? `\n• Attorney: ${attorneyName}\nThe visitor is viewing the profile of ${attorneyName}, a ${metierName.toLowerCase()} attorney in ${ville}.`
     : ''
 
   const ctaLine = attorneyName
-    ? `"Souhaitez-vous envoyer votre demande à ${attorneyName} ?"`
-    : `"Souhaitez-vous être mis en relation avec un ${metierName.toLowerCase()} vérifié à ${ville} ?"`
+    ? `"Would you like to send your inquiry to ${attorneyName}?"`
+    : `"Would you like to connect with a verified ${metierName.toLowerCase()} attorney in ${ville}?"`
 
-  return `Tu es l'assistant estimation de ServicesArtisans.fr.
-CONTEXTE :
-• Métier : ${metierName}
-• City : ${ville} (${departement})
-• Coefficient géographique : ${coefficient} (OBLIGATOIRE : multiplie TOUJOURS les prix de la grille par ce coefficient)${artisanLine}
+  return `You are the fee estimation assistant for us-attorneys.com.
+CONTEXT:
+• Practice Area: ${metierName}
+• City: ${ville} (${departement})
+• Geographic coefficient: ${coefficient} (REQUIRED: ALWAYS multiply the fee schedule prices by this coefficient)${attorneyLine}
 
-GRILLE TARIFAIRE — ${metierName.toUpperCase()} :
+FEE SCHEDULE — ${metierName.toUpperCase()}:
 ${formattedGrid}
 
-RÈGLES STRICTES :
-1. Pose UNE SEULE question par réponse. JAMAIS deux questions. JAMAIS "et aussi...?". UNE question, point final.
-2. Maximum 2-3 questions avant de donner l'estimation. Ne pose pas plus de 3 questions au total.
-3. Si le visiteur répond "oui", "non", ou une réponse courte/vague, NE REPOSE PAS la même question reformulée. Interprète sa réponse au mieux et avance vers l'estimation. Si tu manques d'infos, donne une fourchette plus large plutôt que de reposer.
-4. Sois concis : 3-4 lignes max par réponse.
-5. CALCUL OBLIGATOIRE : prix_min de la grille × ${coefficient} et prix_max de la grille × ${coefficient}. Arrondis à la dizaine.
-6. Donne TOUJOURS la fourchette en gras : **min€ — max€**
-7. Précise que c'est une estimation indicative.
-8. OBLIGATOIRE après chaque estimation : termine par ${ctaLine}
-9. Si urgence mentionnée, propose le rappel immédiat.
-10. Ne donne JAMAIS de conseil technique dangereux.
-11. Vouvoie toujours. 1-2 emojis max par réponse.`
+STRICT RULES:
+1. Ask ONE question per response. NEVER two questions. NEVER "and also...?". ONE question, period.
+2. Maximum 2-3 questions before giving the estimate. Do not ask more than 3 questions total.
+3. If the visitor answers "yes", "no", or a short/vague response, DO NOT rephrase and re-ask the same question. Interpret their answer as best you can and move toward the estimate. If you lack info, give a wider range rather than re-asking.
+4. Be concise: 3-4 lines max per response.
+5. REQUIRED CALCULATION: fee_min from the schedule × ${coefficient} and fee_max from the schedule × ${coefficient}. Round to the nearest ten.
+6. ALWAYS present the range in bold: **$min — $max**
+7. Specify that this is an indicative estimate.
+8. REQUIRED after each estimate: end with ${ctaLine}
+9. If urgency is mentioned, offer an immediate callback.
+10. NEVER give dangerous technical advice.
+11. Always use formal, professional language. 1-2 emojis max per response.`
 }
 
 // ---------------------------------------------------------------------------
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.success) {
       return NextResponse.json(
-        { error: 'Trop de requêtes. Veuillez réessayer dans une minute.' },
+        { error: 'Too many requests. Please try again in a minute.' },
         { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
       )
     }
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: validation.error.flatten() },
+        { error: 'Invalid data', details: validation.error.flatten() },
         { status: 400 },
       )
     }
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
     // Guard: max 20 messages
     if (messages.length > 20) {
       return NextResponse.json(
-        { error: 'Conversation trop longue (max 20 messages)' },
+        { error: 'Conversation too long (max 20 messages)' },
         { status: 400 },
       )
     }
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
           .eq('metier', metierLower)
 
         if (error) {
-          logger.error('Erreur récupération tarifs', error, { action: 'estimation' })
+          logger.error('Error fetching fee schedule', error, { action: 'estimation' })
           return []
         }
         return (data as Tarif[]) ?? []
@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
           .single()
 
         if (error) {
-          logger.warn('Coefficient géo non trouvé, utilisation de 1.0', { action: 'estimation', departement })
+          logger.warn('Geographic coefficient not found, using 1.0', { action: 'estimation', departement })
           return null
         }
         return data as CoefficientGeo
@@ -258,10 +258,10 @@ export async function POST(request: NextRequest) {
           clearTimeout(timeout)
           if (abortController.signal.aborted) {
             logger.error('Anthropic stream timed out after 15s', streamError, { action: 'estimation' })
-            controller.enqueue(encoder.encode('\n\nDésolé, le service est temporairement surchargé. Veuillez réessayer.'))
+            controller.enqueue(encoder.encode('\n\nSorry, the service is temporarily overloaded. Please try again.'))
             controller.close()
           } else {
-            logger.error('Erreur streaming Anthropic', streamError, { action: 'estimation' })
+            logger.error('Anthropic streaming error', streamError, { action: 'estimation' })
             controller.error(streamError)
           }
         }
@@ -279,7 +279,7 @@ export async function POST(request: NextRequest) {
     const errMsg = error instanceof Error ? error.message : String(error)
     logger.error('Estimation API error', error, { action: 'estimation', message: errMsg })
     return NextResponse.json(
-      { error: 'Erreur serveur', debug: process.env.NODE_ENV === 'development' ? errMsg : undefined },
+      { error: 'Server error', debug: process.env.NODE_ENV === 'development' ? errMsg : undefined },
       { status: 500 },
     )
   }

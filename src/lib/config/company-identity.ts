@@ -2,12 +2,12 @@
  * Company Identity — Single Source of Truth
  *
  * CHARTER.md Source Hierarchy:
- *   Level 1 (Legal docs): siret, legalName, address, phone, rcs, tva
+ *   Level 1 (Legal docs): ein, legalName, address, phone, stateRegistration, taxId
  *   Level 5 (UI copy): description, tagline
  *
  * RULE: Any field that is `null` MUST NOT appear in:
  *   - Structured data (JSON-LD)
- *   - Mentions légales
+ *   - Legal notices
  *   - Footer contact section
  *
  * When the company is registered, update the null fields here.
@@ -16,38 +16,38 @@
 
 export const companyIdentity = {
   // Brand (Level 5 — UI copy only)
-  name: 'ServicesArtisans' as const,
-  tagline: 'Trouvez des artisans qualifiés près de chez vous',
+  name: 'US Attorneys' as const,
+  tagline: 'Find Top-Rated Attorneys Near You',
   description:
-    'Des artisans référencés dans toute la France grâce aux données SIREN officielles. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
+    'US Attorneys is the leading attorney directory covering all 50 states. Find experienced lawyers by practice area, read verified reviews, and get free consultations.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com',
 
   // Legal identity (Level 1 — from env vars, null until company registration)
   legalName: process.env.COMPANY_LEGAL_NAME || null,
-  formeJuridique: process.env.COMPANY_FORME_JURIDIQUE || null,
+  legalEntityType: process.env.COMPANY_LEGAL_ENTITY_TYPE || null,
   capitalSocial: process.env.COMPANY_CAPITAL_SOCIAL || null,
-  siret: process.env.COMPANY_SIRET || null,
-  rcs: process.env.COMPANY_RCS || null,
-  tvaIntracom: process.env.COMPANY_TVA || null,
+  ein: process.env.COMPANY_EIN || null,
+  stateRegistration: process.env.COMPANY_STATE_REGISTRATION || null,
+  taxId: process.env.COMPANY_TAX_ID || null,
   address: process.env.COMPANY_ADDRESS || null,
-  phone: process.env.COMPANY_PHONE || '06 51 85 89 30',
-  directeurPublication: process.env.COMPANY_DIRECTEUR_PUBLICATION || null,
+  phone: process.env.COMPANY_PHONE || '(800) 555-0199',
+  publishingDirector: process.env.COMPANY_PUBLISHING_DIRECTOR || null,
   foundingDate: process.env.COMPANY_FOUNDING_DATE || null,
 
   // Contact (real and functional)
   email: 'contact@us-attorneys.com',
   supportEmail: 'support@us-attorneys.com',
   dpoEmail: 'dpo@us-attorneys.com',
-  presseEmail: 'presse@us-attorneys.com',
-  partenairesEmail: 'partenaires@us-attorneys.com',
+  pressEmail: 'press@us-attorneys.com',
+  partnersEmail: 'partners@us-attorneys.com',
   careersEmail: 'careers@us-attorneys.com',
 
   // Social (real profiles)
   social: {
-    facebook: 'https://facebook.com/servicesartisans',
-    instagram: 'https://instagram.com/servicesartisans',
-    linkedin: 'https://linkedin.com/company/servicesartisans',
-    twitter: 'https://twitter.com/servicesartisans',
+    facebook: 'https://facebook.com/usattorneys',
+    instagram: 'https://instagram.com/usattorneys',
+    linkedin: 'https://linkedin.com/company/usattorneys',
+    twitter: 'https://twitter.com/usattorneys',
   },
 
   // Hosting (Level 1 — verifiable)
@@ -66,23 +66,23 @@ export const companyIdentity = {
  * Import this in any component that displays platform numbers.
  */
 export const marketingStats = {
-  attorneyCount: 'SIREN',
-  attorneyCountShort: 'SIREN',
-  cityCount: '1 000+',
-  specialtyCount: '46',
+  attorneyCount: '50,000+',
+  attorneyCountShort: '50K+',
+  cityCount: '41,000+',
+  specialtyCount: '75',
   responseTime: 'Variable',
 } as const
 
-/** True when SIRET, legal name, and address are all filled. */
+/** True when EIN, legal name, and address are all filled. */
 export function isCompanyRegistered(): boolean {
   return (
-    companyIdentity.siret !== null &&
+    companyIdentity.ein !== null &&
     companyIdentity.legalName !== null &&
     companyIdentity.address !== null
   )
 }
 
-/** True once the platform has real artisans / is live. */
+/** True once the platform has real attorneys / is live. */
 export function isPlatformLaunched(): boolean {
   return companyIdentity.status === 'launched'
 }

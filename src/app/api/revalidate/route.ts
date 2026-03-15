@@ -2,15 +2,15 @@ import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-// Schema pour revalidation single path (rétrocompatible)
+// Schema for single path revalidation (backward-compatible)
 const revalidateSingleSchema = z.object({
-  path: z.string().min(1, 'Path requis'),
-  secret: z.string().min(1, 'Secret requis'),
+  path: z.string().min(1, 'Path is required'),
+  secret: z.string().min(1, 'Secret is required'),
 })
 
-// Schema pour revalidation batch
+// Schema for batch revalidation
 const revalidateBatchSchema = z.object({
-  paths: z.array(z.string().min(1)).min(1).max(50, 'Maximum 50 paths par batch'),
+  paths: z.array(z.string().min(1)).min(1).max(50, 'Maximum 50 paths per batch'),
 })
 
 const MAX_BATCH_SIZE = 50
@@ -18,10 +18,10 @@ const MAX_BATCH_SIZE = 50
 export async function POST(request: NextRequest) {
   try {
     if (!process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Erreur de configuration serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server configuration error' } }, { status: 500 })
     }
 
-    // Vérifier l'auth via Bearer token OU champ secret dans le body
+    // Verify auth via Bearer token OR secret field in body
     const authHeader = request.headers.get('authorization')
     const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
 
@@ -29,15 +29,15 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
     }
 
-    // Mode batch : { paths: [...] } avec Bearer auth
+    // Batch mode: { paths: [...] } with Bearer auth
     const batchResult = revalidateBatchSchema.safeParse(body)
     if (batchResult.success) {
-      // Auth via Bearer token obligatoire pour le batch
+      // Bearer token auth required for batch mode
       if (!bearerToken || bearerToken !== process.env.REVALIDATE_SECRET) {
-        return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
+        return NextResponse.json({ success: false, error: { message: 'Invalid secret' } }, { status: 401 })
       }
 
       const { paths } = batchResult.data
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Notifier IndexNow pour tous les paths revalidés (fire-and-forget)
+      // Notify IndexNow for all revalidated paths (fire-and-forget)
       if (revalidated.length > 0) {
         import('@/lib/seo/indexnow')
           .then(({ submitToIndexNow }) => submitToIndexNow(revalidated))
@@ -68,22 +68,22 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Mode single (rétrocompatible) : { path, secret }
+    // Single mode (backward-compatible): { path, secret }
     const singleResult = revalidateSingleSchema.safeParse(body)
     if (!singleResult.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides — envoyez { path, secret } ou { paths: [...] } avec Bearer auth' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid data — send { path, secret } or { paths: [...] } with Bearer auth' } }, { status: 400 })
     }
 
     const { path, secret } = singleResult.data
 
     if (secret !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid secret' } }, { status: 401 })
     }
 
-    // Revalider le chemin
+    // Revalidate the path
     revalidatePath(path, 'page')
 
-    // Notifier IndexNow (fire-and-forget)
+    // Notify IndexNow (fire-and-forget)
     import('@/lib/seo/indexnow')
       .then(({ submitToIndexNow }) => submitToIndexNow([path]))
       .catch(() => {})
@@ -95,29 +95,29 @@ export async function POST(request: NextRequest) {
     })
   } catch (err) {
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la revalidation', details: err instanceof Error ? err.message : String(err) } },
+      { success: false, error: { message: 'Error during revalidation', details: err instanceof Error ? err.message : String(err) } },
       { status: 500 }
     )
   }
 }
 
-// GET pour revalider plusieurs pages courantes
+// GET to revalidate common pages
 export async function GET(request: NextRequest) {
   try {
     if (!process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Erreur de configuration serveur' } }, { status: 500 })
+      return NextResponse.json({ success: false, error: { message: 'Server configuration error' } }, { status: 500 })
     }
 
     const searchParams = request.nextUrl.searchParams
     const secret = searchParams.get('secret')
 
     if (!secret || secret !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid secret' } }, { status: 401 })
     }
 
-    // Revalider les pages principales
+    // Revalidate main pages
     const paths = [
-      '/practice-areas/plombier/paris',
+      '/practice-areas/personal-injury/new-york',
       '/services',
       '/',
     ]
@@ -133,7 +133,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (err) {
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la revalidation', details: err instanceof Error ? err.message : String(err) } },
+      { success: false, error: { message: 'Error during revalidation', details: err instanceof Error ? err.message : String(err) } },
       { status: 500 }
     )
   }

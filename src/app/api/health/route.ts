@@ -7,15 +7,15 @@ type ServiceStatus = 'healthy' | 'degraded' | 'unhealthy'
 type CheckResult = { status: ServiceStatus; latency?: number; error?: string }
 
 /**
- * Health check — ne retourne JAMAIS 500.
- * 200 = healthy ou degraded (au moins un service up)
- * 503 = unhealthy (TOUS les services down)
+ * Health check — NEVER returns 500.
+ * 200 = healthy or degraded (at least one service up)
+ * 503 = unhealthy (ALL services down)
  */
 export async function GET() {
   const startTime = Date.now()
   const checks: Record<string, CheckResult> = {}
 
-  // Lazy-import env pour catcher les erreurs Zod au lieu de crasher le module
+  // Lazy-import env to catch Zod errors instead of crashing the module
   let env: Record<string, string | undefined> | null = null
   try {
     env = (await import('@/lib/env')).env as unknown as Record<string, string | undefined>

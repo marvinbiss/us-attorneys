@@ -1,13 +1,40 @@
 import { describe, it, expect } from 'vitest'
 import {
   getDeptCodeFromPostal,
+  getStateFromZip,
   getDepartmentName,
   getRegionName,
   getGeographyFromPostal,
   slugify,
+  US_STATES,
+  STATE_TO_REGION,
+  DEPARTMENTS,
+  DEPT_TO_REGION,
+  REGIONS,
 } from './geography'
 
-describe('getDeptCodeFromPostal', () => {
+describe('getStateFromZip', () => {
+  it('should return state abbreviation for valid ZIP codes', () => {
+    expect(getStateFromZip('10001')).toBe('NY')  // New York City
+    expect(getStateFromZip('90210')).toBe('CA')  // Beverly Hills
+    expect(getStateFromZip('60601')).toBe('IL')  // Chicago
+    expect(getStateFromZip('77001')).toBe('TX')  // Houston
+    expect(getStateFromZip('33101')).toBe('FL')  // Miami
+    expect(getStateFromZip('20001')).toBe('DC')  // Washington DC
+    expect(getStateFromZip('98101')).toBe('WA')  // Seattle
+  })
+
+  it('should return null for out-of-range ZIP codes', () => {
+    expect(getStateFromZip('00000')).toBeNull()
+    expect(getStateFromZip('00100')).toBeNull()
+  })
+
+  it('should handle edge cases', () => {
+    expect(getStateFromZip('')).toBeNull()
+  })
+})
+
+describe('getDeptCodeFromPostal (backward compat)', () => {
   it('should return null for null input', () => {
     expect(getDeptCodeFromPostal(null)).toBeNull()
   })
@@ -20,31 +47,9 @@ describe('getDeptCodeFromPostal', () => {
     expect(getDeptCodeFromPostal('')).toBeNull()
   })
 
-  it('should extract department code from standard postal code', () => {
-    expect(getDeptCodeFromPostal('75001')).toBe('75')
-    expect(getDeptCodeFromPostal('13001')).toBe('13')
-    expect(getDeptCodeFromPostal('69001')).toBe('69')
-  })
-
-  it('should handle DOM-TOM postal codes (3 digit prefix)', () => {
-    expect(getDeptCodeFromPostal('97100')).toBe('971') // Guadeloupe
-    expect(getDeptCodeFromPostal('97200')).toBe('972') // Martinique
-    expect(getDeptCodeFromPostal('97300')).toBe('973') // Guyane
-    expect(getDeptCodeFromPostal('97400')).toBe('974') // La Reunion
-    expect(getDeptCodeFromPostal('97600')).toBe('976') // Mayotte
-  })
-
-  // The implementation uses: num < 201 for 2A, else 2B
-  // 20000 -> num=200 -> 2A, 20100 -> num=201 -> 2B, 20200 -> num=202 -> 2B
-  it('should handle Corse-du-Sud postal codes (2A) - codes < 20100', () => {
-    expect(getDeptCodeFromPostal('20000')).toBe('2A') // Ajaccio (200 < 201)
-    expect(getDeptCodeFromPostal('20090')).toBe('2A') // 200 < 201
-  })
-
-  it('should handle Haute-Corse postal codes (2B) - codes >= 20100', () => {
-    expect(getDeptCodeFromPostal('20100')).toBe('2B') // 201 >= 201
-    expect(getDeptCodeFromPostal('20200')).toBe('2B') // Bastia
-    expect(getDeptCodeFromPostal('20600')).toBe('2B')
+  it('should delegate to getStateFromZip', () => {
+    expect(getDeptCodeFromPostal('10001')).toBe('NY')
+    expect(getDeptCodeFromPostal('90210')).toBe('CA')
   })
 })
 
@@ -61,26 +66,27 @@ describe('getDepartmentName', () => {
     expect(getDepartmentName('')).toBeNull()
   })
 
-  it('should return department name from postal code', () => {
-    expect(getDepartmentName('75001')).toBe('Paris')
-    expect(getDepartmentName('13001')).toBe('Bouches-du-Rhône')
-    expect(getDepartmentName('69001')).toBe('Rhône')
+  it('should return state name from ZIP code', () => {
+    expect(getDepartmentName('10001')).toBe('New York')
+    expect(getDepartmentName('90210')).toBe('California')
+    expect(getDepartmentName('60601')).toBe('Illinois')
   })
 
-  it('should return department name from department code', () => {
-    expect(getDepartmentName('75')).toBe('Paris')
-    expect(getDepartmentName('13')).toBe('Bouches-du-Rhône')
-    expect(getDepartmentName('2A')).toBe('Corse-du-Sud')
+  it('should return state name from state abbreviation', () => {
+    expect(getDepartmentName('NY')).toBe('New York')
+    expect(getDepartmentName('CA')).toBe('California')
+    expect(getDepartmentName('TX')).toBe('Texas')
+    expect(getDepartmentName('DC')).toBe('District of Columbia')
   })
 
-  it('should return the input if it is already a department name', () => {
-    expect(getDepartmentName('Paris')).toBe('Paris')
-    expect(getDepartmentName('Bouches-du-Rhône')).toBe('Bouches-du-Rhône')
+  it('should return the input if it is already a state name', () => {
+    expect(getDepartmentName('California')).toBe('California')
+    expect(getDepartmentName('New York')).toBe('New York')
   })
 
-  it('should return null for invalid department code', () => {
-    expect(getDepartmentName('99')).toBeNull()
-    expect(getDepartmentName('00')).toBeNull()
+  it('should return null for invalid state code', () => {
+    expect(getDepartmentName('XX')).toBeNull()
+    expect(getDepartmentName('ZZ')).toBeNull()
   })
 })
 
@@ -97,26 +103,28 @@ describe('getRegionName', () => {
     expect(getRegionName('')).toBeNull()
   })
 
-  it('should return region name from postal code', () => {
-    expect(getRegionName('75001')).toBe('Île-de-France')
-    expect(getRegionName('13001')).toBe("Provence-Alpes-Côte d'Azur")
-    expect(getRegionName('69001')).toBe('Auvergne-Rhône-Alpes')
+  it('should return region name from ZIP code', () => {
+    expect(getRegionName('10001')).toBe('Northeast')  // NY
+    expect(getRegionName('90210')).toBe('West')        // CA
+    expect(getRegionName('60601')).toBe('Midwest')     // IL
+    expect(getRegionName('77001')).toBe('South')       // TX
   })
 
-  it('should return region name from department code', () => {
-    expect(getRegionName('75')).toBe('Île-de-France')
-    expect(getRegionName('29')).toBe('Bretagne')
-    expect(getRegionName('2A')).toBe('Corse')
+  it('should return region name from state abbreviation', () => {
+    expect(getRegionName('NY')).toBe('Northeast')
+    expect(getRegionName('CA')).toBe('West')
+    expect(getRegionName('IL')).toBe('Midwest')
+    expect(getRegionName('TX')).toBe('South')
   })
 
   it('should return the input if it is already a region name', () => {
-    expect(getRegionName('Bretagne')).toBe('Bretagne')
-    expect(getRegionName('Île-de-France')).toBe('Île-de-France')
+    expect(getRegionName('Northeast')).toBe('Northeast')
+    expect(getRegionName('Midwest')).toBe('Midwest')
   })
 
-  it('should return null for invalid department code', () => {
-    expect(getRegionName('99')).toBeNull()
-    expect(getRegionName('00')).toBeNull()
+  it('should return null for invalid state code', () => {
+    expect(getRegionName('XX')).toBeNull()
+    expect(getRegionName('ZZ')).toBeNull()
   })
 })
 
@@ -128,40 +136,89 @@ describe('getGeographyFromPostal', () => {
     expect(result.regionName).toBeNull()
   })
 
-  it('should return full geography info for valid postal code', () => {
-    const result = getGeographyFromPostal('75001')
-    expect(result.departmentCode).toBe('75')
-    expect(result.departmentName).toBe('Paris')
-    expect(result.regionName).toBe('Île-de-France')
+  it('should return full geography info for valid ZIP code', () => {
+    const result = getGeographyFromPostal('10001')
+    expect(result.departmentCode).toBe('NY')
+    expect(result.departmentName).toBe('New York')
+    expect(result.regionName).toBe('Northeast')
   })
 
-  it('should handle DOM-TOM postal codes', () => {
-    const result = getGeographyFromPostal('97100')
-    expect(result.departmentCode).toBe('971')
-    expect(result.departmentName).toBe('Guadeloupe')
-    expect(result.regionName).toBe('Guadeloupe')
+  it('should handle West Coast ZIP codes', () => {
+    const result = getGeographyFromPostal('90210')
+    expect(result.departmentCode).toBe('CA')
+    expect(result.departmentName).toBe('California')
+    expect(result.regionName).toBe('West')
+  })
+
+  it('should handle DC ZIP codes', () => {
+    const result = getGeographyFromPostal('20001')
+    expect(result.departmentCode).toBe('DC')
+    expect(result.departmentName).toBe('District of Columbia')
+    expect(result.regionName).toBe('South')
+  })
+})
+
+describe('backward compatibility aliases', () => {
+  it('DEPARTMENTS should be same as US_STATES', () => {
+    expect(DEPARTMENTS).toBe(US_STATES)
+  })
+
+  it('DEPT_TO_REGION should be same as STATE_TO_REGION', () => {
+    expect(DEPT_TO_REGION).toBe(STATE_TO_REGION)
+  })
+})
+
+describe('US_STATES', () => {
+  it('should contain 51 entries (50 states + DC)', () => {
+    expect(Object.keys(US_STATES).length).toBe(51)
+  })
+
+  it('should map abbreviations to full names', () => {
+    expect(US_STATES['NY']).toBe('New York')
+    expect(US_STATES['CA']).toBe('California')
+    expect(US_STATES['DC']).toBe('District of Columbia')
+  })
+})
+
+describe('STATE_TO_REGION', () => {
+  it('should map all 51 entries to regions', () => {
+    expect(Object.keys(STATE_TO_REGION).length).toBe(51)
+  })
+
+  it('should only contain valid region names', () => {
+    const validRegions = new Set(['Northeast', 'Midwest', 'South', 'West'])
+    Object.values(STATE_TO_REGION).forEach(region => {
+      expect(validRegions.has(region)).toBe(true)
+    })
+  })
+})
+
+describe('REGIONS', () => {
+  it('should contain 4 US Census regions', () => {
+    expect(REGIONS.length).toBe(4)
+  })
+
+  it('should have slugified names', () => {
+    const regionNames = REGIONS.map(r => r.name)
+    expect(regionNames).toContain('Northeast')
+    expect(regionNames).toContain('Midwest')
+    expect(regionNames).toContain('South')
+    expect(regionNames).toContain('West')
   })
 })
 
 describe('slugify', () => {
   it('should convert text to lowercase', () => {
-    expect(slugify('Paris')).toBe('paris')
-    expect(slugify('BRETAGNE')).toBe('bretagne')
+    expect(slugify('California')).toBe('california')
+    expect(slugify('NEW YORK')).toBe('new-york')
   })
 
   it('should replace spaces with hyphens', () => {
-    expect(slugify('Ile de France')).toBe('ile-de-france')
-  })
-
-  it('should remove accents', () => {
-    expect(slugify('Île-de-France')).toBe('ile-de-france')
-    expect(slugify('Rhône-Alpes')).toBe('rhone-alpes')
+    expect(slugify('New York')).toBe('new-york')
+    expect(slugify('North Carolina')).toBe('north-carolina')
   })
 
   it('should handle special characters', () => {
-    // The geography slugify converts special chars to hyphens
-    const result = slugify("Provence-Alpes-Côte d'Azur")
-    expect(result).toMatch(/provence-alpes-cote-d/)
-    expect(result).toContain('azur')
+    expect(slugify('District of Columbia')).toBe('district-of-columbia')
   })
 })

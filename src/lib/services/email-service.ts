@@ -17,7 +17,7 @@ export interface EmailOptions {
   from?: string
 }
 
-const DEFAULT_FROM = 'ServicesArtisans <noreply@us-attorneys.com>'
+const DEFAULT_FROM = 'US Attorneys <noreply@us-attorneys.com>'
 
 /**
  * Send an email using Resend API
@@ -71,7 +71,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
 export const emailTemplates = {
   // Welcome email for new users
   welcome: (name: string): EmailTemplate => ({
-    subject: 'Bienvenue sur ServicesArtisans !',
+    subject: 'Welcome to US Attorneys!',
     html: `
       <!DOCTYPE html>
       <html>
@@ -88,23 +88,23 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Bienvenue ${name} !</h1>
+              <h1>Welcome ${name}!</h1>
             </div>
             <div class="content">
-              <p>Nous sommes ravis de vous accueillir sur ServicesArtisans.</p>
-              <p>Vous pouvez maintenant :</p>
+              <p>We're glad to have you on US Attorneys.</p>
+              <p>You can now:</p>
               <ul>
-                <li>Rechercher des artisans qualifiés près de chez vous</li>
-                <li>Comparer les avis et les tarifs</li>
-                <li>Demander des devis gratuits</li>
-                <li>Réserver directement en ligne</li>
+                <li>Search for qualified attorneys near you</li>
+                <li>Compare reviews and rates</li>
+                <li>Request free consultations</li>
+                <li>Book appointments online</li>
               </ul>
               <a href="${process.env.NEXT_PUBLIC_APP_URL}/search" class="button">
-                Trouver un artisan
+                Find an attorney
               </a>
             </div>
             <div class="footer">
-              <p>ServicesArtisans - Trouvez des artisans qualifiés près de chez vous</p>
+              <p>US Attorneys - Find qualified attorneys near you</p>
             </div>
           </div>
         </body>
@@ -114,7 +114,7 @@ export const emailTemplates = {
 
   // Welcome email for new artisans
   welcomeArtisan: (name: string): EmailTemplate => ({
-    subject: 'Bienvenue sur ServicesArtisans - Votre espace artisan est prêt !',
+    subject: 'Welcome to US Attorneys - Your attorney dashboard is ready!',
     html: `
       <!DOCTYPE html>
       <html>
@@ -133,38 +133,38 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Bienvenue ${name} !</h1>
-              <p>Votre espace artisan est prêt</p>
+              <h1>Welcome ${name}!</h1>
+              <p>Your attorney dashboard is ready</p>
             </div>
             <div class="content">
-              <p>Félicitations ! Vous faites maintenant partie de la communauté ServicesArtisans.</p>
+              <p>Congratulations! You are now part of the US Attorneys community.</p>
 
-              <h3>Prochaines étapes :</h3>
+              <h3>Next steps:</h3>
 
               <div class="step">
                 <span class="step-number">1</span>
-                <strong>Complétez votre profil</strong>
-                <p style="margin-left: 40px;">Ajoutez vos spécialités, photos et tarifs</p>
+                <strong>Complete your profile</strong>
+                <p style="margin-left: 40px;">Add your practice areas, photos, and rates</p>
               </div>
 
               <div class="step">
                 <span class="step-number">2</span>
-                <strong>Ajoutez votre portfolio</strong>
-                <p style="margin-left: 40px;">Montrez vos réalisations avec des photos avant/après</p>
+                <strong>Add your portfolio</strong>
+                <p style="margin-left: 40px;">Showcase your case results and credentials</p>
               </div>
 
               <div class="step">
                 <span class="step-number">3</span>
-                <strong>Configurez votre calendrier</strong>
-                <p style="margin-left: 40px;">Définissez vos disponibilités pour recevoir des demandes</p>
+                <strong>Set up your calendar</strong>
+                <p style="margin-left: 40px;">Define your availability to receive consultation requests</p>
               </div>
 
               <a href="${process.env.NEXT_PUBLIC_APP_URL}/attorney-dashboard" class="button">
-                Accéder à mon espace
+                Go to my dashboard
               </a>
             </div>
             <div class="footer">
-              <p>ServicesArtisans - Trouvez des artisans qualifiés près de chez vous</p>
+              <p>US Attorneys - Find qualified attorneys near you</p>
             </div>
           </div>
         </body>
@@ -174,7 +174,7 @@ export const emailTemplates = {
 
   // New booking notification
   newBooking: (attorneyName: string, clientName: string, service: string, date: string): EmailTemplate => ({
-    subject: `Nouvelle réservation de ${clientName}`,
+    subject: `New booking from ${clientName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -191,22 +191,22 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Nouvelle réservation !</h1>
+              <h1>New Booking!</h1>
             </div>
             <div class="content">
-              <p>Bonjour ${attorneyName},</p>
-              <p>Vous avez reçu une nouvelle demande de réservation.</p>
+              <p>Hello ${attorneyName},</p>
+              <p>You have received a new booking request.</p>
 
               <div class="info">
-                <p><strong>Client :</strong> ${clientName}</p>
-                <p><strong>Service :</strong> ${service}</p>
-                <p><strong>Date souhaitée :</strong> ${date}</p>
+                <p><strong>Client:</strong> ${clientName}</p>
+                <p><strong>Service:</strong> ${service}</p>
+                <p><strong>Requested date:</strong> ${date}</p>
               </div>
 
-              <p>Répondez rapidement pour augmenter vos chances de conversion !</p>
+              <p>Respond quickly to increase your conversion rate!</p>
 
               <a href="${process.env.NEXT_PUBLIC_APP_URL}/attorney-dashboard/demandes" class="button">
-                Voir la demande
+                View request
               </a>
             </div>
           </div>
@@ -217,7 +217,7 @@ export const emailTemplates = {
 
   // Review request
   reviewRequest: (clientName: string, attorneyName: string, bookingId: string): EmailTemplate => ({
-    subject: `Donnez votre avis sur ${attorneyName}`,
+    subject: `Leave a review for ${attorneyName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -234,23 +234,23 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Comment s'est passée votre intervention ?</h1>
+              <h1>How was your consultation?</h1>
             </div>
             <div class="content">
-              <p>Bonjour ${clientName},</p>
-              <p>Votre intervention avec <strong>${attorneyName}</strong> est terminée.</p>
-              <p>Prenez 2 minutes pour laisser un avis et aider d'autres clients à choisir.</p>
+              <p>Hello ${clientName},</p>
+              <p>Your consultation with <strong>${attorneyName}</strong> is complete.</p>
+              <p>Take 2 minutes to leave a review and help other clients make their choice.</p>
 
               <div class="stars">⭐⭐⭐⭐⭐</div>
 
               <p style="text-align: center;">
                 <a href="${process.env.NEXT_PUBLIC_APP_URL}/leave-review/${bookingId}" class="button">
-                  Donner mon avis
+                  Leave a review
                 </a>
               </p>
 
               <p style="color: #666; font-size: 12px; margin-top: 30px;">
-                Votre avis est important pour la communauté et aide les artisans à améliorer leurs services.
+                Your review is important to the community and helps attorneys improve their services.
               </p>
             </div>
           </div>
@@ -261,7 +261,7 @@ export const emailTemplates = {
 
   // Password reset
   passwordReset: (name: string, resetLink: string): EmailTemplate => ({
-    subject: 'Réinitialisation de votre mot de passe',
+    subject: 'Password Reset - US Attorneys',
     html: `
       <!DOCTYPE html>
       <html>
@@ -277,21 +277,21 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Réinitialisation du mot de passe</h1>
+              <h1>Password Reset</h1>
             </div>
             <div class="content">
-              <p>Bonjour ${name},</p>
-              <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
-              <p>Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
+              <p>Hello ${name},</p>
+              <p>You requested to reset your password.</p>
+              <p>Click the button below to create a new password:</p>
 
               <p style="text-align: center;">
                 <a href="${resetLink}" class="button">
-                  Réinitialiser mon mot de passe
+                  Reset my password
                 </a>
               </p>
 
               <p style="color: #666; font-size: 12px; margin-top: 30px;">
-                Ce lien expire dans 1 heure. Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.
+                This link expires in 1 hour. If you did not request this reset, please ignore this email.
               </p>
             </div>
           </div>

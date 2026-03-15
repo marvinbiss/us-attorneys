@@ -1,7 +1,7 @@
 /* TEAM */
-Site: ServicesArtisans.fr
-Location: France
-Contact: contact@servicesartisans.fr
+Site: US-Attorneys.com
+Location: United States
+Contact: contact@us-attorneys.com
 
 /* SITE */
 Framework: Next.js 14 (App Router)
@@ -10,10 +10,10 @@ Styling: Tailwind CSS
 Database: Supabase (PostgreSQL)
 Hosting: Vercel
 Standards: HTML5, CSS3, ES2024
-Data Source: INSEE SIREN/SIRET (donnees gouvernementales)
+Data Source: State Bar Associations, CourtListener (public records)
 Components: React 18, Leaflet, Stripe, Resend
-Last update: 2026-03-10
+Last update: 2026-03-15
 
 /* NOTE */
-940 000+ artisans references via les donnees officielles de l'INSEE.
-46 metiers du batiment couverts dans 101 departements.
+Comprehensive attorney directory covering 75 practice areas across all 50 US states.
+Find qualified, verified attorneys by specialty, location, and ratings.

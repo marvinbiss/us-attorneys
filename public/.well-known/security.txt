@@ -1,5 +1,5 @@
-Contact: https://servicesartisans.fr/contact
+Contact: https://us-attorneys.com/contact
 Expires: 2027-03-10T00:00:00.000Z
-Preferred-Languages: fr, en
-Canonical: https://servicesartisans.fr/.well-known/security.txt
-Policy: https://servicesartisans.fr/confidentialite
+Preferred-Languages: en
+Canonical: https://us-attorneys.com/.well-known/security.txt
+Policy: https://us-attorneys.com/privacy

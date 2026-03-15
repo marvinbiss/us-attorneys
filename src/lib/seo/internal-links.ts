@@ -5,77 +5,60 @@ interface InternalLink {
 
 /**
  * Maps keywords found in article slugs and tags to their corresponding
- * service pages. Used to generate contextual "Services associés" links.
+ * service pages. Used to generate contextual "Related Services" links.
  */
 const serviceMapping: Record<string, { slug: string; label: string }> = {
-  // Plombier / Plomberie
-  'plombier': { slug: 'plombier', label: 'plombier' },
-  'plomberie': { slug: 'plombier', label: 'plombier' },
-  'canalisations': { slug: 'plombier', label: 'plombier' },
-  // Électricien / Électricité
-  'électricien': { slug: 'electricien', label: 'électricien' },
-  'electricien': { slug: 'electricien', label: 'électricien' },
-  'électricité': { slug: 'electricien', label: 'électricien' },
-  'electricite': { slug: 'electricien', label: 'électricien' },
-  'domotique': { slug: 'electricien', label: 'électricien' },
-  // Serrurier / Serrurerie
-  'serrurier': { slug: 'serrurier', label: 'serrurier' },
-  'serrurerie': { slug: 'serrurier', label: 'serrurier' },
-  'serrure': { slug: 'serrurier', label: 'serrurier' },
-  // Chauffagiste / Chauffage
-  'chauffagiste': { slug: 'chauffagiste', label: 'chauffagiste' },
-  'chauffage': { slug: 'chauffagiste', label: 'chauffagiste' },
-  'chaudière': { slug: 'chauffagiste', label: 'chauffagiste' },
-  'chaudiere': { slug: 'chauffagiste', label: 'chauffagiste' },
-  'pompe à chaleur': { slug: 'chauffagiste', label: 'chauffagiste' },
-  'pompe-a-chaleur': { slug: 'chauffagiste', label: 'chauffagiste' },
-  // Menuisier / Menuiserie
-  'menuisier': { slug: 'menuisier', label: 'menuisier' },
-  'menuiserie': { slug: 'menuisier', label: 'menuisier' },
-  'fenêtre': { slug: 'menuisier', label: 'menuisier' },
-  'fenêtres': { slug: 'menuisier', label: 'menuisier' },
-  'fenetres': { slug: 'menuisier', label: 'menuisier' },
-  // Carreleur / Carrelage
-  'carreleur': { slug: 'carreleur', label: 'carreleur' },
-  'carrelage': { slug: 'carreleur', label: 'carreleur' },
-  // Couvreur / Toiture
-  'couvreur': { slug: 'couvreur', label: 'couvreur' },
-  'toiture': { slug: 'couvreur', label: 'couvreur' },
-  'couverture': { slug: 'couvreur', label: 'couvreur' },
-  // Peintre en bâtiment
-  'peintre': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
-  'peinture': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
-  'ravalement': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
-  'façade': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
-  // Maçon / Maçonnerie
-  'maçon': { slug: 'macon', label: 'maçon' },
-  'macon': { slug: 'macon', label: 'maçon' },
-  'maçonnerie': { slug: 'macon', label: 'maçon' },
-  'maconnerie': { slug: 'macon', label: 'maçon' },
-  'gros œuvre': { slug: 'macon', label: 'maçon' },
-  // Climaticien / Climatisation
-  'climaticien': { slug: 'climaticien', label: 'climaticien' },
-  'climatisation': { slug: 'climaticien', label: 'climaticien' },
-  'pac air-air': { slug: 'climaticien', label: 'climaticien' },
-  // Jardinier paysagiste
-  'jardinier': { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  'paysagiste': { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  'jardin': { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  'paysagisme': { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  // Vitrier
-  'vitrier': { slug: 'vitrier', label: 'vitrier' },
-  'vitrerie': { slug: 'vitrier', label: 'vitrier' },
-  'vitrage': { slug: 'vitrier', label: 'vitrier' },
-  'double vitrage': { slug: 'vitrier', label: 'vitrier' },
-  // Cuisiniste
-  'cuisiniste': { slug: 'cuisiniste', label: 'cuisiniste' },
-  'cuisine': { slug: 'cuisiniste', label: 'cuisiniste' },
-  // Solier / Moquettiste
-  'solier': { slug: 'solier-moquettiste', label: 'solier moquettiste' },
-  'parquet': { slug: 'solier-moquettiste', label: 'solier moquettiste' },
-  'revêtement de sol': { slug: 'solier-moquettiste', label: 'solier moquettiste' },
-  // Entreprise de nettoyage
-  'nettoyage': { slug: 'entreprise-de-nettoyage', label: 'entreprise de nettoyage' },
+  // Personal Injury
+  'personal-injury': { slug: 'personal-injury', label: 'personal injury attorney' },
+  'car-accident': { slug: 'personal-injury', label: 'personal injury attorney' },
+  'slip-and-fall': { slug: 'personal-injury', label: 'personal injury attorney' },
+  // Criminal Defense
+  'criminal-defense': { slug: 'criminal-defense', label: 'criminal defense attorney' },
+  'dui': { slug: 'criminal-defense', label: 'criminal defense attorney' },
+  'felony': { slug: 'criminal-defense', label: 'criminal defense attorney' },
+  'misdemeanor': { slug: 'criminal-defense', label: 'criminal defense attorney' },
+  // Family Law
+  'family-law': { slug: 'family-law', label: 'family law attorney' },
+  'divorce': { slug: 'family-law', label: 'family law attorney' },
+  'custody': { slug: 'family-law', label: 'family law attorney' },
+  'child-support': { slug: 'family-law', label: 'family law attorney' },
+  // Immigration
+  'immigration': { slug: 'immigration', label: 'immigration attorney' },
+  'visa': { slug: 'immigration', label: 'immigration attorney' },
+  'green-card': { slug: 'immigration', label: 'immigration attorney' },
+  'deportation': { slug: 'immigration', label: 'immigration attorney' },
+  // Estate Planning
+  'estate-planning': { slug: 'estate-planning', label: 'estate planning attorney' },
+  'wills': { slug: 'estate-planning', label: 'estate planning attorney' },
+  'trusts': { slug: 'estate-planning', label: 'estate planning attorney' },
+  'probate': { slug: 'estate-planning', label: 'estate planning attorney' },
+  // Real Estate
+  'real-estate': { slug: 'real-estate', label: 'real estate attorney' },
+  'property': { slug: 'real-estate', label: 'real estate attorney' },
+  'closing': { slug: 'real-estate', label: 'real estate attorney' },
+  // Business Law
+  'business-law': { slug: 'business-law', label: 'business law attorney' },
+  'corporate': { slug: 'business-law', label: 'business law attorney' },
+  'llc': { slug: 'business-law', label: 'business law attorney' },
+  'contract': { slug: 'business-law', label: 'business law attorney' },
+  // Employment Law
+  'employment-law': { slug: 'employment-law', label: 'employment law attorney' },
+  'wrongful-termination': { slug: 'employment-law', label: 'employment law attorney' },
+  'discrimination': { slug: 'employment-law', label: 'employment law attorney' },
+  // Bankruptcy
+  'bankruptcy': { slug: 'bankruptcy', label: 'bankruptcy attorney' },
+  'chapter-7': { slug: 'bankruptcy', label: 'bankruptcy attorney' },
+  'chapter-13': { slug: 'bankruptcy', label: 'bankruptcy attorney' },
+  'debt': { slug: 'bankruptcy', label: 'bankruptcy attorney' },
+  // Tax Law
+  'tax-law': { slug: 'tax-law', label: 'tax law attorney' },
+  'irs': { slug: 'tax-law', label: 'tax law attorney' },
+  'tax-audit': { slug: 'tax-law', label: 'tax law attorney' },
+  // Intellectual Property
+  'intellectual-property': { slug: 'intellectual-property', label: 'intellectual property attorney' },
+  'patent': { slug: 'intellectual-property', label: 'intellectual property attorney' },
+  'trademark': { slug: 'intellectual-property', label: 'intellectual property attorney' },
+  'copyright': { slug: 'intellectual-property', label: 'intellectual property attorney' },
 }
 
 /**
@@ -94,13 +77,13 @@ export function getRelatedServiceLinks(
   const slugWords = slug.toLowerCase()
   const searchTerms = [slugWords, ...tags.map((t) => t.toLowerCase())]
 
-  // Top 5 cities for service×ville cross-links
+  // Top 5 cities for service×city cross-links
   const TOP_CITIES = [
-    { name: 'Paris', slug: 'paris' },
-    { name: 'Lyon', slug: 'lyon' },
-    { name: 'Marseille', slug: 'marseille' },
-    { name: 'Toulouse', slug: 'toulouse' },
-    { name: 'Nice', slug: 'nice' },
+    { name: 'New York', slug: 'new-york' },
+    { name: 'Los Angeles', slug: 'los-angeles' },
+    { name: 'Chicago', slug: 'chicago' },
+    { name: 'Houston', slug: 'houston' },
+    { name: 'Phoenix', slug: 'phoenix' },
   ]
 
   let firstServiceSlug: string | null = null
@@ -109,7 +92,7 @@ export function getRelatedServiceLinks(
     for (const [keyword, service] of Object.entries(serviceMapping)) {
       if (term.includes(keyword) && !addedSlugs.has(service.slug)) {
         links.push({
-          text: `Trouver un ${service.label} qualifié`,
+          text: `Find a qualified ${service.label}`,
           href: `/practice-areas/${service.slug}`,
         })
         // Add top-city variants for the first matched service only
@@ -117,7 +100,7 @@ export function getRelatedServiceLinks(
           firstServiceSlug = service.slug
           for (const city of TOP_CITIES) {
             links.push({
-              text: `${service.label.charAt(0).toUpperCase() + service.label.slice(1)} à ${city.name}`,
+              text: `${service.label.charAt(0).toUpperCase() + service.label.slice(1)} in ${city.name}`,
               href: `/practice-areas/${service.slug}/${city.slug}`,
             })
           }
@@ -127,27 +110,27 @@ export function getRelatedServiceLinks(
     }
   }
 
-  // Always add devis link for Tarifs articles
-  if (category === 'Tarifs') {
-    links.push({ text: 'Demander un devis gratuit', href: '/quotes' })
+  // Always add consultation link for Pricing articles
+  if (category === 'Pricing') {
+    links.push({ text: 'Request a free consultation', href: '/quotes' })
   }
 
   // Add general links based on category
-  if (category === 'Réglementation' || category === 'Aides & Subventions') {
-    links.push({ text: 'Comment ça marche ?', href: '/how-it-works' })
+  if (category === 'Regulations' || category === 'Legal Resources') {
+    links.push({ text: 'How it works', href: '/how-it-works' })
   }
 
-  if (category === 'Fiches métier') {
-    links.push({ text: 'Devenir artisan partenaire', href: '/register-attorney' })
+  if (category === 'Attorney Profiles') {
+    links.push({ text: 'Become a partner attorney', href: '/register-attorney' })
   }
 
-  // Add urgence link when relevant
+  // Add emergency link when relevant
   if (
-    tags.some((t) => t.toLowerCase() === 'urgence') ||
-    slug.includes('urgence') ||
-    slug.includes('depannage')
+    tags.some((t) => t.toLowerCase() === 'emergency') ||
+    slug.includes('emergency') ||
+    slug.includes('urgent')
   ) {
-    links.push({ text: 'Artisan en urgence', href: '/emergency' })
+    links.push({ text: 'Emergency attorney', href: '/emergency' })
   }
 
   // Limit to 5 links max

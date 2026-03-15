@@ -32,29 +32,28 @@ function truncateTitle(title: string, maxLen = 42): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { departement: deptSlug } = await params
   const dept = getStateBySlug(deptSlug)
-  if (!dept) return { title: 'Département non trouvé' }
+  if (!dept) return { title: 'State not found' }
 
-  const metaContent = generateDepartementContent(dept as never)
   const attorneyCount = await getAttorneyCountByDepartment(dept.name)
 
   const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
   const titleTemplates = [
-    `Artisans ${dept.name} (${dept.code}) — Devis`,
-    `Artisan ${dept.name} — Devis Gratuit`,
-    `${dept.name} : artisans qualifiés — Devis`,
-    `Artisans ${dept.name} — Comparez les pros`,
-    `${dept.name} (${dept.code}) — Annuaire artisans`,
+    `${dept.name} Attorneys | US Attorneys`,
+    `Find Attorneys in ${dept.name}`,
+    `${dept.name} Lawyers — Free Consultation`,
+    `Top Attorneys in ${dept.name}`,
+    `${dept.name} — Attorney Directory`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-dept-${dept.slug}`))
-  const artisanStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)} artisans, ` : ''
+  const attorneyStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)} attorneys, ` : ''
   const descTemplates = [
-    `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
-    `${dept.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
-    `Artisans en ${dept.name} (${dept.code}), ${dept.region}. ${artisanStr}${dept.population} hab., chef-lieu ${dept.capital}. Devis gratuits en ligne.`,
-    `${artisanStr}${services.length} corps de métier dans le ${dept.name}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
-    `Tous les artisans du ${dept.name} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
+    `Find top-rated attorneys in ${dept.name}. ${attorneyStr}${services.length} practice areas. Free consultations.`,
+    `${dept.name} attorney directory. ${attorneyStr}browse lawyers by practice area. Read reviews, compare and get free consultations.`,
+    `Attorneys in ${dept.name}, ${dept.region}. ${attorneyStr}capital ${dept.capital}. Browse lawyers and get free consultations.`,
+    `${attorneyStr}${services.length} practice areas in ${dept.name}. Find qualified lawyers near you. Free consultation.`,
+    `Browse all attorneys in ${dept.name}. ${attorneyStr}read reviews, compare lawyers. Free consultations.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -67,12 +66,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     robots: { index: true, follow: true },
     alternates: { canonical: `${SITE_URL}/states/${deptSlug}` },
     openGraph: {
-      locale: 'fr_FR',
+      locale: 'en_US',
       title,
       description,
       type: 'website',
       url: `${SITE_URL}/states/${deptSlug}`,
-      images: [{ url: deptImage.src, width: 1200, height: 630, alt: `Artisans en ${dept.name}` }],
+      images: [{ url: deptImage.src, width: 1200, height: 630, alt: `Attorneys in ${dept.name}` }],
     },
     twitter: {
       card: 'summary_large_image' as const,
@@ -109,14 +108,14 @@ export default async function DepartementPage({ params }: PageProps) {
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Départements', url: '/states' },
+    { name: 'Home', url: '/' },
+    { name: 'States', url: '/states' },
     { name: `${dept.name} (${dept.code})`, url: `/states/${dept.slug}` },
   ])
 
   const collectionPageSchema = getCollectionPageSchema({
-    name: `Artisans en ${dept.name} (${dept.code})`,
-    description: `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
+    name: `Attorneys in ${dept.name} (${dept.code})`,
+    description: `Find qualified attorneys in ${dept.name} (${dept.code}). ${services.length} practice areas covered.`,
     url: `/states/${dept.slug}`,
     itemCount: services.length,
   })
@@ -146,7 +145,7 @@ export default async function DepartementPage({ params }: PageProps) {
             <Breadcrumb
               items={[
                 ...(regionSlug ? [{ label: dept.region, href: `/regions/${regionSlug}` }] : []),
-                { label: 'Départements', href: '/states' },
+                { label: 'States', href: '/states' },
                 { label: `${dept.name} (${dept.code})` },
               ]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
@@ -157,7 +156,7 @@ export default async function DepartementPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3 mb-5">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/15 backdrop-blur-sm rounded-full border border-indigo-400/25">
                 <Map className="w-4 h-4 text-indigo-400" />
-                <span className="text-sm font-medium text-indigo-200">Département</span>
+                <span className="text-sm font-medium text-indigo-200">State</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
                 <Thermometer className="w-4 h-4 text-cyan-400" />
@@ -177,11 +176,11 @@ export default async function DepartementPage({ params }: PageProps) {
                 {(() => {
                   const h1Hash = Math.abs(hashCode(`h1-dept-${dept.slug}`))
                   const h1Templates = [
-                    `Artisans dans le ${dept.name}`,
-                    `Trouver un artisan en ${dept.name} (${dept.code})`,
-                    `${dept.name} : artisans qualifiés par ville`,
-                    `Artisans du ${dept.code} — ${dept.name}`,
-                    `Tous les artisans en ${dept.name}, ${dept.region}`,
+                    `Attorneys in ${dept.name}`,
+                    `Find an attorney in ${dept.name} (${dept.code})`,
+                    `${dept.name}: lawyers by city`,
+                    `${dept.code} Attorneys — ${dept.name}`,
+                    `All attorneys in ${dept.name}, ${dept.region}`,
                   ]
                   return (
                     <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
@@ -194,7 +193,7 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
 
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {content.profile.climateLabel}, {content.profile.economyLabel.toLowerCase()}, {content.profile.housingLabel.toLowerCase()}. {services.length} corps de métier disponibles dans le département.
+              {content.profile.climateLabel}, {content.profile.economyLabel.toLowerCase()}, {content.profile.housingLabel.toLowerCase()}. {services.length} practice areas available in this state.
             </p>
 
             {/* Location info */}
@@ -202,30 +201,30 @@ export default async function DepartementPage({ params }: PageProps) {
               {deptArtisanCount > 0 && (
                 <div className="flex items-center gap-2 text-slate-300">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatAttorneyCount(deptArtisanCount)} artisan{deptArtisanCount > 1 ? 's' : ''}</span>
+                  <span>{formatAttorneyCount(deptArtisanCount)} attorney{deptArtisanCount > 1 ? 's' : ''}</span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-indigo-400" />
-                <span>Chef-lieu : {dept.capital}</span>
+                <span>Capital: {dept.capital}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Users className="w-4 h-4 text-indigo-400" />
-                <span>{dept.population} habitants</span>
+                <span>{dept.population} population</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-indigo-400" />
-                <span>{villesDuDepartement.length || dept.cities.length} ville{(villesDuDepartement.length || dept.cities.length) > 1 ? 's' : ''} couvertes</span>
+                <span>{villesDuDepartement.length || dept.cities.length} cit{(villesDuDepartement.length || dept.cities.length) > 1 ? 'ies' : 'y'} covered</span>
               </div>
             </div>
 
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Bar-verified attorneys</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Free consultations</span>
               </div>
             </div>
           </div>
@@ -241,9 +240,9 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Trouver un artisan dans le {dept.name}
+                Find an attorney in {dept.name}
               </h2>
-              <p className="text-sm text-slate-500">{services.length} corps de métier disponibles</p>
+              <p className="text-sm text-slate-500">{services.length} practice areas available</p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -254,10 +253,10 @@ export default async function DepartementPage({ params }: PageProps) {
                 className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
-                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
+                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Top rated</span>
                 )}
                 <span className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors block text-sm">{service.name}</span>
-                <span className="block text-xs text-slate-400 mt-1.5">dans le {dept.code}</span>
+                <span className="block text-xs text-slate-400 mt-1.5">in {dept.code}</span>
               </Link>
             ))}
           </div>
@@ -271,7 +270,7 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Profil du {dept.name}
+                Profile of {dept.name}
               </h2>
               <p className="text-sm text-slate-500">{content.profile.climateLabel} · {content.profile.economyLabel}</p>
             </div>
@@ -280,26 +279,26 @@ export default async function DepartementPage({ params }: PageProps) {
             <p className="text-slate-700 leading-relaxed mb-6">{content.intro}</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div className="bg-cyan-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
+                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climate</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.climateLabel}</div>
               </div>
               <div className="bg-emerald-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Habitat</div>
+                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Housing</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.housingLabel}</div>
               </div>
               <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
+                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Economy</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
               </div>
               <div className="bg-amber-50 rounded-xl p-4">
                 <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Population</div>
-                <div className="text-sm text-slate-800 font-medium">{dept.population} habitants</div>
+                <div className="text-sm text-slate-800 font-medium">{dept.population} residents</div>
               </div>
             </div>
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-500" />
-                Problématiques courantes
+                Common legal issues
               </h3>
               <div className="grid sm:grid-cols-2 gap-2">
                 {content.profile.climaticIssues.map((issue, i) => (
@@ -321,16 +320,16 @@ export default async function DepartementPage({ params }: PageProps) {
               <TrendingUp className="w-5 h-5 text-blue-600" />
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              Artisanat dans le {dept.name}
+              Legal services in {dept.name}
             </h2>
           </div>
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Services prioritaires</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Top practice areas</h3>
               <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Conseils pour vos travaux</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Tips for finding the right attorney</h3>
               <p className="text-slate-700 leading-relaxed">{content.conseilsDepartement}</p>
             </div>
           </div>
@@ -344,9 +343,9 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Principales cities du {dept.name}
+                Major cities in {dept.name}
               </h2>
-              <p className="text-sm text-slate-500">{villesDuDepartement.length > 0 ? villesDuDepartement.length : dept.cities.length} cities référencées</p>
+              <p className="text-sm text-slate-500">{villesDuDepartement.length > 0 ? villesDuDepartement.length : dept.cities.length} cities listed</p>
             </div>
           </div>
           {villesDuDepartement.length > 0 ? (
@@ -359,7 +358,7 @@ export default async function DepartementPage({ params }: PageProps) {
                     </div>
                     <div className="min-w-0">
                       <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm truncate">{ville.name}</div>
-                      <div className="text-xs text-slate-400">{ville.population} hab.</div>
+                      <div className="text-xs text-slate-400">{ville.population} pop.</div>
                     </div>
                   </div>
                 </Link>
@@ -384,13 +383,13 @@ export default async function DepartementPage({ params }: PageProps) {
                 <Wrench className="w-5 h-5 text-violet-600" />
               </div>
               <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                Services par ville dans le {dept.name}
+                Practice areas by city in {dept.name}
               </h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {villesDuDepartement.slice(0, 12).map((ville) => (
                 <div key={ville.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
-                  <h3 className="font-heading font-semibold text-slate-900 mb-4">Artisans à {ville.name}</h3>
+                  <h3 className="font-heading font-semibold text-slate-900 mb-4">Attorneys in {ville.name}</h3>
                   <div className="flex flex-wrap gap-2">
                     {services.map((service) => (
                       <Link
@@ -403,7 +402,7 @@ export default async function DepartementPage({ params }: PageProps) {
                     ))}
                   </div>
                   <Link href={`/cities/${ville.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
-                    Tous les artisans <ArrowRight className="w-3 h-3" />
+                    All attorneys <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
               ))}
@@ -419,7 +418,7 @@ export default async function DepartementPage({ params }: PageProps) {
                 <Building2 className="w-5 h-5 text-amber-600" />
               </div>
               <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                Autres départements en {dept.region}
+                Other states in {dept.region}
               </h2>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -439,7 +438,7 @@ export default async function DepartementPage({ params }: PageProps) {
               <HelpCircle className="w-5 h-5 text-amber-600" />
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              Questions fréquentes
+              Frequently asked questions
             </h2>
           </div>
           <div className="space-y-4">
@@ -460,17 +459,17 @@ export default async function DepartementPage({ params }: PageProps) {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan dans le {dept.name} ?
+            Need an attorney in {dept.name}?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
+            Get up to 3 free consultations from qualified attorneys.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Demander un devis gratuit
+              Get a free consultation
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              Voir les services <ArrowRight className="w-4 h-4" />
+              Browse practice areas <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -480,12 +479,12 @@ export default async function DepartementPage({ params }: PageProps) {
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
-            Voir aussi
+            See also
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             {/* Services */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Popular practice areas</h3>
               <div className="space-y-2">
                 {orderedServices.slice(0, 8).map((s) => (
                   <Link key={s.slug} href={`/practice-areas/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
@@ -495,18 +494,18 @@ export default async function DepartementPage({ params }: PageProps) {
                 ))}
               </div>
               <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Tous les services <ArrowRight className="w-4 h-4" />
+                All practice areas <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Region */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Région {dept.region}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Region: {dept.region}</h3>
               <div className="space-y-2">
                 {regionSlug && (
                   <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Artisans en {dept.region}
+                    Attorneys in {dept.region}
                   </Link>
                 )}
                 {siblingDepts.slice(0, 5).map((d) => (
@@ -517,7 +516,7 @@ export default async function DepartementPage({ params }: PageProps) {
                 ))}
               </div>
               <Link href="/states" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Tous les départements <ArrowRight className="w-4 h-4" />
+                All states <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -526,19 +525,19 @@ export default async function DepartementPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
                 <Link href="/cities" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Toutes les cities
+                  <ChevronRight className="w-3 h-3" />All cities
                 </Link>
                 <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Toutes les régions
+                  <ChevronRight className="w-3 h-3" />All regions
                 </Link>
                 <Link href="/states" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Tous les départements
+                  <ChevronRight className="w-3 h-3" />All states
                 </Link>
                 <Link href="/quotes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Demander un devis
+                  <ChevronRight className="w-3 h-3" />Request a consultation
                 </Link>
                 <Link href="/how-it-works" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Comment ça marche
+                  <ChevronRight className="w-3 h-3" />How it works
                 </Link>
               </div>
             </div>
@@ -546,11 +545,11 @@ export default async function DepartementPage({ params }: PageProps) {
 
           {/* Dept × Service cross-links */}
           <div className="mt-10">
-            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services dans le {dept.name}</h3>
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Practice areas in {dept.name}</h3>
             <div className="flex flex-wrap gap-2">
               {orderedServices.slice(0, 10).map((s) => (
                 <Link key={`dept-svc-${s.slug}`} href={`/states/${dept.slug}/${s.slug}`} className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 hover:text-indigo-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-indigo-100 hover:border-indigo-200">
-                  {s.name} dans le {dept.code}
+                  {s.name} in {dept.code}
                 </Link>
               ))}
             </div>
@@ -560,39 +559,39 @@ export default async function DepartementPage({ params }: PageProps) {
           {villesDuDepartement.length > 0 && (
             <div className="mt-10 grid md:grid-cols-3 gap-8">
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Devis dans le {dept.name}</h3>
+                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {dept.name}</h3>
                 <div className="space-y-1.5">
                   {villesDuDepartement.slice(0, 6).flatMap((ville) =>
                     orderedServices.slice(0, 5).map((s) => (
                       <Link key={`devis-${s.slug}-${ville.slug}`} href={`/quotes/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
-                        Devis {s.name.toLowerCase()} à {ville.name}
+                        {s.name} consultation in {ville.name}
                       </Link>
                     ))
                   )}
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Avis dans le {dept.name}</h3>
+                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {dept.name}</h3>
                 <div className="space-y-1.5">
                   {villesDuDepartement.slice(0, 6).flatMap((ville) =>
                     orderedServices.slice(0, 5).map((s) => (
                       <Link key={`avis-${s.slug}-${ville.slug}`} href={`/reviews/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
-                        Avis {s.name.toLowerCase()} à {ville.name}
+                        {s.name} reviews in {ville.name}
                       </Link>
                     ))
                   )}
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Tarifs dans le {dept.name}</h3>
+                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Pricing in {dept.name}</h3>
                 <div className="space-y-1.5">
                   {villesDuDepartement.slice(0, 6).flatMap((ville) =>
                     orderedServices.slice(0, 5).map((s) => (
                       <Link key={`tarifs-${s.slug}-${ville.slug}`} href={`/pricing/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
-                        Tarifs {s.name.toLowerCase()} à {ville.name}
+                        {s.name} pricing in {ville.name}
                       </Link>
                     ))
                   )}
@@ -602,12 +601,12 @@ export default async function DepartementPage({ params }: PageProps) {
           )}
           {villesDuDepartement.length > 0 && (
             <div className="mt-8">
-              <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Urgences dans le {dept.name}</h3>
+              <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Emergency services in {dept.name}</h3>
               <div className="flex flex-wrap gap-2">
                 {villesDuDepartement.slice(0, 6).flatMap((ville) =>
                   orderedServices.slice(0, 5).map((s) => (
                     <Link key={`urgence-${s.slug}-${ville.slug}`} href={`/emergency/${s.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
-                      Urgence {s.name.toLowerCase()} à {ville.name}
+                      Emergency {s.name.toLowerCase()} in {ville.name}
                     </Link>
                   ))
                 )}
@@ -616,12 +615,12 @@ export default async function DepartementPage({ params }: PageProps) {
           )}
           {villesDuDepartement.length > 0 && (
             <div className="mt-8">
-              <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Problèmes courants dans le {dept.name}</h3>
+              <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Common issues in {dept.name}</h3>
               <div className="flex flex-wrap gap-2">
                 {villesDuDepartement.slice(0, 4).flatMap((ville) =>
                   problems.slice(0, 6).map((p) => (
                     <Link key={`prob-${p.slug}-${ville.slug}`} href={`/issues/${p.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
-                      {p.name} à {ville.name}
+                      {p.name} in {ville.name}
                     </Link>
                   ))
                 )}
@@ -635,9 +634,9 @@ export default async function DepartementPage({ params }: PageProps) {
         <section className="mb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-              <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial methodology</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Les profils climatiques et économiques sont des estimations basées sur les caractéristiques régionales. Les données démographiques proviennent de l&apos;INSEE. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
+                State profiles are based on publicly available data. US Attorneys is an independent directory — we do not provide legal services.
               </p>
             </div>
           </div>
@@ -646,19 +645,19 @@ export default async function DepartementPage({ params }: PageProps) {
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>
           <div className="flex flex-wrap gap-4">
             <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Processus de vérification
+              Verification process
             </Link>
             <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Politique d&apos;avis
+              Review policy
             </Link>
             <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Médiation
+              Mediation
             </Link>
             <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              CGV
+              Terms of service
             </Link>
           </div>
         </div>

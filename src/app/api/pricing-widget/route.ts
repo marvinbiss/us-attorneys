@@ -36,45 +36,45 @@ export async function OPTIONS() {
 }
 
 // ---------------------------------------------------------------------------
-// GET /api/prix-widget?service=plombier&ville=lyon&format=json|html
+// GET /api/pricing-widget?service=attorney&city=new-york&format=json|html
 // ---------------------------------------------------------------------------
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const specialtySlug = searchParams.get('service')?.toLowerCase().trim()
-  const villeSlug = searchParams.get('ville')?.toLowerCase().trim()
+  const citySlug = searchParams.get('ville')?.toLowerCase().trim() || searchParams.get('city')?.toLowerCase().trim()
   const format = searchParams.get('format')?.toLowerCase().trim()
 
   // --- Validate service ---
   if (!specialtySlug) {
-    return errorResponse('Paramètre "service" manquant. Exemple : ?service=plombier&ville=paris', format)
+    return errorResponse('Missing "service" parameter. Example: ?service=personal-injury&city=new-york', format)
   }
 
   const trade = getTradeContent(specialtySlug)
   if (!trade) {
     const availableSlugs = Object.keys(tradeContent).slice(0, 10).join(', ')
     return errorResponse(
-      `Service "${escapeHtml(specialtySlug)}" non trouvé. Services disponibles : ${availableSlugs}…`,
+      `Service "${escapeHtml(specialtySlug)}" not found. Available services: ${availableSlugs}…`,
       format,
     )
   }
 
-  // --- Validate ville ---
-  if (!villeSlug) {
-    return errorResponse('Paramètre "ville" manquant. Exemple : ?service=plombier&ville=paris', format)
+  // --- Validate city ---
+  if (!citySlug) {
+    return errorResponse('Missing "city" parameter. Example: ?service=personal-injury&city=new-york', format)
   }
 
-  const ville = getCityBySlug(villeSlug)
+  const ville = getCityBySlug(citySlug)
   if (!ville) {
     return errorResponse(
-      `City "${escapeHtml(villeSlug)}" non trouvée. Utilisez le slug de la ville (ex: paris, lyon, marseille).`,
+      `City "${escapeHtml(citySlug)}" not found. Use the city slug (e.g., new-york, los-angeles, chicago).`,
       format,
     )
   }
 
   // --- Compute prices ---
-  const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
-  const multiplier = getRegionalMultiplier(villeRegion)
+  const cityRegion = getStateByCode(ville.stateCode)?.region ?? ''
+  const multiplier = getRegionalMultiplier(cityRegion)
 
   // Use barometre data if available for richer data, fallback to trade priceRange
   const barometreService = servicePricings.find((s) => s.service === specialtySlug)
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
     unit = trade.priceRange.unit
   }
 
-  const sourceUrl = `https://us-attorneys.com/${specialtySlug}/${villeSlug}`
+  const sourceUrl = `https://us-attorneys.com/${specialtySlug}/${citySlug}`
 
   // --- JSON response ---
   if (format === 'json') {
@@ -111,15 +111,15 @@ export async function GET(request: NextRequest) {
       {
         service: specialtySlug,
         specialtyName: trade.name,
-        ville: villeSlug,
-        villeName: ville.name,
-        region: villeRegion,
+        city: citySlug,
+        cityName: ville.name,
+        region: cityRegion,
         priceMin,
         priceMax,
         unit,
         multiplier,
         ...(interventions && { interventions }),
-        source: 'ServicesArtisans.fr',
+        source: 'us-attorneys.com',
         sourceUrl,
       },
       {
@@ -131,8 +131,8 @@ export async function GET(request: NextRequest) {
   // --- HTML widget response ---
   const html = buildWidgetHtml({
     specialtyName: trade.name,
-    villeName: ville.name,
-    region: villeRegion,
+    cityName: ville.name,
+    region: cityRegion,
     priceMin,
     priceMax,
     unit,
@@ -162,12 +162,12 @@ function errorResponse(message: string, format?: string | null) {
   }
 
   const html = `<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:16px;font-family:system-ui,-apple-system,sans-serif;background:#fef2f2;color:#991b1b;font-size:14px;border-radius:8px;">
-  <p style="margin:0"><strong>Erreur :</strong> ${message}</p>
+  <p style="margin:0"><strong>Error:</strong> ${message}</p>
   <p style="margin:8px 0 0;font-size:12px;color:#b91c1c">
-    <a href="https://us-attorneys.com/widget-prix" style="color:#b91c1c" target="_blank" rel="noopener">Documentation du widget</a>
+    <a href="https://us-attorneys.com/pricing-widget" style="color:#b91c1c" target="_blank" rel="noopener">Widget documentation</a>
   </p>
 </body>
 </html>`
@@ -187,7 +187,7 @@ function errorResponse(message: string, format?: string | null) {
 
 interface WidgetData {
   specialtyName: string
-  villeName: string
+  cityName: string
   region: string
   priceMin: number
   priceMax: number
@@ -199,7 +199,7 @@ interface WidgetData {
 function buildWidgetHtml(data: WidgetData): string {
   const {
     specialtyName,
-    villeName,
+    cityName,
     region,
     priceMin,
     priceMax,
@@ -209,7 +209,7 @@ function buildWidgetHtml(data: WidgetData): string {
   } = data
 
   const safeServiceName = escapeHtml(specialtyName)
-  const safeVilleName = escapeHtml(villeName)
+  const safeCityName = escapeHtml(cityName)
   const safeRegion = escapeHtml(region)
   const safeSourceUrl = escapeHtml(sourceUrl)
 
@@ -222,14 +222,14 @@ function buildWidgetHtml(data: WidgetData): string {
         (i) => `
       <tr>
         <td style="padding:6px 8px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6">${escapeHtml(i.name)}</td>
-        <td style="padding:6px 8px;font-size:13px;color:#1d4ed8;font-weight:600;text-align:right;white-space:nowrap;border-bottom:1px solid #f3f4f6">${i.prixMin} – ${i.prixMax} €<span style="font-weight:400;color:#6b7280;font-size:11px">/${escapeHtml(i.unite)}</span></td>
+        <td style="padding:6px 8px;font-size:13px;color:#1d4ed8;font-weight:600;text-align:right;white-space:nowrap;border-bottom:1px solid #f3f4f6">$${i.prixMin} – $${i.prixMax}<span style="font-weight:400;color:#6b7280;font-size:11px">/${escapeHtml(i.unite)}</span></td>
       </tr>`,
       )
       .join('')
   }
 
   return `<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -263,15 +263,15 @@ function buildWidgetHtml(data: WidgetData): string {
         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
       <div class="header-text">
-        <h2>Prix ${safeServiceName} à ${safeVilleName}</h2>
+        <h2>${safeServiceName} Pricing in ${safeCityName}</h2>
         <p>${safeRegion}</p>
       </div>
     </div>
 
     <div class="price-bar">
       <div>
-        <div class="price-label">Fourchette de prix</div>
-        <div class="price-range">${priceMin} – ${priceMax} € <span class="price-unit">/ ${escapeHtml(unit)}</span></div>
+        <div class="price-label">Price Range</div>
+        <div class="price-range">$${priceMin} – $${priceMax} <span class="price-unit">/ ${escapeHtml(unit)}</span></div>
       </div>
       <div class="region-badge">${safeRegion}</div>
     </div>
@@ -287,9 +287,9 @@ function buildWidgetHtml(data: WidgetData): string {
     <div class="footer">
       <a href="${safeSourceUrl}" target="_blank" rel="noopener">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Powered by ServicesArtisans.fr
+        Powered by us-attorneys.com
       </a>
-      <span class="footer-source">Tarifs indicatifs 2026</span>
+      <span class="footer-source">Estimated rates 2026</span>
     </div>
   </div>
 </body>

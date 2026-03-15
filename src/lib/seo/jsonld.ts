@@ -18,18 +18,18 @@ export function getOrganizationSchema() {
       width: 512,
       height: 512,
     },
-    description: 'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.',
+    description: 'Find experienced attorneys across all 50 states. Compare ratings, read reviews, and connect with qualified lawyers for your legal needs.',
     ...(socialLinks.length > 0 && { sameAs: socialLinks }),
     areaServed: {
       '@type': 'Country',
-      name: 'France',
+      name: 'United States',
     },
     email: companyIdentity.email,
     contactPoint: {
       '@type': 'ContactPoint',
       url: `${SITE_URL}/contact`,
       contactType: 'customer service',
-      availableLanguage: 'French',
+      availableLanguage: 'English',
       email: companyIdentity.email,
       ...(companyIdentity.phone && { telephone: companyIdentity.phone }),
     },
@@ -38,11 +38,11 @@ export function getOrganizationSchema() {
       address: {
         '@type': 'PostalAddress',
         streetAddress: companyIdentity.address,
-        addressCountry: 'FR',
+        addressCountry: 'US',
       },
       telephone: companyIdentity.phone,
       foundingDate: companyIdentity.foundingDate,
-      ...(companyIdentity.tvaIntracom && { vatID: companyIdentity.tvaIntracom }),
+      ...(companyIdentity.taxId && { vatID: companyIdentity.taxId }),
     }),
   }
 }
@@ -98,7 +98,7 @@ export function getServiceSchema(service: {
         }
       : {
           '@type': 'Country',
-          name: 'France',
+          name: 'United States',
         },
     serviceType: service.category || service.name,
   }
@@ -141,7 +141,7 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]): Reco
   }
 }
 
-// Schema.org HowTo (for "Comment ça marche" page and problem pages)
+// Schema.org HowTo (for "How it works" page and problem pages)
 export function getHowToSchema(
   steps: { name: string; text: string; image?: string }[],
   options?: { name?: string; description?: string }
@@ -149,8 +149,8 @@ export function getHowToSchema(
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: options?.name ?? 'Comment trouver un artisan sur ServicesArtisans',
-    description: options?.description ?? 'Guide étape par étape pour trouver et contacter un artisan qualifié.',
+    name: options?.name ?? 'How to find an attorney on US Attorneys',
+    description: options?.description ?? 'Step-by-step guide to finding and contacting a qualified attorney.',
     step: steps.map((step, index) => ({
       '@type': 'HowToStep',
       position: index + 1,
@@ -161,7 +161,7 @@ export function getHowToSchema(
   }
 }
 
-// Schema.org ItemList (pour les pages de listing SEO programmatique style TripAdvisor)
+// Schema.org ItemList (for programmatic SEO listing pages)
 export function getItemListSchema(params: {
   name: string
   description: string
@@ -190,7 +190,7 @@ export function getItemListSchema(params: {
         name: item.name,
         url: `${SITE_URL}${item.url}`,
         image: item.image,
-        priceRange: '€€',
+        priceRange: '$$',
         ...(item.rating && item.reviewCount && item.reviewCount > 0 && {
           aggregateRating: {
             '@type': 'AggregateRating',
@@ -205,7 +205,7 @@ export function getItemListSchema(params: {
   }
 }
 
-// Schema.org City/Place (pour pages cities)
+// Schema.org City/Place (for city pages)
 export function getPlaceSchema(city: {
   name: string
   slug: string
@@ -220,7 +220,7 @@ export function getPlaceSchema(city: {
     name: city.name,
     url: `${SITE_URL}/cities/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
-    description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
+    description: city.description || `Find qualified attorneys in ${city.name}`,
     ...(city.region ? {
       containedInPlace: {
         '@type': 'AdministrativeArea',
@@ -230,7 +230,7 @@ export function getPlaceSchema(city: {
   }
 }
 
-// Schema.org CollectionPage (pour pages de catégories de services)
+// Schema.org CollectionPage (for service category pages)
 export function getCollectionPageSchema(params: {
   name: string
   description: string
@@ -275,20 +275,20 @@ export function getServicePricingSchema(params: {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: params.location
-      ? `${params.specialtyName} à ${params.location} — Tarifs`
-      : `${params.specialtyName} — Tarifs France`,
+      ? `${params.specialtyName} in ${params.location} — Pricing`
+      : `${params.specialtyName} — Pricing USA`,
     description: params.description,
     url: params.url,
     dateModified,
     brand: {
       '@type': 'Organization',
-      name: 'ServicesArtisans',
+      name: 'US Attorneys',
     },
     offers: {
       '@type': 'AggregateOffer',
       lowPrice: params.lowPrice,
       highPrice: params.highPrice,
-      priceCurrency: params.priceCurrency || 'EUR',
+      priceCurrency: params.priceCurrency || 'USD',
       ...(params.priceUnit && { unitText: params.priceUnit }),
       ...(params.offerCount && { offerCount: params.offerCount }),
       availability: 'https://schema.org/InStock',

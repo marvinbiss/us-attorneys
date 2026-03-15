@@ -1,5 +1,5 @@
 /**
- * Contact API - ServicesArtisans
+ * Contact API - US Attorneys
  * Handles contact form submissions and sends emails via Resend
  */
 
@@ -34,10 +34,10 @@ const getResend = () => {
 }
 
 const contactSchema = z.object({
-  nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
-  email: z.string().email('Email invalide'),
-  sujet: z.string().min(1, 'Veuillez sélectionner un sujet'),
-  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères'),
+  nom: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  sujet: z.string().min(1, 'Please select a subject'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
 })
 
 export async function POST(request: Request) {
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const validation = contactSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: validation.error.flatten() },
+        { error: 'Invalid data', details: validation.error.flatten() },
         { status: 400 }
       )
     }
@@ -60,11 +60,11 @@ export async function POST(request: Request) {
 
     // Map subject to readable text
     const sujetTexte: Record<string, string> = {
-      devis: 'Question sur un devis',
-      artisan: 'Problème avec un artisan',
-      inscription: 'Inscription artisan',
-      partenariat: 'Partenariat',
-      autre: 'Autre',
+      devis: 'Question about a consultation',
+      artisan: 'Issue with an attorney',
+      inscription: 'Attorney registration',
+      partenariat: 'Partnership',
+      autre: 'Other',
     }
 
     // Sanitize all user inputs for HTML
@@ -80,16 +80,16 @@ export async function POST(request: Request) {
       reply_to: safeEmailHeader,
       subject: `[Contact] ${safeSujet} - ${safeNom}`,
       html: `
-        <h2>Nouveau message de contact</h2>
-        <p><strong>Nom:</strong> ${safeNom}</p>
+        <h2>New Contact Message</h2>
+        <p><strong>Name:</strong> ${safeNom}</p>
         <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Sujet:</strong> ${safeSujet}</p>
+        <p><strong>Subject:</strong> ${safeSujet}</p>
         <hr />
         <h3>Message:</h3>
         <p>${safeMessage}</p>
         <hr />
         <p style="color: #666; font-size: 12px;">
-          Message envoyé depuis le formulaire de contact de ServicesArtisans
+          Message sent from the US Attorneys contact form
         </p>
       `,
     })
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
     if (sendError) {
       logger.error('Error sending email', sendError)
       return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi du message' },
+        { error: 'Error sending message' },
         { status: 500 }
       )
     }
@@ -107,16 +107,16 @@ export async function POST(request: Request) {
       await getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: email,
-        subject: 'Votre message a bien été reçu - ServicesArtisans',
+        subject: 'Your message has been received - US Attorneys',
         html: `
-          <h2>Bonjour ${safeNom},</h2>
-          <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
-          <p><strong>Sujet:</strong> ${safeSujet}</p>
+          <h2>Hello ${safeNom},</h2>
+          <p>We have received your message and will get back to you as soon as possible.</p>
+          <p><strong>Subject:</strong> ${safeSujet}</p>
           <hr />
-          <p><strong>Votre message:</strong></p>
+          <p><strong>Your message:</strong></p>
           <p>${safeMessage}</p>
           <hr />
-          <p>Cordialement,<br />L'équipe ServicesArtisans</p>
+          <p>Best regards,<br />The US Attorneys Team</p>
           <p style="color: #666; font-size: 12px;">
             <a href="https://us-attorneys.com">us-attorneys.com</a>
           </p>
@@ -128,12 +128,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Message envoyé avec succès',
+      message: 'Message sent successfully',
     })
   } catch (error) {
     logger.error('Contact API error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

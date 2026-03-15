@@ -77,7 +77,7 @@ export function initSentry() {
       // Add custom context
       event.tags = {
         ...event.tags,
-        platform: 'servicesartisans',
+        platform: 'us-attorneys',
       }
 
       return event

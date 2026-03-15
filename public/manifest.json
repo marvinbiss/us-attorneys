@@ -1,14 +1,14 @@
 {
-  "name": "ServicesArtisans",
-  "short_name": "Artisans",
-  "description": "Trouvez et réservez les meilleurs artisans près de chez vous",
+  "name": "US Attorneys",
+  "short_name": "US Attorneys",
+  "description": "Find top-rated attorneys across all 50 states",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#E86B4B",
   "orientation": "portrait-primary",
   "scope": "/",
-  "lang": "fr-FR",
+  "lang": "en-US",
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -66,29 +66,29 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Page d'accueil"
+      "label": "Homepage"
     },
     {
       "src": "/screenshots/booking.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Réservation"
+      "label": "Consultation Booking"
     }
   ],
   "shortcuts": [
     {
-      "name": "Rechercher un artisan",
-      "short_name": "Rechercher",
-      "description": "Trouver un artisan près de chez vous",
-      "url": "/services",
+      "name": "Find an Attorney",
+      "short_name": "Search",
+      "description": "Find a qualified attorney near you",
+      "url": "/practice-areas",
       "icons": [{ "src": "/icons/search.png", "sizes": "96x96" }]
     },
     {
-      "name": "Mes réservations",
-      "short_name": "RDV",
-      "description": "Voir mes rendez-vous",
-      "url": "/espace-client",
+      "name": "My Consultations",
+      "short_name": "Appointments",
+      "description": "View my appointments",
+      "url": "/client-dashboard",
       "icons": [{ "src": "/icons/calendar.png", "sizes": "96x96" }]
     }
   ],

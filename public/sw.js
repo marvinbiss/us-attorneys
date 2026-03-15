@@ -1,6 +1,6 @@
-const CACHE_NAME = 'servicesartisans-v1'
-const STATIC_CACHE_NAME = 'servicesartisans-static-v1'
-const DYNAMIC_CACHE_NAME = 'servicesartisans-dynamic-v1'
+const CACHE_NAME = 'us-attorneys-v1'
+const STATIC_CACHE_NAME = 'us-attorneys-static-v1'
+const DYNAMIC_CACHE_NAME = 'us-attorneys-dynamic-v1'
 
 // Static assets to cache
 const STATIC_ASSETS = [
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
         cacheNames
           .filter((cacheName) => {
             return (
-              cacheName.startsWith('servicesartisans-') &&
+              cacheName.startsWith('us-attorneys-') &&
               cacheName !== STATIC_CACHE_NAME &&
               cacheName !== DYNAMIC_CACHE_NAME
             )

@@ -6,39 +6,39 @@ import { companyIdentity } from '@/lib/config/company-identity'
 
 // Navigation links
 const navigationLinks = [
-  { name: 'Accueil', href: '/' },
-  { name: 'Services', href: '/services' },
-  { name: 'Villes', href: '/cities' },
-  { name: 'Carte des artisans', href: '/attorney-map' },
-  { name: 'Recherche', href: '/search' },
-  { name: 'Comment ça marche', href: '/how-it-works' },
+  { name: 'Home', href: '/' },
+  { name: 'Practice Areas', href: '/services' },
+  { name: 'Cities', href: '/cities' },
+  { name: 'Attorney Map', href: '/attorney-map' },
+  { name: 'Search', href: '/search' },
+  { name: 'How It Works', href: '/how-it-works' },
 ]
 
-// Outils links
-const outilsLinks = [
-  { name: 'Calculateur de prix', href: '/tools/calculator-prix' },
-  { name: 'Diagnostic artisan', href: '/tools/diagnostic' },
-  { name: 'Carte des artisans', href: '/attorney-map' },
-  { name: 'Tarifs artisans', href: '/pricing' },
-  { name: 'Demander un devis', href: '/quotes' },
-  { name: 'Urgence artisan', href: '/emergency' },
-  { name: 'Problèmes courants', href: '/issues' },
-  { name: 'Vérifier un artisan', href: '/verify-attorney' },
-  { name: 'Statistiques artisans', href: '/attorney-statistics' },
-  { name: 'Widget pour artisans', href: '/widget' },
+// Tools links
+const toolsLinks = [
+  { name: 'Cost Estimator', href: '/tools/calculator-prix' },
+  { name: 'Attorney Finder', href: '/tools/diagnostic' },
+  { name: 'Attorney Map', href: '/attorney-map' },
+  { name: 'Fee Comparison', href: '/pricing' },
+  { name: 'Free Consultation', href: '/quotes' },
+  { name: 'Emergency Legal Help', href: '/emergency' },
+  { name: 'Common Legal Issues', href: '/issues' },
+  { name: 'Verify an Attorney', href: '/verify-attorney' },
+  { name: 'Attorney Statistics', href: '/attorney-statistics' },
+  { name: 'Attorney Widget', href: '/widget' },
 ]
 
 // Information links
 const informationLinks = [
-  { name: 'À propos', href: '/about' },
+  { name: 'About Us', href: '/about' },
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Guides travaux', href: '/guides' },
-  { name: 'Avis artisans', href: '/reviews' },
-  { name: 'CGV', href: '/terms' },
-  { name: 'Mentions légales', href: '/legal' },
-  { name: 'Confidentialité', href: '/privacy' },
+  { name: 'Legal Guides', href: '/guides' },
+  { name: 'Attorney Reviews', href: '/reviews' },
+  { name: 'Terms of Service', href: '/terms' },
+  { name: 'Legal Notice', href: '/legal' },
+  { name: 'Privacy Policy', href: '/privacy' },
 ]
 
 // Legal/non-SEO pages — rel="nofollow" to preserve PageRank for money pages
@@ -65,8 +65,8 @@ export default function Footer() {
             <div className="absolute -top-20 -right-20 w-60 h-60 bg-clay-300/20 rounded-full blur-3xl" aria-hidden="true" />
             <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-clay-200/15 rounded-full blur-3xl" aria-hidden="true" />
             <div className="relative text-center lg:text-left">
-              <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">Restez informé</h3>
-              <p className="text-white/80 text-base">Recevez nos conseils et offres exclusives</p>
+              <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">Stay Informed</h3>
+              <p className="text-white/80 text-base">Get our latest tips and exclusive offers</p>
             </div>
             <div className="relative w-full lg:w-auto">
               <NewsletterForm />
@@ -84,8 +84,8 @@ export default function Footer() {
                 <Shield className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Artisans référencés SIREN</p>
-                <p className="text-gray-500 text-xs mt-0.5">Référencés par SIREN</p>
+                <p className="text-white font-semibold text-sm">Bar-Verified Attorneys</p>
+                <p className="text-gray-500 text-xs mt-0.5">Verified by State Bar</p>
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
@@ -93,8 +93,8 @@ export default function Footer() {
                 <Building2 className="w-6 h-6 text-clay-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">101 départements</p>
-                <p className="text-gray-500 text-xs mt-0.5">Couverture nationale</p>
+                <p className="text-white font-semibold text-sm">50 States + DC</p>
+                <p className="text-gray-500 text-xs mt-0.5">Nationwide Coverage</p>
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
@@ -102,8 +102,8 @@ export default function Footer() {
                 <Award className="w-6 h-6 text-amber-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">100% gratuit</p>
-                <p className="text-gray-500 text-xs mt-0.5">Sans engagement</p>
+                <p className="text-white font-semibold text-sm">100% Free</p>
+                <p className="text-gray-500 text-xs mt-0.5">No Obligation</p>
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
@@ -111,8 +111,8 @@ export default function Footer() {
                 <CreditCard className="w-6 h-6 text-clay-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Devis gratuit</p>
-                <p className="text-gray-500 text-xs mt-0.5">Sans engagement</p>
+                <p className="text-white font-semibold text-sm">Free Consultation</p>
+                <p className="text-gray-500 text-xs mt-0.5">No Obligation</p>
               </div>
             </div>
           </div>
@@ -120,13 +120,13 @@ export default function Footer() {
       </div>
 
       {/* SEO Internal Links Section */}
-      <nav className="relative border-b border-white/[0.06]" aria-label="Liens populaires">
+      <nav className="relative border-b border-white/[0.06]" aria-label="Popular links">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           {/* Desktop: full grid visible */}
           <div className="hidden md:grid md:grid-cols-5 gap-8 lg:gap-12">
-            {/* Services populaires */}
+            {/* Popular Practice Areas */}
             <div>
-              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Services populaires</h4>
+              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Popular Practice Areas</h4>
               <ul className="space-y-3 text-sm">
                 {popularServices.map((service) => (
                   <li key={service.slug}>
@@ -140,16 +140,16 @@ export default function Footer() {
                 ))}
                 <li className="pt-2">
                   <Link href="/services" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Tous les services
+                    All Practice Areas
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Villes populaires */}
+            {/* Popular Cities */}
             <div>
-              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Villes populaires</h4>
+              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Popular Cities</h4>
               <ul className="space-y-3 text-sm">
                 {popularCities.map((city) => (
                   <li key={city.slug}>
@@ -163,18 +163,18 @@ export default function Footer() {
                 ))}
                 <li className="pt-2">
                   <Link href="/cities" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Toutes les cities
+                    All Cities
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Par région */}
+            {/* By Region */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em] flex items-center gap-2">
                 <Building2 className="w-3.5 h-3.5 text-gray-500" />
-                Par région
+                By Region
               </h4>
               <ul className="space-y-3 text-sm">
                 {popularRegions.map((region) => (
@@ -189,24 +189,24 @@ export default function Footer() {
                 ))}
                 <li className="pt-2">
                   <Link href="/regions" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Toutes les régions
+                    All Regions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
                   <Link href="/states" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Tous les départements
+                    All States
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Outils */}
+            {/* Free Tools */}
             <div>
-              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Outils gratuits</h4>
+              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Free Tools</h4>
               <ul className="space-y-3 text-sm">
-                {outilsLinks.map((link) => (
+                {toolsLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -241,7 +241,7 @@ export default function Footer() {
           <div className="md:hidden space-y-2">
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
-                Services populaires
+                Popular Practice Areas
                 <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
@@ -257,7 +257,7 @@ export default function Footer() {
                 ))}
                 <li className="pt-1">
                   <Link href="/services" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Tous les services
+                    All Practice Areas
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -266,7 +266,7 @@ export default function Footer() {
 
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
-                Villes populaires
+                Popular Cities
                 <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
@@ -282,7 +282,7 @@ export default function Footer() {
                 ))}
                 <li className="pt-1">
                   <Link href="/cities" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Toutes les cities
+                    All Cities
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -293,7 +293,7 @@ export default function Footer() {
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 <span className="flex items-center gap-2">
                   <Building2 className="w-3.5 h-3.5 text-gray-500" />
-                  Par région
+                  By Region
                 </span>
                 <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
               </summary>
@@ -310,13 +310,13 @@ export default function Footer() {
                 ))}
                 <li className="pt-1">
                   <Link href="/regions" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Toutes les régions
+                    All Regions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
                   <Link href="/states" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
-                    Tous les départements
+                    All States
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -325,11 +325,11 @@ export default function Footer() {
 
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
-                Outils gratuits
+                Free Tools
                 <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
-                {outilsLinks.map((link) => (
+                {toolsLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -392,32 +392,32 @@ export default function Footer() {
                 <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
               </svg>
               <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-gray-200 transition-colors duration-200">
-                Services<span className="text-clay-400">Artisans</span>
+                US<span className="text-clay-400">Attorneys</span>
               </span>
             </Link>
-            <p className="text-sm text-gray-500 mb-2 font-medium">La plateforme de confiance pour trouver votre artisan</p>
+            <p className="text-sm text-gray-500 mb-2 font-medium">The trusted platform to find your attorney</p>
             <p className="text-sm leading-relaxed mb-8 text-gray-400/80">
               {companyIdentity.description}
             </p>
             <div className="flex gap-2.5">
-              <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-blue-600 hover:scale-110 border border-white/[0.06] hover:border-blue-500 transition-all duration-300 group" aria-label="Facebook">
+              <a href="https://facebook.com/usattorneys" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-blue-600 hover:scale-110 border border-white/[0.06] hover:border-blue-500 transition-all duration-300 group" aria-label="Facebook">
                 <Facebook className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://twitter.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-sky-500 hover:scale-110 border border-white/[0.06] hover:border-sky-400 transition-all duration-300 group" aria-label="Twitter">
+              <a href="https://twitter.com/usattorneys" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-sky-500 hover:scale-110 border border-white/[0.06] hover:border-sky-400 transition-all duration-300 group" aria-label="Twitter">
                 <Twitter className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://linkedin.com/company/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-blue-700 hover:scale-110 border border-white/[0.06] hover:border-blue-600 transition-all duration-300 group" aria-label="LinkedIn">
+              <a href="https://linkedin.com/company/usattorneys" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-blue-700 hover:scale-110 border border-white/[0.06] hover:border-blue-600 transition-all duration-300 group" aria-label="LinkedIn">
                 <Linkedin className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://instagram.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:scale-110 border border-white/[0.06] hover:border-purple-400 transition-all duration-300 group" aria-label="Instagram">
+              <a href="https://instagram.com/usattorneys" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:scale-110 border border-white/[0.06] hover:border-purple-400 transition-all duration-300 group" aria-label="Instagram">
                 <Instagram className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
               </a>
             </div>
           </div>
 
-          {/* Informations */}
+          {/* Information */}
           <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Informations</h4>
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Information</h4>
             <ul className="space-y-3 text-sm">
               {informationLinks.slice(0, 6).map((link) => (
                 <li key={link.href}>
@@ -428,60 +428,60 @@ export default function Footer() {
               ))}
               <li>
                 <Link href="/services" className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-400 rounded-lg hover:from-amber-500/30 hover:to-amber-600/30 transition-all mt-2 group">
-                  Voir les services
+                  View Practice Areas
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Entreprise */}
+          {/* Company */}
           <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Entreprise</h4>
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Company</h4>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/about" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  À propos
+                  About Us
                 </Link>
               </li>
               <li>
                 <Link href="/register-attorney" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Devenir partenaire
+                  Become a Partner
                 </Link>
               </li>
               <li>
                 <Link href="/verification-process" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Processus de vérification
+                  Verification Process
                 </Link>
               </li>
               <li>
                 <Link href="/guarantee" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Notre garantie
+                  Our Guarantee
                 </Link>
               </li>
               <li>
                 <Link href="/review-policy" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Politique des avis
+                  Review Policy
                 </Link>
               </li>
               <li>
                 <Link href="/mediation" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Médiation
+                  Mediation
                 </Link>
               </li>
               <li>
                 <Link href="/press" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Espace presse
+                  Press
                 </Link>
               </li>
               <li>
                 <Link href="/careers" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Carrières
+                  Careers
                 </Link>
               </li>
               <li>
                 <Link href="/partners" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Partenaires
+                  Partners
                 </Link>
               </li>
             </ul>
@@ -489,26 +489,26 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Juridique</h4>
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Legal</h4>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/legal" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Mentions légales
+                  Legal Notice
                 </Link>
               </li>
               <li>
                 <Link href="/terms" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  CGV
+                  Terms of Service
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Confidentialité
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link href="/accessibility" rel="nofollow" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Accessibilité
+                  Accessibility
                 </Link>
               </li>
             </ul>
@@ -524,7 +524,7 @@ export default function Footer() {
                   <MapPin className="w-5 h-5 text-clay-400" />
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm mb-0.5">Adresse</p>
+                  <p className="text-white font-medium text-sm mb-0.5">Address</p>
                   <span className="text-sm text-gray-500">{companyIdentity.address}</span>
                 </div>
               </div>
@@ -535,7 +535,7 @@ export default function Footer() {
                   <Phone className="w-5 h-5 text-clay-400" />
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm mb-0.5">Téléphone</p>
+                  <p className="text-white font-medium text-sm mb-0.5">Phone</p>
                   <a href={`tel:${companyIdentity.phone}`} className="text-sm text-gray-500 hover:text-white transition-colors duration-200">{companyIdentity.phone}</a>
                 </div>
               </div>
@@ -565,21 +565,21 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-gray-500">
-              &copy; {new Date().getFullYear()} <span className="text-gray-400 font-medium">ServicesArtisans</span>. Tous droits réservés.
-              <span className="hidden sm:inline"> &mdash; Données mises à jour en {new Date().getFullYear()}</span>
+              &copy; {new Date().getFullYear()} <span className="text-gray-400 font-medium">USAttorneys</span>. All rights reserved.
+              <span className="hidden sm:inline"> &mdash; Data updated in {new Date().getFullYear()}</span>
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-gray-500">
               <Link href="/legal" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
-                Mentions légales
+                Legal Notice
               </Link>
               <Link href="/privacy" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
-                Confidentialité
+                Privacy Policy
               </Link>
               <Link href="/terms" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
-                CGV
+                Terms of Service
               </Link>
               <Link href="/accessibility" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
-                Accessibilité
+                Accessibility
               </Link>
               <Link href="/faq" rel="nofollow" className="hover:text-white transition-colors duration-200 py-1.5">
                 FAQ
@@ -588,7 +588,7 @@ export default function Footer() {
                 Contact
               </Link>
               <Link href="/sitemap-page" className="hover:text-white transition-colors duration-200 py-1.5">
-                Plan du site
+                Sitemap
               </Link>
             </div>
           </div>

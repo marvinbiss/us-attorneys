@@ -10,20 +10,20 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisans par Région — 18 Régions',
-  description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
+  title: 'Attorneys by Region | US Attorneys',
+  description: 'Browse attorneys across US regions: Northeast, South, Midwest, and West. Find lawyers by practice area, read reviews, and get free consultations.',
   alternates: { canonical: `${SITE_URL}/regions` },
   openGraph: {
-    title: 'Artisans par Région — 18 Régions',
-    description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+    title: 'Attorneys by Region | US Attorneys',
+    description: 'Browse attorneys across US regions: Northeast, South, Midwest, and West. Find lawyers by practice area.',
     url: `${SITE_URL}/regions`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par région' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'US Attorneys — Attorneys by Region' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Artisans par Région — 18 Régions',
-    description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+    title: 'Attorneys by Region | US Attorneys',
+    description: 'Browse attorneys across US regions: Northeast, South, Midwest, and West. Find lawyers by practice area.',
   },
 }
 
@@ -58,16 +58,16 @@ export default async function RegionsIndexPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        name: 'Artisans par région en France',
-        description: 'Annuaire d\'artisans référencés dans les 18 régions françaises.',
+        name: 'Attorneys by Region in the US',
+        description: 'Find attorneys across all US regions.',
         url: `${SITE_URL}/regions`,
         numberOfItems: usRegions.length,
-        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
+        isPartOf: { '@type': 'WebSite', name: 'US Attorneys', url: SITE_URL },
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: 'Régions' }
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: 'Regions' }
           ]
         }
       }) }} />
@@ -90,7 +90,7 @@ export default async function RegionsIndexPage() {
           {/* Breadcrumb */}
           <div className="mb-10">
             <Breadcrumb
-              items={[{ label: 'Régions' }]}
+              items={[{ label: 'Regions' }]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
             />
           </div>
@@ -98,20 +98,20 @@ export default async function RegionsIndexPage() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-500/15 backdrop-blur-sm rounded-full border border-slate-400/25 mb-6">
               <Globe className="w-4 h-4 text-slate-300" />
-              <span className="text-sm font-medium text-slate-200">Régions</span>
+              <span className="text-sm font-medium text-slate-200">Regions</span>
               <span className="w-1 h-1 rounded-full bg-slate-400/50" />
-              <span className="text-sm font-medium text-white/90">France métropolitaine et outre-mer</span>
+              <span className="text-sm font-medium text-white/90">Nationwide coverage</span>
             </div>
 
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-slate-200 to-white">
-                {usRegions.length} régions
+                {usRegions.length} regions
               </span>
-              , un réseau national
+              , a national network
             </h1>
             <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Des artisans référencés via les données SIREN dans toutes les régions de France.
-              Explorez l&apos;annuaire des artisans du bâtiment.
+              Find verified attorneys across every region of the United States.
+              Browse our comprehensive attorney directory.
             </p>
           </div>
 
@@ -121,21 +121,21 @@ export default async function RegionsIndexPage() {
               <Globe className="w-5 h-5 text-slate-300" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">{usRegions.length}</div>
-                <div className="text-xs text-slate-400">Régions</div>
+                <div className="text-xs text-slate-400">Regions</div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
               <Building2 className="w-5 h-5 text-slate-300" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">{totalDepartments}</div>
-                <div className="text-xs text-slate-400">Départements</div>
+                <div className="text-xs text-slate-400">States</div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
               <Users className="w-5 h-5 text-slate-300" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">SIREN</div>
-                <div className="text-xs text-slate-400">Données officielles</div>
+                <div className="text-xs text-slate-400">Official data</div>
               </div>
             </div>
           </div>
@@ -146,10 +146,10 @@ export default async function RegionsIndexPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-            Choisissez votre région
+            Choose your region
           </h2>
           <p className="text-slate-500 max-w-lg mx-auto">
-            Chaque région dispose d&apos;artisans qualifiés pour tous vos projets de travaux.
+            Each region has qualified attorneys for all your legal needs.
           </p>
         </div>
 
@@ -180,11 +180,11 @@ export default async function RegionsIndexPage() {
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-1.5 text-slate-500">
                     <Building2 className="w-3.5 h-3.5" />
-                    <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
+                    <span>{deptCount} state{deptCount > 1 ? 's' : ''}</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-500">
                     <MapPin className="w-3.5 h-3.5" />
-                    <span>{cityCount} ville{cityCount > 1 ? 's' : ''}</span>
+                    <span>{cityCount} cit{cityCount > 1 ? 'ies' : 'y'}</span>
                   </div>
                 </div>
 
@@ -214,17 +214,17 @@ export default async function RegionsIndexPage() {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan ?
+            Need an attorney?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
+            Describe your legal matter and get free consultations from qualified attorneys.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Demander un devis gratuit
+              Get a free consultation
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              Voir les services <ArrowRight className="w-4 h-4" />
+              Browse practice areas <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -234,12 +234,12 @@ export default async function RegionsIndexPage() {
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
-            Explorer également
+            Also explore
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             {/* Departements */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Départements populaires</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Popular states</h3>
               <div className="space-y-2">
                 {states.slice(0, 8).map((d) => (
                   <Link key={d.slug} href={`/states/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
@@ -249,29 +249,29 @@ export default async function RegionsIndexPage() {
                 ))}
               </div>
               <Link href="/states" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Tous les départements <ArrowRight className="w-4 h-4" />
+                All states <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Villes */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Grandes cities</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Major cities</h3>
               <div className="space-y-2">
                 {cities.slice(0, 12).map((v) => (
                   <Link key={v.slug} href={`/cities/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Artisans à {v.name}
+                    Attorneys in {v.name}
                   </Link>
                 ))}
               </div>
               <Link href="/cities" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Toutes les cities <ArrowRight className="w-4 h-4" />
+                All cities <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Services */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Popular practice areas</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
                   <Link key={s.slug} href={`/practice-areas/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
@@ -281,7 +281,7 @@ export default async function RegionsIndexPage() {
                 ))}
               </div>
               <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Tous les services <ArrowRight className="w-4 h-4" />
+                All practice areas <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>

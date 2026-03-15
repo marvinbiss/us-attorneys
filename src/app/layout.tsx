@@ -60,17 +60,17 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ServicesArtisans — Annuaire d\'artisans en France',
-    template: '%s | ServicesArtisans',
+    default: 'US Attorneys — Find Lawyers Near You',
+    template: '%s | US Attorneys',
   },
   description:
-    'Annuaire d\'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.',
-  authors: [{ name: 'ServicesArtisans' }],
-  applicationName: 'ServicesArtisans',
+    'Find top-rated attorneys near you. Browse 75+ practice areas across all 50 states. Free consultations available.',
+  authors: [{ name: 'US Attorneys' }],
+  applicationName: 'US Attorneys',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ServicesArtisans',
+    title: 'US Attorneys',
   },
   formatDetection: {
     telephone: true,
@@ -79,19 +79,19 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'fr_FR',
+    locale: 'en_US',
     url: SITE_URL,
-    siteName: 'ServicesArtisans',
-    title: 'ServicesArtisans — Annuaire des artisans référencés en France',
+    siteName: 'US Attorneys',
+    title: 'US Attorneys — Find Top-Rated Lawyers Near You',
     description:
-      'Annuaire d\'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans référencés en France' }],
+      'Find top-rated attorneys across all 50 states. Browse 75+ practice areas, read reviews, and request free consultations.',
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'US Attorneys — Find Top-Rated Lawyers Near You' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ServicesArtisans — Annuaire des artisans référencés en France',
+    title: 'US Attorneys — Find Top-Rated Lawyers Near You',
     description:
-      'Annuaire d\'artisans de France. Devis gratuits, données gouvernementales SIREN.',
+      'Find top-rated attorneys across all 50 states. Free consultations available.',
   },
   robots: {
     index: true,
@@ -103,7 +103,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
     languages: {
-      'fr-FR': SITE_URL,
+      'en-US': SITE_URL,
       'x-default': SITE_URL,
     },
     types: {
@@ -193,7 +193,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        {/* Meta Pixel — chargé après consentement analytics (RGPD) */}
+        {/* Meta Pixel — loaded after analytics consent */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <Script id="meta-pixel" strategy="lazyOnload">
             {`!function(f,b,e,v,n,t,s)
@@ -210,7 +210,7 @@ fbq('track', 'PageView');`}
         )}
         {/* Contentsquare UX Analytics */}
         <Script src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js" strategy="lazyOnload" />
-        {/* Microsoft Clarity — chargé uniquement après consentement analytics (RGPD) via CookieConsent */}
+        {/* Microsoft Clarity — loaded only after analytics consent via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
         <PageViewTracker />
@@ -220,7 +220,7 @@ fbq('track', 'PageView');`}
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg z-50 font-medium"
           >
-            Aller au contenu principal
+            Skip to main content
           </a>
           <Header attorneyCount={attorneyCount} />
           <main id="main-content" className="pb-16 md:pb-0">{children}</main>

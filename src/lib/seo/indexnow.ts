@@ -53,8 +53,8 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
 }
 
 /**
- * Build the list of affected URLs when a provider changes.
- * Notifies: the provider page, the service+ville hub page, and the city page.
+ * Build the list of affected URLs when an attorney changes.
+ * Notifies: the attorney page, the service+city hub page, and the city page.
  */
 export function getAttorneyAffectedUrls(
   specialtySlug: string,

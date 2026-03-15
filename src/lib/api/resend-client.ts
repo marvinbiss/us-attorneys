@@ -28,7 +28,7 @@ export function getResendClient(): Resend {
 }
 
 // Default sender
-const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@us-attorneys.com>'
+const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'US Attorneys <noreply@us-attorneys.com>'
 
 // Types
 export interface EmailParams {
@@ -228,44 +228,44 @@ export async function sendWelcomeEmail(params: {
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
+    <h1 style="color: #2563eb; margin: 0;">US Attorneys</h1>
   </div>
 
-  <h2>Bienvenue ${name} !</h2>
+  <h2>Welcome ${name}!</h2>
 
-  <p>Nous sommes ravis de vous accueillir sur ServicesArtisans${isArtisan ? ', la plateforme qui connecte les artisans avec leurs clients' : ''}.</p>
+  <p>We're glad to have you on US Attorneys${isArtisan ? ', the platform that connects attorneys with their clients' : ''}.</p>
 
   ${isArtisan ? `
-  <p>Prochaines étapes pour démarrer :</p>
+  <p>Next steps to get started:</p>
   <ul>
-    <li>Complétez votre profil professionnel</li>
-    <li>Ajoutez vos photos de réalisations</li>
-    <li>Définissez votre zone d'intervention</li>
-    <li>Configurez vos disponibilités</li>
+    <li>Complete your professional profile</li>
+    <li>Add photos of your work</li>
+    <li>Define your service area</li>
+    <li>Set up your availability</li>
   </ul>
   ` : `
-  <p>Vous pouvez maintenant :</p>
+  <p>You can now:</p>
   <ul>
-    <li>Rechercher des artisans qualifies</li>
-    <li>Demander des devis gratuits</li>
-    <li>Prendre rendez-vous en ligne</li>
+    <li>Search for qualified attorneys</li>
+    <li>Request free consultations</li>
+    <li>Book appointments online</li>
   </ul>
   `}
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Acceder a mon compte
+      Go to my account
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Si vous avez des questions, n'hesitez pas a nous contacter a support@us-attorneys.com
+    If you have any questions, feel free to contact us at support@us-attorneys.com
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    US Attorneys - Find qualified attorneys near you
   </p>
 </body>
 </html>
@@ -273,7 +273,7 @@ export async function sendWelcomeEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Bienvenue sur ServicesArtisans${isArtisan ? ' !' : ', ' + name}`,
+    subject: `Welcome to US Attorneys${isArtisan ? '!' : ', ' + name}`,
     html,
     tags: [
       { name: 'type', value: 'welcome' },
@@ -300,29 +300,29 @@ export async function sendPasswordResetEmail(params: {
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
+    <h1 style="color: #2563eb; margin: 0;">US Attorneys</h1>
   </div>
 
-  <h2>Reinitialisation de mot de passe</h2>
+  <h2>Password Reset</h2>
 
-  <p>Bonjour ${name},</p>
+  <p>Hello ${name},</p>
 
-  <p>Vous avez demande a reinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour creer un nouveau mot de passe :</p>
+  <p>You requested to reset your password. Click the button below to create a new password:</p>
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${resetLink}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Reinitialiser mon mot de passe
+      Reset my password
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Ce lien expire dans 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.
+    This link expires in 1 hour. If you did not make this request, please ignore this email.
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    US Attorneys - Find qualified attorneys near you
   </p>
 </body>
 </html>
@@ -330,7 +330,7 @@ export async function sendPasswordResetEmail(params: {
 
   return sendEmail({
     to,
-    subject: 'Reinitialisation de votre mot de passe - ServicesArtisans',
+    subject: 'Password Reset - US Attorneys',
     html,
     tags: [{ name: 'type', value: 'password_reset' }],
   })
@@ -355,29 +355,29 @@ export async function sendClaimApprovedEmail(params: {
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #f59e0b; margin: 0;">ServicesArtisans</h1>
+    <h1 style="color: #f59e0b; margin: 0;">US Attorneys</h1>
   </div>
 
-  <h2 style="color: #333;">Bonne nouvelle, ${name} !</h2>
+  <h2 style="color: #333;">Great news, ${name}!</h2>
 
-  <p>Votre demande de revendication pour <strong>${attorneyName}</strong> a ete approuvee par notre equipe.</p>
+  <p>Your claim request for <strong>${attorneyName}</strong> has been approved by our team.</p>
 
-  <p>Votre fiche artisan est desormais active. Pour acceder a votre espace et gerer vos leads, definissez votre mot de passe :</p>
+  <p>Your attorney profile is now active. To access your dashboard and manage your leads, set your password:</p>
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${passwordLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-      Definir mon mot de passe
+      Set my password
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Ce lien est valable pendant 24 heures. Apres ce delai, vous pourrez utiliser la fonction "Mot de passe oublie" pour en generer un nouveau.
+    This link is valid for 24 hours. After that, you can use the "Forgot password" feature to generate a new one.
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies<br>
+    US Attorneys - Find qualified attorneys near you<br>
     <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'}" style="color: #999;">us-attorneys.com</a>
   </p>
 </body>
@@ -386,7 +386,7 @@ export async function sendClaimApprovedEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Votre fiche "${attorneyName}" a ete validee - ServicesArtisans`,
+    subject: `Your profile "${attorneyName}" has been approved - US Attorneys`,
     html,
     tags: [
       { name: 'type', value: 'claim_approved' },
@@ -417,36 +417,36 @@ export async function sendBookingConfirmationEmail(params: {
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
+    <h1 style="color: #2563eb; margin: 0;">US Attorneys</h1>
   </div>
 
-  <h2>Reservation confirmee !</h2>
+  <h2>Appointment Confirmed!</h2>
 
-  <p>Bonjour ${clientName},</p>
+  <p>Hello ${clientName},</p>
 
-  <p>Votre rendez-vous avec <strong>${attorneyName}</strong> est confirme.</p>
+  <p>Your appointment with <strong>${attorneyName}</strong> is confirmed.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service :</strong> ${specialtyName}</p>
-    <p style="margin: 0 0 10px 0;"><strong>Date :</strong> ${date}</p>
-    <p style="margin: 0 0 10px 0;"><strong>Heure :</strong> ${time}</p>
-    <p style="margin: 0;"><strong>Adresse :</strong> ${address}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${specialtyName}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${date}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Time:</strong> ${time}</p>
+    <p style="margin: 0;"><strong>Address:</strong> ${address}</p>
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}/reservations/${bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Voir ma reservation
+      View my appointment
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Besoin de modifier ou annuler ? Rendez-vous dans votre espace client.
+    Need to reschedule or cancel? Visit your client dashboard.
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    US Attorneys - Find qualified attorneys near you
   </p>
 </body>
 </html>
@@ -454,7 +454,7 @@ export async function sendBookingConfirmationEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Rendez-vous confirme avec ${attorneyName} - ${date}`,
+    subject: `Appointment confirmed with ${attorneyName} - ${date}`,
     html,
     tags: [
       { name: 'type', value: 'booking_confirmation' },
@@ -484,35 +484,35 @@ export async function sendQuoteRequestEmail(params: {
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
+    <h1 style="color: #2563eb; margin: 0;">US Attorneys</h1>
   </div>
 
-  <h2>Nouvelle demande de devis !</h2>
+  <h2>New Consultation Request!</h2>
 
-  <p>Bonjour ${attorneyName},</p>
+  <p>Hello ${attorneyName},</p>
 
-  <p>Vous avez reçu une nouvelle demande de devis de <strong>${clientName}</strong>.</p>
+  <p>You have received a new consultation request from <strong>${clientName}</strong>.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service demandé :</strong> ${specialtyName}</p>
-    <p style="margin: 0;"><strong>Description :</strong></p>
+    <p style="margin: 0 0 10px 0;"><strong>Requested service:</strong> ${specialtyName}</p>
+    <p style="margin: 0;"><strong>Description:</strong></p>
     <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${description}</p>
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}/artisan/quotes/${quoteId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Repondre a la demande
+      Respond to the request
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Repondez rapidement pour augmenter vos chances de decrocher ce projet !
+    Respond quickly to increase your chances of winning this case!
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    US Attorneys - Find qualified attorneys near you
   </p>
 </body>
 </html>
@@ -520,7 +520,7 @@ export async function sendQuoteRequestEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Nouvelle demande de devis - ${specialtyName}`,
+    subject: `New consultation request - ${specialtyName}`,
     html,
     tags: [
       { name: 'type', value: 'quote_request' },

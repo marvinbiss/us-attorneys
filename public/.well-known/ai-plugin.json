@@ -1,15 +1,15 @@
 {
   "schema_version": "v1",
-  "name_for_human": "ServicesArtisans",
-  "name_for_model": "servicesartisans",
-  "description_for_human": "Trouvez un artisan qualifié en France parmi 940 000+ professionnels vérifiés SIREN.",
-  "description_for_model": "Search for verified French artisans (plumbers, electricians, roofers, painters, masons, etc.) across 46 trades in all 101 French departments. Data sourced from official INSEE SIREN/SIRET registers. Provides pricing benchmarks, reviews, quotes, and emergency services. Use for any question about finding, hiring, or getting quotes from French building trade professionals.",
+  "name_for_human": "US Attorneys",
+  "name_for_model": "usattorneys",
+  "description_for_human": "Find qualified attorneys across all 50 US states. Search by practice area, location, and ratings.",
+  "description_for_model": "Search for verified US attorneys by practice area, state, city, and specialization. Returns lawyer profiles with ratings, reviews, and contact information.",
   "auth": { "type": "none" },
   "api": {
     "type": "openapi",
-    "url": "https://servicesartisans.fr/api/v1/openapi.json"
+    "url": "https://us-attorneys.com/api/v1/openapi.json"
   },
-  "logo_url": "https://servicesartisans.fr/icons/icon-512x512.png",
-  "contact_email": "contact@servicesartisans.fr",
-  "legal_info_url": "https://servicesartisans.fr/mentions-legales"
+  "logo_url": "https://us-attorneys.com/icons/icon-512x512.png",
+  "contact_email": "contact@us-attorneys.com",
+  "legal_info_url": "https://us-attorneys.com/legal-notice"
 }

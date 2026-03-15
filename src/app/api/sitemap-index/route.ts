@@ -18,7 +18,7 @@ const MAX_ATTORNEY_SITEMAPS = 20
  * This route is rewritten from /sitemap.xml via next.config.js.
  * Keep in sync with generateSitemaps() in src/app/sitemap.ts.
  *
- * IMPORTANT: All intent pages (devis, avis, tarifs, urgence, problemes) use
+ * IMPORTANT: All intent pages (quotes, reviews, pricing, emergency, issues) use
  * Phase 1 (top 300 cities) to avoid declaring sitemaps that can't be served.
  * Quartier-level sitemaps are removed entirely.
  */

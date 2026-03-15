@@ -8,7 +8,7 @@ interface FAQItem {
 
 /**
  * Extract FAQ items from article content.
- * Looks for H2 headings that are questions (contain '?') or common French
+ * Looks for H2 headings that are questions (contain '?') or common English
  * question patterns, and pairs them with the following paragraph(s) as the answer.
  */
 export function extractFAQFromContent(content: string[]): FAQItem[] {
@@ -26,8 +26,8 @@ export function extractFAQFromContent(content: string[]): FAQItem[] {
 
     // Check if the heading is a question or FAQ-worthy pattern
     const isQuestion = heading.includes('?')
-    const isHowMuch = /combien|co[uû]t|prix|tarif/i.test(heading)
-    const isHow = /comment|pourquoi|quand|quel|que faire|faut-il/i.test(heading)
+    const isHowMuch = /how much|cost|price|fee|rate/i.test(heading)
+    const isHow = /how|why|when|what|which|should|can|do/i.test(heading)
 
     if (!isQuestion && !isHowMuch && !isHow) continue
 
@@ -48,10 +48,10 @@ export function extractFAQFromContent(content: string[]): FAQItem[] {
     }
 
     if (answerParts.length > 0) {
-      // Format question: add ' ?' if missing (French typography uses a space before ?)
+      // Format question: add '?' if missing
       let question = heading
       if (!question.endsWith('?')) {
-        question = question + ' ?'
+        question = question + '?'
       }
 
       faqs.push({
@@ -93,10 +93,10 @@ export function getBlogArticleSchema(article: {
     description: article.excerpt,
     image: articleImage,
     author: (() => {
-      if (article.author === 'ServicesArtisans') {
+      if (article.author === 'US Attorneys') {
         return {
           '@type': 'Organization' as const,
-          name: 'Équipe éditoriale ServicesArtisans',
+          name: 'US Attorneys Editorial Team',
           url: `${SITE_URL}/about`,
           '@id': `${SITE_URL}#organization`,
         }
@@ -123,7 +123,7 @@ export function getBlogArticleSchema(article: {
     })(),
     publisher: {
       '@type': 'Organization',
-      name: 'ServicesArtisans',
+      name: 'US Attorneys',
       '@id': `${SITE_URL}#organization`,
     },
     datePublished: article.date,
@@ -134,7 +134,7 @@ export function getBlogArticleSchema(article: {
     },
     articleSection: article.category,
     keywords: article.tags.join(', '),
-    inLanguage: 'fr-FR',
+    inLanguage: 'en-US',
   })
 
   // FAQ schema (only if we have at least 2 FAQ items)

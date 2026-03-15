@@ -1,18 +1,18 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com').trim().replace(/\/+$/, '')
-export const SITE_NAME = 'ServicesArtisans'
-export const PHONE_NUMBER = '06 51 85 89 30'
-export const PHONE_TEL = 'tel:+33651858930'
+export const SITE_NAME = 'US Attorneys'
+export const PHONE_NUMBER = '(800) 555-0199'
+export const PHONE_TEL = 'tel:+18005550199'
 
 // SEO configuration object
 export const defaultSEOConfig = {
-  titleTemplate: '%s | ServicesArtisans',
-  defaultTitle: 'ServicesArtisans — Annuaire des artisans référencés en France',
+  titleTemplate: '%s | US Attorneys',
+  defaultTitle: 'US Attorneys — Find Top-Rated Lawyers Near You',
   description:
-    'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements. Devis gratuits.',
+    'Find experienced attorneys across all 50 states. Compare ratings, read reviews, and connect with qualified lawyers for your legal needs.',
   canonical: SITE_URL,
   openGraph: {
     type: 'website',
-    locale: 'fr_FR',
+    locale: 'en_US',
     url: SITE_URL,
     siteName: SITE_NAME,
     images: [
@@ -20,13 +20,13 @@ export const defaultSEOConfig = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans - Trouvez des artisans qualifiés près de chez vous',
+        alt: 'US Attorneys - Find Top-Rated Lawyers Near You',
       },
     ],
   },
   twitter: {
-    handle: '@servicesartisans',
-    site: '@servicesartisans',
+    handle: '@usattorneys',
+    site: '@usattorneys',
     cardType: 'summary_large_image',
   },
   additionalMetaTags: [
@@ -68,15 +68,15 @@ export const defaultSEOConfig = {
   ],
 }
 
-// SEO pour les pages de services
+// SEO for practice area pages
 export function getServiceSEO(specialtyName: string, location?: string) {
   const title = location
-    ? `${specialtyName} à ${location} — Annuaire & Devis Gratuit`
-    : `${specialtyName} en France — Artisans référencés SIREN`
+    ? `${specialtyName} in ${location} — Find Attorneys & Free Consultation`
+    : `${specialtyName} Attorneys — Licensed Lawyers Across All 50 States`
 
   const description = location
-    ? `Trouvez un ${specialtyName.toLowerCase()} à ${location} parmi des milliers de professionnels référencés. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
-    : `Annuaire des ${specialtyName.toLowerCase()}s en France. Professionnels référencés dans 101 départements. Recherche gratuite, devis sans engagement.`
+    ? `Find a ${specialtyName.toLowerCase()} attorney in ${location} from thousands of licensed professionals. Compare profiles, read reviews, and request a free consultation.`
+    : `Directory of ${specialtyName.toLowerCase()} attorneys across all 50 states. Licensed professionals verified by bar number. Free search, no obligation.`
 
   return {
     title,
@@ -89,18 +89,18 @@ export function getServiceSEO(specialtyName: string, location?: string) {
   }
 }
 
-// SEO pour les pages de localisation
-export function getLocationSEO(locationType: 'ville' | 'region' | 'departement', locationName: string) {
+// SEO for location pages
+export function getLocationSEO(locationType: 'city' | 'state' | 'county', locationName: string) {
   const titles: Record<string, string> = {
-    ville: `Artisans à ${locationName} — Annuaire référencés`,
-    region: `Artisans en ${locationName} — Tous les métiers du bâtiment`,
-    departement: `Artisans dans le ${locationName} — Annuaire & Devis gratuits`,
+    city: `Attorneys in ${locationName} — Licensed Lawyers Directory`,
+    state: `Attorneys in ${locationName} — All Practice Areas`,
+    county: `Attorneys in ${locationName} County — Directory & Free Consultations`,
   }
 
   const descriptions: Record<string, string> = {
-    ville: `Annuaire complet des artisans à ${locationName}. Des milliers de professionnels référencés : plombiers, électriciens, menuisiers et plus. 100% gratuit.`,
-    region: `Trouvez un artisan en ${locationName} parmi des milliers de professionnels référencés. Tous les corps de métier, tous les départements.`,
-    departement: `Artisans référencés dans le ${locationName}. 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
+    city: `Complete directory of attorneys in ${locationName}. Thousands of licensed professionals: personal injury, criminal defense, family law and more. 100% free.`,
+    state: `Find an attorney in ${locationName} from thousands of licensed professionals. All practice areas, all counties covered.`,
+    county: `Licensed attorneys in ${locationName} County. 75 practice areas covered. Free search, no obligation.`,
   }
 
   return {
@@ -113,12 +113,12 @@ export function getLocationSEO(locationType: 'ville' | 'region' | 'departement',
   }
 }
 
-// SEO pour les artisans
+// SEO for attorney profiles
 export function getAttorneySEO(attorneyName: string, service: string, location: string, rating?: number) {
-  const title = `${attorneyName} — ${service} à ${location}`
+  const title = `${attorneyName} — ${service} Attorney in ${location}`
   const description = rating
-    ? `${attorneyName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise référencée par SIREN. Consultez le profil et demandez un devis gratuit.`
-    : `${attorneyName}, ${service.toLowerCase()} à ${location}. Entreprise référencée par SIREN. Coordonnées, profil et devis gratuit.`
+    ? `${attorneyName}, ${service.toLowerCase()} attorney in ${location}. Rating: ${rating}/5. Bar-verified professional. View profile and request a free consultation.`
+    : `${attorneyName}, ${service.toLowerCase()} attorney in ${location}. Bar-verified professional. Contact info, profile, and free consultation.`
 
   return {
     title,

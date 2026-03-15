@@ -22,4 +22,4 @@ services:
 
 networks:
   default:
-    name: servicesartisans-network
+    name: us-attorneys-network

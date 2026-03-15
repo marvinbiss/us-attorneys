@@ -109,43 +109,43 @@ export default async function MentionsLegalesPage() {
             )}
             <ul>
               {companyIdentity.legalName && (
-                <li><strong>Raison sociale :</strong> {companyIdentity.legalName}</li>
+                <li><strong>Legal Name:</strong> {companyIdentity.legalName}</li>
               )}
-              {companyIdentity.formeJuridique && (
-                <li><strong>Forme juridique :</strong> {companyIdentity.formeJuridique}</li>
+              {companyIdentity.legalEntityType && (
+                <li><strong>Legal Entity Type:</strong> {companyIdentity.legalEntityType}</li>
               )}
               {companyIdentity.capitalSocial && (
-                <li><strong>Capital social :</strong> {companyIdentity.capitalSocial}</li>
+                <li><strong>Registered Capital:</strong> {companyIdentity.capitalSocial}</li>
               )}
-              {companyIdentity.siret && (
-                <li><strong>SIRET :</strong> {companyIdentity.siret}</li>
+              {companyIdentity.ein && (
+                <li><strong>EIN:</strong> {companyIdentity.ein}</li>
               )}
-              {companyIdentity.rcs && (
-                <li><strong>RCS :</strong> {companyIdentity.rcs}</li>
+              {companyIdentity.stateRegistration && (
+                <li><strong>State Registration:</strong> {companyIdentity.stateRegistration}</li>
               )}
-              {companyIdentity.tvaIntracom && (
-                <li><strong>TVA intracommunautaire :</strong> {companyIdentity.tvaIntracom}</li>
+              {companyIdentity.taxId && (
+                <li><strong>Tax ID:</strong> {companyIdentity.taxId}</li>
               )}
               {companyIdentity.address && (
-                <li><strong>Siège social :</strong> {companyIdentity.address}</li>
+                <li><strong>Headquarters:</strong> {companyIdentity.address}</li>
               )}
               {companyIdentity.phone && (
-                <li><strong>Téléphone :</strong> {companyIdentity.phone}</li>
+                <li><strong>Phone:</strong> {companyIdentity.phone}</li>
               )}
-              {companyIdentity.directeurPublication && (
-                <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
+              {companyIdentity.publishingDirector && (
+                <li><strong>Publishing Director:</strong> {companyIdentity.publishingDirector}</li>
               )}
-              <li><strong>Email :</strong> {companyIdentity.email}</li>
+              <li><strong>Email:</strong> {companyIdentity.email}</li>
             </ul>
 
-            <h2>Hébergement</h2>
+            <h2>Hosting</h2>
             <ul>
-              <li><strong>Hébergeur :</strong> {companyIdentity.hosting.name}</li>
-              <li><strong>Adresse :</strong> {companyIdentity.hosting.address}</li>
-              <li><strong>Site web :</strong> {companyIdentity.hosting.website}</li>
+              <li><strong>Host:</strong> {companyIdentity.hosting.name}</li>
+              <li><strong>Address:</strong> {companyIdentity.hosting.address}</li>
+              <li><strong>Website:</strong> {companyIdentity.hosting.website}</li>
             </ul>
 
-            <h2>Propriété intellectuelle</h2>
+            <h2>Intellectual Property</h2>
             <p>
               L'ensemble du contenu de ce site (textes, images, logos, icônes, mise en page)
               est protégé par le droit de la propriété intellectuelle. Toute reproduction,

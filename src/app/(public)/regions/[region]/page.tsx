@@ -32,7 +32,7 @@ function truncateTitle(title: string, maxLen = 42): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { region: regionSlug } = await params
   const region = getRegionBySlug(regionSlug)
-  if (!region) return { title: 'Région non trouvée' }
+  if (!region) return { title: 'Region not found' }
 
   const metaContent = generateRegionContent(region as never)
   const stateCount = region.states.length
@@ -41,22 +41,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`title-region-${region.slug}`))
   const titleTemplates = [
-    `Artisans ${region.name} — Devis Gratuit`,
-    `Artisan ${region.name} : annuaire vérifiés`,
-    `${region.name} : artisans qualifiés — Devis`,
-    `Artisans en ${region.name} — Comparez`,
-    `${region.name} — Annuaire artisans vérifiés`,
+    `${region.name} Attorneys | US Attorneys`,
+    `Find Attorneys in ${region.name}`,
+    `${region.name}: Top Lawyers — Free Consult`,
+    `Attorneys in ${region.name} — Compare`,
+    `${region.name} — Attorney Directory`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
-  const artisanStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)} artisans, ` : ''
+  const attorneyStr = attorneyCount > 0 ? `${formatAttorneyCount(attorneyCount)} attorneys, ` : ''
   const descTemplates = [
-    `Trouvez un artisan en ${region.name}. ${artisanStr}${stateCount} states, ${cityCount} cities. Devis gratuits.`,
-    `${region.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
-    `Artisans en ${region.name} : ${cityCount} cities couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
-    `Tous les artisans de ${region.name}. ${artisanStr}${stateCount} states, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
-    `${region.name} — ${stateCount} states, ${cityCount} cities${attorneyCount > 0 ? `, ${formatAttorneyCount(attorneyCount)} artisans` : ''}. ${metaContent.profile.climateLabel}. Devis gratuits en ligne.`,
+    `Find an attorney in ${region.name}. ${attorneyStr}${stateCount} states, ${cityCount} cities. Free consultations.`,
+    `${region.name}: ${attorneyStr}verified attorney directory. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Compare lawyers.`,
+    `Attorneys in ${region.name}: ${cityCount} cities covered, ${allServices.length} practice areas. ${attorneyStr}${metaContent.profile.economyLabel}. Free consultation.`,
+    `Browse all attorneys in ${region.name}. ${attorneyStr}${stateCount} states, ${metaContent.profile.geoLabel.toLowerCase()}. Compare for free.`,
+    `${region.name} — ${stateCount} states, ${cityCount} cities${attorneyCount > 0 ? `, ${formatAttorneyCount(attorneyCount)} attorneys` : ''}. ${metaContent.profile.climateLabel}. Free consultations.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -69,12 +69,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     robots: { index: true, follow: true },
     alternates: { canonical: `${SITE_URL}/regions/${regionSlug}` },
     openGraph: {
-      locale: 'fr_FR',
+      locale: 'en_US',
       title,
       description,
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}`,
-      images: [{ url: regionImage.src, width: 1200, height: 630, alt: `Artisans en ${region.name}` }],
+      images: [{ url: regionImage.src, width: 1200, height: 630, alt: `Attorneys in ${region.name}` }],
     },
     twitter: {
       card: 'summary_large_image' as const,
@@ -112,13 +112,13 @@ export default async function RegionPage({ params }: PageProps) {
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Régions', url: '/regions' },
+    { name: 'Home', url: '/' },
+    { name: 'Regions', url: '/regions' },
     { name: region.name, url: `/regions/${regionSlug}` },
   ])
   const collectionSchema = getCollectionPageSchema({
-    name: `Artisans en ${region.name}`,
-    description: `Trouvez un artisan qualifié en ${region.name}. ${stateCount} départements, ${cityCount} cities couvertes.`,
+    name: `Attorneys in ${region.name}`,
+    description: `Find a qualified attorney in ${region.name}. ${stateCount} states, ${cityCount} cities covered.`,
     url: `/regions/${regionSlug}`,
     itemCount: cityCount,
   })
@@ -148,7 +148,7 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="mb-10">
             <Breadcrumb
               items={[
-                { label: 'Régions', href: '/regions' },
+                { label: 'Regions', href: '/regions' },
                 { label: region.name },
               ]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
@@ -159,7 +159,7 @@ export default async function RegionPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3 mb-5">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-500/15 backdrop-blur-sm rounded-full border border-slate-400/25">
                 <Globe className="w-4 h-4 text-slate-300" />
-                <span className="text-sm font-medium text-slate-200">Région</span>
+                <span className="text-sm font-medium text-slate-200">Region</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
                 <Thermometer className="w-4 h-4 text-cyan-400" />
@@ -174,11 +174,11 @@ export default async function RegionPage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-region-${region.slug}`))
               const h1Templates = [
-                `Artisans en ${region.name}`,
-                `Trouver un artisan en ${region.name}`,
-                `${region.name} : artisans par département`,
-                `Artisans qualifiés en ${region.name}`,
-                `Tous les artisans de ${region.name}`,
+                `Attorneys in ${region.name}`,
+                `Find an attorney in ${region.name}`,
+                `${region.name}: lawyers by state`,
+                `Top-rated attorneys in ${region.name}`,
+                `All attorneys in ${region.name}`,
               ]
               return (
                 <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -187,7 +187,7 @@ export default async function RegionPage({ params }: PageProps) {
               )
             })()}
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()}, {content.profile.economyLabel.toLowerCase()}. {allServices.length} corps de métier disponibles.
+              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()}, {content.profile.economyLabel.toLowerCase()}. {allServices.length} practice areas available.
             </p>
 
             {/* Stats badges */}
@@ -195,30 +195,30 @@ export default async function RegionPage({ params }: PageProps) {
               {regionArtisanCount > 0 && (
                 <div className="flex items-center gap-2 text-slate-300">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatAttorneyCount(regionArtisanCount)} artisan{regionArtisanCount > 1 ? 's' : ''}</span>
+                  <span>{formatAttorneyCount(regionArtisanCount)} attorney{regionArtisanCount > 1 ? 's' : ''}</span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-slate-400" />
-                <span>{stateCount} département{stateCount > 1 ? 's' : ''}</span>
+                <span>{stateCount} state{stateCount > 1 ? 's' : ''}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-slate-400" />
-                <span>{cityCount} ville{cityCount > 1 ? 's' : ''} couvertes</span>
+                <span>{cityCount} cit{cityCount > 1 ? 'ies' : 'y'} covered</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Users className="w-4 h-4 text-slate-400" />
-                <span>{allServices.length} corps de métier</span>
+                <span>{allServices.length} practice areas</span>
               </div>
             </div>
 
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Bar-verified attorneys</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Free consultations</span>
               </div>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default async function RegionPage({ params }: PageProps) {
       <section className="py-6 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm text-slate-500 font-medium">Services prioritaires :</span>
+            <span className="text-sm text-slate-500 font-medium">Top practice areas:</span>
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
@@ -252,7 +252,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Profil de la région {region.name}
+                {region.name} region profile
               </h2>
               <p className="text-sm text-slate-500">{content.profile.climateLabel} · {content.profile.geoLabel}</p>
             </div>
@@ -261,28 +261,28 @@ export default async function RegionPage({ params }: PageProps) {
             <p className="text-slate-700 leading-relaxed mb-6">{content.intro}</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div className="bg-cyan-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
+                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climate</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.climateLabel}</div>
               </div>
               <div className="bg-emerald-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Géographie</div>
+                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Geography</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.geoLabel}</div>
               </div>
               <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
+                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Economy</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
               </div>
               <div className="bg-amber-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Couverture</div>
+                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Coverage</div>
                 <div className="text-sm text-slate-800 font-medium">
-                  {regionArtisanCount > 0 ? `${formatAttorneyCount(regionArtisanCount)} artisans · ` : ''}{stateCount} dép. · {cityCount} cities
+                  {regionArtisanCount > 0 ? `${formatAttorneyCount(regionArtisanCount)} attorneys · ` : ''}{stateCount} states · {cityCount} cities
                 </div>
               </div>
             </div>
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-500" />
-                Caractéristiques du territoire
+                Key characteristics
               </h3>
               <div className="grid sm:grid-cols-2 gap-2">
                 {content.profile.keyFacts.map((fact, i) => (
@@ -304,16 +304,16 @@ export default async function RegionPage({ params }: PageProps) {
               <TrendingUp className="w-5 h-5 text-blue-600" />
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              Artisanat en {region.name}
+              Legal services in {region.name}
             </h2>
           </div>
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Services prioritaires</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Top practice areas</h3>
               <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Conseils pour vos travaux</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Tips for finding the right attorney</h3>
               <p className="text-slate-700 leading-relaxed">{content.conseilsRegion}</p>
             </div>
           </div>
@@ -327,9 +327,9 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Départements de la région {region.name}
+                States in the {region.name} region
               </h2>
-              <p className="text-sm text-slate-500">{stateCount} département{stateCount > 1 ? 's' : ''}</p>
+              <p className="text-sm text-slate-500">{stateCount} state{stateCount > 1 ? 's' : ''}</p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -346,7 +346,7 @@ export default async function RegionPage({ params }: PageProps) {
                     </div>
                     <div>
                       <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-slate-700 transition-colors">{st.name}</h3>
-                      <span className="text-xs text-slate-400">{stateCitiesMap[st.code].length} ville{stateCitiesMap[st.code].length > 1 ? 's' : ''}</span>
+                      <span className="text-xs text-slate-400">{stateCitiesMap[st.code].length} cit{stateCitiesMap[st.code].length > 1 ? 'ies' : 'y'}</span>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
@@ -374,15 +374,15 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Services par ville en {region.name}
+                Practice areas by city in {region.name}
               </h2>
-              <p className="text-sm text-slate-500">Accès rapide aux artisans par ville</p>
+              <p className="text-sm text-slate-500">Quick access to attorneys by city</p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {allCities.slice(0, 12).map((city) => (
               <div key={city.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
-                <h3 className="font-heading font-semibold text-slate-900 mb-4">Artisans à {city.name}</h3>
+                <h3 className="font-heading font-semibold text-slate-900 mb-4">Attorneys in {city.name}</h3>
                 <div className="flex flex-wrap gap-2">
                   {allServices.map((service) => (
                     <Link
@@ -395,7 +395,7 @@ export default async function RegionPage({ params }: PageProps) {
                   ))}
                 </div>
                 <Link href={`/cities/${city.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
-                  Tous les artisans <ArrowRight className="w-3 h-3" />
+                  All attorneys <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
             ))}
@@ -409,7 +409,7 @@ export default async function RegionPage({ params }: PageProps) {
               <Globe className="w-5 h-5 text-violet-600" />
             </div>
             <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-              Autres régions
+              Other regions
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -428,7 +428,7 @@ export default async function RegionPage({ params }: PageProps) {
               <HelpCircle className="w-5 h-5 text-amber-600" />
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              Questions fréquentes
+              Frequently asked questions
             </h2>
           </div>
           <div className="space-y-4">
@@ -449,17 +449,17 @@ export default async function RegionPage({ params }: PageProps) {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan en {region.name} ?
+            Need an attorney in {region.name}?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
+            Get up to 3 free consultations from qualified attorneys.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Demander un devis gratuit
+              Get a free consultation
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              Voir les services <ArrowRight className="w-4 h-4" />
+              Browse practice areas <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -469,7 +469,7 @@ export default async function RegionPage({ params }: PageProps) {
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
-            Voir aussi
+            See also
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             {/* Services */}
@@ -484,23 +484,23 @@ export default async function RegionPage({ params }: PageProps) {
                 ))}
               </div>
               <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Tous les services <ArrowRight className="w-4 h-4" />
+                All practice areas <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Other regions */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Autres régions</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Other regions</h3>
               <div className="space-y-2">
                 {otherRegions.slice(0, 6).map((r) => (
                   <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Artisans en {r.name}
+                    Attorneys in {r.name}
                   </Link>
                 ))}
               </div>
               <Link href="/regions" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Toutes les régions <ArrowRight className="w-4 h-4" />
+                All regions <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -511,12 +511,12 @@ export default async function RegionPage({ params }: PageProps) {
                 {allCities.slice(0, 6).map((city) => (
                   <Link key={city.slug} href={`/cities/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Artisans à {city.name}
+                    Attorneys in {city.name}
                   </Link>
                 ))}
               </div>
               <Link href="/cities" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Toutes les cities <ArrowRight className="w-4 h-4" />
+                All cities <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -524,39 +524,39 @@ export default async function RegionPage({ params }: PageProps) {
           {/* Intent variant links — devis, avis, tarifs */}
           <div className="mt-10 grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Devis en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {region.name}</h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
                     <Link key={`devis-${s.slug}-${city.slug}`} href={`/quotes/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
-                      Devis {s.name.toLowerCase()} à {city.name}
+                      {s.name} consultation in {city.name}
                     </Link>
                   ))
                 )}
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Avis en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {region.name}</h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
                     <Link key={`avis-${s.slug}-${city.slug}`} href={`/reviews/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
-                      Avis {s.name.toLowerCase()} à {city.name}
+                      {s.name} reviews in {city.name}
                     </Link>
                   ))
                 )}
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Tarifs en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Pricing in {region.name}</h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
                     <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/pricing/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
-                      Tarifs {s.name.toLowerCase()} à {city.name}
+                      {s.name} pricing in {city.name}
                     </Link>
                   ))
                 )}
@@ -564,24 +564,24 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Urgences en {region.name}</h3>
+            <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Emergency services in {region.name}</h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 6).flatMap((city) =>
                 allServices.slice(0, 5).map((s) => (
                   <Link key={`urgence-${s.slug}-${city.slug}`} href={`/emergency/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
-                    Urgence {s.name.toLowerCase()} à {city.name}
+                    Emergency {s.name.toLowerCase()} in {city.name}
                   </Link>
                 ))
               )}
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Problèmes courants en {region.name}</h3>
+            <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Common issues in {region.name}</h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 4).flatMap((city) =>
                 problems.slice(0, 6).map((p) => (
                   <Link key={`prob-${p.slug}-${city.slug}`} href={`/issues/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
-                    {p.name} à {city.name}
+                    {p.name} in {city.name}
                   </Link>
                 ))
               )}
@@ -594,9 +594,9 @@ export default async function RegionPage({ params }: PageProps) {
         <section className="mb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-              <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial methodology</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Les profils géographiques et économiques sont des estimations régionales. Les données proviennent de sources publiques (INSEE, base SIRENE). ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
+                Geographic and economic profiles are regional estimates. Data comes from public sources. US Attorneys is an independent directory — we do not provide legal services or guarantee outcomes.
               </p>
             </div>
           </div>
@@ -605,19 +605,19 @@ export default async function RegionPage({ params }: PageProps) {
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>
           <div className="flex flex-wrap gap-4">
             <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Processus de vérification
+              Verification process
             </Link>
             <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Politique d&apos;avis
+              Review policy
             </Link>
             <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Médiation
+              Mediation
             </Link>
             <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              CGV
+              Terms of service
             </Link>
           </div>
         </div>

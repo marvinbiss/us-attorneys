@@ -1,5 +1,5 @@
 /**
- * Newsletter API - ServicesArtisans
+ * Newsletter API - US Attorneys
  * Handles newsletter subscriptions
  */
 
@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 const getResend = () => getResendClient()
 
 const newsletterSchema = z.object({
-  email: z.string().email('Email invalide'),
+  email: z.string().email('Invalid email address'),
 })
 
 export async function POST(request: Request) {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const validation = newsletterSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Email invalide' },
+        { error: 'Invalid email address' },
         { status: 400 }
       )
     }
@@ -36,21 +36,21 @@ export async function POST(request: Request) {
       await getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: email,
-        subject: 'Bienvenue dans la newsletter ServicesArtisans !',
+        subject: 'Welcome to the US Attorneys Newsletter!',
         html: `
-          <h2>Bienvenue !</h2>
-          <p>Merci de vous être inscrit à notre newsletter.</p>
-          <p>Vous recevrez régulièrement nos meilleurs articles et conseils pour vos projets de travaux :</p>
+          <h2>Welcome!</h2>
+          <p>Thank you for subscribing to our newsletter.</p>
+          <p>You will regularly receive our best articles and insights on legal matters:</p>
           <ul>
-            <li>Guides pratiques</li>
-            <li>Conseils d'experts</li>
-            <li>Tendances déco</li>
-            <li>Aides et subventions</li>
+            <li>Practical legal guides</li>
+            <li>Expert advice</li>
+            <li>Legal industry trends</li>
+            <li>Know your rights</li>
           </ul>
-          <p>À bientôt sur ServicesArtisans !</p>
+          <p>See you soon on US Attorneys!</p>
           <hr />
           <p style="color: #666; font-size: 12px;">
-            Pour vous désinscrire, répondez simplement à cet email.<br />
+            To unsubscribe, simply reply to this email.<br />
             <a href="https://us-attorneys.com">us-attorneys.com</a>
           </p>
         `,
@@ -61,12 +61,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Inscription enregistrée',
+      message: 'Subscription confirmed',
     })
   } catch (error) {
     logger.error('Newsletter API error', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { error: 'Server error' },
       { status: 500 }
     )
   }

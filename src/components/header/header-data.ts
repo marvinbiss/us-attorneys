@@ -34,59 +34,59 @@ export type MobileAccordion = 'services' | 'cities' | 'regions' | null
 
 export const serviceCategories: ServiceCategory[] = [
   {
-    category: 'Urgences 24h/24',
+    category: 'Personal Injury',
     color: 'red',
     icon: Clock,
     services: [
-      { name: 'Plombier', slug: 'plombier', icon: Wrench, description: 'Fuites, débouchage, installation', urgent: true },
-      { name: 'Serrurier', slug: 'serrurier', icon: Key, description: 'Ouverture de porte, serrure', urgent: true },
-      { name: 'Électricien', slug: 'electricien', icon: Zap, description: 'Panne, dépannage électrique', urgent: true },
+      { name: 'Car Accident', slug: 'car-accident-lawyer', icon: Wrench, description: 'Auto collision claims', urgent: true },
+      { name: 'Medical Malpractice', slug: 'medical-malpractice-lawyer', icon: Key, description: 'Healthcare negligence', urgent: true },
+      { name: 'Slip & Fall', slug: 'slip-and-fall-lawyer', icon: Zap, description: 'Premises liability claims', urgent: true },
     ]
   },
   {
-    category: 'Chauffage & Clim',
+    category: 'Family Law',
     color: 'orange',
     icon: Flame,
     services: [
-      { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, description: 'Chaudière, pompe à chaleur' },
-      { name: 'Climaticien', slug: 'climaticien', icon: Wind, description: 'Installation, entretien clim' },
+      { name: 'Divorce', slug: 'divorce-lawyer', icon: Flame, description: 'Divorce & separation' },
+      { name: 'Child Custody', slug: 'child-custody-lawyer', icon: Wind, description: 'Custody & visitation' },
     ]
   },
   {
-    category: 'Bâtiment',
+    category: 'Criminal Defense',
     color: 'blue',
     icon: HardHat,
     services: [
-      { name: 'Maçon', slug: 'macon', icon: HardHat, description: 'Construction, rénovation' },
-      { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, zinguerie' },
-      { name: 'Menuisier', slug: 'menuisier', icon: Hammer, description: 'Fenêtres, portes, escaliers' },
+      { name: 'DUI Defense', slug: 'dui-lawyer', icon: HardHat, description: 'DUI & DWI charges' },
+      { name: 'Drug Crimes', slug: 'drug-crimes-lawyer', icon: Home, description: 'Drug offense defense' },
+      { name: 'White Collar', slug: 'white-collar-crime-lawyer', icon: Hammer, description: 'Fraud & financial crimes' },
     ]
   },
   {
-    category: 'Finitions',
+    category: 'Business Law',
     color: 'green',
     icon: PaintBucket,
     services: [
-      { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture int. et ext.' },
-      { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Carrelage, faïence' },
-      { name: 'Solier', slug: 'solier', icon: Layers, description: 'Parquet, moquette, lino' },
+      { name: 'Corporate', slug: 'corporate-lawyer', icon: PaintBucket, description: 'Business formation & compliance' },
+      { name: 'Real Estate', slug: 'real-estate-lawyer', icon: Sparkles, description: 'Property transactions' },
+      { name: 'Employment', slug: 'employment-lawyer', icon: Layers, description: 'Workplace disputes' },
     ]
   },
   {
-    category: 'Aménagement',
+    category: 'Estate Planning',
     color: 'pink',
     icon: ChefHat,
     services: [
-      { name: 'Cuisiniste', slug: 'cuisiniste', icon: ChefHat, description: 'Cuisines sur mesure' },
-      { name: 'Nettoyage', slug: 'nettoyage', icon: Brush, description: 'Ménage professionnel' },
+      { name: 'Wills & Trusts', slug: 'estate-planning-lawyer', icon: ChefHat, description: 'Estate planning & probate' },
+      { name: 'Bankruptcy', slug: 'bankruptcy-lawyer', icon: Brush, description: 'Debt relief & restructuring' },
     ]
   },
   {
-    category: 'Extérieur',
+    category: 'Immigration',
     color: 'emerald',
     icon: TreeDeciduous,
     services: [
-      { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Jardin, aménagement' },
+      { name: 'Immigration', slug: 'immigration-lawyer', icon: TreeDeciduous, description: 'Visas, green cards & citizenship' },
     ]
   },
 ]
@@ -105,14 +105,8 @@ export function getCategoryColors(color: string) {
   return map[color] || map.blue
 }
 
-export async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
-  try {
-    const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
-    const response = await fetch(url)
-    if (!response.ok) return null
-    const data = await response.json()
-    return data.features?.[0]?.properties?.city || null
-  } catch {
-    return null
-  }
+// TODO: Replace with US geocoding service (e.g., Census Geocoder, Google Maps, or Mapbox)
+// The previous implementation used the French government API (api-adresse.data.gouv.fr)
+export async function getLocationFromCoords(_lon: number, _lat: number): Promise<string | null> {
+  return null
 }
