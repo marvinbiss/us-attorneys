@@ -1,4 +1,4 @@
-// CMS Types for ServicesArtisans
+// CMS Types for US Attorneys
 
 export type CmsPageType = 'static' | 'blog' | 'service' | 'location' | 'homepage' | 'faq'
 export type CmsStatus = 'draft' | 'published' | 'archived'

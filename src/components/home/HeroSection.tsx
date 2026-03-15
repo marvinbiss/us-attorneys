@@ -15,7 +15,7 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
   const motionValue = useMotionValue(0)
   const rounded = useTransform(motionValue, (v) => {
     if (v >= 1000) {
-      return Math.round(v).toLocaleString('fr-FR')
+      return Math.round(v).toLocaleString('en-US')
     }
     return Math.round(v).toString()
   })
@@ -39,16 +39,16 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
 
 // ── Filter chips for popular services ─────────────────────────────────
 const chipServices = [
-  { name: 'Plombier', slug: 'plombier' },
-  { name: 'Électricien', slug: 'electricien' },
-  { name: 'Couvreur', slug: 'couvreur' },
-  { name: 'Chauffagiste', slug: 'chauffagiste' },
-  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur' },
-  { name: 'Isolation', slug: 'isolation-thermique' },
-  { name: 'Peintre', slug: 'peintre-en-batiment' },
-  { name: 'Serrurier', slug: 'serrurier' },
-  { name: 'Menuisier', slug: 'menuisier' },
-  { name: 'Maçon', slug: 'macon' },
+  { name: 'Personal Injury', slug: 'personal-injury' },
+  { name: 'Criminal Defense', slug: 'criminal-defense' },
+  { name: 'Family Law', slug: 'family-law' },
+  { name: 'Immigration', slug: 'immigration' },
+  { name: 'Estate Planning', slug: 'estate-planning' },
+  { name: 'Real Estate', slug: 'real-estate' },
+  { name: 'Business Law', slug: 'business-law' },
+  { name: 'Employment Law', slug: 'employment-law' },
+  { name: 'Bankruptcy', slug: 'bankruptcy' },
+  { name: 'Tax Law', slug: 'tax-law' },
 ]
 
 // ── Stagger animation variants ────────────────────────────────────────
@@ -236,7 +236,7 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
-                  {attorneyCount > 0 ? `${attorneyCount.toLocaleString('fr-FR')} artisans référencés en France` : 'Artisans référencés en France (données SIREN)'}
+                  {attorneyCount > 0 ? `${attorneyCount.toLocaleString('en-US')} verified attorneys nationwide` : 'Verified attorneys nationwide (official bar records)'}
                 </span>
               </div>
             </motion.div>
@@ -251,11 +251,11 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
             >
               <AnimatedHeadingLine
-                text="L'annuaire des artisans"
+                text="The directory of verified"
                 className="text-white block"
               />
               <AnimatedHeadingLine
-                text="qualifiés en France"
+                text="attorneys nationwide"
                 className="text-amber-400 block"
               />
             </motion.div>
@@ -351,10 +351,10 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  Données SIREN officielles
+                  Official Bar Records
                 </div>
                 <div className="text-xs text-slate-500">
-                  Registres de l&#39;État vérifiés
+                  State bar verified data
                 </div>
               </div>
             </div>
@@ -378,10 +378,10 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  {services.length} corps de métier
+                  {services.length} practice areas
                 </div>
                 <div className="text-xs text-slate-500">
-                  Tous les métiers du bâtiment
+                  All legal practice areas
                 </div>
               </div>
             </div>

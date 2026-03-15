@@ -47,7 +47,7 @@ export function MessageBubble({
 
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
   }
 
   const handleCopy = () => {
@@ -75,7 +75,7 @@ export function MessageBubble({
     return (
       <div className={cn('flex', isOwn ? 'justify-end' : 'justify-start')}>
         <div className="max-w-[70%] px-4 py-2 text-gray-400 dark:text-gray-500 italic text-sm">
-          Ce message a été supprimé
+          This message was deleted
         </div>
       </div>
     )
@@ -98,14 +98,14 @@ export function MessageBubble({
         <button
           onClick={() => setShowReactionPicker(!showReactionPicker)}
           className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400"
-          title="Ajouter une réaction"
+          title="Add reaction"
         >
           <Smile className="w-4 h-4" />
         </button>
         <button
           onClick={() => onReply?.(message)}
           className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400"
-          title="Répondre"
+          title="Reply"
         >
           <Reply className="w-4 h-4" />
         </button>
@@ -130,7 +130,7 @@ export function MessageBubble({
                 className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
               >
                 <Copy className="w-4 h-4" />
-                Copier
+                Copy
               </button>
               {isOwn && (
                 <>
@@ -142,7 +142,7 @@ export function MessageBubble({
                     className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
                   >
                     <Edit2 className="w-4 h-4" />
-                    Modifier
+                    Edit
                   </button>
                   <button
                     onClick={() => {
@@ -152,7 +152,7 @@ export function MessageBubble({
                     className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-red-600"
                   >
                     <Trash2 className="w-4 h-4" />
-                    Supprimer
+                    Delete
                   </button>
                 </>
               )}
@@ -206,7 +206,7 @@ export function MessageBubble({
           {message.message_type === 'image' && message.file_url && (
             <Image
               src={message.file_url}
-              alt="Image partagée"
+              alt="Shared image"
               width={400}
               height={300}
               className="max-w-full rounded-lg mb-2 cursor-pointer hover:opacity-90 object-contain"
@@ -225,7 +225,7 @@ export function MessageBubble({
                 isOwn ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'
               )}
             >
-              <span className="text-sm">📎 Fichier joint</span>
+              <span className="text-sm">Attached file</span>
             </a>
           )}
 
@@ -254,7 +254,7 @@ export function MessageBubble({
                   isOwn ? 'text-blue-200' : 'text-gray-400'
                 )}
               >
-                modifié
+                edited
               </span>
             )}
             <span

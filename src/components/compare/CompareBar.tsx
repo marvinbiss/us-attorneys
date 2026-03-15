@@ -43,7 +43,7 @@ export function CompareBar() {
           'pb-16 md:pb-0',
         )}
         role="region"
-        aria-label="Barre de comparaison"
+        aria-label="Comparison bar"
       >
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
@@ -60,7 +60,7 @@ export function CompareBar() {
                     <button
                       onClick={() => removeFromCompare(provider.id)}
                       className="p-0.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                      aria-label={`Retirer ${provider.name}`}
+                      aria-label={`Remove ${provider.name}`}
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -80,7 +80,7 @@ export function CompareBar() {
                 onClick={clearCompare}
                 className="text-sm text-gray-500 hover:text-red-600 transition-colors px-2 py-1.5 rounded-lg hover:bg-red-50"
               >
-                Effacer
+                Clear
               </button>
               <button
                 onClick={() => setShowModal(true)}
@@ -93,7 +93,7 @@ export function CompareBar() {
                 )}
               >
                 <Scale className="w-4 h-4" />
-                Comparer ({compareList.length})
+                Compare ({compareList.length})
               </button>
             </div>
           </div>

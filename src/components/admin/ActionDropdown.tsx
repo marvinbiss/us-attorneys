@@ -80,7 +80,7 @@ export function ActionDropdown({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-        aria-label="Ouvrir le menu d'actions"
+        aria-label="Open actions menu"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -94,7 +94,7 @@ export function ActionDropdown({
       {isOpen && (
         <div
           role="menu"
-          aria-label="Actions disponibles"
+          aria-label="Available actions"
           className={`absolute z-50 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 ${
             align === 'right' ? 'right-0' : 'left-0'
           }`}

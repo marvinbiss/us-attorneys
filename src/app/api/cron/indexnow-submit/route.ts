@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services } from '@/lib/data/usa'
 
-const TOP_CITIES = ['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille']
+const TOP_CITIES = ['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 'philadelphia', 'san-antonio', 'san-diego', 'dallas', 'austin']
 
 /**
  * Cron job: Submit strategic URLs to IndexNow after each deploy.

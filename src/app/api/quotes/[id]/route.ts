@@ -41,7 +41,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Devis non trouve' }
+          error: { code: 2002, message: 'Quote not found' }
         },
         { status: 404 }
       )
@@ -69,7 +69,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1002, message: 'Acces non autorise' }
+          error: { code: 1002, message: 'Access denied' }
         },
         { status: 403 }
       )
@@ -133,7 +133,7 @@ export async function PATCH(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Devis non trouve' }
+          error: { code: 2002, message: 'Quote not found' }
         },
         { status: 404 }
       )
@@ -164,7 +164,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Seul le client peut accepter the consultation' }
+              error: { code: 1002, message: 'Only the client can accept the consultation' }
             },
             { status: 403 }
           )
@@ -177,7 +177,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Seul le client peut refuser the consultation' }
+              error: { code: 1002, message: 'Only the client can reject the consultation' }
             },
             { status: 403 }
           )

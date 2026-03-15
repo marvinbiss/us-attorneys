@@ -120,7 +120,7 @@ export function ChatWindow({
   // Format time
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
   }
 
   // Format date separator
@@ -131,11 +131,11 @@ export function ChatWindow({
     yesterday.setDate(yesterday.getDate() - 1)
 
     if (date.toDateString() === today.toDateString()) {
-      return "Aujourd'hui"
+      return 'Today'
     } else if (date.toDateString() === yesterday.toDateString()) {
-      return 'Hier'
+      return 'Yesterday'
     }
-    return date.toLocaleDateString('fr-FR', {
+    return date.toLocaleDateString('en-US', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -156,7 +156,7 @@ export function ChatWindow({
       (t) => t.user_id !== currentUserId
     )
     if (typingUsersList.length === 0) return null
-    return `${otherUserName} écrit...`
+    return `${otherUserName} is typing...`
   }
 
   const isOtherUserOnline = onlineUsers.some((u) => u !== currentUserId)
@@ -197,7 +197,7 @@ export function ChatWindow({
         <div>
           <h3 className="font-medium text-gray-900 dark:text-white">{otherUserName}</h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {isOtherUserOnline ? 'En ligne' : 'Hors ligne'}
+            {isOtherUserOnline ? 'Online' : 'Offline'}
           </p>
         </div>
       </div>
@@ -286,14 +286,14 @@ export function ChatWindow({
           <button
             type="button"
             className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            title="Joindre un fichier"
+            title="Attach file"
           >
             <Paperclip className="w-5 h-5" />
           </button>
           <button
             type="button"
             className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            title="Envoyer une image"
+            title="Send image"
           >
             <Image className="w-5 h-5" />
           </button>
@@ -305,7 +305,7 @@ export function ChatWindow({
               setNewMessage(e.target.value)
               handleTyping()
             }}
-            placeholder="Écrivez votre message..."
+            placeholder="Type a message..."
             className="flex-1"
             disabled={isSending}
           />

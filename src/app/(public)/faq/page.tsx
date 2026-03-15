@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Find answers to frequently asked questions about USAttorneys.',
     url: `${SITE_URL}/faq`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — FAQ' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'US Attorneys — FAQ' }],
   },
   twitter: {
     card: 'summary_large_image',

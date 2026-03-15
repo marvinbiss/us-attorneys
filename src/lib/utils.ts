@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Format price with currency
-export function formatPrice(price: number, currency = 'EUR'): string {
+export function formatPrice(price: number, currency = 'USD'): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
@@ -173,17 +173,18 @@ export function isValidEmail(email: string): boolean {
   return emailRegex.test(email)
 }
 
-// Validate French phone number
-export function isValidFrenchPhone(phone: string): boolean {
-  const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/
-  return phoneRegex.test(phone)
+// Validate US phone number
+export function isValidUSPhone(phone: string): boolean {
+  const cleaned = phone.replace(/[\s.\-()]/g, '')
+  const phoneRegex = /^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/
+  return phoneRegex.test(cleaned)
 }
 
-// Format French phone number
-export function formatFrenchPhone(phone: string): string {
+// Format US phone number
+export function formatUSPhone(phone: string): string {
   const cleaned = phone.replace(/\D/g, '')
   if (cleaned.length === 10) {
-    return cleaned.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`
   }
   return phone
 }

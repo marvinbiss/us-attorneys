@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 
-const INDEXNOW_KEY = '55e191c6b56d89e07bbf8fcba3552fcd'
+const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || ''
 
 /**
  * POST /api/indexnow — Submit URLs to IndexNow (Bing, Yandex, etc.)

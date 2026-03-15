@@ -166,7 +166,7 @@ export default function MobileMenu({
             )}
           </div>
 
-          {/* ===== Villes Accordion ===== */}
+          {/* ===== Cities Accordion ===== */}
           <div className="rounded-xl border border-gray-100 overflow-hidden">
             <button
               type="button"
@@ -219,7 +219,7 @@ export default function MobileMenu({
             )}
           </div>
 
-          {/* ===== Régions Accordion ===== */}
+          {/* ===== Regions Accordion ===== */}
           <div className="rounded-xl border border-gray-100 overflow-hidden">
             <button
               type="button"

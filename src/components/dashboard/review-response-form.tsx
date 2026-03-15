@@ -29,7 +29,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
       })
 
       if (!res.ok) {
-        throw new Error('Erreur lors de la publication')
+        throw new Error('Error publishing response')
       }
 
       router.refresh()
@@ -44,7 +44,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
   if (!isOpen) {
     return (
       <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
-        Répondre
+        Reply
       </Button>
     )
   }
@@ -60,7 +60,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
       <Textarea
         value={response}
         onChange={(e) => setResponse(e.target.value)}
-        placeholder="Votre réponse..."
+        placeholder="Your response..."
         rows={3}
       />
 
@@ -69,10 +69,10 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
           onClick={handleSubmit}
           disabled={isLoading || !response.trim()}
         >
-          {isLoading ? 'Publication...' : 'Publier'}
+          {isLoading ? 'Publishing...' : 'Publish'}
         </Button>
         <Button variant="ghost" onClick={() => setIsOpen(false)}>
-          Annuler
+          Cancel
         </Button>
       </div>
     </div>

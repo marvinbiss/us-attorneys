@@ -85,7 +85,7 @@ export function ReviewPhotoGallery({
             {item.type === 'photo' ? (
               <Image
                 src={item.thumbnailUrl || item.url}
-                alt={item.caption || `Photo d'avis client ${index + 1}`}
+                alt={item.caption || `Client review photo ${index + 1}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
                 width={200}
@@ -130,7 +130,7 @@ export function ReviewPhotoGallery({
           onKeyDown={handleKeyDown}
           tabIndex={0}
           role="dialog"
-          aria-label="Galerie photo en plein écran"
+          aria-label="Full-screen photo gallery"
           aria-modal="true"
         >
           {/* Header */}
@@ -153,14 +153,14 @@ export function ReviewPhotoGallery({
             <button
               onClick={() => navigate('prev')}
               className="absolute left-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white z-10"
-              aria-label="Photo précédente"
+              aria-label="Previous photo"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => navigate('next')}
               className="absolute right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white z-10"
-              aria-label="Photo suivante"
+              aria-label="Next photo"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -170,7 +170,7 @@ export function ReviewPhotoGallery({
               {media[currentIndex].type === 'photo' ? (
                 <Image
                   src={media[currentIndex].url}
-                  alt={media[currentIndex].caption || `Photo d'avis client ${currentIndex + 1}`}
+                  alt={media[currentIndex].caption || `Client review photo ${currentIndex + 1}`}
                   className="max-w-full max-h-[70vh] object-contain"
                   width={800}
                   height={600}
@@ -211,7 +211,7 @@ export function ReviewPhotoGallery({
               >
                 <Image
                   src={item.thumbnailUrl || item.url}
-                  alt={`Miniature photo ${index + 1}`}
+                  alt={`Photo thumbnail ${index + 1}`}
                   className="w-full h-full object-cover"
                   width={64}
                   height={64}

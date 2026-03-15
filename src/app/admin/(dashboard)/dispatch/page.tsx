@@ -80,7 +80,7 @@ export default function AdminDispatchPage() {
       })
       mutate()
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Erreur')
+      setMutationError(err instanceof Error ? err.message : 'Error')
     } finally {
       setActionLoading(null)
     }
@@ -97,18 +97,18 @@ export default function AdminDispatchPage() {
       setConfirmDeleteId(null)
       mutate()
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Erreur')
+      setMutationError(err instanceof Error ? err.message : 'Error')
     } finally {
       setActionLoading(null)
     }
   }
 
   const statusTabs = [
-    { key: 'all', label: 'Tous', count: data?.stats.total || 0 },
-    { key: 'pending', label: 'En attente', count: data?.stats.pending || 0 },
-    { key: 'viewed', label: 'Vus', count: data?.stats.viewed || 0 },
-    { key: 'quoted', label: 'Devis', count: data?.stats.quoted || 0 },
-    { key: 'declined', label: 'Déclinés', count: data?.stats.declined || 0 },
+    { key: 'all', label: 'All', count: data?.stats.total || 0 },
+    { key: 'pending', label: 'Pending', count: data?.stats.pending || 0 },
+    { key: 'viewed', label: 'Viewed', count: data?.stats.viewed || 0 },
+    { key: 'quoted', label: 'Quoted', count: data?.stats.quoted || 0 },
+    { key: 'declined', label: 'Declined', count: data?.stats.declined || 0 },
   ]
 
   const responseRate = data && data.stats.total > 0
@@ -120,40 +120,40 @@ export default function AdminDispatchPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Suivi de la répartition</h1>
-            <p className="text-gray-500 mt-1">Suivi des assignations en temps réel</p>
+            <h1 className="text-2xl font-bold text-gray-900">Dispatch Tracking</h1>
+            <p className="text-gray-500 mt-1">Real-time assignment tracking</p>
           </div>
           <button
             onClick={() => mutate()}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
-            Actualiser
+            Refresh
           </button>
         </div>
 
         {/* KPI cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
-            title="Total assignations"
+            title="Total assignments"
             value={data?.stats.total || 0}
             icon={<Inbox className="w-5 h-5" />}
             color="blue"
           />
           <StatCard
-            title="En attente"
+            title="Pending"
             value={data?.stats.pending || 0}
             icon={<Clock className="w-5 h-5" />}
             color="yellow"
           />
           <StatCard
-            title="Devis envoyés"
+            title="Quotes sent"
             value={data?.stats.quoted || 0}
             icon={<Send className="w-5 h-5" />}
             color="green"
           />
           <StatCard
-            title="Taux réponse"
+            title="Response rate"
             value={`${responseRate}%`}
             icon={<Eye className="w-5 h-5" />}
             color="blue"
@@ -183,14 +183,14 @@ export default function AdminDispatchPage() {
         ) : data ? (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Liste des assignations de dispatch">
+              <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Dispatch assignments list">
                 <thead>
                   <tr className="border-b border-gray-100 bg-gray-50/50">
                     <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Artisan</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Statut</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assigné le</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vu le</th>
+                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Attorney</th>
+                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Status</th>
+                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assigned on</th>
+                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Viewed on</th>
                     <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
                   </tr>
                 </thead>
@@ -199,7 +199,7 @@ export default function AdminDispatchPage() {
                     <tr>
                       <td colSpan={6} className="px-4 py-12 text-center text-gray-500">
                         <ArrowRight className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                        Aucune assignation
+                        No assignments
                       </td>
                     </tr>
                   ) : (
@@ -227,13 +227,13 @@ export default function AdminDispatchPage() {
                             </span>
                           </td>
                           <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
-                            {new Date(a.assigned_at).toLocaleString('fr-FR', {
+                            {new Date(a.assigned_at).toLocaleString('en-US', {
                               day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                             })}
                           </td>
                           <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                             {a.viewed_at
-                              ? new Date(a.viewed_at).toLocaleString('fr-FR', {
+                              ? new Date(a.viewed_at).toLocaleString('en-US', {
                                   day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                                 })
                               : <span className="text-gray-300">—</span>}
@@ -251,7 +251,7 @@ export default function AdminDispatchPage() {
                                   ) : (
                                     <RefreshCw className="w-3 h-3" />
                                   )}
-                                  Relancer
+                                  Retry
                                 </button>
                               )}
                               {confirmDeleteId === a.id ? (
@@ -266,13 +266,13 @@ export default function AdminDispatchPage() {
                                     ) : (
                                       <Trash2 className="w-3 h-3" />
                                     )}
-                                    Confirmer
+                                    Confirm
                                   </button>
                                   <button
                                     onClick={() => setConfirmDeleteId(null)}
                                     className="px-2.5 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                                   >
-                                    Annuler
+                                    Cancel
                                   </button>
                                 </>
                               ) : (

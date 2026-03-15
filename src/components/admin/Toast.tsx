@@ -23,7 +23,7 @@ export function Toast({ toast, onClose, duration = 4000 }: ToastProps) {
     }`}>
       <div className="flex items-center gap-2">
         <span className="text-sm">{toast.message}</span>
-        <button onClick={onClose} className="text-current opacity-50 hover:opacity-100" aria-label="Fermer">×</button>
+        <button onClick={onClose} className="text-current opacity-50 hover:opacity-100" aria-label="Close">×</button>
       </div>
     </div>
   )

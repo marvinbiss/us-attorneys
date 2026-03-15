@@ -31,12 +31,12 @@ export async function POST(
 
     if (!['draft', 'scheduled'].includes(campaign.status)) {
       return NextResponse.json(
-        { success: false, error: { message: `Impossible d'envoyer une campagne avec le statut "${campaign.status}"` } },
+        { success: false, error: { message: `Cannot send a campaign with status "${campaign.status}"` } },
         { status: 400 }
       )
     }
 
-    // Enfiler les messages
+    // Enqueue the messages
     const enqueueResult = await enqueueCampaignMessages(id)
 
     // Launch the first batch (the rest will be processed by cron or polling)

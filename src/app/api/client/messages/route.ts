@@ -101,7 +101,7 @@ export async function GET(request: Request) {
         status,
         created_at,
         booking_id,
-        provider:providers!attorney_id(id, name),
+        attorney:attorneys!attorney_id(id, name),
         booking:bookings!booking_id(service_name)
       `)
       .eq('client_id', user.id)

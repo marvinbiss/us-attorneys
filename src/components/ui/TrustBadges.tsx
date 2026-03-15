@@ -3,7 +3,7 @@
 import { Shield, CheckCircle, Star, BadgeCheck, Database, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-// Trust badges comme Checkatrade — spécifiques et vérifiables
+// Trust badges like Checkatrade — specific and verifiable
 export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'compact' | 'hero' }) {
   const badges = [
     {
@@ -96,7 +96,7 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
   )
 }
 
-// Badge de certification style B Corp
+// B Corp style certification badge
 export function CertificationBadge() {
   return (
     <motion.div
@@ -115,7 +115,7 @@ export function CertificationBadge() {
   )
 }
 
-// Social proof counter animé
+// Animated social proof counter
 export function SocialProofCounter({
   value,
   label,
@@ -150,7 +150,7 @@ export function SocialProofCounter({
   )
 }
 
-// Badge "Disponible maintenant" style Doctolib
+// "Available now" badge (Doctolib style)
 export function AvailabilityBadge({ count = 0 }: { count?: number }) {
   return (
     <motion.div
@@ -169,7 +169,7 @@ export function AvailabilityBadge({ count = 0 }: { count?: number }) {
   )
 }
 
-// Badge référencé pour les profils
+// Verified badge for profiles
 export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizes = {
     sm: 'w-4 h-4',
@@ -184,7 +184,7 @@ export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   )
 }
 
-// Rating avec étoiles style Airbnb
+// Airbnb-style star rating
 export function RatingStars({
   rating,
   reviewCount,

@@ -137,7 +137,7 @@ export async function PATCH(request: NextRequest) {
 
     if (claimError || !claim) {
       return NextResponse.json(
-        { success: false, error: { message: 'Demande introuvable' } },
+        { success: false, error: { message: 'Claim not found' } },
         { status: 404 }
       )
     }
@@ -269,7 +269,7 @@ export async function PATCH(request: NextRequest) {
 
       if (attorneyError) {
         return NextResponse.json(
-          { success: false, error: { message: `Erreur attribution: ${attorneyError.message} [code=${attorneyError.code}] [details=${attorneyError.details}]` } },
+          { success: false, error: { message: `Assignment error: ${attorneyError.message} [code=${attorneyError.code}] [details=${attorneyError.details}]` } },
           { status: 500 }
         )
       }
@@ -335,7 +335,7 @@ export async function PATCH(request: NextRequest) {
             type: 'recovery',
             email: claimEmail,
             options: {
-              redirectTo: `${siteUrl}/auth/callback?next=/definir-mot-de-passe`,
+              redirectTo: `${siteUrl}/auth/callback?next=/set-password`,
             },
           })
 
@@ -349,7 +349,7 @@ export async function PATCH(request: NextRequest) {
             const emailResult = await sendClaimApprovedEmail({
               to: claimEmail,
               name: claim.claimant_name || 'Attorney',
-              attorneyName: updatedProvider.name || 'Votre fiche',
+              attorneyName: updatedProvider.name || 'Your profile',
               passwordLink: safeLink,
             })
 

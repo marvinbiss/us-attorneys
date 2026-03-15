@@ -161,7 +161,7 @@ export default function VideoPlayer({
           <button
             onClick={togglePlay}
             className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label={isPlaying ? 'Pause' : 'Lecture'}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (
               <Pause className="w-5 h-5 text-white" fill="currentColor" />
@@ -173,7 +173,7 @@ export default function VideoPlayer({
           <button
             onClick={toggleMute}
             className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
+            aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
             {isMuted ? (
               <VolumeX className="w-5 h-5 text-white" />
@@ -191,7 +191,7 @@ export default function VideoPlayer({
           <button
             onClick={toggleFullscreen}
             className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label="Plein écran"
+            aria-label="Fullscreen"
           >
             <Maximize className="w-5 h-5 text-white" />
           </button>

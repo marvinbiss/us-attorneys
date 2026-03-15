@@ -116,7 +116,7 @@ export function ReviewMediaUpload({
       setFiles(updatedFiles)
       onUpload(updatedFiles)
     } catch (_err) {
-      setError('Erreur lors de l\'upload')
+      setError('Upload failed')
     } finally {
       setUploading(false)
     }
@@ -181,7 +181,7 @@ export function ReviewMediaUpload({
         {uploading ? (
           <div className="flex flex-col items-center">
             <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-2" />
-            <p className="text-sm text-gray-600 dark:text-gray-400">Upload en cours...</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Uploading...</p>
           </div>
         ) : (
           <>
@@ -213,7 +213,7 @@ export function ReviewMediaUpload({
               {acceptedTypes.includes('video') && 'Videos: MP4, WebM (max 50MB)'}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-500">
-              Maximum {maxFiles} fichiers
+              Maximum {maxFiles} files
             </p>
           </>
         )}

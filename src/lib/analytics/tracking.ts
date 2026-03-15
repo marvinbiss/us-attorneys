@@ -112,7 +112,7 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
     // Forward conversion value to GA4
     if (properties?.value) {
       gtagParams.value = properties.value
-      gtagParams.currency = properties?.currency || 'EUR'
+      gtagParams.currency = properties?.currency || 'USD'
     }
     window.gtag('event', event, gtagParams)
   }
@@ -158,7 +158,7 @@ async function sendToAnalytics(data: TrackingData) {
 export function trackConversion(
   event: 'generate_lead' | 'purchase' | 'sign_up' | 'contact',
   value: number,
-  currency: string = 'EUR',
+  currency: string = 'USD',
   properties?: Record<string, unknown>
 ) {
   // Always send conversions to backend
@@ -193,7 +193,7 @@ export const BookingFunnel = {
       attorneyName,
       source,
       value: 5,
-      currency: 'EUR',
+      currency: 'USD',
     })
   },
 
@@ -204,7 +204,7 @@ export const BookingFunnel = {
       attorneyName,
       source,
       value: 15,
-      currency: 'EUR',
+      currency: 'USD',
     })
   },
 

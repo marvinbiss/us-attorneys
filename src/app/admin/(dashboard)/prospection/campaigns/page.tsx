@@ -19,16 +19,16 @@ export default function CampaignsPage() {
       setError(null)
       const params = new URLSearchParams({ status: statusFilter })
       const res = await fetch(`/api/admin/prospection/campaigns?${params}`, { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setCampaigns(data.data)
       } else {
-        setError(data.error?.message || 'Erreur lors du chargement')
+        setError(data.error?.message || 'Loading error')
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -103,7 +103,7 @@ export default function CampaignsPage() {
             ) : campaigns.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
-                  Aucune campagne. Créez votre première campagne de prospection.
+                  No campaigns. Create your first prospection campaign.
                 </td>
               </tr>
             ) : (
@@ -122,9 +122,9 @@ export default function CampaignsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3"><CampaignStatusBadge status={camp.status} /></td>
-                  <td className="px-4 py-3 text-right">{camp.sent_count.toLocaleString('fr-FR')}</td>
-                  <td className="px-4 py-3 text-right">{camp.delivered_count.toLocaleString('fr-FR')}</td>
-                  <td className="px-4 py-3 text-right">{camp.replied_count.toLocaleString('fr-FR')}</td>
+                  <td className="px-4 py-3 text-right">{camp.sent_count.toLocaleString('en-US')}</td>
+                  <td className="px-4 py-3 text-right">{camp.delivered_count.toLocaleString('en-US')}</td>
+                  <td className="px-4 py-3 text-right">{camp.replied_count.toLocaleString('en-US')}</td>
                   <td className="px-4 py-3 text-right text-gray-500">{camp.actual_cost.toFixed(2)} €</td>
                 </tr>
               ))

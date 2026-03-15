@@ -144,7 +144,7 @@ export async function PUT(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(auth.admin!.id, 'cms_page.update', 'cms_page', id, { slug: page.slug, page_type: page.page_type })
 
     // Revalidate cached paths if the page is published
@@ -206,7 +206,7 @@ export async function DELETE(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(auth.admin!.id, 'cms_page.delete', 'cms_page', id, { slug: page.slug })
 
     // Revalidate public paths so the page disappears from the site

@@ -19,18 +19,18 @@ export default function ListsPage() {
       const res = await fetch('/api/admin/prospection/lists', { signal })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setError(data?.error?.message || `Erreur ${res.status}`)
+        setError(data?.error?.message || `Error ${res.status}`)
         return
       }
       const data = await res.json()
       if (data.success) {
         setLists(data.data)
       } else {
-        setError(data.error?.message || 'Erreur inconnue')
+        setError(data.error?.message || 'Unknown error')
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Impossible de charger les listes')
+      setError('Unable to load lists')
     } finally {
       setLoading(false)
     }
@@ -111,8 +111,8 @@ export default function ListsPage() {
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
                   <List className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   {lists.length === 0
-                    ? 'Aucune liste. Créez votre première liste de contacts.'
-                    : 'Aucune liste pour ce filtre.'}
+                    ? 'No lists. Create your first contact list.'
+                    : 'No lists for this filter.'}
                 </td>
               </tr>
             ) : (
@@ -130,10 +130,10 @@ export default function ListsPage() {
                       {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right">{list.contact_count.toLocaleString('fr-FR')}</td>
+                  <td className="px-4 py-3 text-right">{list.contact_count.toLocaleString('en-US')}</td>
                   <td className="px-4 py-3 text-gray-500 truncate max-w-[200px]">{list.description || '-'}</td>
                   <td className="px-4 py-3 text-gray-400 text-xs">
-                    {new Date(list.created_at).toLocaleDateString('fr-FR')}
+                    {new Date(list.created_at).toLocaleDateString('en-US')}
                   </td>
                 </tr>
               ))

@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     // Always return success for security (don't reveal if email exists)
     return NextResponse.json({
       success: true,
-      message: 'Si un compte existe avec cet email, vous recevrez un lien de reinitialisation.',
+      message: 'If an account exists with this email, you will receive a reset link.',
     })
   } catch (error) {
     logger.error('Reset password API error', error)

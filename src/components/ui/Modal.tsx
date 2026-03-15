@@ -161,7 +161,7 @@ export function Modal({
                 <button
                   onClick={onClose}
                   className="p-2 -m-2 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
-                  aria-label="Fermer"
+                  aria-label="Close"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -218,8 +218,8 @@ export function ConfirmModal({
   onConfirm,
   title,
   message,
-  confirmText = 'Confirmer',
-  cancelText = 'Annuler',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
   variant = 'danger',
   isLoading = false,
 }: ConfirmModalProps) {
@@ -250,7 +250,7 @@ export function ConfirmModal({
               buttonVariants[variant]
             )}
           >
-            {isLoading ? 'Chargement...' : confirmText}
+            {isLoading ? 'Loading...' : confirmText}
           </button>
         </div>
       </div>

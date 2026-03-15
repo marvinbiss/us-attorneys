@@ -32,30 +32,30 @@ import {
 } from 'lucide-react'
 
 const nav = [
-  { name: 'Tableau de bord', href: '/admin', icon: LayoutDashboard },
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
-  { name: 'Système', href: '/admin/systeme', icon: Gauge },
-  { name: 'Demandes', href: '/admin/leads', icon: FileText },
+  { name: 'System', href: '/admin/systeme', icon: Gauge },
+  { name: 'Requests', href: '/admin/leads', icon: FileText },
   { name: 'Leads Estimation', href: '/admin/estimation-leads', icon: MessageSquare },
-  { name: 'Répartition', href: '/admin/dispatch', icon: ArrowRight },
-  { name: 'Algorithme', href: '/admin/algorithme', icon: Sliders },
-  { name: 'Outils', href: '/admin/tools', icon: Wrench },
-  { name: 'Journal', href: '/admin/journal', icon: BookOpen },
-  { name: 'Utilisateurs', href: '/admin/utilisateurs', icon: Users },
-  { name: 'Artisans', href: '/admin/attorneys', icon: Briefcase },
-  { name: 'Revendications', href: '/admin/revendications', icon: BadgeCheck },
-  { name: 'Réservations', href: '/admin/reservations', icon: Calendar },
-  { name: 'Devis', href: '/admin/quotes', icon: FileText },
-  { name: 'Avis', href: '/admin/reviews', icon: Star },
-  { name: 'Paiements', href: '/admin/paiements', icon: CreditCard },
+  { name: 'Dispatch', href: '/admin/dispatch', icon: ArrowRight },
+  { name: 'Algorithm', href: '/admin/algorithme', icon: Sliders },
+  { name: 'Tools', href: '/admin/tools', icon: Wrench },
+  { name: 'Log', href: '/admin/journal', icon: BookOpen },
+  { name: 'Users', href: '/admin/utilisateurs', icon: Users },
+  { name: 'Attorneys', href: '/admin/attorneys', icon: Briefcase },
+  { name: 'Claims', href: '/admin/revendications', icon: BadgeCheck },
+  { name: 'Bookings', href: '/admin/reservations', icon: Calendar },
+  { name: 'Quotes', href: '/admin/quotes', icon: FileText },
+  { name: 'Reviews', href: '/admin/reviews', icon: Star },
+  { name: 'Payments', href: '/admin/paiements', icon: CreditCard },
   { name: 'Services', href: '/admin/services', icon: Grid },
-  { name: 'Contenu', href: '/admin/contenu', icon: FileEdit },
+  { name: 'Content', href: '/admin/contenu', icon: FileEdit },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
-  { name: 'Signalements', href: '/admin/signalements', icon: Flag },
+  { name: 'Reports', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },
-  { name: 'RGPD', href: '/admin/rgpd', icon: Lock },
+  { name: 'GDPR', href: '/admin/rgpd', icon: Lock },
   { name: 'Prospection', href: '/admin/prospection', icon: Megaphone },
-  { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
+  { name: 'Settings', href: '/admin/parametres', icon: Settings },
 ]
 
 export function AdminSidebar() {
@@ -73,7 +73,7 @@ export function AdminSidebar() {
       <button
         onClick={() => setMobileOpen(true)}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-lg shadow-lg"
-        aria-label="Ouvrir le menu"
+        aria-label="Open menu"
       >
         <Menu className="w-6 h-6" />
       </button>
@@ -92,7 +92,7 @@ export function AdminSidebar() {
           'fixed lg:static lg:translate-x-0 w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
-        aria-label="Navigation administration"
+        aria-label="Admin navigation"
       >
         <div className="p-4 border-b border-gray-800 flex items-center justify-between">
           <Link href="/admin" className="text-xl font-bold text-white flex items-center gap-2">
@@ -102,12 +102,12 @@ export function AdminSidebar() {
           <button
             onClick={() => setMobileOpen(false)}
             className="lg:hidden p-1 text-gray-400 hover:text-white"
-            aria-label="Fermer le menu"
+            aria-label="Close menu"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
-        <nav className="p-4 space-y-1 flex-1 overflow-y-auto" aria-label="Menu principal administration">
+        <nav className="p-4 space-y-1 flex-1 overflow-y-auto" aria-label="Main admin menu">
           {nav.map((item) => {
             const Icon = item.icon
             return (
@@ -134,7 +134,7 @@ export function AdminSidebar() {
             href="/"
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
-            ← Retour au site
+            ← Back to site
           </Link>
         </div>
       </aside>

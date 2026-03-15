@@ -186,20 +186,10 @@ export function getItemListSchema(params: {
       '@type': 'ListItem',
       position: item.position,
       item: {
-        '@type': 'LocalBusiness',
+        '@type': 'ProfessionalService',
         name: item.name,
         url: `${SITE_URL}${item.url}`,
         image: item.image,
-        priceRange: '$$',
-        ...(item.rating && item.reviewCount && item.reviewCount > 0 && {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: item.rating,
-            reviewCount: item.reviewCount,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }),
       },
     })),
   }

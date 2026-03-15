@@ -16,12 +16,12 @@ export default function TemplatesPage() {
     try {
       setError(null)
       const res = await fetch('/api/admin/prospection/templates', { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) setTemplates(data.data)
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -70,7 +70,7 @@ export default function TemplatesPage() {
         ) : templates.length === 0 ? (
           <div className="col-span-3 text-center py-12 text-gray-400">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Aucun modèle. Créez votre premier modèle de message.</p>
+            <p>No templates. Create your first message template.</p>
           </div>
         ) : (
           templates.map((tmpl) => (

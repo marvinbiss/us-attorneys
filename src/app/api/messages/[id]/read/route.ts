@@ -52,7 +52,7 @@ export async function POST(
     if (error) {
       logger.error('Error marking message as read', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de marquer comme lu' } },
+        { success: false, error: { message: 'Unable to mark as read' } },
         { status: 500 }
       )
     }

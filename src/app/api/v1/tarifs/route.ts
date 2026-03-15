@@ -70,8 +70,8 @@ export async function GET(request: NextRequest) {
         },
         attribution: {
           text: `Source: ${SITE_NAME} — Attorney Barometer`,
-          url: `${SITE_URL}/price-index`,
-          licence: 'Attribution obligatoire avec lien vers la source.',
+          url: `${SITE_URL}/attorney-statistics`,
+          licence: 'Attribution required with link to source.',
         },
       },
       {
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     )
   } catch {
     return NextResponse.json(
-      { error: 'Erreur serveur inattendue.' },
+      { error: 'Unexpected server error.' },
       { status: 500, headers: CORS_HEADERS },
     )
   }

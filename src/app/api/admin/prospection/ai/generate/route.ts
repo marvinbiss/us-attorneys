@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    // Charger la conversation, le contact et les messages
+    // Load the conversation, contact and messages
     const { data: conversation } = await supabase
       .from('prospection_conversations')
       .select('*, contact:prospection_contacts(*), campaign:prospection_campaigns(*)')
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       .eq('conversation_id', parsed.data.conversation_id)
       .order('created_at', { ascending: true })
 
-    // Charger les settings IA
+    // Load AI settings
     const { data: aiSettings } = await supabase
       .from('prospection_ai_settings')
       .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt, updated_by, updated_at')

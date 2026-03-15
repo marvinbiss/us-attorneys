@@ -22,15 +22,15 @@ const adminFetcher = async (url: string) => {
   try {
     const res = await fetch(url, { signal: controller.signal })
     if (!res.ok) {
-      const body = await res.json().catch(() => ({ error: { message: 'Erreur réseau' } }))
-      const error = new Error(body?.error?.message || `Erreur ${res.status}`)
+      const body = await res.json().catch(() => ({ error: { message: 'Network error' } }))
+      const error = new Error(body?.error?.message || `Error ${res.status}`)
       ;(error as unknown as Record<string, unknown>).status = res.status
       throw error
     }
     return res.json()
   } catch (err) {
     if (err instanceof DOMException && err.name === 'AbortError') {
-      throw new Error('La requête a expiré (30s). Veuillez réessayer.')
+      throw new Error('Request timed out (30s). Please try again.')
     }
     throw err
   } finally {
@@ -118,13 +118,13 @@ export async function adminMutate<T = unknown>(
     const data = await res.json()
 
     if (!res.ok) {
-      throw new Error(data?.error?.message || `Erreur ${res.status}`)
+      throw new Error(data?.error?.message || `Error ${res.status}`)
     }
 
     return data as T
   } catch (err) {
     if (err instanceof DOMException && err.name === 'AbortError') {
-      throw new Error('La requête a expiré (30s). Veuillez réessayer.')
+      throw new Error('Request timed out (30s). Please try again.')
     }
     throw err
   } finally {

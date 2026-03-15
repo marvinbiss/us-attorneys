@@ -27,7 +27,7 @@ interface AttorneySimilarProps {
 export function AttorneySimilar({ artisan: _artisan, similarArtisans }: AttorneySimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Fallback: show hub link when no similar artisans available
+  // Fallback: show hub link when no similar attorneys available
   if (!similarArtisans || similarArtisans.length === 0) {
     const hubUrl = _artisan.specialty_slug && _artisan.city_slug
       ? `/practice-areas/${_artisan.specialty_slug}/${_artisan.city_slug}`

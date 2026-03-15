@@ -43,15 +43,15 @@ export default function AdminToolsPage() {
         const data = await res.json()
         setProviderInfo({
           id: data.id || data.provider?.id,
-          name: data.name || data.provider?.name || 'Inconnu',
+          name: data.name || data.provider?.name || 'Unknown',
           is_active: data.is_active ?? data.provider?.is_active ?? false,
           is_verified: data.is_verified ?? data.provider?.is_verified ?? false,
         })
       } else {
-        setError('Artisan non trouvé')
+        setError('Attorney not found')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -72,17 +72,17 @@ export default function AdminToolsPage() {
         }),
       })
       if (res.ok) {
-        setSuccess(`Artisan ${action === 'enable' ? 'activé' : 'désactivé'}`)
+        setSuccess(`Attorney ${action === 'enable' ? 'enabled' : 'disabled'}`)
         setProviderInfo((prev) =>
           prev ? { ...prev, is_active: action === 'enable' } : prev
         )
         setTimeout(() => setSuccess(null), 3000)
       } else {
         const data = await res.json()
-        setError(data.error || 'Erreur')
+        setError(data.error || 'Error')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -101,15 +101,15 @@ export default function AdminToolsPage() {
         body: JSON.stringify({ action: 'replay', assignmentId: assignmentId.trim() }),
       })
       if (res.ok) {
-        setSuccess('Dispatch rejoué avec succès')
+        setSuccess('Dispatch replayed successfully')
         setAssignmentId('')
         setTimeout(() => setSuccess(null), 3000)
       } else {
         const data = await res.json()
-        setError(data.error || 'Erreur')
+        setError(data.error || 'Error')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -118,8 +118,8 @@ export default function AdminToolsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Outils Admin</h1>
-        <p className="text-gray-500 mb-8">Gestion des artisans et dispatch</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Tools</h1>
+        <p className="text-gray-500 mb-8">Attorney management and dispatch</p>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
@@ -139,7 +139,7 @@ export default function AdminToolsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5 text-gray-400" />
-            Activer / Désactiver un artisan
+            Enable / Disable an attorney
           </h2>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -147,8 +147,8 @@ export default function AdminToolsPage() {
               type="text"
               value={attorneyId}
               onChange={(e) => setProviderId(e.target.value)}
-              placeholder="UUID de l'artisan"
-              aria-label="UUID de l'artisan"
+              placeholder="Attorney UUID"
+              aria-label="Attorney UUID"
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
             />
             <button
@@ -157,7 +157,7 @@ export default function AdminToolsPage() {
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-              Rechercher
+              Search
             </button>
           </div>
 
@@ -172,12 +172,12 @@ export default function AdminToolsPage() {
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                     attorneyInfo.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                   }`}>
-                    {attorneyInfo.is_active ? 'Actif' : 'Inactif'}
+                    {attorneyInfo.is_active ? 'Active' : 'Inactive'}
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                     attorneyInfo.is_verified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
                   }`}>
-                    {attorneyInfo.is_verified ? 'Référencé' : 'Non référencé'}
+                    {attorneyInfo.is_verified ? 'Verified' : 'Not verified'}
                   </span>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export default function AdminToolsPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
                   >
                     <PowerOff className="w-4 h-4" />
-                    Désactiver
+                    Disable
                   </button>
                 ) : (
                   <button
@@ -198,7 +198,7 @@ export default function AdminToolsPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50"
                   >
                     <Power className="w-4 h-4" />
-                    Activer
+                    Enable
                   </button>
                 )}
               </div>
@@ -210,18 +210,18 @@ export default function AdminToolsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <RefreshCw className="w-5 h-5 text-gray-400" />
-            Rejouer un dispatch
+            Replay a dispatch
           </h2>
           <p className="text-sm text-gray-500 mb-4">
-            Relance le round-robin pour une assignation existante. Un nouvel artisan sera sélectionné automatiquement.
+            Re-run dispatch for an existing assignment.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={assignmentId}
               onChange={(e) => setAssignmentId(e.target.value)}
-              placeholder="ID de l'assignation à rejouer"
-              aria-label="ID de l'assignation à rejouer"
+              placeholder="Assignment ID to replay"
+              aria-label="Assignment ID to replay"
               onKeyDown={(e) => e.key === 'Enter' && replayDispatch()}
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
             />
@@ -231,7 +231,7 @@ export default function AdminToolsPage() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-              Relancer la répartition
+              Replay dispatch
             </button>
           </div>
         </div>
@@ -242,9 +242,9 @@ export default function AdminToolsPage() {
           isOpen={disableModal}
           onClose={() => setDisableModal(false)}
           onConfirm={() => { setDisableModal(false); toggleProvider('disable') }}
-          title="Désactiver l'artisan"
-          message={`Êtes-vous sûr de vouloir désactiver l'artisan « ${attorneyInfo.name} » ?`}
-          confirmText="Désactiver"
+          title="Disable attorney"
+          message={`Are you sure you want to disable the attorney "${attorneyInfo.name}"?`}
+          confirmText="Disable"
           variant="warning"
         />
       )}

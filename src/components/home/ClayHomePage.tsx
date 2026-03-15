@@ -16,43 +16,43 @@ interface Props {
 }
 
 const SERVICE_ITEMS = [
-  { Icon: Droplets,      name: 'Plomberie',    slug: 'plombier' },
-  { Icon: Zap,           name: 'Électricité',  slug: 'electricien' },
-  { Icon: Key,           name: 'Serrurerie',   slug: 'serrurier' },
-  { Icon: Flame,         name: 'Chauffage',    slug: 'chauffagiste' },
-  { Icon: PaintBucket,   name: 'Peinture',     slug: 'peintre-en-batiment' },
-  { Icon: Hammer,        name: 'Menuiserie',   slug: 'menuisier' },
-  { Icon: HardHat,       name: 'Maçonnerie',   slug: 'macon' },
-  { Icon: TreeDeciduous, name: 'Jardinage',    slug: 'jardinier' },
+  { Icon: Droplets,      name: 'Personal Injury',    slug: 'plombier' },
+  { Icon: Zap,           name: 'Criminal Defense',   slug: 'electricien' },
+  { Icon: Key,           name: 'Family Law',         slug: 'serrurier' },
+  { Icon: Flame,         name: 'Immigration',        slug: 'chauffagiste' },
+  { Icon: PaintBucket,   name: 'Estate Planning',    slug: 'peintre-en-batiment' },
+  { Icon: Hammer,        name: 'Real Estate',        slug: 'menuisier' },
+  { Icon: HardHat,       name: 'Business Law',       slug: 'macon' },
+  { Icon: TreeDeciduous, name: 'Employment Law',     slug: 'jardinier' },
 ]
 
-// Artisans mis en avant (sélection manuelle — vrais profils vérifiés)
+// Featured attorneys (manual selection — verified profiles)
 const FEATURED_ARTISANS = [
   {
-    name: 'P B C Services', specialty: 'Plombier', address_city: 'Paris', address_postal_code: '75013',
+    name: 'P B C Services', specialty: 'Personal Injury', address_city: 'New York', address_postal_code: '10001',
     rating_average: 4.6, review_count: 34, is_verified: true, slug: 'plombier',
-    stable_id: 'p-b-c-services-814394359', profileCity: 'paris',
+    stable_id: 'p-b-c-services-814394359', profileCity: 'new-york',
   },
   {
-    name: 'Ecoterra', specialty: 'Électricien', address_city: 'Marseille', address_postal_code: '13006',
+    name: 'Ecoterra', specialty: 'Criminal Defense', address_city: 'Los Angeles', address_postal_code: '90001',
     rating_average: 4.9, review_count: 9, is_verified: true, slug: 'electricien',
-    stable_id: 'ecoterra-940717085', profileCity: 'marseille',
+    stable_id: 'ecoterra-940717085', profileCity: 'los-angeles',
   },
   {
-    name: 'Romain Simon', specialty: 'Serrurier', address_city: 'Strasbourg', address_postal_code: '67000',
+    name: 'Romain Simon', specialty: 'Family Law', address_city: 'Chicago', address_postal_code: '60601',
     rating_average: 4.7, review_count: 95, is_verified: true, slug: 'serrurier',
-    stable_id: 'romain-simon-strasbourg', profileCity: 'strasbourg',
+    stable_id: 'romain-simon-strasbourg', profileCity: 'chicago',
   },
 ]
 
-/** Met en forme le nom : "DUPONT JEAN" → "Dupont Jean" */
+/** Formats a name: "SMITH JOHN" → "Smith John" */
 function formatName(raw: string): string {
-  // Si tout est en majuscules, convertir en Title Case
+  // If all uppercase, convert to Title Case
   if (raw === raw.toUpperCase()) {
     return raw
       .toLowerCase()
       .replace(/(?:^|\s|['-])\S/g, c => c.toUpperCase())
-      // Tronquer les noms de société entre parenthèses
+      // Truncate firm names in parentheses
       .replace(/\s*\(.*$/, '')
   }
   return raw.replace(/\s*\(.*$/, '')
@@ -64,14 +64,14 @@ const FALLBACK_REVIEWS = [
   { client_name: 'Emily Rodriguez', rating: 5, comment: "Finally a serious platform! Attorneys are truly verified, not fake profiles. Found my real estate attorney in 5 minutes, consultation done 3 days later.", created_at: '', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80' },
 ]
 
-// Images de fond uniques par position (jamais 2 identiques côte à côte)
+// Unique background images per position (never 2 identical side by side)
 const CARD_BG_IMAGES = [
   'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=250&fit=crop&q=80',
   'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&h=250&fit=crop&q=80',
   'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=250&fit=crop&q=80',
 ]
 
-// Avatars pour les avis (fallback quand pas de photo en BDD)
+// Avatars for reviews (fallback when no photo in DB)
 const REVIEW_AVATARS = [
   'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
@@ -134,7 +134,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
   const ratingStr = avgRating > 0 ? avgRating.toFixed(1) : '—'
 
   // Use real top providers from DB when available, fall back to curated list
-  const artisans = topProviders.length >= 3
+  const attorneys = topProviders.length >= 3
     ? topProviders.slice(0, 3).map(p => ({
         ...p,
         profileCity: (p.address_city ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
@@ -347,7 +347,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
         </div>
       </ScrollReveal>
 
-      {/* ─── ARTISAN CARDS (real data or fallback) ───────────── */}
+      {/* ─── ATTORNEY CARDS (real data or fallback) ──────────── */}
       <ScrollReveal as="section">
         <div style={{ background: '#EDE8E1' }}>
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
@@ -363,7 +363,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {artisans.map((a, i) => {
+              {attorneys.map((a, i) => {
                 const rating = a.rating_average ?? 0
                 const ratingDisplay = rating.toFixed(1)
                 const profileHref = a.stable_id ? `/practice-areas/${a.slug}/${a.profileCity}/${a.stable_id}` : `/practice-areas/${a.slug}`

@@ -26,7 +26,7 @@ interface ActivityChartProps {
 
 function formatDateTick(dateStr: string): string {
   const d = new Date(dateStr + 'T12:00:00')
-  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
 }
 
 function ChartSkeleton() {
@@ -57,18 +57,18 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
   const hasData = data.some((d) => d.bookings > 0 || d.users > 0 || d.reviews > 0)
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100" role="region" aria-label="Graphique d'activité des 30 derniers jours">
-      <h3 className="font-semibold text-gray-900 mb-6">Activité des 30 derniers jours</h3>
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100" role="region" aria-label="Activity chart for the last 30 days">
+      <h3 className="font-semibold text-gray-900 mb-6">Activity over the last 30 days</h3>
       {!hasData ? (
         <div className="h-[300px] flex items-center justify-center text-gray-400">
-          <p>Aucune donnée sur cette période</p>
+          <p>No data for this period</p>
         </div>
       ) : (
         <>
         <div className="sr-only">
-          <p>Graphique montrant les réservations, inscriptions et avis sur les 30 derniers jours.</p>
+          <p>Chart showing bookings, sign-ups, and reviews over the last 30 days.</p>
           <table>
-            <thead><tr><th>Date</th><th>Réservations</th><th>Inscriptions</th><th>Avis</th></tr></thead>
+            <thead><tr><th>Date</th><th>Bookings</th><th>Sign-ups</th><th>Reviews</th></tr></thead>
             <tbody>
               {data.filter(d => d.bookings > 0 || d.users > 0 || d.reviews > 0).map(d => (
                 <tr key={d.date}>
@@ -128,7 +128,7 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
             <Area
               type="monotone"
               dataKey="bookings"
-              name="Réservations"
+              name="Bookings"
               stroke="#3b82f6"
               fill="url(#fillBookings)"
               strokeWidth={2}
@@ -138,7 +138,7 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
             <Area
               type="monotone"
               dataKey="users"
-              name="Inscriptions"
+              name="Sign-ups"
               stroke="#10b981"
               fill="url(#fillUsers)"
               strokeWidth={2}
@@ -148,7 +148,7 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
             <Area
               type="monotone"
               dataKey="reviews"
-              name="Avis"
+              name="Reviews"
               stroke="#f59e0b"
               fill="url(#fillReviews)"
               strokeWidth={2}

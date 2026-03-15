@@ -81,7 +81,7 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
             <button
               onClick={handleDownload}
               className="p-1.5 bg-black/50 rounded-full text-white hover:bg-black/70"
-              title="Télécharger"
+              title="Download"
             >
               <Download className="w-4 h-4" />
             </button>
@@ -155,7 +155,7 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
               <button
                 onClick={handleZoomOut}
                 className="p-2 hover:bg-white/10 rounded-full"
-                title="Zoom arrière"
+                title="Zoom out"
               >
                 <ZoomOut className="w-5 h-5" />
               </button>
@@ -163,14 +163,14 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
               <button
                 onClick={handleZoomIn}
                 className="p-2 hover:bg-white/10 rounded-full"
-                title="Zoom avant"
+                title="Zoom in"
               >
                 <ZoomIn className="w-5 h-5" />
               </button>
               <button
                 onClick={handleRotate}
                 className="p-2 hover:bg-white/10 rounded-full"
-                title="Pivoter"
+                title="Rotate"
               >
                 <RotateCw className="w-5 h-5" />
               </button>
@@ -179,14 +179,14 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
           <button
             onClick={handleDownload}
             className="p-2 hover:bg-white/10 rounded-full"
-            title="Télécharger"
+            title="Download"
           >
             <Download className="w-5 h-5" />
           </button>
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/10 rounded-full"
-            title="Fermer"
+            title="Close"
           >
             <X className="w-5 h-5" />
           </button>
@@ -241,7 +241,7 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
               className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center gap-2 mx-auto"
             >
               <Download className="w-5 h-5" />
-              Télécharger
+              Download
             </button>
           </div>
         )}

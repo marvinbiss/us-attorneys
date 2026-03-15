@@ -63,7 +63,7 @@ export default function AdminReviewsPage() {
       setModerationModal({ open: false, reviewId: '', status: 'published' })
       mutate()
     } catch {
-      setActionError('Erreur lors de la modération de l\'avis')
+      setActionError('Moderation error')
     }
   }
 
@@ -85,7 +85,7 @@ export default function AdminReviewsPage() {
         })
         mutate()
       } catch {
-        setActionError('Erreur lors de la modération de l\'avis')
+        setActionError('Moderation error')
       }
     })()
   }
@@ -97,13 +97,13 @@ export default function AdminReviewsPage() {
   const getStatusBadge = (review: Review) => {
     switch (review.status) {
       case 'flagged':
-        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs flex items-center gap-1"><Flag className="w-3 h-3" /> Signalé</span>
+        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs flex items-center gap-1"><Flag className="w-3 h-3" /> Flagged</span>
       case 'pending_review':
-        return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">En attente</span>
+        return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">Pending</span>
       case 'published':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Publié</span>
+        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Published</span>
       case 'hidden':
-        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Masqué</span>
+        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Hidden</span>
     }
   }
 
@@ -124,8 +124,8 @@ export default function AdminReviewsPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Modération des Avis</h1>
-          <p className="text-gray-500 mt-1">Vérifiez et modérez les avis clients</p>
+          <h1 className="text-2xl font-bold text-gray-900">Review Moderation</h1>
+          <p className="text-gray-500 mt-1">Review and moderate client reviews</p>
         </div>
 
         {/* Filters */}
@@ -141,10 +141,10 @@ export default function AdminReviewsPage() {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {f === 'all' ? 'Tous' :
-                 f === 'pending_review' ? 'En attente' :
-                 f === 'flagged' ? 'Signalés' :
-                 f === 'published' ? 'Publiés' : 'Masqués'}
+                {f === 'all' ? 'All' :
+                 f === 'pending_review' ? 'Pending' :
+                 f === 'flagged' ? 'Flagged' :
+                 f === 'published' ? 'Published' : 'Hidden'}
               </button>
             ))}
           </div>
@@ -162,7 +162,7 @@ export default function AdminReviewsPage() {
           ) : displayReviews.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm p-8 text-center">
               <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">Aucun avis à afficher</p>
+              <p className="text-gray-500">No reviews to display</p>
             </div>
           ) : (
             displayReviews.map((review) => (
@@ -182,13 +182,13 @@ export default function AdminReviewsPage() {
                         {renderStars(review.rating)}
                         <span className="text-sm text-gray-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {new Date(review.created_at).toLocaleDateString('fr-FR')}
+                          {new Date(review.created_at).toLocaleDateString('en-US')}
                         </span>
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-500">Pour</p>
+                    <p className="text-sm text-gray-500">For</p>
                     <p className="font-medium text-blue-600">{review.provider_name}</p>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default function AdminReviewsPage() {
 
                 {review.response && (
                   <div className="bg-blue-50 rounded-lg p-4 mb-4 ml-8">
-                    <p className="text-sm text-blue-600 font-medium mb-1">Réponse de l'artisan :</p>
+                    <p className="text-sm text-blue-600 font-medium mb-1">Attorney response:</p>
                     <p className="text-gray-700">{review.response}</p>
                   </div>
                 )}
@@ -211,14 +211,14 @@ export default function AdminReviewsPage() {
                       className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
                       <CheckCircle className="w-4 h-4" />
-                      Publier
+                      Publish
                     </button>
                     <button
                       onClick={() => handleModeration(review.id, 'hidden')}
                       className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                     >
                       <XCircle className="w-4 h-4" />
-                      Masquer
+                      Hide
                     </button>
                   </div>
                 )}
@@ -238,7 +238,7 @@ export default function AdminReviewsPage() {
               <ChevronLeft className="w-5 h-5" />
             </button>
             <span className="px-4 py-2 text-gray-600">
-              Page {page} sur {totalPages}
+              Page {page} of {totalPages}
             </span>
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
@@ -256,9 +256,9 @@ export default function AdminReviewsPage() {
         isOpen={moderationModal.open}
         onClose={() => setModerationModal({ open: false, reviewId: '', status: 'published' })}
         onConfirm={confirmModeration}
-        title="Masquer l'avis"
-        message="Êtes-vous sûr de vouloir masquer cet avis ? Il ne sera plus visible publiquement."
-        confirmText="Masquer"
+        title="Hide review"
+        message="Are you sure you want to hide this review? It will no longer be publicly visible."
+        confirmText="Hide"
         variant="danger"
       />
     </div>

@@ -8,14 +8,14 @@ import { Save, Eye, Tag, ArrowLeft, AlertCircle } from 'lucide-react'
 import type { ProspectionChannel, AudienceType } from '@/types/prospection'
 
 const VARIABLES = [
-  { key: 'contact_name', label: 'Nom' },
-  { key: 'company_name', label: 'Entreprise' },
+  { key: 'contact_name', label: 'Name' },
+  { key: 'company_name', label: 'Company' },
   { key: 'city', label: 'City' },
-  { key: 'department', label: 'Département' },
+  { key: 'department', label: 'State' },
   { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'Téléphone' },
-  { key: 'date', label: 'Date du jour' },
-  { key: 'unsubscribe_link', label: 'Lien désinscription' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'date', label: 'Today\'s date' },
+  { key: 'unsubscribe_link', label: 'Unsubscribe link' },
 ]
 
 export default function CreateTemplatePage() {
@@ -45,14 +45,14 @@ export default function CreateTemplatePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ body, subject }),
       })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) setPreview(data.data.rendered_body)
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'aperçu')
+        setError('Error generating preview')
       }
     }
   }
@@ -73,18 +73,18 @@ export default function CreateTemplatePage() {
           ai_system_prompt: aiPrompt || undefined,
         }),
       })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         router.push('/admin/prospection/templates')
       } else {
-        setError(data.error?.message || 'Erreur')
+        setError(data.error?.message || 'Error')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de la sauvegarde')
+        setError('Error saving template')
       }
     } finally {
       setSaving(false)
@@ -95,9 +95,9 @@ export default function CreateTemplatePage() {
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux modèles
+          <ArrowLeft className="w-4 h-4" /> Back to templates
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau modèle</h1>
+        <h1 className="text-2xl font-bold text-gray-900">New template</h1>
       </div>
 
       <ProspectionNav />
@@ -114,13 +114,13 @@ export default function CreateTemplatePage() {
         {/* Formulaire */}
         <div className="lg:col-span-2 bg-white rounded-lg border p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Nom du modèle</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Ex: Invitation artisan plombier" />
+            <label className="block text-sm font-medium mb-1">Template name</label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="E.g., Attorney invitation" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Canal</label>
+              <label className="block text-sm font-medium mb-1">Channel</label>
               <select value={channel} onChange={(e) => setChannel(e.target.value as ProspectionChannel)} className="w-full px-3 py-2 border rounded-lg text-sm">
                 <option value="email">Email</option>
                 <option value="sms">SMS</option>
@@ -128,61 +128,61 @@ export default function CreateTemplatePage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Audience (optionnel)</label>
+              <label className="block text-sm font-medium mb-1">Audience (optional)</label>
               <select value={audienceType} onChange={(e) => setAudienceType(e.target.value as AudienceType | '')} className="w-full px-3 py-2 border rounded-lg text-sm">
-                <option value="">Toutes</option>
-                <option value="artisan">Artisans</option>
+                <option value="">All</option>
+                <option value="artisan">Attorneys</option>
                 <option value="client">Clients</option>
-                <option value="mairie">Mairies</option>
+                <option value="mairie">Municipalities</option>
               </select>
             </div>
           </div>
 
           {channel === 'email' && (
             <div>
-              <label className="block text-sm font-medium mb-1">Sujet</label>
-              <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Ex: Rejoignez ServicesArtisans, {{contact_name}} !" />
+              <label className="block text-sm font-medium mb-1">Subject</label>
+              <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Ex: Rejoignez US Attorneys, {{contact_name}} !" />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium mb-1">Corps du message</label>
+            <label className="block text-sm font-medium mb-1">Message body</label>
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               rows={8}
               className={`w-full px-3 py-2 border rounded-lg text-sm font-mono ${smsOverLimit ? 'border-red-300 bg-red-50' : ''}`}
-              placeholder={channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'}
+              placeholder={channel === 'sms' ? 'Max 160 characters for 1 SMS' : 'Message content...'}
             />
             {channel === 'sms' && (
               <p className={`text-xs mt-1 ${smsOverLimit ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
-                {body.length}/160 caractères ({Math.ceil(body.length / 160 || 1)} SMS)
-                {smsOverLimit && ' — Limite de 160 caractères dépassée'}
+                {body.length}/160 characters ({Math.ceil(body.length / 160 || 1)} SMS)
+                {smsOverLimit && ' — 160 character limit exceeded'}
               </p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Prompt IA pour les réponses (optionnel)</label>
+            <label className="block text-sm font-medium mb-1">AI prompt for replies (optional)</label>
             <textarea
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border rounded-lg text-sm"
-              placeholder="Instructions spécifiques pour l'IA quand elle répond aux contacts de cette campagne..."
+              placeholder="Specific instructions for the AI when replying to contacts from this campaign..."
             />
           </div>
 
           <div className="flex gap-2 pt-4">
             <button onClick={handlePreview} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
-              <Eye className="w-4 h-4" /> Aperçu
+              <Eye className="w-4 h-4" /> Preview
             </button>
             <button
               onClick={handleSave}
               disabled={saving || !name || !body || smsOverLimit}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
-              <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+              <Save className="w-4 h-4" /> {saving ? 'Saving...' : 'Save'}
             </button>
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function CreateTemplatePage() {
         <div className="space-y-4">
           <div className="bg-white rounded-lg border p-4">
             <h3 className="text-sm font-medium flex items-center gap-2 mb-3">
-              <Tag className="w-4 h-4" /> Variables disponibles
+              <Tag className="w-4 h-4" /> Available variables
             </h3>
             <div className="space-y-1">
               {VARIABLES.map((v) => (
@@ -209,7 +209,7 @@ export default function CreateTemplatePage() {
 
           {preview && (
             <div className="bg-white rounded-lg border p-4">
-              <h3 className="text-sm font-medium mb-3">Aperçu</h3>
+              <h3 className="text-sm font-medium mb-3">Preview</h3>
               <div className="text-sm bg-gray-50 rounded p-3 whitespace-pre-wrap">{preview}</div>
             </div>
           )}

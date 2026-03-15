@@ -18,7 +18,7 @@ const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googlet
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
   "font-src 'self' https://fonts.gstatic.com data:; " +
   "img-src 'self' data: blob: https: http:; " +
-  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; " +
+  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; " +
   "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org; " +
   "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 
@@ -42,8 +42,6 @@ function addCspHeaders(response: NextResponse, request: NextRequest, nonce: stri
 const LEGACY_REDIRECTS: Record<string, string> = {
   '/issues-courants': '/issues',
   '/tools/diagnostic-artisan': '/tools/diagnostic',
-  '/price-index-prix': '/price-index',
-  '/calculator': '/tools/calculator-prix',
 }
 
 // URL canonicalization — all fixes combined into a single 301 hop
@@ -187,7 +185,7 @@ export async function middleware(request: NextRequest) {
       if (!result.allowed) {
         const retryAfter = Math.ceil((result.resetTime - Date.now()) / 1000)
         return new NextResponse(
-          JSON.stringify({ error: 'Trop de requêtes. Veuillez réessayer plus tard.' }),
+          JSON.stringify({ error: 'Too many requests. Please try again later.' }),
           {
             status: 429,
             headers: {
@@ -251,7 +249,6 @@ export async function middleware(request: NextRequest) {
     '/faq/',
     '/blog/',
     '/compare/',
-    '/price-index/',
     '/tools/',
   ]
   // Exact-match pages (no sub-routes, or the index page of a prefix group)
@@ -269,11 +266,8 @@ export async function middleware(request: NextRequest) {
     '/terms',
     '/privacy',
     '/accessibility',
-    '/before-after',
-    '/project-planner',
     '/attorney-badge',
     '/careers',
-    '/price-index',
     '/glossary',
     '/guides',
     '/faq',
@@ -284,7 +278,6 @@ export async function middleware(request: NextRequest) {
     '/cities',
     '/regulations',
     '/tools',
-    '/project-checklist',
     '/attorney-statistics',
     '/press',
     '/partners',

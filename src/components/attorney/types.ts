@@ -93,5 +93,5 @@ export function getDisplayName(artisan: Artisan): string {
   if (artisan.business_name) {
     return artisan.business_name
   }
-  return `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || 'Artisan'
+  return `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || 'Attorney'
 }

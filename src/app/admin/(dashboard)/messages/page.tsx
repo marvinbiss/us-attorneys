@@ -85,7 +85,7 @@ export default function AdminMessagesPage() {
 
   const formatDate = (date: string | null) => {
     if (!date) return '-'
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -97,8 +97,8 @@ export default function AdminMessagesPage() {
   const getStatusBadge = (status: string) => {
     const config: Record<string, { variant: 'success' | 'default' | 'error'; label: string }> = {
       active: { variant: 'success', label: 'Active' },
-      archived: { variant: 'default', label: 'Archivée' },
-      blocked: { variant: 'error', label: 'Bloquée' },
+      archived: { variant: 'default', label: 'Archived' },
+      blocked: { variant: 'error', label: 'Blocked' },
     }
     const { variant, label } = config[status] || config.active
     return <StatusBadge variant={variant}>{label}</StatusBadge>
@@ -109,7 +109,7 @@ export default function AdminMessagesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Modération des Messages</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Message Moderation</h1>
           <p className="text-gray-500 mt-1">{total} conversations</p>
         </div>
 
@@ -131,7 +131,7 @@ export default function AdminMessagesPage() {
               >
                 {s === 'all' ? 'Toutes' :
                  s === 'active' ? 'Actives' :
-                 s === 'archived' ? 'Archivées' : 'Bloquées'}
+                 s === 'archived' ? 'Archived' : 'Blocked'}
               </button>
             ))}
           </div>
@@ -149,7 +149,7 @@ export default function AdminMessagesPage() {
           ) : conversations.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <MessageSquare className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucune conversation trouvée</p>
+              <p>No conversations found</p>
             </div>
           ) : (
             <>
@@ -162,7 +162,7 @@ export default function AdminMessagesPage() {
                           {getStatusBadge(conversation.status)}
                           {conversation.unread_count > 0 && (
                             <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                              {conversation.unread_count} non lu(s)
+                              {conversation.unread_count} unread
                             </span>
                           )}
                         </div>
@@ -176,7 +176,7 @@ export default function AdminMessagesPage() {
                             <div>
                               <p className="text-xs text-gray-500 uppercase">Client</p>
                               <p className="font-medium text-gray-900">
-                                {conversation.client?.full_name || 'Sans nom'}
+                                {conversation.client?.full_name || 'No name'}
                               </p>
                               <p className="text-sm text-gray-500">
                                 {conversation.client?.email}
@@ -190,9 +190,9 @@ export default function AdminMessagesPage() {
                               <Briefcase className="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 uppercase">Artisan</p>
+                              <p className="text-xs text-gray-500 uppercase">Attorney</p>
                               <p className="font-medium text-gray-900">
-                                {conversation.provider?.name || conversation.provider?.full_name || 'Sans nom'}
+                                {conversation.provider?.name || conversation.provider?.full_name || 'No name'}
                               </p>
                               <p className="text-sm text-gray-500">
                                 {conversation.provider?.email}
@@ -204,10 +204,10 @@ export default function AdminMessagesPage() {
                         <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
                           <span className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
-                            Dernier message: {formatDate(conversation.last_message_at)}
+                            Last message: {formatDate(conversation.last_message_at)}
                           </span>
                           <span>
-                            Créée le {formatDate(conversation.created_at)}
+                            Created {formatDate(conversation.created_at)}
                           </span>
                         </div>
                       </div>
@@ -219,8 +219,8 @@ export default function AdminMessagesPage() {
                               onClick={() => handleStatusChange(conversation.id, 'archived')}
                               disabled={actionLoading === conversation.id}
                               className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg disabled:opacity-50"
-                              title="Archiver"
-                              aria-label="Archiver la conversation"
+                              title="Archive"
+                              aria-label="Archive conversation"
                             >
                               <Archive className="w-5 h-5" />
                             </button>
@@ -228,8 +228,8 @@ export default function AdminMessagesPage() {
                               onClick={() => handleStatusChange(conversation.id, 'blocked')}
                               disabled={actionLoading === conversation.id}
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
-                              title="Bloquer"
-                              aria-label="Bloquer la conversation"
+                              title="Block"
+                              aria-label="Block conversation"
                             >
                               <Ban className="w-5 h-5" />
                             </button>
@@ -249,7 +249,7 @@ export default function AdminMessagesPage() {
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
-                    aria-label="Page précédente"
+                    aria-label="Previous page"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -257,7 +257,7 @@ export default function AdminMessagesPage() {
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
-                    aria-label="Page suivante"
+                    aria-label="Next page"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>

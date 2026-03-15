@@ -35,7 +35,7 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
   const statusConfig = {
     pending: {
       icon: <Loader2 className="w-4 h-4 animate-spin text-gray-400" />,
-      text: 'En attente...',
+      text: 'Pending...',
       color: 'text-gray-500',
       bgColor: 'bg-gray-100',
     },
@@ -47,19 +47,19 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
     },
     processing: {
       icon: <Loader2 className="w-4 h-4 animate-spin text-amber-500" />,
-      text: 'Traitement...',
+      text: 'Processing...',
       color: 'text-amber-600',
       bgColor: 'bg-amber-500',
     },
     complete: {
       icon: <Check className="w-4 h-4 text-green-500" />,
-      text: 'Terminé',
+      text: 'Complete',
       color: 'text-green-600',
       bgColor: 'bg-green-500',
     },
     error: {
       icon: <AlertCircle className="w-4 h-4 text-red-500" />,
-      text: error || 'Erreur',
+      text: error || 'Error',
       color: 'text-red-600',
       bgColor: 'bg-red-500',
     },
@@ -116,7 +116,7 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
           type="button"
           onClick={() => onRemove(fileName)}
           className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-          aria-label="Supprimer"
+          aria-label="Remove"
         >
           <X className="w-4 h-4" />
         </button>
@@ -175,7 +175,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                 type="button"
                 onClick={() => onRemove(file.url)}
                 className="absolute top-2 right-2 p-1.5 bg-white/90 hover:bg-white text-gray-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                aria-label="Supprimer"
+                aria-label="Remove"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -185,7 +185,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
             {isVideo && (
               <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/70 text-white text-xs rounded-md flex items-center gap-1">
                 <Video className="w-3 h-3" />
-                Vidéo
+                Video
               </div>
             )}
 

@@ -30,7 +30,7 @@ function getAllTags(): { slug: string; label: string }[] {
   }
   return Array.from(tagMap.entries())
     .map(([slug, label]) => ({ slug, label }))
-    .sort((a, b) => a.label.localeCompare(b.label, 'fr'))
+    .sort((a, b) => a.label.localeCompare(b.label, 'en'))
 }
 
 const allTags = getAllTags()
@@ -49,10 +49,10 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { tag: tagSlug } = await params
   const tagInfo = allTags.find(t => t.slug === tagSlug)
-  if (!tagInfo) return { title: 'Tag non trouvé' }
+  if (!tagInfo) return { title: 'Tag not found' }
 
-  const title = `${tagInfo.label} — Articles & Guides | ServicesArtisans`
-  const description = `Tous les articles sur ${tagInfo.label.toLowerCase()} : conseils, prix, réglementation et guides pratiques par les experts ServicesArtisans.`
+  const title = `${tagInfo.label} — Articles & Guides | US Attorneys`
+  const description = `All articles about ${tagInfo.label.toLowerCase()}: tips, pricing, regulations, and practical guides by USAttorneys experts.`
 
   return {
     title,
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url: `${SITE_URL}/blog/tag/${tagSlug}`,
       type: 'website',
-      locale: 'fr_FR',
+      locale: 'en_US',
     },
     twitter: {
       card: 'summary_large_image',
@@ -99,13 +99,13 @@ export default async function BlogTagPage({ params }: PageProps) {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `Articles : ${tagInfo.label}`,
-    description: `Articles et guides sur ${tagInfo.label.toLowerCase()}`,
+    name: `Articles: ${tagInfo.label}`,
+    description: `Articles and guides about ${tagInfo.label.toLowerCase()}`,
     url: `${SITE_URL}/blog/tag/${tagSlug}`,
     numberOfItems: articles.length,
     isPartOf: {
       '@type': 'Blog',
-      name: 'Blog ServicesArtisans',
+      name: 'USAttorneys Blog',
       url: `${SITE_URL}/blog`,
     },
     hasPart: articles.slice(0, 10).map(a => ({
@@ -114,9 +114,9 @@ export default async function BlogTagPage({ params }: PageProps) {
       url: `${SITE_URL}/blog/${a.slug}`,
       datePublished: a.date,
       author: (() => {
-        const authorName = allArticles[a.slug]?.author || 'ServicesArtisans'
-        return authorName === 'ServicesArtisans'
-          ? { '@type': 'Organization', name: 'Équipe éditoriale ServicesArtisans', url: `${SITE_URL}/about`, '@id': `${SITE_URL}#organization` }
+        const authorName = allArticles[a.slug]?.author || 'US Attorneys'
+        return authorName === 'US Attorneys'
+          ? { '@type': 'Organization', name: 'USAttorneys Editorial Team', url: `${SITE_URL}/about`, '@id': `${SITE_URL}#organization` }
           : { '@type': 'Person', name: authorName }
       })(),
     })),
@@ -126,7 +126,7 @@ export default async function BlogTagPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
       { '@type': 'ListItem', position: 3, name: tagInfo.label, item: `${SITE_URL}/blog/tag/${tagSlug}` },
     ],
@@ -174,10 +174,10 @@ export default async function BlogTagPage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {articles.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">Aucun article avec ce tag pour le moment.</p>
+                <p className="text-gray-500 text-lg">No articles with this tag yet.</p>
                 <Link href="/blog" className="inline-flex items-center gap-2 mt-4 text-blue-600 font-medium hover:text-blue-800">
                   <ArrowLeft className="w-4 h-4" />
-                  Retour au blog
+                  Back to blog
                 </Link>
               </div>
             ) : (
@@ -212,7 +212,7 @@ export default async function BlogTagPage({ params }: PageProps) {
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <span className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5" />
-                            {new Date(article.date).toLocaleDateString('fr-FR', {
+                            {new Date(article.date).toLocaleDateString('en-US', {
                               day: 'numeric', month: 'short', year: 'numeric',
                             })}
                           </span>
@@ -222,7 +222,7 @@ export default async function BlogTagPage({ params }: PageProps) {
                           </span>
                         </div>
                         <span className="text-blue-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
-                          Lire <ArrowRight className="w-4 h-4" />
+                          Read <ArrowRight className="w-4 h-4" />
                         </span>
                       </div>
                     </div>
@@ -238,7 +238,7 @@ export default async function BlogTagPage({ params }: PageProps) {
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-blue-500 pl-4">
-                Tags associés
+                Related tags
               </h2>
               <div className="flex flex-wrap gap-3">
                 {relatedTags.map(t => (
@@ -264,7 +264,7 @@ export default async function BlogTagPage({ params }: PageProps) {
               className="inline-flex items-center gap-2 text-blue-600 font-medium hover:text-blue-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Tous les articles
+              All articles
             </Link>
           </div>
         </section>

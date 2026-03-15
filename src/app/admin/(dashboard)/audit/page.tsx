@@ -43,30 +43,30 @@ interface LeadEvent {
 }
 
 const ENTITY_TYPES = [
-  { value: 'all', label: 'Tous' },
-  { value: 'user', label: 'Utilisateurs' },
-  { value: 'provider', label: 'Artisans' },
-  { value: 'review', label: 'Avis' },
-  { value: 'payment', label: 'Paiements' },
-  { value: 'subscription', label: 'Abonnements' },
-  { value: 'booking', label: 'Réservations' },
+  { value: 'all', label: 'All' },
+  { value: 'user', label: 'Users' },
+  { value: 'provider', label: 'Attorneys' },
+  { value: 'review', label: 'Reviews' },
+  { value: 'payment', label: 'Payments' },
+  { value: 'subscription', label: 'Subscriptions' },
+  { value: 'booking', label: 'Bookings' },
   { value: 'service', label: 'Services' },
-  { value: 'report', label: 'Signalements' },
+  { value: 'report', label: 'Reports' },
 ]
 
 const eventTypeLabels: Record<string, string> = {
-  'created': 'Créé',
-  'dispatched': 'Distribué',
-  'viewed': 'Consulté',
-  'quoted': 'Devis envoyé',
-  'declined': 'Refusé',
-  'accepted': 'Accepté',
-  'completed': 'Terminé',
-  'cancelled': 'Annulé',
-  'expired': 'Expiré',
-  'pending': 'En attente',
-  'reassigned': 'Réassigné',
-  'refused': 'Refusé',
+  'created': 'Created',
+  'dispatched': 'Dispatched',
+  'viewed': 'Viewed',
+  'quoted': 'Quote sent',
+  'declined': 'Declined',
+  'accepted': 'Accepted',
+  'completed': 'Completed',
+  'cancelled': 'Cancelled',
+  'expired': 'Expired',
+  'pending': 'Pending',
+  'reassigned': 'Reassigned',
+  'refused': 'Refused',
 }
 
 type AuditTab = 'audit_logs' | 'lead_events'
@@ -170,14 +170,14 @@ export default function AdminAuditPage() {
   }, [activeTab, eventsPage, eventTypeFilter])
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleString('fr-FR', {
+    return new Date(date).toLocaleString('en-US', {
       day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit', second: '2-digit',
     })
   }
 
   const getActionBadge = (action: string) => {
-    if (action.includes('create')) return <StatusBadge variant="success">Création</StatusBadge>
+    if (action.includes('create')) return <StatusBadge variant="success">Create</StatusBadge>
     if (action.includes('update') || action.includes('change')) return <StatusBadge variant="info">Modification</StatusBadge>
     if (action.includes('delete') || action.includes('cancel')) return <StatusBadge variant="error">Suppression</StatusBadge>
     if (action.includes('ban')) return <StatusBadge variant="error">Ban</StatusBadge>
@@ -191,14 +191,14 @@ export default function AdminAuditPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Audit & Événements</h1>
-          <p className="text-gray-500 mt-1">Traçabilité complète — append-only</p>
+          <h1 className="text-2xl font-bold text-gray-900">Audit & Events</h1>
+          <p className="text-gray-500 mt-1">Append-only audit trail</p>
         </div>
 
         {/* Stats row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
-            title="Événements leads"
+            title="Lead events"
             value={totalEventsAll}
             icon={<Activity className="w-5 h-5" />}
             color="blue"
@@ -210,15 +210,15 @@ export default function AdminAuditPage() {
             color="blue"
           />
           <StatCard
-            title="Types d'événements"
+            title="Event types"
             value={Object.keys(eventTypeCounts).length}
             icon={<FileText className="w-5 h-5" />}
             color="blue"
           />
           <StatCard
-            title="Immutabilité"
+            title="Immutability"
             value="STRICT"
-            subtitle="Aucune mutation possible"
+            subtitle="No mutations"
             icon={<Shield className="w-5 h-5" />}
             color="green"
           />
@@ -233,7 +233,7 @@ export default function AdminAuditPage() {
             }`}
           >
             <Activity className="w-4 h-4 inline mr-1.5" />
-            Événements Leads
+            Lead Events
           </button>
           <button
             onClick={() => setActiveTab('audit_logs')}
@@ -281,14 +281,14 @@ export default function AdminAuditPage() {
             ) : (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Événements des leads">
+                  <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Lead events">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID du lead</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID de l&apos;artisan</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métadonnées</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead ID</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Attorney ID</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Metadata</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -296,7 +296,7 @@ export default function AdminAuditPage() {
                         <tr>
                           <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
                             <Activity className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                            Aucun événement
+                            No events found
                           </td>
                         </tr>
                       ) : (
@@ -347,7 +347,7 @@ export default function AdminAuditPage() {
                 {eventsTotalPages > 1 && (
                   <div className="px-4 py-4 border-t border-gray-100 flex items-center justify-between">
                     <span className="text-sm text-gray-500">
-                      Page {eventsPage} / {eventsTotalPages} ({eventsTotal} événements)
+                      Page {eventsPage} / {eventsTotalPages} ({eventsTotal} events)
                     </span>
                     <div className="flex gap-2">
                       <button
@@ -379,11 +379,11 @@ export default function AdminAuditPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Type d&apos;entité</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Entity type</label>
                   <select
                     value={entityType}
                     onChange={(e) => { setEntityType(e.target.value); setLogsPage(1) }}
-                    aria-label="Filtrer par type d'entité"
+                    aria-label="Filter by entity type"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   >
                     {ENTITY_TYPES.map((type) => (
@@ -402,7 +402,7 @@ export default function AdminAuditPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Début</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Start</label>
                   <input
                     type="date"
                     value={dateFrom}
@@ -431,7 +431,7 @@ export default function AdminAuditPage() {
               ) : logs.length === 0 ? (
                 <div className="p-16 text-center text-gray-500">
                   <Shield className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                  <p>Aucun log d&apos;audit trouvé</p>
+                  <p>No audit logs found</p>
                 </div>
               ) : (
                 <>
@@ -442,8 +442,8 @@ export default function AdminAuditPage() {
                           <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
                           <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Admin</th>
                           <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Action</th>
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Entité</th>
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Détails</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Entity</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Details</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
@@ -475,7 +475,7 @@ export default function AdminAuditPage() {
                               {log.new_value && Object.keys(log.new_value).length > 0 && (
                                 <details className="text-xs">
                                   <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
-                                    Données
+                                    Data
                                   </summary>
                                   <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
                                     {JSON.stringify(log.new_value, null, 2)}

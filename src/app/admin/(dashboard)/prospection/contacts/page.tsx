@@ -40,7 +40,7 @@ export default function ContactsPage() {
         search: debouncedSearch,
       })
       const res = await fetch(`/api/admin/prospection/contacts?${params}`, { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setContacts(data.data)
@@ -49,7 +49,7 @@ export default function ContactsPage() {
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -66,14 +66,14 @@ export default function ContactsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Gestion des contacts</p>
+          <p className="text-gray-500 mt-1">Contact management</p>
         </div>
         <div className="flex gap-2">
-          <button disabled title="Fonctionnalité non disponible" className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg opacity-50 cursor-not-allowed">
-            <Users className="w-4 h-4" /> Synchroniser les artisans
+          <button disabled title="Feature not available" className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg opacity-50 cursor-not-allowed">
+            <Users className="w-4 h-4" /> Sync attorneys
           </button>
           <Link href="/admin/prospection/contacts/import" className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            <Upload className="w-4 h-4" /> Importer CSV
+            <Upload className="w-4 h-4" /> Import CSV
           </Link>
         </div>
       </div>
@@ -88,45 +88,45 @@ export default function ContactsPage() {
         </div>
       )}
 
-      {/* Filtres */}
+      {/* Filters */}
       <div className="flex gap-4 mb-4">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Rechercher par nom, email, ville..."
+            placeholder="Search by name, email, city..."
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
-            aria-label="Rechercher par nom, email, ville"
+            aria-label="Search by name, email, city"
             className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
           />
         </div>
         <select
           value={typeFilter}
           onChange={(e) => { setTypeFilter(e.target.value); setPage(1) }}
-          aria-label="Filtrer par type de contact"
+          aria-label="Filter by contact type"
           className="border rounded-lg px-3 py-2 text-sm"
         >
-          <option value="all">Tous les types</option>
-          <option value="artisan">Artisans</option>
+          <option value="all">All types</option>
+          <option value="artisan">Attorneys</option>
           <option value="client">Clients</option>
-          <option value="mairie">Mairies</option>
+          <option value="mairie">Municipalities</option>
         </select>
       </div>
 
       {/* Total */}
-      <p className="text-sm text-gray-500 mb-3">{total.toLocaleString('fr-FR')} contacts</p>
+      <p className="text-sm text-gray-500 mb-3">{total.toLocaleString('en-US')} contacts</p>
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[700px] text-sm" aria-label="Liste des contacts de prospection">
+        <table className="w-full min-w-[700px] text-sm" aria-label="Prospection contacts list">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Téléphone</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Phone</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">City</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
             </tr>
@@ -144,7 +144,7 @@ export default function ContactsPage() {
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
                   <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  Aucun contact. Importez un CSV pour commencer.
+                  No contacts. Import a CSV to get started.
                 </td>
               </tr>
             ) : (
@@ -179,7 +179,7 @@ export default function ContactsPage() {
             disabled={page === 1}
             className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
           >
-            Précédent
+            Previous
           </button>
           <span className="text-sm text-gray-500">Page {page} / {totalPages}</span>
           <button
@@ -187,7 +187,7 @@ export default function ContactsPage() {
             disabled={page === totalPages}
             className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
           >
-            Suivant
+            Next
           </button>
         </div>
       )}

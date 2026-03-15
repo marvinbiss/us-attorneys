@@ -94,7 +94,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
 
     if (!formData.phone.trim()) {
       newErrors.phone = 'Your phone number is required'
-    } else if (!/^(?:\+33|0)[1-9](?:[0-9]{8})$/.test(formData.phone.replace(/\s/g, ''))) {
+    } else if (!/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/.test(formData.phone.replace(/\s/g, ''))) {
       newErrors.phone = 'Invalid phone number'
     }
 
@@ -137,7 +137,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
           city: artisan.city || '',
           urgency: formData.urgency,
         })
-        trackConversion('generate_lead', 40, 'EUR', {
+        trackConversion('generate_lead', 40, 'USD', {
           attorney_id: artisan.id,
           artisan_name: displayName,
           service: artisan.specialty || '',

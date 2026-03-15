@@ -67,7 +67,7 @@ export default function Loading() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3">
               <div className="w-10 h-10 border-4 border-clay-400 border-t-transparent rounded-full animate-spin" />
-              <span className="text-stone-500 text-sm">Chargement de la carte...</span>
+              <span className="text-stone-500 text-sm">Loading map...</span>
             </div>
           </div>
         </div>

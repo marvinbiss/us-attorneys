@@ -62,7 +62,7 @@ export default function AddPortfolioModal({
     setError(null)
 
     try {
-      // Get artisan ID from current user - we'll use a dummy for now
+      // Get attorney ID from current user - we'll use a dummy for now
       // In production, this would come from the auth context
       const formData = new FormData()
       formData.append('file', files[0])

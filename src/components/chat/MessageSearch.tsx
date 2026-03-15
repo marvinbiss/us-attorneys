@@ -66,7 +66,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('fr-FR', {
+    return date.toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
       year: date.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined,
@@ -101,7 +101,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Rechercher dans la conversation..."
+            placeholder="Search in conversation..."
             className="w-full pl-9 pr-3 py-2 bg-gray-100 dark:bg-gray-800 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             autoFocus
           />
@@ -116,7 +116,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
             onClick={() => navigateResult('up')}
             disabled={results.length === 0}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded disabled:opacity-50"
-            title="Résultat précédent"
+            title="Previous result"
           >
             <ChevronUp className="w-4 h-4" />
           </button>
@@ -124,7 +124,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
             onClick={() => navigateResult('down')}
             disabled={results.length === 0}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded disabled:opacity-50"
-            title="Résultat suivant"
+            title="Next result"
           >
             <ChevronDown className="w-4 h-4" />
           </button>
@@ -141,7 +141,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
         <button
           onClick={onClose}
           className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-          title="Fermer"
+          title="Close"
         >
           <X className="w-4 h-4" />
         </button>
@@ -180,7 +180,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
       {/* No results */}
       {query && !isSearching && results.length === 0 && (
         <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
-          Aucun message trouvé pour "{query}"
+          No messages found for "{query}"
         </div>
       )}
     </div>

@@ -16,17 +16,17 @@ export default function ProspectionDashboard() {
     try {
       setError(null)
       const res = await fetch('/api/admin/prospection/analytics', { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setStats(data.data.overview)
         setChannels(data.data.channels)
       } else {
-        setError(data.error?.message || 'Erreur lors du chargement')
+        setError(data.error?.message || 'Loading error')
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -69,15 +69,15 @@ export default function ProspectionDashboard() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Envoyés</span>
-                  <span className="font-medium">{ch.sent.toLocaleString('fr-FR')}</span>
+                  <span className="font-medium">{ch.sent.toLocaleString('en-US')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Livrés</span>
-                  <span className="font-medium">{ch.delivered.toLocaleString('fr-FR')}</span>
+                  <span className="font-medium">{ch.delivered.toLocaleString('en-US')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Réponses</span>
-                  <span className="font-medium">{ch.replied.toLocaleString('fr-FR')}</span>
+                  <span className="font-medium">{ch.replied.toLocaleString('en-US')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Taux livraison</span>
@@ -92,7 +92,7 @@ export default function ProspectionDashboard() {
           ))}
           {!loading && channels.length === 0 && (
             <div className="col-span-3 text-center py-8 text-gray-400">
-              Aucune donnée disponible. Lancez votre première campagne.
+              No data available. Launch your first campaign.
             </div>
           )}
         </div>

@@ -185,7 +185,7 @@ export function ShareButton({
       color: 'text-gray-600 hover:bg-gray-100',
     },
     {
-      label: copied ? 'Lien copié !' : 'Copier le lien',
+      label: copied ? 'Link copied!' : 'Copy link',
       icon: <Link2 className="w-4 h-4" />,
       onClick: () => {
         handleCopyLink()
@@ -207,7 +207,7 @@ export function ShareButton({
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
             className,
           )}
-          aria-label="Partager"
+          aria-label="Share"
           aria-expanded={isOpen}
           aria-haspopup="true"
         >
@@ -224,12 +224,12 @@ export function ShareButton({
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
             className,
           )}
-          aria-label="Partager"
+          aria-label="Share"
           aria-expanded={isOpen}
           aria-haspopup="true"
         >
           <Share2 className="w-4 h-4" />
-          <span>Partager</span>
+          <span>Share</span>
         </button>
       )}
 
@@ -241,11 +241,11 @@ export function ShareButton({
             'py-1',
           )}
           role="menu"
-          aria-label="Options de partage"
+          aria-label="Share options"
         >
           <div className="px-3 py-2 border-b border-gray-100">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              Partager via
+              Share via
             </p>
           </div>
           {shareOptions.map((option) => (
@@ -270,7 +270,7 @@ export function ShareButton({
               className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X className="w-3 h-3" />
-              Fermer
+              Close
             </button>
           </div>
         </div>

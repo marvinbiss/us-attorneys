@@ -36,7 +36,7 @@ interface UsersResponse {
 export default function AdminUsersPage() {
   const router = useRouter()
   const [search, setSearch] = useState('')
-  const [filter, setFilter] = useState<'all' | 'clients' | 'artisans'>('all')
+  const [filter, setFilter] = useState<'all' | 'clients' | 'attorneys'>('all')
   const [page, setPage] = useState(1)
 
   // Modal state (kept for future use — ban endpoint not yet active)
@@ -78,7 +78,7 @@ export default function AdminUsersPage() {
   }
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -91,15 +91,15 @@ export default function AdminUsersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Utilisateurs</h1>
-            <p className="text-gray-500 mt-1">{total} utilisateurs au total</p>
+            <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+            <p className="text-gray-500 mt-1">{total} total users</p>
           </div>
           <button
             onClick={() => router.push('/admin/utilisateurs/nouveau')}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <UserPlus className="w-5 h-5" />
-            Nouvel utilisateur
+            New user
           </button>
         </div>
 
@@ -111,8 +111,8 @@ export default function AdminUsersPage() {
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher par nom, email, téléphone..."
-                aria-label="Rechercher un utilisateur"
+                placeholder="Search by name, email, phone..."
+                aria-label="Search for a user"
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -124,7 +124,7 @@ export default function AdminUsersPage() {
 
             {/* Type filter */}
             <div className="flex gap-2">
-              {(['all', 'clients', 'artisans'] as const).map((f) => (
+              {(['all', 'clients', 'attorneys'] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => {
@@ -137,8 +137,8 @@ export default function AdminUsersPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {f === 'all' ? 'Tous' :
-                   f === 'clients' ? 'Clients' : 'Artisans'}
+                  {f === 'all' ? 'All' :
+                   f === 'clients' ? 'Clients' : 'Attorneys'}
                 </button>
               ))}
             </div>
@@ -164,25 +164,25 @@ export default function AdminUsersPage() {
           ) : users.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <User className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucun utilisateur trouvé</p>
+              <p>No users found</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[800px]" aria-label="Liste des utilisateurs">
+                <table className="w-full min-w-[800px]" aria-label="Users list">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Utilisateur
+                        User
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Rôle
+                        Role
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Statut
+                        Status
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Inscription
+                        Registered
                       </th>
                       <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
@@ -195,7 +195,7 @@ export default function AdminUsersPage() {
                         <td className="px-6 py-4">
                           <div>
                             <p className="font-medium text-gray-900">
-                              {user.full_name || 'Sans nom'}
+                              {user.full_name || 'No name'}
                             </p>
                             <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
                               <Mail className="w-3 h-3" />
@@ -230,7 +230,7 @@ export default function AdminUsersPage() {
                             <button
                               onClick={() => router.push(`/admin/utilisateurs/${user.id}`)}
                               className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                              title="Voir le profil"
+                              title="View profile"
                             >
                               <Eye className="w-5 h-5" />
                             </button>
@@ -241,7 +241,7 @@ export default function AdminUsersPage() {
                                 userName: user.full_name || user.email,
                               })}
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                              title="Bannir"
+                              title="Ban"
                             >
                               <Ban className="w-5 h-5" />
                             </button>
@@ -256,13 +256,13 @@ export default function AdminUsersPage() {
               {/* Pagination */}
               <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p className="text-sm text-gray-500">
-                  Page {page} sur {totalPages} ({total} résultats)
+                  Page {page} of {totalPages} ({total} results)
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    aria-label="Page précédente"
+                    aria-label="Previous page"
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -270,7 +270,7 @@ export default function AdminUsersPage() {
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    aria-label="Page suivante"
+                    aria-label="Next page"
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -292,15 +292,15 @@ export default function AdminUsersPage() {
             }} />
             <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-[95vw] sm:max-w-md w-full p-6">
               <h3 id="ban-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
-                Bannir utilisateur
+                Ban user
               </h3>
               <p className="text-gray-600 mb-4">
-                {`Êtes-vous sûr de vouloir bannir ${banModal.userName} ? L'utilisateur ne pourra plus accéder à la plateforme.`}
+                {`Are you sure you want to ban ${banModal.userName}? The user will no longer be able to access the platform.`}
               </p>
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Raison du bannissement
+                  Reason for ban
                 </label>
                 <textarea
                   value={banReason}
@@ -308,7 +308,7 @@ export default function AdminUsersPage() {
                   rows={3}
                   maxLength={500}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder="Indiquez la raison du bannissement..."
+                  placeholder="Enter the reason for the ban..."
                 />
               </div>
 
@@ -320,13 +320,13 @@ export default function AdminUsersPage() {
                   }}
                   className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   onClick={handleBanAction}
                   className="px-4 py-2 text-white rounded-lg transition-colors bg-red-600 hover:bg-red-700"
                 >
-                  Bannir
+                  Ban
                 </button>
               </div>
             </div>

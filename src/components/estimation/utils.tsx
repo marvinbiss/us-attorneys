@@ -24,14 +24,16 @@ export interface ChatMessage {
 }
 
 // ---------------------------------------------------------------------------
-// French phone validation
+// US phone validation
 // ---------------------------------------------------------------------------
 
-export function isValidFrenchPhone(phone: string): boolean {
+export function isValidUSPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^0033[1-9]\d{8}$/.test(cleaned)) return true
+  // US 10-digit: (555) 123-4567 or 5551234567
+  if (/^\d{10}$/.test(cleaned)) return true
+  // US with country code: +1 or 1
+  if (/^1\d{10}$/.test(cleaned)) return true
+  if (/^\+1\d{10}$/.test(cleaned)) return true
   return false
 }
 
@@ -41,10 +43,10 @@ export function isValidFrenchPhone(phone: string): boolean {
 
 export function shouldShowLeadForm(content: string): boolean {
   const lower = content.toLowerCase()
-  // Trigger on keywords OR when a price estimation is given (bold €)
+  // Trigger on keywords OR when a price estimation is given (bold $)
   if (LEAD_TRIGGER_KEYWORDS.some((kw) => lower.includes(kw))) return true
-  // Detect price pattern like **80€ — 150€** or **80 € — 150 €**
-  if (/\*\*\d+\s*€/.test(content)) return true
+  // Detect price pattern like **$80 — $150** or **$80 - $150**
+  if (/\*\*\$\d+/.test(content)) return true
   return false
 }
 
@@ -75,7 +77,7 @@ export function getGreetingMessage(
   const ville = context.ville
   const pageUrl = context.pageUrl || ''
 
-  // Returning visitor — message personnalisé
+  // Returning visitor — personalized message
   if (isReturning) {
     if (context.artisan) {
       return `Welcome back! Get your free consultation with ${context.artisan.name}`

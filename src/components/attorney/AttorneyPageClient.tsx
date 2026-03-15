@@ -68,7 +68,7 @@ const AttorneyMap = dynamic(
   { loading: () => <SectionSkeleton height="h-80" /> }
 )
 
-// Similar artisans carousel
+// Similar attorneys carousel
 const AttorneySimilar = dynamic(
   () => import('@/components/attorney/AttorneySimilar').then(mod => ({ default: mod.AttorneySimilar })),
   { loading: () => <SectionSkeleton height="h-72" /> }

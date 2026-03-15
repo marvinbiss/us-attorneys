@@ -81,13 +81,13 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
   }
 
   const dayNames: Record<string, string> = {
-    monday: 'Lundi',
-    tuesday: 'Mardi',
-    wednesday: 'Mercredi',
-    thursday: 'Jeudi',
-    friday: 'Vendredi',
-    saturday: 'Samedi',
-    sunday: 'Dimanche',
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday',
+    sunday: 'Sunday',
   }
 
   return (
@@ -122,7 +122,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                 {provider.is_verified && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                     <CheckCircle className="w-4 h-4" />
-                    Vérifié
+                    Verified
                   </span>
                 )}
               </div>
@@ -133,7 +133,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                   {provider.rating_average.toFixed(1)}
                 </span>
                 <span className="text-gray-500">
-                  ({provider.review_count} avis)
+                  ({provider.review_count} reviews)
                 </span>
               </div>
 
@@ -150,19 +150,19 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                 {provider.is_available_24h && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
                     <Clock className="w-4 h-4" />
-                    Disponible 24h/24
+                    Available 24/7
                   </span>
                 )}
                 {provider.years_experience && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
                     <Award className="w-4 h-4" />
-                    {provider.years_experience} ans d'expérience
+                    {provider.years_experience} years of experience
                   </span>
                 )}
                 {provider.response_time && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                     <MessageSquare className="w-4 h-4" />
-                    Répond en {provider.response_time}
+                    Responds in {provider.response_time}
                   </span>
                 )}
               </div>
@@ -185,7 +185,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                   className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
                 >
                   <Mail className="w-5 h-5" />
-                  Envoyer un email
+                  Send email
                 </a>
               )}
               {provider.website && (
@@ -196,7 +196,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                   className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
                 >
                   <Globe className="w-5 h-5" />
-                  Site web
+                  Website
                 </a>
               )}
             </div>
@@ -209,9 +209,9 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-8">
             {[
-              { id: 'about', label: 'À propos' },
+              { id: 'about', label: 'About' },
               { id: 'services', label: 'Services' },
-              { id: 'reviews', label: `Avis (${provider.review_count})` },
+              { id: 'reviews', label: `Reviews (${provider.review_count})` },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -239,10 +239,10 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                 {/* Description */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                    À propos
+                    About
                   </h2>
                   <p className="text-gray-600 whitespace-pre-line">
-                    {provider.full_description || provider.description || 'Pas de description disponible.'}
+                    {provider.full_description || provider.description || 'No description available.'}
                   </p>
                 </div>
 
@@ -251,7 +251,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                       <Calendar className="w-5 h-5 text-blue-600" />
-                      Horaires d'ouverture
+                      Office hours
                     </h2>
                     <div className="space-y-2">
                       {Object.entries(provider.opening_hours).map(([day, hours]) => (
@@ -269,7 +269,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
             {activeTab === 'services' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Services proposés
+                  Services offered
                 </h2>
                 {provider.services && provider.services.length > 0 ? (
                   <ul className="space-y-2">
@@ -281,13 +281,13 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-500">Aucun service spécifié.</p>
+                  <p className="text-gray-500">No services specified.</p>
                 )}
 
                 {provider.service_areas && provider.service_areas.length > 0 && (
                   <div className="mt-6 pt-6 border-t border-gray-100">
                     <h3 className="font-semibold text-gray-900 mb-3">
-                      Zones d'intervention
+                      Service areas
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {provider.service_areas.map((area, i) => (
@@ -307,7 +307,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
             {activeTab === 'reviews' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Avis clients ({provider.review_count})
+                  Client reviews ({provider.review_count})
                 </h2>
                 <ReviewsList reviews={provider.reviews || []} />
               </div>
@@ -319,7 +319,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
             {showQuoteForm && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Demander un devis
+                  Request a quote
                 </h2>
                 <QuoteForm attorneyId={provider.id} specialtySlug={provider.slug} />
               </div>

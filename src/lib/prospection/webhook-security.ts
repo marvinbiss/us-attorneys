@@ -56,7 +56,7 @@ export function verifyResendSignature(
       return false
     }
 
-    // Verify le timestamp (max 5 minutes de différence)
+    // Verify timestamp (max 5 minutes difference)
     const timestamp = parseInt(svixTimestamp, 10)
     const now = Math.floor(Date.now() / 1000)
     if (Math.abs(now - timestamp) > 300) {

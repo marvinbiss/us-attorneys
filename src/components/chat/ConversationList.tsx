@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
 import { MessageSquare, Search } from 'lucide-react'
 import { Input } from '@/components/ui'
 import Image from 'next/image'
@@ -54,7 +54,7 @@ export function ConversationList({
   })
 
   const formatTime = (dateStr: string) => {
-    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: fr })
+    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: enUS })
   }
 
   if (isLoading) {
@@ -81,7 +81,7 @@ export function ConversationList({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Rechercher une conversation..."
+            placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -96,8 +96,8 @@ export function ConversationList({
             <MessageSquare className="w-12 h-12 mb-4 opacity-50" />
             <p className="text-center">
               {searchQuery
-                ? 'Aucune conversation trouvée'
-                : 'Aucune conversation pour le moment'}
+                ? 'No conversations found'
+                : 'No conversations yet'}
             </p>
           </div>
         ) : (
@@ -158,7 +158,7 @@ export function ConversationList({
                             : 'text-gray-700 dark:text-gray-300'
                         )}
                       >
-                        {name || 'Utilisateur'}
+                        {name || 'User'}
                       </h3>
                       <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">
                         {formatTime(conversation.last_message_at)}
@@ -167,9 +167,9 @@ export function ConversationList({
                     {/* Last message preview would go here if we had it */}
                     <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                       {conversation.booking_id
-                        ? 'Réservation en cours'
+                        ? 'Active booking'
                         : conversation.quote_id
-                        ? 'Demande de devis'
+                        ? 'Quote request'
                         : 'Conversation'}
                     </p>
                   </div>

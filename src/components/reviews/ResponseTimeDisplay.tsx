@@ -23,7 +23,7 @@ const getResponseSpeedLevel = (hours: number) => {
 const SPEED_CONFIG = {
   instant: {
     icon: Zap,
-    label: 'Ultra rapide',
+    label: 'Lightning fast',
     sublabel: '< 1h',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
@@ -31,7 +31,7 @@ const SPEED_CONFIG = {
   },
   fast: {
     icon: Clock,
-    label: 'Rapide',
+    label: 'Fast',
     sublabel: '< 4h',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
@@ -47,7 +47,7 @@ const SPEED_CONFIG = {
   },
   slow: {
     icon: Timer,
-    label: 'Lent',
+    label: 'Slow',
     sublabel: '> 24h',
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
@@ -90,7 +90,7 @@ export function ResponseTimeDisplay({
   const formatTime = (hours: number) => {
     if (hours < 1) return `${Math.round(hours * 60)} min`
     if (hours < 24) return `${Math.round(hours)}h`
-    return `${Math.round(hours / 24)}j`
+    return `${Math.round(hours / 24)}d`
   }
 
   // Badge variant

@@ -17,13 +17,13 @@ function formatRelative(dateStr: string): string {
   const now = new Date()
   const diffMs = now.getTime() - d.getTime()
   const diffMin = Math.floor(diffMs / 60000)
-  if (diffMin < 1) return "À l'instant"
-  if (diffMin < 60) return `il y a ${diffMin} min`
+  if (diffMin < 1) return 'Just now'
+  if (diffMin < 60) return `${diffMin}m ago`
   const diffH = Math.floor(diffMin / 60)
-  if (diffH < 24) return `il y a ${diffH}h`
+  if (diffH < 24) return `${diffH}h ago`
   const diffD = Math.floor(diffH / 24)
-  if (diffD < 7) return `il y a ${diffD}j`
-  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  if (diffD < 7) return `${diffD}d ago`
+  return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
 }
 
 export function LeadTable({ assignments, basePath, showProvider, attorneyNames }: LeadTableProps) {
@@ -33,8 +33,8 @@ export function LeadTable({ assignments, basePath, showProvider, attorneyNames }
         <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
           <Clock className="w-6 h-6 text-gray-400" />
         </div>
-        <p className="text-gray-500 font-medium">Aucun lead</p>
-        <p className="text-sm text-gray-400 mt-1">Les nouveaux leads apparaîtront ici.</p>
+        <p className="text-gray-500 font-medium">No leads</p>
+        <p className="text-sm text-gray-400 mt-1">New leads will appear here.</p>
       </div>
     )
   }
@@ -49,18 +49,18 @@ export function LeadTable({ assignments, basePath, showProvider, attorneyNames }
                 Service
               </th>
               <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
-                Lieu
+                Location
               </th>
               {showProvider && (
                 <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
-                  Artisan
+                  Attorney
                 </th>
               )}
               <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
-                Urgence
+                Urgency
               </th>
               <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
-                Statut
+                Status
               </th>
               <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
                 Date

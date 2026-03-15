@@ -42,7 +42,7 @@ export function RadiusSlider({
                 : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             )}
           >
-            {preset} km
+            {preset} mi
           </button>
         ))}
       </div>
@@ -50,12 +50,12 @@ export function RadiusSlider({
       {/* Slider */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500 dark:text-gray-400">{min} km</span>
+          <span className="text-gray-500 dark:text-gray-400">{min} mi</span>
           <div className="flex items-center gap-1 font-medium text-blue-600">
             <MapPin className="w-4 h-4" />
-            {value} km
+            {value} mi
           </div>
-          <span className="text-gray-500 dark:text-gray-400">{max} km</span>
+          <span className="text-gray-500 dark:text-gray-400">{max} mi</span>
         </div>
 
         <div className="relative h-2">

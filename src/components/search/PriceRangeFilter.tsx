@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Euro } from 'lucide-react'
+import { DollarSign } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface PriceRangeFilterProps {
@@ -90,7 +90,7 @@ export function PriceRangeFilter({
             Min ($/h)
           </label>
           <div className="relative">
-            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="number"
               value={localMin}
@@ -110,7 +110,7 @@ export function PriceRangeFilter({
             Max ($/h)
           </label>
           <div className="relative">
-            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="number"
               value={localMax}

@@ -31,11 +31,11 @@ function getReviewEmailTemplate(data: {
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">Votre avis compte !</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">Your opinion matters!</h1>
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.clientName}</strong>,
+                Hello <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
                 How was your appointment with <strong>${data.attorneyName}</strong> for <strong>${data.specialtyName}</strong>?
@@ -46,12 +46,12 @@ function getReviewEmailTemplate(data: {
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${data.reviewUrl}" style="display: inline-block; background: #8b5cf6; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 16px;">
-                  ⭐ Laisser un avis
+                  ⭐ Leave a review
                 </a>
               </div>
 
               <p style="color: #999; font-size: 13px; text-align: center;">
-                Cela ne prend que 30 secondes
+                It only takes 30 seconds
               </p>
 
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
@@ -65,15 +65,15 @@ function getReviewEmailTemplate(data: {
       </html>
     `,
     text: `
-Bonjour ${data.clientName},
+Hello ${data.clientName},
 
 How was your appointment with ${data.attorneyName} for ${data.specialtyName}?
 
 Your review helps others find the best attorneys.
 
-Laisser un avis: ${data.reviewUrl}
+Leave a review: ${data.reviewUrl}
 
-Cela ne prend que 30 secondes.
+It only takes 30 seconds.
 
 US Attorneys
     `,

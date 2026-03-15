@@ -42,7 +42,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
       TableHeader,
       TableCell,
       Placeholder.configure({
-        placeholder: placeholder || 'Commencez à écrire...',
+        placeholder: placeholder || 'Start writing...',
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],

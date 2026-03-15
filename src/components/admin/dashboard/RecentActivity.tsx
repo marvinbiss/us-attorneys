@@ -19,11 +19,11 @@ interface RecentActivityProps {
 
 function formatRelativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime()
-  if (diff < 60_000) return 'À l’instant'
-  if (diff < 3_600_000) return `Il y a ${Math.floor(diff / 60_000)} min`
-  if (diff < 86_400_000) return `Il y a ${Math.floor(diff / 3_600_000)}h`
-  if (diff < 604_800_000) return `Il y a ${Math.floor(diff / 86_400_000)}j`
-  return new Date(iso).toLocaleDateString('fr-FR')
+  if (diff < 60_000) return 'Just now'
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`
+  if (diff < 604_800_000) return `${Math.floor(diff / 86_400_000)}d ago`
+  return new Date(iso).toLocaleDateString('en-US')
 }
 
 const typeConfig: Record<string, { icon: typeof Calendar; bg: string }> = {
@@ -34,12 +34,12 @@ const typeConfig: Record<string, { icon: typeof Calendar; bg: string }> = {
 }
 
 const statusLabels: Record<string, { label: string; classes: string }> = {
-  confirmed: { label: 'Confirmé', classes: 'bg-green-100 text-green-700' },
-  pending: { label: 'En attente', classes: 'bg-amber-100 text-amber-700' },
-  completed: { label: 'Terminé', classes: 'bg-blue-100 text-blue-700' },
-  published: { label: 'Publié', classes: 'bg-green-100 text-green-700' },
-  cancelled: { label: 'Annulé', classes: 'bg-red-100 text-red-700' },
-  in_progress: { label: 'En cours', classes: 'bg-blue-100 text-blue-700' },
+  confirmed: { label: 'Confirmed', classes: 'bg-green-100 text-green-700' },
+  pending: { label: 'Pending', classes: 'bg-amber-100 text-amber-700' },
+  completed: { label: 'Completed', classes: 'bg-blue-100 text-blue-700' },
+  published: { label: 'Published', classes: 'bg-green-100 text-green-700' },
+  cancelled: { label: 'Cancelled', classes: 'bg-red-100 text-red-700' },
+  in_progress: { label: 'In progress', classes: 'bg-blue-100 text-blue-700' },
 }
 
 function SkeletonRow() {
@@ -57,14 +57,14 @@ function SkeletonRow() {
 
 export function RecentActivity({ activity, loading }: RecentActivityProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Activité récente">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Recent activity">
       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h3 className="font-semibold text-gray-900">Activité récente</h3>
+        <h3 className="font-semibold text-gray-900">Recent activity</h3>
         <Link
           href="/admin/journal"
           className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
         >
-          Voir tout
+          View all
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -74,7 +74,7 @@ export function RecentActivity({ activity, loading }: RecentActivityProps) {
         ) : activity.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
             <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-            <p>Aucune activité récente</p>
+            <p>No recent activity</p>
           </div>
         ) : (
           activity.map((item) => {

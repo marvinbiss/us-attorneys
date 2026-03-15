@@ -15,38 +15,38 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       value: stats?.total_contacts || 0,
       icon: Users,
       color: 'text-blue-600 bg-blue-100',
-      detail: stats ? `${stats.contacts_by_type.artisan} artisans, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} mairies` : '',
+      detail: stats ? `${stats.contacts_by_type.artisan} attorneys, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} firms` : '',
     },
     {
-      name: 'Campagnes actives',
+      name: 'Active campaigns',
       value: stats?.active_campaigns || 0,
       icon: Send,
       color: 'text-green-600 bg-green-100',
-      detail: `${stats?.total_campaigns || 0} au total`,
+      detail: `${stats?.total_campaigns || 0} total`,
     },
     {
-      name: 'Messages envoyés',
+      name: 'Messages sent',
       value: stats?.total_messages_sent || 0,
       icon: MessageSquare,
       color: 'text-blue-600 bg-blue-100',
       detail: stats ? `Email: ${stats.messages_by_channel.email}, SMS: ${stats.messages_by_channel.sms}, WA: ${stats.messages_by_channel.whatsapp}` : '',
     },
     {
-      name: 'Taux de livraison',
+      name: 'Delivery rate',
       value: `${(stats?.overall_delivery_rate || 0).toFixed(1)}%`,
       icon: TrendingUp,
       color: 'text-amber-600 bg-amber-100',
     },
     {
-      name: 'Taux de réponse',
+      name: 'Reply rate',
       value: `${(stats?.overall_reply_rate || 0).toFixed(1)}%`,
       icon: Inbox,
       color: 'text-blue-600 bg-blue-100',
-      detail: `${stats?.open_conversations || 0} conversations ouvertes`,
+      detail: `${stats?.open_conversations || 0} open conversations`,
     },
     {
-      name: 'Coût total',
-      value: `${(stats?.total_cost || 0).toFixed(2)} €`,
+      name: 'Total cost',
+      value: `${(stats?.total_cost || 0).toFixed(2)} $`,
       icon: DollarSign,
       color: 'text-rose-600 bg-rose-100',
     },
@@ -79,7 +79,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
               </div>
             </div>
             <p className="text-2xl font-bold text-gray-900">
-              {typeof card.value === 'number' ? card.value.toLocaleString('fr-FR') : card.value}
+              {typeof card.value === 'number' ? card.value.toLocaleString('en-US') : card.value}
             </p>
             {card.detail && (
               <p className="text-xs text-gray-400 mt-1">{card.detail}</p>
@@ -91,7 +91,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
   )
 }
 
-// Icônes de canal
+// Channel icons
 export function ChannelIcon({ channel, className }: { channel: string; className?: string }) {
   switch (channel) {
     case 'email': return <Mail className={className || 'w-4 h-4'} />
@@ -101,7 +101,7 @@ export function ChannelIcon({ channel, className }: { channel: string; className
   }
 }
 
-// Badge de statut campagne
+// Campaign status badge
 export function CampaignStatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
     draft: 'bg-gray-100 text-gray-700',
@@ -113,12 +113,12 @@ export function CampaignStatusBadge({ status }: { status: string }) {
   }
 
   const labels: Record<string, string> = {
-    draft: 'Brouillon',
-    scheduled: 'Planifiée',
-    sending: 'En cours',
-    paused: 'En pause',
-    completed: 'Terminée',
-    cancelled: 'Annulée',
+    draft: 'Draft',
+    scheduled: 'Scheduled',
+    sending: 'Sending',
+    paused: 'Paused',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
   }
 
   return (
@@ -128,7 +128,7 @@ export function CampaignStatusBadge({ status }: { status: string }) {
   )
 }
 
-// Badge type contact
+// Contact type badge
 export function ContactTypeBadge({ type }: { type: string }) {
   const styles: Record<string, string> = {
     artisan: 'bg-blue-100 text-blue-700',
@@ -137,9 +137,9 @@ export function ContactTypeBadge({ type }: { type: string }) {
   }
 
   const labels: Record<string, string> = {
-    artisan: 'Artisan',
+    artisan: 'Attorney',
     client: 'Client',
-    mairie: 'Mairie',
+    mairie: 'Firm',
   }
 
   return (

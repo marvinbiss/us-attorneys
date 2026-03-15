@@ -170,7 +170,7 @@ export async function PATCH(
       )
     }
 
-    return NextResponse.json({ success: true, devis: updated })
+    return NextResponse.json({ success: true, quote: updated })
   } catch (error) {
     logger.error('Attorney quote PATCH error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })

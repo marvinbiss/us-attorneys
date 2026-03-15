@@ -154,7 +154,7 @@ const staticServices: Record<string, { id: string; name: string; slug: string; d
   Object.fromEntries(
     allStaticPracticeAreas.map(s => [
       s.slug,
-      { id: s.slug, name: s.name, slug: s.slug, description: `${s.name} professionnel : devis gratuit, artisans qualifiés.`, category: 'Services', is_active: true },
+      { id: s.slug, name: s.name, slug: s.slug, description: `${s.name} professional: free consultation, qualified attorneys.`, category: 'Services', is_active: true },
     ])
   )
 

@@ -62,7 +62,7 @@ export async function GET(
         status,
         created_at,
         attorney_id,
-        provider:providers!attorney_id(id, name, specialty, address_city, rating_average)
+        attorney:attorneys!attorney_id(id, name, primary_specialty_id, address_city, rating_average)
       `)
       .eq('request_id', id)
       .order('created_at', { ascending: true })

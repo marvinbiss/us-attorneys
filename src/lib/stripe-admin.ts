@@ -107,7 +107,7 @@ export async function processRefund(
 }
 
 /**
- * Annuler un abonnement
+ * Cancel a subscription
  */
 export async function cancelSubscription(
   subscriptionId: string,
@@ -172,7 +172,7 @@ export async function changeSubscriptionPlan(
     const subscription = await getStripe().subscriptions.retrieve(subscriptionId)
     const subscriptionItemId = subscription.items.data[0].id
 
-    // Update avec le nouveau prix
+    // Update with the new price
     const updatedSubscription = await getStripe().subscriptions.update(subscriptionId, {
       items: [
         {
@@ -196,7 +196,7 @@ export async function changeSubscriptionPlan(
 }
 
 /**
- * Créer une charge manuelle
+ * Create a manual charge
  */
 export async function createManualCharge(
   customerId: string,
@@ -351,7 +351,7 @@ export async function getRevenueStats(days = 30) {
   }
 }
 
-// Export des IDs de prix pour les plans
+// Export price IDs for plans
 export const PRICE_IDS = {
   pro: process.env.STRIPE_PRO_PRICE_ID,
   premium: process.env.STRIPE_PREMIUM_PRICE_ID,

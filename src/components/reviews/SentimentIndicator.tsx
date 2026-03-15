@@ -18,28 +18,28 @@ const SENTIMENT_CONFIG = {
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
-    label: 'Positif',
+    label: 'Positive',
   },
   neutral: {
     icon: Minus,
     color: 'text-gray-500',
     bgColor: 'bg-gray-50',
     borderColor: 'border-gray-200',
-    label: 'Neutre',
+    label: 'Neutral',
   },
   negative: {
     icon: ThumbsDown,
     color: 'text-red-600',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
-    label: 'Négatif',
+    label: 'Negative',
   },
   mixed: {
     icon: TrendingUp,
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
-    label: 'Mitigé',
+    label: 'Mixed',
   },
 }
 
@@ -132,13 +132,13 @@ interface TopicSentimentProps {
 }
 
 const TOPIC_LABELS: Record<string, string> = {
-  quality: 'Qualité',
-  price: 'Prix',
-  punctuality: 'Ponctualité',
+  quality: 'Quality',
+  price: 'Price',
+  punctuality: 'Punctuality',
   communication: 'Communication',
-  cleanliness: 'Propreté',
-  professionalism: 'Professionnalisme',
-  value: 'Rapport qualité-prix',
+  cleanliness: 'Cleanliness',
+  professionalism: 'Professionalism',
+  value: 'Value for money',
 }
 
 export function TopicSentiment({ topics, size = 'sm', className }: TopicSentimentProps) {

@@ -379,40 +379,6 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ─── DEVIS RAPIDES ─────────────────────────────────── */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-              <ArrowRight className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Free Consultation in {ville.name}
-              </h2>
-              <p className="text-sm text-slate-500">Request a free consultation online</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { slug: 'plombier', label: 'Family Law' },
-              { slug: 'electricien', label: 'Personal Injury' },
-              { slug: 'chauffagiste', label: 'Criminal Defense' },
-              { slug: 'serrurier', label: 'Estate Planning' },
-            ].map((s) => (
-              <Link
-                key={s.slug}
-                href={`/quotes/${s.slug}/${villeSlug}`}
-                className="bg-white rounded-xl border border-gray-200 p-5 text-center hover:border-amber-300 hover:shadow-md transition-all group"
-              >
-                <h3 className="font-semibold text-slate-800 group-hover:text-amber-600 transition-colors text-sm">
-                  {s.label} Consultation
-                </h3>
-                <p className="text-xs text-slate-400 mt-1.5">in {ville.name}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
         {/* ─── NEARBY VILLES ────────────────────────────────── */}
         {nearbyVilles.length > 0 && (
           <section className="mb-16">
@@ -458,29 +424,6 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
       </div>
-
-      {/* ─── CTA ────────────────────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 60%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Need an Attorney in {ville.name}?
-          </h2>
-          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Describe your legal needs and receive free consultations from qualified attorneys.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Request a Free Consultation
-            </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              View Practice Areas <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
@@ -567,7 +510,7 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Intent variant links — devis, avis, tarifs, urgence, problèmes */}
+          {/* Intent variant links — quotes, reviews, pricing, emergency, issues */}
           <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-5 gap-8">
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {ville.name}</h3>
@@ -628,38 +571,6 @@ export default async function VillePage({ params }: PageProps) {
         </div>
       </section>
 
-        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-        <section className="mb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-              <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial Methodology</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                The data on this page comes from public sources (census data, bar association records). Climate and economic profiles are regional estimates. US Attorneys is an independent directory — we do not provide legal services and do not guarantee the services of listed attorneys.
-              </p>
-            </div>
-          </div>
-        </section>
-
-      {/* Confiance & Sécurité */}
-      <section className="py-8 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Verification Process
-            </Link>
-            <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Review Policy
-            </Link>
-            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Mediation
-            </Link>
-            <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

@@ -94,7 +94,7 @@ export default function DiagnosticClient() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-600">
-            Étape {step} sur {step === 4 ? '4' : '3'}
+            Step {step} of {step === 4 ? '4' : '3'}
           </span>
           {step > 1 && (
             <button
@@ -102,7 +102,7 @@ export default function DiagnosticClient() {
               className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Retour
+              Back
             </button>
           )}
         </div>
@@ -128,10 +128,10 @@ export default function DiagnosticClient() {
         {step === 1 && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2 font-heading">
-              Quel est votre problème ?
+              What is your legal issue?
             </h2>
             <p className="text-gray-600 mb-6">
-              Sélectionnez la catégorie qui correspond le mieux à votre situation.
+              Select the category that best matches your situation.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {diagnosticCategories.map((category) => (
@@ -148,7 +148,7 @@ export default function DiagnosticClient() {
                       {category.label}
                     </span>
                     <span className="block text-sm text-gray-500 mt-0.5">
-                      {category.subProblems.length} problèmes courants
+                      {category.subProblems.length} common issues
                     </span>
                   </div>
                   <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 transition-colors flex-shrink-0" />
@@ -162,14 +162,14 @@ export default function DiagnosticClient() {
         {step === 2 && selectedCategory && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2 font-heading">
-              Plus précisément...
+              More specifically...
             </h2>
             <p className="text-gray-600 mb-6">
               <span className="inline-flex items-center gap-1.5 text-sm bg-gray-100 px-3 py-1 rounded-full mr-2">
                 <span role="img" aria-hidden="true">{selectedCategory.icon}</span>
                 {selectedCategory.label}
               </span>
-              Décrivez plus en détail votre problème.
+              Describe your issue in more detail.
             </p>
             <div className="grid grid-cols-1 gap-3">
               {selectedCategory.subProblems.map((problem) => (
@@ -187,7 +187,7 @@ export default function DiagnosticClient() {
                     </span>
                     {problem.estimatedPriceRange && (
                       <span className="inline-block mt-2 text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
-                        Estimation : {problem.estimatedPriceRange}
+                        Estimate: {problem.estimatedPriceRange}
                       </span>
                     )}
                   </div>
@@ -202,10 +202,10 @@ export default function DiagnosticClient() {
         {step === 3 && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2 font-heading">
-              Est-ce urgent ?
+              Is this urgent?
             </h2>
             <p className="text-gray-600 mb-6">
-              Cela nous aide à vous orienter vers les bonnes ressources.
+              This helps us direct you to the right resources.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
@@ -217,10 +217,10 @@ export default function DiagnosticClient() {
                 </div>
                 <div className="text-center">
                   <span className="font-semibold text-gray-900 group-hover:text-red-700 transition-colors block">
-                    Oui, c&apos;est urgent
+                    Yes, it&apos;s urgent
                   </span>
                   <span className="text-sm text-gray-500 mt-1 block">
-                    J&apos;ai besoin d&apos;une intervention aujourd&apos;hui ou demain
+                    I need help today or tomorrow
                   </span>
                 </div>
               </button>
@@ -233,10 +233,10 @@ export default function DiagnosticClient() {
                 </div>
                 <div className="text-center">
                   <span className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors block">
-                    Non, je planifie
+                    No, I&apos;m planning ahead
                   </span>
                   <span className="text-sm text-gray-500 mt-1 block">
-                    Je prends le temps de comparer les artisans
+                    I want to take time to compare attorneys
                   </span>
                 </div>
               </button>
@@ -253,21 +253,21 @@ export default function DiagnosticClient() {
                   {serviceIcon}
                 </span>
                 <div>
-                  <p className="text-sm text-blue-600 font-medium">Notre recommandation</p>
+                  <p className="text-sm text-blue-600 font-medium">Our recommendation</p>
                   <h2 className="text-2xl font-bold text-gray-900 font-heading">
-                    Vous avez besoin d&apos;un {serviceLabel}
+                    You need a {serviceLabel}
                   </h2>
                 </div>
               </div>
 
               <p className="text-gray-700 mb-4">
-                Pour votre problème de <strong>{selectedProblem.label.toLowerCase()}</strong>,
-                un <strong>{serviceLabel.toLowerCase()}</strong> est le professionnel le plus adapt&eacute;.
+                For your issue with <strong>{selectedProblem.label.toLowerCase()}</strong>,
+                a <strong>{serviceLabel.toLowerCase()}</strong> is the best professional for your situation.
               </p>
 
               {selectedProblem.estimatedPriceRange && (
                 <div className="flex items-center gap-2 mb-4 bg-white/60 rounded-lg px-4 py-3">
-                  <span className="text-sm font-medium text-gray-700">Fourchette de prix estimée :</span>
+                  <span className="text-sm font-medium text-gray-700">Estimated fee range:</span>
                   <span className="font-bold text-blue-700">{selectedProblem.estimatedPriceRange}</span>
                 </div>
               )}
@@ -276,7 +276,7 @@ export default function DiagnosticClient() {
                 <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
                   <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-amber-800 text-sm">Conseil urgence</p>
+                    <p className="font-semibold text-amber-800 text-sm">Emergency tip</p>
                     <p className="text-amber-700 text-sm">{selectedProblem.urgencyTip}</p>
                   </div>
                 </div>
@@ -290,12 +290,12 @@ export default function DiagnosticClient() {
                 {isUrgent ? (
                   <>
                     <AlertTriangle className="w-5 h-5" />
-                    Trouver un {serviceLabel.toLowerCase()} en urgence
+                    Find an emergency {serviceLabel.toLowerCase()}
                   </>
                 ) : (
                   <>
                     <CheckCircle className="w-5 h-5" />
-                    Voir les {serviceLabel.toLowerCase()}s disponibles
+                    View available {serviceLabel.toLowerCase()}s
                   </>
                 )}
                 <ArrowRight className="w-4 h-4" />
@@ -307,14 +307,14 @@ export default function DiagnosticClient() {
               <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="w-5 h-5 text-gray-500" />
-                  <span className="font-semibold text-gray-900">Précisez votre ville (optionnel)</span>
+                  <span className="font-semibold text-gray-900">Specify your city (optional)</span>
                 </div>
                 <div className="flex gap-3">
                   <input
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="Ex : Lyon, Marseille, Toulouse..."
+                    placeholder="e.g., New York, Chicago, Houston..."
                     className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
                   />
                   {city.trim() && (
@@ -323,7 +323,7 @@ export default function DiagnosticClient() {
                       className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
                     >
                       <MapPin className="w-4 h-4" />
-                      Rechercher
+                      Search
                     </Link>
                   )}
                 </div>
@@ -333,7 +333,7 @@ export default function DiagnosticClient() {
             {/* Alternative services */}
             {selectedProblem.alternativeServices && selectedProblem.alternativeServices.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
-                <p className="font-semibold text-gray-900 mb-3">Alternatives possibles</p>
+                <p className="font-semibold text-gray-900 mb-3">Possible alternatives</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedProblem.alternativeServices.map((altSlug) => (
                     <Link
@@ -353,27 +353,27 @@ export default function DiagnosticClient() {
 
             {/* Tips section */}
             <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Conseils pour bien choisir votre artisan</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Tips for choosing the right attorney</h3>
               <ul className="space-y-2">
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Vérifiez le numéro SIRET de l&apos;entreprise sur le site de l&apos;INSEE.
+                  Verify the attorney&apos;s bar number with the state bar association.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Demandez toujours un devis détaillé avant le début des travaux.
+                  Always request a detailed fee agreement before engaging services.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Comparez au moins 3 devis pour le même type de travaux.
+                  Compare at least 3 consultations for the same type of case.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Assurez-vous que l&apos;artisan possède une assurance responsabilité civile professionnelle.
+                  Make sure the attorney carries professional liability (malpractice) insurance.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Pour les travaux importants, demandez une garantie décennale.
+                  For complex cases, ask about the attorney&apos;s relevant experience and track record.
                 </li>
               </ul>
             </div>
@@ -385,7 +385,7 @@ export default function DiagnosticClient() {
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-blue-600 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Recommencer le diagnostic
+                Restart diagnostic
               </button>
             </div>
           </div>

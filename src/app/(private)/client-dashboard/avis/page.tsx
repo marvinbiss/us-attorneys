@@ -214,7 +214,7 @@ export default function AvisClientPage() {
 
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
-            {/* En attente */}
+            {/* Pending */}
             {avisEnAttente.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -247,7 +247,7 @@ export default function AvisClientPage() {
               </div>
             )}
 
-            {/* Avis publiés */}
+            {/* Published reviews */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Published Reviews ({avisPublies.length})
@@ -326,7 +326,7 @@ export default function AvisClientPage() {
             </p>
 
             <form onSubmit={handleSubmitAvis} className="space-y-6">
-              {/* Note */}
+              {/* Rating */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Your Rating
@@ -349,7 +349,7 @@ export default function AvisClientPage() {
                 </div>
               </div>
 
-              {/* Commentaire */}
+              {/* Comment */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Your Comment

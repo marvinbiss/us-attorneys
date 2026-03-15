@@ -46,7 +46,7 @@ export default function FileDropzone({
       const fileArray = Array.from(files)
 
       if (fileArray.length > maxFiles) {
-        const errorMsg = `Maximum ${maxFiles} fichiers autorisés`
+        const errorMsg = `Maximum ${maxFiles} files allowed`
         setError(errorMsg)
         onError?.(errorMsg)
         return
@@ -164,10 +164,10 @@ export default function FileDropzone({
           <div>
             <p className="text-base font-medium text-gray-700">
               {isDragging ? (
-                'Déposez vos fichiers ici'
+                'Drop your files here'
               ) : (
                 <>
-                  <span className="text-blue-600">Cliquez pour parcourir</span> ou glissez-déposez
+                  <span className="text-blue-600">Click to browse</span> or drag and drop
                 </>
               )}
             </p>
@@ -179,7 +179,7 @@ export default function FileDropzone({
                   : 'JPG, PNG, WebP, GIF'}
               {' • '}
               Max {formatFileSize(maxSize)}
-              {maxFiles > 1 && ` • ${maxFiles} fichiers max`}
+              {maxFiles > 1 && ` • ${maxFiles} files max`}
             </p>
           </div>
         </div>

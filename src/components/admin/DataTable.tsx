@@ -24,7 +24,7 @@ interface DataTableProps<T> {
   onSort?: (key: string) => void
   onRowClick?: (item: T) => void
   rowKey: (item: T) => string
-  /** Accessible label for the table (e.g., "Liste des artisans") */
+  /** Accessible label for the table (e.g., "Attorneys list") */
   ariaLabel?: string
 }
 
@@ -32,7 +32,7 @@ export function DataTable<T>({
   columns,
   data,
   loading = false,
-  emptyMessage = 'Aucune donnée',
+  emptyMessage = 'No data',
   emptyIcon,
   sortKey,
   sortOrder,
@@ -45,7 +45,7 @@ export function DataTable<T>({
     return (
       <div className="p-8 text-center" role="status" aria-busy="true">
         <Loader2 className="w-8 h-8 animate-spin mx-auto text-blue-600" />
-        <span className="sr-only">Chargement des données...</span>
+        <span className="sr-only">Loading data...</span>
       </div>
     )
   }

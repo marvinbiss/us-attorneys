@@ -80,8 +80,8 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
 
   // Build badge URL and embed code
   const isVerifiedBadge = mode === 'search' && selectedProvider
-  const displayName = isVerifiedBadge ? selectedProvider.name : (name || 'Mon Entreprise')
-  const displayService = isVerifiedBadge ? (selectedProvider.specialty || 'Artisan') : (service || 'Artisan')
+  const displayName = isVerifiedBadge ? selectedProvider.name : (name || 'My Firm')
+  const displayService = isVerifiedBadge ? (selectedProvider.specialty || 'Attorney') : (service || 'Attorney')
 
   let badgeUrl: string
   let linkUrl: string
@@ -117,9 +117,9 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
   const badgeW = style === 'minimal' ? (isVerifiedBadge ? '220' : '200') : (isVerifiedBadge ? '320' : '300')
   const badgeH = style === 'minimal' ? (isVerifiedBadge ? '54' : '50') : (isVerifiedBadge ? '110' : '100')
 
-  const embedCode = `<a href="${linkUrl}" target="_blank" rel="noopener" title="${displayName} — Artisan sur ServicesArtisans.fr">
+  const embedCode = `<a href="${linkUrl}" target="_blank" rel="noopener" title="${displayName} — Attorney on US Attorneys">
   <img src="${badgeUrl}"
-       alt="${displayName} — Artisan ${isVerifiedBadge && selectedProvider.is_verified ? 'Verifie' : 'Reference'} sur ServicesArtisans"
+       alt="${displayName} — ${isVerifiedBadge && selectedProvider.is_verified ? 'Verified' : 'Listed'} Attorney on US Attorneys"
        width="${badgeW}" height="${badgeH}" loading="lazy" />
 </a>`
 
@@ -158,25 +158,25 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                 className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${mode === 'search' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
               >
                 <Search className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
-                Trouver ma fiche
+                Find my profile
               </button>
               <button
                 onClick={() => setMode('manual')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${mode === 'manual' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
               >
                 <Code className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
-                Badge personnalise
+                Custom badge
               </button>
             </div>
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            {mode === 'search' ? 'Trouvez votre fiche artisan' : 'Configurez votre badge'}
+            {mode === 'search' ? 'Find your attorney profile' : 'Configure your badge'}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-10">
             {mode === 'search'
-              ? 'Recherchez votre entreprise pour generer un badge avec vos vraies donnees (note, avis, verification).'
-              : 'Remplissez les champs ci-dessous et votre badge se met a jour en temps reel.'}
+              ? 'Search for your firm to generate a badge with your real data (rating, reviews, verification).'
+              : 'Fill in the fields below and your badge updates in real time.'}
           </p>
 
           <div className="grid md:grid-cols-2 gap-10">
@@ -186,7 +186,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                 <>
                   <div ref={searchRef} className="relative">
                     <label htmlFor="badge-search" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Nom de votre entreprise
+                      Your firm name
                     </label>
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -196,7 +196,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                         value={searchQuery}
                         onChange={(e) => handleSearchInput(e.target.value)}
                         onFocus={() => searchResults.length > 0 && setShowResults(true)}
-                        placeholder="Ex : Dupont Plomberie, Martin Electricite..."
+                        placeholder="e.g. Smith & Associates, Johnson Law..."
                         className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                         autoComplete="off"
                       />
@@ -206,10 +206,10 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                     {showResults && (
                       <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                         {searching ? (
-                          <div className="p-4 text-center text-gray-500 text-sm">Recherche...</div>
+                          <div className="p-4 text-center text-gray-500 text-sm">Searching...</div>
                         ) : searchResults.length === 0 ? (
                           <div className="p-4 text-center text-gray-500 text-sm">
-                            Aucun resultat. Essayez un autre nom ou passez en mode &laquo; Badge personnalise &raquo;.
+                            No results. Try another name or switch to custom badge mode.
                           </div>
                         ) : (
                           searchResults.map((p) => (
@@ -225,12 +225,12 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                                 <div className="text-sm font-medium text-gray-900 truncate">{p.name}</div>
                                 <div className="text-xs text-gray-500 truncate">
                                   {[p.specialty, p.city].filter(Boolean).join(' — ')}
-                                  {p.rating ? ` — ${p.rating.toFixed(1)}/5 (${p.reviews} avis)` : ''}
+                                  {p.rating ? ` — ${p.rating.toFixed(1)}/5 (${p.reviews} reviews)` : ''}
                                 </div>
                               </div>
                               {p.is_verified && (
                                 <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex-shrink-0">
-                                  Verifie
+                                  Verified
                                 </span>
                               )}
                             </button>
@@ -247,7 +247,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                         <span className="text-sm font-semibold text-emerald-800">{selectedProvider.name}</span>
                       </div>
                       <p className="text-xs text-emerald-700">
-                        {selectedProvider.is_verified ? 'Artisan verifie' : 'Artisan reference'} — {selectedProvider.specialty || 'Artisan'} {selectedProvider.city ? `a ${selectedProvider.city}` : ''}
+                        {selectedProvider.is_verified ? 'Verified attorney' : 'Listed attorney'} — {selectedProvider.specialty || 'Attorney'} {selectedProvider.city ? `in ${selectedProvider.city}` : ''}
                       </p>
                     </div>
                   )}
@@ -256,28 +256,28 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                 <>
                   <div>
                     <label htmlFor="badge-name" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Nom de votre entreprise
+                      Your firm name
                     </label>
                     <input
                       id="badge-name"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Ex : Dupont Plomberie"
+                      placeholder="e.g. Smith & Associates"
                       maxLength={40}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                     />
                   </div>
                   <div>
                     <label htmlFor="badge-service" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Metier / Service
+                      Practice area
                     </label>
                     <input
                       id="badge-service"
                       type="text"
                       value={service}
                       onChange={(e) => setService(e.target.value)}
-                      placeholder="Ex : Plombier"
+                      placeholder="e.g. Personal Injury"
                       maxLength={40}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                     />
@@ -287,7 +287,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
 
               <div>
                 <label htmlFor="badge-style" className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Style du badge
+                  Badge style
                 </label>
                 <select
                   id="badge-style"
@@ -295,8 +295,8 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                   onChange={(e) => setStyle(e.target.value as 'light' | 'dark' | 'minimal')}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white"
                 >
-                  <option value="light">Clair</option>
-                  <option value="dark">Sombre</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
                   <option value="minimal">Minimal</option>
                 </select>
               </div>
@@ -304,7 +304,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
 
             {/* Preview */}
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-3">Apercu en direct</p>
+              <p className="text-sm font-medium text-gray-700 mb-3">Live preview</p>
               <div className={`rounded-xl border p-8 flex items-center justify-center min-h-[160px] ${style === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -317,7 +317,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               </div>
               {isVerifiedBadge && (
                 <p className="text-xs text-gray-500 mt-2 text-center">
-                  Donnees en temps reel depuis votre fiche ServicesArtisans
+                  Real-time data from your US Attorneys profile
                 </p>
               )}
             </div>
@@ -329,11 +329,11 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            Code HTML a copier
+            HTML code to copy
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Collez ce code dans votre site pour afficher le badge.
-            {isVerifiedBadge && ' Les donnees se mettent a jour automatiquement.'}
+            Paste this code into your site to display the badge.
+            {isVerifiedBadge && ' Data updates automatically.'}
           </p>
           <div className="bg-gray-900 rounded-xl p-6 relative">
             <div className="flex items-center gap-2 mb-4">
@@ -346,17 +346,17 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
             <button
               onClick={handleCopy}
               className="absolute top-4 right-4 flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-              aria-label="Copier le code"
+              aria-label="Copy code"
             >
               {copied ? (
                 <>
                   <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400">Code copie !</span>
+                  <span className="text-green-400">Code copied!</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4" />
-                  <span>Copier le code</span>
+                  <span>Copy code</span>
                 </>
               )}
             </button>
@@ -368,33 +368,33 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Comment integrer le badge sur votre site
+            How to add the badge to your site
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 step: '1',
                 icon: Search,
-                title: 'Trouvez votre fiche',
-                desc: "Recherchez votre entreprise dans notre base ou creez un badge personnalise avec vos informations.",
+                title: 'Find your profile',
+                desc: "Search for your firm in our directory or create a custom badge with your information.",
               },
               {
                 step: '2',
                 icon: Copy,
-                title: 'Copiez le code HTML',
-                desc: "Cliquez sur le bouton \"Copier le code\" pour copier le code dans votre presse-papiers.",
+                title: 'Copy the HTML code',
+                desc: "Click the \"Copy code\" button to copy the code to your clipboard.",
               },
               {
                 step: '3',
                 icon: Code,
-                title: 'Collez sur votre site',
-                desc: "Integrez le code dans votre site WordPress, Wix, Squarespace ou tout autre CMS.",
+                title: 'Paste on your site',
+                desc: "Add the code to your WordPress, Wix, Squarespace or any other CMS.",
               },
               {
                 step: '4',
                 icon: Globe,
-                title: 'Badge actif !',
-                desc: "Le badge apparait avec vos vraies donnees. Note et avis se mettent a jour automatiquement.",
+                title: 'Badge active!',
+                desc: "The badge displays your real data. Rating and reviews update automatically.",
               },
             ].map((item) => (
               <div key={item.step} className="bg-gray-50 rounded-xl border border-gray-200 p-6 text-center">
@@ -414,39 +414,39 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Pourquoi afficher le badge ?
+            Why display the badge?
           </h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {[
               {
                 icon: Shield,
-                title: 'Inspirez confiance aux clients',
-                desc: "Le badge \"Artisan Verifie\" rassure instantanement vos visiteurs. 73 % des internautes declarent faire davantage confiance aux sites avec un badge de verification.",
+                title: 'Build client trust',
+                desc: "The \"Verified Attorney\" badge instantly reassures your visitors. 73% of users say they trust sites more with a verification badge.",
               },
               {
                 icon: TrendingUp,
-                title: 'Boostez votre referencement SEO',
-                desc: "Le badge inclut un lien vers votre fiche ServicesArtisans, ce qui ameliore votre visibilite sur Google. C'est un backlink gratuit et permanent.",
+                title: 'Boost your SEO',
+                desc: "The badge includes a link to your US Attorneys profile, improving your Google visibility. It is a free, permanent backlink.",
               },
               {
                 icon: Users,
-                title: 'Plus de demandes de devis',
-                desc: "Les artisans qui affichent un badge de confiance recoivent en moyenne 35 % de demandes de contact en plus sur leur site.",
+                title: 'More consultation requests',
+                desc: "Attorneys who display a trust badge receive on average 35% more contact requests on their site.",
               },
               {
                 icon: Sparkles,
-                title: 'Donnees en temps reel',
-                desc: "Votre note, nombre d'avis et statut de verification se mettent a jour automatiquement. Aucune maintenance requise de votre part.",
+                title: 'Real-time data',
+                desc: "Your rating, review count, and verification status update automatically. No maintenance required on your end.",
               },
               {
                 icon: ExternalLink,
-                title: 'Gratuit et sans engagement',
-                desc: "Le badge est 100 % gratuit. Aucun abonnement, aucun frais cache. Vous pouvez le retirer a tout moment.",
+                title: 'Free with no commitment',
+                desc: "The badge is 100% free. No subscription, no hidden fees. You can remove it at any time.",
               },
               {
                 icon: Globe,
-                title: 'Compatible avec tous les sites',
-                desc: "Le badge fonctionne sur WordPress, Wix, Squarespace, Shopify, Webflow et tout site acceptant du HTML. Moins de 3 Ko, zero JavaScript.",
+                title: 'Compatible with all sites',
+                desc: "The badge works on WordPress, Wix, Squarespace, Shopify, Webflow and any site that accepts HTML. Under 3 KB, zero JavaScript.",
               },
             ].map((benefit) => (
               <div key={benefit.title} className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5">
@@ -467,7 +467,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions frequentes
+            Frequently asked questions
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, i) => (

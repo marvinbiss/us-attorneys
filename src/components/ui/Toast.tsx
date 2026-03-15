@@ -76,7 +76,7 @@ export function Toast({ toast, onDismiss }: ToastProps) {
       <button
         onClick={handleDismiss}
         className="flex-shrink-0 p-1 rounded hover:bg-black/10 transition-colors"
-        aria-label="Fermer"
+        aria-label="Close"
       >
         <X className="w-4 h-4" />
       </button>

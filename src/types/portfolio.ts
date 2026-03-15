@@ -87,14 +87,14 @@ export interface UploadProgress {
 
 // Categories for portfolio items
 export const PORTFOLIO_CATEGORIES = [
-  { value: 'renovation', label: 'Rénovation' },
+  { value: 'renovation', label: 'Renovation' },
   { value: 'construction', label: 'Construction' },
   { value: 'installation', label: 'Installation' },
-  { value: 'reparation', label: 'Réparation' },
-  { value: 'decoration', label: 'Décoration' },
-  { value: 'amenagement', label: 'Aménagement' },
-  { value: 'entretien', label: 'Entretien' },
-  { value: 'autre', label: 'Autre' },
+  { value: 'reparation', label: 'Repair' },
+  { value: 'decoration', label: 'Decoration' },
+  { value: 'amenagement', label: 'Development' },
+  { value: 'entretien', label: 'Maintenance' },
+  { value: 'autre', label: 'Other' },
 ] as const
 
 export type PortfolioCategory = typeof PORTFOLIO_CATEGORIES[number]['value']

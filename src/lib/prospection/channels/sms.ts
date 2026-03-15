@@ -1,13 +1,13 @@
 /**
  * SMS Channel Sender - Prospection
- * Envoi SMS via Twilio pour campagnes de prospection
+ * Send SMS via Twilio for prospection campaigns
  */
 
 import { sendSMS } from '@/lib/notifications/sms'
 import { logger } from '@/lib/logger'
 
 export interface SMSProspectionParams {
-  to: string  // phone_e164 format (+33...)
+  to: string  // phone_e164 format (+1...)
   body: string
 }
 
@@ -19,7 +19,7 @@ export interface SMSResult {
 }
 
 /**
- * Envoyer un SMS de prospection
+ * Send a prospection SMS
  */
 export async function sendProspectionSMS(params: SMSProspectionParams): Promise<SMSResult> {
   try {

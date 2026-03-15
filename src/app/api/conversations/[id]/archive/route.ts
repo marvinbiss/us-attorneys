@@ -64,7 +64,7 @@ export async function POST(
     if (error) {
       logger.error('Archive conversation error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible d\'archiver la conversation' } },
+        { success: false, error: { message: 'Unable to archive conversation' } },
         { status: 500 }
       )
     }

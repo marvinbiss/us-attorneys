@@ -48,8 +48,8 @@ export function ConfirmationModal({
   onConfirm,
   title,
   message,
-  confirmText = 'Confirmer',
-  cancelText = 'Annuler',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
   variant = 'danger',
   requireConfirmation,
   children,
@@ -144,7 +144,7 @@ export function ConfirmationModal({
           <button
             onClick={handleClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-            aria-label="Fermer la boîte de dialogue"
+            aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
           </button>
@@ -165,15 +165,15 @@ export function ConfirmationModal({
           {requireConfirmation && (
             <div className="mb-4">
               <p className="text-sm text-gray-500 mb-2">
-                Tapez <span className="font-mono font-semibold text-gray-900">{requireConfirmation}</span> pour confirmer
+                Type <span className="font-mono font-semibold text-gray-900">{requireConfirmation}</span> to confirm
               </p>
               <input
                 type="text"
                 value={confirmInput}
                 onChange={(e) => setConfirmInput(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Tapez pour confirmer"
-                aria-label="Saisir le texte de confirmation"
+                placeholder="Type to confirm"
+                aria-label="Enter confirmation text"
               />
             </div>
           )}
@@ -198,7 +198,7 @@ export function ConfirmationModal({
               {loading ? (
                 <span className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Chargement...
+                  Loading...
                 </span>
               ) : (
                 confirmText

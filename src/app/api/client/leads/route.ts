@@ -17,30 +17,30 @@ const clientLeadsQuerySchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-type DerivedStatus = 'en_attente' | 'en_traitement' | 'devis_recus' | 'accepte' | 'termine' | 'expire' | 'refuse'
+type DerivedStatus = 'pending' | 'in_progress' | 'quotes_received' | 'accepted' | 'completed' | 'expired' | 'declined'
 
 function deriveStatus(events: Array<{ event_type: string }>): DerivedStatus {
-  if (events.length === 0) return 'en_attente'
+  if (events.length === 0) return 'pending'
 
   // Check for terminal states first (scan all events)
   const types = new Set(events.map(e => e.event_type))
-  if (types.has('completed')) return 'termine'
-  if (types.has('expired')) return 'expire'
-  if (types.has('accepted')) return 'accepte'
-  if (types.has('refused')) return 'refuse'
-  if (types.has('quoted')) return 'devis_recus'
-  if (types.has('dispatched') || types.has('viewed') || types.has('declined') || types.has('reassigned')) return 'en_traitement'
-  return 'en_attente'
+  if (types.has('completed')) return 'completed'
+  if (types.has('expired')) return 'expired'
+  if (types.has('accepted')) return 'accepted'
+  if (types.has('refused')) return 'declined'
+  if (types.has('quoted')) return 'quotes_received'
+  if (types.has('dispatched') || types.has('viewed') || types.has('declined') || types.has('reassigned')) return 'in_progress'
+  return 'pending'
 }
 
 const STATUS_LABELS: Record<DerivedStatus, string> = {
-  en_attente: 'En attente',
-  en_traitement: 'En traitement',
-  devis_recus: 'Consultation(s) received',
-  accepte: 'Accepted',
-  termine: 'Completed',
-  expire: 'Expired',
-  refuse: 'Declined',
+  pending: 'Pending',
+  in_progress: 'In progress',
+  quotes_received: 'Consultation(s) received',
+  accepted: 'Accepted',
+  completed: 'Completed',
+  expired: 'Expired',
+  declined: 'Declined',
 }
 
 export async function GET(request: NextRequest) {
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     if (!demandes || demandes.length === 0) {
       return NextResponse.json({
         leads: [],
-        stats: { total: 0, en_attente: 0, en_traitement: 0, devis_recus: 0, termine: 0 },
+        stats: { total: 0, pending: 0, in_progress: 0, quotes_received: 0, completed: 0 },
         pagination: { page: 1, pageSize, totalPages: 0, totalItems: 0 },
       })
     }
@@ -141,10 +141,10 @@ export async function GET(request: NextRequest) {
     // Stats (before filtering)
     const stats = {
       total: enrichedLeads.length,
-      en_attente: enrichedLeads.filter(l => l.derived_status === 'en_attente').length,
-      en_traitement: enrichedLeads.filter(l => l.derived_status === 'en_traitement').length,
-      devis_recus: enrichedLeads.filter(l => l.derived_status === 'devis_recus').length,
-      termine: enrichedLeads.filter(l => l.derived_status === 'termine' || l.derived_status === 'accepte').length,
+      pending: enrichedLeads.filter(l => l.derived_status === 'pending').length,
+      in_progress: enrichedLeads.filter(l => l.derived_status === 'in_progress').length,
+      quotes_received: enrichedLeads.filter(l => l.derived_status === 'quotes_received').length,
+      completed: enrichedLeads.filter(l => l.derived_status === 'completed' || l.derived_status === 'accepted').length,
     }
 
     // Paginate

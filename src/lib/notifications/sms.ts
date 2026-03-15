@@ -63,28 +63,28 @@ Manage: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 24h reminder (highest impact)
   reminder24h: (data: SMSData) =>
-    `Rappel: RDV demain
+    `Reminder: Appointment tomorrow
 ${data.date} at ${data.time}
 ${data.attorneyName}
-Confirmer/Annuler: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
+Confirm/Cancel: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 1h reminder
   reminder1h: (data: SMSData) =>
-    `RDV dans 1h
+    `Appointment in 1h
 ${data.time} - ${data.attorneyName}
 ${data.specialtyName}`,
 
   // Cancellation
   cancellation: (data: SMSData) =>
-    `RDV annulé
+    `Appointment cancelled
 ${data.date} at ${data.time}
 ${data.attorneyName}
-Reprogrammer: us-attorneys.com`,
+Reschedule: us-attorneys.com`,
 
   // Reschedule confirmation
   reschedule: (data: SMSData) =>
-    `RDV reporté ✓
-Nouveau: ${data.date} at ${data.time}
+    `Appointment rescheduled ✓
+New: ${data.date} at ${data.time}
 ${data.attorneyName}
 Manage: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
 
@@ -98,7 +98,7 @@ Book now: us-attorneys.com`,
   // Review request (post-appointment)
   reviewRequest: (data: SMSData) =>
     `How was your appointment with ${data.attorneyName}?
-Donnez votre avis: us-attorneys.com/leave-review/${data.bookingId.slice(0, 8)}`,
+Leave a review: us-attorneys.com/leave-review/${data.bookingId.slice(0, 8)}`,
 }
 
 // Send SMS function

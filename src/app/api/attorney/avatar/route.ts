@@ -30,7 +30,7 @@ function extensionFromMime(mime: AllowedMimeType): string {
   return map[mime]
 }
 
-/** Extrait le storage path depuis une URL publique Supabase Storage */
+/** Extract the storage path from a Supabase Storage public URL */
 function storagePathFromUrl(url: string, bucket: string): string | null {
   try {
     const parsed = new URL(url)
@@ -46,7 +46,7 @@ function storagePathFromUrl(url: string, bucket: string): string | null {
 }
 
 /**
- * Valide les magic bytes du buffer pour confirmer le vrai format du fichier.
+ * Validate the magic bytes of the buffer to confirm the actual file format.
  * Protects against MIME type spoofing (client can send any file.type).
  */
 function validateMagicBytes(bytes: Uint8Array): boolean {
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     )
   }
 
-  // Parser le FormData et extraire le fichier
+  // Parse the FormData and extract the file
   let formData: FormData
   try {
     formData = await request.formData()
@@ -122,14 +122,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   if (file.size > MAX_SIZE_BYTES) {
     return NextResponse.json(
-      { error: 'Fichier trop volumineux. Taille maximale: 2 Mo.' },
+      { error: 'File too large. Maximum size: 2 MB.' },
       { status: 422 }
     )
   }
 
-  // Bug 1 fix — Validation des magic bytes pour contrer le MIME type spoofing.
+  // Bug 1 fix — Validate magic bytes to counter MIME type spoofing.
   // The file.type is provided by the client and can be spoofed. We read the
-  // premiers octets du buffer pour confirmer le vrai format du fichier.
+  // first bytes of the buffer to confirm the actual file format.
   const buffer = await file.arrayBuffer()
   const bytes = new Uint8Array(buffer)
 
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   // This ensures we upload exactly the bytes read server-side.
   const fileBlob = new Blob([buffer], { type: file.type })
 
-  // Delete l'ancien avatar s'il existe
+  // Delete the old avatar if it exists
   const currentAvatarUrl = provider.avatar_url as string | null
   if (currentAvatarUrl) {
     const oldPath = storagePathFromUrl(currentAvatarUrl, 'avatars')
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  // Uploader le nouveau fichier dans Storage (fileBlob, pas file)
+  // Upload the new file to Storage (fileBlob, not file)
   const ext = extensionFromMime(file.type)
   const storagePath = `${provider.id}/avatar.${ext}`
 
@@ -169,14 +169,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     )
   }
 
-  // Obtenir l'URL publique
+  // Get the public URL
   const { data: publicUrlData } = supabase.storage
     .from('avatars')
     .getPublicUrl(storagePath)
 
   const publicUrl = publicUrlData.publicUrl
 
-  // Update la colonne avatar_url dans providers
+  // Update the avatar_url column in attorneys
   const { error: updateError } = await supabase
     .from('attorneys')
     .update({ avatar_url: publicUrl })
@@ -189,19 +189,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     )
   }
 
-  // Return l'URL publique
+  // Return the public URL
   return NextResponse.json({ url: publicUrl }, { status: 200 })
 }
 
 // =============================================================================
-// DELETE — Supprimer l'avatar
+// DELETE — Delete the avatar
 // =============================================================================
 
 export async function DELETE(): Promise<NextResponse> {
   const { error: guardError, user, supabase } = await requireArtisan()
   if (guardError) return guardError
 
-  // Retrieve le provider et son avatar_url actuel
+  // Retrieve the attorney and their current avatar_url
   const { data: provider, error: attorneyError } = await supabase
     .from('attorneys')
     .select('id, avatar_url')
@@ -224,14 +224,14 @@ export async function DELETE(): Promise<NextResponse> {
     )
   }
 
-  // Bug 2 fix: si storagePathFromUrl retourne null, on ne peut pas localiser le
+  // Bug 2 fix: if storagePathFromUrl returns null, we cannot locate the
   // file in Storage. We refuse to nullify avatar_url to avoid an orphaned
   // file (file in Storage but URL removed from DB without deleting it).
   const storagePath = storagePathFromUrl(currentAvatarUrl, 'avatars')
 
   if (!storagePath) {
     return NextResponse.json(
-      { error: 'Impossible de localiser le fichier avatar' },
+      { error: 'Unable to locate the avatar file' },
       { status: 400 }
     )
   }

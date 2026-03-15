@@ -81,12 +81,12 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'inscription')
+        throw new Error(data.error || 'Error subscribing to newsletter')
       }
 
       setIsSubscribed(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+      setError(err instanceof Error ? err.message : 'Error subscribing to newsletter')
     } finally {
       setIsLoading(false)
     }
@@ -113,10 +113,10 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Blog & Actualit&eacute;s
+              Blog & Insights
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Conseils, guides de prix et tendances pour vos projets de travaux. Par les experts de ServicesArtisans.
+              Tips, pricing guides, and trends for your legal matters. By the experts at USAttorneys.
             </p>
           </div>
         </div>
@@ -148,13 +148,13 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
         <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-500">Filtré par :</span>
+              <span className="text-sm text-slate-500">Filtered by:</span>
               <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">{activeTag}</span>
               <button
                 onClick={handleClearTag}
                 className="text-sm text-slate-400 hover:text-slate-600 transition-colors"
               >
-                &times; Effacer
+                &times; Clear
               </button>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {visibleArticles.map((article, index) => {
-              // Category color mapping for pill badges
+              // Category color mapping for badges
               const categoryColors: Record<string, string> = {
                 'Guides pratiques': 'bg-blue-100 text-blue-700',
                 'Tendances': 'bg-purple-100 text-purple-700',
@@ -226,7 +226,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span className="flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5" />
-                          {new Date(article.date).toLocaleDateString('fr-FR', {
+                          {new Date(article.date).toLocaleDateString('en-US', {
                             day: 'numeric',
                             month: 'short',
                             year: 'numeric',
@@ -238,7 +238,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                         </span>
                       </div>
                       <span className="text-blue-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
-                        Lire
+                        Read
                         <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
@@ -255,7 +255,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 onClick={handleLoadMore}
                 className="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
               >
-                Voir plus d&apos;articles
+                Load more articles
               </button>
             </div>
           )}
@@ -266,15 +266,15 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Restez informé
+            Stay informed
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Recevez nos derniers articles et conseils directement dans votre boîte mail
+            Get our latest articles and tips delivered straight to your inbox
           </p>
           {isSubscribed ? (
             <div className="max-w-md mx-auto bg-white/20 rounded-lg p-6 flex items-center justify-center gap-3 text-white">
               <CheckCircle className="w-6 h-6" />
-              <span className="font-medium">Merci ! Vous êtes inscrit à notre newsletter.</span>
+              <span className="font-medium">Thank you! You are now subscribed to our newsletter.</span>
             </div>
           ) : (
             <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
@@ -283,7 +283,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Votre email"
+                  placeholder="Your email"
                   required
                   className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300"
                 />
@@ -295,7 +295,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                   {isLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    "S'inscrire"
+                    "Subscribe"
                   )}
                 </button>
               </div>

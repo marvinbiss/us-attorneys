@@ -50,7 +50,7 @@ export async function PATCH(
 
     if (fetchError || !existing) {
       return NextResponse.json(
-        { success: false, error: { message: 'Membre introuvable' } },
+        { success: false, error: { message: 'Team member not found' } },
         { status: 404 }
       )
     }
@@ -101,7 +101,7 @@ export async function DELETE(
 
     if (fetchError || !existing) {
       return NextResponse.json(
-        { success: false, error: { message: 'Membre introuvable' } },
+        { success: false, error: { message: 'Team member not found' } },
         { status: 404 }
       )
     }

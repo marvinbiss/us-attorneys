@@ -43,20 +43,20 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: specialtySlug || 'general',
-          ville: cityName || '',
-          telephone: phone.trim(),
-          nom: '',
+          city: cityName || '',
+          phone: phone.trim(),
+          name: '',
           email: '',
           description: 'Callback request',
           urgency: 'week',
           budget: '',
-          codePostal: '',
+          zipCode: '',
         }),
       })
 
       if (!res.ok) throw new Error('Error')
 
-      trackEvent('devis_submitted', {
+      trackEvent('quote_submitted', {
         source: 'callback_request',
         service: specialtySlug || '',
         city: cityName || '',

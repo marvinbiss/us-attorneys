@@ -9,9 +9,9 @@ interface SocialProofData {
 }
 
 interface SocialProofBannerProps {
-  /** Nom du metier pour contextualiser */
+  /** Practice area name for contextual display */
   metier?: string
-  /** Nom de la ville pour contextualiser */
+  /** City name for contextual display */
   ville?: string
   /** Variant: 'inline' pills, 'card' full card, 'compact' minimal */
   variant?: 'inline' | 'card' | 'compact'

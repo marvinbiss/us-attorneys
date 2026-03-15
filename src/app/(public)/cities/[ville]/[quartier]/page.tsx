@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, BarChart3, Thermometer, Zap, Home } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -10,7 +10,6 @@ import { SITE_URL } from '@/lib/seo/config'
 import { cities, practiceAreas, getNeighborhoodBySlug, getNeighborhoodsByCity, getNearbyCities, getRegionSlugByName, getStateByCode } from '@/lib/data/usa'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
-import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 
 // Pre-render top 50 cities × their quartiers (~500+ pages)
 const TOP_CITIES = 50
@@ -326,163 +325,6 @@ export default async function QuartierPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ─── SEO CONTENT (5 unique sections per profile) ──── */}
-        <section className="mb-16 prose prose-slate max-w-none">
-          <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-            Find an Attorney in the {neighborhoodName} Neighborhood
-          </h2>
-          <p className="text-slate-600 leading-relaxed">{content.intro}</p>
-
-          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            The {neighborhoodName} Area: What You Need to Know
-          </h3>
-          <p className="text-slate-600 leading-relaxed">{content.batimentContext}</p>
-
-          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Most Requested Services in {neighborhoodName}
-          </h3>
-          <p className="text-slate-600 leading-relaxed">{content.servicesDemandes}</p>
-
-          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Tips for Legal Services in {neighborhoodName}
-          </h3>
-          <p className="text-slate-600 leading-relaxed">{content.conseils}</p>
-
-          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
-            Why Choose an Attorney Near {neighborhoodName}?
-          </h3>
-          <p className="text-slate-600 leading-relaxed">{content.proximite}</p>
-        </section>
-
-        {/* ─── DATA-DRIVEN CONTENT (unique per quartier) ──────── */}
-        {content.dataDriven && (
-          <section className="mb-16 space-y-8">
-            {/* Immobilier quartier */}
-            <div className="bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-2xl border border-amber-100 p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <Home className="w-4 h-4 text-amber-600" />
-                </div>
-                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Real Estate in the {neighborhoodName} Neighborhood
-                </h3>
-              </div>
-              <p className="text-slate-600 leading-relaxed">{content.dataDriven.immobilierQuartier}</p>
-              {content.dataDriven.statCards.prixM2Quartier > 0 && (
-                <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
-                    <div className="text-lg font-bold text-amber-700">{formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²</div>
-                    <div className="text-xs text-slate-500 mt-1">Est. Neighborhood Price</div>
-                  </div>
-                  {content.dataDriven.statCards.artisansProximite > 0 && (
-                    <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
-                      <div className="text-lg font-bold text-amber-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
-                      <div className="text-xs text-slate-500 mt-1">Attorneys Nearby</div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Marché artisanal */}
-            <div className="bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-2xl border border-emerald-100 p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="w-4 h-4 text-emerald-600" />
-                </div>
-                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Legal Professionals Around {neighborhoodName}
-                </h3>
-              </div>
-              <p className="text-slate-600 leading-relaxed">{content.dataDriven.marcheArtisanalQuartier}</p>
-              {content.dataDriven.statCards.artisansBtp > 0 && (
-                <div className="mt-6 grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                    <div className="text-lg font-bold text-emerald-700">{formatNumber(content.dataDriven.statCards.artisansBtp)}</div>
-                    <div className="text-xs text-slate-500 mt-1">Law Firms in the Area</div>
-                  </div>
-                  {content.dataDriven.statCards.artisansProximite > 0 && (
-                    <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                      <div className="text-lg font-bold text-emerald-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
-                      <div className="text-xs text-slate-500 mt-1">Legal Practices</div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Énergie / DPE */}
-            <div className="bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-2xl border border-orange-100 p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-orange-600" />
-                </div>
-                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Energy Performance in {neighborhoodName}
-                </h3>
-              </div>
-              <p className="text-slate-600 leading-relaxed">{content.dataDriven.energetiqueQuartier}</p>
-              {content.dataDriven.statCards.passoiresDpe > 0 && (
-                <div className="mt-6 grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
-                    <div className="text-lg font-bold text-orange-700">{content.dataDriven.statCards.passoiresDpe} %</div>
-                    <div className="text-xs text-slate-500 mt-1">Est. Energy-Inefficient</div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Climat et travaux */}
-            <div className="bg-gradient-to-br from-sky-50/50 to-cyan-50/30 rounded-2xl border border-sky-100 p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center">
-                  <Thermometer className="w-4 h-4 text-sky-600" />
-                </div>
-                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                  Climate and Conditions in {neighborhoodName}
-                </h3>
-              </div>
-              <p className="text-slate-600 leading-relaxed">{content.dataDriven.climatQuartier}</p>
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {content.dataDriven.statCards.joursGel != null && (
-                  <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
-                    <div className="text-lg font-bold text-sky-700">{content.dataDriven.statCards.joursGel}</div>
-                    <div className="text-xs text-slate-500 mt-1">Frost Days/yr</div>
-                  </div>
-                )}
-                {content.dataDriven.statCards.periodeTravaux && (
-                  <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
-                    <div className="text-sm font-bold text-sky-700">{content.dataDriven.statCards.periodeTravaux}</div>
-                    <div className="text-xs text-slate-500 mt-1">Best Period for Ext. Work</div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-        <section className="mb-16">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial Methodology</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              The information on this page is compiled from public sources (census data, bar association records, public records).
-              The area profile is estimated based on the urban characteristics of {city.name} and may vary from one building to another.
-              {content.dataDriven?.statCards.prixM2Quartier
-                ? <> The estimated real estate price in {neighborhoodName} ({formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) is derived from city averages adjusted by construction era ({content.profile.eraLabel.toLowerCase()}) and urban density ({content.profile.densityLabel.toLowerCase()}).</>
-                : <> Fees are indicative and based on regional averages ({stateData?.region}).</>
-              }{' '}
-              US Attorneys is an independent directory — we do not provide legal services and do not guarantee the services of listed attorneys.
-            </p>
-            {content.dataDriven?.dataSources && content.dataDriven.dataSources.length > 0 && (
-              <p className="text-xs text-slate-400 mt-2">
-                <strong className="text-slate-500">Sources :</strong>{' '}
-                {content.dataDriven.dataSources.join(' · ')}.
-              </p>
-            )}
-          </div>
-        </section>
-
         {/* ─── OTHER QUARTIERS ─────────────────────────────── */}
         {quartiers.length > 0 && (
           <section className="mb-16">
@@ -558,42 +400,6 @@ export default async function QuartierPage({ params }: PageProps) {
           </div>
         </section>
       </div>
-
-      {/* ─── CTA ────────────────────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(16,185,129,0.12) 0%, transparent 60%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          {(() => {
-            const ctaHash = Math.abs(hashCode(`cta-${villeSlug}-${quartierSlug}`))
-            const ctaTemplates = [
-              { h: `Need an Attorney in ${neighborhoodName}?`, p: `Describe your legal needs and receive free consultations from qualified attorneys in ${city.name}.` },
-              { h: `Legal Issues in ${content.profile.eraLabel.toLowerCase()} Area of ${neighborhoodName}?`, p: `Our attorneys know the specifics of your neighborhood. Free consultation, no obligation.` },
-              { h: `Legal Services in ${neighborhoodName}, ${city.name}`, p: `Find the right attorney for the ${content.profile.eraLabel.toLowerCase()} area of your neighborhood. ${practiceAreas.length} practice areas available.` },
-            ]
-            const cta = ctaTemplates[ctaHash % ctaTemplates.length]
-            return (
-              <>
-                <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-                  {cta.h}
-                </h2>
-                <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-                  {cta.p}
-                </p>
-              </>
-            )
-          })()}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Request a Free Consultation
-            </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              View Practice Areas <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
@@ -676,26 +482,6 @@ export default async function QuartierPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Confiance & Sécurité */}
-      <section className="py-8 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Verification Process
-            </Link>
-            <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Review Policy
-            </Link>
-            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Mediation
-            </Link>
-            <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

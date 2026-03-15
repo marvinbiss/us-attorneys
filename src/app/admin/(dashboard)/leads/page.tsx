@@ -52,7 +52,7 @@ interface AssignmentRow {
   viewed_at: string | null
 }
 
-type ViewTab = 'leads' | 'artisans'
+type ViewTab = 'leads' | 'attorneys'
 
 interface LeadsResponse {
   leads: LeadRow[]
@@ -62,8 +62,8 @@ interface LeadsResponse {
   pagination: { page: number; pageSize: number; total: number; totalPages: number }
 }
 
-interface ArtisansResponse {
-  artisans: ArtisanRow[]
+interface AttorneysResponse {
+  attorneys: ArtisanRow[]
 }
 
 export default function AdminLeadsPage() {
@@ -90,13 +90,13 @@ export default function AdminLeadsPage() {
     `/api/admin/leads?${leadsParams}`
   )
 
-  // Build artisans URL
-  const artisansParams = new URLSearchParams()
-  if (city) artisansParams.set('city', city)
-  if (service) artisansParams.set('service', service)
+  // Build attorneys URL
+  const attorneysParams = new URLSearchParams()
+  if (city) attorneysParams.set('city', city)
+  if (service) attorneysParams.set('service', service)
 
-  const { data: artisansData, mutate: mutateArtisans } = useAdminFetch<ArtisansResponse>(
-    `/api/admin/leads?${artisansParams}`
+  const { data: attorneysData, mutate: mutateAttorneys } = useAdminFetch<AttorneysResponse>(
+    `/api/admin/leads?${attorneysParams}`
   )
 
   const leads = leadsData?.leads || []
@@ -104,12 +104,12 @@ export default function AdminLeadsPage() {
   const attorneyNames = leadsData?.attorneyNames || {}
   const stats = leadsData?.stats || { totalLeads: 0, pendingAssignments: 0, dispatchedToday: 0 }
   const pagination = leadsData?.pagination || { page: 1, pageSize: 20, total: 0, totalPages: 1 }
-  const artisans = artisansData?.artisans || []
+  const attorneys = attorneysData?.attorneys || []
   const error = leadsError || (mutationError ? new Error(mutationError) : undefined)
 
   const revalidateAll = () => {
     mutateLeads()
-    mutateArtisans()
+    mutateAttorneys()
   }
 
   const handleDispatch = async (leadId: string) => {
@@ -123,7 +123,7 @@ export default function AdminLeadsPage() {
       })
       revalidateAll()
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Erreur de dispatch')
+      setMutationError(err instanceof Error ? err.message : 'Dispatch error')
     } finally {
       setDispatchLoading(false)
       setDispatchLeadId(null)
@@ -138,15 +138,15 @@ export default function AdminLeadsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Leads — Vue globale</h1>
-            <p className="text-gray-500 mt-1">Gestion des leads et dispatch</p>
+            <h1 className="text-2xl font-bold text-gray-900">Leads — Overview</h1>
+            <p className="text-gray-500 mt-1">Lead management and dispatch</p>
           </div>
           <button
             onClick={revalidateAll}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
-            Actualiser
+            Refresh
           </button>
         </div>
 
@@ -159,20 +159,20 @@ export default function AdminLeadsPage() {
             color="blue"
           />
           <StatCard
-            title="En attente"
+            title="Pending"
             value={stats.pendingAssignments}
             icon={<Clock className="w-5 h-5" />}
             color="yellow"
           />
           <StatCard
-            title="Dispatchés aujourd'hui"
+            title="Dispatched today"
             value={stats.dispatchedToday}
             icon={<Send className="w-5 h-5" />}
             color="green"
           />
           <StatCard
-            title="Artisans actifs"
-            value={artisans.length}
+            title="Active attorneys"
+            value={attorneys.length}
             icon={<Users className="w-5 h-5" />}
             color="blue"
           />
@@ -195,7 +195,7 @@ export default function AdminLeadsPage() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Métier</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Specialty</label>
               <div className="relative">
                 <Wrench className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -203,12 +203,12 @@ export default function AdminLeadsPage() {
                   value={service}
                   onChange={(e) => setService(e.target.value)}
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
-                  placeholder="Plombier"
+                  placeholder="Attorney"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Recherche</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Search</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -216,22 +216,22 @@ export default function AdminLeadsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-48"
-                  placeholder="Nom, service..."
+                  placeholder="Name, service..."
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Urgence</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Urgency</label>
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
-                aria-label="Filtrer par urgence"
+                aria-label="Filter by urgency"
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Toutes</option>
+                <option value="">All</option>
                 <option value="normal">Normal</option>
                 <option value="urgent">Urgent</option>
-                <option value="tres_urgent">Très urgent</option>
+                <option value="tres_urgent">Very urgent</option>
               </select>
             </div>
             <button
@@ -239,7 +239,7 @@ export default function AdminLeadsPage() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <Search className="w-4 h-4" />
-              Filtrer
+              Filter
             </button>
           </div>
         </div>
@@ -263,13 +263,13 @@ export default function AdminLeadsPage() {
             Leads
           </button>
           <button
-            onClick={() => setTab('artisans')}
+            onClick={() => setTab('attorneys')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'artisans' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              tab === 'attorneys' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Users className="w-4 h-4 inline mr-1.5" />
-            Artisans ({artisans.length})
+            Attorneys ({attorneys.length})
           </button>
         </div>
 
@@ -283,14 +283,14 @@ export default function AdminLeadsPage() {
             {tab === 'leads' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[800px] text-sm" aria-label="Liste des leads">
+                  <table className="w-full min-w-[400px] sm:min-w-[800px] text-sm" aria-label="Leads list">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lieu</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Location</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Client</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgence</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignations</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgency</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignments</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
                       </tr>
@@ -300,7 +300,7 @@ export default function AdminLeadsPage() {
                         <tr>
                           <td colSpan={7} className="px-4 py-12 text-center text-gray-500">
                             <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                            Aucun lead trouvé
+                            No leads found
                           </td>
                         </tr>
                       ) : (
@@ -340,11 +340,11 @@ export default function AdminLeadsPage() {
                                     })}
                                   </div>
                                 ) : (
-                                  <span className="text-xs text-gray-400">Non assigné</span>
+                                  <span className="text-xs text-gray-400">Unassigned</span>
                                 )}
                               </td>
                               <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
-                                {new Date(lead.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                                {new Date(lead.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
                               </td>
                               <td className="px-4 py-3">
                                 <button
@@ -372,30 +372,30 @@ export default function AdminLeadsPage() {
               </div>
             )}
 
-            {/* Artisans table */}
-            {tab === 'artisans' && (
+            {/* Attorneys table */}
+            {tab === 'attorneys' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[600px] text-sm" aria-label="Liste des artisans pour le dispatch">
+                  <table className="w-full min-w-[400px] sm:min-w-[600px] text-sm" aria-label="Attorneys list for dispatch">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métier</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Name</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Specialty</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">City</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vérifié</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dernier lead</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Verified</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Last lead</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      {artisans.length === 0 ? (
+                      {attorneys.length === 0 ? (
                         <tr>
                           <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
                             <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                            Aucun artisan trouvé
+                            No attorneys found
                           </td>
                         </tr>
                       ) : (
-                        artisans.map((a) => (
+                        attorneys.map((a) => (
                           <tr key={a.id} className="hover:bg-gray-50/50 transition-colors">
                             <td className="px-4 py-3 font-medium text-gray-900">{a.name}</td>
                             <td className="px-4 py-3 text-gray-600">{a.specialty}</td>
@@ -404,13 +404,13 @@ export default function AdminLeadsPage() {
                               {a.is_verified ? (
                                 <CheckCircle className="w-4 h-4 text-green-500" />
                               ) : (
-                                <span className="text-gray-400 text-xs">Non</span>
+                                <span className="text-gray-400 text-xs">No</span>
                               )}
                             </td>
                             <td className="px-4 py-3 text-gray-500 text-xs">
                               {a.last_lead_assigned_at
-                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
-                                : 'Jamais'}
+                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+                                : 'Never'}
                             </td>
                           </tr>
                         ))

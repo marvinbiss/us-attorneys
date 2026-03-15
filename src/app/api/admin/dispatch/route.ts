@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         score,
         distance_km,
         position,
-        provider:providers (id, name, specialty, address_city)
+        attorney:attorneys(id, name, specialty, address_city)
       `)
       .order('assigned_at', { ascending: false })
       .range(offset, offset + limit - 1)
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// DELETE - Supprimer une assignation
+// DELETE - Delete an assignment
 export async function DELETE(request: NextRequest) {
   const auth = await requirePermission('services', 'delete')
   if (!auth.success || !auth.admin) return auth.error!

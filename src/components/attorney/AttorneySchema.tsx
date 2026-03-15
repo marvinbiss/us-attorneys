@@ -13,11 +13,11 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = companyIdentity.url
 
-  // Organization Schema for ServicesArtisans platform
+  // Organization Schema for US Attorneys platform
   const organizationSchema = {
     '@type': 'Organization',
     '@id': `${baseUrl}#organization`,
-    name: 'ServicesArtisans',
+    name: 'US Attorneys',
     url: baseUrl,
     logo: {
       '@type': 'ImageObject',
@@ -62,7 +62,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
         offers: {
           '@type': 'Offer',
           price: numericPrice,
-          priceCurrency: 'EUR',
+          priceCurrency: 'USD',
           availability: artisan.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         },
       }
@@ -95,7 +95,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     parentOrganization: {
       '@type': 'Organization',
       '@id': `${baseUrl}#organization`,
-      name: 'ServicesArtisans',
+      name: 'US Attorneys',
     },
 
     address: {
@@ -167,7 +167,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
               priceSpecification: {
                 '@type': 'PriceSpecification',
                 price: numericPrice,
-                priceCurrency: 'EUR',
+                priceCurrency: 'USD',
               },
             }
           })(),
@@ -201,8 +201,8 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
-    priceRange: '€€',
-    currenciesAccepted: 'EUR',
+    priceRange: '$$',
+    currenciesAccepted: 'USD',
 
     // Opening hours for Google Knowledge Panel
     ...(artisan.opening_hours && Object.keys(artisan.opening_hours).length > 0 && {
@@ -244,7 +244,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
   } : null
 
   // BreadcrumbList Schema — 5 levels matching visible breadcrumb
-  // Structure: Accueil > Services > {Service} > {City} > {Nom artisan}
+  // Structure: Home > Practice Areas > {Service} > {City} > {Attorney name}
   const specialtySlug = slugify(artisan.specialty)
   const citySlug = slugify(artisan.city)
   const breadcrumbItems = [

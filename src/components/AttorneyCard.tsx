@@ -33,7 +33,7 @@ export default function AttorneyCard({
           : 'border-gray-100 shadow-sm hover:-translate-y-1 hover:scale-[1.02] hover:border-amber-200 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:before:opacity-100'
       }`}
     >
-      {/* Bouton favori — top-right */}
+      {/* Favorite button — top-right */}
       <FavoriteButton
         attorneyId={provider.stable_id || provider.id}
         attorneyName={provider.name}
@@ -50,7 +50,7 @@ export default function AttorneyCard({
       <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden z-0">
         <ChevronRight className="w-5 h-5 text-gray-300" />
       </div>
-      {/* Avatar, Nom et vérification */}
+      {/* Avatar, Name and verification */}
       <div className="flex items-start gap-4 mb-2">
         {/* Avatar / Initials */}
         <Link href={providerUrl} className="flex-shrink-0">
@@ -111,7 +111,7 @@ export default function AttorneyCard({
         )}
       </div>
 
-      {/* Adresse + SIREN trust signal */}
+      {/* Address + Bar Number trust signal */}
       {provider.address_street && (
         <div className="flex items-start gap-2 text-sm text-gray-600 mb-1">
           <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
@@ -130,10 +130,10 @@ export default function AttorneyCard({
         </p>
       )}
 
-      {/* Boutons */}
+      {/* Buttons */}
       <div className="flex gap-3 relative z-20">
         <Link
-          href={`${providerUrl}#devis`}
+          href={`${providerUrl}#quote`}
           className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
         >
           Request a Consultation

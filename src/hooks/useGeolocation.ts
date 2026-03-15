@@ -47,17 +47,17 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
   }, [])
 
   const handleError = useCallback((error: GeolocationPositionError) => {
-    let errorMessage = 'Une erreur est survenue lors de la géolocalisation'
+    let errorMessage = 'An error occurred while retrieving your location'
 
     switch (error.code) {
       case error.PERMISSION_DENIED:
-        errorMessage = 'Vous avez refusé l\'accès à votre position. Veuillez autoriser la géolocalisation dans les paramètres de votre navigateur.'
+        errorMessage = 'You have denied access to your location. Please enable geolocation in your browser settings.'
         break
       case error.POSITION_UNAVAILABLE:
-        errorMessage = 'Votre position n\'est pas disponible pour le moment.'
+        errorMessage = 'Your position is currently unavailable.'
         break
       case error.TIMEOUT:
-        errorMessage = 'La demande de géolocalisation a expiré. Veuillez réessayer.'
+        errorMessage = 'The geolocation request timed out. Please try again.'
         break
     }
 
@@ -72,7 +72,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
     if (!navigator.geolocation) {
       setState(prev => ({
         ...prev,
-        error: 'La géolocalisation n\'est pas supportée par votre navigateur',
+        error: 'Geolocation is not supported by your browser',
         loading: false
       }))
       return

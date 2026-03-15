@@ -79,7 +79,7 @@ export function createApiHandler<T = unknown>(
             .single()
 
           if (!artisan) {
-            throw new AuthorizationError('Profil artisan requis')
+            throw new AuthorizationError('Attorney profile required')
           }
 
           context.artisan = { attorney_id: artisan.id }

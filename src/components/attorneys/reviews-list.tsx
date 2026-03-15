@@ -20,7 +20,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
   if (reviews.length === 0) {
     return (
       <p className="text-gray-500 text-center py-4">
-        Aucun avis pour le moment
+        No reviews yet
       </p>
     )
   }
@@ -49,7 +49,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
           {review.response && (
             <div className="mt-3 pl-4 border-l-2 border-blue-200 bg-blue-50/50 py-2 pr-2 rounded-r">
               <p className="text-xs text-blue-600 font-medium mb-1">
-                Réponse de l'artisan
+                Attorney response
               </p>
               <p className="text-sm text-gray-700">{review.response}</p>
             </div>

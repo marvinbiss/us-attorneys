@@ -19,7 +19,7 @@ import { createHash } from 'crypto'
 export const dynamic = 'force-dynamic'
 
 const ALLOWED_EVENTS = [
-  'artisan_profile_view',
+  'attorney_profile_view',
   'phone_reveal',
   'phone_click',
   'page_view',
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
     const { event, properties, sessionId, visitorId } = validation.data
 
     // For attorney-specific events, attorneyId is required
-    const ATTORNEY_EVENTS = ['artisan_profile_view', 'phone_reveal', 'phone_click']
+    const ATTORNEY_EVENTS = ['attorney_profile_view', 'phone_reveal', 'phone_click']
     if (ATTORNEY_EVENTS.includes(event) && !properties.attorneyId) {
       return new NextResponse(null, { status: 400 })
     }

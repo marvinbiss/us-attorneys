@@ -24,26 +24,26 @@ interface AuditLog {
 }
 
 const actionLabels: Record<string, string> = {
-  'create_provider': 'Création artisan',
-  'update_provider': 'Modification artisan',
-  'delete_provider': 'Suppression artisan',
-  'create_review': 'Création avis',
-  'update_review': 'Modification avis',
-  'delete_review': 'Suppression avis',
-  'ban_user': 'Bannissement utilisateur',
-  'unban_user': 'Débannissement utilisateur',
-  'create_service': 'Création service',
-  'update_service': 'Modification service',
-  'delete_service': 'Suppression service',
-  'create_user': 'Création utilisateur',
-  'update_user': 'Modification utilisateur',
-  'delete_user': 'Suppression utilisateur',
-  'verify_provider': 'Vérification artisan',
-  'suspend_provider': 'Suspension artisan',
-  'activate_provider': 'Réactivation artisan',
-  'resolve_report': 'Résolution signalement',
-  'dismiss_report': 'Rejet signalement',
-  'update_settings': 'Modification paramètres',
+  'create_provider': 'Create attorney',
+  'update_provider': 'Update attorney',
+  'delete_provider': 'Delete attorney',
+  'create_review': 'Create review',
+  'update_review': 'Update review',
+  'delete_review': 'Delete review',
+  'ban_user': 'Ban user',
+  'unban_user': 'Unban user',
+  'create_service': 'Create service',
+  'update_service': 'Update service',
+  'delete_service': 'Delete service',
+  'create_user': 'Create user',
+  'update_user': 'Update user',
+  'delete_user': 'Delete user',
+  'verify_provider': 'Verify attorney',
+  'suspend_provider': 'Suspend attorney',
+  'activate_provider': 'Reactivate attorney',
+  'resolve_report': 'Resolve report',
+  'dismiss_report': 'Dismiss report',
+  'update_settings': 'Update settings',
 }
 
 interface JournalResponse {
@@ -80,17 +80,17 @@ export default function AdminJournalPage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
               <Shield className="w-6 h-6 text-gray-400" />
-              Journal Admin
+              Admin Journal
             </h1>
             <p className="text-gray-500 mt-1">
-              Journal immuable — {total} entrées au total
+              {total} entries
             </p>
           </div>
           <button
             onClick={() => mutate()}
             className="text-sm text-blue-600 hover:underline flex items-center gap-1"
           >
-            <RefreshCw className="w-3 h-3" /> Rafraîchir
+            <RefreshCw className="w-3 h-3" /> Refresh
           </button>
         </div>
 
@@ -108,20 +108,20 @@ export default function AdminJournalPage() {
         ) : logs.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">
             <Shield className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Aucune entrée dans le journal</p>
+            <p className="text-gray-500">No entries found</p>
           </div>
         ) : (
           <>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Journal des actions administrateur">
+                <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Admin action log">
                   <thead>
                     <tr className="border-b border-gray-100 text-left text-gray-500">
                       <th scope="col" className="px-4 py-3 font-medium">Date</th>
                       <th scope="col" className="px-4 py-3 font-medium">Action</th>
-                      <th scope="col" className="px-4 py-3 font-medium">Ressource</th>
+                      <th scope="col" className="px-4 py-3 font-medium">Resource</th>
                       <th scope="col" className="px-4 py-3 font-medium">Admin</th>
-                      <th scope="col" className="px-4 py-3 font-medium">Détails</th>
+                      <th scope="col" className="px-4 py-3 font-medium">Details</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
@@ -129,7 +129,7 @@ export default function AdminJournalPage() {
                       <tr key={log.id} className="hover:bg-gray-50">
                         <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                           <Clock className="w-3 h-3 inline mr-1" />
-                          {new Date(log.created_at).toLocaleString('fr-FR', {
+                          {new Date(log.created_at).toLocaleString('en-US', {
                             day: '2-digit', month: '2-digit', year: '2-digit',
                             hour: '2-digit', minute: '2-digit',
                           })}
@@ -172,7 +172,7 @@ export default function AdminJournalPage() {
                   disabled={page === 1}
                   className="flex items-center gap-1 px-3 py-1.5 text-sm rounded border disabled:opacity-40"
                 >
-                  <ChevronLeft className="w-4 h-4" /> Préc.
+                  <ChevronLeft className="w-4 h-4" /> Prev
                 </button>
                 <span className="text-sm text-gray-600">Page {page} / {totalPages}</span>
                 <button
@@ -180,7 +180,7 @@ export default function AdminJournalPage() {
                   disabled={page === totalPages}
                   className="flex items-center gap-1 px-3 py-1.5 text-sm rounded border disabled:opacity-40"
                 >
-                  Suiv. <ChevronRight className="w-4 h-4" />
+                  Next <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>

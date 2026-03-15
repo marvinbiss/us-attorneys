@@ -184,16 +184,23 @@ export function hasDemographicData(commune: LocationData): boolean {
 // ---------------------------------------------------------------------------
 
 export function formatNumber(n: number): string {
-  return (n ?? 0).toLocaleString('fr-FR')
+  return (n ?? 0).toLocaleString('en-US')
 }
 
-export function formatEuro(n: number): string {
-  return (n ?? 0).toLocaleString('fr-FR') + ' €'
+export function formatUSD(n: number): string {
+  return '$' + (n ?? 0).toLocaleString('en-US')
 }
+
+export function formatDollarSign(n: number): string {
+  return '$' + (n ?? 0).toLocaleString('en-US')
+}
+
+/** @deprecated Use formatDollarSign instead */
+export const formatEuro = formatDollarSign
 
 const MONTH_NAMES = [
-  '', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+  '', 'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
 ]
 
 export function monthName(m: number): string {

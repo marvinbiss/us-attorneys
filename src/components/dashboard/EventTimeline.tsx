@@ -44,21 +44,21 @@ const colorMap: Record<LeadEventType, string> = {
 }
 
 const labelMap: Record<LeadEventType, string> = {
-  created: 'Lead créé',
-  dispatched: 'Lead dispatché',
-  viewed: 'Lead consulté',
-  quoted: 'Devis envoyé',
-  declined: 'Lead décliné',
-  accepted: 'Devis accepté',
-  refused: 'Devis refusé',
-  completed: 'Mission terminée',
-  expired: 'Lead expiré',
-  reassigned: 'Lead réassigné',
+  created: 'Lead created',
+  dispatched: 'Lead dispatched',
+  viewed: 'Lead viewed',
+  quoted: 'Quote sent',
+  declined: 'Lead declined',
+  accepted: 'Quote accepted',
+  refused: 'Quote refused',
+  completed: 'Case completed',
+  expired: 'Lead expired',
+  reassigned: 'Lead reassigned',
 }
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr)
-  return d.toLocaleDateString('fr-FR', {
+  return d.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -69,10 +69,10 @@ function formatDate(dateStr: string): string {
 
 function renderMetadata(meta: Record<string, unknown>, eventType: LeadEventType): string | null {
   if (eventType === 'quoted' && meta.amount) {
-    return `Montant : ${meta.amount} €`
+    return `Amount: $${meta.amount}`
   }
   if (eventType === 'declined' && meta.reason) {
-    return `Raison : ${meta.reason}`
+    return `Reason: ${meta.reason}`
   }
   return null
 }
@@ -82,7 +82,7 @@ export function EventTimeline({ events, compact = false }: EventTimelineProps) {
     return (
       <div className="text-center py-8 text-gray-400">
         <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />
-        <p className="text-sm">Aucun événement</p>
+        <p className="text-sm">No events</p>
       </div>
     )
   }

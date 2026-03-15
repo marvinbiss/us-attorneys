@@ -97,7 +97,7 @@ export function AttorneyProfileCard({
           {coverUrl && !imageError && (
             <Image
               src={coverUrl}
-              alt={`Photo de couverture de ${companyName || name} - ${profession} à ${location}`}
+              alt={`Cover photo of ${companyName || name} - ${profession} in ${location}`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -138,7 +138,7 @@ export function AttorneyProfileCard({
                 {imageUrl && !imageError ? (
                   <Image
                     src={imageUrl}
-                    alt={`${name} - ${profession} à ${location}`}
+                    alt={`${name} - ${profession} in ${location}`}
                     fill
                     className="object-cover"
                     sizes="96px"
@@ -165,12 +165,12 @@ export function AttorneyProfileCard({
             {isAvailableNow ? (
               <div className="bg-green-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                Disponible maintenant
+                Available now
               </div>
             ) : isAvailableToday ? (
               <div className="bg-clay-400 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Clock className="w-3 h-3" />
-                Dispo aujourd'hui
+                Available today
               </div>
             ) : nextSlot ? (
               <div className="bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
@@ -209,7 +209,7 @@ export function AttorneyProfileCard({
             {responseTime && (
               <div className="flex items-center gap-1">
                 <MessageCircle className="w-4 h-4" />
-                Répond en {responseTime}
+                Responds in {responseTime}
               </div>
             )}
           </div>
@@ -219,13 +219,13 @@ export function AttorneyProfileCard({
             {yearsExperience && (
               <div className="text-center">
                 <div className="text-lg font-bold text-slate-900">{yearsExperience}+</div>
-                <div className="text-xs text-slate-500">ans d'exp.</div>
+                <div className="text-xs text-slate-500">yrs exp.</div>
               </div>
             )}
             {completedJobs && (
               <div className="text-center">
                 <div className="text-lg font-bold text-slate-900">{completedJobs}+</div>
-                <div className="text-xs text-slate-500">missions</div>
+                <div className="text-xs text-slate-500">cases</div>
               </div>
             )}
           </div>
@@ -253,7 +253,7 @@ export function AttorneyProfileCard({
               {isVerified && (
                 <div className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full">
                   <Shield className="w-3 h-3" />
-                  Identité contrôlée
+                  Verified identity
                 </div>
               )}
               {badges.slice(0, 2).map((badge, i) => (
@@ -277,15 +277,15 @@ export function AttorneyProfileCard({
                 className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                Appeler
+                Call
               </a>
             )}
             <Link
-              href={`${href}#reserver`}
+              href={`${href}#book`}
               className="flex-1 flex items-center justify-center gap-2 bg-clay-400 hover:bg-clay-600 text-white py-3 rounded-xl font-semibold transition-colors"
             >
               <Calendar className="w-4 h-4" />
-              Réserver
+              Book
             </Link>
           </div>
         </Link>
@@ -308,7 +308,7 @@ export function AttorneyProfileCard({
             {imageUrl && !imageError ? (
               <Image
                 src={imageUrl}
-                alt={`${name} - ${profession} à ${location}`}
+                alt={`${name} - ${profession} in ${location}`}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 640px) 100vw, 224px"
@@ -332,7 +332,7 @@ export function AttorneyProfileCard({
               {isAvailableNow && (
                 <div className="bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
                   <Zap className="w-3 h-3" />
-                  Dispo
+                  Available
                 </div>
               )}
             </div>
@@ -400,12 +400,12 @@ export function AttorneyProfileCard({
             <div className="flex items-center gap-4 text-sm">
               {yearsExperience && (
                 <span className="text-slate-600">
-                  <strong>{yearsExperience}</strong> ans d'exp.
+                  <strong>{yearsExperience}</strong> yrs exp.
                 </span>
               )}
               {completedJobs && (
                 <span className="text-slate-600">
-                  <strong>{completedJobs}</strong> missions
+                  <strong>{completedJobs}</strong> cases
                 </span>
               )}
             </div>
@@ -419,12 +419,12 @@ export function AttorneyProfileCard({
                   className="flex-1 flex items-center justify-center gap-1 bg-green-500 text-white py-2.5 rounded-lg font-medium text-sm"
                 >
                   <Phone className="w-4 h-4" />
-                  Appeler
+                  Call
                 </a>
               )}
               <span className="flex-1 flex items-center justify-center gap-1 bg-clay-400 text-white py-2.5 rounded-lg font-medium text-sm">
                 <Calendar className="w-4 h-4" />
-                Réserver
+                Book
               </span>
             </div>
           </div>
@@ -449,7 +449,7 @@ export function AttorneyProfileCard({
           {imageUrl && !imageError ? (
             <Image
               src={imageUrl}
-              alt={`${name} - ${profession} à ${location}`}
+              alt={`${name} - ${profession} in ${location}`}
               fill
               className="object-cover"
               sizes="48px"
@@ -496,7 +496,7 @@ export function AttorneyProfileCard({
           {imageUrl && !imageError ? (
             <Image
               src={imageUrl}
-              alt={`${name} - ${profession} à ${location}`}
+              alt={`${name} - ${profession} in ${location}`}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -534,7 +534,7 @@ export function AttorneyProfileCard({
           {isAvailableNow ? (
             <div className="absolute bottom-3 left-3 bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
               <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-              Disponible
+              Available
             </div>
           ) : nextSlot ? (
             <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">

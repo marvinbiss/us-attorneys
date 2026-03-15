@@ -33,7 +33,7 @@ export async function POST() {
       .single()
 
     if (!profile?.email) {
-      return NextResponse.json({ success: false, error: { message: 'Profil incomplet' } }, { status: 400 })
+      return NextResponse.json({ success: false, error: { message: 'Incomplete profile' } }, { status: 400 })
     }
 
     // Use admin client to update leads where client_id is NULL

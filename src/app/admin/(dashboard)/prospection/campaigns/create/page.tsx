@@ -42,8 +42,8 @@ export default function CreateCampaignPage() {
         fetch('/api/admin/prospection/templates', { signal }),
         fetch('/api/admin/prospection/lists', { signal }),
       ])
-      if (!templatesRes.ok) throw new Error(`Erreur serveur templates (${templatesRes.status})`)
-      if (!listsRes.ok) throw new Error(`Erreur serveur listes (${listsRes.status})`)
+      if (!templatesRes.ok) throw new Error(`Server error templates (${templatesRes.status})`)
+      if (!listsRes.ok) throw new Error(`Server error lists (${listsRes.status})`)
       const [templatesData, listsData] = await Promise.all([templatesRes.json(), listsRes.json()])
       if (templatesData.success) setTemplates(templatesData.data)
       if (listsData.success) setLists(listsData.data)
@@ -52,7 +52,7 @@ export default function CreateCampaignPage() {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur de chargement')
+        setError('Loading error')
       }
     }
   }, [])
@@ -73,15 +73,15 @@ export default function CreateCampaignPage() {
   const handleCreate = async () => {
     // Validation
     if (!name.trim()) {
-      setError('Le nom de la campagne est requis')
+      setError('Campaign name is required')
       return
     }
     if (!templateId) {
-      setError('Veuillez sélectionner un modèle')
+      setError('Please select a template')
       return
     }
     if (!listId) {
-      setError('Veuillez sélectionner une liste de contacts')
+      setError('Please select a contact list')
       return
     }
 
@@ -102,18 +102,18 @@ export default function CreateCampaignPage() {
           scheduled_at: scheduledAt || undefined,
         }),
       })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         router.push(`/admin/prospection/campaigns/${data.data.id}`)
       } else {
-        setError(data.error?.message || 'Erreur')
+        setError(data.error?.message || 'Error')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de la création')
+        setError('Error creating campaign')
       }
     } finally {
       setSaving(false)
@@ -124,10 +124,10 @@ export default function CreateCampaignPage() {
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/campaigns" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux campagnes
+          <ArrowLeft className="w-4 h-4" /> Back to campaigns
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouvelle campagne</h1>
-        <p className="text-gray-500 mt-1">Configurez et lancez votre campagne de prospection</p>
+        <h1 className="text-2xl font-bold text-gray-900">New campaign</h1>
+        <p className="text-gray-500 mt-1">Configure and launch your prospection campaign</p>
       </div>
 
       <ProspectionNav />
@@ -155,21 +155,21 @@ export default function CreateCampaignPage() {
       </div>
 
       <div className="bg-white rounded-lg border p-6">
-        {/* Step 1: Canal + Audience */}
+        {/* Step 1: Channel + Audience */}
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">Nom de la campagne</label>
+              <label className="block text-sm font-medium mb-2">Campaign name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ex: Prospection artisans Paris"
+                placeholder="E.g. Prospection attorneys NYC"
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Canal</label>
+              <label className="block text-sm font-medium mb-2">Channel</label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {(['email', 'sms', 'whatsapp'] as const).map((ch) => (
                   <button
@@ -192,7 +192,7 @@ export default function CreateCampaignPage() {
                     onClick={() => setAudienceType(type)}
                     className={`p-4 rounded-lg border-2 capitalize font-medium ${audienceType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
-                    {type === 'mairie' ? 'Mairies' : type + 's'}
+                    {type === 'mairie' ? 'Municipalities' : type === 'artisan' ? 'Attorneys' : 'Clients'}
                   </button>
                 ))}
               </div>
@@ -203,9 +203,9 @@ export default function CreateCampaignPage() {
         {/* Step 2: Template */}
         {step === 2 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Choisir un modèle</h3>
+            <h3 className="text-lg font-medium">Choose a template</h3>
             {filteredTemplates.length === 0 ? (
-              <p className="text-gray-400 py-4">Aucun modèle disponible pour ce canal. Créez-en un d&apos;abord.</p>
+              <p className="text-gray-400 py-4">No template available for this channel. Create one first.</p>
             ) : (
               <div className="space-y-2">
                 {filteredTemplates.map((tmpl) => (
@@ -215,7 +215,7 @@ export default function CreateCampaignPage() {
                     className={`w-full text-left p-4 rounded-lg border-2 ${templateId === tmpl.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
                     <div className="font-medium">{tmpl.name}</div>
-                    {tmpl.subject && <div className="text-sm text-gray-500 mt-1">Sujet: {tmpl.subject}</div>}
+                    {tmpl.subject && <div className="text-sm text-gray-500 mt-1">Subject: {tmpl.subject}</div>}
                     <div className="text-xs text-gray-400 mt-1 line-clamp-2">{tmpl.body}</div>
                   </button>
                 ))}
@@ -224,12 +224,12 @@ export default function CreateCampaignPage() {
           </div>
         )}
 
-        {/* Step 3: Liste */}
+        {/* Step 3: List */}
         {step === 3 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Choisir une liste de contacts</h3>
+            <h3 className="text-lg font-medium">Choose a contact list</h3>
             {lists.length === 0 ? (
-              <p className="text-gray-400 py-4">Aucune liste de contacts. Créez-en une d&apos;abord.</p>
+              <p className="text-gray-400 py-4">No contact list. Create one first.</p>
             ) : (
               <div className="space-y-2">
                 {lists.map((list) => (
@@ -250,10 +250,10 @@ export default function CreateCampaignPage() {
           </div>
         )}
 
-        {/* Step 4: Config IA */}
+        {/* Step 4: AI Config */}
         {step === 4 && (
           <div className="space-y-6">
-            <h3 className="text-lg font-medium">Réponses IA automatiques</h3>
+            <h3 className="text-lg font-medium">Automatic AI replies</h3>
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -262,27 +262,27 @@ export default function CreateCampaignPage() {
                 className="w-4 h-4 rounded border-gray-300 text-blue-600"
               />
               <div>
-                <span className="font-medium">Activer les réponses IA</span>
-                <p className="text-sm text-gray-500">L&apos;IA répondra automatiquement aux contacts qui répondent</p>
+                <span className="font-medium">Enable AI replies</span>
+                <p className="text-sm text-gray-500">AI will automatically reply to contacts who respond</p>
               </div>
             </label>
             {aiAutoReply && (
               <div>
-                <label className="block text-sm font-medium mb-2">Fournisseur IA</label>
+                <label className="block text-sm font-medium mb-2">AI Provider</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setAiProvider('claude')}
                     className={`p-4 rounded-lg border-2 ${aiProvider === 'claude' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
                   >
                     <div className="font-medium">Claude (Anthropic)</div>
-                    <div className="text-xs text-gray-500 mt-1">Excellent en français</div>
+                    <div className="text-xs text-gray-500 mt-1">Excellent quality</div>
                   </button>
                   <button
                     onClick={() => setAiProvider('openai')}
                     className={`p-4 rounded-lg border-2 ${aiProvider === 'openai' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
                   >
                     <div className="font-medium">GPT-4o (OpenAI)</div>
-                    <div className="text-xs text-gray-500 mt-1">Rapide et polyvalent</div>
+                    <div className="text-xs text-gray-500 mt-1">Fast and versatile</div>
                   </button>
                 </div>
               </div>
@@ -290,27 +290,27 @@ export default function CreateCampaignPage() {
           </div>
         )}
 
-        {/* Step 5: Résumé */}
+        {/* Step 5: Summary */}
         {step === 5 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Résumé de la campagne</h3>
+            <h3 className="text-lg font-medium">Campaign summary</h3>
             <div className="bg-gray-50 rounded-lg p-4 space-y-3 text-sm">
-              <div className="flex justify-between"><span className="text-gray-500">Nom</span><span className="font-medium">{name}</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Canal</span><span className="font-medium capitalize">{channel}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Name</span><span className="font-medium">{name}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Channel</span><span className="font-medium capitalize">{channel}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Audience</span><span className="font-medium capitalize">{audienceType}s</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Modèle</span><span className="font-medium">{selectedTemplate?.name || 'Aucun'}</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Liste</span><span className="font-medium">{selectedList?.name || 'Aucune'} ({selectedList?.contact_count || 0} contacts)</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Réponse IA auto</span><span className="font-medium">{aiAutoReply ? `Oui (${aiProvider})` : 'Non'}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Template</span><span className="font-medium">{selectedTemplate?.name || 'None'}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">List</span><span className="font-medium">{selectedList?.name || 'None'} ({selectedList?.contact_count || 0} contacts)</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">AI auto-reply</span><span className="font-medium">{aiAutoReply ? `Yes (${aiProvider})` : 'No'}</span></div>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Planification (optionnel)</label>
+              <label className="block text-sm font-medium mb-2">Schedule (optional)</label>
               <input
                 type="datetime-local"
                 value={scheduledAt}
                 onChange={(e) => setScheduledAt(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               />
-              <p className="text-xs text-gray-400 mt-1">Laissez vide pour sauvegarder en brouillon</p>
+              <p className="text-xs text-gray-400 mt-1">Leave empty to save as draft</p>
             </div>
           </div>
         )}
@@ -319,7 +319,7 @@ export default function CreateCampaignPage() {
         <div className="flex justify-between mt-8 pt-4 border-t">
           {step > 1 ? (
             <button onClick={() => setStep((step - 1) as Step)} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
-              <ArrowLeft className="w-4 h-4" /> Précédent
+              <ArrowLeft className="w-4 h-4" /> Previous
             </button>
           ) : <div />}
 
@@ -329,7 +329,7 @@ export default function CreateCampaignPage() {
               disabled={step === 1 && !name}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
-              Suivant <ArrowRight className="w-4 h-4" />
+              Next <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
             <button
@@ -337,7 +337,7 @@ export default function CreateCampaignPage() {
               disabled={saving || !name}
               className="flex items-center gap-2 px-6 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
             >
-              <Send className="w-4 h-4" /> {saving ? 'Création...' : 'Créer la campagne'}
+              <Send className="w-4 h-4" /> {saving ? 'Creating...' : 'Create campaign'}
             </button>
           )}
         </div>

@@ -14,7 +14,7 @@ import {
   Phone,
   ChevronDown,
   ChevronUp,
-  Euro,
+  DollarSign,
   Hammer,
   Send,
   Trash2,
@@ -58,32 +58,32 @@ interface DevisResponse {
 const STATUS_FILTERS = ['all', 'pending', 'sent', 'accepted', 'refused', 'completed'] as const
 
 const STATUS_CONFIG: Record<string, { variant: 'success' | 'warning' | 'error' | 'default'; label: string }> = {
-  pending: { variant: 'warning', label: 'En attente' },
-  sent: { variant: 'default', label: 'Envoyé' },
-  accepted: { variant: 'success', label: 'Accepté' },
-  refused: { variant: 'error', label: 'Refusé' },
-  completed: { variant: 'success', label: 'Terminé' },
+  pending: { variant: 'warning', label: 'Pending' },
+  sent: { variant: 'default', label: 'Sent' },
+  accepted: { variant: 'success', label: 'Accepted' },
+  refused: { variant: 'error', label: 'Refused' },
+  completed: { variant: 'success', label: 'Completed' },
 }
 
 const URGENCY_CONFIG: Record<string, { variant: 'error' | 'warning' | 'default'; label: string }> = {
-  tres_urgent: { variant: 'error', label: 'Très urgent' },
+  tres_urgent: { variant: 'error', label: 'Very urgent' },
   urgent: { variant: 'warning', label: 'Urgent' },
   normal: { variant: 'default', label: 'Normal' },
 }
 
 const ASSIGNMENT_STATUS: Record<string, { cls: string; label: string }> = {
-  pending: { cls: 'bg-yellow-100 text-yellow-800', label: 'En attente' },
-  viewed: { cls: 'bg-blue-100 text-blue-800', label: 'Vu' },
-  quoted: { cls: 'bg-green-100 text-green-800', label: 'Devis envoyé' },
-  declined: { cls: 'bg-red-100 text-red-800', label: 'Décliné' },
+  pending: { cls: 'bg-yellow-100 text-yellow-800', label: 'Pending' },
+  viewed: { cls: 'bg-blue-100 text-blue-800', label: 'Viewed' },
+  quoted: { cls: 'bg-green-100 text-green-800', label: 'Quote sent' },
+  declined: { cls: 'bg-red-100 text-red-800', label: 'Declined' },
 }
 
 const BUDGET_LABELS: Record<string, string> = {
-  'moins-500': '< 500 €',
-  '500-2000': '500 – 2 000 €',
-  '2000-5000': '2 000 – 5 000 €',
-  'plus-5000': '> 5 000 €',
-  'ne-sais-pas': 'Non précisé',
+  'moins-500': '< $500',
+  '500-2000': '$500 – $2,000',
+  '2000-5000': '$2,000 – $5,000',
+  'plus-5000': '> $5,000',
+  'ne-sais-pas': 'Not specified',
 }
 
 export default function AdminDevisPage() {
@@ -103,7 +103,7 @@ export default function AdminDevisPage() {
   const total = data?.total || 0
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -127,7 +127,7 @@ export default function AdminDevisPage() {
       setExpandedId(null)
       mutate()
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Erreur lors de la suppression')
+      alert(err instanceof Error ? err.message : 'Error deleting request')
     } finally {
       setDeletingId(null)
     }
@@ -138,8 +138,8 @@ export default function AdminDevisPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Demandes de devis</h1>
-          <p className="text-gray-500 mt-1">{total} demande{total > 1 ? 's' : ''} au total</p>
+          <h1 className="text-2xl font-bold text-gray-900">Quote Requests</h1>
+          <p className="text-gray-500 mt-1">{total} total request{total > 1 ? 's' : ''}</p>
         </div>
 
         {/* Filters */}
@@ -149,8 +149,8 @@ export default function AdminDevisPage() {
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher par nom, email, service, ville, code postal..."
-                aria-label="Rechercher une demande"
+                placeholder="Search by name, email, service, city, zip code..."
+                aria-label="Search requests"
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -173,7 +173,7 @@ export default function AdminDevisPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {s === 'all' ? 'Tous' : STATUS_CONFIG[s]?.label || s}
+                  {s === 'all' ? 'All' : STATUS_CONFIG[s]?.label || s}
                 </button>
               ))}
             </div>
@@ -183,7 +183,7 @@ export default function AdminDevisPage() {
         {/* Error Banner */}
         {error && <ErrorBanner message={error.message} onDismiss={() => {}} onRetry={() => mutate()} />}
 
-        {/* Demandes List */}
+        {/* Requests List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
@@ -192,7 +192,7 @@ export default function AdminDevisPage() {
           ) : demandes.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucune demande trouvée</p>
+              <p>No requests found</p>
             </div>
           ) : (
             <>
@@ -235,7 +235,7 @@ export default function AdminDevisPage() {
                               </span>
                             </div>
 
-                            {/* Artisan(s) assigné(s) — visible sans expand */}
+                            {/* Assigned attorneys */}
                             {demandeAssignments.length > 0 ? (
                               <div className="mt-2 flex items-center gap-2 flex-wrap">
                                 <Hammer className="w-4 h-4 text-gray-400" />
@@ -251,7 +251,7 @@ export default function AdminDevisPage() {
                             ) : (
                               <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-400">
                                 <Send className="w-3.5 h-3.5" />
-                                Non assigné
+                                Unassigned
                               </div>
                             )}
 
@@ -282,19 +282,17 @@ export default function AdminDevisPage() {
                       {isExpanded && (
                         <div className="px-4 pb-4 border-t border-gray-100 bg-gray-50/50">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                            {/* Message complet */}
                             <div className="md:col-span-2">
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Message du client</h4>
+                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Client message</h4>
                               <div className="bg-white rounded-lg border border-gray-200 p-4">
                                 <p className="text-sm text-gray-800 whitespace-pre-wrap">
-                                  {demande.description || 'Aucune description fournie'}
+                                  {demande.description || 'No description provided'}
                                 </p>
                               </div>
                             </div>
 
-                            {/* Coordonnées client */}
                             <div>
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Coordonnées</h4>
+                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Contact info</h4>
                               <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-2">
                                 <div className="flex items-center gap-2 text-sm">
                                   <User className="w-4 h-4 text-gray-400" />
@@ -315,9 +313,8 @@ export default function AdminDevisPage() {
                               </div>
                             </div>
 
-                            {/* Détails demande */}
                             <div>
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Détails</h4>
+                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Details</h4>
                               <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-2 text-sm">
                                 <div className="flex justify-between">
                                   <span className="text-gray-500">Service</span>
@@ -325,7 +322,7 @@ export default function AdminDevisPage() {
                                 </div>
                                 {(demande.city || demande.postal_code) && (
                                   <div className="flex justify-between">
-                                    <span className="text-gray-500">Localisation</span>
+                                    <span className="text-gray-500">Location</span>
                                     <span className="font-medium text-gray-900">
                                       {demande.city ? `${demande.city} (${demande.postal_code})` : demande.postal_code}
                                     </span>
@@ -334,25 +331,24 @@ export default function AdminDevisPage() {
                                 <div className="flex justify-between">
                                   <span className="text-gray-500">Budget</span>
                                   <span className="font-medium text-gray-900 flex items-center gap-1">
-                                    <Euro className="w-3.5 h-3.5" />
-                                    {demande.budget ? (BUDGET_LABELS[demande.budget] || demande.budget) : 'Non précisé'}
+                                    <DollarSign className="w-3.5 h-3.5" />
+                                    {demande.budget ? (BUDGET_LABELS[demande.budget] || demande.budget) : 'Not specified'}
                                   </span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">Urgence</span>
+                                  <span className="text-gray-500">Urgency</span>
                                   <StatusBadge variant={urgencyConf.variant}>{urgencyConf.label}</StatusBadge>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">Statut</span>
+                                  <span className="text-gray-500">Status</span>
                                   <StatusBadge variant={statusConf.variant}>{statusConf.label}</StatusBadge>
                                 </div>
                               </div>
                             </div>
 
-                            {/* Artisan(s) assigné(s) — détail */}
                             <div className="md:col-span-2">
                               <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
-                                Artisan{demandeAssignments.length > 1 ? 's' : ''} assigné{demandeAssignments.length > 1 ? 's' : ''}
+                                Assigned attorney{demandeAssignments.length > 1 ? 's' : ''}
                               </h4>
                               {demandeAssignments.length > 0 ? (
                                 <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
@@ -379,7 +375,7 @@ export default function AdminDevisPage() {
                               ) : (
                                 <div className="bg-white rounded-lg border border-gray-200 p-4 text-sm text-gray-400 flex items-center gap-2">
                                   <Send className="w-4 h-4" />
-                                  Aucun artisan assigné à cette demande
+                                  No attorney assigned to this request
                                 </div>
                               )}
                             </div>
@@ -390,7 +386,7 @@ export default function AdminDevisPage() {
                             <p className="text-xs text-gray-400 font-mono">ID: {demande.id}</p>
                             {confirmDeleteId === demande.id ? (
                               <div className="flex items-center gap-2">
-                                <span className="text-sm text-red-600 font-medium">Supprimer cette demande ?</span>
+                                <span className="text-sm text-red-600 font-medium">Delete this request?</span>
                                 <button
                                   onClick={(e) => { e.stopPropagation(); handleDelete(demande.id) }}
                                   disabled={deletingId === demande.id}
@@ -401,13 +397,13 @@ export default function AdminDevisPage() {
                                   ) : (
                                     <Trash2 className="w-3 h-3" />
                                   )}
-                                  Confirmer
+                                  Confirm
                                 </button>
                                 <button
                                   onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(null) }}
                                   className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                                 >
-                                  Annuler
+                                  Cancel
                                 </button>
                               </div>
                             ) : (
@@ -416,7 +412,7 @@ export default function AdminDevisPage() {
                                 className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
                               >
                                 <Trash2 className="w-3 h-3" />
-                                Supprimer
+                                Delete
                               </button>
                             )}
                           </div>
@@ -430,7 +426,7 @@ export default function AdminDevisPage() {
               {/* Pagination */}
               <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p className="text-sm text-gray-500">
-                  Page {page} sur {totalPages}
+                  Page {page} of {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button

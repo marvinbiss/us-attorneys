@@ -94,7 +94,7 @@ export default function AdminRgpdPage() {
           setFoundUser(data.users[0])
         } else {
           setFoundUser(null)
-          setToast({ type: 'error', message: 'Utilisateur non trouvé' })
+          setToast({ type: 'error', message: 'User not found' })
         }
       }
     } catch (error) {
@@ -112,12 +112,12 @@ export default function AdminRgpdPage() {
       })
       if (response.ok) {
         const data = await response.json()
-        // Télécharger le fichier JSON
+        // Download the JSON file
         const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' })
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = `export_rgpd_${userId}.json`
+        a.download = `export_gdpr_${userId}.json`
         a.click()
         URL.revokeObjectURL(url)
       }
@@ -133,7 +133,7 @@ export default function AdminRgpdPage() {
       const response = await fetch(`/api/admin/gdpr/delete/${deleteModal.userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ confirmDelete: 'SUPPRIMER' }),
+        body: JSON.stringify({ confirmDelete: 'DELETE' }),
       })
       if (response.ok) {
         setDeleteModal({ open: false, userId: '', userName: '' })
@@ -147,7 +147,7 @@ export default function AdminRgpdPage() {
   }
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -158,10 +158,10 @@ export default function AdminRgpdPage() {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { variant: 'warning' | 'info' | 'success' | 'error'; label: string }> = {
-      pending: { variant: 'warning', label: 'En attente' },
-      processing: { variant: 'info', label: 'En cours' },
-      completed: { variant: 'success', label: 'Terminé' },
-      failed: { variant: 'error', label: 'Échoué' },
+      pending: { variant: 'warning', label: 'Pending' },
+      processing: { variant: 'info', label: 'Processing' },
+      completed: { variant: 'success', label: 'Completed' },
+      failed: { variant: 'error', label: 'Failed' },
     }
     const { variant, label } = config[status] || config.pending
     return <StatusBadge variant={variant}>{label}</StatusBadge>
@@ -172,21 +172,21 @@ export default function AdminRgpdPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Conformité RGPD</h1>
-          <p className="text-gray-500 mt-1">Gestion des demandes d&apos;export et de suppression de données</p>
+          <h1 className="text-2xl font-bold text-gray-900">GDPR Compliance</h1>
+          <p className="text-gray-500 mt-1">Manage data export and deletion requests</p>
         </div>
 
         {/* Manual Action Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Action manuelle</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Manual action</h2>
 
           <div className="flex gap-4 mb-4">
             <div className="flex-1 relative">
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="email"
-                placeholder="Rechercher un utilisateur par email..."
-                aria-label="Rechercher un utilisateur par email"
+                placeholder="Search for a user by email..."
+                aria-label="Search for a user by email"
                 value={searchEmail}
                 onChange={(e) => setSearchEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchUser()}
@@ -198,7 +198,7 @@ export default function AdminRgpdPage() {
               disabled={searching || !searchEmail}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
-              {searching ? 'Recherche...' : 'Rechercher'}
+              {searching ? 'Searching...' : 'Search'}
             </button>
           </div>
 
@@ -210,7 +210,7 @@ export default function AdminRgpdPage() {
                     <User className="w-5 h-5 text-gray-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{foundUser.full_name || 'Sans nom'}</p>
+                    <p className="font-medium text-gray-900">{foundUser.full_name || 'No name'}</p>
                     <p className="text-sm text-gray-500">{foundUser.email}</p>
                   </div>
                 </div>
@@ -221,7 +221,7 @@ export default function AdminRgpdPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                   >
                     <Download className="w-4 h-4" />
-                    {exportingUser === foundUser.id ? 'Export...' : 'Exporter'}
+                    {exportingUser === foundUser.id ? 'Exporting...' : 'Export'}
                   </button>
                   <button
                     onClick={() => setDeleteModal({
@@ -232,7 +232,7 @@ export default function AdminRgpdPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                   >
                     <Trash2 className="w-4 h-4" />
-                    Supprimer
+                    Delete
                   </button>
                 </div>
               </div>
@@ -244,10 +244,10 @@ export default function AdminRgpdPage() {
         <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg mb-6">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-amber-800">Attention</p>
+            <p className="font-medium text-amber-800">Warning</p>
             <p className="text-sm text-amber-700">
-              La suppression des données est irréversible. Assurez-vous d&apos;avoir effectué un export avant toute suppression.
-              Les données seront anonymisées conformément au RGPD.
+              Data deletion is irreversible. Make sure you have performed an export before any deletion.
+              Data will be anonymized in compliance with GDPR.
             </p>
           </div>
         </div>
@@ -256,7 +256,7 @@ export default function AdminRgpdPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-4 border-b border-gray-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Demandes RGPD</h2>
+              <h2 className="text-lg font-semibold text-gray-900">GDPR Requests</h2>
               <div className="flex gap-2">
                 {(['all', 'pending', 'processing', 'completed'] as const).map((s) => (
                   <button
@@ -271,9 +271,9 @@ export default function AdminRgpdPage() {
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    {s === 'all' ? 'Toutes' :
-                     s === 'pending' ? 'En attente' :
-                     s === 'processing' ? 'En cours' : 'Terminées'}
+                    {s === 'all' ? 'All' :
+                     s === 'pending' ? 'Pending' :
+                     s === 'processing' ? 'Processing' : 'Completed'}
                   </button>
                 ))}
               </div>
@@ -287,7 +287,7 @@ export default function AdminRgpdPage() {
           ) : requests.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Lock className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucune demande RGPD</p>
+              <p>No GDPR requests</p>
             </div>
           ) : (
             <>
@@ -310,7 +310,7 @@ export default function AdminRgpdPage() {
                           <div className="flex items-center gap-3 text-sm text-gray-500">
                             <span className="flex items-center gap-1">
                               <FileText className="w-4 h-4" />
-                              {request.request_type === 'export' ? 'Export' : 'Suppression'}
+                              {request.request_type === 'export' ? 'Export' : 'Deletion'}
                             </span>
                             <span className="flex items-center gap-1">
                               <Calendar className="w-4 h-4" />
@@ -327,7 +327,7 @@ export default function AdminRgpdPage() {
 
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">Page {page} sur {totalPages}</p>
+                <p className="text-sm text-gray-500">Page {page} of {totalPages}</p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
@@ -356,7 +356,7 @@ export default function AdminRgpdPage() {
         }`}>
           <div className="flex items-center gap-2">
             <span className="text-sm">{toast.message}</span>
-            <button onClick={() => setToast(null)} className="text-current opacity-50 hover:opacity-100" aria-label="Fermer">×</button>
+            <button onClick={() => setToast(null)} className="text-current opacity-50 hover:opacity-100" aria-label="Close">×</button>
           </div>
         </div>
       )}
@@ -366,11 +366,11 @@ export default function AdminRgpdPage() {
         isOpen={deleteModal.open}
         onClose={() => setDeleteModal({ open: false, userId: '', userName: '' })}
         onConfirm={handleDelete}
-        title="Supprimer les données utilisateur"
-        message={`Êtes-vous sûr de vouloir supprimer toutes les données de ${deleteModal.userName} ? Cette action est irréversible et les données seront anonymisées.`}
-        confirmText="Supprimer définitivement"
+        title="Delete user data"
+        message={`Are you sure you want to delete all data for ${deleteModal.userName}? This action is irreversible and the data will be anonymized.`}
+        confirmText="Delete permanently"
         variant="danger"
-        requireConfirmation="SUPPRIMER"
+        requireConfirmation="DELETE"
       />
     </div>
   )

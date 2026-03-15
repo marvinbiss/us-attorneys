@@ -61,15 +61,15 @@ export async function GET() {
       id: r.id,
       client: r.client_name || 'Client',
       date: r.created_at,
-      note: r.rating,
-      commentaire: r.comment,
-      reponse: r.artisan_response,
+      rating: r.rating,
+      comment: r.comment,
+      response: r.artisan_response,
       artisan_responded_at: r.artisan_responded_at,
-      repondu: r.artisan_response !== null,
+      has_response: r.artisan_response !== null,
     })) || []
 
     return NextResponse.json({
-      avis: formattedReviews,
+      reviews: formattedReviews,
       stats,
     })
   } catch (error) {

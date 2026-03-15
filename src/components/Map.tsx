@@ -56,7 +56,7 @@ export default function Map({
   if (!isMounted) {
     return (
       <div className="w-full h-full bg-gray-100 animate-pulse flex items-center justify-center">
-        <span className="text-gray-500">Chargement de la carte...</span>
+        <span className="text-gray-500">Loading map...</span>
       </div>
     )
   }

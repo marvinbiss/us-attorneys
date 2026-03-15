@@ -11,22 +11,22 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Carrières — Rejoignez notre équipe',
-  description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
+  title: 'Careers — Join Our Team',
+  description: 'Discover career opportunities at US Attorneys. Join a passionate team building the leading attorney directory in the United States based on public bar records.',
   alternates: {
     canonical: `${SITE_URL}/careers`,
   },
   openGraph: {
-    title: 'Carrières — Rejoignez notre équipe',
-    description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
+    title: 'Careers — Join Our Team',
+    description: 'Discover career opportunities at US Attorneys. Join a passionate team building the leading attorney directory in the United States based on public bar records.',
     url: `${SITE_URL}/careers`,
-    siteName: 'ServicesArtisans',
+    siteName: 'US Attorneys',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Carrières — Rejoignez notre équipe',
-    description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
+    title: 'Careers — Join Our Team',
+    description: 'Discover career opportunities at US Attorneys. Join a passionate team building the leading attorney directory in the United States based on public bar records.',
   },
   robots: {
     index: false,
@@ -34,19 +34,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function CarrieresPage() {
+export default async function CareersPage() {
   const cmsPage = await getPageContent('carrieres', 'static')
 
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-gray-50">
         <JsonLd data={getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
-          { name: 'Carrières', url: '/careers' },
+          { name: 'Home', url: '/' },
+          { name: 'Careers', url: '/careers' },
         ])} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <Breadcrumb items={[{ label: 'Carrières' }]} className="mb-4" />
+            <Breadcrumb items={[{ label: 'Careers' }]} className="mb-4" />
             <h1 className="font-heading text-3xl font-bold text-gray-900">
               {cmsPage.title}
             </h1>
@@ -79,14 +79,14 @@ export default async function CarrieresPage() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
-            items={[{ label: 'Carrières' }]}
+            items={[{ label: 'Careers' }]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <h1 className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]">
-            Carri&egrave;res
+            Careers
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl">
-            Rejoignez une &eacute;quipe passionn&eacute;e qui construit l&apos;annuaire des artisans de France bas&eacute; sur les donn&eacute;es SIREN officielles.
+            Join a passionate team building the leading attorney directory in the United States based on official public bar records.
           </p>
         </div>
       </section>
@@ -94,13 +94,13 @@ export default async function CarrieresPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-xl shadow-sm p-8 text-center max-w-2xl mx-auto">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
-            Aucune offre disponible pour le moment
+            No open positions at this time
           </h2>
           <p className="text-gray-600 mb-6">
-            Nous n&apos;avons pas de poste ouvert actuellement, mais nous sommes toujours à la recherche de talents. N&apos;hésitez pas à nous envoyer une candidature spontanée.
+            We don&apos;t have any open positions right now, but we&apos;re always looking for talented people. Feel free to send us a spontaneous application.
           </p>
           <p className="text-gray-500 mb-8">
-            Pour toute candidature spontanée, contactez-nous à{' '}
+            For spontaneous applications, contact us at{' '}
             <a href="mailto:careers@us-attorneys.com" className="text-blue-600 hover:underline font-medium">
               careers@us-attorneys.com
             </a>
@@ -109,7 +109,7 @@ export default async function CarrieresPage() {
             href="/about"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
           >
-            En savoir plus sur ServicesArtisans
+            Learn more about US Attorneys
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

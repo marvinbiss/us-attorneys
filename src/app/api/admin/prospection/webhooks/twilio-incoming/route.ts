@@ -11,7 +11,7 @@ import type { ProspectionContact, ProspectionConversationMessage } from '@/types
 export const dynamic = 'force-dynamic'
 
 /**
- * Webhook Twilio - Messages entrants (SMS et WhatsApp)
+ * Twilio Webhook - Incoming messages (SMS and WhatsApp)
  * Handles contact responses and triggers AI if configured
  */
 export async function POST(request: NextRequest) {
@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
     const params: Record<string, string> = {}
     formData.forEach((value, key) => { params[key] = value.toString() })
 
-    // Verify la signature
+    // Verify the signature
     const signature = request.headers.get('x-twilio-signature') || ''
     if (!verifyTwilioSignature(signature, request.url, params)) {
-      return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
+      return NextResponse.json({ success: false, error: { message: 'Invalid signature' } }, { status: 403 })
     }
 
     const from = params.From?.replace('whatsapp:', '') || ''
@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Verify si c'est un opt-out (STOP)
-    if (['stop', 'arret', 'arrêt', 'desabonner', 'désabonner'].includes(body.trim().toLowerCase())) {
+    // Check if this is an opt-out (STOP)
+    if (['stop', 'unsubscribe', 'cancel', 'opt out', 'quit', 'arret', 'arrêt', 'desabonner', 'désabonner'].includes(body.trim().toLowerCase())) {
       await supabase
         .from('prospection_contacts')
         .update({ consent_status: 'opted_out', opted_out_at: new Date().toISOString() })
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Save le message entrant
+    // Save the incoming message
     await supabase
       .from('prospection_conversation_messages')
       .insert({
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
         content: body,
       })
 
-    // Update la conversation
+    // Update the conversation
     await supabase
       .from('prospection_conversations')
       .update({
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       })
       .eq('id', conversation.id)
 
-    // Update le message original comme "replied"
+    // Update the original message as "replied"
     if (conversation.campaign_id) {
       await supabase
         .from('prospection_messages')
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
           row_id: conversation.campaign_id,
         })
       } catch {
-        // Fallback si la fonction RPC n'existe pas
+        // Fallback if the RPC function does not exist
       }
     }
 
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (aiSettings?.auto_reply_enabled) {
-      // Verify l'escalade
+      // Check for escalation
       if (shouldEscalate(body, aiSettings.escalation_keywords || [])) {
         await supabase
           .from('prospection_conversations')
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       // Check auto-reply limit
       if ((conversation.ai_replies_count || 0) < (aiSettings.max_auto_replies || 3)) {
         try {
-          // Charger l'historique
+          // Load conversation history
           const { data: history } = await supabase
             .from('prospection_conversation_messages')
             .select('id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at')
@@ -182,7 +182,7 @@ export async function POST(request: NextRequest) {
           const outputValidation = validateAIOutput(aiResult.content)
           const replyContent = outputValidation.valid
             ? aiResult.content
-            : 'Merci pour votre message. Un conseiller va vous recontacter rapidement.'
+            : 'Thank you for your message. An advisor will get back to you shortly.'
 
           // Send the AI response
           if (channel === 'whatsapp') {
@@ -206,7 +206,7 @@ export async function POST(request: NextRequest) {
               ai_cost: aiResult.cost,
             })
 
-          // Update le compteur IA
+          // Update the AI counter
           await supabase
             .from('prospection_conversations')
             .update({
@@ -225,7 +225,7 @@ export async function POST(request: NextRequest) {
             .eq('id', conversation.id)
         }
       } else {
-        // Limite atteinte → escalade humaine
+        // Limit reached → human escalation
         await supabase
           .from('prospection_conversations')
           .update({ status: 'human_required' })

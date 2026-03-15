@@ -74,10 +74,10 @@ export function Pagination({
           <p className="text-sm text-gray-500">
             {total > 0 ? (
               <>
-                Affichage {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, total)} sur {total}
+                Showing {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, total)} of {total}
               </>
             ) : (
-              'Aucun résultat'
+              'No results'
             )}
           </p>
         )}
@@ -85,12 +85,12 @@ export function Pagination({
           <select
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            aria-label="Nombre d'éléments par page"
+            aria-label="Items per page"
             className="text-sm border border-gray-300 rounded px-2 py-1"
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
-                {size} par page
+                {size} per page
               </option>
             ))}
           </select>
@@ -103,8 +103,8 @@ export function Pagination({
           onClick={() => onPageChange(1)}
           disabled={!canGoPrev}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-          title="Première page"
-          aria-label="Première page"
+          title="First page"
+          aria-label="First page"
         >
           <ChevronsLeft className="w-4 h-4" />
         </button>
@@ -114,8 +114,8 @@ export function Pagination({
           onClick={() => onPageChange(page - 1)}
           disabled={!canGoPrev}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-          title="Page précédente"
-          aria-label="Page précédente"
+          title="Previous page"
+          aria-label="Previous page"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -150,8 +150,8 @@ export function Pagination({
           onClick={() => onPageChange(page + 1)}
           disabled={!canGoNext}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-          title="Page suivante"
-          aria-label="Page suivante"
+          title="Next page"
+          aria-label="Next page"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
@@ -161,8 +161,8 @@ export function Pagination({
           onClick={() => onPageChange(totalPages)}
           disabled={!canGoNext}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-          title="Dernière page"
-          aria-label="Dernière page"
+          title="Last page"
+          aria-label="Last page"
         >
           <ChevronsRight className="w-4 h-4" />
         </button>

@@ -10,7 +10,7 @@ const SESSION_KEY = 'sa:proactive-prompt-shown'
 interface ProactiveChatPromptProps {
   /** Service slug for contextual CTA */
   specialtySlug?: string
-  /** City slug for devis link */
+  /** City slug for quote link */
   citySlug?: string
   /** Custom message */
   message?: string

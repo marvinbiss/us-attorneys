@@ -22,19 +22,19 @@ export function RegisterForm() {
 
     // Validation
     if (formData.password.length < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caractères')
+      setError('Password must be at least 8 characters')
       setIsLoading(false)
       return
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas')
+      setError('Passwords do not match')
       setIsLoading(false)
       return
     }
 
     if (!formData.acceptTerms) {
-      setError('Vous devez accepter les conditions d\'utilisation')
+      setError('You must accept the terms of service')
       setIsLoading(false)
       return
     }
@@ -56,7 +56,7 @@ export function RegisterForm() {
 
       setSuccess(true)
     } catch (_err) {
-      setError('Une erreur est survenue')
+      setError('An error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -67,10 +67,10 @@ export function RegisterForm() {
       <div className="text-center py-8">
         <div className="text-4xl mb-4">📧</div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          Vérifiez votre email
+          Check your email
         </h3>
         <p className="text-gray-600">
-          Un lien de confirmation a été envoyé à <strong>{formData.email}</strong>
+          A confirmation link has been sent to <strong>{formData.email}</strong>
         </p>
       </div>
     )
@@ -86,36 +86,36 @@ export function RegisterForm() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email professionnel
+          Professional email
         </label>
         <Input
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="vous@entreprise.fr"
+          placeholder="you@company.com"
           required
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Mot de passe
+          Password
         </label>
         <Input
           type="password"
           value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          placeholder="8 caractères minimum"
+          placeholder="8 characters minimum"
           required
         />
         <p className="text-xs text-gray-500 mt-1">
-          Au moins 8 caractères
+          At least 8 characters
         </p>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Confirmer le mot de passe
+          Confirm password
         </label>
         <Input
           type="password"
@@ -134,19 +134,19 @@ export function RegisterForm() {
           className="rounded border-gray-300 mt-1"
         />
         <span className="text-sm text-gray-600">
-          J'accepte les{' '}
+          I accept the{' '}
           <a href="/terms" className="text-blue-600 underline">
-            conditions générales d'utilisation
+            terms of service
           </a>{' '}
-          et la{' '}
+          and the{' '}
           <a href="/privacy" className="text-blue-600 underline">
-            politique de confidentialité
+            privacy policy
           </a>
         </span>
       </label>
 
       <Button type="submit" disabled={isLoading} fullWidth>
-        {isLoading ? 'Création...' : 'Créer mon compte'}
+        {isLoading ? 'Creating...' : 'Create my account'}
       </Button>
     </form>
   )

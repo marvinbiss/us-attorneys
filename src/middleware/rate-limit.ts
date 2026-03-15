@@ -105,7 +105,7 @@ export async function rateLimitMiddleware(
         success: false,
         error: {
           code: 'RATE_LIMIT_EXCEEDED',
-          message: 'Trop de requêtes. Veuillez réessayer plus tard.',
+          message: 'Too many requests. Please try again later.',
         },
       },
       {

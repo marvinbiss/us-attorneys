@@ -214,7 +214,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Log d'audit
+    // Audit log
     if (authData.user) {
       await logAdminAction(authResult.admin.id, 'user.create', 'user', authData.user.id, { email, user_type })
     }

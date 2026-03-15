@@ -27,10 +27,10 @@ export default function PhotoUploadBanner({ photoCount }: PhotoUploadBannerProps
 
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-slate-900 text-base">
-            Ajoutez des photos de vos r&eacute;alisations
+            Add photos of your work
           </h3>
           <p className="text-sm text-slate-600 mt-0.5">
-            Les artisans avec des photos re&ccedil;oivent 3x plus de demandes de devis.
+            Attorneys with photos receive 3x more consultation requests.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export default function PhotoUploadBanner({ photoCount }: PhotoUploadBannerProps
           href="/attorney-dashboard/portfolio"
           className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
         >
-          Ajouter des photos
+          Add photos
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

@@ -28,13 +28,13 @@ interface OpeningHours {
 const FIELDS = ['opening_hours', 'available_24h', 'accepts_new_clients'] as const
 
 const DAYS: { key: keyof OpeningHours; label: string }[] = [
-  { key: 'lundi', label: 'Lundi' },
-  { key: 'mardi', label: 'Mardi' },
-  { key: 'mercredi', label: 'Mercredi' },
-  { key: 'jeudi', label: 'Jeudi' },
-  { key: 'vendredi', label: 'Vendredi' },
-  { key: 'samedi', label: 'Samedi' },
-  { key: 'dimanche', label: 'Dimanche' },
+  { key: 'lundi', label: 'Monday' },
+  { key: 'mardi', label: 'Tuesday' },
+  { key: 'mercredi', label: 'Wednesday' },
+  { key: 'jeudi', label: 'Thursday' },
+  { key: 'vendredi', label: 'Friday' },
+  { key: 'samedi', label: 'Saturday' },
+  { key: 'dimanche', label: 'Sunday' },
 ]
 
 const DEFAULT_HOURS: OpeningHours = {
@@ -75,7 +75,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
 
   return (
     <SectionCard
-      title="Disponibilité"
+      title="Availability"
       icon={Clock}
       onSave={onSave}
       saving={saving}
@@ -86,10 +86,10 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
       <div className="space-y-8">
         {/* Opening hours grid */}
         <div>
-          <span className="block text-sm font-medium text-gray-700 mb-3">Horaires d&apos;ouverture</span>
+          <span className="block text-sm font-medium text-gray-700 mb-3">Office hours</span>
           {isUsingDefaults && !isDirty && (
             <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg mb-3">
-              Horaires par d&eacute;faut. Modifiez et enregistrez pour personnaliser.
+              Default hours. Edit and save to customize.
             </p>
           )}
           <div className="space-y-3">
@@ -108,33 +108,33 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
                         onChange={(e) => updateDay(key, 'ouvert', e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-600">Ouvert</span>
+                      <span className="text-sm text-gray-600">Open</span>
                     </label>
                     {day.ouvert && (
                       <>
                         <label htmlFor={`dispo-${key}-debut`} className="sr-only">
-                          Heure d&apos;ouverture {label}
+                          Opening time {label}
                         </label>
                         <input
                           id={`dispo-${key}-debut`}
                           type="time"
                           value={day.debut}
                           onChange={(e) => updateDay(key, 'debut', e.target.value)}
-                          aria-label={`Heure d'ouverture ${label}`}
+                          aria-label={`Opening time ${label}`}
                           className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                             timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
                           }`}
                         />
-                        <span className="text-gray-500 text-sm" aria-hidden="true">&agrave;</span>
+                        <span className="text-gray-500 text-sm" aria-hidden="true">to</span>
                         <label htmlFor={`dispo-${key}-fin`} className="sr-only">
-                          Heure de fermeture {label}
+                          Closing time {label}
                         </label>
                         <input
                           id={`dispo-${key}-fin`}
                           type="time"
                           value={day.fin}
                           onChange={(e) => updateDay(key, 'fin', e.target.value)}
-                          aria-label={`Heure de fermeture ${label}`}
+                          aria-label={`Closing time ${label}`}
                           className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                             timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
                           }`}
@@ -144,7 +144,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
                   </div>
                   {timeError && (
                     <p className="text-xs text-red-500 mt-1 ml-28">
-                      L&apos;heure de fermeture doit &ecirc;tre apr&egrave;s l&apos;heure d&apos;ouverture
+                      Closing time must be after opening time
                     </p>
                   )}
                 </div>
@@ -157,7 +157,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <label htmlFor="dispo-24h" className="text-sm font-medium text-gray-700">
-              Disponible 24h/24
+              Available 24/7
             </label>
             <button
               id="dispo-24h"
@@ -179,7 +179,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
 
           <div className="flex items-center justify-between">
             <label htmlFor="dispo-new-clients" className="text-sm font-medium text-gray-700">
-              Accepte de nouveaux clients
+              Accepting new clients
             </label>
             <button
               id="dispo-new-clients"

@@ -1,8 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable')
+  process.exit(1)
+}
+
 const supabase = createClient(
-  'https://umjmbdbwcsxrvfqktiui.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc',
+  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { autoRefreshToken: false, persistSession: false } }
 )
 

@@ -15,7 +15,7 @@ const quotesQuerySchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Liste des demandes de devis (devis_requests)
+// GET - List quote requests (devis_requests)
 export async function GET(request: NextRequest) {
   try {
     // Verify admin with services:read permission
@@ -51,12 +51,12 @@ export async function GET(request: NextRequest) {
         { count: 'exact' }
       )
 
-    // Filtre par statut — valeurs CHECK: pending/sent/accepted/refused/completed
+    // Filter by status — CHECK values: pending/sent/accepted/refused/completed
     if (status !== 'all') {
       query = query.eq('status', status)
     }
 
-    // Recherche sur service_name, description, client_name, client_email ou postal_code
+    // Search on service_name, description, client_name, client_email or postal_code
     if (search) {
       const sanitized = sanitizeSearchQuery(search)
       if (sanitized) {
@@ -71,10 +71,10 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Devis requests query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Quote requests query failed, returning empty list', { code: error.code, message: error.message })
       return NextResponse.json({
         success: true,
-        demandes: [],
+        requests: [],
         assignments: {},
         total: 0,
         page,
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
     if (demandeIds.length > 0) {
       const { data: assignments } = await supabase
         .from('lead_assignments')
-        .select('id, lead_id, status, assigned_at, attorney_id, provider:providers(id, name)')
+        .select('id, lead_id, status, assigned_at, attorney_id, attorney:attorneys(id, name)')
         .in('lead_id', demandeIds)
         .order('position', { ascending: true })
 
@@ -113,14 +113,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      demandes: demandes || [],
+      requests: demandes || [],
       assignments: assignmentsByLead,
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),
     })
   } catch (error) {
-    logger.error('Admin devis requests list error', error)
+    logger.error('Admin quote requests list error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },
       { status: 500 }
@@ -128,7 +128,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// DELETE - Supprimer une demande de devis
+// DELETE - Delete a quote request
 export async function DELETE(request: NextRequest) {
   try {
     const authResult = await requirePermission('services', 'delete')
@@ -161,7 +161,7 @@ export async function DELETE(request: NextRequest) {
       .eq('id', id)
 
     if (error) {
-      logger.error('Devis request delete error', error)
+      logger.error('Quote request delete error', error)
       return NextResponse.json(
         { success: false, error: { message: 'Error during deletion' } },
         { status: 500 }
@@ -172,7 +172,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    logger.error('Devis request delete error', error)
+    logger.error('Quote request delete error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },
       { status: 500 }

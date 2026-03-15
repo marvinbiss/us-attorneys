@@ -35,7 +35,7 @@ export function validateFile(file: File, type: 'image' | 'video'): { valid: bool
     const maxSizeMB = maxSize / (1024 * 1024)
     return {
       valid: false,
-      error: `Fichier trop volumineux. Taille maximum: ${maxSizeMB}MB`,
+      error: `File too large. Maximum size: ${maxSizeMB}MB`,
     }
   }
 
@@ -77,7 +77,7 @@ export async function uploadFile(
     })
 
   if (error) {
-    throw new Error(`Erreur d'upload: ${error.message}`)
+    throw new Error(`Upload error: ${error.message}`)
   }
 
   // Get public URL
@@ -154,7 +154,7 @@ export async function deleteFile(fileUrl: string): Promise<void> {
     .remove([filePath])
 
   if (error) {
-    throw new Error(`Erreur de suppression: ${error.message}`)
+    throw new Error(`Deletion error: ${error.message}`)
   }
 
   // Also try to delete thumbnail

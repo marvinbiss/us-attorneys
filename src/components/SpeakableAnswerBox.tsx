@@ -16,8 +16,8 @@ export function SpeakableAnswerBox({ answer, source, updatedDate }: SpeakableAns
         {answer}
       </p>
       <p className="mt-3 text-xs text-gray-500">
-        Source : {source || SITE_NAME} {'—'} Donn{'é'}es v{'é'}rifi{'é'}es SIREN/SIRET
-        {updatedDate && ` — Mis à jour : ${updatedDate}`}
+        Source: {source || SITE_NAME} — Verified bar records
+        {updatedDate && ` — Updated: ${updatedDate}`}
       </p>
     </div>
   )

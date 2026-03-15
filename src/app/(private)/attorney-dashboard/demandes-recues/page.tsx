@@ -509,7 +509,7 @@ export default function DemandesRecuesPage() {
         </div>
       </div>
 
-      {/* Modal Envoyer / R\u00e9viser Devis */}
+      {/* Send / Revise Quote Modal */}
       {showDevisModal && selectedLead?.lead && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-[95vw] sm:max-w-lg w-full p-6">
@@ -609,7 +609,7 @@ export default function DemandesRecuesPage() {
         </div>
       )}
 
-      {/* Modal D\u00e9tails (with quote info) */}
+      {/* Details Modal (with quote info) */}
       {showDetailModal && selectedLead?.lead && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-[95vw] sm:max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">

@@ -115,9 +115,9 @@ export default function AdminEditContenuPage() {
       })
       if (!response.ok) {
         if (response.status === 404) {
-          setError('Page non trouvée')
+          setError('Page not found')
         } else {
-          setError('Erreur lors du chargement')
+          setError('Error loading page')
         }
         return
       }
@@ -147,8 +147,8 @@ export default function AdminEditContenuPage() {
       setSortOrder(data.sort_order ?? 0)
       setIsDirty(false)
     } catch (err) {
-      console.error('Erreur:', err)
-      setError('Erreur lors du chargement de la page')
+      console.error('Error:', err)
+      setError('Error loading page')
     } finally {
       setLoading(false)
     }
@@ -188,15 +188,15 @@ export default function AdminEditContenuPage() {
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) {
-      showToast('Le titre est requis', 'error')
+      showToast('Title is required', 'error')
       return
     }
     if (pageType === 'service' && !specialtySlug.trim()) {
-      showToast('Le slug de service est requis pour les pages de type service', 'error')
+      showToast('Service slug is required for service pages', 'error')
       return
     }
     if (pageType === 'location' && (!specialtySlug.trim() || !locationSlug.trim())) {
-      showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
+      showToast('Service and location slugs are required for location pages', 'error')
       return
     }
 
@@ -213,14 +213,14 @@ export default function AdminEditContenuPage() {
 
       if (response.ok) {
         setIsDirty(false)
-        showToast('Page enregistrée', 'success')
+        showToast('Page saved', 'success')
       } else {
         const err = await response.json().catch(() => ({}))
-        showToast(err.error?.message || 'Erreur lors de la sauvegarde', 'error')
+        showToast(err.error?.message || 'Error saving page', 'error')
       }
     } catch (err) {
-      console.error('Erreur:', err)
-      showToast('Erreur lors de la sauvegarde', 'error')
+      console.error('Error:', err)
+      showToast('Error saving page', 'error')
     } finally {
       setSaving(false)
     }
@@ -243,15 +243,15 @@ export default function AdminEditContenuPage() {
 
   const handlePublish = async () => {
     if (!title.trim()) {
-      showToast('Le titre est requis', 'error')
+      showToast('Title is required', 'error')
       return
     }
     if (pageType === 'service' && !specialtySlug.trim()) {
-      showToast('Le slug de service est requis pour les pages de type service', 'error')
+      showToast('Service slug is required for service pages', 'error')
       return
     }
     if (pageType === 'location' && (!specialtySlug.trim() || !locationSlug.trim())) {
-      showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
+      showToast('Service and location slugs are required for location pages', 'error')
       return
     }
 
@@ -268,7 +268,7 @@ export default function AdminEditContenuPage() {
           body: JSON.stringify(payload),
         })
         if (!saveRes.ok) {
-          showToast('Erreur lors de la sauvegarde avant publication', 'error')
+          showToast('Error saving before publishing', 'error')
           return
         }
         setIsDirty(false)
@@ -281,14 +281,14 @@ export default function AdminEditContenuPage() {
 
       if (response.ok) {
         setStatus('published')
-        showToast('Page publiée', 'success')
+        showToast('Page published', 'success')
       } else {
         const err = await response.json().catch(() => ({}))
-        showToast(err?.error?.message || 'Erreur lors de la publication', 'error')
+        showToast(err?.error?.message || 'Error publishing page', 'error')
       }
     } catch (err) {
-      console.error('Erreur:', err)
-      showToast('Erreur lors de la publication', 'error')
+      console.error('Error:', err)
+      showToast('Error publishing page', 'error')
     } finally {
       setSaving(false)
     }
@@ -304,13 +304,13 @@ export default function AdminEditContenuPage() {
 
       if (response.ok) {
         setStatus('draft')
-        showToast('Page dépubliée', 'success')
+        showToast('Page unpublished', 'success')
       } else {
-        showToast('Erreur lors de la dépublication', 'error')
+        showToast('Error unpublishing page', 'error')
       }
     } catch (err) {
-      console.error('Erreur:', err)
-      showToast('Erreur lors de la dépublication', 'error')
+      console.error('Error:', err)
+      showToast('Error unpublishing page', 'error')
     } finally {
       setSaving(false)
     }
@@ -325,14 +325,14 @@ export default function AdminEditContenuPage() {
       })
 
       if (response.ok) {
-        showToast('Page supprimée', 'success')
+        showToast('Page deleted', 'success')
         setTimeout(() => router.push('/admin/contenu'), 500)
       } else {
-        showToast('Erreur lors de la suppression', 'error')
+        showToast('Error deleting page', 'error')
       }
     } catch (err) {
-      console.error('Erreur:', err)
-      showToast('Erreur lors de la suppression', 'error')
+      console.error('Error:', err)
+      showToast('Error deleting page', 'error')
     } finally {
       setSaving(false)
       setShowDeleteConfirm(false)
@@ -342,11 +342,11 @@ export default function AdminEditContenuPage() {
   const statusBadge = () => {
     switch (status) {
       case 'draft':
-        return { label: 'Brouillon', classes: 'bg-yellow-100 text-yellow-800' }
+        return { label: 'Draft', classes: 'bg-yellow-100 text-yellow-800' }
       case 'published':
-        return { label: 'Publié', classes: 'bg-green-100 text-green-800' }
+        return { label: 'Published', classes: 'bg-green-100 text-green-800' }
       case 'archived':
-        return { label: 'Archivé', classes: 'bg-gray-100 text-gray-800' }
+        return { label: 'Archived', classes: 'bg-gray-100 text-gray-800' }
       default:
         return { label: status, classes: 'bg-gray-100 text-gray-600' }
     }
@@ -358,7 +358,7 @@ export default function AdminEditContenuPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="mt-4 text-gray-500">Chargement de la page...</p>
+          <p className="mt-4 text-gray-500">Loading page...</p>
         </div>
       </div>
     )
@@ -375,14 +375,14 @@ export default function AdminEditContenuPage() {
               onClick={fetchPage}
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
-              Réessayer
+              Retry
             </button>
             <Link
               href="/admin/contenu"
               className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
             >
               <ArrowLeft className="w-4 h-4" />
-              Retour à la liste
+              Back to list
             </Link>
           </div>
         </div>
@@ -416,7 +416,7 @@ export default function AdminEditContenuPage() {
               className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              Retour
+              Back
             </Link>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
@@ -429,7 +429,7 @@ export default function AdminEditContenuPage() {
               className="flex items-center gap-2 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <Eye className="w-4 h-4" />
-              Prévisualiser
+              Preview
             </button>
             <button
               onClick={() => setShowVersions(true)}
@@ -444,7 +444,7 @@ export default function AdminEditContenuPage() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              Enregistrer
+              Save
             </button>
             {status === 'draft' ? (
               <button
@@ -453,7 +453,7 @@ export default function AdminEditContenuPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                Publier
+                Publish
               </button>
             ) : status === 'published' ? (
               <button
@@ -462,7 +462,7 @@ export default function AdminEditContenuPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50 transition-colors"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowDownCircle className="w-4 h-4" />}
-                Dépublier
+                Unpublish
               </button>
             ) : null}
           </div>
@@ -474,12 +474,12 @@ export default function AdminEditContenuPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Title input */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Titre</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => { setTitle(e.target.value); setIsDirty(true) }}
-                placeholder="Titre de la page"
+                placeholder="Page title"
                 maxLength={FIELD_LIMITS.title}
                 className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -499,12 +499,12 @@ export default function AdminEditContenuPage() {
                     setIsDirty(true)
                     const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
                     if (newSlug && !SLUG_RE.test(newSlug)) {
-                      setSlugError('Lettres minuscules, chiffres et tirets uniquement')
+                      setSlugError('Lowercase letters, numbers, and hyphens only')
                     } else {
                       setSlugError('')
                     }
                   }}
-                  placeholder="slug-de-la-page"
+                  placeholder="page-slug"
                   maxLength={FIELD_LIMITS.slug}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
@@ -515,31 +515,31 @@ export default function AdminEditContenuPage() {
             {/* Service/Location slug fields */}
             {(pageType === 'service' || pageType === 'location') && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <h3 className="font-medium text-gray-900">Champs {pageType === 'location' ? 'localisation' : 'service'}</h3>
+                <h3 className="font-medium text-gray-900">{pageType === 'location' ? 'Location' : 'Service'} fields</h3>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Slug du service</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Service slug</label>
                   <input
                     type="text"
                     value={specialtySlug}
                     onChange={(e) => { setServiceSlug(e.target.value); setIsDirty(true) }}
-                    placeholder="plombier"
+                    placeholder="personal-injury"
                     maxLength={FIELD_LIMITS.slug}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   />
-                  <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
+                  <p className="mt-1 text-xs text-gray-500">Lowercase letters, numbers, and hyphens only</p>
                 </div>
                 {pageType === 'location' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Slug de la localisation</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Location slug</label>
                     <input
                       type="text"
                       value={locationSlug}
                       onChange={(e) => { setLocationSlug(e.target.value); setIsDirty(true) }}
-                      placeholder="paris"
+                      placeholder="new-york"
                       maxLength={FIELD_LIMITS.slug}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     />
-                    <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
+                    <p className="mt-1 text-xs text-gray-500">Lowercase letters, numbers, and hyphens only</p>
                   </div>
                 )}
               </div>
@@ -548,28 +548,28 @@ export default function AdminEditContenuPage() {
             {/* Blog-specific fields */}
             {pageType === 'blog' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <h3 className="font-medium text-gray-900">Champs blog</h3>
+                <h3 className="font-medium text-gray-900">Blog fields</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Auteur</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
                     <input
                       type="text"
                       value={author}
                       onChange={(e) => { setAuthor(e.target.value); setIsDirty(true) }}
-                      placeholder="Nom de l'auteur"
+                      placeholder="Author name"
                       maxLength={FIELD_LIMITS.author}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                     <select
                       value={category}
                       onChange={(e) => { setCategory(e.target.value); setIsDirty(true) }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                     >
-                      <option value="">Sélectionner...</option>
+                      <option value="">Select...</option>
                       {BLOG_CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>
                           {cat}
@@ -581,14 +581,14 @@ export default function AdminEditContenuPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Biographie de l&apos;auteur
+                    Author bio
                   </label>
                   <textarea
                     value={authorBio}
                     onChange={(e) => { setAuthorBio(e.target.value); setIsDirty(true) }}
                     rows={2}
                     maxLength={FIELD_LIMITS.authorBio}
-                    placeholder="Courte biographie de l'auteur..."
+                    placeholder="Short author biography..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
@@ -596,18 +596,18 @@ export default function AdminEditContenuPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tags (séparés par des virgules)
+                      Tags (comma-separated)
                     </label>
                     <input
                       type="text"
                       value={tags}
                       onChange={(e) => { setTags(e.target.value); setIsDirty(true) }}
-                      placeholder="rénovation, plomberie, conseils"
+                      placeholder="legal, litigation, tips"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Temps de lecture</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Read time</label>
                     <input
                       type="text"
                       value={readTime}
@@ -620,19 +620,19 @@ export default function AdminEditContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Extrait</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
                   <textarea
                     value={excerpt}
                     onChange={(e) => { setExcerpt(e.target.value); setIsDirty(true) }}
                     rows={3}
                     maxLength={FIELD_LIMITS.excerpt}
-                    placeholder="Court résumé de l'article..."
+                    placeholder="Short article summary..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Image mise en avant (URL)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Featured image (URL)</label>
                   <input
                     type="url"
                     value={featuredImage}
@@ -647,7 +647,7 @@ export default function AdminEditContenuPage() {
 
             {/* Editor */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-4">Contenu</label>
+              <label className="block text-sm font-medium text-gray-700 mb-4">Content</label>
               {usesRichTextEditor && (
                 <RichTextEditor
                   value={content}
@@ -675,11 +675,11 @@ export default function AdminEditContenuPage() {
           <div className="space-y-6">
             {/* Page settings */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-medium text-gray-900 mb-4">Paramètres</h3>
+              <h3 className="font-medium text-gray-900 mb-4">Settings</h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type de page</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Page type</label>
                   <select
                     value={pageType}
                     onChange={(e) => { setPageType(e.target.value); setIsDirty(true) }}
@@ -694,7 +694,7 @@ export default function AdminEditContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ordre de tri</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Sort order</label>
                   <input
                     type="number"
                     value={sortOrder}
@@ -704,7 +704,7 @@ export default function AdminEditContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${sb.classes}`}
                   >
@@ -724,7 +724,7 @@ export default function AdminEditContenuPage() {
 
             {/* Additional SEO fields */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-              <h3 className="font-medium text-gray-900">SEO avancé</h3>
+              <h3 className="font-medium text-gray-900">Advanced SEO</h3>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Image Open Graph (URL)</label>
                 <input
@@ -737,12 +737,12 @@ export default function AdminEditContenuPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL canonique</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
                 <input
                   type="url"
                   value={canonicalUrl}
                   onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
-                  placeholder="https://servicesartisans.com/page"
+                  placeholder="https://us-attorneys.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
@@ -751,13 +751,13 @@ export default function AdminEditContenuPage() {
 
             {/* Danger zone */}
             <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
-              <h3 className="font-medium text-red-600 mb-4">Zone de danger</h3>
+              <h3 className="font-medium text-red-600 mb-4">Danger zone</h3>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
                 className="flex items-center gap-2 w-full px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
-                Supprimer cette page
+                Delete this page
               </button>
             </div>
           </div>
@@ -766,7 +766,7 @@ export default function AdminEditContenuPage() {
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
-        <div role="dialog" aria-modal="true" aria-label="Confirmer la suppression" className="fixed inset-0 z-50 overflow-y-auto">
+        <div role="dialog" aria-modal="true" aria-label="Confirm deletion" className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div
               className="fixed inset-0 bg-black/50"
@@ -774,25 +774,25 @@ export default function AdminEditContenuPage() {
             />
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Supprimer la page
+                Delete page
               </h3>
               <p className="text-gray-600 mb-6">
-                Êtes-vous sûr de vouloir supprimer la page &quot;{title}&quot; ? Cette action est
-                irréversible.
+                Are you sure you want to delete the page &quot;{title}&quot;? This action cannot
+                be undone.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
                   className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   onClick={handleDelete}
                   disabled={saving}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
                 >
-                  Supprimer
+                  Delete
                 </button>
               </div>
             </div>

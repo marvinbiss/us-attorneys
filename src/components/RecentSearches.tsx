@@ -8,7 +8,7 @@ const STORAGE_KEY = 'sa:recent-searches'
 const MAX_ITEMS = 5
 
 export interface RecentSearch {
-  type: 'service' | 'service-ville' | 'tarifs' | 'urgence' | 'devis'
+  type: 'service' | 'service-city' | 'fees' | 'emergency' | 'consultation'
   label: string
   href: string
   timestamp: number

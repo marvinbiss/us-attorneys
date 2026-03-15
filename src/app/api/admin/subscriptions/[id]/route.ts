@@ -56,7 +56,7 @@ export async function GET(
   }
 }
 
-// PATCH - Modifier un abonnement (changer de plan)
+// PATCH - Update a subscription (change plan)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -105,7 +105,7 @@ export async function PATCH(
         proration as 'create_prorations' | 'none' | 'always_invoice'
       )
 
-      // Log d'audit
+      // Audit log
       await logAdminAction(
         authResult.admin.id,
         'subscription.change_plan',

@@ -1,9 +1,9 @@
 /**
  * SIMPLE & CLEAN MAP STYLES
- * Pas d'effets exagérés, juste propre et fonctionnel
+ * No exaggerated effects, just clean and functional
  */
 
-/* Marqueurs simples */
+/* Simple markers */
 .custom-marker {
   transition: transform 0.2s ease;
 }
@@ -13,7 +13,7 @@
   z-index: 1000 !important;
 }
 
-/* Popups propres */
+/* Clean popups */
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   padding: 0;
@@ -30,7 +30,7 @@
   display: none;
 }
 
-/* Contrôles de carte */
+/* Map controls */
 .leaflet-control-zoom {
   border: none !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
@@ -50,7 +50,7 @@
   background: #f3f4f6 !important;
 }
 
-/* Carte */
+/* Map container */
 .leaflet-container {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #f9fafb;
@@ -67,7 +67,7 @@
   opacity: 0.6;
 }
 
-/* Loading simple */
+/* Simple loading */
 .map-loading {
   display: flex;
   align-items: center;

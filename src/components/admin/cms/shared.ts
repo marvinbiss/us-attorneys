@@ -1,14 +1,14 @@
 export const PAGE_TYPE_OPTIONS = [
-  { value: 'static', label: 'Page statique' },
-  { value: 'blog', label: 'Article de blog' },
-  { value: 'service', label: 'Page service' },
-  { value: 'location', label: 'Page localisation' },
-  { value: 'homepage', label: "Page d'accueil" },
+  { value: 'static', label: 'Static page' },
+  { value: 'blog', label: 'Blog post' },
+  { value: 'service', label: 'Service page' },
+  { value: 'location', label: 'Location page' },
+  { value: 'homepage', label: 'Homepage' },
   { value: 'faq', label: 'FAQ' },
 ] as const
 
 export const BLOG_CATEGORIES = [
-  'Conseils', 'Guides', 'Actualités', 'Témoignages', 'Réglementations', 'Tendances', 'Astuces'
+  'Tips', 'Guides', 'News', 'Testimonials', 'Regulations', 'Trends', 'How-to'
 ] as const
 
 // Matches DB CHECK and Zod schema constraints

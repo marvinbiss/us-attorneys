@@ -15,8 +15,8 @@ function isValidPhone(phone: string | undefined | null): phone is string {
   return digits.length >= 10
 }
 
-/** Format French phone: 0X XX XX XX XX */
-function formatFrenchPhone(phone: string): string {
+/** Format US phone: (XXX) XXX-XXXX */
+function formatUSPhone(phone: string): string {
   const digits = phone.replace(/\D/g, '')
   const normalized = digits.startsWith('33') && digits.length === 11
     ? '0' + digits.slice(2)
@@ -55,9 +55,9 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
           )}
         </div>
 
-        {/* CTA Buttons — Ordre optimisé pour la conversion */}
+        {/* CTA Buttons — Optimized for conversion */}
         <div className="space-y-3">
-          {/* 1. Téléphone (action la plus directe, haute conversion) */}
+          {/* 1. Phone (most direct action, high conversion) */}
           {hasPhone && (
             <button
               type="button"
@@ -67,14 +67,14 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
                 window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-medium transition-colors"
-              aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
+              aria-label={`Call ${formatUSPhone(artisan.phone!)}`}
             >
               <Phone className="w-4 h-4" />
-              {formatFrenchPhone(artisan.phone!)}
+              {formatUSPhone(artisan.phone!)}
             </button>
           )}
 
-          {/* 2. Devis IA gratuit (ouvre le widget d'estimation) */}
+          {/* 2. Free AI estimate (opens estimation widget) */}
           <button
             type="button"
             onClick={() => {
@@ -87,7 +87,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
             Request a Free Consultation
           </button>
 
-          {/* 3. Email (basse conversion) */}
+          {/* 3. Email (lower conversion) */}
           {hasEmail && (
             <a
               href={`mailto:${artisan.email}`}

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const rawBody = await request.text()
 
-    // Verify la signature Resend (svix)
+    // Verify the Resend signature (svix)
     const svixHeaders = {
       'svix-id': request.headers.get('svix-id') || undefined,
       'svix-timestamp': request.headers.get('svix-timestamp') || undefined,
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Resend envoie l'email_id dans data.email_id
+    // Resend sends the email_id in data.email_id
     const emailId: string | undefined = data.email_id
     if (!emailId) {
       logger.warn('Resend webhook missing email_id', { eventType })

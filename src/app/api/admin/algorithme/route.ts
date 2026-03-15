@@ -46,7 +46,7 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Try d'abord le schema app
+    // Try the app schema first
     const { data, error } = await supabase
       .from('algorithm_config')
       .select('id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
@@ -54,7 +54,7 @@ export async function GET() {
       .single()
 
     if (error || !data) {
-      // Return les defaults si la table n'existe pas encore
+      // Return defaults if the table does not exist yet
       return NextResponse.json({
         config: {
           id: 'default',
@@ -89,10 +89,10 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json()
     const supabase = createAdminClient()
 
-    // Delete les champs non-modifiables avant validation
+    // Remove non-modifiable fields before validation
     const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<string, unknown>
 
-    // Validate avec Zod
+    // Validate with Zod
     const parsed = algorithmConfigSchema.safeParse(fieldsToValidate)
     if (!parsed.success) {
       return NextResponse.json(
@@ -105,11 +105,11 @@ export async function PATCH(request: NextRequest) {
 
     const updates: Record<string, unknown> = { ...parsed.data }
 
-    // Add le metadata
+    // Add metadata
     updates.updated_by = auth.admin.id
     updates.updated_at = new Date().toISOString()
 
-    // Retrieve l'ID de la config actuelle
+    // Retrieve the ID of the current config
     const { data: current } = await supabase
       .from('algorithm_config')
       .select('id')

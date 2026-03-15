@@ -383,7 +383,7 @@ export default function BookingPage() {
           </div>
         )}
 
-        {/* Contact Artisan */}
+        {/* Contact Attorney */}
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm mb-2">
             Need help?

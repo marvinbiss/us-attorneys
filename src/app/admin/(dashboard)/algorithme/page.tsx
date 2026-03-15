@@ -42,10 +42,10 @@ export default function AdminAlgorithmePage() {
         setConfig(data.config)
         setOriginal(data.config)
       } else {
-        setError('Erreur lors du chargement')
+        setError('Failed to load configuration')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -71,10 +71,10 @@ export default function AdminAlgorithmePage() {
         setTimeout(() => setSaveSuccess(false), 3000)
       } else {
         const data = await res.json()
-        setError(data.error || 'Erreur')
+        setError(data.error || 'Error')
       }
     } catch {
-      setError('Erreur de connexion')
+      setError('Connection error')
     } finally {
       setSaving(false)
     }
@@ -111,16 +111,16 @@ export default function AdminAlgorithmePage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Configuration Algorithmique</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Algorithm Configuration</h1>
             <p className="text-gray-500 mt-1">
-              Paramètres de distribution des leads et scoring des artisans
+              Lead distribution and attorney scoring settings
             </p>
           </div>
           <div className="flex items-center gap-3">
             {saveSuccess && (
               <span className="flex items-center gap-1 text-green-600 text-sm">
                 <CheckCircle className="w-4 h-4" />
-                Enregistré
+                Saved
               </span>
             )}
             {hasChanges && (
@@ -129,7 +129,7 @@ export default function AdminAlgorithmePage() {
                 className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
                 <RefreshCw className="w-4 h-4" />
-                Annuler
+                Cancel
               </button>
             )}
             <button
@@ -138,7 +138,7 @@ export default function AdminAlgorithmePage() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
-              {saving ? 'Enregistrement...' : 'Enregistrer'}
+              {saving ? 'Saving...' : 'Save'}
             </button>
           </div>
         </div>
@@ -151,12 +151,12 @@ export default function AdminAlgorithmePage() {
         )}
 
         <div className="space-y-6">
-          {/* === STRATEGIE DE DISTRIBUTION === */}
-          <Section icon={Target} title="Stratégie de distribution">
+          {/* === DISTRIBUTION STRATEGY === */}
+          <Section icon={Target} title="Distribution Strategy">
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Mode de matching
+                  Matching Mode
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {(Object.keys(MATCHING_STRATEGY_META) as MatchingStrategy[]).map((key) => {
@@ -183,38 +183,38 @@ export default function AdminAlgorithmePage() {
               </div>
 
               <NumberField
-                label="Artisans max par lead"
+                label="Max attorneys per lead"
                 value={config.max_artisans_per_lead}
                 onChange={(v) => update('max_artisans_per_lead', v)}
                 min={1} max={20}
-                description="Nombre maximum d'artisans qui reçoivent chaque lead"
+                description="Maximum number of attorneys who receive each lead"
               />
 
               <NumberField
-                label="Rayon géographique (km)"
+                label="Geographic radius (km)"
                 value={config.geo_radius_km}
                 onChange={(v) => update('geo_radius_km', v)}
                 min={1} max={500}
-                description="Rayon par défaut si l'artisan n'a pas de rayon spécifique"
+                description="Default radius if the attorney has no specific radius set"
               />
 
               <ToggleField
-                label="Même département obligatoire"
+                label="Same state required"
                 value={config.require_same_department}
                 onChange={(v) => update('require_same_department', v)}
-                description="L'artisan doit être dans le même département que le chantier"
+                description="The attorney must be in the same state as the case"
               />
 
               <ToggleField
-                label="Correspondance spécialité obligatoire"
+                label="Specialty match required"
                 value={config.require_specialty_match}
                 onChange={(v) => update('require_specialty_match', v)}
-                description="L'artisan doit proposer le service demandé"
+                description="The attorney must offer the requested practice area"
               />
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Mode de correspondance spécialité
+                  Specialty Matching Mode
                 </label>
                 <div className="flex gap-2">
                   {(Object.keys(SPECIALTY_MATCH_META) as SpecialtyMatchMode[]).map((key) => {
@@ -239,47 +239,47 @@ export default function AdminAlgorithmePage() {
               </div>
 
               <ToggleField
-                label="Préférer les artisans revendiqués"
+                label="Prefer claimed attorneys"
                 value={config.prefer_claimed}
                 onChange={(v) => update('prefer_claimed', v)}
-                description="Priorité aux artisans qui ont revendiqué leur profil"
+                description="Prioritize attorneys who have claimed their profile"
               />
             </div>
           </Section>
 
           {/* === SCORING === */}
-          <Section icon={Sliders} title="Poids du scoring">
+          <Section icon={Sliders} title="Scoring Weights">
             <p className="text-sm text-gray-500 mb-4">
-              Ajustez les poids relatifs du score composite.
-              Total actuel : <span className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-amber-600'}`}>{totalWeight}</span>/100
+              Adjust the relative weights of the composite score.
+              Current total: <span className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-amber-600'}`}>{totalWeight}</span>/100
             </p>
             <div className="space-y-4">
               <WeightSlider
-                label="Note Google"
+                label="Google Rating"
                 value={config.weight_rating}
                 onChange={(v) => update('weight_rating', v)}
                 color="yellow"
               />
               <WeightSlider
-                label="Nombre d'avis"
+                label="Number of Reviews"
                 value={config.weight_reviews}
                 onChange={(v) => update('weight_reviews', v)}
                 color="blue"
               />
               <WeightSlider
-                label="Artisan vérifié"
+                label="Verified Attorney"
                 value={config.weight_verified}
                 onChange={(v) => update('weight_verified', v)}
                 color="green"
               />
               <WeightSlider
-                label="Proximité géographique"
+                label="Geographic Proximity"
                 value={config.weight_proximity}
                 onChange={(v) => update('weight_proximity', v)}
                 color="blue"
               />
               <WeightSlider
-                label="Qualité des données"
+                label="Data Quality"
                 value={config.weight_data_quality}
                 onChange={(v) => update('weight_data_quality', v)}
                 color="purple"
@@ -288,111 +288,111 @@ export default function AdminAlgorithmePage() {
           </Section>
 
           {/* === QUOTAS === */}
-          <Section icon={Shield} title="Quotas et limites">
+          <Section icon={Shield} title="Quotas and Limits">
             <div className="space-y-4">
               <NumberField
-                label="Quota journalier"
+                label="Daily quota"
                 value={config.daily_lead_quota}
                 onChange={(v) => update('daily_lead_quota', v)}
                 min={0} max={1000}
-                description="Max leads par artisan par jour (0 = illimité)"
+                description="Max leads per attorney per day (0 = unlimited)"
               />
               <NumberField
-                label="Quota mensuel"
+                label="Monthly quota"
                 value={config.monthly_lead_quota}
                 onChange={(v) => update('monthly_lead_quota', v)}
                 min={0} max={10000}
-                description="Max leads par artisan par mois (0 = illimité)"
+                description="Max leads per attorney per month (0 = unlimited)"
               />
               <NumberField
                 label="Cooldown (minutes)"
                 value={config.cooldown_minutes}
                 onChange={(v) => update('cooldown_minutes', v)}
                 min={0} max={1440}
-                description="Temps minimum entre deux leads pour un même artisan"
+                description="Minimum time between two leads for the same attorney"
               />
             </div>
           </Section>
 
           {/* === EXPIRATION === */}
-          <Section icon={Clock} title="Expiration et réassignation">
+          <Section icon={Clock} title="Expiration and Reassignment">
             <div className="space-y-4">
               <NumberField
-                label="Expiration lead (heures)"
+                label="Lead expiration (hours)"
                 value={config.lead_expiry_hours}
                 onChange={(v) => update('lead_expiry_hours', v)}
                 min={1} max={720}
-                description="Durée avant qu'un lead non-vu expire"
+                description="Time before an unseen lead expires"
               />
               <NumberField
-                label="Expiration devis (heures)"
+                label="Quote expiration (hours)"
                 value={config.quote_expiry_hours}
                 onChange={(v) => update('quote_expiry_hours', v)}
                 min={1} max={720}
-                description="Durée avant qu'une demande de devis expire"
+                description="Time before a quote request expires"
               />
               <NumberField
-                label="Auto-réassignation (heures)"
+                label="Auto-reassignment (hours)"
                 value={config.auto_reassign_hours}
                 onChange={(v) => update('auto_reassign_hours', v)}
                 min={1} max={720}
-                description="Délai avant réassignation automatique à un autre artisan"
+                description="Delay before automatic reassignment to another attorney"
               />
             </div>
           </Section>
 
-          {/* === FILTRES === */}
-          <Section icon={MapPin} title="Filtres d'éligibilité">
+          {/* === ELIGIBILITY FILTERS === */}
+          <Section icon={MapPin} title="Eligibility Filters">
             <div className="space-y-4">
               <NumberField
-                label="Note minimum"
+                label="Minimum rating"
                 value={config.min_rating}
                 onChange={(v) => update('min_rating', v)}
                 min={0} max={5} step={0.5}
-                description="Note Google minimum pour recevoir des leads (0 = pas de filtre)"
+                description="Minimum Google rating to receive leads (0 = no filter)"
               />
               <ToggleField
-                label="Vérifié obligatoire pour urgent"
+                label="Verified required for urgent"
                 value={config.require_verified_urgent}
                 onChange={(v) => update('require_verified_urgent', v)}
-                description="Seuls les artisans vérifiés reçoivent les leads urgents"
+                description="Only verified attorneys receive urgent leads"
               />
               <NumberField
-                label="Exclure inactifs (jours)"
+                label="Exclude inactive (days)"
                 value={config.exclude_inactive_days}
                 onChange={(v) => update('exclude_inactive_days', v)}
                 min={0} max={365}
-                description="Exclure les artisans sans activité depuis N jours (0 = désactivé)"
+                description="Exclude attorneys with no activity for N days (0 = disabled)"
               />
             </div>
           </Section>
 
-          {/* === MULTIPLICATEURS URGENCE === */}
-          <Section icon={Zap} title="Multiplicateurs d'urgence">
+          {/* === URGENCY MULTIPLIERS === */}
+          <Section icon={Zap} title="Urgency Multipliers">
             <p className="text-sm text-gray-500 mb-4">
-              Multiplie le score des artisans pour les leads urgents
+              Multiplies attorney scores for urgent leads
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <MultiplierCard
-                label="Basse"
+                label="Low"
                 value={config.urgency_low_multiplier}
                 onChange={(v) => update('urgency_low_multiplier', v)}
                 color="gray"
               />
               <MultiplierCard
-                label="Moyenne"
+                label="Medium"
                 value={config.urgency_medium_multiplier}
                 onChange={(v) => update('urgency_medium_multiplier', v)}
                 color="blue"
               />
               <MultiplierCard
-                label="Haute"
+                label="High"
                 value={config.urgency_high_multiplier}
                 onChange={(v) => update('urgency_high_multiplier', v)}
                 color="orange"
               />
               <MultiplierCard
-                label="Urgence"
+                label="Emergency"
                 value={config.urgency_emergency_multiplier}
                 onChange={(v) => update('urgency_emergency_multiplier', v)}
                 color="red"
@@ -403,7 +403,7 @@ export default function AdminAlgorithmePage() {
           {/* Metadata */}
           {config.updated_at && (
             <div className="text-xs text-gray-400 text-center pt-4">
-              Dernière modification : {new Date(config.updated_at).toLocaleString('fr-FR')}
+              Last modified: {new Date(config.updated_at).toLocaleString('en-US')}
             </div>
           )}
         </div>
@@ -412,7 +412,7 @@ export default function AdminAlgorithmePage() {
   )
 }
 
-// === COMPOSANTS UTILITAIRES ===
+// === UTILITY COMPONENTS ===
 
 function Section({ icon: Icon, title, children }: {
   icon: React.ComponentType<{ className?: string }>
@@ -526,7 +526,7 @@ function WeightSlider({ label, value, onChange, color }: {
             max={100}
             value={value}
             onChange={(e) => onChange(parseInt(e.target.value))}
-            aria-label={`${label} (curseur)`}
+            aria-label={`${label} (slider)`}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
         </div>
@@ -536,7 +536,7 @@ function WeightSlider({ label, value, onChange, color }: {
           max={100}
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value) || 0)}
-          aria-label={`${label} (valeur)`}
+          aria-label={`${label} (value)`}
           className="w-full sm:w-16 px-2 py-1 text-sm border border-gray-300 rounded-lg text-center"
         />
       </div>
@@ -568,10 +568,10 @@ function MultiplierCard({ label, value, onChange, color }: {
         min={0.5}
         max={5}
         step={0.25}
-        aria-label={`Multiplicateur ${label}`}
+        aria-label={`Multiplier ${label}`}
         className="w-full sm:w-20 mx-auto px-2 py-1 text-center text-lg font-bold border border-gray-300 rounded-lg"
       />
-      <p className="text-xs text-gray-400 mt-1">x multiplicateur</p>
+      <p className="text-xs text-gray-400 mt-1">x multiplier</p>
     </div>
   )
 }

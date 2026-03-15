@@ -194,7 +194,7 @@ export default async function AvisPage() {
           ...(platformStats.totalReviews > 0 ? [{
             '@context': 'https://schema.org',
             '@type': 'Organization',
-            name: 'ServicesArtisans',
+            name: 'US Attorneys',
             url: SITE_URL,
             aggregateRating: {
               '@type': 'AggregateRating',

@@ -43,13 +43,13 @@ export default function CancellationModal({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'annulation')
+        throw new Error(data.error || 'Error during cancellation')
       }
 
       onCancelled()
     } catch (err) {
       console.error('Cancellation error:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'annulation')
+      setError(err instanceof Error ? err.message : 'Error during cancellation')
     } finally {
       setIsSubmitting(false)
     }
@@ -61,7 +61,7 @@ export default function CancellationModal({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h3 className="text-lg font-semibold text-gray-900">
-            Annuler la réservation
+            Cancel booking
           </h3>
           <button
             onClick={onClose}
@@ -77,17 +77,17 @@ export default function CancellationModal({
           <div className="flex items-start gap-4 p-4 bg-yellow-50 rounded-lg mb-6">
             <AlertTriangle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-yellow-800">Attention</p>
+              <p className="font-medium text-yellow-800">Warning</p>
               <p className="text-sm text-yellow-700 mt-1">
-                Les annulations doivent être effectuées au moins 24h avant le rendez-vous.
-                Des frais peuvent s'appliquer en cas d'annulation tardive.
+                Cancellations must be made at least 24 hours before the appointment.
+                Late cancellation fees may apply.
               </p>
             </div>
           </div>
 
           {/* Booking Details */}
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-gray-900 mb-3">Détails du rendez-vous</h4>
+            <h4 className="font-medium text-gray-900 mb-3">Appointment details</h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2 text-gray-600">
                 <Calendar className="w-4 h-4" />
@@ -113,12 +113,12 @@ export default function CancellationModal({
           {/* Reason input */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Raison de l'annulation (optionnel)
+              Cancellation reason (optional)
             </label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="Indiquez la raison de votre annulation..."
+              placeholder="Please indicate the reason for your cancellation..."
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
             />
@@ -131,7 +131,7 @@ export default function CancellationModal({
               disabled={isSubmitting}
               className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-50 disabled:opacity-50"
             >
-              Conserver le RDV
+              Keep appointment
             </button>
             <button
               onClick={handleCancel}
@@ -139,7 +139,7 @@ export default function CancellationModal({
               className="flex-1 bg-red-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-              Confirmer l'annulation
+              Confirm cancellation
             </button>
           </div>
         </div>

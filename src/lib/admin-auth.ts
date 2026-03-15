@@ -296,7 +296,7 @@ export async function requirePermission(
     return {
       success: false,
       error: NextResponse.json(
-        { success: false, error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Permission insuffisante' } },
+        { success: false, error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Insufficient permissions' } },
         { status: 403 }
       ),
     }

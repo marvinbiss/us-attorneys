@@ -35,7 +35,7 @@ export const popularServices = popularServicesData.map(s => ({
   icon: iconMap[s.icon] || Wrench
 }))
 
-// Composant: Services populaires
+// Component: Popular services
 export function PopularServicesLinks({
   limit = 8,
   showTitle = true,
@@ -78,7 +78,7 @@ export function PopularServicesLinks({
   )
 }
 
-// Composant: Villes populaires
+// Component: Popular cities
 export function PopularCitiesLinks({
   limit = 10,
   showTitle = true,
@@ -117,7 +117,7 @@ export function PopularCitiesLinks({
   )
 }
 
-// Composant: Navigation géographique
+// Component: Geographic navigation
 export function GeographicNavigation({ className = '' }: { className?: string }) {
   return (
     <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
@@ -161,7 +161,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
   )
 }
 
-// Composant: Liens croisés service×ville populaires (homepage SEO)
+// Component: Popular service x city cross-links (homepage SEO)
 export function PopularServiceCityLinks({
   limit = 12,
   showTitle = true,
@@ -201,7 +201,7 @@ export function PopularServiceCityLinks({
   )
 }
 
-// Composant: Matrice service-ville (liens croisés)
+// Component: Service-city matrix (cross-links)
 export function ServiceCityMatrix({
   service,
   cities = popularCities.slice(0, 6),
@@ -234,7 +234,7 @@ export function ServiceCityMatrix({
   )
 }
 
-// Composant: Liens rapides pour dashboards
+// Component: Quick links for dashboards
 export function QuickSiteLinks({ className = '' }: { className?: string }) {
   return (
     <div className={`bg-gray-50 rounded-xl p-4 ${className}`}>
@@ -269,7 +269,7 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
   )
 }
 
-// Composant: Footer de maillage interne pour les pages
+// Component: Internal linking footer for pages
 export function InternalLinksFooter({ className = '' }: { className?: string }) {
   return (
     <section className={`bg-gray-50 py-12 ${className}`}>

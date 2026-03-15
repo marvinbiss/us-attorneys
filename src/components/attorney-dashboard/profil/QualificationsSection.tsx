@@ -59,7 +59,7 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
             <span className="text-xs text-gray-400">{certifications.length}/{MAX_CERTIFICATIONS}</span>
           </div>
           <p className="text-sm text-gray-500 mb-3">
-            Ajoutez vos certifications, labels et qualifications professionnelles (ex: RGE, Qualibat, QualiPAC, Artisan d&apos;Art...).
+            Add your certifications, credentials, and professional qualifications (e.g.: Board Certified, AV Rated, Super Lawyers...).
           </p>
           <div className="flex flex-wrap gap-2 mb-3">
             {certifications.map((cert, index) => (
@@ -72,7 +72,7 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
                   type="button"
                   onClick={() => removeCertification(index)}
                   className="hover:text-green-900"
-                  aria-label={`Supprimer ${cert}`}
+                  aria-label={`Remove ${cert}`}
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -86,7 +86,7 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
               value={newCertification}
               onChange={(e) => setNewCertification(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCertification() } }}
-              placeholder={atMax ? 'Limite atteinte' : 'Ajouter une certification'}
+              placeholder={atMax ? 'Limit reached' : 'Add a certification'}
               maxLength={200}
               disabled={atMax}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
@@ -96,19 +96,19 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
               onClick={addCertification}
               disabled={atMax}
               className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-              aria-label="Ajouter une certification"
+              aria-label="Add a certification"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           {atMax && (
-            <p className="text-xs text-amber-600 mt-1">Limite de {MAX_CERTIFICATIONS} certifications atteinte.</p>
+            <p className="text-xs text-amber-600 mt-1">Limit of {MAX_CERTIFICATIONS} certifications reached.</p>
           )}
         </div>
 
         {certifications.length === 0 && (
           <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-3 rounded-lg">
-            Aucune certification ajout&eacute;e. Les certifications renforcent la confiance de vos clients.
+            No certifications added. Certifications build trust with your clients.
           </p>
         )}
       </div>

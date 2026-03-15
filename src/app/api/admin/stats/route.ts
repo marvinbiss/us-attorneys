@@ -147,7 +147,7 @@ export async function GET() {
       ? Math.round((ratings.reduce((s, r) => s + r.rating, 0) / ratings.length) * 10) / 10
       : 0
 
-    // Revenue: total_amount n'existe pas dans bookings.
+    // Revenue: total_amount does not exist in bookings.
     // We use the number of paid bookings for the trend; the returned amount is 0.
     const revThisMonth = 0
     // Trend based on number of paid bookings (no amount available)
@@ -177,7 +177,7 @@ export async function GET() {
       activity.push({
         id: `r-${r.id}`,
         type: 'review',
-        action: 'Nouvel avis',
+        action: 'New review',
         details: `${r.client_name || 'Anonymous'} — ${r.rating} star${r.rating > 1 ? 's' : ''}`,
         timestamp: r.created_at,
         status: r.status,

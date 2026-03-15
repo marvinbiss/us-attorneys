@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { isValidFrenchPhone } from '../utils'
+import { isValidUSPhone } from '../utils'
 import type { EstimationContext, ChatMessage } from '../utils'
 
 export interface UseLeadSubmitReturn {
@@ -17,8 +17,8 @@ export interface UseLeadSubmitReturn {
   leadLoading: boolean
   leadError: boolean
   leadSubmitted: boolean
-  rgpdConsent: boolean
-  setRgpdConsent: (v: boolean) => void
+  privacyConsent: boolean
+  setPrivacyConsent: (v: boolean) => void
   handleLeadSubmit: (e: React.FormEvent) => void
   // Callback
   callbackPhone: string
@@ -27,8 +27,8 @@ export interface UseLeadSubmitReturn {
   callbackLoading: boolean
   callbackError: boolean
   callbackSubmitted: boolean
-  rgpdCallbackConsent: boolean
-  setRgpdCallbackConsent: (v: boolean) => void
+  privacyCallbackConsent: boolean
+  setPrivacyCallbackConsent: (v: boolean) => void
   handleCallbackSubmit: (e: React.FormEvent) => void
 }
 
@@ -46,7 +46,7 @@ export function useLeadSubmit(
   const [leadLoading, setLeadLoading] = useState(false)
   const [leadError, setLeadError] = useState(false)
   const [leadSubmitted, setLeadSubmitted] = useState(false)
-  const [rgpdConsent, setRgpdConsent] = useState(false)
+  const [privacyConsent, setPrivacyConsent] = useState(false)
 
   // Callback fields
   const [callbackPhone, setCallbackPhone] = useState('')
@@ -54,16 +54,16 @@ export function useLeadSubmit(
   const [callbackLoading, setCallbackLoading] = useState(false)
   const [callbackError, setCallbackError] = useState(false)
   const [callbackSubmitted, setCallbackSubmitted] = useState(false)
-  const [rgpdCallbackConsent, setRgpdCallbackConsent] = useState(false)
+  const [privacyCallbackConsent, setPrivacyCallbackConsent] = useState(false)
 
   const handleLeadSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
       if (!leadPhone.trim()) return
-      if (!rgpdConsent) return
+      if (!privacyConsent) return
 
-      if (!isValidFrenchPhone(leadPhone)) {
-        setLeadPhoneError('Numéro invalide (ex: 06 12 34 56 78)')
+      if (!isValidUSPhone(leadPhone)) {
+        setLeadPhoneError('Invalid phone number (e.g., (555) 123-4567)')
         return
       }
       setLeadPhoneError('')
@@ -75,12 +75,12 @@ export function useLeadSubmit(
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nom: leadName || undefined,
-            telephone: leadPhone,
+            name: leadName || undefined,
+            phone: leadPhone,
             email: leadEmail || undefined,
-            metier: context.metier,
-            ville: context.ville,
-            departement: context.departement || undefined,
+            specialty: context.metier,
+            city: context.ville,
+            state: context.departement || undefined,
             source: 'chat' as const,
             conversation_history: messages,
             page_url: context.pageUrl,
@@ -100,8 +100,8 @@ export function useLeadSubmit(
         setLeadSubmitted(true)
 
         const confirmationMsg = context.artisan
-          ? `Parfait ! Votre demande a bien été envoyée à ${context.artisan.name}. Il vous recontactera dans les plus brefs délais.`
-          : `Parfait ! Votre demande a bien été enregistrée. Un ${context.metier.toLowerCase()} qualifié à ${context.ville} vous recontactera dans les plus brefs délais.`
+          ? `Your request has been sent to ${context.artisan.name}. They will contact you as soon as possible.`
+          : `Your request has been submitted. A qualified ${context.metier.toLowerCase()} attorney in ${context.ville} will contact you as soon as possible.`
 
         onLeadSubmitted?.(confirmationMsg)
       } catch (error) {
@@ -111,17 +111,17 @@ export function useLeadSubmit(
         setLeadLoading(false)
       }
     },
-    [leadPhone, leadName, leadEmail, rgpdConsent, context, messages, onLeadSubmitted],
+    [leadPhone, leadName, leadEmail, privacyConsent, context, messages, onLeadSubmitted],
   )
 
   const handleCallbackSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
       if (!callbackPhone.trim()) return
-      if (!rgpdCallbackConsent) return
+      if (!privacyCallbackConsent) return
 
-      if (!isValidFrenchPhone(callbackPhone)) {
-        setCallbackPhoneError('Numéro invalide (ex: 06 12 34 56 78)')
+      if (!isValidUSPhone(callbackPhone)) {
+        setCallbackPhoneError('Invalid phone number (e.g., (555) 123-4567)')
         return
       }
       setCallbackPhoneError('')
@@ -133,10 +133,10 @@ export function useLeadSubmit(
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            telephone: callbackPhone,
-            metier: context.metier,
-            ville: context.ville,
-            departement: context.departement || undefined,
+            phone: callbackPhone,
+            specialty: context.metier,
+            city: context.ville,
+            state: context.departement || undefined,
             source: 'callback' as const,
             page_url: context.pageUrl,
             artisan_public_id: context.artisan?.publicId,
@@ -160,7 +160,7 @@ export function useLeadSubmit(
         setCallbackLoading(false)
       }
     },
-    [callbackPhone, rgpdCallbackConsent, context, onCallbackSubmitted],
+    [callbackPhone, privacyCallbackConsent, context, onCallbackSubmitted],
   )
 
   return {
@@ -174,8 +174,8 @@ export function useLeadSubmit(
     leadLoading,
     leadError,
     leadSubmitted,
-    rgpdConsent,
-    setRgpdConsent,
+    privacyConsent,
+    setPrivacyConsent,
     handleLeadSubmit,
     callbackPhone,
     setCallbackPhone,
@@ -183,8 +183,8 @@ export function useLeadSubmit(
     callbackLoading,
     callbackError,
     callbackSubmitted,
-    rgpdCallbackConsent,
-    setRgpdCallbackConsent,
+    privacyCallbackConsent,
+    setPrivacyCallbackConsent,
     handleCallbackSubmit,
   }
 }

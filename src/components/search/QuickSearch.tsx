@@ -102,8 +102,8 @@ function buildSuggestions(input: string): Suggestion[] {
   const results: Suggestion[] = []
 
   // 1) Try to split input into service + city parts
-  //    Check each possible split point: "Plombier Paris" -> ["Plombier", "Paris"]
-  //    Also handle "Plombier a Paris", "Plombier à Paris"
+  //    Check each possible split point: "Personal Injury Chicago" -> ["Personal Injury", "Chicago"]
+  //    Also handle "Personal Injury in Chicago"
   const words = trimmed.split(/\s+/)
 
   let bestServiceMatch: typeof services[0] | null = null
@@ -128,8 +128,8 @@ function buildSuggestions(input: string): Suggestion[] {
   if (bestServiceMatch && bestSplitIndex < words.length) {
     let remainingWords = words.slice(bestSplitIndex)
 
-    // Strip common French prepositions "a", "à", "de", "en"
-    if (remainingWords.length > 0 && /^(a|à|de|en)$/i.test(remainingWords[0])) {
+    // Strip common prepositions "in", "near", "around"
+    if (remainingWords.length > 0 && /^(in|near|around)$/i.test(remainingWords[0])) {
       remainingWords = remainingWords.slice(1)
     }
 
@@ -217,7 +217,7 @@ function buildSuggestions(input: string): Suggestion[] {
   }
 
   // 3) Also try partial service prefix + city for partial matches
-  //    e.g., "Plomb Par" -> try "Plomb" as partial service, "Par" as partial city
+  //    e.g., "Person Chi" -> try "Person" as partial service, "Chi" as partial city
   if (results.length === 0 && words.length >= 2) {
     for (let i = 1; i < words.length; i++) {
       const serviceCandidate = words.slice(0, i).join(' ')
@@ -231,7 +231,7 @@ function buildSuggestions(input: string): Suggestion[] {
       if (partialServiceMatches.length > 0) {
         let remainingWords = words.slice(i)
         // Strip prepositions
-        if (remainingWords.length > 0 && /^(a|à|de|en)$/i.test(remainingWords[0])) {
+        if (remainingWords.length > 0 && /^(in|near|around)$/i.test(remainingWords[0])) {
           remainingWords = remainingWords.slice(1)
         }
         const cityPart = remainingWords.join(' ')

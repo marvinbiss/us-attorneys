@@ -7,7 +7,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
  */
 export async function GET() {
   const html = `<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,7 +44,7 @@ export async function GET() {
 
     <div class="warn">
       <strong>Required attribution</strong> — Any use of data from this API must include a visible link to
-      <a href="${SITE_URL}/price-index">${SITE_URL}/price-index</a> avec la mention
+      <a href="${SITE_URL}/attorney-statistics">${SITE_URL}/attorney-statistics</a> avec la mention
       "Source: ${SITE_NAME} — Attorney Barometer".
     </div>
 
@@ -55,13 +55,13 @@ export async function GET() {
       <p>Statistics by practice area, optionally filtered by location.</p>
       <h3>Parameters</h3>
       <table>
-        <tr><th>Param</th><th>Type</th><th>Requis</th><th>Description</th></tr>
+        <tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr>
         <tr><td><code>metier</code></td><td>string</td><td>Yes</td><td>Practice area slug (e.g. <code>personal-injury</code>)</td></tr>
-        <tr><td><code>ville</code></td><td>string</td><td>No</td><td>Slug de la ville (ex: <code>paris</code>)</td></tr>
+        <tr><td><code>ville</code></td><td>string</td><td>No</td><td>City slug (e.g. <code>paris</code>)</td></tr>
         <tr><td><code>departement</code></td><td>string</td><td>No</td><td>State code (e.g. <code>CA</code>)</td></tr>
         <tr><td><code>region</code></td><td>string</td><td>No</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
       </table>
-      <h3>Exemple</h3>
+      <h3>Example</h3>
       <pre><code>curl "${SITE_URL}/api/v1/pricing?metier=plombier&ville=paris"</code></pre>
       <pre><code>{
   "success": true,
@@ -76,7 +76,7 @@ export async function GET() {
   }],
   "attribution": {
     "text": "Source: ${SITE_NAME} — Attorney Barometer",
-    "url": "${SITE_URL}/price-index"
+    "url": "${SITE_URL}/attorney-statistics"
   }
 }</code></pre>
     </div>
@@ -86,12 +86,12 @@ export async function GET() {
       <p>Regional or state statistics — all practice areas in a zone.</p>
       <h3>Parameters</h3>
       <table>
-        <tr><th>Param</th><th>Type</th><th>Requis</th><th>Description</th></tr>
-        <tr><td><code>region</code></td><td>string</td><td>Non*</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
-        <tr><td><code>departement</code></td><td>string</td><td>Non*</td><td>State code (e.g. <code>CA</code>)</td></tr>
+        <tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr>
+        <tr><td><code>region</code></td><td>string</td><td>No*</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
+        <tr><td><code>departement</code></td><td>string</td><td>No*</td><td>State code (e.g. <code>CA</code>)</td></tr>
       </table>
       <p>* One of the two parameters is required.</p>
-      <h3>Exemple</h3>
+      <h3>Example</h3>
       <pre><code>curl "${SITE_URL}/api/v1/stats?region=ile-de-france"</code></pre>
     </div>
 

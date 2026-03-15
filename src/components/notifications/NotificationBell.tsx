@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Bell, Check } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { formatDistanceToNow } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
 
 interface Notification {
   id: string
@@ -139,11 +139,11 @@ export function NotificationBell({ userId }: NotificationBellProps) {
             <div className="overflow-y-auto max-h-80">
               {loading ? (
                 <div className="p-4 text-center text-gray-500">
-                  Chargement...
+                  Loading...
                 </div>
               ) : notifications.length === 0 ? (
                 <div className="p-4 text-center text-gray-500">
-                  Aucune notification
+                  No notifications
                 </div>
               ) : (
                 notifications.map((notification) => (
@@ -177,7 +177,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                             new Date(notification.created_at),
                             {
                               addSuffix: true,
-                              locale: fr,
+                              locale: enUS,
                             }
                           )}
                         </p>
@@ -201,7 +201,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                     window.location.href = '/client-dashboard/notifications'
                   }}
                 >
-                  Voir toutes les notifications
+                  View all notifications
                 </Button>
               </div>
             )}

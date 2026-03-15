@@ -27,7 +27,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
 
   return (
     <SectionCard
-      title="Identité"
+      title="Identity"
       icon={Building2}
       onSave={onSave}
       saving={saving}
@@ -39,7 +39,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="identite-name" className="block text-sm font-medium text-gray-700 mb-2">
-              Nom de l&apos;entreprise *
+              Firm name *
             </label>
             <input
               id="identite-name"
@@ -56,9 +56,9 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="identite-siret" className="block text-sm font-medium text-gray-700 mb-2">
-              N&deg; SIRET
+              Bar Number
               {isVerified && (
-                <span className="ml-2 text-xs text-green-600 font-normal">(vérifié - non modifiable)</span>
+                <span className="ml-2 text-xs text-green-600 font-normal">(verified - not editable)</span>
               )}
             </label>
             <input
@@ -75,7 +75,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               }`}
             />
             <p id="siret-help" className={`text-xs mt-1 ${siretInvalid ? 'text-amber-600' : 'text-gray-500'}`}>
-              {isVerified ? '14 chiffres — SIRET vérifié, non modifiable' : siretInvalid ? `${siretValue.length}/14 chiffres — le SIRET doit contenir exactement 14 chiffres` : '14 chiffres'}
+              {isVerified ? 'Bar number verified, not editable' : siretInvalid ? `${siretValue.length}/14 digits — bar number must contain exactly 14 digits` : 'Bar number'}
             </p>
           </div>
         </div>

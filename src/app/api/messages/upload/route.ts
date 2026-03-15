@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: { message: 'Fichier trop volumineux (max 10MB)' } },
+        { success: false, error: { message: 'File too large (max 10MB)' } },
         { status: 400 }
       )
     }

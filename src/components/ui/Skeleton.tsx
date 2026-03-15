@@ -17,7 +17,7 @@ export function Skeleton({ className, shimmer = true }: SkeletonProps) {
   )
 }
 
-// Card skeleton for artisan/service cards
+// Card skeleton for attorney/service cards
 export function CardSkeleton() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -118,7 +118,7 @@ export function AttorneyCardSkeleton() {
       className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm"
       role="article"
       aria-busy="true"
-      aria-label="Chargement d'un artisan"
+      aria-label="Loading attorney"
     >
       {/* Badge placeholder */}
       <Skeleton className="h-6 w-32 rounded-full mb-3" />
@@ -156,11 +156,11 @@ export function AttorneyCardSkeleton() {
 // Provider list skeleton
 export function AttorneyListSkeleton({ count = 5 }: { count?: number }) {
   return (
-    <div className="space-y-4" role="status" aria-label="Chargement des artisans">
+    <div className="space-y-4" role="status" aria-label="Loading attorneys">
       {Array.from({ length: count }).map((_, i) => (
         <AttorneyCardSkeleton key={i} />
       ))}
-      <span className="sr-only">Chargement en cours...</span>
+      <span className="sr-only">Loading...</span>
     </div>
   )
 }

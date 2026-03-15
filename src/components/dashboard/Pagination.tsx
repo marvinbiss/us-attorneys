@@ -19,7 +19,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
         className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />
-        <span className="hidden sm:inline">Précédent</span>
+        <span className="hidden sm:inline">Previous</span>
       </button>
 
       <div className="flex items-center gap-1">
@@ -56,7 +56,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
         disabled={page === totalPages}
         className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
       >
-        <span className="hidden sm:inline">Suivant</span>
+        <span className="hidden sm:inline">Next</span>
         <ChevronRight className="w-4 h-4" />
       </button>
     </div>

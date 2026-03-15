@@ -196,7 +196,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(auth.admin!.id, 'cms_page.create', 'cms_page', page.id, { slug: validated.slug, page_type: validated.page_type })
 
     return NextResponse.json({ success: true, data: page }, { status: 201 })

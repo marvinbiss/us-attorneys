@@ -41,7 +41,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error?.message || 'Erreur lors de l\'envoi')
+        throw new Error(data.error?.message || 'Error sending request')
       }
 
       setIsSuccess(true)
@@ -57,9 +57,9 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
     return (
       <div className="text-center py-4">
         <div className="text-4xl mb-2">✅</div>
-        <p className="text-green-600 font-medium">Demande envoyée !</p>
+        <p className="text-green-600 font-medium">Request sent!</p>
         <p className="text-sm text-gray-500 mt-1">
-          L'artisan vous contactera dans les meilleurs délais.
+          The attorney will contact you as soon as possible.
         </p>
         <Button
           variant="outline"
@@ -67,7 +67,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
           onClick={() => setIsSuccess(false)}
           className="mt-3"
         >
-          Nouvelle demande
+          New request
         </Button>
       </div>
     )
@@ -82,7 +82,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
       )}
 
       <Input
-        placeholder="Votre nom *"
+        placeholder="Your name *"
         value={formData.client_name}
         onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
         required
@@ -90,7 +90,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
 
       <Input
         type="tel"
-        placeholder="Téléphone *"
+        placeholder="Phone *"
         value={formData.client_phone}
         onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
         required
@@ -105,7 +105,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
       />
 
       <Textarea
-        placeholder="Décrivez votre besoin *"
+        placeholder="Describe your needs *"
         value={formData.description}
         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
         rows={3}
@@ -118,8 +118,8 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
       >
         <option value="normal">Normal</option>
-        <option value="urgent">Urgent (sous 48h)</option>
-        <option value="very_urgent">Très urgent (sous 24h)</option>
+        <option value="urgent">Urgent (within 48h)</option>
+        <option value="very_urgent">Very urgent (within 24h)</option>
       </select>
 
       <div className="grid grid-cols-2 gap-2">
@@ -129,7 +129,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
           onChange={(e) => setFormData({ ...formData, city: e.target.value })}
         />
         <Input
-          placeholder="Code postal"
+          placeholder="ZIP code"
           value={formData.postal_code}
           onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
           maxLength={5}
@@ -137,11 +137,11 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
       </div>
 
       <Button type="submit" disabled={isLoading} fullWidth>
-        {isLoading ? 'Envoi...' : 'Envoyer ma demande'}
+        {isLoading ? 'Sending...' : 'Submit my request'}
       </Button>
 
       <p className="text-xs text-gray-500 text-center">
-        En soumettant, vous acceptez d'être contacté par l'artisan.
+        By submitting, you agree to be contacted by the attorney.
       </p>
     </form>
   )

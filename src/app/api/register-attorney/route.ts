@@ -64,16 +64,16 @@ export async function POST(request: Request) {
       getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: data.email,
-        subject: 'Votre inscription sur US Attorneys - Confirmation',
+        subject: 'Your registration on US Attorneys - Confirmation',
         html: `
-          <h2>Bonjour ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')},</h2>
+          <h2>Hello ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')},</h2>
           <p>We have received your registration request as an attorney on US Attorneys.</p>
           <p><strong>Registration summary:</strong></p>
           <ul>
-            <li><strong>Entreprise :</strong> ${escapeHtml(data.entreprise ?? '')}</li>
-            <li><strong>SIRET :</strong> ${escapeHtml(data.siret ?? '')}</li>
+            <li><strong>Firm:</strong> ${escapeHtml(data.entreprise ?? '')}</li>
+            <li><strong>SIRET:</strong> ${escapeHtml(data.siret ?? '')}</li>
             <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
-            <li><strong>Zone d'intervention :</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
+            <li><strong>Coverage area:</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
           </ul>
           <p>Our team will verify your information and you will receive a response within 24-48 hours.</p>
           <p>See you on US Attorneys!</p>
@@ -89,23 +89,23 @@ export async function POST(request: Request) {
         subject: `[New registration] ${escapeHtml(data.entreprise ?? '')} - ${escapeHtml(metierFinal ?? '')}`,
         html: `
           <h2>New attorney registration request</h2>
-          <h3>Entreprise</h3>
+          <h3>Firm</h3>
           <ul>
-            <li><strong>Nom :</strong> ${escapeHtml(data.entreprise ?? '')}</li>
-            <li><strong>SIRET :</strong> ${escapeHtml(data.siret ?? '')}</li>
+            <li><strong>Name:</strong> ${escapeHtml(data.entreprise ?? '')}</li>
+            <li><strong>SIRET:</strong> ${escapeHtml(data.siret ?? '')}</li>
             <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
           </ul>
           <h3>Contact</h3>
           <ul>
-            <li><strong>Nom :</strong> ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')}</li>
-            <li><strong>Email :</strong> ${escapeHtml(data.email ?? '')}</li>
+            <li><strong>Name:</strong> ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')}</li>
+            <li><strong>Email:</strong> ${escapeHtml(data.email ?? '')}</li>
             <li><strong>Phone:</strong> ${escapeHtml(data.telephone ?? '')}</li>
           </ul>
-          <h3>Localisation</h3>
+          <h3>Location</h3>
           <ul>
-            <li><strong>Adresse :</strong> ${escapeHtml(data.adresse ?? '')}</li>
+            <li><strong>Address:</strong> ${escapeHtml(data.adresse ?? '')}</li>
             <li><strong>City:</strong> ${escapeHtml(data.codePostal ?? '')} ${escapeHtml(data.ville ?? '')}</li>
-            <li><strong>Rayon d'intervention :</strong> ${escapeHtml(data.rayonIntervention ?? '')} km</li>
+            <li><strong>Coverage radius:</strong> ${escapeHtml(data.rayonIntervention ?? '')} km</li>
           </ul>
           ${data.description ? `<h3>Description</h3><p>${escapeHtml(data.description)}</p>` : ''}
           ${data.experience ? `<p><strong>Experience:</strong> ${escapeHtml(data.experience)}</p>` : ''}

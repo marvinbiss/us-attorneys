@@ -150,7 +150,7 @@ export default function CookieConsent() {
         exit={{ y: 100, opacity: 0 }}
         className="fixed bottom-20 md:bottom-0 left-0 right-0 z-50 p-4 md:p-6"
       >
-        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100" role="dialog" aria-label="Gestion des cookies" aria-modal="false">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100" role="dialog" aria-label="Cookie management" aria-modal="false">
           <div className="p-6">
             {/* Header */}
             <div className="flex items-start justify-between gap-4">
@@ -162,10 +162,10 @@ export default function CookieConsent() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Nous respectons votre vie privée
+                    We respect your privacy
                   </h3>
                   <p className="text-sm text-gray-500">
-                    Conformité RGPD
+                    GDPR Compliance
                   </p>
                 </div>
               </div>
@@ -174,8 +174,8 @@ export default function CookieConsent() {
             {/* Main content */}
             <div className="mt-4">
               <p className="text-gray-600 text-sm">
-                Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et personnaliser le contenu.
-                Vous pouvez choisir les cookies que vous acceptez.
+                We use cookies to improve your experience, analyze traffic, and personalize content.
+                You can choose which cookies you accept.
               </p>
             </div>
 
@@ -191,9 +191,9 @@ export default function CookieConsent() {
                   {/* Necessary cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">Cookies essentiels</h4>
+                      <h4 className="font-medium text-gray-900">Essential cookies</h4>
                       <p className="text-sm text-gray-500">
-                        Nécessaires au fonctionnement du site (authentification, sécurité)
+                        Required for the site to function (authentication, security)
                       </p>
                     </div>
                     <div className="relative">
@@ -203,16 +203,16 @@ export default function CookieConsent() {
                         disabled
                         className="h-5 w-5 rounded text-blue-600"
                       />
-                      <span className="ml-2 text-xs text-gray-400">Requis</span>
+                      <span className="ml-2 text-xs text-gray-400">Required</span>
                     </div>
                   </div>
 
                   {/* Analytics cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">Cookies analytiques</h4>
+                      <h4 className="font-medium text-gray-900">Analytics cookies</h4>
                       <p className="text-sm text-gray-500">
-                        Nous aident à comprendre comment vous utilisez le site
+                        Help us understand how you use the site
                       </p>
                     </div>
                     <label className="relative inline-flex cursor-pointer items-center">
@@ -231,9 +231,9 @@ export default function CookieConsent() {
                   {/* Marketing cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">Cookies marketing</h4>
+                      <h4 className="font-medium text-gray-900">Marketing cookies</h4>
                       <p className="text-sm text-gray-500">
-                        Utilisés pour vous proposer des publicités pertinentes
+                        Used to show you relevant advertisements
                       </p>
                     </div>
                     <label className="relative inline-flex cursor-pointer items-center">
@@ -252,9 +252,9 @@ export default function CookieConsent() {
                   {/* Personalization cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">Cookies de personnalisation</h4>
+                      <h4 className="font-medium text-gray-900">Personalization cookies</h4>
                       <p className="text-sm text-gray-500">
-                        Permettent de mémoriser vos préférences
+                        Allow us to remember your preferences
                       </p>
                     </div>
                     <label className="relative inline-flex cursor-pointer items-center">
@@ -279,27 +279,27 @@ export default function CookieConsent() {
                 onClick={acceptAll}
                 className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
               >
-                Tout accepter
+                Accept all
               </button>
               <button
                 onClick={acceptNecessaryOnly}
                 className="rounded-lg border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                Refuser tout
+                Reject all
               </button>
               {showDetails ? (
                 <button
                   onClick={saveCustomPreferences}
                   className="rounded-lg border border-blue-300 bg-blue-50 px-6 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
                 >
-                  Enregistrer mes choix
+                  Save my choices
                 </button>
               ) : (
                 <button
                   onClick={() => setShowDetails(true)}
                   className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
                 >
-                  Personnaliser
+                  Customize
                 </button>
               )}
             </div>
@@ -307,10 +307,10 @@ export default function CookieConsent() {
             {/* Links */}
             <div className="mt-4 flex gap-4 text-xs text-gray-500">
               <a href="/privacy" className="hover:text-blue-600 hover:underline">
-                Politique de confidentialité
+                Privacy policy
               </a>
               <a href="/legal" className="hover:text-blue-600 hover:underline">
-                Mentions légales
+                Legal notice
               </a>
             </div>
           </div>

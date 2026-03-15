@@ -123,7 +123,7 @@ export function AuthenticityBadge({
   )
 }
 
-// Detailed authenticity display for admin/artisan view
+// Detailed authenticity display for admin/attorney view
 interface AuthenticityDetailsProps {
   score: number
   isVerifiedPurchase: boolean
@@ -164,7 +164,7 @@ export function AuthenticityDetails({
       {/* Score bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between text-sm mb-1">
-          <span className="text-gray-600 dark:text-gray-400">Score de confiance</span>
+          <span className="text-gray-600 dark:text-gray-400">Trust score</span>
           <span className="font-medium">{score}%</span>
         </div>
         <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -229,7 +229,7 @@ export function AuthenticityDetails({
       {/* Risk factors */}
       {riskFactors.length > 0 && (
         <div className="space-y-1">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Facteurs de risque:</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Risk factors:</p>
           <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-0.5">
             {riskFactors.map((factor) => (
               <li key={factor} className="flex items-center gap-1.5">

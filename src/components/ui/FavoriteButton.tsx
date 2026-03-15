@@ -53,8 +53,8 @@ export function FavoriteButton({
       // Show toast
       setToast(
         willBeFavorite
-          ? `${attorneyName} ajouté aux favoris`
-          : `${attorneyName} retiré des favoris`,
+          ? `${attorneyName} added to favorites`
+          : `${attorneyName} removed from favorites`,
       )
     },
     [favorited, toggleFavorite, attorneyId, attorneyName],
@@ -67,8 +67,8 @@ export function FavoriteButton({
         onClick={handleClick}
         aria-label={
           favorited
-            ? `Retirer ${attorneyName} des favoris`
-            : `Ajouter ${attorneyName} aux favoris`
+            ? `Remove ${attorneyName} from favorites`
+            : `Add ${attorneyName} to favorites`
         }
         className={cn(
           btnSize,

@@ -36,18 +36,18 @@ const staggerItem = {
 // ─── SERVICES SHOWCASE → BENTO GRID ─────────────────────────────
 
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Fuite, robinetterie, chauffe-eau, canalisation' },
-  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', desc: 'Installation, dépannage, mise aux normes' },
-  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Ouverture, blindage, serrures' },
-  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-blue-600 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Chaudière, pompe à chaleur, radiateur' },
-  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Intérieur, extérieur, ravalement' },
-  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', desc: 'Fenêtres, portes, agencement' },
-  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-blue-500 to-indigo-500', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Sol, mur, salle de bain' },
-  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50', text: 'text-indigo-600', desc: 'Toiture, zinguerie, charpente' },
-  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-slate-600 to-slate-700', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Gros œuvre, extension, rénovation' },
-  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Entretien, élagage, aménagement' },
-  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: Flame, color: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', text: 'text-emerald-600', desc: 'Installation, entretien, air-eau, géothermie' },
-  { name: 'Isolation', slug: 'isolation-thermique', icon: Shield, color: 'from-teal-500 to-teal-600', bg: 'bg-teal-50', text: 'text-teal-600', desc: 'ITE, ITI, combles, plancher' },
+  { name: 'Personal Injury', slug: 'personal-injury', icon: Wrench, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Car accidents, slip & fall, medical malpractice' },
+  { name: 'Criminal Defense', slug: 'criminal-defense', icon: Zap, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', desc: 'DUI, felony, misdemeanor, white collar' },
+  { name: 'Family Law', slug: 'family-law', icon: Key, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Divorce, custody, child support' },
+  { name: 'Immigration', slug: 'immigration', icon: Flame, color: 'from-blue-600 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Visas, green cards, citizenship, deportation defense' },
+  { name: 'Estate Planning', slug: 'estate-planning', icon: PaintBucket, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Wills, trusts, probate, power of attorney' },
+  { name: 'Real Estate', slug: 'real-estate', icon: Hammer, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', desc: 'Closings, disputes, landlord-tenant' },
+  { name: 'Business Law', slug: 'business-law', icon: Sparkles, color: 'from-blue-500 to-indigo-500', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'Formation, contracts, compliance' },
+  { name: 'Employment Law', slug: 'employment-law', icon: Home, color: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50', text: 'text-indigo-600', desc: 'Wrongful termination, discrimination, wage disputes' },
+  { name: 'Bankruptcy', slug: 'bankruptcy', icon: HardHat, color: 'from-slate-600 to-slate-700', bg: 'bg-slate-100', text: 'text-slate-600', desc: 'Chapter 7, Chapter 13, debt relief' },
+  { name: 'Tax Law', slug: 'tax-law', icon: TreeDeciduous, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', desc: 'IRS disputes, audits, tax planning' },
+  { name: 'Intellectual Property', slug: 'intellectual-property', icon: Flame, color: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', text: 'text-emerald-600', desc: 'Patents, trademarks, copyrights, trade secrets' },
+  { name: 'Civil Litigation', slug: 'civil-litigation', icon: Shield, color: 'from-teal-500 to-teal-600', bg: 'bg-teal-50', text: 'text-teal-600', desc: 'Contract disputes, class actions, appeals' },
 ]
 
 export function ServicesShowcase() {
@@ -68,14 +68,14 @@ export function ServicesShowcase() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
             <Wrench className="w-3.5 h-3.5" />
-            {allServicesFromFrance.length} métiers disponibles
+            {allServicesFromFrance.length} practice areas available
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />
-            Tous les corps de métier
+            All practice areas
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Trouvez le bon professionnel pour chaque besoin, de l&apos;urgence à la rénovation complète.
+            Find the right attorney for every legal need, from urgent matters to complex litigation.
           </p>
         </motion.div>
 
@@ -188,7 +188,7 @@ export function ServicesShowcase() {
             href="/services"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group transition-colors"
           >
-            Voir tous les services
+            View all practice areas
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
@@ -202,8 +202,8 @@ export function ServicesShowcase() {
 const steps = [
   {
     step: '1',
-    title: 'Recherchez',
-    description: 'Indiquez le service dont vous avez besoin et votre localisation. Notre moteur trouve les artisans disponibles près de chez vous.',
+    title: 'Search',
+    description: 'Enter the type of legal help you need and your location. Our engine finds available attorneys near you.',
     icon: Search,
     color: 'from-blue-500 to-blue-600',
     bg: 'bg-blue-50',
@@ -211,7 +211,7 @@ const steps = [
   },
   {
     step: '2',
-    title: 'Comparez',
+    title: 'Compare',
     description: 'View detailed profiles, credentials, and fees. Choose the attorney that matches your needs.',
     icon: ClipboardList,
     color: 'from-amber-500 to-amber-600',
@@ -317,7 +317,7 @@ export function HowItWorksSection() {
   )
 }
 
-// ─── ARTISAN CTA → PREMIUM DESIGN ───────────────────────────────
+// ─── ATTORNEY CTA → PREMIUM DESIGN ──────────────────────────────
 
 const artisanBenefits = [
   { icon: TrendingUp, text: 'Visibility to thousands of clients' },
@@ -429,7 +429,7 @@ const trustPoints = [
     icon: FileCheck,
     title: 'Free Consultations, No Obligation',
     description: 'Request as many consultations as you want. No fees, no hidden commissions. Neither for clients nor for attorneys.',
-    stat: '0€',
+    stat: '$0',
     statLabel: 'always free',
   },
   {
@@ -533,14 +533,14 @@ export function TestimonialsSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-5">
             <Star className="w-3.5 h-3.5" />
-            Avis clients
+            Client reviews
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />
-            Ils nous font confiance
+            They trust us
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Des milliers de particuliers trouvent chaque jour l&apos;artisan idéal sur ServicesArtisans.
+            Thousands of clients find the right attorney every day on US Attorneys.
           </p>
         </motion.div>
 
@@ -595,14 +595,14 @@ export function BeforeAfterShowcase() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
             <Sparkles className="w-3.5 h-3.5" />
-            Réalisations
+            Case Results
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-3 mb-1" />
-            Avant / Après
+            Before / After
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Découvrez les transformations réalisées par nos artisans référencés.
+            Discover the outcomes achieved by our verified attorneys.
           </p>
         </motion.div>
 
@@ -621,15 +621,15 @@ export function BeforeAfterShowcase() {
             >
               <div className="grid grid-cols-2 h-48">
                 <div className="relative">
-                  <Image src={pair.before} alt={`Avant — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
+                  <Image src={pair.before} alt={`Before — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
                   <div className="absolute top-2 left-2 bg-red-500/90 text-white text-xs font-bold px-2 py-1 rounded">
-                    AVANT
+                    BEFORE
                   </div>
                 </div>
                 <div className="relative">
-                  <Image src={pair.after} alt={`Après — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
+                  <Image src={pair.after} alt={`After — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
                   <div className="absolute top-2 right-2 bg-emerald-500/90 text-white text-xs font-bold px-2 py-1 rounded">
-                    APRÈS
+                    AFTER
                   </div>
                 </div>
               </div>

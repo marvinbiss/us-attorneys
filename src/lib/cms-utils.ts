@@ -40,7 +40,7 @@ export const createPageSchema = z.object(baseCmsFields).refine(
     if (data.page_type === 'location' && (!data.service_slug || !data.location_slug)) return false
     return true
   },
-  { message: 'Les slugs requis sont manquants pour ce type de page', path: ['page_type'] }
+  { message: 'Required slugs are missing for this page type', path: ['page_type'] }
 )
 
 /** Schema for updating a CMS page (all fields optional) */

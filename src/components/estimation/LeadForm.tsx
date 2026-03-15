@@ -59,12 +59,12 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
         onChange={(e) => lead.setLeadEmail(e.target.value)}
         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E07040] focus:outline-none focus:ring-1 focus:ring-[#E07040]"
       />
-      {/* RGPD consent */}
+      {/* Privacy consent */}
       <label className="flex items-start gap-2 text-xs text-gray-500">
         <input
           type="checkbox"
-          checked={lead.rgpdConsent}
-          onChange={(e) => lead.setRgpdConsent(e.target.checked)}
+          checked={lead.privacyConsent}
+          onChange={(e) => lead.setPrivacyConsent(e.target.checked)}
           className="mt-0.5"
         />
         <span>
@@ -85,7 +85,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
       )}
       <button
         type="submit"
-        disabled={lead.leadLoading || !lead.leadPhone.trim() || !lead.rgpdConsent}
+        disabled={lead.leadLoading || !lead.leadPhone.trim() || !lead.privacyConsent}
         className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#c9603a] transition-colors disabled:opacity-50"
       >
         {lead.leadLoading ? (

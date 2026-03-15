@@ -46,7 +46,7 @@ export function announce(message: string, priority: 'polite' | 'assertive' = 'po
 // Calendar-specific announcements
 export const calendarAnnouncements = {
   monthChanged: (month: string, year: number) =>
-    announce(`Calendrier: ${month} ${year}`),
+    announce(`Calendar: ${month} ${year}`),
 
   dateSelected: (date: Date, slotsCount: number) => {
     const dateStr = date.toLocaleDateString('en-US', {
@@ -73,9 +73,9 @@ export const calendarAnnouncements = {
     announce(`Booking confirmed for ${date} at ${time}`, 'assertive'),
 
   formError: (errorMessage: string) =>
-    announce(`Erreur: ${errorMessage}`, 'assertive'),
+    announce(`Error: ${errorMessage}`, 'assertive'),
 
-  loading: () => announce('Chargement en cours...'),
+  loading: () => announce('Loading...'),
 
   loaded: (message: string) => announce(message),
 }
@@ -194,10 +194,10 @@ export function getCalendarCellAttributes(
   })
 
   const labels: string[] = [dateStr]
-  if (isToday) labels.push("aujourd'hui")
-  if (isDisabled) labels.push('indisponible')
+  if (isToday) labels.push('today')
+  if (isDisabled) labels.push('unavailable')
   else if (!hasSlots) labels.push('no slots')
-  else labels.push('disponible')
+  else labels.push('available')
   if (isSelected) labels.push('selected')
 
   return {
@@ -218,8 +218,8 @@ export function getSlotAttributes(
   isRecommended?: boolean
 ): Record<string, string | boolean | number> {
   const labels: string[] = [time]
-  if (!isAvailable) labels.push('indisponible')
-  if (isPopular) labels.push('populaire')
+  if (!isAvailable) labels.push('unavailable')
+  if (isPopular) labels.push('popular')
   if (isRecommended) labels.push('recommended')
   if (isSelected) labels.push('selected')
 
@@ -253,7 +253,7 @@ export function generateId(prefix: string): string {
 
 // Form field error announcements
 export function announceFieldError(fieldName: string, error: string): void {
-  announce(`Erreur dans le champ ${fieldName}: ${error}`, 'assertive')
+  announce(`Error in field ${fieldName}: ${error}`, 'assertive')
 }
 
 // Form validation state

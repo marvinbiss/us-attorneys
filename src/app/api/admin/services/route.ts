@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Log d'audit with actual admin ID
+    // Audit log with actual admin ID
     await logAdminAction(
       authResult.admin.id,
       'service.create',

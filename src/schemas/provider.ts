@@ -3,32 +3,32 @@ import { z } from 'zod'
 export const providerUpdateSchema = z.object({
   name: z
     .string()
-    .min(2, 'Nom trop court')
-    .max(100, 'Nom trop long')
+    .min(2, 'Name too short')
+    .max(100, 'Name too long')
     .transform((v) => v.trim())
     .optional(),
   description: z
     .string()
-    .min(50, 'La description doit contenir au moins 50 caractères')
-    .max(2000, 'Description trop longue')
+    .min(50, 'Description must be at least 50 characters')
+    .max(2000, 'Description too long')
     .optional()
     .nullable(),
   specialties: z.string().max(500).optional().nullable(),
   phone: z
     .string()
-    .regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro de téléphone invalide')
+    .regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid phone number')
     .transform((v) => v.replace(/\s/g, ''))
     .optional(),
   phone_secondary: z
     .string()
-    .regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro de téléphone invalide')
+    .regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid phone number')
     .optional()
     .nullable()
     .transform((v) => v?.replace(/\s/g, '')),
-  email: z.string().email('Email invalide').optional().nullable(),
-  website: z.string().url('URL invalide').optional().nullable(),
+  email: z.string().email('Invalid email').optional().nullable(),
+  website: z.string().url('Invalid URL').optional().nullable(),
   address_street: z.string().max(200).optional().nullable(),
-  address_postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional().nullable(),
+  address_postal_code: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
   intervention_radius_km: z.number().int().min(1).max(200).optional().default(30),
   free_quote: z.boolean().optional().default(true),
@@ -39,19 +39,19 @@ export const providerUpdateSchema = z.object({
 // Sub-schemas for artisan profile editor
 // ============================================================
 export const dayScheduleSchema = z.object({
-  ouvert: z.boolean(),
-  debut: z.string().regex(/^\d{2}:\d{2}$/).or(z.literal('')),
-  fin: z.string().regex(/^\d{2}:\d{2}$/).or(z.literal('')),
+  open: z.boolean(),
+  start: z.string().regex(/^\d{2}:\d{2}$/).or(z.literal('')),
+  end: z.string().regex(/^\d{2}:\d{2}$/).or(z.literal('')),
 })
 
 export const openingHoursSchema = z.object({
-  lundi: dayScheduleSchema,
-  mardi: dayScheduleSchema,
-  mercredi: dayScheduleSchema,
-  jeudi: dayScheduleSchema,
-  vendredi: dayScheduleSchema,
-  samedi: dayScheduleSchema,
-  dimanche: dayScheduleSchema,
+  monday: dayScheduleSchema,
+  tuesday: dayScheduleSchema,
+  wednesday: dayScheduleSchema,
+  thursday: dayScheduleSchema,
+  friday: dayScheduleSchema,
+  saturday: dayScheduleSchema,
+  sunday: dayScheduleSchema,
 })
 
 export const servicePriceSchema = z.object({
@@ -62,8 +62,8 @@ export const servicePriceSchema = z.object({
 })
 
 export const faqItemSchema = z.object({
-  question: z.string().min(5, 'Question trop courte').max(500),
-  answer: z.string().min(10, 'Réponse trop courte').max(2000),
+  question: z.string().min(5, 'Question too short').max(500),
+  answer: z.string().min(10, 'Answer too short').max(2000),
 })
 
 // ============================================================
@@ -74,25 +74,25 @@ export const faqItemSchema = z.object({
 export const providerArtisanUpdateSchema = z.object({
   // Identity
   name: z.string().min(2).max(100).transform(v => v.trim()).optional(),
-  siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir 14 chiffres').optional().nullable(),
+  siret: z.string().regex(/^\d{14}$/, 'Bar number is required').optional().nullable(),
   team_size: z.number().int().min(1).max(1000).optional().nullable(),
 
   // Contact — preprocess strips spaces/dots/dashes before validation so "06 12 34 56 78" passes
   phone: z.preprocess(
     (v) => typeof v === 'string' ? v.replace(/[-\s.]/g, '') : v,
-    z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide')
+    z.string().regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid phone number')
   ).optional(),
   phone_secondary: z.preprocess(
     (v) => typeof v === 'string' ? v.replace(/[-\s.]/g, '') : v,
-    z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide')
+    z.string().regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid phone number')
   ).optional().nullable(),
-  email: z.string().email('Email invalide').optional().nullable(),
-  website: z.string().url('URL invalide').optional().nullable(),
+  email: z.string().email('Invalid email').optional().nullable(),
+  website: z.string().url('Invalid URL').optional().nullable(),
 
   // Location — address_department, latitude, longitude exist in providers (migrations 009, 007)
   address_street: z.string().max(200).optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
-  address_postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional().nullable(),
+  address_postal_code: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional().nullable(),
   address_region: z.string().max(50).optional().nullable(),
   address_department: z.string().max(50).optional().nullable(),
   latitude: z.number().min(-90).max(90).optional().nullable(),
@@ -140,8 +140,8 @@ export const providerSearchSchema = z.object({
 
 export const photoUploadSchema = z.object({
   filename: z.string().min(1),
-  contentType: z.string().regex(/^image\/(jpeg|png|webp|gif)$/, 'Type de fichier non supporté'),
-  size: z.number().max(5 * 1024 * 1024, 'Le fichier ne doit pas dépasser 5MB'),
+  contentType: z.string().regex(/^image\/(jpeg|png|webp|gif)$/, 'Unsupported file type'),
+  size: z.number().max(5 * 1024 * 1024, 'File must not exceed 5MB'),
 })
 
 export type ProviderUpdateInput = z.infer<typeof providerUpdateSchema>

@@ -52,7 +52,7 @@ export async function PATCH(
     if (error) {
       logger.error('Error editing message', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de modifier le message' } },
+        { success: false, error: { message: 'Unable to edit message' } },
         { status: 500 }
       )
     }
@@ -98,7 +98,7 @@ export async function DELETE(
     if (error) {
       logger.error('Error deleting message', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de supprimer le message' } },
+        { success: false, error: { message: 'Unable to delete message' } },
         { status: 500 }
       )
     }

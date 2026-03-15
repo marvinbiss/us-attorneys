@@ -59,11 +59,11 @@ export default function AdminServicesPage() {
         const data = await response.json()
         setServices(data.services || [])
       } else {
-        setError('Erreur lors du chargement des services')
+        setError('Error loading services')
       }
     } catch (err) {
       console.error('Failed to fetch services:', err)
-      setError('Erreur de connexion au serveur')
+      setError('Connection error')
     } finally {
       setLoading(false)
     }
@@ -84,7 +84,7 @@ export default function AdminServicesPage() {
       })
 
       if (!response.ok) {
-        setError(isNew ? 'Erreur lors de la création du service' : 'Erreur lors de la modification du service')
+        setError(isNew ? 'Error creating service' : 'Error updating service')
       }
 
       setEditModal({ open: false, service: null })
@@ -92,7 +92,7 @@ export default function AdminServicesPage() {
       fetchSpecialties()
     } catch (err) {
       console.error('Failed to save service:', err)
-      setError('Erreur de connexion au serveur')
+      setError('Connection error')
     }
   }
 
@@ -103,14 +103,14 @@ export default function AdminServicesPage() {
       })
 
       if (!response.ok) {
-        setError('Erreur lors de la suppression du service')
+        setError('Error deleting service')
       }
 
       setDeleteModal({ open: false, specialtyId: '', specialtyName: '' })
       fetchSpecialties()
     } catch (err) {
       console.error('Failed to delete service:', err)
-      setError('Erreur de connexion au serveur')
+      setError('Connection error')
     }
   }
 
@@ -133,7 +133,7 @@ export default function AdminServicesPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Services</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Services</h1>
             <p className="text-gray-500 mt-1">{services.length} services</p>
           </div>
           <button
@@ -141,7 +141,7 @@ export default function AdminServicesPage() {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <Plus className="w-5 h-5" />
-            Nouveau service
+            New service
           </button>
         </div>
 
@@ -152,8 +152,8 @@ export default function AdminServicesPage() {
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher un service..."
-                aria-label="Rechercher un service"
+                placeholder="Search services..."
+                aria-label="Search services"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -166,7 +166,7 @@ export default function AdminServicesPage() {
                 onChange={(e) => setShowInactive(e.target.checked)}
                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-600">Afficher les inactifs</span>
+              <span className="text-sm text-gray-600">Show inactive</span>
             </label>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function AdminServicesPage() {
           ) : services.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Grid className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucun service trouvé</p>
+              <p>No services found</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
@@ -211,7 +211,7 @@ export default function AdminServicesPage() {
                       </div>
                     </div>
                     <StatusBadge variant={service.is_active ? 'success' : 'error'}>
-                      {service.is_active ? 'Actif' : 'Inactif'}
+                      {service.is_active ? 'Active' : 'Inactive'}
                     </StatusBadge>
                   </div>
                   {service.description && (
@@ -225,7 +225,7 @@ export default function AdminServicesPage() {
                       className="flex items-center gap-1 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg"
                     >
                       <Edit2 className="w-4 h-4" />
-                      Modifier
+                      Edit
                     </button>
                     <button
                       onClick={() => setDeleteModal({
@@ -236,7 +236,7 @@ export default function AdminServicesPage() {
                       className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg"
                     >
                       <Trash2 className="w-4 h-4" />
-                      Supprimer
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -253,19 +253,19 @@ export default function AdminServicesPage() {
             <div className="fixed inset-0 bg-black/50" onClick={() => setEditModal({ open: false, service: null })} />
             <div role="dialog" aria-modal="true" aria-labelledby="edit-service-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               <h3 id="edit-service-title" className="text-lg font-semibold text-gray-900 mb-4">
-                {editModal.service ? 'Modifier le service' : 'Nouveau service'}
+                {editModal.service ? 'Edit service' : 'New service'}
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ex: Plomberie"
+                    placeholder="e.g. Personal Injury"
                   />
                 </div>
                 <div>
@@ -276,11 +276,11 @@ export default function AdminServicesPage() {
                     rows={3}
                     maxLength={2000}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                    placeholder="Description du service..."
+                    placeholder="Service description..."
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Icône (emoji)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Icon (emoji)</label>
                   <input
                     type="text"
                     value={formData.icon}
@@ -297,14 +297,14 @@ export default function AdminServicesPage() {
                   onClick={() => setEditModal({ open: false, service: null })}
                   className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={!formData.name}
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {editModal.service ? 'Enregistrer' : 'Créer'}
+                  {editModal.service ? 'Save' : 'Create'}
                 </button>
               </div>
             </div>
@@ -317,9 +317,9 @@ export default function AdminServicesPage() {
         isOpen={deleteModal.open}
         onClose={() => setDeleteModal({ open: false, specialtyId: '', specialtyName: '' })}
         onConfirm={handleDelete}
-        title="Supprimer le service"
-        message={`Êtes-vous sûr de vouloir désactiver le service "${deleteModal.specialtyName}" ?`}
-        confirmText="Désactiver"
+        title="Delete service"
+        message={`Are you sure you want to deactivate "${deleteModal.specialtyName}"?`}
+        confirmText="Deactivate"
         variant="danger"
       />
     </div>

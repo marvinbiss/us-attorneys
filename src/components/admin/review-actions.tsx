@@ -35,7 +35,7 @@ export function AdminReviewActions({ reviewId }: AdminReviewActionsProps) {
     <>
       <div className="flex gap-2">
         <Button onClick={() => moderate('approved')} disabled={isLoading}>
-          Approuver
+          Approve
         </Button>
         <Button
           variant="outline"
@@ -43,7 +43,7 @@ export function AdminReviewActions({ reviewId }: AdminReviewActionsProps) {
           disabled={isLoading}
           className="text-red-600"
         >
-          Rejeter
+          Reject
         </Button>
       </div>
 
@@ -51,9 +51,9 @@ export function AdminReviewActions({ reviewId }: AdminReviewActionsProps) {
         isOpen={rejectModal}
         onClose={() => setRejectModal(false)}
         onConfirm={() => { setRejectModal(false); moderate('rejected') }}
-        title="Rejeter l'avis"
-        message="Êtes-vous sûr de vouloir rejeter cet avis ? Il ne sera plus visible publiquement."
-        confirmText="Rejeter"
+        title="Reject review"
+        message="Are you sure you want to reject this review? It will no longer be publicly visible."
+        confirmText="Reject"
         variant="danger"
       />
     </>

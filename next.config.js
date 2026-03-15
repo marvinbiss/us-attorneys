@@ -406,8 +406,8 @@ const nextConfig = {
     return [
       // Next.js 14.2 generateSitemaps() doesn't auto-generate the sitemap index
       { source: '/sitemap.xml', destination: '/api/sitemap-index' },
-      // Provider sitemaps served dynamically (DB-dependent, can't pre-render at build time)
-      { source: '/sitemap/providers-:id.xml', destination: '/api/sitemap-attorneys?id=:id' },
+      // Attorney sitemaps served dynamically (DB-dependent, can't pre-render at build time)
+      { source: '/sitemap/attorneys-:id.xml', destination: '/api/sitemap-attorneys?id=:id' },
     ]
   },
 

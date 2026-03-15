@@ -61,7 +61,7 @@ interface ApiResponse {
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
-  return d.toLocaleDateString('fr-FR', {
+  return d.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -71,10 +71,9 @@ function formatDate(iso: string): string {
 }
 
 function formatPhone(phone: string): string {
-  // Format French phone: 0612345678 → 06 12 34 56 78
   const clean = phone.replace(/\D/g, '')
   if (clean.length === 10) {
-    return clean.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+    return clean.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
   }
   return phone
 }
@@ -117,22 +116,22 @@ export default function AdminEstimationLeadsPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer ce lead ? Cette action est irréversible.')) return
+    if (!confirm('Delete this lead? This action cannot be undone.')) return
     try {
       await adminMutate('/api/admin/estimation-leads', {
         method: 'DELETE',
         body: { id },
       })
-      setToast({ message: 'Lead supprimé', type: 'success' })
+      setToast({ message: 'Lead deleted', type: 'success' })
       mutate()
     } catch {
-      setToast({ message: 'Erreur lors de la suppression', type: 'error' })
+      setToast({ message: 'Error deleting lead', type: 'error' })
     }
   }
 
   const handleExportCSV = () => {
     if (!leads.length) return
-    const headers = ['Date', 'Source', 'Nom', 'Téléphone', 'Email', 'Métier', 'City', 'Département', 'Artisan ID']
+    const headers = ['Date', 'Source', 'Name', 'Phone', 'Email', 'Specialty', 'City', 'State', 'Attorney ID']
     const rows = leads.map(l => [
       formatDate(l.created_at),
       l.source,
@@ -173,10 +172,8 @@ export default function AdminEstimationLeadsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Leads Estimation IA</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Leads capturés par le widget d&apos;estimation sur les pages services et artisans
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">AI Estimation Leads</h1>
+          <p className="text-sm text-gray-500 mt-1">{stats.total} total</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -192,7 +189,7 @@ export default function AdminEstimationLeadsPage() {
             className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
           >
             <RefreshCw className="w-4 h-4" />
-            Rafraîchir
+            Refresh
           </button>
         </div>
       </div>
@@ -204,7 +201,7 @@ export default function AdminEstimationLeadsPage() {
           <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Aujourd&apos;hui</p>
+          <p className="text-sm text-gray-500">Today</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">{stats.today}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -215,7 +212,7 @@ export default function AdminEstimationLeadsPage() {
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center gap-1.5 text-sm text-gray-500">
-            <Phone className="w-3.5 h-3.5" /> Rappel
+            <Phone className="w-3.5 h-3.5" /> Callback
           </div>
           <p className="text-2xl font-bold text-gray-900 mt-1">{stats.callback}</p>
         </div>
@@ -236,7 +233,7 @@ export default function AdminEstimationLeadsPage() {
                     : 'bg-white text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                {s === 'all' ? 'Tous' : s === 'chat' ? 'Chat' : 'Rappel'}
+                {s === 'all' ? 'All' : s === 'chat' ? 'Chat' : 'Callback'}
               </button>
             ))}
           </div>
@@ -249,7 +246,7 @@ export default function AdminEstimationLeadsPage() {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Rechercher par nom, tél, email, ville..."
+                placeholder="Search by name, phone, email, city..."
                 className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E07040]/20 focus:border-[#E07040]"
               />
             </div>
@@ -257,7 +254,7 @@ export default function AdminEstimationLeadsPage() {
               type="submit"
               className="px-4 py-2 bg-[#E07040] text-white text-sm font-medium rounded-lg hover:bg-[#c9603a]"
             >
-              Filtrer
+              Filter
             </button>
             {search && (
               <button
@@ -265,7 +262,7 @@ export default function AdminEstimationLeadsPage() {
                 onClick={() => { setSearch(''); setSearchInput(''); setPage(1) }}
                 className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
               >
-                Effacer
+                Clear
               </button>
             )}
           </form>
@@ -287,8 +284,7 @@ export default function AdminEstimationLeadsPage() {
       ) : leads.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-          <p className="font-medium">Aucun lead pour le moment</p>
-          <p className="text-sm mt-1">Les leads apparaîtront ici quand les visiteurs utiliseront le widget d&apos;estimation.</p>
+          <p className="font-medium">No leads yet</p>
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -299,9 +295,9 @@ export default function AdminEstimationLeadsPage() {
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Source</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Contact</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Métier</th>
+                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Specialty</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">City</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Artisan</th>
+                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Attorney</th>
                   <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
@@ -322,13 +318,13 @@ export default function AdminEstimationLeadsPage() {
                         {lead.source === 'chat' ? (
                           <><MessageSquare className="w-3 h-3" /> Chat</>
                         ) : (
-                          <><Phone className="w-3 h-3" /> Rappel</>
+                          <><Phone className="w-3 h-3" /> Callback</>
                         )}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">
-                        {lead.nom || <span className="text-gray-400 italic">Anonyme</span>}
+                        {lead.nom || <span className="text-gray-400 italic">Anonymous</span>}
                       </div>
                       <div className="text-gray-500">{formatPhone(lead.telephone)}</div>
                       {lead.email && (
@@ -357,7 +353,7 @@ export default function AdminEstimationLeadsPage() {
                           <button
                             onClick={() => setSelectedLead(lead)}
                             className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Voir la conversation"
+                            title="View conversation"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -365,14 +361,14 @@ export default function AdminEstimationLeadsPage() {
                         <a
                           href={`tel:${lead.telephone}`}
                           className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                          title="Appeler"
+                          title="Call"
                         >
                           <Phone className="w-4 h-4" />
                         </a>
                         <button
                           onClick={() => handleDelete(lead.id)}
                           className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Supprimer"
+                          title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -389,7 +385,7 @@ export default function AdminEstimationLeadsPage() {
             <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
               <p className="text-sm text-gray-500">
                 {(pagination.page - 1) * pagination.limit + 1}–
-                {Math.min(pagination.page * pagination.limit, pagination.total)} sur{' '}
+                {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
                 {pagination.total}
               </p>
               <div className="flex items-center gap-1">
@@ -428,7 +424,7 @@ export default function AdminEstimationLeadsPage() {
               <div>
                 <h3 className="font-semibold text-gray-900">Conversation</h3>
                 <p className="text-xs text-gray-500">
-                  {selectedLead.nom || 'Anonyme'} · {selectedLead.metier} · {selectedLead.ville}
+                  {selectedLead.nom || 'Anonymous'} · {selectedLead.metier} · {selectedLead.ville}
                 </p>
               </div>
               <button
@@ -472,7 +468,7 @@ export default function AdminEstimationLeadsPage() {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
               >
                 <Phone className="w-3.5 h-3.5" />
-                Appeler
+                Call
               </a>
             </div>
           </div>

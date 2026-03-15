@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users, ShowerHead, ChefHat, Leaf, Search, ShieldAlert, Calculator, Home, FileCheck } from "lucide-react"
+import { BookOpen, Euro, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users, ShowerHead, ChefHat, Leaf, Search, ShieldAlert, Calculator, Home, FileCheck } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
@@ -252,12 +252,6 @@ const relatedPages = [
     description: "News, tips, and trends in the legal industry.",
     href: "/blog",
     icon: Newspaper,
-  },
-  {
-    title: "Price Index",
-    description: "Average fees, regional indices, and trends for legal practice areas.",
-    href: "/price-index",
-    icon: BarChart3,
   },
 ]
 

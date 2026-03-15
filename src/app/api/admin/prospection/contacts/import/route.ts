@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const MAX_FILE_SIZE = 10 * 1024 * 1024
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le fichier depasse la taille maximale autorisee (10 Mo)' } },
+        { success: false, error: { message: 'File exceeds the maximum allowed size (10 MB)' } },
         { status: 400 }
       )
     }
@@ -67,14 +67,14 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.name ? '.' + file.name.split('.').pop()?.toLowerCase() : ''
     if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Type de fichier non autorise. Formats acceptes : CSV, TSV, TXT' } },
+        { success: false, error: { message: 'Unauthorized file type. Accepted formats: CSV, TSV, TXT' } },
         { status: 400 }
       )
     }
 
     const content = await file.text()
 
-    // Si pas de mapping fourni, retourner les headers + suggestion
+    // If no mapping provided, return headers + suggestion
     if (!mappingJson) {
       const { headers, rows } = parseCSV(content)
       const suggestedMapping = suggestColumnMapping(headers)
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Avec mapping, lancer l'import
+    // With mapping, start the import
     let mapping: ColumnMapping
     try {
       mapping = JSON.parse(mappingJson)

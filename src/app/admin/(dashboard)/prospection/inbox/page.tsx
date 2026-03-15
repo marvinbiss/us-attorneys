@@ -27,12 +27,12 @@ export default function InboxPage() {
       setError(null)
       const params = new URLSearchParams({ status: statusFilter })
       const res = await fetch(`/api/admin/prospection/conversations?${params}`, { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) setConversations(data.data)
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -84,7 +84,7 @@ export default function InboxPage() {
         ) : conversations.length === 0 ? (
           <div className="p-8 text-center text-gray-400">
             <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Aucune conversation. Les réponses à vos campagnes apparaîtront ici.</p>
+            <p>No conversations. Replies to your campaigns will appear here.</p>
           </div>
         ) : (
           conversations.map((conv) => {
@@ -116,7 +116,7 @@ export default function InboxPage() {
                 <div className="ml-10 text-sm text-gray-500">
                   {conv.ai_replies_count > 0 && <span className="mr-3">{conv.ai_replies_count} réponses IA</span>}
                   {conv.last_message_at && (
-                    <span>{new Date(conv.last_message_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{new Date(conv.last_message_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                   )}
                 </div>
               </Link>

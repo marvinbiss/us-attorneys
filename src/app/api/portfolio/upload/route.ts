@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     if (file.size > maxSize) {
       const maxSizeMB = maxSize / (1024 * 1024)
       return NextResponse.json(
-        { error: `Fichier trop volumineux. Taille maximum: ${maxSizeMB}MB` },
+        { error: `File too large. Maximum size: ${maxSizeMB}MB` },
         { status: 400 }
       )
     }
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
     if (uploadError) {
       logger.error('Storage upload error:', uploadError)
       return NextResponse.json(
-        { error: `Erreur d'upload: ${uploadError.message}` },
+        { error: `Upload error: ${uploadError.message}` },
         { status: 500 }
       )
     }
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Portfolio upload error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur lors de l\'upload' },
+      { error: 'Server error during upload' },
       { status: 500 }
     )
   }

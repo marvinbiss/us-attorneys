@@ -127,7 +127,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
           updated[updated.length - 1] = {
             role: 'assistant',
             content:
-              "Désolé, une erreur est survenue. Veuillez réessayer ou nous contacter directement.",
+              "Sorry, an error occurred. Please try again or contact us directly.",
           }
           return updated
         })

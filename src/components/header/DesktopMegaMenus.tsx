@@ -231,7 +231,7 @@ export default function DesktopMegaMenus({
         </div>
       )}
 
-      {/* ===== RÉGIONS MEGA MENU ===== */}
+      {/* ===== REGIONS MEGA MENU ===== */}
       {openMenu === 'regions' && (
         <div
           data-menu-content="regions" role="menu" aria-label="States"

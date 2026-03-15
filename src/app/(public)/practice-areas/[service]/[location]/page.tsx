@@ -105,7 +105,7 @@ interface PageProps {
   }>
 }
 
-/** Truncate title to ~42 chars to leave room for " | ServicesArtisans" suffix (18 chars → total ~60, Google's display limit) */
+/** Truncate title to ~42 chars to leave room for " | US Attorneys" suffix (15 chars → total ~57, Google's display limit) */
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
@@ -207,7 +207,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: 'website',
-      locale: 'fr_FR',
+      locale: 'en_US',
       images: [{ url: getServiceImage(specialtySlug).src, width: 1200, height: 630, alt: title }],
     },
     twitter: {
@@ -235,38 +235,17 @@ function generateJsonLd(
   const svcLower = service.name.toLowerCase()
   const trade = getTradeContent(specialtySlug)
 
-  const localBusinessSchema: Record<string, unknown> = {
+  const collectionPageSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'CollectionPage',
     name: `${service.name} in ${location.name}`,
     description: `Find a qualified ${svcLower} in ${location.name}. Bar-verified attorneys, free consultation and client reviews.`,
-    image: getServiceImage(specialtySlug).src,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: location.name,
-      ...(location.region_name ? { addressRegion: location.region_name } : {}),
-      addressCountry: 'US',
-      ...(location.postal_code ? { postalCode: location.postal_code } : {}),
-    },
-    ...('latitude' in (locationData ?? {}) && 'longitude' in (locationData ?? {}) ? {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: (locationData as Record<string, unknown>).latitude,
-        longitude: (locationData as Record<string, unknown>).longitude,
-      },
-    } : {}),
-    areaServed: {
-      '@type': 'City',
-      name: location.name,
-      ...(location.department_name ? {
-        containedInPlace: {
-          '@type': 'AdministrativeArea',
-          name: location.department_name,
-        },
-      } : {}),
-    },
-    ...(trade ? { priceRange: `${trade.priceRange.min}€–${trade.priceRange.max}€` } : {}),
     url: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}`,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'US Attorneys',
+      url: SITE_URL,
+    },
     dateModified: new Date().toISOString().split('T')[0],
   }
 
@@ -297,7 +276,7 @@ function generateJsonLd(
     { name: location.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
   ])
 
-  return [localBusinessSchema, serviceSchema, breadcrumbSchema]
+  return [collectionPageSchema, serviceSchema, breadcrumbSchema]
 }
 
 export default async function ServiceLocationPage({ params }: PageProps) {

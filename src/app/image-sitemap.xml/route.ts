@@ -38,7 +38,7 @@ export async function GET() {
 
   // 1. Homepage
   urls.push(
-    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Trouvez les meilleurs artisans en France sur ServicesArtisans — plateforme de mise en relation avec des professionnels qualifiés' }])
+    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Trouvez les meilleurs artisans en France sur US Attorneys — plateforme de mise en relation avec des professionnels qualifiés' }])
   )
 
   // 2. Pages de services — une image par métier
@@ -47,7 +47,7 @@ export async function GET() {
     if (img) {
       urls.push(
         urlEntry(`${SITE_URL}/practice-areas/${service.slug}`, [
-          { loc: img.src, title: img.alt, caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur ServicesArtisans` },
+          { loc: img.src, title: img.alt, caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur US Attorneys` },
         ])
       )
     }
@@ -61,7 +61,7 @@ export async function GET() {
       .join('-')
     urls.push(
       urlEntry(`${SITE_URL}/cities/${citySlug}`, [
-        { loc: img.src, title: img.alt, caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur ServicesArtisans` },
+        { loc: img.src, title: img.alt, caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur US Attorneys` },
       ])
     )
   }
@@ -72,14 +72,14 @@ export async function GET() {
     const img = getBlogImage(slug, article?.category)
     const articleTitle = article?.title || slug.replace(/-/g, ' ')
     urls.push(
-      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt, caption: `Illustration de l'article « ${articleTitle} » — blog ServicesArtisans` }])
+      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt, caption: `Illustration de l'article « ${articleTitle} » — blog US Attorneys` }])
     )
   }
 
   // 5. Pages statiques avec images connues
   const staticPageMap: Record<string, { url: string; captionPrefix: string }> = {
     howItWorks: { url: `${SITE_URL}/how-it-works`, captionPrefix: 'Comment ça marche' },
-    about: { url: `${SITE_URL}/about`, captionPrefix: 'À propos de ServicesArtisans' },
+    about: { url: `${SITE_URL}/about`, captionPrefix: 'À propos de US Attorneys' },
     verification: { url: `${SITE_URL}/verification-process`, captionPrefix: 'Processus de vérification des artisans' },
   }
 

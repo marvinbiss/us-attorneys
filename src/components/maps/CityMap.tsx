@@ -32,30 +32,30 @@ interface CityMapProps {
 
 // City coordinates (main cities)
 const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
-  'paris': { lat: 48.8566, lng: 2.3522 },
-  'marseille': { lat: 43.2965, lng: 5.3698 },
-  'lyon': { lat: 45.7640, lng: 4.8357 },
-  'toulouse': { lat: 43.6047, lng: 1.4442 },
-  'nice': { lat: 43.7102, lng: 7.2620 },
-  'nantes': { lat: 47.2184, lng: -1.5536 },
-  'strasbourg': { lat: 48.5734, lng: 7.7521 },
-  'montpellier': { lat: 43.6108, lng: 3.8767 },
-  'bordeaux': { lat: 44.8378, lng: -0.5792 },
-  'lille': { lat: 50.6292, lng: 3.0573 },
-  'rennes': { lat: 48.1173, lng: -1.6778 },
-  'reims': { lat: 49.2583, lng: 4.0317 },
-  'le-havre': { lat: 49.4944, lng: 0.1079 },
-  'saint-etienne': { lat: 45.4397, lng: 4.3872 },
-  'toulon': { lat: 43.1242, lng: 5.9280 },
-  'grenoble': { lat: 45.1885, lng: 5.7245 },
-  'dijon': { lat: 47.3220, lng: 5.0415 },
-  'angers': { lat: 47.4784, lng: -0.5632 },
-  'nimes': { lat: 43.8367, lng: 4.3601 },
-  'villeurbanne': { lat: 45.7669, lng: 4.8795 },
+  'new-york': { lat: 40.7128, lng: -74.0060 },
+  'los-angeles': { lat: 34.0522, lng: -118.2437 },
+  'chicago': { lat: 41.8781, lng: -87.6298 },
+  'houston': { lat: 29.7604, lng: -95.3698 },
+  'phoenix': { lat: 33.4484, lng: -112.0740 },
+  'philadelphia': { lat: 39.9526, lng: -75.1652 },
+  'san-antonio': { lat: 29.4241, lng: -98.4936 },
+  'san-diego': { lat: 32.7157, lng: -117.1611 },
+  'dallas': { lat: 32.7767, lng: -96.7970 },
+  'san-jose': { lat: 37.3382, lng: -121.8863 },
+  'austin': { lat: 30.2672, lng: -97.7431 },
+  'jacksonville': { lat: 30.3322, lng: -81.6557 },
+  'san-francisco': { lat: 37.7749, lng: -122.4194 },
+  'columbus': { lat: 39.9612, lng: -82.9988 },
+  'charlotte': { lat: 35.2271, lng: -80.8431 },
+  'indianapolis': { lat: 39.7684, lng: -86.1581 },
+  'seattle': { lat: 47.6062, lng: -122.3321 },
+  'denver': { lat: 39.7392, lng: -104.9903 },
+  'washington-dc': { lat: 38.9072, lng: -77.0369 },
+  'miami': { lat: 25.7617, lng: -80.1918 },
 }
 
-// Default France center
-const DEFAULT_CENTER = { lat: 46.2276, lng: 2.2137 }
+// Default US center (geographic center of contiguous US)
+const DEFAULT_CENTER = { lat: 39.8283, lng: -98.5795 }
 
 export default function CityMap({ cityName, citySlug }: CityMapProps) {
   const [providers, setProviders] = useState<Provider[]>([])

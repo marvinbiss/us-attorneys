@@ -49,7 +49,7 @@ export default function LogoutButton({ className = '' }: LogoutButtonProps) {
       ) : (
         <LogOut className="w-5 h-5" />
       )}
-      {isLoading ? 'Déconnexion...' : 'Déconnexion'}
+      {isLoading ? 'Signing out...' : 'Sign out'}
     </button>
   )
 }

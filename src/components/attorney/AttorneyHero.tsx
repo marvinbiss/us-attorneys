@@ -49,7 +49,7 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
           {/* Avatar */}
           <div className="flex-shrink-0">
             <div className="relative">
-              {/* Pulsing ring for artisans accepting new clients */}
+              {/* Pulsing ring for attorneys accepting new clients */}
               {artisan.accepts_new_clients && (
                 <motion.div
                   className="absolute -inset-1.5 rounded-2xl border-2 border-clay-400/50"
@@ -69,7 +69,7 @@ export function AttorneyHero({ artisan }: AttorneyHeroProps) {
                 {hasPortfolioImage ? (
                   <Image
                     src={artisan.portfolio![0].imageUrl}
-                    alt={`${displayName} - ${artisan.specialty} à ${artisan.city}`}
+                    alt={`${displayName} - ${artisan.specialty} in ${artisan.city}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 96px, 128px"

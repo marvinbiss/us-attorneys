@@ -6,8 +6,8 @@ import {
   truncate,
   getInitials,
   isValidEmail,
-  isValidFrenchPhone,
-  formatFrenchPhone,
+  isValidUSPhone,
+  formatUSPhone,
   isValidSIRET,
   calculateDistance,
   getRatingColor,
@@ -42,7 +42,7 @@ describe('formatPrice', () => {
   it('should format price in EUR by default', () => {
     const result = formatPrice(100)
     expect(result).toContain('100')
-    expect(result).toMatch(/€|EUR/)
+    expect(result).toMatch(/$|EUR/)
   })
 
   it('should format large numbers with proper grouping', () => {
@@ -137,27 +137,25 @@ describe('isValidEmail', () => {
   })
 })
 
-describe('isValidFrenchPhone', () => {
-  it('should validate correct French phone numbers', () => {
-    expect(isValidFrenchPhone('0612345678')).toBe(true)
-    expect(isValidFrenchPhone('06 12 34 56 78')).toBe(true)
-    expect(isValidFrenchPhone('+33612345678')).toBe(true)
-    expect(isValidFrenchPhone('+33 6 12 34 56 78')).toBe(true)
+describe('isValidUSPhone', () => {
+  it('should validate correct US phone numbers', () => {
+    expect(isValidUSPhone('2125551234')).toBe(true)
+    expect(isValidUSPhone('+12125551234')).toBe(true)
   })
 
   it('should reject invalid phone numbers', () => {
-    expect(isValidFrenchPhone('123')).toBe(false)
-    expect(isValidFrenchPhone('abcdefghij')).toBe(false)
+    expect(isValidUSPhone('123')).toBe(false)
+    expect(isValidUSPhone('abcdefghij')).toBe(false)
   })
 })
 
-describe('formatFrenchPhone', () => {
+describe('formatUSPhone', () => {
   it('should format 10-digit phone number', () => {
-    expect(formatFrenchPhone('0612345678')).toBe('06 12 34 56 78')
+    expect(formatUSPhone('2125551234')).toBe('(212) 555-1234')
   })
 
   it('should return original if not 10 digits', () => {
-    expect(formatFrenchPhone('+33612345678')).toBe('+33612345678')
+    expect(formatUSPhone('+12125551234')).toBe('+12125551234')
   })
 })
 

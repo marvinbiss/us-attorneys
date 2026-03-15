@@ -15,56 +15,8 @@ export { logger, apiLogger, dbLogger, authLogger, paymentLogger } from '@/lib/lo
 // API Clients
 // ============================================
 
-// Pappers - Business data
-export {
-  getEntrepriseParSiret,
-  getEntrepriseParSiren,
-  rechercherEntreprises,
-  verifierSanteEntreprise,
-  getBadgeConfiance,
-  validateSiren,
-  validateSiret,
-  formaterMontant,
-  formaterAnciennete,
-  formaterSiret,
-  formaterSiren,
-  CODES_NAF_ARTISANS,
-  type EntrepriseComplete,
-  type RechercheResultat,
-} from './pappers'
-
-// SIRENE - Official French business registry
-export {
-  getEtablissementBySiret,
-  getUniteLegaleBySiren,
-  rechercherEtablissements,
-  verifierSiret,
-  formatAdresseEtablissement,
-  getLibelleTrancheEffectifs,
-  TRANCHES_EFFECTIFS,
-  type EtablissementSirene,
-  type UniteLegaleSirene,
-} from './sirene'
-
-// Adresse - French address API
-export {
-  autocompleteAdresse,
-  autocompleteVille,
-  geocoder,
-  reverseGeocode,
-  getLocationsByCodePostal,
-  geocodeBatch,
-  calculerDistance,
-  filterByRadius,
-  sortByDistance,
-  isValidCodePostal,
-  getDepartementFromCodePostal,
-  formaterAdresse,
-  parseAdresse,
-  DEPARTEMENTS,
-  type AdresseSuggestion,
-  type GeocodageResult,
-} from './adresse'
+// French APIs removed: Pappers, SIRENE, Adresse (data.gouv.fr)
+// TODO: Replace with US equivalents (state bar APIs, USPS address API, etc.)
 
 // Stripe - Payments
 export {
@@ -108,19 +60,8 @@ export {
 
 // Mapbox, Twilio — removed in v2 cleanup
 
-// ============================================
-// SERVICES
-// ============================================
-export {
-  verifyEntreprise,
-  quickVerify,
-  verifySiren,
-  batchVerify,
-  calculateTrustScore,
-  getVerificationSummary,
-  type VerificationResult,
-  type QuickVerificationResult,
-} from '../services/verification.service'
+// French verification service removed (was based on Pappers/SIRENE/Adresse APIs)
+// TODO: Replace with US bar verification service
 
 // ============================================
 // HOOKS (Client-side)

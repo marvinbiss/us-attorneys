@@ -233,10 +233,10 @@ function buildNotificationSpec(
         emailHtml: emailTemplate({
           heading: 'Request registered',
           color: '#2563eb',
-          greeting: `Bonjour ${target.name}`,
+          greeting: `Hello ${target.name}`,
           body: `Your consultation request for <strong>${lead.service_name}</strong> in ${location} has been registered. We will contact qualified attorneys in your area.`,
           ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes`,
-          ctaLabel: 'Suivre ma demande',
+          ctaLabel: 'Track my request',
           footer: 'You will receive a notification as soon as an attorney sends you a consultation.',
         }),
       }
@@ -249,12 +249,12 @@ function buildNotificationSpec(
         link: '/attorney-dashboard/leads',
         emailSubject: `New lead – ${lead.service_name} in ${location}`,
         emailHtml: emailTemplate({
-          heading: 'Nouveau lead disponible',
+          heading: 'New lead available',
           color: '#059669',
-          greeting: `Bonjour ${target.name}`,
+          greeting: `Hello ${target.name}`,
           body: `You have received a new request from <strong>${lead.client_name}</strong> for <strong>${lead.service_name}</strong> in ${location}. Review it and send your consultation.`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
-          ctaLabel: 'Voir le lead',
+          ctaLabel: 'View the lead',
           footer: 'Respond quickly to maximize your chances.',
         }),
       }
@@ -263,7 +263,7 @@ function buildNotificationSpec(
       return {
         type: 'lead_viewed',
         title: 'An attorney has viewed your request',
-        message: `An attorney a pris connaissance de votre demande pour "${lead.service_name}".`,
+        message: `An attorney has viewed your request for "${lead.service_name}".`,
         link: `/client-dashboard/mes-demandes/${lead.id}`,
         emailSubject: '',
         emailHtml: '',
@@ -280,10 +280,10 @@ function buildNotificationSpec(
         emailHtml: emailTemplate({
           heading: 'You have received a consultation',
           color: '#059669',
-          greeting: `Bonjour ${target.name}`,
+          greeting: `Hello ${target.name}`,
           body: `An attorney has sent you a consultation for <strong>${lead.service_name}</strong> in ${location}${amount ? `.<br><br>Proposed amount: <strong>$${event.metadata.amount}</strong>` : ''}.`,
           ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes/${lead.id}`,
-          ctaLabel: 'Voir the consultation',
+          ctaLabel: 'View the consultation',
           footer: 'View the details and compare received offers.',
         }),
       }
@@ -299,10 +299,10 @@ function buildNotificationSpec(
         emailHtml: emailTemplate({
           heading: 'Your consultation has been accepted',
           color: '#059669',
-          greeting: `Bonjour ${target.name}`,
+          greeting: `Hello ${target.name}`,
           body: `Great news! <strong>${lead.client_name}</strong> accepted your consultation for <strong>${lead.service_name}</strong>. You can contact them to arrange the engagement.`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
-          ctaLabel: 'Voir le lead',
+          ctaLabel: 'View the lead',
           footer: '',
         }),
       }
@@ -328,7 +328,7 @@ function buildNotificationSpec(
           emailHtml: emailTemplate({
             heading: 'Case completed',
             color: '#059669',
-            greeting: `Bonjour ${target.name}`,
+            greeting: `Hello ${target.name}`,
             body: `The case for <strong>${lead.service_name}</strong> in ${location} is complete. Thank you for your trust!`,
             ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes/${lead.id}`,
             ctaLabel: 'View details',
@@ -345,10 +345,10 @@ function buildNotificationSpec(
         emailHtml: emailTemplate({
           heading: 'Case completed',
           color: '#059669',
-          greeting: `Bonjour ${target.name}`,
+          greeting: `Hello ${target.name}`,
           body: `The case <strong>${lead.service_name}</strong> for ${lead.client_name} is complete. Well done!`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
-          ctaLabel: 'Voir mes leads',
+          ctaLabel: 'View my leads',
           footer: '',
         }),
       }
@@ -364,10 +364,10 @@ function buildNotificationSpec(
           emailHtml: emailTemplate({
             heading: 'Request expired',
             color: '#d97706',
-            greeting: `Bonjour ${target.name}`,
+            greeting: `Hello ${target.name}`,
             body: `Your request for <strong>${lead.service_name}</strong> in ${location} has expired. You can create a new one at any time.`,
             ctaUrl: `${SITE_URL}/client-dashboard/mes-demandes`,
-            ctaLabel: 'Mes demandes',
+            ctaLabel: 'My requests',
             footer: '',
           }),
         }
@@ -377,14 +377,14 @@ function buildNotificationSpec(
         title: 'Lead expired',
         message: `The lead "${lead.service_name}" from ${lead.client_name} has expired.`,
         link: '/attorney-dashboard/leads',
-        emailSubject: `Lead expiré – ${lead.service_name}`,
+        emailSubject: `Lead expired – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Lead expired',
           color: '#d97706',
-          greeting: `Bonjour ${target.name}`,
+          greeting: `Hello ${target.name}`,
           body: `The lead <strong>${lead.service_name}</strong> from ${lead.client_name} has expired.`,
           ctaUrl: `${SITE_URL}/attorney-dashboard/leads`,
-          ctaLabel: 'Voir mes leads',
+          ctaLabel: 'View my leads',
           footer: '',
         }),
       }

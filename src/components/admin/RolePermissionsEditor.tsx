@@ -13,43 +13,43 @@ interface RolePermissionsEditorProps {
 const PERMISSION_GROUPS = [
   {
     key: 'users',
-    label: 'Utilisateurs',
+    label: 'Users',
     icon: Users,
     permissions: [
-      { key: 'read', label: 'Voir' },
-      { key: 'write', label: 'Modifier' },
-      { key: 'delete', label: 'Supprimer' },
+      { key: 'read', label: 'View' },
+      { key: 'write', label: 'Edit' },
+      { key: 'delete', label: 'Delete' },
     ],
   },
   {
     key: 'providers',
-    label: 'Artisans',
+    label: 'Attorneys',
     icon: Briefcase,
     permissions: [
-      { key: 'read', label: 'Voir' },
-      { key: 'write', label: 'Modifier' },
-      { key: 'delete', label: 'Supprimer' },
-      { key: 'verify', label: 'Vérifier' },
+      { key: 'read', label: 'View' },
+      { key: 'write', label: 'Edit' },
+      { key: 'delete', label: 'Delete' },
+      { key: 'verify', label: 'Verify' },
     ],
   },
   {
     key: 'reviews',
-    label: 'Avis',
+    label: 'Reviews',
     icon: Star,
     permissions: [
-      { key: 'read', label: 'Voir' },
-      { key: 'write', label: 'Modifier' },
-      { key: 'delete', label: 'Supprimer' },
+      { key: 'read', label: 'View' },
+      { key: 'write', label: 'Edit' },
+      { key: 'delete', label: 'Delete' },
     ],
   },
   {
     key: 'payments',
-    label: 'Paiements',
+    label: 'Payments',
     icon: CreditCard,
     permissions: [
-      { key: 'read', label: 'Voir' },
-      { key: 'refund', label: 'Rembourser' },
-      { key: 'cancel', label: 'Annuler' },
+      { key: 'read', label: 'View' },
+      { key: 'refund', label: 'Refund' },
+      { key: 'cancel', label: 'Cancel' },
     ],
   },
   {
@@ -57,18 +57,18 @@ const PERMISSION_GROUPS = [
     label: 'Services',
     icon: Grid,
     permissions: [
-      { key: 'read', label: 'Voir' },
-      { key: 'write', label: 'Modifier' },
-      { key: 'delete', label: 'Supprimer' },
+      { key: 'read', label: 'View' },
+      { key: 'write', label: 'Edit' },
+      { key: 'delete', label: 'Delete' },
     ],
   },
   {
     key: 'settings',
-    label: 'Paramètres',
+    label: 'Settings',
     icon: Settings,
     permissions: [
-      { key: 'read', label: 'Voir' },
-      { key: 'write', label: 'Modifier' },
+      { key: 'read', label: 'View' },
+      { key: 'write', label: 'Edit' },
     ],
   },
   {
@@ -76,7 +76,7 @@ const PERMISSION_GROUPS = [
     label: 'Audit',
     icon: FileText,
     permissions: [
-      { key: 'read', label: 'Voir' },
+      { key: 'read', label: 'View' },
     ],
   },
 ]
@@ -127,7 +127,7 @@ export function RolePermissionsEditor({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-4">
         <Shield className="w-5 h-5 text-gray-400" />
-        <h3 className="font-medium text-gray-900">Permissions pour {role}</h3>
+        <h3 className="font-medium text-gray-900">Permissions for {role}</h3>
       </div>
 
       <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -136,9 +136,9 @@ export function RolePermissionsEditor({
           <thead className="bg-gray-50">
             <tr>
               <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                Ressource
+                Resource
               </th>
-              {['Voir', 'Modifier', 'Supprimer', 'Autres'].map(header => (
+              {['View', 'Edit', 'Delete', 'Other'].map(header => (
                 <th key={header} className="text-center px-2 py-3 text-xs font-medium text-gray-500 uppercase">
                   {header}
                 </th>
@@ -165,7 +165,7 @@ export function RolePermissionsEditor({
                             : 'text-blue-600 hover:bg-blue-50'
                         }`}
                       >
-                        {isGroupFullyEnabled(group.key) ? 'Tout désactiver' : 'Tout activer'}
+                        {isGroupFullyEnabled(group.key) ? 'Disable all' : 'Enable all'}
                       </button>
                     </div>
                   </td>

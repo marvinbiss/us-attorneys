@@ -30,7 +30,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
       })
 
       if (!response.ok) {
-        throw new Error('Erreur lors de la mise à jour')
+        throw new Error('Error updating status')
       }
 
       router.refresh()
@@ -51,7 +51,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
 
       <div>
         <label className="block text-sm font-medium mb-1">
-          Montant estimé (€)
+          Estimated amount ($)
         </label>
         <Input
           type="number"
@@ -67,7 +67,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
             onClick={() => updateStatus('responded')}
             disabled={isLoading}
           >
-            ✓ Marquer comme répondu
+            Mark as responded
           </Button>
         )}
         <Button
@@ -75,7 +75,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
           onClick={() => updateStatus('converted')}
           disabled={isLoading}
         >
-          💰 Converti en client
+          Converted to client
         </Button>
         <Button
           variant="ghost"
@@ -83,7 +83,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
           disabled={isLoading}
           className="text-red-600"
         >
-          ✗ Annuler
+          Cancel
         </Button>
       </div>
     </div>

@@ -60,12 +60,12 @@ export async function POST(
     if (error) {
       logger.error('Report resolve failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de traiter le signalement' } },
+        { success: false, error: { message: 'Unable to process the report' } },
         { status: 500 }
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(
       authResult.admin.id,
       `report.${action}`,

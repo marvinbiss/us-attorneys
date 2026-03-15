@@ -7,7 +7,7 @@ interface BookingPaymentProps {
   bookingId: string
   specialtyName: string
   attorneyName: string
-  depositAmount?: number // In euros
+  depositAmount?: number // In dollars
   onPaymentComplete?: () => void
 }
 

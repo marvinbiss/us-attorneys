@@ -1,5 +1,5 @@
 /**
- * ServicesArtisans - UI Components
+ * US Attorneys - UI Components
  * World-class branded components
  */
 
@@ -56,8 +56,8 @@ export { AttorneyCard, ArtisanGrid } from './AttorneyCard'
 
 // Autocomplete (World-class, Stripe/Doctolib-style)
 export { VilleAutocomplete } from './VilleAutocomplete'
-export { AdresseAutocomplete } from './AdresseAutocomplete'
-export { SiretAutocomplete } from './SiretAutocomplete'
+// AdresseAutocomplete removed (French data.gouv.fr API)
+// SiretAutocomplete removed (French SIRET validation)
 export { MetierAutocomplete } from './MetierAutocomplete'
 
 // Scroll-triggered animations (Framer Motion)

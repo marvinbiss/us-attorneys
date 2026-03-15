@@ -1,6 +1,6 @@
 /**
  * Contact Import Service - Prospection
- * Import CSV/Excel avec validation, normalisation et déduplication
+ * CSV/Excel import with validation, normalization and deduplication
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -19,7 +19,7 @@ import type {
 const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB
 const MAX_ROWS = 500_000
 
-// Champs valides pour le mapping (exported for validation)
+// Valid fields for mapping (exported for validation)
 export const VALID_FIELDS: (keyof ProspectionContactInsert)[] = [
   'contact_type', 'company_name', 'contact_name', 'email', 'phone',
   'address', 'postal_code', 'city', 'department', 'region',
@@ -27,14 +27,14 @@ export const VALID_FIELDS: (keyof ProspectionContactInsert)[] = [
 ]
 
 /**
- * Parser un fichier CSV en lignes
+ * Parse a CSV file into rows
  * Enforces MAX_ROWS limit to prevent memory exhaustion on large files.
  */
 export function parseCSV(content: string): { headers: string[]; rows: Record<string, string>[] } {
   // Check file size (byte length of the string)
   const byteSize = Buffer.byteLength(content, 'utf-8')
   if (byteSize > MAX_FILE_SIZE) {
-    throw new Error(`Le fichier dépasse la taille maximale autorisée (${Math.round(MAX_FILE_SIZE / 1024 / 1024)} Mo)`)
+    throw new Error(`File exceeds maximum allowed size (${Math.round(MAX_FILE_SIZE / 1024 / 1024)} MB)`)
   }
 
   const lines = content.split(/\r?\n/).filter(line => line.trim())
@@ -42,10 +42,10 @@ export function parseCSV(content: string): { headers: string[]; rows: Record<str
 
   // Enforce row limit (lines includes header, so data rows = lines.length - 1)
   if (lines.length - 1 > MAX_ROWS) {
-    throw new Error(`Le fichier contient trop de lignes (${lines.length - 1}). Maximum autorisé : ${MAX_ROWS}`)
+    throw new Error(`File contains too many rows (${lines.length - 1}). Maximum allowed: ${MAX_ROWS}`)
   }
 
-  // Détecter le séparateur (virgule, point-virgule, tab)
+  // Detect separator (comma, semicolon, tab)
   const firstLine = lines[0]
   const separator = firstLine.includes(';') ? ';'
     : firstLine.includes('\t') ? '\t'
@@ -65,7 +65,7 @@ export function parseCSV(content: string): { headers: string[]; rows: Record<str
 }
 
 /**
- * Parser une ligne CSV (gestion des guillemets)
+ * Parse a CSV line (handles quoted fields)
  */
 function parseCsvLine(line: string, separator: string): string[] {
   const result: string[] = []
@@ -94,7 +94,7 @@ function parseCsvLine(line: string, separator: string): string[] {
 }
 
 /**
- * Suggestion automatique de mapping des colonnes
+ * Auto-suggest column mapping
  */
 export function suggestColumnMapping(headers: string[]): ColumnMapping {
   const mapping: ColumnMapping = {}
@@ -124,7 +124,7 @@ export function suggestColumnMapping(headers: string[]): ColumnMapping {
     }
   }
 
-  // Les colonnes non mappées → null
+  // Unmapped columns → null
   for (const h of headers) {
     if (!(h in mapping)) {
       mapping[h] = null
@@ -135,7 +135,7 @@ export function suggestColumnMapping(headers: string[]): ColumnMapping {
 }
 
 /**
- * Valider et transformer les lignes importées
+ * Validate and transform imported rows
  */
 export function validateRows(
   rows: Record<string, string>[],
@@ -151,7 +151,7 @@ export function validateRows(
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i]
-    const rowNum = i + 2 // +2 car header = ligne 1
+    const rowNum = i + 2 // +2 because header = row 1
 
     const contact: ProspectionContactInsert = {
       contact_type: contactType,
@@ -172,7 +172,7 @@ export function validateRows(
         case 'email': {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
           if (!emailRegex.test(value)) {
-            errors.push({ row: rowNum, field: 'email', message: `Email invalide: ${value}` })
+            errors.push({ row: rowNum, field: 'email', message: `Invalid email: ${value}` })
           } else {
             contact.email = value.toLowerCase()
             hasContactInfo = true
@@ -203,7 +203,7 @@ export function validateRows(
     }
 
     if (!hasContactInfo) {
-      errors.push({ row: rowNum, field: 'email/phone', message: 'Ni email ni téléphone fourni' })
+      errors.push({ row: rowNum, field: 'email/phone', message: 'Neither email nor phone provided' })
       continue
     }
 
@@ -214,7 +214,7 @@ export function validateRows(
 }
 
 /**
- * Vérifier les doublons contre la base existante
+ * Check duplicates against existing database
  * Uses batched lookups (chunks of 500) instead of loading ALL contacts into memory.
  */
 export async function checkDuplicates(
@@ -292,7 +292,7 @@ export async function checkDuplicates(
     }
   }
 
-  // Verify chaque contact
+  // Verify each contact
   const seenEmails = new Set<string>()
   const seenPhones = new Set<string>()
 
@@ -342,7 +342,7 @@ export async function checkDuplicates(
 }
 
 /**
- * Insérer les contacts en base par batch
+ * Insert contacts into database in batches
  */
 export async function bulkInsertContacts(
   contacts: ProspectionContactInsert[]
@@ -370,7 +370,7 @@ export async function bulkInsertContacts(
 }
 
 /**
- * Pipeline complet d'import
+ * Complete import pipeline
  * Validates file size before processing.
  */
 export async function importContacts(
@@ -382,13 +382,13 @@ export async function importContacts(
   // 0. Validate file size upfront
   const byteSize = Buffer.byteLength(csvContent, 'utf-8')
   if (byteSize > MAX_FILE_SIZE) {
-    throw new Error(`Le fichier dépasse la taille maximale autorisée (${Math.round(MAX_FILE_SIZE / 1024 / 1024)} Mo)`)
+    throw new Error(`File exceeds maximum allowed size (${Math.round(MAX_FILE_SIZE / 1024 / 1024)} MB)`)
   }
 
-  // 1. Parser le CSV (also validates row count)
+  // 1. Parse the CSV (also validates row count)
   const { rows } = parseCSV(csvContent)
 
-  // 2. Valider
+  // 2. Validate
   const { valid, errors } = validateRows(rows, mapping, contactType, sourceFile)
 
   // 3. Dédupliquer
@@ -416,7 +416,7 @@ export async function syncArtisansFromDatabase(
 ): Promise<{ synced: number; skipped: number }> {
   const supabase = createAdminClient()
 
-  // Construire la requête
+  // Build the query
   let query = supabase
     .from('attorneys')
     .select('id, name, email, phone, address_street, address_city, address_postal_code, address_department, address_region, siret')

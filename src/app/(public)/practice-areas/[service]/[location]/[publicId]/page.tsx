@@ -206,24 +206,6 @@ function generateDescription(name: string, specialty: string, city: string, prov
     parts.push(`Rated ${Number(rating).toFixed(1)}/5 by clients.`)
   }
 
-  // Service-specific expertise (programmatic based on specialty slug)
-  const serviceDescriptions: Record<string, string> = {
-    'plombier': `Les prestations couvrent l'installation, la réparation et l'entretien de plomberie : robinetterie, canalisations, sanitaires, chauffe-eau et dépannage de fuites.`,
-    'electricien': `Les interventions incluent la mise aux normes électriques, l'installation de tableaux, le câblage, le dépannage et la pose d'éclairage intérieur et extérieur.`,
-    'chauffagiste': `Spécialiste en systèmes de chauffage : installation, entretien et dépannage de chaudières, radiateurs, planchers chauffants et pompes à chaleur.`,
-    'serrurier': `Interventions en serrurerie : ouverture de portes, changement de serrures, blindage, installation de systèmes de sécurité et reproduction de clés.`,
-    'menuisier': `Travaux de menuiserie intérieure et extérieure : fabrication et pose de portes, fenêtres, placards, escaliers et aménagements sur mesure.`,
-    'couvreur': `Travaux de couverture : réfection de toiture, pose de tuiles et ardoises, zinguerie, étanchéité et isolation de combles.`,
-    'macon': `Travaux de maçonnerie : construction, rénovation, extension, dalles, murs porteurs, fondations et ravalement de façade.`,
-    'carreleur': `Pose de carrelage et faïence : sols, murs, douches à l'italienne, terrasses et mosaïques pour tous types de projets.`,
-    'peintre-en-batiment': `Travaux de peinture intérieure et extérieure : préparation des surfaces, enduits, peinture décorative et ravalement.`,
-    'climaticien': `Installation et maintenance de climatisation : pose de splits, gainable, réversible et contrats d'entretien annuel.`,
-  }
-  const svcDesc = serviceDescriptions[specialtySlug || '']
-  if (svcDesc) {
-    parts.push(svcDesc)
-  }
-
   // Zone d'intervention
   parts.push(`Service area: ${city} and surrounding cities.`)
 
@@ -236,7 +218,7 @@ function generateDescription(name: string, specialty: string, city: string, prov
   return parts.join(' ')
 }
 
-/** Row shape from the similar-artisans lightweight query */
+/** Row shape from the similar-attorneys lightweight query */
 interface SimilarAttorneyRow {
   id: string
   stable_id: string | null
@@ -259,7 +241,7 @@ interface ReviewRow {
   has_media: boolean | null
 }
 
-// Fetch similar artisans (same specialty, same department)
+// Fetch similar attorneys (same specialty, same department)
 async function getSimilarArtisans(attorneyId: string, specialty: string, postalCode?: string) {
   try {
     const { supabase } = await import('@/lib/supabase')
@@ -329,7 +311,7 @@ async function getAttorneyReviews(attorneyId: string, specialtyName?: string): P
         id: r.id,
         author: r.client_name || 'Client',
         rating: r.rating,
-        date: new Date(r.created_at).toLocaleDateString('fr-FR', {
+        date: new Date(r.created_at).toLocaleDateString('en-US', {
           day: 'numeric',
           month: 'long',
           year: 'numeric',
@@ -401,7 +383,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       // All service×quartier pages indexed — rich content exists even with few providers
-      openGraph: { title, description, type: 'website', locale: 'fr_FR', url: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(specialtySlug).src, width: 1200, height: 630, alt: title }] },
+      openGraph: { title, description, type: 'website', locale: 'en_US', url: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(specialtySlug).src, width: 1200, height: 630, alt: title }] },
       twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(specialtySlug).src] },
       alternates: { canonical: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}/${publicId}` },
     }
@@ -470,7 +452,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title,
         description,
         type: 'profile',
-        locale: 'fr_FR',
+        locale: 'en_US',
         url: `${SITE_URL}${canonicalPath}`,
         images: [{ url: ogImage, width: 1200, height: 630, alt: ogAlt }],
       },
@@ -541,10 +523,10 @@ export default async function AttorneyPage({ params }: PageProps) {
     redirect(canonicalUrl)
   }
 
-  // Convert to Artisan format
+  // Convert to Attorney format
   const artisan = convertToArtisan(provider, service, location, specialtySlug)
 
-  // Fetch reviews and similar artisans in parallel (graceful degradation)
+  // Fetch reviews and similar attorneys in parallel (graceful degradation)
   let reviews: Review[] = []
   let similarArtisans: Awaited<ReturnType<typeof getSimilarArtisans>> = []
   try {
@@ -553,7 +535,7 @@ export default async function AttorneyPage({ params }: PageProps) {
       getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
     ])
   } catch {
-    // Graceful degradation — page renders without reviews/similar artisans
+    // Graceful degradation — page renders without reviews/similar attorneys
   }
 
   return (
@@ -573,32 +555,7 @@ export default async function AttorneyPage({ params }: PageProps) {
         hasSiret={!!provider.siret}
       />
 
-      {/* ─── DEVIS CTA BANNER ────────────────────────────────── */}
-      <section className="py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-t border-b border-blue-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">
-                Need This Professional?
-              </h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Request a free consultation with no obligation.
-              </p>
-            </div>
-            <Link
-              href={`/quotes/${specialtySlug}/${locationSlug}`}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap"
-            >
-              Request a Free Consultation
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
+      {/* Back link to service+location listing */}
       <section className="py-6 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
@@ -608,7 +565,7 @@ export default async function AttorneyPage({ params }: PageProps) {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            Voir tous les {(service?.name || artisan.specialty).toLowerCase()}s à {artisan.city}
+            All {(service?.name || artisan.specialty).toLowerCase()}s in {artisan.city}
           </Link>
         </div>
       </section>
@@ -624,37 +581,6 @@ export default async function AttorneyPage({ params }: PageProps) {
         departmentCode={location?.department_code}
       />
 
-      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-      <section className="mb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">About This Profile</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              The information on this profile is provided by the attorney and verified via bar records. The fees displayed, when provided, are indicative and specific to this attorney. Reviews are collected from clients who have used their services. This is an independent directory — we facilitate connections but do not guarantee outcomes.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-gray-50 border-t">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Trust &amp; Safety
-          </h2>
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
-              How We Verify Attorneys
-            </Link>
-            <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
-              Our Review Policy
-            </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
-              Mediation Service
-            </Link>
-          </nav>
-        </div>
-      </section>
 
       <EstimationWidget hideLauncher context={{
         metier: service?.name || artisan.specialty,

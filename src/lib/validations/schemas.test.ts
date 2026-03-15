@@ -35,14 +35,14 @@ describe('emailSchema', () => {
 })
 
 describe('phoneSchema', () => {
-  it('accepts valid French phone numbers', () => {
-    expect(phoneSchema.safeParse('0612345678').success).toBe(true)
-    expect(phoneSchema.safeParse('+33612345678').success).toBe(true)
+  it('accepts valid US phone numbers', () => {
+    expect(phoneSchema.safeParse('2125551234').success).toBe(true)
+    expect(phoneSchema.safeParse('+12125551234').success).toBe(true)
   })
 
   it('strips spaces on transform', () => {
-    const result = phoneSchema.safeParse('0612345678')
-    expect(result.success && result.data).toBe('0612345678')
+    const result = phoneSchema.safeParse('2125551234')
+    expect(result.success && result.data).toBe('2125551234')
   })
 
   it('rejects invalid phones', () => {

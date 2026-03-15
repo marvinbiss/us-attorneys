@@ -42,7 +42,7 @@ export type InseeCode = Brand<string, 'InseeCode'>
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const SIRET_REGEX = /^\d{14}$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const PHONE_REGEX = /^(\+33|0)[1-9](\d{8})$/
+const PHONE_REGEX = /^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/
 const POSTAL_CODE_REGEX = /^\d{5}$/
 const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -129,8 +129,8 @@ export function createPhone(value: string): Phone {
   const cleaned = value.replace(/\s/g, '')
   if (!isValidPhone(cleaned)) throw new Error(`Invalid Phone: ${value}`)
   // Normalize to E.164
-  if (cleaned.startsWith('0')) {
-    return `+33${cleaned.slice(1)}` as Phone
+  if (!cleaned.startsWith('+1')) {
+    return `+1${cleaned}` as Phone
   }
   return cleaned as Phone
 }

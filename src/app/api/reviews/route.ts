@@ -122,7 +122,7 @@ export async function GET(request: Request) {
           service_name,
           status,
           client:profiles!client_id(full_name, email, phone_e164),
-          artisan:providers!bookings_attorney_id_fkey(id, name)
+          attorney:attorneys!bookings_attorney_id_fkey(id, name)
         `)
         .eq('id', bookingId)
         .single()
@@ -388,8 +388,8 @@ export async function POST(request: Request) {
           status: review.status,
         },
         message: fraudIndicators.length > 0
-          ? 'Votre avis sera publie apres verification'
-          : 'Merci pour votre avis !',
+          ? 'Your review will be published after verification'
+          : 'Thank you for your review!',
       }),
       { status: 201 }
     )

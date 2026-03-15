@@ -131,7 +131,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
       if (score === 'disqualified') {
         const reason = !data.is_homeowner
           ? 'not a property owner'
-          : 'zone non couverte'
+          : 'area not covered'
         return NextResponse.json({
           result: `The prospect does not meet our criteria: ${reason}. Politely end the call.`,
         })
@@ -142,7 +142,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
           score === 'A'
             ? 'Excellent prospect, offer an immediate transfer.'
             : score === 'B'
-            ? 'Bon prospect, proposez un rappel sous 24h.'
+            ? 'Good prospect, offer a callback within 24 hours.'
             : 'Prospect to follow up, offer a callback.'
         }`,
       })
@@ -154,12 +154,12 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
 
       return NextResponse.json({
         result: covered
-          ? 'Le code postal est dans notre zone de service. Continuez la qualification.'
-          : "Malheureusement, nous ne couvrons pas encore cette zone. Informez poliment le prospect et terminez l'appel.",
+          ? 'The ZIP code is within our service area. Continue the qualification.'
+          : "Unfortunately, we don't cover this area yet. Politely inform the prospect and end the call.",
       })
     }
 
-    case 'transfer_to_artisan': {
+    case 'transfer_to_attorney': {
       // For now, log the transfer request — live transfer requires Vapi phone config
       logger.info('Transfer requested', {
         callId,

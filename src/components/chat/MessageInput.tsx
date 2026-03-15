@@ -43,7 +43,7 @@ export function MessageInput({
   onEdit,
   quickReplies = [],
   disabled = false,
-  placeholder = 'Écrivez votre message...',
+  placeholder = 'Type a message...',
 }: MessageInputProps) {
   const [message, setMessage] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -114,7 +114,7 @@ export function MessageInput({
     try {
       const result = await onFileUpload(file)
       if (result) {
-        onSend('Message vocal', 'voice', result.url)
+        onSend('Voice message', 'voice', result.url)
       }
     } finally {
       setIsUploading(false)
@@ -142,7 +142,7 @@ export function MessageInput({
           <MessageSquare className="w-4 h-4 text-blue-600" />
           <div className="flex-1 min-w-0">
             <div className="text-xs text-blue-600 font-medium">
-              {editingMessage ? 'Modification du message' : 'Réponse à'}
+              {editingMessage ? 'Editing message' : 'Replying to'}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
               {editingMessage?.content || replyTo?.content}
@@ -210,7 +210,7 @@ export function MessageInput({
                 ? 'text-gray-300 dark:text-gray-600'
                 : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             )}
-            title="Joindre un fichier"
+            title="Attach file"
           >
             <Paperclip className="w-5 h-5" />
           </button>
@@ -226,7 +226,7 @@ export function MessageInput({
                 ? 'text-gray-300 dark:text-gray-600'
                 : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             )}
-            title="Envoyer une image"
+            title="Send image"
           >
             <Image className="w-5 h-5" />
           </button>
@@ -243,7 +243,7 @@ export function MessageInput({
                   ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
                   : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               )}
-              title="Réponses rapides"
+              title="Quick replies"
             >
               <Zap className="w-5 h-5" />
             </button>
@@ -261,7 +261,7 @@ export function MessageInput({
                   ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
                   : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               )}
-              title="Ajouter un emoji"
+              title="Add emoji"
             >
               <Smile className="w-5 h-5" />
             </button>
@@ -284,7 +284,7 @@ export function MessageInput({
             value={message}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            placeholder={isUploading ? 'Envoi en cours...' : placeholder}
+            placeholder={isUploading ? 'Uploading...' : placeholder}
             disabled={disabled || isUploading || isRecording}
             className="flex-1"
           />
@@ -309,7 +309,7 @@ export function MessageInput({
                   ? 'text-gray-300 dark:text-gray-600'
                   : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30'
               )}
-              title="Enregistrer un message vocal"
+              title="Record voice message"
             >
               <Mic className="w-5 h-5" />
             </button>

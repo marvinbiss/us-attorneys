@@ -127,7 +127,7 @@ export async function DELETE(request: NextRequest) {
 
     if (error) {
       return NextResponse.json(
-        { error: 'Erreur suppression', details: error.message },
+        { error: 'Deletion error', details: error.message },
         { status: 500 },
       )
     }

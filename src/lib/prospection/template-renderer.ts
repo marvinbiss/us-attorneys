@@ -128,7 +128,7 @@ export function renderTemplate(
     rendered = rendered.replaceAll(`{{${key}}}`, escapeTemplateValue(getter(campaign)))
   }
 
-  // Variables custom (champs personnalisés)
+  // Custom variables (personalized fields)
   if (customVars) {
     for (const [key, value] of Object.entries(customVars)) {
       rendered = rendered.replaceAll(`{{${key}}}`, escapeTemplateValue(value))
@@ -142,12 +142,12 @@ export function renderTemplate(
     }
   }
 
-  // Lien de désinscription with HMAC-signed token to prevent tampering
+  // Unsubscribe link with HMAC-signed token to prevent tampering
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
   const unsubToken = generateUnsubscribeToken(contact.id, campaign.channel)
   rendered = rendered.replaceAll('{{unsubscribe_link}}', `${siteUrl}/api/prospection/unsubscribe?token=${unsubToken}`)
 
-  // Date du jour
+  // Current date
   rendered = rendered.replaceAll('{{date}}', new Date().toLocaleDateString('en-US'))
 
   return rendered
@@ -195,18 +195,18 @@ export function renderPreview(template: string): string {
   const sampleContact: ProspectionContact = {
     id: 'preview-id',
     contact_type: 'artisan',
-    company_name: 'Plomberie Martin SARL',
-    contact_name: 'Jean Martin',
-    email: 'jean.martin@example.com',
-    email_canonical: 'jean.martin@example.com',
-    phone: '06 12 34 56 78',
-    phone_e164: '+33612345678',
-    address: '12 rue de la Paix',
-    postal_code: '75001',
-    city: 'Paris',
-    department: '75',
-    region: 'Île-de-France',
-    location_code: '75101',
+    company_name: 'Smith & Associates Law Firm',
+    contact_name: 'John Smith',
+    email: 'john.smith@example.com',
+    email_canonical: 'john.smith@example.com',
+    phone: '(212) 555-1234',
+    phone_e164: '+12125551234',
+    address: '123 Main Street',
+    postal_code: '10001',
+    city: 'New York',
+    department: 'NY',
+    region: 'New York',
+    location_code: '10001',
     population: null,
     attorney_id: null,
     source: 'manual',
@@ -223,7 +223,7 @@ export function renderPreview(template: string): string {
 
   const sampleCampaign: ProspectionCampaign = {
     id: 'preview-campaign',
-    name: 'Campagne Test',
+    name: 'Test Campaign',
     description: null,
     channel: 'email',
     audience_type: 'artisan',

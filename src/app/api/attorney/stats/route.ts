@@ -103,7 +103,7 @@ export async function GET(request: Request) {
       curReviewsResult,
       // Reviews: previous period count
       prevReviewsResult,
-      // Lead events: quoted (= devis sent)
+      // Lead events: quoted (= quote sent)
       quotedEventsResult,
       // Lead events: quoted in current period
       curQuotedResult,
@@ -176,7 +176,7 @@ export async function GET(request: Request) {
         .gte('created_at', previousStart)
         .lt('created_at', currentStart),
 
-      // Total quoted events (= devis sent)
+      // Total quoted events (= quote sent)
       adminClient
         .from('lead_events')
         .select('id', { count: 'exact', head: true })
@@ -205,7 +205,7 @@ export async function GET(request: Request) {
         .from('analytics_events')
         .select('id', { count: 'exact', head: true })
         .eq('attorney_id', attorneyId)
-        .eq('event_type', 'artisan_profile_view')
+        .eq('event_type', 'attorney_profile_view')
         .gte('created_at', currentStart),
 
       // Profile views previous
@@ -213,7 +213,7 @@ export async function GET(request: Request) {
         .from('analytics_events')
         .select('id', { count: 'exact', head: true })
         .eq('attorney_id', attorneyId)
-        .eq('event_type', 'artisan_profile_view')
+        .eq('event_type', 'attorney_profile_view')
         .gte('created_at', previousStart)
         .lt('created_at', currentStart),
 
@@ -375,11 +375,11 @@ export async function GET(request: Request) {
     }
 
     const stats = {
-      // Statistiques page fields (flat numbers)
+      // Statistics page fields (flat numbers)
       totalLeads,
       totalLeadsChange: pctChange(curLeads, prevLeads),
-      devisSent: totalQuoted,
-      devisSentChange: pctChange(curQuoted, prevQuoted),
+      quotesSent: totalQuoted,
+      quotesSentChange: pctChange(curQuoted, prevQuoted),
       averageRating,
       totalReviews,
       totalReviewsChange: pctChange(curReviews, prevReviews),

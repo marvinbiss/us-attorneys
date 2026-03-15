@@ -38,7 +38,7 @@ export function StructuredFieldsEditor({ value, pageType, onChange }: Structured
     default:
       return (
         <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
-          Aucun champ structuré disponible pour le type de page &laquo;{pageType}&raquo;.
+          No structured fields available for page type &laquo;{pageType}&raquo;.
         </div>
       )
   }
@@ -68,7 +68,7 @@ interface ServiceFieldsProps {
 
 function ServiceFields({ data, update }: ServiceFieldsProps) {
   const certInputRef = useRef<HTMLInputElement>(null)
-  const priceRange = data.priceRange || { min: 0, max: 0, unit: 'EUR' }
+  const priceRange = data.priceRange || { min: 0, max: 0, unit: 'USD' }
   const commonTasks = data.commonTasks || []
   const tips = data.tips || []
   const faq = data.faq || []
@@ -81,18 +81,18 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
 
   const priceRangeError =
     priceRange.min < 0
-      ? 'Le minimum doit être >= 0'
+      ? 'Minimum must be >= 0'
       : priceRange.max < 0
-        ? 'Le maximum doit être >= 0'
+        ? 'Maximum must be >= 0'
         : priceRange.min > priceRange.max && priceRange.max > 0
-          ? 'Le minimum ne peut pas dépasser le maximum'
+          ? 'Minimum cannot exceed maximum'
           : null
 
   return (
     <div className="space-y-8">
       {/* Price range */}
       <div>
-        <SectionHeader title="Fourchette de prix" description="Prix minimum et maximum du service" />
+        <SectionHeader title="Price range" description="Minimum and maximum price for the service" />
         <div className="grid grid-cols-3 gap-3">
           <div>
             <label className="block text-xs text-gray-500 mb-1">Min</label>
@@ -121,7 +121,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Unité</label>
+            <label className="block text-xs text-gray-500 mb-1">Unit</label>
             <input
               type="text"
               value={priceRange.unit}
@@ -140,18 +140,18 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
 
       {/* Common tasks */}
       <div>
-        <SectionHeader title="Tâches courantes" description="Prestations avec fourchette de prix" />
+        <SectionHeader title="Common tasks" description="Services with price range" />
         <div className="space-y-2">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {commonTasks.map((task, index) => {
             const nameEmpty = taskTouched[index]?.name && !task.name.trim()
             const taskPriceError =
               task.priceMin < 0
-                ? 'Le minimum doit être >= 0'
+                ? 'Minimum must be >= 0'
                 : task.priceMax < 0
-                  ? 'Le maximum doit être >= 0'
+                  ? 'Maximum must be >= 0'
                   : task.priceMin > task.priceMax && task.priceMax > 0
-                    ? 'Le minimum ne peut pas dépasser le maximum'
+                    ? 'Minimum cannot exceed maximum'
                     : null
 
             return (
@@ -175,10 +175,10 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm ${
                         nameEmpty ? 'border-red-400' : 'border-gray-300'
                       }`}
-                      placeholder="Nom de la tâche"
+                      placeholder="Task name"
                     />
                     {nameEmpty && (
-                      <p className="mt-0.5 text-xs text-red-600">Nom requis</p>
+                      <p className="mt-0.5 text-xs text-red-600">Name required</p>
                     )}
                   </div>
                   <input
@@ -218,8 +218,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       })
                     }}
                     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Supprimer"
-                    aria-label="Supprimer cet élément"
+                    title="Delete"
+                    aria-label="Delete this item"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -244,13 +244,13 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           }`}
         >
           <Plus className="w-4 h-4" />
-          Ajouter une tâche ({commonTasks.length}/{STRUCTURED_LIMITS.commonTasks})
+          Add a task ({commonTasks.length}/{STRUCTURED_LIMITS.commonTasks})
         </button>
       </div>
 
       {/* Tips */}
       <div>
-        <SectionHeader title="Conseils" description="Conseils utiles pour les clients" />
+        <SectionHeader title="Tips" description="Useful tips for clients" />
         <div className="space-y-2">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {tips.map((tip, index) => (
@@ -264,7 +264,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   update('tips', updated)
                 }}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="Conseil..."
+                placeholder="Tip..."
               />
               <button
                 type="button"
@@ -273,7 +273,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   update('tips', updated)
                 }}
                 className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                title="Supprimer"
+                title="Delete"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -291,13 +291,13 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           }`}
         >
           <Plus className="w-4 h-4" />
-          Ajouter un conseil ({tips.length}/{STRUCTURED_LIMITS.tips})
+          Add a tip ({tips.length}/{STRUCTURED_LIMITS.tips})
         </button>
       </div>
 
       {/* FAQ */}
       <div>
-        <SectionHeader title="FAQ" description="Questions fréquemment posées" />
+        <SectionHeader title="FAQ" description="Frequently asked questions" />
         <div className="space-y-3">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {faq.map((item, index) => {
@@ -328,7 +328,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       placeholder="Question"
                     />
                     {questionEmpty && (
-                      <p className="mt-0.5 text-xs text-red-600">Question requise</p>
+                      <p className="mt-0.5 text-xs text-red-600">Question required</p>
                     )}
                   </div>
                   <button
@@ -343,8 +343,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       })
                     }}
                     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Supprimer"
-                    aria-label="Supprimer cet élément"
+                    title="Delete"
+                    aria-label="Delete this item"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -366,10 +366,10 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none bg-white ${
                     answerEmpty ? 'border-red-400' : 'border-gray-300'
                   }`}
-                  placeholder="Réponse"
+                  placeholder="Answer"
                 />
                 {answerEmpty && (
-                  <p className="mt-0.5 text-xs text-red-600">Réponse requise</p>
+                  <p className="mt-0.5 text-xs text-red-600">Answer required</p>
                 )}
               </div>
             )
@@ -386,13 +386,13 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           }`}
         >
           <Plus className="w-4 h-4" />
-          Ajouter une question ({faq.length}/{STRUCTURED_LIMITS.faqItems})
+          Add a question ({faq.length}/{STRUCTURED_LIMITS.faqItems})
         </button>
       </div>
 
       {/* Certifications */}
       <div>
-        <SectionHeader title="Certifications" description="Labels et certifications du prestataire" />
+        <SectionHeader title="Certifications" description="Provider labels and certifications" />
         <div className="flex flex-wrap gap-2 mb-2">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {certifications.map((cert, index) => (
@@ -408,7 +408,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   update('certifications', updated)
                 }}
                 className="text-blue-400 hover:text-blue-700 ml-0.5"
-                aria-label={`Retirer la certification ${cert}`}
+                aria-label={`Remove certification ${cert}`}
               >
                 &times;
               </button>
@@ -419,7 +419,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           <input
             type="text"
             ref={certInputRef}
-            placeholder="Nouvelle certification..."
+            placeholder="New certification..."
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -446,7 +446,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
               }
             }}
             disabled={certifications.length >= STRUCTURED_LIMITS.certifications}
-            aria-label="Ajouter la certification"
+            aria-label="Add certification"
             className={`px-3 py-2 text-white text-sm rounded-lg transition-colors ${
               certifications.length >= STRUCTURED_LIMITS.certifications
                 ? 'bg-gray-400 cursor-not-allowed'
@@ -458,7 +458,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
         </div>
         {certifications.length >= STRUCTURED_LIMITS.certifications ? (
           <p className="mt-1 text-xs text-gray-500">
-            Limite atteinte ({certifications.length}/{STRUCTURED_LIMITS.certifications})
+            Limit reached ({certifications.length}/{STRUCTURED_LIMITS.certifications})
           </p>
         ) : (
           <p className="mt-1 text-xs text-gray-400">
@@ -469,25 +469,25 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
 
       {/* Average response time */}
       <div>
-        <SectionHeader title="Temps de réponse moyen" />
+        <SectionHeader title="Average response time" />
         <input
           type="text"
           value={data.averageResponseTime || ''}
           onChange={(e) => update('averageResponseTime', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-          placeholder="Ex: 30 minutes"
+          placeholder="E.g.: 30 minutes"
         />
       </div>
 
       {/* Emergency info */}
       <div>
-        <SectionHeader title="Informations d'urgence" />
+        <SectionHeader title="Emergency information" />
         <textarea
           value={data.emergencyInfo || ''}
           onChange={(e) => update('emergencyInfo', e.target.value)}
           rows={3}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-y"
-          placeholder="Ex: Service disponible 24h/24, 7j/7"
+          placeholder="E.g.: Available 24/7"
         />
       </div>
     </div>
@@ -512,19 +512,19 @@ function FaqFields({ data, update }: FaqFieldsProps) {
     <div className="space-y-6">
       {/* Category name */}
       <div>
-        <SectionHeader title="Nom de la catégorie" />
+        <SectionHeader title="Category name" />
         <input
           type="text"
           value={categoryName}
           onChange={(e) => update('categoryName', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-          placeholder="Ex: Questions générales, Tarification..."
+          placeholder="E.g.: General questions, Pricing..."
         />
       </div>
 
       {/* Q&A items */}
       <div>
-        <SectionHeader title="Questions / Réponses" />
+        <SectionHeader title="Questions / Answers" />
         <div className="space-y-3">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {items.map((item, index) => {
@@ -555,7 +555,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                       placeholder="Question"
                     />
                     {questionEmpty && (
-                      <p className="mt-0.5 text-xs text-red-600">Question requise</p>
+                      <p className="mt-0.5 text-xs text-red-600">Question required</p>
                     )}
                   </div>
                   <button
@@ -570,8 +570,8 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                       })
                     }}
                     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Supprimer"
-                    aria-label="Supprimer cet élément"
+                    title="Delete"
+                    aria-label="Delete this item"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -593,10 +593,10 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-y bg-white ${
                     answerEmpty ? 'border-red-400' : 'border-gray-300'
                   }`}
-                  placeholder="Réponse (texte enrichi supporté)"
+                  placeholder="Answer (rich text supported)"
                 />
                 {answerEmpty && (
-                  <p className="mt-0.5 text-xs text-red-600">Réponse requise</p>
+                  <p className="mt-0.5 text-xs text-red-600">Answer required</p>
                 )}
               </div>
             )
@@ -613,7 +613,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
           }`}
         >
           <Plus className="w-4 h-4" />
-          Ajouter une question ({items.length}/{STRUCTURED_LIMITS.faqItems})
+          Add a question ({items.length}/{STRUCTURED_LIMITS.faqItems})
         </button>
       </div>
     </div>
@@ -636,44 +636,44 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
     <div className="space-y-6">
       <SectionHeader
         title="Section Hero"
-        description="Contenu principal affiché en haut de la page d'accueil"
+        description="Main content displayed at the top of the homepage"
       />
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">Titre Hero</label>
+        <label className="block text-xs text-gray-500 mb-1">Hero Title</label>
         <input
           type="text"
           value={data.heroTitle || ''}
           onChange={(e) => update('heroTitle', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-          placeholder="Titre principal de la page d'accueil"
+          placeholder="Main homepage title"
         />
       </div>
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">Sous-titre Hero</label>
+        <label className="block text-xs text-gray-500 mb-1">Hero Subtitle</label>
         <textarea
           value={data.heroSubtitle || ''}
           onChange={(e) => update('heroSubtitle', e.target.value)}
           rows={2}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
-          placeholder="Sous-titre ou accroche"
+          placeholder="Subtitle or tagline"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Texte du bouton CTA</label>
+          <label className="block text-xs text-gray-500 mb-1">CTA button text</label>
           <input
             type="text"
             value={data.heroCtaText || ''}
             onChange={(e) => update('heroCtaText', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            placeholder="Ex: Demander un devis"
+            placeholder="E.g.: Request a consultation"
           />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">URL du bouton CTA</label>
+          <label className="block text-xs text-gray-500 mb-1">CTA button URL</label>
           <input
             type="text"
             value={data.heroCtaUrl || ''}
@@ -686,7 +686,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
 
       {/* Sections */}
       <div>
-        <SectionHeader title="Sections" description="Sections de la page d'accueil" />
+        <SectionHeader title="Sections" description="Homepage sections" />
         <div className="space-y-3">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {sections.map((section, index) => (
@@ -694,7 +694,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="flex-1 space-y-2">
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Identifiant</label>
+                    <label className="block text-xs text-gray-500 mb-1">Identifier</label>
                     <input
                       type="text"
                       value={section.id}
@@ -704,11 +704,11 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         update('sections', updated)
                       }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
-                      placeholder="Ex: services, temoignages"
+                      placeholder="E.g.: services, testimonials"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Titre</label>
+                    <label className="block text-xs text-gray-500 mb-1">Title</label>
                     <input
                       type="text"
                       value={section.title}
@@ -718,11 +718,11 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         update('sections', updated)
                       }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
-                      placeholder="Titre de la section"
+                      placeholder="Section title"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Sous-titre (optionnel)</label>
+                    <label className="block text-xs text-gray-500 mb-1">Subtitle (optional)</label>
                     <input
                       type="text"
                       value={section.subtitle || ''}
@@ -732,7 +732,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         update('sections', updated)
                       }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
-                      placeholder="Sous-titre de la section"
+                      placeholder="Section subtitle"
                     />
                   </div>
                 </div>
@@ -743,7 +743,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                     update('sections', updated)
                   }}
                   className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Supprimer"
+                  title="Delete"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -764,7 +764,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
           }`}
         >
           <Plus className="w-4 h-4" />
-          Ajouter une section ({sections.length}/{STRUCTURED_LIMITS.homepageSections})
+          Add a section ({sections.length}/{STRUCTURED_LIMITS.homepageSections})
         </button>
       </div>
     </div>

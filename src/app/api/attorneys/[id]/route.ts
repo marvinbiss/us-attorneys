@@ -201,7 +201,7 @@ export async function GET(
         .order('created_at', { ascending: false })
         .limit(100)
 
-      // Calculate la note moyenne
+      // Calculate the average rating
       let averageRating = 0
       let reviewCount = 0
       if (providerReviews && providerReviews.length > 0) {
@@ -209,12 +209,12 @@ export async function GET(
         averageRating = providerReviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
       }
 
-      // Extraire les services
+      // Extract services
       const services = provider.provider_services?.map((ps: { service?: { name: string } }) =>
         ps.service?.name
       ).filter(Boolean) || []
 
-      // Extraire les zones d'intervention
+      // Extract coverage areas
       const interventionZones = provider.provider_locations?.map((pl: {
         location?: { name: string; postal_code?: string }
       }) => {
@@ -306,7 +306,7 @@ export async function GET(
             ? `${ps.price_min}-${ps.price_max}$`
             : ps.price_min
               ? `Starting from ${ps.price_min}$`
-              : 'Sur devis',
+              : 'By consultation',
           duration: undefined
         })) || [],
         accepts_new_clients: true,
@@ -401,7 +401,7 @@ export async function GET(
         // attorney_faq table does not exist in migrations — return empty
         const faq: Array<{ question: string; answer: string }> = []
 
-        // Calculate la note moyenne
+        // Calculate the average rating
         let averageRating = 0
         let reviewCount = 0
         if (profileReviews && profileReviews.length > 0) {
@@ -448,7 +448,7 @@ export async function GET(
           longitude: null,
         }
 
-        // Transformer les avis
+        // Transform the reviews
         reviews = (profileReviews || []).map(r => ({
           id: r.id,
           author: r.client_name || 'Client',

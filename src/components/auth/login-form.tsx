@@ -28,7 +28,7 @@ export function LoginForm() {
 
       if (authError) {
         if (authError.message.includes('Invalid login')) {
-          setError('Email ou mot de passe incorrect')
+          setError('Incorrect email or password')
         } else {
           setError(authError.message)
         }
@@ -38,7 +38,7 @@ export function LoginForm() {
       router.push('/attorney-dashboard')
       router.refresh()
     } catch (_err) {
-      setError('Une erreur est survenue')
+      setError('An error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -60,14 +60,14 @@ export function LoginForm() {
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="vous@exemple.fr"
+          placeholder="you@example.com"
           required
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Mot de passe
+          Password
         </label>
         <Input
           type="password"
@@ -81,15 +81,15 @@ export function LoginForm() {
       <div className="flex items-center justify-between">
         <label className="flex items-center gap-2">
           <input type="checkbox" className="rounded border-gray-300" />
-          <span className="text-sm text-gray-600">Se souvenir de moi</span>
+          <span className="text-sm text-gray-600">Remember me</span>
         </label>
         <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
-          Mot de passe oublié ?
+          Forgot password?
         </a>
       </div>
 
       <Button type="submit" disabled={isLoading} fullWidth>
-        {isLoading ? 'Connexion...' : 'Se connecter'}
+        {isLoading ? 'Signing in...' : 'Sign in'}
       </Button>
     </form>
   )

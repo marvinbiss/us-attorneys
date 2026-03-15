@@ -11,7 +11,7 @@ interface ContactSectionProps {
 
 const FIELDS = ['phone', 'phone_secondary', 'email', 'website'] as const
 
-const PHONE_PATTERN = '^(?:\\+33|0)[1-9](?:[\\s.\\-]*\\d{2}){4}$'
+const PHONE_PATTERN = '^(?:\\+1)?[2-9]\\d{2}[2-9]\\d{6}$'
 
 export function ContactSection({ provider, onSaved }: ContactSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
@@ -35,7 +35,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="contact-phone" className="block text-sm font-medium text-gray-700 mb-2">
-              Téléphone principal
+              Primary Phone
             </label>
             <input
               id="contact-phone"
@@ -44,14 +44,14 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               onChange={(e) => setField('phone', e.target.value)}
               pattern={PHONE_PATTERN}
               maxLength={20}
-              placeholder="06 12 34 56 78"
+              placeholder="(212) 555-1234"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <p className="text-xs text-gray-500 mt-1">Format : 06 12 34 56 78 ou +33 6 12 34 56 78</p>
+            <p className="text-xs text-gray-500 mt-1">Format: (212) 555-1234 or +12125551234</p>
           </div>
           <div>
             <label htmlFor="contact-phone-secondary" className="block text-sm font-medium text-gray-700 mb-2">
-              Téléphone secondaire
+              Secondary Phone
             </label>
             <input
               id="contact-phone-secondary"
@@ -60,10 +60,10 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               onChange={(e) => setField('phone_secondary', e.target.value || null)}
               pattern={PHONE_PATTERN}
               maxLength={20}
-              placeholder="06 12 34 56 78"
+              placeholder="(212) 555-1234"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <p className="text-xs text-gray-500 mt-1">Format : 06 12 34 56 78 ou +33 6 12 34 56 78</p>
+            <p className="text-xs text-gray-500 mt-1">Format: (212) 555-1234 or +12125551234</p>
           </div>
         </div>
 
@@ -78,13 +78,13 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               value={(formData.email as string) || ''}
               onChange={(e) => setField('email', e.target.value || null)}
               maxLength={200}
-              placeholder="contact@entreprise.fr"
+              placeholder="contact@lawfirm.com"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
             <label htmlFor="contact-website" className="block text-sm font-medium text-gray-700 mb-2">
-              Site web
+              Website
             </label>
             <input
               id="contact-website"
@@ -92,7 +92,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               value={(formData.website as string) || ''}
               onChange={(e) => setField('website', e.target.value || null)}
               maxLength={500}
-              placeholder="https://www.entreprise.fr"
+              placeholder="https://www.lawfirm.com"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>

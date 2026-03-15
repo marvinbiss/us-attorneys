@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Count devis requests in the last 30 days
+    // Count quote requests in the last 30 days
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
@@ -28,7 +28,7 @@ export async function GET() {
     const attorneyCount = activeProviders || 0
 
     return NextResponse.json({
-      devisThisMonth: devisCount,
+      requestsThisMonth: devisCount,
       activeProviders: attorneyCount,
       updatedAt: new Date().toISOString(),
     }, {
@@ -40,7 +40,7 @@ export async function GET() {
     logger.error('Social proof API error', error)
     // Fallback values so the banner always renders
     return NextResponse.json({
-      devisThisMonth: 150,
+      requestsThisMonth: 150,
       activeProviders: 500,
       updatedAt: new Date().toISOString(),
     })

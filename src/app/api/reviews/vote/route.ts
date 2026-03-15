@@ -129,9 +129,9 @@ export async function POST(request: Request) {
       throw err
     }
   } catch (error) {
-    logger.error('Erreur vote avis:', error)
+    logger.error('Review vote error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur lors du vote' } },
+      { success: false, error: { message: 'Server error during vote' } },
       { status: 500 }
     )
   }

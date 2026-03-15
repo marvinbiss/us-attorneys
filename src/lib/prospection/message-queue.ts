@@ -19,7 +19,7 @@ import type {
 } from '@/types/prospection'
 
 /**
- * Mask a phone number for safe logging (e.g. +33****78)
+ * Mask a phone number for safe logging (e.g. +1****34)
  */
 export function maskPhone(phone: string): string {
   if (!phone || phone.length < 6) return '***'
@@ -93,7 +93,7 @@ export async function enqueueCampaignMessages(
 ): Promise<{ enqueued: number; skipped: number }> {
   const supabase = createAdminClient()
 
-  // Charger la campagne avec template et liste
+  // Load campaign with template and list
   const { data: campaign, error: campError } = await supabase
     .from('prospection_campaigns')
     .select('id, name, channel, list_id, template_id, status, ab_test_enabled, ab_split_percent, template:prospection_templates(id, name, channel, subject, body, variables), list:prospection_lists(id, name)')
@@ -122,7 +122,7 @@ export async function enqueueCampaignMessages(
     throw new Error('Messages already enqueued for this campaign')
   }
 
-  // Retrieve les contacts de la liste
+  // Retrieve contacts from the list
   const { data: members, error: memberError } = await supabase
     .from('prospection_list_members')
     .select('contact_id')
@@ -132,7 +132,7 @@ export async function enqueueCampaignMessages(
     throw new Error(`Failed to load list members: ${memberError.message}`)
   }
 
-  // Charger les contacts
+  // Load contacts
   const contactIds = members.map(m => m.contact_id)
   const { data: contacts, error: contactError } = await supabase
     .from('prospection_contacts')
@@ -145,13 +145,13 @@ export async function enqueueCampaignMessages(
     throw new Error(`Failed to load contacts: ${contactError.message}`)
   }
 
-  // Filter les contacts qui ont le canal nécessaire
+  // Filter contacts that have the required channel
   const validContacts = ((contacts || []) as unknown as ProspectionContact[]).filter(c => {
     if (campaign.channel === 'email') return !!c.email
     return !!c.phone_e164
   })
 
-  // Déterminer le variant A/B
+  // Determine A/B variant
   const template = campaign.template as unknown as ProspectionTemplate
   const messages = validContacts.map((contact: ProspectionContact, index: number) => {
     const isVariantB = campaign.ab_test_enabled && index % 100 < campaign.ab_split_percent
@@ -172,7 +172,7 @@ export async function enqueueCampaignMessages(
     }
   })
 
-  // Insérer par batch de 500
+  // Insert in batches of 500
   let enqueued = 0
   const batchSize = 500
   for (let i = 0; i < messages.length; i += batchSize) {
@@ -188,7 +188,7 @@ export async function enqueueCampaignMessages(
     }
   }
 
-  // Update les stats de la campagne
+  // Update campaign stats
   await supabase
     .from('prospection_campaigns')
     .update({
@@ -215,7 +215,7 @@ export async function processBatch(
   // Reconcile any orphaned messages before processing new batch
   await reconcileOrphanedMessages(supabase)
 
-  // Retrieve la campagne pour le canal
+  // Retrieve campaign for channel
   const { data: campaign } = await supabase
     .from('prospection_campaigns')
     .select('channel, status')
@@ -265,7 +265,7 @@ export async function processBatch(
   const rateLimit = CHANNEL_RATE_LIMITS[channel]
   const delayMs = Math.ceil(1000 / rateLimit.perSecond)
 
-  // Send par canal
+  // Send by channel
   if (channel === 'email') {
     // Batch email - separate messages with valid emails from those without
     const emailMessages = messages.filter(m => m.contact?.email)
@@ -406,7 +406,7 @@ export async function processBatch(
     }
   }
 
-  // Update les stats de la campagne
+  // Update campaign stats
   try {
     await updateCampaignStats(supabase, campaignId)
   } catch (err) {
@@ -454,7 +454,7 @@ export async function resumeCampaign(campaignId: string): Promise<void> {
 }
 
 /**
- * Réessayer les messages échoués
+ * Retry failed messages
  * Keeps existing retry_count so we know total attempts; only clears error and re-queues
  */
 export async function retryFailed(campaignId: string): Promise<number> {

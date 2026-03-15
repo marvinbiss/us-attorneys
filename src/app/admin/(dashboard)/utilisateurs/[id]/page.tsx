@@ -103,7 +103,7 @@ export default function AdminUserDetailPage() {
   }
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'long',
       year: 'numeric',
@@ -134,13 +134,13 @@ export default function AdminUserDetailPage() {
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à la liste
+            Back to list
           </button>
 
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                {user.full_name || 'Sans nom'}
+                {user.full_name || 'No name'}
               </h1>
               <p className="text-gray-500 mt-1">{user.email}</p>
               <div className="flex items-center gap-3 mt-2">
@@ -161,7 +161,7 @@ export default function AdminUserDetailPage() {
                     }}
                     className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
                   >
-                    Annuler
+                    Cancel
                   </button>
                   <button
                     onClick={handleSave}
@@ -169,7 +169,7 @@ export default function AdminUserDetailPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
-                    {saving ? 'Enregistrement...' : 'Enregistrer'}
+                    {saving ? 'Saving...' : 'Save'}
                   </button>
                 </>
               ) : (
@@ -177,7 +177,7 @@ export default function AdminUserDetailPage() {
                   onClick={() => setEditMode(true)}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
-                  Modifier
+                  Edit
                 </button>
               )}
             </div>
@@ -185,14 +185,14 @@ export default function AdminUserDetailPage() {
         </div>
 
         <div className="grid gap-6">
-          {/* Informations générales */}
+          {/* General information */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations générales</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">General information</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom complet
+                  Full name
                 </label>
                 {editMode ? (
                   <input
@@ -221,7 +221,7 @@ export default function AdminUserDetailPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Rôle
+                  Role
                 </label>
                 <p className="flex items-center gap-2 text-gray-900">
                   <Phone className="w-4 h-4 text-gray-400" />
@@ -231,21 +231,21 @@ export default function AdminUserDetailPage() {
             </div>
           </div>
 
-          {/* Statistiques */}
+          {/* Statistics */}
           {user.stats && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiques</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistics</h2>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
                   <Calendar className="w-6 h-6 mx-auto mb-2 text-blue-600" />
                   <p className="text-2xl font-bold text-gray-900">{user.stats.bookings}</p>
-                  <p className="text-sm text-gray-500">Réservations</p>
+                  <p className="text-sm text-gray-500">Bookings</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
                   <Star className="w-6 h-6 mx-auto mb-2 text-amber-500" />
                   <p className="text-2xl font-bold text-gray-900">{user.stats.reviews}</p>
-                  <p className="text-sm text-gray-500">Avis donnés</p>
+                  <p className="text-sm text-gray-500">Reviews given</p>
                 </div>
               </div>
             </div>
@@ -253,25 +253,25 @@ export default function AdminUserDetailPage() {
 
           {/* Dates */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Historique</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">History</h2>
 
             <div className="space-y-2 text-sm">
               <p className="flex items-center gap-2 text-gray-600">
                 <Calendar className="w-4 h-4" />
-                Inscrit le {formatDate(user.created_at)}
+                Registered on {formatDate(user.created_at)}
               </p>
               {user.updated_at && (
                 <p className="flex items-center gap-2 text-gray-600">
                   <FileText className="w-4 h-4" />
-                  Dernière modification le {formatDate(user.updated_at)}
+                  Last modified on {formatDate(user.updated_at)}
                 </p>
               )}
             </div>
           </div>
 
-          {/* Actions dangereuses */}
+          {/* Danger zone */}
           <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
-            <h2 className="text-lg font-semibold text-red-900 mb-4">Zone de danger</h2>
+            <h2 className="text-lg font-semibold text-red-900 mb-4">Danger zone</h2>
 
             <div className="flex flex-wrap gap-3">
               <button
@@ -279,7 +279,7 @@ export default function AdminUserDetailPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
               >
                 <Trash2 className="w-4 h-4" />
-                Supprimer le compte
+                Delete account
               </button>
             </div>
           </div>
@@ -291,11 +291,11 @@ export default function AdminUserDetailPage() {
         isOpen={deleteModal}
         onClose={() => setDeleteModal(false)}
         onConfirm={handleDelete}
-        title="Supprimer le compte"
-        message={`Êtes-vous sûr de vouloir supprimer le compte de ${user.full_name || user.email} ? Cette action est irréversible.`}
-        confirmText="Supprimer"
+        title="Delete account"
+        message={`Are you sure you want to delete the account of ${user.full_name || user.email}? This action is irreversible.`}
+        confirmText="Delete"
         variant="danger"
-        requireConfirmation="SUPPRIMER"
+        requireConfirmation="DELETE"
       />
     </div>
   )

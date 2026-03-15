@@ -139,7 +139,7 @@ export async function DELETE(
 
     const supabase = createAdminClient()
 
-    // Ne supprimer que les campagnes en draft
+    // Only delete campaigns in draft status
     const { data: campaign } = await supabase
       .from('prospection_campaigns')
       .select('status')

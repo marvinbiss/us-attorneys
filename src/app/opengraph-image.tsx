@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — Annuaire d\'artisans référencés en France'
+export const alt = 'US Attorneys — Find Licensed Attorneys Near You'
 export const size = {
   width: 1200,
   height: 630,
@@ -106,7 +106,7 @@ export default async function Image() {
               display: 'flex',
             }}
           >
-            Artisans référencés en France — Données SIREN
+            Licensed Attorneys Nationwide — Bar Verified
           </div>
 
           {/* Subtitle */}
@@ -118,7 +118,7 @@ export default async function Image() {
               display: 'flex',
             }}
           >
-            Annuaire d&apos;artisans référencés — Données SIREN officielles
+            US Attorney Directory — Verified Legal Professionals
           </div>
 
           {/* Bottom accent bar */}

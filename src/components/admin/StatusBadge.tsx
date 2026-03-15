@@ -43,23 +43,23 @@ export function UserStatusBadge({ status }: { status: string }) {
     deleted: 'default',
   }
   const labels: Record<string, string> = {
-    active: 'Actif',
-    pending: 'En attente',
-    suspended: 'Suspendu',
-    banned: 'Banni',
-    deleted: 'Supprimé',
+    active: 'Active',
+    pending: 'Pending',
+    suspended: 'Suspended',
+    banned: 'Banned',
+    deleted: 'Deleted',
   }
   return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
 }
 
 export function ProviderStatusBadge({ isVerified, isActive }: { isVerified: boolean; isActive: boolean }) {
   if (!isActive) {
-    return <StatusBadge variant="error">Suspendu</StatusBadge>
+    return <StatusBadge variant="error">Suspended</StatusBadge>
   }
   if (!isVerified) {
-    return <StatusBadge variant="warning">En attente</StatusBadge>
+    return <StatusBadge variant="warning">Pending</StatusBadge>
   }
-  return <StatusBadge variant="success">Vérifié</StatusBadge>
+  return <StatusBadge variant="success">Verified</StatusBadge>
 }
 
 export function SubscriptionBadge({ plan }: { plan: string }) {
@@ -87,12 +87,12 @@ export function PaymentStatusBadge({ status }: { status: string }) {
     canceled: 'default',
   }
   const labels: Record<string, string> = {
-    succeeded: 'Payé',
-    paid: 'Payé',
-    pending: 'En attente',
-    failed: 'Échoué',
-    refunded: 'Remboursé',
-    canceled: 'Annulé',
+    succeeded: 'Paid',
+    paid: 'Paid',
+    pending: 'Pending',
+    failed: 'Failed',
+    refunded: 'Refunded',
+    canceled: 'Canceled',
   }
   return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
 }
@@ -108,13 +108,13 @@ export function ReviewStatusBadge({ status }: { status: string }) {
     flagged: 'error',
   }
   const labels: Record<string, string> = {
-    approved: 'Approuvé',
-    published: 'Publié',
-    pending: 'En attente',
-    pending_review: 'À modérer',
-    rejected: 'Rejeté',
-    hidden: 'Masqué',
-    flagged: 'Signalé',
+    approved: 'Approved',
+    published: 'Published',
+    pending: 'Pending',
+    pending_review: 'Under review',
+    rejected: 'Rejected',
+    hidden: 'Hidden',
+    flagged: 'Flagged',
   }
   return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
 }
@@ -128,11 +128,11 @@ export function BookingStatusBadge({ status }: { status: string }) {
     canceled: 'error',
   }
   const labels: Record<string, string> = {
-    confirmed: 'Confirmé',
-    completed: 'Terminé',
-    pending: 'En attente',
-    cancelled: 'Annulé',
-    canceled: 'Annulé',
+    confirmed: 'Confirmed',
+    completed: 'Completed',
+    pending: 'Pending',
+    cancelled: 'Cancelled',
+    canceled: 'Canceled',
   }
   return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
 }
@@ -145,10 +145,10 @@ export function ReportStatusBadge({ status }: { status: string }) {
     dismissed: 'default',
   }
   const labels: Record<string, string> = {
-    pending: 'En attente',
-    reviewed: 'En cours',
-    resolved: 'Résolu',
-    dismissed: 'Rejeté',
+    pending: 'Pending',
+    reviewed: 'In review',
+    resolved: 'Resolved',
+    dismissed: 'Dismissed',
   }
   return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
 }

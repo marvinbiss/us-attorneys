@@ -15,23 +15,23 @@ export default function ServiceDetailError({
           <span className="text-2xl text-orange-600">!</span>
         </div>
         <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
-          Service temporairement indisponible
+          Service temporarily unavailable
         </h1>
         <p className="text-gray-500 mb-8">
-          Nous rencontrons un problème technique. Veuillez réessayer dans quelques instants.
+          We're experiencing a technical issue. Please try again in a moment.
         </p>
         <div className="flex gap-4 justify-center">
           <button
             onClick={reset}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
-            Réessayer
+            Try again
           </button>
           <Link
             href="/services"
             className="inline-flex items-center px-6 py-3 rounded-lg font-semibold text-blue-600 border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
           >
-            Voir tous les services
+            View all services
           </Link>
         </div>
       </div>

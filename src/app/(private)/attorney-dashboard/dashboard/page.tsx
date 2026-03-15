@@ -351,7 +351,7 @@ export default function AttorneyDashboardPage() {
   const profile = data?.profile ?? null
   const provider = data?.provider ?? null
 
-  // 403 — artisan-only access
+  // 403 — attorney-only access
   if (error && (error as FetchError).status === 403) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -530,9 +530,9 @@ export default function AttorneyDashboardPage() {
               )}
             </section>
 
-            {/* Two-column layout: Demandes + Profile CTA */}
+            {/* Two-column layout: Cases + Profile CTA */}
             <div className={showProfileCTA ? 'grid grid-cols-1 lg:grid-cols-3 gap-8' : ''}>
-              {/* Dernières demandes */}
+              {/* Recent cases */}
               <section className={showProfileCTA ? 'lg:col-span-2' : ''} aria-label="Recent cases">
                 {isLoading && !data ? (
                   <DemandesSkeleton />

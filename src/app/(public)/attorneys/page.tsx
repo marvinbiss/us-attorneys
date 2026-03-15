@@ -14,22 +14,22 @@ import { resolveProviderCities } from '@/lib/insee-resolver'
 export const revalidate = 3600 // ISR - revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'Annuaire Artisans France — SIREN Vérifiés',
+  title: 'US Attorneys Directory — Verified Lawyers',
   description:
-    'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
+    'Find verified attorneys near you. Personal injury, criminal defense, family law and 75+ practice areas across all 50 states.',
   alternates: { canonical: `${SITE_URL}/attorneys` },
   openGraph: {
-    locale: 'fr_FR',
-    title: 'Annuaire Artisans France — SIREN Vérifiés',
-    description: 'Trouvez un artisan qualifié parmi les professionnels référencés en France. Données SIREN officielles.',
+    locale: 'en_US',
+    title: 'US Attorneys Directory — Verified Lawyers',
+    description: 'Find verified attorneys across all 50 states. Bar-verified profiles, reviews and free consultations.',
     url: `${SITE_URL}/attorneys`,
-    siteName: 'ServicesArtisans',
+    siteName: 'US Attorneys',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Annuaire Artisans France — SIREN Vérifiés',
-    description: 'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
+    title: 'US Attorneys Directory — Verified Lawyers',
+    description: 'Find verified attorneys near you. Personal injury, criminal defense, family law and 75+ practice areas across all 50 states.',
   },
 }
 
@@ -86,13 +86,13 @@ export default async function ArtisansPage() {
   const topServices = practiceAreas.slice(0, 15)
 
   const breadcrumbItems = [
-    { label: 'Accueil', href: '/' },
-    { label: 'Artisans' },
+    { label: 'Home', href: '/' },
+    { label: 'Attorneys' },
   ]
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Artisans', url: '/attorneys' },
+    { name: 'Home', url: '/' },
+    { name: 'Attorneys', url: '/attorneys' },
   ])
 
   return (
@@ -111,17 +111,12 @@ export default async function ArtisansPage() {
           <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-500/30 rounded-full px-4 py-1.5 mb-6">
             <Users className="w-4 h-4 text-amber-400" />
             <span className="text-sm font-medium text-amber-300">
-              {count > 0 ? `${count.toLocaleString('fr-FR')} artisans référencés` : 'Annuaire des artisans'}
+              {count > 0 ? `${count.toLocaleString('en-US')} listed attorneys` : 'Attorney Directory'}
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-            Trouvez un <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">artisan qualifié</span> près de chez vous
+            Find a <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">qualified attorney</span> near you
           </h1>
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8">
-            {count > 0
-              ? `Plus de ${Math.floor(count / 1000) * 1000} professionnels du bâtiment dans toute la France. Plombier, électricien, maçon, couvreur et 40+ métiers.`
-              : 'Des milliers de professionnels du bâtiment dans toute la France.'}
-          </p>
 
           {/* Quick search links */}
           <div className="flex flex-wrap justify-center gap-2 mt-8">
@@ -144,20 +139,20 @@ export default async function ArtisansPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 text-center">
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-slate-900">{count.toLocaleString('fr-FR')}</div>
-                <div className="text-sm text-slate-500 mt-1">Artisans référencés</div>
+                <div className="text-2xl md:text-3xl font-bold text-slate-900">{count.toLocaleString('en-US')}</div>
+                <div className="text-sm text-slate-500 mt-1">Listed Attorneys</div>
               </div>
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-slate-900">46</div>
-                <div className="text-sm text-slate-500 mt-1">Métiers couverts</div>
+                <div className="text-2xl md:text-3xl font-bold text-slate-900">75+</div>
+                <div className="text-sm text-slate-500 mt-1">Practice Areas</div>
               </div>
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-slate-900">101</div>
-                <div className="text-sm text-slate-500 mt-1">Départements</div>
+                <div className="text-2xl md:text-3xl font-bold text-slate-900">50</div>
+                <div className="text-sm text-slate-500 mt-1">States</div>
               </div>
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-slate-900">13 680+</div>
-                <div className="text-sm text-slate-500 mt-1">Communes desservies</div>
+                <div className="text-2xl md:text-3xl font-bold text-slate-900">41,000+</div>
+                <div className="text-sm text-slate-500 mt-1">ZIP Codes Served</div>
               </div>
             </div>
           </div>
@@ -168,7 +163,7 @@ export default async function ArtisansPage() {
       {error && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-            <p className="text-red-800 font-medium">Erreur de chargement des artisans</p>
+            <p className="text-red-800 font-medium">Error loading attorneys</p>
             <p className="text-red-600 text-sm mt-1">{error}</p>
           </div>
         </section>
@@ -177,12 +172,12 @@ export default async function ArtisansPage() {
       {/* Providers listing */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-          Artisans récemment référencés
+          Recently Listed Attorneys
         </h2>
         <p className="text-slate-500 mb-8">
           {providers.length > 0
-            ? `${providers.length} artisans affichés sur ${count.toLocaleString('fr-FR')} au total`
-            : 'Chargement en cours...'}
+            ? `${providers.length} attorneys shown out of ${count.toLocaleString('en-US')} total`
+            : 'Loading...'}
         </p>
 
         {providers.length > 0 ? (
@@ -218,7 +213,7 @@ export default async function ArtisansPage() {
                           <span
                             className="inline-flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
                             style={{ backgroundColor: '#1877f2' }}
-                            title="Artisan vérifié"
+                            title="Verified Attorney"
                           >
                             <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
                               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
@@ -236,7 +231,7 @@ export default async function ArtisansPage() {
                           <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
                           <span className="text-lg font-bold">{ratingValue}</span>
                         </div>
-                        <span className="text-xs text-gray-500">{provider.review_count} avis</span>
+                        <span className="text-xs text-gray-500">{provider.review_count} reviews</span>
                       </div>
                     )}
                   </div>
@@ -257,7 +252,7 @@ export default async function ArtisansPage() {
 
                   {/* SIRET */}
                   {provider.siret && (
-                    <p className="text-xs text-gray-400 mb-3 ml-6">SIREN {provider.siret.slice(0, 9)}</p>
+                    <p className="text-xs text-gray-400 mb-3 ml-6">Bar # {provider.siret.slice(0, 9)}</p>
                   )}
 
                   {/* Badges */}
@@ -272,10 +267,10 @@ export default async function ArtisansPage() {
                   {/* CTA */}
                   <div className="flex gap-3">
                     <Link
-                      href={`${providerUrl}#devis`}
+                      href={`${providerUrl}#quote`}
                       className="flex-1 py-2.5 text-center bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 text-sm"
                     >
-                      Demander un devis
+                      Request a Quote
                     </Link>
                     {provider.phone && (
                       <a
@@ -283,7 +278,7 @@ export default async function ArtisansPage() {
                         className="flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm"
                       >
                         <Phone className="w-4 h-4" />
-                        Appeler
+                        Call
                       </a>
                     )}
                   </div>
@@ -294,8 +289,8 @@ export default async function ArtisansPage() {
         ) : !error ? (
           <div className="text-center py-16 bg-gray-50 rounded-2xl">
             <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-lg text-gray-600 font-medium">Aucun artisan trouvé</p>
-            <p className="text-gray-400 mt-2">La base de données est peut-être temporairement indisponible.</p>
+            <p className="text-lg text-gray-600 font-medium">No attorneys found</p>
+            <p className="text-gray-400 mt-2">The database may be temporarily unavailable.</p>
           </div>
         ) : null}
       </section>
@@ -303,7 +298,7 @@ export default async function ArtisansPage() {
       {/* Browse by service */}
       <section className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Rechercher par métier</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">Browse by Practice Area</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {practiceAreas.map(s => (
               <Link
@@ -322,9 +317,9 @@ export default async function ArtisansPage() {
       {/* Browse by city */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Villes populaires</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">Popular Cities</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'montpellier', 'strasbourg', 'bordeaux', 'lille', 'rennes', 'reims'].map(city => (
+            {['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 'philadelphia', 'san-antonio', 'san-diego', 'dallas', 'san-jose', 'austin', 'miami'].map(city => (
               <Link
                 key={city}
                 href={`/cities/${city}`}

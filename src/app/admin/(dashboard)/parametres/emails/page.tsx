@@ -23,95 +23,95 @@ interface EmailTemplate {
 const EMAIL_TEMPLATES: EmailTemplate[] = [
   {
     id: 'welcome',
-    name: 'Bienvenue',
-    subject: 'Bienvenue sur ServicesArtisans',
-    description: 'Email envoyé après inscription',
+    name: 'Welcome',
+    subject: 'Welcome to US Attorneys',
+    description: 'Email sent after registration',
     variables: ['{{user_name}}', '{{verify_link}}'],
-    content: `Bonjour {{user_name}},
+    content: `Hello {{user_name}},
 
-Bienvenue sur ServicesArtisans ! Nous sommes ravis de vous compter parmi nous.
+Welcome to US Attorneys! We are delighted to have you on board.
 
-Pour commencer, veuillez vérifier votre email en cliquant sur le lien ci-dessous :
+To get started, please verify your email by clicking the link below:
 {{verify_link}}
 
-Si vous avez des questions, n'hésitez pas à nous contacter.
+If you have any questions, do not hesitate to contact us.
 
-L'équipe ServicesArtisans`,
+The US Attorneys Team`,
   },
   {
     id: 'password_reset',
-    name: 'Réinitialisation mot de passe',
-    subject: 'Réinitialisation de votre mot de passe',
-    description: 'Email pour réinitialiser le mot de passe',
+    name: 'Password Reset',
+    subject: 'Reset your password',
+    description: 'Email to reset password',
     variables: ['{{user_name}}', '{{reset_link}}', '{{expiry_time}}'],
-    content: `Bonjour {{user_name}},
+    content: `Hello {{user_name}},
 
-Vous avez demandé la réinitialisation de votre mot de passe.
+You have requested a password reset.
 
-Cliquez sur le lien ci-dessous pour choisir un nouveau mot de passe :
+Click the link below to choose a new password:
 {{reset_link}}
 
-Ce lien expire dans {{expiry_time}}.
+This link expires in {{expiry_time}}.
 
-Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.
+If you did not request this, please ignore this email.
 
-L'équipe ServicesArtisans`,
+The US Attorneys Team`,
   },
   {
     id: 'booking_confirmation',
-    name: 'Confirmation de réservation',
-    subject: 'Confirmation de votre réservation',
-    description: 'Email envoyé après une réservation',
-    variables: ['{{user_name}}', '{{artisan_name}}', '{{service}}', '{{date}}', '{{time}}'],
-    content: `Bonjour {{user_name}},
+    name: 'Booking Confirmation',
+    subject: 'Your booking confirmation',
+    description: 'Email sent after a booking',
+    variables: ['{{user_name}}', '{{attorney_name}}', '{{service}}', '{{date}}', '{{time}}'],
+    content: `Hello {{user_name}},
 
-Votre réservation a été confirmée !
+Your booking has been confirmed!
 
-Détails :
-- Artisan : {{artisan_name}}
-- Service : {{service}}
-- Date : {{date}}
-- Heure : {{time}}
+Details:
+- Attorney: {{attorney_name}}
+- Service: {{service}}
+- Date: {{date}}
+- Time: {{time}}
 
-L'artisan vous contactera pour confirmer les derniers détails.
+The attorney will contact you to confirm the final details.
 
-L'équipe ServicesArtisans`,
+The US Attorneys Team`,
   },
   {
     id: 'quote_request',
-    name: 'Nouvelle demande de devis',
-    subject: 'Nouvelle demande de devis',
-    description: 'Email envoyé à l\'artisan pour une demande de devis',
-    variables: ['{{artisan_name}}', '{{client_name}}', '{{service}}', '{{description}}', '{{dashboard_link}}'],
-    content: `Bonjour {{artisan_name}},
+    name: 'New Consultation Request',
+    subject: 'New consultation request',
+    description: 'Email sent to the attorney for a consultation request',
+    variables: ['{{attorney_name}}', '{{client_name}}', '{{service}}', '{{description}}', '{{dashboard_link}}'],
+    content: `Hello {{attorney_name}},
 
-Vous avez reçu une nouvelle demande de devis !
+You have received a new consultation request!
 
-Client : {{client_name}}
-Service : {{service}}
-Description : {{description}}
+Client: {{client_name}}
+Service: {{service}}
+Description: {{description}}
 
-Connectez-vous à votre tableau de bord pour répondre :
+Log in to your dashboard to respond:
 {{dashboard_link}}
 
-L'équipe ServicesArtisans`,
+The US Attorneys Team`,
   },
   {
     id: 'review_notification',
-    name: 'Nouvel avis',
-    subject: 'Vous avez reçu un nouvel avis',
-    description: 'Email envoyé à l\'artisan pour un nouvel avis',
-    variables: ['{{artisan_name}}', '{{rating}}', '{{review_text}}', '{{client_name}}'],
-    content: `Bonjour {{artisan_name}},
+    name: 'New Review',
+    subject: 'You have received a new review',
+    description: 'Email sent to the attorney for a new review',
+    variables: ['{{attorney_name}}', '{{rating}}', '{{review_text}}', '{{client_name}}'],
+    content: `Hello {{attorney_name}},
 
-Vous avez reçu un nouvel avis de {{client_name}} !
+You have received a new review from {{client_name}}!
 
-Note : {{rating}}/5
-Commentaire : {{review_text}}
+Rating: {{rating}}/5
+Comment: {{review_text}}
 
-Continuez votre excellent travail !
+Keep up the great work!
 
-L'équipe ServicesArtisans`,
+The US Attorneys Team`,
   },
 ]
 
@@ -197,19 +197,19 @@ export default function EmailTemplatesPage() {
   const getPreviewContent = (template: EmailTemplate) => {
     let preview = template.content
     // Replace variables with example values
-    preview = preview.replace(/\{\{user_name\}\}/g, 'Jean Dupont')
-    preview = preview.replace(/\{\{artisan_name\}\}/g, 'Pierre Martin')
-    preview = preview.replace(/\{\{client_name\}\}/g, 'Marie Durand')
+    preview = preview.replace(/\{\{user_name\}\}/g, 'John Smith')
+    preview = preview.replace(/\{\{attorney_name\}\}/g, 'James Johnson')
+    preview = preview.replace(/\{\{client_name\}\}/g, 'Sarah Williams')
     preview = preview.replace(/\{\{verify_link\}\}/g, 'https://us-attorneys.com/verify/abc123')
     preview = preview.replace(/\{\{reset_link\}\}/g, 'https://us-attorneys.com/reset/xyz789')
     preview = preview.replace(/\{\{dashboard_link\}\}/g, 'https://us-attorneys.com/attorney-dashboard')
-    preview = preview.replace(/\{\{expiry_time\}\}/g, '24 heures')
-    preview = preview.replace(/\{\{service\}\}/g, 'Plomberie')
-    preview = preview.replace(/\{\{description\}\}/g, 'Réparation fuite sous évier')
-    preview = preview.replace(/\{\{date\}\}/g, '15 janvier 2026')
-    preview = preview.replace(/\{\{time\}\}/g, '14h00')
+    preview = preview.replace(/\{\{expiry_time\}\}/g, '24 hours')
+    preview = preview.replace(/\{\{service\}\}/g, 'Personal Injury')
+    preview = preview.replace(/\{\{description\}\}/g, 'Car accident injury consultation')
+    preview = preview.replace(/\{\{date\}\}/g, 'January 15, 2026')
+    preview = preview.replace(/\{\{time\}\}/g, '2:00 PM')
     preview = preview.replace(/\{\{rating\}\}/g, '5')
-    preview = preview.replace(/\{\{review_text\}\}/g, 'Excellent travail, très professionnel !')
+    preview = preview.replace(/\{\{review_text\}\}/g, 'Excellent work, very professional!')
     return preview
   }
 
@@ -224,15 +224,15 @@ export default function EmailTemplatesPage() {
               className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
-              Retour aux paramètres
+              Back to settings
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modèles d&apos;email</h1>
-            <p className="text-gray-500 mt-1">Personnalisez les emails envoyés par la plateforme</p>
+            <h1 className="text-2xl font-bold text-gray-900">Email Templates</h1>
+            <p className="text-gray-500 mt-1">Customize emails sent by the platform</p>
           </div>
           {saved && (
             <span className="flex items-center gap-1 text-green-600 text-sm">
               <Check className="w-4 h-4" />
-              Enregistré
+              Saved
             </span>
           )}
         </div>
@@ -263,8 +263,8 @@ export default function EmailTemplatesPage() {
                         ? 'bg-blue-100 text-blue-600'
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                     }`}
-                    title="Prévisualiser"
-                    aria-label={`Prévisualiser le modèle ${template.name}`}
+                    title="Preview"
+                    aria-label={`Preview template ${template.name}`}
                   >
                     <Eye className="w-5 h-5" />
                   </button>
@@ -275,8 +275,8 @@ export default function EmailTemplatesPage() {
                         ? 'bg-blue-100 text-blue-600'
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                     }`}
-                    title="Modifier"
-                    aria-label={`Modifier le modèle ${template.name}`}
+                    title="Edit"
+                    aria-label={`Edit template ${template.name}`}
                   >
                     <Edit2 className="w-5 h-5" />
                   </button>
@@ -288,7 +288,7 @@ export default function EmailTemplatesPage() {
                 <div className="p-6 space-y-4 bg-gray-50">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Sujet
+                      Subject
                     </label>
                     <input
                       type="text"
@@ -299,7 +299,7 @@ export default function EmailTemplatesPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Contenu
+                      Body
                     </label>
                     <textarea
                       value={editContent}
@@ -309,7 +309,7 @@ export default function EmailTemplatesPage() {
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Variables disponibles :</p>
+                    <p className="text-sm text-gray-500 mb-2">Available variables:</p>
                     <div className="flex flex-wrap gap-2">
                       {template.variables.map((v) => (
                         <code
@@ -326,7 +326,7 @@ export default function EmailTemplatesPage() {
                       onClick={handleCancel}
                       className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300"
                     >
-                      Annuler
+                      Cancel
                     </button>
                     <button
                       onClick={handleSave}
@@ -334,7 +334,7 @@ export default function EmailTemplatesPage() {
                       className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                     >
                       <Save className="w-4 h-4" />
-                      {saving ? 'Enregistrement...' : 'Enregistrer'}
+                      {saving ? 'Saving...' : 'Save'}
                     </button>
                   </div>
                 </div>
@@ -346,7 +346,7 @@ export default function EmailTemplatesPage() {
                   <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                     <div className="px-4 py-3 bg-gray-100 border-b border-gray-200">
                       <p className="text-sm">
-                        <span className="text-gray-500">Sujet : </span>
+                        <span className="text-gray-500">Subject: </span>
                         <span className="font-medium text-gray-900">{template.subject}</span>
                       </p>
                     </div>
@@ -357,7 +357,7 @@ export default function EmailTemplatesPage() {
                     </div>
                   </div>
                   <p className="text-xs text-gray-500 mt-3 text-center">
-                    Aperçu avec des valeurs de test
+                    Preview with test values
                   </p>
                 </div>
               )}
@@ -367,11 +367,8 @@ export default function EmailTemplatesPage() {
 
         {/* Info */}
         <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h3 className="font-medium text-blue-900 mb-2">À propos des templates</h3>
           <p className="text-sm text-blue-700">
-            Les modifications apportées aux templates seront appliquées à tous les futurs emails.
-            Les variables entre doubles accolades (ex: {"{{user_name}}"}) seront automatiquement
-            remplacées par les valeurs réelles lors de l&apos;envoi.
+            Variables in {"{{braces}}"} are replaced with actual values when sending.
           </p>
         </div>
       </div>

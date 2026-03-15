@@ -1,5 +1,5 @@
 /**
- * ServicesArtisans - Custom Hooks (v2)
+ * US Attorneys - Custom Hooks (v2)
  */
 
 export { useAuth } from './useAuth'

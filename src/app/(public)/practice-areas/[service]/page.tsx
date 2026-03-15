@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText, BookOpen } from 'lucide-react'
+import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText } from 'lucide-react'
 import { getSpecialtyBySlug, getLocationsByService, getAttorneysByService, getAttorneyCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
@@ -90,7 +90,7 @@ interface PageProps {
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -115,11 +115,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`hub-title-${specialtySlug}`))
   const titleTemplates = [
-    `${specialtyName} Nationwide — Free Consultation 2026`,
+    `${specialtyName} Nationwide \u2014 Free Consultation 2026`,
     `${specialtyName} : fees and free consultation 2026`,
-    `${specialtyName} Nationwide — Verified Attorneys`,
-    `${specialtyName} — Compare Attorneys 2026`,
-    `${specialtyName} Nationwide — Qualified Attorneys`,
+    `${specialtyName} Nationwide \u2014 Verified Attorneys`,
+    `${specialtyName} \u2014 Compare Attorneys 2026`,
+    `${specialtyName} Nationwide \u2014 Qualified Attorneys`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
@@ -139,12 +139,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     openGraph: {
-      locale: 'fr_FR',
+      locale: 'en_US',
       title,
       description,
       url: `${SITE_URL}/practice-areas/${specialtySlug}`,
       type: 'website',
-      siteName: 'ServicesArtisans',
+      siteName: 'US Attorneys',
       images: [{ url: serviceImage.src, width: 1200, height: 630, alt: serviceImage.alt }],
     },
     twitter: {
@@ -275,7 +275,7 @@ export default async function ServicePage({ params }: PageProps) {
   const h1Templates = [
     `${service.name} Nationwide`,
     `Find a ${service.name.toLowerCase()} Nationwide`,
-    `${service.name} — National Directory`,
+    `${service.name} \u2014 National Directory`,
     `${service.name.toLowerCase()} Attorneys Nationwide`,
     `${service.name}: Compare Professionals`,
   ]
@@ -290,7 +290,7 @@ export default async function ServicePage({ params }: PageProps) {
   })
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
+    { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
     { name: service.name, url: `/practice-areas/${specialtySlug}` },
   ])
@@ -310,7 +310,7 @@ export default async function ServicePage({ params }: PageProps) {
     description: service.description || `${service.name.toLowerCase()} legal services nationwide`,
     lowPrice: trade.priceRange.min,
     highPrice: trade.priceRange.max,
-    priceCurrency: 'EUR',
+    priceCurrency: 'USD',
     priceUnit: trade.priceRange.unit,
     offerCount: totalAttorneyCount || trade.commonTasks.length,
     url: `${SITE_URL}/practice-areas/${specialtySlug}`,
@@ -370,7 +370,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
-                {totalAttorneyCount > 0 ? totalAttorneyCount.toLocaleString('fr-FR') : '—'}
+                {totalAttorneyCount > 0 ? totalAttorneyCount.toLocaleString('en-US') : '\u2014'}
               </span>
               <span className="text-sm text-slate-400 mt-1">verified attorneys</span>
             </div>
@@ -389,7 +389,7 @@ export default async function ServicePage({ params }: PageProps) {
             {trade && (
               <div className="flex flex-col">
                 <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
-                  {trade.priceRange.min}–{trade.priceRange.max}
+                  {trade.priceRange.min}\u2013{trade.priceRange.max}
                 </span>
                 <span className="text-sm text-slate-400 mt-1">{trade.priceRange.unit}</span>
               </div>
@@ -433,7 +433,7 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} nationwide: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount.toLocaleString('en-US')} verified attorneys in ${topCities?.length || 0}+ cities. Free consultation, official data.`}
+            answer={`${trade.name} nationwide: ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount.toLocaleString('en-US')} verified attorneys in ${topCities?.length || 0}+ cities. Free consultation, official data.`}
           />
         </div>
       )}
@@ -508,7 +508,7 @@ export default async function ServicePage({ params }: PageProps) {
                 .map(([region, cities]) => (
                   <div key={region}>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      {service.name} en {region}
+                      {service.name} in {region}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {cities.slice(0, 10).map((city) => (
@@ -574,9 +574,9 @@ export default async function ServicePage({ params }: PageProps) {
             })}
           </div>
           <div className="mt-6 flex flex-wrap gap-4 text-sm">
-            <Link href="/states" className="text-blue-600 hover:underline">Tous les départements →</Link>
-            <Link href="/regions" className="text-blue-600 hover:underline">Toutes les régions →</Link>
-            <Link href="/cities" className="text-blue-600 hover:underline">Toutes les cities →</Link>
+            <Link href="/states" className="text-blue-600 hover:underline">All states &rarr;</Link>
+            <Link href="/regions" className="text-blue-600 hover:underline">All regions &rarr;</Link>
+            <Link href="/cities" className="text-blue-600 hover:underline">All cities &rarr;</Link>
           </div>
         </div>
       </section>
@@ -660,7 +660,7 @@ export default async function ServicePage({ params }: PageProps) {
                   <ul className="space-y-2">
                     {trade.certifications.map((cert, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="text-green-500 mt-1">✓</span>
+                        <span className="text-green-500 mt-1">{'\u2713'}</span>
                         {cert}
                       </li>
                     ))}
@@ -690,40 +690,13 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      {/* Questions fréquentes — PAA optimisé */}
-      {trade && (
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <h2 className="text-xl font-heading font-semibold text-gray-900">
-              Why Hire a Professional {service.name.toLowerCase()}?
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              Hiring a professional {service.name.toLowerCase()} ensures work that complies with current standards
-              and is covered by professional liability insurance. A qualified attorney has the experience,
-              proper resources and certifications needed to handle your legal services safely.
-              Additionally, working with a verified professional protects you in case of malpractice.
-            </p>
-
-            <h2 className="text-xl font-heading font-semibold text-gray-900">
-              What Certifications Should a {service.name.toLowerCase()} Have?
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              {trade.certifications.length > 0
-                ? `A qualified ${service.name.toLowerCase()} should ideally hold the following certifications: ${trade.certifications.slice(0, 3).join(', ')}. These credentials guarantee a recognized level of competence and may, in some cases, qualify you for financial assistance.`
-                : `A ${service.name.toLowerCase()} should at minimum have professional liability insurance and a guarantee of service. Also verify their bar admission and registration number.`
-              }
-            </p>
-          </div>
-        </section>
-      )}
-
       {/* FAQ — rich content for SEO */}
       {trade && trade.faq.length > 0 && (
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-8">
               <h2 className="text-2xl font-bold text-gray-900">
-                Frequently Asked Questions — {service.name}
+                Frequently Asked Questions {'\u2014'} {service.name}
               </h2>
             </div>
             <div className="space-y-4">
@@ -742,188 +715,6 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </section>
       )}
-
-      {/* Generic SEO Content — fallback when no trade content */}
-      {!trade && (
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm">
-              <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
-                How to Find a Good {service.name.toLowerCase()}?
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <p>
-                  Finding a trustworthy {service.name.toLowerCase()} can seem complicated.
-                  We simplify the task by listing the best
-                  professionals in your area.
-                </p>
-                <h3>Criteria for Choosing Your {service.name.toLowerCase()}</h3>
-                <ul>
-                  <li>
-                    <strong>Client Reviews</strong>: Check feedback from
-                    other clients to get an idea of the quality of work.
-                  </li>
-                  <li>
-                    <strong>Certifications</strong>: Verify that the attorney has
-                    the qualifications needed for your legal services.
-                  </li>
-                  <li>
-                    <strong>Proximity</strong>: An attorney near you can
-                    respond more quickly and travel costs will be reduced.
-                  </li>
-                  <li>
-                    <strong>Detailed Consultation</strong>: Always request a written consultation
-                    before committing.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Guides utiles — maillage interne vers guides */}
-      {(() => {
-        const serviceGuidesMap: Record<string, { slug: string; title: string }[]> = {
-          'electricien': [
-            { slug: 'normes-electriques', title: 'Normes électriques NF C 15 100' },
-            { slug: 'diagnostics-immobiliers', title: 'Diagnostics immobiliers obligatoires' },
-          ],
-          'plombier': [
-            { slug: 'aides-renovation-2026', title: 'Aides rénovation 2026' },
-            { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
-          ],
-          'chauffagiste': [
-            { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
-            { slug: 'maprimerenov-2026', title: 'MaPrimeRénov\' 2026' },
-            { slug: 'isolation-thermique', title: 'Guide isolation thermique' },
-          ],
-          'couvreur': [
-            { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
-            { slug: 'isolation-combles', title: 'Guide isolation des combles' },
-          ],
-          'menuisier': [
-            { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
-            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-          ],
-          'peintre-en-batiment': [
-            { slug: 'renovation-energetique-complete', title: 'Guide rénovation énergétique complète' },
-            { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
-          ],
-          'macon': [
-            { slug: 'extension-maison', title: 'Guide extension maison' },
-            { slug: 'permis-construire', title: 'Guide permis de construire' },
-          ],
-          'carreleur': [
-            { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
-            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-          ],
-          'cuisiniste': [
-            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-            { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
-          ],
-          'climaticien': [
-            { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
-            { slug: 'maprimerenov-2026', title: 'MaPrimeRénov\' 2026' },
-          ],
-          'vitrier': [
-            { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
-          ],
-          'charpentier': [
-            { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
-            { slug: 'isolation-combles', title: 'Guide isolation des combles' },
-          ],
-          'serrurier': [
-            { slug: 'eviter-arnaques-artisan', title: 'Éviter les arnaques artisan' },
-            { slug: 'devis-travaux', title: 'Guide devis travaux' },
-          ],
-        }
-        const guides = serviceGuidesMap[specialtySlug]
-        if (!guides || guides.length === 0) return null
-        return (
-          <section className="py-12 bg-white border-t">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-amber-600" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">Useful Guides</h2>
-              </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {guides.map((guide) => (
-                  <Link
-                    key={guide.slug}
-                    href={`/guides/${guide.slug}`}
-                    className="flex items-start gap-3 p-5 bg-gray-50 hover:bg-amber-50 rounded-xl border border-gray-200 hover:border-amber-300 transition-all group"
-                  >
-                    <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-amber-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <span className="font-medium text-gray-900 group-hover:text-amber-600 text-sm">
-                        {guide.title}
-                      </span>
-                      <span className="block text-xs text-gray-500 mt-1">Read the full guide</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )
-      })()}
-
-      {/* CTA */}
-      <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
-        }} />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-            Are You a {service.name.toLowerCase()}?
-          </h2>
-          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-            Register for free and receive qualified consultation requests
-          </p>
-          <Link
-            href="/register-attorney"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
-          >
-            Create My Profile
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
-      </section>
-
-      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-      <section className="mb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial Methodology</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              The fees and information presented are indicative, based on national and regional averages. Attorneys are verified via their bar registration. This is an independent directory — we do not provide legal services and do not guarantee outcomes.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Trust &amp; Safety
-          </h2>
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/verification-process" className="text-blue-600 hover:text-blue-800">
-              How We Verify Attorneys
-            </Link>
-            <Link href="/review-policy" className="text-blue-600 hover:text-blue-800">
-              Our Review Policy
-            </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
-              Mediation Service
-            </Link>
-          </nav>
-        </div>
-      </section>
 
       {/* Voir aussi - Autres services */}
       <section className="py-12 bg-white">
@@ -1062,7 +853,7 @@ export default async function ServicePage({ params }: PageProps) {
 
       <ExitIntentPopup
         sessionKey="sa:exit-services"
-        description="Comparez les devis de plusieurs artisans qualifiés, gratuitement et sans engagement."
+        description="Compare quotes from multiple qualified attorneys, free and with no obligation."
         ctaHref={`/quotes/${specialtySlug}`}
       />
 

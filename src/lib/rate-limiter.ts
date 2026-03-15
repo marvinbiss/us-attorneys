@@ -184,7 +184,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   search: { window: 60 * 1000, max: 100 },       // 100 searches per minute
   gdpr: { window: 300 * 1000, max: 5 },          // 5 requests per 5 minutes for GDPR export/delete
   newsletter: { window: 300 * 1000, max: 3 },    // 3 requests per 5 minutes for newsletter (sends email)
-  inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for artisan registration (sends emails)
+  inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for attorney registration (sends emails)
   ai: { window: 60 * 1000, max: 10 },            // 10 requests per minute for AI generation (expensive)
   estimation: { window: 60 * 1000, max: 15, failOpen: true },    // 15 messages per minute for estimation chat — fail open so widget always works
   estimationLead: { window: 300 * 1000, max: 3, failOpen: true }, // 3 leads per 5 minutes for estimation lead capture — fail open

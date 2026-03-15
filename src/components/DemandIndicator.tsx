@@ -33,17 +33,17 @@ export default function DemandIndicator({ specialtySlug, cityName, variant = 'in
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp className="w-4 h-4 text-amber-600" />
           <span className="text-sm font-semibold text-amber-900">
-            {cityName ? `Forte demande à ${cityName}` : 'Forte demande cette semaine'}
+            {cityName ? `High demand in ${cityName}` : 'High demand this week'}
           </span>
         </div>
         <div className="flex flex-wrap gap-4 text-sm text-amber-800">
           <span className="flex items-center gap-1.5">
             <Users className="w-3.5 h-3.5" />
-            {weeklyRequests} demandes cette semaine
+            {weeklyRequests} requests this week
           </span>
           <span className="flex items-center gap-1.5">
             <Eye className="w-3.5 h-3.5" />
-            {viewsToday} consultations aujourd&apos;hui
+            {viewsToday} views today
           </span>
         </div>
       </div>
@@ -57,11 +57,11 @@ export default function DemandIndicator({ specialtySlug, cityName, variant = 'in
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
           <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
         </span>
-        {weeklyRequests} demandes cette semaine
+        {weeklyRequests} requests this week
       </span>
       <span className="flex items-center gap-1">
         <Eye className="w-3 h-3" />
-        {viewsToday} vues aujourd&apos;hui
+        {viewsToday} views today
       </span>
     </div>
   )

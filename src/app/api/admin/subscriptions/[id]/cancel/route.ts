@@ -59,7 +59,7 @@ export async function POST(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(
       authResult.admin.id,
       `subscription.${action}`,

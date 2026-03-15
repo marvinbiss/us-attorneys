@@ -23,7 +23,7 @@ export async function GET() {
       )
     }
 
-    // Fetch devis requests for this client
+    // Fetch quote requests for this client
     const { data: demandes, error: demandesError } = await supabase
       .from('devis_requests')
       .select(`
@@ -35,7 +35,7 @@ export async function GET() {
           valid_until,
           status,
           created_at,
-          provider:providers!attorney_id(id, name)
+          attorney:attorneys!attorney_id(id, name)
         )
       `)
       .eq('client_id', user.id)
@@ -52,15 +52,15 @@ export async function GET() {
     // Calculate stats
     const stats = {
       total: demandes?.length || 0,
-      enAttente: demandes?.filter(d => d.status === 'pending').length || 0,
-      devisRecus: demandes?.filter(d => d.status === 'sent').length || 0,
-      acceptes: demandes?.filter(d => d.status === 'accepted').length || 0,
-      refuses: demandes?.filter(d => d.status === 'refused').length || 0,
-      termines: demandes?.filter(d => d.status === 'completed').length || 0,
+      pending: demandes?.filter(d => d.status === 'pending').length || 0,
+      quotesReceived: demandes?.filter(d => d.status === 'sent').length || 0,
+      accepted: demandes?.filter(d => d.status === 'accepted').length || 0,
+      declined: demandes?.filter(d => d.status === 'refused').length || 0,
+      completed: demandes?.filter(d => d.status === 'completed').length || 0,
     }
 
     return NextResponse.json({
-      demandes: demandes || [],
+      requests: demandes || [],
       stats
     })
   } catch (error) {

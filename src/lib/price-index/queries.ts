@@ -156,7 +156,7 @@ async function _getNationalStats(): Promise<NationalStats> {
   try {
     const supabase = createAdminClient()
 
-    // Métiers au niveau national
+    // Services at national level
     const { data: national } = await supabase
       .from('barometre_stats')
       .select('*')
@@ -205,7 +205,7 @@ export async function getNationalStats(): Promise<NationalStats> {
   })()
 }
 
-/** Top N métiers par nb_artisans (niveau national) */
+/** Top N practice areas by nb_artisans (national level) */
 async function _getTopMetiers(limit: number): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
@@ -231,11 +231,11 @@ export async function getTopMetiers(limit = 10): Promise<BarometreStatRow[]> {
   })(limit)
 }
 
-/** Top N cities par nb_artisans (toutes spécialités confondues) */
+/** Top N cities by nb_artisans (all practice areas combined) */
 async function _getTopVilles(limit: number): Promise<{ ville: string; ville_slug: string; total: number }[]> {
   try {
     const supabase = createAdminClient()
-    // On récupère les cities et on agrège côté client
+    // Fetch cities and aggregate client-side
     const { data } = await supabase
       .from('barometre_stats')
       .select('ville, ville_slug, nb_artisans')
@@ -245,7 +245,7 @@ async function _getTopVilles(limit: number): Promise<{ ville: string; ville_slug
 
     if (!data) return []
 
-    // Agrège par ville
+    // Aggregate by city
     const villeMap = new Map<string, { ville: string; ville_slug: string; total: number }>()
     for (const row of data) {
       if (!row.ville || !row.ville_slug) continue

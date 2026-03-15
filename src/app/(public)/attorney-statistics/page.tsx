@@ -16,7 +16,7 @@ import {
   regionalIndices,
   getPrixMoyenNational,
   getVariationMoyenne,
-} from '@/lib/data/price-index'
+} from '@/lib/data/attorney-statistics'
 
 // ---------------------------------------------------------------------------
 // Compute stats from real data
@@ -188,8 +188,8 @@ function StatCard({
   )
 }
 
-function TrendBadge({ tendance, variation }: { tendance: 'hausse' | 'stable' | 'baisse'; variation?: number }) {
-  if (tendance === 'hausse') {
+function TrendBadge({ trend, variation }: { trend: 'up' | 'stable' | 'down'; variation?: number }) {
+  if (trend === 'up') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
         <ArrowUpRight className="w-3 h-3" />
@@ -197,7 +197,7 @@ function TrendBadge({ tendance, variation }: { tendance: 'hausse' | 'stable' | '
       </span>
     )
   }
-  if (tendance === 'baisse') {
+  if (trend === 'down') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
         <ArrowDownRight className="w-3 h-3" />
@@ -655,7 +655,7 @@ export default function AttorneyStatisticsPage() {
                   <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
                     <h3 className="font-bold text-gray-900">{sp.specialtyName}</h3>
                     <Link
-                      href={`/price-index/pricing/${sp.service}`}
+                      href={`/attorney-statistics/pricing/${sp.service}`}
                       className="text-xs text-blue-600 hover:underline flex items-center gap-1"
                     >
                       View details <ExternalLink className="w-3 h-3" />
@@ -680,7 +680,7 @@ export default function AttorneyStatisticsPage() {
                             )}
                           </td>
                           <td className="px-3 py-2.5 text-right">
-                            <TrendBadge tendance={int.tendance} variation={int.variation} />
+                            <TrendBadge trend={int.trend} variation={int.variation} />
                           </td>
                         </tr>
                       ))}
@@ -706,7 +706,7 @@ export default function AttorneyStatisticsPage() {
                         <span className={`text-sm font-bold ${region.index > 105 ? 'text-red-600' : region.index < 95 ? 'text-green-600' : 'text-gray-700'}`}>
                           {region.index}
                         </span>
-                        <TrendBadge tendance={region.tendance} />
+                        <TrendBadge trend={region.trend} />
                       </div>
                     </div>
                   ))}
@@ -1086,7 +1086,7 @@ export default function AttorneyStatisticsPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Link
-                  href="/price-index"
+                  href="/attorney-statistics"
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/20 transition-colors group"
                 >
                   <h3 className="font-bold mb-1 flex items-center gap-2">

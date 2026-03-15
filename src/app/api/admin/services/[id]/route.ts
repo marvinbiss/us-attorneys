@@ -120,7 +120,7 @@ export async function PATCH(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'service.update', 'service', params.id, result.data)
 
     return NextResponse.json({

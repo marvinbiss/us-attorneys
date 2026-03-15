@@ -21,14 +21,14 @@ const PAGE_URL = `${SITE_URL}/regulations`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "Normes du Bâtiment : DTU, NF et Réglementations Essentielles",
+  title: "Building Codes & Regulations: Essential Standards",
   description:
-    "Guide complet des normes du bâtiment en France : NF C 15-100 (électricité), DTU plomberie, chauffage, isolation RE2020, toiture, fenêtres et accessibilité PMR.",
+    "Complete guide to building codes and regulations: electrical codes, plumbing standards, heating requirements, insulation codes, roofing specifications, and accessibility standards.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: "Normes du Bâtiment : DTU, NF et Réglementations Essentielles",
+    title: "Building Codes & Regulations: Essential Standards",
     description:
-      "Toutes les normes du bâtiment expliquées en français clair : DTU, NF, RE2020 et réglementations par corps de métier.",
+      "All building codes and regulations explained clearly: electrical, plumbing, HVAC, insulation, and accessibility standards by trade.",
     url: PAGE_URL,
     type: "website",
     siteName: SITE_NAME,
@@ -37,175 +37,175 @@ export const metadata: Metadata = {
 
 const categories = [
   {
-    title: "Électricité",
+    title: "Electrical",
     icon: Zap,
     color: "bg-yellow-100 text-yellow-700",
     normes: [
       {
-        name: "NF C 15-100",
-        scope: "Installation électrique basse tension",
+        name: "NEC (National Electrical Code)",
+        scope: "Electrical installation standards",
         requirements:
-          "Nombre minimum de prises par pièce, protection différentielle 30 mA obligatoire, tableau divisionnaire, volumes de sécurité en salle de bain (zones 0-1-2), circuits spécialisés (four, plaque, lave-linge).",
-        link: "/guides/regulations-electriques",
-        linkLabel: "Guide NF C 15-100",
+          "Minimum number of outlets per room, GFCI protection required in wet areas, circuit breaker panel requirements, safety zones in bathrooms, dedicated circuits for major appliances (oven, dryer, washer).",
+        link: "/guides/normes-electriques",
+        linkLabel: "Electrical Code Guide",
         service: "/practice-areas/electricien",
-        serviceLabel: "Trouver un électricien",
+        serviceLabel: "Find an electrician",
       },
     ],
   },
   {
-    title: "Plomberie",
+    title: "Plumbing",
     icon: Droplets,
     color: "bg-blue-100 text-blue-700",
     normes: [
       {
-        name: "DTU 60.1",
-        scope: "Plomberie sanitaire pour bâtiments",
+        name: "IPC (International Plumbing Code)",
+        scope: "Plumbing systems for buildings",
         requirements:
-          "Diamètres des canalisations d'alimentation (12 mm pour un lavabo, 16 mm pour une baignoire), pression de service (1 à 3 bars), protection anti-retour (disconnecteur), matériaux autorisés (cuivre, PER, multicouche).",
+          "Pipe diameters for supply lines, water pressure requirements (40-80 PSI), backflow prevention devices, approved materials (copper, PEX, CPVC), drain-waste-vent system specifications.",
         service: "/practice-areas/plombier",
-        serviceLabel: "Trouver un plombier",
+        serviceLabel: "Find a plumber",
       },
       {
-        name: "DTU 60.11",
-        scope: "Évacuation des eaux usées et pluviales",
+        name: "Drain-Waste-Vent Standards",
+        scope: "Wastewater and stormwater drainage",
         requirements:
-          "Pentes minimales des évacuations (1 à 3 cm/m selon le diamètre), raccordement au réseau collectif ou à l'assainissement individuel, ventilation primaire obligatoire, diamètres des colonnes de chute (100 mm minimum pour les WC).",
+          "Minimum drain pipe slopes (1/4 inch per foot), connection to municipal sewer or septic system, vent stack requirements, minimum drain pipe sizes (3-inch minimum for toilets).",
         service: "/practice-areas/plombier",
-        serviceLabel: "Trouver un plombier",
+        serviceLabel: "Find a plumber",
       },
     ],
   },
   {
-    title: "Chauffage",
+    title: "HVAC",
     icon: Flame,
     color: "bg-orange-100 text-orange-700",
     normes: [
       {
-        name: "DTU 65.11",
-        scope: "Installations de chauffage central à eau chaude (chaudières gaz)",
+        name: "IMC (International Mechanical Code)",
+        scope: "Heating, ventilation, and air conditioning systems",
         requirements:
-          "Ventilation du local chaudière (amenée d'air basse + sortie haute), conduit de fumée conforme, thermostat d'ambiance obligatoire depuis 2018, entretien annuel obligatoire, rendement minimal selon la puissance.",
+          "Combustion air requirements for furnaces, flue and chimney specifications, programmable thermostat requirements, annual maintenance requirements, minimum efficiency ratings by system size.",
         service: "/practice-areas/chauffagiste",
-        serviceLabel: "Trouver un chauffagiste",
+        serviceLabel: "Find an HVAC contractor",
       },
       {
-        name: "DTU 65.14",
-        scope: "Pompes à chaleur (PAC) air/eau et eau/eau",
+        name: "Heat Pump Standards",
+        scope: "Air-source and ground-source heat pumps",
         requirements:
-          "Distance minimale par rapport aux limites de propriété (respect des émissions sonores), dimensionnement selon l'étude thermique, fluides frigorigènes autorisés, COP minimal, entretien tous les 2 ans obligatoire pour les PAC > 4 kW.",
+          "Setback distance from property lines (noise compliance), sizing per Manual J load calculation, approved refrigerants, minimum SEER/HSPF ratings, maintenance intervals for systems over 5 tons.",
         service: "/practice-areas/chauffagiste",
-        serviceLabel: "Trouver un installateur PAC",
+        serviceLabel: "Find a heat pump installer",
       },
     ],
   },
   {
-    title: "Isolation et énergie",
+    title: "Insulation & Energy",
     icon: Home,
     color: "bg-green-100 text-green-700",
     normes: [
       {
-        name: "RE2020 (Réglementation Environnementale)",
-        scope: "Construction neuve depuis janvier 2022",
+        name: "IECC (International Energy Conservation Code)",
+        scope: "New construction energy standards",
         requirements:
-          "Bbio max (besoin bioclimatique) réduit de 30 % vs RT2012, Cep max (consommation énergie primaire) abaissé, indicateur carbone IC (prise en compte du cycle de vie des matériaux), confort d'été (indicateur DH). Remplace la RT2012 pour le neuf.",
+          "Climate zone-specific R-value requirements for walls, ceilings, and floors. Air sealing and testing requirements (blower door test), HVAC efficiency minimums, and lighting power density limits.",
         service: "/practice-areas/isolation",
-        serviceLabel: "Trouver un isolateur",
+        serviceLabel: "Find an insulation contractor",
       },
       {
-        name: "DTU 45.10",
-        scope: "Isolation des combles par soufflage",
+        name: "Attic Insulation Standards",
+        scope: "Attic insulation requirements",
         requirements:
-          "Résistance thermique minimale R ≥ 7 m².K/W en combles perdus (8 recommandé pour MaPrimeRénov), épaisseur selon le matériau (30-35 cm en laine de verre), pare-vapeur côté chaud, repérage des boîtiers électriques, protection des spots encastrés.",
+          "Minimum R-value R-38 to R-60 depending on climate zone, vapor barrier installation requirements, proper ventilation with soffit and ridge vents, clearance around electrical fixtures and recessed lighting.",
         service: "/practice-areas/isolation",
-        serviceLabel: "Trouver un isolateur",
+        serviceLabel: "Find an insulation contractor",
       },
       {
-        name: "DTU 45.11",
-        scope: "Isolation thermique par l'extérieur (ITE)",
+        name: "Exterior Insulation Standards",
+        scope: "Continuous exterior insulation",
         requirements:
-          "Préparation du support (ravalement préalable si nécessaire), fixation mécanique + collage, résistance thermique R ≥ 3,7 m².K/W (murs), traitement des ponts thermiques (tableaux, appuis de fenêtre), pare-pluie, finition enduit ou bardage ventilé.",
+          "Substrate preparation requirements, mechanical fastening plus adhesive attachment, minimum R-values for walls by climate zone, thermal bridging mitigation at windows and doors, weather-resistant barrier, cladding attachment over insulation.",
         service: "/practice-areas/isolation",
-        serviceLabel: "Trouver un façadier",
+        serviceLabel: "Find a siding contractor",
       },
     ],
   },
   {
-    title: "Toiture",
+    title: "Roofing",
     icon: Building2,
     color: "bg-slate-100 text-slate-700",
     normes: [
       {
-        name: "DTU 40.11 / 40.21 / 40.24 / 40.41",
-        scope: "Couverture selon le type de matériau",
+        name: "IRC Chapter 9 / IBC Chapter 15",
+        scope: "Roofing by material type",
         requirements:
-          "DTU 40.11 : ardoises naturelles (recouvrement selon la pente et l'exposition). DTU 40.21 : tuiles de terre cuite (pureau, liteaunage, ventilation sous-toiture). DTU 40.24 : tuiles en béton. DTU 40.41 : couverture zinc (épaisseur 0,65 mm mini, joints debout, pente ≥ 5 %).",
+          "Asphalt shingles: minimum slope, underlayment, and fastening requirements. Metal roofing: gauge thickness, standing seam specifications. Tile roofing: batten spacing, load calculations. All: ice and water shield in cold climates.",
         service: "/practice-areas/couvreur",
-        serviceLabel: "Trouver un couvreur",
+        serviceLabel: "Find a roofer",
       },
       {
-        name: "DTU 43.1 / 43.4",
-        scope: "Étanchéité des toitures terrasses",
+        name: "Flat Roof Standards",
+        scope: "Low-slope and flat roof systems",
         requirements:
-          "DTU 43.1 : toitures terrasses non accessibles (membrane bitumineuse ou synthétique, isolant, pare-vapeur, protection lourde ou autoprotégée). DTU 43.4 : toitures terrasses avec revêtement d'étanchéité apparente. Pente minimale 1 à 3 %.",
+          "Membrane roofing (TPO, EPDM, or built-up), insulation requirements, vapor barrier placement, drainage specifications (minimum 1/4 inch per foot slope), and waterproofing requirements for occupied roof decks.",
         service: "/practice-areas/etancheur",
-        serviceLabel: "Trouver un étancheur",
+        serviceLabel: "Find a waterproofing specialist",
       },
     ],
   },
   {
-    title: "Sécurité et accessibilité",
+    title: "Safety & Accessibility",
     icon: Shield,
     color: "bg-red-100 text-red-700",
     normes: [
       {
-        name: "Normes parasismiques (Eurocode 8)",
-        scope: "Construction en zones sismiques (1 à 5)",
+        name: "Seismic Codes (ASCE 7)",
+        scope: "Construction in seismic zones",
         requirements:
-          "La France est divisée en 5 zones de sismicité. En zones 2 à 5, les règles parasismiques s'appliquent : fondations renforcées, chaînages horizontaux et verticaux, liaisons murs-planchers, limitations des porte-à-faux. Les maisons individuelles suivent les règles PS-MI (simplifiées).",
+          "The US is divided into seismic design categories (A through F). In categories D-F, strict seismic requirements apply: reinforced foundations, continuous load paths, shear walls, hold-down connections, and limitations on cantilevered elements.",
         service: "/practice-areas/macon",
-        serviceLabel: "Trouver un maçon",
+        serviceLabel: "Find a structural contractor",
       },
       {
-        name: "Accessibilité PMR (loi du 11 février 2005)",
-        scope: "Logements neufs et ERP",
+        name: "ADA Accessibility Standards",
+        scope: "Accessible design for public and residential buildings",
         requirements:
-          "Largeur des portes ≥ 83 cm (90 cm pour la porte d'entrée), salle de bain adaptable (espace de rotation Ø 150 cm), WC accessible, douche de plain-pied, interrupteurs à hauteur (90-130 cm), absence de ressaut > 2 cm. Les ERP existants devaient être mis en conformité (Ad'AP).",
+          "Minimum door widths of 32 inches clear, accessible bathroom with 60-inch turning radius, grab bars at toilets and showers, barrier-free shower entry, switch and outlet heights (15-48 inches), maximum threshold height of 1/2 inch.",
         service: "/practice-areas/renovation-interieure",
-        serviceLabel: "Trouver un artisan",
+        serviceLabel: "Find a contractor",
       },
     ],
   },
   {
-    title: "Fenêtres et menuiseries",
+    title: "Windows & Doors",
     icon: Home,
     color: "bg-indigo-100 text-indigo-700",
     normes: [
       {
-        name: "DTU 36.5 (NF DTU 36.5)",
-        scope: "Mise en œuvre des fenêtres et portes extérieures",
+        name: "AAMA/WDMA/CSA 101 (NAFS)",
+        scope: "Window and door performance standards",
         requirements:
-          "Calage et fixation du dormant (calles d'assise, de serrage, de jeu), étanchéité à l'air et à l'eau (joints compribande, mastic, membrane), classement AEV (Air, Eau, Vent) minimal selon la zone climatique et l'exposition, pose en applique, en feuillure ou en tunnel.",
+          "Shimming, leveling, and fastening requirements, air and water infiltration resistance, performance grade ratings based on design pressure, installation methods (nail-fin, block frame, or new construction).",
         service: "/practice-areas/menuisier",
-        serviceLabel: "Trouver un menuisier",
+        serviceLabel: "Find a window installer",
       },
       {
-        name: "NF P 24-351",
-        scope: "Classification des fenêtres selon leurs performances",
+        name: "ENERGY STAR Window Standards",
+        scope: "Energy performance classification for windows",
         requirements:
-          "Classement AEV : A (perméabilité à l'air, A*1 à A*4), E (étanchéité à l'eau, E*1A à E*9A), V (résistance au vent, V*A1 à V*A5). Le classement minimal exigé dépend de la zone géographique, de la hauteur et de l'exposition du bâtiment.",
+          "U-factor and SHGC (Solar Heat Gain Coefficient) requirements by climate zone. Northern zones require U-factor of 0.27 or below. Southern zones focus on low SHGC (0.25 or below) to reduce cooling loads.",
         link: "/guides/renovation-fenetres",
-        linkLabel: "Guide fenêtres",
+        linkLabel: "Window guide",
         service: "/practice-areas/menuisier",
-        serviceLabel: "Trouver un menuisier",
+        serviceLabel: "Find a window installer",
       },
     ],
   },
 ]
 
-const breadcrumbItems = [{ label: "Normes du bâtiment" }]
+const breadcrumbItems = [{ label: "Building Codes" }]
 
-export default function NormesPage() {
+export default function RegulationsPage() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -213,13 +213,13 @@ export default function NormesPage() {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Accueil",
+        name: "Home",
         item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Normes du bâtiment",
+        name: "Building Codes",
         item: PAGE_URL,
       },
     ],
@@ -239,13 +239,13 @@ export default function NormesPage() {
         <section className="max-w-5xl mx-auto px-4 py-12 md:py-16 text-center">
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <BookOpen className="w-4 h-4" />
-            Normes et réglementations
+            Codes and regulations
           </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 font-heading leading-tight">
-            {"Normes du bâtiment : DTU, NF et réglementations essentielles"}
+            {"Building Codes & Regulations: Essential Standards"}
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {"Les normes du bâtiment garantissent la sécurité, la durabilité et la performance des constructions. Retrouvez les principales réglementations par corps de métier, expliquées en français clair."}
+            {"Building codes ensure the safety, durability, and performance of construction. Find the main regulations by trade, explained in plain language."}
           </p>
         </section>
 
@@ -253,31 +253,31 @@ export default function NormesPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
-              Comprendre les normes du bâtiment
+              Understanding building codes
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                {"Les normes du bâtiment en France se répartissent en trois grandes familles :"}
+                {"Building codes in the United States fall into three main categories:"}
               </p>
               <ul className="space-y-2 mt-4">
                 <li className="flex items-start gap-3">
                   <FileCheck className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
-                  <span><strong>DTU (Documents Techniques Unifiés)</strong> — règles de l{"'"}art pour chaque corps de métier. Ils définissent les matériaux, les mises en œuvre et les contrôles. Contractuellement opposables (si cités dans le marché de travaux).</span>
+                  <span><strong>Model Codes (ICC)</strong> — the International Building Code (IBC), International Residential Code (IRC), and related codes developed by the International Code Council. These are adopted and enforced at the state and local level.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <FileCheck className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
-                  <span><strong>Normes NF</strong> — normes françaises homologuées par l{"'"}AFNOR. Elles définissent les caractéristiques des produits et des installations (NF C 15-100 pour l{"'"}électricité, NF P pour la construction).</span>
+                  <span><strong>Industry Standards</strong> — standards developed by organizations like ASTM, ANSI, NFPA, and UL that define material properties, testing methods, and installation requirements referenced by building codes.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <FileCheck className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
-                  <span><strong>Réglementations</strong> — textes à valeur légale (lois, décrets, arrêtés). La RE2020, les règles parasismiques et l{"'"}accessibilité PMR sont des obligations réglementaires, pas de simples recommandations.</span>
+                  <span><strong>Federal Regulations</strong> — legally binding requirements such as the ADA (Americans with Disabilities Act), ENERGY STAR standards, and EPA lead paint rules. These are mandatory, not just recommendations.</span>
                 </li>
               </ul>
             </div>
           </div>
         </section>
 
-        {/* Normes par catégorie */}
+        {/* Codes by category */}
         {categories.map((cat) => {
           const CatIcon = cat.icon
           return (
@@ -327,23 +327,23 @@ export default function NormesPage() {
           )
         })}
 
-        {/* Guides liés */}
+        {/* Related guides */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
-            Guides complémentaires
+            Related guides
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Link href="/guides/regulations-electriques" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Normes électriques NF C 15-100"}</h3>
-              <p className="text-sm text-gray-500">{"Guide détaillé de la norme électrique avec les obligations par pièce."}</p>
+            <Link href="/guides/normes-electriques" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Electrical Code Guide"}</h3>
+              <p className="text-sm text-gray-500">{"Detailed guide to electrical codes with room-by-room requirements."}</p>
             </Link>
-            <Link href="/guides/guarantee-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Garantie décennale"}</h3>
-              <p className="text-sm text-gray-500">{"Les travaux non conformes aux normes peuvent affecter la décennale."}</p>
+            <Link href="/guides/certified-attorney" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Certified Professionals"}</h3>
+              <p className="text-sm text-gray-500">{"Non-compliant work can affect warranties and liability."}</p>
             </Link>
-            <Link href="/guides/renovation-toiture" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Rénovation toiture"}</h3>
-              <p className="text-sm text-gray-500">{"DTU couverture et isolation appliqués à votre projet."}</p>
+            <Link href="/guides/find-attorney" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{"Find an Attorney"}</h3>
+              <p className="text-sm text-gray-500">{"Building codes applied to your project needs."}</p>
             </Link>
           </div>
         </section>
@@ -352,10 +352,10 @@ export default function NormesPage() {
         <section className="max-w-5xl mx-auto px-4 py-12">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              {"Besoin d'un artisan qui respecte les normes ?"}
+              {"Need a professional who follows the codes?"}
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              {"Trouvez des professionnels qualifiés et certifiés près de chez vous. Ils connaissent et appliquent les DTU et normes en vigueur."}
+              {"Find qualified and certified professionals near you. They know and apply the current codes and regulations."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -363,14 +363,14 @@ export default function NormesPage() {
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
-                {"Trouver un artisan"}
+                {"Find an attorney"}
               </Link>
               <Link
                 href="/quotes"
                 className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-blue-400 transition-colors border border-blue-400"
               >
                 <FileCheck className="w-5 h-5" />
-                Demander un devis gratuit
+                Request a free consultation
               </Link>
             </div>
           </div>

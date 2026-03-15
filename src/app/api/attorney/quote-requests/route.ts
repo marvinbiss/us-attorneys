@@ -65,7 +65,7 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ devis: quotes || [] })
+    return NextResponse.json({ quotes: quotes || [] })
   } catch (error) {
     logger.error('Attorney quote GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
@@ -119,13 +119,13 @@ export async function POST(request: Request) {
       .single()
 
     if (!devisRequest) {
-      return NextResponse.json({ success: false, error: { message: 'Demande introuvable' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Request not found' } }, { status: 404 })
     }
 
     // Reject quotes on closed/completed requests
     if (!['pending', 'sent'].includes(devisRequest.status)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Cette demande n\'accepte plus de devis' } },
+        { success: false, error: { message: 'This request no longer accepts quotes' } },
         { status: 409 }
       )
     }
@@ -169,7 +169,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      devis: quote,
+      quote: quote,
       message: 'Consultation sent successfully',
     })
   } catch (error) {
@@ -265,7 +265,7 @@ export async function PUT(request: Request) {
       )
     }
 
-    return NextResponse.json({ success: true, devis: quote })
+    return NextResponse.json({ success: true, quote: quote })
   } catch (error) {
     logger.error('Attorney quote PUT error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })

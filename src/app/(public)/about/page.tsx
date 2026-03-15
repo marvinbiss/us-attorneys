@@ -152,8 +152,8 @@ export default async function AProposPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <JsonLd data={getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
-          { name: 'À propos', url: '/about' },
+          { name: 'Home', url: '/' },
+          { name: 'About', url: '/about' },
         ])} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -170,7 +170,7 @@ export default async function AProposPage() {
             </div>
           </div>
         </section>
-        {/* Notre équipe — E-E-A-T (also in CMS branch) */}
+        {/* Our team — E-E-A-T (also in CMS branch) */}
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">
@@ -249,7 +249,7 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Comment nous référençons les artisans */}
+      {/* How we verify attorneys */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -279,11 +279,11 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Notre technologie + modèle économique */}
+      {/* Our technology + business model */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Technologie */}
+            {/* Technology */}
             <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
               <div className="relative h-48 w-full">
                 <Image
@@ -333,7 +333,7 @@ export default async function AProposPage() {
               </div>
             </div>
 
-            {/* Modèle économique */}
+            {/* Business model */}
             <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl overflow-hidden text-white">
               <div className="relative h-48 w-full">
                 <Image
@@ -378,7 +378,7 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Chiffres ou état de lancement */}
+      {/* Stats or launch state */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {hasArtisans ? (
@@ -433,7 +433,7 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Nos engagements */}
+      {/* Our commitments */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -456,7 +456,7 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* En savoir plus sur nos engagements */}
+      {/* Learn more about our commitments */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
@@ -524,7 +524,7 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Notre équipe — E-E-A-T */}
+      {/* Our team — E-E-A-T */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -536,7 +536,7 @@ export default async function AProposPage() {
             </p>
           </div>
 
-          {/* Équipe éditoriale collective */}
+          {/* Editorial team */}
           {(() => {
             const editorial = teamMembers[0]
             return (
@@ -562,7 +562,7 @@ export default async function AProposPage() {
             )
           })()}
 
-          {/* Auteurs individuels */}
+          {/* Individual authors */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {getAllAuthors().map((author) => {
               const initials = author.name.split(' ').map(n => n[0]).join('')

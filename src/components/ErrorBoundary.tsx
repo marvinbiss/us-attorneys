@@ -45,10 +45,10 @@ export class ErrorBoundary extends Component<Props, State> {
               <AlertTriangle className="w-8 h-8 text-red-600" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Une erreur est survenue
+              Something went wrong
             </h2>
             <p className="text-gray-600 mb-8">
-              Nous nous excusons pour ce désagrément. Veuillez réessayer ou retourner à l'accueil.
+              Please try again or return to the home page.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
@@ -56,20 +56,20 @@ export class ErrorBoundary extends Component<Props, State> {
                 className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 <RefreshCw className="w-5 h-5" />
-                Réessayer
+                Retry
               </button>
               <Link
                 href="/"
                 className="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
               >
                 <Home className="w-5 h-5" />
-                Retour à l'accueil
+                Home
               </Link>
             </div>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-8 text-left bg-gray-100 rounded-lg p-4">
                 <summary className="cursor-pointer text-sm font-medium text-gray-700">
-                  Détails de l'erreur (dev)
+                  Error details (dev)
                 </summary>
                 <pre className="mt-2 text-xs text-red-600 overflow-auto">
                   {this.state.error.message}

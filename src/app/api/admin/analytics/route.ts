@@ -76,7 +76,7 @@ export async function GET(request: Request) {
       fetchAllBatched((from, to) => {
         let q = supabase
           .from('analytics_events')
-          .select('attorney_id, event_type, created_at, source, providers!inner(name, address_city, slug, stable_id, specialty)')
+          .select('attorney_id, event_type, created_at, source, attorneys!inner(name, address_city, slug, stable_id, primary_specialty_id)')
           .neq('event_type', 'page_view')
           .order('created_at', { ascending: false })
           .range(from, to)
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
       (() => {
         let q = supabase
           .from('analytics_events')
-          .select('id, attorney_id, event_type, source, created_at, metadata, providers!inner(name, address_city, slug, stable_id, specialty)')
+          .select('id, attorney_id, event_type, source, created_at, metadata, attorneys!inner(name, address_city, slug, stable_id, primary_specialty_id)')
           .neq('event_type', 'page_view')
           .order('created_at', { ascending: false })
           .range(feedOffset, feedOffset + FEED_PER_PAGE - 1)
@@ -122,14 +122,14 @@ export async function GET(request: Request) {
 
     // Current totals
     const totals = {
-      views: events.filter(e => e.event_type === 'artisan_profile_view').length,
+      views: events.filter(e => e.event_type === 'attorney_profile_view').length,
       reveals: events.filter(e => e.event_type === 'phone_reveal').length,
       clicks: events.filter(e => e.event_type === 'phone_click').length,
     }
 
     // Previous totals for trends
     const prevTotals = {
-      views: prevEvents.filter(e => e.event_type === 'artisan_profile_view').length,
+      views: prevEvents.filter(e => e.event_type === 'attorney_profile_view').length,
       reveals: prevEvents.filter(e => e.event_type === 'phone_reveal').length,
       clicks: prevEvents.filter(e => e.event_type === 'phone_click').length,
     }
@@ -153,7 +153,7 @@ export async function GET(request: Request) {
       const dateStr = d.toISOString().split('T')[0]
       chartData.push({
         date: dateStr,
-        views: events.filter(e => e.event_type === 'artisan_profile_view' && e.created_at.startsWith(dateStr)).length,
+        views: events.filter(e => e.event_type === 'attorney_profile_view' && e.created_at.startsWith(dateStr)).length,
         reveals: events.filter(e => e.event_type === 'phone_reveal' && e.created_at.startsWith(dateStr)).length,
         clicks: events.filter(e => e.event_type === 'phone_click' && e.created_at.startsWith(dateStr)).length,
       })
@@ -194,7 +194,7 @@ export async function GET(request: Request) {
       }
 
       const entry = providerMap.get(event.attorney_id)!
-      if (event.event_type === 'artisan_profile_view') entry.views++
+      if (event.event_type === 'attorney_profile_view') entry.views++
       else if (event.event_type === 'phone_reveal') entry.reveals++
       else if (event.event_type === 'phone_click') entry.clicks++
 

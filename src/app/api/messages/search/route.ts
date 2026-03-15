@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('Message search error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de recherche' } },
+        { success: false, error: { message: 'Search error' } },
         { status: 500 }
       )
     }

@@ -11,34 +11,34 @@ import { z } from 'zod'
 
 export const emailSchema = z
   .string()
-  .email('Adresse email invalide')
-  .min(5, 'Email trop court')
-  .max(255, 'Email trop long')
+  .email('Invalid email address')
+  .min(5, 'Email too short')
+  .max(255, 'Email too long')
 
 export const phoneSchema = z
   .string()
-  .regex(/^(?:\+33|0)[1-9](?:[0-9]{8})$/, 'Numero de telephone invalide')
+  .regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid US phone number')
   .transform((val) => val.replace(/\s/g, ''))
 
 export const passwordSchema = z
   .string()
-  .min(8, 'Le mot de passe doit contenir au moins 8 caracteres')
-  .max(128, 'Le mot de passe est trop long')
-  .regex(/[A-Z]/, 'Le mot de passe doit contenir au moins une majuscule')
-  .regex(/[a-z]/, 'Le mot de passe doit contenir au moins une minuscule')
-  .regex(/[0-9]/, 'Le mot de passe doit contenir au moins un chiffre')
+  .min(8, 'Password must be at least 8 characters')
+  .max(128, 'Password is too long')
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+  .regex(/[0-9]/, 'Password must contain at least one digit')
 
 export const nameSchema = z
   .string()
-  .min(2, 'Nom trop court')
-  .max(100, 'Nom trop long')
-  .regex(/^[a-zA-ZÀ-ÿ\s\-']+$/, 'Nom invalide')
+  .min(2, 'Name too short')
+  .max(100, 'Name too long')
+  .regex(/^[a-zA-ZÀ-ÿ\s\-']+$/, 'Invalid name')
 
-export const uuidSchema = z.string().uuid('ID invalide')
+export const uuidSchema = z.string().uuid('Invalid ID')
 
-export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Format de date invalide (YYYY-MM-DD)')
+export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
 
-export const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, 'Format d\'heure invalide (HH:MM)')
+export const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, 'Invalid time format (HH:MM)')
 
 // ============================================
 // BOOKING SCHEMAS
@@ -51,8 +51,8 @@ export const createBookingSchema = z.object({
   clientName: nameSchema,
   clientPhone: phoneSchema,
   clientEmail: emailSchema,
-  serviceDescription: z.string().max(1000, 'Description trop longue').optional(),
-  address: z.string().max(500, 'Adresse trop longue').optional(),
+  serviceDescription: z.string().max(1000, 'Description too long').optional(),
+  address: z.string().max(500, 'Address too long').optional(),
   paymentIntentId: z.string().optional(),
   depositAmount: z.number().min(0).max(10000).optional(),
 })
@@ -79,7 +79,7 @@ export const getBookingsSchema = z.object({
 export const createReviewSchema = z.object({
   bookingId: uuidSchema,
   rating: z.number().int().min(1).max(5),
-  comment: z.string().min(10, 'Commentaire trop court').max(500, 'Commentaire trop long'),
+  comment: z.string().min(10, 'Comment too short').max(500, 'Comment too long'),
   reviewToken: z.string().optional(),
 })
 
@@ -103,16 +103,16 @@ export const signUpSchema = z.object({
   lastName: nameSchema,
   phone: phoneSchema.optional(),
   acceptTerms: z.boolean().refine(val => val === true, {
-    message: 'Vous devez accepter les conditions',
+    message: 'You must accept the terms and conditions',
   }),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
+  message: 'Passwords do not match',
   path: ['confirmPassword'],
 })
 
 export const signInSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, 'Mot de passe requis'),
+  password: z.string().min(1, 'Password required'),
   rememberMe: z.boolean().optional(),
 })
 
@@ -122,7 +122,7 @@ export const updateProfileSchema = z.object({
   phone: phoneSchema.optional(),
   address: z.string().max(500).optional(),
   city: z.string().max(100).optional(),
-  postalCode: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional(),
+  postalCode: z.string().regex(/^\d{5}$/, 'Invalid postal code').optional(),
   bio: z.string().max(1000).optional(),
 })
 
@@ -139,14 +139,14 @@ export const artisanRegistrationSchema = z.object({
   lastName: nameSchema,
   phone: phoneSchema,
   specialty: z.string().min(2).max(100),
-  siret: z.string().regex(/^\d{14}$/, 'SIRET invalide'),
+  siret: z.string().regex(/^\d{14}$/, 'Invalid SIRET'),
   address: z.string().min(5).max(500),
   city: z.string().min(2).max(100),
-  postalCode: z.string().regex(/^\d{5}$/, 'Code postal invalide'),
+  postalCode: z.string().regex(/^\d{5}$/, 'Invalid postal code'),
   description: z.string().max(2000).optional(),
   acceptTerms: z.literal(true),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
+  message: 'Passwords do not match',
   path: ['confirmPassword'],
 })
 

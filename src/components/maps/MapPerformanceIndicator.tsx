@@ -59,7 +59,7 @@ export default function MapPerformanceIndicator({
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-600 flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
-                  Temps de réponse
+                  Response time
                 </span>
                 <span className={`font-medium ${
                   responseTime < 500 ? 'text-green-600' : 
@@ -91,7 +91,7 @@ export default function MapPerformanceIndicator({
             {/* Results Count */}
             {resultsCount !== undefined && (
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">Résultats</span>
+                <span className="text-gray-600">Results</span>
                 <span className="font-medium text-blue-600">{resultsCount}</span>
               </div>
             )}

@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    // Marquer le contact comme opted_out
+    // Mark the contact as opted_out
     const { error } = await supabase
       .from('prospection_contacts')
       .update({
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('Unsubscribe error', error)
-      return new NextResponse(unsubscribePage('Erreur technique', false), {
+      return new NextResponse(unsubscribePage('Technical error', false), {
         status: 500,
         headers: securityHeaders,
       })
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Unsubscribe endpoint error', error as Error)
-    return new NextResponse(unsubscribePage('Erreur technique', false), {
+    return new NextResponse(unsubscribePage('Technical error', false), {
       status: 500,
       headers: securityHeaders,
     })
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
 
 function unsubscribePage(message: string, success: boolean): string {
   return `<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@ function unsubscribePage(message: string, success: boolean): string {
     <div class="icon">${success ? '&#10003;' : '&#10007;'}</div>
     <h1>${escapeHtml(message)}</h1>
     <p>${success
-      ? 'Vous ne recevrez plus de communications de notre part.'
+      ? 'You will no longer receive communications from us.'
       : 'Please try again or contact support@us-attorneys.com'
     }</p>
   </div>

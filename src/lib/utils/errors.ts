@@ -308,24 +308,24 @@ export function getUserMessage(error: unknown): string {
   }
 
   if (error instanceof NotFoundError) {
-    return `${error.resourceType} introuvable`
+    return `${error.resourceType} not found`
   }
 
   if (error instanceof RateLimitError) {
-    return 'Service temporairement indisponible. Veuillez réessayer dans quelques instants.'
+    return 'Service temporarily unavailable. Please try again in a few moments.'
   }
 
   if (error instanceof AuthError) {
-    return 'Veuillez vous connecter pour continuer.'
+    return 'Please log in to continue.'
   }
 
   if (error instanceof PermissionError) {
-    return "Vous n'avez pas les droits nécessaires pour cette action."
+    return "You do not have the required permissions for this action."
   }
 
   if (error instanceof APIError) {
-    return 'Une erreur technique est survenue. Veuillez réessayer.'
+    return 'A technical error occurred. Please try again.'
   }
 
-  return 'Une erreur inattendue est survenue.'
+  return 'An unexpected error occurred.'
 }

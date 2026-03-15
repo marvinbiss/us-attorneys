@@ -40,7 +40,7 @@ export function SimilarArtisans({
   limit = 4,
   className,
 }: SimilarArtisansProps) {
-  const [artisans, setArtisans] = useState<SimilarArtisan[]>([])
+  const [attorneys, setAttorneys] = useState<SimilarArtisan[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -52,10 +52,10 @@ export function SimilarArtisans({
         )
         if (response.ok) {
           const data = await response.json()
-          setArtisans(data.artisans || [])
+          setAttorneys(data.artisans || [])
         }
       } catch (error) {
-        console.error('Error fetching similar artisans:', error)
+        console.error('Error fetching similar attorneys:', error)
       } finally {
         setIsLoading(false)
       }
@@ -74,7 +74,7 @@ export function SimilarArtisans({
     )
   }
 
-  if (artisans.length === 0) {
+  if (attorneys.length === 0) {
     return null
   }
 
@@ -93,7 +93,7 @@ export function SimilarArtisans({
       </div>
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        {artisans.map((artisan) => {
+        {attorneys.map((artisan) => {
           const providerUrl = getAttorneyUrl({ stable_id: artisan.stable_id, slug: artisan.slug, specialty: artisan.specialty, city: artisan.city })
 
           return (

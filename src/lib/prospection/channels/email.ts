@@ -1,6 +1,6 @@
 /**
  * Email Channel Sender - Prospection
- * Envoi d'emails via Resend pour campagnes de prospection
+ * Send emails via Resend for prospection campaigns
  */
 
 import { sendEmail, sendBatchEmails } from '@/lib/api/resend-client'
@@ -21,7 +21,7 @@ export interface EmailResult {
 }
 
 /**
- * Envoyer un email de prospection
+ * Send a prospection email
  */
 export async function sendProspectionEmail(params: EmailProspectionParams): Promise<EmailResult> {
   try {
@@ -45,7 +45,7 @@ export async function sendProspectionEmail(params: EmailProspectionParams): Prom
 }
 
 /**
- * Envoyer un batch d'emails de prospection
+ * Send a batch of prospection emails
  */
 export async function sendProspectionEmailBatch(
   emails: EmailProspectionParams[]

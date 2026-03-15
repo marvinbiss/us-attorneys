@@ -1,34 +1,34 @@
 import { z } from 'zod'
 
 export const quoteRequestSchema = z.object({
-  attorney_id: z.string().uuid('ID artisan invalide'),
-  service_slug: z.string().min(1, 'Service requis'),
+  attorney_id: z.string().uuid('Invalid attorney ID'),
+  service_slug: z.string().min(1, 'Service required'),
   client_name: z
     .string()
-    .min(2, 'Nom trop court')
-    .max(100, 'Nom trop long')
+    .min(2, 'Name too short')
+    .max(100, 'Name too long')
     .transform((v) => v.trim()),
   client_email: z
     .string()
-    .email('Email invalide')
+    .email('Invalid email')
     .transform((v) => v.toLowerCase().trim()),
   client_phone: z
     .string()
-    .regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro de téléphone invalide')
+    .regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid phone number')
     .transform((v) => {
       const cleaned = v.replace(/\s/g, '')
-      if (cleaned.startsWith('0')) {
-        return `+33${cleaned.slice(1)}`
+      if (!cleaned.startsWith('+1')) {
+        return `+1${cleaned}`
       }
       return cleaned
     }),
   description: z
     .string()
-    .min(10, 'La description doit contenir au moins 10 caractères')
-    .max(2000, 'Description trop longue'),
+    .min(10, 'Description must be at least 10 characters')
+    .max(2000, 'Description too long'),
   urgency: z.enum(['normal', 'urgent', 'tres_urgent']).optional().default('normal'),
   city: z.string().max(100).optional(),
-  postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional(),
+  postal_code: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional(),
   budget_min: z.number().int().positive().optional(),
   budget_max: z.number().int().positive().optional(),
   preferred_date: z.string().datetime().optional(),

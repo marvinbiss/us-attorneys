@@ -18,7 +18,7 @@ const auditQuerySchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Liste des logs d'audit
+// GET - List audit logs
 export async function GET(request: NextRequest) {
   try {
     // Verify admin with audit:read permission

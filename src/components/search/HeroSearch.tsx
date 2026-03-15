@@ -148,24 +148,24 @@ function removeRecentSearch(city: string) {
 
 // ── Large fallback cities for "no match" state ──────────────────────
 const fallbackCities = [
-  { name: 'Paris', dept: '75' },
-  { name: 'Lyon', dept: '69' },
-  { name: 'Marseille', dept: '13' },
-  { name: 'Toulouse', dept: '31' },
-  { name: 'Bordeaux', dept: '33' },
-  { name: 'Lille', dept: '59' },
+  { name: 'New York', dept: 'NY' },
+  { name: 'Los Angeles', dept: 'CA' },
+  { name: 'Chicago', dept: 'IL' },
+  { name: 'Houston', dept: 'TX' },
+  { name: 'Phoenix', dept: 'AZ' },
+  { name: 'Miami', dept: 'FL' },
 ]
 
 // ── Popular cities for empty state ──────────────────────────────────
 const popularCities = [
-  { name: 'Paris', slug: 'paris', stateName: 'Paris (75)', pop: '2.1M' },
-  { name: 'Marseille', slug: 'marseille', stateName: 'Bouches-du-Rhône (13)', pop: '870k' },
-  { name: 'Lyon', slug: 'lyon', stateName: 'Rhône (69)', pop: '522k' },
-  { name: 'Toulouse', slug: 'toulouse', stateName: 'Haute-Garonne (31)', pop: '493k' },
-  { name: 'Nice', slug: 'nice', stateName: 'Alpes-Maritimes (06)', pop: '342k' },
-  { name: 'Nantes', slug: 'nantes', stateName: 'Loire-Atlantique (44)', pop: '320k' },
-  { name: 'Bordeaux', slug: 'bordeaux', stateName: 'Gironde (33)', pop: '260k' },
-  { name: 'Lille', slug: 'lille', stateName: 'Nord (59)', pop: '236k' },
+  { name: 'New York', slug: 'new-york', stateName: 'New York (NY)', pop: '8.3M' },
+  { name: 'Los Angeles', slug: 'los-angeles', stateName: 'California (CA)', pop: '3.9M' },
+  { name: 'Chicago', slug: 'chicago', stateName: 'Illinois (IL)', pop: '2.7M' },
+  { name: 'Houston', slug: 'houston', stateName: 'Texas (TX)', pop: '2.3M' },
+  { name: 'Phoenix', slug: 'phoenix', stateName: 'Arizona (AZ)', pop: '1.6M' },
+  { name: 'Miami', slug: 'miami', stateName: 'Florida (FL)', pop: '442k' },
+  { name: 'Dallas', slug: 'dallas', stateName: 'Texas (TX)', pop: '1.3M' },
+  { name: 'San Francisco', slug: 'san-francisco', stateName: 'California (CA)', pop: '874k' },
 ]
 
 // ── Dropdown animation variants ─────────────────────────────────────
@@ -257,11 +257,11 @@ export function HeroSearch() {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${position.coords.longitude}&lat=${position.coords.latitude}`
+          const url = `https://nominatim.openstreetmap.org/reverse?format=json&lon=${position.coords.longitude}&lat=${position.coords.latitude}`
           const response = await fetch(url)
           if (response.ok) {
             const data = await response.json()
-            const city = data.features?.[0]?.properties?.city
+            const city = data.address?.city || data.address?.town
             if (city) {
               setLocation(city)
               addRecentSearch(city)
@@ -369,7 +369,7 @@ export function HeroSearch() {
   const navigableCityItems = useMemo(() => {
     if (filteredCities.length > 0) return filteredCities
     if (!hasTypedCity && recentSearches.length > 0) {
-      // Map recent searches to ville objects or placeholders
+      // Map recent searches to city objects or placeholders
       return recentSearches.map(name => {
         const match = cities.find(v => normalizeText(v.name) === normalizeText(name))
         return match || { name, slug: slugify(name), stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as City
@@ -498,7 +498,7 @@ export function HeroSearch() {
                     role="listbox"
                     aria-label="Available services"
                   >
-                    {/* Urgence Banner */}
+                    {/* Emergency Banner */}
                     <div className="p-3 bg-gradient-to-r from-red-500 to-orange-500 text-white">
                       <div className="flex items-center gap-2">
                         <Zap className="w-4 h-4" />
@@ -518,7 +518,7 @@ export function HeroSearch() {
                     <div className="p-2" ref={specialtyListRef}>
                       <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
                         <TrendingUp className="w-3 h-3" />
-                        {query ? `Résults for « ${query} »` : 'Popular services'}
+                        {query ? `Results for "${query}"` : 'Popular services'}
                       </div>
                       {filteredServices.length === 0 && (
                         <div className="px-3 py-6 text-center text-slate-400 text-sm">
@@ -729,7 +729,7 @@ export function HeroSearch() {
                       </div>
                     )}
 
-                    {/* Filtered cities from france.ts (fuzzy search results) */}
+                    {/* Filtered cities from usa.ts (fuzzy search results) */}
                     {filteredCities.length > 0 && (
                       <div className="p-2" ref={cityListRef}>
                         <div className="px-3 py-2 text-xs text-slate-500 font-medium">
@@ -785,7 +785,7 @@ export function HeroSearch() {
                             No city found for <span className="font-semibold text-slate-700">&ldquo;{location}&rdquo;</span>
                           </div>
                           <div className="text-xs text-slate-400 mb-4">
-                            We don&apos;t cover this city yet. Try a nearby city.
+                            We don&apos;t cover this area yet. Try a nearby city.
                           </div>
                           <div className="flex flex-wrap items-center justify-center gap-2">
                             {fallbackCities.map((fc) => (

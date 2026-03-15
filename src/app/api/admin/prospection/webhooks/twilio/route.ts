@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const params: Record<string, string> = {}
     formData.forEach((value, key) => { params[key] = value.toString() })
 
-    // Verify la signature Twilio
+    // Verify the Twilio signature
     const signature = request.headers.get('x-twilio-signature') || ''
     const url = request.url
     if (!verifyTwilioSignature(signature, url, params)) {

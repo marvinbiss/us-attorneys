@@ -57,10 +57,10 @@ export default function EditUserPage() {
           is_admin: data.user.is_admin || false,
         })
       } else {
-        setError('Utilisateur non trouvé')
+        setError('User not found')
       }
     } catch {
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -80,10 +80,10 @@ export default function EditUserPage() {
         router.push(`/admin/utilisateurs/${userId}`)
       } else {
         const data = await response.json()
-        setError(data.error?.message || data.error || 'Erreur de sauvegarde')
+        setError(data.error?.message || data.error || 'Save error')
       }
     } catch {
-      setError('Erreur de sauvegarde')
+      setError('Save error')
     } finally {
       setSaving(false)
     }
@@ -106,7 +106,7 @@ export default function EditUserPage() {
             onClick={() => router.push('/admin/utilisateurs')}
             className="text-blue-600 hover:underline"
           >
-            Retour à la liste
+            Back to list
           </button>
         </div>
       </div>
@@ -124,9 +124,9 @@ export default function EditUserPage() {
               className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
-              Retour au profil
+              Back to profile
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modifier l&apos;utilisateur</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Edit user</h1>
             <p className="text-gray-500 mt-1">{user?.email}</p>
           </div>
           <button
@@ -135,7 +135,7 @@ export default function EditUserPage() {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-5 h-5" />
-            {saving ? 'Enregistrement...' : 'Enregistrer'}
+            {saving ? 'Saving...' : 'Save'}
           </button>
         </div>
 
@@ -151,12 +151,12 @@ export default function EditUserPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <User className="w-5 h-5 text-gray-400" />
-              Informations personnelles
+              Personal information
             </h2>
             <div className="grid gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom complet
+                  Full name
                 </label>
                 <input
                   type="text"
@@ -177,12 +177,12 @@ export default function EditUserPage() {
                     disabled
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">L&apos;email ne peut pas être modifié ici</p>
+                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed here</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     <Phone className="w-4 h-4 inline mr-1" />
-                    Téléphone
+                    Phone
                   </label>
                   <input
                     type="tel"
@@ -199,25 +199,25 @@ export default function EditUserPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Shield className="w-5 h-5 text-gray-400" />
-              Paramètres du compte
+              Account settings
             </h2>
             <div className="grid gap-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Rôle
+                    Role
                   </label>
                   <input
                     type="text"
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="ex: client, artisan, admin"
+                    placeholder="e.g., client, attorney, admin"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Administrateur
+                    Administrator
                   </label>
                   <div className="mt-2 flex items-center gap-3">
                     <button
@@ -235,7 +235,7 @@ export default function EditUserPage() {
                       />
                     </button>
                     <span className="text-sm text-gray-600">
-                      {formData.is_admin ? 'Administrateur' : 'Utilisateur standard'}
+                      {formData.is_admin ? 'Administrator' : 'Standard user'}
                     </span>
                   </div>
                 </div>

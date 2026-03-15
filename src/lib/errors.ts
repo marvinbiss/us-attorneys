@@ -23,7 +23,7 @@ export class ValidationError extends AppError {
 }
 
 export class NotFoundError extends AppError {
-  constructor(resource: string = 'Ressource') {
+  constructor(resource: string = 'Resource') {
     super(`${resource} not found`, 'NOT_FOUND', 404)
     this.name = 'NotFoundError'
   }
@@ -57,7 +57,7 @@ export class RateLimitError extends AppError {
 export class ExternalServiceError extends AppError {
   constructor(specialtyName: string, details?: string) {
     super(
-      `Erreur du service externe ${specialtyName}${details ? `: ${details}` : ''}`,
+      `External service error: ${specialtyName}${details ? `: ${details}` : ''}`,
       'EXTERNAL_SERVICE_ERROR',
       502
     )
@@ -73,7 +73,7 @@ export class ConflictError extends AppError {
 }
 
 export class PaymentError extends AppError {
-  constructor(message: string = 'Erreur de paiement') {
+  constructor(message: string = 'Payment error') {
     super(message, 'PAYMENT_ERROR', 402)
     this.name = 'PaymentError'
   }
@@ -98,7 +98,7 @@ export function toAppError(error: unknown): AppError {
     return new AppError(error.message, 'UNKNOWN_ERROR', 500)
   }
 
-  return new AppError('Une erreur inattendue est survenue', 'UNKNOWN_ERROR', 500)
+  return new AppError('An unexpected error occurred', 'UNKNOWN_ERROR', 500)
 }
 
 /**

@@ -39,11 +39,11 @@ export function CompareButton({ provider, size = 'sm', className }: CompareButto
           : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300',
         className,
       )}
-      aria-label={active ? `Retirer ${provider.name} de la comparaison` : `Ajouter ${provider.name} a la comparaison`}
+      aria-label={active ? `Remove ${provider.name} from comparison` : `Add ${provider.name} to comparison`}
       aria-pressed={active}
     >
       <Scale className={clsx('flex-shrink-0', size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4')} />
-      <span>{active ? 'Ajouté' : 'Comparer'}</span>
+      <span>{active ? 'Added' : 'Compare'}</span>
     </button>
   )
 }

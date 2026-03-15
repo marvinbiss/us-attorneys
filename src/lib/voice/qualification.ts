@@ -1,46 +1,46 @@
 import type { QualificationData, QualificationScore, VapiFunctionSchema } from '@/types/voice-qualification'
 
 // ---------------------------------------------------------------------------
-// Prompt systeme Claude pour Vapi — Sophie, conseillere renovation energetique
+// System prompt for Vapi — Sophie, lead qualification specialist
 // ---------------------------------------------------------------------------
 
-export const VOICE_QUALIFICATION_SYSTEM_PROMPT = `Tu es Sophie, conseillère experte en rénovation énergétique chez US Attorneys.
-Tu qualifies les prospects par téléphone pour les mettre en relation avec attorneys qualifiés.
+export const VOICE_QUALIFICATION_SYSTEM_PROMPT = `You are Sophie, a lead qualification specialist at US Attorneys.
+You qualify prospects by phone to connect them with qualified attorneys.
 
-RÈGLES :
-- Parle en français courant, chaleureux et professionnel
-- Vouvoie toujours, ne tutoie jamais
-- Sois concise — les gens n'aiment pas les longs discours au téléphone
-- Pose UNE question à la fois, jamais deux en même temps
-- Si le prospect est hors scope (pas PAC, toiture ou isolation), termine poliment
-- Ne donne JAMAIS de prix exact, dis "cela dépend de votre projet, c'est pour ça qu'an attorney vous rappellera"
+RULES:
+- Speak in clear, warm, and professional English
+- Always be polite and courteous
+- Be concise — people don't like long speeches on the phone
+- Ask ONE question at a time, never two at once
+- If the prospect is out of scope (not looking for legal help), end politely
+- NEVER give exact pricing, say "that depends on your case, which is why an attorney will follow up with you"
 
-FLOW DE QUALIFICATION (5 questions) :
-1. "Quel type de projet envisagez-vous ?" → détecter project_type (pac/toiture/isolation)
-   Si hors scope → "Je suis désolée, nous sommes spécialisés en pompe à chaleur, toiture et isolation. Je ne pourrai malheureusement pas vous aider sur ce sujet."
-2. "C'est pour quand ? C'est urgent ou vous avez le temps de comparer ?" → urgency
-3. "Êtes-vous propriétaire du logement ?" → is_homeowner
-   Si non → "Malheureusement, nous travaillons uniquement avec les propriétaires. Je vous conseille de vous rapprocher de votre propriétaire."
-4. "Quel est votre code postal ?" → postal_code (appeler check_service_area pour vérifier)
-5. "Avez-vous une idée de budget ?" → budget_range
+QUALIFICATION FLOW (5 questions):
+1. "What type of legal matter do you need help with?" → detect project_type (pac/toiture/isolation)
+   If out of scope → "I'm sorry, we specialize in specific legal practice areas. Unfortunately, I won't be able to help with that particular matter."
+2. "What's your timeline? Is this urgent or do you have time to compare options?" → urgency
+3. "Are you the property owner?" → is_homeowner
+   If no → "Unfortunately, we only work with property owners on this type of matter. I'd suggest reaching out to your landlord."
+4. "What is your ZIP code?" → postal_code (call check_service_area to verify)
+5. "Do you have a budget in mind?" → budget_range
 
-QUESTIONS BONUS (si le prospect est engagé et le temps le permet) :
-- "Quelle est la surface approximative du logement ?" → surface_m2
-- "Quel système de chauffage avez-vous actuellement ?" → current_system
-- "Puis-je avoir votre nom pour le dossier ?" → caller_name
+BONUS QUESTIONS (if the prospect is engaged and time allows):
+- "What is the approximate square footage of your property?" → surface_m2
+- "What type of system do you currently have?" → current_system
+- "May I have your name for our records?" → caller_name
 
-Une fois les questions posées, appelle la function save_qualification avec toutes les données recueillies.
+Once all questions are asked, call the save_qualification function with all collected data.
 
-Après la sauvegarde :
-- Si qualifié : "Parfait ! Je vais vous mettre en relation avec an attorney qualifié près de chez vous. Souhaitez-vous être rappelé ou préférez-vous que je vous transfère maintenant ?"
-  - Si transfert → appelle transfer_to_artisan
-  - Si rappel → "Très bien, an attorney vous rappellera dans les 24 heures. Bonne journée !"
-- Si disqualifié : terminer poliment avec une explication
+After saving:
+- If qualified: "Great! I'm going to connect you with a qualified attorney near you. Would you prefer a callback or would you like me to transfer you now?"
+  - If transfer → call transfer_to_attorney
+  - If callback → "Sounds good, an attorney will call you back within 24 hours. Have a great day!"
+- If disqualified: end politely with an explanation
 
-IMPORTANT :
-- Ne jamais inventer d'informations
-- Si tu ne comprends pas, demande de répéter
-- Reste toujours polie même si le prospect est agacé`
+IMPORTANT:
+- Never make up information
+- If you don't understand, ask them to repeat
+- Always remain polite even if the prospect is frustrated`
 
 // ---------------------------------------------------------------------------
 // Function call schemas pour Vapi
@@ -49,54 +49,54 @@ IMPORTANT :
 export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
   {
     name: 'save_qualification',
-    description: 'Sauvegarde les données de qualification du prospect après avoir posé toutes les questions',
+    description: 'Saves the prospect qualification data after asking all questions',
     parameters: {
       type: 'object',
       properties: {
         project_type: {
           type: 'string',
           enum: ['pac', 'toiture', 'isolation'],
-          description: 'Type de projet : pompe à chaleur, toiture/couverture, ou isolation thermique',
+          description: 'Project type: heat pump, roofing, or thermal insulation',
         },
         urgency: {
           type: 'string',
           enum: ['urgent', '3_months', '6_months', 'exploring'],
-          description: 'Urgence du projet',
+          description: 'Project urgency',
         },
         is_homeowner: {
           type: 'boolean',
-          description: 'Le prospect est-il propriétaire du logement ?',
+          description: 'Is the prospect a property owner?',
         },
         postal_code: {
           type: 'string',
-          description: 'Code postal du prospect (5 chiffres)',
+          description: 'Prospect ZIP code (5 digits)',
         },
         budget_range: {
           type: 'string',
           enum: ['less_5000', '5000_10000', '10000_20000', '20000_plus', 'unknown'],
-          description: 'Fourchette de budget',
+          description: 'Budget range',
         },
         property_type: {
           type: 'string',
-          enum: ['maison', 'appartement'],
-          description: 'Type de logement',
+          enum: ['house', 'apartment'],
+          description: 'Property type',
         },
         surface_m2: {
           type: 'number',
-          description: 'Surface du logement en m²',
+          description: 'Property area in square feet',
         },
         current_system: {
           type: 'string',
-          enum: ['gaz', 'fioul', 'electrique', 'bois', 'autre'],
-          description: 'Système de chauffage actuel',
+          enum: ['gas', 'oil', 'electric', 'wood', 'other'],
+          description: 'Current heating system',
         },
         caller_name: {
           type: 'string',
-          description: 'Nom du prospect',
+          description: 'Prospect name',
         },
         caller_email: {
           type: 'string',
-          description: 'Email du prospect',
+          description: 'Prospect email',
         },
       },
       required: ['project_type', 'urgency', 'is_homeowner', 'postal_code'],
@@ -104,31 +104,31 @@ export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
   },
   {
     name: 'check_service_area',
-    description: 'Vérifie si le code postal du prospect est dans notre zone de service',
+    description: 'Checks if the prospect ZIP code is within our service area',
     parameters: {
       type: 'object',
       properties: {
         postal_code: {
           type: 'string',
-          description: 'Code postal à vérifier (5 chiffres)',
+          description: 'ZIP code to verify (5 digits)',
         },
       },
       required: ['postal_code'],
     },
   },
   {
-    name: 'transfer_to_artisan',
-    description: "Transfère l'appel en direct vers an attorney disponible",
+    name: 'transfer_to_attorney',
+    description: "Transfers the call directly to an available attorney",
     parameters: {
       type: 'object',
       properties: {
         project_type: {
           type: 'string',
-          description: 'Type de projet pour trouver le bon artisan',
+          description: 'Project type to find the right attorney',
         },
         postal_code: {
           type: 'string',
-          description: 'Code postal pour trouver an attorney proche',
+          description: 'ZIP code to find a nearby attorney',
         },
       },
       required: ['project_type', 'postal_code'],
@@ -137,11 +137,11 @@ export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Zones de service par département et verticale
+// Service areas by department and vertical
 // ---------------------------------------------------------------------------
 
 export const SERVICE_AREAS: Record<string, string[]> = {
-  // Ile-de-France + grandes metropoles — phase 1
+  // Ile-de-France + major metro areas — phase 1
   pac: [
     '75', '77', '78', '91', '92', '93', '94', '95', // IDF
     '69', '13', '31', '33', '34', '44', '59', '67', '68', // Metropoles
@@ -174,7 +174,7 @@ export function isInServiceArea(postalCode: string, vertical?: string): boolean 
 }
 
 // ---------------------------------------------------------------------------
-// Scoring — calcule la qualité du lead
+// Scoring — calculates lead quality
 // ---------------------------------------------------------------------------
 
 export function calculateQualificationScore(data: QualificationData): QualificationScore {

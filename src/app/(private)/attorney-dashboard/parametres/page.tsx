@@ -47,7 +47,7 @@ interface NotificationPreferences {
   rappelsRdv: boolean
 }
 
-const NOTIF_STORAGE_KEY = 'artisan_notification_prefs'
+const NOTIF_STORAGE_KEY = 'attorney_notification_prefs'
 
 function getDefaultNotifPrefs(): NotificationPreferences {
   return {
@@ -235,7 +235,7 @@ export default function AttorneySettingsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          confirmText: 'SUPPRIMER MON COMPTE',
+          confirmText: 'DELETE MY ACCOUNT',
           password: deletePassword,
           reason: deleteReason || undefined,
         }),
@@ -309,7 +309,7 @@ export default function AttorneySettingsPage() {
           </div>
         )}
 
-        {/* Section 1: Informations du compte */}
+        {/* Section 1: Account Information */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h2 className="font-semibold text-gray-900 mb-6 flex items-center gap-2">
             <User className="w-5 h-5 text-gray-400" />
@@ -385,7 +385,7 @@ export default function AttorneySettingsPage() {
           </div>
         </div>
 
-        {/* Section 2: Sécurité */}
+        {/* Section 2: Security */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5 text-gray-400" />
@@ -448,7 +448,7 @@ export default function AttorneySettingsPage() {
           </div>
         </div>
 
-        {/* Section 4: Données personnelles (RGPD) */}
+        {/* Section 4: Personal Data (Privacy) */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5 text-gray-400" />

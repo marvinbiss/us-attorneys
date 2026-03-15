@@ -20,7 +20,7 @@ export function ErrorBanner({ message, onDismiss, onRetry }: ErrorBannerProps) {
               onClick={onRetry}
               className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
             >
-              Réessayer
+              Retry
             </button>
           )}
         </div>
@@ -28,7 +28,7 @@ export function ErrorBanner({ message, onDismiss, onRetry }: ErrorBannerProps) {
           <button
             onClick={onDismiss}
             className="text-red-400 hover:text-red-600"
-            aria-label="Fermer le message d'erreur"
+            aria-label="Dismiss error"
           >
             <XCircle className="w-4 h-4" />
           </button>

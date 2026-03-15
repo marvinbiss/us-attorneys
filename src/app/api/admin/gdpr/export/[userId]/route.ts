@@ -44,14 +44,14 @@ export async function POST(
       profile,
       bookings: bookings || [],
       reviews: reviews || [],
-      // La table conversations n'est pas disponible dans ce contexte d'export.
+      // The conversations table is not available in this export context.
       conversations: null,
       _note: 'Conversation data not available in this export',
       exportedAt: new Date().toISOString(),
       exportedBy: authResult.admin.id,
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'gdpr.export', 'user', userId)
 
     return NextResponse.json({

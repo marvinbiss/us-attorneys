@@ -248,7 +248,7 @@ async function sendClientConfirmationEmail(
   if (!clientEmail || clientEmail.length === 0) return
 
   const prenom = data.nom ? htmlEscape(data.nom.split(' ')[0]) : ''
-  const salutation = prenom ? `Bonjour ${prenom}` : 'Bonjour'
+  const salutation = prenom ? `Hello ${prenom}` : 'Hello'
   const metier = htmlEscape(data.metier.toLowerCase())
   const ville = htmlEscape(data.ville)
   const isAttorneyPage = !!data.artisan_public_id
@@ -275,18 +275,18 @@ async function sendClientConfirmationEmail(
     <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       <p style="color: #333; font-size: 16px; margin-bottom: 4px;">${salutation},</p>
       <p style="color: #333; font-size: 15px; line-height: 1.6;">
-        Merci pour votre demande d'estimation pour un <strong>${metier}</strong>
+        Thank you for your estimation request for a <strong>${metier}</strong>
         in <strong>${ville}</strong>. We have recorded your contact information.
       </p>
 
       <div style="background: #fef7f4; border-left: 4px solid #E07040; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;">
         <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Summary:</strong></p>
-        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service : <strong>${htmlEscape(data.metier)}</strong></p>
-        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">City : <strong>${ville}${data.departement ? ` (${htmlEscape(data.departement)})` : ''}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service: <strong>${htmlEscape(data.metier)}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">City: <strong>${ville}${data.departement ? ` (${htmlEscape(data.departement)})` : ''}</strong></p>
         <p style="margin: 0; font-size: 14px; color: #333;">Phone: <strong>${htmlEscape(data.telephone)}</strong></p>
       </div>
 
-      <h3 style="color: #333; font-size: 16px; margin: 24px 0 8px 0;">Que se passe-t-il maintenant ?</h3>
+      <h3 style="color: #333; font-size: 16px; margin: 24px 0 8px 0;">What happens next?</h3>
       ${nextSteps}
 
       <div style="background: #f0fdf4; border-radius: 8px; padding: 16px; margin: 24px 0;">

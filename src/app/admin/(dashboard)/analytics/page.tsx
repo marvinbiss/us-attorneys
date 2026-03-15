@@ -104,16 +104,16 @@ interface VisitorData {
 // ─── Constants ──────────────────────────────────────────────────
 
 const RANGES = [
-  { label: '7j', value: '7d' },
-  { label: '30j', value: '30d' },
-  { label: '90j', value: '90d' },
-  { label: 'Tout', value: 'all' },
+  { label: '7d', value: '7d' },
+  { label: '30d', value: '30d' },
+  { label: '90d', value: '90d' },
+  { label: 'All', value: 'all' },
 ]
 
 const EVENT_CONFIG = {
-  artisan_profile_view: { label: 'a consulté le profil de', color: 'text-blue-600', bg: 'bg-blue-50', icon: Eye },
-  phone_reveal: { label: 'a affiché le numéro de', color: 'text-amber-600', bg: 'bg-amber-50', icon: Phone },
-  phone_click: { label: 'a appelé', color: 'text-green-600', bg: 'bg-green-50', icon: PhoneCall },
+  artisan_profile_view: { label: 'viewed the profile of', color: 'text-blue-600', bg: 'bg-blue-50', icon: Eye },
+  phone_reveal: { label: 'revealed the number of', color: 'text-amber-600', bg: 'bg-amber-50', icon: Phone },
+  phone_click: { label: 'called', color: 'text-green-600', bg: 'bg-green-50', icon: PhoneCall },
 } as const
 
 type TabType = 'table' | 'feed' | 'audience' | 'parcours'
@@ -133,18 +133,18 @@ function buildArtisanUrl(p: { slug: string; stableId: string; specialty: string;
 function formatRelativeDate(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime()
   const minutes = Math.floor(diff / 60000)
-  if (minutes < 1) return 'a l\'instant'
-  if (minutes < 60) return `il y a ${minutes}min`
+  if (minutes < 1) return 'just now'
+  if (minutes < 60) return `${minutes}m ago`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `il y a ${hours}h`
+  if (hours < 24) return `${hours}h ago`
   const days = Math.floor(hours / 24)
-  if (days === 1) return 'hier'
-  if (days < 7) return `il y a ${days}j`
-  return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  if (days === 1) return 'yesterday'
+  if (days < 7) return `${days}d ago`
+  return new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('fr-FR', {
+  return new Date(iso).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'short',
     hour: '2-digit',
@@ -153,7 +153,7 @@ function formatDate(iso: string): string {
 }
 
 function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+  return new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
 }
 
 // ─── Pagination Controls ────────────────────────────────────────
@@ -167,7 +167,7 @@ function PaginationControls({ page, totalPages, onPageChange }: {
   return (
     <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-t border-gray-100">
       <p className="text-xs sm:text-sm text-gray-400">
-        Page {page} sur {totalPages}
+        Page {page} of {totalPages}
       </p>
       <div className="flex items-center gap-2">
         <button
@@ -175,14 +175,14 @@ function PaginationControls({ page, totalPages, onPageChange }: {
           disabled={page <= 1}
           className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Précédent
+          Previous
         </button>
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
           className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Suivant
+          Next
         </button>
       </div>
     </div>
@@ -247,10 +247,10 @@ export default function AnalyticsPage() {
             <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
           </div>
           <p className="text-sm text-gray-500 ml-12">
-            {totalEvents.toLocaleString('fr-FR')} événement{totalEvents > 1 ? 's' : ''} enregistré{totalEvents > 1 ? 's' : ''}
+            {totalEvents.toLocaleString('en-US')} event{totalEvents > 1 ? 's' : ''} recorded
             {visitorData?.success && (
               <span className="ml-2">
-                · {visitorData.totals.uniqueVisitors.toLocaleString('fr-FR')} visiteur{visitorData.totals.uniqueVisitors > 1 ? 's' : ''} unique{visitorData.totals.uniqueVisitors > 1 ? 's' : ''}
+                · {visitorData.totals.uniqueVisitors.toLocaleString('en-US')} unique visitor{visitorData.totals.uniqueVisitors > 1 ? 's' : ''}
               </span>
             )}
           </p>
@@ -286,7 +286,7 @@ export default function AnalyticsPage() {
       {isLoading && !data && (
         <div className="flex flex-col items-center justify-center py-24 gap-3">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <p className="text-sm text-gray-400">Chargement des analytics...</p>
+          <p className="text-sm text-gray-400">Loading analytics...</p>
         </div>
       )}
 
@@ -295,21 +295,21 @@ export default function AnalyticsPage() {
           {/* ── KPI Cards ───────────────────────────────── */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <KpiCard
-              label="Vues de profils"
+              label="Profile Views"
               value={data.totals.views}
               trend={data.trends.views}
               icon={<Eye className="w-5 h-5" />}
               color="blue"
             />
             <KpiCard
-              label="Numéros affichés"
+              label="Numbers Revealed"
               value={data.totals.reveals}
               trend={data.trends.reveals}
               icon={<Phone className="w-5 h-5" />}
               color="amber"
             />
             <KpiCard
-              label="Appels déclenchés"
+              label="Calls Triggered"
               value={data.totals.clicks}
               trend={data.trends.clicks}
               icon={<PhoneCall className="w-5 h-5" />}
@@ -322,13 +322,13 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Activity className="w-4 h-4 text-gray-400" />
-                <h3 className="text-sm font-semibold text-gray-700">Activité quotidienne</h3>
+                <h3 className="text-sm font-semibold text-gray-700">Daily Activity</h3>
               </div>
               <MiniChart data={data.chartData} />
               <div className="flex items-center gap-6 mt-3 text-xs text-gray-400">
-                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-400" /> Vues</span>
-                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400" /> Numéros</span>
-                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-green-500" /> Appels</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-400" /> Views</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400" /> Numbers</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-green-500" /> Calls</span>
               </div>
             </div>
           )}
@@ -337,10 +337,10 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex bg-gray-100/80 rounded-lg p-0.5 border border-gray-200/50">
               {([
-                { key: 'table' as const, label: 'Par artisan', icon: Search },
-                { key: 'feed' as const, label: 'Activité', icon: Activity },
+                { key: 'table' as const, label: 'By Attorney', icon: Search },
+                { key: 'feed' as const, label: 'Activity', icon: Activity },
                 { key: 'audience' as const, label: 'Audience', icon: Users },
-                { key: 'parcours' as const, label: 'Parcours', icon: Navigation },
+                { key: 'parcours' as const, label: 'Journeys', icon: Navigation },
               ]).map(({ key, label }) => (
                 <button
                   key={key}
@@ -359,7 +359,7 @@ export default function AnalyticsPage() {
                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Rechercher un artisan..."
+                  placeholder="Search for an attorney..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 w-full sm:w-64 bg-white"
@@ -393,7 +393,7 @@ export default function AnalyticsPage() {
             visitorLoading && !visitorData ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3">
                 <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
-                <p className="text-sm text-gray-400">Chargement des données visiteurs...</p>
+                <p className="text-sm text-gray-400">Loading visitor data...</p>
               </div>
             ) : visitorData?.success ? (
               <AudiencePanel
@@ -404,8 +404,8 @@ export default function AnalyticsPage() {
             ) : (
               <div className="bg-gray-50 rounded-xl p-12 text-center">
                 <Users className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                <p className="text-gray-500 font-medium">Aucune donnée visiteur disponible</p>
-                <p className="text-sm text-gray-400 mt-1">Les données apparaîtront dès que des visiteurs navigueront sur le site.</p>
+                <p className="text-gray-500 font-medium">No visitor data available</p>
+                <p className="text-sm text-gray-400 mt-1">Data will appear once visitors start browsing the site.</p>
               </div>
             )
           )}
@@ -415,7 +415,7 @@ export default function AnalyticsPage() {
             visitorLoading && !visitorData ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3">
                 <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
-                <p className="text-sm text-gray-400">Chargement des parcours...</p>
+                <p className="text-sm text-gray-400">Loading journeys...</p>
               </div>
             ) : visitorData?.success ? (
               <JourneysPanel
@@ -426,8 +426,8 @@ export default function AnalyticsPage() {
             ) : (
               <div className="bg-gray-50 rounded-xl p-12 text-center">
                 <Navigation className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                <p className="text-gray-500 font-medium">Aucun parcours disponible</p>
-                <p className="text-sm text-gray-400 mt-1">Les parcours multi-pages apparaîtront ici.</p>
+                <p className="text-gray-500 font-medium">No journeys available</p>
+                <p className="text-sm text-gray-400 mt-1">Multi-page journeys will appear here.</p>
               </div>
             )
           )}
@@ -454,14 +454,14 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
       {/* Visitor KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
-          label="Visiteurs uniques"
+          label="Unique Visitors"
           value={data.totals.uniqueVisitors}
           trend={data.trends.visitors}
           icon={<Users className="w-5 h-5" />}
           color="blue"
         />
         <KpiCard
-          label="Pages vues"
+          label="Page Views"
           value={data.totals.totalPageViews}
           trend={data.trends.pageViews}
           icon={<FileText className="w-5 h-5" />}
@@ -493,7 +493,7 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-gray-400" />
-            <h3 className="text-sm font-semibold text-gray-700">Visiteurs & pages vues</h3>
+            <h3 className="text-sm font-semibold text-gray-700">Visitors & Page Views</h3>
           </div>
           <div className="flex bg-gray-100 rounded-lg p-0.5">
             <button
@@ -502,7 +502,7 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
                 viewMode === 'daily' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
               }`}
             >
-              Jour
+              Daily
             </button>
             <button
               onClick={() => setViewMode('weekly')}
@@ -510,7 +510,7 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
                 viewMode === 'weekly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
               }`}
             >
-              Semaine
+              Weekly
             </button>
           </div>
         </div>
@@ -520,8 +520,8 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
           <VisitorChart data={data.weeklyChart.map(w => ({ date: w.week, visitors: w.visitors, pageViews: w.pageViews }))} />
         )}
         <div className="flex items-center gap-6 mt-3 text-xs text-gray-400">
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-400" /> Visiteurs uniques</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400" /> Pages vues</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-400" /> Unique Visitors</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400" /> Page Views</span>
         </div>
       </div>
 
@@ -530,13 +530,13 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
         <div className="px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-gray-400" />
-            <h3 className="text-sm font-semibold text-gray-700">Pages les plus visitées</h3>
+            <h3 className="text-sm font-semibold text-gray-700">Most Visited Pages</h3>
           </div>
         </div>
         {data.topPages.length === 0 ? (
           <div className="px-6 py-12 text-center text-gray-400">
             <FileText className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-            <p className="text-sm">Aucune page vue enregistrée</p>
+            <p className="text-sm">No page views recorded</p>
           </div>
         ) : (
           <>
@@ -546,8 +546,8 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
                   <tr className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-100">
                     <th className="px-3 sm:px-6 py-3">#</th>
                     <th className="px-2 sm:px-4 py-3">Page</th>
-                    <th className="px-2 sm:px-4 py-3 text-right">Pages vues</th>
-                    <th className="px-2 sm:px-4 py-3 text-right">Visiteurs uniques</th>
+                    <th className="px-2 sm:px-4 py-3 text-right">Page Views</th>
+                    <th className="px-2 sm:px-4 py-3 text-right">Unique Visitors</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -578,10 +578,10 @@ function AudiencePanel({ data, pagesPage, onPagesPageChange }: {
                           </div>
                         </td>
                         <td className="px-2 sm:px-4 py-3 text-right">
-                          <span className="text-sm font-bold text-gray-900">{page.views.toLocaleString('fr-FR')}</span>
+                          <span className="text-sm font-bold text-gray-900">{page.views.toLocaleString('en-US')}</span>
                         </td>
                         <td className="px-2 sm:px-4 py-3 text-right">
-                          <span className="text-sm font-semibold text-indigo-600">{page.uniqueVisitors.toLocaleString('fr-FR')}</span>
+                          <span className="text-sm font-semibold text-indigo-600">{page.uniqueVisitors.toLocaleString('en-US')}</span>
                         </td>
                       </tr>
                     )
@@ -612,8 +612,8 @@ function JourneysPanel({ sessions, page, onPageChange }: {
     return (
       <div className="bg-gray-50 rounded-xl p-12 text-center">
         <Navigation className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-        <p className="text-gray-500 font-medium">Aucun parcours multi-pages</p>
-        <p className="text-sm text-gray-400 mt-1">Les parcours avec 2+ pages apparaîtront ici.</p>
+        <p className="text-gray-500 font-medium">No multi-page journeys</p>
+        <p className="text-sm text-gray-400 mt-1">Journeys with 2+ pages will appear here.</p>
       </div>
     )
   }
@@ -626,7 +626,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
       <div className="flex items-center gap-2 mb-2">
         <Navigation className="w-4 h-4 text-gray-400" />
         <h3 className="text-sm font-semibold text-gray-700">
-          {sessions.length} parcours multi-pages récents
+          {sessions.length} recent multi-page journeys
         </h3>
       </div>
 
@@ -642,7 +642,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
                 <Users className="w-4 h-4 text-indigo-600" />
               </div>
               <div>
-                <span className="text-xs font-mono text-gray-400">Visiteur {session.visitorId}</span>
+                <span className="text-xs font-mono text-gray-400">Visitor {session.visitorId}</span>
                 <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                   <Clock className="w-3 h-3" />
                   {formatDate(session.startTime)}
@@ -707,8 +707,8 @@ function ArtisanTable({ providers, page, onPageChange }: {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-16 text-center text-gray-400">
           <Search className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-          <p className="font-medium">Aucun résultat</p>
-          <p className="text-sm mt-1">Essayez une autre recherche ou période</p>
+          <p className="font-medium">No results</p>
+          <p className="text-sm mt-1">Try a different search or time period</p>
         </div>
       </div>
     )
@@ -723,12 +723,12 @@ function ArtisanTable({ providers, page, onPageChange }: {
         <table className="w-full min-w-[640px]">
           <thead>
             <tr className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-100">
-              <th className="px-3 sm:px-6 py-3 sm:py-4">Artisan</th>
-              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Vues</th>
-              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Numéros</th>
-              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Appels</th>
+              <th className="px-3 sm:px-6 py-3 sm:py-4">Attorney</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Views</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Numbers</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Calls</th>
               <th className="px-2 sm:px-4 py-3 sm:py-4 text-center">Conversion</th>
-              <th className="px-2 sm:px-4 py-3 sm:py-4 text-right">Dernière activité</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4 text-right">Last Activity</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
@@ -813,7 +813,7 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-16 text-center text-gray-400">
           <Clock className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-          <p className="font-medium">Aucune activité récente</p>
+          <p className="font-medium">No recent activity</p>
         </div>
       </div>
     )
@@ -842,7 +842,7 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-700">
-                  <span className="text-gray-400">Un visiteur</span>{' '}
+                  <span className="text-gray-400">A visitor</span>{' '}
                   <span className={`font-medium ${config.color}`}>{config.label}</span>{' '}
                   {attorneyUrl ? (
                     <Link href={attorneyUrl} target="_blank" className="font-semibold text-gray-900 hover:text-blue-600 transition-colors">
@@ -921,7 +921,7 @@ function KpiCard({ label, value, trend, icon, color }: {
             </div>
           )}
         </div>
-        <div className="text-4xl font-extrabold tracking-tight">{value.toLocaleString('fr-FR')}</div>
+        <div className="text-4xl font-extrabold tracking-tight">{value.toLocaleString('en-US')}</div>
         <div className="text-sm text-white/70 mt-1 font-medium">{label}</div>
       </div>
     </div>
@@ -1004,7 +1004,7 @@ function VisitorChart({ data }: { data: VisitorChartPoint[] }) {
   if (data.length < 2) {
     return (
       <div className="h-20 flex items-center justify-center text-sm text-gray-400">
-        Pas assez de données pour afficher le graphique
+        Not enough data to display the chart
       </div>
     )
   }

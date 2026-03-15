@@ -21,7 +21,7 @@ import {
   isBefore,
   startOfDay,
 } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
 
 interface TimeSlot {
   time: string
@@ -39,12 +39,12 @@ interface BookingCalendarProps {
   className?: string
 }
 
-// Générer des créneaux exemple (en production, vient de l'API)
+// Generate example time slots (in production, comes from the API)
 function generateMockSlots(date: Date): TimeSlot[] {
   const slots: TimeSlot[] = []
   const isWeekend = date.getDay() === 0 || date.getDay() === 6
 
-  // Matinée
+  // Morning
   for (let h = 8; h < 12; h++) {
     for (let m = 0; m < 60; m += 30) {
       slots.push({
@@ -54,7 +54,7 @@ function generateMockSlots(date: Date): TimeSlot[] {
     }
   }
 
-  // Après-midi
+  // Afternoon
   for (let h = 14; h < 18; h++) {
     for (let m = 0; m < 60; m += 30) {
       slots.push({
@@ -70,7 +70,7 @@ function generateMockSlots(date: Date): TimeSlot[] {
 export function BookingCalendar({
   attorneyId: _attorneyId,
   attorneyName,
-  specialtyName = 'Intervention',
+  specialtyName = 'Consultation',
   serviceDuration = 60,
   servicePrice,
   onSlotSelect,
@@ -85,7 +85,7 @@ export function BookingCalendar({
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState<'date' | 'time' | 'confirm'>('date')
 
-  // Générer les jours de la semaine
+  // Generate days of the week
   const weekDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
       const date = addDays(currentWeekStart, i)
@@ -97,14 +97,14 @@ export function BookingCalendar({
     })
   }, [currentWeekStart])
 
-  // Slots du jour sélectionné
+  // Slots for the selected day
   const selectedDaySlots = useMemo(() => {
     if (!selectedDate) return null
     const day = weekDays.find((d) => isSameDay(d.date, selectedDate))
     return day?.slots || []
   }, [selectedDate, weekDays])
 
-  // Navigation semaines
+  // Week navigation
   const goToPreviousWeek = () => {
     const prevWeek = addWeeks(currentWeekStart, -1)
     if (!isBefore(prevWeek, startOfWeek(new Date(), { weekStartsOn: 1 }))) {
@@ -116,7 +116,7 @@ export function BookingCalendar({
     setCurrentWeekStart(addWeeks(currentWeekStart, 1))
   }
 
-  // Sélection date
+  // Date selection
   const handleDateSelect = (date: Date, isPast: boolean, hasSlots: boolean) => {
     if (isPast || !hasSlots) return
     setSelectedDate(date)
@@ -125,7 +125,7 @@ export function BookingCalendar({
     onSlotSelect?.(date, '')
   }
 
-  // Sélection heure
+  // Time selection
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time)
     onSlotSelect?.(selectedDate!, time)
@@ -143,7 +143,7 @@ export function BookingCalendar({
     onConfirm?.(selectedDate, selectedTime)
   }
 
-  // Séparer créneaux matin/après-midi
+  // Separate morning/afternoon slots
   const morningSlots = selectedDaySlots?.filter(
     (s) => parseInt(s.time.split(':')[0]) < 12
   ) || []
@@ -155,16 +155,16 @@ export function BookingCalendar({
     <div className={`bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden ${className}`}>
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-5">
-        <h3 className="text-lg font-bold mb-1">Réserver un créneau</h3>
+        <h3 className="text-lg font-bold mb-1">Book a time slot</h3>
         <p className="text-blue-100 text-sm">
           {specialtyName} • {serviceDuration} min
-          {servicePrice && ` • ${servicePrice}€`}
+          {servicePrice && ` • ${servicePrice}$`}
         </p>
       </div>
 
       {/* Progress Steps */}
       <div className="flex border-b border-slate-200">
-        {['Date', 'Heure', 'Confirmation'].map((label, i) => {
+        {['Date', 'Time', 'Confirmation'].map((label, i) => {
           const stepNum = i + 1
           const isActive =
             (step === 'date' && i === 0) ||
@@ -226,11 +226,11 @@ export function BookingCalendar({
               </button>
               <div className="text-center">
                 <div className="font-semibold text-slate-900">
-                  {format(currentWeekStart, 'MMMM yyyy', { locale: fr })}
+                  {format(currentWeekStart, 'MMMM yyyy', { locale: enUS })}
                 </div>
                 <div className="text-sm text-slate-500">
-                  Semaine du {format(currentWeekStart, 'd', { locale: fr })} au{' '}
-                  {format(addDays(currentWeekStart, 6), 'd MMMM', { locale: fr })}
+                  Week of {format(currentWeekStart, 'd', { locale: enUS })} to{' '}
+                  {format(addDays(currentWeekStart, 6), 'd MMMM', { locale: enUS })}
                 </div>
               </div>
               <button
@@ -263,7 +263,7 @@ export function BookingCalendar({
                     `}
                   >
                     <div className="text-xs font-medium mb-1">
-                      {format(date, 'EEE', { locale: fr })}
+                      {format(date, 'EEE', { locale: enUS })}
                     </div>
                     <div className="text-lg font-bold">{format(date, 'd')}</div>
                     {hasSlots && !isPast && (
@@ -272,11 +272,11 @@ export function BookingCalendar({
                           isSelected ? 'text-blue-100' : 'text-green-600'
                         }`}
                       >
-                        {availableSlots} dispo
+                        {availableSlots} avail
                       </div>
                     )}
                     {!hasSlots && !isPast && (
-                      <div className="text-xs mt-1 text-slate-400">Complet</div>
+                      <div className="text-xs mt-1 text-slate-400">Full</div>
                     )}
                   </button>
                 )
@@ -294,7 +294,7 @@ export function BookingCalendar({
                   onClick={() => setStep('time')}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
                 >
-                  Choisir l'heure →
+                  Choose time →
                 </button>
               </motion.div>
             )}
@@ -319,10 +319,10 @@ export function BookingCalendar({
               </button>
               <div>
                 <div className="font-semibold text-slate-900">
-                  {format(selectedDate, 'EEEE d MMMM', { locale: fr })}
+                  {format(selectedDate, 'EEEE d MMMM', { locale: enUS })}
                 </div>
                 <div className="text-sm text-slate-500">
-                  Choisissez votre créneau
+                  Choose your time slot
                 </div>
               </div>
             </div>
@@ -332,7 +332,7 @@ export function BookingCalendar({
               <div className="mb-5">
                 <div className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-3">
                   <Sun className="w-4 h-4" />
-                  Matin
+                  Morning
                 </div>
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                   {morningSlots.map((slot) => (
@@ -359,7 +359,7 @@ export function BookingCalendar({
               <div className="mb-5">
                 <div className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-3">
                   <Moon className="w-4 h-4" />
-                  Après-midi
+                  Afternoon
                 </div>
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                   {afternoonSlots.map((slot) => (
@@ -395,11 +395,11 @@ export function BookingCalendar({
                   {isLoading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Réservation en cours...
+                      Booking in progress...
                     </>
                   ) : (
                     <>
-                      Confirmer {selectedTime}
+                      Confirm {selectedTime}
                       <Check className="w-5 h-5" />
                     </>
                   )}
@@ -420,19 +420,19 @@ export function BookingCalendar({
               <Check className="w-8 h-8 text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">
-              Réservation confirmée !
+              Booking confirmed!
             </h3>
             <p className="text-slate-600 mb-4">
-              Votre rendez-vous avec {attorneyName}
+              Your appointment with {attorneyName}
             </p>
             <div className="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg mb-6">
               <CalendarIcon className="w-5 h-5 text-slate-500" />
               <span className="font-medium">
-                {format(selectedDate, 'EEEE d MMMM', { locale: fr })} à {selectedTime}
+                {format(selectedDate, 'EEEE d MMMM', { locale: enUS })} at {selectedTime}
               </span>
             </div>
             <p className="text-sm text-slate-500">
-              Un email de confirmation vous a été envoyé.
+              A confirmation email has been sent to you.
             </p>
           </motion.div>
         )}

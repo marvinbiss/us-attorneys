@@ -15,7 +15,7 @@ const UNAVAILABLE_RESPONSE = {
   success: false,
   error: {
     code: 'PUSH_UNAVAILABLE',
-    message: 'Les notifications push sont temporairement indisponibles.',
+    message: 'Push notifications are temporarily unavailable.',
   },
 } as const
 

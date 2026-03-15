@@ -79,7 +79,7 @@ const tradeEmojis: Record<string, string> = {
 }
 
 export default async function TarifsPage() {
-  const cmsPage = await getPageContent('tarifs-artisans', 'static')
+  const cmsPage = await getPageContent('pricing', 'static')
 
   if (cmsPage?.content_html) {
     return (

@@ -9,8 +9,8 @@ export default function AdminPaymentsPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Paiements</h1>
-            <p className="text-gray-500 mt-1">Revenus, abonnements et remboursements</p>
+            <h1 className="text-2xl font-bold text-gray-900">Payments</h1>
+            <p className="text-gray-500 mt-1">Revenue, subscriptions, refunds</p>
           </div>
         </div>
 
@@ -22,11 +22,10 @@ export default function AdminPaymentsPage() {
             </div>
             <div className="flex items-center gap-2 text-amber-600 font-semibold text-lg">
               <Clock className="w-5 h-5" />
-              Fonctionnalité en cours de développement
+              Coming soon
             </div>
             <p className="text-gray-500 max-w-md">
-              La gestion des paiements et abonnements sera disponible prochainement.
-              L&apos;intégration Stripe est en cours de configuration.
+              Stripe integration is being configured.
             </p>
           </div>
         </div>

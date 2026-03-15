@@ -7,8 +7,8 @@ export default function AdminSubscriptionsPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des Abonnements</h1>
-          <p className="text-gray-500 mt-1">Suivi des plans d&apos;abonnement des utilisateurs</p>
+          <h1 className="text-2xl font-bold text-gray-900">Subscription Management</h1>
+          <p className="text-gray-500 mt-1">Track user subscription plans</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
@@ -18,11 +18,11 @@ export default function AdminSubscriptionsPage() {
             </div>
           </div>
           <h2 className="text-lg font-semibold text-gray-700 mb-2">
-            Fonctionnalité abonnements non disponible
+            Subscription feature unavailable
           </h2>
           <p className="text-sm text-gray-500 max-w-md mx-auto">
-            La gestion des abonnements n&apos;est pas encore configurée pour cette plateforme.
-            Revenez plus tard ou contactez l&apos;équipe technique.
+            Subscription management is not yet configured for this platform.
+            Please check back later or contact the technical team.
           </p>
         </div>
       </div>

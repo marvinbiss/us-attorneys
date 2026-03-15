@@ -85,7 +85,7 @@ export default function AdminNouveauContenuPage() {
     setIsDirty(true)
     const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
     if (newSlug && !SLUG_RE.test(newSlug)) {
-      setSlugError('Lettres minuscules, chiffres et tirets uniquement')
+      setSlugError('Lowercase letters, numbers, and hyphens only')
     } else {
       setSlugError('')
     }
@@ -131,15 +131,15 @@ export default function AdminNouveauContenuPage() {
 
   const handleSaveDraft = useCallback(async () => {
     if (!title.trim()) {
-      showToast('Le titre est requis', 'error')
+      showToast('Title is required', 'error')
       return
     }
     if (pageType === 'service' && !specialtySlug.trim()) {
-      showToast('Le slug de service est requis pour les pages de type service', 'error')
+      showToast('Service slug is required for service pages', 'error')
       return
     }
     if (pageType === 'location' && (!specialtySlug.trim() || !locationSlug.trim())) {
-      showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
+      showToast('Service and location slugs are required for location pages', 'error')
       return
     }
 
@@ -156,15 +156,15 @@ export default function AdminNouveauContenuPage() {
 
       if (response.ok) {
         setIsDirty(false)
-        showToast('Page enregistrée comme brouillon', 'success')
+        showToast('Page saved as draft', 'success')
         setTimeout(() => router.push('/admin/contenu'), 500)
       } else {
         const err = await response.json().catch(() => ({}))
-        showToast(err.error?.message || 'Erreur lors de la sauvegarde', 'error')
+        showToast(err.error?.message || 'Error saving page', 'error')
       }
     } catch (error) {
-      console.error('Erreur:', error)
-      showToast('Erreur lors de la sauvegarde', 'error')
+      console.error('Error:', error)
+      showToast('Error saving page', 'error')
     } finally {
       setSaving(false)
     }
@@ -187,15 +187,15 @@ export default function AdminNouveauContenuPage() {
 
   const handlePublish = async () => {
     if (!title.trim()) {
-      showToast('Le titre est requis', 'error')
+      showToast('Title is required', 'error')
       return
     }
     if (pageType === 'service' && !specialtySlug.trim()) {
-      showToast('Le slug de service est requis pour les pages de type service', 'error')
+      showToast('Service slug is required for service pages', 'error')
       return
     }
     if (pageType === 'location' && (!specialtySlug.trim() || !locationSlug.trim())) {
-      showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
+      showToast('Service and location slugs are required for location pages', 'error')
       return
     }
 
@@ -220,21 +220,21 @@ export default function AdminNouveauContenuPage() {
 
         if (publishResponse.ok) {
           setIsDirty(false)
-          showToast('Page publiée avec succès', 'success')
+          showToast('Page published successfully', 'success')
           setTimeout(() => router.push('/admin/contenu'), 500)
         } else {
           setIsDirty(false)
-          showToast('Page créée mais la publication a échoué', 'error')
+          showToast('Page created but publishing failed', 'error')
           // Redirect to edit page to avoid re-creating on retry
           setTimeout(() => router.push(`/admin/contenu/${pageId}`), 1500)
         }
       } else {
         const err = await response.json().catch(() => ({}))
-        showToast(err.error?.message || 'Erreur lors de la création', 'error')
+        showToast(err.error?.message || 'Error creating page', 'error')
       }
     } catch (error) {
-      console.error('Erreur:', error)
-      showToast('Erreur lors de la publication', 'error')
+      console.error('Error:', error)
+      showToast('Error publishing page', 'error')
     } finally {
       setSaving(false)
     }
@@ -264,9 +264,9 @@ export default function AdminNouveauContenuPage() {
               className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              Retour
+              Back
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Nouvelle page</h1>
+            <h1 className="text-2xl font-bold text-gray-900">New page</h1>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -275,7 +275,7 @@ export default function AdminNouveauContenuPage() {
               className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              Enregistrer comme brouillon
+              Save as draft
             </button>
             <button
               onClick={handlePublish}
@@ -283,7 +283,7 @@ export default function AdminNouveauContenuPage() {
               className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-              Publier
+              Publish
             </button>
           </div>
         </div>
@@ -294,12 +294,12 @@ export default function AdminNouveauContenuPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Title input */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Titre</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => handleTitleChange(e.target.value)}
-                placeholder="Titre de la page"
+                placeholder="Page title"
                 maxLength={FIELD_LIMITS.title}
                 className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -314,7 +314,7 @@ export default function AdminNouveauContenuPage() {
                   type="text"
                   value={slug}
                   onChange={(e) => handleSlugChange(e.target.value)}
-                  placeholder="slug-de-la-page"
+                  placeholder="page-slug"
                   maxLength={FIELD_LIMITS.slug}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
@@ -325,31 +325,31 @@ export default function AdminNouveauContenuPage() {
             {/* Service/Location slug fields */}
             {(pageType === 'service' || pageType === 'location') && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <h3 className="font-medium text-gray-900">Champs {pageType === 'location' ? 'localisation' : 'service'}</h3>
+                <h3 className="font-medium text-gray-900">{pageType === 'location' ? 'Location' : 'Service'} fields</h3>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Slug du service</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Service slug</label>
                   <input
                     type="text"
                     value={specialtySlug}
                     onChange={(e) => { setServiceSlug(e.target.value); setIsDirty(true) }}
-                    placeholder="plombier"
+                    placeholder="personal-injury"
                     maxLength={FIELD_LIMITS.slug}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   />
-                  <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
+                  <p className="mt-1 text-xs text-gray-500">Lowercase letters, numbers, and hyphens only</p>
                 </div>
                 {pageType === 'location' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Slug de la localisation</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Location slug</label>
                     <input
                       type="text"
                       value={locationSlug}
                       onChange={(e) => { setLocationSlug(e.target.value); setIsDirty(true) }}
-                      placeholder="paris"
+                      placeholder="new-york"
                       maxLength={FIELD_LIMITS.slug}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     />
-                    <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
+                    <p className="mt-1 text-xs text-gray-500">Lowercase letters, numbers, and hyphens only</p>
                   </div>
                 )}
               </div>
@@ -358,28 +358,28 @@ export default function AdminNouveauContenuPage() {
             {/* Blog-specific fields */}
             {pageType === 'blog' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <h3 className="font-medium text-gray-900">Champs blog</h3>
+                <h3 className="font-medium text-gray-900">Blog fields</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Auteur</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
                     <input
                       type="text"
                       value={author}
                       onChange={(e) => { setAuthor(e.target.value); setIsDirty(true) }}
-                      placeholder="Nom de l'auteur"
+                      placeholder="Author name"
                       maxLength={FIELD_LIMITS.author}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                     <select
                       value={category}
                       onChange={(e) => { setCategory(e.target.value); setIsDirty(true) }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                     >
-                      <option value="">Sélectionner...</option>
+                      <option value="">Select...</option>
                       {BLOG_CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>
                           {cat}
@@ -391,14 +391,14 @@ export default function AdminNouveauContenuPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Biographie de l&apos;auteur
+                    Author bio
                   </label>
                   <textarea
                     value={authorBio}
                     onChange={(e) => { setAuthorBio(e.target.value); setIsDirty(true) }}
                     rows={2}
                     maxLength={FIELD_LIMITS.authorBio}
-                    placeholder="Courte biographie de l'auteur..."
+                    placeholder="Short author biography..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
@@ -406,18 +406,18 @@ export default function AdminNouveauContenuPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tags (séparés par des virgules)
+                      Tags (comma-separated)
                     </label>
                     <input
                       type="text"
                       value={tags}
                       onChange={(e) => { setTags(e.target.value); setIsDirty(true) }}
-                      placeholder="rénovation, plomberie, conseils"
+                      placeholder="legal, litigation, tips"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Temps de lecture</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Read time</label>
                     <input
                       type="text"
                       value={readTime}
@@ -430,19 +430,19 @@ export default function AdminNouveauContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Extrait</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
                   <textarea
                     value={excerpt}
                     onChange={(e) => { setExcerpt(e.target.value); setIsDirty(true) }}
                     rows={3}
                     maxLength={FIELD_LIMITS.excerpt}
-                    placeholder="Court résumé de l'article..."
+                    placeholder="Short article summary..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Image mise en avant (URL)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Featured image (URL)</label>
                   <input
                     type="url"
                     value={featuredImage}
@@ -457,7 +457,7 @@ export default function AdminNouveauContenuPage() {
 
             {/* Editor */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-4">Contenu</label>
+              <label className="block text-sm font-medium text-gray-700 mb-4">Content</label>
               {usesRichTextEditor && (
                 <RichTextEditor
                   value={content}
@@ -485,11 +485,11 @@ export default function AdminNouveauContenuPage() {
           <div className="space-y-6">
             {/* Page settings */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-medium text-gray-900 mb-4">Paramètres</h3>
+              <h3 className="font-medium text-gray-900 mb-4">Settings</h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type de page</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Page type</label>
                   <select
                     value={pageType}
                     onChange={(e) => { setPageType(e.target.value); setIsDirty(true) }}
@@ -504,7 +504,7 @@ export default function AdminNouveauContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ordre de tri</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Sort order</label>
                   <input
                     type="number"
                     value={sortOrder}
@@ -514,9 +514,9 @@ export default function AdminNouveauContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                    Brouillon
+                    Draft
                   </span>
                 </div>
               </div>
@@ -532,7 +532,7 @@ export default function AdminNouveauContenuPage() {
 
             {/* Additional SEO fields */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-              <h3 className="font-medium text-gray-900">SEO avancé</h3>
+              <h3 className="font-medium text-gray-900">Advanced SEO</h3>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Image Open Graph (URL)</label>
                 <input
@@ -545,12 +545,12 @@ export default function AdminNouveauContenuPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL canonique</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
                 <input
                   type="url"
                   value={canonicalUrl}
                   onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
-                  placeholder="https://servicesartisans.com/page"
+                  placeholder="https://us-attorneys.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />

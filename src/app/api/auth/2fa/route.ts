@@ -68,7 +68,7 @@ export async function POST(request: Request) {
           success: true,
           qrCodeUrl: setup.qrCodeUrl,
           backupCodes: setup.backupCodes,
-          message: 'Scannez le QR code avec votre application d\'authentification',
+          message: 'Scan the QR code with your authenticator app',
         })
       }
 

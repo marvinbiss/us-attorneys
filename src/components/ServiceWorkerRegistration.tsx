@@ -17,7 +17,7 @@ export default function ServiceWorkerRegistration() {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                   // New content available, show refresh prompt
-                  if (confirm('Nouvelle version disponible. Rafraichir ?')) {
+                  if (confirm('New version available. Refresh?')) {
                     window.location.reload()
                   }
                 }

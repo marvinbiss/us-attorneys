@@ -16,8 +16,8 @@ import type { AdminRole, AdminUser } from '@/types/admin'
 const ROLE_LABELS: Record<AdminRole, { label: string; color: string }> = {
   super_admin: { label: 'Super Admin', color: 'bg-red-100 text-red-700' },
   admin: { label: 'Admin', color: 'bg-blue-100 text-blue-700' },
-  moderator: { label: 'Modérateur', color: 'bg-green-100 text-green-700' },
-  viewer: { label: 'Lecteur', color: 'bg-gray-100 text-gray-700' },
+  moderator: { label: 'Moderator', color: 'bg-green-100 text-green-700' },
+  viewer: { label: 'Viewer', color: 'bg-gray-100 text-gray-700' },
 }
 
 export default function AdminsManagementPage() {
@@ -47,12 +47,12 @@ export default function AdminsManagementPage() {
       setLoading(true)
       setError(null)
       const response = await fetch(`/api/admin/admins?page=${page}&limit=20`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      if (!response.ok) throw new Error(`Error ${response.status}`)
       const data = await response.json()
       setAdmins(data.admins || [])
       setTotalPages(data.totalPages || 1)
     } catch {
-      setError('Erreur lors du chargement des administrateurs')
+      setError('Error loading administrators')
       setAdmins([])
     } finally {
       setLoading(false)
@@ -68,12 +68,12 @@ export default function AdminsManagementPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newAdmin),
       })
-      if (!response.ok) throw new Error('Erreur lors de l\'ajout')
+      if (!response.ok) throw new Error('Error adding admin')
       setAddModal(false)
       setNewAdmin({ email: '', role: 'admin' })
       fetchAdmins()
     } catch {
-      setError('Erreur lors de l\'ajout de l\'administrateur')
+      setError('Error adding administrator')
     } finally {
       setAdding(false)
     }
@@ -85,11 +85,11 @@ export default function AdminsManagementPage() {
       const response = await fetch(`/api/admin/admins/${deleteModal.adminId}`, {
         method: 'DELETE',
       })
-      if (!response.ok) throw new Error('Erreur lors de la suppression')
+      if (!response.ok) throw new Error('Error deleting admin')
       setDeleteModal({ open: false, adminId: '', adminEmail: '' })
       fetchAdmins()
     } catch {
-      setError('Erreur lors de la suppression de l\'administrateur')
+      setError('Error deleting administrator')
     }
   }
 
@@ -101,15 +101,15 @@ export default function AdminsManagementPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: newRole }),
       })
-      if (!response.ok) throw new Error('Erreur lors de la mise à jour du rôle')
+      if (!response.ok) throw new Error('Error updating role')
       fetchAdmins()
     } catch {
-      setError('Erreur lors de la mise à jour du rôle')
+      setError('Error updating role')
     }
   }
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -127,23 +127,23 @@ export default function AdminsManagementPage() {
               className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
-              Retour aux paramètres
+              Back to settings
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Administrateurs</h1>
-            <p className="text-gray-500 mt-1">Gérer les rôles et permissions des administrateurs</p>
+            <h1 className="text-2xl font-bold text-gray-900">Admin Management</h1>
+            <p className="text-gray-500 mt-1">Manage admin roles and permissions</p>
           </div>
           <button
             onClick={() => setAddModal(true)}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <UserPlus className="w-5 h-5" />
-            Ajouter un admin
+            Add admin
           </button>
         </div>
 
         {/* Role Legend */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Niveaux de permissions</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Permission levels</h3>
           <div className="flex flex-wrap gap-3">
             {Object.entries(ROLE_LABELS).map(([role, { label, color }]) => (
               <div key={role} className="flex items-center gap-2">
@@ -151,10 +151,10 @@ export default function AdminsManagementPage() {
                   {label}
                 </span>
                 <span className="text-xs text-gray-500">
-                  {role === 'super_admin' && '(Accès total)'}
-                  {role === 'admin' && '(CRUD limité)'}
-                  {role === 'moderator' && '(Modération)'}
-                  {role === 'viewer' && '(Lecture seule)'}
+                  {role === 'super_admin' && '(Full access)'}
+                  {role === 'admin' && '(Limited CRUD)'}
+                  {role === 'moderator' && '(Moderation)'}
+                  {role === 'viewer' && '(Read-only)'}
                 </span>
               </div>
             ))}
@@ -173,22 +173,22 @@ export default function AdminsManagementPage() {
           ) : admins.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Shield className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucun administrateur trouvé</p>
+              <p>No administrators found</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px]" aria-label="Liste des administrateurs">
+                <table className="w-full min-w-[600px]" aria-label="Administrators list">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Email
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Rôle
+                        Role
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Ajouté le
+                        Added on
                       </th>
                       <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Actions
@@ -205,7 +205,7 @@ export default function AdminsManagementPage() {
                           <select
                             value={admin.role}
                             onChange={(e) => handleRoleChange(admin.id, e.target.value as AdminRole)}
-                            aria-label={`Rôle de ${admin.email}`}
+                            aria-label={`Role of ${admin.email}`}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 ${ROLE_LABELS[admin.role].color}`}
                           >
                             {Object.entries(ROLE_LABELS).map(([role, { label }]) => (
@@ -225,8 +225,8 @@ export default function AdminsManagementPage() {
                                 adminEmail: admin.email,
                               })}
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                              title="Supprimer"
-                              aria-label={`Supprimer l'administrateur ${admin.email}`}
+                              title="Delete"
+                              aria-label={`Delete administrator ${admin.email}`}
                             >
                               <Trash2 className="w-5 h-5" />
                             </button>
@@ -241,14 +241,14 @@ export default function AdminsManagementPage() {
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  Page {page} sur {totalPages}
+                  Page {page} of {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                    aria-label="Page précédente"
+                    aria-label="Previous page"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -256,7 +256,7 @@ export default function AdminsManagementPage() {
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                    aria-label="Page suivante"
+                    aria-label="Next page"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
@@ -271,7 +271,7 @@ export default function AdminsManagementPage() {
       {addModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div role="dialog" aria-modal="true" aria-labelledby="add-admin-title" className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-            <h3 id="add-admin-title" className="text-lg font-semibold text-gray-900 mb-4">Ajouter un administrateur</h3>
+            <h3 id="add-admin-title" className="text-lg font-semibold text-gray-900 mb-4">Add administrator</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -285,7 +285,7 @@ export default function AdminsManagementPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
                 <select
                   value={newAdmin.role}
                   onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value as AdminRole })}
@@ -302,14 +302,14 @@ export default function AdminsManagementPage() {
                 onClick={() => setAddModal(false)}
                 className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                Annuler
+                Cancel
               </button>
               <button
                 onClick={handleAddAdmin}
                 disabled={adding || !newAdmin.email}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
-                {adding ? 'Ajout...' : 'Ajouter'}
+                {adding ? 'Adding...' : 'Add'}
               </button>
             </div>
           </div>
@@ -321,9 +321,9 @@ export default function AdminsManagementPage() {
         isOpen={deleteModal.open}
         onClose={() => setDeleteModal({ open: false, adminId: '', adminEmail: '' })}
         onConfirm={handleDeleteAdmin}
-        title="Supprimer l'administrateur"
-        message={`Êtes-vous sûr de vouloir retirer les droits d'administration de ${deleteModal.adminEmail} ?`}
-        confirmText="Supprimer"
+        title="Remove administrator"
+        message={`Are you sure you want to remove admin rights from ${deleteModal.adminEmail}?`}
+        confirmText="Remove"
         variant="danger"
       />
     </div>

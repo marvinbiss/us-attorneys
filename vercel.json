@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "regions": ["cdg1"],
+  "regions": ["iad1"],
   "functions": {
     "src/app/**/*.tsx": {
       "maxDuration": 30
@@ -8,7 +8,7 @@
     "src/app/api/cron/**/*.ts": {
       "maxDuration": 60
     },
-    "src/app/api/sitemap-providers/route.ts": {
+    "src/app/api/sitemap-attorneys/route.ts": {
       "maxDuration": 60
     },
     "src/app/api/vapi/**/*.ts": {

@@ -44,7 +44,7 @@ export default function DashboardLoading() {
               ))}
             </div>
 
-            {/* Demandes skeleton */}
+            {/* Cases skeleton */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="h-6 w-44 bg-gray-200 rounded animate-pulse" />

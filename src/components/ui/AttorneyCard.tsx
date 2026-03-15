@@ -53,7 +53,7 @@ export function AttorneyCard({
 
   const href = getAttorneyUrl({ stable_id: id, slug, specialty: profession, city: location })
 
-  // Variant horizontal (pour les listes)
+  // Horizontal variant (for lists)
   if (variant === 'horizontal') {
     return (
       <motion.div
@@ -68,7 +68,7 @@ export function AttorneyCard({
             {imageUrl ? (
               <Image
                 src={imageUrl}
-                alt={`${name} - ${profession} à ${location}`}
+                alt={`${name} - ${profession} in ${location}`}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, 192px"
@@ -90,16 +90,16 @@ export function AttorneyCard({
               </div>
             )}
 
-            {/* Disponibilité */}
+            {/* Availability */}
             {isAvailableNow && (
               <div className="absolute bottom-3 left-3 bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                Disponible
+                Available
               </div>
             )}
           </div>
 
-          {/* Contenu */}
+          {/* Content */}
           <div className="flex-1 p-5">
             <div className="flex items-start justify-between mb-2">
               <div>
@@ -128,7 +128,7 @@ export function AttorneyCard({
               {location}
             </div>
 
-            {/* Spécialités */}
+            {/* Specialties */}
             {specialties.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-3">
                 {specialties.slice(0, 3).map((specialty, i) => (
@@ -142,12 +142,12 @@ export function AttorneyCard({
               </div>
             )}
 
-            {/* Infos supplémentaires */}
+            {/* Additional info */}
             <div className="flex items-center gap-4 text-sm">
               {responseTime && (
                 <div className="flex items-center gap-1 text-slate-500">
                   <Clock className="w-4 h-4" />
-                  Répond en {responseTime}
+                  Responds in {responseTime}
                 </div>
               )}
               {priceRange && (
@@ -171,7 +171,7 @@ export function AttorneyCard({
       >
         <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
           {imageUrl ? (
-            <Image src={imageUrl} alt={`${name} - ${profession} à ${location}`} fill className="object-cover" sizes="48px" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
+            <Image src={imageUrl} alt={`${name} - ${profession} in ${location}`} fill className="object-cover" sizes="48px" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
           ) : (
             <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
               <span className="font-bold text-white">{name.charAt(0)}</span>
@@ -193,7 +193,7 @@ export function AttorneyCard({
     )
   }
 
-  // Variant default (carte style Airbnb)
+  // Default variant (Airbnb-style card)
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -209,7 +209,7 @@ export function AttorneyCard({
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={`${name} - ${profession} à ${location}`}
+              alt={`${name} - ${profession} in ${location}`}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -227,7 +227,7 @@ export function AttorneyCard({
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-          {/* Badge premium */}
+          {/* Premium badge */}
           {isPremium && (
             <motion.div
               initial={{ x: -10, opacity: 0 }}
@@ -241,7 +241,7 @@ export function AttorneyCard({
             </motion.div>
           )}
 
-          {/* Bouton favori */}
+          {/* Favorite button */}
           <FavoriteButton
             attorneyId={id}
             attorneyName={name}
@@ -249,11 +249,11 @@ export function AttorneyCard({
             className="absolute top-3 right-3 z-10"
           />
 
-          {/* Disponibilité */}
+          {/* Availability */}
           {isAvailableNow ? (
             <div className="absolute bottom-3 left-3 bg-green-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-              Disponible maintenant
+              Available now
             </div>
           ) : nextAvailable ? (
             <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
@@ -263,7 +263,7 @@ export function AttorneyCard({
           ) : null}
         </div>
 
-        {/* Contenu */}
+        {/* Content */}
         <div className="space-y-1.5">
           {/* Header */}
           <div className="flex items-start justify-between">
@@ -291,7 +291,7 @@ export function AttorneyCard({
             {location}
           </div>
 
-          {/* Spécialités */}
+          {/* Specialties */}
           {specialties.length > 0 && (
             <div className="flex flex-wrap gap-1.5 pt-1">
               {specialties.slice(0, 2).map((specialty, i) => (
@@ -315,12 +315,12 @@ export function AttorneyCard({
   )
 }
 
-// Grid d'artisans
+// Attorney grid
 export function ArtisanGrid({
-  artisans,
+  attorneys,
   loading = false,
 }: {
-  artisans: AttorneyCardProps[]
+  attorneys: AttorneyCardProps[]
   loading?: boolean
 }) {
   if (loading) {
@@ -339,7 +339,7 @@ export function ArtisanGrid({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {artisans.map((artisan) => (
+      {attorneys.map((artisan) => (
         <AttorneyCard key={artisan.id} {...artisan} />
       ))}
     </div>

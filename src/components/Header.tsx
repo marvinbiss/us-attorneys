@@ -253,7 +253,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
             <NavTrigger menu="regions" label="States" />
             <NavTrigger menu="plus" label="More" />
 
-            {/* Favoris */}
+            {/* Favorites */}
             <Link
               href="/my-favorites"
               className="relative text-gray-600 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80"

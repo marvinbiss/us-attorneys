@@ -114,7 +114,7 @@ export function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderProps) {
       <button
         onClick={handleCancel}
         className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-800/30 rounded-full"
-        title="Annuler"
+        title="Cancel"
       >
         <Trash2 className="w-5 h-5" />
       </button>
@@ -161,7 +161,7 @@ export function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderProps) {
         <button
           onClick={isPaused ? resumeRecording : pauseRecording}
           className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
-          title={isPaused ? 'Reprendre' : 'Pause'}
+          title={isPaused ? 'Resume' : 'Pause'}
         >
           {isPaused ? <Play className="w-5 h-5" /> : <Pause className="w-5 h-5" />}
         </button>
@@ -172,7 +172,7 @@ export function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderProps) {
         <button
           onClick={stopRecording}
           className="p-2 bg-red-600 text-white hover:bg-red-700 rounded-full"
-          title="Arrêter l'enregistrement"
+          title="Stop recording"
         >
           <Square className="w-5 h-5" />
         </button>
@@ -180,7 +180,7 @@ export function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderProps) {
         <button
           onClick={handleSend}
           className="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-full"
-          title="Envoyer"
+          title="Send"
         >
           <Send className="w-5 h-5" />
         </button>

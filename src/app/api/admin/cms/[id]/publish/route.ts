@@ -69,7 +69,7 @@ export async function POST(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(auth.admin!.id, 'cms_page.publish', 'cms_page', id, { slug: page.slug })
 
     // Revalidate cached paths + invalidate in-memory cache
@@ -132,7 +132,7 @@ export async function DELETE(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(auth.admin!.id, 'cms_page.unpublish', 'cms_page', id, { slug: page.slug })
 
     // Revalidate cached paths using data from before the update

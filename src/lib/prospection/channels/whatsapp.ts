@@ -1,6 +1,6 @@
 /**
  * WhatsApp Channel Sender - Prospection
- * Envoi WhatsApp via Twilio WhatsApp Business API
+ * Send WhatsApp messages via Twilio WhatsApp Business API
  */
 
 import twilio from 'twilio'
@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger'
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
-const whatsappFrom = process.env.TWILIO_WHATSAPP_NUMBER || 'whatsapp:+33100000000'
+const whatsappFrom = process.env.TWILIO_WHATSAPP_NUMBER || 'whatsapp:+10000000000'
 
 let twilioClient: twilio.Twilio | null = null
 
@@ -23,9 +23,9 @@ function getTwilioClient(): twilio.Twilio {
 }
 
 export interface WhatsAppSendParams {
-  to: string  // phone_e164 format (+33...)
+  to: string  // phone_e164 format (+1...)
   body?: string
-  contentSid?: string  // Twilio Content SID pour templates approuvés
+  contentSid?: string  // Twilio Content SID for approved templates
   contentVariables?: Record<string, string>
 }
 
@@ -37,7 +37,7 @@ export interface WhatsAppResult {
 }
 
 /**
- * Envoyer un message WhatsApp via Twilio
+ * Send a WhatsApp message via Twilio
  */
 export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsAppResult> {
   try {
@@ -48,19 +48,19 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
     const messageParams: Record<string, unknown> = { from, to }
 
     if (params.contentSid) {
-      // Template approuvé par Meta (obligatoire pour messages initiés par l'entreprise)
+      // Meta-approved template (required for business-initiated messages)
       messageParams.contentSid = params.contentSid
       if (params.contentVariables) {
         messageParams.contentVariables = JSON.stringify(params.contentVariables)
       }
     } else if (params.body) {
-      // Message libre (uniquement dans une fenêtre de 24h après réponse du contact)
+      // Free-form message (only within 24h window after contact reply)
       messageParams.body = params.body
     } else {
-      return { success: false, error: 'body ou contentSid requis' }
+      return { success: false, error: 'body or contentSid required' }
     }
 
-    // Add callback URL pour le tracking
+    // Add callback URL for tracking
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
     if (siteUrl) {
       messageParams.statusCallback = `${siteUrl}/api/admin/prospection/webhooks/twilio`
@@ -79,7 +79,7 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
 }
 
 /**
- * Envoyer une réponse WhatsApp (dans la fenêtre de 24h)
+ * Send a WhatsApp reply (within the 24h window)
  */
 export async function sendWhatsAppReply(to: string, body: string): Promise<WhatsAppResult> {
   return sendWhatsApp({ to, body })

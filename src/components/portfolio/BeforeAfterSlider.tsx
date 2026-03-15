@@ -16,8 +16,8 @@ export interface BeforeAfterSliderProps {
 export default function BeforeAfterSlider({
   beforeImage,
   afterImage,
-  beforeAlt = 'Avant',
-  afterAlt = 'Après',
+  beforeAlt = 'Before',
+  afterAlt = 'After',
   initialPosition = 50,
   className,
 }: BeforeAfterSliderProps) {
@@ -154,10 +154,10 @@ export default function BeforeAfterSlider({
 
       {/* Labels */}
       <div className="absolute top-4 left-4 px-3 py-1.5 bg-black/70 text-white text-sm font-medium rounded-lg">
-        Avant
+        Before
       </div>
       <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/70 text-white text-sm font-medium rounded-lg">
-        Après
+        After
       </div>
     </div>
   )

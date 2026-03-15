@@ -18,7 +18,7 @@ export default function SettingsPage() {
     try {
       setError(null)
       const res = await fetch('/api/admin/prospection/ai/settings', { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setSettings(data.data)
@@ -27,7 +27,7 @@ export default function SettingsPage() {
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -42,16 +42,16 @@ export default function SettingsPage() {
   const validateSettings = (): string | null => {
     if (!settings) return null
     if (settings.claude_temperature < 0 || settings.claude_temperature > 2) {
-      return 'La température Claude doit être entre 0 et 2'
+      return 'Claude temperature must be between 0 and 2'
     }
     if (settings.openai_temperature < 0 || settings.openai_temperature > 2) {
-      return 'La température OpenAI doit être entre 0 et 2'
+      return 'OpenAI temperature must be between 0 and 2'
     }
     if (settings.claude_max_tokens < 1 || settings.claude_max_tokens > 8000) {
-      return 'Max tokens Claude doit être entre 1 et 8000'
+      return 'Claude max tokens must be between 1 and 8000'
     }
     if (settings.openai_max_tokens < 1 || settings.openai_max_tokens > 8000) {
-      return 'Max tokens OpenAI doit être entre 1 et 8000'
+      return 'OpenAI max tokens must be between 1 and 8000'
     }
     return null
   }
@@ -72,7 +72,7 @@ export default function SettingsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settings),
       })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setSettings(data.data)
@@ -81,13 +81,13 @@ export default function SettingsPage() {
         setSaved(true)
         setTimeout(() => setSaved(false), 3000)
       } else {
-        setError(data.error?.message || 'Erreur lors de la sauvegarde')
+        setError(data.error?.message || 'Error saving settings')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de la sauvegarde')
+        setError('Error saving settings')
       }
     } finally {
       setSaving(false)
@@ -125,14 +125,14 @@ export default function SettingsPage() {
         </div>
         <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
-            <span className="text-sm text-amber-600 font-medium">Modifications non sauvegardées</span>
+            <span className="text-sm text-amber-600 font-medium">Unsaved changes</span>
           )}
           <button
             onClick={handleSave}
             disabled={saving}
             className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Sauvegarder'}
+            <Save className="w-4 h-4" /> {saving ? 'Saving...' : saved ? 'Saved!' : 'Save'}
           </button>
         </div>
       </div>

@@ -78,7 +78,7 @@ export async function POST(request: Request) {
       }
       if (error.message.includes('Email not confirmed')) {
         return NextResponse.json(
-          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Veuillez confirmer votre email avant de vous connecter'),
+          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Please confirm your email before signing in'),
           { status: 401 }
         )
       }
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
 
     if (!data.user || !data.session) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Echec de l\'authentification'),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentication failed'),
         { status: 401 }
       )
     }

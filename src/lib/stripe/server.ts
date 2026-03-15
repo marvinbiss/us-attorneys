@@ -27,19 +27,19 @@ export const stripe = new Proxy({} as Stripe, {
 export const PLANS = {
   gratuit: {
     id: 'gratuit',
-    name: 'Gratuit',
+    name: 'Free',
     price: 0,
     priceId: null,
     features: [
-      'Profil basique',
-      '5 demandes/mois',
-      'Messagerie',
-      'Support email',
+      'Basic profile',
+      '5 requests/month',
+      'Messaging',
+      'Email support',
     ],
     limits: {
-      demandesParMois: 5,
+      requestsPerMonth: 5,
       photos: 3,
-      priorite: 0,
+      priority: 0,
     },
   },
   pro: {
@@ -48,17 +48,17 @@ export const PLANS = {
     price: 49,
     priceId: process.env.STRIPE_PRO_PRICE_ID,
     features: [
-      'Profil complet',
-      '30 demandes/mois',
-      'Messagerie prioritaire',
-      'Badge référencé',
-      'Statistiques de base',
-      'Support prioritaire',
+      'Full profile',
+      '30 requests/month',
+      'Priority messaging',
+      'Listed badge',
+      'Basic statistics',
+      'Priority support',
     ],
     limits: {
-      demandesParMois: 30,
+      requestsPerMonth: 30,
       photos: 10,
-      priorite: 1,
+      priority: 1,
     },
   },
   premium: {
@@ -67,19 +67,19 @@ export const PLANS = {
     price: 99,
     priceId: process.env.STRIPE_PREMIUM_PRICE_ID,
     features: [
-      'Profil premium',
-      'Demandes illimitées',
-      'Messagerie prioritaire',
-      'Badge Premium',
-      'Position prioritaire',
-      'Statistiques avancées',
-      'Support dédié 24/7',
-      'Formation gratuite',
+      'Premium profile',
+      'Unlimited requests',
+      'Priority messaging',
+      'Premium badge',
+      'Priority placement',
+      'Advanced statistics',
+      'Dedicated 24/7 support',
+      'Free training',
     ],
     limits: {
-      demandesParMois: -1, // unlimited
+      requestsPerMonth: -1, // unlimited
       photos: 50,
-      priorite: 2,
+      priority: 2,
     },
   },
 } as const

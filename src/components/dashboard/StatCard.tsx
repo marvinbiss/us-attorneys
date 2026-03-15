@@ -26,7 +26,7 @@ const colorMap = {
 
 function AnimatedValue({ value }: { value: number }) {
   const motionValue = useMotionValue(0)
-  const display = useTransform(motionValue, (v) => Math.round(v).toLocaleString('fr-FR'))
+  const display = useTransform(motionValue, (v) => Math.round(v).toLocaleString('en-US'))
 
   useEffect(() => {
     const controls = animate(motionValue, value, {

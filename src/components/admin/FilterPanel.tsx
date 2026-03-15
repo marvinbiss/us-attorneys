@@ -38,7 +38,7 @@ export function FilterPanel({
   )
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4" role="search" aria-label="Filtres">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4" role="search" aria-label="Filters">
       <div className="flex flex-col lg:flex-row gap-4">
         {filters.map((filter) => (
           <div key={filter.key} className="flex-shrink-0">
@@ -97,7 +97,7 @@ export function FilterPanel({
             className="flex items-center gap-1 px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
           >
             <X className="w-4 h-4" />
-            Effacer les filtres
+            Clear filters
           </button>
         )}
       </div>

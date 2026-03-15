@@ -8,41 +8,41 @@ import { trackEvent, trackConversion } from '@/lib/analytics/tracking'
 
 interface FormData {
   service: string
-  ville: string
+  city: string
   description: string
-  urgence: string
+  urgency: string
   budget: string
-  nom: string
-  telephone: string
+  name: string
+  phone: string
   email: string
-  consentement: boolean
+  consent: boolean
 }
 
 const initialFormData: FormData = {
   service: '',
-  ville: '',
+  city: '',
   description: '',
-  urgence: '',
+  urgency: '',
   budget: '',
-  nom: '',
-  telephone: '',
+  name: '',
+  phone: '',
   email: '',
-  consentement: false,
+  consent: false,
 }
 
 const urgencyOptions = [
   { value: 'flexible', label: 'Not urgent' },
-  { value: 'mois', label: 'This month' },
-  { value: 'semaine', label: 'This week' },
+  { value: 'month', label: 'This month' },
+  { value: 'week', label: 'This week' },
   { value: 'urgent', label: 'Urgent (within 24h)' },
 ]
 
 const budgetOptions = [
-  { value: 'moins-500', label: 'Under $500' },
+  { value: 'under-500', label: 'Under $500' },
   { value: '500-2000', label: '$500–$2,000' },
   { value: '2000-5000', label: '$2,000–$5,000' },
-  { value: 'plus-5000', label: 'Over $5,000' },
-  { value: 'ne-sais-pas', label: 'I don\'t know' },
+  { value: 'over-5000', label: 'Over $5,000' },
+  { value: 'unknown', label: 'I don\'t know' },
 ]
 
 /** Common case types per practice area for quick selection */
@@ -59,7 +59,7 @@ const serviceSubcategories: Record<string, string[]> = {
   'tax-law': ['Tax audit', 'IRS disputes', 'Tax planning', 'Back taxes', 'Tax liens'],
 }
 
-function isValidFrenchPhone(phone: string): boolean {
+function isValidUSPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s.\-()]/g, '')
   if (/^\d{10}$/.test(cleaned)) return true
   if (/^\+1\d{10}$/.test(cleaned)) return true
@@ -67,9 +67,9 @@ function isValidFrenchPhone(phone: string): boolean {
   return false
 }
 
-const STORAGE_KEY = 'sa:devis-draft'
+const STORAGE_KEY = 'sa:quote-draft'
 
-const stepLabels = ['Service', 'City', 'Projet', 'Contact']
+const stepLabels = ['Service', 'City', 'Details', 'Contact']
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
   const progress = Math.round(((currentStep - 1) / 3) * 100)
@@ -159,9 +159,9 @@ export default function DevisForm({
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState(prefilledCity || savedState?.villeQuery || '')
-  const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
-  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || savedState?.selectedVillePostal || '')
+  const [cityQuery, setCityQuery] = useState(prefilledCity || savedState?.cityQuery || '')
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false)
+  const [selectedCityZip, setSelectedCityZip] = useState(prefilledCityPostal || savedState?.selectedCityZip || '')
   const [geoLoading, setGeoLoading] = useState(false)
 
   const updateField = useCallback(
@@ -180,14 +180,14 @@ export default function DevisForm({
     setErrors((prev) => {
       const next = { ...prev }
       switch (field) {
-        case 'nom':
-          if (!formData.nom.trim()) next.nom = 'Please enter your name'
-          else delete next.nom
+        case 'name':
+          if (!formData.name.trim()) next.name = 'Please enter your name'
+          else delete next.name
           break
-        case 'telephone':
-          if (!formData.telephone.trim()) next.telephone = 'Please enter your phone number'
-          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Please enter a valid US phone number'
-          else delete next.telephone
+        case 'phone':
+          if (!formData.phone.trim()) next.phone = 'Please enter your phone number'
+          else if (!isValidUSPhone(formData.phone.trim())) next.phone = 'Please enter a valid US phone number'
+          else delete next.phone
           break
         case 'email':
           if (!formData.email.trim()) next.email = 'Please enter your email address'
@@ -205,15 +205,15 @@ export default function DevisForm({
   useEffect(() => {
     if (submitted) return
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, step, villeQuery, selectedVillePostal }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, step, cityQuery, selectedCityZip }))
     } catch {}
-  }, [formData, step, villeQuery, selectedVillePostal, submitted])
+  }, [formData, step, cityQuery, selectedCityZip, submitted])
 
-  const filteredVilles = villeQuery.length >= 2
+  const filteredCities = cityQuery.length >= 2
     ? cities
         .filter((v) =>
-          v.name.toLowerCase().includes(villeQuery.toLowerCase()) ||
-          v.zipCode.startsWith(villeQuery)
+          v.name.toLowerCase().includes(cityQuery.toLowerCase()) ||
+          v.zipCode.startsWith(cityQuery)
         )
         .slice(0, 8)
     : []
@@ -226,22 +226,12 @@ export default function DevisForm({
         navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
       })
       const { latitude, longitude } = position.coords
-      const res = await fetch(
-        `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
-      )
-      const data = await res.json()
-      if (data.features && data.features.length > 0) {
-        const feature = data.features[0]
-        const cityName = feature.properties.city || feature.properties.name
-        const postcode = feature.properties.postcode
-        if (cityName) {
-          updateField('ville', cityName)
-          setVilleQuery(cityName)
-          if (postcode) setSelectedVillePostal(postcode)
-        }
-      }
+      // TODO: Replace with US geocoding service (Census Geocoder, Google Places, or Mapbox)
+      // French data.gouv.fr API removed — does not serve US locations
+      void latitude
+      void longitude
     } catch {
-      // Silently fail — user can still type manually
+      // Silently fail - user can still type manually
     } finally {
       setGeoLoading(false)
     }
@@ -256,14 +246,14 @@ export default function DevisForm({
 
   const validateStep2 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.ville) newErrors.ville = 'Please enter your city'
+    if (!formData.city) newErrors.city = 'Please enter your city'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const validateStep3 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.urgence) newErrors.urgence = 'Please indicate your preferred timeline'
+    if (!formData.urgency) newErrors.urgency = 'Please indicate your preferred timeline'
     if (formData.description.trim().length > 0 && formData.description.trim().length < 10) {
       newErrors.description = 'Please provide more detail (10 characters minimum) or leave the field empty'
     }
@@ -273,19 +263,19 @@ export default function DevisForm({
 
   const validateStep4 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.nom.trim()) newErrors.nom = 'Please enter your name'
-    if (!formData.telephone.trim()) {
-      newErrors.telephone = 'Please enter your phone number'
-    } else if (!isValidFrenchPhone(formData.telephone.trim())) {
-      newErrors.telephone = 'Please enter a valid US phone number'
+    if (!formData.name.trim()) newErrors.name = 'Please enter your name'
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Please enter your phone number'
+    } else if (!isValidUSPhone(formData.phone.trim())) {
+      newErrors.phone = 'Please enter a valid US phone number'
     }
     if (!formData.email.trim()) {
       newErrors.email = 'Please enter your email address'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = 'Please enter a valid email address'
     }
-    if (!formData.consentement) {
-      newErrors.consentement = "Please agree to be contacted by attorneys"
+    if (!formData.consent) {
+      newErrors.consent = "Please agree to be contacted by attorneys"
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -295,7 +285,7 @@ export default function DevisForm({
     if (step === 1 && validateStep1()) {
       trackEvent('form_started', {
         service: formData.service || '',
-        source: 'devis_form',
+        source: 'quote_form',
       })
       setStep(2)
     } else if (step === 2 && validateStep2()) {
@@ -327,14 +317,14 @@ export default function DevisForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: formData.service,
-          urgency: formData.urgence,
+          urgency: formData.urgency,
           budget: formData.budget,
           description: formData.description,
-          codePostal: selectedVillePostal,
-          ville: formData.ville,
-          nom: formData.nom,
+          zipCode: selectedCityZip,
+          city: formData.city,
+          name: formData.name,
           email: formData.email,
-          telephone: formData.telephone,
+          phone: formData.phone,
         }),
       })
 
@@ -343,19 +333,19 @@ export default function DevisForm({
         throw new Error(body?.error || "Error sending request")
       }
 
-      trackEvent('devis_submitted', {
+      trackEvent('quote_submitted', {
         service: formData.service || '',
-        city: formData.ville || '',
-        postalCode: selectedVillePostal || '',
-        urgency: formData.urgence || '',
-        source: 'devis_form',
+        city: formData.city || '',
+        postalCode: selectedCityZip || '',
+        urgency: formData.urgency || '',
+        source: 'quote_form',
         value: 45,
         currency: 'USD',
       })
       trackConversion('generate_lead', 45, 'USD', {
-        event_label: `devis_${formData.service}_${formData.ville}`,
+        event_label: `quote_${formData.service}_${formData.city}`,
         service: formData.service,
-        city: formData.ville,
+        city: formData.city,
       })
       setSubmitted(true)
       localStorage.removeItem(STORAGE_KEY)
@@ -510,49 +500,49 @@ export default function DevisForm({
             </p>
 
             <div>
-              <label htmlFor="ville" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="city" className="block text-sm font-semibold text-slate-700 mb-2">
                 City <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
-                  id="ville"
+                  id="city"
                   type="text"
                   autoComplete="address-level2"
                   placeholder="E.g.: New York, Los Angeles, Chicago..."
-                  value={villeQuery}
+                  value={cityQuery}
                   onChange={(e) => {
                     const newValue = e.target.value
-                    setVilleQuery(newValue)
-                    setShowVilleSuggestions(true)
-                    if (formData.ville && newValue !== formData.ville) {
-                      updateField('ville', '')
-                      setSelectedVillePostal('')
+                    setCityQuery(newValue)
+                    setShowCitySuggestions(true)
+                    if (formData.city && newValue !== formData.city) {
+                      updateField('city', '')
+                      setSelectedCityZip('')
                     }
                   }}
-                  onFocus={() => setShowVilleSuggestions(true)}
+                  onFocus={() => setShowCitySuggestions(true)}
                   onBlur={() => {
-                    setTimeout(() => setShowVilleSuggestions(false), 200)
+                    setTimeout(() => setShowCitySuggestions(false), 200)
                   }}
-                  aria-describedby={errors.ville ? 'ville-error' : undefined}
-                  aria-invalid={!!errors.ville}
+                  aria-describedby={errors.city ? 'city-error' : undefined}
+                  aria-invalid={!!errors.city}
                   style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
-                    errors.ville ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                    errors.city ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
                 />
-                {showVilleSuggestions && filteredVilles.length > 0 && (
+                {showCitySuggestions && filteredCities.length > 0 && (
                   <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-auto">
-                    {filteredVilles.map((v) => (
+                    {filteredCities.map((v) => (
                       <li key={v.slug}>
                         <button
                           type="button"
                           className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors text-sm"
                           onMouseDown={(e) => {
                             e.preventDefault()
-                            updateField('ville', v.name)
-                            setVilleQuery(v.name)
-                            setSelectedVillePostal(v.zipCode)
-                            setShowVilleSuggestions(false)
+                            updateField('city', v.name)
+                            setCityQuery(v.name)
+                            setSelectedCityZip(v.zipCode)
+                            setShowCitySuggestions(false)
                           }}
                         >
                           <span className="font-medium text-slate-900">{v.name}</span>
@@ -574,8 +564,8 @@ export default function DevisForm({
                 <MapPin className="w-4 h-4" />
                 {geoLoading ? 'Locating...' : 'Use my location'}
               </button>
-              {errors.ville && (
-                <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.ville}</p>
+              {errors.city && (
+                <p id="city-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.city}</p>
               )}
             </div>
 
@@ -599,7 +589,7 @@ export default function DevisForm({
         )}
       </div>
 
-      {/* Step 3: Urgence + Description + Budget */}
+      {/* Step 3: Timeline + Description + Budget */}
       <div
         className={`transition-all duration-300 ${
           step === 3 ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'
@@ -624,25 +614,25 @@ export default function DevisForm({
                   <label
                     key={opt.value}
                     className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
-                      formData.urgence === opt.value
+                      formData.urgency === opt.value
                         ? 'border-blue-600 bg-blue-50 text-blue-700'
                         : 'border-gray-200 hover:border-gray-300 text-slate-700'
                     }`}
                   >
                     <input
                       type="radio"
-                      name="urgence"
+                      name="urgency"
                       value={opt.value}
-                      checked={formData.urgence === opt.value}
-                      onChange={(e) => updateField('urgence', e.target.value)}
+                      checked={formData.urgency === opt.value}
+                      onChange={(e) => updateField('urgency', e.target.value)}
                       className="sr-only"
                     />
                     {opt.label}
                   </label>
                 ))}
               </div>
-              {errors.urgence && (
-                <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.urgence}</p>
+              {errors.urgency && (
+                <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.urgency}</p>
               )}
             </div>
 
@@ -784,67 +774,67 @@ export default function DevisForm({
               So attorneys can reach out to you with their consultations.
             </p>
 
-            {/* Nom */}
+            {/* Name */}
             <div>
-              <label htmlFor="nom" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
                 Full name <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
-                  id="nom"
+                  id="name"
                   type="text"
                   autoComplete="name"
                   placeholder="John Smith"
-                  value={formData.nom}
-                  onChange={(e) => updateField('nom', e.target.value)}
-                  onBlur={() => validateField('nom')}
-                  aria-describedby={errors.nom ? 'nom-error' : undefined}
-                  aria-invalid={!!errors.nom}
+                  value={formData.name}
+                  onChange={(e) => updateField('name', e.target.value)}
+                  onBlur={() => validateField('name')}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                  aria-invalid={!!errors.name}
                   style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
-                    errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                    errors.name ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
                 />
-                {formData.nom.trim() && !errors.nom && (
+                {formData.name.trim() && !errors.name && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
                     <Check className="w-4 h-4" />
                   </span>
                 )}
               </div>
-              {errors.nom && (
-                <p id="nom-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
+              {errors.name && (
+                <p id="name-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.name}</p>
               )}
             </div>
 
             {/* Phone */}
             <div>
-              <label htmlFor="telephone" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2">
                 Phone <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <input
-                  id="telephone"
+                  id="phone"
                   type="tel"
                   autoComplete="tel"
                   placeholder="(555) 123-4567"
-                  value={formData.telephone}
-                  onChange={(e) => updateField('telephone', e.target.value)}
-                  onBlur={() => validateField('telephone')}
-                  aria-describedby={errors.telephone ? 'telephone-error' : undefined}
-                  aria-invalid={!!errors.telephone}
+                  value={formData.phone}
+                  onChange={(e) => updateField('phone', e.target.value)}
+                  onBlur={() => validateField('phone')}
+                  aria-describedby={errors.phone ? 'phone-error' : undefined}
+                  aria-invalid={!!errors.phone}
                   style={{ fontSize: '16px' }}
                   className={`w-full rounded-xl border ${
-                    errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
+                    errors.phone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
                   } bg-white px-4 py-3 pr-10 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
                 />
-                {formData.telephone.trim() && !errors.telephone && (
+                {formData.phone.trim() && !errors.phone && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
                     <Check className="w-4 h-4" />
                   </span>
                 )}
               </div>
-              {errors.telephone && (
-                <p id="telephone-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
+              {errors.phone && (
+                <p id="phone-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.phone}</p>
               )}
             </div>
 
@@ -885,8 +875,8 @@ export default function DevisForm({
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={formData.consentement}
-                  onChange={(e) => updateField('consentement', e.target.checked)}
+                  checked={formData.consent}
+                  onChange={(e) => updateField('consent', e.target.checked)}
                   className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-slate-600 leading-relaxed">
@@ -895,8 +885,8 @@ export default function DevisForm({
                   <span className="text-gray-400">Only your name, phone number, and case description are shared with matched attorneys.</span>
                 </span>
               </label>
-              {errors.consentement && (
-                <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.consentement}</p>
+              {errors.consent && (
+                <p role="alert" className="mt-1.5 text-sm text-red-600">{errors.consent}</p>
               )}
             </div>
 

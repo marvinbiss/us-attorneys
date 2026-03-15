@@ -124,7 +124,7 @@ export async function GET(request: Request) {
 
       if (!exportRequest) {
         return NextResponse.json(
-          { success: false, error: { message: 'Demande d\'export introuvable' } },
+          { success: false, error: { message: 'Export request not found' } },
           { status: 404 }
         )
       }

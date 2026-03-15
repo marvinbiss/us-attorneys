@@ -110,12 +110,12 @@ export const CallbackPanel = memo(function CallbackPanel({
                 </p>
               )}
             </div>
-            {/* RGPD consent */}
+            {/* Privacy consent */}
             <label className="flex items-start gap-2 text-xs text-gray-500 text-left">
               <input
                 type="checkbox"
-                checked={lead.rgpdCallbackConsent}
-                onChange={(e) => lead.setRgpdCallbackConsent(e.target.checked)}
+                checked={lead.privacyCallbackConsent}
+                onChange={(e) => lead.setPrivacyCallbackConsent(e.target.checked)}
                 className="mt-0.5"
               />
               <span>
@@ -137,7 +137,7 @@ export const CallbackPanel = memo(function CallbackPanel({
             <button
               type="submit"
               disabled={
-                lead.callbackLoading || !lead.callbackPhone.trim() || !lead.rgpdCallbackConsent
+                lead.callbackLoading || !lead.callbackPhone.trim() || !lead.privacyCallbackConsent
               }
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-3 text-sm font-semibold text-white hover:bg-[#c9603a] transition-colors disabled:opacity-50"
             >

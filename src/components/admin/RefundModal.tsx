@@ -13,11 +13,11 @@ interface RefundModalProps {
 }
 
 const REFUND_REASONS = [
-  { value: 'requested_by_customer', label: 'Demande client' },
-  { value: 'duplicate', label: 'Paiement en double' },
-  { value: 'fraudulent', label: 'Fraude détectée' },
-  { value: 'service_not_provided', label: 'Service non fourni' },
-  { value: 'other', label: 'Autre' },
+  { value: 'requested_by_customer', label: 'Customer request' },
+  { value: 'duplicate', label: 'Duplicate payment' },
+  { value: 'fraudulent', label: 'Fraud detected' },
+  { value: 'service_not_provided', label: 'Service not provided' },
+  { value: 'other', label: 'Other' },
 ]
 
 export function RefundModal({
@@ -26,7 +26,7 @@ export function RefundModal({
   onConfirm,
   paymentId,
   maxAmount,
-  currency = 'EUR',
+  currency = 'USD',
 }: RefundModalProps) {
   const [refundType, setRefundType] = useState<'full' | 'partial'>('full')
   const [amount, setAmount] = useState(maxAmount)
@@ -44,12 +44,12 @@ export function RefundModal({
     const refundAmount = refundType === 'full' ? maxAmount : amount
 
     if (refundAmount <= 0) {
-      setError('Le montant doit être supérieur à 0')
+      setError('Amount must be greater than 0')
       return
     }
 
     if (refundAmount > maxAmount) {
-      setError(`Le montant ne peut pas dépasser ${formatAmount(maxAmount)}`)
+      setError(`Amount cannot exceed ${formatAmount(maxAmount)}`)
       return
     }
 
@@ -59,7 +59,7 @@ export function RefundModal({
       await onConfirm(refundAmount, finalReason)
       onClose()
     } catch (err) {
-      setError('Erreur lors du remboursement. Veuillez réessayer.')
+      setError('Refund failed. Please try again.')
       console.error('Refund error:', err)
     } finally {
       setLoading(false)
@@ -67,7 +67,7 @@ export function RefundModal({
   }
 
   const formatAmount = (value: number) => {
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency,
     }).format(value / 100)
@@ -100,11 +100,11 @@ export function RefundModal({
                 <CreditCard className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <h3 id="refund-modal-title" className="text-lg font-semibold text-gray-900">Remboursement</h3>
+                <h3 id="refund-modal-title" className="text-lg font-semibold text-gray-900">Refund</h3>
                 <p className="text-sm text-gray-500">ID: {paymentId.slice(0, 20)}...</p>
               </div>
             </div>
-            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600" aria-label="Fermer la boîte de dialogue">
+            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600" aria-label="Close dialog">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -113,14 +113,14 @@ export function RefundModal({
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {/* Amount info */}
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-sm text-gray-500">Montant maximum remboursable</p>
+              <p className="text-sm text-gray-500">Maximum refundable amount</p>
               <p className="text-2xl font-bold text-gray-900">{formatAmount(maxAmount)}</p>
             </div>
 
             {/* Refund type */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Type de remboursement
+                Refund type
               </label>
               <div className="flex gap-4">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -132,7 +132,7 @@ export function RefundModal({
                     onChange={() => setRefundType('full')}
                     className="w-4 h-4 text-blue-600"
                   />
-                  <span className="text-sm text-gray-700">Remboursement total</span>
+                  <span className="text-sm text-gray-700">Full refund</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -143,7 +143,7 @@ export function RefundModal({
                     onChange={() => setRefundType('partial')}
                     className="w-4 h-4 text-blue-600"
                   />
-                  <span className="text-sm text-gray-700">Remboursement partiel</span>
+                  <span className="text-sm text-gray-700">Partial refund</span>
                 </label>
               </div>
             </div>
@@ -152,7 +152,7 @@ export function RefundModal({
             {refundType === 'partial' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Montant à rembourser (en centimes)
+                  Refund amount (in cents)
                 </label>
                 <div className="relative">
                   <input
@@ -173,7 +173,7 @@ export function RefundModal({
             {/* Reason */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Motif du remboursement
+                Refund reason
               </label>
               <select
                 value={reason}
@@ -192,7 +192,7 @@ export function RefundModal({
             {reason === 'other' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Précisez le motif
+                  Specify reason
                 </label>
                 <textarea
                   value={customReason}
@@ -200,7 +200,7 @@ export function RefundModal({
                   rows={2}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Décrivez le motif..."
+                  placeholder="Describe the reason..."
                 />
               </div>
             )}
@@ -209,7 +209,7 @@ export function RefundModal({
             <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
               <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-amber-700">
-                Cette action est irréversible. Le remboursement sera traité via Stripe et peut prendre 5-10 jours ouvrés pour apparaître sur le compte du client.
+                This action is irreversible. The refund will be processed via Stripe and may take 5-10 business days to appear on the customer's account.
               </p>
             </div>
 
@@ -228,7 +228,7 @@ export function RefundModal({
                 disabled={loading}
                 className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
               >
-                Annuler
+                Cancel
               </button>
               <button
                 type="submit"
@@ -238,10 +238,10 @@ export function RefundModal({
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Traitement...
+                    Processing...
                   </span>
                 ) : (
-                  `Rembourser ${refundType === 'full' ? formatAmount(maxAmount) : formatAmount(amount)}`
+                  `Refund ${refundType === 'full' ? formatAmount(maxAmount) : formatAmount(amount)}`
                 )}
               </button>
             </div>

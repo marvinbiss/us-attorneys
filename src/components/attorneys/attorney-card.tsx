@@ -54,7 +54,7 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
             {provider.image_url ? (
               <Image
                 src={provider.image_url}
-                alt={`${provider.name}${provider.service_type ? ` - ${provider.service_type}` : ''} à ${provider.address_city}`}
+                alt={`${provider.name}${provider.service_type ? ` - ${provider.service_type}` : ''} in ${provider.address_city}`}
                 fill
                 className="object-cover"
                 sizes="64px"
@@ -72,7 +72,7 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <Link
-                href={`/artisan/${provider.slug}`}
+                href={`/attorney/${provider.slug}`}
                 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
               >
                 {provider.name}
@@ -94,7 +94,7 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
                 {provider.rating_average.toFixed(1)}
               </span>
               <span className="text-sm text-gray-500">
-                ({provider.review_count} avis)
+                ({provider.review_count} reviews)
               </span>
             </div>
 
@@ -116,12 +116,12 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
           {provider.is_available_24h && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
               <Clock className="w-3 h-3" />
-              24h/24
+              24/7
             </span>
           )}
           {provider.response_time && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-              Répond en {provider.response_time}
+              Responds in {provider.response_time}
             </span>
           )}
         </div>
@@ -129,10 +129,10 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
         {/* Actions */}
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
           <Link
-            href={`/artisan/${provider.slug}`}
+            href={`/attorney/${provider.slug}`}
             className="flex-1 text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
           >
-            Voir le profil
+            View profile
           </Link>
           {showContact && provider.phone && (
             <a
@@ -140,7 +140,7 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
               className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
             >
               <Phone className="w-4 h-4" />
-              Appeler
+              Call
             </a>
           )}
         </div>

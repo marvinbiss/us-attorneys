@@ -169,7 +169,7 @@ export default function StatistiquesPage() {
             <div className="text-sm text-gray-500">Cases Received</div>
           </div>
 
-          {/* Devis sent */}
+          {/* Quotes sent */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
               <FileText className="w-8 h-8 text-green-600" />

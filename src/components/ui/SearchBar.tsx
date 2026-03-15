@@ -13,35 +13,14 @@ interface CitySuggestion {
   postcode: string
 }
 
-async function searchCities(query: string): Promise<CitySuggestion[]> {
-  if (!query || query.length < 2) return []
-
-  try {
-    const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=6&autocomplete=1`
-    const response = await fetch(url)
-    if (!response.ok) return []
-    const data = await response.json()
-    return data.features?.map((f: { properties: { city: string; context: string; label: string; postcode: string } }) => ({
-      city: f.properties.city || f.properties.label,
-      context: f.properties.context,
-      label: f.properties.label,
-      postcode: f.properties.postcode
-    })) || []
-  } catch {
-    return []
-  }
+// TODO: Replace with US geocoding service (Census Geocoder, Google Places, or Mapbox)
+// French data.gouv.fr API removed — does not serve US locations
+async function searchCities(_query: string): Promise<CitySuggestion[]> {
+  return []
 }
 
-async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
-  try {
-    const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
-    const response = await fetch(url)
-    if (!response.ok) return null
-    const data = await response.json()
-    return data.features?.[0]?.properties?.city || null
-  } catch {
-    return null
-  }
+async function getLocationFromCoords(_lon: number, _lat: number): Promise<string | null> {
+  return null
 }
 
 interface SearchBarProps {
@@ -331,7 +310,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setShowServiceSuggestions(true)}
                 onKeyDown={handleServiceKeyDown}
-                placeholder="Quel service recherchez-vous ?"
+                placeholder="What service are you looking for?"
                 className="w-full pl-12 pr-10 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
                 autoComplete="off"
               />
@@ -356,7 +335,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                     <div className="p-3 border-b border-gray-100">
                       <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
                         <Clock className="w-3 h-3" />
-                        Recherches récentes
+                        Recent searches
                       </div>
                       {recentSearches.slice(0, 3).map((search, idx) => (
                         <button
@@ -367,7 +346,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                         >
                           <Clock className="w-4 h-4 text-gray-300" />
                           <span className="text-sm text-gray-700 truncate">
-                            {search.service || 'Tous'}{search.location && ` · ${search.location}`}
+                            {search.service || 'All'}{search.location && ` · ${search.location}`}
                           </span>
                         </button>
                       ))}
@@ -405,7 +384,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                     <div className="p-3">
                       <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
                         <TrendingUp className="w-3 h-3" />
-                        Services populaires
+                        Popular services
                       </div>
                       <div className="grid grid-cols-2 gap-1">
                         {popularServices.map((service) => (
@@ -441,7 +420,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 }}
                 onFocus={() => setShowLocationSuggestions(true)}
                 onKeyDown={handleLocationKeyDown}
-                placeholder="City ou code postal"
+                placeholder="City or ZIP code"
                 className="w-full pl-12 pr-12 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
                 autoComplete="off"
               />
@@ -452,7 +431,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 onClick={handleGeolocate}
                 disabled={isLocating}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50"
-                title="Utiliser ma position"
+                title="Use my location"
               >
                 {isLocating ? (
                   <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -496,18 +475,18 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                     <div className="p-3">
                       <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
                         <MapPin className="w-3 h-3" />
-                        Villes populaires
+                        Popular cities
                       </div>
                       <div className="grid grid-cols-2 gap-1">
                         {[
-                          { name: 'Paris', slug: 'paris' },
-                          { name: 'Lyon', slug: 'lyon' },
-                          { name: 'Marseille', slug: 'marseille' },
-                          { name: 'Toulouse', slug: 'toulouse' },
-                          { name: 'Bordeaux', slug: 'bordeaux' },
-                          { name: 'Nantes', slug: 'nantes' },
-                          { name: 'Nice', slug: 'nice' },
-                          { name: 'Lille', slug: 'lille' },
+                          { name: 'New York', slug: 'new-york' },
+                          { name: 'Los Angeles', slug: 'los-angeles' },
+                          { name: 'Chicago', slug: 'chicago' },
+                          { name: 'Houston', slug: 'houston' },
+                          { name: 'Phoenix', slug: 'phoenix' },
+                          { name: 'Philadelphia', slug: 'philadelphia' },
+                          { name: 'San Antonio', slug: 'san-antonio' },
+                          { name: 'San Diego', slug: 'san-diego' },
                         ].map((city) => (
                           <button
                             key={city.slug}
@@ -544,7 +523,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
               className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-              <span className="relative">Rechercher</span>
+              <span className="relative">Search</span>
               <ArrowRight className="w-5 h-5 relative group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>

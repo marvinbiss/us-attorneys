@@ -79,7 +79,7 @@ interface RevenueChartProps {
   title?: string
 }
 
-export function RevenueChart({ data, title = 'Revenus & Réservations' }: RevenueChartProps) {
+export function RevenueChart({ data, title = 'Revenue & Bookings' }: RevenueChartProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
@@ -98,8 +98,8 @@ export function RevenueChart({ data, title = 'Revenus & Réservations' }: Revenu
             }}
           />
           <Legend />
-          <Bar yAxisId="right" dataKey="bookings" name="Réservations" fill={COLORS.secondary} radius={[4, 4, 0, 0]} />
-          <Line yAxisId="left" type="monotone" dataKey="revenue" name="Revenus (€)" stroke={COLORS.primary} strokeWidth={2} dot={{ r: 4 }} />
+          <Bar yAxisId="right" dataKey="bookings" name="Bookings" fill={COLORS.secondary} radius={[4, 4, 0, 0]} />
+          <Line yAxisId="left" type="monotone" dataKey="revenue" name="Revenue ($)" stroke={COLORS.primary} strokeWidth={2} dot={{ r: 4 }} />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -118,7 +118,7 @@ interface BookingsTrendProps {
 export function BookingsTrendChart({ data }: BookingsTrendProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Tendance des réservations</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking trends</h3>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -132,9 +132,9 @@ export function BookingsTrendChart({ data }: BookingsTrendProps) {
             }}
           />
           <Legend />
-          <Area type="monotone" dataKey="confirmed" name="Confirmées" stackId="1" stroke={COLORS.success} fill={COLORS.success} fillOpacity={0.6} />
-          <Area type="monotone" dataKey="pending" name="En attente" stackId="1" stroke={COLORS.warning} fill={COLORS.warning} fillOpacity={0.6} />
-          <Area type="monotone" dataKey="cancelled" name="Annulées" stackId="1" stroke={COLORS.danger} fill={COLORS.danger} fillOpacity={0.6} />
+          <Area type="monotone" dataKey="confirmed" name="Confirmed" stackId="1" stroke={COLORS.success} fill={COLORS.success} fillOpacity={0.6} />
+          <Area type="monotone" dataKey="pending" name="Pending" stackId="1" stroke={COLORS.warning} fill={COLORS.warning} fillOpacity={0.6} />
+          <Area type="monotone" dataKey="cancelled" name="Cancelled" stackId="1" stroke={COLORS.danger} fill={COLORS.danger} fillOpacity={0.6} />
         </AreaChart>
       </ResponsiveContainer>
     </div>
@@ -151,7 +151,7 @@ interface RatingDistributionProps {
 export function RatingDistributionChart({ data }: RatingDistributionProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribution des avis</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Review distribution</h3>
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -164,7 +164,7 @@ export function RatingDistributionChart({ data }: RatingDistributionProps) {
               borderRadius: '8px',
             }}
           />
-          <Bar dataKey="count" name="Nombre d'avis" fill={COLORS.warning} radius={[0, 4, 4, 0]} />
+          <Bar dataKey="count" name="Reviews" fill={COLORS.warning} radius={[0, 4, 4, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -183,7 +183,7 @@ export function ServiceDistributionChart({ data }: ServiceDistributionProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Répartition par service</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribution by specialty</h3>
       <div className="flex items-center gap-8">
         <ResponsiveContainer width="50%" height={200}>
           <PieChart>
@@ -240,7 +240,7 @@ export function GeographicDistribution({ data }: GeographicHeatmapProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribution géographique</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Geographic distribution</h3>
       <div className="space-y-3">
         {data.slice(0, 10).map((item) => (
           <div key={item.city} className="flex items-center gap-4">
@@ -252,7 +252,7 @@ export function GeographicDistribution({ data }: GeographicHeatmapProps) {
               />
             </div>
             <div className="w-16 text-right text-sm text-gray-600">{item.bookings}</div>
-            <div className="w-20 text-right text-sm font-medium text-gray-900">{item.revenue}€</div>
+            <div className="w-20 text-right text-sm font-medium text-gray-900">{item.revenue}$</div>
           </div>
         ))}
       </div>
@@ -271,15 +271,15 @@ interface PerformanceMetricsProps {
 
 export function PerformanceMetrics({ data }: PerformanceMetricsProps) {
   const metrics = [
-    { label: 'Temps de réponse', value: `${data.responseTime}h`, target: '<24h', status: data.responseTime <= 24 ? 'good' : 'warning' },
-    { label: 'Taux de complétion', value: `${data.completionRate}%`, target: '>95%', status: data.completionRate >= 95 ? 'good' : data.completionRate >= 80 ? 'warning' : 'bad' },
-    { label: 'Satisfaction client', value: `${data.customerSatisfaction}%`, target: '>90%', status: data.customerSatisfaction >= 90 ? 'good' : 'warning' },
-    { label: 'Clients récurrents', value: `${data.repeatCustomerRate}%`, target: '>30%', status: data.repeatCustomerRate >= 30 ? 'good' : 'warning' },
+    { label: 'Response time', value: `${data.responseTime}h`, target: '<24h', status: data.responseTime <= 24 ? 'good' : 'warning' },
+    { label: 'Completion rate', value: `${data.completionRate}%`, target: '>95%', status: data.completionRate >= 95 ? 'good' : data.completionRate >= 80 ? 'warning' : 'bad' },
+    { label: 'Client satisfaction', value: `${data.customerSatisfaction}%`, target: '>90%', status: data.customerSatisfaction >= 90 ? 'good' : 'warning' },
+    { label: 'Repeat clients', value: `${data.repeatCustomerRate}%`, target: '>30%', status: data.repeatCustomerRate >= 30 ? 'good' : 'warning' },
   ]
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Indicateurs de performance</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance metrics</h3>
       <div className="grid grid-cols-2 gap-4">
         {metrics.map((metric) => (
           <div key={metric.label} className="p-4 bg-gray-50 rounded-lg">
@@ -291,7 +291,7 @@ export function PerformanceMetrics({ data }: PerformanceMetricsProps) {
               }`} />
             </div>
             <div className="text-2xl font-bold text-gray-900">{metric.value}</div>
-            <div className="text-xs text-gray-400 mt-1">Objectif: {metric.target}</div>
+            <div className="text-xs text-gray-400 mt-1">Target: {metric.target}</div>
           </div>
         ))}
       </div>
@@ -314,11 +314,11 @@ export function TrendComparison({ currentPeriod, previousPeriod, label, format =
   const formatValue = (val: number) => {
     switch (format) {
       case 'currency':
-        return `${val.toLocaleString('fr-FR')}€`
+        return `${val.toLocaleString('en-US')}$`
       case 'percent':
         return `${val}%`
       default:
-        return val.toLocaleString('fr-FR')
+        return val.toLocaleString('en-US')
     }
   }
 
@@ -347,16 +347,16 @@ interface DashboardProps {
 
 export function DashboardWrapper({ children, onPeriodChange, selectedPeriod = '7d' }: DashboardProps) {
   const periods = [
-    { value: '7d', label: '7 jours' },
-    { value: '30d', label: '30 jours' },
-    { value: '90d', label: '3 mois' },
-    { value: '1y', label: '1 an' },
+    { value: '7d', label: '7 days' },
+    { value: '30d', label: '30 days' },
+    { value: '90d', label: '3 months' },
+    { value: '1y', label: '1 year' },
   ]
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Tableau de bord</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
         <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
           {periods.map((period) => (
             <button

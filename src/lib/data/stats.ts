@@ -1,10 +1,10 @@
 /**
- * Fonctions serveur pour récupérer les vraies statistiques depuis Supabase
- * Utilisées dans les pages SSR/ISR — NE PAS importer dans des composants client
+ * Server functions to fetch real statistics from Supabase
+ * Used in SSR/ISR pages — DO NOT import in client components
  *
- * Les fonctions sont wrappées avec unstable_cache pour garantir le CDN caching.
- * Sans ce wrapper, les appels Supabase (fetch tiers) contournent le cache Next.js
- * et forcent un rendu dynamique sur chaque requête.
+ * Functions are wrapped with unstable_cache to guarantee CDN caching.
+ * Without this wrapper, Supabase calls (third-party fetch) bypass the Next.js cache
+ * and force dynamic rendering on each request.
  */
 
 import { unstable_cache } from 'next/cache'
@@ -12,7 +12,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
-/** Nombre total d'artisans actifs dans la base */
+/** Total number of active attorneys in the database */
 async function _getAttorneyCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
@@ -31,7 +31,7 @@ export const getAttorneyCount = unstable_cache(_getAttorneyCount, ['provider-cou
   tags: ['providers'],
 })
 
-/** Nombre d'artisans actifs dans une région (par nom de région) */
+/** Number of active attorneys in a region (by region name) */
 export async function getAttorneyCountByRegion(regionName: string): Promise<number> {
   // Fail open at build: default to indexed. ISR will correct with real DB data.
   if (IS_BUILD) return 1
@@ -48,7 +48,7 @@ export async function getAttorneyCountByRegion(regionName: string): Promise<numb
   }
 }
 
-/** Nombre d'artisans actifs dans un département (par nom de département) */
+/** Number of active attorneys in a state (by state name) */
 export async function getAttorneyCountByDepartment(deptName: string): Promise<number> {
   // Fail open at build: default to indexed. ISR will correct with real DB data.
   if (IS_BUILD) return 1
@@ -65,9 +65,9 @@ export async function getAttorneyCountByDepartment(deptName: string): Promise<nu
   }
 }
 
-/** Formate un nombre d'artisans pour l'affichage (ex: 12 450) */
+/** Format an attorney count for display (e.g. 12,450) */
 export function formatAttorneyCount(count: number): string {
-  return count.toLocaleString('fr-FR')
+  return count.toLocaleString('en-US')
 }
 
 export interface SiteStats {
@@ -103,7 +103,7 @@ export interface HomepageData extends SiteStats {
   recentReviews: HomepageReview[]
 }
 
-/** Toutes les stats du site en un seul appel (pour la homepage) */
+/** All site stats in a single call (for the homepage) */
 export async function getSiteStats(): Promise<SiteStats> {
   try {
     const supabase = createAdminClient()
@@ -150,11 +150,11 @@ export async function getSiteStats(): Promise<SiteStats> {
 }
 
 const HOMEPAGE_SERVICE_SLUGS = [
-  'plombier', 'electricien', 'serrurier', 'chauffagiste',
-  'peintre-en-batiment', 'menuisier', 'macon', 'jardinier',
+  'personal-injury', 'criminal-defense', 'family-law', 'estate-planning',
+  'immigration', 'business-law', 'employment-law', 'real-estate-law',
 ]
 
-/** Données complètes pour la homepage : stats + providers + avis + compteurs */
+/** Complete homepage data: stats + providers + reviews + counters */
 export async function getHomepageData(): Promise<HomepageData> {
   const stats = await getSiteStats()
 

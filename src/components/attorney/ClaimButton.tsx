@@ -217,7 +217,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                 )}
 
                 <div className="space-y-3">
-                  {/* Nom complet */}
+                  {/* Full name */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Full name <span className="text-red-500">*</span>
@@ -247,7 +247,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                     />
                   </div>
 
-                  {/* Téléphone */}
+                  {/* Phone */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Phone <span className="text-red-500">*</span>

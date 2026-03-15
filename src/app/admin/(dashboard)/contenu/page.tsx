@@ -22,30 +22,30 @@ interface CMSResponse {
 }
 
 const PAGE_TYPES = [
-  { value: '', label: 'Tout' },
-  { value: 'static', label: 'Statiques' },
+  { value: '', label: 'All' },
+  { value: 'static', label: 'Static' },
   { value: 'blog', label: 'Blog' },
   { value: 'service', label: 'Services' },
-  { value: 'location', label: 'Localisation' },
-  { value: 'homepage', label: 'Accueil' },
+  { value: 'location', label: 'Location' },
+  { value: 'homepage', label: 'Home' },
   { value: 'faq', label: 'FAQ' },
 ]
 
 const STATUS_OPTIONS = [
-  { value: '', label: 'Tous' },
-  { value: 'draft', label: 'Brouillon' },
-  { value: 'published', label: 'Publié' },
-  { value: 'archived', label: 'Archivé' },
+  { value: '', label: 'All' },
+  { value: 'draft', label: 'Draft' },
+  { value: 'published', label: 'Published' },
+  { value: 'archived', label: 'Archived' },
 ]
 
 const statusBadge = (status: string) => {
   switch (status) {
     case 'draft':
-      return { label: 'Brouillon', classes: 'bg-yellow-100 text-yellow-800' }
+      return { label: 'Draft', classes: 'bg-yellow-100 text-yellow-800' }
     case 'published':
-      return { label: 'Publié', classes: 'bg-green-100 text-green-800' }
+      return { label: 'Published', classes: 'bg-green-100 text-green-800' }
     case 'archived':
-      return { label: 'Archivé', classes: 'bg-gray-100 text-gray-800' }
+      return { label: 'Archived', classes: 'bg-gray-100 text-gray-800' }
     default:
       return { label: status, classes: 'bg-gray-100 text-gray-600' }
   }
@@ -54,15 +54,15 @@ const statusBadge = (status: string) => {
 const typeBadge = (type: string) => {
   switch (type) {
     case 'static':
-      return { label: 'Statique', classes: 'bg-blue-100 text-blue-800' }
+      return { label: 'Static', classes: 'bg-blue-100 text-blue-800' }
     case 'blog':
       return { label: 'Blog', classes: 'bg-blue-100 text-blue-800' }
     case 'service':
       return { label: 'Service', classes: 'bg-green-100 text-green-800' }
     case 'location':
-      return { label: 'Localisation', classes: 'bg-amber-100 text-amber-800' }
+      return { label: 'Location', classes: 'bg-amber-100 text-amber-800' }
     case 'homepage':
-      return { label: 'Accueil', classes: 'bg-red-100 text-red-800' }
+      return { label: 'Home', classes: 'bg-red-100 text-red-800' }
     case 'faq':
       return { label: 'FAQ', classes: 'bg-blue-100 text-blue-800' }
     default:
@@ -117,7 +117,7 @@ export default function AdminContenuPage() {
   const totalPages = Math.ceil(total / pageSize)
 
   const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('fr-FR', {
+    new Date(d).toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -129,7 +129,7 @@ export default function AdminContenuPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion du contenu</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Content Management</h1>
             <p className="text-gray-500 mt-1">{total} page{total !== 1 ? 's' : ''}</p>
           </div>
           <Link
@@ -137,7 +137,7 @@ export default function AdminContenuPage() {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-5 h-5" />
-            Nouvelle page
+            New page
           </Link>
         </div>
 
@@ -165,8 +165,8 @@ export default function AdminContenuPage() {
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher une page..."
-                aria-label="Rechercher une page"
+                placeholder="Search pages..."
+                aria-label="Search pages"
                 value={searchInput}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 maxLength={200}
@@ -176,7 +176,7 @@ export default function AdminContenuPage() {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              aria-label="Filtrer par statut"
+              aria-label="Filter by status"
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-700"
             >
               {STATUS_OPTIONS.map((opt) => (
@@ -193,7 +193,7 @@ export default function AdminContenuPage() {
           {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-4 text-gray-500">Chargement...</p>
+              <p className="mt-4 text-gray-500">Loading...</p>
             </div>
           ) : error ? (
             <div className="p-8">
@@ -205,25 +205,25 @@ export default function AdminContenuPage() {
           ) : pages.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <FileEdit className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucune page trouvée</p>
+              <p>No pages found</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[400px] sm:min-w-[700px]" aria-label="Liste des pages CMS">
+                <table className="w-full min-w-[400px] sm:min-w-[700px]" aria-label="CMS pages list">
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-50">
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Titre
+                        Title
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Type
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Statut
+                        Status
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Dernière modification
+                        Last modified
                       </th>
                       <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
@@ -253,7 +253,7 @@ export default function AdminContenuPage() {
                               <p className="font-medium text-gray-900">
                                 {page.title}
                                 {!page.is_active && (
-                                  <span className="ml-2 text-xs text-red-500">(supprimée)</span>
+                                  <span className="ml-2 text-xs text-red-500">(deleted)</span>
                                 )}
                               </p>
                               <p className="text-sm text-gray-500">/{page.slug}</p>
@@ -282,7 +282,7 @@ export default function AdminContenuPage() {
                               onClick={(e) => e.stopPropagation()}
                               className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                             >
-                              Modifier
+                              Edit
                             </Link>
                           </td>
                         </tr>
@@ -296,7 +296,7 @@ export default function AdminContenuPage() {
               {totalPages > 1 && (
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-4 border-t border-gray-200">
                   <p className="text-sm text-gray-500">
-                    Page {currentPage} sur {totalPages} ({total} résultats)
+                    Page {currentPage} of {totalPages} ({total} results)
                   </p>
                   <div className="flex items-center gap-2">
                     <button
@@ -305,14 +305,14 @@ export default function AdminContenuPage() {
                       className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="w-4 h-4" />
-                      Précédent
+                      Previous
                     </button>
                     <button
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                       className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Suivant
+                      Next
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>

@@ -16,7 +16,7 @@ export function AttorneyBreadcrumb({ artisan }: AttorneyBreadcrumbProps) {
   const citySlug = artisan.city_slug || slugify(artisan.city)
 
   // Build breadcrumb with 5 levels for SEO clarity
-  // Structure: Accueil > Services > {Service} > {City} > {Nom artisan}
+  // Structure: Home > Practice Areas > {Service} > {City} > {Attorney name}
   const items: Array<{ label: string; href?: string; icon?: typeof Home }> = [
     { label: 'Home', href: '/', icon: Home },
     { label: 'Practice Areas', href: '/services' },

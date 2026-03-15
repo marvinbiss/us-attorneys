@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Wrench, Clock, Euro, CheckCircle } from 'lucide-react'
+import { Wrench, Clock, DollarSign, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface AttorneyServicesProps {
@@ -46,7 +46,7 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
         {/* Pricing table — only show real prices from the artisan */}
         {artisan.service_prices.length > 0 ? (
           <div className="space-y-2.5 mt-4" role="list" aria-label="Service fees">
-            {artisan.service_prices[0]?.price?.startsWith('À partir') && (
+            {artisan.service_prices[0]?.price?.startsWith('Starting') && (
               <p className="text-xs text-slate-400 italic mb-3">* Indicative fees, the final price depends on the exact nature of the consultation. Request a consultation for a precise quote.</p>
             )}
             {artisan.service_prices.map((service, index) => (
@@ -75,7 +75,7 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
                     </div>
                   )}
                   <div className="flex items-center gap-1 text-lg font-bold text-clay-600 whitespace-nowrap bg-clay-50 px-3 py-1 rounded-lg" aria-label={`Price: ${service.price}`}>
-                    <Euro className="w-4 h-4" aria-hidden="true" />
+                    <DollarSign className="w-4 h-4" aria-hidden="true" />
                     <span>{service.price}</span>
                   </div>
                 </div>

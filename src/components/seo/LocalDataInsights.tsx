@@ -1,5 +1,5 @@
-import { Building2, Users, Euro, Zap, CloudRain } from 'lucide-react'
-import { LocationData, formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
+import { Building2, Users, DollarSign, Zap, CloudRain } from 'lucide-react'
+import { LocationData, formatNumber, formatDollarSign, monthName } from '@/lib/data/commune-data'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -46,7 +46,7 @@ export default function LocalDataInsights({
         </p>
 
         <div className="grid sm:grid-cols-2 gap-6">
-          {/* 1. Marché local de la rénovation */}
+          {/* 1. Local legal market */}
           {hasMarche && (
             <InsightCard
               icon={<Building2 className="w-5 h-5 text-blue-600" />}
@@ -70,18 +70,18 @@ export default function LocalDataInsights({
             </InsightCard>
           )}
 
-          {/* 2. Immobilier & patrimoine */}
+          {/* 2. Real estate & property */}
           {hasImmo && (
             <InsightCard
-              icon={<Euro className="w-5 h-5 text-amber-600" />}
+              icon={<DollarSign className="w-5 h-5 text-amber-600" />}
               title="Real estate & property"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
                 {c.prix_m2_moyen && (
-                  <>The average price per sq ft in {villeName} is {formatEuro(c.prix_m2_moyen)}. </>
+                  <>The average price per sq ft in {villeName} is {formatDollarSign(c.prix_m2_moyen)}. </>
                 )}
                 {c.prix_m2_maison && c.prix_m2_appartement && (
-                  <>Houses: {formatEuro(c.prix_m2_maison)}/sq ft, condos: {formatEuro(c.prix_m2_appartement)}/sq ft. </>
+                  <>Houses: {formatDollarSign(c.prix_m2_maison)}/sq ft, condos: {formatDollarSign(c.prix_m2_appartement)}/sq ft. </>
                 )}
                 {c.part_maisons_pct != null && (
                   <>With {c.part_maisons_pct > 50
@@ -99,7 +99,7 @@ export default function LocalDataInsights({
             </InsightCard>
           )}
 
-          {/* 3. Performance énergétique */}
+          {/* 3. Energy performance */}
           {hasDpe && (
             <InsightCard
               icon={<Zap className="w-5 h-5 text-green-600" />}
@@ -119,7 +119,7 @@ export default function LocalDataInsights({
             </InsightCard>
           )}
 
-          {/* 4. Climat & saisonnalité */}
+          {/* 4. Climate & seasonality */}
           {hasClimat && (
             <InsightCard
               icon={<CloudRain className="w-5 h-5 text-sky-600" />}
@@ -147,14 +147,14 @@ export default function LocalDataInsights({
             </InsightCard>
           )}
 
-          {/* 5. Contexte socio-économique */}
+          {/* 5. Socioeconomic context */}
           {hasSocio && (
             <InsightCard
               icon={<Users className="w-5 h-5 text-purple-600" />}
               title="Socioeconomic context"
             >
               <p className="text-gray-600 text-sm leading-relaxed">
-                The median income in {villeName} is {formatEuro(c.revenu_median!)}/year.{' '}
+                The median income in {villeName} is {formatDollarSign(c.revenu_median!)}/year.{' '}
                 {c.revenu_median! < 22000 ? (
                   <>This income level means many households may qualify for legal aid or pro bono services, significantly reducing legal costs for {gentile}.</>
                 ) : c.revenu_median! < 30000 ? (
@@ -163,7 +163,7 @@ export default function LocalDataInsights({
                   <>With higher purchasing power, {gentile} regularly invest in quality legal services and comprehensive representation.</>
                 )}
                 {c.prix_m2_moyen && (
-                  <> Combined with real estate prices of {formatEuro(c.prix_m2_moyen)}/sq ft, property-related legal services remain in high demand.</>
+                  <> Combined with real estate prices of {formatDollarSign(c.prix_m2_moyen)}/sq ft, property-related legal services remain in high demand.</>
                 )}
               </p>
             </InsightCard>

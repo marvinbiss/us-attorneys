@@ -69,12 +69,12 @@ export default function MesFavorisPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-heading font-bold text-slate-900">
-              Mes artisans favoris
+              My Favorite Attorneys
             </h1>
             <p className="text-slate-500 mt-1">
               {count === 0
-                ? 'Aucun artisan sauvegardé'
-                : `${count} artisan${count > 1 ? 's' : ''} sauvegardé${count > 1 ? 's' : ''}`}
+                ? 'No saved attorneys'
+                : `${count} saved attorney${count > 1 ? 's' : ''}`}
             </p>
           </div>
 
@@ -84,7 +84,7 @@ export default function MesFavorisPage() {
               onClick={clearFavorites}
               className="text-sm text-red-500 hover:text-red-700 font-medium transition-colors"
             >
-              Tout supprimer
+              Remove all
             </button>
           )}
         </div>
@@ -103,19 +103,19 @@ export default function MesFavorisPage() {
               <Heart className="w-10 h-10 text-red-300" />
             </div>
             <h2 className="text-xl font-semibold text-slate-800 mb-3">
-              Vous n&apos;avez pas encore d&apos;artisans favoris
+              You have no favorite attorneys yet
             </h2>
             <p className="text-slate-500 max-w-md mx-auto mb-8">
-              Parcourez nos artisans et cliquez sur{' '}
-              <Heart className="inline w-4 h-4 text-red-400" /> pour les
-              sauvegarder ici.
+              Browse attorneys and click{' '}
+              <Heart className="inline w-4 h-4 text-red-400" /> to
+              save them here.
             </p>
             <Link
               href="/search"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md shadow-blue-500/20 transition-all duration-200"
             >
               <Search className="w-5 h-5" />
-              Rechercher des artisans
+              Search attorneys
             </Link>
           </div>
         )}
@@ -191,7 +191,7 @@ export default function MesFavorisPage() {
                           {typeof provider.review_count === 'number' &&
                             provider.review_count > 0 && (
                               <span className="text-sm text-slate-500">
-                                ({provider.review_count} avis)
+                                ({provider.review_count} reviews)
                               </span>
                             )}
                         </div>
@@ -207,14 +207,14 @@ export default function MesFavorisPage() {
         {!loading && count > 0 && providers.length === 0 && (
           <div className="text-center py-16">
             <p className="text-slate-500">
-              Les artisans sauvegardés ne sont plus disponibles.
+              The saved attorneys are no longer available.
             </p>
             <button
               type="button"
               onClick={clearFavorites}
               className="mt-4 text-sm text-red-500 hover:text-red-700 font-medium transition-colors"
             >
-              Effacer les favoris
+              Clear favorites
             </button>
           </div>
         )}

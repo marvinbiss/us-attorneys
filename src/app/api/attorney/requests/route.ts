@@ -41,7 +41,7 @@ export async function GET(request: Request) {
       .maybeSingle()
 
     if (!provider) {
-      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
+      return NextResponse.json({ requests: [], stats: { total: 0, new: 0, quotes_sent: 0, accepted: 0, declined: 0 } })
     }
 
     // Get lead IDs assigned to this provider via lead_assignments
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
     const leadIds = (assignments || []).map(a => a.lead_id)
 
     if (leadIds.length === 0) {
-      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
+      return NextResponse.json({ requests: [], stats: { total: 0, new: 0, quotes_sent: 0, accepted: 0, declined: 0 } })
     }
 
     // Fetch ALL devis_requests assigned to this provider (unfiltered) for accurate stats
@@ -73,10 +73,10 @@ export async function GET(request: Request) {
     // Stats calculated on ALL demandes (not filtered by status)
     const stats = {
       total: allDemandes?.length || 0,
-      nouveau: allDemandes?.filter(d => d.status === 'pending').length || 0,
-      devis_envoye: allDemandes?.filter(d => d.status === 'sent').length || 0,
-      accepte: allDemandes?.filter(d => d.status === 'accepted').length || 0,
-      refuse: allDemandes?.filter(d => d.status === 'refused').length || 0,
+      new: allDemandes?.filter(d => d.status === 'pending').length || 0,
+      quotes_sent: allDemandes?.filter(d => d.status === 'sent').length || 0,
+      accepted: allDemandes?.filter(d => d.status === 'accepted').length || 0,
+      declined: allDemandes?.filter(d => d.status === 'refused').length || 0,
     }
 
     // Fetch only devis_requests assigned to this provider, filtered by status if requested
@@ -102,7 +102,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({
-      demandes: demandes || [],
+      requests: demandes || [],
       stats
     })
   } catch (error) {

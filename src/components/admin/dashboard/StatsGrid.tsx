@@ -69,17 +69,17 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
 
   const cards = [
     {
-      label: 'Utilisateurs',
-      value: stats.totalUsers.toLocaleString('fr-FR'),
+      label: 'Users',
+      value: stats.totalUsers.toLocaleString('en-US'),
       icon: Users,
       color: 'bg-blue-100 text-blue-600',
       trend: stats.trends.users,
-      trendLabel: 'vs mois dernier',
-      href: '/admin/utilisateurs',
+      trendLabel: 'vs last month',
+      href: '/admin/users',
     },
     {
-      label: 'Artisans actifs',
-      value: stats.totalArtisans.toLocaleString('fr-FR'),
+      label: 'Active attorneys',
+      value: stats.totalArtisans.toLocaleString('en-US'),
       icon: Briefcase,
       color: 'bg-indigo-100 text-indigo-600',
       trend: null,
@@ -87,22 +87,22 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       href: '/admin/attorneys',
     },
     {
-      label: 'Réservations',
-      value: stats.totalBookings.toLocaleString('fr-FR'),
+      label: 'Bookings',
+      value: stats.totalBookings.toLocaleString('en-US'),
       icon: Calendar,
       color: 'bg-green-100 text-green-600',
       trend: stats.trends.bookings,
-      trendLabel: 'vs mois dernier',
-      href: '/admin/reservations',
+      trendLabel: 'vs last month',
+      href: '/admin/bookings',
     },
     {
-      label: 'Revenus ce mois',
-      value: `${(stats.totalRevenue / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`,
+      label: 'Revenue this month',
+      value: `${(stats.totalRevenue / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`,
       icon: DollarSign,
       color: 'bg-amber-100 text-amber-600',
       trend: stats.trends.revenue,
-      trendLabel: 'vs mois dernier',
-      href: '/admin/paiements',
+      trendLabel: 'vs last month',
+      href: '/admin/payments',
     },
   ]
 
@@ -113,7 +113,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
           key={card.label}
           href={card.href}
           className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all group block"
-          aria-label={`${card.label}: ${card.value}${card.trend !== null ? `, tendance ${card.trend > 0 ? '+' : ''}${card.trend}%` : ''}`}
+          aria-label={`${card.label}: ${card.value}${card.trend !== null ? `, trend ${card.trend > 0 ? '+' : ''}${card.trend}%` : ''}`}
         >
           <div className="flex items-center justify-between mb-4">
             <div className={`p-3 rounded-lg ${card.color}`}>

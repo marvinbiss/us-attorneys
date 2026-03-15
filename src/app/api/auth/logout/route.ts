@@ -25,7 +25,7 @@ export async function POST() {
 
     return NextResponse.json({
       success: true,
-      message: 'Deconnexion reussie'
+      message: 'Logout successful'
     })
   } catch (error) {
     logger.error('Logout error', error)

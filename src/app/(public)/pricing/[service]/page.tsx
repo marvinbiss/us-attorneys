@@ -175,11 +175,13 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       offerCount: trade.commonTasks.length,
       priceValidUntil,
     },
-    author: {
-      '@type': 'Person',
-      name: author.name,
-      url: `${SITE_URL}/about`,
-    },
+    ...(author ? {
+      author: {
+        '@type': 'Person',
+        name: author.name,
+        url: `${SITE_URL}/about`,
+      },
+    } : {}),
   }
 
   const pricingItemListSchema = {
@@ -323,9 +325,9 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             <p className="text-sm text-slate-500">
               Fees verified by{' '}
               <Link href="/about" className="underline hover:text-white transition-colors">
-                {author.name}
+                {author?.name}
               </Link>
-              , {author.role.toLowerCase()}
+              , {author?.role.toLowerCase()}
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">

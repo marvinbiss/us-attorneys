@@ -4,14 +4,14 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'FAQ - Questions fréquentes | ServicesArtisans',
-  description: 'Trouvez les réponses à vos questions sur ServicesArtisans. Comment demander un devis, choisir un artisan, garanties et plus.',
+  title: 'FAQ - Frequently Asked Questions | US Attorneys',
+  description: 'Find answers to your questions about US Attorneys. How to request a consultation, choose an attorney, guarantees, and more.',
   alternates: {
     canonical: `${SITE_URL}/faq`,
   },
   openGraph: {
-    title: 'FAQ - Questions fréquentes | ServicesArtisans',
-    description: 'Trouvez les réponses à vos questions sur ServicesArtisans.',
+    title: 'FAQ - Frequently Asked Questions | US Attorneys',
+    description: 'Find answers to your questions about US Attorneys.',
     url: `${SITE_URL}/faq`,
   },
   robots: {
@@ -29,7 +29,7 @@ export default function FAQLayout({
   children: React.ReactNode
 }) {
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
+    { name: 'Home', url: '/' },
     { name: 'FAQ', url: '/faq' },
   ])
 

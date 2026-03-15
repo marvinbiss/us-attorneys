@@ -1,9 +1,9 @@
 'use client'
 
 /**
- * BookingCalendarPro - ServicesArtisans
+ * BookingCalendarPro - US Attorneys
  * World-class booking calendar with all premium features
- * Based on best practices from Doctolib, Booksy, Calendly
+ * Based on best practices from Calendly, Clio, LawPay
  */
 
 import { useState, useEffect } from 'react'

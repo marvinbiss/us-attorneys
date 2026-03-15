@@ -15,14 +15,14 @@ import {
 } from 'lucide-react'
 
 const tabs = [
-  { name: 'Vue d\'ensemble', href: '/admin/prospection', icon: LayoutDashboard, exact: true },
+  { name: 'Overview', href: '/admin/prospection', icon: LayoutDashboard, exact: true },
   { name: 'Contacts', href: '/admin/prospection/contacts', icon: Users },
-  { name: 'Listes', href: '/admin/prospection/lists', icon: List },
-  { name: 'Modèles', href: '/admin/prospection/templates', icon: FileText },
-  { name: 'Campagnes', href: '/admin/prospection/campaigns', icon: Send },
-  { name: 'Boîte de réception', href: '/admin/prospection/inbox', icon: Inbox },
-  { name: 'Statistiques', href: '/admin/prospection/analytics', icon: BarChart3 },
-  { name: 'Paramètres IA', href: '/admin/prospection/settings', icon: Settings },
+  { name: 'Lists', href: '/admin/prospection/lists', icon: List },
+  { name: 'Templates', href: '/admin/prospection/templates', icon: FileText },
+  { name: 'Campaigns', href: '/admin/prospection/campaigns', icon: Send },
+  { name: 'Inbox', href: '/admin/prospection/inbox', icon: Inbox },
+  { name: 'Statistics', href: '/admin/prospection/analytics', icon: BarChart3 },
+  { name: 'AI Settings', href: '/admin/prospection/settings', icon: Settings },
 ]
 
 export function ProspectionNav() {
@@ -34,7 +34,7 @@ export function ProspectionNav() {
   }
 
   return (
-    <nav aria-label="Navigation prospection" className="flex gap-1 overflow-x-auto border-b border-gray-200 pb-px mb-6">
+    <nav aria-label="Prospection navigation" className="flex gap-1 overflow-x-auto border-b border-gray-200 pb-px mb-6">
       {tabs.map((tab) => {
         const Icon = tab.icon
         const active = isActive(tab.href, tab.exact)

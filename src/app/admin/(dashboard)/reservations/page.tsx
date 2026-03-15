@@ -66,14 +66,14 @@ export default function AdminReservationsPage() {
       setCancelModal({ open: false, bookingId: '' })
       mutate()
     } catch {
-      setActionError('Erreur lors de l\'annulation de la réservation')
+      setActionError('Error cancelling booking')
     }
   }
 
   const displayError = actionError || (error ? error.message : null)
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       weekday: 'short',
       day: '2-digit',
       month: 'short',
@@ -83,9 +83,9 @@ export default function AdminReservationsPage() {
 
   const formatAmount = (amount: number | null) => {
     if (!amount) return '-'
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'USD',
     }).format(amount / 100)
   }
 
@@ -94,8 +94,8 @@ export default function AdminReservationsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des Réservations</h1>
-          <p className="text-gray-500 mt-1">{total} réservations au total</p>
+          <h1 className="text-2xl font-bold text-gray-900">Bookings Management</h1>
+          <p className="text-gray-500 mt-1">{total} total bookings</p>
         </div>
 
         {/* Filters */}
@@ -105,8 +105,8 @@ export default function AdminReservationsPage() {
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher par email, service..."
-                aria-label="Rechercher une réservation"
+                placeholder="Search by email, service..."
+                aria-label="Search bookings"
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -129,10 +129,10 @@ export default function AdminReservationsPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {s === 'all' ? 'Tous' :
-                   s === 'pending' ? 'En attente' :
-                   s === 'confirmed' ? 'Confirmés' :
-                   s === 'completed' ? 'Terminés' : 'Annulés'}
+                  {s === 'all' ? 'All' :
+                   s === 'pending' ? 'Pending' :
+                   s === 'confirmed' ? 'Confirmed' :
+                   s === 'completed' ? 'Completed' : 'Cancelled'}
                 </button>
               ))}
             </div>
@@ -151,12 +151,12 @@ export default function AdminReservationsPage() {
           ) : bookings.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucune réservation trouvée</p>
+              <p>No bookings found</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[900px]" aria-label="Liste des réservations">
+                <table className="w-full min-w-[900px]" aria-label="Bookings list">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
@@ -166,16 +166,16 @@ export default function AdminReservationsPage() {
                         Client
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Artisan
+                        Attorney
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Service
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Statut
+                        Status
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Paiement
+                        Payment
                       </th>
                       <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Actions
@@ -221,7 +221,7 @@ export default function AdminReservationsPage() {
                             <PaymentStatusBadge status={booking.payment_status} />
                             {booking.deposit_amount && (
                               <p className="text-xs text-gray-500 mt-1">
-                                Acompte: {formatAmount(booking.deposit_amount)}
+                                Deposit: {formatAmount(booking.deposit_amount)}
                               </p>
                             )}
                           </div>
@@ -232,7 +232,7 @@ export default function AdminReservationsPage() {
                               <button
                                 onClick={() => setCancelModal({ open: true, bookingId: booking.id })}
                                 className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                                title="Annuler"
+                                title="Cancel"
                               >
                                 <XCircle className="w-5 h-5" />
                               </button>
@@ -248,7 +248,7 @@ export default function AdminReservationsPage() {
               {/* Pagination */}
               <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p className="text-sm text-gray-500">
-                  Page {page} sur {totalPages}
+                  Page {page} of {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
@@ -277,9 +277,9 @@ export default function AdminReservationsPage() {
         isOpen={cancelModal.open}
         onClose={() => setCancelModal({ open: false, bookingId: '' })}
         onConfirm={handleCancel}
-        title="Annuler la réservation"
-        message="Êtes-vous sûr de vouloir annuler cette réservation ? Le client et l'artisan seront notifiés."
-        confirmText="Annuler la réservation"
+        title="Cancel booking"
+        message="Are you sure you want to cancel this booking? The client and the attorney will be notified."
+        confirmText="Cancel booking"
         variant="danger"
       />
     </div>

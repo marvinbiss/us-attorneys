@@ -54,7 +54,7 @@ export async function POST(
     if (authError) {
       logger.error('User ban/unban failed', { code: authError.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de modifier le statut de l\'utilisateur' } },
+        { success: false, error: { message: 'Unable to update user status' } },
         { status: 500 }
       )
     }
@@ -68,7 +68,7 @@ export async function POST(
       })
       .eq('user_id', params.id)
 
-    // Enregistrer l'action dans les logs d'audit
+    // Log the action in the audit log
     await logAdminAction(
       authResult.admin.id,
       isBanning ? 'user.ban' : 'user.unban',

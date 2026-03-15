@@ -15,7 +15,7 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   return (
-    <nav aria-label="Fil d'Ariane" className={`flex items-center gap-2 text-sm ${className}`}>
+    <nav aria-label="Breadcrumb" className={`flex items-center gap-2 text-sm ${className}`}>
       <ol className="flex items-center gap-2" itemScope itemType="https://schema.org/BreadcrumbList">
         <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
           <Link
@@ -24,7 +24,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             itemProp="item"
           >
             <Home className="w-4 h-4" />
-            <span className="sr-only" itemProp="name">Accueil</span>
+            <span className="sr-only" itemProp="name">Home</span>
           </Link>
           <meta itemProp="position" content="1" />
         </li>

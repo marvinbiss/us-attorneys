@@ -23,7 +23,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
     try {
       setError(null)
       const res = await fetch(`/api/admin/prospection/conversations/${id}`, { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setConversation(data.data)
@@ -31,7 +31,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
+      setError('Loading error')
     } finally {
       setLoading(false)
     }
@@ -46,7 +46,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
   const handleReply = async () => {
     if (!replyText.trim()) return
     if (replyText.length > MAX_REPLY_LENGTH) {
-      setError(`La réponse est trop longue (${replyText.length}/${MAX_REPLY_LENGTH} caractères)`)
+      setError(`Reply is too long (${replyText.length}/${MAX_REPLY_LENGTH} characters)`)
       return
     }
     setSending(true)
@@ -57,19 +57,19 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: replyText, sender_type: 'human' }),
       })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setReplyText('')
         fetchConversation()
       } else {
-        setError(data.error?.message || 'Erreur lors de l\'envoi')
+        setError(data.error?.message || 'Error sending message')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'envoi')
+        setError('Error sending message')
       }
     } finally {
       setSending(false)
@@ -85,18 +85,18 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ conversation_id: id }),
       })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
         setReplyText(data.data.content)
       } else {
-        setError(data.error?.message || 'Erreur IA')
+        setError(data.error?.message || 'AI error')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de la génération IA')
+        setError('Error generating AI response')
       }
     } finally {
       setGenerating(false)
@@ -119,7 +119,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/inbox" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour à la boîte de réception
+          <ArrowLeft className="w-4 h-4" /> Back to inbox
         </Link>
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold text-gray-900">
@@ -138,7 +138,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} aria-label="Fermer le message d'erreur" className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button onClick={() => setError(null)} aria-label="Close error message" className="ml-auto text-red-500 hover:text-red-700">&times;</button>
         </div>
       )}
 
@@ -146,7 +146,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       <div className="bg-white rounded-lg border">
         <div className="p-4 space-y-4 max-h-[500px] overflow-y-auto">
           {messages.length === 0 ? (
-            <p className="text-center text-gray-400 py-8">Aucun message dans cette conversation</p>
+            <p className="text-center text-gray-400 py-8">No messages in this conversation</p>
           ) : (
             messages.map((msg) => (
               <div
@@ -162,8 +162,8 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
                 }`}>
                   <div className="flex items-center gap-1.5 mb-1 text-xs opacity-60">
                     {msg.sender_type === 'ai' ? <Bot className="w-3 h-3" /> : msg.sender_type === 'human' ? <User className="w-3 h-3" /> : null}
-                    <span>{msg.sender_type === 'ai' ? 'IA' : msg.sender_type === 'human' ? 'Humain' : 'Contact'}</span>
-                    <span>{new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{msg.sender_type === 'ai' ? 'AI' : msg.sender_type === 'human' ? 'Human' : 'Contact'}</span>
+                    <span>{new Date(msg.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   {msg.ai_provider && (
@@ -180,8 +180,8 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
           <textarea
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
-            placeholder="Tapez votre réponse..."
-            aria-label="Réponse au contact"
+            placeholder="Type your reply..."
+            aria-label="Reply to contact"
             rows={3}
             className={`w-full px-3 py-2 border rounded-lg text-sm mb-1 ${replyText.length > MAX_REPLY_LENGTH ? 'border-red-300 bg-red-50' : ''}`}
           />
@@ -196,14 +196,14 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
               disabled={generating}
               className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-blue-50 text-blue-600 disabled:opacity-50"
             >
-              <Sparkles className="w-4 h-4" /> {generating ? 'Génération...' : 'Générer avec IA'}
+              <Sparkles className="w-4 h-4" /> {generating ? 'Generating...' : 'Generate with AI'}
             </button>
             <button
               onClick={handleReply}
               disabled={sending || !replyText.trim() || replyText.length > MAX_REPLY_LENGTH}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 ml-auto"
             >
-              <Send className="w-4 h-4" /> {sending ? 'Envoi...' : 'Envoyer'}
+              <Send className="w-4 h-4" /> {sending ? 'Sending...' : 'Send'}
             </button>
           </div>
         </div>

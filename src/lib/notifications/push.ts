@@ -75,12 +75,12 @@ export const pushTemplates = {
     vibrate: [100, 50, 100],
     actions: [
       { action: 'view', title: 'View details' },
-      { action: 'calendar', title: 'Ajouter au calendrier' },
+      { action: 'calendar', title: 'Add to calendar' },
     ],
   }),
 
   bookingReminder: (attorneyName: string, time: string): PushNotificationPayload => ({
-    title: 'Rappel de RDV',
+    title: 'Appointment reminder',
     body: `Don't forget your appointment with ${attorneyName} at ${time}`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
@@ -88,7 +88,7 @@ export const pushTemplates = {
     requireInteraction: true,
     vibrate: [200, 100, 200],
     actions: [
-      { action: 'view', title: 'Voir' },
+      { action: 'view', title: 'View' },
       { action: 'directions', title: 'Directions' },
     ],
   }),
@@ -99,11 +99,11 @@ export const pushTemplates = {
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'booking-cancelled',
-    actions: [{ action: 'rebook', title: 'Reprendre RDV' }],
+    actions: [{ action: 'rebook', title: 'Rebook appointment' }],
   }),
 
   newMessage: (senderName: string): PushNotificationPayload => ({
-    title: 'Nouveau message',
+    title: 'New message',
     body: `${senderName} sent you a message`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
@@ -112,7 +112,7 @@ export const pushTemplates = {
   }),
 
   newReview: (rating: number, clientName: string): PushNotificationPayload => ({
-    title: `Nouvel avis ${'⭐'.repeat(rating)}`,
+    title: `New review ${'⭐'.repeat(rating)}`,
     body: `${clientName} left a review`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
@@ -128,20 +128,20 @@ export const pushTemplates = {
     requireInteraction: true,
     vibrate: [200, 100, 200, 100, 200],
     actions: [
-      { action: 'accept', title: 'Accepter' },
-      { action: 'view', title: 'Voir' },
+      { action: 'accept', title: 'Accept' },
+      { action: 'view', title: 'View' },
     ],
   }),
 
   videoCallStarting: (clientName: string): PushNotificationPayload => ({
     title: 'Video consultation',
-    body: `${clientName} attend dans la salle d'attente`,
+    body: `${clientName} is waiting in the waiting room`,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     tag: 'video-call',
     requireInteraction: true,
     vibrate: [300, 100, 300, 100, 300],
-    actions: [{ action: 'join', title: 'Rejoindre' }],
+    actions: [{ action: 'join', title: 'Join' }],
   }),
 
   slotAvailable: (attorneyName: string, date: string): PushNotificationPayload => ({

@@ -47,19 +47,19 @@ export async function GET(request: NextRequest) {
       .from('bookings')
       .select(`
         *,
-        provider:providers!attorney_id (
+        attorney:attorneys!attorney_id (
           id,
           name,
           email
         )
       `, { count: 'exact' })
 
-    // Filtre par statut
+    // Filter by status
     if (status !== 'all') {
       query = query.eq('status', status)
     }
 
-    // Recherche: bookings n'a pas de colonnes textuelles libres (client_email et service n'existent pas).
+    // Search: bookings has no free-text columns (client_email and service do not exist).
     // Status search is handled by the dedicated filter above.
     // The search parameter is accepted for UI compatibility but ignored at DB level.
     void search

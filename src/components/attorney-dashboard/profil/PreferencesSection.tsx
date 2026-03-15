@@ -14,7 +14,7 @@ export function PreferencesSection({ provider, onSaved }: PreferencesSectionProp
 
   return (
     <SectionCard
-      title="Préférences"
+      title="Preferences"
       icon={Settings2}
       onSave={() => {}}
       saving={false}
@@ -23,7 +23,7 @@ export function PreferencesSection({ provider, onSaved }: PreferencesSectionProp
       success={null}
     >
       <p className="text-sm text-gray-500">
-        Cette section sera bient&ocirc;t disponible.
+        This section will be available soon.
       </p>
     </SectionCard>
   )

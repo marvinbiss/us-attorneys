@@ -229,7 +229,7 @@ export async function PATCH(
   }
 }
 
-// DELETE - Supprimer un utilisateur
+// DELETE - Delete a user
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }

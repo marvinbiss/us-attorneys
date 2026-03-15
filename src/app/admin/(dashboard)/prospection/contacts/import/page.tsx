@@ -30,7 +30,7 @@ export default function ImportPage() {
 
   const handleFileChange = (selectedFile: File | null) => {
     if (selectedFile && selectedFile.size > MAX_FILE_SIZE) {
-      setError(`Le fichier est trop volumineux (${(selectedFile.size / 1024 / 1024).toFixed(1)} Mo). Taille maximale : 50 Mo.`)
+      setError(`File is too large (${(selectedFile.size / 1024 / 1024).toFixed(1)} MB). Maximum size: 50 MB.`)
       setFile(null)
       return
     }
@@ -49,7 +49,7 @@ export default function ImportPage() {
 
     try {
       const res = await fetch('/api/admin/prospection/contacts/import', { method: 'POST', body: formData })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
 
       if (data.success) {
@@ -59,13 +59,13 @@ export default function ImportPage() {
         setTotalRows(data.data.total_rows)
         setStep('mapping')
       } else {
-        setError(data.error?.message || 'Erreur')
+        setError(data.error?.message || 'Error')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'analyse du fichier')
+        setError('Error analyzing file')
       }
     } finally {
       setLoading(false)
@@ -84,20 +84,20 @@ export default function ImportPage() {
 
     try {
       const res = await fetch('/api/admin/prospection/contacts/import', { method: 'POST', body: formData })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
 
       if (data.success) {
         setResult(data.data)
         setStep('result')
       } else {
-        setError(data.error?.message || 'Erreur')
+        setError(data.error?.message || 'Error')
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'import')
+        setError('Error during import')
       }
     } finally {
       setLoading(false)
@@ -105,17 +105,17 @@ export default function ImportPage() {
   }
 
   const fieldOptions: { value: string; label: string }[] = [
-    { value: '', label: '-- Ignorer --' },
-    { value: 'contact_name', label: 'Nom du contact' },
-    { value: 'company_name', label: 'Entreprise' },
+    { value: '', label: '-- Ignore --' },
+    { value: 'contact_name', label: 'Contact name' },
+    { value: 'company_name', label: 'Company' },
     { value: 'email', label: 'Email' },
-    { value: 'phone', label: 'Téléphone' },
-    { value: 'address', label: 'Adresse' },
-    { value: 'postal_code', label: 'Code postal' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'address', label: 'Address' },
+    { value: 'postal_code', label: 'Zip code' },
     { value: 'city', label: 'City' },
-    { value: 'department', label: 'Département' },
-    { value: 'region', label: 'Région' },
-    { value: 'location_code', label: 'Code INSEE' },
+    { value: 'department', label: 'State' },
+    { value: 'region', label: 'Region' },
+    { value: 'location_code', label: 'Location code' },
     { value: 'population', label: 'Population' },
   ]
 
@@ -123,10 +123,10 @@ export default function ImportPage() {
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/contacts" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux contacts
+          <ArrowLeft className="w-4 h-4" /> Back to contacts
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Import de contacts</h1>
-        <p className="text-gray-500 mt-1">Importez des contacts depuis un fichier CSV</p>
+        <h1 className="text-2xl font-bold text-gray-900">Import contacts</h1>
+        <p className="text-gray-500 mt-1">Import contacts from a CSV file</p>
       </div>
 
       <ProspectionNav />
@@ -143,20 +143,20 @@ export default function ImportPage() {
       {step === 'upload' && (
         <div className="bg-white rounded-lg border p-6 max-w-xl">
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Type de contact</label>
+            <label className="block text-sm font-medium mb-2">Contact type</label>
             <select
               value={contactType}
               onChange={(e) => setContactType(e.target.value as ContactType)}
               className="w-full px-3 py-2 border rounded-lg text-sm"
             >
-              <option value="artisan">Artisans</option>
+              <option value="artisan">Attorneys</option>
               <option value="client">Clients</option>
-              <option value="mairie">Mairies</option>
+              <option value="mairie">Municipalities</option>
             </select>
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium mb-2">Fichier CSV</label>
+            <label className="block text-sm font-medium mb-2">CSV file</label>
             <div className="border-2 border-dashed rounded-lg p-8 text-center">
               <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
               <input
@@ -165,7 +165,7 @@ export default function ImportPage() {
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700"
               />
-              <p className="text-xs text-gray-400 mt-2">CSV avec séparateur ; ou , (encodage UTF-8) — max 50 Mo</p>
+              <p className="text-xs text-gray-400 mt-2">CSV with ; or , separator (UTF-8 encoding) -- max 50 MB</p>
             </div>
           </div>
 
@@ -174,7 +174,7 @@ export default function ImportPage() {
             disabled={!file || loading}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? 'Analyse...' : 'Analyser le fichier'} <ArrowRight className="w-4 h-4" />
+            {loading ? 'Analyzing...' : 'Analyze file'} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -182,7 +182,7 @@ export default function ImportPage() {
       {/* Step: Mapping */}
       {step === 'mapping' && (
         <div className="bg-white rounded-lg border p-6">
-          <p className="text-sm text-gray-500 mb-4">{totalRows} lignes détectées. Mappez les colonnes :</p>
+          <p className="text-sm text-gray-500 mb-4">{totalRows} rows detected. Map the columns:</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             {headers.map((h) => (
@@ -192,7 +192,7 @@ export default function ImportPage() {
                 <select
                   value={mapping[h] || ''}
                   onChange={(e) => setMapping(prev => ({ ...prev, [h]: (e.target.value || null) as ColumnMapping[string] }))}
-                  aria-label={`Correspondance pour la colonne ${h}`}
+                  aria-label={`Mapping for column ${h}`}
                   className="flex-1 px-2 py-1.5 border rounded text-sm"
                 >
                   {fieldOptions.map((opt) => (
@@ -203,11 +203,11 @@ export default function ImportPage() {
             ))}
           </div>
 
-          {/* Aperçu */}
+          {/* Preview */}
           {previewRows.length > 0 && (
             <div className="mb-6 overflow-x-auto">
-              <p className="text-sm font-medium mb-2">Aperçu (5 premières lignes)</p>
-              <table className="text-xs border min-w-[500px]" aria-label="Aperçu des données importées">
+              <p className="text-sm font-medium mb-2">Preview (first 5 rows)</p>
+              <table className="text-xs border min-w-[500px]" aria-label="Preview of imported data">
                 <thead>
                   <tr className="bg-gray-50">
                     {headers.map(h => <th scope="col" key={h} className="px-2 py-1 border text-left">{h}</th>)}
@@ -229,7 +229,7 @@ export default function ImportPage() {
             disabled={loading}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 disabled:opacity-50"
           >
-            {loading ? 'Import en cours...' : `Importer ${totalRows} contacts`} <Check className="w-4 h-4" />
+            {loading ? 'Importing...' : `Import ${totalRows} contacts`} <Check className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -239,25 +239,25 @@ export default function ImportPage() {
         <div className="bg-white rounded-lg border p-6 max-w-xl">
           <div className="text-center mb-6">
             <Check className="w-12 h-12 mx-auto text-green-600 mb-2" />
-            <h2 className="text-lg font-semibold">Import terminé</h2>
+            <h2 className="text-lg font-semibold">Import complete</h2>
           </div>
 
           <div className="space-y-2 text-sm mb-6">
-            <div className="flex justify-between"><span>Lignes analysées</span><span className="font-medium">{result.total_rows}</span></div>
-            <div className="flex justify-between"><span>Valides</span><span className="font-medium text-green-600">{result.valid}</span></div>
-            <div className="flex justify-between"><span>Importés</span><span className="font-medium text-green-600">{result.imported}</span></div>
-            <div className="flex justify-between"><span>Doublons</span><span className="font-medium text-yellow-600">{result.duplicates}</span></div>
-            <div className="flex justify-between"><span>Erreurs</span><span className="font-medium text-red-600">{result.errors}</span></div>
+            <div className="flex justify-between"><span>Rows analyzed</span><span className="font-medium">{result.total_rows}</span></div>
+            <div className="flex justify-between"><span>Valid</span><span className="font-medium text-green-600">{result.valid}</span></div>
+            <div className="flex justify-between"><span>Imported</span><span className="font-medium text-green-600">{result.imported}</span></div>
+            <div className="flex justify-between"><span>Duplicates</span><span className="font-medium text-yellow-600">{result.duplicates}</span></div>
+            <div className="flex justify-between"><span>Errors</span><span className="font-medium text-red-600">{result.errors}</span></div>
           </div>
 
           {result.error_details.length > 0 && (
             <div className="mb-4">
               <p className="text-sm font-medium text-red-600 flex items-center gap-1 mb-2">
-                <AlertCircle className="w-4 h-4" /> Erreurs
+                <AlertCircle className="w-4 h-4" /> Errors
               </p>
               <div className="max-h-32 overflow-y-auto text-xs space-y-1">
                 {result.error_details.slice(0, 10).map((err, i) => (
-                  <div key={i} className="text-red-500">Ligne {err.row}: {err.message}</div>
+                  <div key={i} className="text-red-500">Row {err.row}: {err.message}</div>
                 ))}
               </div>
             </div>
@@ -267,7 +267,7 @@ export default function ImportPage() {
             onClick={() => router.push('/admin/prospection/contacts')}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
           >
-            Voir les contacts
+            View contacts
           </button>
         </div>
       )}

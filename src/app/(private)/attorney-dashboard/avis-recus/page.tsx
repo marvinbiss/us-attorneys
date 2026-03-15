@@ -153,7 +153,7 @@ export default function AvisRecusPage() {
               </div>
             </div>
 
-            {/* Avis list */}
+            {/* Reviews list */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">
                 Latest Reviews

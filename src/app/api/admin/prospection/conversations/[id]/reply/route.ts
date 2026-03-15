@@ -40,7 +40,7 @@ export async function POST(
 
     const supabase = createAdminClient()
 
-    // Charger la conversation avec le contact
+    // Load the conversation with the contact
     const { data: conversation } = await supabase
       .from('prospection_conversations')
       .select('*, contact:prospection_contacts(*)')
@@ -53,7 +53,7 @@ export async function POST(
 
     const contact = conversation.contact as { phone_e164?: string; email?: string }
 
-    // Send via le bon canal
+    // Send via the appropriate channel
     let externalId: string | undefined
 
     switch (conversation.channel) {
@@ -83,7 +83,7 @@ export async function POST(
         break
     }
 
-    // Save le message dans la conversation
+    // Save the message in the conversation
     const { data: msg, error: msgError } = await supabase
       .from('prospection_conversation_messages')
       .insert({
@@ -100,7 +100,7 @@ export async function POST(
       logger.error('Save reply error', msgError)
     }
 
-    // Update la conversation
+    // Update the conversation
     await supabase
       .from('prospection_conversations')
       .update({ last_message_at: new Date().toISOString() })

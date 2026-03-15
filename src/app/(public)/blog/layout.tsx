@@ -2,14 +2,14 @@ import { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Blog — Conseils et actualités travaux | ServicesArtisans',
-  description: 'Conseils pratiques, guides et actualités pour tous vos projets de travaux. Rénovation, décoration, entretien maison.',
+  title: 'Blog — Legal Tips and Insights | USAttorneys',
+  description: 'Practical tips, guides, and news for all your legal needs. Practice areas, attorney selection, and legal processes.',
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: 'Blog — Conseils et actualités travaux | ServicesArtisans',
-    description: 'Conseils pratiques, guides et actualités pour tous vos projets de travaux.',
+    title: 'Blog — Legal Tips and Insights | USAttorneys',
+    description: 'Practical tips, guides, and news for all your legal needs.',
     url: `${SITE_URL}/blog`,
   },
   robots: {

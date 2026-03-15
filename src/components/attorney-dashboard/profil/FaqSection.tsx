@@ -50,7 +50,7 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
 
   return (
     <SectionCard
-      title="Foire aux questions"
+      title="Frequently Asked Questions"
       icon={HelpCircle}
       onSave={onSave}
       saving={saving}
@@ -71,14 +71,14 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
             className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 disabled:opacity-50"
           >
             <Plus className="w-4 h-4" />
-            {faqAtMax ? 'Limite atteinte' : 'Ajouter une question'}
+            {faqAtMax ? 'Limit reached' : 'Add a question'}
           </button>
         </div>
 
         {/* Empty state */}
         {faqItems.length === 0 && (
           <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-3 rounded-lg">
-            Ajoutez des questions fr&eacute;quentes pour aider vos clients &agrave; mieux comprendre vos services.
+            Add frequently asked questions to help your clients better understand your services.
           </p>
         )}
 
@@ -93,7 +93,7 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                   type="button"
                   onClick={() => removeFaq(index)}
                   className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
-                  aria-label={`Supprimer la question ${index + 1}`}
+                  aria-label={`Delete question ${index + 1}`}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -109,18 +109,18 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                       onChange={(e) => updateFaq(index, 'question', e.target.value)}
                       maxLength={200}
                       minLength={MIN_QUESTION_LENGTH}
-                      placeholder="Ex : Quels sont vos d&eacute;lais d'intervention ?"
+                      placeholder="E.g.: What are your response times?"
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                         questionTooShort ? 'border-amber-300' : 'border-gray-300'
                       }`}
                     />
                     {questionTooShort && (
-                      <p className="text-xs text-amber-600 mt-0.5">{MIN_QUESTION_LENGTH} caract&egrave;res minimum</p>
+                      <p className="text-xs text-amber-600 mt-0.5">{MIN_QUESTION_LENGTH} characters minimum</p>
                     )}
                   </div>
                   <div>
                     <label htmlFor={`faq-answer-${index}`} className="block text-xs text-gray-500 mb-1">
-                      R&eacute;ponse *
+                      Answer *
                     </label>
                     <textarea
                       id={`faq-answer-${index}`}
@@ -129,13 +129,13 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                       maxLength={2000}
                       minLength={MIN_ANSWER_LENGTH}
                       rows={3}
-                      placeholder="Votre r&eacute;ponse d&eacute;taill&eacute;e..."
+                      placeholder="Your detailed answer..."
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-y ${
                         answerTooShort ? 'border-amber-300' : 'border-gray-300'
                       }`}
                     />
                     {answerTooShort && (
-                      <p className="text-xs text-amber-600 mt-0.5">{MIN_ANSWER_LENGTH} caract&egrave;res minimum</p>
+                      <p className="text-xs text-amber-600 mt-0.5">{MIN_ANSWER_LENGTH} characters minimum</p>
                     )}
                   </div>
                 </div>

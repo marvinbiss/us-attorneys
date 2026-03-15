@@ -24,7 +24,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
 
   return (
     <SectionCard
-      title="Présentation"
+      title="Presentation"
       icon={FileText}
       onSave={onSave}
       saving={saving}
@@ -35,7 +35,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
       <div className="space-y-6">
         <div>
           <label htmlFor="presentation-specialty" className="block text-sm font-medium text-gray-700 mb-2">
-            Spécialité principale
+            Primary specialty
           </label>
           <input
             id="presentation-specialty"
@@ -43,7 +43,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
             value={(formData.specialty as string) || ''}
             onChange={(e) => setField('specialty', e.target.value || null)}
             maxLength={200}
-            placeholder="Ex: Plombier, Électricien, Menuisier..."
+            placeholder="Ex: Criminal Defense, Family Law, Personal Injury..."
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
@@ -58,12 +58,12 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
             onChange={(e) => setField('description', e.target.value || null)}
             rows={6}
             maxLength={5000}
-            placeholder="Décrivez votre entreprise, vos services et ce qui vous distingue..."
+            placeholder="Describe your practice, your services, and what sets you apart..."
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           <div className="flex justify-between items-center mt-1">
             <p className="text-xs text-gray-500">
-              Si vous ne renseignez pas de description, elle sera générée automatiquement à partir de vos informations.
+              If you do not provide a description, one will be automatically generated from your information.
             </p>
             <span className={`text-xs ${descriptionLength > 4500 ? 'text-amber-600' : 'text-gray-400'}`}>
               {descriptionLength} / 5 000
@@ -73,7 +73,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
 
         <div>
           <label htmlFor="presentation-bio" className="block text-sm font-medium text-gray-700 mb-2">
-            Biographie
+            Biography
           </label>
           <textarea
             id="presentation-bio"
@@ -81,7 +81,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
             onChange={(e) => setField('bio', e.target.value || null)}
             rows={4}
             maxLength={5000}
-            placeholder="Parlez de votre parcours, vos valeurs, votre engagement..."
+            placeholder="Tell us about your background, your values, your commitment..."
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           <div className="flex justify-end mt-1">

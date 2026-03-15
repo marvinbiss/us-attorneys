@@ -46,11 +46,11 @@ export function SectionCard({ title, icon: Icon, children, onSave, saving, isDir
           className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {saving && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
-          {saving ? 'Enregistrement...' : 'Enregistrer'}
+          {saving ? 'Saving...' : 'Save'}
         </button>
         {isDirty && !saving && (
           <span className="text-sm text-amber-600" role="status" aria-live="polite">
-            Modifications non sauvegardées
+            Unsaved changes
           </span>
         )}
       </div>

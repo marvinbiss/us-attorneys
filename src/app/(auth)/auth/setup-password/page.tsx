@@ -50,7 +50,7 @@ export default function SetupPasswordPage() {
       }
 
       // Session is now active — redirect to password setup
-      router.push('/definir-mot-de-passe')
+      router.push('/set-password')
     } catch {
       setError('Unexpected error. Please try again.')
       setLoading(false)

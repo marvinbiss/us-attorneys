@@ -38,16 +38,16 @@ interface ReportsResponse {
 
 const REASON_LABELS: Record<string, string> = {
   spam: 'Spam',
-  inappropriate: 'Contenu inapproprié',
-  fake: 'Faux contenu',
-  harassment: 'Harcèlement',
-  other: 'Autre',
+  inappropriate: 'Inappropriate content',
+  fake: 'Fake content',
+  harassment: 'Harassment',
+  other: 'Other',
 }
 
 const TARGET_TYPE_LABELS: Record<string, string> = {
-  provider: 'Artisan',
-  review: 'Avis',
-  user: 'Utilisateur',
+  provider: 'Attorney',
+  review: 'Review',
+  user: 'User',
   message: 'Message',
 }
 
@@ -89,14 +89,14 @@ export default function AdminSignalementsPage() {
       setResolutionNotes('')
       mutate()
     } catch {
-      setActionError('Erreur lors du traitement du signalement')
+      setActionError('Error processing report')
     }
   }
 
   const displayError = actionError || (error ? error.message : null)
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -121,8 +121,8 @@ export default function AdminSignalementsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des Signalements</h1>
-          <p className="text-gray-500 mt-1">{total} signalements</p>
+          <h1 className="text-2xl font-bold text-gray-900">Report management</h1>
+          <p className="text-gray-500 mt-1">{total} reports</p>
         </div>
 
         {/* Filters */}
@@ -142,9 +142,9 @@ export default function AdminSignalementsPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {s === 'all' ? 'Tous' :
-                   s === 'pending' ? 'En attente' :
-                   s === 'reviewed' ? 'Traités' : 'Rejetés'}
+                  {s === 'all' ? 'All' :
+                   s === 'pending' ? 'Pending' :
+                   s === 'reviewed' ? 'Reviewed' : 'Dismissed'}
                 </button>
               ))}
             </div>
@@ -154,13 +154,13 @@ export default function AdminSignalementsPage() {
                 setTargetType(e.target.value as typeof targetType)
                 setPage(1)
               }}
-              aria-label="Filtrer par type de cible"
+              aria-label="Filter by target type"
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
-              <option value="all">Tous les types</option>
-              <option value="provider">Artisans</option>
-              <option value="review">Avis</option>
-              <option value="user">Utilisateurs</option>
+              <option value="all">All types</option>
+              <option value="provider">Attorneys</option>
+              <option value="review">Reviews</option>
+              <option value="user">Users</option>
               <option value="message">Messages</option>
             </select>
           </div>
@@ -178,7 +178,7 @@ export default function AdminSignalementsPage() {
           ) : reports.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Flag className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucun signalement trouvé</p>
+              <p>No reports found</p>
             </div>
           ) : (
             <>
@@ -221,7 +221,7 @@ export default function AdminSignalementsPage() {
 
                         {report.resolution && (
                           <div className="mt-2 p-2 bg-gray-100 rounded text-sm text-gray-600">
-                            <strong>Résolution:</strong> {report.resolution}
+                            <strong>Resolution:</strong> {report.resolution}
                           </div>
                         )}
                       </div>
@@ -235,7 +235,7 @@ export default function AdminSignalementsPage() {
                               action: 'resolve',
                             })}
                             className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                            title="Résoudre"
+                            title="Resolve"
                           >
                             <CheckCircle className="w-5 h-5" />
                           </button>
@@ -246,7 +246,7 @@ export default function AdminSignalementsPage() {
                               action: 'dismiss',
                             })}
                             className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg"
-                            title="Rejeter"
+                            title="Dismiss"
                           >
                             <XCircle className="w-5 h-5" />
                           </button>
@@ -259,7 +259,7 @@ export default function AdminSignalementsPage() {
 
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">Page {page} sur {totalPages}</p>
+                <p className="text-sm text-gray-500">Page {page} of {totalPages}</p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
@@ -289,12 +289,12 @@ export default function AdminSignalementsPage() {
             <div className="fixed inset-0 bg-black/50" onClick={() => setActionModal({ open: false, reportId: '', action: 'resolve' })} />
             <div role="dialog" aria-modal="true" aria-labelledby="action-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               <h3 id="action-modal-title" className="text-lg font-semibold text-gray-900 mb-4">
-                {actionModal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
+                {actionModal.action === 'resolve' ? 'Resolve report' : 'Dismiss report'}
               </h3>
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Notes (optionnel)
+                  Notes (optional)
                 </label>
                 <textarea
                   value={resolutionNotes}
@@ -302,7 +302,7 @@ export default function AdminSignalementsPage() {
                   rows={3}
                   maxLength={2000}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder="Décrivez les actions prises..."
+                  placeholder="Describe the actions taken..."
                 />
               </div>
 
@@ -314,7 +314,7 @@ export default function AdminSignalementsPage() {
                   }}
                   className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
                 >
-                  Annuler
+                  Cancel
                 </button>
                 <button
                   onClick={handleAction}
@@ -324,7 +324,7 @@ export default function AdminSignalementsPage() {
                       : 'bg-gray-600 hover:bg-gray-700'
                   }`}
                 >
-                  {actionModal.action === 'resolve' ? 'Résoudre' : 'Rejeter'}
+                  {actionModal.action === 'resolve' ? 'Resolve' : 'Dismiss'}
                 </button>
               </div>
             </div>

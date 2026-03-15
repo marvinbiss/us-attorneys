@@ -1,5 +1,5 @@
 /**
- * Devis API - US Attorneys
+ * Quote Request API - US Attorneys
  * Handles quote request submissions
  */
 
@@ -58,9 +58,9 @@ const specialtyNames: Record<string, string> = {
 }
 
 const urgencyLabels: Record<string, string> = {
-  urgent: 'Urgent (sous 24h)',
-  semaine: 'Cette semaine',
-  mois: 'Ce mois-ci',
+  urgent: 'Urgent (within 24h)',
+  semaine: 'This week',
+  mois: 'This month',
   flexible: 'Flexible',
 }
 
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
         client_email: data.email,
         client_phone: data.telephone,
         service_name: specialtyNames[data.service] || data.service,
-        description: data.description || 'Demande de devis',
+        description: data.description || 'Consultation request',
         budget: data.budget || null,
         urgency: urgencyDbMap[data.urgency] || 'normal',
         city: data.ville || null,
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
       resend.emails.send({
         from: fromEmail,
         to: data.email,
-        subject: 'Votre demande de devis - US Attorneys',
+        subject: 'Your consultation request - US Attorneys',
         html: `
           <h2>Hello ${htmlEscape(data.nom)},</h2>
           <p>We have received your consultation request. Here is the summary:</p>
@@ -206,7 +206,7 @@ export async function POST(request: Request) {
       }),
     ])
 
-    // Log any email failures (devis is already saved in DB, so we still return success)
+    // Log any email failures (request is already saved in DB, so we still return success)
     const emailLabels = ['client confirmation', 'admin notification']
     emailResults.forEach((result, i) => {
       if (result.status === 'rejected') {
@@ -222,7 +222,7 @@ export async function POST(request: Request) {
       ...(assignedProviders.length === 0 && { artisans_found: false }),
     })
   } catch (error) {
-    logger.error('Devis API error', error)
+    logger.error('Quote request API error', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }

@@ -54,7 +54,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       const res = await fetch(`/api/admin/prospection/lists/${id}`, { signal })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setError(data?.error?.message || `Erreur ${res.status}`)
+        setError(data?.error?.message || `Error ${res.status}`)
         return
       }
       const data = await res.json()
@@ -63,11 +63,11 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         setEditName(data.data.name)
         setEditDesc(data.data.description || '')
       } else {
-        setError(data.error?.message || 'Liste non trouvée')
+        setError(data.error?.message || 'List not found')
       }
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
-      setError('Impossible de charger la liste')
+      setError('Unable to load list')
     } finally {
       setLoading(false)
     }
@@ -122,7 +122,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors de la modification')
+        setActionError(data?.error?.message || 'Error updating list')
         return
       }
       const data = await res.json()
@@ -130,10 +130,10 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         setList(data.data)
         setEditingName(false)
       } else {
-        setActionError(data.error?.message || 'Erreur')
+        setActionError(data.error?.message || 'Error')
       }
     } catch {
-      setActionError('Impossible de sauvegarder les modifications')
+      setActionError('Unable to save changes')
     } finally {
       setSavingEdit(false)
     }
@@ -148,7 +148,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors de la suppression')
+        setActionError(data?.error?.message || 'Error deleting list')
         setDeleting(false)
         return
       }
@@ -156,11 +156,11 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       if (data.success) {
         router.push('/admin/prospection/lists')
       } else {
-        setActionError(data.error?.message || 'Erreur')
+        setActionError(data.error?.message || 'Error')
         setDeleting(false)
       }
     } catch {
-      setActionError('Impossible de supprimer la liste')
+      setActionError('Unable to delete list')
       setDeleting(false)
     }
   }
@@ -175,7 +175,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors du retrait')
+        setActionError(data?.error?.message || 'Error removing contact')
         return
       }
       const data = await res.json()
@@ -184,7 +184,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         fetchList()
       }
     } catch {
-      setActionError('Impossible de retirer le contact')
+      setActionError('Unable to remove contact')
     }
   }
 
@@ -206,14 +206,14 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       <div>
         <div className="mb-6">
           <Link href="/admin/prospection/lists" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-            <ArrowLeft className="w-4 h-4" /> Retour aux listes
+            <ArrowLeft className="w-4 h-4" /> Back to lists
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error || 'Liste non trouvée'}
+          {error || 'List not found'}
         </div>
       </div>
     )
@@ -223,7 +223,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/lists" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux listes
+          <ArrowLeft className="w-4 h-4" /> Back to lists
         </Link>
 
         {editingName ? (
@@ -232,7 +232,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               type="text"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              aria-label="Nom de la liste"
+              aria-label="List name"
               className="text-2xl font-bold text-gray-900 border rounded-lg px-2 py-1 w-full max-w-md"
             />
             <textarea
@@ -240,7 +240,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               onChange={(e) => setEditDesc(e.target.value)}
               rows={2}
               placeholder="Description..."
-              aria-label="Description de la liste"
+              aria-label="List description"
               className="w-full max-w-md px-3 py-2 border rounded-lg text-sm"
             />
             <div className="flex gap-2">
@@ -249,13 +249,13 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 disabled={savingEdit || !editName.trim()}
                 className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
-                <Save className="w-3 h-3" /> {savingEdit ? 'Sauvegarde...' : 'Sauvegarder'}
+                <Save className="w-3 h-3" /> {savingEdit ? 'Saving...' : 'Save'}
               </button>
               <button
                 onClick={() => { setEditingName(false); setEditName(list.name); setEditDesc(list.description || '') }}
                 className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
               >
-                Annuler
+                Cancel
               </button>
             </div>
           </div>
@@ -264,16 +264,16 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             <h1
               className="text-2xl font-bold text-gray-900 cursor-pointer hover:text-blue-600"
               onClick={() => setEditingName(true)}
-              title="Cliquer pour modifier"
+              title="Click to edit"
             >
               {list.name}
             </h1>
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
               list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
             }`}>
-              {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
+              {list.list_type === 'static' ? 'Static' : 'Dynamic'}
             </span>
-            <span className="text-sm text-gray-500">{list.contact_count.toLocaleString('fr-FR')} contacts</span>
+            <span className="text-sm text-gray-500">{list.contact_count.toLocaleString('en-US')} contacts</span>
           </div>
         )}
 
@@ -288,7 +288,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto">
+          <button onClick={() => setActionError(null)} aria-label="Close error message" className="ml-auto">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -301,23 +301,23 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             onClick={() => setEditingName(true)}
             className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
           >
-            Modifier
+            Edit
           </button>
         )}
         {list.list_type === 'static' && (
           <button
             className="flex items-center gap-1 px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50 text-gray-600"
-            title="Fonctionnalité à venir"
+            title="Coming soon"
             disabled
           >
-            <UserPlus className="w-3 h-3" /> Ajouter des contacts
+            <UserPlus className="w-3 h-3" /> Add contacts
           </button>
         )}
         <button
           onClick={() => setShowDeleteConfirm(true)}
           className="flex items-center gap-1 px-3 py-1.5 text-sm border border-red-200 rounded-lg hover:bg-red-50 text-red-600 ml-auto"
         >
-          <Trash2 className="w-3 h-3" /> Supprimer la liste
+          <Trash2 className="w-3 h-3" /> Delete list
         </button>
       </div>
 
@@ -325,7 +325,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       {showDeleteConfirm && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-700 mb-3">
-            Voulez-vous vraiment supprimer la liste &laquo; {list.name} &raquo; ? Cette action est irr&eacute;versible.
+            Are you sure you want to delete the list &laquo; {list.name} &raquo;? This action cannot be undone.
           </p>
           <div className="flex gap-2">
             <button
@@ -333,13 +333,13 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               disabled={deleting}
               className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
             >
-              {deleting ? 'Suppression...' : 'Confirmer la suppression'}
+              {deleting ? 'Deleting...' : 'Confirm deletion'}
             </button>
             <button
               onClick={() => setShowDeleteConfirm(false)}
               className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
             >
-              Annuler
+              Cancel
             </button>
           </div>
         </div>
@@ -348,7 +348,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       {/* Dynamic filter info */}
       {list.list_type === 'dynamic' && list.filter_criteria && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <h3 className="text-sm font-medium text-blue-700 mb-2">Crit&egrave;res de filtrage dynamique</h3>
+          <h3 className="text-sm font-medium text-blue-700 mb-2">Dynamic filter criteria</h3>
           <div className="flex flex-wrap gap-2">
             {list.filter_criteria.contact_type && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
@@ -357,12 +357,12 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             )}
             {list.filter_criteria.department && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
-                D&eacute;partement: {list.filter_criteria.department}
+                State: {list.filter_criteria.department}
               </span>
             )}
             {list.filter_criteria.region && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
-                R&eacute;gion: {list.filter_criteria.region}
+                Region: {list.filter_criteria.region}
               </span>
             )}
             {list.filter_criteria.city && (
@@ -382,18 +382,18 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       {/* Members table (static lists only) */}
       {list.list_type === 'static' && (
         <>
-          <p className="text-sm text-gray-500 mb-3">{totalMembers.toLocaleString('fr-FR')} membres</p>
+          <p className="text-sm text-gray-500 mb-3">{totalMembers.toLocaleString('en-US')} members</p>
 
           <div className="bg-white rounded-lg border overflow-hidden">
             <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px] text-sm" aria-label="Membres de la liste">
+            <table className="w-full min-w-[700px] text-sm" aria-label="List members">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
                   <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
                   <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
-                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">T&eacute;l&eacute;phone</th>
-                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ajout&eacute; le</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Phone</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Added on</th>
                   <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Actions</th>
                 </tr>
               </thead>
@@ -409,7 +409,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 ) : members.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                      Aucun membre dans cette liste.
+                      No members in this list.
                     </td>
                   </tr>
                 ) : (
@@ -426,18 +426,18 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                       <td className="px-4 py-3 text-gray-600">{member.contact?.email || '-'}</td>
                       <td className="px-4 py-3 text-gray-600">{member.contact?.phone || '-'}</td>
                       <td className="px-4 py-3 text-gray-400 text-xs">
-                        {new Date(member.added_at).toLocaleDateString('fr-FR')}
+                        {new Date(member.added_at).toLocaleDateString('en-US')}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <button
                           onClick={() => setRemoveMemberModal({
                             open: true,
                             contactId: member.contact_id,
-                            contactName: member.contact?.contact_name || member.contact?.company_name || 'ce contact',
+                            contactName: member.contact?.contact_name || member.contact?.company_name || 'this contact',
                           })}
                           className="text-red-500 hover:text-red-700 text-xs"
-                          title="Retirer de la liste"
-                          aria-label={`Retirer ${member.contact?.contact_name || member.contact?.company_name || 'ce contact'} de la liste`}
+                          title="Remove from list"
+                          aria-label={`Remove ${member.contact?.contact_name || member.contact?.company_name || 'this contact'} from list`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -458,7 +458,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 disabled={page === 1}
                 className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
               >
-                Pr&eacute;c&eacute;dent
+                Previous
               </button>
               <span className="text-sm text-gray-500">Page {page} / {totalPages}</span>
               <button
@@ -466,7 +466,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 disabled={page === totalPages}
                 className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
               >
-                Suivant
+                Next
               </button>
             </div>
           )}
@@ -477,9 +477,9 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         isOpen={removeMemberModal.open}
         onClose={() => setRemoveMemberModal({ open: false, contactId: '', contactName: '' })}
         onConfirm={() => { setRemoveMemberModal({ open: false, contactId: '', contactName: '' }); handleRemoveMember(removeMemberModal.contactId) }}
-        title="Retirer le contact"
-        message={`Êtes-vous sûr de vouloir retirer « ${removeMemberModal.contactName} » de la liste ?`}
-        confirmText="Retirer"
+        title="Remove contact"
+        message={`Are you sure you want to remove "${removeMemberModal.contactName}" from the list?`}
+        confirmText="Remove"
         variant="warning"
       />
     </div>

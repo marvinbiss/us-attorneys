@@ -84,7 +84,7 @@ export default function GeographicMap({
     })
   }, [])
 
-  // Attach moveend listener for "Rechercher dans cette zone"
+  // Attach moveend listener for "Search this area"
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
@@ -304,7 +304,7 @@ export default function GeographicMap({
     })
   }, [highlightedProviderId, _L, validProviders, getMarkerIcon])
 
-  // Handle "Rechercher dans cette zone" click
+  // Handle "Search this area" click
   const handleSearchArea = useCallback(() => {
     if (mapRef.current && onSearchArea) {
       onSearchArea(mapRef.current.getBounds())
@@ -341,7 +341,7 @@ export default function GeographicMap({
         />
       </MapContainer>
 
-      {/* "Rechercher dans cette zone" button */}
+      {/* "Search this area" button */}
       {mapMoved && (
         <button
           onClick={handleSearchArea}

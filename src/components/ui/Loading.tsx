@@ -34,21 +34,21 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
       gray: 'bg-gray-600',
     }
     return (
-      <div className={clsx('flex items-center gap-1', className)} role="status" aria-label="Chargement">
+      <div className={clsx('flex items-center gap-1', className)} role="status" aria-label="Loading">
         <span className={clsx(dotSizes[size], dotColors[color], 'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]')} style={{ animationDelay: '0ms' }} />
         <span className={clsx(dotSizes[size], dotColors[color], 'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]')} style={{ animationDelay: '160ms' }} />
         <span className={clsx(dotSizes[size], dotColors[color], 'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]')} style={{ animationDelay: '320ms' }} />
-        <span className="sr-only">Chargement...</span>
+        <span className="sr-only">Loading...</span>
       </div>
     )
   }
 
   if (variant === 'pulse') {
     return (
-      <div className={clsx(sizes[size], 'relative', className)} role="status" aria-label="Chargement">
+      <div className={clsx(sizes[size], 'relative', className)} role="status" aria-label="Loading">
         <div className={clsx('absolute inset-0 rounded-full bg-blue-600/30 animate-ping')} />
         <div className={clsx('absolute inset-2 rounded-full bg-blue-600')} />
-        <span className="sr-only">Chargement...</span>
+        <span className="sr-only">Loading...</span>
       </div>
     )
   }
@@ -65,9 +65,9 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
         animation: 'spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
       }}
       role="status"
-      aria-label="Chargement"
+      aria-label="Loading"
     >
-      <span className="sr-only">Chargement...</span>
+      <span className="sr-only">Loading...</span>
     </div>
   )
 }
@@ -76,7 +76,7 @@ export function LoadingPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
       <Loading size="lg" />
-      <p className="text-gray-500 text-sm animate-pulse">Chargement en cours...</p>
+      <p className="text-gray-500 text-sm animate-pulse">Loading...</p>
     </div>
   )
 }
@@ -99,7 +99,7 @@ export function LoadingButton() {
   return <Loading size="sm" color="white" />
 }
 
-export function LoadingInline({ text = 'Chargement...' }: { text?: string }) {
+export function LoadingInline({ text = 'Loading...' }: { text?: string }) {
   return (
     <div className="inline-flex items-center gap-2 text-gray-500">
       <Loading size="sm" />

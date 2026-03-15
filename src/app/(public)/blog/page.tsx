@@ -14,22 +14,22 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Blog Travaux & Artisanat — Conseils 2026',
-  description: `Conseils, guides et actualités sur l'artisanat, les travaux de rénovation, les prix et la réglementation. ${allArticlesMeta.length}+ articles par des experts.`,
+  title: 'Legal Blog & Insights — Attorney Tips 2026',
+  description: `Tips, guides, and news about legal services, attorney fees, and regulations. ${allArticlesMeta.length}+ articles by experts.`,
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: 'Blog Travaux & Artisanat — Conseils 2026',
-    description: 'Conseils, guides et actualités sur les travaux de rénovation et l\'artisanat.',
+    title: 'Legal Blog & Insights — Attorney Tips 2026',
+    description: 'Tips, guides, and news about legal services and attorney practice.',
     url: `${SITE_URL}/blog`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Blog travaux et artisanat' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Legal blog and insights' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog Travaux & Artisanat — Conseils 2026',
-    description: 'Conseils, guides et actualités sur les travaux de rénovation et l\'artisanat.',
+    title: 'Legal Blog & Insights — Attorney Tips 2026',
+    description: 'Tips, guides, and news about legal services and attorney practice.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -65,13 +65,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Blog Artisanat & Travaux',
-    description: 'Conseils, guides et actualités sur l\'artisanat et les travaux de rénovation.',
+    name: 'Legal Blog & Insights',
+    description: 'Tips, guides, and news about legal services and attorney practice.',
     url: `${SITE_URL}/blog`,
     numberOfItems: allArticlesMeta.length,
     isPartOf: {
       '@type': 'WebSite',
-      name: 'ServicesArtisans',
+      name: 'US Attorneys',
       url: SITE_URL,
     },
     hasPart: allArticlesMeta.slice(0, 10).map(a => ({
@@ -80,20 +80,20 @@ export default async function BlogPage({ searchParams }: PageProps) {
       url: `${SITE_URL}/blog/${a.slug}`,
       datePublished: a.date,
       author: (() => {
-        const authorName = allArticles[a.slug]?.author || 'ServicesArtisans'
-        return authorName === 'ServicesArtisans'
-          ? { '@type': 'Organization', name: 'Équipe éditoriale ServicesArtisans', url: `${SITE_URL}/about`, '@id': `${SITE_URL}#organization` }
+        const authorName = allArticles[a.slug]?.author || 'US Attorneys'
+        return authorName === 'US Attorneys'
+          ? { '@type': 'Organization', name: 'USAttorneys Editorial Team', url: `${SITE_URL}/about`, '@id': `${SITE_URL}#organization` }
           : { '@type': 'Person', name: authorName }
       })(),
     })),
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: '/' },
+    { name: 'Home', url: '/' },
     { name: 'Blog', url: '/blog' },
   ])
 
-  // Category article counts for the cross-link section
+  // Category article counts for cross-link section
   const categoryCounts = blogCategories.map(c => ({
     ...c,
     count: allArticlesMeta.filter(
@@ -102,17 +102,26 @@ export default async function BlogPage({ searchParams }: PageProps) {
   }))
 
   const categoryColors: Record<string, string> = {
+    'Tips': 'bg-amber-100 text-amber-700',
+    'Fees': 'bg-emerald-100 text-emerald-700',
+    'Practice Areas': 'bg-blue-100 text-blue-700',
+    'Guides': 'bg-purple-100 text-purple-700',
+    'Regulations': 'bg-slate-100 text-slate-700',
+    'Aid & Grants': 'bg-green-100 text-green-700',
+    'Seasonal': 'bg-lime-100 text-lime-700',
+    'Safety': 'bg-red-100 text-red-700',
+    'Energy': 'bg-teal-100 text-teal-700',
+    'DIY': 'bg-orange-100 text-orange-700',
+    'Inspiration': 'bg-pink-100 text-pink-700',
+    // Legacy French keys for backward compatibility
     'Conseils': 'bg-amber-100 text-amber-700',
     'Tarifs': 'bg-emerald-100 text-emerald-700',
     'Fiches métier': 'bg-blue-100 text-blue-700',
-    'Guides': 'bg-purple-100 text-purple-700',
     'Réglementation': 'bg-slate-100 text-slate-700',
     'Aides & Subventions': 'bg-green-100 text-green-700',
     'Saisonnier': 'bg-lime-100 text-lime-700',
     'Sécurité': 'bg-red-100 text-red-700',
     'Énergie': 'bg-teal-100 text-teal-700',
-    'DIY': 'bg-orange-100 text-orange-700',
-    'Inspiration': 'bg-pink-100 text-pink-700',
   }
 
   return (
@@ -124,7 +133,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 border-l-4 border-blue-500 pl-4">
-            Parcourir par cat&eacute;gorie
+            Browse by category
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {categoryCounts.map(c => {

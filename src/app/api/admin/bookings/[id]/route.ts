@@ -39,7 +39,7 @@ export async function GET(
       .from('bookings')
       .select(`
         *,
-        provider:providers!attorney_id (
+        attorney:attorneys!attorney_id (
           id,
           name,
           email,
@@ -114,7 +114,7 @@ export async function PATCH(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'booking.update', 'booking', params.id, result.data)
 
     return NextResponse.json({
@@ -167,7 +167,7 @@ export async function DELETE(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(authResult.admin.id, 'booking.cancel', 'booking', params.id)
 
     return NextResponse.json({

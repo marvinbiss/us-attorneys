@@ -12,17 +12,17 @@ interface DateRangePickerProps {
 }
 
 const DEFAULT_PRESETS = [
-  { label: 'Aujourd\'hui', days: 0 },
-  { label: '7 derniers jours', days: 7 },
-  { label: '30 derniers jours', days: 30 },
-  { label: '90 derniers jours', days: 90 },
+  { label: 'Today', days: 0 },
+  { label: 'Last 7 days', days: 7 },
+  { label: 'Last 30 days', days: 30 },
+  { label: 'Last 90 days', days: 90 },
 ]
 
 export function DateRangePicker({
   startDate,
   endDate,
   onChange,
-  placeholder = 'Sélectionner une période',
+  placeholder = 'Select a date range',
   presets = DEFAULT_PRESETS,
 }: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -49,7 +49,7 @@ export function DateRangePicker({
 
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return ''
-    return new Date(dateStr).toLocaleDateString('fr-FR', {
+    return new Date(dateStr).toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -61,7 +61,7 @@ export function DateRangePicker({
       return `${formatDate(startDate)} - ${formatDate(endDate)}`
     }
     if (startDate) {
-      return `À partir du ${formatDate(startDate)}`
+      return `From ${formatDate(startDate)}`
     }
     return placeholder
   }
@@ -151,7 +151,7 @@ export function DateRangePicker({
     <div className="relative" ref={containerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Sélectionner une période"
+        aria-label="Select a date range"
         aria-expanded={isOpen}
         className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
       >
@@ -166,7 +166,7 @@ export function DateRangePicker({
               handleClear()
             }}
             className="ml-1 text-gray-400 hover:text-gray-600"
-            aria-label="Effacer la période sélectionnée"
+            aria-label="Clear date range"
           >
             <X className="w-4 h-4" />
           </button>
@@ -178,7 +178,7 @@ export function DateRangePicker({
           <div className="flex gap-4">
             {/* Presets */}
             <div className="border-r border-gray-100 pr-4">
-              <p className="text-xs font-medium text-gray-500 mb-2">Raccourcis</p>
+              <p className="text-xs font-medium text-gray-500 mb-2">Presets</p>
               <div className="space-y-1">
                 {presets.map((preset) => (
                   <button
@@ -199,17 +199,17 @@ export function DateRangePicker({
                 <button
                   onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
                   className="p-1 hover:bg-gray-100 rounded"
-                  aria-label="Mois précédent"
+                  aria-label="Previous month"
                 >
                   <ChevronLeft className="w-5 h-5 text-gray-600" />
                 </button>
                 <span className="font-medium text-gray-900">
-                  {currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                  {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                 </span>
                 <button
                   onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
                   className="p-1 hover:bg-gray-100 rounded"
-                  aria-label="Mois suivant"
+                  aria-label="Next month"
                 >
                   <ChevronRight className="w-5 h-5 text-gray-600" />
                 </button>
@@ -217,7 +217,7 @@ export function DateRangePicker({
 
               {/* Day headers */}
               <div className="grid grid-cols-7 mb-2">
-                {['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'].map((day) => (
+                {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day) => (
                   <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
                     {day}
                   </div>
@@ -258,7 +258,7 @@ export function DateRangePicker({
               {/* Selection hint */}
               {startDate && !endDate && (
                 <p className="text-xs text-gray-500 mt-3 text-center">
-                  Sélectionnez la date de fin
+                  Select end date
                 </p>
               )}
             </div>

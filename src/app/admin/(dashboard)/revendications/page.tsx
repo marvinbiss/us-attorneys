@@ -93,12 +93,12 @@ export default function AdminClaimsPage() {
       if (result?.message) setActionSuccess(result.message)
       mutate()
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Erreur lors du traitement')
+      setActionError(err instanceof Error ? err.message : 'Error processing request')
     }
   }
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('fr-FR', {
+    return new Date(dateStr).toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -110,11 +110,11 @@ export default function AdminClaimsPage() {
   const statusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800"><Clock className="w-3 h-3" /> En attente</span>
+        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800"><Clock className="w-3 h-3" /> Pending</span>
       case 'approved':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3" /> Approuvée</span>
+        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3" /> Approved</span>
       case 'rejected':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3" /> Rejetée</span>
+        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3" /> Rejected</span>
       default:
         return null
     }
@@ -127,10 +127,10 @@ export default function AdminClaimsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <Shield className="w-7 h-7 text-amber-500" />
-            Revendications de fiches
+            Profile claims
           </h1>
           <p className="text-gray-500 mt-1">
-            Gérez les demandes de revendication des artisans
+            Manage attorney profile claim requests
           </p>
         </div>
       </div>
@@ -144,7 +144,7 @@ export default function AdminClaimsPage() {
             <span>{actionSuccess}</span>
           </div>
           <button onClick={() => setActionSuccess(null)} className="text-green-600 hover:text-green-800 text-sm">
-            Fermer
+            Close
           </button>
         </div>
       )}
@@ -152,10 +152,10 @@ export default function AdminClaimsPage() {
       {/* Filters */}
       <div className="flex gap-2">
         {[
-          { value: 'pending' as const, label: 'En attente' },
-          { value: 'approved' as const, label: 'Approuvées' },
-          { value: 'rejected' as const, label: 'Rejetées' },
-          { value: 'all' as const, label: 'Toutes' },
+          { value: 'pending' as const, label: 'Pending' },
+          { value: 'approved' as const, label: 'Approved' },
+          { value: 'rejected' as const, label: 'Rejected' },
+          { value: 'all' as const, label: 'All' },
         ].map(({ value, label }) => (
           <button
             key={value}
@@ -183,11 +183,11 @@ export default function AdminClaimsPage() {
           ))}
         </div>
       ) : error ? (
-        <ErrorBanner message="Erreur lors du chargement des demandes" />
+        <ErrorBanner message="Error loading claims" />
       ) : claims.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
           <Shield className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">Aucune demande {filter !== 'all' ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}` : ''}</p>
+          <p className="text-gray-500 font-medium">No {filter !== 'all' ? `${filter}` : ''} claims</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -198,9 +198,9 @@ export default function AdminClaimsPage() {
                   {/* Provider info */}
                   <div className="flex items-center gap-2">
                     <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="font-semibold text-gray-900">{claim.provider?.name || 'Artisan inconnu'}</span>
+                    <span className="font-semibold text-gray-900">{claim.provider?.name || 'Unknown attorney'}</span>
                     {claim.provider?.address_city && (
-                      <span className="text-gray-500 text-sm">— {claim.provider.address_city}</span>
+                      <span className="text-gray-500 text-sm">-- {claim.provider.address_city}</span>
                     )}
                   </div>
 
@@ -208,9 +208,9 @@ export default function AdminClaimsPage() {
                   <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
                     <div className="flex items-center gap-2 text-sm">
                       <User className="w-4 h-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">{claim.claimant_name || claim.user?.full_name || 'Utilisateur'}</span>
+                      <span className="font-medium text-gray-900">{claim.claimant_name || claim.user?.full_name || 'User'}</span>
                       {claim.claimant_position && (
-                        <span className="text-gray-500">— {claim.claimant_position}</span>
+                        <span className="text-gray-500">-- {claim.claimant_position}</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
@@ -236,13 +236,13 @@ export default function AdminClaimsPage() {
                   {/* SIRET comparison */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 text-sm">
                     <div>
-                      <span className="text-gray-500">SIRET en base :</span>{' '}
+                      <span className="text-gray-500">Bar number on file:</span>{' '}
                       <span className="font-mono font-medium text-gray-900">
                         {claim.provider?.siret || 'N/A'}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-500">SIRET fourni :</span>{' '}
+                      <span className="text-gray-500">Bar number provided:</span>{' '}
                       <span className="font-mono font-medium text-gray-900">
                         {claim.siret_provided}
                       </span>
@@ -258,7 +258,7 @@ export default function AdminClaimsPage() {
                   {/* Rejection reason */}
                   {claim.rejection_reason && (
                     <p className="text-sm rounded-lg p-2 text-red-600 bg-red-50">
-                      Motif de rejet : {claim.rejection_reason}
+                      Rejection reason: {claim.rejection_reason}
                     </p>
                   )}
                 </div>
@@ -274,26 +274,26 @@ export default function AdminClaimsPage() {
                           open: true,
                           claimId: claim.id,
                           action: 'approve',
-                          attorneyName: claim.provider?.name || 'Artisan',
-                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
+                          attorneyName: claim.provider?.name || 'Attorney',
+                          userName: claim.claimant_name || claim.user?.full_name || 'User',
                         })}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                       >
                         <CheckCircle className="w-4 h-4" />
-                        Approuver
+                        Approve
                       </button>
                       <button
                         onClick={() => setActionModal({
                           open: true,
                           claimId: claim.id,
                           action: 'reject',
-                          attorneyName: claim.provider?.name || 'Artisan',
-                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
+                          attorneyName: claim.provider?.name || 'Attorney',
+                          userName: claim.claimant_name || claim.user?.full_name || 'User',
                         })}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
                       >
                         <XCircle className="w-4 h-4" />
-                        Rejeter
+                        Reject
                       </button>
                     </div>
                   )}
@@ -332,24 +332,24 @@ export default function AdminClaimsPage() {
         isOpen={actionModal.open}
         onClose={() => { setActionModal({ ...actionModal, open: false }); setRejectionReason('') }}
         onConfirm={confirmAction}
-        title={actionModal.action === 'approve' ? 'Approuver la revendication' : 'Rejeter la revendication'}
+        title={actionModal.action === 'approve' ? 'Approve claim' : 'Reject claim'}
         message={
           actionModal.action === 'approve'
-            ? `Approuver la revendication de "${actionModal.attorneyName}" par ${actionModal.userName} ? La fiche sera attribuée. Si l'artisan n'a pas de compte, un compte sera créé et il recevra un email pour définir son mot de passe.`
-            : `Rejeter la revendication de "${actionModal.attorneyName}" par ${actionModal.userName} ?`
+            ? `Approve the claim for "${actionModal.attorneyName}" by ${actionModal.userName}? The profile will be assigned. If the attorney does not have an account, one will be created and they will receive an email to set their password.`
+            : `Reject the claim for "${actionModal.attorneyName}" by ${actionModal.userName}?`
         }
-        confirmText={actionModal.action === 'approve' ? 'Approuver' : 'Rejeter'}
+        confirmText={actionModal.action === 'approve' ? 'Approve' : 'Reject'}
         variant={actionModal.action === 'approve' ? 'success' : 'danger'}
       >
         {actionModal.action === 'reject' && (
           <div className="mt-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Motif du rejet (optionnel)
+              Rejection reason (optional)
             </label>
             <textarea
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder="Expliquez pourquoi la demande est rejetée..."
+              placeholder="Explain why the request is rejected..."
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               maxLength={500}

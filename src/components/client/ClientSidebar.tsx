@@ -38,7 +38,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           }`}
         >
           <FileText className="w-5 h-5" />
-          Mes demandes
+          My requests
         </Link>
         <Link
           href="/client-dashboard/messages"
@@ -59,7 +59,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           }`}
         >
           <Star className="w-5 h-5" />
-          Avis donnés
+          My reviews
         </Link>
         <Link
           href="/client-dashboard/parametres"
@@ -68,12 +68,12 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           }`}
         >
           <Settings className="w-5 h-5" />
-          Paramètres
+          Settings
         </Link>
         <LogoutButton />
       </nav>
 
-      {/* Liens vers le site - Maillage interne */}
+      {/* Site links - Internal linking */}
       <QuickSiteLinks className="mt-4" />
     </div>
   )

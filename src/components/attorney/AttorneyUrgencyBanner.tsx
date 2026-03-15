@@ -69,7 +69,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
         color: 'text-blue-500',
       })
     }
-    // If > 30 days, don't show anything (removes vague "Profil mis à jour récemment")
+    // If > 30 days, don't show anything (removes vague "Profile recently updated")
   }
 
   return items

@@ -53,7 +53,7 @@ function CityListFallback({
     const copy = [...markers]
     return sortBy === 'count'
       ? copy.sort((a, b) => b.attorneyCount - a.attorneyCount)
-      : copy.sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+      : copy.sort((a, b) => a.name.localeCompare(b.name, 'en'))
   }, [markers, sortBy])
 
   return (
@@ -64,15 +64,15 @@ function CityListFallback({
           {markers.length} cities
         </p>
         <div className="flex items-center gap-2">
-          <label htmlFor="sort-select" className="text-xs text-gray-500">Trier par</label>
+          <label htmlFor="sort-select" className="text-xs text-gray-500">Sort by</label>
           <select
             id="sort-select"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'name' | 'count')}
             className="text-xs border border-gray-300 rounded px-2 py-1"
           >
-            <option value="count">Nombre d&apos;artisans</option>
-            <option value="name">Nom de ville</option>
+            <option value="count">Attorney count</option>
+            <option value="name">City name</option>
           </select>
         </div>
       </div>
@@ -101,9 +101,9 @@ function CityListFallback({
             </div>
             <div className="flex items-center gap-2 flex-shrink-0 ml-3">
               <span className="text-sm font-semibold text-gray-700">
-                {city.attorneyCount.toLocaleString('fr-FR')}
+                {city.attorneyCount.toLocaleString('en-US')}
               </span>
-              <span className="text-xs text-gray-400">artisans</span>
+              <span className="text-xs text-gray-400">attorneys</span>
               <MapPin className="w-4 h-4 text-gray-300 group-hover:text-blue-500" />
             </div>
           </Link>
@@ -171,7 +171,7 @@ export default function CarteClient() {
     return uniqueMarkers.filter((m) => m.region === selectedRegion)
   }, [uniqueMarkers, selectedRegion])
 
-  // Total artisans in filtered zone
+  // Total attorneys in filtered zone
   const totalArtisans = useMemo(() => {
     return filteredMarkers.reduce((sum, m) => sum + m.attorneyCount, 0)
   }, [filteredMarkers])
@@ -211,17 +211,17 @@ export default function CarteClient() {
             </div>
             <div>
               <p className="text-sm text-blue-100">
-                {selectedRegion ? `Artisans en ${selectedRegion}` : 'Total artisans référencés'}
+                {selectedRegion ? `Attorneys in ${selectedRegion}` : 'Total listed attorneys'}
               </p>
               <p className="text-2xl font-bold">
                 {selectedRegion
-                  ? totalArtisans.toLocaleString('fr-FR')
+                  ? totalArtisans.toLocaleString('en-US')
                   : '350 000+'}
               </p>
             </div>
           </div>
           <p className="text-sm text-blue-200">
-            {filteredMarkers.length} cities affichées
+            {filteredMarkers.length} cities shown
           </p>
         </div>
 
@@ -237,7 +237,7 @@ export default function CarteClient() {
             } ${mapError ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <MapIcon className="w-4 h-4" />
-            Carte
+            Map
           </button>
           <button
             onClick={() => setViewMode('list')}
@@ -248,7 +248,7 @@ export default function CarteClient() {
             }`}
           >
             <List className="w-4 h-4" />
-            Liste
+            List
           </button>
         </div>
 
@@ -259,7 +259,7 @@ export default function CarteClient() {
         >
           <span className="flex items-center gap-2 font-medium text-gray-700">
             <Filter className="w-4 h-4" />
-            Filtres
+            Filters
           </span>
           <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
         </button>
@@ -269,7 +269,7 @@ export default function CarteClient() {
           {/* Region filter */}
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <label htmlFor="region-filter" className="block text-sm font-semibold text-gray-700 mb-2">
-              Filtrer par région
+              Filter by region
             </label>
             <select
               id="region-filter"
@@ -277,7 +277,7 @@ export default function CarteClient() {
               onChange={(e) => handleRegionChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             >
-              <option value="">Toute la France</option>
+              <option value="">All regions</option>
               {mapRegions.map((region) => (
                 <option key={region} value={region}>
                   {region}
@@ -289,7 +289,7 @@ export default function CarteClient() {
           {/* Service filter */}
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <label htmlFor="service-filter" className="block text-sm font-semibold text-gray-700 mb-2">
-              Filtrer par métier
+              Filter by practice area
             </label>
             <select
               id="service-filter"
@@ -297,7 +297,7 @@ export default function CarteClient() {
               onChange={(e) => setSelectedService(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             >
-              <option value="">Tous les métiers</option>
+              <option value="">All practice areas</option>
               {services.map((service) => (
                 <option key={service.slug} value={service.slug}>
                   {service.name}
@@ -313,26 +313,26 @@ export default function CarteClient() {
               className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
             >
               <X className="w-4 h-4" />
-              Réinitialiser les filtres
+              Reset filters
             </button>
           )}
 
           {/* Legend (only in map mode) */}
           {showMap && (
             <div className="bg-white border border-gray-200 rounded-xl p-4">
-              <p className="text-sm font-semibold text-gray-700 mb-3">Légende</p>
+              <p className="text-sm font-semibold text-gray-700 mb-3">Legend</p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-green-600" />
-                  <span className="text-sm text-gray-600">Forte couverture (3&nbsp;000+)</span>
+                  <span className="text-sm text-gray-600">High coverage (3,000+)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-amber-500" />
-                  <span className="text-sm text-gray-600">Couverture moyenne (1&nbsp;000-3&nbsp;000)</span>
+                  <span className="text-sm text-gray-600">Medium coverage (1,000-3,000)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-red-500" />
-                  <span className="text-sm text-gray-600">Couverture limitée (&lt; 1&nbsp;000)</span>
+                  <span className="text-sm text-gray-600">Limited coverage (&lt; 1,000)</span>
                 </div>
               </div>
             </div>
@@ -379,14 +379,14 @@ export default function CarteClient() {
                     <Tooltip direction="top" offset={[0, -radius]}>
                       <span className="font-medium">{city.name}</span>
                       <br />
-                      <span className="text-xs">{city.attorneyCount.toLocaleString('fr-FR')} artisans</span>
+                      <span className="text-xs">{city.attorneyCount.toLocaleString('en-US')} attorneys</span>
                     </Tooltip>
                     <Popup maxWidth={280}>
                       <div className="p-3">
                         <h3 className="font-bold text-gray-900 text-base mb-1">{city.name}</h3>
                         <p className="text-sm text-gray-600 mb-1">{city.departement} &middot; {city.region}</p>
                         <p className="text-sm font-medium text-blue-700 mb-3">
-                          {city.attorneyCount.toLocaleString('fr-FR')} artisans référencés
+                          {city.attorneyCount.toLocaleString('en-US')} listed attorneys
                         </p>
 
                         <div className="flex gap-2">
@@ -396,7 +396,7 @@ export default function CarteClient() {
                           >
                             <span className="flex items-center justify-center gap-1.5">
                               <MapPin className="w-3.5 h-3.5" />
-                              {selectedService ? 'Voir les artisans' : 'Voir la ville'}
+                              {selectedService ? 'View attorneys' : 'View city'}
                             </span>
                           </Link>
                         </div>
@@ -414,12 +414,12 @@ export default function CarteClient() {
           <div className="bg-gray-100 rounded-xl flex items-center justify-center" style={{ height: '600px' }}>
             <div className="text-center text-gray-500">
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2" />
-              <p>Chargement de la carte...</p>
+              <p>Loading map...</p>
               <button
                 onClick={() => setViewMode('list')}
                 className="mt-3 text-sm text-blue-600 hover:text-blue-700 underline"
               >
-                Voir en liste
+                View as list
               </button>
             </div>
           </div>
@@ -430,16 +430,16 @@ export default function CarteClient() {
           <div className="bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-center" style={{ height: '300px' }}>
             <div className="text-center px-6">
               <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-              <p className="font-medium text-gray-900 mb-1">La carte n&apos;a pas pu se charger</p>
+              <p className="font-medium text-gray-900 mb-1">Map could not load</p>
               <p className="text-sm text-gray-600 mb-4">
-                Utilisez la vue liste ci-dessous pour parcourir les cities.
+                Use the list view below to browse cities.
               </p>
               <button
                 onClick={() => setViewMode('list')}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <List className="w-4 h-4" />
-                Voir en liste
+                View as list
               </button>
             </div>
           </div>

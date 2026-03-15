@@ -59,7 +59,7 @@ export interface PaymentFailedEmailData {
 // Email templates
 const templates = {
   bookingConfirmationClient: (data: BookingEmailData) => ({
-    subject: `Confirmation de votre rendez-vous - ${data.specialtyName}`,
+    subject: `Appointment confirmation - ${data.specialtyName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -75,7 +75,7 @@ const templates = {
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.clientName}</strong>,
+                Hello <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
                 Your appointment with <strong>${data.attorneyName}</strong> has been confirmed.
@@ -93,11 +93,11 @@ const templates = {
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.date}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Horaire:</td>
+                    <td style="padding: 8px 0; color: #666;">Time:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Artisan:</td>
+                    <td style="padding: 8px 0; color: #666;">Attorney:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.attorneyName}</td>
                   </tr>
                 </table>
@@ -110,7 +110,7 @@ const templates = {
               </div>
 
               <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                Besoin de modifier ou annuler votre rendez-vous ? Utilisez le lien ci-dessus ou contactez directement the attorney.
+                Need to modify or cancel your appointment? Use the link above or contact the attorney directly.
               </p>
 
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
@@ -124,25 +124,25 @@ const templates = {
       </html>
     `,
     text: `
-Bonjour ${data.clientName},
+Hello ${data.clientName},
 
 Your appointment with ${data.attorneyName} has been confirmed.
 
 APPOINTMENT DETAILS
 Service: ${data.specialtyName}
 Date: ${data.date}
-Horaire: ${data.startTime} - ${data.endTime}
-Artisan: ${data.attorneyName}
+Time: ${data.startTime} - ${data.endTime}
+Attorney: ${data.attorneyName}
 
 Manage your booking: ${SITE_URL}/booking/${data.bookingId}
 
-Besoin de modifier ou annuler ? Utilisez le lien ci-dessus ou contactez directement the attorney.
+Need to modify or cancel? Use the link above or contact the attorney directly.
 
 ${SITE_NAME}
     `,
   }),
 
-  bookingNotificationArtisan: (data: BookingEmailData) => ({
+  bookingNotificationAttorney: (data: BookingEmailData) => ({
     subject: `New booking - ${data.clientName}`,
     html: `
       <!DOCTYPE html>
@@ -158,7 +158,7 @@ ${SITE_NAME}
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.attorneyName}</strong>,
+                Hello <strong>${data.attorneyName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
                 You have received a new booking from <strong>${data.clientName}</strong>.
@@ -188,13 +188,13 @@ ${SITE_NAME}
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.date}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Horaire:</td>
+                    <td style="padding: 8px 0; color: #666;">Time:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
                   </tr>
                 </table>
                 ${data.message ? `
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #d1fae5;">
-                  <p style="color: #666; font-size: 13px; margin: 0 0 5px 0;">Message du client:</p>
+                  <p style="color: #666; font-size: 13px; margin: 0 0 5px 0;">Client message:</p>
                   <p style="color: #333; font-size: 14px; margin: 0; font-style: italic;">"${data.message}"</p>
                 </div>
                 ` : ''}
@@ -202,7 +202,7 @@ ${SITE_NAME}
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${SITE_URL}/attorney-dashboard/calendrier" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Voir mon calendrier
+                  View my calendar
                 </a>
               </div>
 
@@ -217,7 +217,7 @@ ${SITE_NAME}
       </html>
     `,
     text: `
-Bonjour ${data.attorneyName},
+Hello ${data.attorneyName},
 
 You have received a new booking.
 
@@ -227,17 +227,17 @@ Phone: ${data.clientPhone}
 Email: ${data.clientEmail}
 Service: ${data.specialtyName}
 Date: ${data.date}
-Horaire: ${data.startTime} - ${data.endTime}
+Time: ${data.startTime} - ${data.endTime}
 ${data.message ? `Message: ${data.message}` : ''}
 
-Voir votre calendrier: ${SITE_URL}/attorney-dashboard/calendrier
+View your calendar: ${SITE_URL}/attorney-dashboard/calendrier
 
 ${SITE_NAME}
     `,
   }),
 
   reminderClient: (data: ReminderEmailData) => ({
-    subject: `Rappel: Votre RDV demain avec ${data.attorneyName}`,
+    subject: `Reminder: Your appointment tomorrow with ${data.attorneyName}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -248,11 +248,11 @@ ${SITE_NAME}
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">Rappel de rendez-vous</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">Appointment Reminder</h1>
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.clientName}</strong>,
+                Hello <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
                 This is a reminder for your appointment <strong>tomorrow</strong> with <strong>${data.attorneyName}</strong>.
@@ -269,7 +269,7 @@ ${SITE_NAME}
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.date}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Horaire:</td>
+                    <td style="padding: 8px 0; color: #666;">Time:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
                   </tr>
                 </table>
@@ -296,13 +296,13 @@ ${SITE_NAME}
       </html>
     `,
     text: `
-Bonjour ${data.clientName},
+Hello ${data.clientName},
 
-Rappel: Vous avez un rendez-vous DEMAIN avec ${data.attorneyName}.
+Reminder: You have an appointment TOMORROW with ${data.attorneyName}.
 
 Service: ${data.specialtyName}
 Date: ${data.date}
-Horaire: ${data.startTime} - ${data.endTime}
+Time: ${data.startTime} - ${data.endTime}
 
 Manage your booking: ${SITE_URL}/booking/${data.bookingId}
 
@@ -313,7 +313,7 @@ ${SITE_NAME}
   }),
 
   cancellationNotification: (data: CancellationEmailData) => ({
-    subject: `Annulation de rendez-vous - ${data.date}`,
+    subject: `Appointment cancellation - ${data.date}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -328,7 +328,7 @@ ${SITE_NAME}
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour,
+                Hello,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
                 The appointment scheduled for <strong>${data.date}</strong> has been cancelled by ${data.cancelledBy === 'client' ? 'the client' : 'the attorney'}.
@@ -346,12 +346,12 @@ ${SITE_NAME}
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.date}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Horaire:</td>
+                    <td style="padding: 8px 0; color: #666;">Time:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
                   </tr>
                   ${data.reason ? `
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Raison:</td>
+                    <td style="padding: 8px 0; color: #666;">Reason:</td>
                     <td style="padding: 8px 0; color: #333;">${data.reason}</td>
                   </tr>
                   ` : ''}
@@ -373,8 +373,8 @@ The appointment scheduled for ${data.date} has been cancelled by ${data.cancelle
 
 Service: ${data.specialtyName}
 Scheduled date: ${data.date}
-Horaire: ${data.startTime} - ${data.endTime}
-${data.reason ? `Raison: ${data.reason}` : ''}
+Time: ${data.startTime} - ${data.endTime}
+${data.reason ? `Reason: ${data.reason}` : ''}
 
 ${SITE_NAME}
     `,
@@ -396,10 +396,10 @@ ${SITE_NAME}
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.clientName}</strong>,
+                Hello <strong>${data.clientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Nous n'avons pas pu traiter votre paiement pour votre abonnement ${SITE_NAME}.
+                We were unable to process your payment for your ${SITE_NAME} subscription.
               </p>
 
               <div style="background: #fef2f2; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #dc2626;">
@@ -415,7 +415,7 @@ ${SITE_NAME}
                   </tr>
                   ${data.amount ? `
                   <tr>
-                    <td style="padding: 8px 0; color: #666;">Montant:</td>
+                    <td style="padding: 8px 0; color: #666;">Amount:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.amount}</td>
                   </tr>
                   ` : ''}
@@ -435,7 +435,7 @@ ${SITE_NAME}
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
               <p style="color: #999; font-size: 12px; text-align: center;">
-                ${SITE_NAME} - Si vous avez des questions, contactez notre support.
+                ${SITE_NAME} - If you have any questions, contact our support team.
               </p>
             </div>
           </div>
@@ -443,13 +443,13 @@ ${SITE_NAME}
       </html>
     `,
     text: `
-Bonjour ${data.clientName},
+Hello ${data.clientName},
 
-Nous n'avons pas pu traiter votre paiement pour votre abonnement ${SITE_NAME}.
+We were unable to process your payment for your ${SITE_NAME} subscription.
 
 Service: ${data.specialtyName}
 Date: ${data.date}
-${data.amount ? `Montant: ${data.amount}` : ''}
+${data.amount ? `Amount: ${data.amount}` : ''}
 
 Please update your payment information to continue your subscription.
 
@@ -496,7 +496,7 @@ export async function sendEmail({
 // High-level email functions
 export async function sendBookingConfirmation(data: BookingEmailData) {
   const clientEmail = templates.bookingConfirmationClient(data)
-  const artisanEmail = templates.bookingNotificationArtisan(data)
+  const artisanEmail = templates.bookingNotificationAttorney(data)
 
   const results = await Promise.all([
     sendEmail({ to: data.clientEmail, ...clientEmail }),

@@ -34,13 +34,13 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      setError('Le fichier est trop volumineux. Taille maximum : 2 Mo.')
+      setError('File is too large. Maximum size: 2 MB.')
       return
     }
 
     // Validate file type
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      setError('Type de fichier non supporté. Utilisez JPEG, PNG ou WebP.')
+      setError('Unsupported file type. Use JPEG, PNG, or WebP.')
       return
     }
 
@@ -64,16 +64,16 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors du téléchargement')
+        throw new Error(data.error || 'Upload error')
       }
 
       // Update parent state with new avatar URL
       onSaved({ ...provider, avatar_url: data.url })
       setPreviewUrl(null)
-      setSuccess('Photo mise à jour')
+      setSuccess('Photo updated')
       setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de téléchargement')
+      setError(err instanceof Error ? err.message : 'Upload error')
       setPreviewUrl(null)
     } finally {
       setUploading(false)
@@ -97,15 +97,15 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la suppression')
+        throw new Error(data.error || 'Deletion error')
       }
 
       onSaved({ ...provider, avatar_url: null })
       setPreviewUrl(null)
-      setSuccess('Photo supprimée')
+      setSuccess('Photo deleted')
       setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de suppression')
+      setError(err instanceof Error ? err.message : 'Deletion error')
     } finally {
       setDeleting(false)
     }
@@ -115,7 +115,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
     <div className="bg-white rounded-xl shadow-sm p-6" aria-busy={uploading || deleting}>
       <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
         <Camera className="w-5 h-5 text-blue-600" />
-        Photo de profil
+        Profile photo
       </h2>
 
       <div className="flex items-center gap-6">
@@ -123,7 +123,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
           {displayUrl ? (
             <Image
               src={displayUrl}
-              alt={`Photo de profil de ${name}`}
+              alt={`Profile photo of ${name}`}
               width={96}
               height={96}
               sizes="96px"
@@ -131,23 +131,23 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               unoptimized
             />
           ) : (
-            <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center" role="img" aria-label="Aucune photo de profil">
+            <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center" role="img" aria-label="No profile photo">
               <span className="text-3xl font-bold text-blue-600">{initials}</span>
             </div>
           )}
           {(uploading || deleting) && (
             <div className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center" aria-busy="true">
-              <Loader2 className="w-6 h-6 animate-spin text-white" aria-label="Traitement en cours" />
+              <Loader2 className="w-6 h-6 animate-spin text-white" aria-label="Processing" />
             </div>
           )}
         </div>
 
         <div className="flex-1">
           <p className="text-sm text-gray-600 mb-3">
-            Ajoutez une photo de profil professionnelle pour inspirer confiance.
+            Add a professional profile photo to build trust.
           </p>
           <p className="text-xs text-gray-500 mb-4">
-            Formats acceptés : JPEG, PNG, WebP. Taille maximale : 2 Mo.
+            Accepted formats: JPEG, PNG, WebP. Maximum size: 2 MB.
           </p>
 
           <div className="flex gap-3">
@@ -157,7 +157,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               accept="image/jpeg,image/png,image/webp"
               onChange={handleFileSelect}
               className="hidden"
-              aria-label="Choisir une photo de profil"
+              aria-label="Choose a profile photo"
             />
             <button
               type="button"
@@ -168,12 +168,12 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               {uploading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Téléchargement en cours...
+                  Uploading...
                 </>
               ) : (
                 <>
                   <Camera className="w-4 h-4" />
-                  Changer la photo
+                  Change photo
                 </>
               )}
             </button>
@@ -187,12 +187,12 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
                 {deleting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Suppression...
+                    Deleting...
                   </>
                 ) : (
                   <>
                     <Trash2 className="w-4 h-4" />
-                    Supprimer
+                    Delete
                   </>
                 )}
               </button>

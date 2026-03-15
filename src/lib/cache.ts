@@ -8,12 +8,12 @@ const redisCache = new CacheService('sa:cache:')
 
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
-  services: 86400,  // 24 hours — les services ne changent quasi jamais
-  artisans: 3600,   // 1 hour — les profils artisans changent rarement
-  reviews: 3600,    // 1 hour — les avis changent rarement
-  locations: 604800,// 7 days — les communes ne changent jamais
+  services: 86400,  // 24 hours — services almost never change
+  artisans: 3600,   // 1 hour — attorney profiles rarely change
+  reviews: 3600,    // 1 hour — reviews rarely change
+  locations: 604800,// 7 days — locations never change
   stats: 86400,     // 24 hours — stats recalculated by daily cron
-  cms: 3600,        // 1 hour — contenu CMS change rarement
+  cms: 3600,        // 1 hour — CMS content rarely changes
 } as const
 
 // ISR Revalidation times (in seconds)

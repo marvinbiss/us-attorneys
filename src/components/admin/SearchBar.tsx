@@ -12,7 +12,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({
-  placeholder = 'Rechercher...',
+  placeholder = 'Search...',
   value: controlledValue,
   onChange,
   debounceMs = 300,
@@ -67,7 +67,7 @@ export function SearchBar({
         <button
           onClick={handleClear}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          aria-label="Effacer la recherche"
+          aria-label="Clear search"
         >
           <X className="w-4 h-4" />
         </button>

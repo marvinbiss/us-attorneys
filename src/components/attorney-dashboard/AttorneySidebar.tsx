@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, DollarSign, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
@@ -32,28 +32,28 @@ interface NavSection {
 
 const navSections: NavSection[] = [
   {
-    title: 'Activité',
+    title: 'Activity',
     items: [
-      { key: 'dashboard', href: '/attorney-dashboard/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
-      { key: 'demandes-recues', href: '/attorney-dashboard/demandes-recues', icon: FileText, label: 'Demandes reçues' },
-      { key: 'leads', href: '/attorney-dashboard/leads', icon: Inbox, label: 'Opportunités' },
-      { key: 'calendrier', href: '/attorney-dashboard/calendrier', icon: Calendar, label: 'Calendrier' },
+      { key: 'dashboard', href: '/attorney-dashboard/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+      { key: 'demandes-recues', href: '/attorney-dashboard/demandes-recues', icon: FileText, label: 'Received requests' },
+      { key: 'leads', href: '/attorney-dashboard/leads', icon: Inbox, label: 'Opportunities' },
+      { key: 'calendrier', href: '/attorney-dashboard/calendrier', icon: Calendar, label: 'Calendar' },
       { key: 'messages', href: '/attorney-dashboard/messages', icon: MessageSquare, label: 'Messages' },
     ],
   },
   {
-    title: 'Mon espace',
+    title: 'My space',
     items: [
       { key: 'portfolio', href: '/attorney-dashboard/portfolio', icon: ImageIcon, label: 'Portfolio' },
-      { key: 'statistiques', href: '/attorney-dashboard/statistiques', icon: TrendingUp, label: 'Statistiques' },
-      { key: 'avis-recus', href: '/attorney-dashboard/reviews-recus', icon: Star, label: 'Avis reçus' },
+      { key: 'statistiques', href: '/attorney-dashboard/statistiques', icon: TrendingUp, label: 'Statistics' },
+      { key: 'avis-recus', href: '/attorney-dashboard/reviews-recus', icon: Star, label: 'Reviews received' },
     ],
   },
   {
-    title: 'Paramètres',
+    title: 'Settings',
     items: [
-      { key: 'profil', href: '/attorney-dashboard/profil', icon: Settings, label: 'Mon profil' },
-      { key: 'abonnement', href: '/attorney-dashboard/abonnement', icon: Euro, label: 'Mon compte' },
+      { key: 'profil', href: '/attorney-dashboard/profil', icon: Settings, label: 'My profile' },
+      { key: 'abonnement', href: '/attorney-dashboard/abonnement', icon: DollarSign, label: 'My account' },
     ],
   },
 ]
@@ -129,7 +129,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
       return (
         <span
           role="status"
-          aria-label={`${newDemandesCount} nouvelle${newDemandesCount > 1 ? 's' : ''} demande${newDemandesCount > 1 ? 's' : ''}`}
+          aria-label={`${newDemandesCount} new request${newDemandesCount > 1 ? 's' : ''}`}
           className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full"
         >
           {newDemandesCount}
@@ -140,7 +140,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
       return (
         <span
           role="status"
-          aria-label={`${unreadMessagesCount} message${unreadMessagesCount > 1 ? 's' : ''} non lu${unreadMessagesCount > 1 ? 's' : ''}`}
+          aria-label={`${unreadMessagesCount} unread message${unreadMessagesCount > 1 ? 's' : ''}`}
           className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full"
         >
           {unreadMessagesCount}
@@ -200,7 +200,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
         type="button"
         onClick={() => setMobileOpen(true)}
         className="lg:hidden flex items-center gap-2 px-3 py-2 mb-2 bg-white rounded-lg shadow-sm text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-        aria-label="Ouvrir le menu"
+        aria-label="Open menu"
         aria-expanded={mobileOpen}
         aria-controls="mobile-sidebar"
       >
@@ -223,7 +223,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
         ref={mobileSidebarRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Menu principal artisan"
+        aria-label="Attorney main menu"
         onKeyDown={handleMobileKeyDown}
         className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl transform transition-transform duration-200 ease-in-out ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
@@ -238,7 +238,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
               type="button"
               onClick={() => setMobileOpen(false)}
               className="p-1 text-gray-500 hover:text-gray-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-              aria-label="Fermer le menu"
+              aria-label="Close menu"
             >
               <X className="w-5 h-5" aria-hidden="true" />
             </button>
@@ -246,7 +246,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
         </div>
         <nav
           role="navigation"
-          aria-label="Menu principal artisan"
+          aria-label="Attorney main menu"
           className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-56px)]"
         >
           {navContent}
@@ -256,7 +256,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
       {/* Desktop sidebar */}
       <nav
         role="navigation"
-        aria-label="Menu principal artisan"
+        aria-label="Attorney main menu"
         className="hidden lg:block bg-white rounded-xl shadow-sm p-2 sm:p-4 space-y-0.5 sm:space-y-1"
       >
         {/* Notifications */}
@@ -275,7 +275,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
             className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded"
           >
             <ExternalLink className="w-4 h-4" aria-hidden="true" />
-            Voir mon profil public
+            View my public profile
           </Link>
         </div>
       )}
@@ -287,15 +287,15 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
 
       {/* Additional links */}
       <div className="bg-white rounded-xl shadow-sm p-4 mt-4 hidden lg:block">
-        <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
+        <h4 className="font-medium text-gray-900 mb-3">Useful links</h4>
         <div className="space-y-2 text-sm">
           <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded">
             <Search className="w-4 h-4" aria-hidden="true" />
-            Parcourir les services
+            Browse services
           </Link>
           <Link href="/search" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded">
             <Search className="w-4 h-4" aria-hidden="true" />
-            Rechercher un artisan
+            Search for an attorney
           </Link>
         </div>
       </div>

@@ -6,11 +6,11 @@ import { FileText, X } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 interface StickyMobileCTAProps {
-  /** The service slug for the devis link */
+  /** The service slug for the quote link */
   specialtySlug?: string
-  /** The city slug for the devis link */
+  /** The city slug for the quote link */
   citySlug?: string
-  /** Custom CTA text (defaults to "Recevoir mes devis gratuits") */
+  /** Custom CTA text (defaults to "Get my free consultations") */
   ctaText?: string
   /** Custom href override */
   href?: string

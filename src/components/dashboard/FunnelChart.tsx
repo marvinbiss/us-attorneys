@@ -23,14 +23,14 @@ const stageColors: Record<string, string> = {
 }
 
 const stageLabels: Record<string, string> = {
-  created: 'Créés',
-  dispatched: 'Dispatchés',
-  viewed: 'Consultés',
-  quoted: 'Devis envoyé',
-  accepted: 'Acceptés',
-  completed: 'Terminés',
-  declined: 'Déclinés',
-  expired: 'Expirés',
+  created: 'Created',
+  dispatched: 'Dispatched',
+  viewed: 'Viewed',
+  quoted: 'Quoted',
+  accepted: 'Accepted',
+  completed: 'Completed',
+  declined: 'Declined',
+  expired: 'Expired',
 }
 
 export function FunnelChart({ steps, title }: FunnelChartProps) {

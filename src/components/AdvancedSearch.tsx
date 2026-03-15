@@ -35,18 +35,18 @@ interface AdvancedSearchProps {
 }
 
 const serviceCategories = [
-  'Plomberie',
-  'Electricite',
-  'Serrurerie',
-  'Peinture',
-  'Menuiserie',
-  'Carrelage',
-  'Maconnerie',
-  'Chauffage',
-  'Climatisation',
-  'Jardinage',
-  'Nettoyage',
-  'Demenagement',
+  'Personal Injury',
+  'Criminal Defense',
+  'Family Law',
+  'Immigration',
+  'Real Estate',
+  'Employment Law',
+  'Estate Planning',
+  'Bankruptcy',
+  'Business Law',
+  'Tax Law',
+  'Civil Litigation',
+  'Intellectual Property',
 ]
 
 const sortOptions = [
@@ -227,7 +227,7 @@ export default function AdvancedSearch({
               type="text"
               value={filters.location || ''}
               onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-              placeholder="City ou code postal"
+              placeholder="City or ZIP code"
               className={`w-40 outline-none text-gray-900 placeholder-gray-400 ${
                 variant === 'hero' ? 'py-3' : 'py-2'
               }`}

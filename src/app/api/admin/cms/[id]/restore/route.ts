@@ -100,7 +100,7 @@ export async function POST(
       )
     }
 
-    // Log d'audit
+    // Audit log
     await logAdminAction(auth.admin!.id, 'cms_page.restore', 'cms_page', id, { version_id, title: version.title })
 
     // Revalidate cached paths if the page is published

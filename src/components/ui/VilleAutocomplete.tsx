@@ -13,49 +13,14 @@ interface CitySuggestion {
   coordinates: [number, number]
 }
 
-async function searchCities(query: string): Promise<CitySuggestion[]> {
-  if (!query || query.length < 2) return []
-
-  try {
-    const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=8&autocomplete=1`
-    const response = await fetch(url)
-    if (!response.ok) return []
-    const data = await response.json()
-    return data.features?.map((f: {
-      properties: { id: string; city: string; context: string; label: string; postcode: string }
-      geometry: { coordinates: [number, number] }
-    }) => ({
-      id: f.properties.id,
-      city: f.properties.city || f.properties.label,
-      context: f.properties.context,
-      label: f.properties.label,
-      postcode: f.properties.postcode,
-      coordinates: f.geometry.coordinates
-    })) || []
-  } catch {
-    return []
-  }
+// TODO: Replace with US geocoding service (Census Geocoder, Google Places, or Mapbox)
+// French data.gouv.fr API removed — does not serve US locations
+async function searchCities(_query: string): Promise<CitySuggestion[]> {
+  return []
 }
 
-async function getLocationFromCoords(lon: number, lat: number): Promise<CitySuggestion | null> {
-  try {
-    const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
-    const response = await fetch(url)
-    if (!response.ok) return null
-    const data = await response.json()
-    const f = data.features?.[0]
-    if (!f) return null
-    return {
-      id: f.properties.id,
-      city: f.properties.city || f.properties.label,
-      context: f.properties.context,
-      label: f.properties.label,
-      postcode: f.properties.postcode,
-      coordinates: f.geometry.coordinates
-    }
-  } catch {
-    return null
-  }
+async function getLocationFromCoords(_lon: number, _lat: number): Promise<CitySuggestion | null> {
+  return null
 }
 
 interface VilleAutocompleteProps {
@@ -164,7 +129,7 @@ export function VilleAutocomplete({
   // Geolocation
   const handleGeolocation = async () => {
     if (!navigator.geolocation) {
-      alert('La geolocalisation n\'est pas supportee par votre navigateur')
+      alert('Geolocation is not supported by your browser')
       return
     }
 
@@ -190,7 +155,7 @@ export function VilleAutocomplete({
       },
       () => {
         setIsLocating(false)
-        alert('Impossible d\'obtenir votre position')
+        alert('Unable to get your location')
       },
       { timeout: 10000, enableHighAccuracy: true }
     )
@@ -207,12 +172,12 @@ export function VilleAutocomplete({
 
   // Popular cities for quick selection
   const popularCities = [
-    { name: 'Paris', postcode: '75001' },
-    { name: 'Lyon', postcode: '69001' },
-    { name: 'Marseille', postcode: '13001' },
-    { name: 'Toulouse', postcode: '31000' },
-    { name: 'Bordeaux', postcode: '33000' },
-    { name: 'Nantes', postcode: '44000' },
+    { name: 'New York', postcode: '10001' },
+    { name: 'Los Angeles', postcode: '90001' },
+    { name: 'Chicago', postcode: '60601' },
+    { name: 'Houston', postcode: '77001' },
+    { name: 'Miami', postcode: '33101' },
+    { name: 'Dallas', postcode: '75201' },
   ]
 
   return (
@@ -259,7 +224,7 @@ export function VilleAutocomplete({
               type="button"
               onClick={handleClear}
               className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label="Effacer"
+              aria-label="Clear"
             >
               <X className="w-4 h-4 text-gray-400" />
             </button>
@@ -272,8 +237,8 @@ export function VilleAutocomplete({
               onClick={handleGeolocation}
               disabled={isLocating || disabled}
               className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
-              aria-label="Utiliser ma position"
-              title="Utiliser ma position"
+              aria-label="Use my location"
+              title="Use my location"
             >
               {isLocating ? (
                 <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
@@ -331,7 +296,7 @@ export function VilleAutocomplete({
           ) : (
             <div className="p-3">
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
-                Villes populaires
+                Popular cities
               </div>
               <div className="grid grid-cols-2 gap-1">
                 {popularCities.map((city) => (

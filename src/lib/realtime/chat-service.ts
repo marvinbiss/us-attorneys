@@ -1,6 +1,6 @@
 /**
  * Real-time Chat Service using Supabase Realtime
- * WebSocket-based messaging between clients and artisans
+ * WebSocket-based messaging between clients and attorneys
  * Enhanced with edit, delete, reactions, threading, and file upload
  */
 

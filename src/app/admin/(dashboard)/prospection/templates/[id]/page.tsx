@@ -8,14 +8,14 @@ import { ArrowLeft, Save, Eye, Tag, Trash2, AlertCircle, X } from 'lucide-react'
 import type { ProspectionTemplate, ProspectionChannel, AudienceType } from '@/types/prospection'
 
 const VARIABLES = [
-  { key: 'contact_name', label: 'Nom' },
-  { key: 'company_name', label: 'Entreprise' },
+  { key: 'contact_name', label: 'Name' },
+  { key: 'company_name', label: 'Company' },
   { key: 'city', label: 'City' },
-  { key: 'department', label: 'Département' },
+  { key: 'department', label: 'State' },
   { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'Téléphone' },
-  { key: 'date', label: 'Date du jour' },
-  { key: 'unsubscribe_link', label: 'Lien désinscription' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'date', label: 'Today\'s date' },
+  { key: 'unsubscribe_link', label: 'Unsubscribe link' },
 ]
 
 export default function TemplateDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -47,7 +47,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       const res = await fetch(`/api/admin/prospection/templates/${id}`)
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setError(data?.error?.message || `Erreur ${res.status}`)
+        setError(data?.error?.message || `Error ${res.status}`)
         return
       }
       const data = await res.json()
@@ -61,10 +61,10 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         setBody(t.body)
         setAiPrompt(t.ai_system_prompt || '')
       } else {
-        setError(data.error?.message || 'Modèle non trouvé')
+        setError(data.error?.message || 'Template not found')
       }
     } catch {
-      setError('Impossible de charger le modèle')
+      setError('Unable to load template')
     } finally {
       setLoading(false)
     }
@@ -88,13 +88,13 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors de la prévisualisation')
+        setActionError(data?.error?.message || 'Error generating preview')
         return
       }
       const data = await res.json()
       if (data.success) setPreview(data.data.rendered_body)
     } catch {
-      setActionError('Impossible de générer l\'aperçu')
+      setActionError('Unable to generate preview')
     }
   }
 
@@ -119,19 +119,19 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors de la sauvegarde')
+        setActionError(data?.error?.message || 'Error saving template')
         return
       }
       const data = await res.json()
       if (data.success) {
         setTemplate(data.data)
-        setSuccessMsg('Modèle mis à jour avec succès')
+        setSuccessMsg('Template updated successfully')
         setTimeout(() => setSuccessMsg(null), 3000)
       } else {
-        setActionError(data.error?.message || 'Erreur')
+        setActionError(data.error?.message || 'Error')
       }
     } catch {
-      setActionError('Impossible de sauvegarder le modèle')
+      setActionError('Unable to save template')
     } finally {
       setSaving(false)
     }
@@ -146,7 +146,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setActionError(data?.error?.message || 'Erreur lors de la suppression')
+        setActionError(data?.error?.message || 'Error deleting template')
         setDeleting(false)
         return
       }
@@ -154,11 +154,11 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       if (data.success) {
         router.push('/admin/prospection/templates')
       } else {
-        setActionError(data.error?.message || 'Erreur')
+        setActionError(data.error?.message || 'Error')
         setDeleting(false)
       }
     } catch {
-      setActionError('Impossible de supprimer le modèle')
+      setActionError('Unable to delete template')
       setDeleting(false)
     }
   }
@@ -181,14 +181,14 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       <div>
         <div className="mb-6">
           <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-            <ArrowLeft className="w-4 h-4" /> Retour aux modèles
+            <ArrowLeft className="w-4 h-4" /> Back to templates
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error || 'Modèle non trouvé'}
+          {error || 'Template not found'}
         </div>
       </div>
     )
@@ -198,9 +198,9 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux modèles
+          <ArrowLeft className="w-4 h-4" /> Back to templates
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Modifier le modèle</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Edit template</h1>
       </div>
 
       <ProspectionNav />
@@ -210,7 +210,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
+          <button onClick={() => setActionError(null)} aria-label="Close error message" className="ml-auto"><X className="w-4 h-4" /></button>
         </div>
       )}
       {successMsg && (
@@ -223,19 +223,19 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         {/* Form */}
         <div className="lg:col-span-2 bg-white rounded-lg border p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Nom du modèle</label>
+            <label className="block text-sm font-medium mb-1">Template name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg text-sm"
-              placeholder="Ex: Invitation artisan plombier"
+              placeholder="E.g., Attorney invitation"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Canal</label>
+              <label className="block text-sm font-medium mb-1">Channel</label>
               <select
                 value={channel}
                 onChange={(e) => setChannel(e.target.value as ProspectionChannel)}
@@ -247,74 +247,74 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Audience (optionnel)</label>
+              <label className="block text-sm font-medium mb-1">Audience (optional)</label>
               <select
                 value={audienceType}
                 onChange={(e) => setAudienceType(e.target.value as AudienceType | '')}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               >
-                <option value="">Toutes</option>
-                <option value="artisan">Artisans</option>
+                <option value="">All</option>
+                <option value="artisan">Attorneys</option>
                 <option value="client">Clients</option>
-                <option value="mairie">Mairies</option>
+                <option value="mairie">Municipalities</option>
               </select>
             </div>
           </div>
 
           {channel === 'email' && (
             <div>
-              <label className="block text-sm font-medium mb-1">Sujet</label>
+              <label className="block text-sm font-medium mb-1">Subject</label>
               <input
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
-                placeholder="Ex: Rejoignez ServicesArtisans, {{contact_name}} !"
+                placeholder="Ex: Rejoignez US Attorneys, {{contact_name}} !"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium mb-1">Corps du message</label>
+            <label className="block text-sm font-medium mb-1">Message body</label>
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               rows={8}
               className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
-              placeholder={channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'}
+              placeholder={channel === 'sms' ? 'Max 160 characters for 1 SMS' : 'Message content...'}
             />
             {channel === 'sms' && (
-              <p className="text-xs text-gray-400 mt-1">{body.length}/160 caract&egrave;res ({Math.ceil(body.length / 160) || 1} SMS)</p>
+              <p className="text-xs text-gray-400 mt-1">{body.length}/160 characters ({Math.ceil(body.length / 160) || 1} SMS)</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Prompt IA pour les r&eacute;ponses (optionnel)</label>
+            <label className="block text-sm font-medium mb-1">AI prompt for replies (optional)</label>
             <textarea
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border rounded-lg text-sm"
-              placeholder="Instructions sp&eacute;cifiques pour l'IA quand elle r&eacute;pond aux contacts de cette campagne..."
+              placeholder="Specific instructions for the AI when replying to contacts from this campaign..."
             />
           </div>
 
           <div className="flex gap-2 pt-4">
             <button onClick={handlePreview} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
-              <Eye className="w-4 h-4" /> Aper&ccedil;u
+              <Eye className="w-4 h-4" /> Preview
             </button>
             <button
               onClick={handleSave}
               disabled={saving || !name.trim() || !body.trim()}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
-              <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+              <Save className="w-4 h-4" /> {saving ? 'Saving...' : 'Save'}
             </button>
             <button
               onClick={() => setShowDeleteConfirm(true)}
               className="flex items-center gap-2 px-4 py-2 text-sm border border-red-200 text-red-600 rounded-lg hover:bg-red-50 ml-auto"
             >
-              <Trash2 className="w-4 h-4" /> Supprimer
+              <Trash2 className="w-4 h-4" /> Delete
             </button>
           </div>
 
@@ -322,7 +322,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
           {showDeleteConfirm && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-700 mb-3">
-                Voulez-vous vraiment supprimer le modèle &laquo; {template.name} &raquo; ?
+                Are you sure you want to delete the template &laquo; {template.name} &raquo;?
               </p>
               <div className="flex gap-2">
                 <button
@@ -330,13 +330,13 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   disabled={deleting}
                   className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
                 >
-                  {deleting ? 'Suppression...' : 'Confirmer'}
+                  {deleting ? 'Deleting...' : 'Confirm'}
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
                   className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
                 >
-                  Annuler
+                  Cancel
                 </button>
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         <div className="space-y-4">
           <div className="bg-white rounded-lg border p-4">
             <h3 className="text-sm font-medium flex items-center gap-2 mb-3">
-              <Tag className="w-4 h-4" /> Variables disponibles
+              <Tag className="w-4 h-4" /> Available variables
             </h3>
             <div className="space-y-1">
               {VARIABLES.map((v) => (
@@ -365,32 +365,32 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
 
           {preview && (
             <div className="bg-white rounded-lg border p-4">
-              <h3 className="text-sm font-medium mb-3">Aper&ccedil;u</h3>
+              <h3 className="text-sm font-medium mb-3">Preview</h3>
               <div className="text-sm bg-gray-50 rounded p-3 whitespace-pre-wrap">{preview}</div>
             </div>
           )}
 
           {/* Template metadata */}
           <div className="bg-white rounded-lg border p-4">
-            <h3 className="text-sm font-medium mb-3">Informations</h3>
+            <h3 className="text-sm font-medium mb-3">Information</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Cr&eacute;&eacute; le</span>
-                <span className="text-gray-700">{new Date(template.created_at).toLocaleDateString('fr-FR')}</span>
+                <span className="text-gray-500">Created on</span>
+                <span className="text-gray-700">{new Date(template.created_at).toLocaleDateString('en-US')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Modifi&eacute; le</span>
-                <span className="text-gray-700">{new Date(template.updated_at).toLocaleDateString('fr-FR')}</span>
+                <span className="text-gray-500">Updated on</span>
+                <span className="text-gray-700">{new Date(template.updated_at).toLocaleDateString('en-US')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Actif</span>
+                <span className="text-gray-500">Active</span>
                 <span className={template.is_active ? 'text-green-600' : 'text-red-600'}>
-                  {template.is_active ? 'Oui' : 'Non'}
+                  {template.is_active ? 'Yes' : 'No'}
                 </span>
               </div>
               {template.variables.length > 0 && (
                 <div>
-                  <span className="text-gray-500">Variables utilis&eacute;es</span>
+                  <span className="text-gray-500">Variables used</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {template.variables.map((v) => (
                       <span key={v} className="text-xs px-1.5 py-0.5 bg-gray-100 rounded">{v}</span>

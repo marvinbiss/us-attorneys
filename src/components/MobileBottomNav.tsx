@@ -28,11 +28,11 @@ export default function MobileBottomNav() {
     return () => observer.disconnect()
   }, [])
 
-  // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
+  // Don't display in logged-in areas (they have their own nav)
   const hideOnPages = ['/client-dashboard', '/attorney-dashboard', '/admin']
   const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
 
-  // Masquer quand le menu mobile est ouvert ou quand le widget estimation est ouvert
+  // Hide when the mobile menu is open or when the estimation widget is open
   if (shouldHide || isMenuOpen || estimationOpen) return null
 
   return (

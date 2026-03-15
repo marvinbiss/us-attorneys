@@ -41,10 +41,10 @@ export function UpgradeButton({ planId, className }: UpgradeButtonProps) {
       className={className}
     >
       {planId === 'free'
-        ? 'Plan gratuit'
+        ? 'Free plan'
         : isLoading
-        ? 'Chargement...'
-        : 'Choisir ce plan'}
+        ? 'Loading...'
+        : 'Choose this plan'}
     </Button>
   )
 }

@@ -25,17 +25,17 @@ interface PendingReportsProps {
 
 const reasonLabels: Record<string, string> = {
   spam: 'Spam',
-  inappropriate: 'Inapproprié',
-  fake: 'Faux contenu',
-  harassment: 'Harcèlement',
-  other: 'Autre',
+  inappropriate: 'Inappropriate',
+  fake: 'Fake content',
+  harassment: 'Harassment',
+  other: 'Other',
 }
 
 const targetLabels: Record<string, string> = {
-  review: 'Avis',
-  user: 'Utilisateur',
-  provider: 'Artisan',
-  artisan: 'Artisan',
+  review: 'Review',
+  user: 'User',
+  provider: 'Attorney',
+  artisan: 'Attorney',
   message: 'Message',
 }
 
@@ -48,7 +48,7 @@ const reasonColors: Record<string, string> = {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('fr-FR', {
+  return new Date(iso).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -98,12 +98,12 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
         body: { action, ...(notes ? { resolution: notes } : {}) },
       })
       setToast({
-        message: action === 'resolve' ? 'Signalement résolu' : 'Signalement rejeté',
+        message: action === 'resolve' ? 'Report resolved' : 'Report dismissed',
         type: 'success',
       })
       onMutate()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur lors du traitement'
+      const message = err instanceof Error ? err.message : 'Error processing report'
       setToast({ message, type: 'error' })
     } finally {
       setActionLoading(null)
@@ -114,10 +114,10 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
     <>
       <Toast toast={toast} onClose={() => setToast(null)} />
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Signalements en attente">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Pending reports">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-gray-900">Signalements</h3>
+            <h3 className="font-semibold text-gray-900">Reports</h3>
             {reports.length > 0 && (
               <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-medium">
                 {reports.length}
@@ -128,7 +128,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
             href="/admin/signalements"
             className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
           >
-            Voir tout
+            View all
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -138,8 +138,8 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
           ) : reports.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-300" />
-              <p className="font-medium">Aucun signalement en attente</p>
-              <p className="text-sm mt-1">Tous les signalements ont été traités</p>
+              <p className="font-medium">No pending reports</p>
+              <p className="text-sm mt-1">All reports have been processed</p>
             </div>
           ) : (
             reports.map((report) => (
@@ -169,8 +169,8 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
                       onClick={() => handleAction(report.id, 'resolve')}
                       disabled={actionLoading === report.id}
                       className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
-                      title="Résoudre"
-                      aria-label="Résoudre ce signalement"
+                      title="Resolve"
+                      aria-label="Resolve this report"
                     >
                       {actionLoading === report.id ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -182,8 +182,8 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
                       onClick={() => handleAction(report.id, 'dismiss')}
                       disabled={actionLoading === report.id}
                       className="p-2 text-gray-400 hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50"
-                      title="Rejeter"
-                      aria-label="Rejeter ce signalement"
+                      title="Dismiss"
+                      aria-label="Dismiss this report"
                     >
                       <XCircle className="w-4 h-4" />
                     </button>
@@ -199,20 +199,20 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
         isOpen={modal.open}
         onClose={() => { setModal({ open: false, reportId: '', action: 'resolve' }); setResolutionNotes('') }}
         onConfirm={confirmAction}
-        title={modal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
-        message={`Êtes-vous sûr de vouloir ${modal.action === 'resolve' ? 'résoudre' : 'rejeter'} ce signalement ?`}
-        confirmText={modal.action === 'resolve' ? 'Résoudre' : 'Rejeter'}
+        title={modal.action === 'resolve' ? 'Resolve report' : 'Dismiss report'}
+        message={`Are you sure you want to ${modal.action === 'resolve' ? 'resolve' : 'dismiss'} this report?`}
+        confirmText={modal.action === 'resolve' ? 'Resolve' : 'Dismiss'}
         variant={modal.action === 'resolve' ? 'success' : 'warning'}
       >
         <div className="mb-4">
           <label htmlFor="resolution-notes" className="block text-sm font-medium text-gray-700 mb-1">
-            Notes de résolution <span className="text-gray-400 font-normal">(optionnel)</span>
+            Resolution notes <span className="text-gray-400 font-normal">(optional)</span>
           </label>
           <textarea
             id="resolution-notes"
             value={resolutionNotes}
             onChange={(e) => setResolutionNotes(e.target.value)}
-            placeholder="Décrivez la raison de votre décision..."
+            placeholder="Describe the reason for your decision..."
             maxLength={1000}
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"

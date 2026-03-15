@@ -75,11 +75,11 @@ export default function BookingCalendar({
   const firstDayOfMonth = new Date(year, month, 1).getDay()
 
   const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ]
 
-  const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   // Fetch available slots from API when month changes
   const fetchAvailableSlots = useCallback(async (year: number, month: number) => {
@@ -90,14 +90,14 @@ export default function BookingCalendar({
       const response = await fetch(`/api/bookings?attorneyId=${attorneyId}&month=${monthStr}`)
 
       if (!response.ok) {
-        throw new Error('Erreur lors du chargement des disponibilités')
+        throw new Error('Failed to load availability')
       }
 
       const data = await response.json()
       setAvailableSlots(data.slots || {})
     } catch (err) {
       console.error('Error fetching slots:', err)
-      setError('Impossible de charger les disponibilités. Veuillez réessayer.')
+      setError('Unable to load availability. Please try again.')
     } finally {
       setIsLoadingSlots(false)
     }
@@ -154,7 +154,7 @@ export default function BookingCalendar({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la réservation')
+        throw new Error(data.error || 'Booking failed')
       }
 
       const bookingData: BookingData = {
@@ -167,7 +167,7 @@ export default function BookingCalendar({
       setStep('confirmation')
     } catch (err) {
       console.error('Booking error:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de la réservation')
+      setError(err instanceof Error ? err.message : 'Booking failed')
     } finally {
       setIsSubmitting(false)
     }
@@ -180,16 +180,16 @@ export default function BookingCalendar({
           <Check className="w-8 h-8 text-green-600" />
         </div>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          Réservation confirmée !
+          Booking confirmed!
         </h3>
         <p className="text-gray-600 mb-6">
-          Votre rendez-vous avec {attorneyName} est confirmé.
+          Your appointment with {attorneyName} is confirmed.
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
             <Calendar className="w-5 h-5 text-blue-600" />
             <span className="font-medium text-gray-900">
-              {selectedDate?.toLocaleDateString('fr-FR', {
+              {selectedDate?.toLocaleDateString('en-US', {
                 weekday: 'long',
                 day: 'numeric',
                 month: 'long',
@@ -210,7 +210,7 @@ export default function BookingCalendar({
           </div>
         </div>
         <p className="text-sm text-gray-500 mb-6">
-          Un email de confirmation a été envoyé à {formData.clientEmail}
+          A confirmation email has been sent to {formData.clientEmail}
         </p>
         <button
           onClick={() => {
@@ -221,7 +221,7 @@ export default function BookingCalendar({
           }}
           className="text-blue-600 hover:underline"
         >
-          Faire une autre réservation
+          Book another appointment
         </button>
       </div>
     )
@@ -231,7 +231,7 @@ export default function BookingCalendar({
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
-        <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
+        <h3 className="text-lg font-semibold mb-1">Book an appointment</h3>
         <p className="text-blue-100 text-sm">{attorneyName} - {specialtyName}</p>
       </div>
 
@@ -308,7 +308,7 @@ export default function BookingCalendar({
           {isLoadingSlots && (
             <div className="flex items-center justify-center py-4 text-gray-500">
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              <span className="text-sm">Chargement des disponibilités...</span>
+              <span className="text-sm">Loading availability...</span>
             </div>
           )}
 
@@ -316,11 +316,11 @@ export default function BookingCalendar({
           <div className="flex items-center gap-4 text-xs text-gray-500 mb-6">
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 rounded bg-green-100 border border-green-200" />
-              <span>Disponible</span>
+              <span>Available</span>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 rounded bg-gray-100" />
-              <span>Indisponible</span>
+              <span>Unavailable</span>
             </div>
           </div>
 
@@ -328,7 +328,7 @@ export default function BookingCalendar({
           {selectedDate && (
             <div className="border-t pt-4">
               <h4 className="font-medium text-gray-900 mb-3">
-                Créneaux disponibles le {selectedDate.toLocaleDateString('fr-FR', {
+                Available slots on {selectedDate.toLocaleDateString('en-US', {
                   weekday: 'long',
                   day: 'numeric',
                   month: 'long',
@@ -359,7 +359,7 @@ export default function BookingCalendar({
               onClick={() => setStep('form')}
               className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
-              Continuer
+              Continue
             </button>
           )}
         </div>
@@ -380,7 +380,7 @@ export default function BookingCalendar({
             <div className="flex items-center gap-3 text-blue-700">
               <Calendar className="w-5 h-5" />
               <span className="font-medium">
-                {selectedDate?.toLocaleDateString('fr-FR', {
+                {selectedDate?.toLocaleDateString('en-US', {
                   weekday: 'long',
                   day: 'numeric',
                   month: 'long',
@@ -397,7 +397,7 @@ export default function BookingCalendar({
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Votre nom *
+                Your name *
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -407,14 +407,14 @@ export default function BookingCalendar({
                   value={formData.clientName}
                   onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Jean Dupont"
+                  placeholder="John Smith"
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Téléphone *
+                Phone *
               </label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -424,7 +424,7 @@ export default function BookingCalendar({
                   value={formData.clientPhone}
                   onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="06 12 34 56 78"
+                  placeholder="(555) 123-4567"
                 />
               </div>
             </div>
@@ -441,14 +441,14 @@ export default function BookingCalendar({
                   value={formData.clientEmail}
                   onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="jean@exemple.fr"
+                  placeholder="john@example.com"
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Message (optionnel)
+                Message (optional)
               </label>
               <div className="relative">
                 <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -457,7 +457,7 @@ export default function BookingCalendar({
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   rows={3}
-                  placeholder="Décrivez brièvement votre besoin..."
+                  placeholder="Briefly describe your needs..."
                 />
               </div>
             </div>
@@ -466,7 +466,7 @@ export default function BookingCalendar({
           <div className="flex items-start gap-2 mt-4 p-3 bg-yellow-50 rounded-lg">
             <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-yellow-700">
-              En confirmant, vous acceptez d'être contacté par {attorneyName} pour confirmer les détails du rendez-vous.
+              By confirming, you agree to be contacted by {attorneyName} to finalize appointment details.
             </p>
           </div>
 
@@ -476,14 +476,14 @@ export default function BookingCalendar({
               onClick={() => setStep('calendar')}
               className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50"
             >
-              Retour
+              Back
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
               className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Confirmation...' : 'Confirmer le RDV'}
+              {isSubmitting ? 'Confirming...' : 'Confirm booking'}
             </button>
           </div>
         </form>

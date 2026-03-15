@@ -59,7 +59,7 @@ export async function GET() {
     const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
 
     // Step 2: fetch reviews for those bookings
-    // Note: 'devis' table does not exist (TODO: re-enable join when reconciled)
+    // Note: 'devis' table does not exist (TODO: re-enable join when quotes table is reconciled)
     // Note: profiles does not have company_name or avatar_url
     const { data: avisPublies, error: avisError } = await supabase
       .from('reviews')
@@ -79,24 +79,24 @@ export async function GET() {
       )
     }
 
-    // TODO: table 'devis' does not exist — pending reviews from completed devis disabled
+    // TODO: table 'devis' does not exist — pending reviews from completed quotes disabled
     const avisEnAttente: unknown[] = []
 
     // Format published reviews
-    const formattedAvisPublies = avisPublies?.map(r => ({
+    const formattedPublishedReviews = avisPublies?.map(r => ({
       id: r.id,
-      artisan: r.artisan?.full_name || 'Attorney',
+      attorney: r.artisan?.full_name || 'Attorney',
       attorney_id: r.attorney_id,
       service: (r.booking as { service_name?: string } | null)?.service_name || null,
       date: r.created_at,
-      note: r.rating,
-      commentaire: r.comment,
-      reponse: r.artisan_response,
+      rating: r.rating,
+      comment: r.comment,
+      response: r.artisan_response,
     })) || []
 
     return NextResponse.json({
-      avisPublies: formattedAvisPublies,
-      avisEnAttente,
+      publishedReviews: formattedPublishedReviews,
+      pendingReviews: avisEnAttente,
     })
   } catch (error) {
     logger.error('Client avis GET error:', error)

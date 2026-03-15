@@ -137,7 +137,7 @@ export function SavedSearches({
                         <span className="flex items-center gap-1">
                           <MapPin className="w-3 h-3" />
                           {search.filters.location}
-                          {search.filters.radius && ` (${search.filters.radius}km)`}
+                          {search.filters.radius && ` (${search.filters.radius} mi)`}
                         </span>
                       )}
                     </div>

@@ -33,7 +33,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
   const hasStructuredData = structuredData && Object.keys(structuredData).length > 0
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Aperçu de la page" className="fixed inset-0 z-50 overflow-y-auto">
+    <div role="dialog" aria-modal="true" aria-label="Page preview" className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-screen items-start justify-center p-4">
         {/* Backdrop */}
         <div
@@ -47,11 +47,11 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <div className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-gray-500" />
-              <h2 className="text-lg font-semibold text-gray-900">Aperçu</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
             </div>
             <button
               onClick={onClose}
-              aria-label="Fermer"
+              aria-label="Close"
               className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
@@ -66,7 +66,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
             {/* Blog metadata */}
             {(author || readTime) && (
               <p className="text-sm text-gray-500 mb-4">
-                {author && <>Par {author}</>}
+                {author && <>By {author}</>}
                 {author && readTime && <> &middot; </>}
                 {readTime && <>{readTime}</>}
               </p>
@@ -101,7 +101,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
             ) : hasStructuredData ? (
               <div className="space-y-4">
                 <p className="text-sm text-gray-500 italic mb-4">
-                  Aucun contenu HTML. Résumé des données structurées :
+                  No HTML content. Structured data summary:
                 </p>
                 <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 overflow-auto max-h-96 whitespace-pre-wrap">
                   {JSON.stringify(structuredData, null, 2)}
@@ -111,7 +111,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
               <div className="text-center py-12">
                 <Eye className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500">
-                  Aucun contenu à afficher. Commencez à rédiger dans l&apos;éditeur.
+                  No content to display. Start writing in the editor.
                 </p>
               </div>
             )}

@@ -109,7 +109,7 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
   const serviceCategory = getServiceCategory(specialtySlug)
   const cards: React.ReactNode[] = []
 
-  // --- Inondation ---
+  // --- Flood ---
   if (locationData.risque_inondation) {
     cards.push(
       <div key="inondation" className={`rounded-lg border-l-4 p-4 ${getRiskColor('high')}`}>
@@ -131,7 +131,7 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
     )
   }
 
-  // --- Argile ---
+  // --- Clay ---
   if (locationData.risque_argile) {
     const argileLevel = locationData.risque_argile === 'fort' ? 'high'
       : locationData.risque_argile === 'moyen' ? 'medium' : 'low'
@@ -156,7 +156,7 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
     )
   }
 
-  // --- Zone sismique ---
+  // --- Seismic zone ---
   if (locationData.zone_sismique && locationData.zone_sismique >= 2) {
     const sismiqueLevel = locationData.zone_sismique >= 4 ? 'high'
       : locationData.zone_sismique === 3 ? 'medium' : 'low'
@@ -266,7 +266,7 @@ export default function GeorisquesInsights({ locationData, villeName, specialtyS
   return (
     <section className="mt-8">
       <h3 className="mb-4 text-lg font-semibold text-gray-900">
-        Risques naturels à {villeName}
+        Natural hazards in {villeName}
       </h3>
       <div className="space-y-3">
         {cards}

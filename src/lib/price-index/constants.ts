@@ -1,6 +1,6 @@
 /**
- * Constantes pour le Baromètre des Artisans
- * Métiers, régions, départements — mapping pour les URL propres
+ * Constants for the Attorney Barometer
+ * Practice areas, regions, states — mapping for clean URLs
  */
 
 // ---------------------------------------------------------------------------

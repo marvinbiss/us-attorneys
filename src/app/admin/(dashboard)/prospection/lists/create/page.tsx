@@ -58,7 +58,7 @@ export default function CreateListPage() {
   const validate = (): boolean => {
     setNameError(null)
     if (!name.trim()) {
-      setNameError('Le nom est requis')
+      setNameError('Name is required')
       return false
     }
     return true
@@ -92,7 +92,7 @@ export default function CreateListPage() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setError(data?.error?.message || `Erreur ${res.status}`)
+        setError(data?.error?.message || `Error ${res.status}`)
         return
       }
 
@@ -100,10 +100,10 @@ export default function CreateListPage() {
       if (data.success) {
         router.push('/admin/prospection/lists')
       } else {
-        setError(data.error?.message || 'Erreur lors de la sauvegarde')
+        setError(data.error?.message || 'Error saving list')
       }
     } catch {
-      setError('Impossible de sauvegarder la liste')
+      setError('Unable to save list')
     } finally {
       setSaving(false)
     }
@@ -113,9 +113,9 @@ export default function CreateListPage() {
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/lists" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux listes
+          <ArrowLeft className="w-4 h-4" /> Back to lists
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouvelle liste</h1>
+        <h1 className="text-2xl font-bold text-gray-900">New list</h1>
       </div>
 
       <ProspectionNav />
@@ -130,13 +130,13 @@ export default function CreateListPage() {
       <div className="bg-white rounded-lg border p-6 space-y-4 max-w-2xl">
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium mb-1">Nom de la liste <span className="text-red-500">*</span></label>
+          <label className="block text-sm font-medium mb-1">List name <span className="text-red-500">*</span></label>
           <input
             type="text"
             value={name}
             onChange={(e) => { setName(e.target.value); setNameError(null) }}
             className={`w-full px-3 py-2 border rounded-lg text-sm ${nameError ? 'border-red-300' : ''}`}
-            placeholder="Ex: Artisans plombiers Ile-de-France"
+            placeholder="E.g., Personal injury attorneys New York"
           />
           {nameError && <p className="text-xs text-red-500 mt-1">{nameError}</p>}
         </div>
@@ -149,13 +149,13 @@ export default function CreateListPage() {
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             className="w-full px-3 py-2 border rounded-lg text-sm"
-            placeholder="Description optionnelle de cette liste..."
+            placeholder="Optional description of this list..."
           />
         </div>
 
         {/* Type */}
         <div>
-          <label className="block text-sm font-medium mb-2">Type de liste</label>
+          <label className="block text-sm font-medium mb-2">List type</label>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -166,8 +166,8 @@ export default function CreateListPage() {
                 onChange={() => setListType('static')}
                 className="text-blue-600"
               />
-              <span className="text-sm">Statique</span>
-              <span className="text-xs text-gray-400">- ajout manuel des contacts</span>
+              <span className="text-sm">Static</span>
+              <span className="text-xs text-gray-400">- manually add contacts</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -178,8 +178,8 @@ export default function CreateListPage() {
                 onChange={() => setListType('dynamic')}
                 className="text-blue-600"
               />
-              <span className="text-sm">Dynamique</span>
-              <span className="text-xs text-gray-400">- bas&eacute;e sur des filtres</span>
+              <span className="text-sm">Dynamic</span>
+              <span className="text-xs text-gray-400">- based on filters</span>
             </label>
           </div>
         </div>
@@ -187,30 +187,30 @@ export default function CreateListPage() {
         {/* Dynamic filters */}
         {listType === 'dynamic' && (
           <div className="border-t pt-4 space-y-4">
-            <h3 className="text-sm font-medium text-gray-700">Crit&egrave;res de filtrage</h3>
+            <h3 className="text-sm font-medium text-gray-700">Filter criteria</h3>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Type de contact</label>
+              <label className="block text-sm font-medium mb-1">Contact type</label>
               <select
                 value={filterContactType}
                 onChange={(e) => setFilterContactType(e.target.value as ContactType | '')}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               >
-                <option value="">Tous</option>
-                <option value="artisan">Artisans</option>
+                <option value="">All</option>
+                <option value="artisan">Attorneys</option>
                 <option value="client">Clients</option>
-                <option value="mairie">Mairies</option>
+                <option value="mairie">Municipalities</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">D&eacute;partement</label>
+              <label className="block text-sm font-medium mb-1">State</label>
               <select
                 value={filterDepartment}
                 onChange={(e) => setFilterDepartment(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               >
-                <option value="">Tous</option>
+                <option value="">All</option>
                 {DEPARTMENTS.map((d) => (
                   <option key={d} value={d}>{d}</option>
                 ))}
@@ -218,13 +218,13 @@ export default function CreateListPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">R&eacute;gion</label>
+              <label className="block text-sm font-medium mb-1">Region</label>
               <select
                 value={filterRegion}
                 onChange={(e) => setFilterRegion(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               >
-                <option value="">Toutes</option>
+                <option value="">All</option>
                 {REGIONS.map((r) => (
                   <option key={r} value={r}>{r}</option>
                 ))}
@@ -239,14 +239,14 @@ export default function CreateListPage() {
             href="/admin/prospection/lists"
             className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
           >
-            Annuler
+            Cancel
           </Link>
           <button
             onClick={handleSave}
             disabled={saving || !name.trim()}
             className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+            <Save className="w-4 h-4" /> {saving ? 'Saving...' : 'Save'}
           </button>
         </div>
       </div>

@@ -25,7 +25,7 @@ function formatSiret(siret: string): string {
   return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9, 14)}`
 }
 
-/** Format creation date to French locale — full date */
+/** Format creation date to US locale — full date */
 function formatCreationDate(dateStr: string): string {
   try {
     const date = new Date(dateStr)
@@ -129,7 +129,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
             </div>
           )}
 
-          {/* Date de création — prominent */}
+          {/* Creation date — prominent */}
           {artisan.creation_date && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50/60 border border-amber-100 hover:bg-amber-50 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
@@ -155,7 +155,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
             </div>
           )}
 
-          {/* Forme juridique */}
+          {/* Legal form */}
           {artisan.legal_form && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
@@ -172,7 +172,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
             </div>
           )}
 
-          {/* Effectif / nombre d'employés — prominent */}
+          {/* Team size / headcount — prominent */}
           {hasEmployees && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-clay-50/50 border border-clay-100 hover:bg-clay-50/80 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">

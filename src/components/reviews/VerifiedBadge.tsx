@@ -101,9 +101,9 @@ export function TrustScore({
 }: TrustScoreProps) {
   const getScoreConfig = (score: number) => {
     if (score >= 80) return { label: 'Excellent', className: 'trust-score-excellent', color: 'bg-green-500' }
-    if (score >= 60) return { label: 'Bon', className: 'trust-score-good', color: 'bg-blue-500' }
-    if (score >= 40) return { label: 'Moyen', className: 'trust-score-fair', color: 'bg-amber-500' }
-    return { label: 'Faible', className: 'trust-score-poor', color: 'bg-red-500' }
+    if (score >= 60) return { label: 'Good', className: 'trust-score-good', color: 'bg-blue-500' }
+    if (score >= 40) return { label: 'Fair', className: 'trust-score-fair', color: 'bg-amber-500' }
+    return { label: 'Low', className: 'trust-score-poor', color: 'bg-red-500' }
   }
 
   const config = getScoreConfig(score)
@@ -139,7 +139,7 @@ const levelConfig = {
   basic: { label: 'Verified', className: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle },
   standard: { label: 'Listed+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
   premium: { label: 'Premium', className: 'bg-amber-100 text-amber-700 border-amber-200', icon: Star },
-  enterprise: { label: 'Entreprise', className: 'bg-slate-100 text-slate-700 border-slate-200', icon: Building2 },
+  enterprise: { label: 'Enterprise', className: 'bg-slate-100 text-slate-700 border-slate-200', icon: Building2 },
 }
 
 export function VerificationLevelBadge({
@@ -206,9 +206,9 @@ interface KYCStatusBadgeProps {
 
 const kycStatusConfig = {
   verified: { label: 'Verified', className: 'kyc-status-verified', icon: CheckCircle },
-  pending: { label: 'En cours', className: 'kyc-status-pending', icon: null },
+  pending: { label: 'Pending', className: 'kyc-status-pending', icon: null },
   rejected: { label: 'Rejected', className: 'kyc-status-rejected', icon: null },
-  not_started: { label: 'Non soumis', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
+  not_started: { label: 'Not submitted', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
 }
 
 export function KYCStatusBadge({
@@ -242,13 +242,13 @@ interface EscrowStatusBadgeProps {
 }
 
 const escrowStatusConfig = {
-  created: { label: 'Créé', className: 'bg-gray-100 text-gray-700' },
-  funded: { label: 'Financé', className: 'escrow-funded' },
-  in_progress: { label: 'En cours', className: 'escrow-in-progress' },
-  work_completed: { label: 'Travaux terminés', className: 'bg-blue-100 text-blue-700' },
-  released: { label: 'Libéré', className: 'escrow-completed' },
-  disputed: { label: 'Litige', className: 'escrow-disputed' },
-  refunded: { label: 'Remboursé', className: 'bg-purple-100 text-purple-700' },
+  created: { label: 'Created', className: 'bg-gray-100 text-gray-700' },
+  funded: { label: 'Funded', className: 'escrow-funded' },
+  in_progress: { label: 'In progress', className: 'escrow-in-progress' },
+  work_completed: { label: 'Work completed', className: 'bg-blue-100 text-blue-700' },
+  released: { label: 'Released', className: 'escrow-completed' },
+  disputed: { label: 'Disputed', className: 'escrow-disputed' },
+  refunded: { label: 'Refunded', className: 'bg-purple-100 text-purple-700' },
 }
 
 export function EscrowStatusBadge({

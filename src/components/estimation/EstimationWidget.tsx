@@ -27,7 +27,7 @@ import type { EstimationContext } from './utils'
 
 interface EstimationWidgetProps {
   context: EstimationContext
-  /** Hide the floating launcher button (e.g. on artisan pages where CTA bar opens the widget) */
+  /** Hide the floating launcher button (e.g. on attorney pages where CTA bar opens the widget) */
   hideLauncher?: boolean
 }
 
@@ -75,7 +75,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
     }
   }, [isOpen])
 
-  // --- Listen for external open event (e.g. from CTA bar on artisan pages) ---
+  // --- Listen for external open event (e.g. from CTA bar on attorney pages) ---
   useEffect(() => {
     function handleExternalOpen() {
       handleOpen('cta_bar')

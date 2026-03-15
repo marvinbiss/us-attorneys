@@ -70,11 +70,11 @@ export default function Badge({
 // Preset badges for booking statuses
 export function StatusBadge({ status }: { status: string }) {
   const statusConfig: Record<string, { variant: BadgeProps['variant']; label: string }> = {
-    confirmed: { variant: 'success', label: 'Confirmé' },
-    pending: { variant: 'warning', label: 'En attente' },
-    cancelled: { variant: 'error', label: 'Annulé' },
-    completed: { variant: 'primary', label: 'Terminé' },
-    no_show: { variant: 'neutral', label: 'Absent' },
+    confirmed: { variant: 'success', label: 'Confirmed' },
+    pending: { variant: 'warning', label: 'Pending' },
+    cancelled: { variant: 'error', label: 'Cancelled' },
+    completed: { variant: 'primary', label: 'Completed' },
+    no_show: { variant: 'neutral', label: 'No show' },
   }
 
   const config = statusConfig[status] || { variant: 'neutral' as const, label: status }
@@ -89,10 +89,10 @@ export function StatusBadge({ status }: { status: string }) {
 // Slot availability badges
 export function SlotBadge({ type }: { type: 'popular' | 'recommended' | 'last_minute' | 'available' }) {
   const config: Record<string, { variant: BadgeProps['variant']; label: string }> = {
-    popular: { variant: 'warning', label: 'Très demandé' },
-    recommended: { variant: 'primary', label: 'Recommandé' },
-    last_minute: { variant: 'error', label: 'Dernière minute' },
-    available: { variant: 'success', label: 'Disponible' },
+    popular: { variant: 'warning', label: 'High demand' },
+    recommended: { variant: 'primary', label: 'Recommended' },
+    last_minute: { variant: 'error', label: 'Last minute' },
+    available: { variant: 'success', label: 'Available' },
   }
 
   const { variant, label } = config[type]

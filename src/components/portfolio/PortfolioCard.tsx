@@ -86,7 +86,7 @@ export default function PortfolioCard({
         {item.media_type === 'before_after' && (
           <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/70 text-white text-xs font-medium rounded-lg flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5" />
-            Avant/Après
+            Before/After
           </div>
         )}
 
@@ -102,7 +102,7 @@ export default function PortfolioCard({
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-900/80 rounded-lg">
               <EyeOff className="w-4 h-4 text-white" />
-              <span className="text-sm text-white font-medium">Masqué</span>
+              <span className="text-sm text-white font-medium">Hidden</span>
             </div>
           </div>
         )}
@@ -164,12 +164,12 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onEdit()
                         }}
-                        aria-label="Modifier"
-                        title="Modifier"
+                        aria-label="Edit"
+                        title="Edit"
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         <Pencil className="w-4 h-4" />
-                        Modifier
+                        Edit
                       </button>
                     )}
                     {onToggleFeatured && (
@@ -179,12 +179,12 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onToggleFeatured()
                         }}
-                        aria-label="Mettre en avant"
-                        title="Mettre en avant"
+                        aria-label="Feature"
+                        title="Feature"
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         <Star className={clsx('w-4 h-4', item.is_featured && 'text-amber-500')} />
-                        {item.is_featured ? 'Retirer des favoris' : 'Mettre en avant'}
+                        {item.is_featured ? 'Unfeature' : 'Feature'}
                       </button>
                     )}
                     {onToggleVisibility && (
@@ -194,19 +194,19 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onToggleVisibility()
                         }}
-                        aria-label={item.is_visible ? 'Masquer' : 'Afficher'}
-                        title={item.is_visible ? 'Masquer' : 'Afficher'}
+                        aria-label={item.is_visible ? 'Hide' : 'Show'}
+                        title={item.is_visible ? 'Hide' : 'Show'}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         {item.is_visible ? (
                           <>
                             <EyeOff className="w-4 h-4" />
-                            Masquer
+                            Hide
                           </>
                         ) : (
                           <>
                             <Eye className="w-4 h-4" />
-                            Afficher
+                            Show
                           </>
                         )}
                       </button>
@@ -220,12 +220,12 @@ export default function PortfolioCard({
                             setShowMenu(false)
                             onDelete()
                           }}
-                          aria-label="Supprimer"
-                          title="Supprimer"
+                          aria-label="Delete"
+                          title="Delete"
                           className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="w-4 h-4" />
-                          Supprimer
+                          Delete
                         </button>
                       </>
                     )}

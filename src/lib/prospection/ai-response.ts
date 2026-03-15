@@ -36,11 +36,11 @@ interface AIGenerateResult {
 export async function generateAIResponse(params: AIGenerateParams): Promise<AIGenerateResult> {
   const { provider, model, systemPrompt, conversationHistory, contactContext, maxTokens, temperature } = params
 
-  // Construire le contexte
+  // Build context
   const contextStr = buildContactContext(contactContext)
   const fullSystemPrompt = `${systemPrompt}\n\nContexte du contact:\n${contextStr}`
 
-  // Historique de conversation
+  // Conversation history
   const messages = conversationHistory.map(msg => ({
     role: msg.direction === 'inbound' ? 'user' as const : 'assistant' as const,
     content: msg.content,
@@ -59,7 +59,7 @@ export async function generateAIResponse(params: AIGenerateParams): Promise<AIGe
     logger.warn('AI output validation failed', { reason: validation.reason, contentPreview: result.content.substring(0, 100) })
     return {
       ...result,
-      content: 'Merci pour votre message. Un conseiller va vous recontacter rapidement.',
+      content: 'Thank you for your message. A representative will get back to you shortly.',
     }
   }
 
@@ -220,10 +220,10 @@ function buildContactContext(contact: ProspectionContact): string {
   const parts: string[] = []
 
   parts.push(`Type: "${sanitizeForPrompt(contact.contact_type)}"`)
-  if (contact.contact_name) parts.push(`Nom: "${sanitizeForPrompt(contact.contact_name)}"`)
-  if (contact.company_name) parts.push(`Entreprise: "${sanitizeForPrompt(contact.company_name)}"`)
+  if (contact.contact_name) parts.push(`Name: "${sanitizeForPrompt(contact.contact_name)}"`)
+  if (contact.company_name) parts.push(`Company: "${sanitizeForPrompt(contact.company_name)}"`)
   if (contact.city) parts.push(`City: "${sanitizeForPrompt(contact.city)}"`)
-  if (contact.department) parts.push(`Département: "${sanitizeForPrompt(contact.department)}"`)
+  if (contact.department) parts.push(`Department: "${sanitizeForPrompt(contact.department)}"`)
   if (contact.tags.length > 0) {
     const sanitizedTags = contact.tags.map(t => sanitizeForPrompt(t))
     parts.push(`Tags: "${sanitizedTags.join(', ')}"`)
@@ -245,11 +245,10 @@ export function validateAIOutput(content: string): { valid: boolean; reason?: st
   // Check for PII leakage patterns
   const piiPatterns = [
     /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/, // email
-    /\b(?:\+33|0033|0)[1-9](?:[\s.-]?\d{2}){4}\b/, // French phone
+    /\b(?:\+1)?[2-9]\d{2}[2-9]\d{6}\b/, // US phone
     /\bsk-[a-zA-Z0-9]{20,}\b/, // API keys
     /\bsupabase[_-]?service[_-]?role\b/i, // service role mention
-    /\bSIR(?:ET|EN)\s*:?\s*\d{9,14}\b/i, // SIRET/SIREN numbers
-    /\b[12]\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{3}\s?\d{3}\s?\d{2}\b/, // French SSN (NIR)
+    /\b\d{3}-?\d{2}-?\d{4}\b/, // US SSN
     /\b[A-Z]{2}\d{2}\s?[\dA-Z]{4}\s?[\dA-Z]{4}\s?[\dA-Z]{4}\s?[\dA-Z]{0,4}\b/, // IBAN
   ]
   for (const pattern of piiPatterns) {

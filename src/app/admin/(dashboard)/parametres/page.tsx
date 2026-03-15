@@ -31,7 +31,7 @@ interface PlatformSettings {
 }
 
 const DEFAULT_SETTINGS: PlatformSettings = {
-  siteName: 'ServicesArtisans',
+  siteName: 'US Attorneys',
   contactEmail: 'contact@us-attorneys.com',
   supportEmail: 'support@us-attorneys.com',
   maintenanceMode: false,
@@ -114,7 +114,7 @@ export default function AdminParametresPage() {
       setActionSuccess(result.message)
       setTimeout(() => setActionSuccess(null), 3000)
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Erreur inattendue')
+      setActionError(err instanceof Error ? err.message : 'Unexpected error')
       setTimeout(() => setActionError(null), 5000)
     } finally {
       if (action === 'reset-stats') setStatsResetModal(false)
@@ -126,47 +126,47 @@ export default function AdminParametresPage() {
 
   const sections = [
     {
-      title: 'Général',
+      title: 'General',
       icon: Globe,
       fields: [
         {
-          label: 'Nom du site',
+          label: 'Site name',
           key: 'siteName',
           type: 'text',
-          description: 'Le nom affiché sur le site',
+          description: 'The name displayed on the site',
           maxLength: 200,
         },
         {
-          label: 'Email de contact',
+          label: 'Contact email',
           key: 'contactEmail',
           type: 'email',
-          description: 'Email principal de contact',
+          description: 'Primary contact email',
           maxLength: 254,
         },
         {
-          label: 'Email support',
+          label: 'Support email',
           key: 'supportEmail',
           type: 'email',
-          description: 'Email pour le support client',
+          description: 'Customer support email',
           maxLength: 254,
         },
       ],
     },
     {
-      title: 'Inscriptions',
+      title: 'Registration',
       icon: Users,
       fields: [
         {
-          label: 'Inscriptions activées',
+          label: 'Registration enabled',
           key: 'registrationEnabled',
           type: 'toggle',
-          description: 'Permettre aux nouveaux utilisateurs de s\'inscrire',
+          description: 'Allow new users to register',
         },
         {
-          label: 'Vérification email obligatoire',
+          label: 'Email verification required',
           key: 'requireEmailVerification',
           type: 'toggle',
-          description: 'Les utilisateurs doivent vérifier leur email',
+          description: 'Users must verify their email',
         },
       ],
     },
@@ -175,28 +175,28 @@ export default function AdminParametresPage() {
       icon: Bell,
       fields: [
         {
-          label: 'Notifications email',
+          label: 'Email notifications',
           key: 'emailNotifications',
           type: 'toggle',
-          description: 'Envoyer des notifications par email',
+          description: 'Send email notifications',
         },
         {
-          label: 'Notifications SMS',
+          label: 'SMS notifications',
           key: 'smsNotifications',
           type: 'toggle',
-          description: 'Envoyer des notifications par SMS (nécessite Twilio)',
+          description: 'Send SMS notifications (requires Twilio)',
         },
       ],
     },
     {
-      title: 'Devis',
+      title: 'Quotes',
       icon: Settings,
       fields: [
         {
-          label: 'Devis max par jour',
+          label: 'Max quotes per day',
           key: 'maxQuotesPerDay',
           type: 'number',
-          description: 'Nombre maximum de demandes de devis par utilisateur par jour',
+          description: 'Maximum number of quote requests per user per day',
           min: 1,
           max: 100,
         },
@@ -204,7 +204,7 @@ export default function AdminParametresPage() {
           label: 'Commission (%)',
           key: 'commissionRate',
           type: 'number',
-          description: 'Taux de commission prélevé sur les transactions',
+          description: 'Commission rate charged on transactions',
           min: 0,
           max: 100,
           step: 0.1,
@@ -216,10 +216,10 @@ export default function AdminParametresPage() {
       icon: AlertTriangle,
       fields: [
         {
-          label: 'Mode maintenance',
+          label: 'Maintenance mode',
           key: 'maintenanceMode',
           type: 'toggle',
-          description: 'Activer le mode maintenance (site inaccessible aux utilisateurs)',
+          description: 'Enable maintenance mode (site inaccessible to users)',
           warning: true,
         },
       ],
@@ -240,14 +240,14 @@ export default function AdminParametresPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-            <p className="text-gray-500 mt-1">Configuration de la plateforme</p>
+            <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+            <p className="text-gray-500 mt-1">Platform configuration</p>
           </div>
           <div className="flex items-center gap-3">
             {saveSuccess && (
               <span className="flex items-center gap-1 text-green-600 text-sm">
                 <CheckCircle className="w-4 h-4" />
-                Enregistré
+                Saved
               </span>
             )}
             {hasChanges && (
@@ -256,7 +256,7 @@ export default function AdminParametresPage() {
                 className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
                 <RefreshCw className="w-4 h-4" />
-                Réinitialiser
+                Reset
               </button>
             )}
             <button
@@ -265,7 +265,7 @@ export default function AdminParametresPage() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
-              {saving ? 'Enregistrement...' : 'Enregistrer'}
+              {saving ? 'Saving...' : 'Save'}
             </button>
           </div>
         </div>
@@ -294,8 +294,8 @@ export default function AdminParametresPage() {
               <Shield className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Administrateurs</p>
-              <p className="text-sm text-gray-500">Gérer les rôles admin</p>
+              <p className="font-medium text-gray-900">Administrators</p>
+              <p className="text-sm text-gray-500">Manage admin roles</p>
             </div>
           </button>
 
@@ -307,8 +307,8 @@ export default function AdminParametresPage() {
               <Mail className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Modèles d&apos;email</p>
-              <p className="text-sm text-gray-500">Personnaliser les emails</p>
+              <p className="font-medium text-gray-900">Email Templates</p>
+              <p className="text-sm text-gray-500">Customize emails</p>
             </div>
           </button>
 
@@ -320,8 +320,8 @@ export default function AdminParametresPage() {
               <Settings className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Logs d&apos;audit</p>
-              <p className="text-sm text-gray-500">Historique des actions</p>
+              <p className="font-medium text-gray-900">Audit Logs</p>
+              <p className="text-sm text-gray-500">Action history</p>
             </div>
           </button>
         </div>
@@ -404,35 +404,35 @@ export default function AdminParametresPage() {
         {/* Danger Zone */}
         <div className="mt-8 bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-red-200 bg-red-50">
-            <h2 className="text-lg font-semibold text-red-900">Zone de danger</h2>
+            <h2 className="text-lg font-semibold text-red-900">Danger zone</h2>
           </div>
           <div className="p-6 space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="font-medium text-gray-900">Réinitialiser les statistiques</p>
+                <p className="font-medium text-gray-900">Reset statistics</p>
                 <p className="text-sm text-gray-500 mt-1">
-                  Remettre à zéro toutes les statistiques de la plateforme. Cette action est irréversible.
+                  Reset all platform statistics to zero. This action cannot be undone.
                 </p>
               </div>
               <button
                 onClick={() => setStatsResetModal(true)}
                 className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
               >
-                Réinitialiser
+                Reset
               </button>
             </div>
             <div className="flex items-start justify-between pt-4 border-t border-gray-100">
               <div>
-                <p className="font-medium text-gray-900">Vider le cache</p>
+                <p className="font-medium text-gray-900">Clear cache</p>
                 <p className="text-sm text-gray-500 mt-1">
-                  Supprimer tous les fichiers en cache. Peut ralentir temporairement le site.
+                  Delete all cached files. May temporarily slow down the site.
                 </p>
               </div>
               <button
                 onClick={() => setClearCacheModal(true)}
                 className="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200"
               >
-                Vider le cache
+                Clear cache
               </button>
             </div>
           </div>
@@ -444,9 +444,9 @@ export default function AdminParametresPage() {
         isOpen={resetModal}
         onClose={() => setResetModal(false)}
         onConfirm={handleReset}
-        title="Réinitialiser les modifications"
-        message="Voulez-vous annuler toutes les modifications non enregistrées ?"
-        confirmText="Réinitialiser"
+        title="Reset changes"
+        message="Do you want to discard all unsaved changes?"
+        confirmText="Reset"
         variant="warning"
       />
 
@@ -455,9 +455,9 @@ export default function AdminParametresPage() {
         isOpen={statsResetModal}
         onClose={() => setStatsResetModal(false)}
         onConfirm={() => handleAction('reset-stats')}
-        title="Réinitialiser les statistiques"
-        message="Êtes-vous sûr de vouloir réinitialiser toutes les statistiques ? Cette action est irréversible."
-        confirmText="Réinitialiser"
+        title="Reset statistics"
+        message="Are you sure you want to reset all statistics? This action cannot be undone."
+        confirmText="Reset"
         variant="danger"
       />
 
@@ -466,9 +466,9 @@ export default function AdminParametresPage() {
         isOpen={clearCacheModal}
         onClose={() => setClearCacheModal(false)}
         onConfirm={() => handleAction('clear-cache')}
-        title="Vider le cache"
-        message="Êtes-vous sûr de vouloir vider le cache ? Cela peut ralentir temporairement le site."
-        confirmText="Vider le cache"
+        title="Clear cache"
+        message="Are you sure you want to clear the cache? This may temporarily slow down the site."
+        confirmText="Clear cache"
         variant="warning"
       />
     </div>

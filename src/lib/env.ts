@@ -84,13 +84,7 @@ const envSchema = z.object({
   STRIPE_PRO_PRICE_ID: z.string().optional(),
   STRIPE_PREMIUM_PRICE_ID: z.string().optional(),
 
-  // ──────────────────────────────────────────────
-  // INSEE / Pappers API (optional)
-  // ──────────────────────────────────────────────
-  INSEE_API_TOKEN: z.string().optional(),
-  INSEE_CONSUMER_KEY: z.string().optional(),
-  INSEE_CONSUMER_SECRET: z.string().optional(),
-  PAPPERS_API_KEY: z.string().optional(),
+  // French APIs removed: INSEE, Pappers, SIRENE
 
   // ──────────────────────────────────────────────
   // Misc secrets & config (optional)

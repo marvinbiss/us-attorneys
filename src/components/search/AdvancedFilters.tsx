@@ -5,7 +5,7 @@ import {
   Filter,
   Star,
   MapPin,
-  Euro,
+  DollarSign,
   Clock,
   ChevronDown,
   ChevronUp,
@@ -145,7 +145,7 @@ export function AdvancedFilters({
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-blue-500" />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Distance ({values.radius || 25} km)
+                    Distance ({values.radius || 25} mi)
                   </span>
                 </div>
                 {expandedSections.has('distance') ? (
@@ -174,7 +174,7 @@ export function AdvancedFilters({
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
-                <Euro className="w-4 h-4 text-green-500" />
+                <DollarSign className="w-4 h-4 text-green-500" />
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Hourly rate</span>
               </div>
               {expandedSections.has('price') ? (

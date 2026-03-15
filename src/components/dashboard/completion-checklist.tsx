@@ -21,11 +21,11 @@ interface CompletionChecklistProps {
 
 export function CompletionChecklist({ provider }: CompletionChecklistProps) {
   const checks = [
-    { label: 'Nom de l\'entreprise', done: !!provider.name },
-    { label: 'Description (50+ car.)', done: (provider.description?.length || 0) >= 50 },
-    { label: 'Téléphone', done: !!provider.phone },
+    { label: 'Firm name', done: !!provider.name },
+    { label: 'Description (50+ chars)', done: (provider.description?.length || 0) >= 50 },
+    { label: 'Phone', done: !!provider.phone },
     { label: 'Email', done: !!provider.email },
-    { label: 'Adresse complète', done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code },
+    { label: 'Full address', done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code },
     { label: 'Logo', done: !!provider.logo },
   ]
 
@@ -34,12 +34,12 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Complétion du profil</h3>
+      <h3 className="font-semibold text-gray-900 mb-4">Profile completion</h3>
 
       {/* Progress bar */}
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-500">Progression</span>
+          <span className="text-gray-500">Progress</span>
           <span className="font-medium">{percentage}%</span>
         </div>
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -72,7 +72,7 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
       {percentage === 100 && (
         <div className="mt-4 p-3 bg-green-50 rounded-lg text-center">
           <p className="text-sm text-green-700 font-medium">
-            ✓ Profil complet !
+            ✓ Profile complete!
           </p>
         </div>
       )}
@@ -80,7 +80,7 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
       {!provider.is_verified && percentage >= 80 && (
         <div className="mt-4 p-3 bg-blue-50 rounded-lg text-center">
           <p className="text-sm text-blue-700">
-            Demandez la vérification de votre profil pour obtenir le badge ✓
+            Request profile verification to get the verified badge
           </p>
         </div>
       )}

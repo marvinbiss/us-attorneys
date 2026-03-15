@@ -40,25 +40,25 @@ export const metadata: Metadata = {
 const breadcrumbItems = [{ label: 'Legal Glossary' }]
 
 const categoryIcons: Record<string, typeof Layers> = {
-  'Gros œuvre': Layers,
-  'Charpente & toiture': Wrench,
-  'Plomberie': Droplets,
-  'Électricité': Zap,
-  'Isolation & énergie': Thermometer,
-  'Menuiserie': DoorOpen,
-  'Revêtements': PaintBucket,
-  'Administratif & juridique': Scale,
+  'Civil Litigation': Layers,
+  'Criminal Law': Wrench,
+  'Family Law': Droplets,
+  'Corporate Law': Zap,
+  'Real Estate & Property': Thermometer,
+  'Employment Law': DoorOpen,
+  'Immigration': PaintBucket,
+  'Administrative & Regulatory': Scale,
 }
 
 const categoryColors: Record<string, { bg: string; text: string; border: string; light: string }> = {
-  'Gros œuvre': { bg: 'bg-stone-100', text: 'text-stone-700', border: 'border-stone-200', light: 'bg-stone-50' },
-  'Charpente & toiture': { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200', light: 'bg-amber-50' },
-  'Plomberie': { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200', light: 'bg-blue-50' },
-  'Électricité': { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-200', light: 'bg-yellow-50' },
-  'Isolation & énergie': { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200', light: 'bg-green-50' },
-  'Menuiserie': { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200', light: 'bg-orange-50' },
-  'Revêtements': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', light: 'bg-purple-50' },
-  'Administratif & juridique': { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200', light: 'bg-red-50' },
+  'Civil Litigation': { bg: 'bg-stone-100', text: 'text-stone-700', border: 'border-stone-200', light: 'bg-stone-50' },
+  'Criminal Law': { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200', light: 'bg-amber-50' },
+  'Family Law': { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200', light: 'bg-blue-50' },
+  'Corporate Law': { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-200', light: 'bg-yellow-50' },
+  'Real Estate & Property': { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200', light: 'bg-green-50' },
+  'Employment Law': { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200', light: 'bg-orange-50' },
+  'Immigration': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', light: 'bg-purple-50' },
+  'Administrative & Regulatory': { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200', light: 'bg-red-50' },
 }
 
 // Build alphabetical index
@@ -207,7 +207,7 @@ export default function GlossairePage() {
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {termsByCategory.map(({ category, terms }) => {
               const Icon = categoryIcons[category] || Layers
-              const colors = categoryColors[category] || categoryColors['Gros œuvre']
+              const colors = categoryColors[category] || categoryColors['Civil Litigation']
               return (
                 <a
                   key={category}
@@ -232,7 +232,7 @@ export default function GlossairePage() {
         {/* Terms by category */}
         {termsByCategory.map(({ category, terms }) => {
           const Icon = categoryIcons[category] || Layers
-          const colors = categoryColors[category] || categoryColors['Gros œuvre']
+          const colors = categoryColors[category] || categoryColors['Civil Litigation']
           const catId = category.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
           return (
             <section
@@ -334,7 +334,7 @@ export default function GlossairePage() {
               <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-green-600 transition-colors" />
             </Link>
             <Link
-              href="/project-planner"
+              href="/guides"
               className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-blue-300 hover:shadow-md transition-all group"
             >
               <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
@@ -342,9 +342,9 @@ export default function GlossairePage() {
               </div>
               <div>
                 <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors text-sm">
-                  Legal planning timeline
+                  Legal guides
                 </span>
-                <p className="text-xs text-gray-500">When to do what?</p>
+                <p className="text-xs text-gray-500">Practical resources for clients</p>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-blue-600 transition-colors" />
             </Link>

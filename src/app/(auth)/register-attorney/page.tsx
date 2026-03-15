@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
-import { SiretAutocomplete } from '@/components/ui/SiretAutocomplete'
+// SiretAutocomplete removed (French SIRET validation) — using plain input for bar number
 import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
@@ -224,17 +224,12 @@ export default function AttorneyRegistrationPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Bar Number / EIN *
                       </label>
-                      <SiretAutocomplete
+                      <input
+                        type="text"
                         value={formData.siret}
-                        onValidated={(siret, company) => {
-                          setFormData(prev => ({
-                            ...prev,
-                            siret,
-                            entreprise: company?.name || prev.entreprise
-                          }))
-                        }}
-                        onClear={() => setFormData(prev => ({ ...prev, siret: '' }))}
-                        showCompanyPreview={true}
+                        onChange={(e) => setFormData(prev => ({ ...prev, siret: e.target.value }))}
+                        placeholder="Enter your bar number..."
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder:text-gray-400"
                       />
                     </div>
                     <div>

@@ -77,9 +77,9 @@ export default function PaymentForm(props: PaymentFormProps) {
   }, [paymentType, splitInstallments, depositPercentage])
 
   const formatPrice = (cents: number) => {
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'USD',
     }).format(cents / 100)
   }
 
@@ -88,7 +88,7 @@ export default function PaymentForm(props: PaymentFormProps) {
       {/* Payment Type Selection */}
       {(props.showSplitPayment || props.showDeposit) && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Mode de paiement</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Payment method</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Full Payment */}
             <button
@@ -106,7 +106,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                   {paymentType === 'full' && <Check className="w-3 h-3 text-white" />}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Paiement complet</div>
+                  <div className="font-medium text-gray-900">Full payment</div>
                   <div className="text-sm text-gray-500">{formatPrice(amount)}</div>
                 </div>
               </div>
@@ -129,9 +129,9 @@ export default function PaymentForm(props: PaymentFormProps) {
                     {paymentType === 'deposit' && <Check className="w-3 h-3 text-white" />}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Acompte</div>
+                    <div className="font-medium text-gray-900">Deposit</div>
                     <div className="text-sm text-gray-500">
-                      {formatPrice(Math.round(amount * (depositPercentage / 100)))} maintenant
+                      {formatPrice(Math.round(amount * (depositPercentage / 100)))} now
                     </div>
                   </div>
                 </div>
@@ -155,7 +155,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                     {paymentType === 'split' && <Check className="w-3 h-3 text-white" />}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Paiement fractionne</div>
+                    <div className="font-medium text-gray-900">Split payment</div>
                     <div className="text-sm text-gray-500">
                       {splitInstallments}x {formatPrice(Math.round(amount / splitInstallments))}
                     </div>
@@ -173,7 +173,7 @@ export default function PaymentForm(props: PaymentFormProps) {
               className="p-4 bg-gray-50 rounded-xl"
             >
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nombre de mensualites
+                Number of installments
               </label>
               <div className="flex gap-2">
                 {([2, 3, 4] as const).map((n) => (
@@ -192,13 +192,13 @@ export default function PaymentForm(props: PaymentFormProps) {
               </div>
               <div className="mt-3 text-sm text-gray-600">
                 <div className="flex justify-between">
-                  <span>Premiere echeance (aujourd'hui)</span>
+                  <span>First installment (today)</span>
                   <span className="font-medium">
                     {formatPrice(Math.round(amount / splitInstallments))}
                   </span>
                 </div>
                 <div className="flex justify-between mt-1">
-                  <span>Puis {splitInstallments - 1} echeances de</span>
+                  <span>Then {splitInstallments - 1} installments of</span>
                   <span className="font-medium">
                     {formatPrice(Math.round(amount / splitInstallments))}
                   </span>
@@ -215,7 +215,7 @@ export default function PaymentForm(props: PaymentFormProps) {
               className="p-4 bg-gray-50 rounded-xl"
             >
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Pourcentage de l'acompte
+                Deposit percentage
               </label>
               <div className="flex gap-2">
                 {[20, 30, 50].map((pct) => (
@@ -234,13 +234,13 @@ export default function PaymentForm(props: PaymentFormProps) {
               </div>
               <div className="mt-3 text-sm text-gray-600">
                 <div className="flex justify-between">
-                  <span>Acompte (aujourd'hui)</span>
+                  <span>Deposit (today)</span>
                   <span className="font-medium">
                     {formatPrice(Math.round(amount * (depositPercentage / 100)))}
                   </span>
                 </div>
                 <div className="flex justify-between mt-1">
-                  <span>Reste a payer (sur place)</span>
+                  <span>Remaining balance (on-site)</span>
                   <span className="font-medium">
                     {formatPrice(amount - Math.round(amount * (depositPercentage / 100)))}
                   </span>
@@ -255,9 +255,9 @@ export default function PaymentForm(props: PaymentFormProps) {
       <div className="bg-gray-50 rounded-xl p-4">
         <div className="flex items-center justify-between text-lg">
           <span className="font-medium text-gray-700">
-            {paymentType === 'full' ? 'Total a payer' :
-             paymentType === 'deposit' ? 'Acompte a payer' :
-             'Premiere echeance'}
+            {paymentType === 'full' ? 'Total due' :
+             paymentType === 'deposit' ? 'Deposit due' :
+             'First installment'}
           </span>
           <span className="font-bold text-gray-900">
             {paymentDetails ? formatPrice(paymentDetails.amount) : formatPrice(amount)}
@@ -303,7 +303,7 @@ export default function PaymentForm(props: PaymentFormProps) {
       {/* Security Badge */}
       <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
         <Lock className="w-4 h-4" />
-        Paiement sécurisé par Stripe
+        Secure payment by Stripe
       </div>
     </div>
   )
@@ -380,12 +380,12 @@ function CheckoutForm({
         {isProcessing ? (
           <>
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-            Traitement en cours...
+            Processing...
           </>
         ) : (
           <>
             <Lock className="w-5 h-5" />
-            Payer maintenant
+            Pay now
           </>
         )}
       </button>

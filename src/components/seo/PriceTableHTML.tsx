@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { slugifyTask } from '@/lib/data/trade-content'
 
 interface PriceTableHTMLProps {
-  tasks: string[]           // commonTasks du trade
+  tasks: string[]           // commonTasks from the trade
   specialtyName: string       // e.g.: "Personal Injury"
   specialtySlug?: string      // service slug for links (e.g.: "personal-injury")
   location?: string         // e.g.: "New York" (optional)
@@ -29,7 +29,7 @@ interface PriceTableHTMLProps {
  * Returns { name, price } where the price is adjusted if a multiplier is provided.
  */
 function parseTaskLocal(task: string, multiplier: number): { name: string; price: string } {
-  // Support both "Label : prix" and "Label: prix"
+  // Support both "Label : price" and "Label: price"
   const colonIndex = task.indexOf(':')
   if (colonIndex === -1) {
     return { name: task.trim(), price: 'By consultation' }

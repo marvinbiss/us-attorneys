@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Euro, Plus, X } from 'lucide-react'
+import { DollarSign, Plus, X } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useAttorneyForm } from './useAttorneyForm'
 
@@ -74,8 +74,8 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
 
   return (
     <SectionCard
-      title="Services & Tarifs"
-      icon={Euro}
+      title="Services & Pricing"
+      icon={DollarSign}
       onSave={onSave}
       saving={saving}
       isDirty={isDirty}
@@ -87,7 +87,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
         <div>
           <div className="flex items-center justify-between mb-2">
             <label htmlFor="services-new" className="block text-sm font-medium text-gray-700">
-              Services propos&eacute;s
+              Services offered
             </label>
             <span className="text-xs text-gray-400">{servicesOffered.length}/{MAX_SERVICES}</span>
           </div>
@@ -102,7 +102,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                   type="button"
                   onClick={() => removeService(index)}
                   className="hover:text-blue-900"
-                  aria-label={`Supprimer ${service}`}
+                  aria-label={`Remove ${service}`}
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -116,7 +116,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
               value={newService}
               onChange={(e) => setNewService(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addService() } }}
-              placeholder={servicesAtMax ? 'Limite atteinte' : 'Ajouter un service'}
+              placeholder={servicesAtMax ? 'Limit reached' : 'Add a service'}
               maxLength={100}
               disabled={servicesAtMax}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
@@ -126,13 +126,13 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
               onClick={addService}
               disabled={servicesAtMax}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-              aria-label="Ajouter un service"
+              aria-label="Add a service"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           {servicesAtMax && (
-            <p className="text-xs text-amber-600 mt-1">Limite de {MAX_SERVICES} services atteinte.</p>
+            <p className="text-xs text-amber-600 mt-1">Limit of {MAX_SERVICES} services reached.</p>
           )}
         </div>
 
@@ -140,7 +140,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
         <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <span className="block text-sm font-medium text-gray-700">Grille tarifaire</span>
+              <span className="block text-sm font-medium text-gray-700">Price list</span>
               <span className="text-xs text-gray-400">{servicePrices.length}/{MAX_SERVICE_PRICES}</span>
             </div>
             <button
@@ -150,13 +150,13 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
               className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
-              {pricesAtMax ? 'Limite atteinte' : 'Ajouter un tarif'}
+              {pricesAtMax ? 'Limit reached' : 'Add a price'}
             </button>
           </div>
 
           {servicePrices.length === 0 && (
             <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-3 rounded-lg">
-              Vos tarifs actuels sont estim&eacute;s. Ajoutez vos vrais prix pour les remplacer.
+              Your current prices are estimated. Add your actual prices to replace them.
             </p>
           )}
 
@@ -169,14 +169,14 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                     type="button"
                     onClick={() => removeServicePrice(index)}
                     className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
-                    aria-label="Supprimer ce tarif"
+                    aria-label="Remove this price"
                   >
                     <X className="w-4 h-4" />
                   </button>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor={`sp-name-${index}`} className="block text-xs text-gray-500 mb-1">
-                        Nom de la prestation *
+                        Service name *
                       </label>
                       <input
                         id={`sp-name-${index}`}
@@ -184,18 +184,18 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         value={item.name}
                         onChange={(e) => updateServicePrice(index, 'name', e.target.value)}
                         maxLength={200}
-                        placeholder="Ex: Débouchage canalisation"
+                        placeholder="Ex: Initial consultation"
                         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                           item.name.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
                         }`}
                       />
                       {item.name.trim() === '' && (
-                        <p className="text-xs text-amber-600 mt-0.5">Le nom est requis</p>
+                        <p className="text-xs text-amber-600 mt-0.5">Name is required</p>
                       )}
                     </div>
                     <div>
                       <label htmlFor={`sp-price-${index}`} className="block text-xs text-gray-500 mb-1">
-                        Prix *
+                        Price *
                       </label>
                       <input
                         id={`sp-price-${index}`}
@@ -203,13 +203,13 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         value={item.price}
                         onChange={(e) => updateServicePrice(index, 'price', e.target.value)}
                         maxLength={100}
-                        placeholder="Ex: 80 € ou À partir de 50 €"
+                        placeholder="Ex: $80 or Starting at $50"
                         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                           item.price.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
                         }`}
                       />
                       {item.price.trim() === '' && (
-                        <p className="text-xs text-amber-600 mt-0.5">Le prix est requis</p>
+                        <p className="text-xs text-amber-600 mt-0.5">Price is required</p>
                       )}
                     </div>
                     <div>
@@ -222,13 +222,13 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         value={item.description}
                         onChange={(e) => updateServicePrice(index, 'description', e.target.value)}
                         maxLength={500}
-                        placeholder="Détails optionnels"
+                        placeholder="Optional details"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                       />
                     </div>
                     <div>
                       <label htmlFor={`sp-duration-${index}`} className="block text-xs text-gray-500 mb-1">
-                        Dur&eacute;e estim&eacute;e
+                        Estimated duration
                       </label>
                       <input
                         id={`sp-duration-${index}`}
@@ -250,7 +250,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
         {/* Free quote toggle */}
         <div className="flex items-center justify-between">
           <label htmlFor="services-free-quote" className="text-sm font-medium text-gray-700">
-            Devis gratuit
+            Free consultation
           </label>
           <button
             id="services-free-quote"

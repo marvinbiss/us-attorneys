@@ -59,7 +59,7 @@ export function useAttorneyForm(provider: ProviderData, fields: readonly (keyof 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault()
       // Modern browsers ignore custom messages but still show a prompt
-      e.returnValue = 'Vous avez des modifications non sauvegardées. Voulez-vous vraiment quitter cette page ?'
+      e.returnValue = 'You have unsaved changes. Are you sure you want to leave this page?'
     }
 
     window.addEventListener('beforeunload', handleBeforeUnload)
@@ -93,21 +93,21 @@ export function useAttorneyForm(provider: ProviderData, fields: readonly (keyof 
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la sauvegarde')
+        throw new Error(data.error || 'Error saving changes')
       }
 
-      setSuccess('Modifications enregistrées')
+      setSuccess('Changes saved')
       if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current)
       successTimeoutRef.current = setTimeout(() => setSuccess(null), 3000)
 
       return data.provider
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') {
-        setError('La requête a expiré. Vérifiez votre connexion et réessayez.')
+        setError('Request timed out. Check your connection and try again.')
       } else if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setError('Impossible de contacter le serveur. Vérifiez votre connexion internet.')
+        setError('Unable to reach the server. Check your internet connection.')
       } else {
-        setError(err instanceof Error ? err.message : 'Erreur de sauvegarde')
+        setError(err instanceof Error ? err.message : 'Save error')
       }
       return null
     } finally {

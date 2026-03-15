@@ -75,7 +75,7 @@ export async function POST(
       .single()
 
     if (quoteError || !quote) {
-      return NextResponse.json({ success: false, error: { message: 'Consultation not found pour cette demande' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Consultation not found for this request' } }, { status: 404 })
     }
 
     if (quote.status !== 'pending') {

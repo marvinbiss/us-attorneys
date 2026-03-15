@@ -62,7 +62,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    // Retrieve l'ID du settings existant
+    // Retrieve the ID of the existing settings
     const { data: existing } = await supabase
       .from('prospection_ai_settings')
       .select('id')

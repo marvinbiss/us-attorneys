@@ -15,7 +15,6 @@ interface TrustBadgeProps {
 const BADGE_CONFIG: Record<BadgeType, {
   icon: React.ElementType
   label: string
-  labelFr: string
   color: string
   bgColor: string
   borderColor: string
@@ -24,7 +23,6 @@ const BADGE_CONFIG: Record<BadgeType, {
   none: {
     icon: Shield,
     label: 'None',
-    labelFr: 'Aucun',
     color: 'text-gray-400',
     bgColor: 'bg-gray-100',
     borderColor: 'border-gray-200',
@@ -33,7 +31,6 @@ const BADGE_CONFIG: Record<BadgeType, {
   bronze: {
     icon: Shield,
     label: 'Bronze',
-    labelFr: 'Bronze',
     color: 'text-amber-700',
     bgColor: 'bg-amber-50',
     borderColor: 'border-amber-200',
@@ -42,7 +39,6 @@ const BADGE_CONFIG: Record<BadgeType, {
   silver: {
     icon: Shield,
     label: 'Silver',
-    labelFr: 'Argent',
     color: 'text-gray-500',
     bgColor: 'bg-gray-100',
     borderColor: 'border-gray-300',
@@ -51,7 +47,6 @@ const BADGE_CONFIG: Record<BadgeType, {
   gold: {
     icon: Award,
     label: 'Gold',
-    labelFr: 'Or',
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-300',
@@ -60,47 +55,42 @@ const BADGE_CONFIG: Record<BadgeType, {
   platinum: {
     icon: Award,
     label: 'Platinum',
-    labelFr: 'Platine',
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-300',
-    description: '100+ avis, 4.8+ note, 98%+ réponse, 5+ ans sur la plateforme',
+    description: '100+ reviews, 4.8+ rating, 98%+ response, 5+ years on the platform',
   },
   top_rated: {
     icon: Star,
     label: 'Top Rated',
-    labelFr: 'Top Noté',
     color: 'text-orange-500',
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-300',
-    description: 'Parmi les mieux notés',
+    description: 'Among the highest rated',
   },
   quick_responder: {
     icon: Clock,
     label: 'Quick Responder',
-    labelFr: 'Réponse Rapide',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-300',
-    description: 'Répond en moins d\'1h',
+    description: 'Responds in under 1 hour',
   },
   verified_expert: {
     icon: Shield,
     label: 'Verified Expert',
-    labelFr: 'Expert Qualifié',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-300',
-    description: 'Qualifications contrôlées',
+    description: 'Verified credentials',
   },
   eco_friendly: {
     icon: Leaf,
     label: 'Eco-Friendly',
-    labelFr: 'Éco-Responsable',
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-50',
     borderColor: 'border-emerald-300',
-    description: 'Pratiques écologiques',
+    description: 'Eco-friendly practices',
   },
 }
 
@@ -148,7 +138,7 @@ export function TrustBadge({
       <Icon className={cn(sizeConfig.icon, config.color)} />
       {showLabel && (
         <span className={cn(sizeConfig.text, config.color)}>
-          {config.labelFr}
+          {config.label}
         </span>
       )}
     </div>

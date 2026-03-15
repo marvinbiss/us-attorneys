@@ -43,11 +43,11 @@ const errorMessages: Record<BookingErrorCode, { message: string; action?: string
     action: 'Check your existing bookings.',
   },
   ARTISAN_UNAVAILABLE: {
-    message: "The attorney n'est plus disponible pour cette date.",
-    action: 'Essayez une autre date ou un autre artisan.',
+    message: "The attorney is no longer available for this date.",
+    action: 'Try another date or a different attorney.',
   },
   INVALID_DATA: {
-    message: 'Certaines informations sont incorrectes.',
+    message: 'Some information is incorrect.',
     action: 'Check the form fields.',
   },
   PAYMENT_FAILED: {
@@ -63,27 +63,27 @@ const errorMessages: Record<BookingErrorCode, { message: string; action?: string
     action: 'Check your connection and try again.',
   },
   SERVER_ERROR: {
-    message: 'Une erreur technique est survenue.',
+    message: 'A technical error occurred.',
     action: 'Please try again in a few moments.',
   },
   UNAUTHORIZED: {
     message: 'Session expired.',
-    action: 'Veuillez vous reconnecter.',
+    action: 'Please log in again.',
   },
   NOT_FOUND: {
-    message: 'Cette ressource est introuvable.',
+    message: 'This resource could not be found.',
     action: 'It may have been deleted.',
   },
   RATE_LIMITED: {
     message: 'Too many requests.',
-    action: 'Veuillez patienter quelques secondes.',
+    action: 'Please wait a few seconds.',
   },
   VALIDATION_ERROR: {
     message: 'The entered data is invalid.',
     action: 'Check the form.',
   },
   UNKNOWN: {
-    message: 'Une erreur inattendue est survenue.',
+    message: 'An unexpected error occurred.',
     action: "Contact support if the problem persists.",
   },
 }
@@ -354,7 +354,7 @@ export function getErrorDisplayData(error: BookingError): {
     error.code === 'RATE_LIMITED'
 
   return {
-    title: isWarning ? 'Attention' : 'Erreur',
+    title: isWarning ? 'Warning' : 'Error',
     description: error.userMessage,
     action: error.action,
     icon: isWarning ? 'warning' : 'error',

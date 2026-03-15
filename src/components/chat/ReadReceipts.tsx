@@ -17,7 +17,7 @@ export function ReadReceipts({ receipts, isOwn, className }: ReadReceiptsProps) 
 
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
   }
 
   const latestReceipt = receipts.sort(
@@ -33,8 +33,8 @@ export function ReadReceipts({ receipts, isOwn, className }: ReadReceiptsProps) 
       )}
       title={
         hasBeenRead && latestReceipt
-          ? `Lu à ${formatTime(latestReceipt.read_at)}`
-          : 'Non lu'
+          ? `Read at ${formatTime(latestReceipt.read_at)}`
+          : 'Unread'
       }
     >
       {hasBeenRead ? (

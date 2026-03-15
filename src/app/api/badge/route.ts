@@ -89,12 +89,12 @@ export async function GET(request: NextRequest) {
   <text x="15" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="${textColor}">${escapedName}</text>
   <text x="15" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="${subtextColor}">${escapedService}</text>
   ${generateStars(ratingNum, 15, 80, starColor)}
-  <text x="92" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="${subtextColor}">${ratingNum.toFixed(1)}/5 (${escapeXml(reviews)} avis)</text>
+  <text x="92" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="${subtextColor}">${ratingNum.toFixed(1)}/5 (${escapeXml(reviews)} reviews)</text>
   <g transform="translate(255, 15)">
     <rect width="30" height="30" rx="6" fill="#dcfce7"/>
     <text x="15" y="22" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#16a34a">&#x2713;</text>
   </g>
-  <text x="270" y="58" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#16a34a">Verifie</text>
+  <text x="270" y="58" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#16a34a">Verified</text>
 </svg>`
   }
 

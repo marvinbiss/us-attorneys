@@ -75,13 +75,13 @@ export default function EditArtisanPage() {
   function validateField(name: string, value: string): string | null {
     switch (name) {
       case 'full_name':
-        return !value.trim() ? 'Le nom est requis' : null
+        return !value.trim() ? 'Name is required' : null
       case 'phone':
-        return value && !/^(\+33|0)[1-9][\d\s.-]{7,13}$/.test(value.replace(/\s/g, ''))
-          ? 'Numéro de téléphone invalide' : null
+        return value && !/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/.test(value.replace(/[\s.-]/g, ''))
+          ? 'Invalid phone number' : null
       case 'address_postal_code':
         return value && !/^\d{5}$/.test(value)
-          ? 'Le code postal doit contenir 5 chiffres' : null
+          ? 'ZIP code must be 5 digits' : null
       default:
         return null
     }
@@ -136,14 +136,14 @@ export default function EditArtisanPage() {
           })
           setHasChanges(false)
         } else {
-          setToast({ message: 'Artisan non trouvé', type: 'error' })
+          setToast({ message: 'Attorney not found', type: 'error' })
         }
       } else {
-        setToast({ message: 'Erreur lors du chargement', type: 'error' })
+        setToast({ message: 'Failed to load data', type: 'error' })
       }
     } catch (err) {
       console.error('Fetch error:', err)
-      setToast({ message: 'Erreur de connexion', type: 'error' })
+      setToast({ message: 'Connection error', type: 'error' })
     } finally {
       setLoading(false)
     }
@@ -175,7 +175,7 @@ export default function EditArtisanPage() {
     }
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors)
-      setToast({ message: 'Veuillez corriger les erreurs dans le formulaire', type: 'error' })
+      setToast({ message: 'Please fix the form errors before saving', type: 'error' })
       return
     }
 
@@ -198,7 +198,7 @@ export default function EditArtisanPage() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        setToast({ message: 'Artisan mis à jour avec succès !', type: 'success' })
+        setToast({ message: 'Attorney updated successfully!', type: 'success' })
         setHasChanges(false)
 
         // Redirect after a short delay with full page reload to clear cache
@@ -206,12 +206,12 @@ export default function EditArtisanPage() {
           window.location.href = `/admin/attorneys/${attorneyId}`
         }, 1500)
       } else {
-        const errorMsg = data.error || data.message || 'Erreur de sauvegarde'
+        const errorMsg = data.error || data.message || 'Failed to save'
         setToast({ message: errorMsg, type: 'error' })
       }
     } catch (err) {
       console.error('Save exception:', err)
-      setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
+      setToast({ message: 'Server connection error', type: 'error' })
     } finally {
       setSaving(false)
     }
@@ -222,7 +222,7 @@ export default function EditArtisanPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
-          <p className="text-gray-500 mt-4">Chargement de l&apos;artisan...</p>
+          <p className="text-gray-500 mt-4">Loading attorney...</p>
         </div>
       </div>
     )
@@ -233,13 +233,13 @@ export default function EditArtisanPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Artisan non trouvé</h2>
-          <p className="text-gray-500 mb-4">L&apos;artisan demandé n&apos;existe pas ou a été supprimé.</p>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Attorney not found</h2>
+          <p className="text-gray-500 mb-4">The requested attorney does not exist or has been deleted.</p>
           <button
             onClick={() => router.push('/admin/attorneys')}
             className="text-blue-600 hover:underline"
           >
-            Retour à la liste
+            Back to list
           </button>
         </div>
       </div>
@@ -263,9 +263,9 @@ export default function EditArtisanPage() {
               className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
-              Retour à la liste
+              Back to list
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modifier l&apos;artisan</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Edit Attorney</h1>
             <p className="text-gray-500 mt-1">{artisan.full_name}</p>
           </div>
           <button
@@ -276,12 +276,12 @@ export default function EditArtisanPage() {
             {saving ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Enregistrement...
+                Saving...
               </>
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                Enregistrer
+                Save
               </>
             )}
           </button>
@@ -293,13 +293,13 @@ export default function EditArtisanPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <User className="w-5 h-5 text-gray-400" />
-              Informations générales
+              General Information
             </h2>
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Nom complet
+                    Full Name
                   </label>
                   <input
                     id="full_name"
@@ -307,7 +307,7 @@ export default function EditArtisanPage() {
                     value={formData.full_name}
                     onChange={(e) => { updateFormData({ full_name: e.target.value }); clearFieldError('full_name') }}
                     onBlur={(e) => handleBlur('full_name', e.target.value)}
-                    placeholder="Jean Dupont"
+                    placeholder="John Smith"
                     maxLength={200}
                     className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.full_name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
@@ -317,14 +317,14 @@ export default function EditArtisanPage() {
                 </div>
                 <div>
                   <label htmlFor="specialty" className="block text-sm font-medium text-gray-700 mb-1">
-                    Spécialité
+                    Specialty
                   </label>
                   <input
                     id="specialty"
                     type="text"
                     value={formData.specialty}
                     onChange={(e) => updateFormData({ specialty: e.target.value })}
-                    placeholder="Plombier, Électricien..."
+                    placeholder="Personal Injury, Criminal Defense..."
                     maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -341,14 +341,14 @@ export default function EditArtisanPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => updateFormData({ email: e.target.value })}
-                    placeholder="contact@entreprise.fr"
+                    placeholder="contact@lawfirm.com"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
                     <Phone className="w-4 h-4 inline mr-1" />
-                    Téléphone
+                    Phone
                   </label>
                   <input
                     id="phone"
@@ -356,7 +356,7 @@ export default function EditArtisanPage() {
                     value={formData.phone}
                     onChange={(e) => { updateFormData({ phone: e.target.value }); clearFieldError('phone') }}
                     onBlur={(e) => handleBlur('phone', e.target.value)}
-                    placeholder="01 23 45 67 89"
+                    placeholder="(212) 555-1234"
                     maxLength={20}
                     className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.phone ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
@@ -367,14 +367,14 @@ export default function EditArtisanPage() {
               </div>
               <div>
                 <label htmlFor="siret" className="block text-sm font-medium text-gray-700 mb-1">
-                  SIRET
+                  Bar Number
                 </label>
                 <input
                   id="siret"
                   type="text"
                   value={formData.siret}
                   onChange={(e) => updateFormData({ siret: e.target.value })}
-                  placeholder="123 456 789 00012"
+                  placeholder="123456"
                   maxLength={20}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
                 />
@@ -388,7 +388,7 @@ export default function EditArtisanPage() {
                   value={formData.description}
                   onChange={(e) => updateFormData({ description: e.target.value })}
                   rows={4}
-                  placeholder="Décrivez l'entreprise, ses services, son expertise..."
+                  placeholder="Describe the attorney's practice, services, expertise..."
                   maxLength={5000}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -402,7 +402,7 @@ export default function EditArtisanPage() {
                   value={formData.bio}
                   onChange={(e) => updateFormData({ bio: e.target.value })}
                   rows={3}
-                  placeholder="Bio courte de l'artisan..."
+                  placeholder="Short bio of the attorney..."
                   maxLength={2000}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -414,19 +414,19 @@ export default function EditArtisanPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-gray-400" />
-              Adresse
+              Address
             </h2>
             <div className="grid gap-4">
               <div>
                 <label htmlFor="address_street" className="block text-sm font-medium text-gray-700 mb-1">
-                  Adresse complète
+                  Street Address
                 </label>
                 <input
                   id="address_street"
                   type="text"
                   value={formData.address_street}
                   onChange={(e) => updateFormData({ address_street: e.target.value })}
-                  placeholder="123 rue de la République"
+                  placeholder="123 Main Street"
                   maxLength={500}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -434,7 +434,7 @@ export default function EditArtisanPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="address_postal_code" className="block text-sm font-medium text-gray-700 mb-1">
-                    Code postal
+                    ZIP Code
                   </label>
                   <input
                     id="address_postal_code"
@@ -442,7 +442,7 @@ export default function EditArtisanPage() {
                     value={formData.address_postal_code}
                     onChange={(e) => { updateFormData({ address_postal_code: e.target.value }); clearFieldError('address_postal_code') }}
                     onBlur={(e) => handleBlur('address_postal_code', e.target.value)}
-                    placeholder="75001"
+                    placeholder="10001"
                     maxLength={10}
                     className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.address_postal_code ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
@@ -459,21 +459,21 @@ export default function EditArtisanPage() {
                     type="text"
                     value={formData.address_city}
                     onChange={(e) => updateFormData({ address_city: e.target.value })}
-                    placeholder="Paris"
+                    placeholder="New York"
                     maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
                   <label htmlFor="address_region" className="block text-sm font-medium text-gray-700 mb-1">
-                    Région
+                    State
                   </label>
                   <input
                     id="address_region"
                     type="text"
                     value={formData.address_region}
                     onChange={(e) => updateFormData({ address_region: e.target.value })}
-                    placeholder="Île-de-France"
+                    placeholder="New York"
                     maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -486,20 +486,20 @@ export default function EditArtisanPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Briefcase className="w-5 h-5 text-gray-400" />
-              Statut
+              Status
             </h2>
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Vérifié
+                    Verified
                   </label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_verified: !formData.is_verified })}
                     role="switch"
                     aria-checked={formData.is_verified}
-                    aria-label="Vérifié"
+                    aria-label="Verified"
                     className={`relative w-14 h-7 rounded-full transition-colors ${
                       formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
                     }`}
@@ -513,7 +513,7 @@ export default function EditArtisanPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Actif
+                    Active
                   </label>
                   <button
                     type="button"
@@ -538,15 +538,15 @@ export default function EditArtisanPage() {
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-amber-500" />
                     <span className="text-sm text-gray-600">
-                      Note: {artisan.rating_average?.toFixed(1) || 'N/A'}
+                      Rating: {artisan.rating_average?.toFixed(1) || 'N/A'}
                     </span>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {artisan.review_count} avis
+                    {artisan.review_count} reviews
                   </div>
                   {artisan.updated_at && (
                     <div className="text-sm text-gray-400">
-                      Dernière modification: {new Date(artisan.updated_at).toLocaleDateString('fr-FR')}
+                      Last updated: {new Date(artisan.updated_at).toLocaleDateString('en-US')}
                     </div>
                   )}
                 </div>
@@ -565,12 +565,12 @@ export default function EditArtisanPage() {
             {saving ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Enregistrement...
+                Saving...
               </>
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                Enregistrer les modifications
+                Save Changes
               </>
             )}
           </button>

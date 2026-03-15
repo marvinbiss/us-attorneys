@@ -10,15 +10,15 @@ import { logger } from '@/lib/logger'
 const leadSchema = z.object({
   attorneyId: z.string().min(1).optional(),
   specialtyName: z.string().min(1),
-  name: z.string().min(1, 'Votre nom est requis'),
-  email: z.string().email('Email invalide'),
+  name: z.string().min(1, 'Your name is required'),
+  email: z.string().email('Invalid email address'),
   phone: z.string().regex(
-    /^(?:\+33|0)[1-9](?:[0-9]{8})$/,
-    'Numero de telephone invalide'
+    /^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/,
+    'Invalid phone number'
   ),
   postalCode: z.string().optional(),
   city: z.string().optional(),
-  description: z.string().min(20, 'Description trop courte (min 20 caracteres)'),
+  description: z.string().min(20, 'Description too short (min 20 characters)'),
   urgency: z.enum(['normal', 'urgent', 'flexible']).default('normal'),
 })
 
@@ -46,7 +46,7 @@ export async function submitLead(
   const validation = leadSchema.safeParse(raw)
   if (!validation.success) {
     const firstError = validation.error.issues[0]
-    return { success: false, error: firstError?.message || 'Donnees invalides' }
+    return { success: false, error: firstError?.message || 'Invalid data' }
   }
 
   const data = validation.data
@@ -79,10 +79,10 @@ export async function submitLead(
 
     if (error || !inserted) {
       logger.error('Lead insert error:', error)
-      return { success: false, error: 'Erreur lors de l\'envoi. Reessayez.' }
+      return { success: false, error: 'Failed to submit. Please try again.' }
     }
 
-    // Log 'created' event — triggers "Demande bien reçue" notification to client
+    // Log 'created' event — triggers "Request received" notification to client
     logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch(() => {})
 
     // Determine whether to use direct dispatch or algorithmic dispatch.
@@ -127,6 +127,6 @@ export async function submitLead(
     return { success: true }
   } catch (err) {
     logger.error('Lead action error:', err)
-    return { success: false, error: 'Erreur serveur. Reessayez.' }
+    return { success: false, error: 'Server error. Please try again.' }
   }
 }
