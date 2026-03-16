@@ -36,7 +36,7 @@ export default function AdminAlgorithmePage() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/admin/algorithme')
+      const res = await fetch('/api/admin/algorithm')
       if (res.ok) {
         const data = await res.json()
         setConfig(data.config)
@@ -58,7 +58,7 @@ export default function AdminAlgorithmePage() {
     setSaving(true)
     setError(null)
     try {
-      const res = await fetch('/api/admin/algorithme', {
+      const res = await fetch('/api/admin/algorithm', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config),

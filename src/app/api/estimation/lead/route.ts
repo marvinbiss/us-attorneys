@@ -206,7 +206,7 @@ async function notifyAdminNewEstimationLead(
         ${data.page_url ? `<p style="margin: 0;"><strong>Page :</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
       </div>
       <div style="text-align: center; margin: 28px 0;">
-        <a href="${SITE_URL}/admin/estimation-leads" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">Voir dans l'admin</a>
+        <a href="${SITE_URL}/admin/lead-estimation" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">Voir dans l'admin</a>
       </div>
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #aaa; font-size: 12px; text-align: center;">US Attorneys – Notification automatique (lead #${leadId})</p>

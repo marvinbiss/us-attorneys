@@ -104,12 +104,12 @@ const envSchema = z.object({
   COMPANY_LEGAL_NAME: z.string().optional(),
   COMPANY_ADDRESS: z.string().optional(),
   COMPANY_PHONE: z.string().optional(),
-  COMPANY_SIRET: z.string().optional(),
-  COMPANY_RCS: z.string().optional(),
-  COMPANY_TVA: z.string().optional(),
-  COMPANY_CAPITAL_SOCIAL: z.string().optional(),
-  COMPANY_FORME_JURIDIQUE: z.string().optional(),
-  COMPANY_DIRECTEUR_PUBLICATION: z.string().optional(),
+  // COMPANY_SIRET: removed (French business ID, not applicable to US)
+  // COMPANY_RCS: removed (French business registry, not applicable to US)
+  // COMPANY_TVA: removed (French VAT number, not applicable to US)
+  COMPANY_EIN: z.string().optional(),
+  COMPANY_LEGAL_STRUCTURE: z.string().optional(),
+  COMPANY_MANAGING_EDITOR: z.string().optional(),
   COMPANY_STATUS: z.string().optional(),
   COMPANY_FOUNDING_DATE: z.string().optional(),
 })

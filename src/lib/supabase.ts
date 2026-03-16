@@ -243,7 +243,7 @@ export async function getLocationBySlug(slug: string) {
         return null
       }
     },
-    CACHE_TTL.locations, // 604800s (7j) — communes ne changent jamais
+    CACHE_TTL.locations, // 604800s (7d) — locations never change
   )
 }
 
@@ -319,7 +319,7 @@ export async function getAttorneyBySlug(slug: string) {
 // All 46 services must be mapped here — unmapped services can never show providers
 // on quartier pages, causing them to be permanently noindexed.
 export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
-  // === Métiers du bâtiment — correspondance directe NAF ===
+  // === Core practice areas — direct mapping ===
   'plombier': ['plombier'],                                        // NAF 43.22A
   'electricien': ['electricien'],                                  // NAF 43.21A
   'chauffagiste': ['chauffagiste'],                                // NAF 43.22B
@@ -337,7 +337,7 @@ export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
   'solier': ['solier'],                                            // NAF 43.39Z
   'nettoyage': ['nettoyage'],                                      // NAF 81.21Z
 
-  // === Bâtiment / Gros œuvre ===
+  // === Construction / Structural ===
   'terrassier': ['terrassier'],                                    // NAF 43.12A
   'zingueur': ['zingueur'],                                        // NAF 43.91B (sous-spécialité couverture)
   'etancheiste': ['etancheiste'],                                  // NAF 43.99A
@@ -346,7 +346,7 @@ export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
   'metallier': ['metallier'],                                      // NAF 43.32B + 25.11Z
   'ferronnier': ['ferronnier'],                                    // NAF 25.11Z
 
-  // === Finitions / Aménagement ===
+  // === Finishing / Interior ===
   'poseur-de-parquet': ['poseur-de-parquet'],                      // NAF 43.33Z
   'miroitier': ['miroitier'],                                      // NAF 43.34Z
   'storiste': ['storiste'],                                        // NAF 43.32A
@@ -355,7 +355,7 @@ export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
   'decorateur': ['decorateur'],                                    // NAF 74.10Z
   'cuisiniste': ['cuisiniste'],                                    // NAF 43.32C + 31.02Z
 
-  // === Énergie / Chauffage ===
+  // === Energy / HVAC ===
   'domoticien': ['domoticien'],                                    // NAF 43.21A
   'pompe-a-chaleur': ['pompe-a-chaleur'],                          // NAF 43.22B
   'panneaux-solaires': ['panneaux-solaires'],                      // NAF 43.21A + 43.22B
@@ -364,20 +364,20 @@ export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
   'borne-recharge': ['borne-recharge'],                            // NAF 43.21A
   'ramoneur': ['ramoneur'],                                        // NAF 81.29B
 
-  // === Extérieur ===
+  // === Exterior ===
   'paysagiste': ['paysagiste'],                                    // NAF 71.11Z + 81.30Z
   'pisciniste': ['pisciniste'],                                    // NAF 43.22A
 
-  // === Sécurité / Technique ===
+  // === Security / Technical ===
   'alarme-securite': ['alarme-securite'],                          // NAF 43.21A
   'antenniste': ['antenniste'],                                    // NAF 43.21A
   'ascensoriste': ['ascensoriste'],                                // NAF 43.29B
 
-  // === Diagnostics / Conseil ===
+  // === Diagnostics / Consulting ===
   'diagnostiqueur': ['diagnostiqueur'],                            // NAF 71.20B
   'geometre': ['geometre'],                                        // NAF 71.12B
 
-  // === Services spécialisés ===
+  // === Specialized Services ===
   'desinsectisation': ['desinsectisation'],                        // NAF 81.29A
   'deratisation': ['deratisation'],                                // NAF 81.29A
   'demenageur': ['demenageur'],                                    // NAF 49.42Z
@@ -692,7 +692,7 @@ export async function getLocationsByService(specialtySlug: string) {
         providerCities.map(p => p.address_city).filter(Boolean)
       )) as string[]
 
-      // Step 2: look up commune data (slug, dept, region) for those cities
+      // Step 2: look up location data (slug, state, region) for those cities
       const { data: communes, error: communesError } = await supabase
         .from('locations_us')
         .select('code_insee, name, slug, departement_code, region_name')

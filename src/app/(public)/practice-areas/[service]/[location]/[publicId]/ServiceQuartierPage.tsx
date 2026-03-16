@@ -21,7 +21,6 @@ import { getTradeContent } from '@/lib/data/trade-content'
 import {
   generateQuartierContent,
   hashCode,
-  getRegionalMultiplier,
 } from '@/lib/seo/location-content'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -91,7 +90,6 @@ export default async function ServiceQuartierPage({
   const trade = getTradeContent(specialtySlug)
   const quartierContent = generateQuartierContent(ville, quartierName, specialtySlug)
   const villeRegion = getStateByCode(ville.stateCode)?.region || ''
-  const pricingMultiplier = getRegionalMultiplier(villeRegion)
   const svcLower = service.name.toLowerCase()
 
   // 5. JSON-LD schemas
@@ -195,7 +193,7 @@ export default async function ServiceQuartierPage({
     : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
   const otherQuartiers = getNeighborhoodsByCity(locationSlug).filter(q => q.slug !== quartierSlug).slice(0, 10)
   const nearbyCities = getNearbyCities(locationSlug, 8)
-  const { profile } = quartierContent
+  const { profile: _profile } = quartierContent
 
   return (
     <>

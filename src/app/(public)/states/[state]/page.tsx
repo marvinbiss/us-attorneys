@@ -14,14 +14,14 @@ import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import problems from '@/lib/data/problems'
 
 export function generateStaticParams() {
-  return states.map((dept) => ({ departement: dept.slug }))
+  return states.map((dept) => ({ state: dept.slug }))
 }
 
 export const dynamicParams = false
 export const revalidate = 86400
 
 interface PageProps {
-  params: Promise<{ departement: string }>
+  params: Promise<{ state: string }>
 }
 
 function truncateTitle(title: string, maxLen = 42): string {
@@ -30,7 +30,7 @@ function truncateTitle(title: string, maxLen = 42): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { departement: deptSlug } = await params
+  const { state: deptSlug } = await params
   const dept = getStateBySlug(deptSlug)
   if (!dept) return { title: 'State not found' }
 
@@ -82,8 +82,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function DepartementPage({ params }: PageProps) {
-  const { departement: deptSlug } = await params
+export default async function StatePage({ params }: PageProps) {
+  const { state: deptSlug } = await params
   const dept = getStateBySlug(deptSlug)
   if (!dept) notFound()
 

@@ -255,9 +255,9 @@ export default async function ServicePage({ params }: PageProps) {
   // Always show major cities first, then DB cities
   topCities = mergeCitiesWithMajor(topCities || [])
 
-  // Grouper les cities par région
+  // Group cities by region
   const citiesByRegion = topCities?.reduce((acc: Record<string, CityInfo[]>, city: CityInfo) => {
-    const region = city.region_name || 'Autres'
+    const region = city.region_name || 'Other'
     if (!acc[region]) acc[region] = []
     acc[region].push(city)
     return acc
@@ -533,7 +533,7 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Par département — SEO internal links to service+ville pages */}
+      {/* By state — SEO internal links to service+city pages */}
       <section className="py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
@@ -759,12 +759,12 @@ export default async function ServicePage({ params }: PageProps) {
             <div>
               <PopularCitiesLinks showTitle={true} limit={8} />
             </div>
-            {/* Articles de blog liés à ce métier */}
+            {/* Blog articles related to this practice area */}
             {(() => {
               const svcLower = service.name.toLowerCase()
               const relatedArticles = allArticlesMeta.filter((a) =>
                 a.tags.some((tag) => tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase()))
-                || a.category === 'Fiches métier' && (a.title.toLowerCase().includes(svcLower) || a.slug.includes(specialtySlug))
+                || a.category === 'Practice Areas' && (a.title.toLowerCase().includes(svcLower) || a.slug.includes(specialtySlug))
               ).slice(0, 4)
               if (relatedArticles.length === 0) return null
               return (
@@ -791,7 +791,7 @@ export default async function ServicePage({ params }: PageProps) {
               )
             })()}
           </div>
-          {/* Intent variants — devis, avis, tarifs by city */}
+          {/* Intent variants -- quotes, reviews, pricing by city */}
           <div className="mt-8 grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Consultation by City</h3>

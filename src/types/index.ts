@@ -35,6 +35,7 @@ export interface Provider {
   slug: string
   siren?: string
   siret?: string
+  bar_number?: string
   email?: string
   phone?: string
   website?: string

@@ -125,7 +125,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
             )}
           </div>
           <Link
-            href="/admin/signalements"
+            href="/admin/reports"
             className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
           >
             View all

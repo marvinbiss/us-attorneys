@@ -147,6 +147,7 @@ export function isValidUuid(value: string): boolean {
 
 /**
  * Sanitize SIRET number
+ * @deprecated Legacy French business ID. Use bar_number validation instead.
  */
 export function sanitizeSiret(input: string): string {
   if (!input || typeof input !== 'string') {

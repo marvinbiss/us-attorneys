@@ -78,7 +78,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
           <button
             type="button"
             onClick={() => {
-              trackEvent('artisan_devis_click', { artisan_slug: artisan.slug })
+              trackEvent('attorney_quote_click', { attorney_slug: artisan.slug })
               window.dispatchEvent(new Event('sa:open-estimation'))
             }}
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 group"
@@ -92,7 +92,7 @@ export function AttorneyContactCard({ artisan }: AttorneyContactCardProps) {
             <a
               href={`mailto:${artisan.email}`}
               onClick={() => {
-                trackEvent('artisan_email_click', { artisan_slug: artisan.slug })
+                trackEvent('attorney_email_click', { attorney_slug: artisan.slug })
               }}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
               aria-label={`Send an email to ${artisan.email}`}

@@ -135,7 +135,7 @@ export async function GET(request: Request) {
 
         return {
           id: conv.id,
-          partner: conv.provider,
+          partner: conv.attorney,
           lastMessage: lastMessages?.[0] || null,
           unreadCount: unreadCount || 0,
           service: (conv.booking as unknown as { service_name: string } | null)?.service_name || null,

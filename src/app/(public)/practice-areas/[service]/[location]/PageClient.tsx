@@ -31,7 +31,7 @@ interface ServiceLocationPageClientProps {
   totalCount?: number
   specialtySlug?: string
   locationSlug?: string
-  recentDevisCount?: number
+  recentQuoteCount?: number
 }
 
 export default function ServiceLocationPageClient({
@@ -42,7 +42,7 @@ export default function ServiceLocationPageClient({
   totalCount = 0,
   specialtySlug,
   locationSlug,
-  recentDevisCount = 0,
+  recentQuoteCount = 0,
 }: ServiceLocationPageClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -169,10 +169,10 @@ export default function ServiceLocationPageClient({
                     : location.postal_code}
                 </p>
               )}
-              {recentDevisCount > 0 && (
+              {recentQuoteCount > 0 && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-medium mt-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  {recentDevisCount} consultation{recentDevisCount > 1 ? 's' : ''} requested this month
+                  {recentQuoteCount} consultation{recentQuoteCount > 1 ? 's' : ''} requested this month
                 </div>
               )}
             </div>

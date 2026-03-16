@@ -33,7 +33,7 @@ interface BookingWithRelations {
   service_name: string | null
   status: string
   client: ClientProfile | ClientProfile[] | null
-  artisan: AttorneyProfile | AttorneyProfile[] | null
+  attorney: AttorneyProfile | AttorneyProfile[] | null
 }
 
 interface Review {
@@ -146,7 +146,7 @@ export async function GET(request: Request) {
 
       return NextResponse.json(
         createSuccessResponse({
-          attorneyName: getAttorneyDisplayName(typedBooking.artisan),
+          attorneyName: getAttorneyDisplayName(typedBooking.attorney),
           specialtyName: typedBooking.service_name || 'Service',
           alreadyReviewed: !!existingReview,
         })

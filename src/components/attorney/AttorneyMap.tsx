@@ -39,7 +39,7 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
 
   // Provider marker for the map
   const mapProvider = hasCoordinates ? [{
-    id: 'artisan',
+    id: 'attorney',
     name: artisan.business_name || `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || '',
     latitude: artisan.latitude!,
     longitude: artisan.longitude!,

@@ -118,7 +118,7 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
           )}
         </div>
 
-        {/* SIRET */}
+        {/* Bar Number */}
         {artisan.siret && (
           <div className="pt-4 border-t border-gray-100">
             <div className="text-xs text-slate-400 font-mono">

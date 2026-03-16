@@ -1,6 +1,6 @@
 /**
  * Attorney Claim API
- * POST: Submit a claim request for a provider page (SIRET verification + admin review)
+ * POST: Submit a claim request for a provider page (bar number verification + admin review)
  * Auth is OPTIONAL — anonymous claims are supported (account created on admin approval)
  */
 
@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 
 const claimSchema = z.object({
   attorneyId: z.string().uuid('Invalid attorney ID'),
-  siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir exactement 14 chiffres'),
+  siret: z.string().min(1, 'Bar number is required'),
   fullName: z.string().min(2, 'Name is required (min. 2 characters)'),
   email: z.string().email('Invalid email'),
   phone: z.string().min(10, 'Invalid phone number'),
@@ -153,18 +153,16 @@ export async function POST(request: Request) {
       )
     }
 
-    // SIRET verification (normalize: strip spaces)
-    const normalizedInput = siret.replace(/\s/g, '')
-    const normalizedStored = provider.siret.replace(/\s/g, '')
+    // Bar number verification (normalize: strip spaces)
+    const normalizedInput = siret.replace(/\s/g, '').toLowerCase()
+    const normalizedStored = provider.siret.replace(/\s/g, '').toLowerCase()
 
     if (normalizedInput !== normalizedStored) {
-      logger.warn('Claim SIRET mismatch', {
+      logger.warn('Claim bar number mismatch', {
         userId: user?.id || 'anonymous',
         claimantEmail: email,
         attorneyId,
         attorneyName: provider.name,
-        inputSiren: normalizedInput.slice(0, 9),
-        storedSiren: normalizedStored.slice(0, 9),
       })
 
       return NextResponse.json(
@@ -173,7 +171,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // SIRET matches — create a pending claim for admin review
+    // Bar number matches — create a pending claim for admin review
     const { error: insertError } = await adminClient
       .from('attorney_claims')
       .insert({

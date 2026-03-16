@@ -69,11 +69,11 @@ const EstimationWidget = dynamic(
 
 export const revalidate = 86400
 
-// Pre-render top service×city×quartier combos for ISR warming
+// Pre-render top service x city x neighborhood combos for ISR warming
 const TOP_CITIES_QUARTIER = 30
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_QUARTIER)
-  // Pre-render top 10 services × 30 cities × quartiers for better ISR coverage
+  // Pre-render top 10 services x 30 cities x neighborhoods for better ISR coverage
   const topServices = staticPracticeAreas.slice(0, 10)
   return topServices.flatMap(s =>
     topCities.flatMap(v => {
@@ -276,7 +276,7 @@ async function getSimilarAttorneys(attorneyId: string, specialty: string, postal
         specialty: p.specialty || specialty,
         rating: p.rating_average || 0,
         reviews: p.review_count || 0,
-        city: resolved.address_city || '',
+        city: p.address_city || '',
         is_verified: p.is_verified || false,
       }
     })
@@ -380,7 +380,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
-      // All service×quartier pages indexed — rich content exists even with few providers
+      // All service x neighborhood pages indexed — rich content exists even with few providers
       openGraph: { title, description, type: 'website', locale: 'en_US', url: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(specialtySlug).src, width: 1200, height: 630, alt: title }] },
       twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(specialtySlug).src] },
       alternates: { canonical: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}/${publicId}` },

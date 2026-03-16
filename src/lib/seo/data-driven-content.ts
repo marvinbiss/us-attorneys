@@ -38,7 +38,7 @@ export interface DataDrivenContent {
 // ---------------------------------------------------------------------------
 
 export function generateDataDrivenContent(
-  _commune: LocationData,
+  _location: LocationData,
   _specialtySlug: string,
   _specialtyName: string,
   _attorneyCount: number,

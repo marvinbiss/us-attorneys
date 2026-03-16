@@ -91,7 +91,7 @@ export default async function VillePage({ params }: PageProps) {
   if (!ville) notFound()
   const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
 
-  // Get other cities in the same departement
+  // Get other cities in the same state
   const nearbyVilles = cities.filter(
     (v) => v.stateCode === ville.stateCode && v.slug !== ville.slug
   )

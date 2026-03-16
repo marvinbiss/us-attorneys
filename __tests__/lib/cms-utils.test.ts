@@ -63,7 +63,7 @@ function validFormData(overrides: Record<string, unknown> = {}) {
     tags: [] as string[],
     readTime: '',
     featuredImage: '',
-    serviceSlug: '',
+    specialtySlug: '',
     locationSlug: '',
     sortOrder: 0,
     ...overrides,
@@ -525,22 +525,22 @@ describe('buildPayload', () => {
   })
 
   it('nullifies service_slug for static pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'static', serviceSlug: 'plomberie' }))
+    const payload = buildPayload(validFormData({ pageType: 'static', specialtySlug: 'plomberie' }))
     expect(payload.service_slug).toBeNull()
   })
 
   it('nullifies location_slug for non-location pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'service', serviceSlug: 'plomberie', locationSlug: 'paris' }))
+    const payload = buildPayload(validFormData({ pageType: 'service', specialtySlug: 'plomberie', locationSlug: 'paris' }))
     expect(payload.location_slug).toBeNull()
   })
 
   it('keeps service_slug for service pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'service', serviceSlug: 'plomberie' }))
+    const payload = buildPayload(validFormData({ pageType: 'service', specialtySlug: 'plomberie' }))
     expect(payload.service_slug).toBe('plomberie')
   })
 
   it('keeps both slugs for location pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'location', serviceSlug: 'plomberie', locationSlug: 'paris' }))
+    const payload = buildPayload(validFormData({ pageType: 'location', specialtySlug: 'plomberie', locationSlug: 'paris' }))
     expect(payload.service_slug).toBe('plomberie')
     expect(payload.location_slug).toBe('paris')
   })

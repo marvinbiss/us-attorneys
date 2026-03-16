@@ -15,7 +15,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       value: stats?.total_contacts || 0,
       icon: Users,
       color: 'text-blue-600 bg-blue-100',
-      detail: stats ? `${stats.contacts_by_type.artisan} attorneys, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} firms` : '',
+      detail: stats ? `${stats.contacts_by_type.attorney} attorneys, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.municipality} firms` : '',
     },
     {
       name: 'Active campaigns',

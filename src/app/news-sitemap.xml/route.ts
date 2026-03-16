@@ -31,7 +31,7 @@ export async function GET() {
     <news:news>
       <news:publication>
         <news:name>${escapeXml(SITE_NAME)}</news:name>
-        <news:language>fr</news:language>
+        <news:language>en</news:language>
       </news:publication>
       <news:publication_date>${pubDate}</news:publication_date>
       <news:title>${escapeXml(article.title)}</news:title>
@@ -45,8 +45,8 @@ export async function GET() {
 ${urls.join('\n')}
 </urlset>`
 
-  // Last-Modified = date du dernier article récent (Google utilise cet en-tête
-  // pour décider d'un HTTP 304 Not Modified et économiser des ressources côté serveur).
+  // Last-Modified = date of the latest recent article (Google uses this header
+  // to decide on HTTP 304 Not Modified and save server-side resources).
   const lastModified = recentArticles[0]
     ? new Date(recentArticles[0].date)
     : new Date()

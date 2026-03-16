@@ -7,7 +7,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 
 interface SearchSuggestion {
   id: string
-  type: 'service' | 'location' | 'artisan' | 'recent'
+  type: 'service' | 'location' | 'attorney' | 'recent'
   text: string
   metadata?: {
     city?: string
@@ -167,7 +167,7 @@ export function InstantSearch({
         return <Briefcase className="w-4 h-4" />
       case 'location':
         return <MapPin className="w-4 h-4" />
-      case 'artisan':
+      case 'attorney':
         return <User className="w-4 h-4" />
       case 'recent':
         return <Clock className="w-4 h-4" />
@@ -226,7 +226,7 @@ export function InstantSearch({
                         'w-8 h-8 rounded-full flex items-center justify-center',
                         suggestion.type === 'service' && 'bg-blue-100 text-blue-600',
                         suggestion.type === 'location' && 'bg-green-100 text-green-600',
-                        suggestion.type === 'artisan' && 'bg-purple-100 text-purple-600',
+                        suggestion.type === 'attorney' && 'bg-purple-100 text-purple-600',
                         suggestion.type === 'recent' && 'bg-gray-100 text-gray-600'
                       )}
                     >

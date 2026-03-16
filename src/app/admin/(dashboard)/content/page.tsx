@@ -133,7 +133,7 @@ export default function AdminContenuPage() {
             <p className="text-gray-500 mt-1">{total} page{total !== 1 ? 's' : ''}</p>
           </div>
           <Link
-            href="/admin/contenu/nouveau"
+            href="/admin/content/nouveau"
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-5 h-5" />
@@ -237,11 +237,11 @@ export default function AdminContenuPage() {
                       return (
                         <tr
                           key={page.id}
-                          onClick={() => router.push(`/admin/contenu/${page.id}`)}
+                          onClick={() => router.push(`/admin/content/${page.id}`)}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter' || e.key === ' ') {
                               e.preventDefault()
-                              router.push(`/admin/contenu/${page.id}`)
+                              router.push(`/admin/content/${page.id}`)
                             }
                           }}
                           tabIndex={0}
@@ -278,7 +278,7 @@ export default function AdminContenuPage() {
                           </td>
                           <td className="px-6 py-4 text-right">
                             <Link
-                              href={`/admin/contenu/${page.id}`}
+                              href={`/admin/content/${page.id}`}
                               onClick={(e) => e.stopPropagation()}
                               className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                             >

@@ -9,7 +9,7 @@ import { getVisitorId } from './visitor'
 // Event types for booking funnel
 export type BookingEvent =
   | 'page_view'
-  | 'artisan_profile_view'
+  | 'attorney_profile_view'
   | 'phone_reveal'
   | 'phone_click'
   | 'calendar_opened'
@@ -28,16 +28,16 @@ export type BookingEvent =
   | 'waitlist_joined'
   | 'reminder_sent'
   | 'reminder_clicked'
-  | 'devis_submitted'
+  | 'quote_submitted'
   | 'chat_opened'
   | 'chat_message_sent'
   | 'chat_lead_form_shown'
   | 'estimation_lead_submitted'
-  | 'artisan_devis_click'
-  | 'artisan_email_click'
-  | 'artisan_website_click'
+  | 'attorney_quote_click'
+  | 'attorney_email_click'
+  | 'attorney_website_click'
   | 'blog_cta_click'
-  | 'header_devis_click'
+  | 'header_quote_click'
   | 'search_query'
   | 'service_click'
   | 'city_click'
@@ -178,7 +178,7 @@ export function trackConversion(
 export const BookingFunnel = {
   // Step 1: User views attorney profile
   viewProfile: (attorneyId: string, attorneyName: string, source?: string) => {
-    trackEvent('artisan_profile_view', {
+    trackEvent('attorney_profile_view', {
       attorneyId,
       attorneyName,
       source,

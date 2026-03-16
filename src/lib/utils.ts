@@ -190,6 +190,7 @@ export function formatUSPhone(phone: string): string {
 }
 
 // Validate SIRET
+/** @deprecated Legacy French business ID validation. Use bar_number validation instead. */
 export function isValidSIRET(siret: string): boolean {
   const cleaned = siret.replace(/\s/g, '')
   if (!/^\d{14}$/.test(cleaned)) return false

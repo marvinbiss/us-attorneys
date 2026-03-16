@@ -54,7 +54,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
     })
   }
 
-  // Company creation year (from SIRENE / provider data)
+  // Company creation year (from bar admission / provider data)
   if (artisan.creation_date) {
     const year = new Date(artisan.creation_date).getFullYear()
     const age = currentYear - year
@@ -76,7 +76,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
     })
   }
 
-  // SIRET verified
+  // Bar admission verified
   if (artisan.is_verified) {
     stats.push({
       icon: Shield,

@@ -38,6 +38,7 @@ interface Provider {
   created_at: string
   source?: string
   siret?: string
+  bar_number?: string
 }
 
 interface ProvidersResponse {

@@ -124,8 +124,8 @@ const PER_PAGE = 25
 
 function buildArtisanUrl(p: { slug: string; stableId: string; specialty: string; city: string }) {
   if (!p.slug && !p.stableId) return null
-  const specSlug = p.specialty?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'artisan'
-  const citySlug = p.city?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'france'
+  const specSlug = p.specialty?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'attorney'
+  const citySlug = p.city?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'us'
   const id = p.slug || p.stableId
   return `/practice-areas/${specSlug}/${citySlug}/${id}`
 }

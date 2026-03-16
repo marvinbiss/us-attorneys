@@ -37,20 +37,13 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
       .catch(() => { /* not logged in — that's fine */ })
   }, [showModal, profileLoaded, fullName, email, phone])
 
-  // Format SIRET with spaces for display (XXX XXX XXX XXXXX)
-  const formatSiret = (value: string) => {
-    const digits = value.replace(/\D/g, '').slice(0, 14)
-    const parts = []
-    if (digits.length > 0) parts.push(digits.slice(0, 3))
-    if (digits.length > 3) parts.push(digits.slice(3, 6))
-    if (digits.length > 6) parts.push(digits.slice(6, 9))
-    if (digits.length > 9) parts.push(digits.slice(9, 14))
-    return parts.join(' ')
+  // Format bar number for display
+  const formatBarNumber = (value: string) => {
+    return value.trim()
   }
 
-  const handleSiretChange = (value: string) => {
-    const digits = value.replace(/\D/g, '').slice(0, 14)
-    setSiret(digits)
+  const handleBarNumberChange = (value: string) => {
+    setSiret(value.trim())
     setError(null)
   }
 
@@ -59,15 +52,15 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
   }
 
   const isFormValid =
-    siret.length === 14 &&
+    siret.length >= 1 &&
     fullName.trim().length >= 2 &&
     email.includes('@') &&
     phone.replace(/\D/g, '').length >= 10 &&
     position.trim().length >= 2
 
   const handleClaim = async () => {
-    if (siret.length !== 14) {
-      setError('The bar number must be valid')
+    if (!siret.trim()) {
+      setError('Bar number is required')
       return
     }
     if (fullName.trim().length < 2) {
@@ -277,18 +270,17 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                     />
                   </div>
 
-                  {/* SIRET */}
+                  {/* Bar Number */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Bar Number <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
-                      value={formatSiret(siret)}
-                      onChange={(e) => handleSiretChange(e.target.value)}
-                      placeholder="XXX XXX XXX XXXXX"
+                      value={formatBarNumber(siret)}
+                      onChange={(e) => handleBarNumberChange(e.target.value)}
+                      placeholder="e.g. 123456"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
-                      maxLength={17}
                       disabled={isLoading}
                     />
                     <p className="mt-1 text-xs text-gray-500">

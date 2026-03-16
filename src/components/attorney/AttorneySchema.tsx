@@ -190,7 +190,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     ...(artisan.siret && {
       identifier: {
         '@type': 'PropertyValue',
-        name: 'SIRET',
+        name: 'barNumber',
         value: artisan.siret,
       },
     }),

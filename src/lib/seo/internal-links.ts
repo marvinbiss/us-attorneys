@@ -77,7 +77,7 @@ export function getRelatedServiceLinks(
   const slugWords = slug.toLowerCase()
   const searchTerms = [slugWords, ...tags.map((t) => t.toLowerCase())]
 
-  // Top 5 cities for service×city cross-links
+  // Top 5 cities for service x city cross-links
   const TOP_CITIES = [
     { name: 'New York', slug: 'new-york' },
     { name: 'Los Angeles', slug: 'los-angeles' },

@@ -28,10 +28,10 @@ ${images.map((img) => imageTag(img.loc, img.title, img.caption)).join('\n')}
 }
 
 /**
- * Image sitemap — Next.js 14 ne génère pas les balises <image:image> avec le bon namespace
- * dans MetadataRoute.Sitemap. Ce handler produit le XML correct pour Google Image Search.
+ * Image sitemap — Next.js 14 does not generate <image:image> tags with the correct namespace
+ * in MetadataRoute.Sitemap. This handler produces the correct XML for Google Image Search.
  *
- * Contenu : homepage, services, top 20 cities, articles de blog, pages statiques clés.
+ * Content: homepage, services, top 20 cities, blog articles, key static pages.
  */
 export async function GET() {
   const urls: string[] = []
@@ -41,7 +41,7 @@ export async function GET() {
     urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Trouvez les meilleurs artisans en France sur US Attorneys — plateforme de mise en relation avec des professionnels qualifiés' }])
   )
 
-  // 2. Pages de services — une image par métier
+  // 2. Service pages — one image per practice area
   for (const service of services) {
     const img = serviceImages[service.slug]
     if (img) {
@@ -53,7 +53,7 @@ export async function GET() {
     }
   }
 
-  // 3. Top 20 cities — photos géographiques
+  // 3. Top 20 cities — geographic photos
   for (const [citySlug, img] of Object.entries(cityImages)) {
     const cityName = citySlug
       .split('-')
@@ -66,7 +66,7 @@ export async function GET() {
     )
   }
 
-  // 4. Articles de blog — matching intelligent slug → image
+  // 4. Blog articles — smart slug → image matching
   for (const slug of articleSlugs) {
     const article = allArticles[slug]
     const img = getBlogImage(slug, article?.category)
@@ -101,8 +101,8 @@ export async function GET() {
 ${urls.join('\n')}
 </urlset>`
 
-  // Last-Modified = date du dernier article (seul contenu dynamique de ce sitemap).
-  // Google utilise Last-Modified pour décider s'il doit re-fetcher le fichier (HTTP 304).
+  // Last-Modified = date of the latest article (only dynamic content in this sitemap).
+  // Google uses Last-Modified to decide whether to re-fetch the file (HTTP 304).
   const latestDate = articleSlugs.reduce<Date | null>((max, slug) => {
     const d = allArticles[slug]?.updatedDate || allArticles[slug]?.date
     if (!d) return max

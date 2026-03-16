@@ -107,7 +107,7 @@ export function suggestColumnMapping(headers: string[]): ColumnMapping {
     phone: ['telephone', 'phone', 'tel', 'portable', 'mobile', 'numero'],
     address: ['adresse', 'address', 'rue', 'voie', 'adresse_postale'],
     postal_code: ['code_postal', 'cp', 'postal_code', 'zip', 'code postal'],
-    city: ['ville', 'city', 'commune', 'localite'],
+    city: ['city', 'ville', 'commune', 'localite'],
     department: ['departement', 'department', 'dept', 'dep'],
     region: ['region'],
     location_code: ['code_insee', 'insee', 'location_code'],

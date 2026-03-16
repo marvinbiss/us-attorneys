@@ -42,7 +42,7 @@ export interface LocationContent {
   citySizeLabel: string
   climateTip: string
   faqItems: { question: string; answer: string }[]
-  /** Data-driven content sections (null when commune data unavailable) */
+  /** Data-driven content sections (null when location data unavailable) */
   dataDriven: DataDrivenContent | null
 }
 

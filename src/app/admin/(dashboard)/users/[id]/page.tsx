@@ -56,11 +56,11 @@ export default function AdminUserDetailPage() {
         setUser(data.user)
         setFormData(data.user)
       } else {
-        router.push('/admin/utilisateurs')
+        router.push('/admin/users')
       }
     } catch (error) {
       console.error('Failed to fetch user:', error)
-      router.push('/admin/utilisateurs')
+      router.push('/admin/users')
     } finally {
       setLoading(false)
     }
@@ -91,7 +91,7 @@ export default function AdminUserDetailPage() {
       await fetch(`/api/admin/users/${userId}`, {
         method: 'DELETE',
       })
-      router.push('/admin/utilisateurs')
+      router.push('/admin/users')
     } catch (error) {
       console.error('Delete failed:', error)
     }
@@ -130,7 +130,7 @@ export default function AdminUserDetailPage() {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => router.push('/admin/utilisateurs')}
+            onClick={() => router.push('/admin/users')}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
             <ArrowLeft className="w-4 h-4" />

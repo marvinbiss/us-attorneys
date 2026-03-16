@@ -124,7 +124,7 @@ export async function getOverviewStats(
   ])
 
   // Group contacts by type in JS
-  const contacts_by_type: Record<ContactType, number> = { artisan: 0, client: 0, mairie: 0 }
+  const contacts_by_type: Record<ContactType, number> = { attorney: 0, client: 0, municipality: 0 }
   if (contactsResult.data) {
     for (const row of contactsResult.data) {
       const ct = row.contact_type as ContactType

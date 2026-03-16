@@ -41,7 +41,7 @@ function addCspHeaders(response: NextResponse, request: NextRequest, nonce: stri
 // Legacy redirects — hoisted to module scope to avoid per-request allocation
 const LEGACY_REDIRECTS: Record<string, string> = {
   '/issues-courants': '/issues',
-  '/tools/diagnostic-artisan': '/tools/diagnostic',
+  '/tools/diagnostic-artisan': '/tools/diagnostic', // legacy French URL redirect
 }
 
 // URL canonicalization — all fixes combined into a single 301 hop
@@ -97,9 +97,9 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Redirect /pricing-artisans → /pricing (301 permanent, cached at CDN edge)
-  if (pathname.startsWith('/pricing-artisans')) {
-    const newPath = pathname.replace('/pricing-artisans', '/pricing')
+  // Redirect /pricing-artisans → /pricing-attorneys → /pricing (301 permanent, cached at CDN edge)
+  if (pathname.startsWith('/pricing-artisans') || pathname.startsWith('/pricing-attorneys')) {
+    const newPath = pathname.replace('/pricing-artisans', '/pricing').replace('/pricing-attorneys', '/pricing')
     const host = request.headers.get('host') || 'us-attorneys.com'
     const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
     redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
@@ -158,10 +158,10 @@ export async function middleware(request: NextRequest) {
         .single()
 
       if (profile) {
-        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') {
+        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') { // DB value: 'artisan' maps to attorney role
           return NextResponse.redirect(new URL('/client-dashboard', request.url))
         }
-        if (pathname.startsWith('/client-dashboard') && profile.role === 'artisan') {
+        if (pathname.startsWith('/client-dashboard') && profile.role === 'artisan') { // DB value: 'artisan' maps to attorney role
           return NextResponse.redirect(new URL('/attorney-dashboard', request.url))
         }
       }

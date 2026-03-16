@@ -123,7 +123,7 @@ export default function AdminsManagementPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <button
-              onClick={() => router.push('/admin/parametres')}
+              onClick={() => router.push('/admin/settings')}
               className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />

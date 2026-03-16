@@ -237,7 +237,7 @@ export default function AdminDashboard() {
                   </span>
                 </div>
                 <Link
-                  href="/admin/signalements"
+                  href="/admin/reports"
                   className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
                 >
                   View Reports
@@ -271,7 +271,7 @@ export default function AdminDashboard() {
                 </>
               )}
               <Link
-                href="/admin/estimation-leads"
+                href="/admin/lead-estimation"
                 className="flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
               >
                 View All

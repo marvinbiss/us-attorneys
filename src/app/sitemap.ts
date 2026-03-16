@@ -37,7 +37,7 @@ export async function generateSitemaps() {
   const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
   const emergencySlugs = Object.keys(tradeContent)
-  const avisServiceSlugs = Object.keys(tradeContent)
+  const reviewServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
   // Count total task×city combinations for tarifs-task-cities sitemaps
@@ -50,15 +50,15 @@ export async function generateSitemaps() {
     { id: 'cities' },
     { id: 'geo' },
     // Quartier & service-quartier sitemaps REMOVED — too granular for new domain
-    { id: 'devis-services' },
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `urgence-service-cities-${i}` })),
+    { id: 'quotes-services' },
+    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `quotes-service-cities-${i}` })),
+    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `emergency-service-cities-${i}` })),
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `tarifs-service-cities-${i}` })),
     ...Array.from({ length: tarifsTaskCitiesBatchCount }, (_, i) => ({ id: `tarifs-task-cities-${i}` })),
-    { id: 'avis-services' },
-    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `avis-service-cities-${i}` })),
-    { id: 'problemes' },
-    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `problemes-cities-${i}` })),
+    { id: 'reviews-services' },
+    ...Array.from({ length: Math.ceil(reviewServiceSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `reviews-service-cities-${i}` })),
+    { id: 'issues' },
+    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `issues-cities-${i}` })),
     ...Array.from(
       { length: Math.ceil(states.length * getTradesSlugs().length / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
@@ -241,7 +241,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return [...villesIndex, ...villePages]
   }
 
-  // ── Geo pages (départements + régions) ──────────────────────────────
+  // ── Geo pages (states + regions) ────────────────────────────────────
   if (id === 'geo') {
     const departementsIndex: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/states` },
@@ -263,17 +263,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
 
-  // ── Devis service hub pages ─────────────────────────────────────────
-  if (id === 'devis-services') {
+  // ── Quotes service hub pages ────────────────────────────────────────
+  if (id === 'quotes-services') {
     return Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/quotes/${slug}`,
       lastModified: BUILD_DATE,
     }))
   }
 
-  // ── Devis service×city pages (Phase 1: top 300 cities only) ─────────
-  if (id.startsWith('devis-service-cities-')) {
-    const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
+  // ── Quotes service×city pages (Phase 1: top 300 cities only) ────────
+  if (id.startsWith('quotes-service-cities-')) {
+    const batchIndex = parseInt(id.replace('quotes-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
@@ -292,9 +292,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Urgence service×city pages (Phase 1: top 300 cities only) ───────
-  if (id.startsWith('urgence-service-cities-')) {
-    const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
+  // ── Emergency service×city pages (Phase 1: top 300 cities only) ─────
+  if (id.startsWith('emergency-service-cities-')) {
+    const batchIndex = parseInt(id.replace('emergency-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
@@ -314,7 +314,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs service×city pages (Phase 1: top 300 cities only) ────────
+  // ── Pricing service×city pages (Phase 1: top 300 cities only) ───────
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
@@ -335,7 +335,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs task×city pages (Phase 1: top 300 cities only) ───────────
+  // ── Pricing task×city pages (Phase 1: top 300 cities only) ──────────
   if (id.startsWith('tarifs-task-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-task-cities-', ''), 10)
     const BATCH = LARGE_BATCH
@@ -359,8 +359,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Avis service hub pages ──────────────────────────────────────────
-  if (id === 'avis-services') {
+  // ── Reviews service hub pages ──────────────────────────────────────
+  if (id === 'reviews-services') {
     const tradeSlugs = Object.keys(tradeContent)
     return [
       { url: `${SITE_URL}/reviews`, lastModified: BUILD_DATE },
@@ -368,9 +368,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Avis service×city pages (Phase 1: top 300 cities only) ──────────
-  if (id.startsWith('avis-service-cities-')) {
-    const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
+  // ── Reviews service×city pages (Phase 1: top 300 cities only) ───────
+  if (id.startsWith('reviews-service-cities-')) {
+    const batchIndex = parseInt(id.replace('reviews-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
@@ -390,8 +390,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Problemes hub + individual pages ────────────────────────────────
-  if (id === 'problemes') {
+  // ── Issues hub + individual pages ──────────────────────────────────
+  if (id === 'issues') {
     const problemSlugs = getProblemSlugs()
     return [
       { url: `${SITE_URL}/issues`, lastModified: BUILD_DATE },
@@ -399,8 +399,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Problemes × city pages (Phase 1: top 300 cities only) ───────────
-  if (id.startsWith('problemes-cities-')) {
+  // ── Issues × city pages (Phase 1: top 300 cities only) ─────────────
+  if (id.startsWith('issues-cities-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
@@ -421,7 +421,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Dept × service pages ────────────────────────────────────────────
+  // ── State × service pages ──────────────────────────────────────────
   if (id.startsWith('dept-services-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
     const tradeSlugs = getTradesSlugs()

@@ -11,7 +11,7 @@ import { cities, practiceAreas, getNeighborhoodBySlug, getNeighborhoodsByCity, g
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 
-// Pre-render top 50 cities × their quartiers (~500+ pages)
+// Pre-render top 50 cities x their neighborhoods (~500+ pages)
 const TOP_CITIES = 50
 export function generateStaticParams() {
   return cities.slice(0, TOP_CITIES).flatMap(v =>
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    // All quartier pages indexed — each has unique content (profil bâti, FAQ, données)
+    // All neighborhood pages indexed — each has unique content (profile, FAQ, data)
     openGraph: {
       locale: 'en_US',
       title,

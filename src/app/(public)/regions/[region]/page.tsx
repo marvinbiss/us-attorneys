@@ -521,7 +521,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Intent variant links — devis, avis, tarifs */}
+          {/* Intent variant links -- quotes, reviews, pricing */}
           <div className="mt-10 grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {region.name}</h3>

@@ -107,7 +107,7 @@ export async function GET(
     // Build quotes list — strip attorney_id from client response
     const quotes = (quotesRaw || []).map(q => {
       // Supabase returns the join as an array or object depending on FK cardinality
-      const providerRaw = Array.isArray(q.provider) ? q.provider[0] : q.provider
+      const providerRaw = Array.isArray(q.attorney) ? q.attorney[0] : q.attorney
       return {
         id: q.id,
         amount: q.amount,
@@ -118,7 +118,7 @@ export async function GET(
         provider: providerRaw
           ? {
               name: providerRaw.name as string,
-              specialty: providerRaw.specialty as string | null,
+              specialty: providerRaw.primary_specialty_id as string | null,
               city: providerRaw.address_city as string | null,
               rating_average: providerRaw.rating_average as number | null,
             }

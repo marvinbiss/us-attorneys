@@ -8,7 +8,7 @@ const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'co
 
 export function generateStaticParams() {
   return states.flatMap((d) =>
-    topServices.map((s) => ({ departement: d.slug, service: s }))
+    topServices.map((s) => ({ state: d.slug, service: s }))
   )
 }
 
@@ -16,11 +16,11 @@ export const dynamicParams = true
 export const revalidate = 86400
 
 interface PageProps {
-  params: Promise<{ departement: string; service: string }>
+  params: Promise<{ state: string; service: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { departement: deptSlug, service: specialtySlug } = await params
+  const { state: deptSlug, service: specialtySlug } = await params
   const dept = getStateBySlug(deptSlug)
   const trade = getTradeContent(specialtySlug)
   if (!dept || !trade) return { title: 'Page not found' }
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function StateServicePage({ params }: PageProps) {
-  const { departement: deptSlug, service: specialtySlug } = await params
+  const { state: deptSlug, service: specialtySlug } = await params
   const dept = getStateBySlug(deptSlug)
   const trade = getTradeContent(specialtySlug)
   if (!dept || !trade) notFound()

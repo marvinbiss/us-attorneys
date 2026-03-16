@@ -100,7 +100,7 @@ export default function AdminEstimationLeadsPage() {
   if (search) params.set('search', search)
 
   const { data, isLoading, error, mutate } = useAdminFetch<ApiResponse>(
-    `/api/admin/estimation-leads?${params.toString()}`
+    `/api/admin/lead-estimation?${params.toString()}`
   )
 
   const leads = data?.data ?? []
@@ -118,7 +118,7 @@ export default function AdminEstimationLeadsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this lead? This action cannot be undone.')) return
     try {
-      await adminMutate('/api/admin/estimation-leads', {
+      await adminMutate('/api/admin/lead-estimation', {
         method: 'DELETE',
         body: { id },
       })

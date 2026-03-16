@@ -244,7 +244,7 @@ export function CompareView({ onClose }: CompareViewProps) {
               </AttorneyGrid>
             </CompareRow>
 
-            {/* SIRET */}
+            {/* Bar Number */}
             <CompareRow
               label="Bar Number"
               icon={<FileText className="w-4 h-4 text-gray-400" />}

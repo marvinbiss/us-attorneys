@@ -18,11 +18,9 @@ interface AttorneyBusinessCardProps {
   artisan: LegacyArtisan
 }
 
-/** Format SIRET: XXX XXX XXX XXXXX */
-function formatSiret(siret: string): string {
-  const digits = siret.replace(/\s/g, '')
-  if (digits.length !== 14) return siret
-  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9, 14)}`
+/** Format bar number for display */
+function formatBarNumber(barNumber: string): string {
+  return barNumber.trim()
 }
 
 /** Format creation date to US locale — full date */
@@ -112,7 +110,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
       <div className="p-6">
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-          {/* SIRET */}
+          {/* Bar Number */}
           {artisan.siret && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
@@ -123,7 +121,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                   Bar Number
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-gray-900 font-mono tracking-widest">
-                  {formatSiret(artisan.siret)}
+                  {formatBarNumber(artisan.siret)}
                 </dd>
               </div>
             </div>

@@ -287,7 +287,7 @@ export default function AdminParametresPage() {
         {/* Quick Links */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <button
-            onClick={() => router.push('/admin/parametres/admins')}
+            onClick={() => router.push('/admin/settings/admins')}
             className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
           >
             <div className="p-2 bg-blue-100 rounded-lg">
@@ -300,7 +300,7 @@ export default function AdminParametresPage() {
           </button>
 
           <button
-            onClick={() => router.push('/admin/parametres/emails')}
+            onClick={() => router.push('/admin/settings/emails')}
             className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
           >
             <div className="p-2 bg-green-100 rounded-lg">

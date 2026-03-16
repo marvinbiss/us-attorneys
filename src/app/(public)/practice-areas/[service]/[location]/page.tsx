@@ -69,7 +69,7 @@ export const revalidate = 86400
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
-// Pre-render top 50 cities (46 × 50 = 2300 pages)
+// Pre-render top 50 cities (46 x 50 = 2300 pages)
 // Remaining cities are generated on-demand via ISR
 const TOP_CITIES_COUNT = 50
 export function generateStaticParams() {
@@ -230,10 +230,9 @@ function generateJsonLd(
   _providers: unknown[],
   specialtySlug: string,
   locationSlug: string,
-  locationData: Awaited<ReturnType<typeof getLocationBySlug>> | null
+  _locationData: Awaited<ReturnType<typeof getLocationBySlug>> | null
 ) {
   const svcLower = service.name.toLowerCase()
-  const trade = getTradeContent(specialtySlug)
 
   const collectionPageSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -350,18 +349,18 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
   const trade = getTradeContent(specialtySlug)
 
-  // 4. Fetch commune enrichment data (best-effort, never crash)
+  // 4. Fetch location enrichment data (best-effort, never crash)
   let locationData: Awaited<ReturnType<typeof getLocationBySlug>> = null
   try {
     locationData = await getLocationBySlug(locationSlug)
   } catch {
-    // Commune table may not exist yet — continue without data
+    // Location table may not exist yet — continue without data
   }
 
   const baseSchemas = generateJsonLd(service, location, providers || [], specialtySlug, locationSlug, locationData)
 
-  // Count recent devis requests for freshness signal
-  let recentDevisCount = 0
+  // Count recent quote requests for freshness signal
+  let recentQuoteCount = 0
   if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
     try {
       const { createAdminClient } = await import('@/lib/supabase/admin')
@@ -373,9 +372,9 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         .select('*', { count: 'exact', head: true })
         .ilike('city', location.name)
         .gte('created_at', thirtyDaysAgo.toISOString())
-      recentDevisCount = count ?? 0
+      recentQuoteCount = count ?? 0
     } catch {
-      recentDevisCount = 0
+      recentQuoteCount = 0
     }
   }
 
@@ -487,7 +486,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       </div>
 
       <SearchRecorder
-        type="service-ville"
+        type="service-city"
         label={`${service.name} in ${location.name}`}
         href={`/practice-areas/${specialtySlug}/${locationSlug}`}
       />
@@ -511,7 +510,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         totalCount={totalAttorneyCount}
         specialtySlug={specialtySlug}
         locationSlug={locationSlug}
-        recentDevisCount={recentDevisCount}
+        recentQuoteCount={recentQuoteCount}
       />
 
       {trade && (
@@ -585,7 +584,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         pageUrl: `/practice-areas/${specialtySlug}/${locationSlug}`,
       }} />
 
-      <MicroConversions pageType="service-ville" specialtySlug={specialtySlug} cityName={location.name} />
+      <MicroConversions pageType="service-city" specialtySlug={specialtySlug} cityName={location.name} />
 
       <ProactiveChatPrompt specialtySlug={specialtySlug} citySlug={locationSlug} />
     </>

@@ -277,7 +277,7 @@ export async function sendWelcomeEmail(params: {
     html,
     tags: [
       { name: 'type', value: 'welcome' },
-      { name: 'user_type', value: isArtisan ? 'artisan' : 'client' },
+      { name: 'user_type', value: isArtisan ? 'attorney' : 'client' },
     ],
   })
 }

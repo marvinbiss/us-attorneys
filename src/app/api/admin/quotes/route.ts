@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
 
       if (assignments) {
         for (const a of assignments) {
-          const provider = a.provider as unknown as { id: string; name: string } | null
+          const provider = a.attorney as unknown as { id: string; name: string } | null
           const entry = {
             id: a.id,
             status: a.status,

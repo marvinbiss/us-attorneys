@@ -126,7 +126,7 @@ export default function AttorneyCard({
       {provider.siret && (
         <p className="flex items-center gap-1 text-xs text-stone-500 mb-3 ml-6">
           <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-          SIREN {provider.siret.slice(0, 9)}
+          Bar # {provider.siret}
         </p>
       )}
 

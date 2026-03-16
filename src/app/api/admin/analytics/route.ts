@@ -178,7 +178,7 @@ export async function GET(request: Request) {
       if (!event.attorney_id) continue
 
       if (!providerMap.has(event.attorney_id)) {
-        const p = event.providers as unknown as ProviderInfo
+        const p = (event as Record<string, unknown>).attorneys as unknown as ProviderInfo
         providerMap.set(event.attorney_id, {
           id: event.attorney_id,
           name: p?.name || 'Unknown',
@@ -217,7 +217,7 @@ export async function GET(request: Request) {
 
     // Recent activity feed
     const recentEvents = (recentResult.data || []).map(e => {
-      const p = e.providers as unknown as ProviderInfo
+      const p = (e as Record<string, unknown>).attorneys as unknown as ProviderInfo
       const meta = e.metadata as Record<string, string> | null
       return {
         id: e.id,

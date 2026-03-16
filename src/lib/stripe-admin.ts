@@ -7,7 +7,7 @@ function getStripe(): Stripe {
   if (!_stripe) {
     const key = process.env.STRIPE_SECRET_KEY
     if (!key) {
-      throw new Error('STRIPE_SECRET_KEY non configuré')
+      throw new Error('STRIPE_SECRET_KEY not configured')
     }
     _stripe = new Stripe(key, { apiVersion: '2023-10-16' })
   }
@@ -115,7 +115,7 @@ export async function cancelSubscription(
 ) {
   try {
     if (immediately) {
-      // Annulation immédiate
+      // Immediate cancellation
       const subscription = await getStripe().subscriptions.cancel(subscriptionId)
       return {
         id: subscription.id,
@@ -123,7 +123,7 @@ export async function cancelSubscription(
         canceledAt: new Date().toISOString(),
       }
     } else {
-      // Annulation à la fin de la période
+      // Cancel at end of period
       const subscription = await getStripe().subscriptions.update(subscriptionId, {
         cancel_at_period_end: true,
       })

@@ -93,9 +93,9 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
     badgeUrl = `${SITE_URL}/api/badge/verified?${param}&style=${style}`
 
     // Build link to artisan page
-    const specialtySlug = (selectedProvider.specialty || 'artisan')
+    const specialtySlug = (selectedProvider.specialty || 'attorney')
       .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-    const citySlug = (selectedProvider.city || 'france')
+    const citySlug = (selectedProvider.city || 'us')
       .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     const publicId = selectedProvider.slug || selectedProvider.stable_id || ''
     linkUrl = `${SITE_URL}/practice-areas/${specialtySlug}/${citySlug}/${publicId}`
@@ -110,7 +110,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
     badgeUrl = `${SITE_URL}/api/badge?${badgeParams.toString()}`
     const specialtySlug = service
       ? service.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-      : 'artisan'
+      : 'attorney'
     linkUrl = `${SITE_URL}/practice-areas/${specialtySlug}`
   }
 

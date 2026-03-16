@@ -24,7 +24,7 @@ const getResend = () => getResendClient()
 const artisanSchema = z.object({
   // Step 1 - Company
   entreprise: z.string().min(2, 'Business name is required'),
-  siret: z.string().min(14, 'Invalid SIRET').max(17),
+  siret: z.string().min(1, 'Bar number is required'),
   metier: z.string().min(1, 'Practice area is required'),
   autreMetier: z.string().optional(),
   // Step 2 - Contact
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
           <p><strong>Registration summary:</strong></p>
           <ul>
             <li><strong>Firm:</strong> ${escapeHtml(data.entreprise ?? '')}</li>
-            <li><strong>SIRET:</strong> ${escapeHtml(data.siret ?? '')}</li>
+            <li><strong>Bar Number:</strong> ${escapeHtml(data.siret ?? '')}</li>
             <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
             <li><strong>Coverage area:</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
           </ul>
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
           <h3>Firm</h3>
           <ul>
             <li><strong>Name:</strong> ${escapeHtml(data.entreprise ?? '')}</li>
-            <li><strong>SIRET:</strong> ${escapeHtml(data.siret ?? '')}</li>
+            <li><strong>Bar Number:</strong> ${escapeHtml(data.siret ?? '')}</li>
             <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
           </ul>
           <h3>Contact</h3>

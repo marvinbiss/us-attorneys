@@ -95,7 +95,7 @@ export default function AdminUsersPage() {
             <p className="text-gray-500 mt-1">{total} total users</p>
           </div>
           <button
-            onClick={() => router.push('/admin/utilisateurs/nouveau')}
+            onClick={() => router.push('/admin/users/nouveau')}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <UserPlus className="w-5 h-5" />
@@ -228,7 +228,7 @@ export default function AdminUsersPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-end gap-2">
                             <button
-                              onClick={() => router.push(`/admin/utilisateurs/${user.id}`)}
+                              onClick={() => router.push(`/admin/users/${user.id}`)}
                               className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="View profile"
                             >

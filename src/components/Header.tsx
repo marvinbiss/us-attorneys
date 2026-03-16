@@ -288,7 +288,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
 
             <Link
               href="/quotes"
-              onClick={() => trackEvent('header_devis_click', {})}
+              onClick={() => trackEvent('header_quote_click', {})}
               className="ml-2 px-4 py-2 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Free consultation

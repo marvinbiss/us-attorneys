@@ -36,7 +36,7 @@ describe('client_id on lead creation — server action', () => {
   })
 })
 
-describe('client_id on lead creation — devis API route', () => {
+describe('client_id on lead creation -- quotes API route', () => {
   const source = readSource('src/app/api/quotes/route.ts')
 
   it('imports server client for auth resolution', () => {

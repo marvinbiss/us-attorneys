@@ -77,7 +77,7 @@ export default function EditUserPage() {
       })
 
       if (response.ok) {
-        router.push(`/admin/utilisateurs/${userId}`)
+        router.push(`/admin/users/${userId}`)
       } else {
         const data = await response.json()
         setError(data.error?.message || data.error || 'Save error')
@@ -103,7 +103,7 @@ export default function EditUserPage() {
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
-            onClick={() => router.push('/admin/utilisateurs')}
+            onClick={() => router.push('/admin/users')}
             className="text-blue-600 hover:underline"
           >
             Back to list
@@ -120,7 +120,7 @@ export default function EditUserPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <button
-              onClick={() => router.push(`/admin/utilisateurs/${userId}`)}
+              onClick={() => router.push(`/admin/users/${userId}`)}
               className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />

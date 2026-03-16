@@ -13,7 +13,7 @@ interface CityMarker {
   lng: number
   attorneyCount: number
   region: string
-  departement: string
+  state: string
   population: number
 }
 const cityMarkers: CityMarker[] = []
@@ -106,7 +106,7 @@ function CityListFallback({
                   {city.name}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {city.departement} &middot; {city.region}
+                  {city.state} &middot; {city.region}
                 </p>
               </div>
             </div>
@@ -395,7 +395,7 @@ export default function CarteClient() {
                     <Popup maxWidth={280}>
                       <div className="p-3">
                         <h3 className="font-bold text-gray-900 text-base mb-1">{city.name}</h3>
-                        <p className="text-sm text-gray-600 mb-1">{city.departement} &middot; {city.region}</p>
+                        <p className="text-sm text-gray-600 mb-1">{city.state} &middot; {city.region}</p>
                         <p className="text-sm font-medium text-blue-700 mb-3">
                           {city.attorneyCount.toLocaleString('en-US')} listed attorneys
                         </p>

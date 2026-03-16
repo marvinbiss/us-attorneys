@@ -144,7 +144,7 @@ export default function AttorneyResultCard({
                 {/* Name & Distance */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <Link
-                    href={getAttorneyUrl(artisan)}
+                    href={getAttorneyUrl(attorney)}
                     className="text-lg font-semibold text-blue-600 hover:underline"
                   >
                     {displayName}
