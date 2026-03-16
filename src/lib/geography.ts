@@ -20,6 +20,9 @@ export const US_STATES: Record<string, string> = {
   'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah',
   'VT': 'Vermont', 'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
   'WI': 'Wisconsin', 'WY': 'Wyoming', 'DC': 'District of Columbia',
+  // US Territories
+  'PR': 'Puerto Rico', 'GU': 'Guam', 'VI': 'U.S. Virgin Islands',
+  'AS': 'American Samoa', 'MP': 'Northern Mariana Islands', 'UM': 'U.S. Minor Outlying Islands',
 }
 // Backward compatibility alias
 export const DEPARTMENTS = US_STATES
@@ -38,6 +41,9 @@ export const STATE_TO_REGION: Record<string, string> = {
   'AZ': 'West', 'CO': 'West', 'ID': 'West', 'MT': 'West', 'NV': 'West',
   'NM': 'West', 'UT': 'West', 'WY': 'West',
   'AK': 'West', 'CA': 'West', 'HI': 'West', 'OR': 'West', 'WA': 'West',
+  // US Territories
+  'PR': 'Territory', 'GU': 'Territory', 'VI': 'Territory',
+  'AS': 'Territory', 'MP': 'Territory', 'UM': 'Territory',
 }
 // Backward compatibility alias
 export const DEPT_TO_REGION = STATE_TO_REGION
