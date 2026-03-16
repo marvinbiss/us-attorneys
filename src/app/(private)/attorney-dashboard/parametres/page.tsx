@@ -41,20 +41,20 @@ interface SettingsData {
 
 // TODO: Persist to API when notification preferences endpoint is available
 interface NotificationPreferences {
-  nouveauxLeads: boolean
-  nouveauxAvis: boolean
+  newLeads: boolean
+  newReviews: boolean
   messages: boolean
-  rappelsRdv: boolean
+  appointmentReminders: boolean
 }
 
 const NOTIF_STORAGE_KEY = 'attorney_notification_prefs'
 
 function getDefaultNotifPrefs(): NotificationPreferences {
   return {
-    nouveauxLeads: true,
-    nouveauxAvis: true,
+    newLeads: true,
+    newReviews: true,
     messages: true,
-    rappelsRdv: true,
+    appointmentReminders: true,
   }
 }
 
@@ -419,10 +419,10 @@ export default function AttorneySettingsPage() {
 
           <div className="space-y-4">
             {([
-              { key: 'nouveauxLeads' as const, label: 'New Leads', desc: 'Get notified for each new case request' },
-              { key: 'nouveauxAvis' as const, label: 'New Reviews', desc: 'Be informed when a client leaves a review' },
+              { key: 'newLeads' as const, label: 'New Leads', desc: 'Get notified for each new case request' },
+              { key: 'newReviews' as const, label: 'New Reviews', desc: 'Be informed when a client leaves a review' },
               { key: 'messages' as const, label: 'Messages', desc: 'Notifications for new messages' },
-              { key: 'rappelsRdv' as const, label: 'Appointment Reminders', desc: 'Reminders before your scheduled appointments' },
+              { key: 'appointmentReminders' as const, label: 'Appointment Reminders', desc: 'Reminders before your scheduled appointments' },
             ]).map((item) => (
               <div key={item.key} className="flex items-center justify-between py-2">
                 <div>

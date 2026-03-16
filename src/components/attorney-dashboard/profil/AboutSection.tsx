@@ -4,14 +4,14 @@ import { FileText } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useAttorneyForm } from './useAttorneyForm'
 
-interface PresentationSectionProps {
+interface AboutSectionProps {
   provider: Record<string, unknown>
   onSaved: (updated: Record<string, unknown>) => void
 }
 
 const FIELDS = ['description', 'bio', 'specialty'] as const
 
-export function PresentationSection({ provider, onSaved }: PresentationSectionProps) {
+export function AboutSection({ provider, onSaved }: AboutSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
 
   const onSave = async () => {

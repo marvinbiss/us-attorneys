@@ -61,7 +61,7 @@ export async function GET() {
     // Step 2: fetch reviews for those bookings
     // Note: 'quotes' table does not exist yet (TODO: re-enable join when quotes table is created)
     // Note: profiles does not have company_name or avatar_url
-    const { data: avisPublies, error: avisError } = await supabase
+    const { data: publishedReviews, error: reviewsError } = await supabase
       .from('reviews')
       .select(`
         *,
@@ -71,8 +71,8 @@ export async function GET() {
       .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
       .order('created_at', { ascending: false })
 
-    if (avisError) {
-      logger.error('Error fetching reviews:', avisError)
+    if (reviewsError) {
+      logger.error('Error fetching reviews:', reviewsError)
       return NextResponse.json(
         { error: 'Error retrieving reviews' },
         { status: 500 }
@@ -80,10 +80,10 @@ export async function GET() {
     }
 
     // TODO: quotes table does not exist yet -- pending reviews from completed quotes disabled
-    const avisEnAttente: unknown[] = []
+    const pendingReviews: unknown[] = []
 
     // Format published reviews
-    const formattedPublishedReviews = avisPublies?.map(r => ({
+    const formattedPublishedReviews = publishedReviews?.map(r => ({
       id: r.id,
       attorney: r.artisan?.full_name || 'Attorney',
       attorney_id: r.attorney_id,
@@ -96,7 +96,7 @@ export async function GET() {
 
     return NextResponse.json({
       publishedReviews: formattedPublishedReviews,
-      pendingReviews: avisEnAttente,
+      pendingReviews: pendingReviews,
     })
   } catch (error) {
     logger.error('Client avis GET error:', error)

@@ -40,7 +40,7 @@ export async function GET() {
 
     return NextResponse.json({ members: data ?? [] })
   } catch (error) {
-    logger.error('Equipe GET error:', error)
+    logger.error('Team GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ member: data }, { status: 201 })
   } catch (error) {
-    logger.error('Equipe POST error:', error)
+    logger.error('Team POST error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

@@ -21,12 +21,12 @@ export async function OPTIONS() {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
-    const metier = searchParams.get('metier')
-    const ville = searchParams.get('ville')
-    const departement = searchParams.get('departement')
+    const specialty = searchParams.get('metier')
+    const city = searchParams.get('ville')
+    const state = searchParams.get('departement')
     const region = searchParams.get('region')
 
-    if (!metier) {
+    if (!specialty) {
       return NextResponse.json(
         { error: 'The "metier" parameter is required. Example: ?metier=plumber' },
         { status: 400, headers: CORS_HEADERS },
@@ -38,12 +38,12 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from('barometre_stats')
       .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at')
-      .eq('metier_slug', metier)
+      .eq('metier_slug', specialty)
 
-    if (ville) {
-      query = query.eq('ville_slug', ville)
-    } else if (departement) {
-      query = query.eq('departement_code', departement).is('ville', null)
+    if (city) {
+      query = query.eq('ville_slug', city)
+    } else if (state) {
+      query = query.eq('departement_code', state).is('ville', null)
     } else if (region) {
       query = query.eq('region_slug', region).is('ville', null).is('departement', null)
     } else {

@@ -4,14 +4,14 @@ import { Building2 } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useAttorneyForm } from './useAttorneyForm'
 
-interface IdentiteSectionProps {
+interface IdentitySectionProps {
   provider: Record<string, unknown>
   onSaved: (updated: Record<string, unknown>) => void
 }
 
 const FIELDS = ['name', 'siret'] as const
 
-export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
+export function IdentitySection({ provider, onSaved }: IdentitySectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
 
   const isVerified = Boolean(provider.is_verified)

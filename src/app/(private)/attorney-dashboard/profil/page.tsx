@@ -3,38 +3,38 @@
 import { useState, useEffect } from 'react'
 import { Loader2, Building2, Phone, MapPin, FileText, Euro, Award, Clock, Settings2, Camera, HelpCircle } from 'lucide-react'
 import AttorneySidebar from '@/components/attorney-dashboard/AttorneySidebar'
-import { IdentiteSection } from '@/components/attorney-dashboard/profil/IdentiteSection'
+import { IdentitySection } from '@/components/attorney-dashboard/profil/IdentitySection'
 import { ContactSection } from '@/components/attorney-dashboard/profil/ContactSection'
-import { LocalisationSection } from '@/components/attorney-dashboard/profil/LocalisationSection'
-import { PresentationSection } from '@/components/attorney-dashboard/profil/PresentationSection'
-import { ServicesTarifsSection } from '@/components/attorney-dashboard/profil/ServicesTarifsSection'
+import { LocationSection } from '@/components/attorney-dashboard/profil/LocationSection'
+import { AboutSection } from '@/components/attorney-dashboard/profil/AboutSection'
+import { ServicesPricingSection } from '@/components/attorney-dashboard/profil/ServicesPricingSection'
 import { QualificationsSection } from '@/components/attorney-dashboard/profil/QualificationsSection'
-import { DisponibiliteSection } from '@/components/attorney-dashboard/profil/DisponibiliteSection'
+import { AvailabilitySection } from '@/components/attorney-dashboard/profil/AvailabilitySection'
 import { PreferencesSection } from '@/components/attorney-dashboard/profil/PreferencesSection'
 import { FaqSection } from '@/components/attorney-dashboard/profil/FaqSection'
 import { AvatarSection } from '@/components/attorney-dashboard/profil/AvatarSection'
 import { getAttorneyUrl } from '@/lib/utils'
 
-type TabId = 'identite' | 'contact' | 'localisation' | 'presentation' | 'services' | 'qualifications' | 'disponibilite' | 'faq' | 'preferences' | 'avatar'
+type TabId = 'identity' | 'contact' | 'location' | 'about' | 'services' | 'qualifications' | 'availability' | 'faq' | 'preferences' | 'avatar'
 
 const TABS = [
-  { id: 'identite' as const, label: 'Identity', icon: Building2 },
+  { id: 'identity' as const, label: 'Identity', icon: Building2 },
   { id: 'contact' as const, label: 'Contact', icon: Phone },
-  { id: 'localisation' as const, label: 'Location', icon: MapPin },
-  { id: 'presentation' as const, label: 'About', icon: FileText },
+  { id: 'location' as const, label: 'Location', icon: MapPin },
+  { id: 'about' as const, label: 'About', icon: FileText },
   { id: 'services' as const, label: 'Services & Fees', icon: Euro },
   { id: 'qualifications' as const, label: 'Qualifications', icon: Award },
-  { id: 'disponibilite' as const, label: 'Availability', icon: Clock },
+  { id: 'availability' as const, label: 'Availability', icon: Clock },
   { id: 'faq' as const, label: 'FAQ', icon: HelpCircle },
   { id: 'preferences' as const, label: 'Preferences', icon: Settings2 },
   { id: 'avatar' as const, label: 'Profile Photo', icon: Camera },
 ]
 
-export default function ProfilArtisanPage() {
+export default function AttorneyProfilePage() {
   const [provider, setProvider] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<TabId>('identite')
+  const [activeTab, setActiveTab] = useState<TabId>('identity')
 
   useEffect(() => {
     fetch('/api/attorney/provider')
@@ -158,13 +158,13 @@ export default function ProfilArtisanPage() {
             id={`tabpanel-${activeTab}`}
             aria-labelledby={`tab-${activeTab}`}
           >
-            {activeTab === 'identite' && <IdentiteSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'identity' && <IdentitySection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'contact' && <ContactSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'localisation' && <LocalisationSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'presentation' && <PresentationSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'services' && <ServicesTarifsSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'location' && <LocationSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'about' && <AboutSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'services' && <ServicesPricingSection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'qualifications' && <QualificationsSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'disponibilite' && <DisponibiliteSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'availability' && <AvailabilitySection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'faq' && <FaqSection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'preferences' && <PreferencesSection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'avatar' && <AvatarSection provider={provider} onSaved={handleSaved} />}

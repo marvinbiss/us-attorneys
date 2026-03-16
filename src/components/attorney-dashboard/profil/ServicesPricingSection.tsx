@@ -5,7 +5,7 @@ import { DollarSign, Plus, X } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useAttorneyForm } from './useAttorneyForm'
 
-interface ServicesTarifsSectionProps {
+interface ServicesPricingSectionProps {
   provider: Record<string, unknown>
   onSaved: (updated: Record<string, unknown>) => void
 }
@@ -22,7 +22,7 @@ const MAX_SERVICE_PRICES = 20
 
 const FIELDS = ['services_offered', 'service_prices', 'free_quote'] as const
 
-export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSectionProps) {
+export function ServicesPricingSection({ provider, onSaved }: ServicesPricingSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
   const [newService, setNewService] = useState('')
 

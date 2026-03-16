@@ -4,14 +4,14 @@ import { MapPin } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useAttorneyForm } from './useAttorneyForm'
 
-interface LocalisationSectionProps {
+interface LocationSectionProps {
   provider: Record<string, unknown>
   onSaved: (updated: Record<string, unknown>) => void
 }
 
 const FIELDS = ['address_street', 'address_city', 'address_postal_code', 'intervention_radius_km'] as const
 
-export function LocalisationSection({ provider, onSaved }: LocalisationSectionProps) {
+export function LocationSection({ provider, onSaved }: LocationSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
 
   const onSave = async () => {

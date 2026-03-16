@@ -24,7 +24,7 @@ export async function GET() {
     }
 
     // Fetch quote requests for this client
-    const { data: demandes, error: demandesError } = await supabase
+    const { data: requests, error: requestsError } = await supabase
       .from('devis_requests')
       .select(`
         *,
@@ -41,8 +41,8 @@ export async function GET() {
       .eq('client_id', user.id)
       .order('created_at', { ascending: false })
 
-    if (demandesError) {
-      logger.error('Error fetching demandes:', demandesError)
+    if (requestsError) {
+      logger.error('Error fetching requests:', requestsError)
       return NextResponse.json(
         { error: 'Error retrieving claims' },
         { status: 500 }
@@ -51,20 +51,20 @@ export async function GET() {
 
     // Calculate stats
     const stats = {
-      total: demandes?.length || 0,
-      pending: demandes?.filter(d => d.status === 'pending').length || 0,
-      quotesReceived: demandes?.filter(d => d.status === 'sent').length || 0,
-      accepted: demandes?.filter(d => d.status === 'accepted').length || 0,
-      declined: demandes?.filter(d => d.status === 'refused').length || 0,
-      completed: demandes?.filter(d => d.status === 'completed').length || 0,
+      total: requests?.length || 0,
+      pending: requests?.filter(d => d.status === 'pending').length || 0,
+      quotesReceived: requests?.filter(d => d.status === 'sent').length || 0,
+      accepted: requests?.filter(d => d.status === 'accepted').length || 0,
+      declined: requests?.filter(d => d.status === 'refused').length || 0,
+      completed: requests?.filter(d => d.status === 'completed').length || 0,
     }
 
     return NextResponse.json({
-      requests: demandes || [],
+      requests: requests || [],
       stats
     })
   } catch (error) {
-    logger.error('Client demandes GET error:', error)
+    logger.error('Client requests GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }

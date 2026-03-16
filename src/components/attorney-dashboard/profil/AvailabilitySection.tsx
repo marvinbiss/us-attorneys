@@ -4,7 +4,7 @@ import { Clock } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useAttorneyForm } from './useAttorneyForm'
 
-interface DisponibiliteSectionProps {
+interface AvailabilitySectionProps {
   provider: Record<string, unknown>
   onSaved: (updated: Record<string, unknown>) => void
 }
@@ -47,7 +47,7 @@ const DEFAULT_HOURS: OpeningHours = {
   dimanche: { ouvert: false, debut: '', fin: '' },
 }
 
-export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSectionProps) {
+export function AvailabilitySection({ provider, onSaved }: AvailabilitySectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
 
   const onSave = async () => {
