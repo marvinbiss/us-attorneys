@@ -69,8 +69,8 @@ describe('getRateLimitConfig', () => {
   })
 
   it('returns verify config for verification routes', () => {
-    expect(getRateLimitConfig('/api/verify/siret')).toBe(RATE_LIMITS.verify)
-    expect(getRateLimitConfig('/api/verify/entreprise')).toBe(RATE_LIMITS.verify)
+    expect(getRateLimitConfig('/api/verify/bar-number')).toBe(RATE_LIMITS.verify)
+    expect(getRateLimitConfig('/api/verify/business')).toBe(RATE_LIMITS.verify)
   })
 
   it('returns geocode config for geocode routes', () => {

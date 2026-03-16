@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
-import { syncArtisansFromDatabase } from '@/lib/prospection/import-service'
+import { syncAttorneysFromDatabase } from '@/lib/prospection/import-service'
 import { z } from 'zod'
 
 const syncSchema = z.object({
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     const department = parsed.data.department
 
-    const result = await syncArtisansFromDatabase({ department })
+    const result = await syncAttorneysFromDatabase({ department })
 
     await logAdminAction(authResult.admin.id, 'contact.sync', 'prospection_contact', 'bulk', {
       department: department || 'all',
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       data: result,
     })
   } catch (error) {
-    logger.error('Sync artisans error', error as Error)
+    logger.error('Sync attorneys error', error as Error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

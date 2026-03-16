@@ -40,7 +40,7 @@ export {
   checkDuplicates,
   bulkInsertContacts,
   importContacts,
-  syncArtisansFromDatabase,
+  syncAttorneysFromDatabase,
 } from './import-service'
 
 // Analytics

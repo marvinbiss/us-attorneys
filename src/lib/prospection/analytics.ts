@@ -53,7 +53,7 @@ export async function getCampaignStats(campaignId: string): Promise<CampaignStat
 }
 
 /**
- * Vue d'ensemble globale
+ * Global overview
  * Optimized: uses parallel queries and in-JS grouping instead of N+1 loops
  */
 export async function getOverviewStats(

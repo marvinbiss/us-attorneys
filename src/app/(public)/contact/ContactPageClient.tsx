@@ -8,9 +8,9 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 
 export default function ContactPageClient() {
   const [formData, setFormData] = useState({
-    nom: '',
+    name: '',
     email: '',
-    sujet: '',
+    subject: '',
     message: '',
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -223,15 +223,15 @@ export default function ContactPageClient() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="contact-nom" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-2">
                       Full name *
                     </label>
                     <input
-                      id="contact-nom"
+                      id="contact-name"
                       type="text"
                       autoComplete="name"
-                      value={formData.nom}
-                      onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
                       disabled={isLoading}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
@@ -257,13 +257,13 @@ export default function ContactPageClient() {
                 </div>
 
                 <div>
-                  <label htmlFor="contact-sujet" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="contact-subject" className="block text-sm font-medium text-gray-700 mb-2">
                     Subject *
                   </label>
                   <select
-                    id="contact-sujet"
-                    value={formData.sujet}
-                    onChange={(e) => setFormData({ ...formData, sujet: e.target.value })}
+                    id="contact-subject"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     required
                     disabled={isLoading}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"

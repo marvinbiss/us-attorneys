@@ -79,7 +79,7 @@ export function generateStaticParams() {
   )
 }
 
-/** Resolve a ville from static data to Location shape (fallback when DB is down) */
+/** Resolve a city from static data to Location shape (fallback when DB is down) */
 function villeToLocation(slug: string): LocationType | null {
   const ville = getCityBySlug(slug)
   if (!ville) return null
@@ -323,7 +323,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
   }
 
-  // 2. Resolve location (DB → france.ts fallback)
+  // 2. Resolve location (DB → static data fallback)
   let location: LocationType
   try {
     const dbLocation = await getLocationBySlug(locationSlug)

@@ -200,7 +200,7 @@ export async function getSpecialtyBySlug(slug: string) {
 
 export async function getLocationBySlug(slug: string) {
   if (IS_BUILD) {
-    // Use static france.ts fallback during build
+    // Use static usa.ts fallback during build
     const ville = getVilleBySlugImport(slug)
     if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.zipCode }
     return null
@@ -237,7 +237,7 @@ export async function getLocationBySlug(slug: string) {
         )
         return data
       } catch {
-        // Fallback to france.ts static data when DB table is empty/missing
+        // Fallback to usa.ts static data when DB table is empty/missing
         const ville = getVilleBySlugImport(slug)
         if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.zipCode }
         return null

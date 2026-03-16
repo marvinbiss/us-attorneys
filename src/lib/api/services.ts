@@ -12,7 +12,7 @@ export interface Service {
   is_active: boolean
 }
 
-export interface Artisan {
+export interface Attorney {
   id: string
   name: string
   specialty: string | null
@@ -76,7 +76,7 @@ export async function getSpecialtyBySlug(slug: string): Promise<Service | null> 
 }
 
 /**
- * Get artisans by service and location
+ * Get attorneys by service and location
  */
 export async function getAttorneys(params: {
   service?: string
@@ -84,8 +84,8 @@ export async function getAttorneys(params: {
   postalCode?: string
   limit?: number
   offset?: number
-}): Promise<{ artisans: Artisan[]; total: number }> {
-  const cacheKey = generateCacheKey('artisans', params)
+}): Promise<{ attorneys: Attorney[]; total: number }> {
+  const cacheKey = generateCacheKey('attorneys', params)
 
   return getCachedData(
     cacheKey,
@@ -124,12 +124,12 @@ export async function getAttorneys(params: {
       const { data, error, count } = await query
 
       if (error) {
-        logger.error('Error fetching artisans', error)
-        return { artisans: [], total: 0 }
+        logger.error('Error fetching attorneys', error)
+        return { attorneys: [], total: 0 }
       }
 
       return {
-        artisans: (data || []).map((a) => ({
+        attorneys: (data || []).map((a) => ({
           id: a.id,
           name: a.name || 'Attorney',
           specialty: a.specialty,
@@ -150,7 +150,7 @@ export async function getAttorneys(params: {
 /**
  * Get attorney by ID
  */
-export async function getAttorneyById(id: string): Promise<Artisan | null> {
+export async function getAttorneyById(id: string): Promise<Attorney | null> {
   return getCachedData(
     `attorney:${id}`,
     async () => {
@@ -233,7 +233,7 @@ export async function getPlatformStats() {
       if (error) {
         logger.error('Error fetching platform stats', error)
         return {
-          totalArtisans: 0,
+          totalAttorneys: 0,
           totalReviews: 0,
           averageRating: 0,
           totalCities: 0,
@@ -241,7 +241,7 @@ export async function getPlatformStats() {
       }
 
       return {
-        totalArtisans: data.total_verified || 0,
+        totalAttorneys: data.total_verified || 0,
         totalReviews: data.total_reviews || 0,
         averageRating: data.avg_rating || 0,
         totalCities: data.total_cities || 0,

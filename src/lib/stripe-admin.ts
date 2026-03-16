@@ -168,7 +168,7 @@ export async function changeSubscriptionPlan(
   prorationBehavior: 'create_prorations' | 'none' | 'always_invoice' = 'create_prorations'
 ) {
   try {
-    // Retrieve l'abonnement actuel
+    // Retrieve the current subscription
     const subscription = await getStripe().subscriptions.retrieve(subscriptionId)
     const subscriptionItemId = subscription.items.data[0].id
 
@@ -200,14 +200,14 @@ export async function changeSubscriptionPlan(
  */
 export async function createManualCharge(
   customerId: string,
-  amount: number, // En centimes
+  amount: number, // In cents
   description: string,
   metadata?: Record<string, string>
 ) {
   try {
     const paymentIntent = await getStripe().paymentIntents.create({
       amount,
-      currency: 'eur',
+      currency: 'usd',
       customer: customerId,
       description,
       metadata,
@@ -343,7 +343,7 @@ export async function getRevenueStats(days = 30) {
       netRevenue: totalRevenue - totalRefunded,
       chargesCount: charges.data.length,
       refundsCount: refunds.data.length,
-      period: `${days} derniers jours`,
+      period: `last ${days} days`,
     }
   } catch (error) {
     logger.error('Error getting revenue stats', error as Error)

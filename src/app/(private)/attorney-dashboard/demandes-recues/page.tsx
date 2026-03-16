@@ -74,7 +74,7 @@ export default function DemandesRecuesPage() {
     totalItems: 0,
   })
   const [filterStatus, setFilterStatus] = useState('all')
-  const [showDevisModal, setShowDevisModal] = useState(false)
+  const [showQuoteModal, setShowQuoteModal] = useState(false)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -149,11 +149,11 @@ export default function DemandesRecuesPage() {
     setFilterStatus(status)
   }
 
-  const openDevisModal = (lead: Lead) => {
+  const openQuoteModal = (lead: Lead) => {
     setSelectedLead(lead)
     setIsRevising(false)
     setQuoteForm({ amount: '', description: '', validity_days: 30 })
-    setShowDevisModal(true)
+    setShowQuoteModal(true)
   }
 
   const openReviseModal = (lead: Lead) => {
@@ -165,7 +165,7 @@ export default function DemandesRecuesPage() {
       validity_days: 30,
     })
     setShowDetailModal(false)
-    setShowDevisModal(true)
+    setShowQuoteModal(true)
   }
 
   const openDetailModal = (lead: Lead) => {
@@ -173,7 +173,7 @@ export default function DemandesRecuesPage() {
     setShowDetailModal(true)
   }
 
-  const handleSendDevis = async (e: React.FormEvent) => {
+  const handleSendQuote = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedLead?.lead || !quoteForm.amount) return
 
@@ -213,7 +213,7 @@ export default function DemandesRecuesPage() {
               },
             }
           }))
-          setShowDevisModal(false)
+          setShowQuoteModal(false)
           setSelectedLead(null)
           setToast({ message: 'Quote updated successfully!', type: 'success' })
         } else {
@@ -251,7 +251,7 @@ export default function DemandesRecuesPage() {
             return { ...l, status: 'quoted', quote: newQuote }
           }))
 
-          setShowDevisModal(false)
+          setShowQuoteModal(false)
           setSelectedLead(null)
           setToast({ message: 'Quote sent successfully!', type: 'success' })
 
@@ -443,7 +443,7 @@ export default function DemandesRecuesPage() {
                           <div className="flex items-center gap-2 ml-4 shrink-0" onClick={(e) => e.stopPropagation()} role="group">
                             {(item.status === 'pending' || item.status === 'viewed') && (
                               <button
-                                onClick={() => openDevisModal(item)}
+                                onClick={() => openQuoteModal(item)}
                                 aria-label="Send a quote"
                                 className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                               >
@@ -510,7 +510,7 @@ export default function DemandesRecuesPage() {
       </div>
 
       {/* Send / Revise Quote Modal */}
-      {showDevisModal && selectedLead?.lead && (
+      {showQuoteModal && selectedLead?.lead && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-[95vw] sm:max-w-lg w-full p-6">
             <div className="flex items-center justify-between mb-6">
@@ -518,7 +518,7 @@ export default function DemandesRecuesPage() {
                 {isRevising ? 'Revise Quote' : 'Send a Quote'}
               </h2>
               <button
-                onClick={() => setShowDevisModal(false)}
+                onClick={() => setShowQuoteModal(false)}
                 aria-label="Close"
                 className="p-2 hover:bg-gray-100 rounded-lg"
               >
@@ -540,7 +540,7 @@ export default function DemandesRecuesPage() {
               </div>
             )}
 
-            <form onSubmit={handleSendDevis} className="space-y-4">
+            <form onSubmit={handleSendQuote} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Quote Amount (USD) *
@@ -589,7 +589,7 @@ export default function DemandesRecuesPage() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="button"
-                  onClick={() => setShowDevisModal(false)}
+                  onClick={() => setShowQuoteModal(false)}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
                   Cancel
@@ -736,7 +736,7 @@ export default function DemandesRecuesPage() {
                   <button
                     onClick={() => {
                       setShowDetailModal(false)
-                      openDevisModal(selectedLead)
+                      openQuoteModal(selectedLead)
                     }}
                     className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                   >

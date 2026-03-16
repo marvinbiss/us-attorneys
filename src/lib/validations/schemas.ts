@@ -122,15 +122,15 @@ export const updateProfileSchema = z.object({
   phone: phoneSchema.optional(),
   address: z.string().max(500).optional(),
   city: z.string().max(100).optional(),
-  postalCode: z.string().regex(/^\d{5}$/, 'Invalid postal code').optional(),
+  postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').optional(),
   bio: z.string().max(1000).optional(),
 })
 
 // ============================================
-// ARTISAN SCHEMAS
+// ATTORNEY SCHEMAS
 // ============================================
 
-export const artisanRegistrationSchema = z.object({
+export const attorneyRegistrationSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
   confirmPassword: z.string(),
@@ -142,7 +142,7 @@ export const artisanRegistrationSchema = z.object({
   barNumber: z.string().regex(/^[A-Za-z0-9]{4,20}$/, 'Invalid bar number'),
   address: z.string().min(5).max(500),
   city: z.string().min(2).max(100),
-  postalCode: z.string().regex(/^\d{5}$/, 'Invalid postal code'),
+  postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code'),
   description: z.string().max(2000).optional(),
   acceptTerms: z.literal(true),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -155,8 +155,8 @@ export const artisanRegistrationSchema = z.object({
 // ============================================
 
 export const createPaymentIntentSchema = z.object({
-  amount: z.number().min(100).max(1000000), // centimes
-  currency: z.enum(['eur']).default('eur'),
+  amount: z.number().min(100).max(1000000), // cents
+  currency: z.enum(['usd']).default('usd'),
   bookingId: uuidSchema.optional(),
   attorneyId: uuidSchema,
   paymentType: z.enum(['full', 'deposit']).default('full'),

@@ -34,9 +34,9 @@ const getResend = () => {
 }
 
 const contactSchema = z.object({
-  nom: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
-  sujet: z.string().min(1, 'Please select a subject'),
+  subject: z.string().min(1, 'Please select a subject'),
   message: z.string().min(10, 'Message must be at least 10 characters'),
 })
 
@@ -53,13 +53,13 @@ export async function POST(request: Request) {
       )
     }
 
-    const { nom, email, sujet, message } = validation.data
+    const { name, email, subject, message } = validation.data
 
     // Sanitise email against SMTP header injection (defence-in-depth on top of Zod .email())
     const safeEmailHeader = email.replace(/[\r\n\t]/g, '').trim()
 
     // Map subject to readable text
-    const sujetTexte: Record<string, string> = {
+    const subjectLabels: Record<string, string> = {
       consultation: 'Question about a consultation',
       attorney: 'Issue with an attorney',
       registration: 'Attorney registration',
@@ -68,9 +68,9 @@ export async function POST(request: Request) {
     }
 
     // Sanitize all user inputs for HTML
-    const safeNom = escapeHtml(nom)
+    const safeName = escapeHtml(name)
     const safeEmail = escapeHtml(email)
-    const safeSujet = escapeHtml(sujetTexte[sujet] || sujet)
+    const safeSubject = escapeHtml(subjectLabels[subject] || subject)
     const safeMessage = escapeHtml(message).replace(/\n/g, '<br />')
 
     // Send email to support team
@@ -78,12 +78,12 @@ export async function POST(request: Request) {
       from: process.env.FROM_EMAIL || 'contact@us-attorneys.com',
       to: 'contact@us-attorneys.com',
       reply_to: safeEmailHeader,
-      subject: `[Contact] ${safeSujet} - ${safeNom}`,
+      subject: `[Contact] ${safeSubject} - ${safeName}`,
       html: `
         <h2>New Contact Message</h2>
-        <p><strong>Name:</strong> ${safeNom}</p>
+        <p><strong>Name:</strong> ${safeName}</p>
         <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Subject:</strong> ${safeSujet}</p>
+        <p><strong>Subject:</strong> ${safeSubject}</p>
         <hr />
         <h3>Message:</h3>
         <p>${safeMessage}</p>
@@ -109,9 +109,9 @@ export async function POST(request: Request) {
         to: email,
         subject: 'Your message has been received - US Attorneys',
         html: `
-          <h2>Hello ${safeNom},</h2>
+          <h2>Hello ${safeName},</h2>
           <p>We have received your message and will get back to you as soon as possible.</p>
-          <p><strong>Subject:</strong> ${safeSujet}</p>
+          <p><strong>Subject:</strong> ${safeSubject}</p>
           <hr />
           <p><strong>Your message:</strong></p>
           <p>${safeMessage}</p>

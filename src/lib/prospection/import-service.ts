@@ -411,7 +411,7 @@ export async function importContacts(
 /**
  * Sync active attorneys from database to prospection_contacts
  */
-export async function syncArtisansFromDatabase(
+export async function syncAttorneysFromDatabase(
   filters?: { department?: string; service?: string }
 ): Promise<{ synced: number; skipped: number }> {
   const supabase = createAdminClient()

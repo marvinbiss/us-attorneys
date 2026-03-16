@@ -134,7 +134,7 @@ export default function ServiceLocationPageClient({
     address_postal_code: p.address_postal_code,
   })), [allProviders])
 
-  // Default center: location coordinates → provider average → France fallback
+  // Default center: location coordinates → provider average → US fallback
   let computedLat = location.latitude
   let computedLng = location.longitude
   if (!computedLat || !computedLng) {
@@ -267,7 +267,7 @@ export default function ServiceLocationPageClient({
             className={`p-2 rounded-lg transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ${
               viewMode !== 'map' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
             }`}
-            aria-label="Vue liste"
+            aria-label="List view"
           >
             <List className="w-4 h-4" />
           </button>
@@ -277,7 +277,7 @@ export default function ServiceLocationPageClient({
             className={`p-2 rounded-lg transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ${
               viewMode === 'map' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
             }`}
-            aria-label="Vue carte"
+            aria-label="Map view"
           >
             <MapIcon className="w-4 h-4" />
           </button>
@@ -306,7 +306,7 @@ export default function ServiceLocationPageClient({
         </div>
       )}
 
-      {/* CTA Banner - Devis above the fold */}
+      {/* CTA Banner - Quote request above the fold */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 border-b border-blue-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3 text-white">
