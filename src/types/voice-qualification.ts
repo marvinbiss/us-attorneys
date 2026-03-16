@@ -3,7 +3,7 @@
 export type QualificationScore = 'A' | 'B' | 'C' | 'disqualified'
 export type VoiceCallStatus = 'in_progress' | 'completed' | 'failed' | 'no_answer' | 'voicemail'
 export type VoiceCallDirection = 'inbound' | 'outbound'
-export type VoiceVertical = 'pac' | 'toiture' | 'isolation'
+export type VoiceVertical = 'family_law' | 'personal_injury' | 'criminal_defense'
 
 export interface QualificationData {
   project_type: VoiceVertical
@@ -11,9 +11,9 @@ export interface QualificationData {
   is_homeowner: boolean
   postal_code: string
   budget_range?: 'less_5000' | '5000_10000' | '10000_20000' | '20000_plus' | 'unknown'
-  property_type?: 'maison' | 'appartement'
-  surface_m2?: number
-  current_system?: 'gaz' | 'fioul' | 'electrique' | 'bois' | 'autre'
+  property_type?: 'house' | 'apartment'
+  surface_sqft?: number
+  case_complexity?: 'simple' | 'moderate' | 'complex' | 'litigation' | 'other'
   caller_name?: string
   caller_email?: string
   disqualification_reason?: 'not_homeowner' | 'outside_area' | 'wrong_vertical'

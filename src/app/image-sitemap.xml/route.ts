@@ -38,7 +38,7 @@ export async function GET() {
 
   // 1. Homepage
   urls.push(
-    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Trouvez les meilleurs artisans en France sur US Attorneys — plateforme de mise en relation avec des professionnels qualifiés' }])
+    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Find the best attorneys in the US on US Attorneys -- a platform connecting you with qualified legal professionals' }])
   )
 
   // 2. Service pages — one image per practice area

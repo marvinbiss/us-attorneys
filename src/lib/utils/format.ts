@@ -11,14 +11,15 @@ export function formatPhone(phone: string): string {
   // Remove all non-digits
   const cleaned = phone.replace(/\D/g, '')
 
-  // Handle French numbers
-  if (cleaned.startsWith('33')) {
-    const national = '0' + cleaned.slice(2)
-    return national.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+  // Handle US numbers with country code
+  if (cleaned.startsWith('1') && cleaned.length === 11) {
+    const national = cleaned.slice(1)
+    return `(${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`
   }
 
-  if (cleaned.length === 10 && cleaned.startsWith('0')) {
-    return cleaned.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+  // Handle 10-digit US numbers
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`
   }
 
   return phone
@@ -35,7 +36,7 @@ export function maskPhone(phone: string): string {
 }
 
 /**
- * Format a price in euros
+ * Format a price in US dollars
  */
 export function formatPrice(amount: number): string {
   return new Intl.NumberFormat('en-US', {
@@ -47,7 +48,7 @@ export function formatPrice(amount: number): string {
 }
 
 /**
- * Format a date in French format
+ * Format a date in US format
  */
 export function formatDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
@@ -73,7 +74,7 @@ export function formatDateTime(date: string | Date): string {
 }
 
 /**
- * Format a relative date (e.g., "il y a 5 minutes")
+ * Format a relative date (e.g., "5 minutes ago")
  */
 export function formatRelativeDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
@@ -86,12 +87,12 @@ export function formatRelativeDate(date: string | Date): string {
   const diffWeek = Math.floor(diffDay / 7)
   const diffMonth = Math.floor(diffDay / 30)
 
-  if (diffSec < 60) return "à l'instant"
-  if (diffMin < 60) return `il y a ${diffMin} minute${diffMin > 1 ? 's' : ''}`
-  if (diffHour < 24) return `il y a ${diffHour} heure${diffHour > 1 ? 's' : ''}`
-  if (diffDay < 7) return `il y a ${diffDay} jour${diffDay > 1 ? 's' : ''}`
-  if (diffWeek < 4) return `il y a ${diffWeek} semaine${diffWeek > 1 ? 's' : ''}`
-  if (diffMonth < 12) return `il y a ${diffMonth} mois`
+  if (diffSec < 60) return 'Just now'
+  if (diffMin < 60) return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`
+  if (diffHour < 24) return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`
+  if (diffDay < 7) return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`
+  if (diffWeek < 4) return `${diffWeek} week${diffWeek > 1 ? 's' : ''} ago`
+  if (diffMonth < 12) return `${diffMonth} month${diffMonth > 1 ? 's' : ''} ago`
 
   return formatDate(d)
 }

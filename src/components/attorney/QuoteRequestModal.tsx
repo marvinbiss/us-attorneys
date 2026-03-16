@@ -257,7 +257,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   <div>
                     <label htmlFor="quote-name" className="block text-sm font-medium text-gray-700 mb-1.5">
                       Your name <span aria-hidden="true">*</span>
-                      <span className="sr-only">(requis)</span>
+                      <span className="sr-only">(required)</span>
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
@@ -284,7 +284,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   <div>
                     <label htmlFor="quote-email" className="block text-sm font-medium text-gray-700 mb-1.5">
                       Your email <span aria-hidden="true">*</span>
-                      <span className="sr-only">(requis)</span>
+                      <span className="sr-only">(required)</span>
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
@@ -311,7 +311,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   <div>
                     <label htmlFor="quote-phone" className="block text-sm font-medium text-gray-700 mb-1.5">
                       Your phone <span aria-hidden="true">*</span>
-                      <span className="sr-only">(requis)</span>
+                      <span className="sr-only">(required)</span>
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
@@ -368,7 +368,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   <div>
                     <label htmlFor="quote-description" className="block text-sm font-medium text-gray-700 mb-1.5">
                       Describe your needs <span aria-hidden="true">*</span>
-                      <span className="sr-only">(requis)</span>
+                      <span className="sr-only">(required)</span>
                     </label>
                     <div className="relative">
                       <FileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" aria-hidden="true" />

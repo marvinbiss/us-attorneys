@@ -1,233 +1,212 @@
-# 🗺️ World-Class Map Components
+# Map Components
 
-Composants de carte de niveau mondial avec fonctionnalités avancées, optimisations de performance et design moderne.
+Map components with advanced features, performance optimizations, and modern design.
 
-## 🚀 Fonctionnalités
+## Features
 
-### ✨ Améliorations Visuelles
+### Visual Enhancements
 
-#### 1. **Marqueurs Animés Premium**
-- Animation de rebond à l'apparition
-- Effet de pulse pour les marqueurs sélectionnés
-- Badge étoile doré pour les artisans premium
-- Échelle dynamique au survol et à la sélection
-- Ombres portées avancées avec cubic-bezier easing
+#### 1. Animated Premium Markers
+- Bounce animation on appearance
+- Pulse effect for selected markers
+- Gold star badge for premium attorneys
+- Dynamic scale on hover and selection
+- Advanced drop shadows with cubic-bezier easing
 
-#### 2. **Popups Ultra-Modernes**
-- Design arrondi avec ombres profondes
-- Badges Premium et Vérifié bien visibles
-- Avatar avec ring coloré pour les premium
-- Boutons avec dégradés et effets de survol
-- Animations d'entrée fluides (slide + scale)
-- Fermeture avec rotation à 90°
+#### 2. Modern Popups
+- Rounded design with deep shadows
+- Visible Premium and Verified badges
+- Avatar with colored ring for premium
+- Buttons with gradients and hover effects
+- Smooth entry animations (slide + scale)
 
-#### 3. **Styles CSS Personnalisés** (`map-styles.css`)
-- Contrôles de zoom stylisés avec coins arrondis
-- Attribution avec backdrop-filter blur
-- Animations de marqueurs (bounce, pulse, glow)
-- Support complet mobile avec media queries
-- Effet shimmer pour le chargement
+#### 3. Custom CSS Styles (`map-styles.css`)
+- Styled zoom controls with rounded corners
+- Attribution with backdrop-filter blur
+- Marker animations (bounce, pulse, glow)
+- Full mobile support with media queries
+- Shimmer effect for loading state
 
-### 🎯 Fonctionnalités World-Class
+### Core Features
 
-#### 4. **MapViewController**
-- Recentrage automatique et fluide avec `flyTo()`
-- Animation avec easing personnalisé (duration: 1.5s)
-- Zoom minimum intelligent (Math.max)
-- Validation stricte des coordonnées
+#### 4. MapViewController
+- Automatic smooth recentering with `flyTo()`
+- Animation with custom easing (duration: 1.5s)
+- Smart minimum zoom (Math.max)
+- Strict coordinate validation
 
-#### 5. **Validation Robuste des Coordonnées**
+#### 5. Robust Coordinate Validation
 ```typescript
-// Filtrage avancé :
+// Advanced filtering:
 - !isNaN(latitude) && !isNaN(longitude)
 - latitude >= -90 && latitude <= 90
 - longitude >= -180 && longitude <= 180
 ```
 
-#### 6. **Hook de Géolocalisation** (`useGeolocation.ts`)
-- Gestion complète des erreurs (Permission, Timeout, Unavailable)
-- Support du mode "watch" pour suivi en temps réel
-- Cache avec maximumAge configurable
-- Messages d'erreur en français
-- Cleanup automatique au démontage
+#### 6. Geolocation Hook (`useGeolocation.ts`)
+- Complete error handling (Permission, Timeout, Unavailable)
+- Support for "watch" mode for real-time tracking
+- Cache with configurable maximumAge
+- Automatic cleanup on unmount
 
-#### 7. **Système de Cache Intelligent** (`useMapSearchCache.ts`)
+#### 7. Smart Cache System (`useMapSearchCache.ts`)
 ```typescript
 // Features:
-- TTL configurable (60s par défaut)
-- Arrondi des coordonnées pour optimiser les hits
-- Limite de 50 entrées max (cleanup auto)
-- Statistiques détaillées (hits, misses, hit rate)
-- Génération de clés incluant les filtres
+- Configurable TTL (60s default)
+- Coordinate rounding to optimize hits
+- Max 50 entries limit (auto cleanup)
+- Detailed statistics (hits, misses, hit rate)
+- Key generation including filters
 ```
 
-#### 8. **Indicateur de Performance** (`MapPerformanceIndicator.tsx`)
-- Affichage du temps de réponse (avec code couleur)
-- Taux de cache hit en pourcentage
-- Nombre de résultats
-- Barre de progression visuelle
-- Auto-masquage après 3 secondes
-- Animation smooth avec Framer Motion
+#### 8. Performance Indicator (`MapPerformanceIndicator.tsx`)
+- Response time display (color coded)
+- Cache hit rate percentage
+- Result count
+- Visual progress bar
+- Auto-hide after 3 seconds
+- Smooth animation with Framer Motion
 
-#### 9. **Tooltip Avancé** (`MapTooltip.tsx`)
-- Affichage au survol des marqueurs
-- Informations riches (rating, ville, téléphone)
-- Badges statut (Premium, Vérifié, Disponible)
-- Position dynamique calculée
-- Animation d'entrée/sortie fluide
+#### 9. Advanced Tooltip (`MapTooltip.tsx`)
+- Display on marker hover
+- Rich information (rating, city, phone)
+- Status badges (Premium, Verified, Available)
+- Dynamic position calculation
+- Smooth enter/exit animation
 
-### 🎨 Design System
+### Design System
 
-#### Couleurs
-- **Premium**: Gradient amber (#f59e0b → #fbbf24)
-- **Vérifié**: Green (#22c55e)
-- **Sélectionné**: Blue (#2563eb)
+#### Colors
+- **Premium**: Gradient amber (#f59e0b -> #fbbf24)
+- **Verified**: Green (#22c55e)
+- **Selected**: Blue (#2563eb)
 - **Standard**: Blue (#3b82f6)
 
-#### Tailles des Marqueurs
+#### Marker Sizes
 - Standard: 38px
-- Survolé/Sélectionné: 48px
-- Badge Premium: 18px
-- Animation scale: 1.15x pour sélection
+- Hovered/Selected: 48px
+- Premium Badge: 18px
+- Animation scale: 1.15x for selection
 
 #### Popups
 - Border-radius: 16px
 - Max-width: 340px (desktop), calc(100vw - 40px) (mobile)
-- Ombre: 0 20px 60px rgba(0,0,0,0.3)
-- Padding: 2 (Tailwind, soit 8px)
+- Shadow: 0 20px 60px rgba(0,0,0,0.3)
+- Padding: 2 (Tailwind, i.e. 8px)
 
-### ⚡ Optimisations Performance
+### Performance Optimizations
 
-1. **Imports Dynamiques**
-   - Tous les composants Leaflet en dynamic import
-   - Évite les erreurs SSR avec Next.js
-   - Chargement lazy des dépendances lourdes
+1. **Dynamic Imports**
+   - All Leaflet components via dynamic import
+   - Avoids SSR errors with Next.js
+   - Lazy loading of heavy dependencies
 
-2. **Debouncing Intelligent**
-   - 300ms pour les changements de bounds
-   - 500ms pour la recherche textuelle
-   - Évite les appels API inutiles
+2. **Smart Debouncing**
+   - 300ms for bounds changes
+   - 500ms for text search
+   - Avoids unnecessary API calls
 
-3. **Caching Stratégique**
-   - Mise en cache des recherches par zone
-   - TTL de 60 secondes par défaut
-   - Hit rate généralement > 70%
+3. **Strategic Caching**
+   - Search caching by zone
+   - 60-second TTL default
+   - Hit rate generally > 70%
 
-4. **Validation en Amont**
-   - Filtrage des coordonnées invalides avant render
-   - Validation isNaN + ranges géographiques
-   - Évite les erreurs Leaflet
+4. **Upstream Validation**
+   - Invalid coordinate filtering before render
+   - isNaN + geographic range validation
+   - Prevents Leaflet errors
 
-5. **Mémoïsation**
-   - useCallback pour toutes les fonctions
-   - useMemo pour les compteurs de filtres
-   - Évite les re-renders inutiles
+5. **Memoization**
+   - useCallback for all functions
+   - useMemo for filter counters
+   - Avoids unnecessary re-renders
 
-### 📱 Responsive Design
+### Responsive Design
 
-- **Desktop**: Vue split (liste + carte)
-- **Tablet**: Bascule liste/carte
-- **Mobile**: 
-  - Drawer coulissant pour les résultats
-  - Controls redimensionnés (36px)
-  - Popups adaptées à la largeur
+- **Desktop**: Split view (list + map)
+- **Tablet**: List/map toggle
+- **Mobile**:
+  - Sliding drawer for results
+  - Resized controls (36px)
+  - Width-adapted popups
 
-### 🔧 Utilisation
+### Usage
 
 #### GeographicMap.tsx (Simple)
 ```tsx
 <GeographicMap
-  centerLat={48.8566}
-  centerLng={2.3522}
+  centerLat={40.7128}
+  centerLng={-74.0060}
   zoom={12}
   providers={providers}
-  locationName="Paris"
+  locationName="New York"
   height="400px"
 />
 ```
 
-#### MapSearch.tsx (Avancé)
+#### MapSearch.tsx (Advanced)
 ```tsx
 <MapSearch />
-// Gestion automatique de :
-// - Recherche
-// - Filtres
-// - Géolocalisation
+// Automatic handling of:
+// - Search
+// - Filters
+// - Geolocation
 // - Cache
 // - Performance monitoring
 ```
 
-### 🎓 Hooks Personnalisés
+### Custom Hooks
 
 #### useGeolocation
 ```typescript
-const geo = useGeolocation({ 
+const geo = useGeolocation({
   enableHighAccuracy: true,
   timeout: 10000,
   maximumAge: 300000
 })
 
-geo.getLocation() // Demander la position
-geo.clearWatch() // Arrêter le suivi
+geo.getLocation() // Request position
+geo.clearWatch() // Stop tracking
 ```
 
 #### useMapSearchCache
 ```typescript
 const cache = useMapSearchCache<Provider[]>(60000) // 60s TTL
 
-cache.get(bounds, filters) // Récupérer
-cache.set(bounds, data, filters) // Stocker
+cache.get(bounds, filters) // Retrieve
+cache.set(bounds, data, filters) // Store
 cache.stats // { hits, misses, size, hitRate }
 ```
 
-### 🌟 Meilleures Pratiques
+### Best Practices
 
-1. **Toujours valider les coordonnées** avant de créer un Marker
-2. **Utiliser le cache** pour les recherches répétées
-3. **Afficher les indicateurs de performance** en développement
-4. **Tester sur mobile** pour la responsivité
-5. **Monitorer le hit rate** du cache (objectif: >60%)
+1. **Always validate coordinates** before creating a Marker
+2. **Use the cache** for repeated searches
+3. **Display performance indicators** in development
+4. **Test on mobile** for responsiveness
+5. **Monitor cache hit rate** (target: >60%)
 
-### 🐛 Debugging
+### Dependencies
 
-#### Afficher les stats de cache
-```typescript
-console.log(searchCache.stats)
-// { hits: 10, misses: 3, size: 13, hitRate: 76.92 }
-```
+- **react-leaflet**: React components for Leaflet
+- **leaflet**: Map library
+- **framer-motion**: Smooth animations
+- **lucide-react**: Modern icons
+- **next**: Framework (for dynamic imports)
 
-#### Afficher le temps de réponse
-```typescript
-console.log(`Search completed in ${responseTime}ms`)
-```
+### Future Improvements
 
-#### Tester la géolocalisation
-```typescript
-console.log(geolocation.error) // Messages d'erreur
-console.log(geolocation.accuracy) // Précision en mètres
-```
-
-### 📦 Dépendances
-
-- **react-leaflet**: Composants React pour Leaflet
-- **leaflet**: Bibliothèque de cartes
-- **framer-motion**: Animations fluides
-- **lucide-react**: Icônes modernes
-- **next**: Framework (pour dynamic imports)
-
-### 🔮 Futures Améliorations
-
-- [ ] Clustering des marqueurs (react-leaflet-cluster)
-- [ ] Heatmap pour la densité d'artisans
-- [ ] Directions avec itinéraire (Leaflet Routing Machine)
-- [ ] Filtres géométriques (cercle, polygone)
-- [ ] Export des résultats (PDF, CSV)
-- [ ] Partage de vue (URL avec bounds)
-- [ ] Mode sombre pour la carte
-- [ ] Offline support avec Service Worker
+- [ ] Marker clustering (react-leaflet-cluster)
+- [ ] Heatmap for attorney density
+- [ ] Directions with routing (Leaflet Routing Machine)
+- [ ] Geometric filters (circle, polygon)
+- [ ] Export results (PDF, CSV)
+- [ ] View sharing (URL with bounds)
+- [ ] Dark mode for map
+- [ ] Offline support with Service Worker
 
 ---
 
-**Version**: 2.0.0 (World-Class Edition)  
-**Dernière mise à jour**: Février 2026  
-**Auteur**: Équipe ServicesArtisans
+**Version**: 2.0.0
+**Last updated**: March 2026
+**Team**: US Attorneys

@@ -58,7 +58,7 @@ interface CityInfo {
   id: string
   name: string
   slug: string
-  department_code?: string
+  state_code?: string
   region_name?: string
 }
 
@@ -159,28 +159,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-/** Top 20 largest French cities — always shown first on service hub pages */
+/** Top 20 largest US cities -- always shown first on service hub pages */
 const MAJOR_CITIES = [
-  { name: 'Paris', slug: 'paris', department_code: '75', region_name: 'Île-de-France' },
-  { name: 'Marseille', slug: 'marseille', department_code: '13', region_name: 'Provence-Alpes-Côte d\'Azur' },
-  { name: 'Lyon', slug: 'lyon', department_code: '69', region_name: 'Auvergne-Rhône-Alpes' },
-  { name: 'Toulouse', slug: 'toulouse', department_code: '31', region_name: 'Occitanie' },
-  { name: 'Nice', slug: 'nice', department_code: '06', region_name: 'Provence-Alpes-Côte d\'Azur' },
-  { name: 'Nantes', slug: 'nantes', department_code: '44', region_name: 'Pays de la Loire' },
-  { name: 'Strasbourg', slug: 'strasbourg', department_code: '67', region_name: 'Grand Est' },
-  { name: 'Montpellier', slug: 'montpellier', department_code: '34', region_name: 'Occitanie' },
-  { name: 'Bordeaux', slug: 'bordeaux', department_code: '33', region_name: 'Nouvelle-Aquitaine' },
-  { name: 'Lille', slug: 'lille', department_code: '59', region_name: 'Hauts-de-France' },
-  { name: 'Rennes', slug: 'rennes', department_code: '35', region_name: 'Bretagne' },
-  { name: 'Reims', slug: 'reims', department_code: '51', region_name: 'Grand Est' },
-  { name: 'Saint-Étienne', slug: 'saint-etienne', department_code: '42', region_name: 'Auvergne-Rhône-Alpes' },
-  { name: 'Toulon', slug: 'toulon', department_code: '83', region_name: 'Provence-Alpes-Côte d\'Azur' },
-  { name: 'Le Havre', slug: 'le-havre', department_code: '76', region_name: 'Normandie' },
-  { name: 'Grenoble', slug: 'grenoble', department_code: '38', region_name: 'Auvergne-Rhône-Alpes' },
-  { name: 'Dijon', slug: 'dijon', department_code: '21', region_name: 'Bourgogne-Franche-Comté' },
-  { name: 'Angers', slug: 'angers', department_code: '49', region_name: 'Pays de la Loire' },
-  { name: 'Nîmes', slug: 'nimes', department_code: '30', region_name: 'Occitanie' },
-  { name: 'Villeurbanne', slug: 'villeurbanne', department_code: '69', region_name: 'Auvergne-Rhône-Alpes' },
+  { name: 'New York', slug: 'new-york', state_code: 'NY', region_name: 'Northeast' },
+  { name: 'Los Angeles', slug: 'los-angeles', state_code: 'CA', region_name: 'West' },
+  { name: 'Chicago', slug: 'chicago', state_code: 'IL', region_name: 'Midwest' },
+  { name: 'Houston', slug: 'houston', state_code: 'TX', region_name: 'South' },
+  { name: 'Phoenix', slug: 'phoenix', state_code: 'AZ', region_name: 'West' },
+  { name: 'Philadelphia', slug: 'philadelphia', state_code: 'PA', region_name: 'Northeast' },
+  { name: 'San Antonio', slug: 'san-antonio', state_code: 'TX', region_name: 'South' },
+  { name: 'San Diego', slug: 'san-diego', state_code: 'CA', region_name: 'West' },
+  { name: 'Dallas', slug: 'dallas', state_code: 'TX', region_name: 'South' },
+  { name: 'Austin', slug: 'austin', state_code: 'TX', region_name: 'South' },
+  { name: 'Jacksonville', slug: 'jacksonville', state_code: 'FL', region_name: 'South' },
+  { name: 'San Jose', slug: 'san-jose', state_code: 'CA', region_name: 'West' },
+  { name: 'Fort Worth', slug: 'fort-worth', state_code: 'TX', region_name: 'South' },
+  { name: 'Columbus', slug: 'columbus', state_code: 'OH', region_name: 'Midwest' },
+  { name: 'Charlotte', slug: 'charlotte', state_code: 'NC', region_name: 'South' },
+  { name: 'Indianapolis', slug: 'indianapolis', state_code: 'IN', region_name: 'Midwest' },
+  { name: 'San Francisco', slug: 'san-francisco', state_code: 'CA', region_name: 'West' },
+  { name: 'Seattle', slug: 'seattle', state_code: 'WA', region_name: 'West' },
+  { name: 'Denver', slug: 'denver', state_code: 'CO', region_name: 'West' },
+  { name: 'Washington DC', slug: 'washington-dc', state_code: 'DC', region_name: 'Northeast' },
 ].map(c => ({ ...c, id: c.slug }))
 
 /** Merge major cities (always first) with DB cities (deduplicated) */
@@ -492,9 +492,9 @@ export default async function ServicePage({ params }: PageProps) {
                     {city.name}
                   </span>
                 </div>
-                {city.department_code && (
+                {city.state_code && (
                   <span className="text-xs text-gray-500 mt-1 block">
-                    ({city.department_code})
+                    ({city.state_code})
                   </span>
                 )}
               </Link>
@@ -594,7 +594,7 @@ export default async function ServicePage({ params }: PageProps) {
                 return (
                   <Link
                     key={provider.id}
-                    href={`/practice-areas/${specialtySlug}/${location?.slug || 'france'}/${provider.stable_id || provider.slug}`}
+                    href={`/practice-areas/${specialtySlug}/${location?.slug || 'nationwide'}/${provider.stable_id || provider.slug}`}
                     className="bg-gray-50 rounded-lg p-4 hover:bg-blue-50 transition-colors group"
                   >
                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
@@ -630,7 +630,7 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-3 gap-8">
-              {/* Conseils pratiques */}
+              {/* Practical tips */}
               <div className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-blue-100 rounded-lg">
@@ -650,7 +650,7 @@ export default async function ServicePage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* Certifications + Urgence */}
+              {/* Certifications + Emergency */}
               <div className="space-y-6">
                 <div className="bg-gray-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-4">
@@ -716,7 +716,7 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      {/* Voir aussi - Autres services */}
+      {/* See also - Other services */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">See Also</h2>
@@ -846,7 +846,7 @@ export default async function ServicePage({ params }: PageProps) {
       <EstimationWidget context={{
         metier: service.name,
         metierSlug: specialtySlug,
-        ville: 'France',
+        ville: 'Nationwide',
         departement: '',
         pageUrl: `/practice-areas/${specialtySlug}`,
       }} />

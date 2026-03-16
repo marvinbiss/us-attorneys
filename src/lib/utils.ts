@@ -16,7 +16,7 @@ export function formatPrice(price: number, currency = 'USD'): string {
   }).format(price)
 }
 
-// Format date in French
+// Format date in US English
 export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const defaultOptions: Intl.DateTimeFormatOptions = {
     day: 'numeric',
@@ -35,10 +35,10 @@ export function formatRelativeTime(date: string | Date): string {
   const diffHours = Math.floor(diffMs / 3600000)
   const diffDays = Math.floor(diffMs / 86400000)
 
-  if (diffMins < 1) return "À l'instant"
-  if (diffMins < 60) return `Il y a ${diffMins} min`
-  if (diffHours < 24) return `Il y a ${diffHours}h`
-  if (diffDays < 7) return `Il y a ${diffDays}j`
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins} min ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  if (diffDays < 7) return `${diffDays}d ago`
   return formatDate(date, { day: 'numeric', month: 'short' })
 }
 
@@ -53,64 +53,61 @@ export function slugify(text: string): string {
     .replace(/^-|-$/g, '')
 }
 
-// Static slug lookup maps — prefer canonical slugs from france.ts over dynamic slugification
+// Static slug lookup maps -- prefer canonical slugs from usa.ts over dynamic slugification
 const _normalize = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
 const _serviceMap = new Map(services.map(s => [_normalize(s.name), s.slug]))
 // Also map slug → slug for direct matches (provider specialty may already be a slug)
 services.forEach(s => { if (!_serviceMap.has(s.slug)) _serviceMap.set(s.slug, s.slug) })
 const _villeMap = new Map(cities.map(v => [_normalize(v.name), v.slug]))
 
-// Reverse mapping: provider specialty variants → canonical service slug
-// Covers cases where provider.specialty is a synonym (e.g., "peintre" → "peintre-en-batiment")
+// Reverse mapping: specialty variants -> canonical service slug
+// Covers cases where attorney.specialty is a synonym (e.g., "injury" -> "personal-injury")
 const _specialtyToServiceSlug: Record<string, string> = {
-  'peintre': 'peintre-en-batiment',
-  'platrier': 'platrier',
-  'plaquiste': 'platrier',
-  'platrerie': 'platrier',
-  'finition': 'peintre-en-batiment',
-  'menuisier-metallique': 'serrurier',
-  'charpentier': 'charpentier',
-  'isolation': 'isolation-thermique',
-  'couvreur-zingueur': 'zingueur',
-  'etancheite': 'etancheiste',
-  'facade': 'facadier',
-  'ravalement': 'facadier',
-  'metallerie': 'metallier',
-  'ferronnerie': 'ferronnier',
-  'parqueteur': 'poseur-de-parquet',
-  'moquettiste': 'solier',
-  'store': 'storiste',
-  'volet': 'storiste',
-  'installateur-de-cuisine': 'cuisiniste',
-  'installateur-de-salle-de-bain': 'salle-de-bain',
-  'architecte-d-interieur': 'architecte-interieur',
-  'decoration': 'decorateur',
-  'peintre-decorateur': 'decorateur',
-  'domotique': 'domoticien',
-  'pac': 'pompe-a-chaleur',
-  'photovoltaique': 'panneaux-solaires',
-  'solaire': 'panneaux-solaires',
-  'ite': 'isolation-thermique',
-  'iti': 'isolation-thermique',
-  'rge': 'renovation-energetique',
-  'borne-electrique': 'borne-recharge',
-  'ramonage': 'ramoneur',
-  'amenagement-exterieur': 'paysagiste',
-  'piscine': 'pisciniste',
-  'alarme': 'alarme-securite',
-  'securite': 'alarme-securite',
-  'videosurveillance': 'alarme-securite',
-  'antenne': 'antenniste',
-  'ascenseur': 'ascensoriste',
-  'diagnostic': 'diagnostiqueur',
-  'dpe': 'diagnostiqueur',
-  'geometre-expert': 'geometre',
-  'desinsectiseur': 'desinsectisation',
-  'nuisibles': 'desinsectisation',
-  'deratiseur': 'deratisation',
-  'demenagement': 'demenageur',
-  'nettoyage-professionnel': 'nettoyage',
-  'terrassement': 'terrassier',
+  'injury': 'personal-injury',
+  'car-accident': 'personal-injury',
+  'auto-accident': 'personal-injury',
+  'slip-and-fall': 'personal-injury',
+  'medical-malpractice': 'medical-malpractice',
+  'med-mal': 'medical-malpractice',
+  'divorce': 'family-law',
+  'custody': 'family-law',
+  'child-support': 'family-law',
+  'dui': 'criminal-defense',
+  'dwi': 'criminal-defense',
+  'felony': 'criminal-defense',
+  'misdemeanor': 'criminal-defense',
+  'bankruptcy-chapter-7': 'bankruptcy',
+  'bankruptcy-chapter-13': 'bankruptcy',
+  'chapter-7': 'bankruptcy',
+  'chapter-13': 'bankruptcy',
+  'workers-comp': 'workers-compensation',
+  'work-injury': 'workers-compensation',
+  'green-card': 'immigration',
+  'visa': 'immigration',
+  'deportation': 'immigration',
+  'asylum': 'immigration',
+  'wills': 'estate-planning',
+  'trusts': 'estate-planning',
+  'probate': 'estate-planning',
+  'business-formation': 'business-law',
+  'llc': 'business-law',
+  'corporation': 'business-law',
+  'contract': 'business-law',
+  'landlord-tenant': 'real-estate',
+  'property': 'real-estate',
+  'foreclosure': 'real-estate',
+  'wrongful-termination': 'employment-law',
+  'discrimination': 'employment-law',
+  'harassment': 'employment-law',
+  'tax-dispute': 'tax-law',
+  'irs': 'tax-law',
+  'social-security': 'social-security-disability',
+  'ssdi': 'social-security-disability',
+  'ssi': 'social-security-disability',
+  'ip': 'intellectual-property',
+  'trademark': 'intellectual-property',
+  'patent': 'intellectual-property',
+  'copyright': 'intellectual-property',
 }
 
 // Generate SEO-friendly artisan URL using static slug lookup
