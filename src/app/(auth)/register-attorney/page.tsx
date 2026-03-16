@@ -9,7 +9,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 // SiretAutocomplete removed (French SIRET validation) — using plain input for bar number
-import { SpecialtyAutocomplete } from '@/components/ui/MetierAutocomplete'
+import { SpecialtyAutocomplete } from '@/components/ui/SpecialtyAutocomplete'
 import { CityAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 const benefits = [

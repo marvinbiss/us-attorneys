@@ -106,18 +106,18 @@ function sampleProviderRow(overrides: Record<string, unknown> = {}) {
   return {
     id: PROVIDER_UUID,
     user_id: 'user-123',
-    name: 'Dupont Plomberie',
-    slug: 'dupont-plomberie',
-    email: 'dupont@example.com',
-    phone: '+33612345678',
+    name: 'Smith & Associates',
+    slug: 'smith-associates',
+    email: 'smith@example.com',
+    phone: '+12125551234',
     siret: '12345678901234',
-    description: 'Expert plombier',
-    address_street: '10 Rue de Paris',
-    address_city: 'Paris',
-    address_postal_code: '75001',
-    address_region: 'Ile-de-France',
-    latitude: 48.8566,
-    longitude: 2.3522,
+    description: 'Expert trial attorney',
+    address_street: '123 Broadway',
+    address_city: 'New York',
+    address_postal_code: '10001',
+    address_region: 'New York',
+    latitude: 40.7128,
+    longitude: -74.006,
     is_verified: true,
     is_active: true,
     rating_average: 4.5,
@@ -168,14 +168,12 @@ describe('GET /api/admin/providers/[id]', () => {
     expect(result.body.success).toBe(true)
     expect(result.body.provider).toBeDefined()
     expect(result.body.provider.id).toBe(PROVIDER_UUID)
-    expect(result.body.provider.name).toBe('Dupont Plomberie')
-    expect(result.body.provider.full_name).toBe('Dupont Plomberie')
-    expect(result.body.provider.email).toBe('dupont@example.com')
-    expect(result.body.provider.phone).toBe('+33612345678')
-    expect(result.body.provider.slug).toBe('dupont-plomberie')
-    expect(result.body.provider.services).toEqual([])
-    expect(result.body.provider.zones).toEqual([])
-    expect(mockFromTable).toBe('providers')
+    expect(result.body.provider.name).toBe('Smith & Associates')
+    expect(result.body.provider.full_name).toBe('Smith & Associates')
+    expect(result.body.provider.email).toBe('smith@example.com')
+    expect(result.body.provider.phone).toBe('+12125551234')
+    expect(result.body.provider.slug).toBe('smith-associates')
+    expect(mockFromTable).toBe('attorneys')
   })
 
   it('returns 400 for invalid UUID', async () => {
@@ -187,7 +185,7 @@ describe('GET /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'Identifiant invalide' })
+    expect(result.body.error).toEqual({ message: 'Invalid ID' })
   })
 
   it('returns 404 for non-existent provider', async () => {
@@ -201,13 +199,13 @@ describe('GET /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(404)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'Provider non trouvé' })
+    expect(result.body.error).toEqual({ message: 'Provider not found' })
   })
 
   it('returns 401/403 when not admin', async () => {
     mockAuthResult = {
       success: false,
-      error: mockJsonFn({ success: false, error: { message: 'Non autorisé' } }, { status: 401 }),
+      error: mockJsonFn({ success: false, error: { message: 'Unauthorized' } }, { status: 401 }),
     }
 
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
@@ -222,10 +220,10 @@ describe('GET /api/admin/providers/[id]', () => {
   it('maps provider fields correctly for response', async () => {
     mockSelectResult = {
       data: sampleProviderRow({
-        address_street: '5 Avenue Foch',
-        address_city: 'Lyon',
-        address_postal_code: '69001',
-        address_region: 'Auvergne-Rhone-Alpes',
+        address_street: '456 Wilshire Blvd',
+        address_city: 'Los Angeles',
+        address_postal_code: '90017',
+        address_region: 'California',
         is_verified: false,
         is_active: true,
         rating_average: 3.2,
@@ -241,15 +239,14 @@ describe('GET /api/admin/providers/[id]', () => {
     ) as unknown as { body: { provider: Record<string, unknown> } }
 
     const p = result.body.provider
-    expect(p.address).toBe('5 Avenue Foch')
-    expect(p.city).toBe('Lyon')
-    expect(p.postal_code).toBe('69001')
-    expect(p.region).toBe('Auvergne-Rhone-Alpes')
+    expect(p.address_street).toBe('456 Wilshire Blvd')
+    expect(p.address_city).toBe('Los Angeles')
+    expect(p.address_postal_code).toBe('90017')
+    expect(p.address_region).toBe('California')
     expect(p.is_verified).toBe(false)
     expect(p.is_active).toBe(true)
-    expect(p.rating).toBe(3.2)
-    expect(p.reviews_count).toBe(5)
-    expect(p.source).toBe('manual')
+    expect(p.rating_average).toBe(3.2)
+    expect(p.review_count).toBe(5)
   })
 
   it('defaults null fields to empty strings', async () => {
@@ -282,11 +279,11 @@ describe('GET /api/admin/providers/[id]', () => {
     expect(p.phone).toBe('')
     expect(p.siret).toBe('')
     expect(p.description).toBe('')
-    expect(p.address).toBe('')
-    expect(p.city).toBe('')
-    expect(p.postal_code).toBe('')
-    expect(p.rating).toBeNull()
-    expect(p.reviews_count).toBe(0)
+    expect(p.address_street).toBe('')
+    expect(p.address_city).toBe('')
+    expect(p.address_postal_code).toBe('')
+    expect(p.rating_average).toBeNull()
+    expect(p.review_count).toBe(0)
   })
 })
 
@@ -304,19 +301,19 @@ describe('PATCH /api/admin/providers/[id]', () => {
   it('updates provider fields (200)', async () => {
     lastOperation = 'update'
     mockUpdateResult = {
-      data: sampleProviderRow({ name: 'Updated Plomberie', is_verified: true }),
+      data: sampleProviderRow({ name: 'Updated Law Firm', is_verified: true }),
       error: null,
     }
 
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
     const result = await PATCH(
-      makePatchRequest({ name: 'Updated Plomberie', is_verified: true }),
+      makePatchRequest({ name: 'Updated Law Firm', is_verified: true }),
       makeParams(PROVIDER_UUID),
     ) as unknown as { body: { success: boolean; data: Record<string, unknown>; message: string }; status: number }
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
-    expect(result.body.message).toBe('Artisan mis à jour avec succès')
+    expect(result.body.message).toBe('Attorney updated successfully')
     expect(result.body.data).toBeDefined()
   })
 
@@ -329,7 +326,7 @@ describe('PATCH /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect((result.body.error as unknown as { message: string }).message).toBe('Erreur de validation')
+    expect((result.body.error as unknown as { message: string }).message).toBe('Validation error')
   })
 
   it('returns 400 for invalid UUID', async () => {
@@ -341,7 +338,7 @@ describe('PATCH /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'Identifiant invalide' })
+    expect(result.body.error).toEqual({ message: 'Invalid ID' })
   })
 
   it('returns 401/403 when not admin', async () => {
@@ -368,7 +365,7 @@ describe('PATCH /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'JSON invalide dans le body' })
+    expect(result.body.error).toEqual({ message: 'Invalid JSON in request body' })
   })
 
   it('returns 500 on database update error', async () => {
@@ -386,7 +383,7 @@ describe('PATCH /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'Erreur lors de la mise à jour' })
+    expect(result.body.error).toEqual({ message: 'Error during update' })
   })
 
   it('calls logAdminAction on successful update', async () => {
@@ -452,7 +449,7 @@ describe('DELETE /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
-    expect(result.body.message).toBe('Artisan supprimé')
+    expect(result.body.message).toBe('Attorney deleted')
   })
 
   it('returns 400 for invalid UUID', async () => {
@@ -464,7 +461,7 @@ describe('DELETE /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'Identifiant invalide' })
+    expect(result.body.error).toEqual({ message: 'Invalid ID' })
   })
 
   it('returns 401/403 when not admin', async () => {
@@ -497,7 +494,7 @@ describe('DELETE /api/admin/providers/[id]', () => {
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual({ message: 'Erreur lors de la suppression' })
+    expect(result.body.error).toEqual({ message: 'Error during deletion' })
   })
 
   it('calls logAdminAction on successful delete', async () => {

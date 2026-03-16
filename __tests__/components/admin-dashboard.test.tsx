@@ -1,16 +1,16 @@
 /**
- * Tests — Admin Dashboard Components
+ * Tests -- Admin Dashboard Components
  * Covers: StatsGrid, RecentActivity, PendingReports, ActivityChart
  *
  * Tests loading/skeleton states, empty states, data rendering,
- * accessibility (aria-labels, roles), and French text assertions.
+ * accessibility (aria-labels, roles), and English text assertions.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, within, fireEvent, act } from '@testing-library/react'
 import React from 'react'
 
 // ============================================
-// Mock setup — must come before component imports
+// Mock setup -- must come before component imports
 // ============================================
 
 // --- next/link mock ---
@@ -99,8 +99,8 @@ vi.mock('@/components/admin/ConfirmationModal', () => ({
         <p data-testid="modal-title">{title}</p>
         <p data-testid="modal-message">{message}</p>
         {children}
-        <button data-testid="modal-confirm" onClick={onConfirm}>Confirmer</button>
-        <button data-testid="modal-cancel" onClick={onClose}>Annuler</button>
+        <button data-testid="modal-confirm" onClick={onConfirm}>Confirm</button>
+        <button data-testid="modal-cancel" onClick={onClose}>Cancel</button>
       </div>
     )
   },
@@ -125,7 +125,7 @@ vi.mock('clsx', () => ({
 }))
 
 // ============================================
-// Component imports — after mocks
+// Component imports -- after mocks
 // ============================================
 
 import { StatsGrid } from '@/components/admin/dashboard/StatsGrid'
@@ -139,14 +139,14 @@ import { ActivityChart } from '@/components/admin/dashboard/ActivityChart'
 
 function buildStats(overrides: Partial<{
   totalUsers: number
-  totalArtisans: number
+  totalAttorneys: number
   totalBookings: number
   totalRevenue: number
   trends: { users: number; bookings: number; revenue: number }
 }> = {}) {
   return {
     totalUsers: 1250,
-    totalArtisans: 48,
+    totalAttorneys: 48,
     totalBookings: 320,
     totalRevenue: 150000, // in cents
     trends: {
@@ -163,24 +163,24 @@ function buildActivityItems() {
     {
       id: 'a1',
       type: 'booking' as const,
-      action: 'Nouvelle réservation',
-      details: 'Plomberie chez Jean Dupont',
+      action: 'New booking',
+      details: 'Consultation with John Smith',
       timestamp: new Date(Date.now() - 30_000).toISOString(), // 30s ago
       status: 'confirmed',
     },
     {
       id: 'a2',
       type: 'review' as const,
-      action: 'Nouvel avis publié',
-      details: '5 étoiles pour Martin Électricité',
+      action: 'New review published',
+      details: '5 stars for Martin Law Firm',
       timestamp: new Date(Date.now() - 7_200_000).toISOString(), // 2h ago
       status: 'published',
     },
     {
       id: 'a3',
       type: 'report' as const,
-      action: 'Signalement reçu',
-      details: 'Contenu inapproprié signalé',
+      action: 'Report received',
+      details: 'Inappropriate content reported',
       timestamp: new Date(Date.now() - 90_000_000).toISOString(), // ~1 day ago
     },
   ]
@@ -192,7 +192,7 @@ function buildReports() {
       id: 'rpt1',
       target_type: 'review',
       reason: 'spam',
-      description: 'Ce commentaire est du spam évident',
+      description: 'This comment is obvious spam',
       status: 'pending',
       created_at: '2026-02-14T10:00:00Z',
       reporter_id: 'user-123',
@@ -256,28 +256,28 @@ describe('StatsGrid', () => {
   })
 
   describe('data rendering', () => {
-    it('renders all 4 stat cards with correct French labels', () => {
+    it('renders all 4 stat cards with correct English labels', () => {
       render(<StatsGrid stats={buildStats()} />)
 
-      expect(screen.getByText('Utilisateurs')).toBeInTheDocument()
-      expect(screen.getByText('Artisans actifs')).toBeInTheDocument()
-      expect(screen.getByText('Réservations')).toBeInTheDocument()
-      expect(screen.getByText('Revenus ce mois')).toBeInTheDocument()
+      expect(screen.getByText('Users')).toBeInTheDocument()
+      expect(screen.getByText('Active attorneys')).toBeInTheDocument()
+      expect(screen.getByText('Bookings')).toBeInTheDocument()
+      expect(screen.getByText('Revenue this month')).toBeInTheDocument()
     })
 
-    it('formats user count with French locale', () => {
+    it('formats user count with US locale', () => {
       const stats = buildStats({ totalUsers: 1250 })
       render(<StatsGrid stats={stats} />)
-      // French locale uses non-breaking space as thousands separator
-      const userCard = screen.getByText(/1[\s\u00A0\u202F]?250/)
+      // en-US locale uses comma as thousands separator
+      const userCard = screen.getByText('1,250')
       expect(userCard).toBeInTheDocument()
     })
 
-    it('formats revenue from cents to euros with French locale', () => {
-      const stats = buildStats({ totalRevenue: 150000 }) // 1500.00 EUR
+    it('formats revenue from cents to dollars with US locale', () => {
+      const stats = buildStats({ totalRevenue: 150000 }) // 1500.00 USD
       render(<StatsGrid stats={stats} />)
-      // 150000 / 100 = 1500.00, formatted as "1 500,00 €" in fr-FR
-      const revenueText = screen.getByText(/1[\s\u00A0\u202F]?500,00\s*€/)
+      // 150000 / 100 = 1500.00, formatted as "1,500.00 $" in en-US
+      const revenueText = screen.getByText(/1,500\.00\s*\$/)
       expect(revenueText).toBeInTheDocument()
     })
 
@@ -286,10 +286,10 @@ describe('StatsGrid', () => {
       const links = screen.getAllByRole('link')
       const hrefs = links.map((l) => l.getAttribute('href'))
 
-      expect(hrefs).toContain('/admin/utilisateurs')
-      expect(hrefs).toContain('/admin/artisans')
-      expect(hrefs).toContain('/admin/reservations')
-      expect(hrefs).toContain('/admin/paiements')
+      expect(hrefs).toContain('/admin/users')
+      expect(hrefs).toContain('/admin/attorneys')
+      expect(hrefs).toContain('/admin/bookings')
+      expect(hrefs).toContain('/admin/payments')
     })
 
     it('renders exactly 4 links (one per stat card)', () => {
@@ -325,21 +325,21 @@ describe('StatsGrid', () => {
       expect(zeroBadges).toHaveLength(3)
     })
 
-    it('shows "vs mois dernier" text for trended cards', () => {
+    it('shows "vs last month" text for trended cards', () => {
       render(<StatsGrid stats={buildStats()} />)
-      const trendLabels = screen.getAllByText('vs mois dernier')
-      // 3 cards have trends: Users, Bookings, Revenue (not Artisans)
+      const trendLabels = screen.getAllByText('vs last month')
+      // 3 cards have trends: Users, Bookings, Revenue (not Attorneys)
       expect(trendLabels).toHaveLength(3)
     })
 
-    it('does not show trend badge for Artisans actifs card', () => {
+    it('does not show trend badge for Active attorneys card', () => {
       const stats = buildStats()
       render(<StatsGrid stats={stats} />)
 
-      // The artisans card links to /admin/artisans
-      const artisanLink = screen.getByRole('link', { name: /Artisans actifs/ })
+      // The attorneys card links to /admin/attorneys
+      const attorneyLink = screen.getByRole('link', { name: /Active attorneys/ })
       // Should not contain a trend badge
-      expect(within(artisanLink).queryByText(/vs mois dernier/)).not.toBeInTheDocument()
+      expect(within(attorneyLink).queryByText(/vs last month/)).not.toBeInTheDocument()
     })
   })
 
@@ -349,22 +349,22 @@ describe('StatsGrid', () => {
       render(<StatsGrid stats={stats} />)
 
       // Users card: positive trend
-      const usersLink = screen.getByRole('link', { name: /Utilisateurs.*tendance \+12%/ })
+      const usersLink = screen.getByRole('link', { name: /Users.*trend \+12%/ })
       expect(usersLink).toBeInTheDocument()
 
       // Bookings card: negative trend
-      const bookingsLink = screen.getByRole('link', { name: /Réservations.*tendance -5%/ })
+      const bookingsLink = screen.getByRole('link', { name: /Bookings.*trend -5%/ })
       expect(bookingsLink).toBeInTheDocument()
 
       // Revenue card: zero trend
-      const revenueLink = screen.getByRole('link', { name: /Revenus ce mois.*tendance 0%/ })
+      const revenueLink = screen.getByRole('link', { name: /Revenue this month.*trend 0%/ })
       expect(revenueLink).toBeInTheDocument()
     })
 
-    it('renders aria-label without trend info for Artisans card', () => {
+    it('renders aria-label without trend info for Attorneys card', () => {
       render(<StatsGrid stats={buildStats()} />)
-      const artisanLink = screen.getByRole('link', { name: /Artisans actifs/ })
-      expect(artisanLink.getAttribute('aria-label')).not.toContain('tendance')
+      const attorneyLink = screen.getByRole('link', { name: /Active attorneys/ })
+      expect(attorneyLink.getAttribute('aria-label')).not.toContain('trend')
     })
   })
 })
@@ -387,14 +387,14 @@ describe('RecentActivity', () => {
 
     it('does not render activity items when loading', () => {
       render(<RecentActivity activity={buildActivityItems()} loading={true} />)
-      expect(screen.queryByText('Nouvelle réservation')).not.toBeInTheDocument()
+      expect(screen.queryByText('New booking')).not.toBeInTheDocument()
     })
   })
 
   describe('empty state', () => {
     it('shows empty state message when no activities', () => {
       render(<RecentActivity activity={[]} />)
-      expect(screen.getByText('Aucune activité récente')).toBeInTheDocument()
+      expect(screen.getByText('No recent activity')).toBeInTheDocument()
     })
 
     it('renders the Activity icon in empty state', () => {
@@ -408,26 +408,26 @@ describe('RecentActivity', () => {
       const items = buildActivityItems()
       render(<RecentActivity activity={items} />)
 
-      expect(screen.getByText('Nouvelle réservation')).toBeInTheDocument()
-      expect(screen.getByText('Nouvel avis publié')).toBeInTheDocument()
-      expect(screen.getByText('Signalement reçu')).toBeInTheDocument()
+      expect(screen.getByText('New booking')).toBeInTheDocument()
+      expect(screen.getByText('New review published')).toBeInTheDocument()
+      expect(screen.getByText('Report received')).toBeInTheDocument()
     })
 
     it('renders activity detail text', () => {
       const items = buildActivityItems()
       render(<RecentActivity activity={items} />)
 
-      expect(screen.getByText('Plomberie chez Jean Dupont')).toBeInTheDocument()
-      expect(screen.getByText('5 étoiles pour Martin Électricité')).toBeInTheDocument()
-      expect(screen.getByText('Contenu inapproprié signalé')).toBeInTheDocument()
+      expect(screen.getByText('Consultation with John Smith')).toBeInTheDocument()
+      expect(screen.getByText('5 stars for Martin Law Firm')).toBeInTheDocument()
+      expect(screen.getByText('Inappropriate content reported')).toBeInTheDocument()
     })
 
-    it('renders French status labels', () => {
+    it('renders English status labels', () => {
       const items = buildActivityItems()
       render(<RecentActivity activity={items} />)
 
-      expect(screen.getByText('Confirmé')).toBeInTheDocument()
-      expect(screen.getByText('Publié')).toBeInTheDocument()
+      expect(screen.getByText('Confirmed')).toBeInTheDocument()
+      expect(screen.getByText('Published')).toBeInTheDocument()
     })
 
     it('does not render status label when status is undefined', () => {
@@ -436,7 +436,7 @@ describe('RecentActivity', () => {
 
       // The report item (id: a3) has no status
       // Ensure no extra status badges
-      const allStatuses = ['Confirmé', 'Publié']
+      const allStatuses = ['Confirmed', 'Published']
       allStatuses.forEach((label) => {
         expect(screen.getAllByText(label)).toHaveLength(1)
       })
@@ -447,13 +447,13 @@ describe('RecentActivity', () => {
         {
           id: 'recent',
           type: 'user' as const,
-          action: 'Nouvel utilisateur',
+          action: 'New user',
           details: 'test@example.com',
           timestamp: new Date(Date.now() - 10_000).toISOString(), // 10s ago
         },
       ]
       render(<RecentActivity activity={items} />)
-      expect(screen.getByText(/instant/i)).toBeInTheDocument()
+      expect(screen.getByText(/Just now/i)).toBeInTheDocument()
     })
 
     it('renders relative time in minutes for items within the last hour', () => {
@@ -461,13 +461,13 @@ describe('RecentActivity', () => {
         {
           id: 'minutes',
           type: 'booking' as const,
-          action: 'Réservation',
-          details: 'Détail',
+          action: 'Booking',
+          details: 'Detail',
           timestamp: new Date(Date.now() - 300_000).toISOString(), // 5 minutes ago
         },
       ]
       render(<RecentActivity activity={items} />)
-      expect(screen.getByText(/Il y a 5 min/)).toBeInTheDocument()
+      expect(screen.getByText(/5m ago/)).toBeInTheDocument()
     })
 
     it('renders relative time in hours for items within the last day', () => {
@@ -475,13 +475,13 @@ describe('RecentActivity', () => {
         {
           id: 'hours',
           type: 'review' as const,
-          action: 'Avis',
-          details: 'Détail',
+          action: 'Review',
+          details: 'Detail',
           timestamp: new Date(Date.now() - 7_200_000).toISOString(), // 2h ago
         },
       ]
       render(<RecentActivity activity={items} />)
-      expect(screen.getByText(/Il y a 2h/)).toBeInTheDocument()
+      expect(screen.getByText(/2h ago/)).toBeInTheDocument()
     })
 
     it('renders relative time in days for items within the last week', () => {
@@ -489,13 +489,13 @@ describe('RecentActivity', () => {
         {
           id: 'days',
           type: 'report' as const,
-          action: 'Signalement',
-          details: 'Détail',
+          action: 'Report',
+          details: 'Detail',
           timestamp: new Date(Date.now() - 172_800_000).toISOString(), // 2 days ago
         },
       ]
       render(<RecentActivity activity={items} />)
-      expect(screen.getByText(/Il y a 2j/)).toBeInTheDocument()
+      expect(screen.getByText(/2d ago/)).toBeInTheDocument()
     })
 
     it('renders formatted date for items older than a week', () => {
@@ -503,14 +503,14 @@ describe('RecentActivity', () => {
         {
           id: 'old',
           type: 'user' as const,
-          action: 'Ancien',
-          details: 'Détail',
+          action: 'Old event',
+          details: 'Detail',
           timestamp: '2025-12-01T10:00:00Z', // long ago
         },
       ]
       render(<RecentActivity activity={items} />)
-      // fr-FR date format: 01/12/2025
-      expect(screen.getByText(/01\/12\/2025/)).toBeInTheDocument()
+      // en-US date format: 12/1/2025
+      expect(screen.getByText(/12\/1\/2025/)).toBeInTheDocument()
     })
 
     it('handles unknown status gracefully by rendering the raw status string', () => {
@@ -519,7 +519,7 @@ describe('RecentActivity', () => {
           id: 'unknown-status',
           type: 'booking' as const,
           action: 'Test',
-          details: 'Détail',
+          details: 'Detail',
           timestamp: new Date().toISOString(),
           status: 'unknown_status',
         },
@@ -530,14 +530,14 @@ describe('RecentActivity', () => {
   })
 
   describe('header and navigation', () => {
-    it('displays "Activité récente" heading', () => {
+    it('displays "Recent activity" heading', () => {
       render(<RecentActivity activity={[]} />)
-      expect(screen.getByText('Activité récente')).toBeInTheDocument()
+      expect(screen.getByText('Recent activity')).toBeInTheDocument()
     })
 
-    it('renders "Voir tout" link pointing to /admin/journal', () => {
+    it('renders "View all" link pointing to /admin/journal', () => {
       render(<RecentActivity activity={[]} />)
-      const link = screen.getByRole('link', { name: /Voir tout/ })
+      const link = screen.getByRole('link', { name: /View all/ })
       expect(link).toHaveAttribute('href', '/admin/journal')
     })
   })
@@ -545,7 +545,7 @@ describe('RecentActivity', () => {
   describe('accessibility', () => {
     it('has region role with correct aria-label', () => {
       render(<RecentActivity activity={[]} />)
-      expect(screen.getByRole('region', { name: 'Activité récente' })).toBeInTheDocument()
+      expect(screen.getByRole('region', { name: 'Recent activity' })).toBeInTheDocument()
     })
   })
 })
@@ -584,8 +584,8 @@ describe('PendingReports', () => {
       render(
         <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
       )
-      expect(screen.getByText('Aucun signalement en attente')).toBeInTheDocument()
-      expect(screen.getByText('Tous les signalements ont été traités')).toBeInTheDocument()
+      expect(screen.getByText('No pending reports')).toBeInTheDocument()
+      expect(screen.getByText('All reports have been processed')).toBeInTheDocument()
     })
 
     it('renders CheckCircle icon in empty state', () => {
@@ -611,13 +611,13 @@ describe('PendingReports', () => {
       )
 
       // First report: review + spam
-      expect(screen.getByText('Avis')).toBeInTheDocument()
+      expect(screen.getByText('Review')).toBeInTheDocument()
       expect(screen.getByText('Spam')).toBeInTheDocument()
-      expect(screen.getByText('Ce commentaire est du spam évident')).toBeInTheDocument()
+      expect(screen.getByText('This comment is obvious spam')).toBeInTheDocument()
 
       // Second report: provider + fake
-      expect(screen.getByText('Artisan')).toBeInTheDocument()
-      expect(screen.getByText('Faux contenu')).toBeInTheDocument()
+      expect(screen.getByText('Attorney')).toBeInTheDocument()
+      expect(screen.getByText('Fake content')).toBeInTheDocument()
     })
 
     it('shows report count badge', () => {
@@ -628,13 +628,13 @@ describe('PendingReports', () => {
       expect(screen.getByText('2')).toBeInTheDocument()
     })
 
-    it('renders formatted date in French for each report', () => {
+    it('renders formatted date in English for each report', () => {
       render(
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
-      // 14 feb 2026 in fr-FR short: "14 févr. 2026"
-      expect(screen.getByText(/14 févr\. 2026/)).toBeInTheDocument()
-      expect(screen.getByText(/13 févr\. 2026/)).toBeInTheDocument()
+      // en-US date format with { day: 'numeric', month: 'short', year: 'numeric' }: "Feb 14, 2026"
+      expect(screen.getByText(/Feb 14, 2026/)).toBeInTheDocument()
+      expect(screen.getByText(/Feb 13, 2026/)).toBeInTheDocument()
     })
 
     it('does not render description when it is null', () => {
@@ -642,12 +642,12 @@ describe('PendingReports', () => {
       render(
         <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
       )
-      // Second report has null description — only the first description should be present
-      const descriptions = screen.queryAllByText('Ce commentaire est du spam évident')
+      // Second report has null description -- only the first description should be present
+      const descriptions = screen.queryAllByText('This comment is obvious spam')
       expect(descriptions).toHaveLength(1)
     })
 
-    it('renders correct French reason labels', () => {
+    it('renders correct English reason labels', () => {
       const reports = [
         { id: '1', target_type: 'review', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
         { id: '2', target_type: 'review', reason: 'inappropriate', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
@@ -660,13 +660,13 @@ describe('PendingReports', () => {
       )
 
       expect(screen.getByText('Spam')).toBeInTheDocument()
-      expect(screen.getByText('Inapproprié')).toBeInTheDocument()
-      expect(screen.getByText('Faux contenu')).toBeInTheDocument()
-      expect(screen.getByText('Harcèlement')).toBeInTheDocument()
-      expect(screen.getByText('Autre')).toBeInTheDocument()
+      expect(screen.getByText('Inappropriate')).toBeInTheDocument()
+      expect(screen.getByText('Fake content')).toBeInTheDocument()
+      expect(screen.getByText('Harassment')).toBeInTheDocument()
+      expect(screen.getByText('Other')).toBeInTheDocument()
     })
 
-    it('renders correct French target type labels', () => {
+    it('renders correct English target type labels', () => {
       const reports = [
         { id: '1', target_type: 'review', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
         { id: '2', target_type: 'user', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
@@ -677,9 +677,9 @@ describe('PendingReports', () => {
         <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
       )
 
-      expect(screen.getByText('Avis')).toBeInTheDocument()
-      expect(screen.getByText('Utilisateur')).toBeInTheDocument()
-      expect(screen.getByText('Artisan')).toBeInTheDocument()
+      expect(screen.getByText('Review')).toBeInTheDocument()
+      expect(screen.getByText('User')).toBeInTheDocument()
+      expect(screen.getByText('Attorney')).toBeInTheDocument()
       expect(screen.getByText('Message')).toBeInTheDocument()
     })
 
@@ -699,7 +699,7 @@ describe('PendingReports', () => {
       render(
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       expect(resolveButtons).toHaveLength(2)
     })
 
@@ -707,7 +707,7 @@ describe('PendingReports', () => {
       render(
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
-      const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
+      const dismissButtons = screen.getAllByRole('button', { name: 'Dismiss this report' })
       expect(dismissButtons).toHaveLength(2)
     })
 
@@ -716,11 +716,11 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       expect(screen.getByTestId('confirmation-modal')).toBeInTheDocument()
-      expect(screen.getByTestId('modal-title')).toHaveTextContent('Résoudre le signalement')
+      expect(screen.getByTestId('modal-title')).toHaveTextContent('Resolve report')
     })
 
     it('opens confirmation modal when dismiss button is clicked', () => {
@@ -728,11 +728,11 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
+      const dismissButtons = screen.getAllByRole('button', { name: 'Dismiss this report' })
       fireEvent.click(dismissButtons[0])
 
       expect(screen.getByTestId('confirmation-modal')).toBeInTheDocument()
-      expect(screen.getByTestId('modal-title')).toHaveTextContent('Rejeter le signalement')
+      expect(screen.getByTestId('modal-title')).toHaveTextContent('Dismiss report')
     })
 
     it('calls adminMutate with correct parameters on resolve confirmation', async () => {
@@ -741,7 +741,7 @@ describe('PendingReports', () => {
       )
 
       // Click resolve on first report
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       // Confirm in modal
@@ -762,7 +762,7 @@ describe('PendingReports', () => {
       )
 
       // Click dismiss on first report
-      const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
+      const dismissButtons = screen.getAllByRole('button', { name: 'Dismiss this report' })
       fireEvent.click(dismissButtons[0])
 
       // Confirm in modal
@@ -784,7 +784,7 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       const confirmBtn = screen.getByTestId('modal-confirm')
@@ -802,7 +802,7 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       const confirmBtn = screen.getByTestId('modal-confirm')
@@ -811,7 +811,7 @@ describe('PendingReports', () => {
       })
 
       const toast = screen.getByTestId('toast')
-      expect(toast).toHaveTextContent('Signalement résolu')
+      expect(toast).toHaveTextContent('Report resolved')
       expect(toast).toHaveAttribute('data-type', 'success')
     })
 
@@ -822,7 +822,7 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
+      const dismissButtons = screen.getAllByRole('button', { name: 'Dismiss this report' })
       fireEvent.click(dismissButtons[0])
 
       const confirmBtn = screen.getByTestId('modal-confirm')
@@ -831,17 +831,17 @@ describe('PendingReports', () => {
       })
 
       const toast = screen.getByTestId('toast')
-      expect(toast).toHaveTextContent('Signalement rejeté')
+      expect(toast).toHaveTextContent('Report dismissed')
     })
 
     it('shows error toast when adminMutate fails', async () => {
-      mockAdminMutate.mockRejectedValue(new Error('Erreur serveur'))
+      mockAdminMutate.mockRejectedValue(new Error('Server error'))
 
       render(
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       const confirmBtn = screen.getByTestId('modal-confirm')
@@ -850,7 +850,7 @@ describe('PendingReports', () => {
       })
 
       const toast = screen.getByTestId('toast')
-      expect(toast).toHaveTextContent('Erreur serveur')
+      expect(toast).toHaveTextContent('Server error')
       expect(toast).toHaveAttribute('data-type', 'error')
     })
 
@@ -861,7 +861,7 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       const confirmBtn = screen.getByTestId('modal-confirm')
@@ -870,7 +870,7 @@ describe('PendingReports', () => {
       })
 
       const toast = screen.getByTestId('toast')
-      expect(toast).toHaveTextContent('Erreur lors du traitement')
+      expect(toast).toHaveTextContent('Error processing report')
     })
 
     it('does not call onMutate when adminMutate fails', async () => {
@@ -880,7 +880,7 @@ describe('PendingReports', () => {
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
 
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       fireEvent.click(resolveButtons[0])
 
       const confirmBtn = screen.getByTestId('modal-confirm')
@@ -893,19 +893,19 @@ describe('PendingReports', () => {
   })
 
   describe('header and navigation', () => {
-    it('displays "Signalements" heading', () => {
+    it('displays "Reports" heading', () => {
       render(
         <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
       )
-      expect(screen.getByText('Signalements')).toBeInTheDocument()
+      expect(screen.getByText('Reports')).toBeInTheDocument()
     })
 
-    it('renders "Voir tout" link pointing to /admin/signalements', () => {
+    it('renders "View all" link pointing to /admin/reports', () => {
       render(
         <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
       )
-      const link = screen.getByRole('link', { name: /Voir tout/ })
-      expect(link).toHaveAttribute('href', '/admin/signalements')
+      const link = screen.getByRole('link', { name: /View all/ })
+      expect(link).toHaveAttribute('href', '/admin/reports')
     })
   })
 
@@ -914,26 +914,26 @@ describe('PendingReports', () => {
       render(
         <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
       )
-      expect(screen.getByRole('region', { name: 'Signalements en attente' })).toBeInTheDocument()
+      expect(screen.getByRole('region', { name: 'Pending reports' })).toBeInTheDocument()
     })
 
-    it('resolve buttons have title attribute "Résoudre"', () => {
+    it('resolve buttons have title attribute "Resolve"', () => {
       render(
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
-      const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
+      const resolveButtons = screen.getAllByRole('button', { name: 'Resolve this report' })
       resolveButtons.forEach((btn) => {
-        expect(btn).toHaveAttribute('title', 'Résoudre')
+        expect(btn).toHaveAttribute('title', 'Resolve')
       })
     })
 
-    it('dismiss buttons have title attribute "Rejeter"', () => {
+    it('dismiss buttons have title attribute "Dismiss"', () => {
       render(
         <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
       )
-      const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
+      const dismissButtons = screen.getAllByRole('button', { name: 'Dismiss this report' })
       dismissButtons.forEach((btn) => {
-        expect(btn).toHaveAttribute('title', 'Rejeter')
+        expect(btn).toHaveAttribute('title', 'Dismiss')
       })
     })
   })
@@ -972,7 +972,7 @@ describe('ActivityChart', () => {
   describe('empty data state', () => {
     it('shows empty state message when all data points are zero', () => {
       render(<ActivityChart data={buildEmptyChartData()} loading={false} />)
-      expect(screen.getByText('Aucune donnée sur cette période')).toBeInTheDocument()
+      expect(screen.getByText('No data for this period')).toBeInTheDocument()
     })
 
     it('does not render chart when data is all zeros', () => {
@@ -982,9 +982,9 @@ describe('ActivityChart', () => {
   })
 
   describe('data rendering', () => {
-    it('renders the heading "Activité des 30 derniers jours"', () => {
+    it('renders the heading "Activity over the last 30 days"', () => {
       render(<ActivityChart data={buildChartData()} loading={false} />)
-      expect(screen.getByText('Activité des 30 derniers jours')).toBeInTheDocument()
+      expect(screen.getByText('Activity over the last 30 days')).toBeInTheDocument()
     })
 
     it('renders a responsive container with area chart', () => {
@@ -1001,12 +1001,12 @@ describe('ActivityChart', () => {
       expect(screen.getByTestId('area-reviews')).toBeInTheDocument()
     })
 
-    it('assigns correct French names to Area series', () => {
+    it('assigns correct English names to Area series', () => {
       render(<ActivityChart data={buildChartData()} loading={false} />)
 
-      expect(screen.getByTestId('area-bookings')).toHaveAttribute('data-name', 'Réservations')
-      expect(screen.getByTestId('area-users')).toHaveAttribute('data-name', 'Inscriptions')
-      expect(screen.getByTestId('area-reviews')).toHaveAttribute('data-name', 'Avis')
+      expect(screen.getByTestId('area-bookings')).toHaveAttribute('data-name', 'Bookings')
+      expect(screen.getByTestId('area-users')).toHaveAttribute('data-name', 'Sign-ups')
+      expect(screen.getByTestId('area-reviews')).toHaveAttribute('data-name', 'Reviews')
     })
 
     it('passes data to AreaChart with correct count', () => {
@@ -1032,24 +1032,24 @@ describe('ActivityChart', () => {
   describe('accessibility', () => {
     it('has region role with aria-label describing the chart', () => {
       render(<ActivityChart data={buildChartData()} loading={false} />)
-      const region = screen.getByRole('region', { name: /Graphique d'activité des 30 derniers jours/ })
+      const region = screen.getByRole('region', { name: /Activity chart for the last 30 days/ })
       expect(region).toBeInTheDocument()
     })
 
     it('renders a screen-reader-only data table for chart data', () => {
       render(<ActivityChart data={buildChartData()} loading={false} />)
-      const srOnly = screen.getByText(/Graphique montrant les réservations, inscriptions et avis/)
+      const srOnly = screen.getByText(/Chart showing bookings, sign-ups, and reviews/)
       expect(srOnly).toBeInTheDocument()
     })
 
-    it('screen-reader table contains column headers in French', () => {
+    it('screen-reader table contains column headers in English', () => {
       render(<ActivityChart data={buildChartData()} loading={false} />)
 
       expect(screen.getByText('Date')).toBeInTheDocument()
-      expect(screen.getByText('Réservations')).toBeInTheDocument()
-      expect(screen.getByText('Inscriptions')).toBeInTheDocument()
-      // "Avis" appears both as legend label and table header — check it exists
-      expect(screen.getAllByText('Avis').length).toBeGreaterThanOrEqual(1)
+      expect(screen.getByText('Bookings')).toBeInTheDocument()
+      expect(screen.getByText('Sign-ups')).toBeInTheDocument()
+      // "Reviews" appears both as legend label and table header -- check it exists
+      expect(screen.getAllByText('Reviews').length).toBeGreaterThanOrEqual(1)
     })
 
     it('screen-reader table only includes rows with non-zero data', () => {
@@ -1071,7 +1071,7 @@ describe('ActivityChart', () => {
   describe('empty data array', () => {
     it('handles empty array without crashing', () => {
       render(<ActivityChart data={[]} loading={false} />)
-      expect(screen.getByText('Aucune donnée sur cette période')).toBeInTheDocument()
+      expect(screen.getByText('No data for this period')).toBeInTheDocument()
     })
   })
 })

@@ -1,6 +1,6 @@
 /**
- * Tests — Reviews API (/api/reviews)
- * GET: param validation, booking info, artisan reviews + stats
+ * Tests -- Reviews API (/api/reviews)
+ * GET: param validation, booking info, attorney reviews + stats
  * POST: validation, HMAC token, duplicate check, fraud detection, 201 success
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -57,7 +57,7 @@ vi.mock('@supabase/supabase-js', () => ({
 // Helpers
 // ============================================
 
-const ARTISAN_UUID = '550e8400-e29b-41d4-a716-446655440001'
+const ATTORNEY_UUID = '550e8400-e29b-41d4-a716-446655440001'
 const BOOKING_UUID = '550e8400-e29b-41d4-a716-446655440002'
 
 function makeGetRequest(params: Record<string, string> = {}) {
@@ -76,7 +76,7 @@ function makePostRequest(body: Record<string, unknown>) {
 const validReviewBody = {
   bookingId: BOOKING_UUID,
   rating: 5,
-  comment: 'Excellent travail, très professionnel et ponctuel.',
+  comment: 'Excellent work, very professional and punctual.',
 }
 
 // Env setup
@@ -97,7 +97,7 @@ beforeEach(() => {
 // ============================================
 
 describe('GET /api/reviews', () => {
-  it('returns 400 when neither bookingId nor artisanId provided', async () => {
+  it('returns 400 when neither bookingId nor attorneyId provided', async () => {
     const { GET } = await import('@/app/api/reviews/route')
     const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
 
@@ -127,11 +127,11 @@ describe('GET /api/reviews', () => {
     queryResults.push({
       data: {
         id: BOOKING_UUID,
-        client_name: 'Jean Dupont',
-        service_description: 'Réparation fuite',
-        artisan_id: ARTISAN_UUID,
+        client_name: 'John Smith',
+        service_description: 'Contract review',
+        attorney_id: ATTORNEY_UUID,
         slot: { date: '2026-03-05' },
-        artisan: { id: ARTISAN_UUID, name: 'Martin Plombier' },
+        attorney: { id: ATTORNEY_UUID, name: 'Attorney Williams' },
       },
       error: null,
     })
@@ -145,13 +145,13 @@ describe('GET /api/reviews', () => {
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
-    expect(result.body.data.artisanName).toBe('Martin Plombier')
+    expect(result.body.data.attorneyName).toBe('Attorney Williams')
     expect(result.body.data.alreadyReviewed).toBe(false)
   })
 
   it('returns alreadyReviewed=true when review exists', async () => {
     queryResults.push({
-      data: { id: BOOKING_UUID, client_name: 'Alice', service_description: null, artisan_id: ARTISAN_UUID, slot: null, artisan: null },
+      data: { id: BOOKING_UUID, client_name: 'Alice', service_description: null, attorney_id: ATTORNEY_UUID, slot: null, attorney: null },
       error: null,
     })
     queryResults.push({ data: { id: 'existing-review-id' }, error: null })
@@ -164,17 +164,17 @@ describe('GET /api/reviews', () => {
     expect(result.body.data.alreadyReviewed).toBe(true)
   })
 
-  it('returns reviews with computed stats for artisanId', async () => {
+  it('returns reviews with computed stats for attorneyId', async () => {
     queryResults.push({
       data: [
-        { id: 'r1', rating: 5, comment: 'Parfait', would_recommend: true, client_name: 'Alice', created_at: '2026-01-01T00:00:00Z', artisan_response: null, artisan_responded_at: null },
-        { id: 'r2', rating: 3, comment: 'Correct', would_recommend: false, client_name: 'Bob', created_at: '2026-01-02T00:00:00Z', artisan_response: null, artisan_responded_at: null },
+        { id: 'r1', rating: 5, comment: 'Perfect', would_recommend: true, client_name: 'Alice', created_at: '2026-01-01T00:00:00Z', artisan_response: null, artisan_responded_at: null },
+        { id: 'r2', rating: 3, comment: 'Decent', would_recommend: false, client_name: 'Bob', created_at: '2026-01-02T00:00:00Z', artisan_response: null, artisan_responded_at: null },
       ],
       error: null,
     })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as unknown as {
+    const result = await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID })) as unknown as {
       body: { success: boolean; data: { reviews: unknown[]; stats: Record<string, unknown> } }; status: number
     }
 
@@ -190,7 +190,7 @@ describe('GET /api/reviews', () => {
     queryResults.push({ data: [], error: null })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as unknown as {
+    const result = await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID })) as unknown as {
       body: { success: boolean; data: { stats: Record<string, unknown> } }; status: number
     }
 
@@ -237,7 +237,7 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 400 when booking status is pending (not reviewable)', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'pending' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'pending' }, error: null })
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest(validReviewBody)) as unknown as { body: Record<string, unknown>; status: number }
@@ -246,7 +246,7 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 409 when review already exists', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
     queryResults.push({ data: { id: 'existing-review' }, error: null }) // existing review
 
     const { POST } = await import('@/app/api/reviews/route')
@@ -256,7 +256,7 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 201 on successful review submission', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
     queryResults.push({ data: null, error: { code: 'PGRST116' } }) // no existing review
     queryResults.push({ data: { id: 'new-review-id', status: 'published' }, error: null }) // insert
     queryResults.push({ data: [{ rating: 5 }], error: null }) // update rating query
@@ -273,7 +273,7 @@ describe('POST /api/reviews', () => {
   })
 
   it('marks review as pending_review when fraud indicators detected', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'completed' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'completed' }, error: null })
     queryResults.push({ data: null, error: { code: 'PGRST116' } })
     queryResults.push({ data: { id: 'new-review-id', status: 'pending_review' }, error: null })
     queryResults.push({ data: [], error: null })

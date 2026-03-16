@@ -15,7 +15,7 @@ const top30Cities = [...cities]
 export function generateStaticParams() {
   const top10Problems = getProblemSlugs().slice(0, 10)
   return top10Problems.flatMap((p) =>
-    top30Cities.map((v) => ({ probleme: p, ville: v.slug }))
+    top30Cities.map((v) => ({ issue: p, city: v.slug }))
   )
 }
 
@@ -25,27 +25,27 @@ export const revalidate = 86400
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ probleme: string; ville: string }>
+  params: Promise<{ issue: string; city: string }>
 }): Promise<Metadata> {
-  const { probleme, ville: villeSlug } = await params
-  const problem = getProblemBySlug(probleme)
+  const { issue, city: villeSlug } = await params
+  const problem = getProblemBySlug(issue)
   const villeData = getCityBySlug(villeSlug)
   if (!problem || !villeData) return {}
 
   return {
     title: `${problem.name} in ${villeData.name} | US Attorneys`,
     robots: { index: false },
-    alternates: { canonical: `${SITE_URL}/issues/${probleme}/${villeSlug}` },
+    alternates: { canonical: `${SITE_URL}/issues/${issue}/${villeSlug}` },
   }
 }
 
 export default async function IssueVillePage({
   params,
 }: {
-  params: Promise<{ probleme: string; ville: string }>
+  params: Promise<{ issue: string; city: string }>
 }) {
-  const { probleme, ville: villeSlug } = await params
-  const problem = getProblemBySlug(probleme)
+  const { issue, city: villeSlug } = await params
+  const problem = getProblemBySlug(issue)
   const villeData = getCityBySlug(villeSlug)
   if (!problem || !villeData) notFound()
 

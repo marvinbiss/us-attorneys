@@ -372,7 +372,7 @@ export async function PATCH(request: NextRequest) {
 
         if (attorneyInfo) {
           const specialtySlug = slugify(attorneyInfo.specialty || 'attorney')
-          const locationSlug = slugify(attorneyInfo.address_city || 'france')
+          const locationSlug = slugify(attorneyInfo.address_city || 'united-states')
           const publicId = attorneyInfo.slug || attorneyInfo.stable_id
 
           if (publicId) {

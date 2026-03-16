@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -26,7 +26,7 @@ const createQuoteSchema = z.object({
 
 export async function GET() {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Get provider linked to this user
@@ -74,7 +74,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Get provider linked to this user
@@ -190,7 +190,7 @@ const updateQuoteSchema = z.object({
 
 export async function PUT(request: Request) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const { data: provider } = await supabase

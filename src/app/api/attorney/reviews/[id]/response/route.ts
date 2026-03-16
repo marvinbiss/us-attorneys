@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { z } from 'zod'
 
 // POST request schema
@@ -17,7 +17,7 @@ export async function POST(
 ) {
   try {
     const { id } = await params
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const body = await request.json()

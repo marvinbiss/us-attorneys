@@ -1,7 +1,7 @@
 /**
- * Tests d'integration — Routes API CMS
- * Couvre : CRUD pages, publish/unpublish, versions, restore,
- *          validation Zod, sanitization HTML, auth, cache invalidation
+ * Integration tests -- CMS API Routes
+ * Covers: CRUD pages, publish/unpublish, versions, restore,
+ *         Zod validation, HTML sanitization, auth, cache invalidation
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Type alias for mock responses used in tests
@@ -262,7 +262,7 @@ describe('POST /api/admin/cms (Create)', () => {
 
     expect(res.status).toBe(409)
     expect(res.body.success).toBe(false)
-    expect(res.body.error.message).toContain('slug identique')
+    expect(res.body.error.message).toContain('slug already exists')
   })
 
   it('returns error when auth fails', async () => {
@@ -342,7 +342,7 @@ describe('POST /api/admin/cms (Create)', () => {
     const res = await POST(req) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('structur')
+    expect(res.body.error.message).toContain('Structured data')
   })
 
   it('rejects service page without service_slug with 400', async () => {
@@ -361,7 +361,7 @@ describe('POST /api/admin/cms (Create)', () => {
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody({
       page_type: 'location',
-      service_slug: 'plomberie',
+      service_slug: 'personal-injury',
       // location_slug missing
     }))
     const res = await POST(req) as unknown as MockResponse
@@ -447,12 +447,12 @@ describe('GET /api/admin/cms (List)', () => {
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
-    const req = makeRequest('/api/admin/cms?search=plombier')
+    const req = makeRequest('/api/admin/cms?search=attorney')
     const res = await GET(req) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     const fromResult = mockSupabaseFrom.mock.results[0].value
-    expect(fromResult.ilike).toHaveBeenCalledWith('title', '%plombier%')
+    expect(fromResult.ilike).toHaveBeenCalledWith('title', '%attorney%')
   })
 
   it('sorts by different columns', async () => {
@@ -545,7 +545,7 @@ describe('GET /api/admin/cms/[id] (Get single)', () => {
     const res = await GET(req, { params: Promise.resolve({ id: 'not-a-uuid' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('returns 404 for non-existent page', async () => {
@@ -558,7 +558,7 @@ describe('GET /api/admin/cms/[id] (Get single)', () => {
     const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
 
     expect(res.status).toBe(404)
-    expect(res.body.error.message).toContain('non trouv')
+    expect(res.body.error.message).toContain('not found')
   })
 
   it('requires auth', async () => {
@@ -597,7 +597,7 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
     const res = await PUT(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('returns 404 for non-existent page', async () => {
@@ -693,7 +693,7 @@ describe('DELETE /api/admin/cms/[id] (Soft delete)', () => {
     const res = await DELETE(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('invalidates cache after delete', async () => {
@@ -763,7 +763,7 @@ describe('POST /api/admin/cms/[id]/publish (Publish)', () => {
     const res = await POST(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('requires publish permission', async () => {
@@ -826,7 +826,7 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
     const res = await DELETE(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('clears published_at on unpublish', async () => {
@@ -925,7 +925,7 @@ describe('GET /api/admin/cms/[id]/versions (Version history)', () => {
     const res = await GET(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('returns 404 for non-existent page', async () => {
@@ -942,7 +942,7 @@ describe('GET /api/admin/cms/[id]/versions (Version history)', () => {
     const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
 
     expect(res.status).toBe(404)
-    expect(res.body.error.message).toContain('non trouv')
+    expect(res.body.error.message).toContain('not found')
   })
 })
 
@@ -994,7 +994,7 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
     const res = await POST(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
 
     expect(res.status).toBe(400)
-    expect(res.body.error.message).toContain('ID invalide')
+    expect(res.body.error.message).toContain('Invalid ID')
   })
 
   it('rejects invalid version_id with 400', async () => {
@@ -1126,9 +1126,9 @@ describe('CMS Validation — createPageSchema', () => {
     const types = ['static', 'blog', 'service', 'location', 'homepage', 'faq']
     for (const pt of types) {
       const extra: Record<string, string> = { page_type: pt }
-      if (pt === 'service') extra.service_slug = 'plomberie'
+      if (pt === 'service') extra.service_slug = 'personal-injury'
       if (pt === 'location') {
-        extra.service_slug = 'plomberie'
+        extra.service_slug = 'personal-injury'
         extra.location_slug = 'paris'
       }
       const result = createPageSchema.safeParse(validCreateBody(extra))
@@ -1146,7 +1146,7 @@ describe('CMS Validation — createPageSchema', () => {
     const { createPageSchema } = await import('@/lib/cms-utils')
     const result = createPageSchema.safeParse(validCreateBody({
       page_type: 'location',
-      service_slug: 'plomberie',
+      service_slug: 'personal-injury',
     }))
     expect(result.success).toBe(false)
   })
@@ -1186,7 +1186,7 @@ describe('CMS Validation — createPageSchema', () => {
 
   it('accepts tags array', async () => {
     const { createPageSchema } = await import('@/lib/cms-utils')
-    const result = createPageSchema.safeParse(validCreateBody({ tags: ['seo', 'plomberie'] }))
+    const result = createPageSchema.safeParse(validCreateBody({ tags: ['seo', 'personal-injury'] }))
     expect(result.success).toBe(true)
   })
 

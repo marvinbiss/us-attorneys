@@ -1,8 +1,8 @@
 /**
- * Branded Types pour la type-safety au runtime
+ * Branded Types for runtime type-safety
  *
- * Ces types empêchent de passer un UserId là où on attend un ProviderId
- * même si les deux sont des strings UUID.
+ * These types prevent passing a UserId where a ProviderId is expected,
+ * even though both are UUID strings.
  */
 
 declare const __brand: unique symbol
@@ -85,7 +85,7 @@ export function isValidPostalCode(value: string): boolean {
 }
 
 // ============================================================================
-// CONSTRUCTORS (avec validation)
+// CONSTRUCTORS (with validation)
 // ============================================================================
 
 export function createAttorneyId(value: string): ProviderId {
@@ -185,7 +185,7 @@ export function unsafeCreateSlug(value: string): Slug {
 }
 
 // ============================================================================
-// EXTRACTION (pour passer aux APIs externes)
+// EXTRACTION (for passing to external APIs)
 // ============================================================================
 
 export function extractId(branded: ProviderId | UserId | QuoteId | ReviewId | ServiceId | CityId): string {

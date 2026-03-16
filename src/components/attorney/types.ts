@@ -63,6 +63,7 @@ export interface Artisan {
   longitude?: number
   prices_are_estimated?: boolean
   available_24h?: boolean
+  // DB-bound: French keys from database (ouvert/debut/fin stored in Supabase JSONB)
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
   free_quote?: boolean
   intervention_radius_km?: number

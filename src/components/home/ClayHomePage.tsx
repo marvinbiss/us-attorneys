@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Droplets, Zap, HardHat, PaintBucket, Hammer, ShieldCheck, Star, MapPin, Shield, Key, Flame, TreeDeciduous } from 'lucide-react'
+import { Scale, Gavel, Heart, Globe, FileText, Home, Building, Briefcase, ShieldCheck, Star, MapPin, Shield, Clock } from 'lucide-react'
 import { ClayHeroSearch } from './ClayHeroSearch'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
@@ -16,32 +16,32 @@ interface Props {
 }
 
 const SERVICE_ITEMS = [
-  { Icon: Droplets,      name: 'Personal Injury',    slug: 'plombier' },
-  { Icon: Zap,           name: 'Criminal Defense',   slug: 'electricien' },
-  { Icon: Key,           name: 'Family Law',         slug: 'serrurier' },
-  { Icon: Flame,         name: 'Immigration',        slug: 'chauffagiste' },
-  { Icon: PaintBucket,   name: 'Estate Planning',    slug: 'peintre-en-batiment' },
-  { Icon: Hammer,        name: 'Real Estate',        slug: 'menuisier' },
-  { Icon: HardHat,       name: 'Business Law',       slug: 'macon' },
-  { Icon: TreeDeciduous, name: 'Employment Law',     slug: 'jardinier' },
+  { Icon: Scale,     name: 'Personal Injury',    slug: 'personal-injury' },
+  { Icon: Gavel,     name: 'Criminal Defense',   slug: 'criminal-defense' },
+  { Icon: Heart,     name: 'Family Law',         slug: 'family-law' },
+  { Icon: Globe,     name: 'Immigration',        slug: 'immigration' },
+  { Icon: FileText,  name: 'Estate Planning',    slug: 'estate-planning' },
+  { Icon: Home,      name: 'Real Estate',        slug: 'real-estate' },
+  { Icon: Building,  name: 'Business Law',       slug: 'business-law' },
+  { Icon: Briefcase, name: 'Employment Law',     slug: 'employment-law' },
 ]
 
 // Featured attorneys (manual selection — verified profiles)
 const FEATURED_ARTISANS = [
   {
-    name: 'P B C Services', specialty: 'Personal Injury', address_city: 'New York', address_postal_code: '10001',
-    rating_average: 4.6, review_count: 34, is_verified: true, slug: 'plombier',
-    stable_id: 'p-b-c-services-814394359', profileCity: 'new-york',
+    name: 'Smith & Associates', specialty: 'Personal Injury', address_city: 'New York', address_postal_code: '10001',
+    rating_average: 4.6, review_count: 34, is_verified: true, slug: 'personal-injury',
+    stable_id: 'smith-associates-new-york', profileCity: 'new-york',
   },
   {
-    name: 'Ecoterra', specialty: 'Criminal Defense', address_city: 'Los Angeles', address_postal_code: '90001',
-    rating_average: 4.9, review_count: 9, is_verified: true, slug: 'electricien',
-    stable_id: 'ecoterra-940717085', profileCity: 'los-angeles',
+    name: 'Davis Law Group', specialty: 'Criminal Defense', address_city: 'Los Angeles', address_postal_code: '90001',
+    rating_average: 4.9, review_count: 9, is_verified: true, slug: 'criminal-defense',
+    stable_id: 'davis-law-group-los-angeles', profileCity: 'los-angeles',
   },
   {
-    name: 'Romain Simon', specialty: 'Family Law', address_city: 'Chicago', address_postal_code: '60601',
-    rating_average: 4.7, review_count: 95, is_verified: true, slug: 'serrurier',
-    stable_id: 'romain-simon-strasbourg', profileCity: 'chicago',
+    name: 'Martinez Family Law', specialty: 'Family Law', address_city: 'Chicago', address_postal_code: '60601',
+    rating_average: 4.7, review_count: 95, is_verified: true, slug: 'family-law',
+    stable_id: 'martinez-family-law-chicago', profileCity: 'chicago',
   },
 ]
 
@@ -216,7 +216,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
             {[
               { Icon: ShieldCheck, text: 'Bar verified' },
               { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} reviews` },
-              { Icon: Zap,         text: 'Consultation in 24h' },
+              { Icon: Clock,       text: 'Consultation in 24h' },
             ].map(({ Icon: PillIcon, text }) => (
               <div
                 key={text}
@@ -289,7 +289,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
             {[
               { Icon: ShieldCheck, label: 'Bar verified',                sub: 'Every attorney vetted' },
               { Icon: Star,        label: `${ratingStr}/5 average`,     sub: `${reviewStr}+ verified reviews` },
-              { Icon: Zap,         label: 'Consultation in 24h',        sub: 'Free, no obligation' },
+              { Icon: Clock,       label: 'Consultation in 24h',        sub: 'Free, no obligation' },
               { Icon: Shield,      label: 'Official data',              sub: 'State bar records' },
               { Icon: MapPin,      label: `${deptCount} states`,        sub: 'Nationwide coverage' },
             ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (

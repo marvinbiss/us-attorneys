@@ -37,10 +37,10 @@ interface ClientLead {
 
 interface Stats {
   total: number
-  en_attente: number
-  en_traitement: number
-  devis_recus: number
-  termine: number
+  pending: number
+  in_progress: number
+  quotes_received: number
+  completed: number
 }
 
 interface PaginationData {
@@ -50,16 +50,16 @@ interface PaginationData {
   totalItems: number
 }
 
-type StatusFilter = 'all' | 'en_attente' | 'en_traitement' | 'devis_recus' | 'termine'
+type StatusFilter = 'all' | 'pending' | 'in_progress' | 'quotes_received' | 'completed'
 
 const STATUS_COLORS: Record<string, string> = {
-  en_attente: 'bg-yellow-100 text-yellow-700',
-  en_traitement: 'bg-blue-100 text-blue-700',
-  devis_recus: 'bg-green-100 text-green-700',
-  accepte: 'bg-emerald-100 text-emerald-700',
-  termine: 'bg-green-100 text-green-800',
-  expire: 'bg-orange-100 text-orange-700',
-  refuse: 'bg-red-100 text-red-700',
+  pending: 'bg-yellow-100 text-yellow-700',
+  in_progress: 'bg-blue-100 text-blue-700',
+  quotes_received: 'bg-green-100 text-green-700',
+  accepted: 'bg-emerald-100 text-emerald-700',
+  completed: 'bg-green-100 text-green-800',
+  expired: 'bg-orange-100 text-orange-700',
+  declined: 'bg-red-100 text-red-700',
 }
 
 function formatRelative(dateStr: string): string {
@@ -133,10 +133,10 @@ export default function MyCasesPage() {
 
   const tabs = [
     { key: 'all', label: 'All', count: stats?.total || 0 },
-    { key: 'en_attente', label: 'Pending', count: stats?.en_attente || 0 },
-    { key: 'en_traitement', label: 'In Progress', count: stats?.en_traitement || 0 },
-    { key: 'devis_recus', label: 'Quotes Received', count: stats?.devis_recus || 0 },
-    { key: 'termine', label: 'Completed', count: stats?.termine || 0 },
+    { key: 'pending', label: 'Pending', count: stats?.pending || 0 },
+    { key: 'in_progress', label: 'In Progress', count: stats?.in_progress || 0 },
+    { key: 'quotes_received', label: 'Quotes Received', count: stats?.quotes_received || 0 },
+    { key: 'completed', label: 'Completed', count: stats?.completed || 0 },
   ]
 
   return (
@@ -182,19 +182,19 @@ export default function MyCasesPage() {
                 />
                 <StatCard
                   title="Pending"
-                  value={stats.en_attente}
+                  value={stats.pending}
                   icon={<Clock className="w-5 h-5" />}
                   color="yellow"
                 />
                 <StatCard
                   title="Quotes Received"
-                  value={stats.devis_recus}
+                  value={stats.quotes_received}
                   icon={<FileText className="w-5 h-5" />}
                   color="green"
                 />
                 <StatCard
                   title="Completed"
-                  value={stats.termine}
+                  value={stats.completed}
                   icon={<CheckCircle className="w-5 h-5" />}
                   color="green"
                 />

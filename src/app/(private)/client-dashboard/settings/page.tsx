@@ -41,8 +41,8 @@ interface DisplayPreferences {
 
 export default function ClientSettingsPage() {
   const [formData, setFormData] = useState({
-    prenom: '',
-    nom: '',
+    firstName: '',
+    lastName: '',
     email: '',
     telephone: '',
   })
@@ -132,12 +132,12 @@ export default function ClientSettingsPage() {
         const profileData = await profileResponse.json()
         if (profileData.profile) {
           const nameParts = (profileData.profile.full_name || '').split(' ')
-          const prenom = nameParts[0] || ''
-          const nom = nameParts.slice(1).join(' ')
+          const firstName = nameParts[0] || ''
+          const lastName = nameParts.slice(1).join(' ')
           setFormData(prev => ({
             ...prev,
-            prenom,
-            nom,
+            firstName,
+            lastName,
             email: profileData.profile.email || '',
             telephone: profileData.profile.phone_e164 || '',
           }))
@@ -193,7 +193,7 @@ export default function ClientSettingsPage() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          full_name: [formData.prenom, formData.nom].filter(Boolean).join(' ').trim() || undefined,
+          full_name: [formData.firstName, formData.lastName].filter(Boolean).join(' ').trim() || undefined,
           phone: formData.telephone || undefined,
         }),
       })
@@ -393,8 +393,8 @@ export default function ClientSettingsPage() {
                             </label>
                             <input
                               type="text"
-                              value={formData.prenom}
-                              onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
+                              value={formData.firstName}
+                              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
@@ -404,8 +404,8 @@ export default function ClientSettingsPage() {
                             </label>
                             <input
                               type="text"
-                              value={formData.nom}
-                              onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+                              value={formData.lastName}
+                              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
@@ -729,9 +729,9 @@ export default function ClientSettingsPage() {
                         }
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="Europe/Paris">Europe/Paris</option>
-                        <option value="Europe/London">Europe/London</option>
                         <option value="America/New_York">America/New_York</option>
+                        <option value="America/Chicago">America/Chicago</option>
+                        <option value="America/Denver">America/Denver</option>
                         <option value="America/Los_Angeles">America/Los_Angeles</option>
                       </select>
                     </div>

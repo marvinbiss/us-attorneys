@@ -92,7 +92,7 @@ export async function GET() {
       </table>
       <p>* One of the two parameters is required.</p>
       <h3>Example</h3>
-      <pre><code>curl "${SITE_URL}/api/v1/stats?region=ile-de-france"</code></pre>
+      <pre><code>curl "${SITE_URL}/api/v1/stats?region=new-york"</code></pre>
     </div>
 
     <h2>Cache</h2>

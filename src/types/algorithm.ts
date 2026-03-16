@@ -1,6 +1,6 @@
 /**
- * Types pour la configuration algorithmique
- * Correspond à la table app.algorithm_config
+ * Types for algorithm configuration
+ * Corresponds to the app.algorithm_config table
  */
 
 export type MatchingStrategy = 'round_robin' | 'scored' | 'geographic'
@@ -17,7 +17,7 @@ export interface AlgorithmConfig {
   require_specialty_match: boolean
   specialty_match_mode: SpecialtyMatchMode
 
-  // Scoring (poids 0-100)
+  // Scoring (weights 0-100)
   weight_rating: number
   weight_reviews: number
   weight_verified: number
@@ -34,13 +34,13 @@ export interface AlgorithmConfig {
   quote_expiry_hours: number
   auto_reassign_hours: number
 
-  // Filtres
+  // Filters
   min_rating: number
   require_verified_urgent: boolean
   exclude_inactive_days: number
   prefer_claimed: boolean
 
-  // Urgence multipliers
+  // Urgency multipliers
   urgency_low_multiplier: number
   urgency_medium_multiplier: number
   urgency_high_multiplier: number

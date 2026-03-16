@@ -5,7 +5,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -25,7 +25,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const { error, user, supabase } = await requireArtisan()
+    const { error, user, supabase } = await requireAttorney()
     if (error) return error
 
     const { searchParams } = new URL(request.url)
@@ -198,7 +198,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { error, user, supabase } = await requireArtisan()
+    const { error, user, supabase } = await requireAttorney()
     if (error) return error
 
     const body = await request.json()

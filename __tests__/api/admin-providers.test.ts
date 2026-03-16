@@ -159,13 +159,13 @@ function createMockRequest(params: Record<string, string> = {}): { nextUrl: URL 
 function sampleProvider(overrides: Record<string, unknown> = {}) {
   return {
     id: 'prov-001',
-    name: 'Dupont Plomberie',
-    slug: 'dupont-plomberie',
-    email: 'dupont@example.com',
-    phone: '+33612345678',
-    address_city: 'Paris',
-    address_region: 'Île-de-France',
-    address_department: '75',
+    name: 'Smith & Associates',
+    slug: 'smith-associates',
+    email: 'smith@example.com',
+    phone: '+12125551234',
+    address_city: 'New York',
+    address_region: 'New York',
+    address_department: 'NY',
     siret: '12345678901234',
     is_verified: true,
     is_active: true,
@@ -174,7 +174,7 @@ function sampleProvider(overrides: Record<string, unknown> = {}) {
     review_count: 12,
     created_at: '2026-01-15T10:00:00Z',
     provider_services: [
-      { service: { name: 'Plomberie', slug: 'plomberie' } },
+      { service: { name: 'Personal Injury', slug: 'personal-injury' } },
     ],
     ...overrides,
   }
@@ -219,7 +219,7 @@ describe('GET /api/admin/providers', () => {
   it('returns 401 when not authenticated', async () => {
     mockAuthResult = {
       success: false,
-      error: mockJsonFn({ success: false, error: { message: 'Non autorisé' } }, { status: 401 }),
+      error: mockJsonFn({ success: false, error: { message: 'Unauthorized' } }, { status: 401 }),
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
@@ -326,13 +326,13 @@ describe('GET /api/admin/providers', () => {
   // ------------------------------------------
   it('applies search query via or() with sanitized input', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    await GET(createMockRequest({ search: 'plombier' }) as never)
+    await GET(createMockRequest({ search: 'attorney' }) as never)
 
     expect(mockOrCalls).toHaveLength(1)
-    expect(mockOrCalls[0]).toContain('name.ilike.%plombier%')
-    expect(mockOrCalls[0]).toContain('email.ilike.%plombier%')
-    expect(mockOrCalls[0]).toContain('address_city.ilike.%plombier%')
-    expect(mockOrCalls[0]).toContain('siret.ilike.%plombier%')
+    expect(mockOrCalls[0]).toContain('name.ilike.%attorney%')
+    expect(mockOrCalls[0]).toContain('email.ilike.%attorney%')
+    expect(mockOrCalls[0]).toContain('address_city.ilike.%attorney%')
+    expect(mockOrCalls[0]).toContain('siret.ilike.%attorney%')
   })
 
   // ------------------------------------------
@@ -347,7 +347,7 @@ describe('GET /api/admin/providers', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error.message).toBe('Paramètres invalides')
+    expect(result.body.error.message).toBe('Invalid parameters')
   })
 
   it('returns 400 when limit exceeds max (100)', async () => {
@@ -400,7 +400,7 @@ describe('GET /api/admin/providers', () => {
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
-    expect(result.body.error.message).toBe('Erreur serveur')
+    expect(result.body.error.message).toBe('Server error')
     expect(mockLoggerError).toHaveBeenCalledWith(
       'Admin providers list error',
       expect.any(Error)
@@ -413,18 +413,18 @@ describe('GET /api/admin/providers', () => {
   it('transforms provider data correctly', async () => {
     mockQueryResult = {
       data: [sampleProvider({
-        name: 'Martin Électricité',
-        email: 'martin@example.com',
-        phone: '+33698765432',
-        address_city: 'Lyon',
-        address_region: 'Auvergne-Rhône-Alpes',
+        name: 'Johnson Criminal Defense',
+        email: 'johnson@example.com',
+        phone: '+13105559876',
+        address_city: 'Los Angeles',
+        address_region: 'California',
         is_verified: false,
         is_active: true,
         rating_average: 3.8,
         review_count: 7,
         source: 'scraping',
         siret: '98765432109876',
-        specialty: 'Électricité',
+        specialty: 'Criminal Defense',
       })],
       error: null,
       count: 1,
@@ -437,12 +437,12 @@ describe('GET /api/admin/providers', () => {
 
     const provider = result.body.providers[0]
     // Real column names (no remapping)
-    expect(provider.name).toBe('Martin Électricité')
+    expect(provider.name).toBe('Johnson Criminal Defense')
     // Direct field mappings
-    expect(provider.email).toBe('martin@example.com')
-    expect(provider.phone).toBe('+33698765432')
-    expect(provider.address_city).toBe('Lyon')
-    expect(provider.address_region).toBe('Auvergne-Rhône-Alpes')
+    expect(provider.email).toBe('johnson@example.com')
+    expect(provider.phone).toBe('+13105559876')
+    expect(provider.address_city).toBe('Los Angeles')
+    expect(provider.address_region).toBe('California')
     expect(provider.is_verified).toBe(false)
     expect(provider.is_active).toBe(true)
     expect(provider.rating_average).toBe(3.8)
@@ -450,7 +450,7 @@ describe('GET /api/admin/providers', () => {
     expect(provider.source).toBe('scraping')
     expect(provider.siret).toBe('98765432109876')
     // Specialty column (no remapping to service_type)
-    expect(provider.specialty).toBe('Électricité')
+    expect(provider.specialty).toBe('Criminal Defense')
   })
 
   // ------------------------------------------
@@ -542,7 +542,7 @@ describe('GET /api/admin/providers', () => {
     const { GET } = await import('@/app/api/admin/providers/route')
     await GET(createMockRequest() as never)
 
-    expect(mockFromTable).toBe('providers')
+    expect(mockFromTable).toBe('attorneys')
   })
 
   it('selects with count: exact for pagination', async () => {
@@ -570,7 +570,7 @@ describe('GET /api/admin/providers', () => {
     expect(mockRangeCalls[0]).toEqual([0, 19])
   })
 
-  it('defaults service_type to Artisan when no services linked', async () => {
+  it('defaults service_type to Attorney when no services linked', async () => {
     mockQueryResult = {
       data: [sampleProvider({ provider_services: [] })],
       error: null,
@@ -582,7 +582,7 @@ describe('GET /api/admin/providers', () => {
       body: { providers: Array<Record<string, unknown>> }
     }
 
-    expect(result.body.providers[0].specialty).toBe('Artisan')
+    expect(result.body.providers[0].specialty).toBe('Attorney')
   })
 
   it('defaults email and phone to empty string when null', async () => {

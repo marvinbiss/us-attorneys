@@ -16,17 +16,17 @@ export interface DataDrivenContent {
   /** Socio-economic context paragraph */
   socioEconomic: string | null
   /** Real estate market context */
-  immobilier: string | null
+  realEstate: string | null
   /** Local legal market (law firms + certifications) */
   legalMarket: string | null
   /** Legal aid and pro bono context */
-  energetique: string | null
+  legalAid: string | null
   /** Climate-driven advice with real data */
   climatData: string | null
   /** Service-specific local demand analysis (always generated) */
-  demandeLocale: string
+  localDemand: string
   /** Service-specific regulatory/standards context (always generated) */
-  reglementation: string
+  regulations: string
   /** Data-enriched FAQ items (replace template FAQs when data available) */
   faqItems: { question: string; answer: string }[]
   /** E-E-A-T data sources citation */
@@ -46,12 +46,12 @@ export function generateDataDrivenContent(
   return {
     intro: '',
     socioEconomic: null,
-    immobilier: null,
+    realEstate: null,
     legalMarket: null,
-    energetique: null,
+    legalAid: null,
     climatData: null,
-    demandeLocale: '',
-    reglementation: '',
+    localDemand: '',
+    regulations: '',
     faqItems: [],
     dataSources: [],
   }

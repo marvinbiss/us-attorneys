@@ -123,9 +123,9 @@ describe('Search API', () => {
   describe('Parameter Validation', () => {
     it('should accept valid search parameters', () => {
       const result = validateSearchParams({
-        q: 'plombier',
-        lat: 48.8566,
-        lon: 2.3522,
+        q: 'attorney',
+        lat: 40.7128,
+        lon: -74.006,
         radius: 25,
         minRating: 4,
         sortBy: 'rating'
@@ -133,7 +133,7 @@ describe('Search API', () => {
 
       expect(result.valid).toBe(true)
       expect(result.errors).toHaveLength(0)
-      expect(result.sanitized.q).toBe('plombier')
+      expect(result.sanitized.q).toBe('attorney')
     })
 
     it('should reject query longer than 200 characters', () => {
@@ -185,23 +185,23 @@ describe('Search API', () => {
     })
 
     it('should trim whitespace from query', () => {
-      const result = validateSearchParams({ q: '  plombier  ' })
-      expect(result.sanitized.q).toBe('plombier')
+      const result = validateSearchParams({ q: '  attorney  ' })
+      expect(result.sanitized.q).toBe('attorney')
     })
   })
 
   describe('Distance Calculation', () => {
-    it('should calculate distance between Paris and Lyon', () => {
-      // Paris: 48.8566, 2.3522
-      // Lyon: 45.7640, 4.8357
-      const distance = calculateDistance(48.8566, 2.3522, 45.7640, 4.8357)
-      // Expected: ~392 km
-      expect(distance).toBeGreaterThan(380)
-      expect(distance).toBeLessThan(400)
+    it('should calculate distance between New York and Los Angeles', () => {
+      // New York: 40.7128, -74.0060
+      // Los Angeles: 34.0522, -118.2437
+      const distance = calculateDistance(40.7128, -74.006, 34.0522, -118.2437)
+      // Expected: ~3944 km
+      expect(distance).toBeGreaterThan(3900)
+      expect(distance).toBeLessThan(4000)
     })
 
     it('should return 0 for same location', () => {
-      const distance = calculateDistance(48.8566, 2.3522, 48.8566, 2.3522)
+      const distance = calculateDistance(40.7128, -74.006, 40.7128, -74.006)
       expect(distance).toBeCloseTo(0)
     })
 

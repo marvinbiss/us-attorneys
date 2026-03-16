@@ -15,18 +15,18 @@ interface ReviewItem {
 }
 
 interface ReviewStats {
-  moyenne: number // API field name
+  average: number
   total: number
-  distribution: { note: number; count: number }[]
+  distribution: { rating: number; count: number }[]
 }
 
 export default function ReviewsReceivedPage() {
   const [loading, setLoading] = useState(true)
   const [reviews, setReviews] = useState<ReviewItem[]>([])
   const [stats, setStats] = useState<ReviewStats>({
-    moyenne: 0,
+    average: 0,
     total: 0,
-    distribution: [5, 4, 3, 2, 1].map(note => ({ note, count: 0 })),
+    distribution: [5, 4, 3, 2, 1].map(rating => ({ rating, count: 0 })),
   })
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
@@ -43,7 +43,7 @@ export default function ReviewsReceivedPage() {
       const data = await response.json()
 
       if (response.ok) {
-        setReviews(data.avis || [])
+        setReviews(data.reviews || [])
         setStats(data.stats || stats)
       }
     } catch (error) {
@@ -122,14 +122,14 @@ export default function ReviewsReceivedPage() {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-gray-900 mb-2">{Number(stats.moyenne).toFixed(1)}</div>
-                  <div className="flex justify-center mb-2" aria-label={`Rating: ${Number(stats.moyenne).toFixed(1)} out of 5`} role="img">
+                  <div className="text-5xl font-bold text-gray-900 mb-2">{Number(stats.average).toFixed(1)}</div>
+                  <div className="flex justify-center mb-2" aria-label={`Rating: ${Number(stats.average).toFixed(1)} out of 5`} role="img">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
                         aria-hidden="true"
                         className={`w-6 h-6 ${
-                          i < Math.round(stats.moyenne) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          i < Math.round(stats.average) ? 'text-yellow-400 fill-current' : 'text-gray-300'
                         }`}
                       />
                     ))}
@@ -138,8 +138,8 @@ export default function ReviewsReceivedPage() {
                 </div>
                 <div className="space-y-2">
                   {stats.distribution.map((item) => (
-                    <div key={item.note} className="flex items-center gap-3">
-                      <span className="text-sm text-gray-600 w-12">{item.note} stars</span>
+                    <div key={item.rating} className="flex items-center gap-3">
+                      <span className="text-sm text-gray-600 w-12">{item.rating} stars</span>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-yellow-400 rounded-full h-2"

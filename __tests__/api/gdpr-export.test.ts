@@ -125,7 +125,7 @@ describe('POST /api/gdpr/export', () => {
     const result = await POST(makePostRequest({ format: 'json' })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(401)
-    expect(result.body.error).toEqual({ message: 'Authentification requise' })
+    expect(result.body.error).toEqual({ message: 'Authentication required' })
   })
 
   it('returns 400 for invalid format', async () => {
@@ -133,7 +133,7 @@ describe('POST /api/gdpr/export', () => {
     const result = await POST(makePostRequest({ format: 'xml' })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
-    expect((result.body.error as { message: string }).message).toBe('Requ\u00eate invalide')
+    expect((result.body.error as { message: string }).message).toBe('Invalid request')
   })
 
   it('returns 400 when existing pending request exists', async () => {
@@ -175,7 +175,7 @@ describe('POST /api/gdpr/export', () => {
     expect(result.body.success).toBe(true)
     expect(result.body.requestId).toBe('new-export-id')
     expect(result.body.data).toBeDefined()
-    expect(result.body.message).toBe('Votre export de donn\u00e9es est pr\u00eat')
+    expect(result.body.message).toBe('Your data export is ready')
   })
 })
 
@@ -191,7 +191,7 @@ describe('GET /api/gdpr/export', () => {
     const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(401)
-    expect(result.body.error).toEqual({ message: 'Authentification requise' })
+    expect(result.body.error).toEqual({ message: 'Authentication required' })
   })
 
   it('returns specific request when requestId provided', async () => {

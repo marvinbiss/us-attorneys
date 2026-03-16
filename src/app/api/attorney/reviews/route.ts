@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { z } from 'zod'
 
 // POST request schema (reply to review)
@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Fetch reviews for this attorney — explicit columns only (no fraud/scoring fields)
@@ -83,7 +83,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const body = await request.json()

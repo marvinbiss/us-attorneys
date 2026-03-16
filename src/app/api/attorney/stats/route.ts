@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -57,7 +57,7 @@ export async function GET(request: Request) {
     const { currentStart, previousStart } = periodDates(period)
 
     // Auth
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Get profile + provider in parallel

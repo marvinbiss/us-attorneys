@@ -34,14 +34,14 @@ export interface SMSData {
   bookingId: string
 }
 
-// Format phone number for France
+// Format phone number for US
 function formatPhoneNumber(phone: string): string {
   // Remove all non-digits
   let cleaned = phone.replace(/\D/g, '')
 
-  // Handle French numbers
-  if (cleaned.startsWith('0') && cleaned.length === 10) {
-    cleaned = '33' + cleaned.substring(1)
+  // Handle US numbers (10 digits without country code)
+  if (cleaned.length === 10) {
+    cleaned = '1' + cleaned
   }
 
   // Add + prefix

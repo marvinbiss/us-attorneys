@@ -15,7 +15,7 @@ import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 const TOP_CITIES = 50
 export function generateStaticParams() {
   return cities.slice(0, TOP_CITIES).flatMap(v =>
-    getNeighborhoodsByCity(v.slug).map(q => ({ ville: v.slug, quartier: q.slug }))
+    getNeighborhoodsByCity(v.slug).map(q => ({ city: v.slug, neighborhood: q.slug }))
   )
 }
 
@@ -23,7 +23,7 @@ export const dynamicParams = true
 export const revalidate = 86400
 
 interface PageProps {
-  params: Promise<{ ville: string; quartier: string }>
+  params: Promise<{ city: string; neighborhood: string }>
 }
 
 function truncateTitle(title: string, maxLen = 42): string {
@@ -32,7 +32,7 @@ function truncateTitle(title: string, maxLen = 42): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { ville: villeSlug, quartier: quartierSlug } = await params
+  const { city: villeSlug, neighborhood: quartierSlug } = await params
   const result = getNeighborhoodBySlug(villeSlug, quartierSlug)
   if (!result) return { title: 'Neighborhood Not Found' }
 
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function QuartierPage({ params }: PageProps) {
-  const { ville: villeSlug, quartier: quartierSlug } = await params
+  const { city: villeSlug, neighborhood: quartierSlug } = await params
   const result = getNeighborhoodBySlug(villeSlug, quartierSlug)
   if (!result) notFound()
 

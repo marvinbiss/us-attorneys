@@ -13,10 +13,7 @@ interface Props {
   specialtySlug: string
 }
 
-export default function FaqAndBlogSection({ combinedFaq, service, location, specialtySlug }: Props) {
-  const isPlombier = specialtySlug === 'plombier'
-  const isBatiment = ['peintre-en-batiment', 'macon', 'couvreur', 'carreleur', 'menuisier'].includes(specialtySlug)
-
+export default function FaqAndBlogSection({ combinedFaq, service, location }: Props) {
   return (
     <>
       {/* FAQ accordion */}
@@ -60,22 +57,8 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, spec
             Guides and Resources
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            {isPlombier ? (
-              <>
-                <BlogLink href="/blog/comment-choisir-son-plombier" emoji="&#128295;" title="How to Choose the Right Attorney" desc="Essential criteria for finding a reliable and competent attorney." />
-                <BlogLink href="/blog/fuite-eau-urgence-guide-complet-gestes-couts" emoji="&#128680;" title="Legal Emergency: What to Do?" desc="The right steps to take in an urgent legal situation." />
-              </>
-            ) : isBatiment ? (
-              <>
-                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Understanding Legal Fees in 2026" desc="Hourly rates, flat fees, contingency — all fee structures explained." />
-                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#128705;" title="Legal Trends 2026" desc="Key legal developments, new regulations, and what to expect this year." />
-              </>
-            ) : (
-              <>
-                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#128705;" title="Legal Trends 2026" desc="Key legal developments, new regulations, and what to expect this year." />
-                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Understanding Legal Fees in 2026" desc="Hourly rates, flat fees, contingency — all fee structures explained." />
-              </>
-            )}
+            <BlogLink href="/guides/find-attorney" emoji="&#9878;" title="How to Choose the Right Attorney" desc="Essential criteria for finding a reliable and competent attorney." />
+            <BlogLink href="/guides/legal-quotes" emoji="&#128176;" title="Understanding Legal Fees in 2026" desc="Hourly rates, flat fees, contingency — all fee structures explained." />
           </div>
         </div>
       </section>

@@ -170,7 +170,7 @@ export async function POST(request: Request) {
 
       if (attorneyData) {
         const specialtySlug = slugify(attorneyData.specialty || 'attorney')
-        const locationSlug = slugify(attorneyData.address_city || 'france')
+        const locationSlug = slugify(attorneyData.address_city || 'united-states')
         const publicId = attorneyData.slug || attorneyData.stable_id
 
         if (publicId) {

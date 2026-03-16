@@ -1,6 +1,6 @@
 /**
- * Tests for Artisan Claim API
- * Validates SIRET schema, claim request validation, and edge cases
+ * Tests for Attorney Claim API
+ * Validates bar number schema, claim request validation, and edge cases
  */
 
 import { describe, it, expect } from 'vitest'
@@ -8,15 +8,15 @@ import { z } from 'zod'
 
 // Replicate the claim schema from the API route for isolated testing
 const claimSchema = z.object({
-  providerId: z.string().uuid('ID artisan invalide'),
-  siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir exactement 14 chiffres'),
+  providerId: z.string().uuid('Invalid attorney ID'),
+  siret: z.string().regex(/^\d{14}$/, 'Bar number must contain exactly 14 digits'),
 })
 
 // ============================================
 // CLAIM SCHEMA VALIDATION
 // ============================================
 
-describe('claimSchema', () => {
+describe('claimSchema (attorney claim)', () => {
   describe('providerId', () => {
     it('should accept a valid UUID', () => {
       const result = claimSchema.safeParse({
@@ -43,8 +43,8 @@ describe('claimSchema', () => {
     })
   })
 
-  describe('siret', () => {
-    it('should accept a valid 14-digit SIRET', () => {
+  describe('siret (bar number field)', () => {
+    it('should accept a valid 14-digit bar number', () => {
       const result = claimSchema.safeParse({
         providerId: '550e8400-e29b-41d4-a716-446655440000',
         siret: '12345678901234',
@@ -52,7 +52,7 @@ describe('claimSchema', () => {
       expect(result.success).toBe(true)
     })
 
-    it('should reject SIRET with less than 14 digits', () => {
+    it('should reject bar number with less than 14 digits', () => {
       const result = claimSchema.safeParse({
         providerId: '550e8400-e29b-41d4-a716-446655440000',
         siret: '1234567890123', // 13 digits
@@ -60,7 +60,7 @@ describe('claimSchema', () => {
       expect(result.success).toBe(false)
     })
 
-    it('should reject SIRET with more than 14 digits', () => {
+    it('should reject bar number with more than 14 digits', () => {
       const result = claimSchema.safeParse({
         providerId: '550e8400-e29b-41d4-a716-446655440000',
         siret: '123456789012345', // 15 digits
@@ -68,7 +68,7 @@ describe('claimSchema', () => {
       expect(result.success).toBe(false)
     })
 
-    it('should reject SIRET with letters', () => {
+    it('should reject bar number with letters', () => {
       const result = claimSchema.safeParse({
         providerId: '550e8400-e29b-41d4-a716-446655440000',
         siret: '1234567890123A',
@@ -76,7 +76,7 @@ describe('claimSchema', () => {
       expect(result.success).toBe(false)
     })
 
-    it('should reject SIRET with spaces', () => {
+    it('should reject bar number with spaces', () => {
       const result = claimSchema.safeParse({
         providerId: '550e8400-e29b-41d4-a716-446655440000',
         siret: '123 456 789 01234',
@@ -84,7 +84,7 @@ describe('claimSchema', () => {
       expect(result.success).toBe(false)
     })
 
-    it('should reject empty SIRET', () => {
+    it('should reject empty bar number', () => {
       const result = claimSchema.safeParse({
         providerId: '550e8400-e29b-41d4-a716-446655440000',
         siret: '',
@@ -114,17 +114,17 @@ describe('claimSchema', () => {
 })
 
 // ============================================
-// SIRET NORMALIZATION
+// BAR NUMBER NORMALIZATION
 // ============================================
 
-describe('SIRET normalization', () => {
+describe('Bar number normalization', () => {
   const normalizeSiret = (input: string) => input.replace(/\s/g, '')
 
-  it('should strip spaces from SIRET', () => {
+  it('should strip spaces from bar number', () => {
     expect(normalizeSiret('123 456 789 01234')).toBe('12345678901234')
   })
 
-  it('should handle SIRET without spaces', () => {
+  it('should handle bar number without spaces', () => {
     expect(normalizeSiret('12345678901234')).toBe('12345678901234')
   })
 
@@ -132,13 +132,13 @@ describe('SIRET normalization', () => {
     expect(normalizeSiret('1 2 3 4 5 6 7 8 9 0 1 2 3 4')).toBe('12345678901234')
   })
 
-  it('should correctly compare matching SIRETs', () => {
+  it('should correctly compare matching bar numbers', () => {
     const input = '12345678901234'
     const stored = '12345678901234'
     expect(normalizeSiret(input)).toBe(normalizeSiret(stored))
   })
 
-  it('should correctly detect mismatching SIRETs', () => {
+  it('should correctly detect mismatching bar numbers', () => {
     const input = '12345678901234'
     const stored = '98765432109876'
     expect(normalizeSiret(input)).not.toBe(normalizeSiret(stored))
@@ -168,7 +168,7 @@ describe('claimActionSchema', () => {
     const result = claimActionSchema.safeParse({
       claimId: '550e8400-e29b-41d4-a716-446655440000',
       action: 'reject',
-      rejectionReason: 'SIRET ne correspond pas au registre du commerce',
+      rejectionReason: 'Bar number does not match state bar records',
     })
     expect(result.success).toBe(true)
   })

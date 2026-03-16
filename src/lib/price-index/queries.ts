@@ -21,6 +21,7 @@ const CACHE_TTL = 86400
 // Types
 // ---------------------------------------------------------------------------
 
+// DB-bound: French column names from barometre_stats table in Supabase
 export interface BarometreStatRow {
   id: number
   metier: string
@@ -40,12 +41,12 @@ export interface BarometreStatRow {
 }
 
 export interface NationalStats {
-  totalArtisans: number
-  noteGlobale: number
-  totalAvis: number
-  tauxVerifGlobal: number
-  nbMetiers: number
-  nbVilles: number
+  totalAttorneys: number
+  globalRating: number
+  totalReviews: number
+  globalVerificationRate: number
+  specialtyCount: number
+  cityCount: number
 }
 
 // ---------------------------------------------------------------------------
@@ -166,38 +167,38 @@ async function _getNationalStats(): Promise<NationalStats> {
 
     const rows = (national ?? []) as BarometreStatRow[]
 
-    const totalArtisans = rows.reduce((s, r) => s + r.nb_artisans, 0)
-    const totalAvis = rows.reduce((s, r) => s + r.nb_avis, 0)
+    const totalAttorneys = rows.reduce((s, r) => s + r.nb_artisans, 0)
+    const totalReviews = rows.reduce((s, r) => s + r.nb_avis, 0)
     const ratedRows = rows.filter((r) => r.note_moyenne !== null)
-    const noteGlobale = ratedRows.length > 0
+    const globalRating = ratedRows.length > 0
       ? Math.round((ratedRows.reduce((s, r) => s + (r.note_moyenne ?? 0) * r.nb_artisans, 0) / ratedRows.reduce((s, r) => s + r.nb_artisans, 0)) * 100) / 100
       : 4.2
-    const tauxVerifGlobal = totalArtisans > 0
-      ? Math.round((rows.reduce((s, r) => s + r.taux_verification * r.nb_artisans, 0) / totalArtisans) * 10000) / 10000
+    const globalVerificationRate = totalAttorneys > 0
+      ? Math.round((rows.reduce((s, r) => s + r.taux_verification * r.nb_artisans, 0) / totalAttorneys) * 10000) / 10000
       : 0
 
     // Count distinct cities
-    const { count: villeCount } = await supabase
+    const { count: cityCount } = await supabase
       .from('barometre_stats')
       .select('*', { count: 'exact', head: true })
       .not('ville', 'is', null)
 
     return {
-      totalArtisans,
-      noteGlobale,
-      totalAvis,
-      tauxVerifGlobal,
-      nbMetiers: rows.length,
-      nbVilles: villeCount ?? 0,
+      totalAttorneys,
+      globalRating,
+      totalReviews,
+      globalVerificationRate,
+      specialtyCount: rows.length,
+      cityCount: cityCount ?? 0,
     }
   } catch {
-    return { totalArtisans: 940000, noteGlobale: 4.2, totalAvis: 0, tauxVerifGlobal: 0, nbMetiers: 0, nbVilles: 0 }
+    return { totalAttorneys: 940000, globalRating: 4.2, totalReviews: 0, globalVerificationRate: 0, specialtyCount: 0, cityCount: 0 }
   }
 }
 
 export async function getNationalStats(): Promise<NationalStats> {
   if (IS_BUILD) {
-    return { totalArtisans: 940000, noteGlobale: 4.2, totalAvis: 0, tauxVerifGlobal: 0, nbMetiers: 0, nbVilles: 0 }
+    return { totalAttorneys: 940000, globalRating: 4.2, totalReviews: 0, globalVerificationRate: 0, specialtyCount: 0, cityCount: 0 }
   }
   return unstable_cache(_getNationalStats, ['barometre-national-stats'], {
     revalidate: CACHE_TTL,

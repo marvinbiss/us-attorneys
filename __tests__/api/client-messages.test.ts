@@ -1,7 +1,7 @@
 /**
  * Tests -- Client Messages API (/api/client/messages)
  * GET: auth check, conversation messages, conversation list, 404 for unknown conv, DB errors
- * POST: auth check, validation, send to existing conv, create new conv, missing provider_id, 403 forbidden conv
+ * POST: auth check, validation, send to existing conv, create new conv, missing attorney_id, 403 forbidden conv
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
@@ -116,20 +116,20 @@ describe('GET /api/client/messages', () => {
     const result = (await GET(makeGetRequest())) as unknown as MockResult
 
     expect(result.status).toBe(401)
-    expect(result.body.error).toBe('Non authentifi\u00e9')
+    expect(result.body.error).toBe('Not authenticated')
   })
 
   it('returns messages for a specific conversation (200)', async () => {
     setAuthUser({ id: USER_UUID })
 
     const mockMessages = [
-      { id: 'm1', conversation_id: CONV_UUID, sender_id: USER_UUID, sender_type: 'client', content: 'Bonjour', read_at: null, created_at: '2026-02-20T10:00:00Z' },
-      { id: 'm2', conversation_id: CONV_UUID, sender_id: PROVIDER_UUID, sender_type: 'artisan', content: 'Salut', read_at: null, created_at: '2026-02-20T10:05:00Z' },
+      { id: 'm1', conversation_id: CONV_UUID, sender_id: USER_UUID, sender_type: 'client', content: 'Hello', read_at: null, created_at: '2026-02-20T10:00:00Z' },
+      { id: 'm2', conversation_id: CONV_UUID, sender_id: PROVIDER_UUID, sender_type: 'attorney', content: 'Hi there', read_at: null, created_at: '2026-02-20T10:05:00Z' },
     ]
 
     builderResults = [
       // Call 0: conversations.select(...).eq('id').eq('client_id').single() -> conversation found
-      { data: { id: CONV_UUID, client_id: USER_UUID, provider_id: PROVIDER_UUID }, error: null },
+      { data: { id: CONV_UUID, client_id: USER_UUID, attorney_id: PROVIDER_UUID }, error: null },
       // Call 1: messages.select(...).eq('conversation_id').order(...) -> messages
       { data: mockMessages, error: null },
       // Call 2: messages.update({read_at}).eq().eq().is() -> mark as read
@@ -155,7 +155,7 @@ describe('GET /api/client/messages', () => {
     const result = (await GET(makeGetRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(404)
-    expect(result.body.error).toBe('Conversation non trouv\u00e9e')
+    expect(result.body.error).toBe('Conversation not found')
   })
 
   it('returns conversations list when no conversation_id provided', async () => {
@@ -165,16 +165,16 @@ describe('GET /api/client/messages', () => {
       {
         id: CONV_UUID,
         client_id: USER_UUID,
-        provider_id: PROVIDER_UUID,
+        attorney_id: PROVIDER_UUID,
         status: 'active',
         created_at: '2026-02-20T10:00:00Z',
         booking_id: null,
-        provider: { id: PROVIDER_UUID, name: 'Plombier Martin' },
+        attorney: { id: PROVIDER_UUID, name: 'Attorney Martin' },
         booking: null,
       },
     ]
 
-    const lastMsg = { id: 'm1', content: 'Dernier message', created_at: '2026-02-20T11:00:00Z', sender_type: 'client', read_at: null }
+    const lastMsg = { id: 'm1', content: 'Last message', created_at: '2026-02-20T11:00:00Z', sender_type: 'client', read_at: null }
 
     builderResults = [
       // Call 0: conversations.select(...).eq('client_id').eq('status').order(...) -> conversations
@@ -191,7 +191,7 @@ describe('GET /api/client/messages', () => {
     expect(result.status).toBe(200)
     const body = result.body as { conversations: Array<Record<string, unknown>> }
     expect(body.conversations).toHaveLength(1)
-    expect(body.conversations[0].partner).toEqual({ id: PROVIDER_UUID, name: 'Plombier Martin' })
+    expect(body.conversations[0].partner).toEqual({ id: PROVIDER_UUID, name: 'Attorney Martin' })
     expect(body.conversations[0].lastMessage).toEqual(lastMsg)
     expect(body.conversations[0].unreadCount).toBe(2)
   })
@@ -211,7 +211,7 @@ describe('GET /api/client/messages', () => {
 
     builderResults = [
       // Call 0: conversations.select(...).single() -> found
-      { data: { id: CONV_UUID, client_id: USER_UUID, provider_id: PROVIDER_UUID }, error: null },
+      { data: { id: CONV_UUID, client_id: USER_UUID, attorney_id: PROVIDER_UUID }, error: null },
       // Call 1: messages.select(...) -> DB error
       { data: null, error: { message: 'DB error', code: '08000' } },
     ]
@@ -220,7 +220,7 @@ describe('GET /api/client/messages', () => {
     const result = (await GET(makeGetRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toBe('Erreur lors de la r\u00e9cup\u00e9ration des messages')
+    expect(result.body.error).toBe('Error retrieving messages')
   })
 
   it('returns 500 when conversations query fails', async () => {
@@ -235,7 +235,7 @@ describe('GET /api/client/messages', () => {
     const result = (await GET(makeGetRequest())) as unknown as MockResult
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toBe('Erreur lors de la r\u00e9cup\u00e9ration des conversations')
+    expect(result.body.error).toBe('Error retrieving conversations')
   })
 })
 
@@ -251,7 +251,7 @@ describe('POST /api/client/messages', () => {
     const result = (await POST(makePostRequest({ content: 'Hello' }))) as unknown as MockResult
 
     expect(result.status).toBe(401)
-    expect(result.body.error).toBe('Non authentifi\u00e9')
+    expect(result.body.error).toBe('Not authenticated')
   })
 
   it('returns 400 for invalid data (empty content)', async () => {
@@ -282,7 +282,7 @@ describe('POST /api/client/messages', () => {
       conversation_id: CONV_UUID,
       sender_id: USER_UUID,
       sender_type: 'client',
-      content: 'Bonjour, je voudrais un devis.',
+      content: 'Hello, I would like a consultation.',
       created_at: '2026-02-20T12:00:00Z',
     }
 
@@ -296,7 +296,7 @@ describe('POST /api/client/messages', () => {
     const { POST } = await import('@/app/api/client/messages/route')
     const result = (await POST(makePostRequest({
       conversation_id: CONV_UUID,
-      content: 'Bonjour, je voudrais un devis.',
+      content: 'Hello, I would like a consultation.',
     }))) as unknown as MockResult
 
     expect(result.status).toBe(200)
@@ -319,10 +319,10 @@ describe('POST /api/client/messages', () => {
     }))) as unknown as MockResult
 
     expect(result.status).toBe(403)
-    expect(result.body.error).toContain('non trouv')
+    expect(result.body.error).toContain('not found')
   })
 
-  it('returns 400 when no conversation_id and no provider_id', async () => {
+  it('returns 400 when no conversation_id and no attorney_id', async () => {
     setAuthUser({ id: USER_UUID })
 
     const { POST } = await import('@/app/api/client/messages/route')
@@ -331,10 +331,10 @@ describe('POST /api/client/messages', () => {
     }))) as unknown as MockResult
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toBe('conversation_id ou provider_id requis')
+    expect(result.body.error).toBe('conversation_id or attorney_id required')
   })
 
-  it('finds existing conversation by provider_id and sends message', async () => {
+  it('finds existing conversation by attorney_id and sends message', async () => {
     setAuthUser({ id: USER_UUID })
 
     const mockMessage = {
@@ -347,7 +347,7 @@ describe('POST /api/client/messages', () => {
     }
 
     builderResults = [
-      // Call 0: conversations.select('id').eq('client_id').eq('provider_id').single() -> existing conv
+      // Call 0: conversations.select('id').eq('client_id').eq('attorney_id').single() -> existing conv
       { data: { id: CONV_UUID }, error: null },
       // Call 1: messages.insert(...).select().single() -> created message
       { data: mockMessage, error: null },
@@ -355,7 +355,7 @@ describe('POST /api/client/messages', () => {
 
     const { POST } = await import('@/app/api/client/messages/route')
     const result = (await POST(makePostRequest({
-      provider_id: PROVIDER_UUID,
+      attorney_id: PROVIDER_UUID,
       content: 'Hello',
     }))) as unknown as MockResult
 
@@ -364,7 +364,7 @@ describe('POST /api/client/messages', () => {
     expect(result.body.message).toEqual(mockMessage)
   })
 
-  it('creates a new conversation when none exists for provider_id', async () => {
+  it('creates a new conversation when none exists for attorney_id', async () => {
     setAuthUser({ id: USER_UUID })
 
     const newConvId = '550e8400-e29b-41d4-a716-446655440030'
@@ -373,14 +373,14 @@ describe('POST /api/client/messages', () => {
       conversation_id: newConvId,
       sender_id: USER_UUID,
       sender_type: 'client',
-      content: 'Bonjour',
+      content: 'Hello',
       created_at: '2026-02-20T12:00:00Z',
     }
 
     builderResults = [
       // Call 0: conversations.select('id').eq().eq().single() -> no existing conv
       { data: null, error: null },
-      // Call 1: conversations.insert({client_id, provider_id}).select('id').single() -> new conv
+      // Call 1: conversations.insert({client_id, attorney_id}).select('id').single() -> new conv
       { data: { id: newConvId }, error: null },
       // Call 2: messages.insert(...).select().single() -> created message
       { data: mockMessage, error: null },
@@ -388,8 +388,8 @@ describe('POST /api/client/messages', () => {
 
     const { POST } = await import('@/app/api/client/messages/route')
     const result = (await POST(makePostRequest({
-      provider_id: PROVIDER_UUID,
-      content: 'Bonjour',
+      attorney_id: PROVIDER_UUID,
+      content: 'Hello',
     }))) as unknown as MockResult
 
     expect(result.status).toBe(200)
@@ -409,12 +409,12 @@ describe('POST /api/client/messages', () => {
 
     const { POST } = await import('@/app/api/client/messages/route')
     const result = (await POST(makePostRequest({
-      provider_id: PROVIDER_UUID,
+      attorney_id: PROVIDER_UUID,
       content: 'Hello',
     }))) as unknown as MockResult
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toContain('cr\u00e9ation')
+    expect(result.body.error).toContain('creating conversation')
   })
 
   it('returns 500 when message insert fails', async () => {
@@ -434,6 +434,6 @@ describe('POST /api/client/messages', () => {
     }))) as unknown as MockResult
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toContain('envoi')
+    expect(result.body.error).toContain('sending message')
   })
 })

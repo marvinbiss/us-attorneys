@@ -383,10 +383,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href={`/quotes/${service}/paris`}
+              href={`/quotes/${service}/new-york`}
               className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
-              {trade.name} consultation in Paris
+              {trade.name} consultation in New York
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -510,7 +510,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       <EstimationWidget context={{
         metier: trade.name,
         metierSlug: service,
-        ville: 'France',
+        ville: 'United States',
         departement: '',
         pageUrl: `/quotes/${service}`,
       }} />

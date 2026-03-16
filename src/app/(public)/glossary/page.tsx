@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
-import { glossaireTerms, glossaireCategories } from '@/lib/data/glossary'
+import { glossaryTerms, glossaryCategories } from '@/lib/data/glossary'
 import {
   BookOpen,
   Search,
@@ -64,10 +64,10 @@ const categoryColors: Record<string, { bg: string; text: string; border: string;
 // Build alphabetical index
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 const termsFirstLetters = new Set(
-  glossaireTerms.map((t) => t.term.charAt(0).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase())
+  glossaryTerms.map((t) => t.term.charAt(0).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase())
 )
 
-export default function GlossairePage() {
+export default function GlossaryPage() {
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -93,7 +93,7 @@ export default function GlossairePage() {
     description:
       'Complete glossary of legal terms and procedures for clients and the general public.',
     url: PAGE_URL,
-    hasDefinedTerm: glossaireTerms.map((t) => ({
+    hasDefinedTerm: glossaryTerms.map((t) => ({
       '@type': 'DefinedTerm',
       name: t.term,
       description: t.definition,
@@ -102,15 +102,15 @@ export default function GlossairePage() {
   }
 
   // Group terms by category
-  const termsByCategory = glossaireCategories.map((cat) => ({
+  const termsByCategory = glossaryCategories.map((cat) => ({
     category: cat,
-    terms: glossaireTerms.filter((t) => t.category === cat),
+    terms: glossaryTerms.filter((t) => t.category === cat),
   }))
 
   // Group terms by first letter (normalized)
   const termsByLetter = alphabet.reduce(
     (acc, letter) => {
-      const matching = glossaireTerms.filter(
+      const matching = glossaryTerms.filter(
         (t) =>
           t.term
             .charAt(0)
@@ -123,7 +123,7 @@ export default function GlossairePage() {
       }
       return acc
     },
-    {} as Record<string, typeof glossaireTerms>
+    {} as Record<string, typeof glossaryTerms>
   )
 
   return (
@@ -154,11 +154,11 @@ export default function GlossairePage() {
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-6 mt-10">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4">
-              <div className="text-2xl font-extrabold text-blue-600">{glossaireTerms.length}</div>
+              <div className="text-2xl font-extrabold text-blue-600">{glossaryTerms.length}</div>
               <div className="text-sm text-gray-500">terms defined</div>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4">
-              <div className="text-2xl font-extrabold text-blue-600">{glossaireCategories.length}</div>
+              <div className="text-2xl font-extrabold text-blue-600">{glossaryCategories.length}</div>
               <div className="text-sm text-gray-500">categories</div>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4">

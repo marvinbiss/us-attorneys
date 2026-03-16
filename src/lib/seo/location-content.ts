@@ -36,7 +36,7 @@ export interface LocationContent {
   introText: string
   pricingNote: string
   localTips: string[]
-  quartierText: string
+  neighborhoodText: string
   conclusion: string
   climateLabel: string
   citySizeLabel: string
@@ -57,7 +57,7 @@ export function generateLocationContent(
     introText: '',
     pricingNote: '',
     localTips: [],
-    quartierText: '',
+    neighborhoodText: '',
     conclusion: '',
     climateLabel: '',
     citySizeLabel: '',
@@ -81,34 +81,37 @@ export interface QuartierProfile {
   architecturalNote: string
 }
 
-export interface QuartierDataDrivenContent {
-  immobilierQuartier: string
-  legalMarketQuartier: string
-  energetiqueQuartier: string
-  climatQuartier: string
+export interface NeighborhoodDataDrivenContent {
+  realEstateNeighborhood: string
+  legalMarketNeighborhood: string
+  legalAidNeighborhood: string
+  climateNeighborhood: string
   statCards: {
-    prixM2Quartier: number
-    artisansProximite: number
-    artisansBtp: number
-    passoiresDpe: number
-    joursGel: number | null
-    periodeTravaux: string | null
+    pricePerSqFtNeighborhood: number
+    nearbyAttorneys: number
+    legalProfessionals: number
+    complianceGaps: number
+    frostDays: number | null
+    peakSeason: string | null
   }
   dataSources: string[]
 }
 
-export interface QuartierContent {
+export interface NeighborhoodContent {
   profile: QuartierProfile
   intro: string
-  batimentContext: string
-  servicesDemandes: string
-  conseils: string
-  proximite: string
+  buildingContext: string
+  demandedServices: string
+  advice: string
+  proximity: string
   faqItems: { question: string; answer: string }[]
-  dataDriven: QuartierDataDrivenContent | null
+  dataDriven: NeighborhoodDataDrivenContent | null
 }
 
-export function generateQuartierContent(_villeRaw: unknown, _quartierName: string, _specialtySlug?: string): QuartierContent {
+/** @deprecated Use NeighborhoodContent instead */
+export type QuartierContent = NeighborhoodContent
+
+export function generateQuartierContent(_villeRaw: unknown, _quartierName: string, _specialtySlug?: string): NeighborhoodContent {
   return {
     profile: {
       era: 'mixte',
@@ -120,10 +123,10 @@ export function generateQuartierContent(_villeRaw: unknown, _quartierName: strin
       architecturalNote: '',
     },
     intro: '',
-    batimentContext: '',
-    servicesDemandes: '',
-    conseils: '',
-    proximite: '',
+    buildingContext: '',
+    demandedServices: '',
+    advice: '',
+    proximity: '',
     faqItems: [],
     dataDriven: null,
   }
@@ -144,16 +147,19 @@ export interface DepartementProfile {
   climaticIssues: string[]
 }
 
-export interface DepartementContent {
+export interface StateContent {
   profile: DepartementProfile
   intro: string
-  contexteHabitat: string
-  servicesPrioritaires: string
-  conseilsDepartement: string
+  housingContext: string
+  priorityServices: string
+  stateAdvice: string
   faqItems: { question: string; answer: string }[]
 }
 
-export function generateDepartementContent(_deptRaw: unknown): DepartementContent {
+/** @deprecated Use StateContent instead */
+export type DepartementContent = StateContent
+
+export function generateDepartementContent(_deptRaw: unknown): StateContent {
   return {
     profile: {
       climate: 'semi-oceanique',
@@ -166,9 +172,9 @@ export function generateDepartementContent(_deptRaw: unknown): DepartementConten
       climaticIssues: [],
     },
     intro: '',
-    contexteHabitat: '',
-    servicesPrioritaires: '',
-    conseilsDepartement: '',
+    housingContext: '',
+    priorityServices: '',
+    stateAdvice: '',
     faqItems: [],
   }
 }
@@ -191,9 +197,9 @@ export interface RegionProfile {
 export interface RegionContent {
   profile: RegionProfile
   intro: string
-  contexteRegional: string
-  servicesPrioritaires: string
-  conseilsRegion: string
+  regionalContext: string
+  priorityServices: string
+  regionAdvice: string
   faqItems: { question: string; answer: string }[]
 }
 
@@ -210,9 +216,9 @@ export function generateRegionContent(_regionRaw: unknown, _cityCountOverride?: 
       keyFacts: [],
     },
     intro: '',
-    contexteRegional: '',
-    servicesPrioritaires: '',
-    conseilsRegion: '',
+    regionalContext: '',
+    priorityServices: '',
+    regionAdvice: '',
     faqItems: [],
   }
 }
@@ -231,16 +237,19 @@ export interface VilleProfile {
   habitatDescription: string
 }
 
-export interface VilleContent {
+export interface CityContent {
   profile: VilleProfile
   intro: string
-  contexteUrbain: string
-  servicesPrioritaires: string
-  conseilsVille: string
+  urbanContext: string
+  priorityServices: string
+  cityAdvice: string
   faqItems: { question: string; answer: string }[]
 }
 
-export function generateVilleContent(_villeRaw: unknown): VilleContent {
+/** @deprecated Use CityContent instead */
+export type VilleContent = CityContent
+
+export function generateVilleContent(_villeRaw: unknown): CityContent {
   return {
     profile: {
       climate: 'semi-oceanique',
@@ -252,9 +261,9 @@ export function generateVilleContent(_villeRaw: unknown): VilleContent {
       habitatDescription: '',
     },
     intro: '',
-    contexteUrbain: '',
-    servicesPrioritaires: '',
-    conseilsVille: '',
+    urbanContext: '',
+    priorityServices: '',
+    cityAdvice: '',
     faqItems: [],
   }
 }

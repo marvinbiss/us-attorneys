@@ -1,4 +1,4 @@
-export const reglementationArticles: Record<string, {
+export const regulationsArticles: Record<string, {
   title: string
   excerpt: string
   content: string[]

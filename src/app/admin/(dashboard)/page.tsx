@@ -55,7 +55,7 @@ const ActivityChart = dynamic(
 interface StatsResponse {
   stats: {
     totalUsers: number
-    totalArtisans: number
+    totalAttorneys: number
     totalBookings: number
     totalRevenue: number
     pendingReports: number
@@ -97,10 +97,10 @@ interface StatsResponse {
     today: number
     recent: Array<{
       id: string
-      nom: string | null
+      lastName: string | null
       telephone: string
-      metier: string
-      ville: string
+      practice_area: string
+      city: string
       source: string
       created_at: string
     }>
@@ -301,9 +301,9 @@ export default function AdminDashboard() {
                     </span>
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
-                        {lead.nom || lead.telephone} — {lead.metier}
+                        {lead.lastName || lead.telephone} — {lead.practice_area}
                       </p>
-                      <p className="text-xs text-gray-500">{lead.ville}</p>
+                      <p className="text-xs text-gray-500">{lead.city}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">

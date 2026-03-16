@@ -1,5 +1,5 @@
 // ============================================
-// Types pour le Dashboard Prospection Multi-Canal
+// Types for Multi-Channel Prospection Dashboard
 // ============================================
 
 // --- Enums ---
@@ -70,7 +70,7 @@ export interface ProspectionContactInsert {
   consent_status?: ConsentStatus
 }
 
-// --- Listes / Segments ---
+// --- Lists / Segments ---
 
 export interface ProspectionList {
   id: string
@@ -146,7 +146,7 @@ export interface ProspectionTemplateInsert {
   variables?: string[]
 }
 
-// --- Campagnes ---
+// --- Campaigns ---
 
 export interface ProspectionCampaign {
   id: string
@@ -186,7 +186,7 @@ export interface ProspectionCampaign {
   created_by: string | null
   created_at: string
   updated_at: string
-  // Relations optionnelles
+  // Optional relations
   template?: ProspectionTemplate
   list?: ProspectionList
 }
@@ -238,7 +238,7 @@ export interface ProspectionMessage {
   next_retry_at: string | null
   cost: number
   created_at: string
-  // Relations optionnelles
+  // Optional relations
   contact?: ProspectionContact
   campaign?: ProspectionCampaign
 }
@@ -270,7 +270,7 @@ export interface ProspectionConversation {
   last_message_at: string | null
   created_at: string
   updated_at: string
-  // Relations optionnelles
+  // Optional relations
   contact?: ProspectionContact
   campaign?: ProspectionCampaign
   messages?: ProspectionConversationMessage[]
@@ -413,7 +413,7 @@ export interface ColumnMapping {
 
 export const CHANNEL_COSTS = {
   sms: {
-    france: 0.0375,
+    domestic: 0.0375,
     international: 0.05,
   },
   whatsapp: {

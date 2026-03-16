@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -17,7 +17,7 @@ const settingsUpdateSchema = z.object({
 
 export async function GET() {
   try {
-    const { error, user, supabase } = await requireArtisan()
+    const { error, user, supabase } = await requireAttorney()
     if (error) return error
 
     const { data: provider } = await supabase
@@ -44,7 +44,7 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { error, user, supabase } = await requireArtisan()
+    const { error, user, supabase } = await requireAttorney()
     if (error) return error
 
     const body = await request.json()

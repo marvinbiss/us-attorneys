@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -18,7 +18,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Get provider linked to this user

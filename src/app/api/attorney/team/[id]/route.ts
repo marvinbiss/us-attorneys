@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -25,7 +25,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const body: unknown = await request.json()
@@ -78,7 +78,7 @@ export async function PATCH(
 
     return NextResponse.json({ member: data })
   } catch (error) {
-    logger.error('Equipe PATCH error:', error)
+    logger.error('Team PATCH error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }
@@ -88,7 +88,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Verify ownership before delete
@@ -122,7 +122,7 @@ export async function DELETE(
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
-    logger.error('Equipe DELETE error:', error)
+    logger.error('Team DELETE error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
 }

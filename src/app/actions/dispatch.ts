@@ -14,7 +14,7 @@ export interface DispatchOptions {
 }
 
 /**
- * Dispatch a lead to eligible artisans using the configurable algorithm.
+ * Dispatch a lead to eligible attorneys using the configurable algorithm.
  *
  * ACTIVE SCHEMA: public (NOT app)
  * - Calls `public.dispatch_lead` from migration 202_configurable_dispatch.sql

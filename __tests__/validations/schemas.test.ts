@@ -50,17 +50,17 @@ describe('emailSchema', () => {
 })
 
 describe('phoneSchema', () => {
-  it('should accept valid French phone numbers', () => {
-    expect(phoneSchema.safeParse('0612345678').success).toBe(true)
-    expect(phoneSchema.safeParse('+33612345678').success).toBe(true)
-    expect(phoneSchema.safeParse('0123456789').success).toBe(true)
+  it('should accept valid US phone numbers', () => {
+    expect(phoneSchema.safeParse('2125551234').success).toBe(true)
+    expect(phoneSchema.safeParse('+12125551234').success).toBe(true)
+    expect(phoneSchema.safeParse('3105559876').success).toBe(true)
   })
 
   it('should reject invalid phone numbers', () => {
     expect(phoneSchema.safeParse('').success).toBe(false)
     expect(phoneSchema.safeParse('123').success).toBe(false)
     expect(phoneSchema.safeParse('0012345678').success).toBe(false)
-    expect(phoneSchema.safeParse('+1234567890').success).toBe(false)
+    expect(phoneSchema.safeParse('0612345678').success).toBe(false)
   })
 })
 
@@ -94,11 +94,11 @@ describe('passwordSchema', () => {
 
 describe('nameSchema', () => {
   it('should accept valid names', () => {
-    expect(nameSchema.safeParse('Jean').success).toBe(true)
-    expect(nameSchema.safeParse('Marie-Claire').success).toBe(true)
+    expect(nameSchema.safeParse('John').success).toBe(true)
+    expect(nameSchema.safeParse('Mary-Claire').success).toBe(true)
     expect(nameSchema.safeParse("Jean-Pierre O'Brien").success).toBe(true)
-    expect(nameSchema.safeParse('François').success).toBe(true)
-    expect(nameSchema.safeParse('Éloïse').success).toBe(true)
+    expect(nameSchema.safeParse('James').success).toBe(true)
+    expect(nameSchema.safeParse('Elizabeth').success).toBe(true)
   })
 
   it('should reject names with numbers or special chars', () => {
@@ -158,11 +158,11 @@ const validUUID = '550e8400-e29b-41d4-a716-446655440000'
 
 describe('createBookingSchema', () => {
   const validBooking = {
-    artisanId: validUUID,
+    attorneyId: validUUID,
     slotId: validUUID,
-    clientName: 'Jean Dupont',
-    clientPhone: '0612345678',
-    clientEmail: 'jean@example.com',
+    clientName: 'John Smith',
+    clientPhone: '2125551234',
+    clientEmail: 'john@example.com',
   }
 
   it('should accept a valid booking', () => {
@@ -172,9 +172,9 @@ describe('createBookingSchema', () => {
   it('should accept booking with optional fields', () => {
     const result = createBookingSchema.safeParse({
       ...validBooking,
-      serviceId: 'plomberie',
-      serviceDescription: 'Fuite dans la salle de bain',
-      address: '12 rue de Paris',
+      serviceId: 'personal-injury',
+      serviceDescription: 'Slip and fall accident consultation',
+      address: '123 Broadway, New York',
       depositAmount: 50,
     })
     expect(result.success).toBe(true)
@@ -182,13 +182,13 @@ describe('createBookingSchema', () => {
 
   it('should reject booking without required fields', () => {
     expect(createBookingSchema.safeParse({}).success).toBe(false)
-    expect(createBookingSchema.safeParse({ artisanId: validUUID }).success).toBe(false)
+    expect(createBookingSchema.safeParse({ attorneyId: validUUID }).success).toBe(false)
   })
 
   it('should reject invalid UUIDs', () => {
     const result = createBookingSchema.safeParse({
       ...validBooking,
-      artisanId: 'not-a-uuid',
+      attorneyId: 'not-a-uuid',
     })
     expect(result.success).toBe(false)
   })
@@ -250,7 +250,7 @@ describe('createReviewSchema', () => {
   const validReview = {
     bookingId: validUUID,
     rating: 5,
-    comment: 'Excellent travail, je recommande vivement !',
+    comment: 'Excellent work, highly recommended!',
   }
 
   it('should accept a valid review', () => {
@@ -290,8 +290,8 @@ describe('signUpSchema', () => {
     email: 'test@example.com',
     password: 'Password1',
     confirmPassword: 'Password1',
-    firstName: 'Jean',
-    lastName: 'Dupont',
+    firstName: 'John',
+    lastName: 'Smith',
     acceptTerms: true,
   }
 
@@ -300,7 +300,7 @@ describe('signUpSchema', () => {
   })
 
   it('should accept signup with optional phone', () => {
-    expect(signUpSchema.safeParse({ ...validSignUp, phone: '0612345678' }).success).toBe(true)
+    expect(signUpSchema.safeParse({ ...validSignUp, phone: '2125551234' }).success).toBe(true)
   })
 
   it('should reject mismatched passwords', () => {
@@ -341,7 +341,7 @@ describe('signInSchema', () => {
 describe('createPaymentIntentSchema', () => {
   const validPayment = {
     amount: 5000,
-    artisanId: validUUID,
+    attorneyId: validUUID,
   }
 
   it('should accept valid payment', () => {
@@ -352,12 +352,12 @@ describe('createPaymentIntentSchema', () => {
     const result = createPaymentIntentSchema.safeParse(validPayment)
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.currency).toBe('eur')
+      expect(result.data.currency).toBe('usd')
       expect(result.data.paymentType).toBe('full')
     }
   })
 
-  it('should reject amount below minimum (100 centimes = 1 EUR)', () => {
+  it('should reject amount below minimum (100 cents = 1 USD)', () => {
     expect(createPaymentIntentSchema.safeParse({ ...validPayment, amount: 50 }).success).toBe(false)
   })
 
@@ -366,7 +366,7 @@ describe('createPaymentIntentSchema', () => {
   })
 
   it('should reject invalid currency', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, currency: 'usd' }).success).toBe(false)
+    expect(createPaymentIntentSchema.safeParse({ ...validPayment, currency: 'eur' }).success).toBe(false)
   })
 
   it('should accept deposit payment with percentage', () => {
@@ -390,10 +390,10 @@ describe('createPaymentIntentSchema', () => {
 
 describe('contactSchema', () => {
   const validContact = {
-    name: 'Jean Dupont',
-    email: 'jean@example.com',
-    subject: 'Question sur le service',
-    message: 'Bonjour, je voudrais en savoir plus sur vos services de plomberie.',
+    name: 'John Smith',
+    email: 'john@example.com',
+    subject: 'Question about legal services',
+    message: 'Hello, I would like to learn more about your personal injury practice.',
   }
 
   it('should accept valid contact form', () => {
@@ -471,7 +471,7 @@ describe('searchSchema', () => {
 describe('createAvailabilitySchema', () => {
   it('should accept valid availability', () => {
     const result = createAvailabilitySchema.safeParse({
-      artisanId: validUUID,
+      attorneyId: validUUID,
       date: '2026-03-01',
       slots: [
         { startTime: '09:00', endTime: '12:00' },
@@ -482,9 +482,9 @@ describe('createAvailabilitySchema', () => {
   })
 
   it('should reject empty slots array', () => {
-    // z.array allows empty by default, but artisanId and date are required
+    // z.array allows empty by default, but attorneyId and date are required
     const result = createAvailabilitySchema.safeParse({
-      artisanId: validUUID,
+      attorneyId: validUUID,
       date: '2026-03-01',
       slots: [],
     })
@@ -493,7 +493,7 @@ describe('createAvailabilitySchema', () => {
 
   it('should reject invalid time format in slots', () => {
     const result = createAvailabilitySchema.safeParse({
-      artisanId: validUUID,
+      attorneyId: validUUID,
       date: '2026-03-01',
       slots: [{ startTime: '9am', endTime: '12pm' }],
     })
@@ -535,10 +535,10 @@ describe('formatZodErrors', () => {
   })
 
   it('should map field paths to messages', () => {
-    const result = createBookingSchema.safeParse({ artisanId: 'bad' })
+    const result = createBookingSchema.safeParse({ attorneyId: 'bad' })
     if (!result.success) {
       const formatted = formatZodErrors(result.error)
-      expect(formatted['artisanId']).toBeDefined()
+      expect(formatted['attorneyId']).toBeDefined()
     }
   })
 })

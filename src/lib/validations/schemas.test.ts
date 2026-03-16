@@ -132,9 +132,9 @@ describe('createBookingSchema', () => {
   const validBooking = {
     attorneyId: '550e8400-e29b-41d4-a716-446655440000',
     slotId: '550e8400-e29b-41d4-a716-446655440001',
-    clientName: 'Jean Dupont',
-    clientPhone: '0612345678',
-    clientEmail: 'jean@example.com',
+    clientName: 'John Smith',
+    clientPhone: '2125551234',
+    clientEmail: 'john@example.com',
   }
 
   it('accepts valid booking', () => {

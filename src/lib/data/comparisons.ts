@@ -5,11 +5,11 @@
 
 export interface ComparisonOption {
   name: string
-  avantages: string[]
-  inconvenients: string[]
-  prixMoyen: string
-  dureeVie: string
-  idealPour: string
+  pros: string[]
+  cons: string[]
+  averagePrice: string
+  lifespan: string
+  idealFor: string
 }
 
 export interface Comparison {
@@ -19,7 +19,7 @@ export interface Comparison {
   intro: string
   options: ComparisonOption[]
   verdict: string
-  criteresChoix: string[]
+  selectionCriteria: string[]
   faq: { question: string; answer: string }[]
   category: string
 }

@@ -54,7 +54,7 @@ export default function SeoContent({
                 <p>{locationContent.climateTip}</p>
 
                 <h3>Service Areas in {location.name}</h3>
-                <p>{locationContent.quartierText}</p>
+                <p>{locationContent.neighborhoodText}</p>
                 {getNeighborhoodsByCity(locationSlug).length > 0 && (
                   <div className="not-prose flex flex-wrap gap-2 mt-4">
                     {getNeighborhoodsByCity(locationSlug).slice(0, 10).map(({ name, slug }) => (
@@ -154,12 +154,12 @@ export default function SeoContent({
               </div>
             )}
 
-            {locationContent.dataDriven.immobilier && (
+            {locationContent.dataDriven.realEstate && (
               <div className="bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-2xl border border-amber-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
                   Real Estate Market in {location.name}
                 </h2>
-                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.immobilier}</p>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.realEstate}</p>
                 {locationData && (locationData.prix_m2_moyen || locationData.prix_m2_maison) && (
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {locationData.prix_m2_moyen && (
@@ -216,12 +216,12 @@ export default function SeoContent({
               </div>
             )}
 
-            {locationContent.dataDriven.energetique && (
+            {locationContent.dataDriven.legalAid && (
               <div className="bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-2xl border border-orange-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-orange-500 pl-4">
                   Energy Performance in {location.name}
                 </h2>
-                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.energetique}</p>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.legalAid}</p>
                 {locationData && (locationData.pct_passoires_dpe !== null || locationData.nb_maprimerenov_annuel) && (
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {locationData.pct_passoires_dpe !== null && locationData.pct_passoires_dpe !== undefined && (
@@ -284,21 +284,21 @@ export default function SeoContent({
               </div>
             )}
 
-            {locationContent.dataDriven.demandeLocale && (
+            {locationContent.dataDriven.localDemand && (
               <div className="bg-gradient-to-br from-violet-50/50 to-purple-50/30 rounded-2xl border border-violet-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-violet-500 pl-4">
                   Local Demand for {service.name.toLowerCase()} in {location.name}
                 </h2>
-                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.demandeLocale}</p>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.localDemand}</p>
               </div>
             )}
 
-            {locationContent.dataDriven.reglementation && (
+            {locationContent.dataDriven.regulations && (
               <div className="bg-gradient-to-br from-rose-50/50 to-pink-50/30 rounded-2xl border border-rose-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-rose-500 pl-4">
                   Regulations and Standards — {service.name.toLowerCase()} in {location.name}
                 </h2>
-                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.reglementation}</p>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.regulations}</p>
               </div>
             )}
           </div>

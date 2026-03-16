@@ -212,9 +212,9 @@ describe('createPageSchema', () => {
         og_image_url: 'https://example.com/og.png',
         canonical_url: 'https://example.com/page',
         excerpt: 'Short excerpt',
-        author: 'Jean Dupont',
+        author: 'John Smith',
         author_bio: 'Author bio',
-        category: 'Conseils',
+        category: 'Advice',
         tags: ['tag1', 'tag2'],
         read_time: '5 min',
         featured_image: 'https://example.com/img.jpg',
@@ -321,10 +321,10 @@ describe('createPageSchema', () => {
   it('accepts all valid page_types', () => {
     for (const pt of ['static', 'blog', 'service', 'location', 'homepage', 'faq'] as const) {
       const overrides: Record<string, unknown> = { page_type: pt }
-      if (pt === 'service') overrides.service_slug = 'plomberie'
+      if (pt === 'service') overrides.service_slug = 'personal-injury'
       if (pt === 'location') {
-        overrides.service_slug = 'plomberie'
-        overrides.location_slug = 'paris'
+        overrides.service_slug = 'personal-injury'
+        overrides.location_slug = 'new-york'
       }
       const result = createPageSchema.safeParse(validPage(overrides))
       expect(result.success, `page_type '${pt}' should be valid`).toBe(true)
@@ -337,23 +337,23 @@ describe('createPageSchema', () => {
   })
 
   it('rejects location page without service_slug (refine)', () => {
-    const result = createPageSchema.safeParse(validPage({ page_type: 'location', location_slug: 'paris' }))
+    const result = createPageSchema.safeParse(validPage({ page_type: 'location', location_slug: 'new-york' }))
     expect(result.success).toBe(false)
   })
 
   it('rejects location page without location_slug (refine)', () => {
-    const result = createPageSchema.safeParse(validPage({ page_type: 'location', service_slug: 'plomberie' }))
+    const result = createPageSchema.safeParse(validPage({ page_type: 'location', service_slug: 'personal-injury' }))
     expect(result.success).toBe(false)
   })
 
   it('accepts service page with service_slug', () => {
-    const result = createPageSchema.safeParse(validPage({ page_type: 'service', service_slug: 'plomberie' }))
+    const result = createPageSchema.safeParse(validPage({ page_type: 'service', service_slug: 'personal-injury' }))
     expect(result.success).toBe(true)
   })
 
   it('accepts location page with both slugs', () => {
     const result = createPageSchema.safeParse(
-      validPage({ page_type: 'location', service_slug: 'plomberie', location_slug: 'paris' })
+      validPage({ page_type: 'location', service_slug: 'personal-injury', location_slug: 'new-york' })
     )
     expect(result.success).toBe(true)
   })
@@ -434,19 +434,19 @@ describe('revalidatePagePaths', () => {
     expect(revalidatePathMock).toHaveBeenCalledWith('/blog')
   })
 
-  it('revalidates /services/slug for service pages', () => {
-    revalidatePagePaths({ page_type: 'service', slug: 'plomberie' })
-    expect(revalidatePathMock).toHaveBeenCalledWith('/services/plomberie')
+  it('revalidates /practice-areas/slug for service pages', () => {
+    revalidatePagePaths({ page_type: 'service', slug: 'personal-injury' })
+    expect(revalidatePathMock).toHaveBeenCalledWith('/practice-areas/personal-injury')
   })
 
-  it('revalidates /services/service_slug/location_slug for location pages', () => {
+  it('revalidates /practice-areas/service_slug/location_slug for location pages', () => {
     revalidatePagePaths({
       page_type: 'location',
-      slug: 'plomberie-paris',
-      service_slug: 'plomberie',
-      location_slug: 'paris',
+      slug: 'personal-injury-new-york',
+      service_slug: 'personal-injury',
+      location_slug: 'new-york',
     })
-    expect(revalidatePathMock).toHaveBeenCalledWith('/services/plomberie/paris')
+    expect(revalidatePathMock).toHaveBeenCalledWith('/practice-areas/personal-injury/new-york')
   })
 
   it('revalidates / for homepage pages', () => {
@@ -479,9 +479,9 @@ describe('buildPayload', () => {
       ogImageUrl: 'https://example.com/og.png',
       canonicalUrl: 'https://example.com/page',
       excerpt: 'Short excerpt',
-      author: 'Jean',
+      author: 'John',
       authorBio: 'Bio',
-      category: 'Conseils',
+      category: 'Advice',
       tags: ['tag1', 'tag2'],
       readTime: '5 min',
       featuredImage: 'https://example.com/img.jpg',
@@ -499,9 +499,9 @@ describe('buildPayload', () => {
     expect(payload.og_image_url).toBe('https://example.com/og.png')
     expect(payload.canonical_url).toBe('https://example.com/page')
     expect(payload.excerpt).toBe('Short excerpt')
-    expect(payload.author).toBe('Jean')
+    expect(payload.author).toBe('John')
     expect(payload.author_bio).toBe('Bio')
-    expect(payload.category).toBe('Conseils')
+    expect(payload.category).toBe('Advice')
     expect(payload.tags).toEqual(['tag1', 'tag2'])
     expect(payload.read_time).toBe('5 min')
     expect(payload.featured_image).toBe('https://example.com/img.jpg')
@@ -525,24 +525,24 @@ describe('buildPayload', () => {
   })
 
   it('nullifies service_slug for static pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'static', specialtySlug: 'plomberie' }))
+    const payload = buildPayload(validFormData({ pageType: 'static', specialtySlug: 'personal-injury' }))
     expect(payload.service_slug).toBeNull()
   })
 
   it('nullifies location_slug for non-location pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'service', specialtySlug: 'plomberie', locationSlug: 'paris' }))
+    const payload = buildPayload(validFormData({ pageType: 'service', specialtySlug: 'personal-injury', locationSlug: 'new-york' }))
     expect(payload.location_slug).toBeNull()
   })
 
   it('keeps service_slug for service pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'service', specialtySlug: 'plomberie' }))
-    expect(payload.service_slug).toBe('plomberie')
+    const payload = buildPayload(validFormData({ pageType: 'service', specialtySlug: 'personal-injury' }))
+    expect(payload.service_slug).toBe('personal-injury')
   })
 
   it('keeps both slugs for location pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'location', specialtySlug: 'plomberie', locationSlug: 'paris' }))
-    expect(payload.service_slug).toBe('plomberie')
-    expect(payload.location_slug).toBe('paris')
+    const payload = buildPayload(validFormData({ pageType: 'location', specialtySlug: 'personal-injury', locationSlug: 'new-york' }))
+    expect(payload.service_slug).toBe('personal-injury')
+    expect(payload.location_slug).toBe('new-york')
   })
 
   it('filters empty tags', () => {

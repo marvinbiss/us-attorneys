@@ -5,13 +5,13 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const result = await requireArtisan()
+    const result = await requireAttorney()
     if (result.error) return result.error
 
     const { user, supabase } = result

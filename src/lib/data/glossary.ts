@@ -3,7 +3,7 @@
  * Used on the /glossary pillar page for SEO and client education.
  */
 
-export interface GlossaireTerm {
+export interface GlossaryTerm {
   term: string
   slug: string
   definition: string
@@ -11,7 +11,10 @@ export interface GlossaireTerm {
   relatedService?: string
 }
 
-export const glossaireCategories = [
+/** @deprecated Use GlossaryTerm instead */
+export type GlossaireTerm = GlossaryTerm
+
+export const glossaryCategories = [
   'Civil Litigation',
   'Criminal Law',
   'Family Law',
@@ -22,6 +25,15 @@ export const glossaireCategories = [
   'Administrative & Regulatory',
 ] as const
 
-export type GlossaireCategory = (typeof glossaireCategories)[number]
+/** @deprecated Use glossaryCategories instead */
+export const glossaireCategories = glossaryCategories
 
-export const glossaireTerms: GlossaireTerm[] = []
+export type GlossaryCategory = (typeof glossaryCategories)[number]
+
+/** @deprecated Use GlossaryCategory instead */
+export type GlossaireCategory = GlossaryCategory
+
+export const glossaryTerms: GlossaryTerm[] = []
+
+/** @deprecated Use glossaryTerms instead */
+export const glossaireTerms = glossaryTerms

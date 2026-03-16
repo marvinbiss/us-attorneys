@@ -1,6 +1,6 @@
 /**
- * Tests d'intégration — Routes API Prospection
- * Couvre : validation Zod, logique métier, sécurité webhook, template rendering
+ * Integration tests -- Prospection API Routes
+ * Covers: Zod validation, business logic, webhook security, template rendering
  */
 import { describe, it, expect } from 'vitest'
 import { z } from 'zod'
@@ -8,7 +8,7 @@ import { readFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
 
 // ============================================
-// 1. SCHEMAS DE VALIDATION — Contacts
+// 1. VALIDATION SCHEMAS -- Contacts
 // ============================================
 
 const contactQuerySchema = z.object({
@@ -37,7 +37,7 @@ const contactCreateSchema = z.object({
 })
 
 // ============================================
-// 2. SCHEMAS DE VALIDATION — Campaigns
+// 2. VALIDATION SCHEMAS -- Campaigns
 // ============================================
 
 const campaignQuerySchema = z.object({
@@ -70,7 +70,7 @@ const campaignCreateSchema = z.object({
 })
 
 // ============================================
-// 3. SCHEMAS DE VALIDATION — Templates
+// 3. VALIDATION SCHEMAS -- Templates
 // ============================================
 
 const templateCreateSchema = z.object({
@@ -88,7 +88,7 @@ const templateCreateSchema = z.object({
 })
 
 // ============================================
-// 4. SCHEMAS DE VALIDATION — Lists
+// 4. VALIDATION SCHEMAS -- Lists
 // ============================================
 
 const listCreateSchema = z.object({
@@ -99,7 +99,7 @@ const listCreateSchema = z.object({
 })
 
 // ============================================
-// 5. SCHEMAS DE VALIDATION — Webhooks Twilio
+// 5. VALIDATION SCHEMAS -- Twilio Webhooks
 // ============================================
 
 const twilioWebhookSchema = z.object({
@@ -114,9 +114,9 @@ const twilioWebhookSchema = z.object({
 // TESTS
 // ============================================
 
-describe('Prospection API — Contacts validation', () => {
+describe('Prospection API -- Contacts validation', () => {
   describe('GET query params', () => {
-    it('accepte des paramètres vides (valeurs par défaut)', () => {
+    it('accepts empty params (defaults applied)', () => {
       const result = contactQuerySchema.safeParse({})
       expect(result.success).toBe(true)
       if (result.success) {
@@ -128,9 +128,9 @@ describe('Prospection API — Contacts validation', () => {
       }
     })
 
-    it('accepte des paramètres valides', () => {
+    it('accepts valid params', () => {
       const result = contactQuerySchema.safeParse({
-        page: '3', limit: '50', type: 'artisan', search: 'plombier', department: '75', consent: 'opted_in',
+        page: '3', limit: '50', type: 'artisan', search: 'attorney', department: '75', consent: 'opted_in',
       })
       expect(result.success).toBe(true)
       if (result.success) {
@@ -142,7 +142,7 @@ describe('Prospection API — Contacts validation', () => {
       }
     })
 
-    it('coerce les strings en numbers pour page/limit', () => {
+    it('coerces strings to numbers for page/limit', () => {
       const result = contactQuerySchema.safeParse({ page: '5', limit: '10' })
       expect(result.success).toBe(true)
       if (result.success) {
@@ -151,73 +151,73 @@ describe('Prospection API — Contacts validation', () => {
       }
     })
 
-    it('rejette un type de contact invalide', () => {
+    it('rejects an invalid contact type', () => {
       const result = contactQuerySchema.safeParse({ type: 'fournisseur' })
       expect(result.success).toBe(false)
     })
 
-    it('rejette page < 1', () => {
+    it('rejects page < 1', () => {
       const result = contactQuerySchema.safeParse({ page: '0' })
       expect(result.success).toBe(false)
     })
 
-    it('rejette limit > 100', () => {
+    it('rejects limit > 100', () => {
       const result = contactQuerySchema.safeParse({ limit: '200' })
       expect(result.success).toBe(false)
     })
 
-    it('rejette une recherche > 200 caractères', () => {
+    it('rejects search > 200 characters', () => {
       const result = contactQuerySchema.safeParse({ search: 'a'.repeat(201) })
       expect(result.success).toBe(false)
     })
 
-    it('rejette consent invalide', () => {
+    it('rejects invalid consent value', () => {
       const result = contactQuerySchema.safeParse({ consent: 'pending' })
       expect(result.success).toBe(false)
     })
   })
 
   describe('POST body', () => {
-    it('accepte un contact artisan valide avec email', () => {
+    it('accepts a valid attorney contact with email', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'artisan',
-        company_name: 'Plomberie Martin',
-        email: 'jean@martin.fr',
-        city: 'Paris',
+        company_name: 'Smith & Associates',
+        email: 'john@smithlaw.com',
+        city: 'New York',
         department: '75',
       })
       expect(result.success).toBe(true)
     })
 
-    it('accepte un contact client avec téléphone seul', () => {
+    it('accepts a client contact with phone only', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'client',
-        contact_name: 'Marie Dupont',
-        phone: '0612345678',
+        contact_name: 'Jane Williams',
+        phone: '2125551234',
       })
       expect(result.success).toBe(true)
     })
 
-    it('accepte un contact mairie', () => {
+    it('accepts a government contact', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'mairie',
-        company_name: 'Mairie de Lyon',
-        email: 'contact@mairie-lyon.fr',
-        city: 'Lyon',
+        company_name: 'City of Los Angeles',
+        email: 'contact@lacity.gov',
+        city: 'Los Angeles',
         department: '69',
-        postal_code: '69001',
+        postal_code: '90012',
       })
       expect(result.success).toBe(true)
     })
 
-    it('rejette sans contact_type', () => {
+    it('rejects without contact_type', () => {
       const result = contactCreateSchema.safeParse({
         email: 'test@test.com',
       })
       expect(result.success).toBe(false)
     })
 
-    it('rejette un contact_type invalide', () => {
+    it('rejects an invalid contact_type', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'fournisseur',
         email: 'test@test.com',
@@ -225,15 +225,15 @@ describe('Prospection API — Contacts validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette un email malformé', () => {
+    it('rejects a malformed email', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'artisan',
-        email: 'pas-un-email',
+        email: 'not-an-email',
       })
       expect(result.success).toBe(false)
     })
 
-    it('rejette un email > 255 caractères', () => {
+    it('rejects email > 255 characters', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'artisan',
         email: 'a'.repeat(250) + '@b.com',
@@ -241,7 +241,7 @@ describe('Prospection API — Contacts validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('accepte des tags', () => {
+    it('accepts tags', () => {
       const result = contactCreateSchema.safeParse({
         contact_type: 'artisan',
         email: 'a@b.com',
@@ -255,9 +255,9 @@ describe('Prospection API — Contacts validation', () => {
   })
 })
 
-describe('Prospection API — Campaigns validation', () => {
+describe('Prospection API -- Campaigns validation', () => {
   describe('GET query params', () => {
-    it('accepte des paramètres vides', () => {
+    it('accepts empty params', () => {
       const result = campaignQuerySchema.safeParse({})
       expect(result.success).toBe(true)
       if (result.success) {
@@ -266,35 +266,35 @@ describe('Prospection API — Campaigns validation', () => {
       }
     })
 
-    it('filtre par statut', () => {
+    it('filters by status', () => {
       const result = campaignQuerySchema.safeParse({ status: 'sending', channel: 'whatsapp' })
       expect(result.success).toBe(true)
     })
 
-    it('rejette un statut invalide', () => {
+    it('rejects an invalid status', () => {
       const result = campaignQuerySchema.safeParse({ status: 'running' })
       expect(result.success).toBe(false)
     })
 
-    it('rejette un canal invalide', () => {
+    it('rejects an invalid channel', () => {
       const result = campaignQuerySchema.safeParse({ channel: 'telegram' })
       expect(result.success).toBe(false)
     })
   })
 
   describe('POST body', () => {
-    it('accepte une campagne email minimale', () => {
+    it('accepts a minimal email campaign', () => {
       const result = campaignCreateSchema.safeParse({
-        name: 'Campagne Test',
+        name: 'Test Campaign',
         channel: 'email',
         audience_type: 'artisan',
       })
       expect(result.success).toBe(true)
     })
 
-    it('accepte une campagne WhatsApp complète', () => {
+    it('accepts a full WhatsApp campaign', () => {
       const result = campaignCreateSchema.safeParse({
-        name: 'WhatsApp Artisans Lyon',
+        name: 'WhatsApp Attorneys NY',
         channel: 'whatsapp',
         audience_type: 'artisan',
         template_id: '550e8400-e29b-41d4-a716-446655440000',
@@ -311,7 +311,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(true)
     })
 
-    it('accepte A/B testing', () => {
+    it('accepts A/B testing', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'AB Test Email',
         channel: 'email',
@@ -323,7 +323,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(true)
     })
 
-    it('rejette sans nom', () => {
+    it('rejects without name', () => {
       const result = campaignCreateSchema.safeParse({
         channel: 'email',
         audience_type: 'artisan',
@@ -331,7 +331,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette nom vide', () => {
+    it('rejects empty name', () => {
       const result = campaignCreateSchema.safeParse({
         name: '',
         channel: 'email',
@@ -340,7 +340,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette sans canal', () => {
+    it('rejects without channel', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         audience_type: 'artisan',
@@ -348,7 +348,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette un canal invalide', () => {
+    it('rejects an invalid channel', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'fax',
@@ -357,7 +357,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette batch_size > 1000', () => {
+    it('rejects batch_size > 1000', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'email',
@@ -367,7 +367,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette batch_delay_ms < 100', () => {
+    it('rejects batch_delay_ms < 100', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'sms',
@@ -377,7 +377,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette ai_max_tokens > 4000', () => {
+    it('rejects ai_max_tokens > 4000', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'email',
@@ -387,7 +387,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette ai_temperature > 2', () => {
+    it('rejects ai_temperature > 2', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'email',
@@ -397,7 +397,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette ab_split_percent < 10', () => {
+    it('rejects ab_split_percent < 10', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'email',
@@ -407,7 +407,7 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('rejette template_id non-UUID', () => {
+    it('rejects non-UUID template_id', () => {
       const result = campaignCreateSchema.safeParse({
         name: 'Test',
         channel: 'email',
@@ -417,14 +417,14 @@ describe('Prospection API — Campaigns validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('status auto: draft si pas de scheduled_at', () => {
+    it('auto status: draft when no scheduled_at', () => {
       const data = { name: 'Test', channel: 'email' as const, audience_type: 'artisan' as const }
       const parsed = campaignCreateSchema.parse(data)
       const status = parsed.scheduled_at ? 'scheduled' : 'draft'
       expect(status).toBe('draft')
     })
 
-    it('status auto: scheduled si scheduled_at', () => {
+    it('auto status: scheduled when scheduled_at present', () => {
       const data = {
         name: 'Test',
         channel: 'email' as const,
@@ -438,43 +438,43 @@ describe('Prospection API — Campaigns validation', () => {
   })
 })
 
-describe('Prospection API — Templates validation', () => {
-  it('accepte un template email valide', () => {
+describe('Prospection API -- Templates validation', () => {
+  it('accepts a valid email template', () => {
     const result = templateCreateSchema.safeParse({
-      name: 'Bienvenue Artisan',
+      name: 'Welcome Attorney',
       channel: 'email',
-      subject: 'Bienvenue chez ServicesArtisans',
-      body: 'Bonjour {{contact_name}}, bienvenue !',
+      subject: 'Welcome to US Attorneys',
+      body: 'Hello {{contact_name}}, welcome!',
       audience_type: 'artisan',
     })
     expect(result.success).toBe(true)
   })
 
-  it('accepte un template SMS sans subject', () => {
+  it('accepts an SMS template without subject', () => {
     const result = templateCreateSchema.safeParse({
       name: 'SMS Promo',
       channel: 'sms',
-      body: 'Bonjour {{contact_name}}, offre spéciale pour {{company_name}} !',
+      body: 'Hello {{contact_name}}, special offer for {{company_name}}!',
     })
     expect(result.success).toBe(true)
   })
 
-  it('accepte un template WhatsApp avec template_name', () => {
+  it('accepts a WhatsApp template with template_name', () => {
     const result = templateCreateSchema.safeParse({
       name: 'WA Welcome',
       channel: 'whatsapp',
-      body: 'Bonjour !',
+      body: 'Hello!',
       whatsapp_template_name: 'welcome_artisan',
       whatsapp_template_sid: 'HX123abc',
     })
     expect(result.success).toBe(true)
   })
 
-  it('accepte des variables', () => {
+  it('accepts variables', () => {
     const result = templateCreateSchema.safeParse({
-      name: 'Avec variables',
+      name: 'With variables',
       channel: 'email',
-      body: '{{contact_name}} à {{city}}',
+      body: '{{contact_name}} in {{city}}',
       variables: ['contact_name', 'city'],
     })
     expect(result.success).toBe(true)
@@ -483,18 +483,18 @@ describe('Prospection API — Templates validation', () => {
     }
   })
 
-  it('accepte ai_context comme record', () => {
+  it('accepts ai_context as record', () => {
     const result = templateCreateSchema.safeParse({
       name: 'AI Template',
       channel: 'email',
       body: 'Test',
-      ai_system_prompt: 'Tu es un assistant professionnel.',
-      ai_context: { tone: 'professional', language: 'fr' },
+      ai_system_prompt: 'You are a professional assistant.',
+      ai_context: { tone: 'professional', language: 'en' },
     })
     expect(result.success).toBe(true)
   })
 
-  it('rejette sans nom', () => {
+  it('rejects without name', () => {
     const result = templateCreateSchema.safeParse({
       channel: 'email',
       body: 'Test',
@@ -502,7 +502,7 @@ describe('Prospection API — Templates validation', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejette nom vide', () => {
+  it('rejects empty name', () => {
     const result = templateCreateSchema.safeParse({
       name: '',
       channel: 'email',
@@ -511,7 +511,7 @@ describe('Prospection API — Templates validation', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejette sans body', () => {
+  it('rejects without body', () => {
     const result = templateCreateSchema.safeParse({
       name: 'Test',
       channel: 'email',
@@ -519,7 +519,7 @@ describe('Prospection API — Templates validation', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejette body vide', () => {
+  it('rejects empty body', () => {
     const result = templateCreateSchema.safeParse({
       name: 'Test',
       channel: 'email',
@@ -528,7 +528,7 @@ describe('Prospection API — Templates validation', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejette un canal invalide', () => {
+  it('rejects an invalid channel', () => {
     const result = templateCreateSchema.safeParse({
       name: 'Test',
       channel: 'fax',
@@ -538,48 +538,48 @@ describe('Prospection API — Templates validation', () => {
   })
 })
 
-describe('Prospection API — Lists validation', () => {
-  it('accepte une liste statique minimale', () => {
-    const result = listCreateSchema.safeParse({ name: 'Artisans Paris' })
+describe('Prospection API -- Lists validation', () => {
+  it('accepts a minimal static list', () => {
+    const result = listCreateSchema.safeParse({ name: 'Attorneys New York' })
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.list_type).toBe('static')
     }
   })
 
-  it('accepte une liste dynamique avec critères', () => {
+  it('accepts a dynamic list with criteria', () => {
     const result = listCreateSchema.safeParse({
-      name: 'Artisans IDF',
-      description: 'Tous les artisans en Île-de-France',
+      name: 'Attorneys California',
+      description: 'All attorneys in California',
       list_type: 'dynamic',
-      filter_criteria: { region: 'Île-de-France', contact_type: 'artisan' },
+      filter_criteria: { region: 'California', contact_type: 'artisan' },
     })
     expect(result.success).toBe(true)
   })
 
-  it('rejette sans nom', () => {
+  it('rejects without name', () => {
     const result = listCreateSchema.safeParse({ description: 'test' })
     expect(result.success).toBe(false)
   })
 
-  it('rejette nom vide', () => {
+  it('rejects empty name', () => {
     const result = listCreateSchema.safeParse({ name: '' })
     expect(result.success).toBe(false)
   })
 
-  it('rejette nom > 200 caractères', () => {
+  it('rejects name > 200 characters', () => {
     const result = listCreateSchema.safeParse({ name: 'a'.repeat(201) })
     expect(result.success).toBe(false)
   })
 
-  it('rejette list_type invalide', () => {
+  it('rejects invalid list_type', () => {
     const result = listCreateSchema.safeParse({ name: 'Test', list_type: 'hybrid' })
     expect(result.success).toBe(false)
   })
 })
 
-describe('Prospection API — Twilio webhook validation', () => {
-  it('accepte un webhook valide', () => {
+describe('Prospection API -- Twilio webhook validation', () => {
+  it('accepts a valid webhook', () => {
     const result = twilioWebhookSchema.safeParse({
       MessageSid: 'SM1234567890abcdef',
       MessageStatus: 'delivered',
@@ -587,7 +587,7 @@ describe('Prospection API — Twilio webhook validation', () => {
     expect(result.success).toBe(true)
   })
 
-  it('accepte un webhook avec erreur', () => {
+  it('accepts a webhook with error', () => {
     const result = twilioWebhookSchema.safeParse({
       MessageSid: 'SM1234567890abcdef',
       MessageStatus: 'failed',
@@ -600,32 +600,32 @@ describe('Prospection API — Twilio webhook validation', () => {
     }
   })
 
-  it('passthrough accepte champs supplémentaires', () => {
+  it('passthrough accepts additional fields', () => {
     const result = twilioWebhookSchema.safeParse({
       MessageSid: 'SM123',
       MessageStatus: 'sent',
       AccountSid: 'AC123',
-      To: '+33612345678',
-      From: '+33698765432',
+      To: '+12125551234',
+      From: '+13105559876',
     })
     expect(result.success).toBe(true)
   })
 
-  it('rejette sans MessageSid', () => {
+  it('rejects without MessageSid', () => {
     const result = twilioWebhookSchema.safeParse({
       MessageStatus: 'delivered',
     })
     expect(result.success).toBe(false)
   })
 
-  it('rejette sans MessageStatus', () => {
+  it('rejects without MessageStatus', () => {
     const result = twilioWebhookSchema.safeParse({
       MessageSid: 'SM123',
     })
     expect(result.success).toBe(false)
   })
 
-  it('rejette MessageSid vide', () => {
+  it('rejects empty MessageSid', () => {
     const result = twilioWebhookSchema.safeParse({
       MessageSid: '',
       MessageStatus: 'sent',
@@ -634,7 +634,7 @@ describe('Prospection API — Twilio webhook validation', () => {
   })
 })
 
-describe('Prospection API — Status mapping logic', () => {
+describe('Prospection API -- Status mapping logic', () => {
   const twilioStatusMap: Record<string, string> = {
     queued: 'sending',
     sent: 'sent',
@@ -652,7 +652,7 @@ describe('Prospection API — Status mapping logic', () => {
     'email.delivery_delayed': 'sending',
   }
 
-  it('Twilio: mappe tous les statuts connus', () => {
+  it('Twilio: maps all known statuses', () => {
     expect(twilioStatusMap['queued']).toBe('sending')
     expect(twilioStatusMap['sent']).toBe('sent')
     expect(twilioStatusMap['delivered']).toBe('delivered')
@@ -661,12 +661,12 @@ describe('Prospection API — Status mapping logic', () => {
     expect(twilioStatusMap['undelivered']).toBe('failed')
   })
 
-  it('Twilio: statut inconnu retourne undefined', () => {
+  it('Twilio: unknown status returns undefined', () => {
     expect(twilioStatusMap['accepted']).toBeUndefined()
     expect(twilioStatusMap['receiving']).toBeUndefined()
   })
 
-  it('Resend: mappe tous les statuts connus', () => {
+  it('Resend: maps all known statuses', () => {
     expect(resendStatusMap['email.sent']).toBe('sent')
     expect(resendStatusMap['email.delivered']).toBe('delivered')
     expect(resendStatusMap['email.bounced']).toBe('failed')
@@ -674,13 +674,13 @@ describe('Prospection API — Status mapping logic', () => {
     expect(resendStatusMap['email.delivery_delayed']).toBe('sending')
   })
 
-  it('Resend: statut inconnu retourne undefined', () => {
+  it('Resend: unknown status returns undefined', () => {
     expect(resendStatusMap['email.opened']).toBeUndefined()
     expect(resendStatusMap['email.clicked']).toBeUndefined()
   })
 })
 
-describe('Prospection API — Campaign state machine', () => {
+describe('Prospection API -- Campaign state machine', () => {
   const validTransitions: Record<string, string[]> = {
     draft: ['scheduled', 'sending', 'cancelled'],
     scheduled: ['sending', 'cancelled', 'draft'],
@@ -692,7 +692,7 @@ describe('Prospection API — Campaign state machine', () => {
 
   const allStatuses = ['draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled']
 
-  it('draft peut aller vers scheduled, sending, cancelled', () => {
+  it('draft can go to scheduled, sending, cancelled', () => {
     expect(validTransitions['draft']).toContain('scheduled')
     expect(validTransitions['draft']).toContain('sending')
     expect(validTransitions['draft']).toContain('cancelled')
@@ -700,39 +700,39 @@ describe('Prospection API — Campaign state machine', () => {
     expect(validTransitions['draft']).not.toContain('paused')
   })
 
-  it('scheduled peut aller vers sending, cancelled, draft', () => {
+  it('scheduled can go to sending, cancelled, draft', () => {
     expect(validTransitions['scheduled']).toContain('sending')
     expect(validTransitions['scheduled']).toContain('cancelled')
     expect(validTransitions['scheduled']).toContain('draft')
   })
 
-  it('sending peut aller vers paused, completed, cancelled', () => {
+  it('sending can go to paused, completed, cancelled', () => {
     expect(validTransitions['sending']).toContain('paused')
     expect(validTransitions['sending']).toContain('completed')
     expect(validTransitions['sending']).toContain('cancelled')
   })
 
-  it('paused peut aller vers sending, cancelled', () => {
+  it('paused can go to sending, cancelled', () => {
     expect(validTransitions['paused']).toContain('sending')
     expect(validTransitions['paused']).toContain('cancelled')
     expect(validTransitions['paused']).not.toContain('completed')
   })
 
-  it('completed est un état terminal', () => {
+  it('completed is a terminal state', () => {
     expect(validTransitions['completed']).toHaveLength(0)
   })
 
-  it('cancelled est un état terminal', () => {
+  it('cancelled is a terminal state', () => {
     expect(validTransitions['cancelled']).toHaveLength(0)
   })
 
-  it('aucun état ne peut transitionner vers lui-même', () => {
+  it('no state can transition to itself', () => {
     for (const status of allStatuses) {
       expect(validTransitions[status]).not.toContain(status)
     }
   })
 
-  it('send route rejette les campagnes non-draft/scheduled', () => {
+  it('send route rejects non-draft/scheduled campaigns', () => {
     const invalidForSend = ['sending', 'paused', 'completed', 'cancelled']
     for (const status of invalidForSend) {
       expect(['draft', 'scheduled'].includes(status)).toBe(false)
@@ -740,20 +740,20 @@ describe('Prospection API — Campaign state machine', () => {
   })
 })
 
-describe('Prospection API — Pagination logic', () => {
-  it('calcule correctement offset pour page 1', () => {
+describe('Prospection API -- Pagination logic', () => {
+  it('correctly computes offset for page 1', () => {
     const page = 1, limit = 20
     const offset = (page - 1) * limit
     expect(offset).toBe(0)
   })
 
-  it('calcule correctement offset pour page 5 avec limit 10', () => {
+  it('correctly computes offset for page 5 with limit 10', () => {
     const page = 5, limit = 10
     const offset = (page - 1) * limit
     expect(offset).toBe(40)
   })
 
-  it('calcule correctement totalPages', () => {
+  it('correctly computes totalPages', () => {
     expect(Math.ceil(0 / 20)).toBe(0)
     expect(Math.ceil(1 / 20)).toBe(1)
     expect(Math.ceil(20 / 20)).toBe(1)
@@ -762,7 +762,7 @@ describe('Prospection API — Pagination logic', () => {
     expect(Math.ceil(101 / 20)).toBe(6)
   })
 
-  it('limit est borné entre 1 et 100', () => {
+  it('limit is bounded between 1 and 100', () => {
     const parse = (val: string) => campaignQuerySchema.safeParse({ limit: val })
     expect(parse('1').success).toBe(true)
     expect(parse('100').success).toBe(true)
@@ -771,7 +771,7 @@ describe('Prospection API — Pagination logic', () => {
   })
 })
 
-describe('Prospection API — Template rendering', () => {
+describe('Prospection API -- Template rendering', () => {
   // Pure function tests for escapeTemplateValue logic
   function escapeTemplateValue(value: unknown): string {
     if (value === null || value === undefined) return ''
@@ -779,35 +779,35 @@ describe('Prospection API — Template rendering', () => {
     return str.replace(/<[^>]*>/g, '').replace(/\{\{/g, '').replace(/\}\}/g, '').slice(0, 500)
   }
 
-  it('escape null → chaîne vide', () => {
+  it('escapes null to empty string', () => {
     expect(escapeTemplateValue(null)).toBe('')
   })
 
-  it('escape undefined → chaîne vide', () => {
+  it('escapes undefined to empty string', () => {
     expect(escapeTemplateValue(undefined)).toBe('')
   })
 
-  it('escape string normale', () => {
-    expect(escapeTemplateValue('Jean Martin')).toBe('Jean Martin')
+  it('escapes a normal string', () => {
+    expect(escapeTemplateValue('John Smith')).toBe('John Smith')
   })
 
-  it('strip les tags HTML (XSS)', () => {
+  it('strips HTML tags (XSS)', () => {
     expect(escapeTemplateValue('<script>alert("xss")</script>')).toBe('alert("xss")')
     expect(escapeTemplateValue('<b>bold</b>')).toBe('bold')
     expect(escapeTemplateValue('Hello <img src=x onerror=alert(1)>')).toBe('Hello ')
   })
 
-  it('strip les {{ }} pour éviter injection template', () => {
+  it('strips {{ }} to prevent template injection', () => {
     expect(escapeTemplateValue('{{malicious}}')).toBe('malicious')
-    expect(escapeTemplateValue('test {{nested}} fin')).toBe('test nested fin')
+    expect(escapeTemplateValue('test {{nested}} end')).toBe('test nested end')
   })
 
-  it('tronque à 500 caractères', () => {
+  it('truncates to 500 characters', () => {
     const long = 'a'.repeat(600)
     expect(escapeTemplateValue(long)).toHaveLength(500)
   })
 
-  it('gère les nombres', () => {
+  it('handles numbers', () => {
     expect(escapeTemplateValue(42)).toBe('42')
     expect(escapeTemplateValue(0)).toBe('0')
   })
@@ -818,46 +818,46 @@ describe('Prospection API — Template rendering', () => {
     return Array.from(new Set(matches.map(m => m.replace(/\{\{|\}\}/g, ''))))
   }
 
-  it('extrait les variables d\'un template', () => {
-    const vars = extractVariables('Bonjour {{contact_name}}, votre entreprise {{company_name}} à {{city}}')
+  it('extracts variables from a template', () => {
+    const vars = extractVariables('Hello {{contact_name}}, your company {{company_name}} in {{city}}')
     expect(vars).toContain('contact_name')
     expect(vars).toContain('company_name')
     expect(vars).toContain('city')
     expect(vars).toHaveLength(3)
   })
 
-  it('déduplique les variables', () => {
-    const vars = extractVariables('{{name}} et {{name}} et {{name}}')
+  it('deduplicates variables', () => {
+    const vars = extractVariables('{{name}} and {{name}} and {{name}}')
     expect(vars).toHaveLength(1)
     expect(vars[0]).toBe('name')
   })
 
-  it('retourne tableau vide sans variables', () => {
-    const vars = extractVariables('Bonjour, ceci est un texte simple.')
+  it('returns empty array without variables', () => {
+    const vars = extractVariables('Hello, this is a simple text.')
     expect(vars).toHaveLength(0)
   })
 
-  it('ignore les accolades malformées', () => {
-    const vars = extractVariables('{name} et {{}} et {{ name }}')
+  it('ignores malformed braces', () => {
+    const vars = extractVariables('{name} and {{}} and {{ name }}')
     expect(vars).toHaveLength(0)
   })
 })
 
-describe('Prospection API — Search sanitization', () => {
-  it('échappe les caractères spéciaux SQL LIKE', () => {
-    const search = '100% plombier_expert'
+describe('Prospection API -- Search sanitization', () => {
+  it('escapes SQL LIKE special characters', () => {
+    const search = '100% attorney_expert'
     const escaped = search.replace(/%/g, '\\%').replace(/_/g, '\\_')
-    expect(escaped).toBe('100\\% plombier\\_expert')
+    expect(escaped).toBe('100\\% attorney\\_expert')
   })
 
-  it('ne modifie pas une recherche normale', () => {
-    const search = 'plombier paris'
+  it('does not modify a normal search', () => {
+    const search = 'attorney new york'
     const escaped = search.replace(/%/g, '\\%').replace(/_/g, '\\_')
-    expect(escaped).toBe('plombier paris')
+    expect(escaped).toBe('attorney new york')
   })
 })
 
-describe('Prospection API — Files existence & structure', () => {
+describe('Prospection API -- Files existence & structure', () => {
   const BASE = resolve(__dirname, '..', '..')
 
   const requiredRoutes = [
@@ -890,12 +890,12 @@ describe('Prospection API — Files existence & structure', () => {
   ]
 
   for (const route of requiredRoutes) {
-    it(`existe: ${route}`, () => {
+    it(`exists: ${route}`, () => {
       expect(existsSync(resolve(BASE, route))).toBe(true)
     })
   }
 
-  it('toutes les routes admin utilisent requirePermission ou verifyTwilio/Resend', () => {
+  it('all admin routes use requirePermission or verifyTwilio/Resend', () => {
     const adminRoutes = requiredRoutes.filter(r => r.includes('/admin/prospection/') && !r.includes('webhooks'))
     for (const route of adminRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
@@ -903,7 +903,7 @@ describe('Prospection API — Files existence & structure', () => {
     }
   })
 
-  it('les webhooks vérifient les signatures', () => {
+  it('webhooks verify signatures', () => {
     const twilioRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/webhooks/twilio/route.ts'), 'utf-8')
     expect(twilioRoute).toContain('verifyTwilioSignature')
 
@@ -911,7 +911,7 @@ describe('Prospection API — Files existence & structure', () => {
     expect(resendRoute).toContain('verifyResendSignature')
   })
 
-  it('les routes admin utilisent createAdminClient ou délèguent au service layer', () => {
+  it('admin routes use createAdminClient or delegate to service layer', () => {
     const adminRoutes = requiredRoutes.filter(r => r.includes('/admin/prospection/'))
     for (const route of adminRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
@@ -924,7 +924,7 @@ describe('Prospection API — Files existence & structure', () => {
     }
   })
 
-  it('aucune route ne leak error.message au client', () => {
+  it('no route leaks error.message to client', () => {
     for (const route of requiredRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
       // error.message should not be in JSON responses (security: info leak)
@@ -935,14 +935,14 @@ describe('Prospection API — Files existence & structure', () => {
     }
   })
 
-  it('toutes les routes utilisent force-dynamic', () => {
+  it('all routes use force-dynamic', () => {
     for (const route of requiredRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
       expect(content).toContain("dynamic = 'force-dynamic'")
     }
   })
 
-  it('les routes POST avec JSON body utilisent zod pour validation', () => {
+  it('POST routes with JSON body use zod for validation', () => {
     // Only check routes that do request.json() AND don't delegate to service layer
     const routesWithJsonPost = requiredRoutes.filter(r => {
       const content = readFileSync(resolve(BASE, r), 'utf-8')
@@ -960,7 +960,7 @@ describe('Prospection API — Files existence & structure', () => {
     }
   })
 
-  it('les routes import/sync délèguent au service layer', () => {
+  it('import/sync routes delegate to service layer', () => {
     const importRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/contacts/import/route.ts'), 'utf-8')
     expect(importRoute).toContain('importContacts')
 
@@ -969,7 +969,7 @@ describe('Prospection API — Files existence & structure', () => {
   })
 })
 
-describe('Prospection API — Migration SQL 302 security', () => {
+describe('Prospection API -- Migration SQL 302 security', () => {
   const migrationPath = resolve(__dirname, '..', '..', 'supabase', 'migrations', '302_critical_security_fixes.sql')
 
   let sql: string
@@ -979,24 +979,24 @@ describe('Prospection API — Migration SQL 302 security', () => {
     sql = ''
   }
 
-  it('fichier migration existe', () => {
+  it('migration file exists', () => {
     expect(existsSync(migrationPath)).toBe(true)
     expect(sql.length).toBeGreaterThan(0)
   })
 
-  it('increment() est whitelisté (pas arbitraire)', () => {
+  it('increment() is whitelisted (not arbitrary)', () => {
     expect(sql).toContain("IF p_table_name = 'prospection_campaigns'")
     expect(sql).toContain('RAISE EXCEPTION')
     expect(sql).toContain("'Disallowed table/column")
   })
 
-  it('increment() est SECURITY DEFINER avec REVOKE PUBLIC', () => {
+  it('increment() is SECURITY DEFINER with REVOKE PUBLIC', () => {
     expect(sql).toContain('SECURITY DEFINER')
     expect(sql).toContain('REVOKE ALL ON FUNCTION public.increment')
     expect(sql).toContain('GRANT EXECUTE ON FUNCTION public.increment')
   })
 
-  it('claim_queued_messages utilise FOR UPDATE SKIP LOCKED', () => {
+  it('claim_queued_messages uses FOR UPDATE SKIP LOCKED', () => {
     expect(sql).toContain('FOR UPDATE SKIP LOCKED')
   })
 

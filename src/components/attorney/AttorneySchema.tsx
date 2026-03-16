@@ -205,6 +205,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     currenciesAccepted: 'USD',
 
     // Opening hours for Google Knowledge Panel
+    // DB-bound: French keys from database (opening_hours JSONB column in Supabase)
     ...(artisan.opening_hours && Object.keys(artisan.opening_hours).length > 0 && {
       openingHoursSpecification: (() => {
         const dayMap: Record<string, string> = {

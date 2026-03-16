@@ -9,12 +9,14 @@ interface AvailabilitySectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
+// DB-bound: French keys from database (opening_hours JSONB column in Supabase)
 interface DaySchedule {
   ouvert: boolean
   debut: string
   fin: string
 }
 
+// DB-bound: French keys from database (opening_hours JSONB column in Supabase)
 interface OpeningHours {
   lundi: DaySchedule
   mardi: DaySchedule

@@ -7,7 +7,7 @@ import { getCityBySlug } from '@/lib/data/usa'
 // Return a minimal seed set (NOT empty — empty array in a child of a parent
 // with generateStaticParams causes a 500 on Vercel with Next.js 14.2).
 export function generateStaticParams() {
-  return [{ service: 'plombier', ville: 'paris', travail: 'debouchage-de-canalisation' }]
+  return [{ service: 'plombier', city: 'paris', travail: 'debouchage-de-canalisation' }]
 }
 
 export const dynamicParams = true
@@ -16,9 +16,9 @@ export const revalidate = 86400
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ service: string; ville: string; travail: string }>
+  params: Promise<{ service: string; city: string; travail: string }>
 }): Promise<Metadata> {
-  const { service, ville: villeSlug, travail } = await params
+  const { service, city: villeSlug, travail } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
@@ -40,9 +40,9 @@ export async function generateMetadata({
 export default async function PricingServiceTravailVillePage({
   params,
 }: {
-  params: Promise<{ service: string; ville: string; travail: string }>
+  params: Promise<{ service: string; city: string; travail: string }>
 }) {
-  const { service, ville: villeSlug, travail } = await params
+  const { service, city: villeSlug, travail } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) notFound()

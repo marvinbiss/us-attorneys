@@ -47,7 +47,7 @@ describe('formatPrice', () => {
 
   it('should format large numbers with proper grouping', () => {
     const result = formatPrice(1000)
-    expect(result).toMatch(/1[\s\u00A0\u202F]?000/)
+    expect(result).toMatch(/1,000/)
   })
 
   it('should handle zero', () => {
@@ -254,22 +254,22 @@ describe('getAttorneyUrl', () => {
   })
 
   it('should resolve specialty synonym to canonical slug', () => {
-    const url = getAttorneyUrl({ specialty: 'peintre', city: 'Paris', slug: 'test' })
-    expect(url).toContain('/peintre-en-batiment/')
+    const url = getAttorneyUrl({ specialty: 'injury', city: 'Phoenix', slug: 'test' })
+    expect(url).toContain('/personal-injury/')
   })
 
   it('should slugify unknown city', () => {
-    const url = getAttorneyUrl({ specialty: 'plombier', city: 'City Inconnue', slug: 'test' })
-    expect(url).toContain('/ville-inconnue/')
+    const url = getAttorneyUrl({ specialty: 'Personal Injury', city: 'Unknown City', slug: 'test' })
+    expect(url).toContain('/unknown-city/')
   })
 
   it('should fall back gracefully with missing fields', () => {
     const url = getAttorneyUrl({})
-    expect(url).toMatch(/^\/services\/artisan\/france\/$/)
+    expect(url).toMatch(/^\/practice-areas\/attorney\/nationwide\/$/)
   })
 
   it('should start with /practice-areas/', () => {
-    const url = getAttorneyUrl({ specialty: 'menuisier', city: 'Marseille', slug: 'bois-pro' })
-    expect(url).toMatch(/^\/services\//)
+    const url = getAttorneyUrl({ specialty: 'Criminal Defense', city: 'Phoenix', slug: 'smith-law' })
+    expect(url).toMatch(/^\/practice-areas\//)
   })
 })

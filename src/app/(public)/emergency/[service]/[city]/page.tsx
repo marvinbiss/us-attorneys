@@ -21,16 +21,16 @@ export const dynamicParams = true
 export function generateStaticParams() {
   const topServices = emergencySlugs.slice(0, 5)
   return topServices.flatMap((s) =>
-    top10Cities.map((v) => ({ service: s, ville: v.slug }))
+    top10Cities.map((v) => ({ service: s, city: v.slug }))
   )
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ service: string; ville: string }>
+  params: Promise<{ service: string; city: string }>
 }): Promise<Metadata> {
-  const { service, ville: villeSlug } = await params
+  const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
@@ -46,9 +46,9 @@ export async function generateMetadata({
 export default async function EmergencyServiceVillePage({
   params,
 }: {
-  params: Promise<{ service: string; ville: string }>
+  params: Promise<{ service: string; city: string }>
 }) {
-  const { service, ville: villeSlug } = await params
+  const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) notFound()

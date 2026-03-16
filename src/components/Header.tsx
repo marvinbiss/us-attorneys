@@ -34,7 +34,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
   const [openMenu, setOpenMenu] = useState<MenuType>(null)
   const [mobileAccordion, setMobileAccordion] = useState<MobileAccordion>(null)
 
-  // Geo menu data loaded from API to keep france.ts out of client bundle
+  // Geo menu data loaded from API to keep usa.ts out of client bundle
   const [citiesByRegion, setCitiesByRegion] = useState<RegionCities[]>([])
   const [popularCities, setPopularCities] = useState<PopularCity[]>([])
   const [metroRegions, setMetroRegions] = useState<MetroRegion[]>([])

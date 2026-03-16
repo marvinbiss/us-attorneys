@@ -309,11 +309,11 @@ export default async function StatePage({ params }: PageProps) {
                 ))}
               </div>
             </div>
-            <p className="text-slate-700 leading-relaxed">{content.contexteHabitat}</p>
+            <p className="text-slate-700 leading-relaxed">{content.housingContext}</p>
           </div>
         </section>
 
-        {/* ─── CONTENU SEO ────────────────────────────────────── */}
+        {/* ─── SEO CONTENT ────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -326,11 +326,11 @@ export default async function StatePage({ params }: PageProps) {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
               <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Top practice areas</h3>
-              <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
+              <p className="text-slate-700 leading-relaxed">{content.priorityServices}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
               <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Tips for finding the right attorney</h3>
-              <p className="text-slate-700 leading-relaxed">{content.conseilsDepartement}</p>
+              <p className="text-slate-700 leading-relaxed">{content.stateAdvice}</p>
             </div>
           </div>
         </section>
@@ -555,7 +555,7 @@ export default async function StatePage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Intent variant links — devis, avis, tarifs */}
+          {/* Intent variant links -- quotes, reviews, pricing */}
           {villesDuDepartement.length > 0 && (
             <div className="mt-10 grid md:grid-cols-3 gap-8">
               <div>

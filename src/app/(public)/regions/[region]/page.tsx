@@ -293,11 +293,11 @@ export default async function RegionPage({ params }: PageProps) {
                 ))}
               </div>
             </div>
-            <p className="text-slate-700 leading-relaxed">{content.contexteRegional}</p>
+            <p className="text-slate-700 leading-relaxed">{content.regionalContext}</p>
           </div>
         </section>
 
-        {/* ─── CONTENU SEO ────────────────────────────────────── */}
+        {/* ─── SEO CONTENT ────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -310,11 +310,11 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
               <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Top practice areas</h3>
-              <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
+              <p className="text-slate-700 leading-relaxed">{content.priorityServices}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
               <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Tips for finding the right attorney</h3>
-              <p className="text-slate-700 leading-relaxed">{content.conseilsRegion}</p>
+              <p className="text-slate-700 leading-relaxed">{content.regionAdvice}</p>
             </div>
           </div>
         </section>

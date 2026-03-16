@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { z } from 'zod'
 
 const patchQuoteSchema = z.object({
@@ -27,7 +27,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const { data: provider } = await supabase
@@ -88,7 +88,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const { data: provider } = await supabase

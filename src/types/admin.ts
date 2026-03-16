@@ -1,4 +1,4 @@
-// Types pour l'administration
+// Types for admin dashboard
 
 export type AdminRole = 'super_admin' | 'admin' | 'moderator' | 'viewer'
 
@@ -156,7 +156,7 @@ export interface AdminBooking {
   cancellation_reason?: string
 }
 
-// Quote/Devis types for admin
+// Quote types for admin
 export interface AdminQuote {
   id: string
   client_email: string

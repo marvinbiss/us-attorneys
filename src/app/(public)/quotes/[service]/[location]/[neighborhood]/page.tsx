@@ -14,7 +14,7 @@ export function generateStaticParams() {
       getNeighborhoodsByCity(v.slug).map((q) => ({
         service: s,
         location: v.slug,
-        quartier: q.slug,
+        neighborhood: q.slug,
       }))
     )
   )
@@ -26,9 +26,9 @@ export const revalidate = 86400
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ service: string; location: string; quartier: string }>
+  params: Promise<{ service: string; location: string; neighborhood: string }>
 }): Promise<Metadata> {
-  const { service, location: locationSlug, quartier: quartierSlug } = await params
+  const { service, location: locationSlug, neighborhood: quartierSlug } = await params
   const trade = tradeContent[service]
   const quartier = getNeighborhoodBySlug(locationSlug, quartierSlug)
   if (!trade || !quartier) return {}
@@ -43,9 +43,9 @@ export async function generateMetadata({
 export default async function QuotesQuartierPage({
   params,
 }: {
-  params: Promise<{ service: string; location: string; quartier: string }>
+  params: Promise<{ service: string; location: string; neighborhood: string }>
 }) {
-  const { service, location: locationSlug, quartier: quartierSlug } = await params
+  const { service, location: locationSlug, neighborhood: quartierSlug } = await params
   const trade = tradeContent[service]
   const quartier = getNeighborhoodBySlug(locationSlug, quartierSlug)
   if (!trade || !quartier) notFound()

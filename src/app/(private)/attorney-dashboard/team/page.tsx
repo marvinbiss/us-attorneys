@@ -59,7 +59,7 @@ export default function TeamPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('/api/attorney/equipe')
+        const res = await fetch('/api/attorney/team')
 
         if (res.status === 401) {
           router.push('/login')
@@ -100,7 +100,7 @@ export default function TeamPage() {
     try {
       if (editingMember) {
         // Update existing member
-        const res = await fetch(`/api/attorney/equipe/${editingMember.id}`, {
+        const res = await fetch(`/api/attorney/team/${editingMember.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -124,7 +124,7 @@ export default function TeamPage() {
         ))
       } else {
         // Add new member
-        const res = await fetch('/api/attorney/equipe', {
+        const res = await fetch('/api/attorney/team', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -167,7 +167,7 @@ export default function TeamPage() {
     if (!confirm('Remove this team member?')) return
 
     try {
-      const res = await fetch(`/api/attorney/equipe/${memberId}`, {
+      const res = await fetch(`/api/attorney/team/${memberId}`, {
         method: 'DELETE',
       })
 
@@ -186,7 +186,7 @@ export default function TeamPage() {
   // Toggle member active status
   const toggleActive = async (member: TeamMember) => {
     try {
-      const res = await fetch(`/api/attorney/equipe/${member.id}`, {
+      const res = await fetch(`/api/attorney/team/${member.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

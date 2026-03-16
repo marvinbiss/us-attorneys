@@ -46,9 +46,9 @@ const Tooltip = dynamic(
   { ssr: false }
 )
 
-// France metropolitan center
-const FRANCE_CENTER: [number, number] = [46.603354, 1.888334]
-const FRANCE_ZOOM = 6
+// US continental center
+const US_CENTER: [number, number] = [39.8283, -98.5795]
+const US_ZOOM = 4
 
 /* ─── List Fallback ──────────────────────────────────────────── */
 
@@ -183,14 +183,14 @@ export default function CarteClient() {
   }, [uniqueMarkers, selectedRegion])
 
   // Total attorneys in filtered zone
-  const totalArtisans = useMemo(() => {
+  const totalAttorneys = useMemo(() => {
     return filteredMarkers.reduce((sum, m) => sum + m.attorneyCount, 0)
   }, [filteredMarkers])
 
   const handleRegionChange = (region: string) => {
     setSelectedRegion(region)
     if (!region) {
-      mapRef.current?.setView(FRANCE_CENTER, FRANCE_ZOOM, { animate: true })
+      mapRef.current?.setView(US_CENTER, US_ZOOM, { animate: true })
     } else {
       const regionCities = uniqueMarkers.filter((m) => m.region === region)
       if (regionCities.length > 0 && mapRef.current && leafletRef.current) {
@@ -205,7 +205,7 @@ export default function CarteClient() {
   const clearFilters = () => {
     setSelectedRegion('')
     setSelectedService('')
-    mapRef.current?.setView(FRANCE_CENTER, FRANCE_ZOOM, { animate: true })
+    mapRef.current?.setView(US_CENTER, US_ZOOM, { animate: true })
   }
 
   const showMap = viewMode === 'map' && mapReady && !mapError
@@ -226,7 +226,7 @@ export default function CarteClient() {
               </p>
               <p className="text-2xl font-bold">
                 {selectedRegion
-                  ? totalArtisans.toLocaleString('en-US')
+                  ? totalAttorneys.toLocaleString('en-US')
                   : '350 000+'}
               </p>
             </div>
@@ -358,8 +358,8 @@ export default function CarteClient() {
           <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm" style={{ height: '600px' }}>
             <MapContainer
               ref={mapRef}
-              center={FRANCE_CENTER}
-              zoom={FRANCE_ZOOM}
+              center={US_CENTER}
+              zoom={US_ZOOM}
               style={{ height: '100%', width: '100%' }}
               scrollWheelZoom={true}
               minZoom={5}

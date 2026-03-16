@@ -67,7 +67,7 @@ export const faqItemSchema = z.object({
 })
 
 // ============================================================
-// Artisan self-service update schema (PUT /api/attorney/provider)
+// Attorney self-service update schema (PUT /api/attorney/provider)
 // Excludes admin-only fields: is_verified, noindex, is_active,
 // rating_average, review_count.
 // ============================================================

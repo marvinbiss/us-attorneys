@@ -20,9 +20,9 @@ const TrustBadge = ({
 
   const labels: Record<string, string> = {
     bronze: 'Bronze',
-    silver: 'Argent',
-    gold: 'Or',
-    platinum: 'Platine'
+    silver: 'Silver',
+    gold: 'Gold',
+    platinum: 'Platinum'
   }
 
   const colors: Record<string, string> = {
@@ -62,19 +62,19 @@ describe('TrustBadge Component', () => {
 
   it('should render silver badge correctly', () => {
     render(<TrustBadge badge="silver" />)
-    expect(screen.getByTestId('trust-badge')).toHaveTextContent('Argent')
+    expect(screen.getByTestId('trust-badge')).toHaveTextContent('Silver')
     expect(screen.getByTestId('trust-badge')).toHaveClass('bg-gray-400')
   })
 
   it('should render gold badge correctly', () => {
     render(<TrustBadge badge="gold" />)
-    expect(screen.getByTestId('trust-badge')).toHaveTextContent('Or')
+    expect(screen.getByTestId('trust-badge')).toHaveTextContent('Gold')
     expect(screen.getByTestId('trust-badge')).toHaveClass('bg-yellow-500')
   })
 
   it('should render platinum badge correctly', () => {
     render(<TrustBadge badge="platinum" />)
-    expect(screen.getByTestId('trust-badge')).toHaveTextContent('Platine')
+    expect(screen.getByTestId('trust-badge')).toHaveTextContent('Platinum')
     expect(screen.getByTestId('trust-badge')).toHaveClass('bg-purple-600')
   })
 

@@ -76,7 +76,7 @@ export async function GET() {
     // ── Single batch: all 20 queries in parallel (no sequential batches) ─
     const [
       // Counts (0–3)
-      totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR,
+      totalUsersR, totalAttorneysR, totalBookingsR, pendingReportsR,
       // Rating sample (4) — 200 rows is statistically sufficient for avg
       reviewsR,
       // Today (5–6)
@@ -129,7 +129,7 @@ export async function GET() {
     ])
 
     logBatchErrors('queries', [
-      totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR, reviewsR,
+      totalUsersR, totalAttorneysR, totalBookingsR, pendingReportsR, reviewsR,
       newUsersTodayR, newBookingsTodayR,
       usersThisMonthR, usersLastMonthR,
       bookingsThisMonthR, bookingsLastMonthR,
@@ -213,7 +213,7 @@ export async function GET() {
       success: true,
       stats: {
         totalUsers: safeCount(totalUsersR),
-        totalArtisans: safeCount(totalArtisansR),
+        totalAttorneys: safeCount(totalAttorneysR),
         totalBookings: safeCount(totalBookingsR),
         totalRevenue: Math.round(revThisMonth * 100), // cents
         pendingReports: safeCount(pendingReportsR),

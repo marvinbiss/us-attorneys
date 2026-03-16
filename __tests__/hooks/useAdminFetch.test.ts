@@ -102,16 +102,16 @@ describe('adminFetcher', () => {
   // ---------------------------------------------------------------
 
   it('throws Error with message from the error response body', async () => {
-    const errorBody = { error: { message: 'Accès refusé' } }
+    const errorBody = { error: { message: 'Access denied' } }
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse(errorBody, { ok: false, status: 403 })
     )
 
-    await expect(adminFetcher!('/api/admin/secret')).rejects.toThrow('Accès refusé')
+    await expect(adminFetcher!('/api/admin/secret')).rejects.toThrow('Access denied')
   })
 
   it('attaches the HTTP status to the thrown error', async () => {
-    const errorBody = { error: { message: 'Introuvable' } }
+    const errorBody = { error: { message: 'Not found' } }
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse(errorBody, { ok: false, status: 404 })
     )
@@ -124,24 +124,24 @@ describe('adminFetcher', () => {
     }
   })
 
-  it('falls back to "Erreur {status}" when error body has no message', async () => {
+  it('falls back to "Error {status}" when error body has no message', async () => {
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse({}, { ok: false, status: 500 })
     )
 
-    await expect(adminFetcher!('/api/admin/broken')).rejects.toThrow('Erreur 500')
+    await expect(adminFetcher!('/api/admin/broken')).rejects.toThrow('Error 500')
   })
 
   // ---------------------------------------------------------------
   // Error: response body parse fails (network-level error body)
   // ---------------------------------------------------------------
 
-  it('throws "Erreur réseau" when the error response body is not valid JSON', async () => {
+  it('throws "Network error" when the error response body is not valid JSON', async () => {
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse(null, { ok: false, status: 502, jsonThrows: true })
     )
 
-    await expect(adminFetcher!('/api/admin/down')).rejects.toThrow('Erreur réseau')
+    await expect(adminFetcher!('/api/admin/down')).rejects.toThrow('Network error')
   })
 
   // ---------------------------------------------------------------
@@ -157,7 +157,7 @@ describe('adminFetcher', () => {
     ;(fetch as Mock).mockRejectedValueOnce(abortError)
 
     await expect(adminFetcher!('/api/admin/slow')).rejects.toThrow(
-      'La requête a expiré (30s). Veuillez réessayer.'
+      'Request timed out (30s). Please try again.'
     )
   })
 
@@ -288,7 +288,7 @@ describe('adminMutate', () => {
   // ---------------------------------------------------------------
 
   it('throws Error with message from the error body on non-ok response', async () => {
-    const errorBody = { error: { message: 'Prestataire non trouvé' } }
+    const errorBody = { error: { message: 'Provider not found' } }
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse(errorBody, { ok: false, status: 404 })
     )
@@ -298,10 +298,10 @@ describe('adminMutate', () => {
         method: 'PATCH',
         body: { is_verified: true },
       })
-    ).rejects.toThrow('Prestataire non trouvé')
+    ).rejects.toThrow('Provider not found')
   })
 
-  it('falls back to "Erreur {status}" when error body has no message', async () => {
+  it('falls back to "Error {status}" when error body has no message', async () => {
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse({}, { ok: false, status: 422 })
     )
@@ -311,17 +311,17 @@ describe('adminMutate', () => {
         method: 'PATCH',
         body: { invalid: true },
       })
-    ).rejects.toThrow('Erreur 422')
+    ).rejects.toThrow('Error 422')
   })
 
-  it('falls back to "Erreur {status}" when error body has null error field', async () => {
+  it('falls back to "Error {status}" when error body has null error field', async () => {
     ;(fetch as Mock).mockResolvedValueOnce(
       mockResponse({ error: null }, { ok: false, status: 500 })
     )
 
     await expect(
       adminMutate('/api/admin/providers/1', { method: 'DELETE' })
-    ).rejects.toThrow('Erreur 500')
+    ).rejects.toThrow('Error 500')
   })
 
   // ---------------------------------------------------------------
@@ -340,7 +340,7 @@ describe('adminMutate', () => {
         method: 'PATCH',
         body: { is_verified: true },
       })
-    ).rejects.toThrow('La requête a expiré (30s). Veuillez réessayer.')
+    ).rejects.toThrow('Request timed out (30s). Please try again.')
   })
 
   it('re-throws non-abort errors as-is', async () => {

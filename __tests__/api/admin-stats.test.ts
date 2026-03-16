@@ -121,8 +121,8 @@ function buildAllSuccessResults(): MockQueryResult[] {
     { data: [{ total_amount: 150 }], error: null },     // revLastMonth
     { count: 30, data: null, error: null },             // activeUsers7d
     // Batch 2 (6 queries)
-    { data: [{ id: 'b1', status: 'pending', created_at: '2026-02-15T10:00:00Z', city: 'Paris' }], error: null },
-    { data: [{ id: 'r1', rating: 5, client_name: 'Jean', status: 'published', created_at: '2026-02-14T10:00:00Z' }], error: null },
+    { data: [{ id: 'b1', status: 'pending', created_at: '2026-02-15T10:00:00Z', city: 'New York' }], error: null },
+    { data: [{ id: 'r1', rating: 5, client_name: 'John', status: 'published', created_at: '2026-02-14T10:00:00Z' }], error: null },
     { data: [{ id: 'rpt1', target_type: 'review', reason: 'spam', description: 'Test', status: 'pending', created_at: '2026-02-13T10:00:00Z', reporter_id: null }], error: null },
     { data: [{ created_at: '2026-02-10T10:00:00Z' }], error: null }, // chartProfiles
     { data: [{ created_at: '2026-02-10T10:00:00Z' }], error: null }, // chartBookings
@@ -155,7 +155,7 @@ describe('GET /api/admin/stats', () => {
   it('returns 401 when not authenticated', async () => {
     mockAuthResult = {
       success: false,
-      error: mockJsonFn({ success: false, error: { message: 'Non autorisé' } }, { status: 401 }),
+      error: mockJsonFn({ success: false, error: { message: 'Unauthorized' } }, { status: 401 }),
     }
 
     const { GET } = await import('@/app/api/admin/stats/route')
@@ -183,7 +183,7 @@ describe('GET /api/admin/stats', () => {
     const stats = result.body.stats
 
     expect(stats.totalUsers).toBe(150)
-    expect(stats.totalArtisans).toBe(42)
+    expect(stats.totalAttorneys).toBe(42)
     expect(stats.totalBookings).toBe(300)
     expect(stats.pendingReports).toBe(3)
     expect(stats.newUsersToday).toBe(5)

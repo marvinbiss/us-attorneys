@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -21,7 +21,7 @@ const memberSchema = z.object({
 
 export async function GET() {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const { data, error } = await supabase
@@ -47,7 +47,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     const body: unknown = await request.json()

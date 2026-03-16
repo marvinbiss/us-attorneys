@@ -15,14 +15,14 @@ import problems from '@/lib/data/problems'
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
 export function generateStaticParams() {
-  return cities.slice(0, TOP_CITIES_COUNT).map((ville) => ({ ville: ville.slug }))
+  return cities.slice(0, TOP_CITIES_COUNT).map((ville) => ({ city: ville.slug }))
 }
 
 export const dynamicParams = true
 export const revalidate = 86400
 
 interface PageProps {
-  params: Promise<{ ville: string }>
+  params: Promise<{ city: string }>
 }
 
 function truncateTitle(title: string, maxLen = 42): string {
@@ -31,7 +31,7 @@ function truncateTitle(title: string, maxLen = 42): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { ville: villeSlug } = await params
+  const { city: villeSlug } = await params
   const ville = getCityBySlug(villeSlug)
   if (!ville) return { title: 'City Not Found' }
   const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
@@ -86,7 +86,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function VillePage({ params }: PageProps) {
-  const { ville: villeSlug } = await params
+  const { city: villeSlug } = await params
   const ville = getCityBySlug(villeSlug)
   if (!ville) notFound()
   const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
@@ -344,7 +344,7 @@ export default async function VillePage({ params }: PageProps) {
 
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-4">
             <h3 className="font-semibold text-slate-900 mb-3">Urban Context</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">{content.contexteUrbain}</p>
+            <p className="text-sm text-slate-600 leading-relaxed">{content.urbanContext}</p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-3">
@@ -357,7 +357,7 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ─── CONTENU SEO : SERVICES & CONSEILS ─────────────── */}
+        {/* ─── SEO CONTENT: SERVICES & TIPS ─────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
@@ -370,11 +370,11 @@ export default async function VillePage({ params }: PageProps) {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="font-semibold text-slate-900 mb-3">Priority Practice Areas</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{content.servicesPrioritaires}</p>
+              <p className="text-sm text-slate-600 leading-relaxed">{content.priorityServices}</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="font-semibold text-slate-900 mb-3">Tips for {ville.name}</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{content.conseilsVille}</p>
+              <p className="text-sm text-slate-600 leading-relaxed">{content.cityAdvice}</p>
             </div>
           </div>
         </section>

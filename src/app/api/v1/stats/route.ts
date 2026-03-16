@@ -13,7 +13,7 @@ export async function OPTIONS() {
 }
 
 /**
- * GET /api/v1/stats?region=ile-de-france
+ * GET /api/v1/stats?region=new-york
  * GET /api/v1/stats?departement=75
  *
  * Returns regional or state statistics.
@@ -57,10 +57,10 @@ export async function GET(request: NextRequest) {
 
     // Calculate totals
     const rows = data ?? []
-    const totalArtisans = rows.reduce((s, r) => s + (r.nb_artisans ?? 0), 0)
-    const totalAvis = rows.reduce((s, r) => s + (r.nb_avis ?? 0), 0)
+    const totalAttorneys = rows.reduce((s, r) => s + (r.nb_artisans ?? 0), 0)
+    const totalReviews = rows.reduce((s, r) => s + (r.nb_avis ?? 0), 0)
     const ratedRows = rows.filter((r) => r.note_moyenne !== null)
-    const noteMoyenne = ratedRows.length > 0
+    const avgRating = ratedRows.length > 0
       ? Math.round(
           (ratedRows.reduce((s, r) => s + (r.note_moyenne as number) * (r.nb_artisans ?? 1), 0) /
             ratedRows.reduce((s, r) => s + (r.nb_artisans ?? 1), 0)) * 100,
@@ -73,10 +73,10 @@ export async function GET(request: NextRequest) {
         summary: {
           zone: region || departement,
           type: region ? 'region' : 'departement',
-          total_artisans: totalArtisans,
-          note_moyenne: noteMoyenne,
-          total_avis: totalAvis,
-          nb_metiers: rows.length,
+          total_attorneys: totalAttorneys,
+          average_rating: avgRating,
+          total_reviews: totalReviews,
+          specialty_count: rows.length,
         },
         data: rows,
         attribution: {

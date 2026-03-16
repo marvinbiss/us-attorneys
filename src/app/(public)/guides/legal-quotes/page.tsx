@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
 }
 
-const mentionsObligatoires: { name: string; icon: typeof FileText; description: string }[] = []
+const requiredDisclosures: { name: string; icon: typeof FileText; description: string }[] = []
 
 const services: { label: string; href: string; icon: typeof FileText }[] = []
 
@@ -110,13 +110,13 @@ export default function DevisTravauxPage() {
         </section>
 
         {/* Required disclosures */}
-        {mentionsObligatoires.length > 0 && (
+        {requiredDisclosures.length > 0 && (
           <section className="max-w-5xl mx-auto px-4 py-10">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
               Required Disclosures
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {mentionsObligatoires.map((m) => {
+              {requiredDisclosures.map((m) => {
                 const Icon = m.icon
                 return (
                   <div key={m.name} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

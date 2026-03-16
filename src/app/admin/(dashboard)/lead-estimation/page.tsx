@@ -22,12 +22,12 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface EstimationLead {
   id: string
-  nom: string | null
+  lastName: string | null
   telephone: string
   email: string | null
-  metier: string
-  ville: string
-  departement: string
+  practice_area: string
+  city: string
+  state: string
   description_projet: string | null
   estimation_min: number | null
   estimation_max: number | null
@@ -135,12 +135,12 @@ export default function AdminEstimationLeadsPage() {
     const rows = leads.map(l => [
       formatDate(l.created_at),
       l.source,
-      l.nom || '',
+      l.lastName || '',
       l.telephone,
       l.email || '',
-      l.metier,
-      l.ville,
-      l.departement,
+      l.practice_area,
+      l.city,
+      l.state,
       l.artisan_public_id || '',
     ])
     const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
@@ -324,18 +324,18 @@ export default function AdminEstimationLeadsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">
-                        {lead.nom || <span className="text-gray-400 italic">Anonymous</span>}
+                        {lead.lastName || <span className="text-gray-400 italic">Anonymous</span>}
                       </div>
                       <div className="text-gray-500">{formatPhone(lead.telephone)}</div>
                       {lead.email && (
                         <div className="text-gray-400 text-xs">{lead.email}</div>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{lead.metier}</td>
+                    <td className="px-4 py-3 text-gray-700">{lead.practice_area}</td>
                     <td className="px-4 py-3">
-                      <span className="text-gray-700">{lead.ville}</span>
-                      {lead.departement && (
-                        <span className="text-gray-400 ml-1">({lead.departement})</span>
+                      <span className="text-gray-700">{lead.city}</span>
+                      {lead.state && (
+                        <span className="text-gray-400 ml-1">({lead.state})</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -424,7 +424,7 @@ export default function AdminEstimationLeadsPage() {
               <div>
                 <h3 className="font-semibold text-gray-900">Conversation</h3>
                 <p className="text-xs text-gray-500">
-                  {selectedLead.nom || 'Anonymous'} · {selectedLead.metier} · {selectedLead.ville}
+                  {selectedLead.lastName || 'Anonymous'} · {selectedLead.practice_area} · {selectedLead.city}
                 </p>
               </div>
               <button

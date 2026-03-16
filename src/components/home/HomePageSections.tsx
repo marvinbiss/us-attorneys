@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getAvatarColor, getInitials } from '@/lib/utils'
-import { practiceAreas as allServicesFromFrance } from '@/lib/data/usa'
+import { practiceAreas as allServices } from '@/lib/data/usa'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 
@@ -68,7 +68,7 @@ export function ServicesShowcase() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
             <Wrench className="w-3.5 h-3.5" />
-            {allServicesFromFrance.length} practice areas available
+            {allServices.length} practice areas available
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />
@@ -563,11 +563,11 @@ export function TestimonialsSection() {
                 </div>
                 <div>
                   <div className="font-semibold text-slate-900">{t.name}</div>
-                  <div className="text-sm text-slate-500">{t.ville}</div>
+                  <div className="text-sm text-slate-500">{t.city}</div>
                 </div>
               </div>
               <div className="flex gap-0.5 mb-3">
-                {Array.from({ length: t.note }).map((_, j) => (
+                {Array.from({ length: t.rating }).map((_, j) => (
                   <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
                 ))}
               </div>

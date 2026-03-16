@@ -158,7 +158,7 @@ function setAuthSuccess() {
 function setAuthFailure() {
   mockAuthResult = {
     success: false,
-    error: mockJsonFn({ success: false, error: { message: 'Non autorisé' } }, { status: 401 }),
+    error: mockJsonFn({ success: false, error: { message: 'Unauthorized' } }, { status: 401 }),
   }
 }
 
@@ -166,8 +166,8 @@ function setDefaultListUsersData() {
   mockListUsersResult = {
     data: {
       users: [
-        makeAuthUser({ id: 'u1', email: 'alice@test.com', user_metadata: { full_name: 'Alice Dupont' } }),
-        makeAuthUser({ id: 'u2', email: 'bob@test.com', user_metadata: { is_artisan: true, name: 'Bob Martin' } }),
+        makeAuthUser({ id: 'u1', email: 'alice@test.com', user_metadata: { full_name: 'Alice Johnson' } }),
+        makeAuthUser({ id: 'u2', email: 'bob@test.com', user_metadata: { is_artisan: true, name: 'Bob Williams' } }),
         makeAuthUser({ id: 'u3', email: 'charlie@test.com', banned_until: '2027-01-01T00:00:00Z' }),
       ],
     },
@@ -176,8 +176,8 @@ function setDefaultListUsersData() {
 
   mockProfilesResult = {
     data: [
-      { id: 'u1', full_name: 'Alice Dupont (profile)', phone_e164: '0612345678', role: 'client' },
-      { id: 'u2', full_name: 'Bob Martin (profile)', phone_e164: '0698765432', role: 'artisan' },
+      { id: 'u1', full_name: 'Alice Johnson (profile)', phone_e164: '2125551234', role: 'client' },
+      { id: 'u2', full_name: 'Bob Williams (profile)', phone_e164: '3105559876', role: 'artisan' },
     ],
     error: null,
   }
@@ -223,8 +223,8 @@ describe('GET /api/admin/users', () => {
 
     const alice = result.body.users.find((u: Record<string, unknown>) => u.id === 'u1')
     // Profile full_name takes priority over user_metadata
-    expect(alice?.full_name).toBe('Alice Dupont (profile)')
-    expect(alice?.phone).toBe('0612345678')
+    expect(alice?.full_name).toBe('Alice Johnson (profile)')
+    expect(alice?.phone).toBe('2125551234')
     expect(alice?.user_type).toBe('client')
   })
 
@@ -239,7 +239,7 @@ describe('GET /api/admin/users', () => {
 
     // Falls back to user_metadata
     const alice = result.body.users.find((u: Record<string, unknown>) => u.id === 'u1')
-    expect(alice?.full_name).toBe('Alice Dupont')
+    expect(alice?.full_name).toBe('Alice Johnson')
   })
 
   it('filters by clients', async () => {
@@ -322,9 +322,9 @@ describe('GET /api/admin/users', () => {
     expect(bob).toEqual(expect.objectContaining({
       id: 'u2',
       email: 'bob@test.com',
-      full_name: 'Bob Martin (profile)',
-      phone: '0698765432',
-      user_type: 'artisan',
+      full_name: 'Bob Williams (profile)',
+      phone: '3105559876',
+      user_type: 'attorney',
       is_verified: true,
       is_banned: false,
       created_at: '2026-01-01T00:00:00Z',
@@ -336,7 +336,7 @@ describe('GET /api/admin/users', () => {
     expect(charlie?.is_verified).toBe(true)
     // u3 has no profile, falls back: user_metadata has no is_artisan => 'client'
     expect(charlie?.user_type).toBe('client')
-    expect(charlie?.subscription_plan).toBe('gratuit')
+    expect(charlie?.subscription_plan).toBe('free')
   })
 })
 
@@ -348,8 +348,8 @@ describe('POST /api/admin/users', () => {
   const validBody = {
     email: 'newuser@test.com',
     password: 'securePass123',
-    full_name: 'Nouveau Utilisateur',
-    phone: '0611223344',
+    full_name: 'New User',
+    phone: '2125559999',
     user_type: 'client' as const,
   }
 
@@ -357,8 +357,8 @@ describe('POST /api/admin/users', () => {
     id: 'new-user-id',
     email: 'newuser@test.com',
     user_metadata: {
-      full_name: 'Nouveau Utilisateur',
-      phone: '0611223344',
+      full_name: 'New User',
+      phone: '2125559999',
       is_artisan: false,
     },
   }
@@ -394,7 +394,7 @@ describe('POST /api/admin/users', () => {
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
     expect(result.body.user).toEqual(createdUser)
-    expect(result.body.message).toBe('Utilisateur créé avec succès')
+    expect(result.body.message).toBe('User created successfully')
   })
 
   it('returns 400 on validation error - missing email', async () => {
@@ -403,7 +403,7 @@ describe('POST /api/admin/users', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error).toEqual(expect.objectContaining({ message: 'Erreur de validation' }))
+    expect(result.body.error).toEqual(expect.objectContaining({ message: 'Validation error' }))
   })
 
   it('returns 400 on validation error - short password', async () => {
@@ -457,8 +457,8 @@ describe('POST /api/admin/users', () => {
       id: 'artisan-id',
       email: 'artisan@test.com',
       user_metadata: {
-        full_name: 'Jean Artisan',
-        phone: '0699887766',
+        full_name: 'John Attorney',
+        phone: '3105558888',
         is_artisan: true,
       },
     }
@@ -471,19 +471,19 @@ describe('POST /api/admin/users', () => {
     const result = await POST(makePostRequest({
       ...validBody,
       email: 'artisan@test.com',
-      full_name: 'Jean Artisan',
-      user_type: 'artisan',
+      full_name: 'John Attorney',
+      user_type: 'attorney',
     }) as never) as unknown as { body: { success: boolean; user: Record<string, unknown> } }
 
     expect(result.body.success).toBe(true)
     expect(result.body.user).toEqual(artisanUser)
-    // The logAdminAction should record user_type: 'artisan'
+    // The logAdminAction should record user_type: 'attorney'
     expect(mockLogAdminAction).toHaveBeenCalledWith(
       ADMIN_ID,
       'user.create',
       'user',
       'artisan-id',
-      expect.objectContaining({ user_type: 'artisan' })
+      expect.objectContaining({ user_type: 'attorney' })
     )
   })
 

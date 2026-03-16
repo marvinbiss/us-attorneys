@@ -376,7 +376,7 @@ export const practiceAreas = [
 ]
 
 // ============================================================================
-// Helper Functions (matching france.ts signatures)
+// Helper Functions
 // ============================================================================
 
 export function getCityBySlug(slug: string): City | undefined {

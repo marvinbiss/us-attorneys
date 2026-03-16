@@ -5,7 +5,7 @@ import { Users, Briefcase, Calendar, DollarSign, TrendingUp, TrendingDown, Minus
 
 interface Stats {
   totalUsers: number
-  totalArtisans: number
+  totalAttorneys: number
   totalBookings: number
   totalRevenue: number
   trends: {
@@ -79,7 +79,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
     },
     {
       label: 'Active attorneys',
-      value: stats.totalArtisans.toLocaleString('en-US'),
+      value: stats.totalAttorneys.toLocaleString('en-US'),
       icon: Briefcase,
       color: 'bg-indigo-100 text-indigo-600',
       trend: null,

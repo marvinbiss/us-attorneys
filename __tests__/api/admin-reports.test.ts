@@ -136,7 +136,7 @@ function makeUnauthResult() {
   return {
     success: false,
     error: mockJsonFn(
-      { success: false, error: { message: 'Non autorise' } },
+      { success: false, error: { message: 'Unauthorized' } },
       { status: 401 },
     ),
   }
@@ -376,7 +376,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
     expect(result.body.report).toBeDefined()
-    expect(result.body.message).toBe('Signalement résolu')
+    expect(result.body.message).toBe('Report resolved')
 
     // Verify the update call set status = 'reviewed' (correct DB value)
     const updateCalls = builderCalls.filter(c => c.method === 'update')
@@ -400,7 +400,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
-    expect(result.body.message).toBe('Signalement rejeté')
+    expect(result.body.message).toBe('Report rejected')
 
     // Verify the update set status = 'dismissed'
     const updateCalls = builderCalls.filter(c => c.method === 'update')
@@ -419,7 +419,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect(result.body.error.message).toBe('Identifiant invalide')
+    expect(result.body.error.message).toBe('Invalid ID')
   })
 
   it('returns 400 on invalid body (missing action)', async () => {
@@ -446,7 +446,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
-    expect(result.body.error.message).toBe('Impossible de traiter le signalement')
+    expect(result.body.error.message).toBe('Unable to process the report')
     expect(mockLoggerError).toHaveBeenCalled()
   })
 
@@ -500,7 +500,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
-    expect(result.body.error.message).toBe('Erreur serveur')
+    expect(result.body.error.message).toBe('Server error')
     expect(mockLoggerError).toHaveBeenCalled()
   })
 })

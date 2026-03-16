@@ -47,7 +47,7 @@ export async function GET() {
     if (img) {
       urls.push(
         urlEntry(`${SITE_URL}/practice-areas/${service.slug}`, [
-          { loc: img.src, title: img.alt, caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur US Attorneys` },
+          { loc: img.src, title: img.alt, caption: `${service.name} professional -- find a qualified ${service.name.toLowerCase()} near you on US Attorneys` },
         ])
       )
     }
@@ -61,7 +61,7 @@ export async function GET() {
       .join('-')
     urls.push(
       urlEntry(`${SITE_URL}/cities/${citySlug}`, [
-        { loc: img.src, title: img.alt, caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur US Attorneys` },
+        { loc: img.src, title: img.alt, caption: `Photo of ${cityName} -- find qualified attorneys in ${cityName} on US Attorneys` },
       ])
     )
   }
@@ -72,15 +72,15 @@ export async function GET() {
     const img = getBlogImage(slug, article?.category)
     const articleTitle = article?.title || slug.replace(/-/g, ' ')
     urls.push(
-      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt, caption: `Illustration de l'article « ${articleTitle} » — blog US Attorneys` }])
+      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt, caption: `Illustration for the article "${articleTitle}" -- US Attorneys blog` }])
     )
   }
 
-  // 5. Pages statiques avec images connues
+  // 5. Static pages with known images
   const staticPageMap: Record<string, { url: string; captionPrefix: string }> = {
-    howItWorks: { url: `${SITE_URL}/how-it-works`, captionPrefix: 'Comment ça marche' },
-    about: { url: `${SITE_URL}/about`, captionPrefix: 'À propos de US Attorneys' },
-    verification: { url: `${SITE_URL}/verification-process`, captionPrefix: 'Processus de vérification des artisans' },
+    howItWorks: { url: `${SITE_URL}/how-it-works`, captionPrefix: 'How it works' },
+    about: { url: `${SITE_URL}/about`, captionPrefix: 'About US Attorneys' },
+    verification: { url: `${SITE_URL}/verification-process`, captionPrefix: 'Attorney verification process' },
   }
 
   for (const [key, { url: pageUrl, captionPrefix }] of Object.entries(staticPageMap)) {

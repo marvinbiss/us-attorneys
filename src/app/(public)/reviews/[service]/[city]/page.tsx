@@ -17,10 +17,10 @@ const top50Cities = [...cities]
   .slice(0, 50)
 
 export function generateStaticParams() {
-  const params: { service: string; ville: string }[] = []
+  const params: { service: string; city: string }[] = []
   for (const service of tradeSlugs) {
     for (const ville of top50Cities) {
-      params.push({ service, ville: ville.slug })
+      params.push({ service, city: ville.slug })
     }
   }
   return params
@@ -31,9 +31,9 @@ export const dynamicParams = true
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ service: string; ville: string }>
+  params: Promise<{ service: string; city: string }>
 }): Promise<Metadata> {
-  const { service, ville: villeSlug } = await params
+  const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
@@ -49,9 +49,9 @@ export async function generateMetadata({
 export default async function ReviewsServiceVillePage({
   params,
 }: {
-  params: Promise<{ service: string; ville: string }>
+  params: Promise<{ service: string; city: string }>
 }) {
-  const { service, ville: villeSlug } = await params
+  const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) notFound()

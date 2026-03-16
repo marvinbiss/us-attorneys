@@ -1,5 +1,5 @@
 /**
- * Portfolio types for artisan media gallery
+ * Portfolio types for attorney media gallery
  * Supports images, videos, and before/after comparisons
  */
 
@@ -87,14 +87,14 @@ export interface UploadProgress {
 
 // Categories for portfolio items
 export const PORTFOLIO_CATEGORIES = [
-  { value: 'renovation', label: 'Renovation' },
-  { value: 'construction', label: 'Construction' },
-  { value: 'installation', label: 'Installation' },
-  { value: 'reparation', label: 'Repair' },
-  { value: 'decoration', label: 'Decoration' },
-  { value: 'amenagement', label: 'Development' },
-  { value: 'entretien', label: 'Maintenance' },
-  { value: 'autre', label: 'Other' },
+  { value: 'case_results', label: 'Case Results' },
+  { value: 'awards', label: 'Awards & Recognition' },
+  { value: 'community', label: 'Community Involvement' },
+  { value: 'office', label: 'Office & Firm' },
+  { value: 'events', label: 'Events & Speaking' },
+  { value: 'publications', label: 'Publications' },
+  { value: 'certifications', label: 'Certifications' },
+  { value: 'other', label: 'Other' },
 ] as const
 
 export type PortfolioCategory = typeof PORTFOLIO_CATEGORIES[number]['value']

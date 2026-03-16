@@ -92,7 +92,7 @@ export default async function Image() {
               }}
             >
               Services
-              <span style={{ color: '#f59e0b' }}>Artisans</span>
+              <span style={{ color: '#f59e0b' }}>Attorneys</span>
             </span>
           </div>
 

@@ -1,14 +1,14 @@
 import { existingArticles } from './existing-articles'
-import { prixArticles } from './batch-prix'
-import { metiersArticles } from './batch-metiers'
+import { prixArticles } from './batch-pricing'
+import { metiersArticles } from './batch-practice-areas'
 import { projetsArticles } from './batch-projets'
-import { conseilsArticles } from './batch-conseils'
-import { reglementationArticles } from './batch-reglementation'
+import { conseilsArticles } from './batch-tips'
+import { regulationsArticles } from './batch-reglementation'
 import { seoBoost1Articles } from './batch-seo-boost1'
 import { batchSeoBoost2Articles } from './batch-seo-boost2'
 import { batchSeoBoost3Articles } from './batch-seo-boost3'
-import { metiers3Articles } from './batch-metiers-3'
-import { metiers4Articles } from './batch-metiers-4'
+import { metiers3Articles } from './batch-practice-areas-3'
+import { metiers4Articles } from './batch-practice-areas-4'
 import { securiteEnergieArticles } from './batch-securite-energie'
 import { aidesSaisonnierArticles } from './batch-aides-saisonnier'
 import { guidesDiversArticles } from './batch-guides-divers'
@@ -21,7 +21,7 @@ import { produitsArticles } from './batch-produits-materiaux'
 import { tutorielsDiy2Articles } from './batch-tutoriels-diy-2'
 import { tutorielsDiyArticles } from './batch-tutoriels-diy'
 import { saisonnierUrgenceArticles } from './batch-saisonnier-urgence'
-import { prixRegionauxArticles } from './batch-prix-regionaux'
+import { prixRegionauxArticles } from './batch-regional-pricing'
 import { comparatifsArticles } from './batch-comparatifs-materiaux'
 
 export interface BlogArticle {
@@ -47,7 +47,7 @@ export const allArticles: Record<string, BlogArticle> = {
   ...metiersArticles,
   ...projetsArticles,
   ...conseilsArticles,
-  ...reglementationArticles,
+  ...regulationsArticles,
   ...seoBoost1Articles,
   ...batchSeoBoost2Articles,
   ...batchSeoBoost3Articles,

@@ -12,9 +12,9 @@ export function SearchForm() {
     e.preventDefault()
     const s = service.toLowerCase().trim().replace(/\s+/g, '-')
     const c = city.toLowerCase().trim().replace(/\s+/g, '-')
-    if (s && c) router.push(`/france/${s}/${c}`)
-    else if (s) router.push(`/france/${s}`)
-    else router.push('/france')
+    if (s && c) router.push(`/practice-areas/${s}/${c}`)
+    else if (s) router.push(`/practice-areas/${s}`)
+    else router.push('/practice-areas')
   }
 
   return (

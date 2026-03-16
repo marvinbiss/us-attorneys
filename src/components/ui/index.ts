@@ -58,7 +58,7 @@ export { AttorneyCard, ArtisanGrid } from './AttorneyCard'
 export { CityAutocomplete } from './VilleAutocomplete'
 // AdresseAutocomplete removed (French data.gouv.fr API)
 // SiretAutocomplete removed (French SIRET validation)
-export { SpecialtyAutocomplete } from './MetierAutocomplete'
+export { SpecialtyAutocomplete } from './SpecialtyAutocomplete'
 
 // Scroll-triggered animations (Framer Motion)
 export { ScrollReveal } from './ScrollReveal'

@@ -107,9 +107,9 @@ export async function requireAdmin(request: NextRequest) {
 }
 
 /**
- * Require artisan or admin role
+ * Require attorney or admin role
  */
-export async function requireArtisan(request: NextRequest) {
+export async function requireAttorney(request: NextRequest) {
   return requireRole(request, ['attorney', 'admin'])
 }
 

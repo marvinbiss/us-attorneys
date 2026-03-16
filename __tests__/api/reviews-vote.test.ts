@@ -133,7 +133,7 @@ describe('POST /api/reviews/vote', () => {
     const result = (await POST(makePostRequest({ bad: 'data' }))) as unknown as MockResult
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toMatchObject({ message: 'Requête invalide' })
+    expect(result.body.error).toMatchObject({ message: 'Invalid request' })
   })
 
   it('returns 400 when reviewId is missing', async () => {
@@ -141,7 +141,7 @@ describe('POST /api/reviews/vote', () => {
     const result = (await POST(makePostRequest({}))) as unknown as MockResult
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toMatchObject({ message: 'Requête invalide' })
+    expect(result.body.error).toMatchObject({ message: 'Invalid request' })
   })
 
   it('uses ip-based fingerprint for unauthenticated user', async () => {
@@ -205,7 +205,7 @@ describe('POST /api/reviews/vote', () => {
     )) as unknown as MockResult
 
     expect(result.status).toBe(404)
-    expect(result.body.error).toEqual({ message: 'Avis non trouvé ou non publié' })
+    expect(result.body.error).toEqual({ message: 'Review not found or not published' })
   })
 
   it('returns 404 when review is not published', async () => {
@@ -222,7 +222,7 @@ describe('POST /api/reviews/vote', () => {
     )) as unknown as MockResult
 
     expect(result.status).toBe(404)
-    expect(result.body.error).toEqual({ message: 'Avis non trouvé ou non publié' })
+    expect(result.body.error).toEqual({ message: 'Review not found or not published' })
   })
 
   it('returns success with recounted helpful_count after vote', async () => {
@@ -278,6 +278,6 @@ describe('POST /api/reviews/vote', () => {
     )) as unknown as MockResult
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toEqual({ message: 'Erreur serveur lors du vote' })
+    expect(result.body.error).toEqual({ message: 'Server error during vote' })
   })
 })

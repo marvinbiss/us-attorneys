@@ -7,24 +7,24 @@ export const revalidate = 86400
 export const dynamicParams = true
 
 export function generateStaticParams() {
-  return getProblemSlugs().map((probleme) => ({ probleme }))
+  return getProblemSlugs().map((issue) => ({ issue }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ probleme: string }> }): Promise<Metadata> {
-  const { probleme } = await params
-  const problem = getProblemBySlug(probleme)
+export async function generateMetadata({ params }: { params: Promise<{ issue: string }> }): Promise<Metadata> {
+  const { issue } = await params
+  const problem = getProblemBySlug(issue)
   if (!problem) return {}
 
   return {
     title: `${problem.name} | US Attorneys`,
     robots: { index: false },
-    alternates: { canonical: `${SITE_URL}/issues/${probleme}` },
+    alternates: { canonical: `${SITE_URL}/issues/${issue}` },
   }
 }
 
-export default async function IssuePage({ params }: { params: Promise<{ probleme: string }> }) {
-  const { probleme } = await params
-  const problem = getProblemBySlug(probleme)
+export default async function IssuePage({ params }: { params: Promise<{ issue: string }> }) {
+  const { issue } = await params
+  const problem = getProblemBySlug(issue)
   if (!problem) notFound()
 
   return (

@@ -541,8 +541,8 @@ export default async function ServicePage({ params }: PageProps) {
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {states.map((dept) => {
-              const deptVilles = getCitiesByState(dept.code)
-              if (deptVilles.length === 0) return null
+              const stateCities = getCitiesByState(dept.code)
+              if (stateCities.length === 0) return null
               return (
                 <div key={dept.code} className="bg-gray-50 rounded-xl p-5">
                   <h3 className="font-semibold text-gray-900 mb-3 text-sm">
@@ -551,21 +551,21 @@ export default async function ServicePage({ params }: PageProps) {
                     </Link>
                   </h3>
                   <div className="flex flex-wrap gap-1.5">
-                    {deptVilles.slice(0, 5).map((ville) => (
+                    {stateCities.slice(0, 5).map((city) => (
                       <Link
-                        key={ville.slug}
-                        href={`/practice-areas/${specialtySlug}/${ville.slug}`}
+                        key={city.slug}
+                        href={`/practice-areas/${specialtySlug}/${city.slug}`}
                         className="text-xs text-gray-600 hover:text-blue-600 px-2.5 py-1 bg-white rounded-full border border-gray-200 hover:border-blue-200 transition-colors"
                       >
-                        {ville.name}
+                        {city.name}
                       </Link>
                     ))}
-                    {deptVilles.length > 5 && (
+                    {stateCities.length > 5 && (
                       <Link
                         href={`/states/${dept.slug}`}
                         className="text-xs text-blue-600 px-2.5 py-1"
                       >
-                        +{deptVilles.length - 5} cities
+                        +{stateCities.length - 5} cities
                       </Link>
                     )}
                   </div>
@@ -798,7 +798,7 @@ export default async function ServicePage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
-                    key={`devis-${city.slug}`}
+                    key={`quote-${city.slug}`}
                     href={`/quotes/${specialtySlug}/${city.slug}`}
                     className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
                   >
@@ -812,7 +812,7 @@ export default async function ServicePage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
-                    key={`avis-${city.slug}`}
+                    key={`review-${city.slug}`}
                     href={`/reviews/${specialtySlug}/${city.slug}`}
                     className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
                   >
@@ -826,7 +826,7 @@ export default async function ServicePage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
-                    key={`tarifs-${city.slug}`}
+                    key={`pricing-${city.slug}`}
                     href={`/pricing/${specialtySlug}/${city.slug}`}
                     className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
                   >

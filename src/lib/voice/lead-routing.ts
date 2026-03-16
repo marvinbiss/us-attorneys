@@ -31,9 +31,9 @@ export interface VoiceCallWithQualification {
 // ---------------------------------------------------------------------------
 
 const VERTICAL_SERVICE_MAP: Record<string, string> = {
-  pac: 'Heat Pump Installation',
-  toiture: 'Roofing Work',
-  isolation: 'Thermal Insulation',
+  family_law: 'Family Law',
+  personal_injury: 'Personal Injury',
+  criminal_defense: 'Criminal Defense',
 }
 
 // ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ export async function createVoiceLead(
   const urgency = (qualData.urgency as string) ?? 'normal'
 
   // Map vertical to service name
-  const specialtyName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'Energy Renovation'
+  const specialtyName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'General Practice'
 
   // ------------------------------------------------------------------
   // 1. Create the devis_request (lead)

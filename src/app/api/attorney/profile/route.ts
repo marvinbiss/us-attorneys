@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
 import { z } from 'zod'
@@ -30,7 +30,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Fetch profile with explicit column list (profiles table)
@@ -67,7 +67,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const { error: guardError, user, supabase } = await requireArtisan()
+    const { error: guardError, user, supabase } = await requireAttorney()
     if (guardError) return guardError
 
     // Parse request body
@@ -146,7 +146,7 @@ export async function PUT(request: Request) {
     if (provider) {
       try {
         const specialtySlug = slugify(provider.specialty || 'attorney')
-        const locationSlug = slugify(provider.address_city || 'france')
+        const locationSlug = slugify(provider.address_city || 'united-states')
         const publicId = provider.slug || provider.stable_id
 
         // Attorney profile page

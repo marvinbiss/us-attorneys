@@ -21,7 +21,7 @@ interface HandlerContext {
 interface HandlerOptions<T = unknown> {
   bodySchema?: ZodSchema<T>
   requireAuth?: boolean
-  requireArtisan?: boolean
+  requireAttorney?: boolean
   requireAdmin?: boolean
 }
 
@@ -58,7 +58,7 @@ export function createApiHandler<T = unknown>(
       }
 
       // Auth check
-      if (options.requireAuth || options.requireArtisan || options.requireAdmin) {
+      if (options.requireAuth || options.requireAttorney || options.requireAdmin) {
         const supabase = await createClient()
         const {
           data: { user },
@@ -71,7 +71,7 @@ export function createApiHandler<T = unknown>(
         context.user = { id: user.id, email: user.email || '' }
 
         // Artisan check
-        if (options.requireArtisan) {
+        if (options.requireAttorney) {
           const { data: artisan } = await supabase
             .from('attorneys')
             .select('id')

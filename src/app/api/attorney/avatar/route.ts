@@ -8,7 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { requireAttorney } from '@/lib/auth/attorney-guard'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,7 +74,7 @@ function validateMagicBytes(bytes: Uint8Array): boolean {
 // =============================================================================
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  const { error: guardError, user, supabase } = await requireArtisan()
+  const { error: guardError, user, supabase } = await requireAttorney()
   if (guardError) return guardError
 
   // Retrieve the provider linked to this user
@@ -198,7 +198,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 // =============================================================================
 
 export async function DELETE(): Promise<NextResponse> {
-  const { error: guardError, user, supabase } = await requireArtisan()
+  const { error: guardError, user, supabase } = await requireAttorney()
   if (guardError) return guardError
 
   // Retrieve the attorney and their current avatar_url
