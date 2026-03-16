@@ -69,8 +69,8 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/attorney-dashboard/abonnement?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/attorney-dashboard/abonnement?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/attorney-dashboard/subscription?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/attorney-dashboard/subscription?canceled=true`,
       metadata: {
         user_id: user.id,
         plan_id: planId,

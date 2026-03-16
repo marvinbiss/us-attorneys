@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function DevisLayout({
+export default function QuotesLayout({
   children,
 }: {
   children: React.ReactNode

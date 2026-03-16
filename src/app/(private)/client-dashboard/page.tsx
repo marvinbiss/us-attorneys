@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
 
-export default function EspaceClientPage() {
-  redirect('/client-dashboard/mes-demandes')
+export default function ClientDashboardPage() {
+  redirect('/client-dashboard/my-cases')
 }

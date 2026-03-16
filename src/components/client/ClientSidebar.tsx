@@ -9,11 +9,11 @@ import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { getSupabaseClient } from '@/lib/supabase/client'
 
 interface ClientSidebarProps {
-  activePage?: 'mes-demandes' | 'messages' | 'avis-donnes' | 'parametres' | 'factures'
+  activePage?: 'my-cases' | 'messages' | 'my-reviews' | 'settings' | 'invoices'
   unreadMessagesCount?: number
 }
 
-export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessagesCount = 0 }: ClientSidebarProps) {
+export default function ClientSidebar({ activePage = 'my-cases', unreadMessagesCount = 0 }: ClientSidebarProps) {
   const [userId, setUserId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           <NotificationBell userId={userId} />
         </div>
         <Link
-          href="/client-dashboard/mes-demandes"
+          href="/client-dashboard/my-cases"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'mes-demandes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'my-cases' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <FileText className="w-5 h-5" />
@@ -53,18 +53,18 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           )}
         </Link>
         <Link
-          href="/client-dashboard/reviews-donnes"
+          href="/client-dashboard/my-reviews"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'avis-donnes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'my-reviews' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <Star className="w-5 h-5" />
           My reviews
         </Link>
         <Link
-          href="/client-dashboard/parametres"
+          href="/client-dashboard/settings"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'parametres' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'settings' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <Settings className="w-5 h-5" />

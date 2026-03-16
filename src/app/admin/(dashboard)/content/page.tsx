@@ -70,7 +70,7 @@ const typeBadge = (type: string) => {
   }
 }
 
-export default function AdminContenuPage() {
+export default function AdminContentPage() {
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState(1)
   const [pageType, setPageType] = useState('')

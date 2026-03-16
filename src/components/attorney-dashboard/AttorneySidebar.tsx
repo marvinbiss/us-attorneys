@@ -9,8 +9,8 @@ import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { getSupabaseClient } from '@/lib/supabase/client'
 
 interface AttorneySidebarProps {
-  activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement'
-  newDemandesCount?: number
+  activePage?: 'dashboard' | 'leads' | 'received-cases' | 'calendar' | 'messages' | 'portfolio' | 'statistics' | 'reviews-received' | 'profile' | 'subscription'
+  newCasesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
   subscriptionPlan?: string
@@ -35,9 +35,9 @@ const navSections: NavSection[] = [
     title: 'Activity',
     items: [
       { key: 'dashboard', href: '/attorney-dashboard/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-      { key: 'demandes-recues', href: '/attorney-dashboard/demandes-recues', icon: FileText, label: 'Received requests' },
+      { key: 'received-cases', href: '/attorney-dashboard/received-cases', icon: FileText, label: 'Received requests' },
       { key: 'leads', href: '/attorney-dashboard/leads', icon: Inbox, label: 'Opportunities' },
-      { key: 'calendrier', href: '/attorney-dashboard/calendrier', icon: Calendar, label: 'Calendar' },
+      { key: 'calendar', href: '/attorney-dashboard/calendar', icon: Calendar, label: 'Calendar' },
       { key: 'messages', href: '/attorney-dashboard/messages', icon: MessageSquare, label: 'Messages' },
     ],
   },
@@ -45,22 +45,22 @@ const navSections: NavSection[] = [
     title: 'My space',
     items: [
       { key: 'portfolio', href: '/attorney-dashboard/portfolio', icon: ImageIcon, label: 'Portfolio' },
-      { key: 'statistiques', href: '/attorney-dashboard/statistiques', icon: TrendingUp, label: 'Statistics' },
-      { key: 'avis-recus', href: '/attorney-dashboard/reviews-recus', icon: Star, label: 'Reviews received' },
+      { key: 'statistics', href: '/attorney-dashboard/statistics', icon: TrendingUp, label: 'Statistics' },
+      { key: 'reviews-received', href: '/attorney-dashboard/reviews-received', icon: Star, label: 'Reviews received' },
     ],
   },
   {
     title: 'Settings',
     items: [
-      { key: 'profil', href: '/attorney-dashboard/profil', icon: Settings, label: 'My profile' },
-      { key: 'abonnement', href: '/attorney-dashboard/abonnement', icon: DollarSign, label: 'My account' },
+      { key: 'profile', href: '/attorney-dashboard/profile', icon: Settings, label: 'My profile' },
+      { key: 'subscription', href: '/attorney-dashboard/subscription', icon: DollarSign, label: 'My account' },
     ],
   },
 ]
 
 const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export default function AttorneySidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0, publicUrl, subscriptionPlan }: AttorneySidebarProps) {
+export default function AttorneySidebar({ activePage = 'dashboard', newCasesCount = 0, unreadMessagesCount = 0, publicUrl, subscriptionPlan }: AttorneySidebarProps) {
   const [userId, setUserId] = useState<string | undefined>(undefined)
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -125,14 +125,14 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
   }, [])
 
   function getBadge(key: string) {
-    if (key === 'demandes-recues' && newDemandesCount > 0) {
+    if (key === 'received-cases' && newCasesCount > 0) {
       return (
         <span
           role="status"
-          aria-label={`${newDemandesCount} new request${newDemandesCount > 1 ? 's' : ''}`}
+          aria-label={`${newCasesCount} new request${newCasesCount > 1 ? 's' : ''}`}
           className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full"
         >
-          {newDemandesCount}
+          {newCasesCount}
         </span>
       )
     }
@@ -147,7 +147,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
         </span>
       )
     }
-    if (key === 'calendrier' && (subscriptionPlan === 'pro' || subscriptionPlan === 'premium')) {
+    if (key === 'calendar' && (subscriptionPlan === 'pro' || subscriptionPlan === 'premium')) {
       return <span className="ml-auto bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Pro</span>
     }
     return null
@@ -267,7 +267,7 @@ export default function AttorneySidebar({ activePage = 'dashboard', newDemandesC
         {navContent}
       </nav>
 
-      {/* Voir mon profil public */}
+      {/* View my public profile */}
       {publicUrl && (
         <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
           <Link

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import { Toast } from '@/components/admin/Toast'
 
-interface ArtisanData {
+interface AttorneyData {
   id: string
   user_id: string
   email: string
@@ -38,12 +38,12 @@ interface ArtisanData {
   updated_at: string | null
 }
 
-export default function EditArtisanPage() {
+export default function EditAttorneyPage() {
   const router = useRouter()
   const params = useParams()
   const attorneyId = params.id as string
 
-  const [artisan, setArtisan] = useState<ArtisanData | null>(null)
+  const [attorney, setAttorney] = useState<AttorneyData | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
@@ -105,7 +105,7 @@ export default function EditArtisanPage() {
     }
   }
 
-  const fetchArtisan = useCallback(async () => {
+  const fetchAttorney = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/providers/${attorneyId}`, {
@@ -118,7 +118,7 @@ export default function EditArtisanPage() {
       if (response.ok) {
         const data = await response.json()
         if (data.success && data.provider) {
-          setArtisan(data.provider)
+          setAttorney(data.provider)
           setFormData({
             email: data.provider.email || '',
             full_name: data.provider.full_name || data.provider.name || '',
@@ -150,8 +150,8 @@ export default function EditArtisanPage() {
   }, [attorneyId])
 
   useEffect(() => {
-    fetchArtisan()
-  }, [fetchArtisan])
+    fetchAttorney()
+  }, [fetchAttorney])
 
   // Track form changes
   const updateFormData = (updates: Partial<typeof formData>) => {
@@ -228,7 +228,7 @@ export default function EditArtisanPage() {
     )
   }
 
-  if (!artisan) {
+  if (!attorney) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -266,7 +266,7 @@ export default function EditArtisanPage() {
               Back to list
             </button>
             <h1 className="text-2xl font-bold text-gray-900">Edit Attorney</h1>
-            <p className="text-gray-500 mt-1">{artisan.full_name}</p>
+            <p className="text-gray-500 mt-1">{attorney.full_name}</p>
           </div>
           <button
             onClick={handleSave}
@@ -533,20 +533,20 @@ export default function EditArtisanPage() {
                   </button>
                 </div>
               </div>
-              {artisan && (
+              {attorney && (
                 <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-amber-500" />
                     <span className="text-sm text-gray-600">
-                      Rating: {artisan.rating_average?.toFixed(1) || 'N/A'}
+                      Rating: {attorney.rating_average?.toFixed(1) || 'N/A'}
                     </span>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {artisan.review_count} reviews
+                    {attorney.review_count} reviews
                   </div>
-                  {artisan.updated_at && (
+                  {attorney.updated_at && (
                     <div className="text-sm text-gray-400">
-                      Last updated: {new Date(artisan.updated_at).toLocaleDateString('en-US')}
+                      Last updated: {new Date(attorney.updated_at).toLocaleDateString('en-US')}
                     </div>
                   )}
                 </div>

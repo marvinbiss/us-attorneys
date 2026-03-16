@@ -205,7 +205,7 @@ export const emailTemplates = {
 
               <p>Respond quickly to increase your conversion rate!</p>
 
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/attorney-dashboard/demandes" class="button">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/attorney-dashboard/requests" class="button">
                 View request
               </a>
             </div>

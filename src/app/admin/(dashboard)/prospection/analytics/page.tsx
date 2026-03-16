@@ -57,7 +57,7 @@ export default function AnalyticsPage() {
 
       <StatsCards stats={stats} loading={loading} />
 
-      {/* Table détaillée par canal */}
+      {/* Detailed table by channel */}
       <div className="mt-8 bg-white rounded-lg border overflow-hidden">
         <div className="px-4 py-3 border-b bg-gray-50">
           <h2 className="font-semibold">Detail by channel</h2>

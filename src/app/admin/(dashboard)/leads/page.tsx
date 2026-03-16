@@ -21,7 +21,7 @@ import { Pagination } from '@/components/dashboard/Pagination'
 import { URGENCY_META, STATUS_META } from '@/types/leads'
 import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
-interface ArtisanRow {
+interface AttorneyRow {
   id: string
   stable_id: string | null
   name: string
@@ -63,7 +63,7 @@ interface LeadsResponse {
 }
 
 interface AttorneysResponse {
-  attorneys: ArtisanRow[]
+  attorneys: AttorneyRow[]
 }
 
 export default function AdminLeadsPage() {

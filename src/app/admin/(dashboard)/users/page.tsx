@@ -211,7 +211,7 @@ export default function AdminUsersPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            {user.role === 'artisan' ? (
+                            {user.role === 'attorney' || user.role === 'artisan' ? (
                               <Shield className="w-4 h-4 text-blue-500" />
                             ) : (
                               <User className="w-4 h-4 text-gray-400" />

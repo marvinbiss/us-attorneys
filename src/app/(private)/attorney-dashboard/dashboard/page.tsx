@@ -38,7 +38,7 @@ interface StatsData {
   portfolioPhotoCount?: number
 }
 
-interface Demande {
+interface CaseRequest {
   id: string
   client_name: string
   service_name: string
@@ -68,7 +68,7 @@ interface Provider {
 
 interface DashboardData {
   stats: StatsData
-  recentDemandes: Demande[]
+  recentDemandes: CaseRequest[] // API field name
   profile: Profile
   provider: Provider
 }
@@ -146,7 +146,7 @@ function StatsSkeleton() {
   )
 }
 
-function DemandesSkeleton() {
+function CasesSkeleton() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6" aria-busy="true" aria-label="Loading cases">
       <div className="flex items-center justify-between mb-6">
@@ -191,7 +191,7 @@ function QuickActions({ publicUrl }: { publicUrl: string | null }) {
         </Link>
       )}
       <Link
-        href="/attorney-dashboard/profil"
+        href="/attorney-dashboard/profile"
         className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors shadow-sm"
       >
         <Pencil className="w-4 h-4" aria-hidden="true" />
@@ -230,7 +230,7 @@ function ProfileCompletionCTA() {
         </li>
       </ul>
       <Link
-        href="/attorney-dashboard/profil"
+        href="/attorney-dashboard/profile"
         className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors w-full justify-center"
       >
         Complete My Profile
@@ -312,7 +312,7 @@ function OnboardingChecklist({ provider, portfolioPhotoCount }: OnboardingCheckl
       </ul>
 
       <Link
-        href="/attorney-dashboard/profil"
+        href="/attorney-dashboard/profile"
         className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
       >
         Complete My Profile
@@ -347,7 +347,7 @@ export default function AttorneyDashboardPage() {
   }, [error, router])
 
   const stats = data?.stats ?? null
-  const demandes = data?.recentDemandes ?? []
+  const recentCases = data?.recentDemandes ?? []
   const profile = data?.profile ?? null
   const provider = data?.provider ?? null
 
@@ -467,7 +467,7 @@ export default function AttorneyDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <AttorneySidebar
             activePage="dashboard"
-            newDemandesCount={stats?.demandesRecues?.value || 0}
+            newCasesCount={stats?.demandesRecues?.value || 0}
             unreadMessagesCount={stats?.unreadMessages ?? 0}
             publicUrl={publicUrl}
           />
@@ -535,7 +535,7 @@ export default function AttorneyDashboardPage() {
               {/* Recent cases */}
               <section className={showProfileCTA ? 'lg:col-span-2' : ''} aria-label="Recent cases">
                 {isLoading && !data ? (
-                  <DemandesSkeleton />
+                  <CasesSkeleton />
                 ) : (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -546,55 +546,55 @@ export default function AttorneyDashboardPage() {
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-lg font-semibold text-gray-900">Recent Cases</h2>
                       <Link
-                        href="/attorney-dashboard/demandes-recues"
+                        href="/attorney-dashboard/received-cases"
                         className="text-blue-600 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
                       >
                         View All
                       </Link>
                     </div>
                     <div className="space-y-4">
-                      {demandes.length === 0 ? (
+                      {recentCases.length === 0 ? (
                         <OnboardingChecklist
                           provider={provider}
                           portfolioPhotoCount={stats?.portfolioPhotoCount ?? 0}
                         />
                       ) : (
-                        demandes.map((demande, index) => (
+                        recentCases.map((caseItem, index) => (
                           <motion.div
-                            key={demande.id}
+                            key={caseItem.id}
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.25 + index * 0.04 }}
                           >
                             <Link
-                              href={`/attorney-dashboard/demandes-recues?id=${demande.id}`}
+                              href={`/attorney-dashboard/received-cases?id=${caseItem.id}`}
                               className="block border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-blue-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-all"
                             >
                               <div className="flex items-center justify-between">
                                 <div>
                                   <h3 className="font-medium text-gray-900">
-                                    {demande.service_name}
+                                    {caseItem.service_name}
                                   </h3>
                                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-gray-500">
-                                    <span>{demande.client_name}</span>
-                                    <span>{demande.city || 'Not specified'}</span>
+                                    <span>{caseItem.client_name}</span>
+                                    <span>{caseItem.city || 'Not specified'}</span>
                                     <span className="flex items-center gap-1">
                                       <Calendar className="w-4 h-4" aria-hidden="true" />
-                                      {new Date(demande.created_at).toLocaleDateString('en-US')}
+                                      {new Date(caseItem.created_at).toLocaleDateString('en-US')}
                                     </span>
                                   </div>
-                                  {demande.postal_code && (
+                                  {caseItem.postal_code && (
                                     <div className="mt-2 text-sm font-medium text-blue-600">
-                                      ZIP Code: {demande.postal_code}
+                                      ZIP Code: {caseItem.postal_code}
                                     </div>
                                   )}
                                 </div>
                                 <div className="flex items-center gap-4">
                                   <span
-                                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusClasses(demande.status)}`}
+                                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusClasses(caseItem.status)}`}
                                     role="status"
                                   >
-                                    {getStatusLabel(demande.status)}
+                                    {getStatusLabel(caseItem.status)}
                                   </span>
                                   <ChevronRight className="w-5 h-5 text-gray-400" aria-hidden="true" />
                                 </div>

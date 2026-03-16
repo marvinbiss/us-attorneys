@@ -201,7 +201,7 @@ ${SITE_NAME}
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/attorney-dashboard/calendrier" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                <a href="${SITE_URL}/attorney-dashboard/calendar" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                   View my calendar
                 </a>
               </div>
@@ -230,7 +230,7 @@ Date: ${data.date}
 Time: ${data.startTime} - ${data.endTime}
 ${data.message ? `Message: ${data.message}` : ''}
 
-View your calendar: ${SITE_URL}/attorney-dashboard/calendrier
+View your calendar: ${SITE_URL}/attorney-dashboard/calendar
 
 ${SITE_NAME}
     `,
@@ -427,7 +427,7 @@ ${SITE_NAME}
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/attorney-dashboard/parametres/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                <a href="${SITE_URL}/attorney-dashboard/settings/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                   Update payment
                 </a>
               </div>
@@ -453,7 +453,7 @@ ${data.amount ? `Amount: ${data.amount}` : ''}
 
 Please update your payment information to continue your subscription.
 
-Update: ${SITE_URL}/attorney-dashboard/parametres/facturation
+Update: ${SITE_URL}/attorney-dashboard/settings/facturation
 
 ${SITE_NAME}
     `,

@@ -129,7 +129,7 @@ describe('Dashboard V2 — No Public Imports', () => {
     'src/app/(private)/attorney-dashboard/leads/page.tsx',
     'src/app/(private)/attorney-dashboard/leads/[id]/page.tsx',
     'src/app/(private)/attorney-dashboard/leads/[id]/historique/page.tsx',
-    'src/app/(private)/attorney-dashboard/parametres/page.tsx',
+    'src/app/(private)/attorney-dashboard/settings/page.tsx',
     'src/app/admin/(dashboard)/leads/page.tsx',
     'src/app/admin/(dashboard)/dispatch/page.tsx',
     'src/app/admin/(dashboard)/tools/page.tsx',

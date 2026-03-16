@@ -122,7 +122,7 @@ const PER_PAGE = 25
 
 // ─── Helpers ────────────────────────────────────────────────────
 
-function buildArtisanUrl(p: { slug: string; stableId: string; specialty: string; city: string }) {
+function buildAttorneyUrl(p: { slug: string; stableId: string; specialty: string; city: string }) {
   if (!p.slug && !p.stableId) return null
   const specSlug = p.specialty?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'attorney'
   const citySlug = p.city?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'us'
@@ -215,7 +215,7 @@ export default function AnalyticsPage() {
     setAttorneyPage(1)
   }, [search])
 
-  // Artisan analytics (existing)
+  // Attorney analytics (existing)
   const attorneyUrl = useMemo(() => {
     const params = new URLSearchParams({ range })
     if (search.length >= 2) params.set('search', search)
@@ -370,7 +370,7 @@ export default function AnalyticsPage() {
 
           {/* ── Table View ─────────────────────────────── */}
           {tab === 'table' && (
-            <ArtisanTable
+            <AttorneyTable
               providers={data.providers}
               page={providerPage}
               onPageChange={setAttorneyPage}
@@ -697,7 +697,7 @@ function JourneysPanel({ sessions, page, onPageChange }: {
 
 // ─── Artisan Table ──────────────────────────────────────────────
 
-function ArtisanTable({ providers, page, onPageChange }: {
+function AttorneyTable({ providers, page, onPageChange }: {
   providers: AttorneyStats[]
   page: number
   onPageChange: (page: number) => void
@@ -734,7 +734,7 @@ function ArtisanTable({ providers, page, onPageChange }: {
           <tbody className="divide-y divide-gray-50">
             {slicedProviders.map((p, i) => {
               const convRate = p.views > 0 ? Math.round((p.clicks / p.views) * 100) : 0
-              const attorneyUrl = buildArtisanUrl(p)
+              const attorneyUrl = buildAttorneyUrl(p)
               const total = p.views + p.reveals + p.clicks
               const rowIndex = (page - 1) * PER_PAGE + i
 
@@ -828,7 +828,7 @@ function ActivityFeed({ events, page, onPageChange, total, perPage }: {
           const config = EVENT_CONFIG[event.type as keyof typeof EVENT_CONFIG]
           if (!config) return null
           const Icon = config.icon
-          const attorneyUrl = buildArtisanUrl({
+          const attorneyUrl = buildAttorneyUrl({
             slug: event.attorneySlug,
             stableId: event.providerStableId,
             specialty: event.providerSpecialty,

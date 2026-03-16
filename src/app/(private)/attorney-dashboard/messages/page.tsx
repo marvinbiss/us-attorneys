@@ -311,7 +311,7 @@ export default function MessagesArtisanPage() {
                           </div>
                         </div>
                         <Link
-                          href="/attorney-dashboard/demandes-recues"
+                          href="/attorney-dashboard/received-cases"
                           className="text-sm text-blue-600 hover:underline"
                         >
                           View Case

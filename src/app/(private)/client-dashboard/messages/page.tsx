@@ -153,7 +153,7 @@ export default function MessagesClientPage() {
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/client-dashboard/mes-demandes" className="text-gray-600 hover:text-gray-900">
+              <Link href="/client-dashboard/my-cases" className="text-gray-600 hover:text-gray-900">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -171,7 +171,7 @@ export default function MessagesClientPage() {
           <div className="lg:col-span-1 space-y-4">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               <Link
-                href="/client-dashboard/mes-demandes"
+                href="/client-dashboard/my-cases"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
@@ -190,14 +190,14 @@ export default function MessagesClientPage() {
                 )}
               </Link>
               <Link
-                href="/client-dashboard/reviews-donnes"
+                href="/client-dashboard/my-reviews"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Star className="w-5 h-5" />
                 My Reviews
               </Link>
               <Link
-                href="/client-dashboard/parametres"
+                href="/client-dashboard/settings"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Settings className="w-5 h-5" />

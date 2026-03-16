@@ -20,7 +20,7 @@ function generateSlug(title: string): string {
     .replace(/^-|-$/g, '')
 }
 
-export default function AdminNouveauContenuPage() {
+export default function AdminNewContentPage() {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [isDirty, setIsDirty] = useState(false)

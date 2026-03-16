@@ -10,7 +10,7 @@ interface ProviderData {
 const SAVE_TIMEOUT_MS = 15000
 
 /**
- * Form hook for artisan profile sections.
+ * Form hook for attorney profile sections.
  * Accepts Record<string, unknown> for runtime compatibility, but constrains
  * field names to keyof Provider for compile-time safety.
  */

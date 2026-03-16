@@ -46,12 +46,12 @@ interface AttorneyProfile {
   updated_at: string | null
 }
 
-export default function AdminArtisanDetailPage() {
+export default function AdminAttorneyDetailPage() {
   const router = useRouter()
   const params = useParams()
   const attorneyId = params.id as string
 
-  const [artisan, setArtisan] = useState<AttorneyProfile | null>(null)
+  const [attorney, setAttorney] = useState<AttorneyProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
@@ -61,7 +61,7 @@ export default function AdminArtisanDetailPage() {
   const [deleteModal, setDeleteModal] = useState(false)
 
   useEffect(() => {
-    fetchArtisan()
+    fetchAttorney()
   }, [attorneyId])
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function AdminArtisanDetailPage() {
     }
   }, [toast])
 
-  const fetchArtisan = async () => {
+  const fetchAttorney = async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/providers/${attorneyId}`, {
@@ -83,12 +83,12 @@ export default function AdminArtisanDetailPage() {
       })
       if (response.ok) {
         const data = await response.json()
-        setArtisan(data.provider)
+        setAttorney(data.provider)
       } else {
         router.push('/admin/attorneys')
       }
     } catch (error) {
-      console.error('Failed to fetch artisan:', error)
+      console.error('Failed to fetch attorney:', error)
       router.push('/admin/attorneys')
     } finally {
       setLoading(false)
@@ -107,7 +107,7 @@ export default function AdminArtisanDetailPage() {
 
       if (response.ok && data.success) {
         setVerifyModal(false)
-        await fetchArtisan()
+        await fetchAttorney()
       } else {
         setToast({ type: 'error', message: data.error || 'Verification failed' })
       }
@@ -122,14 +122,14 @@ export default function AdminArtisanDetailPage() {
       const response = await fetch(`/api/admin/providers/${attorneyId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ is_active: !artisan?.is_active }),
+        body: JSON.stringify({ is_active: !attorney?.is_active }),
       })
 
       const data = await response.json()
 
       if (response.ok && data.success) {
         setSuspendModal(false)
-        await fetchArtisan()
+        await fetchAttorney()
       } else {
         setToast({ type: 'error', message: data.error || 'Action failed' })
       }
@@ -174,15 +174,15 @@ export default function AdminArtisanDetailPage() {
     )
   }
 
-  if (!artisan) {
+  if (!attorney) {
     return null
   }
 
   const getStatusBadge = () => {
-    if (!artisan.is_active) {
+    if (!attorney.is_active) {
       return <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">Suspended</span>
     }
-    if (!artisan.is_verified) {
+    if (!attorney.is_verified) {
       return <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">Pending verification</span>
     }
     return <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Verified</span>
@@ -205,23 +205,23 @@ export default function AdminArtisanDetailPage() {
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {artisan.name || 'No name'}
+                  {attorney.name || 'No name'}
                 </h1>
 
               </div>
-              <p className="text-gray-500 mt-1">{artisan.email}</p>
+              <p className="text-gray-500 mt-1">{attorney.email}</p>
               <div className="flex items-center gap-3 mt-3">
                 {getStatusBadge()}
-                {artisan.specialty && (
+                {attorney.specialty && (
                   <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                    {artisan.specialty}
+                    {attorney.specialty}
                   </span>
                 )}
-                {artisan.rating_average != null && artisan.review_count > 0 && (
+                {attorney.rating_average != null && attorney.review_count > 0 && (
                   <div className="flex items-center gap-1 text-sm">
                     <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    <span className="font-medium">{artisan.rating_average.toFixed(1)}</span>
-                    <span className="text-gray-500">({artisan.review_count} reviews)</span>
+                    <span className="font-medium">{attorney.rating_average.toFixed(1)}</span>
+                    <span className="text-gray-500">({attorney.review_count} reviews)</span>
                   </div>
                 )}
               </div>
@@ -229,7 +229,7 @@ export default function AdminArtisanDetailPage() {
 
             <div className="flex items-center gap-3">
               <a
-                href={getAttorneyUrl({ stable_id: artisan?.stable_id || attorneyId, slug: artisan?.slug || undefined, specialty: artisan?.specialty || undefined, city: artisan?.address_city || undefined })}
+                href={getAttorneyUrl({ stable_id: attorney?.stable_id || attorneyId, slug: attorney?.slug || undefined, specialty: attorney?.specialty || undefined, city: attorney?.address_city || undefined })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
@@ -259,14 +259,14 @@ export default function AdminArtisanDetailPage() {
                   <Mail className="w-5 h-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <p className="text-gray-900">{artisan.email}</p>
+                    <p className="text-gray-900">{attorney.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-500">Phone</p>
-                    <p className="text-gray-900">{artisan.phone || '-'}</p>
+                    <p className="text-gray-900">{attorney.phone || '-'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -274,7 +274,7 @@ export default function AdminArtisanDetailPage() {
                   <div>
                     <p className="text-sm text-gray-500">Address</p>
                     <p className="text-gray-900">
-                      {[artisan.address_street, artisan.address_postal_code, artisan.address_city].filter(Boolean).join(', ') || '-'}
+                      {[attorney.address_street, attorney.address_postal_code, attorney.address_city].filter(Boolean).join(', ') || '-'}
                     </p>
                   </div>
                 </div>
@@ -282,38 +282,38 @@ export default function AdminArtisanDetailPage() {
                   <Building className="w-5 h-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-500">SIRET</p>
-                    <p className="text-gray-900 font-mono">{artisan.siret || '-'}</p>
+                    <p className="text-gray-900 font-mono">{attorney.siret || '-'}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Spécialité */}
-            {artisan.specialty && (
+            {/* Specialty */}
+            {attorney.specialty && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <Briefcase className="w-5 h-5 text-gray-400" />
                   Specialty
                 </h2>
                 <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                  {artisan.specialty}
+                  {attorney.specialty}
                 </span>
               </div>
             )}
 
             {/* Description */}
-            {artisan.description && (
+            {attorney.description && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Description</h2>
-                <p className="text-gray-700 whitespace-pre-wrap">{artisan.description}</p>
+                <p className="text-gray-700 whitespace-pre-wrap">{attorney.description}</p>
               </div>
             )}
 
             {/* Bio */}
-            {artisan.bio && (
+            {attorney.bio && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Bio</h2>
-                <p className="text-gray-700 whitespace-pre-wrap">{artisan.bio}</p>
+                <p className="text-gray-700 whitespace-pre-wrap">{attorney.bio}</p>
               </div>
             )}
           </div>
@@ -327,10 +327,10 @@ export default function AdminArtisanDetailPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500">Average rating</span>
                   <span className="font-semibold text-gray-900 flex items-center gap-1">
-                    {artisan.rating_average ? (
+                    {attorney.rating_average ? (
                       <>
                         <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                        {artisan.rating_average.toFixed(1)}
+                        {attorney.rating_average.toFixed(1)}
                       </>
                     ) : 'N/A'}
                   </span>
@@ -338,7 +338,7 @@ export default function AdminArtisanDetailPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500">Number of reviews</span>
                   <span className="font-semibold text-gray-900">
-                    {artisan.review_count || 0}
+                    {attorney.review_count || 0}
                   </span>
                 </div>
               </div>
@@ -350,12 +350,12 @@ export default function AdminArtisanDetailPage() {
               <div className="space-y-2 text-sm">
                 <p className="flex items-center gap-2 text-gray-600">
                   <Calendar className="w-4 h-4" />
-                  Registered on {formatDate(artisan.created_at)}
+                  Registered on {formatDate(attorney.created_at)}
                 </p>
-                {artisan.updated_at && (
+                {attorney.updated_at && (
                   <p className="flex items-center gap-2 text-gray-600">
                     <Clock className="w-4 h-4" />
-                    Modified on {formatDate(artisan.updated_at)}
+                    Modified on {formatDate(attorney.updated_at)}
                   </p>
                 )}
               </div>
@@ -365,7 +365,7 @@ export default function AdminArtisanDetailPage() {
             <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
               <h2 className="text-lg font-semibold text-red-900 mb-4">Actions</h2>
               <div className="space-y-3">
-                {!artisan.is_verified && (
+                {!attorney.is_verified && (
                   <button
                     onClick={() => setVerifyModal(true)}
                     className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200"
@@ -377,12 +377,12 @@ export default function AdminArtisanDetailPage() {
                 <button
                   onClick={() => setSuspendModal(true)}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${
-                    artisan.is_active
+                    attorney.is_active
                       ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
                       : 'bg-green-100 text-green-700 hover:bg-green-200'
                   }`}
                 >
-                  {artisan.is_active ? (
+                  {attorney.is_active ? (
                     <>
                       <Ban className="w-4 h-4" />
                       Suspend
@@ -424,7 +424,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setVerifyModal(false)}
         onConfirm={handleVerify}
         title="Verify attorney"
-        message={`Do you confirm the verification of ${artisan.name}? The verified badge will be displayed on their profile.`}
+        message={`Do you confirm the verification of ${attorney.name}? The verified badge will be displayed on their profile.`}
         confirmText="Verify"
         variant="success"
       />
@@ -434,14 +434,14 @@ export default function AdminArtisanDetailPage() {
         isOpen={suspendModal}
         onClose={() => setSuspendModal(false)}
         onConfirm={handleSuspend}
-        title={artisan.is_active ? "Suspend attorney" : "Reactivate attorney"}
+        title={attorney.is_active ? "Suspend attorney" : "Reactivate attorney"}
         message={
-          artisan.is_active
-            ? `Are you sure you want to suspend ${artisan.name}? Their profile will no longer be visible.`
-            : `Do you want to reactivate ${artisan.name}'s account?`
+          attorney.is_active
+            ? `Are you sure you want to suspend ${attorney.name}? Their profile will no longer be visible.`
+            : `Do you want to reactivate ${attorney.name}'s account?`
         }
-        confirmText={artisan.is_active ? 'Suspend' : 'Reactivate'}
-        variant={artisan.is_active ? 'warning' : 'success'}
+        confirmText={attorney.is_active ? 'Suspend' : 'Reactivate'}
+        variant={attorney.is_active ? 'warning' : 'success'}
       />
 
       {/* Delete Modal */}
@@ -450,7 +450,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setDeleteModal(false)}
         onConfirm={handleDelete}
         title="Delete attorney"
-        message={`Are you sure you want to delete ${artisan.name}? This action cannot be undone.`}
+        message={`Are you sure you want to delete ${attorney.name}? This action cannot be undone.`}
         confirmText="Delete"
         variant="danger"
         requireConfirmation="DELETE"
