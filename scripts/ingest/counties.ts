@@ -150,11 +150,15 @@ async function processCountyData(
       if (!stateInfo) return null
 
       // Extract county name (before comma)
-      const countyName = cleanCountyName(fullName.split(',')[0].trim())
+      const rawCountyName = fullName.split(',')[0].trim()
+      const countyName = cleanCountyName(rawCountyName)
 
+      // Use FIPS code in slug to guarantee uniqueness within a state
+      // e.g., "washington-01001" — avoids collisions when "Washington County"
+      // and "Washington Parish" in the same state both clean to "Washington"
       return {
         name: countyName,
-        slug: slugify(countyName),
+        slug: `${slugify(countyName)}-${fips}`,
         state_id: stateInfo.id,
         fips_code: fips,
         population,
@@ -168,7 +172,7 @@ async function processCountyData(
   // State distribution
   const perState: Record<string, number> = {}
   rows.forEach(row => {
-    const stateFips = row[3] // state column
+    const stateFips = row[stateIdx] // use dynamic index, not hardcoded
     const stateInfo = stateByFips.get(stateFips)
     const abbr = stateInfo?.abbr || stateFips
     perState[abbr] = (perState[abbr] || 0) + 1

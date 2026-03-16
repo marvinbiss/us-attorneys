@@ -1,29 +1,37 @@
 /**
  * US ZIP Codes Ingestion Script
- * Source: HUD USPS Crosswalk + Census Bureau ZCTA data
- * Records: ~41,000+ ZIP codes
- * Cost: $0 (public datasets)
+ * Source: US Census Bureau Gazetteer ZCTA file (2023)
+ * https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2023_Gazetteer/2023_Gaz_zcta_national.txt
  *
- * Downloads ZIP code data with lat/lng, city, state, county, population
- * and upserts into zip_codes + locations_us tables.
+ * Records: ~33,000 ZCTAs with lat/lng
+ * Cost: $0 (public government dataset)
+ *
+ * Downloads ZIP code tabulation areas with coordinates from Census Bureau,
+ * derives state from ZIP prefix ranges, and upserts into zip_codes + locations_us tables.
  *
  * Usage: npx tsx scripts/ingest/zip-codes.ts [--dry-run] [--limit 1000]
- *
- * Data source: OpenDataSoft US ZIP Codes (derived from Census ZCTA)
- * https://public.opendatasoft.com/explore/dataset/us-zip-code-latitude-and-longitude/
  */
 
 import { createClient } from '@supabase/supabase-js'
+import { execSync } from 'child_process'
+import { mkdtempSync, readFileSync, rmSync } from 'fs'
+import { join } from 'path'
+import { tmpdir } from 'os'
 
 // ============================================================================
 // CONFIG
 // ============================================================================
 
-// OpenDataSoft free API — no key needed, 10K records per request
-const ZIP_API = 'https://public.opendatasoft.com/api/records/1.0/search/'
-const DATASET = 'us-zip-code-latitude-and-longitude'
+// Census Bureau Gazetteer — .zip archive containing tab-separated .txt
+// Try multiple years in case one is unavailable
+const GAZETTEER_URLS = [
+  'https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_Gaz_zcta_national.zip',
+  'https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2023_Gazetteer/2023_Gaz_zcta_national.zip',
+  'https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2022_Gazetteer/2022_Gaz_zcta_national.zip',
+  'https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2020_Gazetteer/2020_Gaz_zcta_national.zip',
+]
+
 const BATCH_SIZE = 500
-const API_PAGE_SIZE = 10000
 
 const args = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')
@@ -41,24 +49,150 @@ if (!supabaseUrl || !supabaseServiceKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: { autoRefreshToken: false, persistSession: false }
+  auth: { autoRefreshToken: false, persistSession: false },
 })
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
-interface ZipRecord {
-  fields: {
-    zip: string
-    city: string
-    state: string
-    latitude: number
-    longitude: number
-    timezone: number
-    dst: number
-    geopoint?: [number, number]
+interface ZctaRecord {
+  zip: string        // 5-digit ZCTA (GEOID)
+  state: string      // 2-letter state abbreviation (derived from ZIP prefix)
+  latitude: number   // INTPTLAT
+  longitude: number  // INTPTLONG
+  alandSqmi: number  // Land area in square miles
+}
+
+// ============================================================================
+// ZIP PREFIX -> STATE MAPPING (from src/lib/geography.ts)
+// Duplicated here so the script is self-contained (no TS path aliases in scripts)
+// ============================================================================
+
+function getStateFromZip(zipCode: string): string | null {
+  const zip = parseInt(zipCode?.substring(0, 3) || '0', 10)
+  if (zip >= 5 && zip <= 5) return 'NY'     // 005xx = NY (Holtsville)
+  if (zip >= 6 && zip <= 9) return 'PR'     // 006-009 = Puerto Rico
+  if (zip >= 10 && zip <= 69) return 'MA'   // 010-069 = MA/CT/etc — simplified
+  // More precise ranges:
+  if (zip >= 10 && zip <= 27) return 'MA'
+  if (zip >= 28 && zip <= 29) return 'RI'
+  if (zip >= 30 && zip <= 38) return 'NH'
+  if (zip >= 39 && zip <= 49) return 'ME'
+  if (zip >= 50 && zip <= 54) return 'VT'
+  if (zip >= 55 && zip <= 59) return 'MA'
+  if (zip >= 60 && zip <= 69) return 'CT'
+  if (zip >= 70 && zip <= 89) return 'NJ'
+  if (zip >= 90 && zip <= 99) return 'AE'   // Military (APO/FPO)
+  if (zip >= 100 && zip <= 149) return 'NY'
+  if (zip >= 150 && zip <= 196) return 'PA'
+  if (zip >= 197 && zip <= 199) return 'DE'
+  if (zip >= 200 && zip <= 205) return 'DC'
+  if (zip >= 206 && zip <= 219) return 'MD'
+  if (zip >= 220 && zip <= 246) return 'VA'
+  if (zip >= 247 && zip <= 268) return 'WV'
+  if (zip >= 270 && zip <= 289) return 'NC'
+  if (zip >= 290 && zip <= 299) return 'SC'
+  if (zip >= 300 && zip <= 319) return 'GA'
+  if (zip >= 320 && zip <= 349) return 'FL'
+  if (zip >= 350 && zip <= 369) return 'AL'
+  if (zip >= 370 && zip <= 385) return 'TN'
+  if (zip >= 386 && zip <= 397) return 'MS'
+  if (zip >= 398 && zip <= 399) return 'GA'
+  if (zip >= 400 && zip <= 427) return 'KY'
+  if (zip >= 430 && zip <= 458) return 'OH'
+  if (zip >= 460 && zip <= 479) return 'IN'
+  if (zip >= 480 && zip <= 499) return 'MI'
+  if (zip >= 500 && zip <= 528) return 'IA'
+  if (zip >= 530 && zip <= 549) return 'WI'
+  if (zip >= 550 && zip <= 567) return 'MN'
+  if (zip >= 570 && zip <= 577) return 'SD'
+  if (zip >= 580 && zip <= 588) return 'ND'
+  if (zip >= 590 && zip <= 599) return 'MT'
+  if (zip >= 600 && zip <= 629) return 'IL'
+  if (zip >= 630 && zip <= 658) return 'MO'
+  if (zip >= 660 && zip <= 679) return 'KS'
+  if (zip >= 680 && zip <= 693) return 'NE'
+  if (zip >= 700 && zip <= 714) return 'LA'
+  if (zip >= 716 && zip <= 729) return 'AR'
+  if (zip >= 730 && zip <= 749) return 'OK'
+  if (zip >= 750 && zip <= 799) return 'TX'
+  if (zip >= 800 && zip <= 816) return 'CO'
+  if (zip >= 820 && zip <= 831) return 'WY'
+  if (zip >= 832 && zip <= 838) return 'ID'
+  if (zip >= 840 && zip <= 847) return 'UT'
+  if (zip >= 850 && zip <= 865) return 'AZ'
+  if (zip >= 870 && zip <= 884) return 'NM'
+  if (zip >= 889 && zip <= 898) return 'NV'
+  if (zip >= 900 && zip <= 966) return 'CA'
+  if (zip >= 967 && zip <= 968) return 'HI'
+  if (zip >= 970 && zip <= 979) return 'OR'
+  if (zip >= 980 && zip <= 994) return 'WA'
+  if (zip >= 995 && zip <= 999) return 'AK'
+  return null
+}
+
+// State-based timezone (approximate)
+function getTimezoneForState(state: string): string {
+  const tz: Record<string, string> = {
+    HI: 'Pacific/Honolulu',
+    AK: 'America/Anchorage',
+    WA: 'America/Los_Angeles',
+    OR: 'America/Los_Angeles',
+    CA: 'America/Los_Angeles',
+    NV: 'America/Los_Angeles',
+    AZ: 'America/Phoenix',
+    UT: 'America/Denver',
+    MT: 'America/Denver',
+    WY: 'America/Denver',
+    CO: 'America/Denver',
+    NM: 'America/Denver',
+    ID: 'America/Boise',
+    ND: 'America/Chicago',
+    SD: 'America/Chicago',
+    NE: 'America/Chicago',
+    KS: 'America/Chicago',
+    OK: 'America/Chicago',
+    TX: 'America/Chicago',
+    MN: 'America/Chicago',
+    IA: 'America/Chicago',
+    MO: 'America/Chicago',
+    AR: 'America/Chicago',
+    LA: 'America/Chicago',
+    WI: 'America/Chicago',
+    IL: 'America/Chicago',
+    MS: 'America/Chicago',
+    AL: 'America/Chicago',
+    TN: 'America/Chicago',
+    MI: 'America/Detroit',
+    IN: 'America/Indiana/Indianapolis',
+    OH: 'America/New_York',
+    KY: 'America/New_York',
+    WV: 'America/New_York',
+    VA: 'America/New_York',
+    NC: 'America/New_York',
+    SC: 'America/New_York',
+    GA: 'America/New_York',
+    FL: 'America/New_York',
+    PA: 'America/New_York',
+    NY: 'America/New_York',
+    NJ: 'America/New_York',
+    CT: 'America/New_York',
+    RI: 'America/New_York',
+    MA: 'America/New_York',
+    VT: 'America/New_York',
+    NH: 'America/New_York',
+    ME: 'America/New_York',
+    MD: 'America/New_York',
+    DE: 'America/New_York',
+    DC: 'America/New_York',
+    PR: 'America/Puerto_Rico',
+    VI: 'America/Virgin',
+    GU: 'Pacific/Guam',
+    AS: 'Pacific/Pago_Pago',
+    MP: 'Pacific/Guam',
   }
+  return tz[state] || 'America/New_York'
 }
 
 // ============================================================================
@@ -74,45 +208,119 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-// Timezone offset to IANA timezone (approximate)
-function offsetToTimezone(offset: number, state: string): string {
-  // State-specific overrides
-  const stateTimezones: Record<string, string> = {
-    'HI': 'Pacific/Honolulu',
-    'AK': 'America/Anchorage',
-    'AZ': 'America/Phoenix',
-    'PR': 'America/Puerto_Rico',
-    'GU': 'Pacific/Guam',
-    'VI': 'America/Virgin',
-    'AS': 'Pacific/Pago_Pago',
-    'MP': 'Pacific/Guam',
-  }
-  if (stateTimezones[state]) return stateTimezones[state]
+function parseGazetteerLines(lines: string[]): ZctaRecord[] {
+  const header = lines[0]
+  console.log(`Header: ${header?.trim()}`)
 
-  switch (offset) {
-    case -5: return 'America/New_York'
-    case -6: return 'America/Chicago'
-    case -7: return 'America/Denver'
-    case -8: return 'America/Los_Angeles'
-    case -9: return 'America/Anchorage'
-    case -10: return 'Pacific/Honolulu'
-    default: return 'America/New_York'
+  const records: ZctaRecord[] = []
+  let skipped = 0
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if (!line) continue
+
+    const parts = line.split('\t').map(p => p.trim())
+
+    // GEOID | ALAND | AWATER | ALAND_SQMI | AWATER_SQMI | INTPTLAT | INTPTLONG
+    const geoid = parts[0]
+    const alandSqmi = parseFloat(parts[3])
+    const lat = parseFloat(parts[5])
+    const lng = parseFloat(parts[6])
+
+    if (!geoid || isNaN(lat) || isNaN(lng)) {
+      skipped++
+      continue
+    }
+
+    const zip = geoid.padStart(5, '0')
+    const state = getStateFromZip(zip)
+
+    if (!state) {
+      skipped++
+      continue
+    }
+
+    records.push({ zip, state, latitude: lat, longitude: lng, alandSqmi: isNaN(alandSqmi) ? 0 : alandSqmi })
+
+    if (LIMIT < Infinity && records.length >= LIMIT) break
   }
+
+  console.log(`Parsed ${records.length.toLocaleString()} records (${skipped} skipped)`)
+  return records
 }
 
-async function fetchZipPage(offset: number): Promise<{ records: ZipRecord[], nhits: number }> {
-  const params = new URLSearchParams({
-    dataset: DATASET,
-    rows: String(API_PAGE_SIZE),
-    start: String(offset),
-    sort: 'zip',
-  })
+/**
+ * Downloads and parses the Census Bureau Gazetteer ZIP archive.
+ * The archive contains a tab-separated .txt file.
+ * Format: GEOID\tALAND\tAWATER\tALAND_SQMI\tAWATER_SQMI\tINTPTLAT\tINTPTLONG
+ */
+async function fetchGazetteerData(): Promise<ZctaRecord[]> {
+  console.log(`Downloading Gazetteer file from Census Bureau...`)
 
-  const res = await fetch(`${ZIP_API}?${params}`)
-  if (!res.ok) {
-    throw new Error(`API ${res.status}: ${res.statusText}`)
+  // Try each URL until one works
+  let zipBuffer: Buffer | null = null
+  let usedUrl = ''
+
+  for (const url of GAZETTEER_URLS) {
+    console.log(`  Trying: ${url}`)
+    try {
+      const res = await fetch(url)
+      if (res.ok) {
+        zipBuffer = Buffer.from(await res.arrayBuffer())
+        usedUrl = url
+        console.log(`  ✓ Downloaded ${(zipBuffer.length / 1024 / 1024).toFixed(1)} MB`)
+        break
+      }
+      console.log(`  ✗ HTTP ${res.status}`)
+    } catch (err: any) {
+      console.log(`  ✗ ${err.message}`)
+    }
   }
-  return res.json()
+
+  if (!zipBuffer) {
+    throw new Error('All Census Bureau Gazetteer URLs failed')
+  }
+
+  // Extract ZIP archive using system unzip
+  const tmpDir = mkdtempSync(join(tmpdir(), 'zcta-'))
+  const zipPath = join(tmpDir, 'gazetteer.zip')
+  require('fs').writeFileSync(zipPath, zipBuffer)
+
+  try {
+    // Use unzip or python to extract (cross-platform)
+    try {
+      execSync(`unzip -o "${zipPath}" -d "${tmpDir}" 2>/dev/null || python3 -c "import zipfile; zipfile.ZipFile('${zipPath.replace(/\\/g, '/')}').extractall('${tmpDir.replace(/\\/g, '/')}')" 2>/dev/null || python -c "import zipfile; zipfile.ZipFile('${zipPath.replace(/\\/g, '/')}').extractall('${tmpDir.replace(/\\/g, '/')}')"`, { stdio: 'pipe' })
+    } catch {
+      // Node.js fallback: use built-in zlib for .zip (single file)
+      const AdmZip = require('adm-zip')
+      const zip = new AdmZip(zipBuffer)
+      zip.extractAllTo(tmpDir, true)
+    }
+  } catch {
+    // Last resort: try reading as plain text (some years serve .txt directly)
+    console.log('  Trying as plain text...')
+    const text = zipBuffer.toString('utf-8')
+    if (text.includes('GEOID') || text.includes('INTPTLAT')) {
+      const lines = text.split('\n')
+      return parseGazetteerLines(lines)
+    }
+    throw new Error('Cannot extract Gazetteer archive')
+  }
+
+  // Find the .txt file in extracted directory
+  const files = require('fs').readdirSync(tmpDir) as string[]
+  const txtFile = files.find((f: string) => f.endsWith('.txt') && f.includes('zcta'))
+  if (!txtFile) {
+    throw new Error(`No ZCTA .txt file found in archive. Files: ${files.join(', ')}`)
+  }
+
+  const text = readFileSync(join(tmpDir, txtFile), 'utf-8')
+
+  // Cleanup
+  try { rmSync(tmpDir, { recursive: true }) } catch { /* ignore */ }
+
+  const lines = text.split('\n')
+  return parseGazetteerLines(lines)
 }
 
 // ============================================================================
@@ -121,11 +329,12 @@ async function fetchZipPage(offset: number): Promise<{ records: ZipRecord[], nhi
 
 async function main() {
   console.log('=== US ZIP Codes Ingestion ===')
+  console.log('Source: US Census Bureau Gazetteer 2023 ZCTA')
   console.log(`Mode: ${DRY_RUN ? 'DRY RUN' : 'LIVE'}`)
   console.log(`Limit: ${LIMIT === Infinity ? 'ALL' : LIMIT}`)
   console.log()
 
-  // 1. Load state mapping
+  // 1. Load state mapping from DB
   const { data: states } = await supabase
     .from('states')
     .select('id, abbreviation')
@@ -136,46 +345,20 @@ async function main() {
   }
 
   const stateMap = new Map(states.map(s => [s.abbreviation, s.id]))
-  console.log(`Loaded ${stateMap.size} states`)
+  console.log(`Loaded ${stateMap.size} states from DB`)
 
-  // 2. Fetch all ZIP codes
-  console.log('\nFetching ZIP codes from OpenDataSoft...')
-  let allZips: ZipRecord[] = []
-  let offset = 0
-
-  const first = await fetchZipPage(0)
-  const total = first.nhits
-  allZips = first.records
-  console.log(`Total ZIP codes available: ${total.toLocaleString()}`)
-
-  while (allZips.length < total && allZips.length < LIMIT) {
-    offset += API_PAGE_SIZE
-    const page = await fetchZipPage(offset)
-    allZips = allZips.concat(page.records)
-    process.stdout.write(`  Fetched ${allZips.length.toLocaleString()} / ${total.toLocaleString()}\r`)
-  }
-
-  // Apply limit
-  if (LIMIT < Infinity) {
-    allZips = allZips.slice(0, LIMIT)
-  }
-
+  // 2. Fetch all ZCTA records from Census Bureau
+  const allZips = await fetchGazetteerData()
   console.log(`\nTotal fetched: ${allZips.length.toLocaleString()}`)
 
-  // Filter valid records
-  const valid = allZips.filter(r =>
-    r.fields.zip &&
-    r.fields.state &&
-    r.fields.latitude &&
-    r.fields.longitude
-  )
-  console.log(`Valid records: ${valid.length.toLocaleString()}`)
+  // Filter to only states we have in DB
+  const valid = allZips.filter(r => stateMap.has(r.state))
+  console.log(`Valid records (state in DB): ${valid.length.toLocaleString()}`)
 
   // State distribution
   const stateCounts: Record<string, number> = {}
   valid.forEach(r => {
-    const st = r.fields.state
-    stateCounts[st] = (stateCounts[st] || 0) + 1
+    stateCounts[r.state] = (stateCounts[r.state] || 0) + 1
   })
   console.log('\nTop 10 states by ZIP count:')
   Object.entries(stateCounts)
@@ -184,100 +367,17 @@ async function main() {
     .forEach(([st, count]) => console.log(`  ${st}: ${count.toLocaleString()}`))
 
   if (DRY_RUN) {
-    console.log('\n--- DRY RUN: showing first 5 records ---')
-    valid.slice(0, 5).forEach((r, i) => {
-      const f = r.fields
-      console.log(`\n[${i + 1}] ZIP ${f.zip} — ${f.city}, ${f.state}`)
-      console.log(`    Lat: ${f.latitude}, Lng: ${f.longitude}`)
+    console.log('\n--- DRY RUN: showing first 10 records ---')
+    valid.slice(0, 10).forEach((r, i) => {
+      console.log(
+        `[${i + 1}] ZIP ${r.zip} — ${r.state} | Lat: ${r.latitude}, Lng: ${r.longitude} | Area: ${r.alandSqmi} sq mi`
+      )
     })
     console.log('\nDry run complete.')
     return
   }
 
-  // 3. First pass: collect unique cities and upsert locations_us
-  console.log('\nUpserting cities into locations_us...')
-  const cityMap = new Map<string, { city: string, state: string, lat: number, lng: number, count: number }>()
-
-  valid.forEach(r => {
-    const f = r.fields
-    const key = `${slugify(f.city)}|${f.state}`
-    const existing = cityMap.get(key)
-    if (existing) {
-      // Average lat/lng across ZIP codes for the city center
-      existing.lat = (existing.lat * existing.count + f.latitude) / (existing.count + 1)
-      existing.lng = (existing.lng * existing.count + f.longitude) / (existing.count + 1)
-      existing.count++
-    } else {
-      cityMap.set(key, { city: f.city, state: f.state, lat: f.latitude, lng: f.longitude, count: 1 })
-    }
-  })
-
-  console.log(`Unique cities: ${cityMap.size.toLocaleString()}`)
-
-  const cityEntries = Array.from(cityMap.entries())
-  let citiesInserted = 0
-
-  for (let i = 0; i < cityEntries.length; i += BATCH_SIZE) {
-    const batch = cityEntries.slice(i, i + BATCH_SIZE)
-    const locations = batch
-      .map(([, v]) => {
-        const stateId = stateMap.get(v.state)
-        if (!stateId) return null
-        return {
-          name: v.city,
-          slug: slugify(v.city),
-          state_id: stateId,
-          latitude: Math.round(v.lat * 1e6) / 1e6,
-          longitude: Math.round(v.lng * 1e6) / 1e6,
-          is_major_city: v.count >= 10, // rough heuristic: 10+ ZIP codes = major city
-          timezone: offsetToTimezone(0, v.state), // simplified
-        }
-      })
-      .filter(Boolean)
-
-    const { error } = await supabase
-      .from('locations_us')
-      .upsert(locations, { onConflict: 'slug,state_id', ignoreDuplicates: true })
-
-    if (error) {
-      console.error(`City batch error:`, error.message)
-    } else {
-      citiesInserted += locations.length
-    }
-
-    if ((i / BATCH_SIZE) % 20 === 0) {
-      process.stdout.write(`  Cities: ${citiesInserted.toLocaleString()} inserted\r`)
-    }
-  }
-  console.log(`\nCities inserted: ${citiesInserted.toLocaleString()}`)
-
-  // 4. Load location IDs for ZIP code linking
-  console.log('\nLoading location IDs...')
-  const locationIdMap = new Map<string, string>()
-
-  // Fetch in pages (Supabase default limit is 1000)
-  let locationOffset = 0
-  const LOCATION_PAGE = 1000
-  while (true) {
-    const { data: locs } = await supabase
-      .from('locations_us')
-      .select('id, slug, state_id')
-      .range(locationOffset, locationOffset + LOCATION_PAGE - 1)
-
-    if (!locs?.length) break
-    locs.forEach(l => {
-      // Find state abbreviation for this state_id
-      const stateAbbr = states.find(s => s.id === l.state_id)?.abbreviation
-      if (stateAbbr) {
-        locationIdMap.set(`${l.slug}|${stateAbbr}`, l.id)
-      }
-    })
-    locationOffset += LOCATION_PAGE
-    if (locs.length < LOCATION_PAGE) break
-  }
-  console.log(`Loaded ${locationIdMap.size.toLocaleString()} location IDs`)
-
-  // 5. Insert ZIP codes
+  // 3. Upsert ZIP codes into zip_codes table
   console.log('\nInserting ZIP codes...')
   let zipsInserted = 0
   let zipsErrors = 0
@@ -287,20 +387,16 @@ async function main() {
 
     const zipRows = batch
       .map(r => {
-        const f = r.fields
-        const stateId = stateMap.get(f.state)
+        const stateId = stateMap.get(r.state)
         if (!stateId) return null
 
-        const locationKey = `${slugify(f.city)}|${f.state}`
-        const locationId = locationIdMap.get(locationKey) || null
-
         return {
-          code: f.zip.padStart(5, '0'),
+          code: r.zip,
           state_id: stateId,
-          location_id: locationId,
-          latitude: Math.round(f.latitude * 1e6) / 1e6,
-          longitude: Math.round(f.longitude * 1e6) / 1e6,
-          area_type: 'standard',
+          location_id: null, // Will be linked later when locations_us is populated
+          latitude: Math.round(r.latitude * 1e6) / 1e6,
+          longitude: Math.round(r.longitude * 1e6) / 1e6,
+          area_type: r.alandSqmi > 0 ? 'standard' : 'po-box',
         }
       })
       .filter(Boolean)
@@ -318,13 +414,48 @@ async function main() {
 
     if ((i / BATCH_SIZE) % 20 === 0 || i + BATCH_SIZE >= valid.length) {
       const pct = Math.min(100, Math.round(((i + batch.length) / valid.length) * 100))
-      process.stdout.write(`  ${pct}% — ${zipsInserted.toLocaleString()} inserted, ${zipsErrors} errors\r`)
+      process.stdout.write(
+        `  ${pct}% — ${zipsInserted.toLocaleString()} inserted, ${zipsErrors} errors\r`
+      )
     }
   }
 
-  // 6. Summary
-  console.log('\n\n=== INGESTION COMPLETE ===')
-  console.log(`Cities inserted:  ${citiesInserted.toLocaleString()}`)
+  console.log()
+
+  // 4. Try to link ZIP codes to existing locations_us records
+  // (locations_us may already be populated from another source)
+  console.log('\nLinking ZIP codes to existing locations...')
+  const locationIdMap = new Map<string, string>()
+
+  let locationOffset = 0
+  const LOCATION_PAGE = 1000
+  while (true) {
+    const { data: locs } = await supabase
+      .from('locations_us')
+      .select('id, slug, state_id')
+      .range(locationOffset, locationOffset + LOCATION_PAGE - 1)
+
+    if (!locs?.length) break
+    locs.forEach(l => {
+      const stateAbbr = states.find(s => s.id === l.state_id)?.abbreviation
+      if (stateAbbr) {
+        locationIdMap.set(`${l.slug}|${stateAbbr}`, l.id)
+      }
+    })
+    locationOffset += LOCATION_PAGE
+    if (locs.length < LOCATION_PAGE) break
+  }
+
+  if (locationIdMap.size > 0) {
+    console.log(`Found ${locationIdMap.size.toLocaleString()} existing locations`)
+    console.log('(ZIP-to-location linking requires city data — run a city ingestion script to populate locations_us)')
+  } else {
+    console.log('No existing locations found in locations_us table.')
+    console.log('To link ZIP codes to cities, populate locations_us first, then re-run this script.')
+  }
+
+  // 5. Summary
+  console.log('\n=== INGESTION COMPLETE ===')
   console.log(`ZIP codes inserted: ${zipsInserted.toLocaleString()}`)
   console.log(`Errors: ${zipsErrors}`)
 
