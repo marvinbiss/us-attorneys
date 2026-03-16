@@ -59,7 +59,7 @@ export async function GET() {
     const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
 
     // Step 2: fetch reviews for those bookings
-    // Note: 'devis' table does not exist (TODO: re-enable join when quotes table is reconciled)
+    // Note: 'quotes' table does not exist yet (TODO: re-enable join when quotes table is created)
     // Note: profiles does not have company_name or avatar_url
     const { data: avisPublies, error: avisError } = await supabase
       .from('reviews')
@@ -79,7 +79,7 @@ export async function GET() {
       )
     }
 
-    // TODO: table 'devis' does not exist — pending reviews from completed quotes disabled
+    // TODO: quotes table does not exist yet -- pending reviews from completed quotes disabled
     const avisEnAttente: unknown[] = []
 
     // Format published reviews

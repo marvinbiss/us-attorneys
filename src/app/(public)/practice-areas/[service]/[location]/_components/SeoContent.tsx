@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { getNeighborhoodsByCity } from '@/lib/data/usa'
 import type { LocationContent } from '@/lib/seo/location-content'
-import type { LocationData } from '@/lib/data/commune-data'
-import { formatNumber, formatEuro } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/location-data'
+import { formatNumber, formatEuro } from '@/lib/data/location-data'
 import type { Service, Location as LocationType } from '@/types'
 import type { TradeContent } from '@/lib/data/trade-content'
 
@@ -50,7 +50,7 @@ export default function SeoContent({
                   ))}
                 </ul>
 
-                <h3>Contexte local : {locationContent.climateLabel}</h3>
+                <h3>Local Context: {locationContent.climateLabel}</h3>
                 <p>{locationContent.climateTip}</p>
 
                 <h3>Service Areas in {location.name}</h3>
@@ -146,7 +146,7 @@ export default function SeoContent({
                     {locationData.densite_population && (
                       <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
                         <div className="text-lg font-bold text-clay-600">{formatNumber(Math.round(locationData.densite_population))}</div>
-                        <div className="text-xs text-gray-500 mt-1">Hab./km²</div>
+                        <div className="text-xs text-gray-500 mt-1">Pop./sq mi</div>
                       </div>
                     )}
                   </div>
@@ -185,12 +185,12 @@ export default function SeoContent({
               </div>
             )}
 
-            {locationContent.dataDriven.marcheArtisanal && (
+            {locationContent.dataDriven.legalMarket && (
               <div className="bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-2xl border border-emerald-100 p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-emerald-500 pl-4">
                   Legal Market in {location.name}
                 </h2>
-                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.marcheArtisanal}</p>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.legalMarket}</p>
                 {locationData && (
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {locationData.nb_entreprises_artisanales && (
@@ -202,7 +202,7 @@ export default function SeoContent({
                     {locationData.nb_artisans_btp && (
                       <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
                         <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_artisans_btp)}</div>
-                        <div className="text-xs text-gray-500 mt-1">Entreprises BTP</div>
+                        <div className="text-xs text-gray-500 mt-1">Construction Companies</div>
                       </div>
                     )}
                     {locationData.nb_artisans_rge && (
@@ -239,7 +239,7 @@ export default function SeoContent({
                     {locationData.nb_maprimerenov_annuel && (
                       <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
                         <div className="text-lg font-bold text-orange-700">{formatNumber(locationData.nb_maprimerenov_annuel)}</div>
-                        <div className="text-xs text-gray-500 mt-1">Dossiers MaPrimeRénov&apos;/an</div>
+                        <div className="text-xs text-gray-500 mt-1">Energy Grant Applications/yr</div>
                       </div>
                     )}
                   </div>

@@ -9,7 +9,6 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 
 import { practiceAreas } from '@/lib/data/usa'
-import { resolveProviderCities } from '@/lib/insee-resolver'
 
 export const revalidate = 3600 // ISR - revalidate every hour
 
@@ -71,7 +70,7 @@ async function getRecentProviders(limit = 50) {
     }
 
     return {
-      providers: resolveProviderCities(data || []),
+      providers: data || [],
       count: totalCount,
       error: null,
     }

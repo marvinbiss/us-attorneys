@@ -3,7 +3,7 @@ import { PopularServicesLinks } from '@/components/InternalLinks'
 import { slugify } from '@/lib/utils'
 import { getStateByCode, getRegionSlugByName } from '@/lib/data/usa'
 import type { LocationContent } from '@/lib/seo/location-content'
-import type { LocationData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/location-data'
 import type { Service, Location as LocationType } from '@/types'
 import { GSC_BOOST_PAGES } from '@/lib/seo/gsc-priority-cities'
 import { getProblemsByService } from '@/lib/data/problems'
@@ -46,13 +46,13 @@ export default function CrossLinks({
 }: Props) {
   return (
     <>
-      {/* Voir aussi */}
+      {/* See Also */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 border-l-4 border-amber-500 pl-4">See Also</h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Autres services dans cette ville */}
+            {/* Other services in this city */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Other Attorneys in {location.name}
@@ -77,7 +77,7 @@ export default function CrossLinks({
               </Link>
             </div>
 
-            {/* Ce service dans les cities proches */}
+            {/* This service in nearby cities */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 {service.name} Near {location.name}
@@ -102,7 +102,7 @@ export default function CrossLinks({
               </Link>
             </div>
 
-            {/* Navigation régionale */}
+            {/* Regional navigation */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Browse by Area</h3>
               <div className="space-y-2">
@@ -180,13 +180,13 @@ export default function CrossLinks({
                 className="flex items-center justify-between p-4 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-200 transition-all group"
               >
                 <span className="text-sm text-amber-800 font-medium">
-                  Besoin d&apos;un {s.name.toLowerCase()} in {location.name} ?
+                  Need a {s.name.toLowerCase()} in {location.name}?
                 </span>
                 <svg className="w-4 h-4 text-amber-600 group-hover:translate-x-0.5 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             ))}
 
-            {/* Villes du département */}
+            {/* Cities in the state */}
             {deptCities.length > 3 && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
                 <h3 className="font-semibold text-gray-900 mb-4">
@@ -206,7 +206,7 @@ export default function CrossLinks({
               </div>
             )}
 
-            {/* Services complémentaires dans cette ville */}
+            {/* Complementary services in this city */}
             {(() => {
               const complementarySlugs = relatedServices[specialtySlug] || []
               const complementaryServices = complementarySlugs

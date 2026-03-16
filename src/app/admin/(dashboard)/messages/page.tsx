@@ -129,8 +129,8 @@ export default function AdminMessagesPage() {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {s === 'all' ? 'Toutes' :
-                 s === 'active' ? 'Actives' :
+                {s === 'all' ? 'All' :
+                 s === 'active' ? 'Active' :
                  s === 'archived' ? 'Archived' : 'Blocked'}
               </button>
             ))}
@@ -243,7 +243,7 @@ export default function AdminMessagesPage() {
 
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">Page {page} sur {totalPages}</p>
+                <p className="text-sm text-gray-500">Page {page} of {totalPages}</p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}

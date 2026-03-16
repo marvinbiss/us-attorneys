@@ -31,7 +31,7 @@ export async function GET() {
 
     return NextResponse.json({
       subscription: null,
-      plan: 'gratuit',
+      plan: 'free',
       memberSince,
       isVerified: provider?.is_verified ?? false,
       attorneyName: provider?.name ?? null,

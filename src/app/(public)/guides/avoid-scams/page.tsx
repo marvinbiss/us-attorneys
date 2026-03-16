@@ -42,7 +42,7 @@ const breadcrumbItems = [
   { label: "Avoid Scams" },
 ]
 
-export default function EviterArnaquesArtisanPage() {
+export default function AvoidScamsPage() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

@@ -22,7 +22,7 @@ interface DayAvailability {
   slots: TimeSlot[]
 }
 
-interface Artisan {
+interface Attorney {
   id: string
   stable_id?: string
   slug?: string
@@ -44,17 +44,17 @@ interface Artisan {
   intervention_zone?: string
 }
 
-interface ArtisanResultCardProps {
-  artisan: Artisan
+interface AttorneyResultCardProps {
+  attorney: Attorney
   availability?: DayAvailability[]
   showDistance?: boolean
 }
 
-export default function ArtisanResultCard({
-  artisan,
+export default function AttorneyResultCard({
+  attorney,
   availability,
   showDistance = true,
-}: ArtisanResultCardProps) {
+}: AttorneyResultCardProps) {
   const router = useRouter()
   const [calendarOffset, setCalendarOffset] = useState(0)
   const [localAvailability, setLocalAvailability] = useState<DayAvailability[]>(
@@ -67,12 +67,12 @@ export default function ArtisanResultCard({
     if (!availability) {
       loadAvailability()
     }
-  }, [artisan.id, availability])
+  }, [attorney.id, availability])
 
   const loadAvailability = async (startDate?: Date) => {
     try {
       const params = new URLSearchParams({
-        attorneyIds: artisan.id,
+        attorneyIds: attorney.id,
         days: '5',
       })
       if (startDate) {
@@ -82,8 +82,8 @@ export default function ArtisanResultCard({
       const response = await fetch(`/api/availability/slots?${params}`)
       if (response.ok) {
         const data = await response.json()
-        if (data.availability[artisan.id]) {
-          setLocalAvailability(data.availability[artisan.id])
+        if (data.availability[attorney.id]) {
+          setLocalAvailability(data.availability[attorney.id])
         }
       }
     } catch (error) {
@@ -104,7 +104,7 @@ export default function ArtisanResultCard({
   }
 
   const handleSlotClick = (date: string, time: string) => {
-    router.push(`/practice-areas/reservation?attorneyId=${artisan.id}&date=${date}&time=${time}`)
+    router.push(`/practice-areas/reservation?attorneyId=${attorney.id}&date=${date}&time=${time}`)
   }
 
   const formatDistance = (meters?: number) => {
@@ -113,9 +113,9 @@ export default function ArtisanResultCard({
     return `${(meters / 1000).toFixed(1)} km`
   }
 
-  const displayName = artisan.is_center
-    ? artisan.business_name
-    : artisan.business_name || `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim()
+  const displayName = attorney.is_center
+    ? attorney.business_name
+    : attorney.business_name || `${attorney.first_name || ''} ${attorney.last_name || ''}`.trim()
 
   const hasAnyAvailability = localAvailability.some((day) => day.slots.length > 0)
   const firstAvailableDate = localAvailability.find((day) => day.slots.length > 0)
@@ -126,7 +126,7 @@ export default function ArtisanResultCard({
         <div className="flex gap-4">
           {/* Avatar / Logo */}
           <div className="flex-shrink-0">
-            {artisan.is_center ? (
+            {attorney.is_center ? (
               <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Building2 className="w-8 h-8 text-blue-600" />
               </div>
@@ -149,47 +149,47 @@ export default function ArtisanResultCard({
                   >
                     {displayName}
                   </Link>
-                  {showDistance && artisan.distance && (
+                  {showDistance && attorney.distance && (
                     <span className="text-sm text-gray-500">
-                      {formatDistance(artisan.distance)}
+                      {formatDistance(attorney.distance)}
                     </span>
                   )}
                 </div>
 
                 {/* Specialty */}
-                <p className="text-gray-600">{artisan.specialty}</p>
+                <p className="text-gray-600">{attorney.specialty}</p>
 
                 {/* Team size for centers */}
-                {artisan.is_center && artisan.team_size && (
+                {attorney.is_center && attorney.team_size && (
                   <p className="text-sm text-gray-500">
-                    {artisan.team_size} professional{artisan.team_size > 1 ? 's' : ''}
+                    {attorney.team_size} professional{attorney.team_size > 1 ? 's' : ''}
                   </p>
                 )}
 
                 {/* Address */}
                 <div className="mt-2 text-sm text-gray-600">
-                  {artisan.address && <p>{artisan.address}</p>}
+                  {attorney.address && <p>{attorney.address}</p>}
                   <p>
-                    {artisan.postal_code} {artisan.city}
+                    {attorney.postal_code} {attorney.city}
                   </p>
                 </div>
 
                 {/* Intervention Zone */}
-                {artisan.intervention_zone && (
+                {attorney.intervention_zone && (
                   <div className="mt-1 flex items-center gap-3 text-sm text-gray-500">
-                    <span>Zone: {artisan.intervention_zone}</span>
+                    <span>Zone: {attorney.intervention_zone}</span>
                   </div>
                 )}
 
                 {/* Badges */}
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
-                  {artisan.is_verified && (
+                  {attorney.is_verified && (
                     <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded">
                       <CheckCircle className="w-3 h-3" />
                       Certified
                     </span>
                   )}
-                  {artisan.is_center && (
+                  {attorney.is_center && (
                     <span className="inline-flex items-center gap-1 text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
                       <Wrench className="w-3 h-3" />
                       Firm
@@ -199,11 +199,11 @@ export default function ArtisanResultCard({
               </div>
 
               {/* Rating */}
-              {artisan.average_rating > 0 && (
+              {attorney.average_rating > 0 && (
                 <div className="flex items-center gap-1 text-sm flex-shrink-0">
                   <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                  <span className="font-medium">{artisan.average_rating.toFixed(1)}</span>
-                  <span className="text-gray-400">({artisan.review_count})</span>
+                  <span className="font-medium">{attorney.average_rating.toFixed(1)}</span>
+                  <span className="text-gray-400">({attorney.review_count})</span>
                 </div>
               )}
             </div>
@@ -274,7 +274,7 @@ export default function ArtisanResultCard({
 
               {/* Availability Note */}
               <div className="mt-2 text-xs text-gray-500">
-                {artisan.accepts_new_clients === false ? (
+                {attorney.accepts_new_clients === false ? (
                   <span className="text-amber-600">
                     This attorney reserves online booking for existing clients only.
                   </span>

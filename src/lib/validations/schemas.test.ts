@@ -151,7 +151,7 @@ describe('createBookingSchema', () => {
   })
 
   it('accepts optional fields', () => {
-    const withOptional = { ...validBooking, serviceDescription: 'Fuite sous évier', address: '10 rue de la Paix' }
+    const withOptional = { ...validBooking, serviceDescription: 'Leaking kitchen faucet', address: '123 Main Street' }
     expect(createBookingSchema.safeParse(withOptional).success).toBe(true)
   })
 })

@@ -16,7 +16,7 @@ function getStripe(): Stripe {
 
 
 /**
- * Récupérer l'historique des paiements d'un client
+ * Retrieve a client's payment history
  */
 export async function getCustomerPayments(customerId: string, limit = 10) {
   try {
@@ -41,7 +41,7 @@ export async function getCustomerPayments(customerId: string, limit = 10) {
 }
 
 /**
- * Récupérer les détails d'un abonnement
+ * Retrieve subscription details
  */
 export async function getSubscription(subscriptionId: string) {
   try {
@@ -73,11 +73,11 @@ export async function getSubscription(subscriptionId: string) {
 }
 
 /**
- * Traiter un remboursement (total ou partiel)
+ * Process a refund (full or partial)
  */
 export async function processRefund(
   paymentIntentId: string,
-  amount?: number, // En centimes, undefined = remboursement total
+  amount?: number, // In cents, undefined = full refund
   reason?: 'duplicate' | 'fraudulent' | 'requested_by_customer'
 ) {
   try {
@@ -141,7 +141,7 @@ export async function cancelSubscription(
 }
 
 /**
- * Réactiver un abonnement annulé (si pas encore expiré)
+ * Reactivate a cancelled subscription (if not yet expired)
  */
 export async function reactivateSubscription(subscriptionId: string) {
   try {
@@ -160,7 +160,7 @@ export async function reactivateSubscription(subscriptionId: string) {
 }
 
 /**
- * Changer le plan d'un abonnement
+ * Change a subscription's plan
  */
 export async function changeSubscriptionPlan(
   subscriptionId: string,
@@ -231,7 +231,7 @@ export async function createManualCharge(
 }
 
 /**
- * Récupérer les factures d'un client
+ * Retrieve a client's invoices
  */
 export async function getCustomerInvoices(customerId: string, limit = 10) {
   try {
@@ -262,7 +262,7 @@ export async function getCustomerInvoices(customerId: string, limit = 10) {
 }
 
 /**
- * Récupérer tous les abonnements avec pagination
+ * Retrieve all subscriptions with pagination
  */
 export async function listAllSubscriptions(
   limit = 20,
@@ -311,7 +311,7 @@ export async function listAllSubscriptions(
 }
 
 /**
- * Obtenir les statistiques de revenus
+ * Get revenue statistics
  */
 export async function getRevenueStats(days = 30) {
   try {

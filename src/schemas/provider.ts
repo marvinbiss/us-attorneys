@@ -36,7 +36,7 @@ export const providerUpdateSchema = z.object({
 })
 
 // ============================================================
-// Sub-schemas for artisan profile editor
+// Sub-schemas for attorney profile editor
 // ============================================================
 export const dayScheduleSchema = z.object({
   open: z.boolean(),

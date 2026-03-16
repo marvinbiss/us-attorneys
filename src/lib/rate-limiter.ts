@@ -178,17 +178,17 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   booking: { window: 60 * 1000, max: 30 },       // 30 requests per minute for bookings
   payment: { window: 60 * 1000, max: 10 },       // 10 requests per minute for payments
   reviews: { window: 60 * 1000, max: 5 },        // 5 requests per minute for reviews
-  devis: { window: 60 * 1000, max: 10 },         // 10 requests per minute for quotes
+  quotes: { window: 60 * 1000, max: 10 },         // 10 requests per minute for quotes
   contact: { window: 300 * 1000, max: 3 },       // 3 requests per 5 minutes for contact
   upload: { window: 60 * 1000, max: 20 },        // 20 uploads per minute
   search: { window: 60 * 1000, max: 100 },       // 100 searches per minute
   gdpr: { window: 300 * 1000, max: 5 },          // 5 requests per 5 minutes for GDPR export/delete
   newsletter: { window: 300 * 1000, max: 3 },    // 3 requests per 5 minutes for newsletter (sends email)
-  inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for attorney registration (sends emails)
+  registration: { window: 300 * 1000, max: 3 },  // 3 requests per 5 minutes for attorney registration (sends emails)
   ai: { window: 60 * 1000, max: 10 },            // 10 requests per minute for AI generation (expensive)
   estimation: { window: 60 * 1000, max: 15, failOpen: true },    // 15 messages per minute for estimation chat — fail open so widget always works
   estimationLead: { window: 300 * 1000, max: 3, failOpen: true }, // 3 leads per 5 minutes for estimation lead capture — fail open
-  verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for SIRET/entreprise verification (external API)
+  verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for bar number/business verification (external API)
   geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
   vapiWebhook: { window: 60 * 1000, max: 300, failOpen: true }, // 300/min for VAPI voice webhooks — fail open
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
@@ -234,8 +234,8 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   // Reviews — create, vote, list
   if (pathname.startsWith('/api/reviews')) return RATE_LIMITS.reviews
 
-  // Quotes / devis — create, list
-  if (pathname.startsWith('/api/quotes') || pathname.startsWith('/api/attorney/quotes')) return RATE_LIMITS.devis
+  // Quotes — create, list
+  if (pathname.startsWith('/api/quotes') || pathname.startsWith('/api/attorney/quotes')) return RATE_LIMITS.quotes
 
   // Contact form — sends email, unauthenticated
   if (pathname.startsWith('/api/contact')) return RATE_LIMITS.contact
@@ -246,10 +246,10 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   // Newsletter — sends welcome email, unauthenticated
   if (pathname.startsWith('/api/newsletter')) return RATE_LIMITS.newsletter
 
-  // Artisan registration — sends 2 emails, unauthenticated
-  if (pathname.startsWith('/api/register-attorney')) return RATE_LIMITS.inscription
+  // Attorney registration — sends 2 emails, unauthenticated
+  if (pathname.startsWith('/api/register-attorney')) return RATE_LIMITS.registration
 
-  // SIRET / entreprise verification — external INSEE API calls
+  // Bar number / business verification — external API calls
   if (pathname.startsWith('/api/verify')) return RATE_LIMITS.verify
 
   // Geocoding — external address API calls

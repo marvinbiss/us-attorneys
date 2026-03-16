@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 /**
- * Client Supabase avec la clé service_role
- * UNIQUEMENT côté serveur (admin / bypass RLS)
+ * Supabase client with service_role key
+ * SERVER-SIDE ONLY (admin / bypass RLS)
  *
  * The global.fetch wrapper passes `next: { revalidate: 3600 }` so that
  * Next.js caches Supabase responses and enables ISR for pages that use

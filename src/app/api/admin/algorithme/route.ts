@@ -13,7 +13,7 @@ import { DEFAULT_ALGORITHM_CONFIG } from '@/types/algorithm'
 
 const algorithmConfigSchema = z.object({
   matching_strategy: z.enum(['scored', 'round_robin', 'geographic']).optional(),
-  max_artisans_per_lead: z.number().int().min(1).max(20).optional(),
+  max_attorneys_per_lead: z.number().int().min(1).max(20).optional(),
   geo_radius_km: z.number().int().min(1).max(500).optional(),
   weight_rating: z.number().int().min(0).max(100).optional(),
   weight_reviews: z.number().int().min(0).max(100).optional(),
@@ -49,7 +49,7 @@ export async function GET() {
     // Try the app schema first
     const { data, error } = await supabase
       .from('algorithm_config')
-      .select('id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
+      .select('id, matching_strategy, max_attorneys_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
       .limit(1)
       .single()
 

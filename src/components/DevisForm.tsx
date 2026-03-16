@@ -126,17 +126,17 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   )
 }
 
-interface DevisFormProps {
+interface ConsultationRequestFormProps {
   prefilledService?: string
   prefilledCity?: string
   prefilledCityPostal?: string
 }
 
-export default function DevisForm({
+export default function ConsultationRequestForm({
   prefilledService,
   prefilledCity,
   prefilledCityPostal,
-}: DevisFormProps = {}) {
+}: ConsultationRequestFormProps = {}) {
   const isPrefilled = !!(prefilledService && prefilledCity)
 
   // Restore saved form progress from localStorage

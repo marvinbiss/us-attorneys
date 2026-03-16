@@ -81,7 +81,7 @@ export default function DemandesRecuesPage() {
   const [publicUrl, setPublicUrl] = useState<string | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [isRevising, setIsRevising] = useState(false)
-  const [devisForm, setDevisForm] = useState({
+  const [quoteForm, setQuoteForm] = useState({
     amount: '',
     description: '',
     validity_days: 30,
@@ -152,14 +152,14 @@ export default function DemandesRecuesPage() {
   const openDevisModal = (lead: Lead) => {
     setSelectedLead(lead)
     setIsRevising(false)
-    setDevisForm({ amount: '', description: '', validity_days: 30 })
+    setQuoteForm({ amount: '', description: '', validity_days: 30 })
     setShowDevisModal(true)
   }
 
   const openReviseModal = (lead: Lead) => {
     setSelectedLead(lead)
     setIsRevising(true)
-    setDevisForm({
+    setQuoteForm({
       amount: lead.quote ? String(lead.quote.amount) : '',
       description: lead.quote?.description || '',
       validity_days: 30,
@@ -175,14 +175,14 @@ export default function DemandesRecuesPage() {
 
   const handleSendDevis = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedLead?.lead || !devisForm.amount) return
+    if (!selectedLead?.lead || !quoteForm.amount) return
 
     setSubmitting(true)
     try {
       const validUntil = new Date()
-      validUntil.setDate(validUntil.getDate() + devisForm.validity_days)
+      validUntil.setDate(validUntil.getDate() + quoteForm.validity_days)
       const validUntilStr = validUntil.toISOString().split('T')[0]
-      const amount = parseFloat(devisForm.amount)
+      const amount = parseFloat(quoteForm.amount)
 
       if (isRevising && selectedLead.quote) {
         // PUT to update existing quote
@@ -192,7 +192,7 @@ export default function DemandesRecuesPage() {
           body: JSON.stringify({
             id: selectedLead.quote.id,
             amount,
-            description: devisForm.description,
+            description: quoteForm.description,
             valid_until: validUntilStr,
           }),
         })
@@ -208,7 +208,7 @@ export default function DemandesRecuesPage() {
               quote: {
                 ...l.quote,
                 amount,
-                description: devisForm.description,
+                description: quoteForm.description,
                 valid_until: validUntilStr,
               },
             }
@@ -228,7 +228,7 @@ export default function DemandesRecuesPage() {
           body: JSON.stringify({
             request_id: selectedLead.lead.id,
             amount,
-            description: devisForm.description,
+            description: quoteForm.description,
             valid_until: validUntilStr,
           }),
         })
@@ -238,9 +238,9 @@ export default function DemandesRecuesPage() {
         if (response.ok) {
           // Optimistic UI: update the lead status and attach quote info locally
           const newQuote: QuoteInfo = {
-            id: data.devis?.id || '',
+            id: data.quote?.id || '',
             amount,
-            description: devisForm.description,
+            description: quoteForm.description,
             valid_until: validUntilStr,
             status: 'pending',
             created_at: new Date().toISOString(),
@@ -263,7 +263,7 @@ export default function DemandesRecuesPage() {
         }
       }
     } catch (error) {
-      console.error('Error sending devis:', error)
+      console.error('Error sending quote:', error)
       setToast({ message: 'Error sending quote', type: 'error' })
     } finally {
       setSubmitting(false)
@@ -397,7 +397,7 @@ export default function DemandesRecuesPage() {
                                   Urgent
                                 </span>
                               )}
-                              {lead.urgency === 'tres_urgent' && (
+                              {lead.urgency === 'very_urgent' && (
                                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
                                   Very Urgent
                                 </span>
@@ -549,8 +549,8 @@ export default function DemandesRecuesPage() {
                   type="number"
                   step="0.01"
                   min="0"
-                  value={devisForm.amount}
-                  onChange={(e) => setDevisForm({ ...devisForm, amount: e.target.value })}
+                  value={quoteForm.amount}
+                  onChange={(e) => setQuoteForm({ ...quoteForm, amount: e.target.value })}
                   placeholder="Ex: 250.00"
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
                   required
@@ -562,8 +562,8 @@ export default function DemandesRecuesPage() {
                   Description / Quote Details
                 </label>
                 <textarea
-                  value={devisForm.description}
-                  onChange={(e) => setDevisForm({ ...devisForm, description: e.target.value })}
+                  value={quoteForm.description}
+                  onChange={(e) => setQuoteForm({ ...quoteForm, description: e.target.value })}
                   rows={3}
                   placeholder="Detail the services included..."
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
@@ -575,8 +575,8 @@ export default function DemandesRecuesPage() {
                   Quote Validity
                 </label>
                 <select
-                  value={devisForm.validity_days}
-                  onChange={(e) => setDevisForm({ ...devisForm, validity_days: parseInt(e.target.value) })}
+                  value={quoteForm.validity_days}
+                  onChange={(e) => setQuoteForm({ ...quoteForm, validity_days: parseInt(e.target.value) })}
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
                 >
                   <option value={7}>7 days</option>

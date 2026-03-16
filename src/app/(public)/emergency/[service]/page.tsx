@@ -634,7 +634,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <CrossIntentLinks
         service={service}
         specialtyName={trade.name}
-        currentIntent="urgence"
+        currentIntent="emergency"
       />
 
       {/* Final CTA */}

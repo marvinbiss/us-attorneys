@@ -83,7 +83,7 @@ export interface QuartierProfile {
 
 export interface QuartierDataDrivenContent {
   immobilierQuartier: string
-  marcheArtisanalQuartier: string
+  legalMarketQuartier: string
   energetiqueQuartier: string
   climatQuartier: string
   statCards: {

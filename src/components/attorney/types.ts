@@ -1,4 +1,4 @@
-// Types pour les composants artisan
+// Types for attorney profile components
 
 export interface ServicePrice {
   name: string
@@ -22,6 +22,7 @@ export interface PortfolioItem {
   thumbnailUrl?: string
 }
 
+/** @deprecated Use AttorneyProfile instead. Kept for backward compatibility. */
 export interface Artisan {
   id: string
   stable_id?: string
@@ -95,3 +96,6 @@ export function getDisplayName(artisan: Artisan): string {
   }
   return `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || 'Attorney'
 }
+
+/** Preferred alias for Artisan interface */
+export type AttorneyProfile = Artisan

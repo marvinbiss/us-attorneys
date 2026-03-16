@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
     // Check if AI auto-reply is enabled
     const { data: aiSettings } = await supabase
       .from('prospection_ai_settings')
-      .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt')
+      .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, attorney_system_prompt, client_system_prompt, municipality_system_prompt')
       .limit(1)
       .single()
 
@@ -163,9 +163,9 @@ export async function POST(request: NextRequest) {
 
           let systemPrompt = ''
           switch ((contact as ProspectionContact).contact_type) {
-            case 'artisan': systemPrompt = aiSettings.artisan_system_prompt; break
+            case 'attorney': systemPrompt = aiSettings.attorney_system_prompt; break
             case 'client': systemPrompt = aiSettings.client_system_prompt; break
-            case 'mairie': systemPrompt = aiSettings.mairie_system_prompt; break
+            case 'municipality': systemPrompt = aiSettings.municipality_system_prompt; break
           }
 
           const aiResult = await generateWithFallback({

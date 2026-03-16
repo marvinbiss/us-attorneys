@@ -1,6 +1,6 @@
 /**
- * Données pour les pages de comparaison.
- * 30 comparatifs détaillés pour aider les propriétaires français à choisir.
+ * Data for comparison pages.
+ * Detailed comparisons to help users choose between options.
  */
 
 export interface ComparisonOption {

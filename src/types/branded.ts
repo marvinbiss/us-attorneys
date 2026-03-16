@@ -27,12 +27,15 @@ export type VerificationId = Brand<string, 'VerificationId'>
 // BRANDED VALUE TYPES
 // ============================================================================
 
+/** @deprecated Use Bar Number for US attorneys */
 export type Siret = Brand<string, 'Siret'>
+/** @deprecated Use EIN for US attorneys */
 export type Siren = Brand<string, 'Siren'>
 export type Email = Brand<string, 'Email'>
 export type Phone = Brand<string, 'Phone'>
 export type Slug = Brand<string, 'Slug'>
 export type PostalCode = Brand<string, 'PostalCode'>
+/** @deprecated Use FIPS code for US locations */
 export type InseeCode = Brand<string, 'InseeCode'>
 
 // ============================================================================
@@ -146,7 +149,7 @@ export function createPostalCode(value: string): PostalCode {
 }
 
 // ============================================================================
-// UNSAFE CONSTRUCTORS (pour données de confiance, ex: DB)
+// UNSAFE CONSTRUCTORS (for trusted data, e.g., DB)
 // ============================================================================
 
 export function unsafeCreateProviderId(value: string): ProviderId {

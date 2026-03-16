@@ -51,13 +51,13 @@ export default function ListsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Gestion des listes</p>
+          <p className="text-gray-500 mt-1">List management</p>
         </div>
         <Link
           href="/admin/prospection/lists/create"
           className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          <Plus className="w-4 h-4" /> Nouvelle liste
+          <Plus className="w-4 h-4" /> New list
         </Link>
       </div>
 
@@ -71,7 +71,7 @@ export default function ListsPage() {
             onClick={() => setTypeFilter(t)}
             className={`px-3 py-1.5 text-sm rounded-lg border ${typeFilter === t ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
           >
-            {t === 'all' ? 'Toutes' : t === 'static' ? 'Statiques' : 'Dynamiques'}
+            {t === 'all' ? 'All' : t === 'static' ? 'Static' : 'Dynamic'}
           </button>
         ))}
       </div>
@@ -87,14 +87,14 @@ export default function ListsPage() {
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[600px] text-sm" aria-label="Liste des listes de contacts">
+        <table className="w-full min-w-[600px] text-sm" aria-label="Contact lists">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
               <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Contacts</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Description</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Cr&eacute;&eacute;e le</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Created</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -127,7 +127,7 @@ export default function ListsPage() {
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
                     }`}>
-                      {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
+                      {list.list_type === 'static' ? 'Static' : 'Dynamic'}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">{list.contact_count.toLocaleString('en-US')}</td>

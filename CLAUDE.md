@@ -1,14 +1,14 @@
-# CLAUDE.md — US Attorneys
+# CLAUDE.md -- US Attorneys
 
 ## Project
 
 US Attorney directory. Next.js 14 App Router, TypeScript strict, Tailwind CSS, Supabase (auth + DB + storage), deployed on Vercel.
 
-**Site in English** — professional legal language is critical for credibility.
+**Site in English** -- professional legal language is critical for credibility.
 
 - **Domain**: us-attorneys.com
 - **Repo**: us-attorneys (branch master)
-- **Target**: 8M+ programmatic pages (75 practice areas × 41K ZIP codes × intents)
+- **Target**: 8M+ programmatic pages (75 practice areas x 41K ZIP codes x intents)
 
 ### Entity Mapping (from ServicesArtisans)
 | French (old) | US (new) | DB Table |
@@ -16,27 +16,27 @@ US Attorney directory. Next.js 14 App Router, TypeScript strict, Tailwind CSS, S
 | providers | attorneys | `attorneys` |
 | services | specialties (practice areas) | `specialties` |
 | communes | locations_us | `locations_us` |
-| départements | states | `states` |
+| departements | states | `states` |
 | SIRET/SIREN | Bar Number / EIN | `bar_admissions` |
-| artisan | attorney | — |
+| artisan | attorney | -- |
 
 ---
 
-## Commandes
+## Commands
 
 ```bash
-npm run dev          # Serveur de développement
-npm run build        # Build Next.js (3 749+ pages pré-rendues) — OBLIGATOIRE avant push
+npm run dev          # Development server
+npm run build        # Next.js build (3,749+ pre-rendered pages) -- REQUIRED before push
 npm run lint         # ESLint
-npx vitest run       # Tests unitaires (~600 tests, 16 fichiers)
-npm run test         # Tests Playwright (e2e)
+npx vitest run       # Unit tests (~600 tests, 16 files)
+npm run test         # Playwright tests (e2e)
 ```
 
-### Avant chaque deploy
+### Before each deploy
 
-1. **TOUJOURS** lancer `npm run build` en local AVANT de commit/push
-2. Si le build casse → corriger AVANT de push — **jamais de build cassé sur Vercel**
-3. Lancer `npx vitest run` si des fichiers de logique/API ont été modifiés
+1. **ALWAYS** run `npm run build` locally BEFORE commit/push
+2. If the build breaks, fix it BEFORE pushing -- **never push a broken build to Vercel**
+3. Run `npx vitest run` if logic/API files were modified
 
 ---
 
@@ -44,69 +44,66 @@ npm run test         # Tests Playwright (e2e)
 
 ```
 src/
-├── app/
-│   ├── (auth)/           # /connexion, /inscription, /inscription-artisan, /mot-de-passe-oublie
-│   ├── (public)/         # Pages publiques (services, blog, FAQ, contact, carrières, tarifs, devis, avis, urgence, villes, departements, regions, problemes, guides, questions, comparaison, barometre, glossaire, normes, outils)
-│   ├── (private)/        # /espace-artisan/*, /espace-client/*, /booking/*, /donner-avis/*
-│   ├── admin/            # /admin/connexion + /admin/(dashboard)/* (26+ pages)
-│   └── api/              # ~188 API routes
-│       ├── admin/        # 50+ endpoints (users, providers, claims, cms, reviews, reports, bookings, quotes, subscriptions, payments, stats, audit, analytics, services, settings, algorithme, leads, messages, gdpr, dispatch, export, voice, prospection/*)
-│       ├── artisan/      # claim, provider, profile, settings, stats, subscription, avatar, avis, demandes, devis, leads, messages, equipe
-│       ├── auth/         # signin, signup, oauth, logout, reset-password, me, 2fa
-│       ├── client/       # profile, demandes, avis, messages, leads
-│       ├── cron/         # 10 crons (reminders, review-requests, sitemap-health, indexnow-submit, prospection-process, calculate-trust-badges, recalculate-quality, voice-*)
-│       ├── stripe/       # create-checkout, create-portal, webhook
-│       └── ...           # bookings, reviews, messages, portfolio, providers, notifications, quotes, gdpr, estimation, contact, newsletter, verify-siret, revalidate, indexnow, analytics, health, feed, sitemaps, vapi, v1/*
-├── components/           # 232 fichiers
-│   ├── admin/ (28)       # Dashboard, tables, modals, config panels
-│   ├── artisan/ (26)     # Profile, leads, quotes, stats
-│   ├── artisan-dashboard/ (12)
-│   ├── chat/ (10)        # Messagerie
-│   ├── ui/ (31)          # Composants UI réutilisables (shadcn-style)
-│   ├── home/ (7)         # Sections homepage
-│   ├── search/ (9)       # SearchBar, filters, results, autocomplete
-│   ├── maps/ (10)        # Cartes Leaflet + marker clustering
-│   ├── seo/ (7)          # JSON-LD, meta tags, breadcrumbs, LastUpdated
-│   ├── estimation/ (7)   # Formulaire estimation, calculateur
-│   ├── reviews/ (7)      # Display, ratings, form
-│   ├── dashboard/ (12)   # Composants dashboard génériques
-│   └── ...               # forms, portfolio, providers, upload, compare, auth, header, booking, notifications, client
-├── hooks/ (19)           # useAuth, useToast, useFavorites, useGeolocation, useCompare, useDebounce, useAdminFetch, etc.
-├── lib/
-│   ├── supabase/         # server.ts (RLS), admin.ts (service_role), client.ts (browser)
-│   ├── supabase.ts       # 717 lignes, queries principales, SERVICE_TO_SPECIALTIES mapping
-│   ├── cache.ts          # L1 mémoire + L2 Redis Upstash
-│   ├── storage.ts        # Supabase Storage (portfolio bucket, thumbnails)
-│   ├── admin-auth.ts     # requirePermission()
-│   ├── logger.ts         # Logger structuré (debug/info/warn/error)
-│   ├── rate-limiter.ts   # Redis-based (prod), in-memory (dev)
-│   ├── stripe-admin.ts   # Stripe SDK lazy init
-│   ├── geography.ts      # Distance, city resolution
-│   ├── insee-resolver.ts # SIREN → company name, E.164 phone
-│   ├── services/         # email-service.ts (Resend), verification.service.ts
-│   ├── seo/              # jsonld.ts, internal-links.ts, location-content.ts (274KB), indexnow.ts, blog-schema.ts
-│   └── data/             # Données statiques volumineuses
-│       ├── france.ts (1.2MB)     # 2 280 villes + 101 depts + 46 services
-│       ├── insee-communes.json (2.1MB) # 36K communes
-│       ├── trade-content.ts (311KB)    # Descriptions, coûts, process par métier
-│       ├── problems.ts (88KB)          # ~500 problèmes
-│       ├── comparisons.ts (187KB)      # Comparaisons services
-│       ├── questions.ts (237KB)        # ~500 FAQs
-│       ├── glossaire.ts (73KB)         # Termes techniques
-│       ├── calendrier-travaux.ts       # Timing saisonnier
-│       ├── authors.ts                  # Auteurs E-E-A-T
-│       └── barometre.ts                # Prix par service × région
-├── types/ (13 fichiers)  # index.ts, database.ts (auto-gen), admin.ts, algorithm.ts, cms.ts, leads.ts, portfolio.ts, prospection.ts, voice-qualification.ts, branded.ts, legacy/
-└── test/                 # Setup Vitest
++-- app/
+|   +-- (auth)/           # /login, /register, /register-attorney, /forgot-password
+|   +-- (public)/         # Public pages (practice-areas, blog, FAQ, contact, careers, pricing, quotes, reviews, emergency, cities, states, regions, issues, guides, questions, comparisons, barometer, glossary, standards, tools)
+|   +-- (private)/        # /attorney-dashboard/*, /client-dashboard/*, /booking/*, /leave-review/*
+|   +-- admin/            # /admin/login + /admin/(dashboard)/* (26+ pages)
+|   +-- api/              # ~188 API routes
+|       +-- admin/        # 50+ endpoints (users, providers, claims, cms, reviews, reports, bookings, quotes, subscriptions, payments, stats, audit, analytics, services, settings, algorithm, leads, messages, gdpr, dispatch, export, voice, prospection/*)
+|       +-- attorney/     # claim, provider, profile, settings, stats, subscription, avatar, reviews, requests, quotes, leads, messages, team
+|       +-- auth/         # signin, signup, oauth, logout, reset-password, me, 2fa
+|       +-- client/       # profile, requests, reviews, messages, leads
+|       +-- cron/         # 10 crons (reminders, review-requests, sitemap-health, indexnow-submit, prospection-process, calculate-trust-badges, recalculate-quality, voice-*)
+|       +-- stripe/       # create-checkout, create-portal, webhook
+|       +-- ...           # bookings, reviews, messages, portfolio, providers, notifications, quotes, gdpr, estimation, contact, newsletter, revalidate, indexnow, analytics, health, feed, sitemaps, vapi, v1/*
++-- components/           # 232 files
+|   +-- admin/ (28)       # Dashboard, tables, modals, config panels
+|   +-- attorney/ (26)    # Profile, leads, quotes, stats
+|   +-- attorney-dashboard/ (12)
+|   +-- chat/ (10)        # Messaging
+|   +-- ui/ (31)          # Reusable UI components (shadcn-style)
+|   +-- home/ (7)         # Homepage sections
+|   +-- search/ (9)       # SearchBar, filters, results, autocomplete
+|   +-- maps/ (10)        # Leaflet maps + marker clustering
+|   +-- seo/ (7)          # JSON-LD, meta tags, breadcrumbs, LastUpdated
+|   +-- estimation/ (7)   # Estimation form, calculator
+|   +-- reviews/ (7)      # Display, ratings, form
+|   +-- dashboard/ (12)   # Generic dashboard components
+|   +-- ...               # forms, portfolio, providers, upload, compare, auth, header, booking, notifications, client
++-- hooks/ (19)           # useAuth, useToast, useFavorites, useGeolocation, useCompare, useDebounce, useAdminFetch, etc.
++-- lib/
+|   +-- supabase/         # server.ts (RLS), admin.ts (service_role), client.ts (browser)
+|   +-- supabase.ts       # 717 lines, main queries, SERVICE_TO_SPECIALTIES mapping
+|   +-- cache.ts          # L1 memory + L2 Redis Upstash
+|   +-- storage.ts        # Supabase Storage (portfolio bucket, thumbnails)
+|   +-- admin-auth.ts     # requirePermission()
+|   +-- logger.ts         # Structured logger (debug/info/warn/error)
+|   +-- rate-limiter.ts   # Redis-based (prod), in-memory (dev)
+|   +-- stripe-admin.ts   # Stripe SDK lazy init
+|   +-- geography.ts      # Distance, city resolution
+|   +-- services/         # email-service.ts (Resend), verification.service.ts
+|   +-- seo/              # jsonld.ts, internal-links.ts, location-content.ts (274KB), indexnow.ts, blog-schema.ts
+|   +-- data/             # Static data files
+|       +-- trade-content.ts (311KB)    # Descriptions, costs, process per practice area
+|       +-- problems.ts (88KB)          # ~500 common issues
+|       +-- comparisons.ts (187KB)      # Service comparisons
+|       +-- questions.ts (237KB)        # ~500 FAQs
+|       +-- glossaire.ts (73KB)         # Technical terms
+|       +-- calendrier-travaux.ts       # Seasonal timing
+|       +-- authors.ts                  # E-E-A-T authors
+|       +-- barometre.ts                # Price per service x region
++-- types/ (13 files)     # index.ts, database.ts (auto-gen), admin.ts, algorithm.ts, cms.ts, leads.ts, portfolio.ts, prospection.ts, voice-qualification.ts, branded.ts, legacy/
++-- test/                 # Vitest setup
 __tests__/                # Tests (api/, components/, hooks/, lib/, services/, validations/)
 scripts/                  # activate-providers, analyze-providers, aggregate-barometre, audit-all-mappings
-supabase/migrations/      # 87 fichiers de migration SQL (001-355)
-android/                  # App Capacitor (wrapper WebView)
+supabase/migrations/      # 87 migration SQL files (001-355)
+android/                  # Capacitor app (WebView wrapper)
 ```
 
 ---
 
-## Supabase Schema — CRITICAL Rules
+## Supabase Schema -- CRITICAL Rules
 
 **NEVER write Supabase queries without verifying columns/tables exist in migrations.**
 
@@ -144,74 +141,74 @@ android/                  # App Capacitor (wrapper WebView)
 
 ### Specialty Mapping
 
-75 practice areas organized by category in `specialties` table. Attorney → Specialty via `attorney_specialties` join table (replaces the old hardcoded `SPECIALTY_TO_PRACTICE_AREAS` dict).
+75 practice areas organized by category in `specialties` table. Attorney -> Specialty via `attorney_specialties` join table (replaces the old hardcoded `SPECIALTY_TO_PRACTICE_AREAS` dict).
 
 ---
 
 ## TypeScript
 
-- **Strict mode** activé : `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`
-- Toujours nettoyer les imports inutilisés après chaque refactoring — le build échouera sinon
-- Toujours vérifier les types des props/interfaces des composants existants avant de les utiliser (lire le fichier d'abord)
-- Path alias : `@/*` → `./src/*`
+- **Strict mode** enabled: `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`
+- Always clean up unused imports after refactoring -- the build will fail otherwise
+- Always check prop/interface types of existing components before using them (read the file first)
+- Path alias: `@/*` -> `./src/*`
 
 ---
 
-## Conventions de code
+## Code Conventions
 
-- **Pas d'over-engineering** : solution minimale qui fonctionne
-- **Polices** : Inter (body) + Plus Jakarta Sans (headings) via `next/font/google`
-- **Icônes** : `lucide-react` (v0.294)
-- **Validation** : `zod` (v4.3) pour tous les schemas d'API
-- **State management** : `swr` (v2.4) pour le data fetching client
-- **Animations** : `framer-motion` (v12.29)
-- **Cartes** : Leaflet + React Leaflet + marker clustering
-- **Éditeur riche** : Tiptap (suite complète : couleur, image, lien, table, alignement)
-- **Charts** : Recharts (v3.7)
-- **Toasts** : Sonner (v2.0)
-- **Admin auth** : `requirePermission('resource', 'read'|'write')` de `@/lib/admin-auth`
-- **Admin DB** : `createAdminClient()` de `@/lib/supabase/admin` pour bypass RLS (service_role)
-- **Client DB** : `createClient()` de `@/lib/supabase/server` (respecte RLS)
-- **Logger** : `logger.info/warn/error()` de `@/lib/logger` — ne pas utiliser `console.log` en production
-- **Cache** : `getCachedData(key, fetcher, ttl)` de `@/lib/cache` — L1 mémoire + L2 Redis
-- **Storage** : `@/lib/storage` — bucket Supabase `portfolio`, thumbnails auto, images max 10MB, vidéos max 100MB
-- **Email** : Resend API via `@/lib/services/email-service` (5 templates : welcome, booking, review request, password reset, welcomeArtisan)
-- **Rate limiting** : `@/lib/rate-limiter` — Redis (prod), in-memory (dev)
+- **No over-engineering**: minimal solution that works
+- **Fonts**: Inter (body) + Plus Jakarta Sans (headings) via `next/font/google`
+- **Icons**: `lucide-react` (v0.294)
+- **Validation**: `zod` (v4.3) for all API schemas
+- **State management**: `swr` (v2.4) for client data fetching
+- **Animations**: `framer-motion` (v12.29)
+- **Maps**: Leaflet + React Leaflet + marker clustering
+- **Rich editor**: Tiptap (full suite: color, image, link, table, alignment)
+- **Charts**: Recharts (v3.7)
+- **Toasts**: Sonner (v2.0)
+- **Admin auth**: `requirePermission('resource', 'read'|'write')` from `@/lib/admin-auth`
+- **Admin DB**: `createAdminClient()` from `@/lib/supabase/admin` to bypass RLS (service_role)
+- **Client DB**: `createClient()` from `@/lib/supabase/server` (respects RLS)
+- **Logger**: `logger.info/warn/error()` from `@/lib/logger` -- do not use `console.log` in production
+- **Cache**: `getCachedData(key, fetcher, ttl)` from `@/lib/cache` -- L1 memory + L2 Redis
+- **Storage**: `@/lib/storage` -- Supabase `portfolio` bucket, auto thumbnails, images max 10MB, videos max 100MB
+- **Email**: Resend API via `@/lib/services/email-service` (5 templates: welcome, booking, review request, password reset, welcomeAttorney)
+- **Rate limiting**: `@/lib/rate-limiter` -- Redis (prod), in-memory (dev)
 
 ---
 
 ## Auth
 
 - **OAuth Google** enabled (Supabase provider)
-- **Flow**: `signInWithOAuth()` → callback `/auth/callback` → create profile on first login → smart redirect (`/attorney-dashboard` or `/client-dashboard` based on `user_type`)
-- **Middleware**: protects `/client-dashboard`, `/attorney-dashboard` — redirects to `/login` if not authenticated
+- **Flow**: `signInWithOAuth()` -> callback `/auth/callback` -> create profile on first login -> smart redirect (`/attorney-dashboard` or `/client-dashboard` based on `user_type`)
+- **Middleware**: protects `/client-dashboard`, `/attorney-dashboard` -- redirects to `/login` if not authenticated
 
 ---
 
 ## Attorney Profile Claim Flow
 
-1. Public attorney page → "Claim this profile" button (if unclaimed)
+1. Public attorney page -> "Claim this profile" button (if unclaimed)
 2. Attorney enters their Bar Number + State
-3. API verifies bar number vs state bar records → creates `attorney_claims` with status `pending`
-4. Admin reviews in `/admin/attorneys` → approves or rejects
-5. If approved: `attorneys.user_id` assigned, `profiles.user_type` → 'attorney'
+3. API verifies bar number vs state bar records -> creates `attorney_claims` with status `pending`
+4. Admin reviews in `/admin/attorneys` -> approves or rejects
+5. If approved: `attorneys.user_id` assigned, `profiles.user_type` -> 'attorney'
 
 ---
 
 ## Tests
 
-- **Framework** : Vitest avec jsdom
-- **Config** : `vitest.config.ts`
-- **Fichiers** : `src/**/*.test.{ts,tsx}` et `__tests__/**/*.test.{ts,tsx}`
-- **Setup** : `src/test/setup.ts`
-- Tests isolés (pas de dépendances Supabase réelles — schemas répliqués localement)
+- **Framework**: Vitest with jsdom
+- **Config**: `vitest.config.ts`
+- **Files**: `src/**/*.test.{ts,tsx}` and `__tests__/**/*.test.{ts,tsx}`
+- **Setup**: `src/test/setup.ts`
+- Isolated tests (no real Supabase dependencies -- schemas replicated locally)
 
 ---
 
 ## SEO
 
 Full SEO domination plan in `SEO-DOMINATION-PLAN.md` at project root.
-- Target: 8M+ pages via 75 practice areas × 41K ZIP codes × intents
+- Target: 8M+ pages via 75 practice areas x 41K ZIP codes x intents
 - Read this file before any SEO work
 
 ### Sitemap
@@ -226,101 +223,97 @@ Architecture: sitemaps (static + dynamic attorney sitemaps + image + news).
 | `src/app/robots.ts` | Dynamic robots.txt |
 
 **Rewrites** (`next.config.js`):
-- `/sitemap.xml` → `/api/sitemap-index`
-- `/sitemap/attorneys-:id.xml` → `/api/sitemap-attorneys?id=:id`
+- `/sitemap.xml` -> `/api/sitemap-index`
+- `/sitemap/attorneys-:id.xml` -> `/api/sitemap-attorneys?id=:id`
 
 **Noindex strategy**: All public pages use **fail-open** (`attorneyCount = 1` default). If DB is down or during build, pages stay indexed. ISR corrects with real value.
 
-**Migration 400**: Covering index `idx_attorneys_sitemap` — serves attorney sitemap query entirely from index (zero heap fetch).
+**Migration 400**: Covering index `idx_attorneys_sitemap` -- serves attorney sitemap query entirely from index (zero heap fetch).
 
 ### IndexNow
 
-- Clé : `55e191c6b56d89e07bbf8fcba3552fcd` (fichier de vérification dans `/public/`)
-- `POST /api/indexnow` — soumission d'URLs à Bing/Yandex
-- Cron quotidien `/api/cron/indexnow-submit` — soumet ~212 URLs stratégiques
+- Key: `55e191c6b56d89e07bbf8fcba3552fcd` (verification file in `/public/`)
+- `POST /api/indexnow` -- URL submission to Bing/Yandex
+- Daily cron `/api/cron/indexnow-submit` -- submits ~212 strategic URLs
 
 ### Monitoring
 
-- Cron quotidien `/api/cron/sitemap-health` — vérifie les 39 sitemaps (HTTP 200 + XML valide)
-- Logs structurés visibles dans Vercel → onglet Logs
+- Daily cron `/api/cron/sitemap-health` -- checks all 39 sitemaps (HTTP 200 + valid XML)
+- Structured logs visible in Vercel -> Logs tab
 
-### Règles SEO critiques
+### Critical SEO Rules
 
-- **Jamais** mettre une page noindex dans le sitemap (contradiction)
-- **Jamais** de canonical conditionnel — toujours self-referencing
-- **Toujours** `escapeXml()` sur les données dynamiques dans les sitemaps XML
-- **Toujours** `stale-while-revalidate=86400` sur les cache headers des sitemaps
-- **Hub pages géo** (villes, départements, régions) : **toujours indexées** — contenu riche même avec 0 providers
-- Pages avec noindex intentionnel : `/accessibilite`, `/carrieres`, `/cgv`, `/confidentialite`, `/mentions-legales`, `/partenaires`, `/presse`, `/mes-favoris`, `/plan-du-site`
+- **Never** put a noindex page in the sitemap (contradiction)
+- **Never** use conditional canonical -- always self-referencing
+- **Always** use `escapeXml()` on dynamic data in XML sitemaps
+- **Always** set `stale-while-revalidate=86400` on sitemap cache headers
+- **Geo hub pages** (cities, states, regions): **always indexed** -- rich content even with 0 attorneys
+- Pages with intentional noindex: `/accessibility`, `/careers`, `/terms`, `/privacy`, `/legal`, `/partners`, `/press`, `/favorites`, `/sitemap-page`
 
 ---
 
 ## Data Layer
 
-### Données statiques (src/lib/data/)
-- `france.ts` (1.2MB) : 2 280 villes + 101 départements + 46 services — fallback pendant le build
-- `insee-communes.json` (2.1MB) : 36K communes officielles INSEE
-- `trade-content.ts` (311KB) : descriptions, bénéfices, coûts, process par métier (+ helpers `slugifyTask()`, `parseTask()`, `getTasksForService()`)
-- `problems.ts` + `problems-extra.ts` : ~500 problèmes courants
-- `questions.ts` (237KB) : ~500 FAQs
-- `comparisons.ts` (187KB) : comparaisons entre services
-- `glossaire.ts` (73KB) : termes techniques
-- `barometre.ts` : prix par service × région × complexité
-- `authors.ts` : auteurs E-E-A-T (6 profils)
+### Static data (src/lib/data/)
+- `trade-content.ts` (311KB): descriptions, benefits, costs, process per practice area (+ helpers `slugifyTask()`, `parseTask()`, `getTasksForService()`)
+- `problems.ts` + `problems-extra.ts`: ~500 common issues
+- `questions.ts` (237KB): ~500 FAQs
+- `comparisons.ts` (187KB): service comparisons
+- `glossaire.ts` (73KB): technical terms
+- `barometre.ts`: price per service x region x complexity
+- `authors.ts`: E-E-A-T authors (6 profiles)
 
-### Patterns de fetching
-- **Build** : flag `IS_BUILD` → skip DB, fallback sur `france.ts`
-- **ISR** : `revalidate = 86400` (24h) sur toutes les pages programmatiques
-- **Fail-open** : `providerCount = 1` par défaut → ISR corrige avec la vraie valeur
-- **Retry** : exponential backoff (2 retries, 800ms base), timeout 8s
-- **CDN** : `s-maxage=86400, stale-while-revalidate=604800` (middleware + next.config)
+### Fetching patterns
+- **Build**: flag `IS_BUILD` -> skip DB, use static fallback data
+- **ISR**: `revalidate = 86400` (24h) on all programmatic pages
+- **Fail-open**: `attorneyCount = 1` default -> ISR corrects with real value
+- **Retry**: exponential backoff (2 retries, 800ms base), timeout 8s
+- **CDN**: `s-maxage=86400, stale-while-revalidate=604800` (middleware + next.config)
 
 ### Cache (src/lib/cache.ts)
-- **L1** : mémoire par invocation Lambda (~1h TTL)
-- **L2** : Redis Upstash partagé, prefix `sa:cache:`
-- **TTLs** : services=24h, artisans=1h, locations=7d, CMS=1h
+- **L1**: per-Lambda-invocation memory (~1h TTL)
+- **L2**: shared Redis Upstash, prefix `sa:cache:`
+- **TTLs**: services=24h, attorneys=1h, locations=7d, CMS=1h
 
 ---
 
-## Intégrations tierces
+## Third-party Integrations
 
 | Service | Usage | Config |
 |---------|-------|--------|
-| **Stripe** | Paiements, abonnements, portail facturation | STRIPE_SECRET_KEY, webhooks |
-| **Resend** | Emails transactionnels (5 templates) | RESEND_API_KEY |
+| **Stripe** | Payments, subscriptions, billing portal | STRIPE_SECRET_KEY, webhooks |
+| **Resend** | Transactional emails (5 templates) | RESEND_API_KEY |
 | **Twilio** | SMS notifications | via prospection webhooks |
-| **Vapi** | Qualification vocale leads | VAPI_API_KEY |
-| **ElevenLabs** | Synthèse vocale | |
-| **Google Calendar** | Calendrier artisan | GOOGLE_CLIENT_ID/SECRET |
-| **INSEE / Pappers** | Validation SIRET/SIREN | INSEE_CONSUMER_KEY, PAPPERS_API_KEY |
-| **IndexNow** | Soumission URLs Bing/Yandex | INDEXNOW_API_KEY |
+| **Vapi** | Voice lead qualification | VAPI_API_KEY |
+| **ElevenLabs** | Voice synthesis | |
+| **Google Calendar** | Attorney calendar | GOOGLE_CLIENT_ID/SECRET |
+| **IndexNow** | URL submission to Bing/Yandex | INDEXNOW_API_KEY |
 | **Sentry** | Error monitoring | |
 | **Google Analytics** | Tracking (lazyOnload) | |
 
 ---
 
-## Environnement
+## Environment
 
-Variables requises (voir `.env.example`) :
+Required variables (see `.env.example`):
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SITE_URL`
-- `ADMIN_EMAILS` (liste séparée par virgules)
+- `ADMIN_EMAILS` (comma-separated list)
 - `CRON_SECRET` / `REVALIDATE_SECRET`
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` / `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `STRIPE_PRO_PRICE_ID` / `STRIPE_PREMIUM_PRICE_ID`
 - `RESEND_API_KEY` / `RESEND_WEBHOOK_SECRET`
 - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` / `UNSUBSCRIBE_SECRET`
-- `INSEE_CONSUMER_KEY` / `INSEE_CONSUMER_SECRET` / `PAPPERS_API_KEY`
 - `INDEXNOW_API_KEY` / `VAPI_API_KEY` / `VAPI_WEBHOOK_SECRET`
 
 ---
 
-## Performance — Règles critiques
+## Performance -- Critical Rules
 
-- **JAMAIS** de `force-dynamic` sur les pages publiques (utiliser ISR avec `revalidate`)
-- **JAMAIS** `generateStaticParams()` retournant `[]` dans un segment enfant d'un parent avec des params statiques → retourner au moins 1 param seed
-- **Scripts tiers** : `strategy="lazyOnload"` (GTM, GA, Meta Pixel, Google Ads)
-- **Images** : toujours `next/image` avec lazy loading (jamais `<img>` brut)
-- **Middleware** : skip `updateSession()` pour les pages publiques
-- **Supabase queries** : wrappées avec `next: { revalidate: N }` pour éviter le SSR dynamique
-- **330 fichiers 'use client'** : beaucoup pourraient être server components (refactoring futur)
+- **NEVER** use `force-dynamic` on public pages (use ISR with `revalidate`)
+- **NEVER** let `generateStaticParams()` return `[]` in a child segment of a parent with static params -> return at least 1 seed param
+- **Third-party scripts**: `strategy="lazyOnload"` (GTM, GA, Meta Pixel, Google Ads)
+- **Images**: always `next/image` with lazy loading (never raw `<img>`)
+- **Middleware**: skip `updateSession()` for public pages
+- **Supabase queries**: wrapped with `next: { revalidate: N }` to avoid dynamic SSR
+- **330 'use client' files**: many could be server components (future refactoring)

@@ -11,7 +11,7 @@ export interface AlgorithmConfig {
 
   // Distribution
   matching_strategy: MatchingStrategy
-  max_artisans_per_lead: number
+  max_attorneys_per_lead: number
   geo_radius_km: number
   require_same_department: boolean
   require_specialty_match: boolean
@@ -53,7 +53,7 @@ export interface AlgorithmConfig {
 
 export const DEFAULT_ALGORITHM_CONFIG: Omit<AlgorithmConfig, 'id' | 'updated_at' | 'updated_by'> = {
   matching_strategy: 'scored',
-  max_artisans_per_lead: 3,
+  max_attorneys_per_lead: 3,
   geo_radius_km: 50,
   require_same_department: false,
   require_specialty_match: true,
@@ -87,29 +87,29 @@ export const DEFAULT_ALGORITHM_CONFIG: Omit<AlgorithmConfig, 'id' | 'updated_at'
 export const MATCHING_STRATEGY_META: Record<MatchingStrategy, { label: string; description: string }> = {
   round_robin: {
     label: 'Round Robin',
-    description: 'Distribution equitable : chaque artisan recoit un lead a tour de role',
+    description: 'Fair distribution: each attorney receives leads in turn',
   },
   scored: {
     label: 'Score composite',
-    description: 'Classement par score (note, avis, verification, proximite)',
+    description: 'Score-based ranking (rating, reviews, verification, proximity)',
   },
   geographic: {
-    label: 'Geographique',
-    description: 'Priorite a la proximite entre artisan et chantier',
+    label: 'Geographic',
+    description: 'Priority to geographic proximity between attorney and case',
   },
 }
 
 export const SPECIALTY_MATCH_META: Record<SpecialtyMatchMode, { label: string; description: string }> = {
   exact: {
     label: 'Exact',
-    description: 'Le service doit correspondre exactement',
+    description: 'Service must match exactly',
   },
   fuzzy: {
-    label: 'Approximatif',
-    description: 'Recherche partielle dans le libelle NAF',
+    label: 'Fuzzy',
+    description: 'Partial search in service categories',
   },
   category: {
-    label: 'Categorie',
-    description: 'Correspondance par categorie de metier',
+    label: 'Category',
+    description: 'Match by practice area category',
   },
 }

@@ -7,7 +7,7 @@ import { z } from 'zod'
 const querySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  type: z.enum(['all', 'artisan', 'client', 'mairie']).optional().default('all'),
+  type: z.enum(['all', 'attorney', 'client', 'municipality']).optional().default('all'),
   search: z.string().max(200).optional().default(''),
   department: z.string().max(10).optional(),
   tags: z.string().optional(),
@@ -15,7 +15,7 @@ const querySchema = z.object({
 })
 
 const createSchema = z.object({
-  contact_type: z.enum(['artisan', 'client', 'mairie']),
+  contact_type: z.enum(['attorney', 'client', 'municipality']),
   contact_name: z.string().max(200).optional(),
   company_name: z.string().max(200).optional(),
   email: z.string().email().max(255).optional(),

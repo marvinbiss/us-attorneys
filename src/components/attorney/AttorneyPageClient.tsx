@@ -98,7 +98,7 @@ const AttorneyContactCard = dynamic(
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
-interface SimilarArtisan {
+interface SimilarAttorney {
   id: string
   stable_id?: string
   slug?: string
@@ -114,7 +114,7 @@ interface AttorneyPageClientProps {
   initialArtisan: LegacyArtisan | null
   initialReviews: Review[]
   attorneyId: string
-  similarArtisans?: SimilarArtisan[]
+  similarAttorneys?: SimilarAttorney[]
   isClaimed?: boolean
   hasSiret?: boolean
 }
@@ -123,7 +123,7 @@ export default function AttorneyPageClient({
   initialArtisan,
   initialReviews,
   attorneyId,
-  similarArtisans,
+  similarAttorneys,
   isClaimed = true,
   hasSiret = false,
 }: AttorneyPageClientProps) {
@@ -276,7 +276,7 @@ export default function AttorneyPageClient({
               <section id="services" aria-label="Services and fees">
                 <AttorneyServices artisan={artisan} />
               </section>
-              <section id="devis" aria-label="Request a consultation">
+              <section id="consultation" aria-label="Request a consultation">
                 <AttorneyQuoteForm artisan={artisan} />
               </section>
               <section id="reviews" aria-label="Client reviews">
@@ -289,7 +289,7 @@ export default function AttorneyPageClient({
                 <AttorneyMap artisan={artisan} />
               </section>
               <section aria-label="Similar attorneys">
-                <AttorneySimilar artisan={artisan} similarArtisans={similarArtisans} />
+                <AttorneySimilar artisan={artisan} similarAttorneys={similarAttorneys} />
               </section>
             </div>
 

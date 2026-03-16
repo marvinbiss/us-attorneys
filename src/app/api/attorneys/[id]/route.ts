@@ -247,7 +247,7 @@ export async function GET(
           title: item.title || 'Case Result',
           description: item.description || '',
           imageUrl: item.image_url || '',
-          category: item.category || 'Travaux',
+          category: item.category || 'Project',
         }))
 
       // provider_faq table does not exist in migrations — return empty array
@@ -339,7 +339,7 @@ export async function GET(
             year: 'numeric'
           }),
           comment: r.comment || '',
-          service: services[0] || 'Prestation',
+          service: services[0] || 'Service',
           hasPhoto: false,
           photoUrl: null,
           verified: false,
@@ -395,7 +395,7 @@ export async function GET(
             title: item.title || 'Case Result',
             description: item.description || '',
             imageUrl: item.image_url || '',
-            category: item.category || 'Travaux',
+            category: item.category || 'Project',
           }))
 
         // attorney_faq table does not exist in migrations — return empty
@@ -459,7 +459,7 @@ export async function GET(
             year: 'numeric'
           }),
           comment: r.comment || '',
-          service: 'Prestation',
+          service: 'Service',
           hasPhoto: false,
           photoUrl: null,
           verified: false,

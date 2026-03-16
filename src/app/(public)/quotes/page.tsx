@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import DevisForm from '@/components/DevisForm'
+import ConsultationRequestForm from '@/components/DevisForm'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -221,7 +221,7 @@ export default async function DevisPage() {
 
       {/* FORM */}
       <section id="formulaire" className="relative -mt-16 z-10 px-4 pb-20">
-        <DevisForm />
+        <ConsultationRequestForm />
       </section>
 
       {/* HOW IT WORKS */}

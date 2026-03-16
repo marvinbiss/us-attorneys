@@ -66,7 +66,7 @@ export async function createVoiceLead(
   // ------------------------------------------------------------------
   log.info('Creating devis_request from voice call', { projectType, postalCode })
 
-  const validUrgency = ['normal', 'urgent', 'tres_urgent'].includes(urgency) ? urgency : 'normal'
+  const validUrgency = ['normal', 'urgent', 'very_urgent'].includes(urgency) ? urgency : 'normal'
 
   const { data: lead, error: leadError } = await admin
     .from('devis_requests')

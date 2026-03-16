@@ -46,6 +46,6 @@ export const allArticlesMeta: BlogArticleMeta[] = Object.entries(allArticles)
 
 /** All unique categories across every article */
 export const allCategories: string[] = [
-  'Tous',
+  'All',
   ...Array.from(new Set(allArticlesMeta.map((a) => a.category))).sort(),
 ]

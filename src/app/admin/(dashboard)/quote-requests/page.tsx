@@ -66,7 +66,7 @@ const STATUS_CONFIG: Record<string, { variant: 'success' | 'warning' | 'error' |
 }
 
 const URGENCY_CONFIG: Record<string, { variant: 'error' | 'warning' | 'default'; label: string }> = {
-  tres_urgent: { variant: 'error', label: 'Very urgent' },
+  very_urgent: { variant: 'error', label: 'Very urgent' },
   urgent: { variant: 'warning', label: 'Urgent' },
   normal: { variant: 'default', label: 'Normal' },
 }
@@ -266,7 +266,7 @@ export default function AdminDevisPage() {
                           <div className="flex items-center gap-2 ml-4 flex-shrink-0">
                             {demande.urgency !== 'normal' && (
                               <AlertCircle className={`w-5 h-5 ${
-                                demande.urgency === 'tres_urgent' ? 'text-red-500' : 'text-amber-500'
+                                demande.urgency === 'very_urgent' ? 'text-red-500' : 'text-amber-500'
                               }`} />
                             )}
                             {isExpanded ? (

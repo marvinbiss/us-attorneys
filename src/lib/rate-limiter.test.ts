@@ -28,9 +28,9 @@ describe('getRateLimitConfig', () => {
     expect(getRateLimitConfig('/api/reviews')).toBe(RATE_LIMITS.reviews)
   })
 
-  it('returns devis config for devis routes', () => {
-    expect(getRateLimitConfig('/api/quotes/create')).toBe(RATE_LIMITS.devis)
-    expect(getRateLimitConfig('/api/attorney/quotes')).toBe(RATE_LIMITS.devis)
+  it('returns quotes config for quote routes', () => {
+    expect(getRateLimitConfig('/api/quotes/create')).toBe(RATE_LIMITS.quotes)
+    expect(getRateLimitConfig('/api/attorney/quotes')).toBe(RATE_LIMITS.quotes)
   })
 
   it('returns contact config for contact routes', () => {
@@ -59,8 +59,8 @@ describe('getRateLimitConfig', () => {
     expect(getRateLimitConfig('/api/newsletter')).toBe(RATE_LIMITS.newsletter)
   })
 
-  it('returns inscription config for artisan registration route', () => {
-    expect(getRateLimitConfig('/api/register-attorney')).toBe(RATE_LIMITS.inscription)
+  it('returns registration config for attorney registration route', () => {
+    expect(getRateLimitConfig('/api/register-attorney')).toBe(RATE_LIMITS.registration)
   })
 
   it('returns ai config for AI generation routes', () => {
@@ -222,9 +222,9 @@ describe('RATE_LIMITS constants', () => {
     expect(RATE_LIMITS.contact.window).toBeGreaterThan(RATE_LIMITS.auth.window)
   })
 
-  it('email-sending tiers are strict (newsletter, inscription, contact)', () => {
+  it('email-sending tiers are strict (newsletter, registration, contact)', () => {
     expect(RATE_LIMITS.newsletter.max).toBeLessThanOrEqual(5)
-    expect(RATE_LIMITS.inscription.max).toBeLessThanOrEqual(5)
+    expect(RATE_LIMITS.registration.max).toBeLessThanOrEqual(5)
     expect(RATE_LIMITS.contact.max).toBeLessThanOrEqual(5)
   })
 

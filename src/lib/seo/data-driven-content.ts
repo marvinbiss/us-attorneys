@@ -4,7 +4,7 @@
  * Stub: returns minimal empty content. Types preserved for compatibility.
  */
 
-import type { LocationData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/location-data'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -18,7 +18,7 @@ export interface DataDrivenContent {
   /** Real estate market context */
   immobilier: string | null
   /** Local legal market (law firms + certifications) */
-  marcheArtisanal: string | null
+  legalMarket: string | null
   /** Legal aid and pro bono context */
   energetique: string | null
   /** Climate-driven advice with real data */
@@ -47,7 +47,7 @@ export function generateDataDrivenContent(
     intro: '',
     socioEconomic: null,
     immobilier: null,
-    marcheArtisanal: null,
+    legalMarket: null,
     energetique: null,
     climatData: null,
     demandeLocale: '',

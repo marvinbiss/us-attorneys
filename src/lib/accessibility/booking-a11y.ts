@@ -63,8 +63,8 @@ export const calendarAnnouncements = {
     announce(`${dateStr}. ${slotsText}`)
   },
 
-  slotSelected: (time: string, artisan: string) =>
-    announce(`Slot selected: ${time} with ${artisan}`, 'assertive'),
+  slotSelected: (time: string, attorneyName: string) =>
+    announce(`Slot selected: ${time} with ${attorneyName}`, 'assertive'),
 
   slotUnavailable: () =>
     announce('This slot is no longer available', 'assertive'),

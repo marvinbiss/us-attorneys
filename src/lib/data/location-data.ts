@@ -1,8 +1,8 @@
 /**
- * Fetches commune demographic & enrichment data from Supabase.
+ * Fetches location demographic & enrichment data from Supabase.
  * Used by service+location pages for data-driven unique SEO content.
  *
- * Data is cached in-memory for 24 hours (communes data changes infrequently).
+ * Data is cached in-memory for 24 hours (location data changes infrequently).
  * Gracefully returns null when the table is empty or DB is unavailable.
  */
 
@@ -32,7 +32,7 @@ export interface LocationData {
   population: number
   densite_population: number | null
 
-  // Socio-economic (INSEE + DVF)
+  // Socio-economic
   revenu_median: number | null
   prix_m2_moyen: number | null
   nb_logements: number | null
@@ -47,13 +47,13 @@ export interface LocationData {
   // Platform data
   attorney_count: number
 
-  // SIRENE enrichment
+  // Business enrichment
   nb_artisans_btp: number | null
 
-  // RGE enrichment
+  // Certification enrichment
   nb_artisans_rge: number | null
 
-  // DPE enrichment
+  // Energy performance enrichment
   pct_passoires_dpe: number | null
   nb_dpe_total: number | null
 
@@ -65,15 +65,15 @@ export interface LocationData {
   temperature_moyenne_hiver: number | null
   temperature_moyenne_ete: number | null
 
-  // DVF enrichment
+  // Real estate transaction enrichment
   nb_transactions_annuelles: number | null
   prix_m2_maison: number | null
   prix_m2_appartement: number | null
 
-  // MaPrimeRénov
+  // Renovation subsidy data
   nb_maprimerenov_annuel: number | null
 
-  // Géorisques
+  // Natural risk data
   risque_inondation?: boolean
   risque_argile?: string | null  // 'fort' | 'moyen' | 'faible'
   zone_sismique?: number | null  // 1-5
@@ -85,10 +85,10 @@ export interface LocationData {
 }
 
 // ---------------------------------------------------------------------------
-// Select columns — explicit to avoid SELECT * and catch schema drift
+// Select columns -- explicit to avoid SELECT * and catch schema drift
 // ---------------------------------------------------------------------------
 
-const COMMUNE_COLUMNS = [
+const LOCATION_COLUMNS = [
   'code_insee', 'name', 'slug', 'code_postal',
   'departement_code', 'departement_name', 'region_name',
   'latitude', 'longitude', 'altitude_moyenne', 'superficie_km2',
@@ -109,15 +109,15 @@ const COMMUNE_COLUMNS = [
 ].join(',')
 
 // ---------------------------------------------------------------------------
-// Fetch commune data by slug (cached 24h)
+// Fetch location data by slug (cached 24h)
 // ---------------------------------------------------------------------------
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export async function getLocationBySlug(slug: string): Promise<LocationData | null> {
-  if (IS_BUILD) return null // Skip DB during build — ISR will populate on first visit
+  if (IS_BUILD) return null // Skip DB during build -- ISR will populate on first visit
   return getCachedData<LocationData | null>(
-    `commune:${slug}`,
+    `location:${slug}`,
     async () => {
       try {
         // Lazy import to avoid crashes when env vars are missing (build time)
@@ -126,7 +126,7 @@ export async function getLocationBySlug(slug: string): Promise<LocationData | nu
 
         const { data, error } = await supabase
           .from('locations_us')
-          .select(COMMUNE_COLUMNS)
+          .select(LOCATION_COLUMNS)
           .eq('slug', slug)
           .eq('is_active', true)
           .single()
@@ -134,7 +134,7 @@ export async function getLocationBySlug(slug: string): Promise<LocationData | nu
         if (error || !data) return null
         return data as unknown as LocationData
       } catch {
-        // DB unavailable or table doesn't exist yet — graceful fallback
+        // DB unavailable or table does not exist yet -- graceful fallback
         return null
       }
     },
@@ -144,43 +144,43 @@ export async function getLocationBySlug(slug: string): Promise<LocationData | nu
 }
 
 // ---------------------------------------------------------------------------
-// Helper: check if commune has enrichment data (beyond basic demographics)
+// Helper: check if location has enrichment data (beyond basic demographics)
 // ---------------------------------------------------------------------------
 
-export function hasEnrichmentData(commune: LocationData): boolean {
+export function hasEnrichmentData(location: LocationData): boolean {
   return !!(
-    commune.nb_artisans_btp ||
-    commune.nb_artisans_rge ||
-    commune.pct_passoires_dpe ||
-    commune.jours_gel_annuels ||
-    commune.nb_transactions_annuelles ||
-    commune.nb_maprimerenov_annuel
+    location.nb_artisans_btp ||
+    location.nb_artisans_rge ||
+    location.pct_passoires_dpe ||
+    location.jours_gel_annuels ||
+    location.nb_transactions_annuelles ||
+    location.nb_maprimerenov_annuel
   )
 }
 
-/** Check if commune has Géorisques risk data */
-export function hasGeorisquesData(commune: LocationData): boolean {
+/** Check if location has natural risk data */
+export function hasGeorisquesData(location: LocationData): boolean {
   return !!(
-    commune.risque_inondation ||
-    commune.risque_argile ||
-    commune.zone_sismique ||
-    commune.risque_radon ||
-    commune.nb_catnat
+    location.risque_inondation ||
+    location.risque_argile ||
+    location.zone_sismique ||
+    location.risque_radon ||
+    location.nb_catnat
   )
 }
 
-/** Check if commune has at least basic demographic data */
-export function hasDemographicData(commune: LocationData): boolean {
+/** Check if location has at least basic demographic data */
+export function hasDemographicData(location: LocationData): boolean {
   return !!(
-    commune.revenu_median ||
-    commune.prix_m2_moyen ||
-    commune.nb_logements ||
-    commune.part_maisons_pct
+    location.revenu_median ||
+    location.prix_m2_moyen ||
+    location.nb_logements ||
+    location.part_maisons_pct
   )
 }
 
 // ---------------------------------------------------------------------------
-// Helper: format number with French thousands separator
+// Helper: format number with US thousands separator
 // ---------------------------------------------------------------------------
 
 export function formatNumber(n: number): string {

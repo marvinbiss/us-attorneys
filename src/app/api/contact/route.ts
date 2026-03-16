@@ -60,11 +60,11 @@ export async function POST(request: Request) {
 
     // Map subject to readable text
     const sujetTexte: Record<string, string> = {
-      devis: 'Question about a consultation',
-      artisan: 'Issue with an attorney',
-      inscription: 'Attorney registration',
-      partenariat: 'Partnership',
-      autre: 'Other',
+      consultation: 'Question about a consultation',
+      attorney: 'Issue with an attorney',
+      registration: 'Attorney registration',
+      partnership: 'Partnership',
+      other: 'Other',
     }
 
     // Sanitize all user inputs for HTML

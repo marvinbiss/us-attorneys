@@ -27,7 +27,7 @@ async function _getAttorneyCount(): Promise<number> {
 }
 
 export const getAttorneyCount = unstable_cache(_getAttorneyCount, ['provider-count'], {
-  revalidate: 3600, // 1h — aligné sur le revalidate du root layout
+  revalidate: 3600, // 1h — aligned with root layout revalidate
   tags: ['providers'],
 })
 

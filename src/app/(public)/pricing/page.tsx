@@ -78,7 +78,7 @@ const tradeEmojis: Record<string, string> = {
   nettoyage: '✨',
 }
 
-export default async function TarifsPage() {
+export default async function PricingPage() {
   const cmsPage = await getPageContent('pricing', 'static')
 
   if (cmsPage?.content_html) {

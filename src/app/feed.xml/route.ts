@@ -33,10 +33,10 @@ export async function GET() {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${escapeXml(SITE_NAME)} — Blog Artisanat &amp; Travaux</title>
+    <title>${escapeXml(SITE_NAME)} — Legal Blog &amp; Insights</title>
     <link>${SITE_URL}/blog</link>
-    <description>Conseils, guides et actualités sur l'artisanat, les travaux de rénovation, les prix et la réglementation.</description>
-    <language>fr</language>
+    <description>Tips, guides, and news about legal services, attorney fees, and regulations.</description>
+    <language>en</language>
     <lastBuildDate>${latestDate.toUTCString()}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
     <image>

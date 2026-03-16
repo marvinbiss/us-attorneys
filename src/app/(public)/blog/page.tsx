@@ -113,15 +113,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
     'Energy': 'bg-teal-100 text-teal-700',
     'DIY': 'bg-orange-100 text-orange-700',
     'Inspiration': 'bg-pink-100 text-pink-700',
-    // Legacy French keys for backward compatibility
-    'Conseils': 'bg-amber-100 text-amber-700',
-    'Tarifs': 'bg-emerald-100 text-emerald-700',
-    'Fiches métier': 'bg-blue-100 text-blue-700',
-    'Réglementation': 'bg-slate-100 text-slate-700',
-    'Aides & Subventions': 'bg-green-100 text-green-700',
-    'Saisonnier': 'bg-lime-100 text-lime-700',
-    'Sécurité': 'bg-red-100 text-red-700',
-    'Énergie': 'bg-teal-100 text-teal-700',
   }
 
   return (

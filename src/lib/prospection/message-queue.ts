@@ -1,7 +1,7 @@
 /**
  * Message Queue Service - Prospection
- * Traitement par batch des envois massifs avec rate limiting
- * Utilise la base de données comme queue (prospection_messages status='queued')
+ * Batch processing of bulk sends with rate limiting
+ * Uses the database as a queue (prospection_messages status='queued')
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -26,7 +26,7 @@ export function maskPhone(phone: string): string {
   return phone.slice(0, 3) + '****' + phone.slice(-2)
 }
 
-// Rate limits par canal (messages par seconde)
+// Rate limits per channel (messages per second)
 const CHANNEL_RATE_LIMITS: Record<ProspectionChannel, { perSecond: number; perMinute: number }> = {
   whatsapp: { perSecond: 80, perMinute: 1000 },
   sms: { perSecond: 10, perMinute: 400 },
@@ -85,8 +85,8 @@ export interface QueueStats {
 }
 
 /**
- * Enfiler les messages pour une campagne
- * Crée les entrées prospection_messages pour chaque contact de la liste
+ * Enqueue messages for a campaign
+ * Creates prospection_messages entries for each contact in the list
  */
 export async function enqueueCampaignMessages(
   campaignId: string
@@ -202,7 +202,7 @@ export async function enqueueCampaignMessages(
 }
 
 /**
- * Traiter un batch de messages en queue
+ * Process a batch of queued messages
  * Uses atomic UPDATE...RETURNING to prevent double-send race conditions
  */
 export async function processBatch(
@@ -332,7 +332,7 @@ export async function processBatch(
       }
     }
   } else {
-    // SMS et WhatsApp : envoi séquentiel avec rate limiting
+    // SMS and WhatsApp: sequential send with rate limiting
     for (const msg of messages) {
       result.processed++
       const contact = msg.contact
@@ -416,7 +416,7 @@ export async function processBatch(
     })
   }
 
-  // Verify si la campagne est terminée
+  // Check if campaign is complete
   try {
     await checkCampaignCompletion(supabase, campaignId)
   } catch (err) {
@@ -430,7 +430,7 @@ export async function processBatch(
 }
 
 /**
- * Mettre en pause une campagne
+ * Pause a campaign
  */
 export async function pauseCampaign(campaignId: string): Promise<void> {
   const supabase = createAdminClient()
@@ -442,7 +442,7 @@ export async function pauseCampaign(campaignId: string): Promise<void> {
 }
 
 /**
- * Reprendre une campagne
+ * Resume a campaign
  */
 export async function resumeCampaign(campaignId: string): Promise<void> {
   const supabase = createAdminClient()
@@ -482,7 +482,7 @@ export async function retryFailed(campaignId: string): Promise<number> {
 }
 
 /**
- * Obtenir les stats de la queue pour une campagne
+ * Get queue statistics for a campaign
  */
 export async function getQueueStats(campaignId: string): Promise<QueueStats> {
   const supabase = createAdminClient()
@@ -551,7 +551,7 @@ export async function reconcileOrphanedMessages(supabase: ReturnType<typeof crea
   return reconciledCount
 }
 
-// --- Helpers privés ---
+// --- Private helpers ---
 
 async function updateMessageStatus(
   supabase: ReturnType<typeof createAdminClient>,
@@ -574,7 +574,7 @@ async function updateMessageFailed(
   messageId: string,
   errorMessage: string
 ): Promise<void> {
-  // Incrémenter retry_count via un select + update
+  // Increment retry_count via select + update
   const { data: msg } = await supabase
     .from('prospection_messages')
     .select('retry_count, max_retries')
@@ -592,7 +592,7 @@ async function updateMessageFailed(
       error_message: errorMessage,
       retry_count: retryCount,
       failed_at: shouldRetry ? null : new Date().toISOString(),
-      // Backoff exponentiel: 30s, 2min, 8min
+      // Exponential backoff: 30s, 2min, 8min
       next_retry_at: shouldRetry
         ? new Date(Date.now() + Math.pow(4, retryCount) * 30000).toISOString()
         : null,

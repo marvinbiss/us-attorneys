@@ -26,7 +26,7 @@ export const quoteRequestSchema = z.object({
     .string()
     .min(10, 'Description must be at least 10 characters')
     .max(2000, 'Description too long'),
-  urgency: z.enum(['normal', 'urgent', 'tres_urgent']).optional().default('normal'),
+  urgency: z.enum(['normal', 'urgent', 'very_urgent']).optional().default('normal'),
   city: z.string().max(100).optional(),
   postal_code: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional(),
   budget_min: z.number().int().positive().optional(),

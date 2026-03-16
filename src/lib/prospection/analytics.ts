@@ -1,6 +1,6 @@
 /**
  * Analytics Service - Prospection
- * Agrégation des stats campagnes, canaux, audiences
+ * Aggregation of campaign, channel, and audience stats
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -13,7 +13,7 @@ import type {
 } from '@/types/prospection'
 
 /**
- * Stats d'une campagne spécifique
+ * Stats for a specific campaign
  */
 export async function getCampaignStats(campaignId: string): Promise<CampaignStats> {
   const supabase = createAdminClient()
@@ -188,7 +188,7 @@ export async function getOverviewStats(
 }
 
 /**
- * Performance par canal
+ * Performance per channel
  * Optimized: single query with in-JS grouping instead of 12 sequential queries
  */
 export async function getChannelPerformance(
@@ -242,7 +242,7 @@ export async function getChannelPerformance(
       failed: d.failed,
       delivery_rate: d.sent > 0 ? (d.delivered / d.sent) * 100 : 0,
       reply_rate: d.delivered > 0 ? (d.replied / d.delivered) * 100 : 0,
-      avg_cost: 0, // TODO: calculer depuis les coûts réels
+      avg_cost: 0, // TODO: calculate from actual costs
     }
   })
 }

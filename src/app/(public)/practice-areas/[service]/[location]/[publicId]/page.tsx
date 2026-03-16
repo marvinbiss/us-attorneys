@@ -3,7 +3,6 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getAttorneyByStableId, getAttorneyBySlug, getAttorneyById, getSpecialtyBySlug, getLocationBySlug, getAttorneyCountByServiceAndLocation } from '@/lib/supabase'
 import { getAttorneyUrl } from '@/lib/utils'
-import { resolveProviderCity } from '@/lib/insee-resolver'
 import AttorneyPageClient from '@/components/attorney/AttorneyPageClient'
 import AttorneyInternalLinks from '@/components/attorney/AttorneyInternalLinks'
 import { Review } from '@/components/attorney'
@@ -242,7 +241,7 @@ interface ReviewRow {
 }
 
 // Fetch similar attorneys (same specialty, same department)
-async function getSimilarArtisans(attorneyId: string, specialty: string, postalCode?: string) {
+async function getSimilarAttorneys(attorneyId: string, specialty: string, postalCode?: string) {
   try {
     const { supabase } = await import('@/lib/supabase')
     const deptCode = postalCode && postalCode.length >= 2 ? postalCode.substring(0, 2) : null
@@ -269,7 +268,6 @@ async function getSimilarArtisans(attorneyId: string, specialty: string, postalC
     const { data } = await query
 
     return ((data || []) as SimilarAttorneyRow[]).map((p) => {
-      const resolved = resolveProviderCity(p)
       return {
         id: p.id,
         stable_id: p.stable_id || undefined,
@@ -404,9 +402,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // Cast to access DB columns that TS can't infer from select('*')
     const provider = rawProvider as unknown as ProviderRecord
 
-    // Resolve provider's real city (may be INSEE code in DB)
-    const resolved = resolveProviderCity(provider)
-    const realCity = resolved.address_city || provider.address_city || ''
+    const realCity = provider.address_city || ''
     const displayName = provider.name || provider.business_name || 'Attorney'
     const specialtyName = service?.name || 'Attorney'
 
@@ -508,13 +504,11 @@ export default async function AttorneyPage({ params }: PageProps) {
   }
 
   // Canonical redirect: if the URL segments don't match the canonical slugs, redirect
-  // Use provider's REAL city (resolved from INSEE if needed), NOT the URL's location
-  const resolvedProvider = resolveProviderCity(provider)
   const canonicalUrl = getAttorneyUrl({
     stable_id: provider.stable_id,
     slug: provider.slug,
     specialty: provider.specialty,
-    city: resolvedProvider.address_city || provider.address_city,
+    city: provider.address_city,
   })
   const currentPath = `/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`
   // Only redirect if canonical URL has a valid ID segment (avoid redirect to hub page)
@@ -528,11 +522,11 @@ export default async function AttorneyPage({ params }: PageProps) {
 
   // Fetch reviews and similar attorneys in parallel (graceful degradation)
   let reviews: Review[] = []
-  let similarArtisans: Awaited<ReturnType<typeof getSimilarArtisans>> = []
+  let similarAttorneys: Awaited<ReturnType<typeof getSimilarAttorneys>> = []
   try {
-    ;[reviews, similarArtisans] = await Promise.all([
+    ;[reviews, similarAttorneys] = await Promise.all([
       getAttorneyReviews(provider.id, service?.name || artisan.specialty),
-      getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
+      getSimilarAttorneys(provider.id, artisan.specialty, artisan.postal_code),
     ])
   } catch {
     // Graceful degradation — page renders without reviews/similar attorneys
@@ -550,7 +544,7 @@ export default async function AttorneyPage({ params }: PageProps) {
         initialArtisan={artisan}
         initialReviews={reviews}
         attorneyId={provider.id}
-        similarArtisans={similarArtisans}
+        similarAttorneys={similarAttorneys}
         isClaimed={!!provider.user_id}
         hasSiret={!!provider.siret}
       />

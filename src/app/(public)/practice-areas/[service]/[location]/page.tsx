@@ -12,7 +12,7 @@ import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
 import CrossLinks from './_components/CrossLinks'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import type { LocationData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/location-data'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -570,8 +570,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       <CrossIntentLinks
         service={specialtySlug}
         specialtyName={service.name}
-        ville={locationSlug}
-        villeName={location.name}
+        city={locationSlug}
+        cityName={location.name}
         currentIntent="services"
       />
 

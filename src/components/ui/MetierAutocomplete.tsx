@@ -11,7 +11,7 @@ interface ServiceItem {
   color: string
 }
 
-interface MetierAutocompleteProps {
+interface SpecialtyAutocompleteProps {
   value?: string
   placeholder?: string
   onSelect: (service: ServiceItem) => void
@@ -86,7 +86,7 @@ function fuzzyMatch(query: string, target: string): number {
 // Popular services for quick access
 const popularServices = ['personal-injury', 'criminal-defense', 'family-law', 'immigration', 'estate-planning']
 
-export function MetierAutocomplete({
+export function SpecialtyAutocomplete({
   value = '',
   placeholder = 'What type of attorney are you looking for?',
   onSelect,
@@ -97,7 +97,7 @@ export function MetierAutocomplete({
   inputClassName = '',
   disabled = false,
   maxSuggestions = 8
-}: MetierAutocompleteProps) {
+}: SpecialtyAutocompleteProps) {
   const [query, setQuery] = useState(value)
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)

@@ -23,10 +23,10 @@ async function getLocationFromCoords(_lon: number, _lat: number): Promise<CitySu
   return null
 }
 
-interface VilleAutocompleteProps {
+interface CityAutocompleteProps {
   value?: string
   placeholder?: string
-  onSelect: (ville: string, codePostal: string, coords?: [number, number]) => void
+  onSelect: (city: string, zipCode: string, coords?: [number, number]) => void
   onClear?: () => void
   showGeolocation?: boolean
   className?: string
@@ -34,16 +34,16 @@ interface VilleAutocompleteProps {
   disabled?: boolean
 }
 
-export function VilleAutocomplete({
+export function CityAutocomplete({
   value = '',
-  placeholder = 'City ou code postal...',
+  placeholder = 'City, state, or ZIP code...',
   onSelect,
   onClear,
   showGeolocation = true,
   className = '',
   inputClassName = '',
   disabled = false
-}: VilleAutocompleteProps) {
+}: CityAutocompleteProps) {
   const [query, setQuery] = useState(value)
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([])
   const [isOpen, setIsOpen] = useState(false)

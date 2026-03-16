@@ -9,7 +9,7 @@ import { z } from 'zod'
 const updateSchema = z.object({
   name: z.string().min(1).max(200).optional(),
   channel: z.enum(['email', 'sms', 'whatsapp']).optional(),
-  audience_type: z.enum(['artisan', 'client', 'mairie']).nullish(),
+  audience_type: z.enum(['attorney', 'client', 'municipality']).nullish(),
   subject: z.string().max(200).optional(),
   body: z.string().min(1).max(50000).optional(),
   html_body: z.string().optional(),

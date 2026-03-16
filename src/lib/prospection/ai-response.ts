@@ -1,6 +1,6 @@
 /**
  * AI Response Service - Prospection
- * Interface unifiée Claude + OpenAI pour réponses contextuelles
+ * Unified Claude + OpenAI interface for contextual responses
  */
 
 import { logger } from '@/lib/logger'
@@ -31,14 +31,14 @@ interface AIGenerateResult {
 }
 
 /**
- * Générer une réponse IA contextuelle
+ * Generate a contextual AI response
  */
 export async function generateAIResponse(params: AIGenerateParams): Promise<AIGenerateResult> {
   const { provider, model, systemPrompt, conversationHistory, contactContext, maxTokens, temperature } = params
 
   // Build context
   const contextStr = buildContactContext(contactContext)
-  const fullSystemPrompt = `${systemPrompt}\n\nContexte du contact:\n${contextStr}`
+  const fullSystemPrompt = `${systemPrompt}\n\nContact context:\n${contextStr}`
 
   // Conversation history
   const messages = conversationHistory.map(msg => ({
@@ -67,7 +67,7 @@ export async function generateAIResponse(params: AIGenerateParams): Promise<AIGe
 }
 
 /**
- * Générer via Claude API
+ * Generate via Claude API
  */
 async function generateWithClaude(
   systemPrompt: string,
@@ -109,7 +109,7 @@ async function generateWithClaude(
     const content = data.content?.[0]?.text || ''
     const usage = data.usage || {}
 
-    // Coût approximatif (Claude Sonnet)
+    // Approximate cost (Claude Sonnet)
     const inputCost = (usage.input_tokens || 0) * 0.000003
     const outputCost = (usage.output_tokens || 0) * 0.000015
 
@@ -132,7 +132,7 @@ async function generateWithClaude(
 }
 
 /**
- * Générer via OpenAI API
+ * Generate via OpenAI API
  */
 async function generateWithOpenAI(
   systemPrompt: string,
@@ -175,7 +175,7 @@ async function generateWithOpenAI(
     const content = data.choices?.[0]?.message?.content || ''
     const usage = data.usage || {}
 
-    // Coût approximatif (GPT-4o)
+    // Approximate cost (GPT-4o)
     const inputCost = (usage.prompt_tokens || 0) * 0.000005
     const outputCost = (usage.completion_tokens || 0) * 0.000015
 
@@ -212,7 +212,7 @@ function sanitizeForPrompt(value: string): string {
 }
 
 /**
- * Construire le contexte textuel d'un contact
+ * Build the textual context for a contact
  * All contact values are sanitized to prevent prompt injection.
  * Wrapped with delimiters to clearly separate data from instructions.
  */
@@ -260,7 +260,7 @@ export function validateAIOutput(content: string): { valid: boolean; reason?: st
 }
 
 /**
- * Vérifier si un message doit être escaladé à un humain
+ * Check if a message should be escalated to a human
  */
 export function shouldEscalate(content: string, keywords: string[]): boolean {
   const lowerContent = content.toLowerCase()
@@ -268,7 +268,7 @@ export function shouldEscalate(content: string, keywords: string[]): boolean {
 }
 
 /**
- * Générer avec fallback (essaie le provider principal, puis le secondaire)
+ * Generate with fallback (tries the primary provider, then the secondary)
  */
 export async function generateWithFallback(
   params: AIGenerateParams

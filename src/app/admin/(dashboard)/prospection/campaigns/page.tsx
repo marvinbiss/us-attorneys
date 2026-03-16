@@ -45,13 +45,13 @@ export default function CampaignsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Gestion des campagnes</p>
+          <p className="text-gray-500 mt-1">Campaign management</p>
         </div>
         <Link
           href="/admin/prospection/campaigns/create"
           className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          <Plus className="w-4 h-4" /> Nouvelle campagne
+          <Plus className="w-4 h-4" /> New campaign
         </Link>
       </div>
 
@@ -72,23 +72,23 @@ export default function CampaignsPage() {
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
           >
-            {s === 'all' ? 'Toutes' : s === 'draft' ? 'Brouillons' : s === 'sending' ? 'En cours' : s === 'paused' ? 'En pause' : 'Terminées'}
+            {s === 'all' ? 'All' : s === 'draft' ? 'Drafts' : s === 'sending' ? 'Sending' : s === 'paused' ? 'Paused' : 'Completed'}
           </button>
         ))}
       </div>
 
       <div className="bg-white rounded-lg border overflow-hidden">
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[800px] text-sm" aria-label="Liste des campagnes de prospection">
+        <table className="w-full min-w-[800px] text-sm" aria-label="Prospection campaigns list">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Campagne</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Canal</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Statut</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Envoyés</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Livrés</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Réponses</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Coût</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Campaign</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Channel</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Sent</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Delivered</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Replies</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Cost</th>
             </tr>
           </thead>
           <tbody className="divide-y">

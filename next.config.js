@@ -244,7 +244,7 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Contenu éditorial & guides
+      // Editorial content & guides
       {
         source: '/glossary',
         headers: [
@@ -269,7 +269,7 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Outils & calculateurs
+      // Tools & calculators
       {
         source: '/tools/:path*',
         headers: [
@@ -294,21 +294,21 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Données & statistiques
+      // Data & statistics
       {
         source: '/attorney-statistics',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Tarifs & devis (variantes)
+      // Pricing & quotes
       {
         source: '/attorney-pricing/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Vérification artisan
+      // Attorney verification
       {
         source: '/verify-attorney',
         headers: [
@@ -321,14 +321,14 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Recherche
+      // Search
       {
         source: '/search',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Pages institutionnelles & légales
+      // Institutional & legal pages
       {
         source: '/press',
         headers: [
@@ -371,34 +371,15 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/home', destination: '/', permanent: true },
-      { source: '/home', destination: '/', permanent: true },
       // Legacy routes
       { source: '/browse', destination: '/services', permanent: true },
       { source: '/map', destination: '/services', permanent: true },
       { source: '/map-list', destination: '/services', permanent: true },
       { source: '/search', destination: '/services', permanent: true },
-      { source: '/attorney-area/:path*', destination: '/espace-artisan', permanent: true },
       { source: '/practice-areas/artisan/:path*', destination: '/services', permanent: true },
-      // French legal page aliases (RGPD compliance)
+      // Legal page aliases
       { source: '/privacy-policy', destination: '/privacy', permanent: true },
       { source: '/general-terms', destination: '/terms', permanent: true },
-      // Common alternative slugs
-      { source: '/practice-areas/peintre', destination: '/practice-areas/peintre-en-batiment', permanent: true },
-      { source: '/practice-areas/peintre/:location', destination: '/practice-areas/peintre-en-batiment/:location', permanent: true },
-      { source: '/practice-areas/peintre/:location/:id', destination: '/practice-areas/peintre-en-batiment/:location/:id', permanent: true },
-      // Blog cannibalisation fixes — 301 redirects to canonical articles
-      // Isolation: canonical = isolation-maison-guide-complet-materiaux-prix-aides
-      { source: '/blog/isolation-thermique-guide', destination: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', permanent: true },
-      { source: '/blog/isolation-thermique-meilleures-solutions-2026', destination: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', permanent: true },
-      // Toiture/prix: canonical = prix-toiture-2026-refection-reparation-materiaux
-      { source: '/blog/prix-couvreur-2026-cout-refection-toiture', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
-      { source: '/blog/refaire-toiture-guide-proprietaire', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
-      // Phantom blog pages — slugs that never existed as articles
-      { source: '/blog/comment-choisir-plombier', destination: '/blog/comment-choisir-son-plombier', permanent: true },
-      { source: '/blog/urgence-plomberie-que-faire', destination: '/blog/fuite-eau-urgence-guide-complet-gestes-couts', permanent: true },
-      { source: '/blog/comment-choisir-plombier-guide', destination: '/blog/comment-choisir-son-plombier', permanent: true },
-      { source: '/blog/renovation-energetique-2026', destination: '/blog/renovation-energetique-aides-2026', permanent: true },
-      { source: '/blog/tendances-decoration-2026', destination: '/blog/tendances-salle-de-bain-2026', permanent: true },
     ]
   },
 

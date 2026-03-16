@@ -176,7 +176,7 @@ export function trackConversion(
 
 // Booking funnel tracking
 export const BookingFunnel = {
-  // Step 1: User views artisan profile
+  // Step 1: User views attorney profile
   viewProfile: (attorneyId: string, attorneyName: string, source?: string) => {
     trackEvent('artisan_profile_view', {
       attorneyId,

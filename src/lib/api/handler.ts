@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger'
 interface HandlerContext {
   request: NextRequest
   user?: { id: string; email: string }
-  artisan?: { attorney_id: string }
+  artisan?: { attorney_id: string } // legacy name -- matches profile.role='artisan' in DB
   body?: unknown
   params?: Record<string, string>
 }

@@ -15,7 +15,7 @@ const createSchema = z.object({
   name: z.string().min(1).max(200),
   description: z.string().max(1000).optional(),
   channel: z.enum(['email', 'sms', 'whatsapp']),
-  audience_type: z.enum(['artisan', 'client', 'mairie']),
+  audience_type: z.enum(['attorney', 'client', 'municipality']),
   template_id: z.string().uuid().optional(),
   list_id: z.string().uuid().optional(),
   scheduled_at: z.string().optional(),

@@ -1,6 +1,6 @@
 /**
  * Webhook Security - Prospection
- * Vérification des signatures pour Twilio et Resend
+ * Signature verification for Twilio and Resend webhooks
  */
 
 import crypto from 'crypto'
@@ -8,7 +8,7 @@ import twilio from 'twilio'
 import { logger } from '@/lib/logger'
 
 /**
- * Vérifier la signature Twilio (X-Twilio-Signature)
+ * Verify Twilio signature (X-Twilio-Signature)
  */
 export function verifyTwilioSignature(
   signature: string,
@@ -30,7 +30,7 @@ export function verifyTwilioSignature(
 }
 
 /**
- * Vérifier la signature Resend (webhook svix)
+ * Verify Resend signature (webhook svix)
  * Performs actual HMAC-SHA256 verification instead of just checking header presence.
  */
 export function verifyResendSignature(

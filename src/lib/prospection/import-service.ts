@@ -190,7 +190,7 @@ export function validateRows(
           break
         }
         case 'contact_type': {
-          const validTypes: ContactType[] = ['artisan', 'client', 'mairie']
+          const validTypes: ContactType[] = ['attorney', 'client', 'municipality']
           const lower = value.toLowerCase()
           if (validTypes.includes(lower as ContactType)) {
             contact.contact_type = lower as ContactType
@@ -391,10 +391,10 @@ export async function importContacts(
   // 2. Validate
   const { valid, errors } = validateRows(rows, mapping, contactType, sourceFile)
 
-  // 3. Dédupliquer
+  // 3. Deduplicate
   const { unique, duplicates } = await checkDuplicates(valid)
 
-  // 4. Insérer
+  // 4. Insert
   const { inserted, failed } = await bulkInsertContacts(unique)
 
   return {
@@ -409,7 +409,7 @@ export async function importContacts(
 }
 
 /**
- * Synchroniser the attorneys existants de la base vers prospection_contacts
+ * Sync active attorneys from database to prospection_contacts
  */
 export async function syncArtisansFromDatabase(
   filters?: { department?: string; service?: string }
@@ -437,7 +437,7 @@ export async function syncArtisansFromDatabase(
   let skipped = 0
 
   for (const provider of providers) {
-    // Verify si déjà importé
+    // Check if already imported
     const { data: existing } = await supabase
       .from('prospection_contacts')
       .select('id')
@@ -451,7 +451,7 @@ export async function syncArtisansFromDatabase(
     }
 
     const contact: ProspectionContactInsert = {
-      contact_type: 'artisan',
+      contact_type: 'attorney',
       company_name: provider.name,
       contact_name: provider.name,
       email: provider.email,

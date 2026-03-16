@@ -269,11 +269,11 @@ export default function ContactPageClient() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
                   >
                     <option value="">Select a subject</option>
-                    <option value="devis">Question about a consultation</option>
-                    <option value="artisan">Issue with an attorney</option>
-                    <option value="inscription">Attorney registration</option>
-                    <option value="partenariat">Partnership</option>
-                    <option value="autre">Other</option>
+                    <option value="consultation">Question about a consultation</option>
+                    <option value="attorney">Issue with an attorney</option>
+                    <option value="registration">Attorney registration</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
 

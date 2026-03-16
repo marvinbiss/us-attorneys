@@ -1,6 +1,6 @@
 /**
  * Template Rendering Engine - Prospection
- * Substitution de variables {{variable}} dans les templates
+ * Template variable substitution for {{variable}} patterns
  */
 
 import crypto from 'crypto'
@@ -19,7 +19,7 @@ function escapeTemplateValue(value: unknown): string {
   return str.replace(/<[^>]*>/g, '').replace(/\{\{/g, '').replace(/\}\}/g, '').slice(0, 500)
 }
 
-// Variables disponibles dans les templates
+// Available template variables
 const CONTACT_VARIABLES: Record<string, (contact: ProspectionContact) => string> = {
   contact_name: (c) => c.contact_name || '',
   company_name: (c) => c.company_name || '',
@@ -108,7 +108,7 @@ export function verifyUnsubscribeToken(
 }
 
 /**
- * Rend un template en substituant les {{variables}}
+ * Render a template by substituting {{variables}}
  */
 export function renderTemplate(
   template: string,
@@ -118,12 +118,12 @@ export function renderTemplate(
 ): string {
   let rendered = template
 
-  // Substitution variables contact
+  // Contact variable substitution
   for (const [key, getter] of Object.entries(CONTACT_VARIABLES)) {
     rendered = rendered.replaceAll(`{{${key}}}`, escapeTemplateValue(getter(contact)))
   }
 
-  // Substitution variables campagne
+  // Campaign variable substitution
   for (const [key, getter] of Object.entries(CAMPAIGN_VARIABLES)) {
     rendered = rendered.replaceAll(`{{${key}}}`, escapeTemplateValue(getter(campaign)))
   }
@@ -135,7 +135,7 @@ export function renderTemplate(
     }
   }
 
-  // Custom fields du contact
+  // Contact custom fields
   if (contact.custom_fields) {
     for (const [key, value] of Object.entries(contact.custom_fields)) {
       rendered = rendered.replaceAll(`{{custom_${key}}}`, escapeTemplateValue(value))
@@ -154,7 +154,7 @@ export function renderTemplate(
 }
 
 /**
- * Extrait les variables d'un template
+ * Extract variables from a template
  */
 export function extractVariables(template: string): string[] {
   const matches = template.match(/\{\{(\w+)\}\}/g) || []
@@ -162,7 +162,7 @@ export function extractVariables(template: string): string[] {
 }
 
 /**
- * Valide qu'un template peut être rendu avec un contact
+ * Validate that a template can be rendered with a contact
  */
 export function validateTemplate(
   template: string,
@@ -189,12 +189,12 @@ export function validateTemplate(
 }
 
 /**
- * Génère un aperçu avec des données fictives
+ * Generate a preview with sample data
  */
 export function renderPreview(template: string): string {
   const sampleContact: ProspectionContact = {
     id: 'preview-id',
-    contact_type: 'artisan',
+    contact_type: 'attorney',
     company_name: 'Smith & Associates Law Firm',
     contact_name: 'John Smith',
     email: 'john.smith@example.com',
@@ -226,7 +226,7 @@ export function renderPreview(template: string): string {
     name: 'Test Campaign',
     description: null,
     channel: 'email',
-    audience_type: 'artisan',
+    audience_type: 'attorney',
     template_id: null,
     list_id: null,
     status: 'draft',

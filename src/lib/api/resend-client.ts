@@ -337,7 +337,7 @@ export async function sendPasswordResetEmail(params: {
 }
 
 /**
- * Send claim approved email (artisan sets password)
+ * Send claim approved email (attorney sets password)
  */
 export async function sendClaimApprovedEmail(params: {
   to: string
@@ -464,7 +464,7 @@ export async function sendBookingConfirmationEmail(params: {
 }
 
 /**
- * Send quote request notification to artisan
+ * Send quote request notification to attorney
  */
 export async function sendQuoteRequestEmail(params: {
   to: string

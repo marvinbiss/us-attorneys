@@ -51,14 +51,14 @@ export {
 // Search (Doctolib-style)
 export { SearchBar } from './SearchBar'
 
-// Artisan Cards (Airbnb-style)
+// Attorney Cards
 export { AttorneyCard, ArtisanGrid } from './AttorneyCard'
 
 // Autocomplete (World-class, Stripe/Doctolib-style)
-export { VilleAutocomplete } from './VilleAutocomplete'
+export { CityAutocomplete } from './VilleAutocomplete'
 // AdresseAutocomplete removed (French data.gouv.fr API)
 // SiretAutocomplete removed (French SIRET validation)
-export { MetierAutocomplete } from './MetierAutocomplete'
+export { SpecialtyAutocomplete } from './MetierAutocomplete'
 
 // Scroll-triggered animations (Framer Motion)
 export { ScrollReveal } from './ScrollReveal'

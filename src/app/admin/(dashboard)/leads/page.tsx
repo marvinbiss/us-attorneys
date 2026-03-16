@@ -231,7 +231,7 @@ export default function AdminLeadsPage() {
                 <option value="">All</option>
                 <option value="normal">Normal</option>
                 <option value="urgent">Urgent</option>
-                <option value="tres_urgent">Very urgent</option>
+                <option value="very_urgent">Very urgent</option>
               </select>
             </div>
             <button

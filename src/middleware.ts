@@ -79,7 +79,7 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   }
 
   // 4. Lowercase normalization — prevent duplicate content from mixed-case URLs
-  //    Exclude artisan publicId paths: /practice-areas/{service}/{location}/{publicId}
+  //    Exclude attorney publicId paths: /practice-areas/{service}/{location}/{publicId}
   //    because stable_id contains mixed-case characters (HMAC-SHA256 base64)
   const isArtisanPublicIdPath = /^\/services\/[^/]+\/[^/]+\/[^/]+$/.test(pathname)
   if (!isArtisanPublicIdPath && pathname !== pathname.toLowerCase()) {
@@ -206,7 +206,7 @@ export async function middleware(request: NextRequest) {
 
   // Refresh session — only for routes that need auth (skip Supabase call for public pages)
   let response: NextResponse
-  const needsAuth = pathname.startsWith('/espace-') || pathname.startsWith('/admin') || pathname.startsWith('/booking')
+  const needsAuth = pathname.startsWith('/admin') || pathname.startsWith('/booking')
   if (needsAuth) {
     try {
       response = await updateSession(request)

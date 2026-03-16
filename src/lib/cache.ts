@@ -9,7 +9,7 @@ const redisCache = new CacheService('sa:cache:')
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
   services: 86400,  // 24 hours — services almost never change
-  artisans: 3600,   // 1 hour — attorney profiles rarely change
+  attorneys: 3600,  // 1 hour — attorney profiles rarely change
   reviews: 3600,    // 1 hour — reviews rarely change
   locations: 604800,// 7 days — locations never change
   stats: 86400,     // 24 hours — stats recalculated by daily cron

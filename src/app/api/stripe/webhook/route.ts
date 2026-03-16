@@ -308,7 +308,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const { error: updateError } = await supabase
     .from('profiles')
     .update({
-      subscription_plan: 'gratuit',
+      subscription_plan: 'free',
       subscription_status: 'canceled',
       updated_at: new Date().toISOString(),
     })
@@ -325,14 +325,14 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     resource_type: 'profile',
     resource_id: profile.id,
     new_value: {
-      subscription_plan: 'gratuit',
+      subscription_plan: 'free',
       subscription_status: 'canceled',
       previous_plan: profile.subscription_plan,
       stripe_subscription_id: subscription.id,
     },
   })
 
-  logger.info(`Subscription deleted for profile ${profile.id}: reverted to gratuit`)
+  logger.info(`Subscription deleted for profile ${profile.id}: reverted to free`)
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {

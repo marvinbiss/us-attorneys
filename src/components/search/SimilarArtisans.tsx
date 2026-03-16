@@ -7,7 +7,7 @@ import { Star, MapPin, Sparkles, ChevronRight, Loader2 } from 'lucide-react'
 import { cn, getAttorneyUrl } from '@/lib/utils'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
-interface SimilarArtisan {
+interface SimilarAttorney {
   id: string
   name: string
   slug: string
@@ -25,7 +25,7 @@ interface SimilarArtisan {
   }
 }
 
-interface SimilarArtisansProps {
+interface SimilarAttorneysProps {
   attorneyId: string
   specialtySlug: string
   locationSlug: string
@@ -33,14 +33,14 @@ interface SimilarArtisansProps {
   className?: string
 }
 
-export function SimilarArtisans({
+export function SimilarAttorneys({
   attorneyId,
   specialtySlug,
   locationSlug,
   limit = 4,
   className,
-}: SimilarArtisansProps) {
-  const [attorneys, setAttorneys] = useState<SimilarArtisan[]>([])
+}: SimilarAttorneysProps) {
+  const [attorneys, setAttorneys] = useState<SimilarAttorney[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function SimilarArtisans({
         )
         if (response.ok) {
           const data = await response.json()
-          setAttorneys(data.artisans || [])
+          setAttorneys(data.attorneys || data.artisans || [])
         }
       } catch (error) {
         console.error('Error fetching similar attorneys:', error)
@@ -93,21 +93,21 @@ export function SimilarArtisans({
       </div>
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        {attorneys.map((artisan) => {
-          const providerUrl = getAttorneyUrl({ stable_id: artisan.stable_id, slug: artisan.slug, specialty: artisan.specialty, city: artisan.city })
+        {attorneys.map((attorney) => {
+          const providerUrl = getAttorneyUrl({ stable_id: attorney.stable_id, slug: attorney.slug, specialty: attorney.specialty, city: attorney.city })
 
           return (
             <Link
-              key={artisan.id}
+              key={attorney.id}
               href={providerUrl}
               className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               {/* Avatar */}
               <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                {artisan.avatarUrl ? (
+                {attorney.avatarUrl ? (
                   <Image
-                    src={artisan.avatarUrl}
-                    alt={`${artisan.name} - ${artisan.specialty} in ${artisan.city}`}
+                    src={attorney.avatarUrl}
+                    alt={`${attorney.name} - ${attorney.specialty} in ${attorney.city}`}
                     width={48}
                     height={48}
                     sizes="48px"
@@ -117,7 +117,7 @@ export function SimilarArtisans({
                   />
                 ) : (
                   <span className="text-lg font-medium text-gray-500 dark:text-gray-400">
-                    {artisan.name.charAt(0)}
+                    {attorney.name.charAt(0)}
                   </span>
                 )}
               </div>
@@ -126,15 +126,15 @@ export function SimilarArtisans({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-gray-900 dark:text-white truncate">
-                    {artisan.name}
+                    {attorney.name}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span>{artisan.specialty}</span>
+                  <span>{attorney.specialty}</span>
                   <span>·</span>
                   <span className="flex items-center gap-1">
                     <MapPin className="w-3 h-3" />
-                    {artisan.city}
+                    {attorney.city}
                   </span>
                 </div>
               </div>
@@ -143,9 +143,9 @@ export function SimilarArtisans({
               <div className="flex items-center gap-1 text-sm">
                 <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                 <span className="font-medium text-gray-900 dark:text-white">
-                  {artisan.ratingAverage.toFixed(1)}
+                  {attorney.ratingAverage.toFixed(1)}
                 </span>
-                <span className="text-gray-400">({artisan.reviewCount})</span>
+                <span className="text-gray-400">({attorney.reviewCount})</span>
               </div>
 
               {/* Arrow */}
@@ -169,4 +169,4 @@ export function SimilarArtisans({
   )
 }
 
-export default SimilarArtisans
+export default SimilarAttorneys

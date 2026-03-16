@@ -41,7 +41,7 @@ const breadcrumbItems = [
   { label: "Find an Attorney" },
 ]
 
-export default function TrouverArtisanPage() {
+export default function FindAttorneyPage() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

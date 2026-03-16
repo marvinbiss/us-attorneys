@@ -9,7 +9,7 @@ const usersQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
   filter: z.enum(['all', 'clients', 'artisans', 'banned']).optional().default('all'),
-  plan: z.enum(['all', 'gratuit', 'pro', 'premium']).optional().default('all'),
+  plan: z.enum(['all', 'free', 'pro', 'premium']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
         user_type: Boolean(user.user_metadata?.is_artisan) ? 'attorney' : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
-        subscription_plan: 'gratuit',
+        subscription_plan: 'free',
         subscription_status: null,
         average_rating: (profile.average_rating as number) || 0,
         review_count: (profile.review_count as number) || 0,

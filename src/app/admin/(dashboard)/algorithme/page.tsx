@@ -184,8 +184,8 @@ export default function AdminAlgorithmePage() {
 
               <NumberField
                 label="Max attorneys per lead"
-                value={config.max_artisans_per_lead}
-                onChange={(v) => update('max_artisans_per_lead', v)}
+                value={config.max_attorneys_per_lead}
+                onChange={(v) => update('max_attorneys_per_lead', v)}
                 min={1} max={20}
                 description="Maximum number of attorneys who receive each lead"
               />

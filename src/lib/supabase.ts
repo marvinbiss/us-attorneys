@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import { getCityBySlug as getVilleBySlugImport } from '@/lib/data/usa'
-import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 import { logger } from '@/lib/logger'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
 
@@ -147,7 +146,7 @@ export async function getSpecialties() {
   )
 }
 
-// Services statiques en fallback — généré depuis france.ts (couvre les 46 métiers)
+// Static services fallback — generated from usa.ts (covers all practice areas)
 import { practiceAreas as allStaticPracticeAreas } from '@/lib/data/usa'
 
 const staticServices: Record<string, { id: string; name: string; slug: string; description: string; category: string; is_active: boolean }> =
@@ -195,7 +194,7 @@ export async function getSpecialtyBySlug(slug: string) {
         throw error
       }
     },
-    CACHE_TTL.services, // 86400s — services ne changent pas
+    CACHE_TTL.services, // 86400s — services rarely change
   )
 }
 
@@ -271,7 +270,7 @@ async function queryAttorneyDetail(
     .eq('is_active', true)
     .single()
 
-  return data ? resolveProviderCity(data as Row) : null
+  return data ? (data as Row) : null
 }
 
 // Lookup by stable_id ONLY — no fallback.
@@ -420,13 +419,13 @@ export async function getAttorneysByServiceAndLocation(
               .order('name')
               .range(offset, offset + limit - 1)
             if (error) throw error
-            return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
+            return (data || []) as unknown as AttorneyListRow[]
           },
           `getAttorneysByServiceAndLocation:postal(${specialtySlug}, ${postalCode})`,
         )
       }
 
-      const cityValues = getCityValues(ville.name)
+      const cityValues = [ville.name]
 
       try {
         return await retryWithBackoff(
@@ -448,7 +447,7 @@ export async function getAttorneysByServiceAndLocation(
               logger.warn(`[getAttorneysByServiceAndLocation] primary query error for ${specialtySlug}/${locationSlug}:`, { error: directError.message })
             }
 
-            if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as AttorneyListRow[])
+            if (!directError && direct && direct.length > 0) return direct as unknown as AttorneyListRow[]
 
             return []
           },
@@ -461,7 +460,7 @@ export async function getAttorneysByServiceAndLocation(
         throw err
       }
     },
-    CACHE_TTL.artisans, // 3600s (1h)
+    CACHE_TTL.attorneys, // 3600s (1h)
     { skipNull: true },
   )
 }
@@ -488,7 +487,7 @@ export async function hasProvidersByServiceAndLocation(
         const cityName = ville?.name
         if (!cityName) return false
 
-        const cityValues = getCityValues(cityName)
+        const cityValues = [cityName]
         const { count, error } = await supabase
           .from('attorneys')
           .select('id', { count: 'exact', head: true })
@@ -534,7 +533,7 @@ export async function getAttorneyCountByServiceAndLocation(
             const cityName = ville?.name
             if (!cityName) return 0
 
-            const cityValues = getCityValues(cityName)
+            const cityValues = [cityName]
             const { count, error } = await supabase
               .from('attorneys')
               .select('id', { count: 'exact', head: true })
@@ -551,7 +550,7 @@ export async function getAttorneyCountByServiceAndLocation(
         return 0
       }
     },
-    CACHE_TTL.artisans, // 3600s (1h)
+    CACHE_TTL.attorneys, // 3600s (1h)
   )
 }
 
@@ -562,7 +561,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
   const ville = getVilleBySlugImport(locationSlug)
   if (!ville) return []
 
-  const cityValues = getCityValues(ville.name)
+  const cityValues = [ville.name]
   try {
     return await retryWithBackoff(
       async () => {
@@ -577,7 +576,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
           .limit(500)
 
         if (error) throw error
-        return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
+        return (data || []) as unknown as AttorneyListRow[]
       },
       `getAttorneysByLocation(${locationSlug})`,
     )
@@ -605,13 +604,13 @@ export async function getAllProviders() {
             .limit(1000)
 
           if (error) throw error
-          return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
+          return (data || []) as unknown as AttorneyListRow[]
         })(),
         QUERY_TIMEOUT_MS,
         'getAllProviders',
       )
     },
-    CACHE_TTL.artisans, // 3600s (1h)
+    CACHE_TTL.attorneys, // 3600s (1h)
     { skipNull: true },
   )
 }
@@ -636,7 +635,7 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
           .limit(effectiveLimit)
 
         if (error) throw error
-        return resolveProviderCities((data || []) as unknown as AttorneyListRow[])
+        return (data || []) as unknown as AttorneyListRow[]
       })(),
       QUERY_TIMEOUT_MS,
       `getAttorneysByService(${specialtySlug})`,

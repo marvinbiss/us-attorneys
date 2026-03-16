@@ -108,7 +108,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
 const topCities = cities.slice(0, 6)
 
-export default async function TarifsServicePage({ params }: { params: Promise<{ service: string }> }) {
+export default async function PricingServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
 
   const cmsPage = await getPageContent(service + '-tarifs', 'static')
@@ -347,7 +347,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      <CrossIntentLinks service={service} specialtyName={trade.name} currentIntent="tarifs" />
+      <CrossIntentLinks service={service} specialtyName={trade.name} currentIntent="pricing" />
 
       {/* Price range */}
       <section className="py-16 bg-white">

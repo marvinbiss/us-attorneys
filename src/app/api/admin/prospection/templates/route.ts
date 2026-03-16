@@ -8,7 +8,7 @@ import { z } from 'zod'
 const createSchema = z.object({
   name: z.string().min(1).max(200),
   channel: z.enum(['email', 'sms', 'whatsapp']),
-  audience_type: z.enum(['artisan', 'client', 'mairie']).optional(),
+  audience_type: z.enum(['attorney', 'client', 'municipality']).optional(),
   subject: z.string().max(200).optional(),
   body: z.string().min(1),
   html_body: z.string().optional(),

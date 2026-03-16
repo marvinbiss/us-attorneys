@@ -6,7 +6,7 @@ import type { ColumnMapping } from '@/types/prospection'
 import { z } from 'zod'
 
 const importFormSchema = z.object({
-  contact_type: z.enum(['artisan', 'client', 'mairie']),
+  contact_type: z.enum(['attorney', 'client', 'municipality']),
   mapping: z.string().optional(),
 })
 

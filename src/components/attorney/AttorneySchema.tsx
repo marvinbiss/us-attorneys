@@ -225,7 +225,7 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     // Quote request action for rich results
     potentialAction: {
       '@type': 'CommunicateAction',
-      target: `${attorneyUrl}#devis`,
+      target: `${attorneyUrl}#consultation`,
       name: 'Request a free consultation',
     },
   }

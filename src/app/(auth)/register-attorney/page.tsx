@@ -9,8 +9,8 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 // SiretAutocomplete removed (French SIRET validation) — using plain input for bar number
-import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
-import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
+import { SpecialtyAutocomplete } from '@/components/ui/MetierAutocomplete'
+import { CityAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 const benefits = [
   { icon: Users, title: 'New Clients', description: 'Receive qualified consultation requests' },
@@ -22,20 +22,20 @@ export default function AttorneyRegistrationPage() {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     // Step 1 - Firm
-    entreprise: '',
-    siret: '',
-    metier: '',
-    autreMetier: '',
+    firmName: '',
+    barNumber: '',
+    practiceArea: '',
+    otherPracticeArea: '',
     // Step 2 - Contact
-    nom: '',
-    prenom: '',
+    lastName: '',
+    firstName: '',
     email: '',
-    telephone: '',
+    phone: '',
     // Step 3 - Location
-    adresse: '',
-    codePostal: '',
-    ville: '',
-    rayonIntervention: '30',
+    address: '',
+    zipCode: '',
+    city: '',
+    serviceRadius: '30',
     // Step 4 - Description
     description: '',
     experience: '',
@@ -50,19 +50,19 @@ export default function AttorneyRegistrationPage() {
     setStepError('')
     switch (currentStep) {
       case 1:
-        if (!formData.entreprise.trim() || !formData.siret.trim() || !formData.metier.trim()) {
+        if (!formData.firmName.trim() || !formData.barNumber.trim() || !formData.practiceArea.trim()) {
           setStepError('Please fill in all required fields before continuing.')
           return false
         }
         return true
       case 2:
-        if (!formData.prenom.trim() || !formData.nom.trim() || !formData.email.trim() || !formData.telephone.trim()) {
+        if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim() || !formData.phone.trim()) {
           setStepError('Please fill in all required fields before continuing.')
           return false
         }
         return true
       case 3:
-        if (!formData.adresse.trim() || !formData.ville.trim()) {
+        if (!formData.address.trim() || !formData.city.trim()) {
           setStepError('Please fill in all required fields before continuing.')
           return false
         }
@@ -211,8 +211,8 @@ export default function AttorneyRegistrationPage() {
                         <input
                           type="text"
                           autoComplete="organization"
-                          value={formData.entreprise}
-                          onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
+                          value={formData.firmName}
+                          onChange={(e) => setFormData({ ...formData, firmName: e.target.value })}
                           required
                           disabled={isLoading}
                           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
@@ -226,8 +226,8 @@ export default function AttorneyRegistrationPage() {
                       </label>
                       <input
                         type="text"
-                        value={formData.siret}
-                        onChange={(e) => setFormData(prev => ({ ...prev, siret: e.target.value }))}
+                        value={formData.barNumber}
+                        onChange={(e) => setFormData(prev => ({ ...prev, barNumber: e.target.value }))}
                         placeholder="Enter your bar number..."
                         className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder:text-gray-400"
                       />
@@ -236,10 +236,10 @@ export default function AttorneyRegistrationPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Primary Practice Area *
                       </label>
-                      <MetierAutocomplete
-                        value={formData.metier}
-                        onSelect={(service) => setFormData(prev => ({ ...prev, metier: service.name }))}
-                        onClear={() => setFormData(prev => ({ ...prev, metier: '' }))}
+                      <SpecialtyAutocomplete
+                        value={formData.practiceArea}
+                        onSelect={(service) => setFormData(prev => ({ ...prev, practiceArea: service.name }))}
+                        onClear={() => setFormData(prev => ({ ...prev, practiceArea: '' }))}
                         placeholder="Search your practice area..."
                         showAllOnFocus={true}
                       />
@@ -257,8 +257,8 @@ export default function AttorneyRegistrationPage() {
                         <input
                           type="text"
                           autoComplete="given-name"
-                          value={formData.prenom}
-                          onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
+                          value={formData.firstName}
+                          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                           required
                           disabled={isLoading}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
@@ -269,8 +269,8 @@ export default function AttorneyRegistrationPage() {
                         <input
                           type="text"
                           autoComplete="family-name"
-                          value={formData.nom}
-                          onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+                          value={formData.lastName}
+                          onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                           required
                           disabled={isLoading}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
@@ -299,8 +299,8 @@ export default function AttorneyRegistrationPage() {
                         <input
                           type="tel"
                           autoComplete="tel"
-                          value={formData.telephone}
-                          onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           required
                           disabled={isLoading}
                           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
@@ -321,8 +321,8 @@ export default function AttorneyRegistrationPage() {
                         <input
                           type="text"
                           autoComplete="street-address"
-                          value={formData.adresse}
-                          onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
+                          value={formData.address}
+                          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                           required
                           disabled={isLoading}
                           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
@@ -331,16 +331,16 @@ export default function AttorneyRegistrationPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                      <VilleAutocomplete
-                        value={formData.ville}
-                        onSelect={(ville, codePostal, _coords) => {
+                      <CityAutocomplete
+                        value={formData.city}
+                        onSelect={(city, zipCode, _coords) => {
                           setFormData(prev => ({
                             ...prev,
-                            ville,
-                            codePostal
+                            city,
+                            zipCode
                           }))
                         }}
-                        onClear={() => setFormData(prev => ({ ...prev, ville: '', codePostal: '' }))}
+                        onClear={() => setFormData(prev => ({ ...prev, city: '', zipCode: '' }))}
                         showGeolocation={true}
                         placeholder="Search your city..."
                       />
@@ -350,8 +350,8 @@ export default function AttorneyRegistrationPage() {
                         Service Radius (km)
                       </label>
                       <select
-                        value={formData.rayonIntervention}
-                        onChange={(e) => setFormData({ ...formData, rayonIntervention: e.target.value })}
+                        value={formData.serviceRadius}
+                        onChange={(e) => setFormData({ ...formData, serviceRadius: e.target.value })}
                         disabled={isLoading}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                       >

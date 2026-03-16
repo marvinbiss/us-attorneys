@@ -14,7 +14,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
 export default function ImportPage() {
   const router = useRouter()
   const [step, setStep] = useState<Step>('upload')
-  const [contactType, setContactType] = useState<ContactType>('artisan')
+  const [contactType, setContactType] = useState<ContactType>('attorney')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -149,9 +149,9 @@ export default function ImportPage() {
               onChange={(e) => setContactType(e.target.value as ContactType)}
               className="w-full px-3 py-2 border rounded-lg text-sm"
             >
-              <option value="artisan">Attorneys</option>
+              <option value="attorney">Attorneys</option>
               <option value="client">Clients</option>
-              <option value="mairie">Municipalities</option>
+              <option value="municipality">Municipalities</option>
             </select>
           </div>
 

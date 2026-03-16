@@ -97,19 +97,19 @@ export default async function BlogCategoryPage({ params }: PageProps) {
   }
 
   const categoryColors: Record<string, string> = {
-    'Conseils': 'bg-amber-100 text-amber-700',
-    'Tarifs': 'bg-emerald-100 text-emerald-700',
-    'Fiches métier': 'bg-blue-100 text-blue-700',
+    'Tips': 'bg-amber-100 text-amber-700',
+    'Fees': 'bg-emerald-100 text-emerald-700',
+    'Practice Areas': 'bg-blue-100 text-blue-700',
     'Guides': 'bg-purple-100 text-purple-700',
-    'Réglementation': 'bg-slate-100 text-slate-700',
-    'Aides & Subventions': 'bg-green-100 text-green-700',
-    'Saisonnier': 'bg-lime-100 text-lime-700',
-    'Sécurité': 'bg-red-100 text-red-700',
-    'Énergie': 'bg-teal-100 text-teal-700',
+    'Regulations': 'bg-slate-100 text-slate-700',
+    'Aid & Grants': 'bg-green-100 text-green-700',
+    'Seasonal': 'bg-lime-100 text-lime-700',
+    'Safety': 'bg-red-100 text-red-700',
+    'Energy': 'bg-teal-100 text-teal-700',
     'DIY': 'bg-orange-100 text-orange-700',
     'Inspiration': 'bg-pink-100 text-pink-700',
-    'Matériaux': 'bg-cyan-100 text-cyan-700',
-    'Urgences': 'bg-red-100 text-red-700',
+    'Materials': 'bg-cyan-100 text-cyan-700',
+    'Emergencies': 'bg-red-100 text-red-700',
   }
 
   const badgeColor = categoryColors[cat.label] || 'bg-blue-100 text-blue-700'

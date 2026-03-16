@@ -31,11 +31,11 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [error, setError] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('Tous')
+  const [selectedCategory, setSelectedCategory] = useState('All')
   const [activeTag, setActiveTag] = useState(initialTag || '')
   const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_PAGE)
 
-  const categoryFiltered = selectedCategory === 'Tous'
+  const categoryFiltered = selectedCategory === 'All'
     ? articles
     : articles.filter(a => a.category === selectedCategory)
 
@@ -168,17 +168,20 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
             {visibleArticles.map((article, index) => {
               // Category color mapping for badges
               const categoryColors: Record<string, string> = {
-                'Guides pratiques': 'bg-blue-100 text-blue-700',
-                'Tendances': 'bg-purple-100 text-purple-700',
-                'Rénovation': 'bg-emerald-100 text-emerald-700',
-                'Conseils': 'bg-amber-100 text-amber-700',
-                'Actualités': 'bg-rose-100 text-rose-700',
-                'Énergie': 'bg-green-100 text-green-700',
-                'Décoration': 'bg-pink-100 text-pink-700',
-                'Budget': 'bg-orange-100 text-orange-700',
+                'Tips': 'bg-amber-100 text-amber-700',
+                'Fees': 'bg-emerald-100 text-emerald-700',
+                'Practice Areas': 'bg-blue-100 text-blue-700',
+                'Guides': 'bg-purple-100 text-purple-700',
+                'Regulations': 'bg-slate-100 text-slate-700',
+                'Aid & Grants': 'bg-green-100 text-green-700',
+                'Seasonal': 'bg-lime-100 text-lime-700',
+                'Safety': 'bg-red-100 text-red-700',
+                'Energy': 'bg-teal-100 text-teal-700',
+                'DIY': 'bg-orange-100 text-orange-700',
+                'Inspiration': 'bg-pink-100 text-pink-700',
               }
               const badgeColor = categoryColors[article.category] || 'bg-blue-100 text-blue-700'
-              const isFeatured = index === 0 && selectedCategory === 'Tous' && !activeTag
+              const isFeatured = index === 0 && selectedCategory === 'All' && !activeTag
 
               return (
                 <Link

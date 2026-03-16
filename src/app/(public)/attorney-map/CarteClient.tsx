@@ -5,12 +5,23 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Loader2, MapPin, Filter, Users, ChevronDown, X, List, Map as MapIcon, AlertTriangle } from 'lucide-react'
-import {
-  cityMarkers,
-  mapRegions,
-  getMarkerColor,
-  getMarkerRadius,
-} from '@/lib/data/map-coverage'
+// TODO: Replace with real US city/state map data from database
+interface CityMarker {
+  slug: string
+  name: string
+  lat: number
+  lng: number
+  attorneyCount: number
+  region: string
+  departement: string
+  population: number
+}
+const cityMarkers: CityMarker[] = []
+const mapRegions: string[] = []
+function getMarkerColor(_count: number): string { return '#3B82F6' }
+function getMarkerRadius(attorneyCount: number): number {
+  return Math.max(5, Math.min(20, Math.sqrt(attorneyCount) * 2))
+}
 import { services } from '@/lib/data/usa'
 
 // Dynamic imports for Leaflet (SSR-incompatible)

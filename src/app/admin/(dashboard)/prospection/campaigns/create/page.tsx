@@ -25,7 +25,7 @@ export default function CreateCampaignPage() {
   // Form state
   const [name, setName] = useState('')
   const [channel, setChannel] = useState<ProspectionChannel>('email')
-  const [audienceType, setAudienceType] = useState<AudienceType>('artisan')
+  const [audienceType, setAudienceType] = useState<AudienceType>('attorney')
   const [templateId, setTemplateId] = useState('')
   const [listId, setListId] = useState('')
   const [aiAutoReply, setAiAutoReply] = useState(false)
@@ -186,13 +186,13 @@ export default function CreateCampaignPage() {
             <div>
               <label className="block text-sm font-medium mb-2">Audience</label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {(['artisan', 'client', 'mairie'] as const).map((type) => (
+                {(['attorney', 'client', 'municipality'] as const).map((type) => (
                   <button
                     key={type}
                     onClick={() => setAudienceType(type)}
                     className={`p-4 rounded-lg border-2 capitalize font-medium ${audienceType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
-                    {type === 'mairie' ? 'Municipalities' : type === 'artisan' ? 'Attorneys' : 'Clients'}
+                    {type === 'municipality' ? 'Municipalities' : type === 'attorney' ? 'Attorneys' : 'Clients'}
                   </button>
                 ))}
               </div>

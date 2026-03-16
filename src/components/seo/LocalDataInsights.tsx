@@ -1,5 +1,5 @@
 import { Building2, Users, DollarSign, Zap, CloudRain } from 'lucide-react'
-import { LocationData, formatNumber, formatDollarSign, monthName } from '@/lib/data/commune-data'
+import { LocationData, formatNumber, formatDollarSign, monthName } from '@/lib/data/location-data'
 
 // ---------------------------------------------------------------------------
 // Props

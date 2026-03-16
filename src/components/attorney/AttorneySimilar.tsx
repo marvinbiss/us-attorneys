@@ -7,7 +7,7 @@ import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck } from 'luci
 import type { LegacyArtisan } from '@/types/legacy'
 import { getAttorneyUrl } from '@/lib/utils'
 
-interface SimilarArtisan {
+interface SimilarAttorney {
   id: string
   stable_id?: string
   slug?: string
@@ -21,14 +21,14 @@ interface SimilarArtisan {
 
 interface AttorneySimilarProps {
   artisan: LegacyArtisan
-  similarArtisans?: SimilarArtisan[]
+  similarAttorneys?: SimilarAttorney[]
 }
 
-export function AttorneySimilar({ artisan: _artisan, similarArtisans }: AttorneySimilarProps) {
+export function AttorneySimilar({ artisan: _artisan, similarAttorneys }: AttorneySimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Fallback: show hub link when no similar attorneys available
-  if (!similarArtisans || similarArtisans.length === 0) {
+  if (!similarAttorneys || similarAttorneys.length === 0) {
     const hubUrl = _artisan.specialty_slug && _artisan.city_slug
       ? `/practice-areas/${_artisan.specialty_slug}/${_artisan.city_slug}`
       : null
@@ -52,7 +52,7 @@ export function AttorneySimilar({ artisan: _artisan, similarArtisans }: Attorney
     )
   }
 
-  const similar = similarArtisans
+  const similar = similarAttorneys
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {

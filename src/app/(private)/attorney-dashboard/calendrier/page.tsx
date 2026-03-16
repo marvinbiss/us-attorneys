@@ -63,7 +63,7 @@ interface BookingEntry {
 interface UserProfile {
   id: string
   full_name: string
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
+  subscription_plan: 'free' | 'pro' | 'premium'
 }
 
 interface ProviderInfo {
@@ -159,7 +159,7 @@ export default function CalendrierPage() {
         const subData = await subRes.json()
         const statsData = await statsRes.json()
 
-        const plan: 'gratuit' | 'pro' | 'premium' = subData.plan ?? 'gratuit'
+        const plan: 'free' | 'pro' | 'premium' = subData.plan ?? 'free'
 
         if (statsData.profile) {
           setProfile({

@@ -8,11 +8,11 @@ import { MessageCircle, Bot, User, AlertCircle } from 'lucide-react'
 import type { ProspectionConversation } from '@/types/prospection'
 
 const statusLabels: Record<string, { label: string; color: string }> = {
-  open: { label: 'Ouvert', color: 'bg-green-100 text-green-700' },
-  ai_handling: { label: 'IA en cours', color: 'bg-blue-100 text-blue-700' },
-  human_required: { label: 'Humain requis', color: 'bg-red-100 text-red-700' },
-  resolved: { label: 'Résolu', color: 'bg-gray-100 text-gray-700' },
-  archived: { label: 'Archivé', color: 'bg-gray-100 text-gray-500' },
+  open: { label: 'Open', color: 'bg-green-100 text-green-700' },
+  ai_handling: { label: 'AI Handling', color: 'bg-blue-100 text-blue-700' },
+  human_required: { label: 'Human Required', color: 'bg-red-100 text-red-700' },
+  resolved: { label: 'Resolved', color: 'bg-gray-100 text-gray-700' },
+  archived: { label: 'Archived', color: 'bg-gray-100 text-gray-500' },
 }
 
 export default function InboxPage() {
@@ -48,7 +48,7 @@ export default function InboxPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Boîte de réception - Conversations avec les contacts</p>
+        <p className="text-gray-500 mt-1">Inbox - Conversations with contacts</p>
       </div>
 
       <ProspectionNav />
@@ -68,7 +68,7 @@ export default function InboxPage() {
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
           >
-            {s === 'all' ? 'Toutes' : statusLabels[s]?.label || s}
+            {s === 'all' ? 'All' : statusLabels[s]?.label || s}
           </button>
         ))}
       </div>
@@ -114,7 +114,7 @@ export default function InboxPage() {
                   </div>
                 </div>
                 <div className="ml-10 text-sm text-gray-500">
-                  {conv.ai_replies_count > 0 && <span className="mr-3">{conv.ai_replies_count} réponses IA</span>}
+                  {conv.ai_replies_count > 0 && <span className="mr-3">{conv.ai_replies_count} AI replies</span>}
                   {conv.last_message_at && (
                     <span>{new Date(conv.last_message_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                   )}

@@ -139,7 +139,7 @@ export const artisanRegistrationSchema = z.object({
   lastName: nameSchema,
   phone: phoneSchema,
   specialty: z.string().min(2).max(100),
-  siret: z.string().regex(/^\d{14}$/, 'Invalid SIRET'),
+  barNumber: z.string().regex(/^[A-Za-z0-9]{4,20}$/, 'Invalid bar number'),
   address: z.string().min(5).max(500),
   city: z.string().min(2).max(100),
   postalCode: z.string().regex(/^\d{5}$/, 'Invalid postal code'),

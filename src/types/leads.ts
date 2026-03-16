@@ -1,6 +1,6 @@
 /**
  * Lead system types — V2 dashboards
- * Shared between artisan, admin, and system dashboards
+ * Shared between attorney, admin, and system dashboards
  */
 
 // ============================================================
@@ -14,7 +14,7 @@ export interface Lead {
   postal_code: string | null
   description: string
   budget: string | null
-  urgency: 'normal' | 'urgent' | 'tres_urgent'
+  urgency: 'normal' | 'urgent' | 'very_urgent'
   client_name: string
   client_email: string | null
   client_phone: string
@@ -97,7 +97,7 @@ export interface AdminLeadStats {
   dispatchedToday: number
   conversionRate: number
   avgResponseMinutes: number
-  leadsByUrgency: { normal: number; urgent: number; tres_urgent: number }
+  leadsByUrgency: { normal: number; urgent: number; very_urgent: number }
   leadsByStatus: Record<string, number>
   topServices: Array<{ service: string; count: number }>
   topCities: Array<{ city: string; count: number }>
@@ -170,7 +170,7 @@ export const EVENT_TYPE_META: Record<LeadEventType, { label: string; color: stri
 export const URGENCY_META: Record<string, { label: string; cls: string }> = {
   normal: { label: 'Normal', cls: 'bg-gray-100 text-gray-700' },
   urgent: { label: 'Urgent', cls: 'bg-red-100 text-red-700' },
-  tres_urgent: { label: 'Very urgent', cls: 'bg-red-200 text-red-800' },
+  very_urgent: { label: 'Very urgent', cls: 'bg-red-200 text-red-800' },
 }
 
 export const STATUS_META: Record<string, { label: string; cls: string }> = {

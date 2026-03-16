@@ -121,7 +121,7 @@ export default function SettingsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Configuration de l&apos;IA et des canaux</p>
+          <p className="text-gray-500 mt-1">AI and channel configuration</p>
         </div>
         <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
@@ -149,15 +149,15 @@ export default function SettingsPage() {
 
       {settings && (
         <div className="space-y-6">
-          {/* Provider par défaut */}
+          {/* Default provider */}
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold flex items-center gap-2 mb-4">
-              <Bot className="w-5 h-5" /> Configuration IA
+              <Bot className="w-5 h-5" /> AI Configuration
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium mb-1">Fournisseur par défaut</label>
+                <label className="block text-sm font-medium mb-1">Default provider</label>
                 <select
                   value={settings.default_provider}
                   onChange={(e) => updateField('default_provider', e.target.value)}
@@ -168,7 +168,7 @@ export default function SettingsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Max auto-réponses par conversation</label>
+                <label className="block text-sm font-medium mb-1">Max auto-replies per conversation</label>
                 <input
                   type="number"
                   value={settings.max_auto_replies}
@@ -187,27 +187,27 @@ export default function SettingsPage() {
                 onChange={(e) => updateField('auto_reply_enabled', e.target.checked)}
                 className="w-4 h-4 rounded"
               />
-              <span className="text-sm font-medium">Activer les réponses automatiques IA (global)</span>
+              <span className="text-sm font-medium">Enable AI auto-replies (global)</span>
             </label>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Mots-clés d&apos;escalade (transfert humain)</label>
+              <label className="block text-sm font-medium mb-1">Escalation keywords (human handoff)</label>
               <input
                 type="text"
                 value={settings.escalation_keywords.join(', ')}
                 onChange={(e) => updateField('escalation_keywords', e.target.value.split(',').map(k => k.trim()).filter(Boolean))}
                 className="w-full px-3 py-2 border rounded-lg text-sm"
-                placeholder="urgent, plainte, avocat, rgpd..."
+                placeholder="urgent, complaint, lawyer, gdpr..."
               />
-              <p className="text-xs text-gray-400 mt-1">Séparés par des virgules. Si un message contient un de ces mots, la conversation sera assignée à un humain.</p>
+              <p className="text-xs text-gray-400 mt-1">Comma-separated. If a message contains any of these keywords, the conversation will be assigned to a human.</p>
             </div>
           </div>
 
-          {/* Prompts par audience */}
+          {/* Prompts by audience */}
           <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold mb-4">Prompts système par audience</h2>
+            <h2 className="text-lg font-semibold mb-4">System prompts by audience</h2>
 
-            {(['artisan', 'client', 'mairie'] as const).map((type) => {
+            {(['attorney', 'client', 'municipality'] as const).map((type) => {
               const field = `${type}_system_prompt` as keyof ProspectionAISettings
               return (
                 <div key={type} className="mb-4">
@@ -223,12 +223,12 @@ export default function SettingsPage() {
             })}
           </div>
 
-          {/* Config Claude */}
+          {/* Claude config */}
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold mb-4">Claude (Anthropic)</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Modèle</label>
+                <label className="block text-sm font-medium mb-1">Model</label>
                 <input type="text" value={settings.claude_model} onChange={(e) => updateField('claude_model', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
               </div>
               <div>
@@ -243,7 +243,7 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Température (0-2)</label>
+                <label className="block text-sm font-medium mb-1">Temperature (0-2)</label>
                 <input
                   type="number"
                   step="0.1"
@@ -256,18 +256,18 @@ export default function SettingsPage() {
               </div>
               <div className="flex items-end">
                 <span className={`text-sm ${settings.claude_api_key_set ? 'text-green-600' : 'text-red-500'}`}>
-                  {settings.claude_api_key_set ? 'API Key configurée' : 'API Key manquante (ANTHROPIC_API_KEY)'}
+                  {settings.claude_api_key_set ? 'API Key configured' : 'API Key missing (ANTHROPIC_API_KEY)'}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Config OpenAI */}
+          {/* OpenAI config */}
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold mb-4">GPT-4o (OpenAI)</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Modèle</label>
+                <label className="block text-sm font-medium mb-1">Model</label>
                 <input type="text" value={settings.openai_model} onChange={(e) => updateField('openai_model', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
               </div>
               <div>
@@ -282,7 +282,7 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Température (0-2)</label>
+                <label className="block text-sm font-medium mb-1">Temperature (0-2)</label>
                 <input
                   type="number"
                   step="0.1"
@@ -295,7 +295,7 @@ export default function SettingsPage() {
               </div>
               <div className="flex items-end">
                 <span className={`text-sm ${settings.openai_api_key_set ? 'text-green-600' : 'text-red-500'}`}>
-                  {settings.openai_api_key_set ? 'API Key configurée' : 'API Key manquante (OPENAI_API_KEY)'}
+                  {settings.openai_api_key_set ? 'API Key configured' : 'API Key missing (OPENAI_API_KEY)'}
                 </span>
               </div>
             </div>

@@ -82,20 +82,20 @@ export async function GET(request: NextRequest) {
   let priceMin: number
   let priceMax: number
   let unit: string
-  let interventions: { name: string; prixMin: number; prixMax: number; unite: string }[] | undefined
+  let interventions: { name: string; minPrice: number; maxPrice: number; unit: string }[] | undefined
 
   if (barometreService) {
     // Compute overall range from all interventions
-    const allMin = barometreService.interventions.map((i) => i.prixMin)
-    const allMax = barometreService.interventions.map((i) => i.prixMax)
+    const allMin = barometreService.interventions.map((i) => i.minPrice)
+    const allMax = barometreService.interventions.map((i) => i.maxPrice)
     priceMin = Math.round(Math.min(...allMin) * multiplier)
     priceMax = Math.round(Math.max(...allMax) * multiplier)
     unit = 'intervention'
     interventions = barometreService.interventions.map((i) => ({
       name: i.name,
-      prixMin: Math.round(i.prixMin * multiplier),
-      prixMax: Math.round(i.prixMax * multiplier),
-      unite: i.unite,
+      minPrice: Math.round(i.minPrice * multiplier),
+      maxPrice: Math.round(i.maxPrice * multiplier),
+      unit: i.unit,
     }))
   } else {
     priceMin = Math.round(trade.priceRange.min * multiplier)
@@ -192,7 +192,7 @@ interface WidgetData {
   priceMin: number
   priceMax: number
   unit: string
-  interventions?: { name: string; prixMin: number; prixMax: number; unite: string }[]
+  interventions?: { name: string; minPrice: number; maxPrice: number; unit: string }[]
   sourceUrl: string
 }
 
@@ -222,7 +222,7 @@ function buildWidgetHtml(data: WidgetData): string {
         (i) => `
       <tr>
         <td style="padding:6px 8px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6">${escapeHtml(i.name)}</td>
-        <td style="padding:6px 8px;font-size:13px;color:#1d4ed8;font-weight:600;text-align:right;white-space:nowrap;border-bottom:1px solid #f3f4f6">$${i.prixMin} – $${i.prixMax}<span style="font-weight:400;color:#6b7280;font-size:11px">/${escapeHtml(i.unite)}</span></td>
+        <td style="padding:6px 8px;font-size:13px;color:#1d4ed8;font-weight:600;text-align:right;white-space:nowrap;border-bottom:1px solid #f3f4f6">$${i.minPrice} – $${i.maxPrice}<span style="font-weight:400;color:#6b7280;font-size:11px">/${escapeHtml(i.unit)}</span></td>
       </tr>`,
       )
       .join('')

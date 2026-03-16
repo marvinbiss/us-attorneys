@@ -6,7 +6,7 @@ export interface TeamMember {
   role: string
   expertise: string[]
   bio: string
-  shortBio: string // 1 phrase pour les bylines
+  shortBio: string // 1 sentence for bylines
 }
 
 export const teamMembers: TeamMember[] = []

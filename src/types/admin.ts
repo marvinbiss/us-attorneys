@@ -71,11 +71,11 @@ export interface AdminUserView {
   email: string
   full_name?: string
   phone?: string
-  user_type: 'client' | 'artisan'
+  user_type: 'client' | 'attorney'
   is_verified: boolean
   is_banned: boolean
   ban_reason?: string
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
+  subscription_plan: 'free' | 'pro' | 'premium'
   subscription_status?: 'active' | 'canceled' | 'past_due'
   stripe_customer_id?: string
   created_at: string
@@ -128,7 +128,7 @@ export interface SubscriptionRecord {
   user_id: string
   user_email: string
   user_name?: string
-  plan: 'gratuit' | 'pro' | 'premium'
+  plan: 'free' | 'pro' | 'premium'
   status: 'active' | 'canceled' | 'past_due' | 'trialing'
   stripe_subscription_id?: string
   current_period_start?: string
@@ -166,7 +166,7 @@ export interface AdminQuote {
   description?: string
   postal_code: string
   status: 'pending' | 'sent' | 'accepted' | 'refused' | 'expired'
-  urgency: 'normal' | 'urgent' | 'tres_urgent'
+  urgency: 'normal' | 'urgent' | 'very_urgent'
   created_at: string
   updated_at?: string
 }
@@ -188,7 +188,7 @@ export interface AdminMessage {
   id: string
   conversation_id: string
   sender_id: string
-  sender_type: 'client' | 'artisan' | 'system'
+  sender_type: 'client' | 'attorney' | 'system'
   content: string
   message_type: 'text' | 'image' | 'file' | 'system'
   created_at: string

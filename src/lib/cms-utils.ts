@@ -11,7 +11,7 @@ export function stripHtml(str: string | null | undefined): string | null | undef
 
 /** Base CMS page schema — shared fields between create and update */
 const baseCmsFields = {
-  slug: z.string().min(1).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets'),
+  slug: z.string().min(1).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must contain only lowercase letters, numbers, and hyphens'),
   page_type: z.enum(['static', 'blog', 'service', 'location', 'homepage', 'faq']),
   title: z.string().min(1).max(500),
   content_json: z.record(z.string(), z.unknown()).nullable().optional(),

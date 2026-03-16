@@ -9,13 +9,14 @@ import {
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
-import { DEPT_ARTISAN_COUNTS } from '@/lib/data/dept-attorney-counts'
+// TODO: Replace with real US state attorney counts from database
+const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number }> = {}
 import { DEPARTMENTS } from '@/lib/geography'
 import {
   servicePricings,
   regionalIndices,
-  getPrixMoyenNational,
-  getVariationMoyenne,
+  getNationalAverageFee,
+  getAverageVariation,
 } from '@/lib/data/attorney-statistics'
 
 // ---------------------------------------------------------------------------
@@ -92,8 +93,8 @@ const {
   withDensity,
 } = computeStateStats()
 
-const avgFee = getPrixMoyenNational()
-const avgVariation = getVariationMoyenne()
+const avgFee = getNationalAverageFee()
+const avgVariation = getAverageVariation()
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -674,9 +675,9 @@ export default function AttorneyStatisticsPage() {
                         <tr key={int.name} className="hover:bg-gray-50">
                           <td className="px-5 py-2.5 text-gray-700">{int.name}</td>
                           <td className="px-3 py-2.5 text-right text-gray-900 font-medium whitespace-nowrap">
-                            {int.prixMin}&ndash;{int.prixMax} $
-                            {int.unite !== 'intervention' && (
-                              <span className="text-gray-400 font-normal">/{int.unite}</span>
+                            {int.minPrice}&ndash;{int.maxPrice} $
+                            {int.unit !== 'intervention' && (
+                              <span className="text-gray-400 font-normal">/{int.unit}</span>
                             )}
                           </td>
                           <td className="px-3 py-2.5 text-right">

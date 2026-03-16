@@ -17,7 +17,7 @@ import {
   getStateByCode,
 } from '@/lib/data/usa'
 import { getTradeContent } from '@/lib/data/trade-content'
-import { getQuartierData } from '@/lib/data/quartier-data'
+// TODO: Neighborhood enrichment data removed (stub was always null)
 import {
   generateQuartierContent,
   hashCode,
@@ -51,8 +51,8 @@ export default async function ServiceQuartierPage({
   if (!quartierData) notFound()
   const { city: ville, neighborhoodName: quartierName } = quartierData
 
-  // 1b. Enriched quartier data (real stats, description, risks, transport…)
-  const quartierRealData = getQuartierData(locationSlug, quartierSlug)
+  // 1b. Enriched neighborhood data (stub -- always null, to be replaced with real data)
+  const quartierRealData = null as { codePostal?: string } | null
 
   // 2. Resolve service (DB → static fallback)
   let service: Service

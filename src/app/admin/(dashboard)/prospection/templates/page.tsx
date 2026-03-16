@@ -38,13 +38,13 @@ export default function TemplatesPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Modèles de messages</p>
+          <p className="text-gray-500 mt-1">Message templates</p>
         </div>
         <Link
           href="/admin/prospection/templates/create"
           className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          <Plus className="w-4 h-4" /> Nouveau modèle
+          <Plus className="w-4 h-4" /> New template
         </Link>
       </div>
 
@@ -89,7 +89,7 @@ export default function TemplatesPage() {
                   <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-600 capitalize">{tmpl.audience_type}</span>
                 )}
               </div>
-              {tmpl.subject && <p className="text-sm text-gray-500 mb-1">Sujet: {tmpl.subject}</p>}
+              {tmpl.subject && <p className="text-sm text-gray-500 mb-1">Subject: {tmpl.subject}</p>}
               <p className="text-sm text-gray-400 line-clamp-3">{tmpl.body}</p>
               <div className="mt-3 text-xs text-gray-400">
                 {tmpl.variables.length > 0 && `Variables: ${tmpl.variables.join(', ')}`}

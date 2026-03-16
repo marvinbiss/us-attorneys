@@ -108,9 +108,9 @@ export default function ContactsPage() {
           className="border rounded-lg px-3 py-2 text-sm"
         >
           <option value="all">All types</option>
-          <option value="artisan">Attorneys</option>
+          <option value="attorney">Attorneys</option>
           <option value="client">Clients</option>
-          <option value="mairie">Municipalities</option>
+          <option value="municipality">Municipalities</option>
         </select>
       </div>
 

@@ -11,7 +11,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 
 interface SearchSuggestion {
   text: string
-  type: 'service' | 'artisan' | 'location'
+  type: 'service' | 'attorney' | 'location'
   id?: string
   subtitle?: string
 }
@@ -156,7 +156,7 @@ export default function AdvancedSearch({
   }, [query, filters, onSearch, router])
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
-    if (suggestion.type === 'artisan' && suggestion.id) {
+    if (suggestion.type === 'attorney' && suggestion.id) {
       router.push(`/search?q=${encodeURIComponent(suggestion.text)}`)
     } else if (suggestion.type === 'location') {
       setFilters({ ...filters, location: suggestion.text })
@@ -308,7 +308,7 @@ export default function AdvancedSearch({
                       {suggestion.type === 'service' && (
                         <TrendingUp className="w-4 h-4 text-gray-400" />
                       )}
-                      {suggestion.type === 'artisan' && (
+                      {suggestion.type === 'attorney' && (
                         <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 font-medium text-sm">
                             {suggestion.text.charAt(0)}
@@ -326,7 +326,7 @@ export default function AdvancedSearch({
                       </div>
                       <span className="text-xs text-gray-400 capitalize">
                         {suggestion.type === 'service' ? 'Service' :
-                         suggestion.type === 'artisan' ? 'Attorney' : 'City'}
+                         suggestion.type === 'attorney' ? 'Attorney' : 'City'}
                       </span>
                     </button>
                   ))}

@@ -5,9 +5,9 @@
 
 export interface InterventionPricing {
   name: string
-  prixMin: number
-  prixMax: number
-  unite: string
+  minPrice: number
+  maxPrice: number
+  unit: string
   trend: 'up' | 'stable' | 'down'
   variation: number
 }
@@ -28,7 +28,7 @@ export interface RegionalIndex {
 export const servicePricings: ServicePricing[] = []
 export const regionalIndices: RegionalIndex[] = []
 
-export function getPrixMoyenNational(): number { return 0 }
-export function getVariationMoyenne(): number { return 0 }
+export function getNationalAverageFee(): number { return 0 }
+export function getAverageVariation(): number { return 0 }
 export function getNombreMetiers(): number { return 0 }
 export function getNombreRegions(): number { return 0 }

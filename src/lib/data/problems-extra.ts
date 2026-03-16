@@ -1,6 +1,6 @@
 /**
- * 30 problèmes supplémentaires granulaires (mars 2026).
- * Importés et concaténés dans problems.ts.
+ * Additional granular problems (March 2026).
+ * Imported and concatenated in problems.ts.
  */
 import type { Problem } from './problems'
 

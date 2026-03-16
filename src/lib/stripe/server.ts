@@ -25,8 +25,8 @@ export const stripe = new Proxy({} as Stripe, {
 })
 
 export const PLANS = {
-  gratuit: {
-    id: 'gratuit',
+  free: {
+    id: 'free',
     name: 'Free',
     price: 0,
     priceId: null,

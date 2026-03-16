@@ -36,7 +36,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!provider) {
       return NextResponse.json(
-        { success: false, error: { message: 'Profil attorney not found' } },
+        { success: false, error: { message: 'Attorney profile not found' } },
         { status: 404 }
       )
     }
@@ -64,7 +64,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!quotes || quotes.length !== quote_ids.length) {
       return NextResponse.json(
-        { success: false, error: { message: 'Certaines demandes ne vous appartiennent pas' } },
+        { success: false, error: { message: 'Some requests do not belong to you' } },
         { status: 403 }
       )
     }
@@ -117,7 +117,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!provider) {
       return NextResponse.json(
-        { success: false, error: { message: 'Profil attorney not found' } },
+        { success: false, error: { message: 'Attorney profile not found' } },
         { status: 404 }
       )
     }

@@ -1,6 +1,6 @@
 import { AlertTriangle, Droplets, Mountain, Activity, Shield, CheckCircle } from 'lucide-react'
-import type { LocationData } from '@/lib/data/commune-data'
-import { hasGeorisquesData } from '@/lib/data/commune-data'
+import type { LocationData } from '@/lib/data/location-data'
+import { hasGeorisquesData } from '@/lib/data/location-data'
 
 // ---------------------------------------------------------------------------
 // Types

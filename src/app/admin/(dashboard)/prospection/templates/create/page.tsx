@@ -131,9 +131,9 @@ export default function CreateTemplatePage() {
               <label className="block text-sm font-medium mb-1">Audience (optional)</label>
               <select value={audienceType} onChange={(e) => setAudienceType(e.target.value as AudienceType | '')} className="w-full px-3 py-2 border rounded-lg text-sm">
                 <option value="">All</option>
-                <option value="artisan">Attorneys</option>
+                <option value="attorney">Attorneys</option>
                 <option value="client">Clients</option>
-                <option value="mairie">Municipalities</option>
+                <option value="municipality">Municipalities</option>
               </select>
             </div>
           </div>

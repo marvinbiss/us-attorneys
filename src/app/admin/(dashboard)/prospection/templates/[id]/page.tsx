@@ -254,9 +254,9 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                 className="w-full px-3 py-2 border rounded-lg text-sm"
               >
                 <option value="">All</option>
-                <option value="artisan">Attorneys</option>
+                <option value="attorney">Attorneys</option>
                 <option value="client">Clients</option>
-                <option value="mairie">Municipalities</option>
+                <option value="municipality">Municipalities</option>
               </select>
             </div>
           </div>

@@ -15,9 +15,9 @@ const updateSchema = z.object({
   auto_reply_enabled: z.boolean().optional(),
   max_auto_replies: z.number().int().min(1).max(50).optional(),
   escalation_keywords: z.array(z.string().max(50)).max(50).optional(),
-  artisan_system_prompt: z.string().max(5000).optional(),
+  attorney_system_prompt: z.string().max(5000).optional(),
   client_system_prompt: z.string().max(5000).optional(),
-  mairie_system_prompt: z.string().max(5000).optional(),
+  municipality_system_prompt: z.string().max(5000).optional(),
 }).strict()
 
 export const dynamic = 'force-dynamic'
@@ -30,7 +30,7 @@ export async function GET() {
     const supabase = createAdminClient()
     const { data, error } = await supabase
       .from('prospection_ai_settings')
-      .select('id, default_provider, claude_model, claude_api_key_set, claude_max_tokens, claude_temperature, openai_model, openai_api_key_set, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt, updated_by, updated_at')
+      .select('id, default_provider, claude_model, claude_api_key_set, claude_max_tokens, claude_temperature, openai_model, openai_api_key_set, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, attorney_system_prompt, client_system_prompt, municipality_system_prompt, updated_by, updated_at')
       .limit(1)
       .single()
 

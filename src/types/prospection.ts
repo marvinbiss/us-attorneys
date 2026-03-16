@@ -4,11 +4,11 @@
 
 // --- Enums ---
 
-export type ContactType = 'artisan' | 'client' | 'mairie'
+export type ContactType = 'attorney' | 'client' | 'municipality'
 export type ContactSource = 'import' | 'database' | 'manual' | 'api' | 'scraping'
 export type ConsentStatus = 'opted_in' | 'opted_out' | 'unknown'
 export type ProspectionChannel = 'email' | 'sms' | 'whatsapp' | 'voice'
-export type AudienceType = 'artisan' | 'client' | 'mairie'
+export type AudienceType = 'attorney' | 'client' | 'municipality'
 export type CampaignStatus = 'draft' | 'scheduled' | 'sending' | 'paused' | 'completed' | 'cancelled'
 export type MessageStatus = 'queued' | 'sending' | 'sent' | 'delivered' | 'read' | 'replied' | 'failed' | 'bounced' | 'opted_out' | 'cancelled'
 export type AIProvider = 'claude' | 'openai'
@@ -330,9 +330,9 @@ export interface ProspectionAISettings {
   auto_reply_enabled: boolean
   max_auto_replies: number
   escalation_keywords: string[]
-  artisan_system_prompt: string
+  attorney_system_prompt: string
   client_system_prompt: string
-  mairie_system_prompt: string
+  municipality_system_prompt: string
   updated_by: string | null
   updated_at: string
 }
@@ -409,7 +409,7 @@ export interface ColumnMapping {
   [csvColumn: string]: keyof ProspectionContactInsert | null
 }
 
-// --- Coûts par canal ---
+// --- Channel costs ---
 
 export const CHANNEL_COSTS = {
   sms: {

@@ -43,7 +43,7 @@ IMPORTANT:
 - Always remain polite even if the prospect is frustrated`
 
 // ---------------------------------------------------------------------------
-// Function call schemas pour Vapi
+// Function call schemas for Vapi
 // ---------------------------------------------------------------------------
 
 export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [

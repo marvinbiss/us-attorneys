@@ -26,7 +26,7 @@ export interface DispatchOptions {
  *
  * Uses service_role (bypasses RLS) — server-only.
  *
- * Returns array of assigned provider IDs (up to max_artisans_per_lead).
+ * Returns array of assigned provider IDs (up to max_attorneys_per_lead).
  */
 export async function dispatchLead(
   leadId: string,

@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
 import { logger } from '@/lib/logger'
-import { getCityValues } from '@/lib/insee-resolver'
 
 export interface Service {
   id: string
@@ -103,8 +102,7 @@ export async function getAttorneys(params: {
       }
 
       if (params.city) {
-        // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
-        query = query.in('address_city', getCityValues(params.city))
+        query = query.in('address_city', [params.city])
       }
 
       if (params.postalCode) {
@@ -145,16 +143,16 @@ export async function getAttorneys(params: {
         total: count || 0,
       }
     },
-    CACHE_TTL.artisans
+    CACHE_TTL.attorneys
   )
 }
 
 /**
- * Get artisan by ID
+ * Get attorney by ID
  */
 export async function getAttorneyById(id: string): Promise<Artisan | null> {
   return getCachedData(
-    `artisan:${id}`,
+    `attorney:${id}`,
     async () => {
       const supabase = await createClient()
       const { data, error } = await supabase
@@ -181,12 +179,12 @@ export async function getAttorneyById(id: string): Promise<Artisan | null> {
         is_active: data.is_active || false,
       }
     },
-    CACHE_TTL.artisans
+    CACHE_TTL.attorneys
   )
 }
 
 /**
- * Get reviews for an artisan
+ * Get reviews for an attorney
  */
 export async function getAttorneyReviews(attorneyId: string, limit = 10) {
   return getCachedData(
