@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 import { getAttorneyUrl } from '@/lib/utils'
@@ -25,6 +26,7 @@ interface AttorneySimilarProps {
 }
 
 export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: AttorneySimilarProps) {
+  const reducedMotion = useReducedMotion()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Fallback: show hub link when no similar attorneys available
@@ -66,9 +68,9 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.6 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.6 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <div className="flex items-center justify-between mb-6">
@@ -80,8 +82,8 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
         {/* Navigation buttons */}
         <div className="flex gap-2" role="group" aria-label="Carousel navigation">
           <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={reducedMotion ? undefined : { scale: 1.1 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.9 }}
             onClick={() => scroll('left')}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="View previous attorneys"
@@ -89,8 +91,8 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
             <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden="true" />
           </motion.button>
           <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={reducedMotion ? undefined : { scale: 1.1 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.9 }}
             onClick={() => scroll('right')}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="View next attorneys"
@@ -112,9 +114,9 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
           <motion.div
             key={item.id}
             role="listitem"
-            initial={{ opacity: 0, x: 20 }}
+            initial={reducedMotion ? false : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.3, delay: index * 0.05 }}
             style={{ scrollSnapAlign: 'start' }}
           >
             <Link
@@ -122,7 +124,7 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
               aria-label={`View ${item.name}'s profile, ${item.specialty} in ${item.city}, rated ${item.rating} out of 5`}
             >
               <motion.article
-                whileHover={{ y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
+                whileHover={reducedMotion ? undefined : { y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
                 className="w-72 bg-white rounded-xl border border-gray-100 p-4 transition-all cursor-pointer"
               >
                 {/* Header */}

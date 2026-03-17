@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Zap, Clock, CheckCircle, RefreshCw } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 
@@ -76,15 +77,16 @@ function getUrgencyItems(attorney: LegacyAttorney): UrgencyItem[] {
 }
 
 export function AttorneyUrgencyBanner({ attorney }: { attorney: LegacyAttorney }) {
+  const reducedMotion = useReducedMotion()
   const items = getUrgencyItems(attorney)
 
   if (items.length === 0) return null
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, ease: 'easeOut' }}
       className="bg-gradient-to-r from-clay-50 to-sand-100 rounded-2xl border border-clay-200/40 px-5 py-3.5"
     >
       <div className="hidden sm:flex flex-wrap items-center gap-x-6 gap-y-2">

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { MapPin, Navigation, ExternalLink, Loader2 } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 
@@ -19,6 +20,7 @@ interface AttorneyMapProps {
 }
 
 export function AttorneyMap({ attorney }: AttorneyMapProps) {
+  const reducedMotion = useReducedMotion()
   const hasCoordinates = attorney.latitude && attorney.longitude
   const hasCity = !!attorney.city
   const hasAddress = attorney.address && attorney.address.length > 0
@@ -50,9 +52,9 @@ export function AttorneyMap({ attorney }: AttorneyMapProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.5 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.5 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">

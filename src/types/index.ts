@@ -69,6 +69,8 @@ export interface Provider {
   intervention_radius_km?: number
   service_prices?: Array<{ name: string; description?: string; price: string; duration?: string }>
   faq?: Array<{ question: string; answer: string }>
+  is_featured?: boolean | null
+  boost_level?: number | null
   team_size?: number
   services_offered?: string[]
   bio?: string

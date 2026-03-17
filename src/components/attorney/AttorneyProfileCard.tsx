@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Star,
   MapPin,
@@ -78,6 +79,7 @@ export function AttorneyProfileCard({
   badges = [],
   variant = 'card',
 }: AttorneyProfileCardProps) {
+  const reducedMotion = useReducedMotion()
   const [isFavorite, setIsFavorite] = useState(false)
   const [imageError, setImageError] = useState(false)
 
@@ -87,9 +89,10 @@ export function AttorneyProfileCard({
   if (variant === 'featured') {
     return (
       <motion.article
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
         viewport={{ once: true }}
+        transition={reducedMotion ? { duration: 0 } : undefined}
         className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500"
       >
         {/* Cover Image */}
@@ -297,9 +300,10 @@ export function AttorneyProfileCard({
   if (variant === 'list') {
     return (
       <motion.article
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={reducedMotion ? false : { opacity: 0, x: -20 }}
+        whileInView={reducedMotion ? undefined : { opacity: 1, x: 0 }}
         viewport={{ once: true }}
+        transition={reducedMotion ? { duration: 0 } : undefined}
         className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-clay-200 transition-all duration-300"
       >
         <Link href={href} className="flex flex-col sm:flex-row">
@@ -485,9 +489,10 @@ export function AttorneyProfileCard({
   // Default: Card (grid)
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true }}
+      transition={reducedMotion ? { duration: 0 } : undefined}
       className="group"
     >
       <Link href={href} className="block">

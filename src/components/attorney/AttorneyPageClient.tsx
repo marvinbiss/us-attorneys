@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { AlertCircle, ArrowLeft, Heart } from 'lucide-react'
 import {
   Review,
@@ -26,6 +27,7 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/attorney/ClaimButton'
 import type { LegacyAttorney } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 // Dynamic import for exit intent (not needed on first paint)
 const AttorneyExitIntent = dynamic(
@@ -143,6 +145,7 @@ export default function AttorneyPageClient({
   trustScore = 0,
   trustScoreBreakdown,
 }: AttorneyPageClientProps) {
+  const reducedMotion = useReducedMotion()
   const attorney = initialAttorney
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
@@ -159,8 +162,9 @@ export default function AttorneyPageClient({
     return (
       <div className="min-h-screen bg-sand-100 flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
+          transition={reducedMotion ? { duration: 0 } : undefined}
           className="text-center p-8"
         >
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -226,8 +230,8 @@ export default function AttorneyPageClient({
                   variant="icon"
                 />
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={reducedMotion ? undefined : { scale: 1.05 }}
+                  whileTap={reducedMotion ? undefined : { scale: 0.95 }}
                   onClick={() => toggleFavorite(attorneyId)}
                   className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 ${
                     isFavorite(attorneyId)
@@ -294,11 +298,13 @@ export default function AttorneyPageClient({
                 <AttorneyContactCard attorney={attorney} />
               </section>
               <section className="lg:hidden" aria-label="Book a video consultation">
-                <BookingWidget
-                  attorneyId={attorneyId}
-                  attorneyName={attorney.business_name || displayName}
-                  specialty={attorney.specialty}
-                />
+                <ErrorBoundary fallback={null}>
+                  <BookingWidget
+                    attorneyId={attorneyId}
+                    attorneyName={attorney.business_name || displayName}
+                    specialty={attorney.specialty}
+                  />
+                </ErrorBoundary>
               </section>
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Claim this profile">
@@ -329,11 +335,13 @@ export default function AttorneyPageClient({
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Contact information">
               <div className="space-y-6 sticky top-20">
                 <AttorneySidebar attorney={attorney} />
-                <BookingWidget
-                  attorneyId={attorneyId}
-                  attorneyName={attorney.business_name || displayName}
-                  specialty={attorney.specialty}
-                />
+                <ErrorBoundary fallback={null}>
+                  <BookingWidget
+                    attorneyId={attorneyId}
+                    attorneyName={attorney.business_name || displayName}
+                    specialty={attorney.specialty}
+                  />
+                </ErrorBoundary>
                 <AttorneyProfileStrength attorney={attorney} />
                 {!isClaimed && (
                   <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />

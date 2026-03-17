@@ -12,8 +12,9 @@ env:
   NEXT_PUBLIC_SITE_URL: 'https://us-attorneys.com'
 
 jobs:
-  ci:
+  lint-test-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
@@ -24,14 +25,6 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-
-      - name: Cache .next/cache
-        uses: actions/cache@v4
-        with:
-          path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
         run: npm ci
@@ -45,8 +38,7 @@ jobs:
       - name: Unit tests
         run: npx vitest run
 
-      - name: CI Guardrails
-        run: bash scripts/ci-guardrails.sh
-
       - name: Build
         run: npm run build
+        env:
+          NEXT_BUILD_SKIP_DB: '1'

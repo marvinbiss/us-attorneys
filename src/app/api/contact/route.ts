@@ -41,12 +41,12 @@ const contactSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    // Rate limiting
+    // Rate limiting — contact category (3/min)
     const rl = await rateLimit(request, RATE_LIMITS.contact)
     if (!rl.success) {
       return NextResponse.json(
-        { error: 'Too many requests' },
-        { status: 429 }
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
       )
     }
 

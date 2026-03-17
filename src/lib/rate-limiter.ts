@@ -212,14 +212,14 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
 
 // Rate limit configurations per route type
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  auth: { maxRequests: 10, windowMs: 60_000, failOpen: false },            // 10 requests per minute for auth — fail-close
+  auth: { maxRequests: 5, windowMs: 60_000, failOpen: false },             // 5 requests per minute for auth — fail-close (brute force prevention)
   api: { maxRequests: 60, windowMs: 60_000, failOpen: true },              // 60 requests per minute for general API
-  booking: { maxRequests: 30, windowMs: 60_000 },                          // 30 requests per minute for bookings
+  booking: { maxRequests: 10, windowMs: 60_000 },                          // 10 requests per minute for bookings
   payment: { maxRequests: 10, windowMs: 60_000, failOpen: false },         // 10 requests per minute for payments — fail-close
   reviews: { maxRequests: 5, windowMs: 60_000 },                           // 5 requests per minute for reviews
   quotes: { maxRequests: 10, windowMs: 60_000 },                           // 10 requests per minute for quotes
-  contact: { maxRequests: 5, windowMs: 60_000, failOpen: true },           // 5 requests per minute for contact
-  upload: { maxRequests: 20, windowMs: 60_000 },                           // 20 uploads per minute
+  contact: { maxRequests: 3, windowMs: 60_000, failOpen: true },           // 3 requests per minute for contact (sends email, unauthenticated)
+  upload: { maxRequests: 5, windowMs: 60_000 },                            // 5 uploads per minute (storage-intensive)
   search: { maxRequests: 100, windowMs: 60_000, failOpen: true },          // 100 searches per minute
   gdpr: { maxRequests: 5, windowMs: 300_000 },                             // 5 requests per 5 minutes for GDPR export/delete
   newsletter: { maxRequests: 3, windowMs: 300_000 },                       // 3 requests per 5 minutes for newsletter (sends email)

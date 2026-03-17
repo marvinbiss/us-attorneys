@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 const confirmBookingSchema = z.object({
   booking_id: z.string().uuid(),
@@ -16,6 +17,15 @@ const confirmBookingSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting — booking category (10/min)
+    const rl = await rateLimit(request, RATE_LIMITS.booking)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
+      )
+    }
+
     // 1. Parse and validate body
     let body: z.infer<typeof confirmBookingSchema>
     try {

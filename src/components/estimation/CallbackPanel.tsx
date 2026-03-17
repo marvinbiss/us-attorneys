@@ -2,6 +2,7 @@
 
 import React, { memo, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Phone, Check, Loader2, Clock, ShieldCheck } from 'lucide-react'
 import type { EstimationContext } from './utils'
 import type { UseLeadSubmitReturn } from './hooks/useLeadSubmit'
@@ -35,6 +36,7 @@ export const CallbackPanel = memo(function CallbackPanel({
   context,
   lead,
 }: CallbackPanelProps) {
+  const reducedMotion = useReducedMotion()
   const confettiFired = useRef(false)
 
   // Fire confetti once on successful submission
@@ -49,8 +51,9 @@ export const CallbackPanel = memo(function CallbackPanel({
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
       {!lead.callbackSubmitted ? (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={reducedMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={reducedMotion ? { duration: 0 } : undefined}
           className="w-full max-w-sm text-center space-y-5"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E07040]/10">
@@ -154,21 +157,22 @@ export const CallbackPanel = memo(function CallbackPanel({
         </motion.div>
       ) : (
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={reducedMotion ? false : { scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
+          transition={reducedMotion ? { duration: 0 } : undefined}
           className="w-full max-w-sm text-center space-y-5"
         >
           {/* Animated checkmark */}
           <motion.div
-            initial={{ scale: 0 }}
+            initial={reducedMotion ? false : { scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
+            transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
             className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
           >
             <motion.div
-              initial={{ scale: 0, rotate: -45 }}
+              initial={reducedMotion ? false : { scale: 0, rotate: -45 }}
               animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.25 }}
+              transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 12, delay: 0.25 }}
             >
               <Check className="h-8 w-8 text-green-600" />
             </motion.div>
@@ -176,17 +180,17 @@ export const CallbackPanel = memo(function CallbackPanel({
 
           <div>
             <motion.p
-              initial={{ opacity: 0, y: 5 }}
+              initial={reducedMotion ? false : { opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={reducedMotion ? { duration: 0 } : { delay: 0.3 }}
               className="text-base font-semibold text-gray-900"
             >
               Request sent!
             </motion.p>
             <motion.p
-              initial={{ opacity: 0, y: 5 }}
+              initial={reducedMotion ? false : { opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={reducedMotion ? { duration: 0 } : { delay: 0.4 }}
               className="mt-1 text-sm text-gray-600"
             >
               Your request has been sent! An attorney will contact you within 24h.
@@ -195,9 +199,9 @@ export const CallbackPanel = memo(function CallbackPanel({
 
           {/* Reassurance stats */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
+            transition={reducedMotion ? { duration: 0 } : { delay: 0.55 }}
             className="flex items-center justify-center gap-4 text-xs text-gray-500"
           >
             <span className="inline-flex items-center gap-1">
@@ -212,9 +216,9 @@ export const CallbackPanel = memo(function CallbackPanel({
 
           {/* Subtle satisfaction message */}
           <motion.p
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
+            transition={reducedMotion ? { duration: 0 } : { delay: 0.7 }}
             className="text-xs text-gray-400"
           >
             98% of our clients are contacted back within 2 hours

@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Trophy, Calendar, Shield, Star, Users, MapPin, CheckCircle } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 
@@ -88,6 +89,7 @@ const cardVariants = {
 }
 
 export function AttorneyWhyChoose({ attorney }: { attorney: LegacyAttorney }) {
+  const reducedMotion = useReducedMotion()
   const cards = getWhyCards(attorney)
 
   if (cards.length === 0) return null
@@ -104,16 +106,16 @@ export function AttorneyWhyChoose({ attorney }: { attorney: LegacyAttorney }) {
       </div>
 
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
+        variants={reducedMotion ? undefined : containerVariants}
+        initial={reducedMotion ? false : "hidden"}
+        whileInView={reducedMotion ? undefined : "visible"}
         viewport={{ once: true, margin: '-40px' }}
         className="grid grid-cols-1 sm:grid-cols-3 gap-4"
       >
         {cards.map((card) => (
           <motion.div
             key={card.title}
-            variants={cardVariants}
+            variants={reducedMotion ? undefined : cardVariants}
             className="rounded-xl bg-white border border-stone-200/60 p-5"
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-clay-50 mb-3">

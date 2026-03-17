@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { SITE_URL } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
 import { REVALIDATE } from '@/lib/cache'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 const MapClient = dynamic(() => import('./MapClient'), {
   ssr: false,
@@ -34,7 +35,13 @@ export default function AttorneyMapPage() {
         </h1>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <MapClient />
+        <ErrorBoundary fallback={
+          <div className="bg-gray-100 rounded-xl flex items-center justify-center" style={{ height: '600px' }}>
+            <p className="text-gray-500">Unable to load the map. Please refresh the page.</p>
+          </div>
+        }>
+          <MapClient />
+        </ErrorBoundary>
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyAttorney } from '@/types/legacy'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   VerificationLevelBadge,
   VerifiedBadge,
@@ -29,14 +30,16 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
   const displayName = getDisplayName(attorney)
   const verificationLevel = getVerificationLevel(attorney)
   const [showPhone, setShowPhone] = useState(false)
+  const reducedMotion = useReducedMotion()
+  const noMotion = { duration: 0 }
 
   const hasPortfolioImage = attorney.portfolio && attorney.portfolio.length > 0 && attorney.portfolio[0].imageUrl
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={reducedMotion ? noMotion : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="bg-[#FFFCF8] dark:bg-gray-800 rounded-2xl shadow-soft border border-stone-200/60 dark:border-gray-700 overflow-hidden"
       role="banner"
       aria-label={`${displayName}'s profile`}
@@ -50,7 +53,7 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
           <div className="flex-shrink-0">
             <div className="relative">
               {/* Pulsing ring for attorneys accepting new clients */}
-              {attorney.accepts_new_clients && (
+              {attorney.accepts_new_clients && !reducedMotion && (
                 <motion.div
                   className="absolute -inset-1.5 rounded-2xl border-2 border-clay-400/50"
                   animate={{

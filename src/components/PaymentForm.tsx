@@ -9,6 +9,7 @@ import {
   useElements,
 } from '@stripe/react-stripe-js'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Check, AlertCircle, Lock } from 'lucide-react'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
@@ -27,6 +28,7 @@ interface PaymentFormProps {
 type PaymentType = 'full' | 'deposit' | 'split'
 
 export default function PaymentForm(props: PaymentFormProps) {
+  const reducedMotion = useReducedMotion()
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [paymentType, setPaymentType] = useState<PaymentType>('full')
   const [splitInstallments, setSplitInstallments] = useState<2 | 3 | 4>(3)
@@ -168,8 +170,9 @@ export default function PaymentForm(props: PaymentFormProps) {
           {/* Split Payment Options */}
           {paymentType === 'split' && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
+              initial={reducedMotion ? false : { opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
+              transition={reducedMotion ? { duration: 0 } : undefined}
               className="p-4 bg-gray-50 rounded-xl"
             >
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -210,8 +213,9 @@ export default function PaymentForm(props: PaymentFormProps) {
           {/* Deposit Options */}
           {paymentType === 'deposit' && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
+              initial={reducedMotion ? false : { opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
+              transition={reducedMotion ? { duration: 0 } : undefined}
               className="p-4 bg-gray-50 rounded-xl"
             >
               <label className="block text-sm font-medium text-gray-700 mb-2">

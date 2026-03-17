@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
 interface StatCardProps {
@@ -24,28 +25,34 @@ const colorMap = {
   gray: 'bg-gray-50 text-gray-600',
 }
 
-function AnimatedValue({ value }: { value: number }) {
+function AnimatedValue({ value, reducedMotion }: { value: number; reducedMotion: boolean }) {
   const motionValue = useMotionValue(0)
   const display = useTransform(motionValue, (v) => Math.round(v).toLocaleString('en-US'))
 
   useEffect(() => {
+    if (reducedMotion) {
+      motionValue.set(value)
+      return
+    }
     const controls = animate(motionValue, value, {
       duration: 0.8,
       ease: 'easeOut',
     })
     return controls.stop
-  }, [motionValue, value])
+  }, [motionValue, value, reducedMotion])
 
   return <motion.span>{display}</motion.span>
 }
 
 export function StatCard({ title, value, subtitle, trend, icon, color = 'blue', delay = 0 }: StatCardProps) {
+  const reducedMotion = useReducedMotion()
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.3, ease: 'easeOut' }}
-      whileHover={{ y: -2, boxShadow: '0 8px 25px rgba(0,0,0,0.08)' }}
+      transition={reducedMotion ? { duration: 0 } : { delay, duration: 0.3, ease: 'easeOut' }}
+      whileHover={reducedMotion ? undefined : { y: -2, boxShadow: '0 8px 25px rgba(0,0,0,0.08)' }}
     >
       <div className="bg-white rounded-xl border border-gray-200 p-5 transition-shadow">
         <div className="flex items-start justify-between">
@@ -69,7 +76,7 @@ export function StatCard({ title, value, subtitle, trend, icon, color = 'blue', 
         </div>
         <div className="mt-3">
           <p className="text-2xl font-bold text-gray-900 tabular-nums">
-            {typeof value === 'number' ? <AnimatedValue value={value} /> : value}
+            {typeof value === 'number' ? <AnimatedValue value={value} reducedMotion={reducedMotion} /> : value}
           </p>
           <p className="text-sm text-gray-500 mt-0.5">{title}</p>
           {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}

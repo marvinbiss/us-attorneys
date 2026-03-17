@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Star, CheckCircle, ChevronDown } from 'lucide-react'
 import { Artisan, Review } from './types'
 
@@ -46,15 +47,15 @@ function ReviewStars({ rating, size = 'w-4 h-4' }: { rating: number; size?: stri
 }
 
 /** Single review card */
-function ReviewCard({ review, index }: { review: Review; index: number }) {
+function ReviewCard({ review, index, reducedMotion }: { review: Review; index: number; reducedMotion: boolean }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 16 }}
+      whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.35, delay: index * 0.1 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.35, delay: index * 0.1 }}
       className="bg-[#FFFCF8] rounded-xl border border-sand-200 p-4"
     >
       {/* Header: author + rating + date */}
@@ -116,6 +117,7 @@ interface AttorneyReviewsProps {
 }
 
 export function AttorneyReviews({ attorney, reviews }: AttorneyReviewsProps) {
+  const reducedMotion = useReducedMotion()
   const rating = attorney.average_rating
   const count = attorney.review_count
 
@@ -130,9 +132,9 @@ export function AttorneyReviews({ attorney, reviews }: AttorneyReviewsProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.3 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.3 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <div className="flex items-center justify-between mb-5">
@@ -212,7 +214,7 @@ export function AttorneyReviews({ attorney, reviews }: AttorneyReviewsProps) {
           </h3>
           <div className="space-y-3">
             {visibleReviews.map((review, i) => (
-              <ReviewCard key={review.id} review={review} index={i} />
+              <ReviewCard key={review.id} review={review} index={i} reducedMotion={reducedMotion} />
             ))}
           </div>
 

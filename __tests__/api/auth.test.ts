@@ -174,7 +174,7 @@ describe('POST /api/auth/signin', () => {
     const res = await callSignin({ email: 'test@example.com', password: 'Password1' })
 
     expect(res.status).toBe(429)
-    expect(res.body.error).toBe('Too many requests')
+    expect(res.body.error).toContain('Too many requests')
   })
 })
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 interface CookiePreferences {
   necessary: boolean // Always true
@@ -33,6 +34,7 @@ function enableClarity() {
 }
 
 export default function CookieConsent() {
+  const reducedMotion = useReducedMotion()
   const [isVisible, setIsVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -145,9 +147,10 @@ export default function CookieConsent() {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ y: 100, opacity: 0 }}
+        initial={reducedMotion ? false : { y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
+        transition={reducedMotion ? { duration: 0 } : undefined}
         className="fixed bottom-20 md:bottom-0 left-0 right-0 z-50 p-4 md:p-6"
       >
         <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100" role="dialog" aria-label="Cookie management" aria-modal="false">
@@ -183,9 +186,10 @@ export default function CookieConsent() {
             <AnimatePresence>
               {showDetails && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
+                  initial={reducedMotion ? false : { height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
+                  transition={reducedMotion ? { duration: 0 } : undefined}
                   className="mt-6 space-y-4 overflow-hidden"
                 >
                   {/* Necessary cookies */}

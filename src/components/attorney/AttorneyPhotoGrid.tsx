@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { X, ChevronLeft, ChevronRight, Grid3X3 } from 'lucide-react'
 import { Artisan } from './types'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
@@ -15,6 +16,7 @@ interface AttorneyPhotoGridProps {
 const BLUR_DATA_URL = BLUR_PLACEHOLDER
 
 export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
+  const reducedMotion = useReducedMotion()
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -59,9 +61,9 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
     <>
       {/* Airbnb-style Photo Grid */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={reducedMotion ? { duration: 0 } : { duration: 0.4 }}
         className="rounded-2xl overflow-hidden cursor-pointer group"
       >
         <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80 md:h-96">
@@ -169,8 +171,8 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
 
         {/* Show all photos button */}
         <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+          whileTap={reducedMotion ? undefined : { scale: 0.98 }}
           onClick={() => openLightbox(0)}
           className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-gray-900 shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
           aria-label={`View all ${photos.length} photos fullscreen`}
@@ -184,9 +186,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
             onClick={closeLightbox}
             onKeyDown={handleKeyDown}
@@ -197,8 +200,9 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
           >
             {/* Close button */}
             <motion.button
-              initial={{ opacity: 0, y: -20 }}
+              initial={reducedMotion ? false : { opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={reducedMotion ? { duration: 0 } : undefined}
               className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={closeLightbox}
               aria-label="Close gallery"
@@ -213,8 +217,9 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
 
             {/* Navigation buttons */}
             <motion.button
-              initial={{ opacity: 0, x: -20 }}
+              initial={reducedMotion ? false : { opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={reducedMotion ? { duration: 0 } : undefined}
               className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
               aria-label="Previous photo"
@@ -223,8 +228,9 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
             </motion.button>
 
             <motion.button
-              initial={{ opacity: 0, x: 20 }}
+              initial={reducedMotion ? false : { opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={reducedMotion ? { duration: 0 } : undefined}
               className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={(e) => { e.stopPropagation(); goToNext(); }}
               aria-label="Next photo"
@@ -235,10 +241,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
             {/* Main image */}
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={reducedMotion ? false : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
               className="relative w-full h-full max-w-5xl max-h-[80vh] mx-4"
               onClick={(e) => e.stopPropagation()}
             >
@@ -253,8 +259,9 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
 
               {/* Caption */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={reducedMotion ? { duration: 0 } : undefined}
                 className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent"
               >
                 <h3 className="text-white font-semibold text-lg">
@@ -273,8 +280,8 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
               {photos.map((photo, index) => (
                 <motion.button
                   key={photo.id}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={reducedMotion ? undefined : { scale: 1.1 }}
+                  whileTap={reducedMotion ? undefined : { scale: 0.95 }}
                   className={`relative flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all ${
                     index === currentIndex
                       ? 'ring-2 ring-white opacity-100'

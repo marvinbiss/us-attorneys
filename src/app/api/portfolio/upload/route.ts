@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 const portfolioUploadTypeSchema = z.enum(['image', 'video', 'before', 'after']).nullable()
@@ -31,6 +32,15 @@ function generateFilePath(attorneyId: string, fileName: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting — upload category (5/min, storage-intensive)
+    const rl = await rateLimit(request, RATE_LIMITS.upload)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many uploads. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
+      )
+    }
+
     const supabase = await createClient()
 
     // Get current user

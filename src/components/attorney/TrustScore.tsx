@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { ShieldCheck, ChevronDown, Info } from 'lucide-react'
 import {
   FACTOR_LABELS,
@@ -86,9 +87,11 @@ function TrustScoreBadge({ score }: { score: number }) {
 function FactorBar({
   factor,
   value,
+  reducedMotion,
 }: {
   factor: TrustFactor
   value: number
+  reducedMotion: boolean
 }) {
   const label = FACTOR_LABELS[factor]
   const description = FACTOR_DESCRIPTIONS[factor]
@@ -111,9 +114,9 @@ function FactorBar({
       </div>
       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
         <motion.div
-          initial={{ width: 0 }}
+          initial={reducedMotion ? false : { width: 0 }}
           animate={{ width: `${percentage}%` }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={reducedMotion ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className={`h-full rounded-full ${colors.bar}`}
         />
       </div>
@@ -130,6 +133,7 @@ function TrustScoreFull({
   score: number
   breakdown?: Record<string, number>
 }) {
+  const reducedMotion = useReducedMotion()
   const [isExpanded, setIsExpanded] = useState(false)
   const colors = getScoreColor(score)
   const scoreLabel = getScoreLabel(score)
@@ -142,9 +146,9 @@ function TrustScoreFull({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.15 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.15 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Header */}
@@ -178,9 +182,9 @@ function TrustScoreFull({
             </div>
             <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
               <motion.div
-                initial={{ width: 0 }}
+                initial={reducedMotion ? false : { width: 0 }}
                 animate={{ width: `${percentage}%` }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={reducedMotion ? { duration: 0 } : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className={`h-full rounded-full ${colors.bar}`}
               />
             </div>
@@ -210,10 +214,10 @@ function TrustScoreFull({
           {isExpanded && (
             <motion.div
               id="trust-score-breakdown"
-              initial={{ height: 0, opacity: 0 }}
+              initial={reducedMotion ? false : { height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={reducedMotion ? { duration: 0 } : { duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="overflow-hidden"
             >
               <div className="mt-4 space-y-3 pt-4 border-t border-stone-200/60">
@@ -226,6 +230,7 @@ function TrustScoreFull({
                     key={factor}
                     factor={factor}
                     value={breakdown?.[factor] ?? 0}
+                    reducedMotion={reducedMotion}
                   />
                 ))}
               </div>

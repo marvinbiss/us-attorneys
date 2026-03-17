@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Wrench, Clock, DollarSign, CheckCircle } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 
@@ -9,11 +10,13 @@ interface AttorneyServicesProps {
 }
 
 export function AttorneyServices({ attorney }: AttorneyServicesProps) {
+  const reducedMotion = useReducedMotion()
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.2 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
@@ -53,9 +56,9 @@ export function AttorneyServices({ attorney }: AttorneyServicesProps) {
               <motion.div
                 key={index}
                 role="listitem"
-                initial={{ opacity: 0, x: -10 }}
+                initial={reducedMotion ? false : { opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
+                transition={reducedMotion ? { duration: 0 } : { duration: 0.3, delay: 0.1 + index * 0.05 }}
                 className="flex items-center justify-between p-4 rounded-xl bg-sand-50 border border-sand-200 group"
               >
                 <div className="flex-1 min-w-0">

@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Send, Loader2 } from 'lucide-react'
 import { renderMarkdown } from './utils'
 import type { EstimationContext } from './utils'
@@ -22,6 +23,7 @@ export const ChatPanel = memo(function ChatPanel({
   lead,
   prompts,
 }: ChatPanelProps) {
+  const reducedMotion = useReducedMotion()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -46,8 +48,9 @@ export const ChatPanel = memo(function ChatPanel({
         {/* Welcome message */}
         {chat.messages.length === 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             className="flex justify-start"
           >
             <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3 text-sm text-gray-800">
@@ -76,9 +79,9 @@ export const ChatPanel = memo(function ChatPanel({
         {chat.messages.map((msg, idx) => (
           <motion.div
             key={idx}
-            initial={{ opacity: 0, y: 8 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
             className={
               'flex ' +
               (msg.role === 'user' ? 'justify-end' : 'justify-start')
@@ -108,9 +111,9 @@ export const ChatPanel = memo(function ChatPanel({
         {/* Quick prompts (before first user message) */}
         {!chat.hasUserMessages && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={reducedMotion ? { duration: 0 } : { delay: 0.3 }}
             className="flex flex-wrap gap-2 pt-1"
           >
             {prompts.map((prompt) => (
@@ -130,10 +133,10 @@ export const ChatPanel = memo(function ChatPanel({
         <AnimatePresence>
           {chat.showLeadForm && !lead.leadSubmitted && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={reducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              transition={{
+              transition={reducedMotion ? { duration: 0 } : {
                 type: 'spring',
                 stiffness: 300,
                 damping: 25,

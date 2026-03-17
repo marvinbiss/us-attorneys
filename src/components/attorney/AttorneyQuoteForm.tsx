@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { MessageCircle, Shield, Clock, Zap, CheckCircle } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 
@@ -9,6 +10,7 @@ interface AttorneyQuoteFormProps {
 }
 
 export function AttorneyQuoteForm({ attorney }: AttorneyQuoteFormProps) {
+  const reducedMotion = useReducedMotion()
   const displayName = getDisplayName(attorney)
 
   const openEstimationWidget = () => {
@@ -64,8 +66,8 @@ export function AttorneyQuoteForm({ attorney }: AttorneyQuoteFormProps) {
         {/* Single dominant CTA */}
         <motion.button
           onClick={openEstimationWidget}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+          whileTap={reducedMotion ? undefined : { scale: 0.98 }}
           className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold text-lg flex items-center justify-center gap-2.5 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
           aria-label="Open the estimation assistant for a free consultation"
         >

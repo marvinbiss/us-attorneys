@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { HelpCircle, Plus, Minus } from 'lucide-react'
 import { Artisan } from './types'
 
@@ -10,6 +11,7 @@ interface AttorneyFAQProps {
 }
 
 export function AttorneyFAQ({ attorney }: AttorneyFAQProps) {
+  const reducedMotion = useReducedMotion()
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   if (!attorney.faq || attorney.faq.length === 0) {
@@ -18,9 +20,9 @@ export function AttorneyFAQ({ attorney }: AttorneyFAQProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.4 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.4 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
@@ -37,9 +39,9 @@ export function AttorneyFAQ({ attorney }: AttorneyFAQProps) {
           return (
             <motion.div
               key={index}
-              initial={{ opacity: 0 }}
+              initial={reducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.05 }}
+              transition={reducedMotion ? { duration: 0 } : { delay: index * 0.05 }}
               className="border border-stone-200/60 rounded-xl overflow-hidden"
             >
               <h3>
@@ -70,10 +72,10 @@ export function AttorneyFAQ({ attorney }: AttorneyFAQProps) {
                     id={panelId}
                     role="region"
                     aria-labelledby={headingId}
-                    initial={{ height: 0, opacity: 0 }}
+                    initial={reducedMotion ? false : { height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
                     className="overflow-hidden"
                   >
                     <div className="px-5 py-4 bg-white text-gray-600 leading-relaxed">

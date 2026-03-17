@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { User, ChevronDown } from 'lucide-react'
 import { Artisan } from './types'
 
@@ -10,6 +11,7 @@ interface AttorneyAboutProps {
 }
 
 export function AttorneyAbout({ attorney }: AttorneyAboutProps) {
+  const reducedMotion = useReducedMotion()
   const [expanded, setExpanded] = useState(false)
 
   const description = attorney.description || ''
@@ -17,9 +19,9 @@ export function AttorneyAbout({ attorney }: AttorneyAboutProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.15 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.15 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}

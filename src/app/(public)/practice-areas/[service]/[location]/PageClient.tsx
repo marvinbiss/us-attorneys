@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import AttorneyList from '@/components/AttorneyList'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 const PAGE_SIZE = 50
 
@@ -406,17 +407,23 @@ export default function ServiceLocationPageClient({
                 : 'w-full h-[calc(100vh-200px)] md:h-auto'
             }`}
           >
-            <GeographicMap
-              centerLat={mapCenter[0]}
-              centerLng={mapCenter[1]}
-              zoom={mapZoom}
-              providers={mapProviders}
-              highlightedProviderId={selectedProvider?.id}
-              locationName={location.name}
-              height="100%"
-              className="h-full"
-              onMarkerHover={setMapHoveredProviderId}
-            />
+            <ErrorBoundary fallback={
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center rounded-xl">
+                <p className="text-gray-500">Unable to load map. Please refresh the page.</p>
+              </div>
+            }>
+              <GeographicMap
+                centerLat={mapCenter[0]}
+                centerLng={mapCenter[1]}
+                zoom={mapZoom}
+                providers={mapProviders}
+                highlightedProviderId={selectedProvider?.id}
+                locationName={location.name}
+                height="100%"
+                className="h-full"
+                onMarkerHover={setMapHoveredProviderId}
+              />
+            </ErrorBoundary>
           </div>
         )}
       </div>

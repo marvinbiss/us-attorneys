@@ -1,15 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 // Shimmer animation component
 function Shimmer({ className }: { className?: string }) {
+  const reducedMotion = useReducedMotion()
   return (
     <div className={`relative overflow-hidden bg-gray-200 ${className}`}>
       <motion.div
         className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent"
-        animate={{ translateX: ['100%', '-100%'] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+        animate={reducedMotion ? undefined : { translateX: ['100%', '-100%'] }}
+        transition={reducedMotion ? { duration: 0 } : { duration: 1.5, repeat: Infinity, ease: 'linear' }}
       />
     </div>
   )

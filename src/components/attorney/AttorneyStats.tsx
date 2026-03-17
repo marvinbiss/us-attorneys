@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Calendar,
   MessageCircle,
@@ -28,6 +29,7 @@ interface StatConfig {
 }
 
 export function AttorneyStats({ attorney }: AttorneyStatsProps) {
+  const reducedMotion = useReducedMotion()
   const stats: StatConfig[] = []
   const currentYear = new Date().getFullYear()
 
@@ -144,9 +146,9 @@ export function AttorneyStats({ attorney }: AttorneyStatsProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.1 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.1 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
@@ -170,10 +172,10 @@ export function AttorneyStats({ attorney }: AttorneyStatsProps) {
             <motion.div
               key={stat.label}
               role="listitem"
-              initial={{ opacity: 0, scale: 0.85 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={reducedMotion ? false : { opacity: 0, scale: 0.85 }}
+              whileInView={reducedMotion ? undefined : { opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
+              transition={reducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
               className={`text-center p-4 rounded-xl border ${stat.bgColor}`}
             >
               <div

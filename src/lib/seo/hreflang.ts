@@ -8,6 +8,7 @@ interface HreflangLink {
 // English to Spanish intent mapping
 const INTENT_MAP: Record<string, string> = {
   'attorneys': 'abogados',
+  'practice-areas': 'abogados',
   'hire': 'contratar',
   'cost': 'costo',
   'reviews': 'opiniones',
@@ -24,10 +25,18 @@ const INTENT_MAP: Record<string, string> = {
   'glossary': 'glosario',
 }
 
-// Reverse mapping
-const INTENT_MAP_REVERSE: Record<string, string> = Object.fromEntries(
-  Object.entries(INTENT_MAP).map(([k, v]) => [v, k])
-)
+// Intents that have actual Spanish route directories (no /es/ prefix needed)
+const INTENTS_WITH_SPANISH_ROUTES: Set<string> = new Set([
+  'attorneys', 'practice-areas', 'hire', 'cost', 'reviews', 'emergency',
+])
+
+// Reverse mapping — first entry wins (e.g. abogados -> attorneys, not practice-areas)
+const INTENT_MAP_REVERSE: Record<string, string> = {}
+for (const [en, es] of Object.entries(INTENT_MAP)) {
+  if (!(es in INTENT_MAP_REVERSE)) {
+    INTENT_MAP_REVERSE[es] = en
+  }
+}
 
 // Spanish practice area slug mappings (all 200 practice areas from practice-areas-200.ts)
 const SPANISH_PA_SLUGS: Record<string, string> = {
@@ -281,22 +290,31 @@ export function getHreflangLinks(currentUrl: string): HreflangLink[] {
 }
 
 /**
- * Get the Spanish mirror URL for an English page
- * Returns null if no Spanish mirror exists
+ * Get the Spanish mirror URL for an English page.
+ * Spanish routes live at /{intent-es}/... (e.g. /abogados/lesiones-personales/houston)
+ * — NO /es/ prefix because those are real Next.js route directories.
+ * Returns null if no Spanish mirror exists.
  */
 export function getSpanishMirror(englishPath: string): string | null {
   const normalizedPath = englishPath.replace(/\/$/, '') || '/'
 
-  // Homepage
+  // Homepage — no Spanish homepage route exists yet
   if (normalizedPath === '/') {
-    return '/es'
+    return null
   }
 
   // Split path into segments
   const segments = normalizedPath.split('/').filter(Boolean)
 
-  // Already a Spanish page
-  if (segments[0] === 'es') {
+  // Already a Spanish page (direct Spanish route prefix)
+  const spanishRoutes = new Set(Object.values(INTENT_MAP))
+  if (spanishRoutes.has(segments[0])) {
+    return null
+  }
+
+  // First segment must be a known English intent with a Spanish route
+  const firstSegment = segments[0]
+  if (!INTENTS_WITH_SPANISH_ROUTES.has(firstSegment)) {
     return null
   }
 
@@ -314,32 +332,27 @@ export function getSpanishMirror(englishPath: string): string | null {
     return segment
   })
 
-  return `/es/${translatedSegments.join('/')}`
+  return `/${translatedSegments.join('/')}`
 }
 
 /**
- * Get the English original URL for a Spanish page
+ * Get the English original URL for a Spanish page.
+ * Spanish routes are at /{spanish-intent}/... (e.g. /abogados/lesiones-personales/houston)
+ * Maps back to /{english-intent}/... (e.g. /attorneys/personal-injury/houston)
  */
 export function getEnglishOriginal(spanishPath: string): string | null {
   const normalizedPath = spanishPath.replace(/\/$/, '') || '/'
 
-  // Spanish homepage
-  if (normalizedPath === '/es') {
-    return '/'
-  }
-
   const segments = normalizedPath.split('/').filter(Boolean)
+  if (segments.length === 0) return null
 
-  // Not a Spanish page
-  if (segments[0] !== 'es') {
+  // Check if first segment is a Spanish intent
+  if (!INTENT_MAP_REVERSE[segments[0]]) {
     return null
   }
 
-  // Remove the 'es' prefix
-  const spanishSegments = segments.slice(1)
-
   // Translate back to English
-  const translatedSegments = spanishSegments.map(segment => {
+  const translatedSegments = segments.map(segment => {
     // Check if it's a Spanish practice area slug
     if (ENGLISH_PA_SLUGS[segment]) {
       return ENGLISH_PA_SLUGS[segment]
@@ -356,59 +369,57 @@ export function getEnglishOriginal(spanishPath: string): string | null {
 }
 
 /**
- * Check if a URL has a Spanish mirror
+ * Check if a URL has a Spanish mirror.
+ * Only returns true for English pages whose first segment is a known intent
+ * that has an actual Spanish route directory.
  */
 export function hasSpanishMirror(path: string): boolean {
   const normalizedPath = path.replace(/\/$/, '') || '/'
-
-  // Spanish pages don't have Spanish mirrors
-  if (normalizedPath.startsWith('/es')) {
-    return false
-  }
-
   const segments = normalizedPath.split('/').filter(Boolean)
 
-  // Pages that have Spanish mirrors:
-  // - Homepage
-  if (segments.length === 0) return true
+  // No homepage mirror (no /es route exists)
+  if (segments.length === 0) return false
 
-  // - Practice area pages (any URL containing a known PA slug)
-  const hasPA = segments.some(seg => SPANISH_PA_SLUGS[seg] !== undefined)
-  if (hasPA) return true
+  // Spanish pages don't have Spanish mirrors
+  const spanishIntents = new Set(Object.values(INTENT_MAP))
+  if (spanishIntents.has(segments[0])) return false
 
-  // - Intent pages (attorneys, cost, reviews, emergency)
-  const hasIntent = segments.some(seg => INTENT_MAP[seg] !== undefined)
-  if (hasIntent) return true
-
-  return false
+  // First segment must be an English intent with an actual Spanish route
+  return INTENTS_WITH_SPANISH_ROUTES.has(segments[0])
 }
 
 /**
- * Generate Next.js Metadata alternates object for hreflang
- * Returns { languages: { en: url, es: url } } for use in metadata.alternates
+ * Generate Next.js Metadata alternates object for hreflang.
+ * Returns { languages: { en: url, es: url, 'x-default': url } } for use in metadata.alternates.
+ *
+ * Works for both English pages (e.g. /attorneys/personal-injury/houston)
+ * and Spanish pages (e.g. /abogados/lesiones-personales/houston).
  */
 export function getAlternateLanguages(path: string): Record<string, string> {
   const normalizedPath = path.replace(/\/$/, '') || '/'
   const languages: Record<string, string> = {}
 
-  // If it's an English page with a Spanish mirror
-  if (!normalizedPath.startsWith('/es') && hasSpanishMirror(normalizedPath)) {
-    const spanishPath = getSpanishMirror(normalizedPath)
-    languages['en'] = `${SITE_URL}${normalizedPath}`
-    if (spanishPath) {
-      languages['es'] = `${SITE_URL}${spanishPath}`
-    }
-    languages['x-default'] = `${SITE_URL}${normalizedPath}`
-  }
+  // Check if this is a Spanish page (first segment is a Spanish intent)
+  const segments = normalizedPath.split('/').filter(Boolean)
+  const spanishIntents = new Set(Object.values(INTENT_MAP))
+  const isSpanishPage = segments.length > 0 && spanishIntents.has(segments[0])
 
-  // If it's a Spanish page, link back to English
-  if (normalizedPath.startsWith('/es')) {
+  if (isSpanishPage) {
+    // Spanish page — link back to English
     const englishPath = getEnglishOriginal(normalizedPath)
     if (englishPath) {
       languages['en'] = `${SITE_URL}${englishPath}`
       languages['es'] = `${SITE_URL}${normalizedPath}`
       languages['x-default'] = `${SITE_URL}${englishPath}`
     }
+  } else if (hasSpanishMirror(normalizedPath)) {
+    // English page with a Spanish mirror
+    const spanishPath = getSpanishMirror(normalizedPath)
+    languages['en'] = `${SITE_URL}${normalizedPath}`
+    if (spanishPath) {
+      languages['es'] = `${SITE_URL}${spanishPath}`
+    }
+    languages['x-default'] = `${SITE_URL}${normalizedPath}`
   }
 
   return languages

@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { twoFactorAuth } from '@/lib/auth/two-factor'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 const verifySchema = z.object({
@@ -51,6 +52,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting — auth category (5/min, fail-close)
+    const rl = await rateLimit(request, RATE_LIMITS.auth)
+    if (!rl.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Too many requests. Please try again later.' } },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
+      )
+    }
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 

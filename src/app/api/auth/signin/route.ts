@@ -16,12 +16,12 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
 export async function POST(request: Request) {
   try {
-    // Rate limiting
+    // Rate limiting — auth category (5/min, fail-close)
     const rl = await rateLimit(request, RATE_LIMITS.auth)
     if (!rl.success) {
       return NextResponse.json(
-        { error: 'Too many requests' },
-        { status: 429 }
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
       )
     }
 

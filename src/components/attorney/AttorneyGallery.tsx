@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { X, ChevronLeft, ChevronRight, Camera, ZoomIn, Play, Layers } from 'lucide-react'
 import { Artisan, PortfolioItem } from './types'
 import { BeforeAfterSlider, VideoPlayer } from '@/components/portfolio'
@@ -12,6 +13,7 @@ interface AttorneyGalleryProps {
 }
 
 export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
+  const reducedMotion = useReducedMotion()
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -72,9 +74,9 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.25 }}
+        transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.25 }}
         className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
       >
         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -96,7 +98,7 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
         <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80 rounded-xl overflow-hidden">
           {/* Main hero image */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
+            whileHover={reducedMotion ? undefined : { scale: 1.02 }}
             className="col-span-2 row-span-2 relative cursor-pointer group"
             onClick={() => openLightbox(0)}
           >
@@ -128,7 +130,7 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
           {photos.slice(1, 5).map((photo, index) => (
             <motion.div
               key={photo.id}
-              whileHover={{ scale: 1.05 }}
+              whileHover={reducedMotion ? undefined : { scale: 1.05 }}
               className="relative cursor-pointer group overflow-hidden"
               onClick={() => openLightbox(index + 1)}
             >
@@ -165,8 +167,8 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
         {/* View all button */}
         {photos.length > 5 && (
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.98 }}
             onClick={() => openLightbox(0)}
             className="mt-4 w-full py-3 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
           >
@@ -180,9 +182,10 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
             onClick={closeLightbox}
             role="dialog"
@@ -215,8 +218,9 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
             <div className="flex-1 flex items-center justify-center p-4 relative">
               {/* Previous button */}
               <motion.button
-                initial={{ opacity: 0, x: -20 }}
+                initial={reducedMotion ? false : { opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
+                transition={reducedMotion ? { duration: 0 } : undefined}
                 className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
                 onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
                 aria-label="Previous photo"
@@ -226,8 +230,9 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
 
               {/* Next button */}
               <motion.button
-                initial={{ opacity: 0, x: 20 }}
+                initial={reducedMotion ? false : { opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
+                transition={reducedMotion ? { duration: 0 } : undefined}
                 className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
                 onClick={(e) => { e.stopPropagation(); goToNext(); }}
                 aria-label="Next photo"
@@ -238,10 +243,10 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
               {/* Media content */}
               <motion.div
                 key={currentIndex}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.2 }}
+                transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
                 className="max-w-5xl w-full max-h-[70vh]"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -284,8 +289,8 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
               {photos.map((photo, index) => (
                 <motion.button
                   key={photo.id}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={reducedMotion ? undefined : { scale: 1.1 }}
+                  whileTap={reducedMotion ? undefined : { scale: 0.95 }}
                   className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all relative ${
                     index === currentIndex
                       ? 'ring-2 ring-white opacity-100'

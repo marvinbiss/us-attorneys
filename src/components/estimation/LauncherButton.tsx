@@ -2,6 +2,7 @@
 
 import React, { memo } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { MessageCircle } from 'lucide-react'
 
 interface LauncherButtonProps {
@@ -17,17 +18,22 @@ export const LauncherButton = memo(function LauncherButton({
   showNotification,
   onClick,
 }: LauncherButtonProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <motion.button
-      initial={{ scale: 0, opacity: 0 }}
+      initial={reducedMotion ? false : { scale: 0, opacity: 0 }}
       animate={
-        shouldWiggle
+        reducedMotion
+          ? { scale: 1, opacity: 1 }
+          : shouldWiggle
           ? { scale: 1, opacity: 1, rotate: [0, -6, 6, -4, 4, 0] }
           : { scale: 1, opacity: 1 }
       }
       exit={{ scale: 0, opacity: 0 }}
       transition={
-        shouldWiggle
+        reducedMotion
+          ? { duration: 0 }
+          : shouldWiggle
           ? { duration: 0.6, ease: 'easeInOut' }
           : { type: 'spring', stiffness: 260, damping: 20 }
       }
@@ -56,8 +62,9 @@ export const LauncherButton = memo(function LauncherButton({
       {/* Pill text (visible when expanded) */}
       {isExpanded && (
         <motion.span
-          initial={{ opacity: 0, width: 0 }}
+          initial={reducedMotion ? false : { opacity: 0, width: 0 }}
           animate={{ opacity: 1, width: 'auto' }}
+          transition={reducedMotion ? { duration: 0 } : undefined}
           className="text-sm font-semibold whitespace-nowrap overflow-hidden"
         >
           Free estimate

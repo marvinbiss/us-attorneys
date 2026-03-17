@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { X, Send, CheckCircle, Loader2, User, Mail, Phone, FileText } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 import { submitLead } from '@/app/actions/lead'
@@ -30,6 +31,7 @@ const initialFormData: FormData = {
 }
 
 export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestModalProps) {
+  const reducedMotion = useReducedMotion()
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -170,9 +172,10 @@ export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestMod
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={reducedMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={reducedMotion ? { duration: 0 } : undefined}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
           onClick={onClose}
           role="dialog"
@@ -182,10 +185,10 @@ export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestMod
         >
           <motion.div
             ref={modalRef}
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.2 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
             className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -198,8 +201,8 @@ export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestMod
                 </p>
               </div>
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={reducedMotion ? undefined : { scale: 1.1 }}
+                whileTap={reducedMotion ? undefined : { scale: 0.9 }}
                 onClick={onClose}
                 className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
                 aria-label="Close form"
@@ -212,16 +215,17 @@ export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestMod
             <div className="p-6">
               {isSuccess ? (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  transition={reducedMotion ? { duration: 0 } : undefined}
                   className="text-center py-8"
                   role="status"
                   aria-live="polite"
                 >
                   <motion.div
-                    initial={{ scale: 0 }}
+                    initial={reducedMotion ? false : { scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: 'spring', delay: 0.1 }}
+                    transition={reducedMotion ? { duration: 0 } : { type: 'spring', delay: 0.1 }}
                     className="w-16 h-16 bg-clay-50 rounded-full flex items-center justify-center mx-auto mb-4"
                     aria-hidden="true"
                   >
@@ -398,8 +402,8 @@ export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestMod
                   <motion.button
                     type="submit"
                     disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+                    whileTap={reducedMotion ? undefined : { scale: 0.98 }}
                     className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
                     aria-busy={isSubmitting}
                   >

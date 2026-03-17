@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   ChevronLeft,
   ChevronRight,
@@ -77,6 +78,7 @@ export function BookingCalendar({
   onConfirm,
   className = '',
 }: BookingCalendarProps) {
+  const reducedMotion = useReducedMotion()
   const [currentWeekStart, setCurrentWeekStart] = useState(() =>
     startOfWeek(new Date(), { weekStartsOn: 1 })
   )
@@ -207,9 +209,10 @@ export function BookingCalendar({
         {/* Step 1: Date Selection */}
         {step === 'date' && (
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={reducedMotion ? false : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             className="p-5"
           >
             {/* Week Navigation */}
@@ -286,8 +289,9 @@ export function BookingCalendar({
             {/* Selected date action */}
             {selectedDate && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={reducedMotion ? { duration: 0 } : undefined}
                 className="mt-4"
               >
                 <button
@@ -304,9 +308,10 @@ export function BookingCalendar({
         {/* Step 2: Time Selection */}
         {step === 'time' && selectedDate && (
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={reducedMotion ? false : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             className="p-5"
           >
             {/* Back & Date */}
@@ -384,8 +389,9 @@ export function BookingCalendar({
             {/* Confirm Button */}
             {selectedTime && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={reducedMotion ? { duration: 0 } : undefined}
               >
                 <button
                   onClick={handleConfirm}
@@ -412,8 +418,9 @@ export function BookingCalendar({
         {/* Step 3: Confirmation */}
         {step === 'confirm' && selectedDate && selectedTime && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             className="p-8 text-center"
           >
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

@@ -30,6 +30,8 @@ function buildCSP(nonce: string): string {
     'https://www.google-analytics.com',
     'https://googleads.g.doubleclick.net',
     'https://www.googleadservices.com',
+    'https://connect.facebook.net',
+    'https://t.contentsquare.net',
     ...(IS_DEV ? ["'unsafe-eval'"] : []),
   ].join(' ')
 
@@ -39,7 +41,7 @@ function buildCSP(nonce: string): string {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
-    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io" + (IS_DEV ? ' ws://localhost:* http://localhost:*' : ''),
+    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io https://connect.facebook.net https://t.contentsquare.net https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org" + (IS_DEV ? ' ws://localhost:* http://localhost:*' : ''),
     "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org",
     "object-src 'none'",
     "base-uri 'self'",
@@ -361,8 +363,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // hreflang header injection for bilingual pages
+  // Maps English route prefixes to their Spanish counterparts
   const spanishPrefixes = ['/abogados/', '/contratar/', '/costo/', '/opiniones/', '/emergencia/']
-  const englishPrefixes = ['/attorneys/', '/hire/', '/cost/', '/reviews/', '/emergency/']
+  const englishPrefixes = ['/attorneys/', '/practice-areas/', '/hire/', '/cost/', '/reviews/', '/emergency/']
   const spanishToEnglish: Record<string, string> = {
     '/abogados/': '/attorneys/',
     '/contratar/': '/hire/',
@@ -372,35 +375,64 @@ export async function middleware(request: NextRequest) {
   }
   const englishToSpanish: Record<string, string> = {
     '/attorneys/': '/abogados/',
+    '/practice-areas/': '/abogados/',
     '/hire/': '/contratar/',
     '/cost/': '/costo/',
     '/reviews/': '/opiniones/',
     '/emergency/': '/emergencia/',
   }
 
+  // Practice area slug translation (English -> Spanish) for hreflang URLs
+  // Only the most common PAs are included here; the full map is in hreflang.ts
+  const enToEsPA: Record<string, string> = {
+    'personal-injury': 'lesiones-personales', 'car-accidents': 'accidentes-de-auto',
+    'truck-accidents': 'accidentes-de-camion', 'motorcycle-accidents': 'accidentes-de-motocicleta',
+    'slip-and-fall': 'resbalones-y-caidas', 'medical-malpractice': 'negligencia-medica',
+    'wrongful-death': 'muerte-injusta', 'workers-compensation': 'compensacion-laboral',
+    'criminal-defense': 'defensa-criminal', 'dui-dwi': 'dui-y-dwi',
+    'drug-crimes': 'delitos-de-drogas', 'divorce': 'divorcio',
+    'child-custody': 'custodia-de-menores', 'child-support': 'manutencion-infantil',
+    'immigration-law': 'derecho-migratorio', 'bankruptcy': 'bancarrota',
+    'estate-planning': 'planificacion-patrimonial', 'employment-law': 'derecho-laboral',
+    'business-law': 'derecho-empresarial', 'real-estate-law': 'derecho-inmobiliario',
+    'intellectual-property': 'propiedad-intelectual', 'tax-law': 'derecho-fiscal',
+  }
+  const esToEnPA: Record<string, string> = Object.fromEntries(
+    Object.entries(enToEsPA).map(([en, es]) => [es, en])
+  )
+
+  /** Translate path segments between English and Spanish PA slugs */
+  function translatePathSegments(restOfPath: string, paMap: Record<string, string>): string {
+    return restOfPath.split('/').map(seg => paMap[seg] || seg).join('/')
+  }
+
   const matchedSpanish = spanishPrefixes.find(p => pathname.startsWith(p))
   const matchedEnglish = englishPrefixes.find(p => pathname.startsWith(p))
+
+  const host = request.headers.get('host') || 'us-attorneys.com'
 
   if (matchedSpanish) {
     // Spanish page — set Content-Language and add hreflang Link headers
     response.headers.set('Content-Language', 'es')
     const englishPrefix = spanishToEnglish[matchedSpanish]
     const restOfPath = pathname.slice(matchedSpanish.length)
-    const englishUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${englishPrefix}${restOfPath}`
-    const selfUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${pathname}`
+    const translatedPath = translatePathSegments(restOfPath, esToEnPA)
+    const englishUrl = `https://${host}${englishPrefix}${translatedPath}`
+    const selfUrl = `https://${host}${pathname}`
     response.headers.set(
       'Link',
-      `<${selfUrl}>; rel="alternate"; hreflang="es", <${englishUrl}>; rel="alternate"; hreflang="en"`
+      `<${selfUrl}>; rel="alternate"; hreflang="es", <${englishUrl}>; rel="alternate"; hreflang="en", <${englishUrl}>; rel="alternate"; hreflang="x-default"`
     )
   } else if (matchedEnglish) {
     // English page with Spanish mirror — add hreflang Link headers
     const spanishPrefix = englishToSpanish[matchedEnglish]
     const restOfPath = pathname.slice(matchedEnglish.length)
-    const spanishUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${spanishPrefix}${restOfPath}`
-    const selfUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${pathname}`
+    const translatedPath = translatePathSegments(restOfPath, enToEsPA)
+    const spanishUrl = `https://${host}${spanishPrefix}${translatedPath}`
+    const selfUrl = `https://${host}${pathname}`
     response.headers.set(
       'Link',
-      `<${selfUrl}>; rel="alternate"; hreflang="en", <${spanishUrl}>; rel="alternate"; hreflang="es"`
+      `<${selfUrl}>; rel="alternate"; hreflang="en", <${spanishUrl}>; rel="alternate"; hreflang="es", <${selfUrl}>; rel="alternate"; hreflang="x-default"`
     )
   }
 

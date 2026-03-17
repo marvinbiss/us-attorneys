@@ -7,12 +7,14 @@ import { motion, useMotionValue, useTransform, animate, useInView, type Variants
 import { services, cities, states } from '@/lib/data/usa'
 import { heroImage } from '@/lib/data/images'
 import { HeroSearch } from '@/components/search/HeroSearch'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 // ── Animated counter component ────────────────────────────────────────
 function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
-  const motionValue = useMotionValue(0)
+  const reducedMotion = useReducedMotion()
+  const motionValue = useMotionValue(reducedMotion ? value : 0)
   const rounded = useTransform(motionValue, (v) => {
     if (v >= 1000) {
       return Math.round(v).toLocaleString('en-US')
@@ -21,13 +23,13 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
   })
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView || reducedMotion) return
     const controls = animate(motionValue, value, {
       duration,
       ease: [0.16, 1, 0.3, 1],
     })
     return controls.stop
-  }, [isInView, motionValue, value, duration])
+  }, [isInView, motionValue, value, duration, reducedMotion])
 
   return (
     <span ref={ref}>
@@ -134,6 +136,8 @@ function AnimatedHeadingLine({ text, className }: { text: string; className?: st
 
 // ── Main Hero Component ───────────────────────────────────────────────
 export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
+  const reducedMotion = useReducedMotion()
+  const noMotion = { duration: 0 }
   return (
     <>
       {/* ── HERO SECTION ────────────────────────────────────── */}
@@ -224,8 +228,8 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
         {/* Hero content */}
         <div className="relative max-w-6xl mx-auto px-4 pt-24 pb-20 md:pt-32 md:pb-28 flex flex-col items-center">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
+            variants={reducedMotion ? undefined : containerVariants}
+            initial={reducedMotion ? false : "hidden"}
             animate="visible"
             className="text-center w-full"
           >
@@ -244,8 +248,8 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
 
             {/* Visual heading with word-by-word stagger — the real H1 is server-rendered in page.tsx */}
             <motion.div
-              variants={headingContainerVariants}
-              initial="hidden"
+              variants={reducedMotion ? undefined : headingContainerVariants}
+              initial={reducedMotion ? false : "hidden"}
               animate="visible"
               aria-hidden="true"
               role="presentation"
@@ -263,8 +267,8 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
 
             {/* Subtitle — fades in after heading stagger completes */}
             <motion.p
-              variants={subtitleVariants}
-              initial="hidden"
+              variants={reducedMotion ? undefined : subtitleVariants}
+              initial={reducedMotion ? false : "hidden"}
               animate="visible"
               className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
             >
@@ -326,10 +330,10 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
       {/* ── FLOATING TRUST BAR ──────────────────────────────── */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 -mt-12">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={reducedMotion ? false : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={reducedMotion ? noMotion : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="bg-white rounded-2xl shadow-xl p-6 md:p-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4">

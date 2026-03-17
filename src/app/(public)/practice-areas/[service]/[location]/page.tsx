@@ -24,6 +24,7 @@ import { resolveZipToCity, getNearbyZipCodes, isZipSlug } from '@/lib/location-r
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
@@ -232,6 +233,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       // Always self-referencing: if noindex, canonical is irrelevant; if indexed, it must point to self
       canonical: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}`,
+      languages: getAlternateLanguages(`/practice-areas/${specialtySlug}/${locationSlug}`),
     },
   }
 }

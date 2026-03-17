@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { X } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 import { getDisplayName } from '@/components/attorney/types'
@@ -16,6 +17,7 @@ interface AttorneyExitIntentProps {
 }
 
 export function AttorneyExitIntent({ attorney, onOpenEstimation }: AttorneyExitIntentProps) {
+  const reducedMotion = useReducedMotion()
   const [visible, setVisible] = useState(false)
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const mobileTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -91,10 +93,10 @@ export function AttorneyExitIntent({ attorney, onOpenEstimation }: AttorneyExitI
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
+          initial={reducedMotion ? false : { y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          exit={reducedMotion ? { opacity: 0 } : { y: 100, opacity: 0 }}
+          transition={reducedMotion ? { duration: 0 } : { type: 'spring', damping: 25, stiffness: 300 }}
           className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100%-2rem)] max-w-sm"
           role="complementary"
           aria-label="Free consultation"

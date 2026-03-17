@@ -10,6 +10,7 @@ import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+import { SPANISH_PA_SLUGS } from '@/lib/seo/hreflang'
 
 // Return 404 for sitemap IDs not in generateSitemaps() — prevents ghost sitemaps
 // from returning empty-but-valid XML that Google keeps crawling forever.
@@ -250,12 +251,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/situations`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/industries`, lastModified: BUILD_DATE },
-      // Spanish index pages
-      { url: `${SITE_URL}/es/abogados`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/es/contratar`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/es/costo`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/es/opiniones`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/es/emergencia`, lastModified: BUILD_DATE },
+      // Spanish index pages (routes live at /{intent-es}/ — no /es/ prefix)
+      // Note: these hub pages may not exist yet as actual routes;
+      // included for forward-compatibility when they are created.
     ]
 
     // Guide pages
@@ -606,8 +604,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
       const allUrls: MetadataRoute.Sitemap = []
       for (const pa of practiceAreas) {
+        // Translate English PA slug to Spanish (e.g. personal-injury -> lesiones-personales)
+        const esPaSlug = SPANISH_PA_SLUGS[pa.slug] || pa.slug
         for (const city of hispanicCities) {
-          allUrls.push({ url: `${SITE_URL}/es/${intent}/${pa.slug}/${city.slug}` })
+          // Spanish routes live at /{intent}/{esPaSlug}/{city} — no /es/ prefix
+          allUrls.push({ url: `${SITE_URL}/${intent}/${esPaSlug}/${city.slug}` })
         }
       }
       return allUrls.slice(offset, offset + LARGE_BATCH)

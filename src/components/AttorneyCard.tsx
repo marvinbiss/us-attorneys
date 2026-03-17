@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Star, ChevronRight, ShieldCheck } from 'lucide-react'
+import { MapPin, Phone, Star, ChevronRight, ShieldCheck, Award } from 'lucide-react'
 import { Provider } from '@/types'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
@@ -43,6 +43,13 @@ export default function AttorneyCard({
         size="sm"
         className="absolute top-3 right-3 z-30"
       />
+      {/* Featured badge */}
+      {provider.is_featured && (
+        <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
+          <Award className="w-3.5 h-3.5" />
+          Featured
+        </div>
+      )}
       {/* Mobile: full-card tappable overlay link */}
       <Link
         href={providerUrl}

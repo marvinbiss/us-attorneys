@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Clock, BadgeCheck, Calendar } from 'lucide-react'
+import { Star, MapPin, Clock, BadgeCheck, Calendar, Award } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { useState } from 'react'
@@ -22,6 +22,7 @@ interface AttorneyCardProps {
   imageUrl?: string
   isVerified?: boolean
   isPremium?: boolean
+  isFeatured?: boolean
   isAvailableNow?: boolean
   nextAvailable?: string
   specialties?: string[]
@@ -43,6 +44,7 @@ export function AttorneyCard({
   imageUrl,
   isVerified = false,
   isPremium = false,
+  isFeatured = false,
   isAvailableNow = false,
   nextAvailable,
   specialties = [],
@@ -89,6 +91,14 @@ export function AttorneyCard({
             {isPremium && (
               <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
                 Premium
+              </div>
+            )}
+
+            {/* Featured badge */}
+            {isFeatured && !isPremium && (
+              <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
+                <Award className="w-3 h-3" />
+                Featured
               </div>
             )}
 
@@ -239,6 +249,20 @@ export function AttorneyCard({
               <span className="flex items-center gap-1">
                 <Star className="w-3 h-3 fill-white" />
                 Premium
+              </span>
+            </motion.div>
+          )}
+
+          {/* Featured badge */}
+          {isFeatured && !isPremium && (
+            <motion.div
+              initial={reducedMotion ? false : { x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg"
+            >
+              <span className="flex items-center gap-1">
+                <Award className="w-3 h-3" />
+                Featured
               </span>
             </motion.div>
           )}

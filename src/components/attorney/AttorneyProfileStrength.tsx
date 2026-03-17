@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Check } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 
@@ -42,6 +43,7 @@ function getTextColor(score: number): string {
 }
 
 export function AttorneyProfileStrength({ attorney }: { attorney: LegacyAttorney }) {
+  const reducedMotion = useReducedMotion()
   const { score, criteria } = useMemo(() => computeProfileStrength(attorney), [attorney])
 
   // Don't render for weak profiles
@@ -60,9 +62,9 @@ export function AttorneyProfileStrength({ attorney }: { attorney: LegacyAttorney
       {/* Progress bar */}
       <div className="h-2 bg-sand-200 rounded-full overflow-hidden mb-3">
         <motion.div
-          initial={{ width: 0 }}
+          initial={reducedMotion ? false : { width: 0 }}
           animate={{ width: `${score}%` }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+          transition={reducedMotion ? { duration: 0 } : { duration: 0.8, ease: 'easeOut', delay: 0.3 }}
           className={`h-full rounded-full bg-gradient-to-r ${getBarColor(score)}`}
         />
       </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Phone, Mail, MessageCircle, Shield } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
@@ -11,6 +12,7 @@ interface AttorneySidebarProps {
 }
 
 export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
+  const reducedMotion = useReducedMotion()
   const [shouldPulse, setShouldPulse] = useState(false)
 
   useEffect(() => {
@@ -34,9 +36,9 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 20 }}
+      initial={reducedMotion ? false : { opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.2 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-premium border border-stone-200/60 overflow-hidden"
     >
       {/* Gradient accent bar */}
@@ -70,8 +72,8 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
           {attorney.phone && (
             <motion.a
               href={`tel:${attorney.phone.replace(/\s/g, '')}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+              whileTap={reducedMotion ? undefined : { scale: 0.98 }}
               onClick={() => {
                 BookingFunnel.revealPhone(attorney.id, attorney.business_name || '', 'sidebar')
                 BookingFunnel.clickPhone(attorney.id, attorney.business_name || '', 'sidebar')
@@ -85,9 +87,9 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
           )}
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            animate={shouldPulse ? {
+            whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+            animate={reducedMotion ? {} : shouldPulse ? {
               scale: [1, 1.03, 1],
               boxShadow: [
                 '0 10px 25px rgba(224, 112, 64, 0.3)',
@@ -95,7 +97,7 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
                 '0 10px 25px rgba(224, 112, 64, 0.3)',
               ],
             } : {}}
-            transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
+            transition={reducedMotion ? { duration: 0 } : shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
             onClick={openEstimationWidget}
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
             aria-label="Open the estimation chat for a free consultation"
@@ -106,8 +108,8 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
 
           {attorney.email && (
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+              whileTap={reducedMotion ? undefined : { scale: 0.98 }}
               onClick={handleEmail}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2"
               aria-label={`Send an email to ${attorney.email}`}
@@ -133,6 +135,8 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
 
 // Mobile CTA bar — Single dominant CTA with subtle phone fallback
 export function AttorneyMobileCTA({ attorney }: AttorneySidebarProps) {
+  const reducedMotion = useReducedMotion()
+
   /** Open the EstimationWidget via custom DOM event */
   const openEstimationWidget = () => {
     window.dispatchEvent(new Event('sa:open-estimation'))
@@ -156,9 +160,9 @@ export function AttorneyMobileCTA({ attorney }: AttorneySidebarProps) {
 
   return (
     <motion.div
-      initial={{ y: 100 }}
+      initial={reducedMotion ? false : { y: 100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.3 }}
       className="fixed bottom-16 left-0 right-0 bg-[#FFFCF8]/95 backdrop-blur-lg border-t border-stone-200/60 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
       role="group"
       aria-label="Quick actions"
@@ -166,10 +170,10 @@ export function AttorneyMobileCTA({ attorney }: AttorneySidebarProps) {
       <div className="flex gap-3">
         {/* Primary: Estimation CTA */}
         <motion.button
-          whileTap={{ scale: 0.97 }}
-          variants={pulseVariants}
-          initial="initial"
-          animate="pulse"
+          whileTap={reducedMotion ? undefined : { scale: 0.97 }}
+          variants={reducedMotion ? undefined : pulseVariants}
+          initial={reducedMotion ? false : "initial"}
+          animate={reducedMotion ? undefined : "pulse"}
           onClick={() => {
             BookingFunnel.clickPhone(attorney.id, attorney.business_name || '', 'mobile_cta')
             openEstimationWidget()
@@ -185,7 +189,7 @@ export function AttorneyMobileCTA({ attorney }: AttorneySidebarProps) {
         {attorney.phone && (
           <motion.a
             href={`tel:${attorney.phone.replace(/\s/g, '')}`}
-            whileTap={{ scale: 0.97 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.97 }}
             onClick={() => {
               BookingFunnel.revealPhone(attorney.id, attorney.business_name || '', 'mobile_cta')
               BookingFunnel.clickPhone(attorney.id, attorney.business_name || '', 'mobile_cta')
