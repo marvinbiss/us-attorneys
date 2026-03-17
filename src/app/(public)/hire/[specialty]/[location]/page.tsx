@@ -12,6 +12,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { getAttorneyUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
 import { practiceAreas as staticPracticeAreas, cities, getCityBySlug, getNearbyCities, getCitiesByState, getStateByCode } from '@/lib/data/usa'
+import { resolveZipToCity, isZipSlug, getNearbyZipCodes } from '@/lib/location-resolver'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
@@ -379,7 +380,7 @@ export default async function HireAttorneyPage({ params }: PageProps) {
   }
 
   // Generate unique SEO content
-  const cityData = getCityBySlug(locationSlug)
+  const cityData = getCityBySlug(locationSlug) || await resolveZipToCity(locationSlug)
   const locationContent = cityData
     ? generateLocationContent(specialtySlug, service.name, cityData, providers.length, locationData)
     : null
@@ -429,7 +430,9 @@ export default async function HireAttorneyPage({ params }: PageProps) {
         return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
       }).filter(Boolean) as { slug: string; name: string; icon: string }[]
     : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
-  const nearbyCities = getNearbyCities(locationSlug, 12)
+  const nearbyCities = isZipSlug(locationSlug)
+    ? await getNearbyZipCodes(locationSlug, 12)
+    : getNearbyCities(locationSlug, 12)
   const deptCities = location.department_code
     ? getCitiesByState(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
     : []

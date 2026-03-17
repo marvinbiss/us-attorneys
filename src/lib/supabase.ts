@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { getCityBySlug as getCityBySlugImport } from '@/lib/data/usa'
+import { isZipSlug, extractZipCode, resolveZipToLocation } from '@/lib/location-resolver'
 import { logger } from '@/lib/logger'
 import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
 
@@ -211,6 +212,11 @@ export async function getLocationBySlug(slug: string) {
     const city = getCityBySlugImport(slug)
     if (city) return { id: '', name: city.name, slug: city.slug, postal_code: city.zipCode }
     return null
+  }
+
+  // ZIP slug (e.g., "10001-new-york-ny") — resolve from zip_codes table
+  if (isZipSlug(slug)) {
+    return resolveZipToLocation(slug)
   }
 
   return getCachedData(
@@ -596,11 +602,6 @@ export async function getAttorneysByServiceAndLocation(
   return getCachedData(
     cacheKey,
     async () => {
-      // Use STATIC data for service/location — no DB needed. This keeps total function
-      // time well under Vercel's 10s serverless timeout (avoids nested retry cascades).
-      const cityData = getCityBySlugImport(locationSlug)
-      if (!cityData) return []
-
       const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
       if (!specialties || specialties.length === 0) return []
 
@@ -625,6 +626,37 @@ export async function getAttorneysByServiceAndLocation(
           `getAttorneysByServiceAndLocation:postal(${specialtySlug}, ${postalCode})`,
         )
       }
+
+      // ZIP slug (e.g., "10001-new-york-ny") — filter by address_zip
+      if (isZipSlug(locationSlug)) {
+        const zipCode = extractZipCode(locationSlug)
+        try {
+          return await retryWithBackoff(
+            async () => {
+              const { data, error } = await supabase
+                .from('attorneys')
+                .select(PROVIDER_LIST_SELECT)
+                .in('specialty', specialties)
+                .eq('address_zip', zipCode)
+                .eq('is_active', true)
+                .order('phone', { ascending: false, nullsFirst: false })
+                .order('is_verified', { ascending: false })
+                .order('name')
+                .range(offset, offset + limit - 1)
+              if (error) throw error
+              return (data || []) as unknown as AttorneyListRow[]
+            },
+            `getAttorneysByServiceAndLocation:zip(${specialtySlug}, ${zipCode})`,
+          )
+        } catch (err) {
+          logger.error(`[getAttorneysByServiceAndLocation] ZIP query FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+          throw err
+        }
+      }
+
+      // City slug — use static data for city name resolution
+      const cityData = getCityBySlugImport(locationSlug)
+      if (!cityData) return []
 
       const cityValues = [cityData.name]
 
@@ -687,6 +719,19 @@ export async function hasProvidersByServiceAndLocation(
             const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
             if (!specialties || specialties.length === 0) return false
 
+            // ZIP slug — filter by address_zip
+            if (isZipSlug(locationSlug)) {
+              const zipCode = extractZipCode(locationSlug)
+              const { count, error } = await supabase
+                .from('attorneys')
+                .select('id', { count: 'exact', head: true })
+                .in('specialty', specialties)
+                .eq('address_zip', zipCode)
+                .eq('is_active', true)
+              if (error) throw error
+              return (count ?? 0) > 0
+            }
+
             const cityLookup = getCityBySlugImport(locationSlug)
             const cityName = cityLookup?.name
             if (!cityName) return false
@@ -736,6 +781,19 @@ export async function getAttorneyCountByServiceAndLocation(
             const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
             if (!specialties || specialties.length === 0) return 0
 
+            // ZIP slug — filter by address_zip
+            if (isZipSlug(locationSlug)) {
+              const zipCode = extractZipCode(locationSlug)
+              const { count, error } = await supabase
+                .from('attorneys')
+                .select('id', { count: 'exact', head: true })
+                .in('specialty', specialties)
+                .eq('address_zip', zipCode)
+                .eq('is_active', true)
+              if (error) throw error
+              return count ?? 0
+            }
+
             const cityLookup = getCityBySlugImport(locationSlug)
             const cityName = cityLookup?.name
             if (!cityName) return 0
@@ -764,7 +822,40 @@ export async function getAttorneyCountByServiceAndLocation(
 export async function getAttorneysByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
-  // Use STATIC data for location — no DB needed
+  // ZIP slug — filter by address_zip
+  if (isZipSlug(locationSlug)) {
+    const zipCode = extractZipCode(locationSlug)
+    return getCachedData(
+      `attorneys:location:zip:${zipCode}`,
+      async () => {
+        try {
+          return await retryWithBackoff(
+            async () => {
+              const { data, error } = await supabase
+                .from('attorneys')
+                .select(PROVIDER_LIST_SELECT)
+                .eq('address_zip', zipCode)
+                .eq('is_active', true)
+                .order('phone', { ascending: false, nullsFirst: false })
+                .order('is_verified', { ascending: false })
+                .order('name')
+                .limit(500)
+              if (error) throw error
+              return (data || []) as unknown as AttorneyListRow[]
+            },
+            `getAttorneysByLocation:zip(${zipCode})`,
+          )
+        } catch (err) {
+          logger.error(`[getAttorneysByLocation] ZIP FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+          throw err
+        }
+      },
+      CACHE_TTL.attorneys,
+      { skipNull: true },
+    )
+  }
+
+  // City slug — use static data for city name resolution
   const cityLookup = getCityBySlugImport(locationSlug)
   if (!cityLookup) return []
 

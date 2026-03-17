@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 import { getCityBySlug } from '@/lib/data/usa'
+import { resolveZipToCity } from '@/lib/location-resolver'
 
 export function generateStaticParams() {
   return [{ service: 'personal-injury', location: 'new-york' }]
@@ -34,7 +35,7 @@ export default async function QuotesServiceLocationPage({
 }) {
   const { service, location: locationSlug } = await params
   const trade = tradeContent[service]
-  const villeData = getCityBySlug(locationSlug)
+  const villeData = getCityBySlug(locationSlug) || await resolveZipToCity(locationSlug)
   if (!trade || !villeData) notFound()
 
   return (

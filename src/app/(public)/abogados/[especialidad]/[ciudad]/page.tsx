@@ -14,6 +14,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { getAttorneyUrl } from '@/lib/utils'
 import type { Location as LocationType, Provider } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
+import { resolveZipToCity, resolveZipToLocation } from '@/lib/location-resolver'
 
 // ISR: revalidate every 24h
 export const revalidate = REVALIDATE.attorneyProfile
@@ -158,7 +159,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     attorneyCount = 1
   }
 
-  const fallbackCity = getCityBySlug(ciudad)
+  const fallbackCity = getCityBySlug(ciudad) || await resolveZipToCity(ciudad)
   if (fallbackCity) {
     locationName = fallbackCity.name
     departmentCode = fallbackCity.stateCode
@@ -289,7 +290,7 @@ export default async function AbogadosPage({ params }: PageProps) {
 
   // Resolve location
   let location: LocationType
-  const fallback = cityToLocation(ciudad)
+  const fallback = cityToLocation(ciudad) || await resolveZipToLocation(ciudad)
   if (!fallback) notFound()
   location = fallback
 

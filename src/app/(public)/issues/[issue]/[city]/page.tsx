@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProblemBySlug } from '@/lib/data/problems'
 import { getCityBySlug } from '@/lib/data/usa'
+import { resolveZipToCity } from '@/lib/location-resolver'
 import { REVALIDATE } from '@/lib/cache'
 
 export function generateStaticParams() {
@@ -37,7 +38,7 @@ export default async function IssueVillePage({
 }) {
   const { issue, city: villeSlug } = await params
   const problem = getProblemBySlug(issue)
-  const villeData = getCityBySlug(villeSlug)
+  const villeData = getCityBySlug(villeSlug) || await resolveZipToCity(villeSlug)
   if (!problem || !villeData) notFound()
 
   return (

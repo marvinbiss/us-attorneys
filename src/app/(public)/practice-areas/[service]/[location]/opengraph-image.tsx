@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { practiceAreas as staticPracticeAreas, getCityBySlug } from '@/lib/data/usa'
+import { resolveZipToCity } from '@/lib/location-resolver'
 
 export const runtime = 'edge'
 
@@ -18,7 +19,7 @@ export default async function Image({
   const { service: specialtySlug, location: locationSlug } = await params
 
   const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
-  const cityData = getCityBySlug(locationSlug)
+  const cityData = getCityBySlug(locationSlug) || await resolveZipToCity(locationSlug)
 
   const specialtyName = staticSvc?.name || specialtySlug
   const cityName = cityData?.name || locationSlug

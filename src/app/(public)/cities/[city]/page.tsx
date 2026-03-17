@@ -12,6 +12,7 @@ import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateCityContent, hashCode } from '@/lib/seo/location-content'
 import problems from '@/lib/data/problems'
 import { REVALIDATE } from '@/lib/cache'
+import { resolveZipToCity } from '@/lib/location-resolver'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -33,7 +34,7 @@ function truncateTitle(title: string, maxLen = 42): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { city: citySlug } = await params
-  const cityInfo = getCityBySlug(citySlug)
+  const cityInfo = getCityBySlug(citySlug) || await resolveZipToCity(citySlug)
   if (!cityInfo) return { title: 'City Not Found' }
   const cityRegion = getStateByCode(cityInfo.stateCode)?.region ?? ''
 
@@ -88,7 +89,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function VillePage({ params }: PageProps) {
   const { city: citySlug } = await params
-  const cityInfo = getCityBySlug(citySlug)
+  const cityInfo = getCityBySlug(citySlug) || await resolveZipToCity(citySlug)
   if (!cityInfo) notFound()
   const cityRegion = getStateByCode(cityInfo.stateCode)?.region ?? ''
 

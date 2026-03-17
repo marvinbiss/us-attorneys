@@ -580,12 +580,583 @@ export function generateLocationPricingNote(params: FAQParams): string {
 }
 
 // ---------------------------------------------------------------------------
+// Statute of Limitations — by legal category × 51 states (years)
+// ---------------------------------------------------------------------------
+
+type SOLCategory =
+  | 'personal-injury'
+  | 'medical-malpractice'
+  | 'property-damage'
+  | 'written-contract'
+  | 'oral-contract'
+  | 'fraud'
+  | 'employment'
+  | 'wrongful-death'
+  | 'product-liability'
+  | 'defamation'
+  | 'professional-malpractice'
+  | 'real-estate'
+  | 'debt-collection'
+
+const STATE_SOL: Record<string, Record<string, number>> = {
+  'personal-injury': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 3, FL: 4,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
+    NJ: 2, NM: 3, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 4, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
+  },
+  'medical-malpractice': {
+    AL: 2, AK: 2, AZ: 2, AR: 2, CA: 1, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 3,
+    MD: 3, MA: 3, MI: 2, MN: 4, MS: 2, MO: 2, MT: 3, NE: 2, NV: 3, NH: 2,
+    NJ: 2, NM: 3, NY: 2, NC: 3, ND: 2, OH: 1, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
+  },
+  'property-damage': {
+    AL: 6, AK: 6, AZ: 2, AR: 3, CA: 3, CO: 2, CT: 2, DE: 2, DC: 3, FL: 4,
+    GA: 4, HI: 2, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 2, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
+    NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 6, PA: 2, RI: 3,
+    SC: 3, SD: 6, TN: 3, TX: 2, UT: 3, VT: 3, VA: 5, WA: 3, WV: 2, WI: 6, WY: 4,
+  },
+  'written-contract': {
+    AL: 6, AK: 3, AZ: 6, AR: 5, CA: 4, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
+    GA: 6, HI: 6, ID: 5, IL: 10, IN: 6, IA: 10, KS: 5, KY: 15, LA: 10, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 10, MT: 5, NE: 5, NV: 6, NH: 3,
+    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
+    SC: 3, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 10,
+  },
+  'oral-contract': {
+    AL: 6, AK: 3, AZ: 3, AR: 3, CA: 2, CO: 6, CT: 3, DE: 3, DC: 3, FL: 4,
+    GA: 4, HI: 6, ID: 4, IL: 5, IN: 6, IA: 5, KS: 3, KY: 5, LA: 10, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 5, MT: 5, NE: 4, NV: 4, NH: 3,
+    NJ: 6, NM: 4, NY: 6, NC: 3, ND: 6, OH: 6, OK: 3, OR: 6, PA: 4, RI: 10,
+    SC: 3, SD: 6, TN: 6, TX: 4, UT: 4, VT: 6, VA: 3, WA: 3, WV: 5, WI: 6, WY: 8,
+  },
+  'fraud': {
+    AL: 2, AK: 2, AZ: 3, AR: 3, CA: 3, CO: 3, CT: 3, DE: 3, DC: 3, FL: 4,
+    GA: 4, HI: 6, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 5, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 6, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
+    NJ: 6, NM: 4, NY: 6, NC: 3, ND: 6, OH: 4, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 6, TN: 3, TX: 4, UT: 3, VT: 6, VA: 2, WA: 3, WV: 2, WI: 6, WY: 4,
+  },
+  'employment': {
+    AL: 2, AK: 2, AZ: 1, AR: 1, CA: 3, CO: 3, CT: 2, DE: 2, DC: 1, FL: 1,
+    GA: 2, HI: 2, ID: 1, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 2,
+    MD: 2, MA: 3, MI: 3, MN: 1, MS: 2, MO: 2, MT: 1, NE: 2, NV: 2, NH: 3,
+    NJ: 2, NM: 2, NY: 3, NC: 3, ND: 2, OH: 2, OK: 2, OR: 1, PA: 2, RI: 1,
+    SC: 1, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 1, WY: 2,
+  },
+  'wrongful-death': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 2, FL: 2,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 2,
+    MD: 3, MA: 3, MI: 3, MN: 3, MS: 3, MO: 3, MT: 3, NE: 2, NV: 2, NH: 3,
+    NJ: 2, NM: 3, NY: 2, NC: 2, ND: 2, OH: 2, OK: 2, OR: 3, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
+  },
+  'product-liability': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 3, DE: 2, DC: 3, FL: 4,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 3, MN: 4, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
+    NJ: 2, NM: 3, NY: 3, NC: 6, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
+  },
+  'defamation': {
+    AL: 2, AK: 2, AZ: 1, AR: 1, CA: 1, CO: 1, CT: 2, DE: 2, DC: 1, FL: 2,
+    GA: 1, HI: 2, ID: 2, IL: 1, IN: 2, IA: 2, KS: 1, KY: 1, LA: 1, ME: 2,
+    MD: 1, MA: 3, MI: 1, MN: 2, MS: 1, MO: 2, MT: 2, NE: 1, NV: 2, NH: 3,
+    NJ: 1, NM: 3, NY: 1, NC: 1, ND: 2, OH: 1, OK: 1, OR: 1, PA: 1, RI: 1,
+    SC: 2, SD: 2, TN: 1, TX: 1, UT: 1, VT: 3, VA: 1, WA: 2, WV: 1, WI: 2, WY: 1,
+  },
+  'professional-malpractice': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 1, CO: 2, CT: 3, DE: 2, DC: 3, FL: 2,
+    GA: 2, HI: 6, ID: 2, IL: 2, IN: 2, IA: 5, KS: 2, KY: 1, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 2, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 4, NH: 3,
+    NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 1, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 4, VT: 6, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
+  },
+  'real-estate': {
+    AL: 6, AK: 10, AZ: 6, AR: 5, CA: 5, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
+    GA: 6, HI: 6, ID: 5, IL: 10, IN: 6, IA: 10, KS: 5, KY: 15, LA: 10, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 6, MO: 10, MT: 5, NE: 5, NV: 6, NH: 3,
+    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
+    SC: 10, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 10,
+  },
+  'debt-collection': {
+    AL: 6, AK: 3, AZ: 6, AR: 5, CA: 4, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
+    GA: 6, HI: 6, ID: 5, IL: 5, IN: 6, IA: 10, KS: 5, KY: 5, LA: 3, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 5, MT: 5, NE: 5, NV: 6, NH: 3,
+    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
+    SC: 3, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 8,
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Practice area slug → SOL category mapping
+// ---------------------------------------------------------------------------
+
+const PA_TO_SOL_CATEGORY: Record<string, SOLCategory> = {
+  'personal-injury': 'personal-injury',
+  'car-accidents': 'personal-injury',
+  'truck-accidents': 'personal-injury',
+  'motorcycle-accidents': 'personal-injury',
+  'slip-and-fall': 'personal-injury',
+  'dog-bites': 'personal-injury',
+  'bicycle-accidents': 'personal-injury',
+  'pedestrian-accidents': 'personal-injury',
+  'boat-accidents': 'personal-injury',
+  'bus-accidents': 'personal-injury',
+  'aviation-accidents': 'personal-injury',
+  'brain-injury': 'personal-injury',
+  'spinal-cord-injury': 'personal-injury',
+  'burn-injury': 'personal-injury',
+  'catastrophic-injury': 'personal-injury',
+  'construction-accidents': 'personal-injury',
+  'premises-liability': 'personal-injury',
+  'nursing-home-abuse': 'personal-injury',
+  'uber-lyft-accidents': 'personal-injury',
+  'rideshare-accidents': 'personal-injury',
+  'electric-scooter-accidents': 'personal-injury',
+  'delivery-driver-accidents': 'personal-injury',
+  'medical-malpractice': 'medical-malpractice',
+  'birth-injury': 'medical-malpractice',
+  'surgical-errors': 'medical-malpractice',
+  'misdiagnosis': 'medical-malpractice',
+  'medication-errors': 'medical-malpractice',
+  'dental-malpractice': 'medical-malpractice',
+  'hospital-negligence': 'medical-malpractice',
+  'wrongful-death': 'wrongful-death',
+  'product-liability': 'product-liability',
+  'defective-drugs': 'product-liability',
+  'defective-medical-devices': 'product-liability',
+  'toxic-torts': 'product-liability',
+  'asbestos-mesothelioma': 'product-liability',
+  'workers-compensation': 'employment',
+  'employment-law': 'employment',
+  'wrongful-termination': 'employment',
+  'workplace-discrimination': 'employment',
+  'sexual-harassment': 'employment',
+  'wage-hour-claims': 'employment',
+  'whistleblower': 'employment',
+  'ada-violations': 'employment',
+  'family-law': 'personal-injury',
+  'divorce': 'personal-injury',
+  'child-custody': 'personal-injury',
+  'child-support': 'personal-injury',
+  'adoption': 'personal-injury',
+  'alimony-spousal-support': 'personal-injury',
+  'domestic-violence': 'personal-injury',
+  'paternity': 'personal-injury',
+  'prenuptial-agreements': 'written-contract',
+  'criminal-defense': 'personal-injury',
+  'dui-dwi': 'personal-injury',
+  'drug-crimes': 'personal-injury',
+  'assault-battery': 'personal-injury',
+  'theft-crimes': 'personal-injury',
+  'white-collar-crimes': 'fraud',
+  'federal-crimes': 'personal-injury',
+  'juvenile-defense': 'personal-injury',
+  'sex-crimes': 'personal-injury',
+  'domestic-violence-defense': 'personal-injury',
+  'expungement': 'personal-injury',
+  'probation-violations': 'personal-injury',
+  'conspiracy': 'personal-injury',
+  'homicide': 'personal-injury',
+  'business-law': 'written-contract',
+  'business-litigation': 'written-contract',
+  'contract-law': 'written-contract',
+  'corporate-law': 'written-contract',
+  'mergers-acquisitions': 'written-contract',
+  'partnership-disputes': 'written-contract',
+  'franchise-law': 'written-contract',
+  'commercial-lease': 'written-contract',
+  'non-compete-agreements': 'written-contract',
+  'business-bankruptcy': 'debt-collection',
+  'real-estate': 'real-estate',
+  'commercial-real-estate': 'real-estate',
+  'boundary-disputes': 'real-estate',
+  'landlord-tenant': 'real-estate',
+  'construction-law': 'real-estate',
+  'zoning-land-use': 'real-estate',
+  'foreclosure-defense': 'real-estate',
+  'hoa-disputes': 'real-estate',
+  'title-disputes': 'real-estate',
+  'eminent-domain': 'real-estate',
+  'immigration': 'personal-injury',
+  'deportation-defense': 'personal-injury',
+  'visa-applications': 'personal-injury',
+  'asylum': 'personal-injury',
+  'citizenship-naturalization': 'personal-injury',
+  'green-card': 'personal-injury',
+  'daca': 'personal-injury',
+  'estate-planning': 'real-estate',
+  'probate': 'real-estate',
+  'trusts': 'real-estate',
+  'wills': 'real-estate',
+  'guardianship': 'real-estate',
+  'elder-law': 'real-estate',
+  'bankruptcy': 'debt-collection',
+  'chapter-7-bankruptcy': 'debt-collection',
+  'chapter-13-bankruptcy': 'debt-collection',
+  'intellectual-property': 'written-contract',
+  'patent-law': 'written-contract',
+  'trademark-law': 'written-contract',
+  'copyright-law': 'written-contract',
+  'trade-secrets': 'written-contract',
+  'tax-law': 'fraud',
+  'irs-audit-defense': 'fraud',
+  'tax-litigation': 'fraud',
+  'back-taxes': 'fraud',
+  'tax-fraud-defense': 'fraud',
+  'consumer-protection': 'fraud',
+  'lemon-law': 'product-liability',
+  'insurance-claims': 'written-contract',
+  'insurance-bad-faith': 'written-contract',
+  'class-action': 'personal-injury',
+  'civil-rights': 'personal-injury',
+  'defamation': 'defamation',
+  'internet-defamation': 'defamation',
+  'privacy-law': 'personal-injury',
+  'cybersecurity-law': 'written-contract',
+  'ai-law': 'written-contract',
+  'cannabis-law': 'personal-injury',
+  'environmental-law': 'property-damage',
+  'maritime-law': 'personal-injury',
+  'aviation-law': 'personal-injury',
+  'military-law': 'personal-injury',
+  'veterans-benefits': 'personal-injury',
+  'social-security-disability': 'personal-injury',
+  'appeals': 'personal-injury',
+  'arbitration-mediation': 'personal-injury',
+  'administrative-law': 'personal-injury',
+  'agricultural-law': 'real-estate',
+  'animal-law': 'personal-injury',
+  'church-abuse': 'personal-injury',
+  'education-law': 'personal-injury',
+  'entertainment-law': 'written-contract',
+  'health-care-law': 'professional-malpractice',
+  'hospitality-law': 'written-contract',
+  'international-law': 'written-contract',
+  'nonprofit-law': 'written-contract',
+  'sports-law': 'written-contract',
+  'telecommunications-law': 'written-contract',
+  'transportation-law': 'personal-injury',
+  'utilities-energy-law': 'written-contract',
+  'water-rights': 'real-estate',
+  'government-contracts': 'written-contract',
+  'election-law': 'personal-injury',
+  'lobbying-law': 'personal-injury',
+}
+
+/**
+ * Get the statute of limitations (in years) for a practice area in a given state.
+ * Returns 0 if not applicable or unknown.
+ */
+export function getStatuteOfLimitations(paSlug: string, stateAbbr: string): number {
+  const category = PA_TO_SOL_CATEGORY[paSlug] ?? 'personal-injury'
+  return STATE_SOL[category]?.[stateAbbr.toUpperCase()] ?? 2
+}
+
+// ---------------------------------------------------------------------------
+// State names lookup
+// ---------------------------------------------------------------------------
+
+const STATE_NAMES: Record<string, string> = {
+  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
+  CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida',
+  GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana',
+  IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine',
+  MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi',
+  MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire',
+  NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota',
+  OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island',
+  SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah',
+  VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin',
+  WY: 'Wyoming',
+}
+
+export function getStateName(stateAbbr: string): string {
+  return STATE_NAMES[stateAbbr.toUpperCase()] ?? stateAbbr
+}
+
+// ---------------------------------------------------------------------------
+// State free legal resources
+// ---------------------------------------------------------------------------
+
+const STATE_LEGAL_AID: Record<string, string[]> = {
+  AL: ['Legal Services Alabama (LSA)', 'Alabama State Bar Volunteer Lawyers Program', 'Alabama Legal Help (alabamalegalhelp.org)'],
+  AK: ['Alaska Legal Services Corporation', 'Alaska Bar Association Pro Bono Program', 'Alaska Law Help (alaskalawhelp.org)'],
+  AZ: ['Community Legal Services (CLS)', 'Arizona Foundation for Legal Services', 'Arizona Law Help (azlawhelp.org)'],
+  AR: ['Center for Arkansas Legal Services', 'Legal Aid of Arkansas', 'Arkansas Legal Services Online (arlegalservices.org)'],
+  CA: ['Legal Aid Foundation of Los Angeles', 'Bay Area Legal Aid', 'California Courts Self-Help Center (courts.ca.gov/selfhelp)'],
+  CO: ['Colorado Legal Services', 'Colorado Bar Association Pro Bono Project', 'Colorado Legal Help (coloradolegalservices.org)'],
+  CT: ['Connecticut Legal Services', 'Statewide Legal Services of Connecticut', 'CT Law Help (ctlawhelp.org)'],
+  DE: ['Delaware Volunteer Legal Services', 'Community Legal Aid Society (CLASI)', 'Delaware Law Help (delawaylawhelp.org)'],
+  DC: ['Legal Aid Society of the District of Columbia', 'DC Bar Pro Bono Center', 'LawHelp DC (lawhelp.org/dc)'],
+  FL: ['Florida Legal Services', 'Florida Bar Foundation', 'Florida Law Help (floridalawhelp.org)'],
+  GA: ['Georgia Legal Services Program', 'Atlanta Legal Aid Society', 'Georgia Law Help (georgialegalaid.org)'],
+  HI: ['Legal Aid Society of Hawaii', 'Volunteer Legal Services Hawaii', 'Hawaii Law Help (lawhelp.org/hi)'],
+  ID: ['Idaho Legal Aid Services', 'Idaho Volunteer Lawyers Program', 'Idaho Law Help (idaholegalaid.org)'],
+  IL: ['Legal Aid Chicago', 'Prairie State Legal Services', 'Illinois Law Help (illinoislegalaid.org)'],
+  IN: ['Indiana Legal Services', 'Indiana Bar Foundation Pro Bono Program', 'Indiana Law Help (indianalegalhelp.org)'],
+  IA: ['Iowa Legal Aid', 'Iowa State Bar Volunteer Lawyers Project', 'Iowa Law Help (iowalegalaid.org)'],
+  KS: ['Kansas Legal Services', 'Kansas Bar Association Pro Bono Program', 'Kansas Law Help (kansaslegalservices.org)'],
+  KY: ['Legal Aid of the Bluegrass', 'Kentucky Legal Aid', 'Kentucky Law Help (klaid.org)'],
+  LA: ['Southeast Louisiana Legal Services', 'Acadiana Legal Service Corporation', 'Louisiana Law Help (lalawhelp.org)'],
+  ME: ['Pine Tree Legal Assistance', 'Volunteer Lawyers Project (Maine)', 'Maine Law Help (ptla.org)'],
+  MD: ['Maryland Legal Aid', 'Pro Bono Resource Center of Maryland', 'Maryland Law Help (mdlab.org)'],
+  MA: ['Greater Boston Legal Services', 'Massachusetts Legal Aid (mlac.org)', 'Mass Law Help (masslegalhelp.org)'],
+  MI: ['Michigan Legal Help', 'Legal Aid of Western Michigan', 'Michigan Law Help (michiganlegalhelp.org)'],
+  MN: ['Legal Aid State Support (Minnesota)', 'Volunteer Lawyers Network', 'Minnesota Law Help (lawhelpmn.org)'],
+  MS: ['Mississippi Center for Legal Services', 'North Mississippi Rural Legal Services', 'Mississippi Law Help (mslegalservices.org)'],
+  MO: ['Legal Services of Eastern Missouri', 'Legal Aid of Western Missouri', 'Missouri Law Help (mobar.org/public)'],
+  MT: ['Montana Legal Services Association', 'State Bar of Montana Pro Bono Program', 'Montana Law Help (montanalawhelp.org)'],
+  NE: ['Legal Aid of Nebraska', 'Nebraska State Bar Volunteer Lawyers Project', 'Nebraska Law Help (nebraskalegalaid.org)'],
+  NV: ['Nevada Legal Services', 'Legal Aid Center of Southern Nevada', 'Nevada Law Help (nevadalegalservices.org)'],
+  NH: ['New Hampshire Legal Assistance', 'NH Pro Bono Referral Program', 'NH Law Help (nhlegalaid.org)'],
+  NJ: ['Legal Services of New Jersey', 'NJ Volunteer Lawyers for Justice', 'NJ Law Help (lsnj.org)'],
+  NM: ['New Mexico Legal Aid', 'State Bar of New Mexico Pro Bono Program', 'NM Law Help (newmexicolegalaid.org)'],
+  NY: ['Legal Aid Society of New York', 'NY Legal Assistance Group (NYLAG)', 'NY Law Help (lawhelpny.org)'],
+  NC: ['Legal Aid of North Carolina', 'NC Pro Bono Resource Center', 'NC Law Help (legalaidnc.org)'],
+  ND: ['Legal Services of North Dakota', 'ND State Bar Lawyer Referral', 'ND Law Help (legalassist.org)'],
+  OH: ['Legal Aid Society of Cleveland', 'Ohio State Legal Services', 'Ohio Law Help (ohiolegalhelp.org)'],
+  OK: ['Legal Aid Services of Oklahoma', 'Oklahoma Indian Legal Services', 'OK Law Help (oklaw.org)'],
+  OR: ['Legal Aid Services of Oregon', 'Oregon State Bar Pro Bono Program', 'Oregon Law Help (oregonlawhelp.org)'],
+  PA: ['Legal Aid of Southeastern PA', 'Neighborhood Legal Services (Pittsburgh)', 'PA Law Help (palawhelp.org)'],
+  RI: ['Rhode Island Legal Services', 'RI Bar Pro Bono Program', 'RI Law Help (helprilaw.org)'],
+  SC: ['South Carolina Legal Services', 'SC Bar Pro Bono Program', 'SC Law Help (lawhelp.org/sc)'],
+  SD: ['East River Legal Services', 'Dakota Plains Legal Services', 'SD Law Help (sdlawhelp.org)'],
+  TN: ['Legal Aid Society of Middle TN', 'Memphis Area Legal Services', 'Tennessee Law Help (tals.org)'],
+  TX: ['Lone Star Legal Aid', 'Texas RioGrande Legal Aid', 'Texas Law Help (texaslawhelp.org)'],
+  UT: ['Utah Legal Services', 'Utah State Bar Pro Bono Program', 'Utah Law Help (utahlegalservices.org)'],
+  VT: ['Legal Services Vermont', 'Vermont Volunteer Lawyers Project', 'VT Law Help (vtlegalaid.org)'],
+  VA: ['Legal Aid Justice Center (Virginia)', 'Virginia Legal Aid Society', 'VA Law Help (valegalaid.org)'],
+  WA: ['Northwest Justice Project', 'King County Bar Pro Bono Services', 'WA Law Help (washingtonlawhelp.org)'],
+  WV: ['Legal Aid of West Virginia', 'WV Senior Legal Aid', 'WV Law Help (lawhelp.org/wv)'],
+  WI: ['Legal Action of Wisconsin', 'Wisconsin Judicare', 'WI Law Help (wilawlibrary.gov/selfhelp)'],
+  WY: ['Legal Aid of Wyoming', 'Wyoming State Bar Pro Bono Program', 'WY Law Help (wyominglaw help.org)'],
+}
+
+export function getStateLegalAid(stateAbbr: string): string[] {
+  return STATE_LEGAL_AID[stateAbbr.toUpperCase()] ?? []
+}
+
+// ---------------------------------------------------------------------------
+// State bar complaint info
+// ---------------------------------------------------------------------------
+
+const STATE_BAR_COMPLAINT: Record<string, { body: string; phone: string }> = {
+  AL: { body: 'Alabama State Bar Disciplinary Commission', phone: '(334) 269-1515' },
+  AK: { body: 'Alaska Bar Association', phone: '(907) 272-7469' },
+  AZ: { body: 'State Bar of Arizona', phone: '(602) 252-4804' },
+  AR: { body: 'Arkansas Supreme Court Committee on Professional Conduct', phone: '(501) 376-0313' },
+  CA: { body: 'State Bar of California Office of Chief Trial Counsel', phone: '(800) 843-9053' },
+  CO: { body: 'Colorado Supreme Court Attorney Regulation Counsel', phone: '(303) 457-5800' },
+  CT: { body: 'Connecticut Statewide Grievance Committee', phone: '(860) 568-5157' },
+  DE: { body: 'Delaware Office of Disciplinary Counsel', phone: '(302) 651-3925' },
+  DC: { body: 'DC Office of Disciplinary Counsel', phone: '(202) 638-1501' },
+  FL: { body: 'Florida Bar Attorney Consumer Assistance Program', phone: '(866) 352-0707' },
+  GA: { body: 'State Bar of Georgia Office of General Counsel', phone: '(404) 527-8720' },
+  HI: { body: 'Hawaii Office of Disciplinary Counsel', phone: '(808) 521-4591' },
+  ID: { body: 'Idaho State Bar Counsel', phone: '(208) 334-4500' },
+  IL: { body: 'Illinois Attorney Registration and Disciplinary Commission', phone: '(312) 565-2600' },
+  IN: { body: 'Indiana Supreme Court Disciplinary Commission', phone: '(317) 232-1807' },
+  IA: { body: 'Iowa Supreme Court Attorney Disciplinary Board', phone: '(515) 725-8017' },
+  KS: { body: 'Kansas Disciplinary Administrator Office', phone: '(785) 296-2486' },
+  KY: { body: 'Kentucky Bar Association Office of Bar Counsel', phone: '(502) 564-3795' },
+  LA: { body: 'Louisiana Attorney Disciplinary Board', phone: '(504) 834-1488' },
+  ME: { body: 'Maine Board of Overseers of the Bar', phone: '(207) 623-1121' },
+  MD: { body: 'Maryland Attorney Grievance Commission', phone: '(410) 514-7051' },
+  MA: { body: 'Massachusetts Board of Bar Overseers', phone: '(617) 728-8750' },
+  MI: { body: 'Michigan Attorney Grievance Commission', phone: '(313) 961-6585' },
+  MN: { body: 'Minnesota Office of Lawyers Professional Responsibility', phone: '(651) 296-3952' },
+  MS: { body: 'Mississippi Bar General Counsel', phone: '(601) 948-4471' },
+  MO: { body: 'Missouri Office of Chief Disciplinary Counsel', phone: '(573) 635-7400' },
+  MT: { body: 'Montana Office of Disciplinary Counsel', phone: '(406) 841-2952' },
+  NE: { body: 'Nebraska Counsel for Discipline', phone: '(402) 471-2024' },
+  NV: { body: 'State Bar of Nevada Office of Bar Counsel', phone: '(702) 382-2200' },
+  NH: { body: 'New Hampshire Attorney Discipline Office', phone: '(603) 224-5828' },
+  NJ: { body: 'New Jersey Office of Attorney Ethics', phone: '(609) 403-7800' },
+  NM: { body: 'New Mexico Disciplinary Board', phone: '(505) 842-5781' },
+  NY: { body: 'New York Attorney Grievance Committee', phone: '(212) 401-0800' },
+  NC: { body: 'North Carolina State Bar', phone: '(919) 828-4620' },
+  ND: { body: 'North Dakota Disciplinary Board', phone: '(701) 328-3925' },
+  OH: { body: 'Ohio Office of Disciplinary Counsel', phone: '(614) 461-0256' },
+  OK: { body: 'Oklahoma Bar Association Office of General Counsel', phone: '(405) 416-7007' },
+  OR: { body: 'Oregon State Bar Disciplinary Counsel', phone: '(503) 620-0222' },
+  PA: { body: 'Pennsylvania Disciplinary Board', phone: '(717) 231-3380' },
+  RI: { body: 'Rhode Island Supreme Court Disciplinary Counsel', phone: '(401) 222-3270' },
+  SC: { body: 'South Carolina Office of Disciplinary Counsel', phone: '(803) 734-2038' },
+  SD: { body: 'South Dakota Disciplinary Board', phone: '(605) 224-7554' },
+  TN: { body: 'Tennessee Board of Professional Responsibility', phone: '(615) 361-7500' },
+  TX: { body: 'State Bar of Texas Office of Chief Disciplinary Counsel', phone: '(800) 932-1900' },
+  UT: { body: 'Utah State Bar Office of Professional Conduct', phone: '(801) 531-9110' },
+  VT: { body: 'Vermont Professional Responsibility Board', phone: '(802) 859-3000' },
+  VA: { body: 'Virginia State Bar', phone: '(804) 775-0500' },
+  WA: { body: 'Washington State Bar Association Office of Disciplinary Counsel', phone: '(206) 727-8207' },
+  WV: { body: 'West Virginia Office of Disciplinary Counsel', phone: '(304) 558-7999' },
+  WI: { body: 'Wisconsin Office of Lawyer Regulation', phone: '(608) 267-7274' },
+  WY: { body: 'Wyoming State Bar Disciplinary Department', phone: '(307) 632-9061' },
+}
+
+export function getStateBarComplaint(stateAbbr: string): { body: string; phone: string } | undefined {
+  return STATE_BAR_COMPLAINT[stateAbbr.toUpperCase()]
+}
+
+// ---------------------------------------------------------------------------
+// Estimated active attorneys per state (approximate, for content generation)
+// ---------------------------------------------------------------------------
+
+const STATE_ATTORNEY_COUNTS: Record<string, number> = {
+  AL: 16500, AK: 3200, AZ: 22000, AR: 8500, CA: 190000,
+  CO: 28000, CT: 22000, DE: 4500, DC: 56000, FL: 108000,
+  GA: 40000, HI: 5500, ID: 5000, IL: 97000, IN: 20000,
+  IA: 10000, KS: 9500, KY: 14000, LA: 22000, ME: 5000,
+  MD: 38000, MA: 50000, MI: 38000, MN: 27000, MS: 9000,
+  MO: 30000, MT: 3500, NE: 7000, NV: 10000, NH: 5000,
+  NJ: 72000, NM: 6500, NY: 180000, NC: 30000, ND: 2500,
+  OH: 46000, OK: 15000, OR: 16000, PA: 70000, RI: 6000,
+  SC: 13000, SD: 3000, TN: 24000, TX: 105000, UT: 11000,
+  VT: 3200, VA: 35000, WA: 36000, WV: 5500, WI: 20000, WY: 2200,
+}
+
+export function getStateAttorneyCount(stateAbbr: string): number {
+  return STATE_ATTORNEY_COUNTS[stateAbbr.toUpperCase()] ?? 5000
+}
+
+// ---------------------------------------------------------------------------
+// Average attorney cost per state (hourly rate in USD)
+// ---------------------------------------------------------------------------
+
+const STATE_AVG_HOURLY_RATE: Record<string, number> = {
+  AL: 225, AK: 300, AZ: 275, AR: 200, CA: 400,
+  CO: 300, CT: 350, DE: 300, DC: 425, FL: 300,
+  GA: 275, HI: 350, ID: 225, IL: 325, IN: 225,
+  IA: 225, KS: 225, KY: 225, LA: 250, ME: 250,
+  MD: 325, MA: 375, MI: 275, MN: 275, MS: 200,
+  MO: 250, MT: 225, NE: 225, NV: 300, NH: 275,
+  NJ: 350, NM: 225, NY: 400, NC: 275, ND: 225,
+  OH: 250, OK: 225, OR: 275, PA: 300, RI: 275,
+  SC: 250, SD: 225, TN: 250, TX: 300, UT: 250,
+  VT: 250, VA: 300, WA: 325, WV: 200, WI: 250, WY: 225,
+}
+
+export function getStateAvgHourlyRate(stateAbbr: string): number {
+  return STATE_AVG_HOURLY_RATE[stateAbbr.toUpperCase()] ?? 275
+}
+
+// ---------------------------------------------------------------------------
+// 3 PA × State FAQ templates (enable 22,950 pages: 3 × 51 × 150)
+// ---------------------------------------------------------------------------
+
+export interface PAStateFAQParams {
+  stateAbbr: string
+  stateName: string
+  specialtySlug: string
+  specialtyName: string
+}
+
+export interface PAStateFAQItem {
+  slug: string
+  question: string
+  answer: string
+}
+
+function faqDoINeed(p: PAStateFAQParams): PAStateFAQItem {
+  const sol = getStatuteOfLimitations(p.specialtySlug, p.stateAbbr)
+  const rate = getStateAvgHourlyRate(p.stateAbbr)
+  const multiplier = getRegionalPricingMultiplier(p.stateAbbr)
+  const count = getStateAttorneyCount(p.stateAbbr)
+  const paCount = Math.round(count * 0.08)
+  const barUrl = getStateBarVerificationUrl(p.stateAbbr)
+  const barRef = barUrl ? ` You can verify credentials through the ${p.stateName} State Bar directory.` : ''
+
+  return {
+    slug: `do-i-need-${p.specialtySlug}-lawyer-${p.stateAbbr.toLowerCase()}`,
+    question: `Do I need a ${p.specialtyName} lawyer in ${p.stateName}?`,
+    answer: `Whether you need a ${p.specialtyName} attorney in ${p.stateName} depends on the complexity of your situation and what is at stake. ${p.stateName} has specific laws governing ${p.specialtyName} matters that differ from other states, and navigating them without legal expertise can be risky. The statute of limitations for most ${p.specialtyName} claims in ${p.stateName} is ${sol} year${sol !== 1 ? 's' : ''}, meaning you must take legal action within that window or lose your right to pursue your case entirely. With approximately ${fmtNumber(paCount)} ${p.specialtyName} attorneys actively practicing in ${p.stateName}, you have multiple options for representation. Average hourly rates for ${p.specialtyName} lawyers in ${p.stateName} range from ${fmtCurrency(rate * 0.6)} to ${fmtCurrency(rate * 1.5)} per hour, which is ${multiplier > 1.1 ? 'above' : multiplier < 0.9 ? 'below' : 'near'} the national average. Many ${p.specialtyName} attorneys in ${p.stateName} offer free initial consultations, allowing you to discuss your situation and understand your options before making any financial commitment. If your case involves significant financial stakes, potential criminal penalties, custody of children, or complex regulatory requirements, hiring a qualified ${p.specialtyName} attorney is strongly recommended.${barRef} Even for seemingly straightforward matters, a brief consultation can reveal legal nuances specific to ${p.stateName} that could significantly affect your outcome.`,
+  }
+}
+
+function faqWhatDoesLawyerDo(p: PAStateFAQParams): PAStateFAQItem {
+  const sol = getStatuteOfLimitations(p.specialtySlug, p.stateAbbr)
+  const rate = getStateAvgHourlyRate(p.stateAbbr)
+  const count = getStateAttorneyCount(p.stateAbbr)
+  const paCount = Math.round(count * 0.08)
+  const resources = getStateLegalAid(p.stateAbbr)
+  const resourceMention = resources.length > 0 ? ` Free resources like ${resources[0]} may also provide initial guidance.` : ''
+
+  return {
+    slug: `what-does-${p.specialtySlug}-lawyer-do-${p.stateAbbr.toLowerCase()}`,
+    question: `What does a ${p.specialtyName} lawyer do in ${p.stateName}?`,
+    answer: `A ${p.specialtyName} attorney in ${p.stateName} provides specialized legal representation tailored to ${p.stateName}'s specific statutory framework and court procedures. Their core responsibilities include: evaluating the merits of your case under ${p.stateName} law, advising you on your legal rights and options, preparing and filing court documents in compliance with ${p.stateName} procedural rules, negotiating with opposing parties or their attorneys, and representing you in court proceedings if necessary. In ${p.stateName}, ${p.specialtyName} cases are subject to a ${sol}-year statute of limitations, and your attorney will ensure all deadlines are met. They will also handle discovery — the process of gathering evidence — and work with expert witnesses when needed. ${p.stateName} has approximately ${fmtNumber(paCount)} practicing ${p.specialtyName} attorneys, with average fees of ${fmtCurrency(rate)} per hour. Beyond litigation, ${p.specialtyName} lawyers in ${p.stateName} also provide preventive counsel: reviewing contracts, ensuring regulatory compliance, and helping you avoid legal pitfalls specific to ${p.stateName}'s legal environment.${resourceMention} A good ${p.specialtyName} attorney will also keep you informed about recent changes in ${p.stateName} law that may affect your case and provide realistic expectations about timelines and outcomes based on their experience with local courts.`,
+  }
+}
+
+function faqHowToFind(p: PAStateFAQParams): PAStateFAQItem {
+  const rate = getStateAvgHourlyRate(p.stateAbbr)
+  const count = getStateAttorneyCount(p.stateAbbr)
+  const paCount = Math.round(count * 0.08)
+  const barUrl = getStateBarVerificationUrl(p.stateAbbr)
+  const resources = getStateLegalAid(p.stateAbbr)
+  const complaint = getStateBarComplaint(p.stateAbbr)
+  const barRef = barUrl ? `Start by checking the ${p.stateName} State Bar's official directory at ${barUrl} to verify any attorney's license status and disciplinary record. ` : `Start by checking the ${p.stateName} State Bar's official directory to verify any attorney's license status. `
+  const resourceList = resources.length > 0 ? ` For those who cannot afford private counsel, ${p.stateName} offers free legal resources including ${resources.slice(0, 2).join(' and ')}.` : ''
+  const complaintRef = complaint ? ` If you ever need to file a complaint, contact the ${complaint.body} at ${complaint.phone}.` : ''
+
+  return {
+    slug: `how-to-find-${p.specialtySlug}-lawyer-${p.stateAbbr.toLowerCase()}`,
+    question: `How to find a ${p.specialtyName} lawyer in ${p.stateName}?`,
+    answer: `Finding the right ${p.specialtyName} attorney in ${p.stateName} requires a systematic approach. ${barRef}${p.stateName} has approximately ${fmtNumber(paCount)} attorneys who practice ${p.specialtyName} law, giving you a solid pool of candidates. Key steps to find the best fit: First, identify attorneys who specialize specifically in ${p.specialtyName} rather than general practitioners — specialization significantly impacts case quality. Second, check online reviews and ratings on legal directories while keeping in mind that no review source is perfect. Third, schedule consultations with at least 2-3 candidates (many offer free initial meetings). Fourth, during consultations, ask about their experience with ${p.specialtyName} cases in ${p.stateName}, their fee structure (average hourly rate: ${fmtCurrency(rate)}), who will handle your case day-to-day, and their communication practices. Fifth, verify their standing with the ${p.stateName} State Bar and check for any disciplinary actions.${resourceList}${complaintRef} Look for attorneys with board certifications, bar association leadership roles, or peer-recognition awards in ${p.specialtyName}. Personal referrals from trusted friends or other attorneys remain one of the most reliable ways to find quality representation.`,
+  }
+}
+
+/**
+ * Generate the 3 PA × State FAQ items for a given specialty and state.
+ * These power 22,950 dedicated FAQ pages (3 questions × 51 states × 150 PAs).
+ */
+export function generatePracticeAreaStateFAQ(specialtySlug: string, specialtyName: string, stateAbbr: string): PAStateFAQItem[] {
+  const params: PAStateFAQParams = {
+    stateAbbr: stateAbbr.toUpperCase(),
+    stateName: getStateName(stateAbbr),
+    specialtySlug,
+    specialtyName,
+  }
+  return [
+    faqDoINeed(params),
+    faqWhatDoesLawyerDo(params),
+    faqHowToFind(params),
+  ]
+}
+
+/**
+ * Generate a single PA × State FAQ by question type index (0, 1, or 2).
+ */
+export function generateSinglePAStateFAQ(
+  specialtySlug: string,
+  specialtyName: string,
+  stateAbbr: string,
+  questionIndex: 0 | 1 | 2
+): PAStateFAQItem {
+  const params: PAStateFAQParams = {
+    stateAbbr: stateAbbr.toUpperCase(),
+    stateName: getStateName(stateAbbr),
+    specialtySlug,
+    specialtyName,
+  }
+  const generators = [faqDoINeed, faqWhatDoesLawyerDo, faqHowToFind]
+  return generators[questionIndex](params)
+}
+
+// ---------------------------------------------------------------------------
 // Exports summary
 // ---------------------------------------------------------------------------
 
 export {
   ALL_FAQ_TEMPLATES,
   hashCode,
+  STATE_NAMES,
 }
 
-export type { FAQTemplateFunction, RegionalTipSet }
+export type { FAQTemplateFunction, RegionalTipSet, SOLCategory }

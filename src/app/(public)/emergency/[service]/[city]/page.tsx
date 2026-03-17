@@ -4,6 +4,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { tradeContent } from '@/lib/data/trade-content'
 import { getCityBySlug } from '@/lib/data/usa'
+import { resolveZipToCity } from '@/lib/location-resolver'
 import { REVALIDATE } from '@/lib/cache'
 
 export const revalidate = REVALIDATE.serviceLocation
@@ -43,7 +44,7 @@ export default async function EmergencyServiceVillePage({
 }) {
   const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
-  const villeData = getCityBySlug(villeSlug)
+  const villeData = getCityBySlug(villeSlug) || await resolveZipToCity(villeSlug)
   if (!trade || !villeData) notFound()
 
   return (

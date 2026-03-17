@@ -19,6 +19,7 @@ import {
   getCitiesByState,
   getStateByCode,
 } from '@/lib/data/usa'
+import { isZipSlug, getNearbyZipCodes } from '@/lib/location-resolver'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import type { Service, Location as LocationType, Provider } from '@/types'
@@ -220,7 +221,9 @@ export default async function SituationPage({ params }: PageProps) {
   const speakableSchema = getSpeakableSchema({ url: `${SITE_URL}/situations/${sitSlug}/${locSlug}`, title: h1 })
   const schemas: Record<string, unknown>[] = [howToSchema, breadcrumbSchema, speakableSchema, ...(itemListSchema ? [itemListSchema] : [])]
 
-  const nearbyCities = getNearbyCities(locSlug, 8)
+  const nearbyCities = isZipSlug(locSlug)
+    ? await getNearbyZipCodes(locSlug, 8)
+    : getNearbyCities(locSlug, 8)
   const stateCities = location.department_code ? getCitiesByState(location.department_code).filter(c => c.slug !== locSlug).slice(0, 6) : []
 
   return (

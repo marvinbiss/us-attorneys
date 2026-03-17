@@ -18,7 +18,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import type { Service } from '@/types'
-import { REVALIDATE } from '@/lib/cache'
+import { REVALIDATE, getCachedData, CACHE_TTL } from '@/lib/cache'
+import { supabase } from '@/lib/supabase'
 
 function safeJsonStringify(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')
@@ -89,8 +90,49 @@ const topCounties: CountyInfo[] = [
   { slug: 'davidson-county-tn', name: 'Davidson County', stateCode: 'TN', stateName: 'Tennessee', seat: 'Nashville', population: '715,884', citySlugs: ['nashville'] },
 ]
 
-function getCounty(slug: string) {
+function getCountyStatic(slug: string) {
   return topCounties.find(c => c.slug === slug) || null
+}
+
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+
+/** Resolve county from static data OR DB (3,244 counties) */
+async function getCounty(slug: string): Promise<CountyInfo | null> {
+  const staticCounty = getCountyStatic(slug)
+  if (staticCounty) return staticCounty
+  if (IS_BUILD) return null
+
+  return getCachedData(
+    `county:${slug}`,
+    async () => {
+      try {
+        const { data, error } = await supabase
+          .from('counties')
+          .select('id, name, slug, fips_code, state:state_id(name, abbreviation, slug)')
+          .eq('slug', slug)
+          .limit(1)
+          .single()
+        if (error || !data) return null
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const row = data as any
+        const stateData = row.state as { name: string; abbreviation: string; slug: string } | null
+
+        return {
+          slug: row.slug,
+          name: row.name,
+          stateCode: stateData?.abbreviation || '',
+          stateName: stateData?.name || '',
+          seat: '',
+          population: '',
+          citySlugs: [],
+        } satisfies CountyInfo
+      } catch {
+        return null
+      }
+    },
+    CACHE_TTL.locations,
+  )
 }
 
 // 1 seed page — ISR 24h handles the rest (dynamicParams = true)
@@ -103,7 +145,7 @@ interface PageProps { params: Promise<{ county: string; specialty: string }> }
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { county: countySlug, specialty: slug } = await params
 
-  const county = getCounty(countySlug)
+  const county = await getCounty(countySlug)
   if (!county) return { title: 'Not Found', robots: { index: false, follow: false } }
 
   let specialtyName = ''
@@ -147,7 +189,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CountyPage({ params }: PageProps) {
   const { county: countySlug, specialty: slug } = await params
 
-  const county = getCounty(countySlug)
+  const county = await getCounty(countySlug)
   if (!county) notFound()
 
   let service: Service

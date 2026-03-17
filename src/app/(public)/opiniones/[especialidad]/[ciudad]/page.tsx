@@ -14,6 +14,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { getAttorneyUrl } from '@/lib/utils'
 import type { Location as LocationType, Provider } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
+import { resolveZipToCity, resolveZipToLocation } from '@/lib/location-resolver'
 
 export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
@@ -128,7 +129,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!esEntry) return { title: 'No Encontrado', robots: { index: false, follow: false } }
 
   const enSlug = esEntry.enSlug
-  const fallbackCity = getCityBySlug(ciudad)
+  const fallbackCity = getCityBySlug(ciudad) || await resolveZipToCity(ciudad)
   if (!fallbackCity) return { title: 'No Encontrado', robots: { index: false, follow: false } }
 
   const locationName = fallbackCity.name
@@ -177,7 +178,7 @@ export default async function OpinionesPage({ params }: PageProps) {
     if (!dbService) { const s = staticPracticeAreas.find(s => s.slug === enSlug); if (!s) notFound() }
   } catch { const s = staticPracticeAreas.find(s => s.slug === enSlug); if (!s) notFound() }
 
-  const location = cityToLocation(ciudad)
+  const location = cityToLocation(ciudad) || await resolveZipToLocation(ciudad)
   if (!location) notFound()
 
   const [providers, totalCount] = await Promise.all([

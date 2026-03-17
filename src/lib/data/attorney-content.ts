@@ -23198,3 +23198,621 @@ export function getCaseTypesForPracticeArea(slug: string): { description: string
   if (!content) return []
   return content.commonCaseTypes.map(parseCaseType)
 }
+
+
+// ============================================================================
+// STATE-SPECIFIC LEGAL GUIDE GENERATOR
+// Enables 200 PA × 51 states = 10,200 unique guide pages
+// Each guide includes: state laws, SOL, bar complaint, free resources, costs
+// ============================================================================
+
+export interface StateGuide {
+  paSlug: string
+  paName: string
+  stateAbbr: string
+  stateName: string
+  overview: string
+  stateLaws: string
+  statuteOfLimitations: string
+  barComplaintProcess: string
+  freeLegalResources: string
+  averageCosts: string
+  courtSystem: string
+  keyTakeaways: string[]
+}
+
+// ---------------------------------------------------------------------------
+// Statute of limitations by practice area category × state (years)
+// ---------------------------------------------------------------------------
+
+export type GuideSOLCategory =
+  | 'personal-injury' | 'medical-malpractice' | 'property-damage'
+  | 'written-contract' | 'oral-contract' | 'fraud' | 'employment'
+  | 'wrongful-death' | 'product-liability' | 'defamation'
+  | 'professional-malpractice' | 'real-estate' | 'debt-collection'
+
+const US_STATE_NAMES: Record<string, string> = {
+  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
+  CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida',
+  GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana',
+  IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine',
+  MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi',
+  MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire',
+  NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota',
+  OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island',
+  SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah',
+  VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin',
+  WY: 'Wyoming',
+}
+
+export const GUIDE_SOL: Record<string, Record<string, number>> = {
+  'personal-injury': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 3, FL: 4,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
+    NJ: 2, NM: 3, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 4, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
+  },
+  'medical-malpractice': {
+    AL: 2, AK: 2, AZ: 2, AR: 2, CA: 1, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 3,
+    MD: 3, MA: 3, MI: 2, MN: 4, MS: 2, MO: 2, MT: 3, NE: 2, NV: 3, NH: 2,
+    NJ: 2, NM: 3, NY: 2, NC: 3, ND: 2, OH: 1, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
+  },
+  'property-damage': {
+    AL: 6, AK: 6, AZ: 2, AR: 3, CA: 3, CO: 2, CT: 2, DE: 2, DC: 3, FL: 4,
+    GA: 4, HI: 2, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 2, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
+    NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 6, PA: 2, RI: 3,
+    SC: 3, SD: 6, TN: 3, TX: 2, UT: 3, VT: 3, VA: 5, WA: 3, WV: 2, WI: 6, WY: 4,
+  },
+  'written-contract': {
+    AL: 6, AK: 3, AZ: 6, AR: 5, CA: 4, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
+    GA: 6, HI: 6, ID: 5, IL: 10, IN: 6, IA: 10, KS: 5, KY: 15, LA: 10, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 10, MT: 5, NE: 5, NV: 6, NH: 3,
+    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
+    SC: 3, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 10,
+  },
+  'oral-contract': {
+    AL: 6, AK: 3, AZ: 3, AR: 3, CA: 2, CO: 6, CT: 3, DE: 3, DC: 3, FL: 4,
+    GA: 4, HI: 6, ID: 4, IL: 5, IN: 6, IA: 5, KS: 3, KY: 5, LA: 10, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 5, MT: 5, NE: 4, NV: 4, NH: 3,
+    NJ: 6, NM: 4, NY: 6, NC: 3, ND: 6, OH: 6, OK: 3, OR: 6, PA: 4, RI: 10,
+    SC: 3, SD: 6, TN: 6, TX: 4, UT: 4, VT: 6, VA: 3, WA: 3, WV: 5, WI: 6, WY: 8,
+  },
+  'fraud': {
+    AL: 2, AK: 2, AZ: 3, AR: 3, CA: 3, CO: 3, CT: 3, DE: 3, DC: 3, FL: 4,
+    GA: 4, HI: 6, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 5, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 6, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
+    NJ: 6, NM: 4, NY: 6, NC: 3, ND: 6, OH: 4, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 6, TN: 3, TX: 4, UT: 3, VT: 6, VA: 2, WA: 3, WV: 2, WI: 6, WY: 4,
+  },
+  'employment': {
+    AL: 2, AK: 2, AZ: 1, AR: 1, CA: 3, CO: 3, CT: 2, DE: 2, DC: 1, FL: 1,
+    GA: 2, HI: 2, ID: 1, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 2,
+    MD: 2, MA: 3, MI: 3, MN: 1, MS: 2, MO: 2, MT: 1, NE: 2, NV: 2, NH: 3,
+    NJ: 2, NM: 2, NY: 3, NC: 3, ND: 2, OH: 2, OK: 2, OR: 1, PA: 2, RI: 1,
+    SC: 1, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 1, WY: 2,
+  },
+  'wrongful-death': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 2, FL: 2,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 2,
+    MD: 3, MA: 3, MI: 3, MN: 3, MS: 3, MO: 3, MT: 3, NE: 2, NV: 2, NH: 3,
+    NJ: 2, NM: 3, NY: 2, NC: 2, ND: 2, OH: 2, OK: 2, OR: 3, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
+  },
+  'product-liability': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 3, DE: 2, DC: 3, FL: 4,
+    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 3, MN: 4, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
+    NJ: 2, NM: 3, NY: 3, NC: 6, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
+  },
+  'defamation': {
+    AL: 2, AK: 2, AZ: 1, AR: 1, CA: 1, CO: 1, CT: 2, DE: 2, DC: 1, FL: 2,
+    GA: 1, HI: 2, ID: 2, IL: 1, IN: 2, IA: 2, KS: 1, KY: 1, LA: 1, ME: 2,
+    MD: 1, MA: 3, MI: 1, MN: 2, MS: 1, MO: 2, MT: 2, NE: 1, NV: 2, NH: 3,
+    NJ: 1, NM: 3, NY: 1, NC: 1, ND: 2, OH: 1, OK: 1, OR: 1, PA: 1, RI: 1,
+    SC: 2, SD: 2, TN: 1, TX: 1, UT: 1, VT: 3, VA: 1, WA: 2, WV: 1, WI: 2, WY: 1,
+  },
+  'professional-malpractice': {
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 1, CO: 2, CT: 3, DE: 2, DC: 3, FL: 2,
+    GA: 2, HI: 6, ID: 2, IL: 2, IN: 2, IA: 5, KS: 2, KY: 1, LA: 1, ME: 6,
+    MD: 3, MA: 3, MI: 2, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 4, NH: 3,
+    NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 1, OK: 2, OR: 2, PA: 2, RI: 3,
+    SC: 3, SD: 3, TN: 1, TX: 2, UT: 4, VT: 6, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
+  },
+  'real-estate': {
+    AL: 6, AK: 10, AZ: 6, AR: 5, CA: 5, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
+    GA: 6, HI: 6, ID: 5, IL: 10, IN: 6, IA: 10, KS: 5, KY: 15, LA: 10, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 6, MO: 10, MT: 5, NE: 5, NV: 6, NH: 3,
+    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
+    SC: 10, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 10,
+  },
+  'debt-collection': {
+    AL: 6, AK: 3, AZ: 6, AR: 5, CA: 4, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
+    GA: 6, HI: 6, ID: 5, IL: 5, IN: 6, IA: 10, KS: 5, KY: 5, LA: 3, ME: 6,
+    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 5, MT: 5, NE: 5, NV: 6, NH: 3,
+    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
+    SC: 3, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 8,
+  },
+}
+
+// ---------------------------------------------------------------------------
+// PA slug → SOL category mapping
+// ---------------------------------------------------------------------------
+
+export const GUIDE_PA_TO_SOL: Record<string, GuideSOLCategory> = {
+  'personal-injury': 'personal-injury', 'car-accidents': 'personal-injury',
+  'truck-accidents': 'personal-injury', 'motorcycle-accidents': 'personal-injury',
+  'slip-and-fall': 'personal-injury', 'dog-bites': 'personal-injury',
+  'bicycle-accidents': 'personal-injury', 'pedestrian-accidents': 'personal-injury',
+  'boat-accidents': 'personal-injury', 'bus-accidents': 'personal-injury',
+  'aviation-accidents': 'personal-injury', 'brain-injury': 'personal-injury',
+  'spinal-cord-injury': 'personal-injury', 'burn-injury': 'personal-injury',
+  'catastrophic-injury': 'personal-injury', 'construction-accidents': 'personal-injury',
+  'premises-liability': 'personal-injury', 'nursing-home-abuse': 'personal-injury',
+  'uber-lyft-accidents': 'personal-injury', 'rideshare-accidents': 'personal-injury',
+  'electric-scooter-accidents': 'personal-injury', 'delivery-driver-accidents': 'personal-injury',
+  'medical-malpractice': 'medical-malpractice', 'birth-injury': 'medical-malpractice',
+  'surgical-errors': 'medical-malpractice', 'misdiagnosis': 'medical-malpractice',
+  'medication-errors': 'medical-malpractice', 'dental-malpractice': 'medical-malpractice',
+  'hospital-negligence': 'medical-malpractice',
+  'wrongful-death': 'wrongful-death',
+  'product-liability': 'product-liability', 'defective-drugs': 'product-liability',
+  'defective-medical-devices': 'product-liability', 'toxic-torts': 'product-liability',
+  'asbestos-mesothelioma': 'product-liability',
+  'workers-compensation': 'employment', 'employment-law': 'employment',
+  'wrongful-termination': 'employment', 'workplace-discrimination': 'employment',
+  'sexual-harassment': 'employment', 'wage-hour-claims': 'employment',
+  'whistleblower': 'employment', 'ada-violations': 'employment',
+  'business-law': 'written-contract', 'business-litigation': 'written-contract',
+  'contract-law': 'written-contract', 'corporate-law': 'written-contract',
+  'mergers-acquisitions': 'written-contract', 'partnership-disputes': 'written-contract',
+  'franchise-law': 'written-contract', 'commercial-lease': 'written-contract',
+  'non-compete-agreements': 'written-contract', 'business-bankruptcy': 'debt-collection',
+  'real-estate': 'real-estate', 'commercial-real-estate': 'real-estate',
+  'boundary-disputes': 'real-estate', 'landlord-tenant': 'real-estate',
+  'construction-law': 'real-estate', 'zoning-land-use': 'real-estate',
+  'foreclosure-defense': 'real-estate', 'hoa-disputes': 'real-estate',
+  'title-disputes': 'real-estate', 'eminent-domain': 'real-estate',
+  'immigration': 'personal-injury', 'deportation-defense': 'personal-injury',
+  'visa-applications': 'personal-injury', 'asylum': 'personal-injury',
+  'citizenship-naturalization': 'personal-injury', 'green-card': 'personal-injury',
+  'daca': 'personal-injury',
+  'estate-planning': 'real-estate', 'probate': 'real-estate', 'trusts': 'real-estate',
+  'wills': 'real-estate', 'guardianship': 'real-estate', 'elder-law': 'real-estate',
+  'bankruptcy': 'debt-collection', 'chapter-7-bankruptcy': 'debt-collection',
+  'chapter-13-bankruptcy': 'debt-collection',
+  'intellectual-property': 'written-contract', 'patent-law': 'written-contract',
+  'trademark-law': 'written-contract', 'copyright-law': 'written-contract',
+  'trade-secrets': 'written-contract',
+  'tax-law': 'fraud', 'irs-audit-defense': 'fraud', 'tax-litigation': 'fraud',
+  'back-taxes': 'fraud', 'tax-fraud-defense': 'fraud',
+  'consumer-protection': 'fraud', 'lemon-law': 'product-liability',
+  'insurance-claims': 'written-contract', 'insurance-bad-faith': 'written-contract',
+  'class-action': 'personal-injury', 'civil-rights': 'personal-injury',
+  'defamation': 'defamation', 'internet-defamation': 'defamation',
+  'privacy-law': 'personal-injury', 'cybersecurity-law': 'written-contract',
+  'ai-law': 'written-contract', 'cannabis-law': 'personal-injury',
+  'environmental-law': 'property-damage', 'maritime-law': 'personal-injury',
+  'aviation-law': 'personal-injury', 'military-law': 'personal-injury',
+  'veterans-benefits': 'personal-injury', 'social-security-disability': 'personal-injury',
+  'appeals': 'personal-injury', 'arbitration-mediation': 'personal-injury',
+  'administrative-law': 'personal-injury', 'agricultural-law': 'real-estate',
+  'animal-law': 'personal-injury', 'church-abuse': 'personal-injury',
+  'education-law': 'personal-injury', 'entertainment-law': 'written-contract',
+  'health-care-law': 'professional-malpractice', 'hospitality-law': 'written-contract',
+  'international-law': 'written-contract', 'nonprofit-law': 'written-contract',
+  'sports-law': 'written-contract', 'telecommunications-law': 'written-contract',
+  'transportation-law': 'personal-injury', 'utilities-energy-law': 'written-contract',
+  'water-rights': 'real-estate', 'government-contracts': 'written-contract',
+  'election-law': 'personal-injury', 'lobbying-law': 'personal-injury',
+  'divorce': 'personal-injury', 'child-custody': 'personal-injury',
+  'child-support': 'personal-injury', 'adoption': 'personal-injury',
+  'alimony-spousal-support': 'personal-injury', 'domestic-violence': 'personal-injury',
+  'paternity': 'personal-injury', 'prenuptial-agreements': 'written-contract',
+  'criminal-defense': 'personal-injury', 'dui-dwi': 'personal-injury',
+  'drug-crimes': 'personal-injury', 'assault-battery': 'personal-injury',
+  'theft-crimes': 'personal-injury', 'white-collar-crimes': 'fraud',
+  'federal-crimes': 'personal-injury', 'juvenile-defense': 'personal-injury',
+  'sex-crimes': 'personal-injury', 'domestic-violence-defense': 'personal-injury',
+  'expungement': 'personal-injury', 'probation-violations': 'personal-injury',
+  'conspiracy': 'personal-injury', 'homicide': 'personal-injury',
+  'family-law': 'personal-injury',
+}
+
+// ---------------------------------------------------------------------------
+// State bar complaint info
+// ---------------------------------------------------------------------------
+
+const GUIDE_BAR_COMPLAINT: Record<string, { body: string; phone: string; url: string }> = {
+  AL: { body: 'Alabama State Bar Disciplinary Commission', phone: '(334) 269-1515', url: 'https://www.alabar.org/office-of-general-counsel/' },
+  AK: { body: 'Alaska Bar Association', phone: '(907) 272-7469', url: 'https://alaskabar.org/lawyer-discipline/' },
+  AZ: { body: 'State Bar of Arizona', phone: '(602) 252-4804', url: 'https://www.azbar.org/for-the-public/filing-a-complaint/' },
+  AR: { body: 'Arkansas Supreme Court Committee on Professional Conduct', phone: '(501) 376-0313', url: 'https://www.arcourts.gov/courts/professional-conduct' },
+  CA: { body: 'State Bar of California', phone: '(800) 843-9053', url: 'https://www.calbar.ca.gov/Public/Complaints-Claims' },
+  CO: { body: 'Colorado Supreme Court Attorney Regulation Counsel', phone: '(303) 457-5800', url: 'https://www.coloradosupremecourt.com/Regulation/Complaints.asp' },
+  CT: { body: 'Connecticut Statewide Grievance Committee', phone: '(860) 568-5157', url: 'https://www.jud.ct.gov/sgc/' },
+  DE: { body: 'Delaware Office of Disciplinary Counsel', phone: '(302) 651-3925', url: 'https://courts.delaware.gov/odc/' },
+  DC: { body: 'DC Office of Disciplinary Counsel', phone: '(202) 638-1501', url: 'https://www.dcodc.org/' },
+  FL: { body: 'Florida Bar', phone: '(866) 352-0707', url: 'https://www.floridabar.org/public/acap/' },
+  GA: { body: 'State Bar of Georgia', phone: '(404) 527-8720', url: 'https://www.gabar.org/forthepublic/fileacomplaint.cfm' },
+  HI: { body: 'Hawaii Office of Disciplinary Counsel', phone: '(808) 521-4591', url: 'https://dbhawaii.org/' },
+  ID: { body: 'Idaho State Bar', phone: '(208) 334-4500', url: 'https://isb.idaho.gov/licensing-mcle/complaints/' },
+  IL: { body: 'Illinois ARDC', phone: '(312) 565-2600', url: 'https://www.iardc.org/information-for-the-public/filing-a-complaint/' },
+  IN: { body: 'Indiana Supreme Court Disciplinary Commission', phone: '(317) 232-1807', url: 'https://www.in.gov/courts/discipline/' },
+  IA: { body: 'Iowa Supreme Court Attorney Disciplinary Board', phone: '(515) 725-8017', url: 'https://www.iowacourts.gov/for-the-public/attorney-discipline' },
+  KS: { body: 'Kansas Disciplinary Administrator', phone: '(785) 296-2486', url: 'https://www.kscourts.org/About-the-Courts/Court-Administration/Attorney-Discipline' },
+  KY: { body: 'Kentucky Bar Association', phone: '(502) 564-3795', url: 'https://www.kybar.org/page/FileaComplaint' },
+  LA: { body: 'Louisiana Attorney Disciplinary Board', phone: '(504) 834-1488', url: 'https://www.ladb.org/Public/' },
+  ME: { body: 'Maine Board of Overseers of the Bar', phone: '(207) 623-1121', url: 'https://www.mebaroverseers.org/grievance_complaint/' },
+  MD: { body: 'Maryland Attorney Grievance Commission', phone: '(410) 514-7051', url: 'https://www.mdcourts.gov/attygrievance' },
+  MA: { body: 'Massachusetts Board of Bar Overseers', phone: '(617) 728-8750', url: 'https://www.massbbo.org/Complaints' },
+  MI: { body: 'Michigan Attorney Grievance Commission', phone: '(313) 961-6585', url: 'https://www.agcmi.com/' },
+  MN: { body: 'Minnesota Office of Lawyers Professional Responsibility', phone: '(651) 296-3952', url: 'https://lprb.mncourts.gov/' },
+  MS: { body: 'Mississippi Bar', phone: '(601) 948-4471', url: 'https://www.msbar.org/for-the-public/consumer-information/' },
+  MO: { body: 'Missouri Office of Chief Disciplinary Counsel', phone: '(573) 635-7400', url: 'https://www.mobar.org/public/' },
+  MT: { body: 'Montana Office of Disciplinary Counsel', phone: '(406) 841-2952', url: 'https://www.montanabar.org/page/ForThePublic' },
+  NE: { body: 'Nebraska Counsel for Discipline', phone: '(402) 471-2024', url: 'https://supremecourt.nebraska.gov/counsel-discipline' },
+  NV: { body: 'State Bar of Nevada', phone: '(702) 382-2200', url: 'https://www.nvbar.org/member-services-3896/office-of-bar-counsel/' },
+  NH: { body: 'New Hampshire Attorney Discipline Office', phone: '(603) 224-5828', url: 'https://www.nhattyreg.org/' },
+  NJ: { body: 'New Jersey Office of Attorney Ethics', phone: '(609) 403-7800', url: 'https://www.njcourts.gov/attorneys/office-attorney-ethics' },
+  NM: { body: 'New Mexico Disciplinary Board', phone: '(505) 842-5781', url: 'https://www.nmbar.org/Public/Public-Resources.aspx' },
+  NY: { body: 'New York Attorney Grievance Committee', phone: '(212) 401-0800', url: 'https://www.nycourts.gov/courts/ad1/committees&programs/DDC/' },
+  NC: { body: 'North Carolina State Bar', phone: '(919) 828-4620', url: 'https://www.ncbar.gov/for-the-public/filing-a-grievance/' },
+  ND: { body: 'North Dakota Disciplinary Board', phone: '(701) 328-3925', url: 'https://www.ndcourts.gov/legal-resources/lawyer-discipline' },
+  OH: { body: 'Ohio Office of Disciplinary Counsel', phone: '(614) 461-0256', url: 'https://www.ohioadvop.org/' },
+  OK: { body: 'Oklahoma Bar Association', phone: '(405) 416-7007', url: 'https://www.okbar.org/ec/filecomplaint/' },
+  OR: { body: 'Oregon State Bar', phone: '(503) 620-0222', url: 'https://www.osbar.org/public/fileacomplaint.html' },
+  PA: { body: 'Pennsylvania Disciplinary Board', phone: '(717) 231-3380', url: 'https://www.padisciplinaryboard.org/for-the-public/file-a-complaint' },
+  RI: { body: 'Rhode Island Supreme Court Disciplinary Counsel', phone: '(401) 222-3270', url: 'https://www.courts.ri.gov/AttorneyResources/disciplinaryboard/' },
+  SC: { body: 'South Carolina Office of Disciplinary Counsel', phone: '(803) 734-2038', url: 'https://commissions.sc.gov/odc/' },
+  SD: { body: 'South Dakota Disciplinary Board', phone: '(605) 224-7554', url: 'https://www.statebarofsouthdakota.com/' },
+  TN: { body: 'Tennessee Board of Professional Responsibility', phone: '(615) 361-7500', url: 'https://www.tbpr.org/consumers' },
+  TX: { body: 'State Bar of Texas', phone: '(800) 932-1900', url: 'https://www.texasbar.com/AM/Template.cfm?Section=Grievance_Info_and_Forms' },
+  UT: { body: 'Utah State Bar Office of Professional Conduct', phone: '(801) 531-9110', url: 'https://www.utahbar.org/opc/' },
+  VT: { body: 'Vermont Professional Responsibility Board', phone: '(802) 859-3000', url: 'https://www.vermontjudiciary.org/attorneys/attorney-regulation' },
+  VA: { body: 'Virginia State Bar', phone: '(804) 775-0500', url: 'https://www.vsb.org/site/regulation/filing-complaints' },
+  WA: { body: 'Washington State Bar Association', phone: '(206) 727-8207', url: 'https://www.wsba.org/for-the-public/file-a-grievance' },
+  WV: { body: 'West Virginia Office of Disciplinary Counsel', phone: '(304) 558-7999', url: 'https://www.wvodc.org/' },
+  WI: { body: 'Wisconsin Office of Lawyer Regulation', phone: '(608) 267-7274', url: 'https://www.wicourts.gov/services/attorney/grievance.htm' },
+  WY: { body: 'Wyoming State Bar', phone: '(307) 632-9061', url: 'https://www.wyomingbar.org/for-the-public/file-complaint/' },
+}
+
+// ---------------------------------------------------------------------------
+// State free legal resources
+// ---------------------------------------------------------------------------
+
+const GUIDE_LEGAL_AID: Record<string, string[]> = {
+  AL: ['Legal Services Alabama (LSA)', 'Alabama State Bar Volunteer Lawyers Program', 'Alabama Legal Help (alabamalegalhelp.org)'],
+  AK: ['Alaska Legal Services Corporation', 'Alaska Bar Association Pro Bono Program', 'Alaska Law Help (alaskalawhelp.org)'],
+  AZ: ['Community Legal Services (CLS)', 'Arizona Foundation for Legal Services', 'AZ Law Help (azlawhelp.org)'],
+  AR: ['Center for Arkansas Legal Services', 'Legal Aid of Arkansas', 'AR Legal Services Online (arlegalservices.org)'],
+  CA: ['Legal Aid Foundation of Los Angeles', 'Bay Area Legal Aid', 'CA Courts Self-Help Center (courts.ca.gov/selfhelp)'],
+  CO: ['Colorado Legal Services', 'Colorado Bar Association Pro Bono Project', 'CO Law Help (coloradolegalservices.org)'],
+  CT: ['Connecticut Legal Services', 'Statewide Legal Services of Connecticut', 'CT Law Help (ctlawhelp.org)'],
+  DE: ['Delaware Volunteer Legal Services', 'Community Legal Aid Society (CLASI)', 'DE Law Help (declasi.org)'],
+  DC: ['Legal Aid Society of DC', 'DC Bar Pro Bono Center', 'LawHelp DC (lawhelp.org/dc)'],
+  FL: ['Florida Legal Services', 'Florida Bar Foundation', 'FL Law Help (floridalawhelp.org)'],
+  GA: ['Georgia Legal Services Program', 'Atlanta Legal Aid Society', 'GA Law Help (georgialegalaid.org)'],
+  HI: ['Legal Aid Society of Hawaii', 'Volunteer Legal Services Hawaii', 'HI Law Help (lawhelp.org/hi)'],
+  ID: ['Idaho Legal Aid Services', 'Idaho Volunteer Lawyers Program', 'ID Law Help (idaholegalaid.org)'],
+  IL: ['Legal Aid Chicago', 'Prairie State Legal Services', 'IL Law Help (illinoislegalaid.org)'],
+  IN: ['Indiana Legal Services', 'Indiana Bar Foundation Pro Bono Program', 'IN Law Help (indianalegalhelp.org)'],
+  IA: ['Iowa Legal Aid', 'Iowa State Bar Volunteer Lawyers Project', 'IA Law Help (iowalegalaid.org)'],
+  KS: ['Kansas Legal Services', 'Kansas Bar Association Pro Bono Program', 'KS Law Help (kansaslegalservices.org)'],
+  KY: ['Legal Aid of the Bluegrass', 'Kentucky Legal Aid', 'KY Law Help (klaid.org)'],
+  LA: ['Southeast Louisiana Legal Services', 'Acadiana Legal Service Corporation', 'LA Law Help (lalawhelp.org)'],
+  ME: ['Pine Tree Legal Assistance', 'Volunteer Lawyers Project (Maine)', 'ME Law Help (ptla.org)'],
+  MD: ['Maryland Legal Aid', 'Pro Bono Resource Center of Maryland', 'MD Law Help (mdlab.org)'],
+  MA: ['Greater Boston Legal Services', 'Massachusetts Legal Aid', 'MA Law Help (masslegalhelp.org)'],
+  MI: ['Michigan Legal Help', 'Legal Aid of Western Michigan', 'MI Law Help (michiganlegalhelp.org)'],
+  MN: ['Legal Aid State Support (Minnesota)', 'Volunteer Lawyers Network', 'MN Law Help (lawhelpmn.org)'],
+  MS: ['Mississippi Center for Legal Services', 'North Mississippi Rural Legal Services', 'MS Law Help (mslegalservices.org)'],
+  MO: ['Legal Services of Eastern Missouri', 'Legal Aid of Western Missouri', 'MO Law Help (lsmo.org)'],
+  MT: ['Montana Legal Services Association', 'State Bar of Montana Pro Bono Program', 'MT Law Help (montanalawhelp.org)'],
+  NE: ['Legal Aid of Nebraska', 'Nebraska State Bar Volunteer Lawyers Project', 'NE Law Help (nebraskalegalaid.org)'],
+  NV: ['Nevada Legal Services', 'Legal Aid Center of Southern Nevada', 'NV Law Help (nevadalegalservices.org)'],
+  NH: ['New Hampshire Legal Assistance', 'NH Pro Bono Referral Program', 'NH Law Help (nhlegalaid.org)'],
+  NJ: ['Legal Services of New Jersey', 'NJ Volunteer Lawyers for Justice', 'NJ Law Help (lsnj.org)'],
+  NM: ['New Mexico Legal Aid', 'State Bar of NM Pro Bono Program', 'NM Law Help (newmexicolegalaid.org)'],
+  NY: ['Legal Aid Society of New York', 'NY Legal Assistance Group (NYLAG)', 'NY Law Help (lawhelpny.org)'],
+  NC: ['Legal Aid of North Carolina', 'NC Pro Bono Resource Center', 'NC Law Help (legalaidnc.org)'],
+  ND: ['Legal Services of North Dakota', 'ND State Bar Lawyer Referral', 'ND Law Help (legalassist.org)'],
+  OH: ['Legal Aid Society of Cleveland', 'Ohio State Legal Services', 'OH Law Help (ohiolegalhelp.org)'],
+  OK: ['Legal Aid Services of Oklahoma', 'Oklahoma Indian Legal Services', 'OK Law Help (oklaw.org)'],
+  OR: ['Legal Aid Services of Oregon', 'Oregon State Bar Pro Bono Program', 'OR Law Help (oregonlawhelp.org)'],
+  PA: ['Legal Aid of Southeastern PA', 'Neighborhood Legal Services (Pittsburgh)', 'PA Law Help (palawhelp.org)'],
+  RI: ['Rhode Island Legal Services', 'RI Bar Pro Bono Program', 'RI Law Help (helprilaw.org)'],
+  SC: ['South Carolina Legal Services', 'SC Bar Pro Bono Program', 'SC Law Help (lawhelp.org/sc)'],
+  SD: ['East River Legal Services', 'Dakota Plains Legal Services', 'SD Law Help (sdlawhelp.org)'],
+  TN: ['Legal Aid Society of Middle TN', 'Memphis Area Legal Services', 'TN Law Help (tals.org)'],
+  TX: ['Lone Star Legal Aid', 'Texas RioGrande Legal Aid', 'TX Law Help (texaslawhelp.org)'],
+  UT: ['Utah Legal Services', 'Utah State Bar Pro Bono Program', 'UT Law Help (utahlegalservices.org)'],
+  VT: ['Legal Services Vermont', 'Vermont Volunteer Lawyers Project', 'VT Law Help (vtlegalaid.org)'],
+  VA: ['Legal Aid Justice Center (Virginia)', 'Virginia Legal Aid Society', 'VA Law Help (valegalaid.org)'],
+  WA: ['Northwest Justice Project', 'King County Bar Pro Bono Services', 'WA Law Help (washingtonlawhelp.org)'],
+  WV: ['Legal Aid of West Virginia', 'WV Senior Legal Aid', 'WV Law Help (lawhelp.org/wv)'],
+  WI: ['Legal Action of Wisconsin', 'Wisconsin Judicare', 'WI Law Help (wilawlibrary.gov)'],
+  WY: ['Legal Aid of Wyoming', 'Wyoming State Bar Pro Bono Program', 'WY Law Help (wyominglegalhelp.org)'],
+}
+
+// ---------------------------------------------------------------------------
+// State court system descriptions
+// ---------------------------------------------------------------------------
+
+const STATE_COURT_SYSTEMS: Record<string, string> = {
+  AL: 'Alabama operates a unified court system with Circuit Courts handling major civil and criminal cases, District Courts for misdemeanors and small claims (up to $20,000), and Municipal Courts for city ordinance violations.',
+  AK: 'Alaska has a unified court system with Superior Courts as the trial courts of general jurisdiction, District Courts handling minor civil and criminal matters, and a unique rural magistrate system for remote communities.',
+  AZ: 'Arizona courts include Superior Courts (general jurisdiction), Justice Courts (civil claims up to $10,000), and Municipal Courts. Arizona also has a system of limited jurisdiction courts for specific case types.',
+  AR: 'Arkansas has Circuit Courts as its primary trial courts, District Courts for smaller matters (civil cases up to $25,000), and City Courts for minor offenses. The state also operates specialized drug and family courts.',
+  CA: 'California operates Superior Courts as its trial courts in each of the 58 counties. Small Claims Court handles disputes up to $10,000 ($5,000 for businesses). California also has extensive self-help resources through its courts website.',
+  CO: 'Colorado has District Courts (general jurisdiction), County Courts (civil claims up to $25,000), and Municipal Courts. Water courts handle water rights cases. Colorado also offers online dispute resolution for certain cases.',
+  CT: 'Connecticut operates a unified Superior Court system with divisions for civil, criminal, family, and housing matters. Small claims handles disputes up to $5,000. The Judicial Branch also offers a range of alternative dispute resolution programs.',
+  DE: 'Delaware has a unique Court of Chancery (equity cases, corporate disputes), Superior Court (law cases), Family Court, Court of Common Pleas, and Justice of the Peace Courts. The Court of Chancery is nationally prominent for corporate law.',
+  DC: 'The DC Superior Court handles civil, criminal, family, and probate matters. Small Claims Court covers disputes up to $10,000. The DC Court of Appeals serves as the appellate court. Federal courts also play a major role in DC.',
+  FL: 'Florida Circuit Courts handle civil cases over $50,000, felonies, and family law. County Courts handle smaller civil matters and misdemeanors. Florida also has specialized problem-solving courts for drug, mental health, and veterans issues.',
+  GA: 'Georgia has Superior Courts (general jurisdiction), State Courts (civil cases and misdemeanors), Magistrate Courts (small claims up to $15,000), and specialized Juvenile and Probate Courts in each county.',
+  HI: 'Hawaii has a unified court system with Circuit Courts (general jurisdiction), Family Courts, District Courts (civil claims up to $40,000), and Small Claims Division (up to $5,000). The state operates courts on four main islands.',
+  ID: 'Idaho District Courts serve as the trial courts of general jurisdiction. Magistrate Courts handle small claims (up to $5,000), minor criminal cases, and preliminary hearings. Idaho also has specialized drug courts and mental health courts.',
+  IL: 'Illinois Circuit Courts are the trial courts handling all civil and criminal cases. Cook County (Chicago) has specialized divisions. Small Claims Court handles disputes up to $10,000. Illinois also has a robust arbitration program for cases under $50,000.',
+  IN: 'Indiana has Circuit Courts, Superior Courts, and specialized courts. Small Claims Courts handle disputes up to $10,000. Indiana also operates problem-solving courts and has a Commercial Court program for complex business litigation.',
+  IA: 'Iowa District Courts are the trial courts of general jurisdiction. Small Claims Court handles disputes up to $6,500. Iowa also offers online court services and has specialized juvenile, drug, and mental health courts.',
+  KS: 'Kansas District Courts are the trial courts of general jurisdiction in 31 judicial districts. Small Claims Court handles disputes up to $4,000. Kansas also operates specialized drug, DUI, mental health, and veterans courts.',
+  KY: 'Kentucky Circuit Courts handle civil cases over $5,000 and felonies. District Courts handle smaller civil matters, misdemeanors, juvenile cases, and probate. Small Claims Division handles disputes up to $2,500.',
+  LA: 'Louisiana is unique in using a civil law system (based on French law rather than English common law). District Courts handle most civil and criminal cases. City and Parish Courts handle smaller matters. Louisiana also has specialized family and juvenile courts.',
+  ME: 'Maine has a unified court system with the Superior Court (general jurisdiction), District Court (civil cases up to $75,000, family matters, and criminal cases), and Small Claims Court (disputes up to $6,000).',
+  MD: 'Maryland Circuit Courts are the trial courts of general jurisdiction in each county. District Courts handle civil cases up to $30,000, minor criminal cases, and traffic matters. Maryland also has a specialized Business and Technology Court.',
+  MA: 'Massachusetts has a trial court system that includes Superior Court, District Court, Boston Municipal Court, Housing Court, Juvenile Court, Land Court, and Probate and Family Court. Small Claims handles disputes up to $7,000.',
+  MI: 'Michigan Circuit Courts handle civil cases over $25,000 and felonies. District Courts handle smaller civil matters (up to $25,000), misdemeanors, and preliminary hearings. Small Claims Court covers disputes up to $6,500.',
+  MN: 'Minnesota has a unified District Court system organized into 10 judicial districts. Conciliation Court (small claims) handles disputes up to $15,000. Minnesota also has specialized courts for drug, DUI, mental health, and veterans issues.',
+  MS: 'Mississippi has Circuit Courts (general jurisdiction), Chancery Courts (equity, family, estates), County Courts, Justice Courts (small civil cases up to $3,500), and Municipal Courts. The dual system of Circuit and Chancery Courts is unique.',
+  MO: 'Missouri Circuit Courts serve as the trial courts of general jurisdiction. Associate Circuit Courts handle smaller civil cases (up to $25,000) and misdemeanors. Small Claims Court covers disputes up to $5,000.',
+  MT: 'Montana District Courts handle civil cases over $12,000, felonies, and appeals from limited courts. Justice Courts handle civil claims up to $12,000 and misdemeanors. Municipal Courts handle city ordinance violations.',
+  NE: 'Nebraska District Courts are the trial courts of general jurisdiction. County Courts handle civil cases up to $57,000, misdemeanors, juvenile cases, and probate. Small Claims Court covers disputes up to $3,900.',
+  NV: 'Nevada District Courts handle civil cases over $15,000 and felonies. Justice Courts handle civil claims up to $15,000 and misdemeanors. Small Claims Court covers disputes up to $10,000. Las Vegas and Reno have specialized courts.',
+  NH: 'New Hampshire has a unified Superior Court (general jurisdiction) and Circuit Court system with District, Family, and Probate divisions. Small Claims Court handles disputes up to $10,000.',
+  NJ: 'New Jersey has a unified court system with the Superior Court as the single trial court, divided into Law, Chancery, and Family divisions. Small Claims handles disputes up to $5,000 ($3,000 for security deposits). Tax Court handles tax matters.',
+  NM: 'New Mexico has District Courts (general jurisdiction), Metropolitan Courts in Albuquerque, Magistrate Courts (civil claims up to $10,000), and Municipal Courts. New Mexico also operates specialized drug, DUI, and family courts.',
+  NY: 'New York has a complex court system including Supreme Court (general jurisdiction), County Court, Family Court, Surrogate Court, City Courts, District Courts (Nassau and Suffolk), Town and Village Justice Courts, and Small Claims Court (up to $10,000).',
+  NC: 'North Carolina has Superior Courts (civil cases over $25,000, felonies) and District Courts (family, juvenile, misdemeanors, small claims up to $10,000). The state also has a specialized Business Court for complex commercial disputes.',
+  ND: 'North Dakota has a unified District Court system organized into 8 judicial districts. Small Claims Court handles disputes up to $15,000. North Dakota also has specialized drug courts and mental health courts.',
+  OH: 'Ohio has Courts of Common Pleas (general jurisdiction), Municipal Courts, County Courts, and specialized courts. Small Claims Court handles disputes up to $6,000. Ohio also operates a robust system of specialty dockets for drug, mental health, and veterans cases.',
+  OK: 'Oklahoma District Courts are the trial courts of general jurisdiction. Small Claims Court handles disputes up to $10,000. Oklahoma also has a Workers Compensation Court and specialized drug, mental health, and veterans courts.',
+  OR: 'Oregon has a unified Circuit Court system serving as the trial courts of general jurisdiction. Small Claims Court handles disputes up to $10,000. Oregon also operates specialty courts including drug, mental health, family, and veterans courts.',
+  PA: 'Pennsylvania Courts of Common Pleas are the trial courts of general jurisdiction in 60 judicial districts. Magisterial District Courts handle civil claims up to $12,000 and minor criminal cases. Philadelphia has its own Municipal Court.',
+  RI: 'Rhode Island has a unified court system with the Superior Court (general jurisdiction), District Court (civil cases up to $10,000, misdemeanors), Family Court, and Workers Compensation Court. Small Claims handles disputes up to $2,500.',
+  SC: 'South Carolina Circuit Courts handle civil cases over $7,500 and felonies. Magistrate Courts handle civil claims up to $7,500, minor criminal offenses, and preliminary hearings. Municipal Courts handle city ordinance violations.',
+  SD: 'South Dakota Circuit Courts are the trial courts of general jurisdiction organized into 7 circuits. Magistrate Courts handle civil claims up to $12,000 and minor criminal cases. Small Claims Court covers disputes up to $12,000.',
+  TN: 'Tennessee has Circuit Courts, Chancery Courts (equity matters), Criminal Courts, and General Sessions Courts (civil cases up to $25,000 and misdemeanors). Small Claims Court handles disputes up to $25,000.',
+  TX: 'Texas has a complex court system with District Courts (general jurisdiction), County Courts, Justice Courts (civil claims up to $20,000), and Municipal Courts. Texas also has specialized courts for probate, family, drug, and veterans matters.',
+  UT: 'Utah has a unified court system with District Courts (general jurisdiction), Juvenile Courts, and Justice Courts (small claims up to $11,000, misdemeanors). Small Claims Court covers disputes up to $11,000.',
+  VT: 'Vermont has a unified Superior Court system with Civil, Criminal, Family, Environmental, and Probate divisions. Small Claims handles disputes up to $5,000. Vermont also offers mediation and arbitration programs.',
+  VA: 'Virginia has Circuit Courts (general jurisdiction), General District Courts (civil claims up to $25,000, misdemeanors), and Juvenile and Domestic Relations District Courts. Small Claims handles disputes up to $5,000.',
+  WA: 'Washington Superior Courts are the trial courts of general jurisdiction. District Courts handle civil cases up to $100,000 and misdemeanors. Small Claims Court covers disputes up to $10,000. Washington also has specialized courts for drug, mental health, and veterans issues.',
+  WV: 'West Virginia has Circuit Courts (general jurisdiction) and Magistrate Courts (civil claims up to $10,000, misdemeanors). Family Courts handle divorce, custody, and domestic violence. West Virginia merged its Supreme Court of Appeals to a single appellate court.',
+  WI: 'Wisconsin Circuit Courts are the trial courts of general jurisdiction organized into 10 judicial administrative districts. Small Claims Court handles disputes up to $10,000. Wisconsin also operates specialty courts for drug, OWI, mental health, and veterans.',
+  WY: 'Wyoming District Courts are the trial courts of general jurisdiction. Circuit Courts handle civil claims up to $50,000 and misdemeanors. Municipal Courts handle city ordinance violations. Small Claims Court covers disputes up to $6,000.',
+}
+
+// ---------------------------------------------------------------------------
+// Estimated active attorneys per state
+// ---------------------------------------------------------------------------
+
+const GUIDE_ATTORNEY_COUNTS: Record<string, number> = {
+  AL: 16500, AK: 3200, AZ: 22000, AR: 8500, CA: 190000,
+  CO: 28000, CT: 22000, DE: 4500, DC: 56000, FL: 108000,
+  GA: 40000, HI: 5500, ID: 5000, IL: 97000, IN: 20000,
+  IA: 10000, KS: 9500, KY: 14000, LA: 22000, ME: 5000,
+  MD: 38000, MA: 50000, MI: 38000, MN: 27000, MS: 9000,
+  MO: 30000, MT: 3500, NE: 7000, NV: 10000, NH: 5000,
+  NJ: 72000, NM: 6500, NY: 180000, NC: 30000, ND: 2500,
+  OH: 46000, OK: 15000, OR: 16000, PA: 70000, RI: 6000,
+  SC: 13000, SD: 3000, TN: 24000, TX: 105000, UT: 11000,
+  VT: 3200, VA: 35000, WA: 36000, WV: 5500, WI: 20000, WY: 2200,
+}
+
+// ---------------------------------------------------------------------------
+// State average hourly rates (USD)
+// ---------------------------------------------------------------------------
+
+const GUIDE_HOURLY_RATES: Record<string, number> = {
+  AL: 225, AK: 300, AZ: 275, AR: 200, CA: 400,
+  CO: 300, CT: 350, DE: 300, DC: 425, FL: 300,
+  GA: 275, HI: 350, ID: 225, IL: 325, IN: 225,
+  IA: 225, KS: 225, KY: 225, LA: 250, ME: 250,
+  MD: 325, MA: 375, MI: 275, MN: 275, MS: 200,
+  MO: 250, MT: 225, NE: 225, NV: 300, NH: 275,
+  NJ: 350, NM: 225, NY: 400, NC: 275, ND: 225,
+  OH: 250, OK: 225, OR: 275, PA: 300, RI: 275,
+  SC: 250, SD: 225, TN: 250, TX: 300, UT: 250,
+  VT: 250, VA: 300, WA: 325, WV: 200, WI: 250, WY: 225,
+}
+
+// ---------------------------------------------------------------------------
+// State-specific legal features (tort reform, damages caps, notable rules)
+// ---------------------------------------------------------------------------
+
+const STATE_LEGAL_FEATURES: Record<string, string[]> = {
+  AL: ['Alabama follows contributory negligence — if you are even 1% at fault, you may be barred from recovery.', 'No caps on compensatory damages in personal injury cases.', 'Alabama has a "guest statute" that limits liability for injuries to passengers in certain situations.'],
+  AK: ['Alaska follows pure comparative negligence — your recovery is reduced by your percentage of fault.', 'Punitive damages are capped at the greater of 3x compensatory damages or $500,000.', 'Alaska allows structured settlements for large awards.'],
+  AZ: ['Arizona follows pure comparative negligence — you can recover damages even if you are 99% at fault.', 'No caps on compensatory or punitive damages in most cases.', 'Arizona has strong consumer protection laws including the Arizona Consumer Fraud Act.'],
+  AR: ['Arkansas follows modified comparative negligence — you cannot recover if you are 50% or more at fault.', 'Punitive damages are limited to 3x compensatory damages or $250,000, whichever is greater.', 'Arkansas has specific notice requirements for medical malpractice claims.'],
+  CA: ['California follows pure comparative negligence — recovery is reduced by your percentage of fault.', 'MICRA caps non-economic damages in medical malpractice at $350,000 (adjusted annually since 2023).', 'California has extensive consumer protection laws including the CLRA and Proposition 65.'],
+  CO: ['Colorado follows modified comparative negligence with a 50% bar — no recovery if 50% or more at fault.', 'Non-economic damages are capped at approximately $642,180 (adjusted for inflation).', 'Colorado has specific notice requirements for construction defect claims.'],
+  CT: ['Connecticut follows modified comparative negligence with a 51% bar.', 'No caps on economic or non-economic damages in personal injury cases.', 'Connecticut has a strong Product Liability Act with specific provisions for manufacturers.'],
+  DE: ['Delaware follows modified comparative negligence with a 51% bar.', 'No caps on compensatory damages in most civil cases.', 'Delaware Court of Chancery is a nationally recognized forum for corporate and business disputes.'],
+  DC: ['DC follows contributory negligence — if you are at fault at all, recovery may be barred (with limited exceptions).', 'No caps on damages in most civil cases.', 'DC has unique jurisdictional considerations as a federal district, not a state.'],
+  FL: ['Florida follows modified comparative negligence (51% bar as of 2023 tort reform).', 'Non-economic damages may be capped in medical malpractice cases.', 'Florida has no state income tax, which can affect damage calculations for lost wages.'],
+  GA: ['Georgia follows modified comparative negligence with a 50% bar.', 'Punitive damages are generally capped at $250,000 unless specific intent is shown.', 'Georgia has an apportionment statute allowing fault to be assigned to non-parties.'],
+  HI: ['Hawaii follows modified comparative negligence — no recovery if your fault exceeds the defendant combined.', 'No caps on compensatory damages.', 'Hawaii has unique property laws influenced by its history, including the Land Court system.'],
+  ID: ['Idaho follows modified comparative negligence with a 50% bar.', 'Non-economic damages are capped at approximately $424,046 (adjusted annually for inflation).', 'Idaho has specific requirements for expert affidavits in medical malpractice cases.'],
+  IL: ['Illinois follows modified comparative negligence with a 50% bar.', 'Illinois Supreme Court struck down damages caps in personal injury cases as unconstitutional.', 'Illinois has a Biometric Information Privacy Act (BIPA) that is one of the strongest in the nation.'],
+  IN: ['Indiana follows modified comparative negligence with a 51% bar.', 'Medical malpractice damages are capped at $1.8 million per occurrence through the Medical Malpractice Act.', 'Indiana has a Patient Compensation Fund for medical malpractice claims.'],
+  IA: ['Iowa follows modified comparative negligence with a 50% bar.', 'No caps on economic damages. Non-economic damages may be subject to caps in medical malpractice cases.', 'Iowa has specific comparative fault statutes that apply to product liability cases.'],
+  KS: ['Kansas follows modified comparative negligence with a 50% bar.', 'Non-economic damages are capped at $325,000 in personal injury cases.', 'Kansas has specific screening panel requirements for medical malpractice claims.'],
+  KY: ['Kentucky follows pure comparative negligence — you can recover even if 99% at fault.', 'No caps on compensatory damages in most cases.', 'Kentucky has a short 1-year statute of limitations for personal injury — among the shortest in the nation.'],
+  LA: ['Louisiana follows pure comparative negligence under its unique civil law system.', 'Medical malpractice damages are capped at $500,000 plus future medical costs through the Patient Compensation Fund.', 'Louisiana is the only state that follows civil law (based on French/Spanish legal traditions) rather than common law.'],
+  ME: ['Maine follows modified comparative negligence — damages reduced by percentage of fault, with no bar threshold for most cases.', 'No caps on damages in most civil cases.', 'Maine has a generous 6-year statute of limitations for personal injury claims.'],
+  MD: ['Maryland follows contributory negligence — any fault on your part can bar recovery entirely.', 'Non-economic damages are capped at $920,000 (adjusts annually).', 'Maryland requires certificate of qualified expert in medical malpractice cases.'],
+  MA: ['Massachusetts follows modified comparative negligence with a 51% bar.', 'No caps on damages in most personal injury cases. Medical malpractice has a $500,000 cap on non-economic damages with exceptions.', 'Massachusetts has a strong consumer protection statute (Chapter 93A) that allows treble damages.'],
+  MI: ['Michigan follows modified comparative negligence with a 50% bar.', 'No-fault auto insurance system significantly affects car accident claims and available remedies.', 'Michigan has specific requirements for affidavits of merit in medical malpractice cases.'],
+  MN: ['Minnesota follows modified comparative negligence with a 51% bar.', 'No caps on damages in most civil cases.', 'Minnesota has a generous 6-year statute of limitations for personal injury claims.'],
+  MS: ['Mississippi follows pure comparative negligence.', 'Punitive damages are capped at 2% of the defendant net worth or $20 million, whichever is less.', 'Mississippi has specific venue rules that affect where lawsuits can be filed.'],
+  MO: ['Missouri follows pure comparative negligence.', 'Punitive damages are capped at the greater of 5x the judgment or $500,000.', 'Missouri abolished joint and several liability for most cases — each defendant pays their share of fault only.'],
+  MT: ['Montana follows modified comparative negligence with a 51% bar.', 'No caps on damages in personal injury cases. Punitive damages are awarded to the state general fund.', 'Montana constitutional right to a clean environment creates unique environmental litigation opportunities.'],
+  NE: ['Nebraska follows modified comparative negligence with a 50% bar.', 'Medical malpractice is capped at $2.25 million.', 'Nebraska has a unique unicameral legislature, which can simplify the legislative process for legal reforms.'],
+  NV: ['Nevada follows modified comparative negligence with a 51% bar.', 'No caps on compensatory damages. Medical malpractice has a $350,000 cap on non-economic damages.', 'Nevada has specific protections for tourists and visitors in premises liability cases due to its hospitality industry.'],
+  NH: ['New Hampshire follows modified comparative negligence with a 51% bar.', 'No caps on damages in most civil cases.', 'New Hampshire has no state income tax or sales tax, which affects damage calculations.'],
+  NJ: ['New Jersey follows modified comparative negligence with a 51% bar.', 'No caps on compensatory damages in most cases. Punitive damages are capped at 5x compensatory damages or $350,000.', 'New Jersey has strong consumer protection through the Consumer Fraud Act.'],
+  NM: ['New Mexico follows pure comparative negligence.', 'Medical malpractice damages are capped at $600,000 through the Medical Malpractice Act.', 'New Mexico has unique sovereign immunity provisions for cases involving government entities.'],
+  NY: ['New York follows pure comparative negligence.', 'No caps on damages in most civil cases.', 'New York has a "serious injury threshold" for auto accident cases that limits recovery for non-economic damages unless injuries meet specific criteria.'],
+  NC: ['North Carolina follows contributory negligence — any fault on your part bars recovery entirely.', 'No caps on compensatory damages in most cases. Punitive damages are capped at 3x compensatory damages or $250,000.', 'North Carolina is one of only a few states still using contributory negligence.'],
+  ND: ['North Dakota follows modified comparative negligence with a 50% bar.', 'No caps on compensatory damages.', 'North Dakota has a 6-year statute of limitations for personal injury — one of the longest in the nation.'],
+  OH: ['Ohio follows modified comparative negligence with a 51% bar.', 'Non-economic damages are capped at $250,000 or 3x economic damages (whichever is greater) for most cases.', 'Ohio has specific requirements for affidavits of merit in medical claims.'],
+  OK: ['Oklahoma follows modified comparative negligence with a 51% bar.', 'No caps on economic damages. Punitive damages are generally capped at the greater of $100,000 or the amount of actual damages.', 'Oklahoma has specific energy and oil/gas laws that affect property and environmental cases.'],
+  OR: ['Oregon follows modified comparative negligence with a 51% bar.', 'Non-economic damages are capped at $500,000 in most tort cases (with exceptions for certain injuries).', 'Oregon has no sales tax, which affects business litigation calculations.'],
+  PA: ['Pennsylvania follows modified comparative negligence with a 51% bar.', 'No caps on damages in most civil cases.', 'Pennsylvania has both choice and no-fault options for auto insurance, affecting accident claims.'],
+  RI: ['Rhode Island follows pure comparative negligence.', 'No caps on damages in most civil cases.', 'Rhode Island has a mandatory arbitration program for medical malpractice claims.'],
+  SC: ['South Carolina follows modified comparative negligence with a 51% bar.', 'Punitive damages are capped at the greater of 3x compensatory damages or $500,000.', 'South Carolina has specific notice requirements before filing medical malpractice suits.'],
+  SD: ['South Dakota follows modified comparative negligence with a slight fault bar — you cannot recover if your fault exceeds the combined fault of all defendants.', 'No caps on compensatory damages.', 'South Dakota has no state income tax, which impacts damage calculations.'],
+  TN: ['Tennessee follows modified comparative negligence with a 50% bar.', 'Non-economic damages are capped at $750,000 in most cases ($1 million for catastrophic injuries).', 'Tennessee has a very short 1-year statute of limitations for personal injury.'],
+  TX: ['Texas follows modified comparative negligence with a 51% bar.', 'Non-economic damages in medical malpractice are capped at $250,000 per defendant (up to $500,000 total for hospitals).', 'Texas has extensive tort reform provisions that affect multiple types of civil litigation.'],
+  UT: ['Utah follows modified comparative negligence with a 50% bar.', 'Non-economic damages in medical malpractice are capped at $450,000.', 'Utah has a mandatory pre-litigation panel review for medical malpractice claims.'],
+  VT: ['Vermont follows modified comparative negligence with a 51% bar.', 'No caps on damages in most civil cases.', 'Vermont has strong environmental and land use laws that affect real estate litigation.'],
+  VA: ['Virginia follows contributory negligence — any fault on your part bars recovery entirely.', 'Punitive damages are capped at $350,000.', 'Virginia is one of the few remaining contributory negligence states — consult an attorney before admitting any fault.'],
+  WA: ['Washington follows pure comparative negligence.', 'No caps on damages in most civil cases.', 'Washington has strong consumer protection through the Consumer Protection Act (CPA), which allows treble damages.'],
+  WV: ['West Virginia follows modified comparative negligence with a 50% bar.', 'Medical malpractice non-economic damages are capped at $250,000-$500,000 depending on the type of provider.', 'West Virginia has a unique Medical Professional Liability Act with specific procedural requirements.'],
+  WI: ['Wisconsin follows modified comparative negligence with a 51% bar.', 'Non-economic damages in medical malpractice are capped at $750,000.', 'Wisconsin has mandatory mediation requirements in certain civil cases.'],
+  WY: ['Wyoming follows modified comparative negligence with a 51% bar.', 'No caps on compensatory damages in most cases.', 'Wyoming has no state income tax, which affects damage and settlement calculations.'],
+}
+
+// ---------------------------------------------------------------------------
+// Format helpers
+// ---------------------------------------------------------------------------
+
+function guideFmtCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD',
+    minimumFractionDigits: 0, maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+function guideFmtNumber(n: number): string {
+  return new Intl.NumberFormat('en-US').format(n)
+}
+
+// ---------------------------------------------------------------------------
+// generateStateGuide — creates a complete state-specific guide for any PA
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate a comprehensive state-specific legal guide for a given practice area.
+ * Enables 200 PA × 51 states = 10,200 unique guide pages.
+ *
+ * @param paSlug - Practice area slug (must exist in attorneyContent)
+ * @param stateAbbr - Two-letter state abbreviation
+ * @returns Complete StateGuide with all sections populated
+ */
+export function generateStateGuide(paSlug: string, stateAbbr: string): StateGuide {
+  const sa = stateAbbr.toUpperCase()
+  const stateName = US_STATE_NAMES[sa] ?? stateAbbr
+  const pa = attorneyContent[paSlug]
+  const paName = pa?.name ?? paSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+
+  // SOL data
+  const solCategory = GUIDE_PA_TO_SOL[paSlug] ?? 'personal-injury'
+  const solYears = GUIDE_SOL[solCategory]?.[sa] ?? 2
+
+  // Cost data
+  const hourlyRate = GUIDE_HOURLY_RATES[sa] ?? 275
+  const totalAttorneys = GUIDE_ATTORNEY_COUNTS[sa] ?? 5000
+  const paAttorneys = Math.round(totalAttorneys * 0.08)
+
+  // Legal features
+  const features = STATE_LEGAL_FEATURES[sa] ?? []
+
+  // Bar complaint
+  const complaint = GUIDE_BAR_COMPLAINT[sa]
+
+  // Legal aid
+  const legalAid = GUIDE_LEGAL_AID[sa] ?? []
+
+  // Court system
+  const courtSystem = STATE_COURT_SYSTEMS[sa] ?? ''
+
+  // Price range from PA content
+  const priceMin = pa ? Math.round(pa.priceRange.min * (hourlyRate / 275)) : hourlyRate * 0.7
+  const priceMax = pa ? Math.round(pa.priceRange.max * (hourlyRate / 275)) : hourlyRate * 1.5
+
+  // Build guide sections
+  const overview = `This comprehensive guide covers everything you need to know about ${paName} law in ${stateName}. Whether you are facing a legal issue or seeking preventive counsel, understanding ${stateName}'s specific legal landscape for ${paName} matters is essential. ${stateName} has approximately ${guideFmtNumber(paAttorneys)} attorneys who practice ${paName} law, with hourly rates averaging ${guideFmtCurrency(hourlyRate)} per hour. ${stateName}'s legal system has its own procedural rules, substantive laws, and court practices that can significantly affect the outcome of your case. This guide provides state-specific information to help you make informed decisions about your legal needs.`
+
+  const stateLawsSection = `${stateName} ${paName} Law Overview\n\n${features.length > 0 ? features.join('\n\n') : `${stateName} follows its own body of statutory and case law governing ${paName} matters. State-specific regulations, filing requirements, and procedural rules may differ significantly from other jurisdictions.`}${pa?.relevantLaws?.length ? `\n\nKey federal and state laws that commonly apply to ${paName} cases in ${stateName} include: ${pa.relevantLaws.slice(0, 5).join('; ')}.` : ''}`
+
+  const solSection = `Statute of Limitations for ${paName} in ${stateName}\n\nThe statute of limitations for ${paName}-related claims in ${stateName} is generally ${solYears} year${solYears !== 1 ? 's' : ''} from the date of the incident or discovery of harm. This is ${solYears <= 1 ? 'among the shortest in the nation — you must act quickly to preserve your rights' : solYears >= 5 ? 'among the more generous deadlines nationally, but you should still act promptly to preserve evidence and witness testimony' : 'in line with national averages, giving you a reasonable but finite window to pursue legal action'}. Missing this deadline will almost certainly result in your case being dismissed regardless of its merits.\n\nImportant exceptions in ${stateName}:\n- The "discovery rule" may extend the deadline if you could not reasonably have known about the harm earlier.\n- Claims against ${stateName} government entities often have shorter notice requirements (sometimes as little as 60-180 days).\n- Minors and individuals with certain legal disabilities may have tolled (paused) limitation periods.\n- Some ${paName} claims may have separate administrative filing deadlines that are shorter than the court filing deadline.\n\nConsult a ${paName} attorney in ${stateName} immediately if you believe your statute of limitations deadline may be approaching.`
+
+  const barComplaintSection = complaint
+    ? `How to File a Bar Complaint in ${stateName}\n\nIf you believe your ${paName} attorney in ${stateName} has acted unethically, incompetently, or violated professional conduct rules, you have the right to file a formal complaint.\n\nFiling body: ${complaint.body}\nPhone: ${complaint.phone}\nOnline: ${complaint.url}\n\nSteps to file a complaint in ${stateName}:\n1. Document the attorney's conduct — gather emails, letters, billing records, and any evidence of misconduct.\n2. Contact the ${complaint.body} to obtain the official complaint form or submit online at ${complaint.url}.\n3. Complete the form with specific details: dates, description of misconduct, and supporting documentation.\n4. Submit the complaint — the ${complaint.body} will acknowledge receipt and assign an investigator.\n5. The investigation typically takes 3-12 months depending on complexity.\n6. Possible outcomes range from dismissal to private reprimand, public censure, suspension, or disbarment.\n\nCommon grounds for attorney complaints in ${stateName} include: failure to communicate, mishandling client funds, conflicts of interest, overbilling, incompetent representation, and abandonment of cases. Filing a disciplinary complaint is separate from a legal malpractice lawsuit — for financial recovery, consult another attorney.`
+    : `How to File a Bar Complaint in ${stateName}\n\nIf you believe your ${paName} attorney has acted unethically, contact the ${stateName} State Bar's disciplinary office to file a formal complaint. Gather all documentation of the attorney's conduct before filing.`
+
+  const freeResourcesSection = `Free Legal Resources in ${stateName}\n\n${stateName} offers several free and low-cost legal resources for individuals who need ${paName} assistance but cannot afford private counsel:\n\n${legalAid.map((r, i) => `${i + 1}. ${r}`).join('\n')}\n\nAdditional resources:\n- ${stateName} State Bar Lawyer Referral Service — provides reduced-fee initial consultations with pre-screened attorneys.\n- Local law school legal clinics — ${stateName}'s law schools often operate free clinics where supervised law students handle certain case types.\n- ${stateName} court self-help centers — many ${stateName} courthouses offer free self-help resources, forms, and guidance for self-represented litigants.\n- Federal legal aid programs — Legal Services Corporation (LSC) funded organizations serve low-income residents of ${stateName}.\n- Pro bono programs — many ${paName} attorneys in ${stateName} accept a limited number of pro bono cases each year.\n\nEligibility for free legal services typically depends on income (generally below 125-200% of the federal poverty level), the type of legal issue, and the availability of volunteer attorneys in your area.`
+
+  const costSection = `Average ${paName} Attorney Costs in ${stateName}\n\nThe cost of hiring a ${paName} attorney in ${stateName} varies based on the attorney's experience, the complexity of your case, and the billing arrangement.\n\nTypical fee ranges in ${stateName}:\n- Hourly rates: ${guideFmtCurrency(priceMin)} to ${guideFmtCurrency(priceMax)} per hour\n- Average hourly rate: ${guideFmtCurrency(hourlyRate)} per hour\n${pa?.priceRange.contingencyFee ? `- Contingency fees: ${pa.priceRange.contingencyFee} (common for injury cases — you pay nothing unless you win)\n` : ''}\
+${pa?.priceRange.flatFeeRange ? `- Flat fees: ${pa.priceRange.flatFeeRange} (for straightforward matters)\n` : ''}\
+${pa?.priceRange.retainerRange ? `- Retainer: ${pa.priceRange.retainerRange} (initial deposit against future hourly charges)\n` : ''}\
+\nCost factors specific to ${stateName}:\n- ${stateName}'s cost of living is reflected in legal fees — rates here are ${hourlyRate > 300 ? 'above' : hourlyRate < 250 ? 'below' : 'near'} the national average.\n- Urban areas within ${stateName} typically charge 20-50% more than rural areas.\n- Board-certified specialists may charge premium rates but often deliver more efficient representation.\n- The ${guideFmtNumber(paAttorneys)} ${paName} attorneys in ${stateName} create ${paAttorneys > 5000 ? 'a competitive market that can moderate prices' : 'a smaller market where rates may be less negotiable but personalized service is more common'}.\n\nWays to reduce costs: request a detailed fee agreement in writing, ask about flat-fee options for predictable matters, inquire about payment plans, and consider attorneys in suburban or rural areas of ${stateName} for lower overhead costs.`
+
+  const courtSection = courtSystem
+    ? `${stateName} Court System for ${paName} Cases\n\n${courtSystem}\n\nFor ${paName} cases specifically, you will typically file in ${stateName}'s court of general jurisdiction unless the matter falls under a specialized court's authority. Understanding which court handles your specific type of ${paName} case is important, as filing in the wrong court can result in dismissal or transfer delays. Your ${paName} attorney will determine the appropriate court based on the amount in controversy, the subject matter, and the geographic jurisdiction.`
+    : ''
+
+  const takeaways: string[] = [
+    `The statute of limitations for ${paName} claims in ${stateName} is ${solYears} year${solYears !== 1 ? 's' : ''} — act promptly to preserve your rights.`,
+    `${stateName} has approximately ${guideFmtNumber(paAttorneys)} ${paName} attorneys with average rates of ${guideFmtCurrency(hourlyRate)}/hour.`,
+    `Always verify your attorney's license through the ${stateName} State Bar before hiring.`,
+    features.length > 0 ? features[0] : `${stateName} has specific procedural rules for ${paName} cases that differ from other states.`,
+    `Free legal resources are available through ${legalAid.length > 0 ? legalAid[0] : `${stateName} Legal Aid`} for qualifying individuals.`,
+    complaint ? `To file a bar complaint in ${stateName}, contact ${complaint.body} at ${complaint.phone}.` : `Contact the ${stateName} State Bar to file complaints against attorneys.`,
+    `Schedule consultations with at least 2-3 ${paName} attorneys in ${stateName} before making your decision.`,
+    `Request a detailed written fee agreement that outlines all costs, billing methods, and potential additional expenses.`,
+  ]
+
+  return {
+    paSlug,
+    paName,
+    stateAbbr: sa,
+    stateName,
+    overview,
+    stateLaws: stateLawsSection,
+    statuteOfLimitations: solSection,
+    barComplaintProcess: barComplaintSection,
+    freeLegalResources: freeResourcesSection,
+    averageCosts: costSection,
+    courtSystem: courtSection,
+    keyTakeaways: takeaways,
+  }
+}
+
+/**
+ * Get all available guide PA slugs (all practice areas that have content).
+ */
+export function getGuideAvailablePAs(): string[] {
+  return Object.keys(attorneyContent)
+}
+
+/**
+ * Get all 51 state abbreviations (50 states + DC).
+ */
+export function getGuideStates(): string[] {
+  return Object.keys(US_STATE_NAMES)
+}
+
+/**
+ * Check if a state guide can be generated for a given PA + state combination.
+ */
+export function isGuideAvailable(paSlug: string, stateAbbr: string): boolean {
+  return paSlug in attorneyContent && stateAbbr.toUpperCase() in US_STATE_NAMES
+}

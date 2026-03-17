@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent, getTasksForService } from '@/lib/data/trade-content'
 import { getCityBySlug } from '@/lib/data/usa'
+import { resolveZipToCity } from '@/lib/location-resolver'
 import { REVALIDATE } from '@/lib/cache'
 
 // Return a minimal seed set (NOT empty — empty array in a child of a parent
@@ -45,7 +46,7 @@ export default async function PricingServiceTaskCityPage({
 }) {
   const { service, city: villeSlug, task: taskSlug } = await params
   const trade = tradeContent[service]
-  const villeData = getCityBySlug(villeSlug)
+  const villeData = getCityBySlug(villeSlug) || await resolveZipToCity(villeSlug)
   if (!trade || !villeData) notFound()
 
   const tasks = getTasksForService(service)

@@ -121,9 +121,10 @@ android/                  # Capacitor app (WebView wrapper)
 | `attorney_specialties` | attorney_id, specialty_id, is_primary, years_experience | Many-to-many |
 | `states` | id, name, slug, abbreviation, fips_code, bar_association_url | 50 states + DC + territories |
 | `counties` | id, name, slug, state_id, fips_code | ~3,244 counties |
-| `locations_us` | id, name, slug, state_id, county_id, population, latitude, longitude, geo | Cities |
+| `locations_us` | id, name, slug, state_id, county_id, population, latitude, longitude, geo, census_data (JSONB) | Cities + ACS demographics (migration 403) |
 | `zip_codes` | id, code, location_id, state_id, latitude, longitude, geo | 41K+ ZIP codes (separate table) |
-| `courthouses` | id, name, slug, court_type, state_id, county_id, courtlistener_id, pacer_court_id | Federal + state courts |
+| `courthouses` | id, name, slug, court_type, state_id, county_id, location_id, courtlistener_id, pacer_court_id | Federal + state courts |
+| `statute_of_limitations` | id, state_code, specialty_slug, years, exceptions, discovery_rule, description, source_url | SOL by state × practice area (migration 403) |
 | `attorney_courthouses` | attorney_id, courthouse_id | Many-to-many |
 | `attorney_claims` | id, attorney_id, user_id, bar_number_provided, bar_state_provided, status | Bar verification flow |
 | `case_results` | id, attorney_id, case_type, outcome, amount, court_id | Win rate / settlement source |
@@ -348,6 +349,9 @@ This avoids fighting pagination (ColdFusion sessions, AJAX tokens) and avoids pa
 | `oh-attorneys.ts` | OH Supreme Court | ~37K | Blocked (use PIA request) |
 | `uspto-attorneys.ts` | USPTO FY25 Roster | ~52K | Direct ZIP download (free) |
 | `link-attorneys-fast.ts` | — | — | Link attorneys → cities by address |
+| `statute-of-limitations.ts` | Justia + Nolo + state codes | ~3,825 | SOL data: 75 PAs × 51 states (--phase 1 for 510) |
+| `census-data.ts` | Census Bureau ACS 5-year | ~32K | Demographics → locations_us.census_data JSONB |
+| `courtlistener-courts-v2.ts` | CourtListener API v4 | ~400+ | Enrich courthouses: link to locations/counties |
 | `run-all.ts` | — | — | Master orchestrator |
 
 ### Running Ingestion

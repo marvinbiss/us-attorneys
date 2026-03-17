@@ -12,6 +12,7 @@ import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import type { Location as LocationType } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
+import { resolveZipToCity, resolveZipToLocation } from '@/lib/location-resolver'
 
 export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
@@ -126,7 +127,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!esEntry) return { title: 'No Encontrado', robots: { index: false, follow: false } }
 
   const enSlug = esEntry.enSlug
-  const fallbackCity = getCityBySlug(ciudad)
+  const fallbackCity = getCityBySlug(ciudad) || await resolveZipToCity(ciudad)
   if (!fallbackCity) return { title: 'No Encontrado', robots: { index: false, follow: false } }
 
   const locationName = fallbackCity.name
@@ -170,7 +171,7 @@ export default async function CostoPage({ params }: PageProps) {
   if (!esEntry) notFound()
 
   const enSlug = esEntry.enSlug
-  const location = cityToLocation(ciudad)
+  const location = cityToLocation(ciudad) || await resolveZipToLocation(ciudad)
   if (!location) notFound()
 
   // Verify specialty exists

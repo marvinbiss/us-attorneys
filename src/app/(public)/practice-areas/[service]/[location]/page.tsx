@@ -20,6 +20,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { getAttorneyUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
 import { practiceAreas as staticPracticeAreas, cities, getCityBySlug, getNearbyCities, getCitiesByState, getStateByCode } from '@/lib/data/usa'
+import { resolveZipToCity, getNearbyZipCodes, isZipSlug } from '@/lib/location-resolver'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -95,6 +96,15 @@ function cityToLocation(slug: string): LocationType | null {
     is_active: true,
     created_at: '',
   }
+}
+
+/** Resolve city data for content generation — supports both city slugs and ZIP slugs */
+async function resolveCityData(slug: string) {
+  // Try static city first (fast, no DB)
+  const staticCity = getCityBySlug(slug)
+  if (staticCity) return staticCity
+  // ZIP slug — resolve from DB
+  return resolveZipToCity(slug)
 }
 
 // slugify imported from '@/lib/utils'
@@ -381,7 +391,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   }
 
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
-  const cityData = getCityBySlug(locationSlug)
+  const cityData = await resolveCityData(locationSlug)
   const locationContent = cityData
     ? generateLocationContent(specialtySlug, service.name, cityData, providers.length, locationData)
     : null
@@ -432,7 +442,9 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
       }).filter(Boolean) as { slug: string; name: string; icon: string }[]
     : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
-  const nearbyCities = getNearbyCities(locationSlug, 12)
+  const nearbyCities = isZipSlug(locationSlug)
+    ? await getNearbyZipCodes(locationSlug, 12)
+    : getNearbyCities(locationSlug, 12)
   const deptCities = location.department_code
     ? getCitiesByState(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
     : []
