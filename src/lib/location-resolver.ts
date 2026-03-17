@@ -4,7 +4,7 @@
 import type { City } from '@/lib/data/usa'
 import type { Location } from '@/types'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
-import { logger } from '@/lib/logger'
+import { dbLogger } from '@/lib/logger'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
@@ -94,7 +94,7 @@ export async function resolveZipToCity(slug: string): Promise<City | null> {
           metroArea: '',
         } satisfies City
       } catch (err) {
-        logger.warn('[resolveZipToCity] Failed for', { slug, error: err instanceof Error ? err.message : err })
+        dbLogger.warn('[resolveZipToCity] Failed for', { slug, error: err instanceof Error ? err.message : err })
         return null
       }
     },
@@ -182,7 +182,7 @@ export async function getNearbyZipCodes(slug: string, limit: number = 8): Promis
             metroArea: '',
           })) satisfies City[]
       } catch (err) {
-        logger.warn('[getNearbyZipCodes] Failed', { error: err instanceof Error ? err.message : err })
+        dbLogger.warn('[getNearbyZipCodes] Failed', { error: err instanceof Error ? err.message : err })
         return []
       }
     },

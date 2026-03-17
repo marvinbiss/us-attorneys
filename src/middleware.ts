@@ -4,36 +4,79 @@ import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from
 import { logger } from '@/lib/logger'
 
 /**
- * Middleware v3 — performance-optimized
+ * Middleware v4 — security-hardened + performance-optimized
  * - Session refresh (with validation cache)
  * - Auth guard for private routes
  * - URL canonicalization
- * - CSP header with per-request nonce (other security headers in next.config.js)
+ * - Full security headers on ALL dynamic responses (defense-in-depth on top of next.config.js)
+ * - CSP header with per-request nonce
  * - Rate limiting for API routes (Upstash Redis in production, in-memory fallback in dev)
  */
 
-// Pre-computed CSP parts — only nonce changes per request
-const CSP_PREFIX = "default-src 'self'; script-src 'self' 'nonce-"
-const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com; " +
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-  "font-src 'self' https://fonts.gstatic.com data:; " +
-  "img-src 'self' data: blob: https: http:; " +
-  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; " +
-  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org; " +
-  "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+const IS_DEV = process.env.NODE_ENV === 'development'
 
-// CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
-function addCspHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
+// ---------------------------------------------------------------------------
+// Content-Security-Policy — pre-computed parts (only nonce changes per request)
+// ---------------------------------------------------------------------------
+
+/** Build CSP string. In development, adds 'unsafe-eval' for Next.js HMR/Fast Refresh. */
+function buildCSP(nonce: string): string {
+  const scriptSrc = [
+    "'self'",
+    `'nonce-${nonce}'`,
+    "'strict-dynamic'",
+    'https://js.stripe.com',
+    'https://www.googletagmanager.com',
+    'https://www.google-analytics.com',
+    'https://googleads.g.doubleclick.net',
+    'https://www.googleadservices.com',
+    ...(IS_DEV ? ["'unsafe-eval'"] : []),
+  ].join(' ')
+
+  return [
+    "default-src 'self'",
+    `script-src ${scriptSrc}`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: blob: https: http:",
+    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io" + (IS_DEV ? ' ws://localhost:* http://localhost:*' : ''),
+    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    'upgrade-insecure-requests',
+  ].join('; ')
+}
+
+// ---------------------------------------------------------------------------
+// Security headers — applied to ALL dynamic responses as defense-in-depth.
+// These duplicate next.config.js headers() which are applied at CDN edge;
+// the middleware layer ensures coverage for streamed / dynamic responses
+// that might bypass the static headers layer.
+// ---------------------------------------------------------------------------
+
+function addSecurityHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
   const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
-  const isDev = process.env.NODE_ENV === 'development'
 
-  if (isDev || isCapacitor) {
-    return response
+  // Always set non-CSP security headers (lightweight, no reason to skip)
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-XSS-Protection', '1; mode=block')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self), payment=(self)')
+
+  // HSTS — only in production (avoid locking localhost into HTTPS)
+  if (!IS_DEV) {
+    response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
   }
 
-  response.headers.set('Content-Security-Policy', CSP_PREFIX + nonce + CSP_SUFFIX)
-  response.headers.set('x-nonce', nonce)
+  // CSP — skip for Capacitor (WebView has its own CSP constraints)
+  if (!isCapacitor) {
+    response.headers.set('Content-Security-Policy', buildCSP(nonce))
+    response.headers.set('x-nonce', nonce)
+  }
 
   return response
 }
@@ -192,7 +235,7 @@ export async function middleware(request: NextRequest) {
             headers: {
               'Content-Type': 'application/json',
               'Retry-After': String(retryAfter),
-              'X-RateLimit-Limit': String(rateLimitConfig.max),
+              'X-RateLimit-Limit': String(rateLimitConfig.maxRequests),
               'X-RateLimit-Remaining': '0',
               'X-RateLimit-Reset': String(result.resetTime),
             },
@@ -361,7 +404,7 @@ export async function middleware(request: NextRequest) {
     )
   }
 
-  return addCspHeaders(response, request, nonce)
+  return addSecurityHeaders(response, request, nonce)
 }
 
 export const config = {

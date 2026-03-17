@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, DollarSign, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, DollarSign, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X, Video } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { getSupabaseClient } from '@/lib/supabase/client'
 
 interface AttorneySidebarProps {
-  activePage?: 'dashboard' | 'leads' | 'received-cases' | 'calendar' | 'messages' | 'portfolio' | 'statistics' | 'reviews-received' | 'profile' | 'subscription'
+  activePage?: 'dashboard' | 'leads' | 'received-cases' | 'calendar' | 'bookings' | 'messages' | 'portfolio' | 'statistics' | 'reviews-received' | 'profile' | 'subscription'
   newCasesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
@@ -38,6 +38,7 @@ const navSections: NavSection[] = [
       { key: 'received-cases', href: '/attorney-dashboard/received-cases', icon: FileText, label: 'Received requests' },
       { key: 'leads', href: '/attorney-dashboard/leads', icon: Inbox, label: 'Opportunities' },
       { key: 'calendar', href: '/attorney-dashboard/calendar', icon: Calendar, label: 'Calendar' },
+      { key: 'bookings', href: '/attorney-dashboard/bookings', icon: Video, label: 'Bookings' },
       { key: 'messages', href: '/attorney-dashboard/messages', icon: MessageSquare, label: 'Messages' },
     ],
   },

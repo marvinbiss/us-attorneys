@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, Video } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { getSupabaseClient } from '@/lib/supabase/client'
 
 interface ClientSidebarProps {
-  activePage?: 'my-cases' | 'messages' | 'my-reviews' | 'settings' | 'invoices'
+  activePage?: 'my-cases' | 'consultations' | 'messages' | 'my-reviews' | 'settings' | 'invoices'
   unreadMessagesCount?: number
 }
 
@@ -39,6 +39,15 @@ export default function ClientSidebar({ activePage = 'my-cases', unreadMessagesC
         >
           <FileText className="w-5 h-5" />
           My requests
+        </Link>
+        <Link
+          href="/client-dashboard/consultations"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+            activePage === 'consultations' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Video className="w-5 h-5" />
+          Consultations
         </Link>
         <Link
           href="/client-dashboard/messages"

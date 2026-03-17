@@ -13,6 +13,7 @@ import { generateCityContent, hashCode } from '@/lib/seo/location-content'
 import problems from '@/lib/data/problems'
 import { REVALIDATE } from '@/lib/cache'
 import { resolveZipToCity } from '@/lib/location-resolver'
+import CityDemographics from '@/components/seo/CityDemographics'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -358,6 +359,14 @@ export default async function VillePage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* ─── DEMOGRAPHICS / LEGAL MARKET OVERVIEW ──────── */}
+        <CityDemographics
+          cityName={cityInfo.name}
+          stateCode={cityInfo.stateCode}
+          stateName={cityInfo.stateName}
+          population={cityInfo.population}
+        />
 
         {/* ─── SEO CONTENT: SERVICES & TIPS ─────────────── */}
         <section className="mb-16">

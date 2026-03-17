@@ -8,7 +8,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { signInSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
-import { logger } from '@/lib/logger'
+import { authLogger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
@@ -17,6 +18,15 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    const rl = await rateLimit(request, RATE_LIMITS.auth)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        { status: 429 }
+      )
+    }
+
     // Validate environment
     if (!supabaseUrl || !supabaseAnonKey) {
       return NextResponse.json(
@@ -136,7 +146,7 @@ export async function POST(request: Request) {
 
     return response
   } catch (error) {
-    logger.error('Signin error:', error)
+    authLogger.error('Signin error:', error)
     return NextResponse.json(
       createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during connection'),
       { status: 500 }

@@ -259,6 +259,170 @@ export const emailTemplates = {
     `
   }),
 
+  // Video booking confirmation for client
+  bookingConfirmationClient: (clientName: string, attorneyName: string, specialty: string, date: string, time: string, dailyUrl: string): EmailTemplate => ({
+    subject: `Your video consultation with ${attorneyName} is confirmed`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
+            .info { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; margin: 20px 0; }
+            .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Booking Confirmed</h1>
+            </div>
+            <div class="content">
+              <p>Hello ${clientName},</p>
+              <p>Your video consultation has been confirmed. Here are the details:</p>
+
+              <div class="info">
+                <p><strong>Attorney:</strong> ${attorneyName}</p>
+                <p><strong>Practice Area:</strong> ${specialty}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Time:</strong> ${time}</p>
+              </div>
+
+              <p>When it's time for your consultation, click the button below to join the video call:</p>
+
+              <p style="text-align: center;">
+                <a href="${dailyUrl}" class="button">
+                  Join Video Consultation
+                </a>
+              </p>
+
+              <p style="color: #666; font-size: 13px;">
+                Please join 2-3 minutes before your scheduled time. Make sure your camera and microphone are working properly.
+              </p>
+            </div>
+            <div class="footer">
+              <p>US Attorneys - Find qualified attorneys near you</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+  }),
+
+  // Video booking notification for attorney
+  bookingNotificationAttorney: (attorneyName: string, clientName: string, clientEmail: string, specialty: string, date: string, time: string, notes: string, dashboardUrl: string): EmailTemplate => ({
+    subject: `New video consultation booked by ${clientName}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
+            .info { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .notes { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 4px; margin: 15px 0; }
+            .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; margin: 20px 0; }
+            .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>New Video Consultation</h1>
+            </div>
+            <div class="content">
+              <p>Hello ${attorneyName},</p>
+              <p>A new video consultation has been booked with you.</p>
+
+              <div class="info">
+                <p><strong>Client:</strong> ${clientName}</p>
+                <p><strong>Email:</strong> ${clientEmail}</p>
+                <p><strong>Practice Area:</strong> ${specialty}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Time:</strong> ${time}</p>
+              </div>
+
+              ${notes ? `
+              <div class="notes">
+                <p><strong>Client Notes:</strong></p>
+                <p>${notes}</p>
+              </div>
+              ` : ''}
+
+              <p style="text-align: center;">
+                <a href="${dashboardUrl}" class="button">
+                  View in Dashboard
+                </a>
+              </p>
+            </div>
+            <div class="footer">
+              <p>US Attorneys - Find qualified attorneys near you</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+  }),
+
+  // 1-hour reminder before video consultation
+  bookingReminder: (name: string, attorneyName: string, date: string, time: string, dailyUrl: string): EmailTemplate => ({
+    subject: `Reminder: Video consultation with ${attorneyName} in 1 hour`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
+            .info { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; margin: 20px 0; }
+            .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Consultation in 1 Hour</h1>
+            </div>
+            <div class="content">
+              <p>Hello ${name},</p>
+              <p>This is a reminder that your video consultation is starting soon.</p>
+
+              <div class="info">
+                <p><strong>Attorney:</strong> ${attorneyName}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Time:</strong> ${time}</p>
+              </div>
+
+              <p>Please make sure you are in a quiet place with a stable internet connection.</p>
+
+              <p style="text-align: center;">
+                <a href="${dailyUrl}" class="button">
+                  Join Video Consultation
+                </a>
+              </p>
+
+              <p style="color: #666; font-size: 13px;">
+                We recommend joining 2-3 minutes early to test your camera and microphone.
+              </p>
+            </div>
+            <div class="footer">
+              <p>US Attorneys - Find qualified attorneys near you</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+  }),
+
   // Password reset
   passwordReset: (name: string, resetLink: string): EmailTemplate => ({
     subject: 'Password Reset - US Attorneys',

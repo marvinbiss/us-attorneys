@@ -98,6 +98,12 @@ const AttorneyContactCard = dynamic(
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
+// Video consultation booking widget
+const BookingWidget = dynamic(
+  () => import('@/components/booking/BookingWidget'),
+  { loading: () => <SectionSkeleton height="h-80" /> }
+)
+
 interface SimilarAttorney {
   id: string
   stable_id?: string
@@ -268,6 +274,13 @@ export default function AttorneyPageClient({
               <section className="lg:hidden" aria-label="Contact this attorney">
                 <AttorneyContactCard attorney={attorney} />
               </section>
+              <section className="lg:hidden" aria-label="Book a video consultation">
+                <BookingWidget
+                  attorneyId={attorneyId}
+                  attorneyName={attorney.business_name || displayName}
+                  specialty={attorney.specialty}
+                />
+              </section>
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Claim this profile">
                   <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />
@@ -297,6 +310,11 @@ export default function AttorneyPageClient({
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Contact information">
               <div className="space-y-6 sticky top-20">
                 <AttorneySidebar attorney={attorney} />
+                <BookingWidget
+                  attorneyId={attorneyId}
+                  attorneyName={attorney.business_name || displayName}
+                  specialty={attorney.specialty}
+                />
                 <AttorneyProfileStrength attorney={attorney} />
                 {!isClaimed && (
                   <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />

@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { getCityBySlug as getCityBySlugImport } from '@/lib/data/usa'
 import { isZipSlug, extractZipCode, resolveZipToLocation } from '@/lib/location-resolver'
-import { logger } from '@/lib/logger'
+import { dbLogger } from '@/lib/logger'
 import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
 
 /**
@@ -106,7 +106,7 @@ async function retryWithBackoff<T>(
         throw err
       }
       const delay = baseDelayMs * Math.pow(2, attempt) + Math.random() * 300
-      logger.warn(
+      dbLogger.warn(
         `[retryWithBackoff] ${label} failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${Math.round(delay)}ms...`,
       )
       await new Promise((r) => setTimeout(r, delay))
@@ -649,7 +649,7 @@ export async function getAttorneysByServiceAndLocation(
             `getAttorneysByServiceAndLocation:zip(${specialtySlug}, ${zipCode})`,
           )
         } catch (err) {
-          logger.error(`[getAttorneysByServiceAndLocation] ZIP query FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+          dbLogger.error(`[getAttorneysByServiceAndLocation] ZIP query FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
           throw err
         }
       }
@@ -677,7 +677,7 @@ export async function getAttorneysByServiceAndLocation(
               .range(offset, offset + limit - 1)
 
             if (directError) {
-              logger.warn(`[getAttorneysByServiceAndLocation] primary query error for ${specialtySlug}/${locationSlug}:`, { error: directError.message })
+              dbLogger.warn(`[getAttorneysByServiceAndLocation] primary query error for ${specialtySlug}/${locationSlug}:`, { error: directError.message })
             }
 
             if (!directError && direct && direct.length > 0) return direct as unknown as AttorneyListRow[]
@@ -689,7 +689,7 @@ export async function getAttorneysByServiceAndLocation(
       } catch (err) {
         // Re-throw so ISR keeps stale cached page instead of caching empty results.
         // Page component catches this and renders gracefully on first cold visit.
-        logger.error(`[getAttorneysByServiceAndLocation] FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+        dbLogger.error(`[getAttorneysByServiceAndLocation] FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
         throw err
       }
     },
@@ -846,7 +846,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
             `getAttorneysByLocation:zip(${zipCode})`,
           )
         } catch (err) {
-          logger.error(`[getAttorneysByLocation] ZIP FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+          dbLogger.error(`[getAttorneysByLocation] ZIP FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
           throw err
         }
       },
@@ -882,7 +882,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
           `getAttorneysByLocation(${locationSlug})`,
         )
       } catch (err) {
-        logger.error(`[getAttorneysByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+        dbLogger.error(`[getAttorneysByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
         throw err
       }
     },

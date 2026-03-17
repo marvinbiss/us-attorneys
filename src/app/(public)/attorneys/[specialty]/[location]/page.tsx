@@ -26,6 +26,7 @@ import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import StatuteOfLimitations from '@/components/seo/StatuteOfLimitations'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import type { LocationData } from '@/lib/data/location-data'
@@ -541,6 +542,13 @@ export default async function AttorneyDirectoryPage({ params }: PageProps) {
         service={service}
         location={location}
         specialtySlug={specialtySlug}
+      />
+
+      <StatuteOfLimitations
+        specialtySlug={specialtySlug}
+        specialtyName={service.name}
+        stateCode={location.department_code || ''}
+        stateName={location.department_name || ''}
       />
 
       <CrossLinks

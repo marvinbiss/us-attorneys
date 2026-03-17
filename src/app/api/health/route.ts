@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createApiHandler } from '@/lib/api/handler'
-import { logger } from '@/lib/logger'
+import { apiLogger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -94,7 +94,7 @@ export const GET = createApiHandler(async () => {
   const totalLatency = Date.now() - startTime
 
   if (overallStatus !== 'healthy') {
-    logger.warn('Health check degraded', { overallStatus, checks, totalLatency })
+    apiLogger.warn('Health check degraded', { overallStatus, checks, totalLatency })
   }
 
   const appVersion = env?.NEXT_PUBLIC_APP_VERSION ?? process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0'

@@ -8,6 +8,7 @@ import { createClient } from '@supabase/supabase-js'
 import { signUpSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus as _getHttpStatus } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -16,6 +17,15 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    const rl = await rateLimit(request, RATE_LIMITS.auth)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        { status: 429 }
+      )
+    }
+
     // Validate environment
     if (!supabaseUrl || !supabaseServiceKey) {
       return NextResponse.json(

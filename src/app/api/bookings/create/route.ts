@@ -1,0 +1,229 @@
+/**
+ * POST /api/bookings/create
+ * Main booking creation endpoint for video consultations
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { sendEmail, emailTemplates } from '@/lib/services/email-service'
+import { logger } from '@/lib/logger'
+
+export const dynamic = 'force-dynamic'
+
+const createBookingBodySchema = z.object({
+  attorney_id: z.string().uuid(),
+  scheduled_at: z.string().datetime(),
+  duration_minutes: z.number().int().min(15).max(120).default(30),
+  specialty_id: z.string().uuid().optional(),
+  client_name: z.string().min(2).max(100),
+  client_email: z.string().email(),
+  client_phone: z.string().optional(),
+  notes: z.string().max(1000).optional(),
+  payment_intent_id: z.string().optional(),
+})
+
+type CreateBookingBody = z.infer<typeof createBookingBodySchema>
+
+export async function POST(request: NextRequest) {
+  try {
+    // 1. Parse and validate body
+    let body: CreateBookingBody
+    try {
+      const rawBody = await request.json()
+      body = createBookingBodySchema.parse(rawBody)
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`)
+        return NextResponse.json(
+          { error: 'Validation error', details: messages },
+          { status: 400 }
+        )
+      }
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      )
+    }
+
+    const {
+      attorney_id,
+      scheduled_at,
+      duration_minutes,
+      specialty_id,
+      client_name,
+      client_email,
+      client_phone,
+      notes,
+      payment_intent_id,
+    } = body
+
+    const supabase = createAdminClient()
+
+    // 2. Verify attorney exists
+    const { data: attorney, error: attorneyError } = await supabase
+      .from('attorneys')
+      .select('id, name')
+      .eq('id', attorney_id)
+      .single()
+
+    if (attorneyError || !attorney) {
+      return NextResponse.json(
+        { error: 'Attorney not found' },
+        { status: 404 }
+      )
+    }
+
+    // 3. Check for double booking (same attorney + same time, non-cancelled)
+    const { data: existingBookings } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('attorney_id', attorney_id)
+      .eq('scheduled_at', scheduled_at)
+      .neq('status', 'cancelled')
+      .limit(1)
+
+    if (existingBookings && existingBookings.length > 0) {
+      return NextResponse.json(
+        { error: 'This time slot is no longer available' },
+        { status: 409 }
+      )
+    }
+
+    // 4. Determine status based on payment
+    const status = payment_intent_id ? 'confirmed' : 'pending'
+
+    // 5. Create Daily.co room (non-blocking if DAILY_API_KEY not set)
+    let dailyRoomUrl: string | null = null
+    let dailyRoomName: string | null = null
+
+    // Generate a temporary booking ID for room naming
+    const tempId = crypto.randomUUID()
+
+    try {
+      const { createDailyRoom } = await import('@/lib/daily')
+      const expiresAt = new Date(new Date(scheduled_at).getTime() + 2 * 60 * 60 * 1000)
+      const room = await createDailyRoom(tempId, expiresAt)
+      dailyRoomUrl = room.url
+      dailyRoomName = room.name
+    } catch (dailyError) {
+      // Daily.co not configured or API error -- continue without room
+      logger.warn('Daily.co room creation failed (non-blocking)', { error: dailyError instanceof Error ? dailyError.message : String(dailyError) })
+    }
+
+    // 6. Insert booking
+    const { data: booking, error: insertError } = await supabase
+      .from('bookings')
+      .insert({
+        id: tempId,
+        attorney_id,
+        scheduled_at,
+        duration_minutes,
+        specialty_id: specialty_id || null,
+        status,
+        daily_room_url: dailyRoomUrl,
+        daily_room_name: dailyRoomName,
+        stripe_payment_intent_id: payment_intent_id || null,
+        client_name: client_name.trim(),
+        client_email: client_email.toLowerCase().trim(),
+        client_phone: client_phone || null,
+        notes: notes || null,
+      })
+      .select()
+      .single()
+
+    if (insertError || !booking) {
+      logger.error('Failed to insert booking', insertError)
+      return NextResponse.json(
+        { error: 'Failed to create booking' },
+        { status: 500 }
+      )
+    }
+
+    // 7. Send confirmation emails (non-blocking)
+    const scheduledDate = new Date(scheduled_at)
+    const dateStr = scheduledDate.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
+    const timeStr = scheduledDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
+
+    const attorneyName = attorney.name || 'Attorney'
+
+    // Client confirmation email
+    try {
+      const clientTemplate = emailTemplates.bookingConfirmationClient(
+        client_name,
+        attorneyName,
+        'Video Consultation',
+        dateStr,
+        timeStr,
+        dailyRoomUrl || 'Link will be provided before your consultation'
+      )
+      sendEmail({ to: client_email, template: clientTemplate }).catch((err) => {
+        logger.error('Failed to send client confirmation email', err as Error)
+      })
+    } catch (emailError) {
+      logger.error('Error preparing client email', emailError as Error)
+    }
+
+    // Attorney notification email
+    try {
+      const { data: attorneyProfile } = await supabase
+        .from('attorneys')
+        .select('email')
+        .eq('id', attorney_id)
+        .single()
+
+      if (attorneyProfile?.email) {
+        const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'}/attorney-dashboard/bookings`
+        const attorneyTemplate = emailTemplates.bookingNotificationAttorney(
+          attorneyName,
+          client_name,
+          client_email,
+          'Video Consultation',
+          dateStr,
+          timeStr,
+          notes || '',
+          dashboardUrl
+        )
+        sendEmail({ to: attorneyProfile.email, template: attorneyTemplate }).catch((err) => {
+          logger.error('Failed to send attorney notification email', err as Error)
+        })
+      }
+    } catch (emailError) {
+      logger.error('Error preparing attorney email', emailError as Error)
+    }
+
+    // 8. Return created booking
+    return NextResponse.json(
+      {
+        success: true,
+        booking: {
+          id: booking.id,
+          attorney_id: booking.attorney_id,
+          scheduled_at: booking.scheduled_at,
+          duration_minutes: booking.duration_minutes,
+          status: booking.status,
+          daily_room_url: booking.daily_room_url,
+          client_name: booking.client_name,
+          client_email: booking.client_email,
+          created_at: booking.created_at,
+        },
+      },
+      { status: 201 }
+    )
+  } catch (error) {
+    logger.error('Booking creation error', error as Error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}

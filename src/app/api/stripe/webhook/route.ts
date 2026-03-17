@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
 import { env } from '@/lib/env'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import Stripe from 'stripe'
 
 export const dynamic = 'force-dynamic'
@@ -118,6 +119,15 @@ async function markEventFailed(eventId: string, errorMsg: string): Promise<void>
 }
 
 export const POST = createApiHandler(async ({ request }) => {
+  // Rate limiting (fail-open for webhooks)
+  const rl = await rateLimit(request, RATE_LIMITS.webhook)
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      { status: 429 }
+    )
+  }
+
   const body = await request.text()
   const headersList = await headers()
   const signature = headersList.get('stripe-signature')

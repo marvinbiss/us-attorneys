@@ -81,6 +81,20 @@ export interface LocationData {
   nb_catnat?: number
   risques_principaux?: string[]
 
+  // Census data (JSONB from ACS)
+  census_data?: {
+    population?: number | null
+    median_household_income?: number | null
+    unemployment_rate?: number | null
+    spanish_speakers?: number | null
+    median_age?: number | null
+    poverty_rate?: number | null
+    total_households?: number | null
+    owner_occupied_pct?: number | null
+    bachelor_degree_pct?: number | null
+    acs_year?: number
+  } | null
+
   enriched_at: string | null
 }
 
@@ -105,6 +119,7 @@ const LOCATION_COLUMNS = [
   'nb_maprimerenov_annuel',
   'risque_inondation', 'risque_argile', 'zone_sismique', 'risque_radon',
   'nb_catnat', 'risques_principaux',
+  'census_data',
   'enriched_at',
 ].join(',')
 

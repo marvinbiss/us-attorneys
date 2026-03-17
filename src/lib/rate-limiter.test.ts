@@ -143,7 +143,7 @@ describe('checkRateLimit (in-memory)', () => {
 
   it('allows requests under the limit', async () => {
     const key = uniqueKey()
-    const config = { window: 60_000, max: 5 }
+    const config = { windowMs: 60_000, maxRequests: 5 }
 
     const result = await checkRateLimit(key, config)
     expect(result.allowed).toBe(true)
@@ -152,7 +152,7 @@ describe('checkRateLimit (in-memory)', () => {
 
   it('decrements remaining on each call', async () => {
     const key = uniqueKey()
-    const config = { window: 60_000, max: 3 }
+    const config = { windowMs: 60_000, maxRequests: 3 }
 
     const r1 = await checkRateLimit(key, config)
     const r2 = await checkRateLimit(key, config)
@@ -166,7 +166,7 @@ describe('checkRateLimit (in-memory)', () => {
 
   it('blocks when limit is reached', async () => {
     const key = uniqueKey()
-    const config = { window: 60_000, max: 2 }
+    const config = { windowMs: 60_000, maxRequests: 2 }
 
     await checkRateLimit(key, config)
     await checkRateLimit(key, config)
@@ -178,7 +178,7 @@ describe('checkRateLimit (in-memory)', () => {
 
   it('allows exactly max requests', async () => {
     const key = uniqueKey()
-    const config = { window: 60_000, max: 1 }
+    const config = { windowMs: 60_000, maxRequests: 1 }
 
     const first = await checkRateLimit(key, config)
     expect(first.allowed).toBe(true)
@@ -189,7 +189,7 @@ describe('checkRateLimit (in-memory)', () => {
 
   it('provides a resetTime in the future', async () => {
     const key = uniqueKey()
-    const config = { window: 60_000, max: 10 }
+    const config = { windowMs: 60_000, maxRequests: 10 }
     const before = Date.now()
 
     const result = await checkRateLimit(key, config)
@@ -200,7 +200,7 @@ describe('checkRateLimit (in-memory)', () => {
 
   it('resets after window expiry', async () => {
     const key = uniqueKey()
-    const config = { window: 1, max: 1 } // 1ms window
+    const config = { windowMs: 1, maxRequests: 1 } // 1ms window
 
     await checkRateLimit(key, config)
     await checkRateLimit(key, config) // blocked
@@ -215,17 +215,13 @@ describe('checkRateLimit (in-memory)', () => {
 
 describe('RATE_LIMITS constants', () => {
   it('auth limit is stricter than api limit', () => {
-    expect(RATE_LIMITS.auth.max).toBeLessThan(RATE_LIMITS.api.max)
-  })
-
-  it('contact has longer window than auth', () => {
-    expect(RATE_LIMITS.contact.window).toBeGreaterThan(RATE_LIMITS.auth.window)
+    expect(RATE_LIMITS.auth.maxRequests).toBeLessThan(RATE_LIMITS.api.maxRequests)
   })
 
   it('email-sending tiers are strict (newsletter, registration, contact)', () => {
-    expect(RATE_LIMITS.newsletter.max).toBeLessThanOrEqual(5)
-    expect(RATE_LIMITS.registration.max).toBeLessThanOrEqual(5)
-    expect(RATE_LIMITS.contact.max).toBeLessThanOrEqual(5)
+    expect(RATE_LIMITS.newsletter.maxRequests).toBeLessThanOrEqual(5)
+    expect(RATE_LIMITS.registration.maxRequests).toBeLessThanOrEqual(5)
+    expect(RATE_LIMITS.contact.maxRequests).toBeLessThanOrEqual(5)
   })
 
   it('webhook and cron tiers have failOpen enabled', () => {
@@ -233,14 +229,19 @@ describe('RATE_LIMITS constants', () => {
     expect(RATE_LIMITS.cron.failOpen).toBe(true)
   })
 
-  it('gdpr tier has longer window', () => {
-    expect(RATE_LIMITS.gdpr.window).toBeGreaterThan(RATE_LIMITS.api.window)
+  it('auth and payment tiers have failOpen disabled', () => {
+    expect(RATE_LIMITS.auth.failOpen).toBe(false)
+    expect(RATE_LIMITS.payment.failOpen).toBe(false)
   })
 
-  it('all configs have positive window and max', () => {
+  it('gdpr tier has longer window', () => {
+    expect(RATE_LIMITS.gdpr.windowMs).toBeGreaterThan(RATE_LIMITS.api.windowMs)
+  })
+
+  it('all configs have positive windowMs and maxRequests', () => {
     for (const config of Object.values(RATE_LIMITS)) {
-      expect(config.window).toBeGreaterThan(0)
-      expect(config.max).toBeGreaterThan(0)
+      expect(config.windowMs).toBeGreaterThan(0)
+      expect(config.maxRequests).toBeGreaterThan(0)
     }
   })
 })

@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
-import { logger } from '@/lib/logger'
+import { apiLogger } from '@/lib/logger'
 import { createApiHandler } from '@/lib/api/handler'
 import { slugify } from '@/lib/utils'
 import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
@@ -172,7 +172,7 @@ export const GET = createApiHandler(async ({ request }) => {
         .order('created_at', { ascending: false })
 
       if (error) {
-        logger.error('Database error:', error)
+        apiLogger.error('Database error:', error)
         return NextResponse.json(
           createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving reviews'),
           { status: 500 }
@@ -246,7 +246,7 @@ export const POST = createApiHandler(async ({ request }) => {
       )
     }
     if (!process.env.REVIEW_HMAC_SECRET) {
-      logger.error('REVIEW_HMAC_SECRET is not configured — rejecting review submission')
+      apiLogger.error('REVIEW_HMAC_SECRET is not configured — rejecting review submission')
       return NextResponse.json(
         createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Review submission is temporarily unavailable'),
         { status: 503 }
@@ -344,7 +344,7 @@ export const POST = createApiHandler(async ({ request }) => {
       .single()
 
     if (insertError) {
-      logger.error('Review insert error:', insertError)
+      apiLogger.error('Review insert error:', insertError)
       return NextResponse.json(
         createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error creating review'),
         { status: 500 }
@@ -352,7 +352,7 @@ export const POST = createApiHandler(async ({ request }) => {
     }
 
     // Update attorney's average rating (non-blocking)
-    updateAttorneyRating(supabase, booking.attorney_id).catch((err) => logger.error('Update rating failed', err))
+    updateAttorneyRating(supabase, booking.attorney_id).catch((err) => apiLogger.error('Update rating failed', err))
 
     // On-demand revalidation of affected pages (non-blocking)
     try {
@@ -376,13 +376,13 @@ export const POST = createApiHandler(async ({ request }) => {
         // City listing
         revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
 
-        logger.info('Revalidated paths after review submission', {
+        apiLogger.info('Revalidated paths after review submission', {
           attorneyId: booking.attorney_id,
           reviewId: review.id,
         })
       }
     } catch (revalError) {
-      logger.error('Revalidation failed after review submission:', revalError)
+      apiLogger.error('Revalidation failed after review submission:', revalError)
     }
 
     return NextResponse.json(

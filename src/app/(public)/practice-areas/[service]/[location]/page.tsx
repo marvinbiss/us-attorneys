@@ -34,6 +34,8 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
+import StatuteOfLimitations from '@/components/seo/StatuteOfLimitations'
+import CityDemographics from '@/components/seo/CityDemographics'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
@@ -557,11 +559,27 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         />
       )}
 
+      <CityDemographics
+        cityName={location.name}
+        stateCode={location.department_code || cityData?.stateCode || ''}
+        stateName={location.department_name || cityData?.stateName || ''}
+        population={cityData?.population}
+        censusData={(locationData as LocationData | null)?.census_data}
+        specialtyName={service.name}
+      />
+
       <FaqAndBlogSection
         combinedFaq={combinedFaq}
         service={service}
         location={location}
         specialtySlug={specialtySlug}
+      />
+
+      <StatuteOfLimitations
+        specialtySlug={specialtySlug}
+        specialtyName={service.name}
+        stateCode={location.department_code || ''}
+        stateName={location.department_name || ''}
       />
 
       <CrossLinks

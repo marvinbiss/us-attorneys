@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
@@ -42,6 +43,15 @@ const contactSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    const rl = await rateLimit(request, RATE_LIMITS.contact)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
 
     // Validate input

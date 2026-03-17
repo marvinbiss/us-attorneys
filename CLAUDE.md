@@ -310,6 +310,49 @@ Required variables (see `.env.example`):
 
 ---
 
+## Video Booking System
+
+Paid video consultations between clients and attorneys via Daily.co.
+
+### New Tables (Migration 404)
+
+| Table | Purpose |
+|-------|---------|
+| `bookings` | Video consultation bookings (status: pending/confirmed/completed/cancelled/no_show, Daily room URL, Stripe payment) |
+| `attorney_availability` | Weekly recurring availability slots (day_of_week, start_time, end_time, timezone) |
+| `attorney_bookings_blocked` | Blocked dates (vacations, holidays) |
+
+### New API Routes
+
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/api/bookings` | GET | Attorney bookings (by attorneyId, date, or month) |
+| `/api/bookings` | POST | Create booking (atomic RPC to prevent double-booking) |
+| `/api/bookings/my-bookings` | GET | Client's own bookings (by auth user) |
+| `/api/bookings/[id]/cancel` | POST | Cancel a booking |
+| `/api/bookings/[id]/reschedule` | POST | Reschedule a booking |
+| `/api/bookings/[id]/join` | GET | Get/create Daily.co room URL for video call |
+
+### New Components
+
+| Component | Path |
+|-----------|------|
+| `VideoConsultationButton` | `src/components/booking/VideoConsultationButton.tsx` -- Join video call button with countdown/live states |
+| `BookingCalendar` | `src/components/booking/BookingCalendar.tsx` -- Calendar widget for selecting booking slots |
+| Attorney Bookings Page | `src/app/(private)/attorney-dashboard/bookings/page.tsx` -- Stats, upcoming/past bookings list |
+| Client Consultations Page | `src/app/(private)/client-dashboard/consultations/page.tsx` -- Client's booked consultations |
+
+### New Navigation Links
+
+- Attorney sidebar: "Bookings" link at `/attorney-dashboard/bookings` (Video icon)
+- Client sidebar: "Consultations" link at `/client-dashboard/consultations` (Video icon)
+
+### Environment Variables
+
+- `DAILY_API_KEY` -- Daily.co API key for creating video rooms
+
+---
+
 ## Performance -- Critical Rules
 
 - **NEVER** use `force-dynamic` on public pages (use ISR with `revalidate`)

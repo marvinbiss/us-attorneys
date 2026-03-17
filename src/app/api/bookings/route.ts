@@ -10,7 +10,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingNotifications, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
 import { createBookingSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
-import { logger } from '@/lib/logger'
+import { apiLogger } from '@/lib/logger'
 import { z } from 'zod'
 
 // Schema for GET request query params
@@ -63,7 +63,7 @@ export const GET = createApiHandler(async ({ request }) => {
       .order('start_time')
 
     if (error) {
-      logger.error('Database error', error)
+      apiLogger.error('Database error', error)
       return NextResponse.json(
         createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving slots'),
         { status: 500 }
@@ -105,7 +105,7 @@ export const GET = createApiHandler(async ({ request }) => {
       .order('start_time')
 
     if (error) {
-      logger.error('Database error', error)
+      apiLogger.error('Database error', error)
       return NextResponse.json(
         createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving slots'),
         { status: 500 }
@@ -128,7 +128,7 @@ export const GET = createApiHandler(async ({ request }) => {
     .order('created_at', { ascending: false })
 
   if (error) {
-    logger.error('Database error', error)
+    apiLogger.error('Database error', error)
     return NextResponse.json(
       createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving bookings'),
       { status: 500 }
@@ -184,7 +184,7 @@ export const POST = createApiHandler(async ({ request }) => {
   })
 
   if (rpcError) {
-    logger.error('Booking RPC error', rpcError)
+    apiLogger.error('Booking RPC error', rpcError)
     return NextResponse.json(
       createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error creating booking'),
       { status: 500 }
@@ -247,7 +247,7 @@ export const POST = createApiHandler(async ({ request }) => {
 
   // Send notifications asynchronously (don't block response)
   sendBookingNotifications(notificationPayload).catch((err) => {
-    logger.error('Failed to send booking confirmation notifications', err)
+    apiLogger.error('Failed to send booking confirmation notifications', err)
   })
 
   return NextResponse.json(

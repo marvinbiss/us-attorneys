@@ -29,7 +29,7 @@ export const POST = createApiHandler(async ({ request }) => {
     || request.headers.get('x-real-ip')
     || request.headers.get('cf-connecting-ip')
     || 'unknown'
-  const rl = await checkRateLimit(`claim:${ip}`, { window: 300_000, max: 20 })
+  const rl = await checkRateLimit(`claim:${ip}`, { windowMs: 300_000, maxRequests: 20 })
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again in a few minutes.' },
