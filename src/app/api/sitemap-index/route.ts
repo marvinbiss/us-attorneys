@@ -1,14 +1,9 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, states } from '@/lib/data/usa'
-import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
-import { getProblemSlugs } from '@/lib/data/problems'
+import { generateSitemaps } from '@/app/sitemap'
 
-// Must match the BATCH constants used in sitemap.ts sitemap() handlers
-const BATCH_SIZE = 10_000
-const LARGE_BATCH = 45_000
 const ATTORNEY_BATCH_SIZE = 5_000
-// Max provider sitemaps to avoid declaring hundreds of broken sitemaps
+// Max attorney sitemaps to avoid declaring hundreds of broken sitemaps
 const MAX_ATTORNEY_SITEMAPS = 20
 
 /**
@@ -16,49 +11,19 @@ const MAX_ATTORNEY_SITEMAPS = 20
  * the sitemap index at /sitemap.xml when using generateSitemaps().
  *
  * This route is rewritten from /sitemap.xml via next.config.js.
- * Keep in sync with generateSitemaps() in src/app/sitemap.ts.
  *
- * IMPORTANT: All intent pages (quotes, reviews, pricing, emergency, issues) use
- * Phase 1 (top 300 cities) to avoid declaring sitemaps that can't be served.
- * Neighborhood-level sitemaps are removed entirely.
+ * SINGLE SOURCE OF TRUTH: imports generateSitemaps() from sitemap.ts
+ * so the index always matches the actual sitemap handlers.
+ * Attorney sitemaps are appended dynamically from the DB.
  */
 export async function GET() {
-  const emergencySlugs = Object.keys(tradeContent)
-  const tradeSlugs = getPracticeAreaSlugs()
-  const reviewServiceSlugs = Object.keys(tradeContent)
-  const problemSlugs = getProblemSlugs()
+  // ── Static/programmatic sitemaps from generateSitemaps() ──────────────
+  const staticSitemaps = await generateSitemaps()
+  const ids: string[] = staticSitemaps.map(s => s.id)
 
-  // Phase 1: top-300 cities only (conservative crawl budget for new domain).
-  // Must match TOP_CITIES_PHASE1 in sitemap.ts.
-  const TOP_CITIES_PHASE1 = 300
-
-  const ids: string[] = [
-    'static',
-    // service × city pages — uses LARGE_BATCH (45000) in sitemap()
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `service-cities-${i}`),
-    'cities',
-    'geo',
-    // Neighborhood & service-neighborhood sitemaps REMOVED — too granular for new domain
-    'quotes-services',
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `quotes-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `emergency-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `tarifs-service-cities-${i}`),
-    // tarifs task×city pages — uses LARGE_BATCH (45000) in sitemap()
-    ...(() => {
-      const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
-      return Array.from({ length: Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `tarifs-task-cities-${i}`)
-    })(),
-    'reviews-services',
-    ...Array.from({ length: Math.ceil(reviewServiceSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `reviews-service-cities-${i}`),
-    'issues',
-    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `issues-cities-${i}`),
-    // dept-services uses LARGE_BATCH (45000) in sitemap()
-    ...Array.from({ length: Math.ceil(states.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
-    'region-services',
-  ]
-
-  // Provider sitemaps (DB-dependent, served via /api/sitemap-providers)
-  // Capped to MAX_ATTORNEY_SITEMAPS to avoid declaring hundreds of broken sitemaps
+  // ── Attorney sitemaps (DB-dependent, served via /api/sitemap-attorneys) ──
+  // These use "attorneys-{i}" naming to match next.config.js rewrite:
+  //   /sitemap/attorneys-:id.xml → /api/sitemap-attorneys?id=:id
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -71,11 +36,11 @@ export async function GET() {
     if (!error && count && count > 0) {
       const batchCount = Math.min(Math.ceil(count / ATTORNEY_BATCH_SIZE), MAX_ATTORNEY_SITEMAPS)
       for (let i = 0; i < batchCount; i++) {
-        ids.push(`providers-${i}`)
+        ids.push(`attorneys-${i}`)
       }
     }
   } catch {
-    // DB unavailable — omit provider sitemaps from index
+    // DB unavailable — omit attorney sitemaps from index
   }
 
   const xml = [

@@ -26,14 +26,18 @@ export async function generateMetadata({
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
 
-  const title = `Emergency ${trade.name} ${villeData.name}`
+  const title = `Emergency ${trade.name} in ${villeData.name} (${villeData.stateCode})`
+  const description = `Need an emergency ${trade.name.toLowerCase()} in ${villeData.name}, ${villeData.stateName}? Get immediate help from verified attorneys available 24/7. Fast response, free initial consultation.`
   return {
     title,
+    description,
     robots: { index: true, follow: true },
     alternates: {
       canonical: `${SITE_URL}/emergency/${service}/${villeSlug}`,
       languages: getAlternateLanguages(`/emergency/${service}/${villeSlug}`),
     },
+    openGraph: { title, description, url: `${SITE_URL}/emergency/${service}/${villeSlug}`, type: 'website', locale: 'en_US' },
+    twitter: { card: 'summary_large_image', title, description },
   }
 }
 

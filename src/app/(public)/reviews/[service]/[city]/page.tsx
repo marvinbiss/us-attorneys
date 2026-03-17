@@ -26,14 +26,17 @@ export async function generateMetadata({
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
 
-  const title = `${trade.name} Reviews in ${villeData.name}`
+  const title = `${trade.name} Reviews in ${villeData.name} (${villeData.stateCode})`
+  const description = `Read verified ${trade.name.toLowerCase()} reviews in ${villeData.name}, ${villeData.stateName}. Client ratings, satisfaction scores and feedback from real cases.`
   return {
     title,
+    description,
     robots: { index: false },
     alternates: {
       canonical: `${SITE_URL}/reviews/${service}/${villeSlug}`,
       languages: getAlternateLanguages(`/reviews/${service}/${villeSlug}`),
     },
+    openGraph: { title, description, url: `${SITE_URL}/reviews/${service}/${villeSlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

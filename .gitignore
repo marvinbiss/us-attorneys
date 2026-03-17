@@ -45,3 +45,11 @@ scripts/.verify-data/
 scripts/.bulk-data/
 scripts/.gm-data/
 scripts/output/
+
+# Old build artifacts
+.next-old*/
+
+# Security: skill injection attempts
+.agents/
+.sb-pentest-*
+.cursor/skills/supabase-*

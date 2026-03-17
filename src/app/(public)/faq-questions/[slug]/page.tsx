@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL } from '@/lib/seo/config'
 import { getQuestionBySlug, getQuestionSlugs } from '@/lib/data/faq'
 import { REVALIDATE } from '@/lib/cache'
 
@@ -19,10 +19,14 @@ export function generateMetadata({
   const question = getQuestionBySlug(params.slug)
   if (!question) return {}
 
+  const title = question.question
+  const description = `Expert answer: ${question.question} Get clear, practical legal guidance from verified attorneys. Free consultation available.`
   return {
-    title: `${question.question} | ${SITE_NAME}`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/faq/${question.slug}` },
+    openGraph: { title, description, url: `${SITE_URL}/faq-questions/${question.slug}`, type: 'website', locale: 'en_US' },
   }
 }
 

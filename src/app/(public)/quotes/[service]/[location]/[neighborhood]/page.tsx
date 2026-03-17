@@ -23,10 +23,14 @@ export async function generateMetadata({
   const quartier = getNeighborhoodBySlug(locationSlug, quartierSlug)
   if (!trade || !quartier) return {}
 
+  const title = `Free ${trade.name} Consultation — ${quartier.neighborhoodName}`
+  const description = `Request a free ${trade.name.toLowerCase()} consultation in ${quartier.neighborhoodName}, ${quartier.city.name}. Compare verified local attorneys. No obligation.`
   return {
-    title: `${trade.name} Consultation in ${quartier.neighborhoodName} | US Attorneys`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/quotes/${service}/${locationSlug}/${quartierSlug}` },
+    openGraph: { title, description, url: `${SITE_URL}/quotes/${service}/${locationSlug}/${quartierSlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

@@ -24,10 +24,14 @@ export async function generateMetadata({
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
 
+  const title = `${trade.name} Fees in ${villeData.name} (${villeData.stateCode})`
+  const description = `How much does a ${trade.name.toLowerCase()} cost in ${villeData.name}? Typical rates: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Compare local attorney fees and payment options.`
   return {
-    title: `${trade.name} Pricing in ${villeData.name} | US Attorneys`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/pricing/${service}/${villeSlug}` },
+    openGraph: { title, description, url: `${SITE_URL}/pricing/${service}/${villeSlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

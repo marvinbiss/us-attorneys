@@ -28,14 +28,18 @@ export async function generateMetadata({
   const tasks = getTasksForService(service)
   const task = tasks.find((t) => t.slug === taskSlug)
 
+  const taskName = task ? task.name : trade.name
   const title = task
     ? `${task.name} in ${villeData.name} — Pricing`
     : `${trade.name} Pricing in ${villeData.name}`
+  const description = `How much does ${taskName.toLowerCase()} cost in ${villeData.name}, ${villeData.stateName}? Compare local rates, get pricing details and request a free consultation.`
 
   return {
     title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/pricing/${service}/${villeSlug}/${taskSlug}` },
+    openGraph: { title, description, url: `${SITE_URL}/pricing/${service}/${villeSlug}/${taskSlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

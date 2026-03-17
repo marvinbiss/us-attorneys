@@ -19,10 +19,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const comparison = comparisons.find((c) => c.slug === slug)
   if (!comparison) return {}
 
+  const title = comparison.title
+  const description = `${comparison.title}: detailed comparison of services, costs, pros and cons. Make an informed decision with our side-by-side analysis.`
   return {
-    title: `${comparison.title} | US Attorneys`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/compare/${comparison.slug}` },
+    openGraph: { title, description, url: `${SITE_URL}/compare/${comparison.slug}`, type: 'website', locale: 'en_US' },
   }
 }
 

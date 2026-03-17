@@ -24,10 +24,14 @@ export async function generateMetadata({
   const villeData = getCityBySlug(villeSlug)
   if (!problem || !villeData) return {}
 
+  const title = `${problem.name} in ${villeData.name} (${villeData.stateCode})`
+  const description = `Need help with ${problem.name.toLowerCase()} in ${villeData.name}, ${villeData.stateName}? Find qualified local attorneys. Free consultation, no obligation.`
   return {
-    title: `${problem.name} in ${villeData.name} | US Attorneys`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/issues/${issue}/${villeSlug}` },
+    openGraph: { title, description, url: `${SITE_URL}/issues/${issue}/${villeSlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

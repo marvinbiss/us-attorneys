@@ -24,10 +24,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!region || !trade) return { title: 'Page not found' }
 
   const title = `${trade.name} in ${region.name}`
+  const description = `Find ${trade.name.toLowerCase()} attorneys across the ${region.name}. Compare profiles, fees and reviews in ${region.states.length} states. Free consultation.`
   return {
     title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/regions/${regionSlug}/${specialtySlug}` },
+    openGraph: { title, description, url: `${SITE_URL}/regions/${regionSlug}/${specialtySlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

@@ -16,10 +16,14 @@ export async function generateMetadata({ params }: { params: Promise<{ issue: st
   const problem = getProblemBySlug(issue)
   if (!problem) return {}
 
+  const title = `${problem.name} — Find a Qualified Attorney`
+  const description = `Dealing with ${problem.name.toLowerCase()}? Find experienced attorneys who handle this issue. Compare profiles, read reviews and get a free consultation.`
   return {
-    title: `${problem.name} | US Attorneys`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/issues/${issue}` },
+    openGraph: { title, description, url: `${SITE_URL}/issues/${issue}`, type: 'website', locale: 'en_US' },
   }
 }
 

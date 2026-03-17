@@ -21,10 +21,14 @@ export async function generateMetadata({
   const villeData = getCityBySlug(locationSlug)
   if (!trade || !villeData) return {}
 
+  const title = `Free ${trade.name} Consultation in ${villeData.name}`
+  const description = `Request a free ${trade.name.toLowerCase()} consultation in ${villeData.name}, ${villeData.stateName}. Compare up to 3 verified attorneys. ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. No obligation.`
   return {
-    title: `${trade.name} Consultation in ${villeData.name} | US Attorneys`,
+    title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/quotes/${service}/${locationSlug}` },
+    openGraph: { title, description, url: `${SITE_URL}/quotes/${service}/${locationSlug}`, type: 'website', locale: 'en_US' },
   }
 }
 

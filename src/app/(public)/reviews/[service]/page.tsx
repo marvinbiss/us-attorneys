@@ -21,11 +21,14 @@ export async function generateMetadata({
   const trade = tradeContent[service]
   if (!trade) return {}
 
-  const title = `${trade.name} Reviews`
+  const title = `${trade.name} Attorney Reviews — Ratings & Feedback`
+  const description = `Read verified reviews for ${trade.name.toLowerCase()} attorneys nationwide. Compare ratings, client feedback and satisfaction scores. Find a top-rated ${trade.name.toLowerCase()} near you.`
   return {
     title,
+    description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/reviews/${service}` },
+    openGraph: { title, description, url: `${SITE_URL}/reviews/${service}`, type: 'website', locale: 'en_US' },
   }
 }
 
