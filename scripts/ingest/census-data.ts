@@ -33,6 +33,8 @@ const RATE_DELAY = 250 // ms between Census API calls
 
 const args = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')
+const FILE_MODE = args.includes('--file') // Save to JSON file if column doesn't exist
+const FROM_FILE = args.includes('--from-file') // Load from staging file into DB
 const limitIdx = args.indexOf('--limit')
 const LIMIT = limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : 0
 const stateIdx = args.indexOf('--state')
@@ -189,10 +191,81 @@ async function fetchStatePlaces(stateFips: string, year: number = 2022): Promise
 
 async function main() {
   console.log('=== Census Bureau ACS Data Enrichment ===')
-  console.log(`Mode:   ${DRY_RUN ? 'DRY RUN' : 'LIVE'}`)
+  console.log(`Mode:   ${DRY_RUN ? 'DRY RUN' : FILE_MODE ? 'FILE (staging)' : 'LIVE'}`)
   console.log(`Limit:  ${LIMIT || 'all'}`)
   if (STATE_FILTER) console.log(`State:  ${STATE_FILTER}`)
   console.log()
+
+  // 0a. --from-file mode: load staging file into DB
+  if (FROM_FILE) {
+    const fs = require('fs')
+    const fromPath = require('path').join(__dirname, '../../data/census-staging.json')
+    if (!fs.existsSync(fromPath)) {
+      console.error('Staging file not found:', fromPath)
+      console.error('Run census-data.ts first (without --from-file) to fetch Census data.')
+      process.exit(1)
+    }
+
+    // Verify column exists
+    const { error: checkErr } = await supabase.from('locations_us').select('census_data').limit(1)
+    if (checkErr && checkErr.message.includes('census_data')) {
+      console.error('census_data column still does not exist. Apply migration 403 first.')
+      process.exit(1)
+    }
+
+    const updates: { id: string; census_data: CensusData }[] = JSON.parse(fs.readFileSync(fromPath, 'utf-8'))
+    console.log(`Loading ${updates.length.toLocaleString()} records from staging file...`)
+
+    let loaded = 0, errors = 0
+    const PARALLEL = 10
+    for (let i = 0; i < updates.length; i += PARALLEL) {
+      const chunk = updates.slice(i, i + PARALLEL)
+      const results = await Promise.all(
+        chunk.map(u =>
+          supabase.from('locations_us').update({ census_data: u.census_data }).eq('id', u.id)
+        )
+      )
+      for (const r of results) {
+        if (r.error) errors++
+        else loaded++
+      }
+      if ((i + PARALLEL) % 500 === 0 || i + PARALLEL >= updates.length) {
+        process.stdout.write(`\r  Progress: ${Math.min(i + PARALLEL, updates.length).toLocaleString()}/${updates.length.toLocaleString()} (errors: ${errors})`)
+      }
+    }
+
+    console.log(`\n\n=== LOAD FROM FILE COMPLETE ===`)
+    console.log(`Loaded:  ${loaded.toLocaleString()}`)
+    console.log(`Errors:  ${errors}`)
+
+    const { count } = await supabase
+      .from('locations_us')
+      .select('*', { count: 'exact', head: true })
+      .not('census_data', 'is', null)
+    console.log(`Total cities with census_data: ${count?.toLocaleString() || 'unknown'}`)
+    return
+  }
+
+  // 0. Detect if census_data column exists
+  let columnExists = true
+  if (!DRY_RUN) {
+    const { error: colErr } = await supabase
+      .from('locations_us')
+      .select('census_data')
+      .limit(1)
+    if (colErr && colErr.message.includes('census_data')) {
+      columnExists = false
+      if (!FILE_MODE) {
+        console.warn('WARNING: census_data column does not exist on locations_us.')
+        console.warn('Switching to FILE mode — will save matched data to data/census-staging.json')
+        console.warn('Apply migration 403 then re-run without --file to load from staging.\n')
+      }
+    }
+  }
+
+  const useFile = !columnExists || FILE_MODE
+  const stagingPath = require('path').join(__dirname, '../../data/census-staging.json')
+  const allFileUpdates: { id: string; census_data: CensusData }[] = []
 
   // 1. Load state mapping from DB
   const { data: states } = await supabase
@@ -311,6 +384,15 @@ async function main() {
       continue
     }
 
+    if (useFile) {
+      // Save to staging array (will write to file at end)
+      allFileUpdates.push(...updates)
+      totalUpdated += updates.length
+      statesProcessed.push(stateAbbr)
+      process.stdout.write(` → staged: ${updates.length}`)
+      continue
+    }
+
     // Batch update
     for (let i = 0; i < updates.length; i += UPDATE_BATCH) {
       const batch = updates.slice(i, i + UPDATE_BATCH)
@@ -343,15 +425,26 @@ async function main() {
     process.stdout.write(` → updated: ${updates.length}`)
   }
 
+  // 3.5. Write staging file if in file mode
+  if (useFile && allFileUpdates.length > 0) {
+    const fs = require('fs')
+    const dir = require('path').dirname(stagingPath)
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+    fs.writeFileSync(stagingPath, JSON.stringify(allFileUpdates, null, 0))
+    console.log(`\n\nStaging file written: ${stagingPath}`)
+    console.log(`  Records: ${allFileUpdates.length.toLocaleString()}`)
+    console.log(`  Size: ${(fs.statSync(stagingPath).size / 1024 / 1024).toFixed(1)} MB`)
+  }
+
   // 4. Summary
   console.log('\n\n=== INGESTION COMPLETE ===')
   console.log(`States processed: ${statesProcessed.length}`)
   console.log(`Cities matched:   ${totalMatched.toLocaleString()}`)
   console.log(`Cities unmatched: ${totalUnmatched.toLocaleString()}`)
-  console.log(`DB updates:       ${totalUpdated.toLocaleString()}`)
+  console.log(`DB ${useFile ? 'staged' : 'updates'}:       ${totalUpdated.toLocaleString()}`)
   console.log(`Errors:           ${totalErrors}`)
 
-  if (!DRY_RUN) {
+  if (!DRY_RUN && !useFile) {
     // Count how many have census_data
     const { count } = await supabase
       .from('locations_us')
@@ -359,6 +452,13 @@ async function main() {
       .not('census_data', 'is', null)
 
     console.log(`\nTotal cities with census_data: ${count?.toLocaleString() || 'unknown'}`)
+  }
+
+  if (useFile) {
+    console.log(`\nNEXT STEPS:`)
+    console.log(`  1. Apply migration 403 in Supabase SQL Editor:`)
+    console.log(`     ALTER TABLE locations_us ADD COLUMN IF NOT EXISTS census_data JSONB;`)
+    console.log(`  2. Re-run: npx tsx scripts/ingest/census-data.ts --from-file`)
   }
 }
 
