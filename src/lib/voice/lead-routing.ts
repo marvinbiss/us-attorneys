@@ -12,6 +12,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendSMS } from '@/lib/notifications/sms'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
+import { trackLeadCharge } from '@/lib/billing/lead-billing'
+import { calculateLeadCost, getAttorneyTier } from '@/lib/billing/cpa-model'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -189,6 +191,17 @@ export async function createVoiceLead(
   })
 
   log.info('Lead assigned to attorney', { leadId: lead.id, attorneyId: matchedAttorney.id })
+
+  // ------------------------------------------------------------------
+  // 5b. Track billing charge with CPA tier pricing
+  // ------------------------------------------------------------------
+  getAttorneyTier(matchedAttorney.id).then((tier) => {
+    const city = (qualData.city as string) ?? null
+    const cost = calculateLeadCost(tier, 'voice', city)
+    return trackLeadCharge(matchedAttorney.id, lead.id, 'voice', cost.finalCents)
+  }).catch((err) =>
+    log.error('Failed to track voice lead charge', { error: err })
+  )
 
   // ------------------------------------------------------------------
   // 6. Notify attorney via SMS

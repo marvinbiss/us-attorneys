@@ -8,6 +8,7 @@ import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 import { checkLeadQuota } from '@/lib/lead-quotas'
 import { trackLeadCharge } from '@/lib/billing/lead-billing'
+import { calculateLeadCost, getAttorneyTier } from '@/lib/billing/cpa-model'
 
 const leadSchema = z.object({
   attorneyId: z.string().min(1).optional(),
@@ -117,8 +118,11 @@ export async function submitLead(
           })
           if (!assignError) {
             logLeadEvent(inserted.id, 'dispatched', { attorneyId: data.attorneyId }).catch(() => {})
-            // Track billing charge for the dispatched lead
-            trackLeadCharge(data.attorneyId, inserted.id, 'standard').catch((err) =>
+            // Track billing charge with CPA tier pricing
+            getAttorneyTier(data.attorneyId).then((tier) => {
+              const cost = calculateLeadCost(tier, 'standard', data.city)
+              return trackLeadCharge(data.attorneyId!, inserted.id, 'standard', cost.finalCents)
+            }).catch((err) =>
               logger.error('Failed to track lead charge (non-blocking)', err)
             )
           }

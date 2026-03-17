@@ -15,6 +15,7 @@ import { createApiHandler } from '@/lib/api/handler'
 import { z } from 'zod'
 import { checkLeadQuota } from '@/lib/lead-quotas'
 import { trackLeadCharge } from '@/lib/billing/lead-billing'
+import { calculateLeadCost, getAttorneyTier } from '@/lib/billing/cpa-model'
 
 const actionBodySchema = z.object({
   action: z.enum(['reassign', 'replay']),
@@ -151,8 +152,11 @@ export const POST = createApiHandler(async ({ request }) => {
       },
     })
 
-    // Track billing charge for the reassigned lead
-    trackLeadCharge(newProviderId, current.lead_id, 'standard').catch((err) =>
+    // Track billing charge with CPA tier pricing
+    getAttorneyTier(newProviderId).then((tier) => {
+      const cost = calculateLeadCost(tier, 'standard')
+      return trackLeadCharge(newProviderId!, current.lead_id, 'standard', cost.finalCents)
+    }).catch((err) =>
       logger.error('Failed to track lead charge on reassign', err)
     )
 

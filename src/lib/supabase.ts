@@ -620,6 +620,7 @@ export async function getAttorneysByServiceAndLocation(
               .in('specialty', specialties)
               .eq('address_postal_code', postalCode)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
               .order('is_featured', { ascending: false, nullsFirst: true })
               .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
@@ -645,6 +646,7 @@ export async function getAttorneysByServiceAndLocation(
                 .in('specialty', specialties)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
+                .is('canonical_attorney_id', null)
                 .order('is_featured', { ascending: false, nullsFirst: true })
               .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
@@ -678,6 +680,7 @@ export async function getAttorneysByServiceAndLocation(
               .in('specialty', specialties)
               .in('address_city', cityValues)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
               // STRICT RULE: providers with phone always rank above those without
               .order('is_featured', { ascending: false, nullsFirst: true })
               .order('boost_level', { ascending: false, nullsFirst: true })
@@ -738,6 +741,7 @@ export async function hasProvidersByServiceAndLocation(
                 .in('specialty', specialties)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
+                .is('canonical_attorney_id', null)
               if (error) throw error
               return (count ?? 0) > 0
             }
@@ -753,6 +757,7 @@ export async function hasProvidersByServiceAndLocation(
               .in('specialty', specialties)
               .in('address_city', cityValues)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
 
             if (error) throw error
             return (count ?? 0) > 0
@@ -801,6 +806,7 @@ export async function getAttorneyCountByServiceAndLocation(
                 .in('specialty', specialties)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
+                .is('canonical_attorney_id', null)
               if (error) throw error
               return count ?? 0
             }
@@ -816,6 +822,7 @@ export async function getAttorneyCountByServiceAndLocation(
               .in('specialty', specialties)
               .in('address_city', cityValues)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
 
             if (error) throw error
             return count ?? 0
@@ -848,6 +855,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
                 .select(PROVIDER_LIST_SELECT)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
+                .is('canonical_attorney_id', null)
                 .order('is_featured', { ascending: false, nullsFirst: true })
                 .order('boost_level', { ascending: false, nullsFirst: true })
                 .order('phone', { ascending: false, nullsFirst: false })
@@ -885,6 +893,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
               .select(PROVIDER_LIST_SELECT)
               .in('address_city', cityValues)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
               .order('is_featured', { ascending: false, nullsFirst: true })
               .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
@@ -919,6 +928,7 @@ export async function getAllProviders() {
             .from('attorneys')
             .select(PROVIDER_LIST_SELECT)
             .eq('is_active', true)
+            .is('canonical_attorney_id', null)
             .order('is_featured', { ascending: false, nullsFirst: true })
             .order('boost_level', { ascending: false, nullsFirst: true })
             .order('phone', { ascending: false, nullsFirst: false })
@@ -956,6 +966,7 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
               .order('is_featured', { ascending: false, nullsFirst: true })
               .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
@@ -993,6 +1004,7 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
               .select('id', { count: 'exact', head: true })
               .in('specialty', specialties)
               .eq('is_active', true)
+              .is('canonical_attorney_id', null)
             if (error) throw error
             return count ?? 0
           })(),
@@ -1025,6 +1037,7 @@ export async function getLocationsByService(specialtySlug: string) {
             .select('address_city')
             .in('specialty', specialties)
             .eq('is_active', true)
+            .is('canonical_attorney_id', null)
             .not('address_city', 'is', null)
             .limit(500)
 

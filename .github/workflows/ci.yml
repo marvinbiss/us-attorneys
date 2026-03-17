@@ -42,3 +42,42 @@ jobs:
         run: npm run build
         env:
           NEXT_BUILD_SKIP_DB: '1'
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: lint-test-build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_BUILD_SKIP_DB: '1'
+
+      - name: Run Playwright E2E tests
+        run: npx playwright test
+        env:
+          CI: 'true'
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

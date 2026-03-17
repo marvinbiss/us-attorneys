@@ -38,9 +38,10 @@ export async function trackLeadCharge(
   attorneyId: string,
   leadId: string,
   leadType: LeadType = 'standard',
+  amountCentsOverride?: number,
 ): Promise<string | null> {
   const admin = createAdminClient()
-  const amountCents = LEAD_PRICES[leadType] * 100
+  const amountCents = amountCentsOverride ?? LEAD_PRICES[leadType] * 100
 
   const { data, error } = await admin
     .from('lead_charges')

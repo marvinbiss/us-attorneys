@@ -29,24 +29,30 @@ vi.mock('@/lib/data/usa', () => ({
   getCityBySlug: vi.fn(() => null),
 }))
 
-// Build the Supabase mock chain
+// Build the Supabase mock chain using a flexible proxy to handle any chain order
 const mockRange = vi.fn()
-const mockOrder5 = vi.fn(() => ({ range: mockRange }))
-const mockOrder4 = vi.fn(() => ({ order: mockOrder5 }))
-const mockOrder3 = vi.fn(() => ({ order: mockOrder4 }))
-const mockOrder2 = vi.fn(() => ({ order: mockOrder3 }))
-const mockOrder1 = vi.fn(() => ({ order: mockOrder2 }))
-const mockEqActive = vi.fn(() => ({ order: mockOrder1 }))
-const mockEqZip = vi.fn(() => ({ eq: mockEqActive }))
-const mockIn = vi.fn(() => ({ eq: mockEqZip }))
-const mockSelect = vi.fn(() => ({ in: mockIn }))
+const mockIn = vi.fn()
+const mockEqZip = vi.fn()
+
+// Flexible chain proxy that supports any method order
+function createChainProxy(terminal: () => unknown = () => ({ range: mockRange })): unknown {
+  const proxy: Record<string, unknown> = {}
+  const methods = ['eq', 'is', 'in', 'order', 'range', 'select', 'not', 'gt', 'lt', 'gte', 'lte']
+  for (const m of methods) {
+    proxy[m] = vi.fn((...args: unknown[]) => {
+      if (m === 'in') mockIn(...args)
+      if (m === 'eq' && args[0] === 'address_zip') mockEqZip(...args)
+      if (m === 'range') return mockRange(...args)
+      return createChainProxy(terminal)
+    })
+  }
+  return proxy
+}
+
+const mockSelect = vi.fn(() => createChainProxy())
 const mockFrom = vi.fn(() => ({ select: mockSelect }))
 
-// For count queries
-const mockCountEqActive = vi.fn()
-const mockCountEqZip = vi.fn(() => ({ eq: mockCountEqActive }))
-void mockCountEqZip // used indirectly via mockCountEqActive
-// mockCountSelect removed (unused)
+// For count queries (handled by flexible proxy above)
 
 vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn(() => ({ from: mockFrom })),
@@ -141,18 +147,21 @@ describe('getAttorneyCountByServiceAndLocation — ZIP slug', () => {
   it('uses head:true count query for ZIP slug', async () => {
     // Override the mock chain for count queries
     const countResult = { count: 42, error: null }
-    mockCountEqActive.mockResolvedValueOnce(countResult)
 
-    // Re-wire mockFrom for this test to use count chain
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Use a proxy that resolves to countResult for any chain
+    function countProxy(): unknown {
+      return new Proxy({}, {
+        get(_t, prop: string) {
+          if (prop === 'then') return undefined
+          if (prop === 'count') return countResult.count
+          if (prop === 'error') return null
+          return vi.fn(() => countProxy())
+        },
+      })
+    }
     ;(mockFrom as any).mockImplementationOnce(() => ({
-      select: () => ({
-        in: () => ({
-          eq: () => ({
-            eq: () => Promise.resolve(countResult),
-          }),
-        }),
-      }),
+      select: () => countProxy(),
     }))
 
     const count = await getAttorneyCountByServiceAndLocation(
@@ -173,14 +182,21 @@ describe('getAttorneyCountByServiceAndLocation — ZIP slug', () => {
 
   it('returns 0 on error (fail-safe)', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Proxy that rejects at the end of chain
+    function rejectProxy(): unknown {
+      return new Proxy({}, {
+        get(_t, prop: string) {
+          if (prop === 'then') {
+            return (_res: unknown, rej: (e: Error) => void) => rej(new Error('timeout'))
+          }
+          if (prop === 'count') return 0
+          if (prop === 'error') return { message: 'timeout' }
+          return vi.fn(() => rejectProxy())
+        },
+      })
+    }
     ;(mockFrom as any).mockImplementationOnce(() => ({
-      select: () => ({
-        in: () => ({
-          eq: () => ({
-            eq: () => Promise.reject(new Error('timeout')),
-          }),
-        }),
-      }),
+      select: () => rejectProxy(),
     }))
 
     const count = await getAttorneyCountByServiceAndLocation(

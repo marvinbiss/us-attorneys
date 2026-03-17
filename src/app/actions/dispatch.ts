@@ -3,6 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { trackLeadCharge } from '@/lib/billing/lead-billing'
+import { calculateLeadCost, getAttorneyTier } from '@/lib/billing/cpa-model'
 
 export interface DispatchOptions {
   specialtyName?: string
@@ -56,9 +57,14 @@ export async function dispatchLead(
 
     // Track billing charges for each dispatched attorney (non-blocking)
     for (const attorneyId of assignedIds) {
-      trackLeadCharge(attorneyId, leadId, 'standard').catch((err) =>
-        logger.error('Failed to track lead charge in dispatch', { attorneyId, leadId, err })
-      )
+      getAttorneyTier(attorneyId)
+        .then((tier) => {
+          const cost = calculateLeadCost(tier, 'standard', opts?.city)
+          return trackLeadCharge(attorneyId, leadId, 'standard', cost.finalCents)
+        })
+        .catch((err) =>
+          logger.error('Failed to track lead charge in dispatch', { attorneyId, leadId, err })
+        )
     }
 
     return assignedIds
