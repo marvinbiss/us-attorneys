@@ -14,6 +14,8 @@ import {
   ChevronLeft,
   AlertCircle,
 } from 'lucide-react'
+import { useToast } from '@/hooks/useToast'
+import { ToastContainer } from '@/components/ui/Toast'
 
 // ── Types ───────────────────────────────────────────────────────────
 
@@ -97,6 +99,7 @@ export default function BookingWidget({
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [bookingResult, setBookingResult] = useState<BookingResponse | null>(null)
+  const { toasts, removeToast, success: toastSuccess } = useToast()
 
   // Form fields
   const [clientName, setClientName] = useState('')
@@ -210,6 +213,7 @@ export default function BookingWidget({
       const data = (await res.json()) as BookingResponse
       setBookingResult(data)
       setStep('success')
+      toastSuccess('Booking confirmed!', 'A confirmation email has been sent.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
@@ -221,6 +225,7 @@ export default function BookingWidget({
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border-2 border-blue-100 overflow-hidden">
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-5">
         <div className="flex items-center justify-between">

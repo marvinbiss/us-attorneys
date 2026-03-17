@@ -94,14 +94,47 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
     return () => document.removeEventListener('click', handleClick, true)
   }, [mounted])
 
-  // Close on Escape
+  // Close on Escape + arrow key navigation inside open menus
   useEffect(() => {
     if (!mounted) return
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpenMenu(null)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Close menu and return focus to the trigger button
+        const currentMenu = openMenuRef.current
+        if (currentMenu) {
+          setOpenMenu(null)
+          const trigger = document.querySelector<HTMLElement>(`[data-menu-trigger="${currentMenu}"]`)
+          trigger?.focus()
+        }
+        return
+      }
+
+      // Arrow key navigation inside open menus
+      if (!openMenuRef.current) return
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
+
+      const menuContent = document.querySelector(`[data-menu-content="${openMenuRef.current}"]`)
+      if (!menuContent) return
+
+      const focusableItems = Array.from(
+        menuContent.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [role="menuitem"]')
+      )
+      if (focusableItems.length === 0) return
+
+      const currentIndex = focusableItems.indexOf(document.activeElement as HTMLElement)
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        const nextIndex = currentIndex < focusableItems.length - 1 ? currentIndex + 1 : 0
+        focusableItems[nextIndex].focus()
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : focusableItems.length - 1
+        focusableItems[prevIndex].focus()
+      }
     }
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [mounted])
 
   // Mobile search handler
@@ -163,6 +196,35 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
 
   const closeMobileMenu = () => { setIsMenuOpen(false) }
 
+  // Keyboard handler for mega menu trigger buttons
+  const handleTriggerKeyDown = useCallback((e: React.KeyboardEvent, menu: MenuType) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      toggleMenu(menu)
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      // Open the menu and focus the first item
+      setOpenMenu(menu)
+      requestAnimationFrame(() => {
+        const menuContent = document.querySelector(`[data-menu-content="${menu}"]`)
+        if (menuContent) {
+          const firstItem = menuContent.querySelector<HTMLElement>('a[role="menuitem"], button[role="menuitem"], a[href]')
+          firstItem?.focus()
+        }
+      })
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setOpenMenu(menu)
+      requestAnimationFrame(() => {
+        const menuContent = document.querySelector(`[data-menu-content="${menu}"]`)
+        if (menuContent) {
+          const items = menuContent.querySelectorAll<HTMLElement>('a[role="menuitem"], button[role="menuitem"], a[href]')
+          if (items.length > 0) items[items.length - 1].focus()
+        }
+      })
+    }
+  }, [toggleMenu])
+
   // Helper to render a nav trigger button
   const NavTrigger = ({ menu, label }: { menu: MenuType; label: string }) => (
     <div
@@ -174,6 +236,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
         type="button"
         data-menu-trigger={menu}
         onClick={() => toggleMenu(menu)}
+        onKeyDown={(e) => handleTriggerKeyDown(e, menu)}
         aria-expanded={openMenu === menu}
         aria-haspopup="true"
         className={cn(
@@ -189,11 +252,11 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
       </button>
       {/* Plus dropdown inline */}
       {menu === 'plus' && openMenu === 'plus' && (
-        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-          <Link href="/reviews" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Attorney reviews</Link>
-          <Link href="/pricing" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Fees</Link>
-          <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
-          <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Legal guides</Link>
+        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50" role="menu" aria-label="More options">
+          <Link href="/reviews" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Attorney reviews</Link>
+          <Link href="/pricing" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Fees</Link>
+          <Link href="/blog" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
+          <Link href="/guides" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Legal guides</Link>
         </div>
       )}
     </div>

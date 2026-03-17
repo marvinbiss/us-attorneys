@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Phone, CheckCircle, Loader2 } from 'lucide-react'
 import { trackEvent, trackConversion } from '@/lib/analytics/tracking'
+import { useToast } from '@/hooks/useToast'
+import { ToastContainer } from '@/components/ui/Toast'
 
 interface CallbackRequestProps {
   specialtySlug?: string
@@ -22,6 +24,7 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const { toasts, removeToast, success: toastSuccess } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,6 +69,7 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
       trackConversion('generate_lead', 30)
 
       setSuccess(true)
+      toastSuccess('Request sent!', 'An attorney will call you back within 24 hours.')
     } catch {
       setError('An error occurred. Please try again.')
     } finally {
@@ -75,11 +79,14 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
 
   if (success) {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-        <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-        <p className="text-sm font-semibold text-green-900">Request sent!</p>
-        <p className="text-xs text-green-700 mt-1">An attorney will call you back within 24 hours.</p>
-      </div>
+      <>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+          <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+          <p className="text-sm font-semibold text-green-900">Request sent!</p>
+          <p className="text-xs text-green-700 mt-1">An attorney will call you back within 24 hours.</p>
+        </div>
+        <ToastContainer toasts={toasts} onDismiss={removeToast} />
+      </>
     )
   }
 

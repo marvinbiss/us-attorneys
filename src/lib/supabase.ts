@@ -274,9 +274,6 @@ async function queryAttorneyDetail(
   field: 'stable_id' | 'id' | 'slug',
   value: string,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type Row = Record<string, any>
-
   const { data } = await supabase
     .from('attorneys')
     .select(PROVIDER_DETAIL_SELECT)
@@ -284,7 +281,7 @@ async function queryAttorneyDetail(
     .eq('is_active', true)
     .single()
 
-  return data ? (data as Row) : null
+  return data ? (data as unknown as AttorneyListRow) : null
 }
 
 // Lookup by stable_id ONLY — no fallback.

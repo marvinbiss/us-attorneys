@@ -46,6 +46,16 @@ interface ZipRow {
   county: { name: string; slug: string } | null
 }
 
+/** Shape returned by the nearby ZIP codes query (no county, no state slug) */
+interface NearbyZipRow {
+  code: string
+  latitude: number | null
+  longitude: number | null
+  population: number | null
+  location: { name: string; slug: string } | null
+  state: { name: string; abbreviation: string } | null
+}
+
 /**
  * Resolve a ZIP slug to a City-compatible object.
  * Returns null during build (no DB) or if ZIP not found.
@@ -163,15 +173,14 @@ export async function getNearbyZipCodes(slug: string, limit: number = 8): Promis
           .limit(limit)
 
         if (!fallback) return []
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (fallback as any[])
-          .filter((z: { code: string }) => z.code !== zipCode)
+        return (fallback as unknown as NearbyZipRow[])
+          .filter((z) => z.code !== zipCode)
           .slice(0, limit)
-          .map((z: ZipRow) => ({
-            slug: buildZipSlug(z.code, (z.location as { name: string })?.name || '', (z.state as { abbreviation: string })?.abbreviation || ''),
-            name: `${(z.location as { name: string })?.name || 'Unknown'} ${z.code}`,
-            stateCode: (z.state as { abbreviation: string })?.abbreviation || '',
-            stateName: (z.state as { name: string })?.name || '',
+          .map((z) => ({
+            slug: buildZipSlug(z.code, z.location?.name || '', z.state?.abbreviation || ''),
+            name: `${z.location?.name || 'Unknown'} ${z.code}`,
+            stateCode: z.state?.abbreviation || '',
+            stateName: z.state?.name || '',
             county: '',
             population: z.population ? z.population.toLocaleString() : '0',
             zipCode: z.code,

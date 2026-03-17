@@ -19,6 +19,55 @@ const attorneyIdSchema = z.string().min(1).max(255).regex(
   'Invalid attorney ID'
 )
 
+/** Provider row shape — base columns + optional join relations from the full query */
+interface ProviderRow {
+  id: string
+  name: string
+  slug: string | null
+  email: string | null
+  phone: string | null
+  siret: string | null
+  siren: string | null
+  is_verified: boolean | null
+  is_active: boolean | null
+  stable_id: string | null
+  noindex: boolean | null
+  address_city: string | null
+  address_postal_code: string | null
+  address_street: string | null
+  address_region: string | null
+  address_department?: string | null
+  specialty: string | null
+  rating_average: number | null
+  review_count: number | null
+  created_at: string | null
+  legal_form_code: string | null
+  description: string | null
+  meta_description: string | null
+  website: string | null
+  latitude: number | null
+  longitude: number | null
+  // Optional join columns (present only when full query succeeds)
+  provider_services?: Array<{
+    service_id: string
+    price_min?: number
+    price_max?: number
+    price_unit?: string
+    service?: { id: string; name: string; slug: string }
+  }>
+  provider_locations?: Array<{
+    radius_km?: number
+    location?: { id: string; name: string; slug: string; postal_code?: string }
+  }>
+  portfolio_items?: Array<{
+    id: string
+    title?: string
+    description?: string
+    image_url?: string
+    category?: string
+  }>
+}
+
 // Type for enriched attorney data
 interface AttorneyDetails {
   id: string
@@ -154,8 +203,7 @@ export const GET = createApiHandler(async ({ params }) => {
     }
 
     // Now get full data with relations (if tables exist)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider may include join columns (provider_services, provider_locations, portfolio_items) from the full query
-    let provider: Record<string, any> | null = simpleProvider
+    let provider: ProviderRow | null = simpleProvider as unknown as ProviderRow | null
     const attorneyError = simpleError
 
     if (simpleProvider) {
@@ -179,7 +227,7 @@ export const GET = createApiHandler(async ({ params }) => {
           .single()
 
         if (fullProvider) {
-          provider = fullProvider
+          provider = fullProvider as unknown as ProviderRow
         }
       } catch {
         // Use simple provider if relations fail
@@ -207,9 +255,9 @@ export const GET = createApiHandler(async ({ params }) => {
       }
 
       // Extract services
-      const services = provider.provider_services?.map((ps: { service?: { name: string } }) =>
+      const services = (provider.provider_services?.map((ps: { service?: { name: string } }) =>
         ps.service?.name
-      ).filter(Boolean) || []
+      ).filter((name): name is string => Boolean(name))) || []
 
       // Extract coverage areas
       const interventionZones = provider.provider_locations?.map((pl: {
@@ -221,7 +269,7 @@ export const GET = createApiHandler(async ({ params }) => {
             : pl.location.name
         }
         return null
-      }).filter(Boolean) || []
+      }).filter((zone): zone is string => Boolean(zone)) || []
 
       // Retrieve the real portfolio (filter demo data with Unsplash images)
       const portfolio = (provider.portfolio_items || [])
@@ -287,7 +335,7 @@ export const GET = createApiHandler(async ({ params }) => {
         description: finalDescription,
         average_rating: Math.round(Number(finalRating) * 10) / 10,
         review_count: finalReviewCount,
-        is_verified: provider.is_verified,
+        is_verified: provider.is_verified ?? false,
         is_center: false,
         team_size: null,
         services: services.length > 0 ? services : [finalSpecialty],

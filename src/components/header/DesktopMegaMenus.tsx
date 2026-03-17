@@ -103,6 +103,8 @@ export default function DesktopMegaMenus({
                               key={`${cat.category}-${service.slug}`}
                               href={`/practice-areas/${service.slug}`}
                               onClick={closeMenus}
+                              role="menuitem"
+                              tabIndex={0}
                               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-200 group/link ${colors.hoverBg} hover:shadow-sm`}
                             >
                               <Icon className="w-4 h-4 text-slate-400 group-hover/link:text-blue-600 transition-colors duration-200" />
@@ -194,6 +196,8 @@ export default function DesktopMegaMenus({
                           key={city.slug}
                           href={`/cities/${city.slug}`}
                           onClick={closeMenus}
+                          role="menuitem"
+                          tabIndex={0}
                           className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-blue-50 transition-all duration-200 group/city"
                         >
                           <div className="flex items-center gap-2.5">
@@ -270,6 +274,8 @@ export default function DesktopMegaMenus({
                       key={region.slug}
                       href={`/regions/${region.slug}`}
                       onClick={closeMenus}
+                      role="menuitem"
+                      tabIndex={0}
                       className="group/region flex items-start gap-3 p-4 bg-slate-50/80 hover:bg-blue-50 rounded-xl border border-transparent hover:border-blue-200 transition-all duration-200 hover:shadow-md"
                     >
                       <div className="w-10 h-10 rounded-xl bg-white group-hover/region:bg-blue-100 border border-slate-200 group-hover/region:border-blue-300 flex items-center justify-center flex-shrink-0 transition-all duration-200 shadow-sm">
@@ -300,6 +306,8 @@ export default function DesktopMegaMenus({
                         key={region.slug}
                         href={`/regions/${region.slug}`}
                         onClick={closeMenus}
+                        role="menuitem"
+                        tabIndex={0}
                         className="group/region flex items-center gap-3 p-3 bg-emerald-50/50 hover:bg-emerald-50 rounded-xl border border-transparent hover:border-emerald-200 transition-all duration-200"
                       >
                         <Globe className="w-4 h-4 text-emerald-400 group-hover/region:text-emerald-600 transition-colors flex-shrink-0" />

@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Star, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { useToast } from '@/hooks/useToast'
+import { ToastContainer } from '@/components/ui/Toast'
 
 interface BookingInfo {
   attorneyName: string
@@ -26,6 +28,7 @@ export default function ReviewPage() {
   const [hoveredRating, setHoveredRating] = useState(0)
   const [comment, setComment] = useState('')
   const [wouldRecommend, setWouldRecommend] = useState<boolean | null>(null)
+  const { toasts, removeToast, success: toastSuccess } = useToast()
 
   // Fetch booking info
   useEffect(() => {
@@ -81,6 +84,7 @@ export default function ReviewPage() {
       }
 
       setSubmitted(true)
+      toastSuccess('Review submitted!', 'Thank you for your feedback.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -150,6 +154,7 @@ export default function ReviewPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
       <div className="max-w-lg mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

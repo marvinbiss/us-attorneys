@@ -24,6 +24,9 @@ export async function GET() {
   // ── Attorney sitemaps (DB-dependent, served via /api/sitemap-attorneys) ──
   // These use "attorneys-{i}" naming to match next.config.js rewrite:
   //   /sitemap/attorneys-:id.xml → /api/sitemap-attorneys?id=:id
+  // The sitemap-attorneys route uses keyset/cursor pagination internally
+  // (ORDER BY id ASC, LIMIT N with a single OFFSET to find the start cursor),
+  // avoiding the O(n) full-scan problem of deep OFFSET pagination.
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()

@@ -2,12 +2,15 @@
 
 import { useState } from 'react'
 import { Loader2, CheckCircle } from 'lucide-react'
+import { useToast } from '@/hooks/useToast'
+import { ToastContainer } from '@/components/ui/Toast'
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { toasts, removeToast, success: toastSuccess } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,6 +36,7 @@ export default function NewsletterForm() {
       }
 
       setIsSubmitted(true)
+      toastSuccess('Subscribed!', 'You will receive our latest updates.')
       setEmail('')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error subscribing')
@@ -43,10 +47,13 @@ export default function NewsletterForm() {
 
   if (isSubmitted) {
     return (
-      <div className="flex items-center gap-3 px-5 py-3.5 bg-green-500/20 border border-green-500/30 rounded-xl">
-        <CheckCircle className="w-5 h-5 text-green-400" />
-        <span className="text-green-400 font-medium">Thank you for subscribing!</span>
-      </div>
+      <>
+        <div className="flex items-center gap-3 px-5 py-3.5 bg-green-500/20 border border-green-500/30 rounded-xl">
+          <CheckCircle className="w-5 h-5 text-green-400" />
+          <span className="text-green-400 font-medium">Thank you for subscribing!</span>
+        </div>
+        <ToastContainer toasts={toasts} onDismiss={removeToast} />
+      </>
     )
   }
 

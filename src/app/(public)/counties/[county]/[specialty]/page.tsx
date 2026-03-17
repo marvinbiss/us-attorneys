@@ -114,9 +114,13 @@ async function getCounty(slug: string): Promise<CountyInfo | null> {
           .single()
         if (error || !data) return null
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const row = data as any
-        const stateData = row.state as { name: string; abbreviation: string; slug: string } | null
+        const row = data as unknown as {
+          slug: string
+          name: string
+          fips_code: string | null
+          state: { name: string; abbreviation: string; slug: string } | null
+        }
+        const stateData = row.state
 
         return {
           slug: row.slug,

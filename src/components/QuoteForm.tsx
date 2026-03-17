@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { services, cities } from '@/lib/data/usa'
 import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check, MapPin } from 'lucide-react'
 import { trackEvent, trackConversion } from '@/lib/analytics/tracking'
+import { useToast } from '@/hooks/useToast'
+import { ToastContainer } from '@/components/ui/Toast'
 
 interface FormData {
   service: string
@@ -163,6 +165,7 @@ export default function ConsultationRequestForm({
   const [showCitySuggestions, setShowCitySuggestions] = useState(false)
   const [selectedCityZip, setSelectedCityZip] = useState(prefilledCityPostal || savedState?.selectedCityZip || '')
   const [geoLoading, setGeoLoading] = useState(false)
+  const { toasts, removeToast, success: toastSuccess } = useToast()
 
   const updateField = useCallback(
     <K extends keyof FormData>(field: K, value: FormData[K]) => {
@@ -348,6 +351,7 @@ export default function ConsultationRequestForm({
         city: formData.city,
       })
       setSubmitted(true)
+      toastSuccess('Request submitted!', 'Attorneys will contact you within 24 hours.')
       localStorage.removeItem(STORAGE_KEY)
     } catch (err) {
       setSubmitError(
@@ -361,6 +365,7 @@ export default function ConsultationRequestForm({
   if (submitted) {
     return (
       <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto text-center">
+        <ToastContainer toasts={toasts} onDismiss={removeToast} />
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-[bounce_0.6s_ease-in-out]">
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>

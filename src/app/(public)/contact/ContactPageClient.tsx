@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { Mail, Send, CheckCircle, Clock, MessageSquare, ArrowRight, Loader2, AlertCircle, Phone } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { useToast } from '@/hooks/useToast'
+import { ToastContainer } from '@/components/ui/Toast'
 
 export default function ContactPageClient() {
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ export default function ContactPageClient() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { toasts, removeToast, success: toastSuccess } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,6 +39,7 @@ export default function ContactPageClient() {
       }
 
       setIsSubmitted(true)
+      toastSuccess('Message sent!', 'We will respond as soon as possible.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error sending message')
     } finally {
@@ -328,6 +332,7 @@ export default function ContactPageClient() {
           </div>
         </div>
       </section>
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
     </div>
   )
 }
