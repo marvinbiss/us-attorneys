@@ -410,7 +410,7 @@ async function enrichAttorney(
 
       const existing = candidateMap.get(clId)
       const dateStr = docket.dateFiled || docket.dateTerminated || null
-      const isStateMatch = courtState === attorney.bar_state
+      const isStateMatch = courtState === (attorney.bar_state || attorney.address_state)
 
       if (existing) {
         existing.count++
@@ -712,15 +712,17 @@ async function main() {
   while (processed < LIMIT) {
     let query = supabase
       .from('attorneys')
-      .select('id, name, first_name, last_name, bar_state')
+      .select('id, name, first_name, last_name, bar_state, address_state')
       .is('courtlistener_id', null)
       .eq('is_active', true)
-      .not('bar_state', 'is', null)
       .order('id')
       .range(batchOffset, batchOffset + DB_BATCH_SIZE - 1)
 
     if (STATE_FILTER) {
-      query = query.eq('bar_state', STATE_FILTER)
+      // Try bar_state first, fall back to address_state for states without bar data
+      query = query.or(`bar_state.eq.${STATE_FILTER},and(bar_state.is.null,address_state.eq.${STATE_FILTER})`)
+    } else {
+      query = query.not('bar_state', 'is', null)
     }
 
     const { data: attorneys, error: fetchErr } = await query
