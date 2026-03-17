@@ -599,8 +599,9 @@ type SOLCategory =
   | 'debt-collection'
 
 const STATE_SOL: Record<string, Record<string, number>> = {
+  // FL personal-injury/property-damage/product-liability updated to 2 per HB 837 (eff. 2023-03-24)
   'personal-injury': {
-    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 3, FL: 4,
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
     GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
     MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
     NJ: 2, NM: 3, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
@@ -614,7 +615,7 @@ const STATE_SOL: Record<string, Record<string, number>> = {
     SC: 3, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
   },
   'property-damage': {
-    AL: 6, AK: 6, AZ: 2, AR: 3, CA: 3, CO: 2, CT: 2, DE: 2, DC: 3, FL: 4,
+    AL: 6, AK: 6, AZ: 2, AR: 3, CA: 3, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
     GA: 4, HI: 2, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 2, LA: 1, ME: 6,
     MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
     NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 6, PA: 2, RI: 3,
@@ -656,7 +657,7 @@ const STATE_SOL: Record<string, Record<string, number>> = {
     SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
   },
   'product-liability': {
-    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 3, DE: 2, DC: 3, FL: 4,
+    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 3, DE: 2, DC: 3, FL: 2,
     GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
     MD: 3, MA: 3, MI: 3, MN: 4, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
     NJ: 2, NM: 3, NY: 3, NC: 6, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
@@ -892,7 +893,7 @@ const STATE_LEGAL_AID: Record<string, string[]> = {
   CA: ['Legal Aid Foundation of Los Angeles', 'Bay Area Legal Aid', 'California Courts Self-Help Center (courts.ca.gov/selfhelp)'],
   CO: ['Colorado Legal Services', 'Colorado Bar Association Pro Bono Project', 'Colorado Legal Help (coloradolegalservices.org)'],
   CT: ['Connecticut Legal Services', 'Statewide Legal Services of Connecticut', 'CT Law Help (ctlawhelp.org)'],
-  DE: ['Delaware Volunteer Legal Services', 'Community Legal Aid Society (CLASI)', 'Delaware Law Help (delawaylawhelp.org)'],
+  DE: ['Delaware Volunteer Legal Services', 'Community Legal Aid Society (CLASI)', 'DE Law Help (declasi.org)'],
   DC: ['Legal Aid Society of the District of Columbia', 'DC Bar Pro Bono Center', 'LawHelp DC (lawhelp.org/dc)'],
   FL: ['Florida Legal Services', 'Florida Bar Foundation', 'Florida Law Help (floridalawhelp.org)'],
   GA: ['Georgia Legal Services Program', 'Atlanta Legal Aid Society', 'Georgia Law Help (georgialegalaid.org)'],
@@ -935,7 +936,7 @@ const STATE_LEGAL_AID: Record<string, string[]> = {
   WA: ['Northwest Justice Project', 'King County Bar Pro Bono Services', 'WA Law Help (washingtonlawhelp.org)'],
   WV: ['Legal Aid of West Virginia', 'WV Senior Legal Aid', 'WV Law Help (lawhelp.org/wv)'],
   WI: ['Legal Action of Wisconsin', 'Wisconsin Judicare', 'WI Law Help (wilawlibrary.gov/selfhelp)'],
-  WY: ['Legal Aid of Wyoming', 'Wyoming State Bar Pro Bono Program', 'WY Law Help (wyominglaw help.org)'],
+  WY: ['Legal Aid of Wyoming', 'Wyoming State Bar Pro Bono Program', 'WY Law Help (wyominglegalhelp.org)'],
 }
 
 export function getStateLegalAid(stateAbbr: string): string[] {
