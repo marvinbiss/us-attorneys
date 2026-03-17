@@ -105,6 +105,29 @@ const STEPS: IngestionStep[] = [
     args: [],
     records: '~90,000 attorneys',
   },
+
+  // Phase 4: Enrichment
+  {
+    step: 10,
+    name: 'Census Bureau ACS Data',
+    script: 'scripts/ingest/census-data.ts',
+    args: [],
+    records: '~32,000 cities',
+  },
+  {
+    step: 11,
+    name: 'Assign Practice Areas (keyword matching)',
+    script: 'scripts/ingest/assign-specialties.ts',
+    args: [],
+    records: 'all attorneys with text fields',
+  },
+  {
+    step: 12,
+    name: 'Deduplicate Attorneys (report only)',
+    script: 'scripts/ingest/deduplicate-attorneys.ts',
+    args: [],
+    records: 'cross-state duplicates',
+  },
 ]
 
 function run(step: IngestionStep): boolean {
@@ -144,7 +167,7 @@ function main() {
   console.log()
   console.log(`Mode: ${DRY_RUN ? 'DRY RUN' : 'LIVE'}`)
   console.log(`Steps: ${STEP ? `only step ${STEP}` : `${FROM} through ${STEPS.length}`}`)
-  console.log(`Total estimated records: ~1,053,000+`)
+  console.log(`Total estimated records: ~1,053,000+ attorneys + enrichment`)
   console.log()
 
   // Show plan

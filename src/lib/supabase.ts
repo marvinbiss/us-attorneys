@@ -51,6 +51,8 @@ interface AttorneyListRow {
   longitude: number | null
   created_at: string | null
   updated_at: string | null
+  is_featured: boolean | null
+  boost_level: number | null
 }
 
 /**
@@ -126,6 +128,7 @@ const PROVIDER_LIST_SELECT = [
   'phone', 'siret',
   'latitude', 'longitude',
   'created_at', 'updated_at',
+  'is_featured', 'boost_level',
 ].join(',')
 
 
@@ -617,6 +620,8 @@ export async function getAttorneysByServiceAndLocation(
               .in('specialty', specialties)
               .eq('address_postal_code', postalCode)
               .eq('is_active', true)
+              .order('is_featured', { ascending: false, nullsFirst: true })
+              .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
               .order('is_verified', { ascending: false })
               .order('name')
@@ -640,7 +645,9 @@ export async function getAttorneysByServiceAndLocation(
                 .in('specialty', specialties)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
-                .order('phone', { ascending: false, nullsFirst: false })
+                .order('is_featured', { ascending: false, nullsFirst: true })
+              .order('boost_level', { ascending: false, nullsFirst: true })
+              .order('phone', { ascending: false, nullsFirst: false })
                 .order('is_verified', { ascending: false })
                 .order('name')
                 .range(offset, offset + limit - 1)
@@ -672,6 +679,8 @@ export async function getAttorneysByServiceAndLocation(
               .in('address_city', cityValues)
               .eq('is_active', true)
               // STRICT RULE: providers with phone always rank above those without
+              .order('is_featured', { ascending: false, nullsFirst: true })
+              .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
               .order('is_verified', { ascending: false })
               .order('name')
@@ -839,6 +848,8 @@ export async function getAttorneysByLocation(locationSlug: string) {
                 .select(PROVIDER_LIST_SELECT)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
+                .order('is_featured', { ascending: false, nullsFirst: true })
+                .order('boost_level', { ascending: false, nullsFirst: true })
                 .order('phone', { ascending: false, nullsFirst: false })
                 .order('is_verified', { ascending: false })
                 .order('name')
@@ -874,6 +885,8 @@ export async function getAttorneysByLocation(locationSlug: string) {
               .select(PROVIDER_LIST_SELECT)
               .in('address_city', cityValues)
               .eq('is_active', true)
+              .order('is_featured', { ascending: false, nullsFirst: true })
+              .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
               .order('is_verified', { ascending: false })
               .order('name')
@@ -906,6 +919,8 @@ export async function getAllProviders() {
             .from('attorneys')
             .select(PROVIDER_LIST_SELECT)
             .eq('is_active', true)
+            .order('is_featured', { ascending: false, nullsFirst: true })
+            .order('boost_level', { ascending: false, nullsFirst: true })
             .order('phone', { ascending: false, nullsFirst: false })
             .order('is_verified', { ascending: false })
             .order('name')
@@ -941,6 +956,8 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
               .eq('is_active', true)
+              .order('is_featured', { ascending: false, nullsFirst: true })
+              .order('boost_level', { ascending: false, nullsFirst: true })
               .order('phone', { ascending: false, nullsFirst: false })
               .order('is_verified', { ascending: false })
               .limit(effectiveLimit)

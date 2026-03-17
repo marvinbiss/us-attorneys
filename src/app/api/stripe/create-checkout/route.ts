@@ -1,13 +1,23 @@
+/**
+ * POST /api/stripe/create-checkout
+ * Creates a Stripe Checkout session for Pro or Premium subscription.
+ * Validates price ID before calling Stripe — returns 503 if not configured.
+ */
+
 import { NextResponse } from 'next/server'
 import { stripe, PLANS, PlanId } from '@/lib/stripe/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-// POST request schema
+// Accept both plan_id (from UpgradeButton) and planId (legacy)
 const checkoutSchema = z.object({
-  planId: z.enum(['starter', 'pro', 'premium'] as const),
-})
+  plan_id: z.enum(['pro', 'premium'] as const).optional(),
+  planId: z.enum(['pro', 'premium'] as const).optional(),
+}).refine(
+  (data) => data.plan_id || data.planId,
+  { message: 'plan_id or planId is required' }
+)
 
 export async function POST(request: Request) {
   try {
@@ -25,11 +35,12 @@ export async function POST(request: Request) {
     const result = checkoutSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Invalid plan. Must be "pro" or "premium".', details: result.error.flatten() },
         { status: 400 }
       )
     }
-    const { planId } = result.data
+
+    const planId = result.data.plan_id || result.data.planId!
 
     if (!(planId in PLANS)) {
       return NextResponse.json(
@@ -40,10 +51,12 @@ export async function POST(request: Request) {
 
     const plan = PLANS[planId as PlanId]
 
+    // Graceful handling: return 503 (not crash) if Stripe price IDs are not configured
     if (!plan.priceId) {
+      logger.error(`Stripe price ID not configured for plan "${planId}". Set STRIPE_${planId.toUpperCase()}_PRICE_ID in environment.`)
       return NextResponse.json(
-        { error: 'This plan does not require payment' },
-        { status: 400 }
+        { error: 'Subscription plans are not yet configured. Please contact support.' },
+        { status: 503 }
       )
     }
 
@@ -56,6 +69,8 @@ export async function POST(request: Request) {
     })
     const customerId = customer.id
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -67,8 +82,8 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/attorney-dashboard/subscription?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/attorney-dashboard/subscription?canceled=true`,
+      success_url: `${siteUrl}/attorney-dashboard/subscription?success=true`,
+      cancel_url: `${siteUrl}/attorney-dashboard/subscription?canceled=true`,
       metadata: {
         user_id: user.id,
         plan_id: planId,
@@ -79,7 +94,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Stripe checkout error:', error)
     return NextResponse.json(
-      { error: 'Error creating payment' },
+      { error: 'Failed to create checkout session' },
       { status: 500 }
     )
   }

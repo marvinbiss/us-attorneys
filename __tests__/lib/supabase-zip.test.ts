@@ -31,7 +31,9 @@ vi.mock('@/lib/data/usa', () => ({
 
 // Build the Supabase mock chain
 const mockRange = vi.fn()
-const mockOrder3 = vi.fn(() => ({ range: mockRange }))
+const mockOrder5 = vi.fn(() => ({ range: mockRange }))
+const mockOrder4 = vi.fn(() => ({ order: mockOrder5 }))
+const mockOrder3 = vi.fn(() => ({ order: mockOrder4 }))
 const mockOrder2 = vi.fn(() => ({ order: mockOrder3 }))
 const mockOrder1 = vi.fn(() => ({ order: mockOrder2 }))
 const mockEqActive = vi.fn(() => ({ order: mockOrder1 }))

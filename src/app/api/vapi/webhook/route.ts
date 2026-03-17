@@ -14,6 +14,7 @@ import type {
   QualificationData,
   VapiAssistantResponse,
 } from '@/types/voice-qualification'
+import { trackVoiceLeadForBilling } from '@/lib/billing/voice-usage'
 
 export const maxDuration = 30
 
@@ -312,6 +313,18 @@ async function handleEndOfCallReport(event: VapiWebhookEvent): Promise<NextRespo
       .from('prospection_conversations')
       .update({ status: 'resolved' })
       .eq('id', voiceCall.conversation_id)
+  }
+
+  // TODO P2.19: Track qualified voice leads for attorney billing.
+  // Currently voice_calls doesn't have a direct attorney_id FK.
+  // Once lead dispatch assigns the call to an attorney, pass that ID here.
+  if (voiceCall.qualification_score && voiceCall.qualification_score !== 'disqualified') {
+    await trackVoiceLeadForBilling({
+      voiceCallId: voiceCall.id,
+      attorneyId: null, // TODO: resolve from lead dispatch once voice→attorney assignment exists
+      qualificationScore: voiceCall.qualification_score,
+      vapiCost: cost || 0,
+    })
   }
 
   logger.info('Voice call report processed', {
