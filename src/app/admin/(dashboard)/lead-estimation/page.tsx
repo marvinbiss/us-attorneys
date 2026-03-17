@@ -34,7 +34,7 @@ interface EstimationLead {
   source: 'chat' | 'callback'
   conversation_history: Array<{ role: string; content: string }> | null
   page_url: string | null
-  artisan_public_id: string | null
+  artisan_public_id: string | null // DB field: artisan_public_id (legacy name for attorney_public_id)
   created_at: string
 }
 
@@ -141,7 +141,7 @@ export default function AdminEstimationLeadsPage() {
       l.practice_area,
       l.city,
       l.state,
-      l.artisan_public_id || '',
+      l.artisan_public_id || '', // DB field: artisan_public_id (legacy name for attorney_public_id)
     ])
     const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })

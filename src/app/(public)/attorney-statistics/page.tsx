@@ -10,7 +10,7 @@ import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 // TODO: Replace with real US state attorney counts from database
-const DEPT_ARTISAN_COUNTS: Record<string, { artisans: number; btp: number }> = {}
+const STATE_ATTORNEY_COUNTS: Record<string, { attorneys: number; legal: number }> = {}
 import { DEPARTMENTS } from '@/lib/geography'
 import {
   servicePricings,
@@ -24,10 +24,10 @@ import {
 // ---------------------------------------------------------------------------
 
 function computeStateStats() {
-  const entries = Object.entries(DEPT_ARTISAN_COUNTS)
+  const entries = Object.entries(STATE_ATTORNEY_COUNTS)
 
-  const totalAttorneys = entries.reduce((s, [, v]) => s + v.artisans, 0)
-  const totalLitigators = entries.reduce((s, [, v]) => s + v.btp, 0)
+  const totalAttorneys = entries.reduce((s, [, v]) => s + v.attorneys, 0)
+  const totalLitigators = entries.reduce((s, [, v]) => s + v.legal, 0)
   const litigationRatio = Math.round((totalLitigators / totalAttorneys) * 100)
 
   // Population data (US Census 2024 estimates, by state)
@@ -63,10 +63,10 @@ function computeStateStats() {
     .map(([code, data]) => ({
       code,
       name: DEPARTMENTS[code] || code,
-      artisans: data.artisans,
-      btp: data.btp,
+      attorneys: data.attorneys,
+      legal: data.legal,
     }))
-    .sort((a, b) => b.artisans - a.artisans)
+    .sort((a, b) => b.attorneys - a.attorneys)
     .slice(0, 10)
 
   // Top 10 by density (attorneys per 10,000 inhabitants)
@@ -75,8 +75,8 @@ function computeStateStats() {
     .map(([code, data]) => ({
       code,
       name: DEPARTMENTS[code] || code,
-      artisans: data.artisans,
-      density: Math.round((data.artisans / STATE_POP[code]) * 10000),
+      attorneys: data.attorneys,
+      density: Math.round((data.attorneys / STATE_POP[code]) * 10000),
       population: STATE_POP[code],
     }))
     .sort((a, b) => b.density - a.density)
@@ -530,8 +530,8 @@ export default function AttorneyStatisticsPage() {
                 </div>
                 <div className="divide-y divide-gray-100">
                   {sortedByCount.map((dept, i) => {
-                    const maxCount = sortedByCount[0].artisans
-                    const barWidth = (dept.artisans / maxCount) * 100
+                    const maxCount = sortedByCount[0].attorneys
+                    const barWidth = (dept.attorneys / maxCount) * 100
                     return (
                       <div key={dept.code} className="px-6 py-3 flex items-center gap-4">
                         <span className="text-sm font-bold text-gray-400 w-6 text-right">{i + 1}</span>
@@ -541,7 +541,7 @@ export default function AttorneyStatisticsPage() {
                               {dept.name} ({dept.code})
                             </span>
                             <span className="text-sm font-bold text-blue-700 ml-2">
-                              {dept.artisans.toLocaleString('en-US')}
+                              {dept.attorneys.toLocaleString('en-US')}
                             </span>
                           </div>
                           <div className="w-full bg-gray-100 rounded-full h-2">

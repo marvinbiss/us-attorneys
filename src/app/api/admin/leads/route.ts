@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     const city = parsed.data.city ? sanitizeSearchQuery(parsed.data.city) : null
     const service = parsed.data.service ? sanitizeSearchQuery(parsed.data.service) : null
 
-    // Build all 3 queries
+    // Build all 3 queries — legacy table name 'devis_requests' = consultation requests
     let leadsQuery = supabase
       .from('devis_requests')
       .select('id', { count: 'exact', head: true })
@@ -53,14 +53,14 @@ export async function GET(request: Request) {
     if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
     if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
 
-    let artisansQuery = supabase
+    let attorneysQuery = supabase
       .from('attorneys')
       .select('id, stable_id, name, slug, specialty, address_city, is_verified')
       .eq('is_active', true)
       .order('name', { ascending: true })
       .limit(100)
-    if (city) artisansQuery = artisansQuery.ilike('address_city', `${city}%`)
-    if (service) artisansQuery = artisansQuery.ilike('specialty', `${service}%`)
+    if (city) attorneysQuery = attorneysQuery.ilike('address_city', `${city}%`)
+    if (service) attorneysQuery = attorneysQuery.ilike('specialty', `${service}%`)
 
     // Execute all 3 queries in parallel (instead of sequential)
     const assignedPromise = assignedQuery.then(
@@ -68,10 +68,10 @@ export async function GET(request: Request) {
       () => ({ count: null as number | null, error: null })
     )
 
-    const [leadsResult, assignedResult, artisansResult] = await Promise.all([
+    const [leadsResult, assignedResult, attorneysResult] = await Promise.all([
       leadsQuery,
       assignedPromise,
-      artisansQuery,
+      attorneysQuery,
     ])
 
     const leadsCreated = leadsResult.count
@@ -84,16 +84,16 @@ export async function GET(request: Request) {
       leadsAssigned = fallbackCount
     }
 
-    const artisans = artisansResult.data
-    if (artisansResult.error) {
-      logger.warn('Admin leads artisans query failed', { code: artisansResult.error.code, message: artisansResult.error.message })
+    const attorneys = attorneysResult.data
+    if (attorneysResult.error) {
+      logger.warn('Admin leads attorneys query failed', { code: attorneysResult.error.code, message: attorneysResult.error.message })
     }
 
     return NextResponse.json({
       leadsCreated: leadsCreated || 0,
       leadsAssigned: leadsAssigned || 0,
-      artisans: artisans || [],
-      attorneyCount: artisans?.length || 0,
+      attorneys: attorneys || [],
+      attorneyCount: attorneys?.length || 0,
       filters: { city, service },
     })
   } catch (error) {
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       leadsCreated: 0,
       leadsAssigned: 0,
-      artisans: [],
+      attorneys: [],
       attorneyCount: 0,
       filters: { city: null, service: null },
     })

@@ -1,5 +1,5 @@
 import { permanentRedirect } from 'next/navigation'
 
 export default function Page() {
-  permanentRedirect('/tools/calculator-prix')
+  permanentRedirect('/tools/calculator')
 }

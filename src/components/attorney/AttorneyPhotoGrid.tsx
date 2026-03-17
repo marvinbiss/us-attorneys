@@ -8,19 +8,19 @@ import { Artisan } from './types'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface AttorneyPhotoGridProps {
-  artisan: Artisan
+  attorney: Artisan
 }
 
 // Use shared BLUR_PLACEHOLDER from images.ts
 const BLUR_DATA_URL = BLUR_PLACEHOLDER
 
-export function AttorneyPhotoGrid({ artisan }: AttorneyPhotoGridProps) {
+export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
   // Only show real portfolio photos — no fake stock images
-  const photos = artisan.portfolio && artisan.portfolio.length > 0
-    ? artisan.portfolio
+  const photos = attorney.portfolio && attorney.portfolio.length > 0
+    ? attorney.portfolio
     : []
 
   const openLightbox = useCallback((index: number) => {

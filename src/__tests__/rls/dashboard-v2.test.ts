@@ -128,7 +128,7 @@ describe('Dashboard V2 — No Public Imports', () => {
   const dashboardFiles = [
     'src/app/(private)/attorney-dashboard/leads/page.tsx',
     'src/app/(private)/attorney-dashboard/leads/[id]/page.tsx',
-    'src/app/(private)/attorney-dashboard/leads/[id]/historique/page.tsx',
+    'src/app/(private)/attorney-dashboard/leads/[id]/history/page.tsx',
     'src/app/(private)/attorney-dashboard/settings/page.tsx',
     'src/app/admin/(dashboard)/leads/page.tsx',
     'src/app/admin/(dashboard)/dispatch/page.tsx',

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getNeighborhoodsByCity } from '@/lib/data/usa'
 import type { LocationContent } from '@/lib/seo/location-content'
 import type { LocationData } from '@/lib/data/location-data'
-import { formatNumber, formatEuro } from '@/lib/data/location-data'
+import { formatNumber, formatUSD } from '@/lib/data/location-data'
 import type { Service, Location as LocationType } from '@/types'
 import type { TradeContent } from '@/lib/data/trade-content'
 
@@ -127,7 +127,7 @@ export default function SeoContent({
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {locationData.revenu_median && (
                       <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
-                        <div className="text-lg font-bold text-clay-600">{formatEuro(locationData.revenu_median)}</div>
+                        <div className="text-lg font-bold text-clay-600">{formatUSD(locationData.revenu_median)}</div>
                         <div className="text-xs text-gray-500 mt-1">Median Income/yr</div>
                       </div>
                     )}
@@ -160,28 +160,6 @@ export default function SeoContent({
                   Real Estate Market in {location.name}
                 </h2>
                 <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.realEstate}</p>
-                {locationData && (locationData.prix_m2_moyen || locationData.prix_m2_maison) && (
-                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {locationData.prix_m2_moyen && (
-                      <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
-                        <div className="text-lg font-bold text-amber-700">{formatEuro(locationData.prix_m2_moyen)}/m²</div>
-                        <div className="text-xs text-gray-500 mt-1">Average Price</div>
-                      </div>
-                    )}
-                    {locationData.prix_m2_maison && (
-                      <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
-                        <div className="text-lg font-bold text-amber-700">{formatEuro(locationData.prix_m2_maison)}/m²</div>
-                        <div className="text-xs text-gray-500 mt-1">Houses</div>
-                      </div>
-                    )}
-                    {locationData.prix_m2_appartement && (
-                      <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
-                        <div className="text-lg font-bold text-amber-700">{formatEuro(locationData.prix_m2_appartement)}/m²</div>
-                        <div className="text-xs text-gray-500 mt-1">Apartments</div>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             )}
 
@@ -193,21 +171,21 @@ export default function SeoContent({
                 <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.legalMarket}</p>
                 {locationData && (
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {locationData.nb_entreprises_artisanales && (
+                    {locationData.nb_law_firms && (
                       <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                        <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_entreprises_artisanales)}</div>
+                        <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_law_firms)}</div>
                         <div className="text-xs text-gray-500 mt-1">Law Firms</div>
                       </div>
                     )}
-                    {locationData.nb_artisans_btp && (
+                    {locationData.nb_attorneys_licensed && (
                       <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                        <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_artisans_btp)}</div>
+                        <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_attorneys_licensed)}</div>
                         <div className="text-xs text-gray-500 mt-1">Construction Companies</div>
                       </div>
                     )}
-                    {locationData.nb_artisans_rge && (
+                    {locationData.nb_attorneys_verified && (
                       <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                        <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_artisans_rge)}</div>
+                        <div className="text-lg font-bold text-emerald-700">{formatNumber(locationData.nb_attorneys_verified)}</div>
                         <div className="text-xs text-gray-500 mt-1">Certified Specialists</div>
                       </div>
                     )}

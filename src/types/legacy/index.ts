@@ -6,7 +6,7 @@
  *
  * They exist solely to keep pre-v2 components compiling until their
  * dedicated PRs migrate them. Each PR that cleans a component should
- * remove its LegacyArtisan/LegacyProvider usage.
+ * remove its LegacyAttorney/LegacyProvider usage.
  *
  * @deprecated — will be deleted when all components are on v2 types.
  */
@@ -26,10 +26,10 @@ export interface LegacyProviderFields {
 /** @deprecated */
 export type LegacyProvider = Provider & LegacyProviderFields
 
-// ── Artisan legacy fields ───────────────────────────────────────────
+// ── Attorney legacy fields ──────────────────────────────────────────
 
 /** @deprecated — all fields below dropped in v2 */
-export interface LegacyArtisanFields {
+export interface LegacyAttorneyFields {
   is_premium?: boolean
   hourly_rate?: number
   response_time?: string
@@ -41,4 +41,4 @@ export interface LegacyArtisanFields {
 }
 
 /** @deprecated */
-export type LegacyArtisan = Artisan & LegacyArtisanFields
+export type LegacyAttorney = Artisan & LegacyAttorneyFields

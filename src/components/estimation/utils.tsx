@@ -6,12 +6,12 @@ import { LEAD_TRIGGER_KEYWORDS } from './constants'
 // ---------------------------------------------------------------------------
 
 export interface EstimationContext {
-  metier: string         // DB column name (prestations_tarifs.metier) -- do not rename
-  metierSlug: string     // DB column name -- do not rename
-  ville: string          // DB column name (coefficients_geo) -- do not rename
-  departement: string    // DB column name (coefficients_geo.departement) -- do not rename
+  metier: string         // DB column name (prestations_tarifs.metier) — legacy, do not rename without migration
+  metierSlug: string     // DB column name — legacy, do not rename without migration
+  ville: string          // DB column name (coefficients_geo) — legacy, do not rename without migration
+  departement: string    // DB column name (coefficients_geo.departement) — legacy, do not rename without migration
   pageUrl: string
-  artisan?: {            // legacy field name, sent to API -- do not rename without migration
+  artisan?: {            // legacy field name, sent to API — do not rename without migration
     name: string
     slug: string
     publicId: string

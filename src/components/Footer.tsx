@@ -16,7 +16,7 @@ const navigationLinks = [
 
 // Tools links
 const toolsLinks = [
-  { name: 'Cost Estimator', href: '/tools/calculator-prix' },
+  { name: 'Cost Estimator', href: '/tools/calculator' },
   { name: 'Attorney Finder', href: '/tools/diagnostic' },
   { name: 'Attorney Map', href: '/attorney-map' },
   { name: 'Fee Comparison', href: '/pricing' },

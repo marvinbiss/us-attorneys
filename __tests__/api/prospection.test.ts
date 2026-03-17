@@ -464,7 +464,7 @@ describe('Prospection API -- Templates validation', () => {
       name: 'WA Welcome',
       channel: 'whatsapp',
       body: 'Hello!',
-      whatsapp_template_name: 'welcome_artisan',
+      whatsapp_template_name: 'welcome_attorney',
       whatsapp_template_sid: 'HX123abc',
     })
     expect(result.success).toBe(true)
@@ -965,7 +965,7 @@ describe('Prospection API -- Files existence & structure', () => {
     expect(importRoute).toContain('importContacts')
 
     const syncRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/contacts/sync/route.ts'), 'utf-8')
-    expect(syncRoute).toContain('syncArtisansFromDatabase')
+    expect(syncRoute).toContain('syncAttorneysFromDatabase')
   })
 })
 

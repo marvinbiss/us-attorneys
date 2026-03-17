@@ -10,7 +10,7 @@ import {
   Search,
 } from "lucide-react"
 
-const PAGE_URL = `${SITE_URL}/guides/eviter-arnaques-artisan`
+const PAGE_URL = `${SITE_URL}/guides/avoid-scams`
 
 export const revalidate = 86400
 

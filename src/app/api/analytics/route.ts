@@ -5,7 +5,7 @@
  * Stores in analytics_events table for admin dashboard reporting
  *
  * Supported events:
- * - artisan_profile_view, phone_reveal, phone_click (attorney interactions)
+ * - attorney_profile_view, phone_reveal, phone_click (attorney interactions)
  * - page_view (page navigation tracking with visitor_id)
  */
 
@@ -39,7 +39,7 @@ const ALLOWED_EVENTS = [
   'waitlist_joined',
   'reminder_sent',
   'reminder_clicked',
-  'devis_submitted',
+  'consultation_submitted',
 ] as const
 
 const analyticsSchema = z.object({
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
       return new NextResponse(null, { status: 400 })
     }
 
-    // Hash IP for dedup (RGPD: no raw IP stored)
+    // Hash IP for dedup (GDPR: no raw IP stored)
     const ipHash = createHash('sha256')
       .update(ip + (process.env.ANALYTICS_SALT || 'sa-analytics-2026'))
       .digest('hex')

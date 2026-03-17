@@ -3,15 +3,15 @@ import { test, expect } from '@playwright/test'
 test.describe('Real-time Chat', () => {
   test('chat interface loads correctly', async ({ page }) => {
     // Navigate to messages page
-    await page.goto('/espace-artisan/messages')
+    await page.goto('/attorney-dashboard/messages')
 
     // Should show messages interface or redirect to login
     const url = page.url()
-    expect(url).toMatch(/messages|connexion/)
+    expect(url).toMatch(/messages|login/)
   })
 
   test('conversation list displays', async ({ page }) => {
-    await page.goto('/espace-client/messages')
+    await page.goto('/client-dashboard/messages')
 
     // Should show conversations or empty state
     const body = await page.locator('body')
@@ -19,9 +19,9 @@ test.describe('Real-time Chat', () => {
   })
 
   test('search conversations works', async ({ page }) => {
-    await page.goto('/espace-artisan/messages')
+    await page.goto('/attorney-dashboard/messages')
 
-    const searchInput = page.locator('input[placeholder*="Rechercher"]')
+    const searchInput = page.locator('input[placeholder*="Search"]')
     if (await searchInput.isVisible()) {
       await searchInput.fill('test')
       await expect(searchInput).toHaveValue('test')
@@ -31,7 +31,7 @@ test.describe('Real-time Chat', () => {
 
 test.describe('Chat Components', () => {
   test('message input is present', async ({ page }) => {
-    await page.goto('/espace-artisan/messages')
+    await page.goto('/attorney-dashboard/messages')
 
     // Look for message input
     // May or may not be visible depending on auth state
@@ -39,7 +39,7 @@ test.describe('Chat Components', () => {
   })
 
   test('send button is present', async ({ page }) => {
-    await page.goto('/espace-client/messages')
+    await page.goto('/client-dashboard/messages')
 
     // Look for send button
     // May or may not be visible depending on auth state
@@ -49,7 +49,7 @@ test.describe('Chat Components', () => {
 
 test.describe('Chat Accessibility', () => {
   test('chat has proper ARIA labels', async ({ page }) => {
-    await page.goto('/espace-artisan/messages')
+    await page.goto('/attorney-dashboard/messages')
 
     // Check for accessibility features
     const main = page.locator('main')
@@ -59,7 +59,7 @@ test.describe('Chat Accessibility', () => {
   })
 
   test('keyboard navigation in chat', async ({ page }) => {
-    await page.goto('/espace-client/messages')
+    await page.goto('/client-dashboard/messages')
 
     // Tab through elements
     await page.keyboard.press('Tab')

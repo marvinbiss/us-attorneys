@@ -152,7 +152,7 @@ export default function ConsultationRequestForm({
   )
   const [formData, setFormData] = useState<FormData>(
     isPrefilled
-      ? { ...initialFormData, service: prefilledService || '', ville: prefilledCity || '' }
+      ? { ...initialFormData, service: prefilledService || '', city: prefilledCity || '' }
       : (savedState?.formData || initialFormData)
   )
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})

@@ -38,7 +38,7 @@ interface MonthlyData {
   count: number
 }
 
-export default function ArtisanLeadStatsPage() {
+export default function AttorneyLeadStatsPage() {
   const [stats, setStats] = useState<LeadStats | null>(null)
   const [monthlyTrend, setMonthlyTrend] = useState<MonthlyData[]>([])
   const [loading, setLoading] = useState(true)

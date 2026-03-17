@@ -8,15 +8,15 @@ import { Artisan, PortfolioItem } from './types'
 import { BeforeAfterSlider, VideoPlayer } from '@/components/portfolio'
 
 interface AttorneyGalleryProps {
-  artisan: Artisan
+  attorney: Artisan
 }
 
-export function AttorneyGallery({ artisan }: AttorneyGalleryProps) {
+export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  // Only show if artisan has real portfolio items
-  const photos = artisan.portfolio || []
+  // Only show if attorney has real portfolio items
+  const photos = attorney.portfolio || []
 
   if (photos.length === 0) {
     return null

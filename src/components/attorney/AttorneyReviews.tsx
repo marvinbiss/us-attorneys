@@ -7,8 +7,8 @@ import { Artisan, Review } from './types'
 
 const MAX_VISIBLE_REVIEWS = 3
 
-/** Format a date string to French locale (e.g. "12 mars 2025") */
-function formatDateFr(raw: string): string {
+/** Format a date string to US locale (e.g. "March 12, 2025") */
+function formatDate(raw: string): string {
   try {
     const d = new Date(raw)
     if (isNaN(d.getTime())) return raw
@@ -78,7 +78,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
           className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0"
           dateTime={review.dateISO || review.date}
         >
-          {formatDateFr(review.dateISO || review.date)}
+          {formatDate(review.dateISO || review.date)}
         </time>
       </div>
 
@@ -111,13 +111,13 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
 }
 
 interface AttorneyReviewsProps {
-  artisan: Artisan
+  attorney: Artisan
   reviews: Review[]
 }
 
-export function AttorneyReviews({ artisan, reviews }: AttorneyReviewsProps) {
-  const rating = artisan.average_rating
-  const count = artisan.review_count
+export function AttorneyReviews({ attorney, reviews }: AttorneyReviewsProps) {
+  const rating = attorney.average_rating
+  const count = attorney.review_count
 
   // Nothing to show if no aggregate rating
   if (!rating || rating === 0) return null

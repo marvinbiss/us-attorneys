@@ -60,10 +60,10 @@ function getSupabaseClient() {
 }
 
 // Helper to get attorney display name
-function getAttorneyDisplayName(artisan: AttorneyProfile | AttorneyProfile[] | null): string {
-  if (!artisan) return 'Attorney'
+function getAttorneyDisplayName(attorneyData: AttorneyProfile | AttorneyProfile[] | null): string {
+  if (!attorneyData) return 'Attorney'
 
-  const profile = Array.isArray(artisan) ? artisan[0] : artisan
+  const profile = Array.isArray(attorneyData) ? attorneyData[0] : attorneyData
 
   return profile?.name || 'Attorney'
 }
@@ -348,7 +348,7 @@ export async function POST(request: Request) {
     }
 
     // Update attorney's average rating (non-blocking)
-    updateArtisanRating(supabase, booking.attorney_id).catch((err) => logger.error('Update rating failed', err))
+    updateAttorneyRating(supabase, booking.attorney_id).catch((err) => logger.error('Update rating failed', err))
 
     // On-demand revalidation of affected pages (non-blocking)
     try {
@@ -437,7 +437,7 @@ function detectFraudIndicators(comment: string, rating: number): string[] {
 }
 
 // Update attorney's average rating (using ALL real reviews, not just published)
-async function updateArtisanRating(supabase: SupabaseClientType, attorneyId: string) {
+async function updateAttorneyRating(supabase: SupabaseClientType, attorneyId: string) {
   const { data: reviews } = await supabase
     .from('reviews')
     .select('rating')

@@ -8,7 +8,7 @@ import { submitLead } from '@/app/actions/lead'
 import { trackEvent, trackConversion } from '@/lib/analytics/tracking'
 
 interface QuoteRequestModalProps {
-  artisan: Artisan
+  attorney: Artisan
   isOpen: boolean
   onClose: () => void
 }
@@ -29,7 +29,7 @@ const initialFormData: FormData = {
   urgency: 'normal',
 }
 
-export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModalProps) {
+export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestModalProps) {
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -37,7 +37,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
   const [serverError, setServerError] = useState<string | null>(null)
   const modalRef = useRef<HTMLDivElement>(null)
 
-  const displayName = getDisplayName(artisan)
+  const displayName = getDisplayName(attorney)
 
   // Focus trap: Tab cycles through focusable elements inside the modal
   const handleFocusTrap = useCallback((e: KeyboardEvent) => {
@@ -118,13 +118,13 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
 
     try {
       const fd = new window.FormData()
-      fd.set('attorneyId', artisan.id)
-      fd.set('specialtyName', artisan.specialty || 'Service')
+      fd.set('attorneyId', attorney.id)
+      fd.set('specialtyName', attorney.specialty || 'Service')
       fd.set('name', formData.name)
       fd.set('email', formData.email)
       fd.set('phone', formData.phone.replace(/\s/g, ''))
-      fd.set('postalCode', artisan.postal_code || '')
-      fd.set('city', artisan.city || '')
+      fd.set('postalCode', attorney.postal_code || '')
+      fd.set('city', attorney.city || '')
       fd.set('description', formData.description)
       fd.set('urgency', formData.urgency)
 
@@ -132,16 +132,16 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
 
       if (result.success) {
         trackEvent('quote_request_submitted', {
-          artisan_slug: artisan.slug,
-          service: artisan.specialty || '',
-          city: artisan.city || '',
+          attorney_slug: attorney.slug,
+          service: attorney.specialty || '',
+          city: attorney.city || '',
           urgency: formData.urgency,
         })
         trackConversion('generate_lead', 40, 'USD', {
-          attorney_id: artisan.id,
-          artisan_name: displayName,
-          service: artisan.specialty || '',
-          city: artisan.city || '',
+          attorney_id: attorney.id,
+          attorney_name: displayName,
+          service: attorney.specialty || '',
+          city: attorney.city || '',
         })
         setIsSuccess(true)
         setTimeout(() => {

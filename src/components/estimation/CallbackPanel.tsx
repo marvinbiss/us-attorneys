@@ -59,13 +59,13 @@ export const CallbackPanel = memo(function CallbackPanel({
           <div>
             <p className="text-base font-semibold text-gray-900">
               {context.artisan
-                ? `Get a callback from ${context.artisan.name}`
+                ? `Get a callback from ${context.attorney.name}`
                 : 'Request a callback'}
             </p>
             <p className="mt-1 text-sm text-gray-600">
               {context.artisan ? (
                 <>
-                  <strong>{context.artisan.name}</strong> will
+                  <strong>{context.attorney.name}</strong> will
                   call you back as soon as possible
                 </>
               ) : (

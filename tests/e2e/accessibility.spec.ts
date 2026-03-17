@@ -19,7 +19,7 @@ test.describe('Accessibility', () => {
   })
 
   test('forms have labels or placeholders', async ({ page }) => {
-    await page.goto('/connexion')
+    await page.goto('/login')
     // Email input should have associated label, aria-label, or placeholder
     const emailInput = page.locator('input[type="email"]').first()
     if (await emailInput.isVisible()) {

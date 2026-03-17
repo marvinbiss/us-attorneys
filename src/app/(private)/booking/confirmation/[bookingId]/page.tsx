@@ -26,8 +26,8 @@ interface BookingDetails {
   clientPhone: string
   specialtyName: string
   attorneyName: string
-  artisanPhone?: string
-  artisanAddress?: string
+  attorneyPhone?: string
+  attorneyAddress?: string
   date: string
   startTime: string
   endTime: string
@@ -97,7 +97,7 @@ DTSTART:${formatICSDate(startDate)}
 DTEND:${formatICSDate(endDate)}
 SUMMARY:Appointment: ${booking.specialtyName} - ${booking.attorneyName}
 DESCRIPTION:Appointment with ${booking.attorneyName}
-LOCATION:${booking.artisanAddress || ''}
+LOCATION:${booking.attorneyAddress || ''}
 STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR`
@@ -219,28 +219,28 @@ END:VCALENDAR`
               </div>
             </div>
 
-            {booking.artisanAddress && (
+            {booking.attorneyAddress && (
               <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl">
                 <MapPin className="w-6 h-6 text-green-600" />
                 <div>
                   <p className="text-sm text-gray-500">Address</p>
                   <p className="font-semibold text-gray-900">
-                    {booking.artisanAddress}
+                    {booking.attorneyAddress}
                   </p>
                 </div>
               </div>
             )}
 
-            {booking.artisanPhone && (
+            {booking.attorneyPhone && (
               <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-xl">
                 <Phone className="w-6 h-6 text-orange-600" />
                 <div>
                   <p className="text-sm text-gray-500">Phone</p>
                   <a
-                    href={`tel:${booking.artisanPhone}`}
+                    href={`tel:${booking.attorneyPhone}`}
                     className="font-semibold text-gray-900 hover:text-violet-600"
                   >
-                    {booking.artisanPhone}
+                    {booking.attorneyPhone}
                   </a>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 /**
  * client_id on leads — regression tests
  *
- * Validates that both INSERT code paths for devis_requests include client_id,
+ * Validates that both INSERT code paths for devis_requests (legacy table name = consultation requests) include client_id,
  * and that the claim-lead backfill endpoint is correctly structured.
  *
  * These are static source-code tests (no runtime DB needed).

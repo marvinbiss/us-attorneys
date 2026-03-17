@@ -1,71 +1,71 @@
 import { test, expect } from '@playwright/test'
 
-// Espace artisan pages require authentication - these tests verify route existence and redirect behavior
+// Attorney dashboard pages require authentication - these tests verify route existence and redirect behavior
 
-test.describe('Espace Artisan Authentication', () => {
+test.describe('Attorney Dashboard Authentication', () => {
   test('should redirect unauthenticated users to login from main dashboard', async ({ page }) => {
-    await page.goto('/espace-artisan')
+    await page.goto('/attorney-dashboard')
     // Should be redirected to login page or show auth required
     const url = page.url()
-    expect(url).toMatch(/connexion|espace-artisan/)
+    expect(url).toMatch(/login|attorney-dashboard/)
   })
 
-  test('should redirect from profil page', async ({ page }) => {
-    await page.goto('/espace-artisan/profil')
+  test('should redirect from profile page', async ({ page }) => {
+    await page.goto('/attorney-dashboard/profile')
     const url = page.url()
-    expect(url).toMatch(/connexion|espace-artisan/)
+    expect(url).toMatch(/login|attorney-dashboard/)
   })
 
-  test('should redirect from demandes page', async ({ page }) => {
-    await page.goto('/espace-artisan/demandes')
+  test('should redirect from requests page', async ({ page }) => {
+    await page.goto('/attorney-dashboard/requests')
     const url = page.url()
-    expect(url).toMatch(/connexion|espace-artisan/)
+    expect(url).toMatch(/login|attorney-dashboard/)
   })
 })
 
-test.describe('Espace Artisan Routes Exist', () => {
-  test('espace-artisan route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan')
+test.describe('Attorney Dashboard Routes Exist', () => {
+  test('attorney-dashboard route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('profil route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/profil')
+  test('profile route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/profile')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('demandes route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/demandes')
+  test('requests route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/requests')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('avis route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/avis')
+  test('reviews route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/reviews')
     expect(response?.status()).toBeLessThan(500)
   })
 
   test('messages route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/messages')
+    const response = await page.goto('/attorney-dashboard/messages')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('statistiques route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/statistiques')
+  test('statistics route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/statistics')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('abonnement route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/abonnement')
+  test('subscription route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/subscription')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('calendrier route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/calendrier')
+  test('calendar route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/calendar')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('equipe route should be defined', async ({ page }) => {
-    const response = await page.goto('/espace-artisan/equipe')
+  test('team route should be defined', async ({ page }) => {
+    const response = await page.goto('/attorney-dashboard/team')
     expect(response?.status()).toBeLessThan(500)
   })
 })

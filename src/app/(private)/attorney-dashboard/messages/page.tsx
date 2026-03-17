@@ -28,7 +28,7 @@ interface Conversation {
   unreadCount: number
 }
 
-export default function MessagesArtisanPage() {
+export default function MessagesAttorneyPage() {
   const [loading, setLoading] = useState(true)
   const [sendingMessage, setSendingMessage] = useState(false)
   const [conversations, setConversations] = useState<Conversation[]>([])

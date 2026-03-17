@@ -52,7 +52,7 @@ export function SimilarAttorneys({
         )
         if (response.ok) {
           const data = await response.json()
-          setAttorneys(data.attorneys || data.artisans || [])
+          setAttorneys(data.attorneys || [])
         }
       } catch (error) {
         console.error('Error fetching similar attorneys:', error)

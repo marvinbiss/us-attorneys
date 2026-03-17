@@ -92,7 +92,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       : `id=${encodeURIComponent(selectedProvider.stable_id || '')}`
     badgeUrl = `${SITE_URL}/api/badge/verified?${param}&style=${style}`
 
-    // Build link to artisan page
+    // Build link to attorney page
     const specialtySlug = (selectedProvider.specialty || 'attorney')
       .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     const citySlug = (selectedProvider.city || 'us')

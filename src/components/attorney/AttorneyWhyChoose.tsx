@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Trophy, Calendar, Shield, Star, Users, MapPin, CheckCircle } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 interface WhyCard {
   icon: React.ElementType
@@ -10,11 +10,11 @@ interface WhyCard {
   description: string
 }
 
-function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
+function getWhyCards(attorney: LegacyAttorney): WhyCard[] {
   const cards: WhyCard[] = []
 
-  if (artisan.creation_date) {
-    const creationYear = new Date(artisan.creation_date).getFullYear()
+  if (attorney.creation_date) {
+    const creationYear = new Date(attorney.creation_date).getFullYear()
     const currentYear = new Date().getFullYear()
     const years = currentYear - creationYear
     if (years > 0) {
@@ -26,7 +26,7 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     }
   }
 
-  if (artisan.is_verified) {
+  if (attorney.is_verified) {
     cards.push({
       icon: Shield,
       title: 'Reliability',
@@ -34,31 +34,31 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     })
   }
 
-  if (artisan.average_rating > 0) {
+  if (attorney.average_rating > 0) {
     cards.push({
       icon: Star,
       title: 'Satisfaction',
-      description: `Rated ${artisan.average_rating.toFixed(1)}/5 (${artisan.review_count} reviews)`,
+      description: `Rated ${attorney.average_rating.toFixed(1)}/5 (${attorney.review_count} reviews)`,
     })
   }
 
-  if (artisan.team_size && artisan.team_size > 1) {
+  if (attorney.team_size && attorney.team_size > 1) {
     cards.push({
       icon: Users,
       title: 'Team',
-      description: `Team of ${artisan.team_size} professionals`,
+      description: `Team of ${attorney.team_size} professionals`,
     })
   }
 
-  if (artisan.intervention_radius_km) {
+  if (attorney.intervention_radius_km) {
     cards.push({
       icon: MapPin,
       title: 'Proximity',
-      description: `Service area within ${artisan.intervention_radius_km} miles`,
+      description: `Service area within ${attorney.intervention_radius_km} miles`,
     })
   }
 
-  if (artisan.free_quote) {
+  if (attorney.free_quote) {
     cards.push({
       icon: CheckCircle,
       title: 'No obligation',
@@ -87,8 +87,8 @@ const cardVariants = {
   },
 }
 
-export function AttorneyWhyChoose({ artisan }: { artisan: LegacyArtisan }) {
-  const cards = getWhyCards(artisan)
+export function AttorneyWhyChoose({ attorney }: { attorney: LegacyAttorney }) {
+  const cards = getWhyCards(attorney)
 
   if (cards.length === 0) return null
 

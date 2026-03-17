@@ -1,16 +1,16 @@
 import React from 'react'
 import { Review, getDisplayName } from './types'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 import { slugify, getAttorneyUrl } from '@/lib/utils'
 import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
 
 interface AttorneySchemaProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
   reviews: Review[]
 }
 
-export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
-  const displayName = getDisplayName(artisan)
+export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
+  const displayName = getDisplayName(attorney)
   const baseUrl = companyIdentity.url
 
   // Organization Schema for US Attorneys platform
@@ -36,10 +36,10 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     ...(getSocialLinks().length > 0 && { sameAs: getSocialLinks() }),
   }
 
-  const attorneyUrl = `${baseUrl}${getAttorneyUrl(artisan)}`
+  const attorneyUrl = `${baseUrl}${getAttorneyUrl(attorney)}`
 
   // Individual Service Schemas for each service offered
-  const serviceSchemas = artisan.service_prices.map((service, index) => ({
+  const serviceSchemas = attorney.service_prices.map((service, index) => ({
     '@type': 'Service',
     '@id': `${attorneyUrl}#service-${index}`,
     name: service.name,
@@ -51,8 +51,8 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     },
     areaServed: {
       '@type': 'City',
-      name: artisan.city,
-      ...(artisan.region && { containedInPlace: { '@type': 'AdministrativeArea', name: artisan.region } }),
+      name: attorney.city,
+      ...(attorney.region && { containedInPlace: { '@type': 'AdministrativeArea', name: attorney.region } }),
     },
     ...(() => {
       if (!service.price) return {}
@@ -63,34 +63,34 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
           '@type': 'Offer',
           price: numericPrice,
           priceCurrency: 'USD',
-          availability: artisan.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          availability: attorney.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         },
       }
     })(),
     ...(service.duration && {
       estimatedDuration: service.duration,
     }),
-    serviceType: artisan.specialty,
+    serviceType: attorney.specialty,
     termsOfService: `${baseUrl}/terms`,
   }))
 
   // LocalBusiness Schema — use more specific @type when possible for richer snippets
-  const businessType = artisan.specialty?.toLowerCase().includes('plomb') ? 'Plumber'
-    : artisan.specialty?.toLowerCase().includes('electr') ? 'Electrician'
+  const businessType = attorney.specialty?.toLowerCase().includes('plomb') ? 'Plumber'
+    : attorney.specialty?.toLowerCase().includes('electr') ? 'Electrician'
     : 'HomeAndConstructionBusiness'
 
   const localBusinessSchema = {
     '@type': ['LocalBusiness', businessType],
     '@id': `${attorneyUrl}#business`,
     name: displayName,
-    description: artisan.description || `${displayName} - ${artisan.specialty} in ${artisan.city}`,
-    image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
+    description: attorney.description || `${displayName} - ${attorney.specialty} in ${attorney.city}`,
+    image: attorney.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     // Add knowsAbout for E-E-A-T signals
-    knowsAbout: artisan.specialty,
-    ...(artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
-      telephone: artisan.phone,
+    knowsAbout: attorney.specialty,
+    ...(attorney.phone && attorney.phone.replace(/\D/g, '').length >= 10 && {
+      telephone: attorney.phone,
     }),
-    ...(artisan.email && { email: artisan.email }),
+    ...(attorney.email && { email: attorney.email }),
     url: attorneyUrl,
     parentOrganization: {
       '@type': 'Organization',
@@ -100,18 +100,18 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
 
     address: {
       '@type': 'PostalAddress',
-      ...(artisan.address ? { streetAddress: artisan.address } : {}),
-      addressLocality: artisan.city,
-      ...(artisan.region || artisan.department ? { addressRegion: artisan.region || artisan.department } : {}),
-      postalCode: artisan.postal_code,
+      ...(attorney.address ? { streetAddress: attorney.address } : {}),
+      addressLocality: attorney.city,
+      ...(attorney.region || attorney.department ? { addressRegion: attorney.region || attorney.department } : {}),
+      postalCode: attorney.postal_code,
       addressCountry: 'US',
     },
 
-    ...(artisan.latitude && artisan.longitude && {
+    ...(attorney.latitude && attorney.longitude && {
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: artisan.latitude,
-        longitude: artisan.longitude,
+        latitude: attorney.latitude,
+        longitude: attorney.longitude,
       },
     }),
 
@@ -148,11 +148,11 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
       } : {}
     })()),
 
-    ...(artisan.service_prices.length > 0 && {
+    ...(attorney.service_prices.length > 0 && {
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
         name: 'Services',
-        itemListElement: artisan.service_prices.map((s, _i) => ({
+        itemListElement: attorney.service_prices.map((s, _i) => ({
           '@type': 'Offer',
           itemOffered: {
             '@type': 'Service',
@@ -175,44 +175,44 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
       },
     }),
 
-    ...(artisan.intervention_radius_km && artisan.latitude && artisan.longitude && {
+    ...(attorney.intervention_radius_km && attorney.latitude && attorney.longitude && {
       areaServed: {
         '@type': 'GeoCircle',
         geoMidpoint: {
           '@type': 'GeoCoordinates',
-          latitude: artisan.latitude,
-          longitude: artisan.longitude,
+          latitude: attorney.latitude,
+          longitude: attorney.longitude,
         },
-        geoRadius: artisan.intervention_radius_km * 1000,
+        geoRadius: attorney.intervention_radius_km * 1000,
       },
     }),
 
-    ...(artisan.siret && {
+    ...(attorney.siret && {
       identifier: {
         '@type': 'PropertyValue',
         name: 'barNumber',
-        value: artisan.siret,
+        value: attorney.siret,
       },
     }),
 
-    ...(artisan.website && {
-      sameAs: [artisan.website],
+    ...(attorney.website && {
+      sameAs: [attorney.website],
     }),
 
     // Additional SEO-friendly properties
-    ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
+    ...(attorney.creation_date ? { foundingDate: attorney.creation_date } : {}),
     priceRange: '$$',
     currenciesAccepted: 'USD',
 
     // Opening hours for Google Knowledge Panel
     // DB-bound: French keys from database (opening_hours JSONB column in Supabase)
-    ...(artisan.opening_hours && Object.keys(artisan.opening_hours).length > 0 && {
+    ...(attorney.opening_hours && Object.keys(attorney.opening_hours).length > 0 && {
       openingHoursSpecification: (() => {
         const dayMap: Record<string, string> = {
           lundi: 'Monday', mardi: 'Tuesday', mercredi: 'Wednesday',
           jeudi: 'Thursday', vendredi: 'Friday', samedi: 'Saturday', dimanche: 'Sunday',
         }
-        return Object.entries(artisan.opening_hours)
+        return Object.entries(attorney.opening_hours)
           .filter(([, val]: [string, any]) => val?.ouvert)
           .map(([day, val]: [string, any]) => ({
             '@type': 'OpeningHoursSpecification',
@@ -232,9 +232,9 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
   }
 
   // FAQPage Schema
-  const faqSchema = artisan.faq && artisan.faq.length > 0 ? {
+  const faqSchema = attorney.faq && attorney.faq.length > 0 ? {
     '@type': 'FAQPage',
-    mainEntity: artisan.faq.map(faq => ({
+    mainEntity: attorney.faq.map(faq => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: {
@@ -246,13 +246,13 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
 
   // BreadcrumbList Schema — 5 levels matching visible breadcrumb
   // Structure: Home > Practice Areas > {Service} > {City} > {Attorney name}
-  const specialtySlug = slugify(artisan.specialty)
-  const citySlug = slugify(artisan.city)
+  const specialtySlug = slugify(attorney.specialty)
+  const citySlug = slugify(attorney.city)
   const breadcrumbItems = [
     { name: 'Home', item: baseUrl },
     { name: 'Practice Areas', item: `${baseUrl}/services` },
-    { name: artisan.specialty, item: `${baseUrl}/practice-areas/${specialtySlug}` },
-    { name: artisan.city, item: `${baseUrl}/practice-areas/${specialtySlug}/${citySlug}` },
+    { name: attorney.specialty, item: `${baseUrl}/practice-areas/${specialtySlug}` },
+    { name: attorney.city, item: `${baseUrl}/practice-areas/${specialtySlug}/${citySlug}` },
     { name: displayName, item: '' },
   ]
 
@@ -275,16 +275,16 @@ export function AttorneySchema({ artisan, reviews }: AttorneySchemaProps) {
     }),
   }
 
-  // ProfilePage Schema (wraps the artisan profile)
+  // ProfilePage Schema (wraps the attorney profile)
   const profilePageSchema = {
     '@type': 'ProfilePage',
     '@id': `${attorneyUrl}#profile`,
     mainEntity: { '@id': `${attorneyUrl}#business` },
-    ...(artisan.member_since && {
-      dateCreated: `${artisan.member_since}-01-01`,
+    ...(attorney.member_since && {
+      dateCreated: `${attorney.member_since}-01-01`,
     }),
-    ...(artisan.updated_at ? {
-      dateModified: new Date(artisan.updated_at).toISOString(),
+    ...(attorney.updated_at ? {
+      dateModified: new Date(attorney.updated_at).toISOString(),
     } : {}),
   }
 

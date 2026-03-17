@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { getCityBySlug as getVilleBySlugImport } from '@/lib/data/usa'
+import { getCityBySlug as getCityBySlugImport } from '@/lib/data/usa'
 import { logger } from '@/lib/logger'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
 
@@ -116,7 +116,7 @@ async function retryWithBackoff<T>(
 
 
 // Lightweight select for listing pages — all required Provider fields + display fields
-// Covers: AttorneyCard, AttorneyList, GeographicMap, ServiceQuartierPage
+// Covers: AttorneyCard, AttorneyList, GeographicMap, ServiceNeighborhoodPage
 const PROVIDER_LIST_SELECT = [
   'id', 'stable_id', 'name', 'slug', 'specialty',
   'address_street', 'address_postal_code', 'address_city', 'address_region',
@@ -201,8 +201,8 @@ export async function getSpecialtyBySlug(slug: string) {
 export async function getLocationBySlug(slug: string) {
   if (IS_BUILD) {
     // Use static usa.ts fallback during build
-    const ville = getVilleBySlugImport(slug)
-    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.zipCode }
+    const city = getCityBySlugImport(slug)
+    if (city) return { id: '', name: city.name, slug: city.slug, postal_code: city.zipCode }
     return null
   }
 
@@ -238,8 +238,8 @@ export async function getLocationBySlug(slug: string) {
         return data
       } catch {
         // Fallback to usa.ts static data when DB table is empty/missing
-        const ville = getVilleBySlugImport(slug)
-        if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.zipCode }
+        const fallbackCity = getCityBySlugImport(slug)
+        if (fallbackCity) return { id: '', name: fallbackCity.name, slug: fallbackCity.slug, postal_code: fallbackCity.zipCode }
         return null
       }
     },
@@ -315,72 +315,43 @@ export async function getAttorneyBySlug(slug: string) {
   }
 }
 
-// Reverse mapping: service slug → provider specialties (for fallback queries)
-// All 46 services must be mapped here — unmapped services can never show providers
-// on quartier pages, causing them to be permanently noindexed.
+// Reverse mapping: specialty slug → practice area aliases (for fallback queries)
+// All practice areas should be mapped here — unmapped ones can never show attorneys
+// on neighborhood pages, causing them to be permanently noindexed.
 export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
-  // === Core practice areas — direct mapping ===
-  'plombier': ['plombier'],                                        // NAF 43.22A
-  'electricien': ['electricien'],                                  // NAF 43.21A
-  'chauffagiste': ['chauffagiste'],                                // NAF 43.22B
-  'menuisier': ['menuisier'],                                      // NAF 43.32A
-  'carreleur': ['carreleur'],                                      // NAF 43.33Z
-  'couvreur': ['couvreur'],                                        // NAF 43.91B
-  'macon': ['macon'],                                              // NAF 43.99C
-  'peintre-en-batiment': ['peintre', 'peintre-en-batiment'],       // NAF 43.34Z
-  'peintre': ['peintre', 'peintre-en-batiment'],                   // alias → peintre-en-batiment
-  'charpentier': ['charpentier'],                                  // NAF 43.91A
-  'serrurier': ['serrurier'],                                      // NAF 43.32B
-  'vitrier': ['vitrier'],                                          // NAF 43.34Z
-  'climaticien': ['climaticien'],                                  // NAF 43.22B
-  'jardinier': ['jardinier'],                                      // NAF 81.30Z
-  'solier': ['solier'],                                            // NAF 43.39Z
-  'nettoyage': ['nettoyage'],                                      // NAF 81.21Z
-
-  // === Construction / Structural ===
-  'terrassier': ['terrassier'],                                    // NAF 43.12A
-  'zingueur': ['zingueur'],                                        // NAF 43.91B (sous-spécialité couverture)
-  'etancheiste': ['etancheiste'],                                  // NAF 43.99A
-  'facadier': ['facadier'],                                        // NAF 43.34Z + 43.99C
-  'platrier': ['platrier'],                                        // NAF 43.31Z
-  'metallier': ['metallier'],                                      // NAF 43.32B + 25.11Z
-  'ferronnier': ['ferronnier'],                                    // NAF 25.11Z
-
-  // === Finishing / Interior ===
-  'poseur-de-parquet': ['poseur-de-parquet'],                      // NAF 43.33Z
-  'miroitier': ['miroitier'],                                      // NAF 43.34Z
-  'storiste': ['storiste'],                                        // NAF 43.32A
-  'salle-de-bain': ['salle-de-bain'],                              // NAF 43.22A + 43.33Z
-  'architecte-interieur': ['architecte-interieur'],                // NAF 71.11Z
-  'decorateur': ['decorateur'],                                    // NAF 74.10Z
-  'cuisiniste': ['cuisiniste'],                                    // NAF 43.32C + 31.02Z
-
-  // === Energy / HVAC ===
-  'domoticien': ['domoticien'],                                    // NAF 43.21A
-  'pompe-a-chaleur': ['pompe-a-chaleur'],                          // NAF 43.22B
-  'panneaux-solaires': ['panneaux-solaires'],                      // NAF 43.21A + 43.22B
-  'isolation-thermique': ['isolation-thermique', 'isolation'],     // NAF 43.29A
-  'renovation-energetique': ['renovation-energetique'],            // NAF 43.29A + 43.22B
-  'borne-recharge': ['borne-recharge'],                            // NAF 43.21A
-  'ramoneur': ['ramoneur'],                                        // NAF 81.29B
-
-  // === Exterior ===
-  'paysagiste': ['paysagiste'],                                    // NAF 71.11Z + 81.30Z
-  'pisciniste': ['pisciniste'],                                    // NAF 43.22A
-
-  // === Security / Technical ===
-  'alarme-securite': ['alarme-securite'],                          // NAF 43.21A
-  'antenniste': ['antenniste'],                                    // NAF 43.21A
-  'ascensoriste': ['ascensoriste'],                                // NAF 43.29B
-
-  // === Diagnostics / Consulting ===
-  'diagnostiqueur': ['diagnostiqueur'],                            // NAF 71.20B
-  'geometre': ['geometre'],                                        // NAF 71.12B
-
-  // === Specialized Services ===
-  'desinsectisation': ['desinsectisation'],                        // NAF 81.29A
-  'deratisation': ['deratisation'],                                // NAF 81.29A
-  'demenageur': ['demenageur'],                                    // NAF 49.42Z
+  'personal-injury': ['personal-injury'],
+  'criminal-defense': ['criminal-defense'],
+  'family-law': ['family-law'],
+  'immigration': ['immigration', 'immigration-law'],
+  'estate-planning': ['estate-planning'],
+  'real-estate': ['real-estate', 'real-estate-law'],
+  'business-law': ['business-law', 'corporate-law'],
+  'employment-law': ['employment-law', 'labor-law'],
+  'intellectual-property': ['intellectual-property'],
+  'bankruptcy': ['bankruptcy'],
+  'tax-law': ['tax-law'],
+  'civil-rights': ['civil-rights'],
+  'dui-dwi': ['dui-dwi'],
+  'workers-compensation': ['workers-compensation'],
+  'medical-malpractice': ['medical-malpractice'],
+  'social-security-disability': ['social-security-disability'],
+  'elder-law': ['elder-law'],
+  'environmental-law': ['environmental-law'],
+  'entertainment-law': ['entertainment-law'],
+  'maritime-law': ['maritime-law', 'admiralty-law'],
+  'military-law': ['military-law'],
+  'securities-law': ['securities-law'],
+  'construction-law': ['construction-law'],
+  'healthcare-law': ['healthcare-law'],
+  'education-law': ['education-law'],
+  'government-law': ['government-law'],
+  'insurance-law': ['insurance-law'],
+  'banking-law': ['banking-law'],
+  'consumer-protection': ['consumer-protection'],
+  'landlord-tenant': ['landlord-tenant'],
+  'product-liability': ['product-liability'],
+  'class-action': ['class-action'],
+  'alternative-dispute-resolution': ['alternative-dispute-resolution', 'mediation', 'arbitration'],
 }
 
 export async function getAttorneysByServiceAndLocation(
@@ -397,8 +368,8 @@ export async function getAttorneysByServiceAndLocation(
     async () => {
       // Use STATIC data for service/location — no DB needed. This keeps total function
       // time well under Vercel's 10s serverless timeout (avoids nested retry cascades).
-      const ville = getVilleBySlugImport(locationSlug)
-      if (!ville) return []
+      const cityData = getCityBySlugImport(locationSlug)
+      if (!cityData) return []
 
       const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
       if (!specialties || specialties.length === 0) return []
@@ -425,7 +396,7 @@ export async function getAttorneysByServiceAndLocation(
         )
       }
 
-      const cityValues = [ville.name]
+      const cityValues = [cityData.name]
 
       try {
         return await retryWithBackoff(
@@ -483,8 +454,8 @@ export async function hasProvidersByServiceAndLocation(
         const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
         if (!specialties || specialties.length === 0) return false
 
-        const ville = getVilleBySlugImport(locationSlug)
-        const cityName = ville?.name
+        const cityLookup = getCityBySlugImport(locationSlug)
+        const cityName = cityLookup?.name
         if (!cityName) return false
 
         const cityValues = [cityName]
@@ -529,8 +500,8 @@ export async function getAttorneyCountByServiceAndLocation(
             const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
             if (!specialties || specialties.length === 0) return 0
 
-            const ville = getVilleBySlugImport(locationSlug)
-            const cityName = ville?.name
+            const cityLookup = getCityBySlugImport(locationSlug)
+            const cityName = cityLookup?.name
             if (!cityName) return 0
 
             const cityValues = [cityName]
@@ -558,10 +529,10 @@ export async function getAttorneysByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
   // Use STATIC data for location — no DB needed
-  const ville = getVilleBySlugImport(locationSlug)
-  if (!ville) return []
+  const cityLookup = getCityBySlugImport(locationSlug)
+  if (!cityLookup) return []
 
-  const cityValues = [ville.name]
+  const cityValues = [cityLookup.name]
   try {
     return await retryWithBackoff(
       async () => {
@@ -693,16 +664,16 @@ export async function getLocationsByService(specialtySlug: string) {
       )) as string[]
 
       // Step 2: look up location data (slug, state, region) for those cities
-      const { data: communes, error: communesError } = await supabase
+      const { data: locations, error: locationsError } = await supabase
         .from('locations_us')
         .select('code_insee, name, slug, departement_code, region_name')
         .in('name', uniqueCityNames.slice(0, 200))
         .order('population', { ascending: false })
         .limit(100)
 
-      if (communesError) throw communesError
+      if (locationsError) throw locationsError
 
-      return (communes || []).map(c => ({
+      return (locations || []).map(c => ({
         id: c.code_insee,
         name: c.name,
         slug: c.slug,

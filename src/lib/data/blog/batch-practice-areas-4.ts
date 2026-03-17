@@ -1,3 +1,3 @@
 import type { BlogArticle } from './articles'
 
-export const metiers4Articles: Record<string, BlogArticle> = {}
+export const practiceArea4Articles: Record<string, BlogArticle> = {}

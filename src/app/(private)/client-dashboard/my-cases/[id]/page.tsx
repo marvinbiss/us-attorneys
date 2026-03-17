@@ -68,8 +68,8 @@ interface ClientEvent {
 }
 
 interface LeadStats {
-  artisans_notified: number
-  artisans_viewed: number
+  attorneys_notified: number
+  attorneys_viewed: number
   quotes_count: number
 }
 
@@ -331,14 +331,14 @@ export default function LeadDetailPage() {
                           <Users className="w-4 h-4" />
                           <span className="text-xs">Contacted</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{stats.artisans_notified}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.attorneys_notified}</p>
                       </div>
                       <div>
                         <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
                           <Eye className="w-4 h-4" />
                           <span className="text-xs">Interested</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{stats.artisans_viewed}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.attorneys_viewed}</p>
                       </div>
                       <div>
                         <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">

@@ -1,4 +1,4 @@
-// Export all artisan components
+// Export all attorney components
 export * from './types'
 export { AttorneyHero } from './AttorneyHero'
 export { AttorneyStats } from './AttorneyStats'

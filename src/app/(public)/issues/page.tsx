@@ -30,22 +30,22 @@ export const metadata: Metadata = {
 }
 
 const urgencyConfig = {
-  haute: { label: 'High urgency', color: 'bg-red-100 text-red-700 border-red-200', dot: 'bg-red-500' },
-  moyenne: { label: 'Medium urgency', color: 'bg-amber-100 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  basse: { label: 'Not urgent', color: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500' },
+  high: { label: 'High urgency', color: 'bg-red-100 text-red-700 border-red-200', dot: 'bg-red-500' },
+  medium: { label: 'Medium urgency', color: 'bg-amber-100 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+  low: { label: 'Not urgent', color: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500' },
 }
 
 const serviceCategories = [
-  { name: 'Personal Injury', slug: 'plombier', icon: Wrench, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { name: 'Criminal Defense', slug: 'electricien', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
-  { name: 'Family Law', slug: 'serrurier', icon: Key, color: 'text-green-600', bg: 'bg-green-50' },
-  { name: 'Employment Law', slug: 'chauffagiste', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
-  { name: 'Real Estate', slug: 'couvreur', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  { name: 'Business Law', slug: 'macon', icon: HardHat, color: 'text-gray-600', bg: 'bg-gray-100' },
+  { name: 'Personal Injury', slug: 'personal-injury', icon: Wrench, color: 'text-blue-600', bg: 'bg-blue-50' },
+  { name: 'Criminal Defense', slug: 'criminal-defense', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
+  { name: 'Family Law', slug: 'family-law', icon: Key, color: 'text-green-600', bg: 'bg-green-50' },
+  { name: 'Employment Law', slug: 'employment-law', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
+  { name: 'Real Estate', slug: 'real-estate-law', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+  { name: 'Business Law', slug: 'business-law', icon: HardHat, color: 'text-gray-600', bg: 'bg-gray-100' },
   { name: 'Other', slug: '_other', icon: Wrench, color: 'text-purple-600', bg: 'bg-purple-50' },
 ]
 
-const otherServiceSlugs = ['peintre-en-batiment', 'vitrier', 'menuisier', 'isolation-thermique', 'desinsectisation']
+const otherServiceSlugs = ['intellectual-property', 'dui-dwi', 'estate-planning', 'tax-law', 'consumer-protection']
 
 function getProblemsByCategory(slug: string) {
   if (slug === '_other') {
@@ -55,17 +55,17 @@ function getProblemsByCategory(slug: string) {
 }
 
 const specialtyNameMap: Record<string, string> = {
-  plombier: 'Personal Injury',
-  electricien: 'Criminal Defense',
-  serrurier: 'Family Law',
-  chauffagiste: 'Employment Law',
-  couvreur: 'Real Estate',
-  macon: 'Business Law',
-  'peintre-en-batiment': 'Immigration',
-  vitrier: 'Bankruptcy',
-  menuisier: 'Estate Planning',
-  'isolation-thermique': 'Tax Law',
-  desinsectisation: 'Consumer Protection',
+  'personal-injury': 'Personal Injury',
+  'criminal-defense': 'Criminal Defense',
+  'family-law': 'Family Law',
+  'employment-law': 'Employment Law',
+  'real-estate-law': 'Real Estate',
+  'business-law': 'Business Law',
+  'intellectual-property': 'Immigration',
+  'dui-dwi': 'Bankruptcy',
+  'estate-planning': 'Estate Planning',
+  'tax-law': 'Tax Law',
+  'consumer-protection': 'Consumer Protection',
 }
 
 const howSteps = [
@@ -343,20 +343,20 @@ export default function ProblemesPage() {
               <h3 className="font-semibold text-gray-900 mb-3">Emergency services</h3>
               <div className="space-y-2">
                 <Link href="/emergency" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Emergency attorney 24/7</Link>
-                <Link href="/emergency/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Personal injury emergency</Link>
-                <Link href="/emergency/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Criminal defense emergency</Link>
-                <Link href="/emergency/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Family law emergency</Link>
-                <Link href="/emergency/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Employment law emergency</Link>
+                <Link href="/emergency/personal-injury" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Personal injury emergency</Link>
+                <Link href="/emergency/criminal-defense" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Criminal defense emergency</Link>
+                <Link href="/emergency/family-law" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Family law emergency</Link>
+                <Link href="/emergency/employment-law" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Employment law emergency</Link>
               </div>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Consultations by practice area</h3>
               <div className="space-y-2">
-                <Link href="/quotes/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Personal injury consultation</Link>
-                <Link href="/quotes/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Criminal defense consultation</Link>
-                <Link href="/quotes/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Family law consultation</Link>
-                <Link href="/quotes/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Employment law consultation</Link>
-                <Link href="/quotes/couvreur" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Real estate consultation</Link>
+                <Link href="/quotes/personal-injury" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Personal injury consultation</Link>
+                <Link href="/quotes/criminal-defense" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Criminal defense consultation</Link>
+                <Link href="/quotes/family-law" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Family law consultation</Link>
+                <Link href="/quotes/employment-law" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Employment law consultation</Link>
+                <Link href="/quotes/real-estate-law" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Real estate consultation</Link>
               </div>
             </div>
             <div>

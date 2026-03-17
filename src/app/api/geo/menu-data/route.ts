@@ -21,13 +21,13 @@ function formatPop(pop: string): string {
 }
 
 const citiesByRegion = megaMenuRegions.map((regionName) => {
-  const regionVilles = cities
+  const regionCities = cities
     .filter((v) => getStateByCode(v.stateCode)?.region === regionName)
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
     .slice(0, 4)
   return {
     region: regionName,
-    cities: regionVilles.map((v) => ({
+    cities: regionCities.map((v) => ({
       name: v.name,
       slug: v.slug,
       population: formatPop(v.population),
@@ -46,13 +46,13 @@ const metroRegions = usRegions.slice(0, 13).map((r) => ({
   states: r.states.map((d) => ({ name: d.name, code: d.code, slug: d.slug })),
 }))
 
-const domTomRegions = usRegions.slice(13).map((r) => ({
+const territoryRegions = usRegions.slice(13).map((r) => ({
   slug: r.slug,
   name: r.name,
   states: r.states.map((d) => ({ name: d.name, code: d.code, slug: d.slug })),
 }))
 
-const payload = { citiesByRegion, popularCities, metroRegions, domTomRegions }
+const payload = { citiesByRegion, popularCities, metroRegions, territoryRegions }
 
 export async function GET() {
   return NextResponse.json(payload, {

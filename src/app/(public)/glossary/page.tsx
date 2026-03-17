@@ -319,7 +319,7 @@ export default function GlossaryPage() {
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Link
-              href="/guides/artisan-rge"
+              href="/guides/certified-attorney"
               className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-green-300 hover:shadow-md transition-all group"
             >
               <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors">

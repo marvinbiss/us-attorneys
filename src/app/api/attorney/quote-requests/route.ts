@@ -54,6 +54,7 @@ export async function GET() {
         created_at,
         request:devis_requests!request_id(id, service_name, city, postal_code, description, status, created_at)
       `)
+      // Table 'devis_requests' = consultation requests (legacy French name)
       .eq('attorney_id', provider.id)
       .order('created_at', { ascending: false })
 
@@ -111,7 +112,8 @@ export async function POST(request: Request) {
       }
     }
 
-    // Verify the devis_request exists
+    // Verify the consultation request exists
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: devisRequest } = await supabase
       .from('devis_requests')
       .select('id, status')

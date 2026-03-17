@@ -15,7 +15,7 @@ test.describe('Performance', () => {
 
   test('search results load quickly', async ({ page }) => {
     const startTime = Date.now()
-    await page.goto('/services/plombier/paris')
+    await page.goto('/services/personal-injury/new-york')
     const loadTime = Date.now() - startTime
 
     // Should load within 7 seconds (dev mode is slower)

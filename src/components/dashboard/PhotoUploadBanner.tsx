@@ -4,12 +4,12 @@ import Link from 'next/link'
 import { Camera, ArrowRight } from 'lucide-react'
 
 interface PhotoUploadBannerProps {
-  /** Number of portfolio photos the artisan currently has */
+  /** Number of portfolio photos the attorney currently has */
   photoCount: number
 }
 
 /**
- * Banner shown on the artisan dashboard when they have 0 portfolio photos.
+ * Banner shown on the attorney dashboard when they have 0 portfolio photos.
  * Encourages them to upload photos to increase quote requests.
  */
 export default function PhotoUploadBanner({ photoCount }: PhotoUploadBannerProps) {

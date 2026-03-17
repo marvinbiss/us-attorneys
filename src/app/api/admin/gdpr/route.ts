@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
-// GET - Liste des demandes RGPD
+// GET - List GDPR/privacy requests
 export async function GET(_request: NextRequest) {
   try {
     // Verify admin with users:read permission (GDPR requests)

@@ -33,7 +33,7 @@ interface StatsData {
   profileViews: { value: number; change: string }
   phoneReveals: { value: number; change: string }
   phoneClicks: { value: number; change: string }
-  demandesRecues: { value: number; change: string }
+  caseRequests: { value: number; change: string }
   unreadMessages: number
   portfolioPhotoCount?: number
 }
@@ -68,7 +68,7 @@ interface Provider {
 
 interface DashboardData {
   stats: StatsData
-  recentDemandes: CaseRequest[] // API field name
+  recentCases: CaseRequest[]
   profile: Profile
   provider: Provider
 }
@@ -347,7 +347,7 @@ export default function AttorneyDashboardPage() {
   }, [error, router])
 
   const stats = data?.stats ?? null
-  const recentCases = data?.recentDemandes ?? []
+  const recentCases = data?.recentCases ?? []
   const profile = data?.profile ?? null
   const provider = data?.provider ?? null
 
@@ -412,8 +412,8 @@ export default function AttorneyDashboardPage() {
         },
         {
           title: 'Cases Received',
-          value: stats.demandesRecues.value,
-          trend: parseTrend(stats.demandesRecues.change),
+          value: stats.caseRequests.value,
+          trend: parseTrend(stats.caseRequests.change),
           icon: <FileText className="w-5 h-5" aria-hidden="true" />,
           color: 'yellow' as const,
         },
@@ -467,7 +467,7 @@ export default function AttorneyDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <AttorneySidebar
             activePage="dashboard"
-            newCasesCount={stats?.demandesRecues?.value || 0}
+            newCasesCount={stats?.caseRequests?.value || 0}
             unreadMessagesCount={stats?.unreadMessages ?? 0}
             publicUrl={publicUrl}
           />

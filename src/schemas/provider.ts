@@ -71,7 +71,7 @@ export const faqItemSchema = z.object({
 // Excludes admin-only fields: is_verified, noindex, is_active,
 // rating_average, review_count.
 // ============================================================
-export const providerArtisanUpdateSchema = z.object({
+export const providerAttorneyUpdateSchema = z.object({
   // Identity
   name: z.string().min(2).max(100).transform(v => v.trim()).optional(),
   siret: z.string().regex(/^\d{14}$/, 'Bar number is required').optional().nullable(),
@@ -121,7 +121,7 @@ export const providerArtisanUpdateSchema = z.object({
   certifications: z.array(z.string().min(1).max(200)).max(20).optional(),
 })
 
-export type ProviderArtisanUpdateInput = z.infer<typeof providerArtisanUpdateSchema>
+export type ProviderAttorneyUpdateInput = z.infer<typeof providerAttorneyUpdateSchema>
 
 export const providerSearchSchema = z.object({
   q: z.string().optional(),

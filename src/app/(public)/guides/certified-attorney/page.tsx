@@ -11,7 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 
-const PAGE_URL = `${SITE_URL}/guides/artisan-rge`
+const PAGE_URL = `${SITE_URL}/guides/certified-attorney`
 
 export const revalidate = 86400
 
@@ -47,7 +47,7 @@ const breadcrumbItems = [
   { label: "Certified Attorney" },
 ]
 
-export default function ArtisanRGEPage() {
+export default function AttorneyVerifiedPage() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

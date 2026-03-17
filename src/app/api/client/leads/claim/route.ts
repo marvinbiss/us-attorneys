@@ -1,7 +1,8 @@
 /**
  * POST /api/client/leads/claim — Backfill client_id on anonymous leads
  *
- * When a user logs in, claim any devis_requests that match their email+phone
+ * When a user logs in, claim any consultation requests (devis_requests) that match their email+phone
+ * Table 'devis_requests' = consultation requests (legacy French name)
  * but have client_id = NULL. This handles the case where a user submitted
  * a quote request before registering/logging in.
  *

@@ -27,40 +27,40 @@ function htmlEscape(str: string): string {
 const getResend = () => getResendClient()
 
 
-const devisSchema = z.object({
+const consultationRequestSchema = z.object({
   service: z.string().min(1, 'Please select a service'),
   urgency: z.string().min(1, 'Please select the urgency'),
   budget: z.string().optional(),
   description: z.string().optional(),
-  codePostal: z.string().optional(),
-  ville: z.string().optional(),
-  nom: z.string().min(2, 'Name is required'),
+  postalCode: z.string().optional(),
+  city: z.string().optional(),
+  name: z.string().min(2, 'Name is required'),
   email: z.string().email('Invalid email'),
-  telephone: z.string().min(10, 'Invalid phone number'),
+  phone: z.string().min(10, 'Invalid phone number'),
 })
 
 const specialtyNames: Record<string, string> = {
-  plombier: 'Plombier',
-  electricien: 'Electrician',
-  serrurier: 'Serrurier',
-  chauffagiste: 'Chauffagiste',
-  'peintre-en-batiment': 'Painter',
-  couvreur: 'Couvreur',
-  menuisier: 'Menuisier',
-  macon: 'Mason',
-  carreleur: 'Carreleur',
-  jardinier: 'Jardinier-paysagiste',
-  vitrier: 'Vitrier',
-  climaticien: 'Climaticien',
-  cuisiniste: 'Cuisiniste',
-  solier: 'Solier-moquettiste',
-  nettoyage: 'Nettoyage professionnel',
+  'personal-injury': 'Personal Injury',
+  'criminal-defense': 'Criminal Defense',
+  'family-law': 'Family Law',
+  'estate-planning': 'Estate Planning',
+  'bankruptcy': 'Bankruptcy',
+  'immigration': 'Immigration',
+  'real-estate': 'Real Estate',
+  'business-law': 'Business Law',
+  'employment-law': 'Employment Law',
+  'intellectual-property': 'Intellectual Property',
+  'tax-law': 'Tax Law',
+  'civil-litigation': 'Civil Litigation',
+  'medical-malpractice': 'Medical Malpractice',
+  'workers-compensation': 'Workers Compensation',
+  'dui-dwi': 'DUI/DWI',
 }
 
 const urgencyLabels: Record<string, string> = {
   urgent: 'Urgent (within 24h)',
-  semaine: 'This week',
-  mois: 'This month',
+  week: 'This week',
+  month: 'This month',
   flexible: 'Flexible',
 }
 
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     }
 
     // Validate input
-    const validation = devisSchema.safeParse(body)
+    const validation = consultationRequestSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
         { error: 'Invalid data', details: validation.error.flatten() },
@@ -91,28 +91,29 @@ export async function POST(request: Request) {
 
     const data = validation.data
 
-    // Map urgency to devis_requests CHECK values
+    // Map urgency to consultation_requests CHECK values
     const urgencyDbMap: Record<string, string> = {
       urgent: 'urgent',
-      semaine: 'normal',
-      mois: 'normal',
+      week: 'normal',
+      month: 'normal',
       flexible: 'normal',
     }
 
-    // Store in devis_requests table
+    // Store in consultation requests table
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: lead, error: dbError } = await supabase
       .from('devis_requests')
       .insert({
         client_id: clientId,
-        client_name: data.nom,
+        client_name: data.name,
         client_email: data.email,
-        client_phone: data.telephone,
+        client_phone: data.phone,
         service_name: specialtyNames[data.service] || data.service,
         description: data.description || 'Consultation request',
         budget: data.budget || null,
         urgency: urgencyDbMap[data.urgency] || 'normal',
-        city: data.ville || null,
-        postal_code: data.codePostal || '',
+        city: data.city || null,
+        postal_code: data.postalCode || '',
         status: 'pending',
       })
       .select()
@@ -133,16 +134,16 @@ export async function POST(request: Request) {
     if (lead) {
       const urgencyMap: Record<string, string> = {
         urgent: 'urgent',
-        semaine: 'normal',
-        mois: 'normal',
+        week: 'normal',
+        month: 'normal',
         flexible: 'flexible',
       }
       assignedProviders = await dispatchLead(lead.id, {
         specialtyName: specialtyNames[data.service] || data.service,
-        city: data.ville,
-        postalCode: data.codePostal,
+        city: data.city,
+        postalCode: data.postalCode,
         urgency: urgencyMap[data.urgency] || 'normal',
-        sourceTable: 'devis_requests',
+        sourceTable: 'devis_requests', // legacy table name 'devis_requests' = consultation requests
       }).catch((err) => {
         logger.error('Failed to dispatch lead', err)
         return []
@@ -163,12 +164,12 @@ export async function POST(request: Request) {
         to: data.email,
         subject: 'Your consultation request - US Attorneys',
         html: `
-          <h2>Hello ${htmlEscape(data.nom)},</h2>
+          <h2>Hello ${htmlEscape(data.name)},</h2>
           <p>We have received your consultation request. Here is the summary:</p>
           <ul>
             <li><strong>Service:</strong> ${htmlEscape(specialtyNames[data.service] || data.service)}</li>
             <li><strong>Timeline:</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
-            ${data.ville ? `<li><strong>City:</strong> ${htmlEscape(data.ville)}</li>` : ''}
+            ${data.city ? `<li><strong>City:</strong> ${htmlEscape(data.city)}</li>` : ''}
             ${data.description ? `<li><strong>Description:</strong> ${htmlEscape(data.description)}</li>` : ''}
           </ul>
           <p><strong>What happens next?</strong></p>
@@ -183,21 +184,21 @@ export async function POST(request: Request) {
       resend.emails.send({
         from: fromEmail,
         to: 'contact@us-attorneys.com',
-        subject: `[New Consultation] ${specialtyNames[data.service] || data.service} - ${data.ville || 'USA'}`,
+        subject: `[New Consultation] ${specialtyNames[data.service] || data.service} - ${data.city || 'USA'}`,
         html: `
           <h2>New consultation request</h2>
           <h3>Client</h3>
           <ul>
-            <li><strong>Name:</strong> ${htmlEscape(data.nom)}</li>
+            <li><strong>Name:</strong> ${htmlEscape(data.name)}</li>
             <li><strong>Email:</strong> ${htmlEscape(data.email)}</li>
-            <li><strong>Phone:</strong> ${htmlEscape(data.telephone)}</li>
+            <li><strong>Phone:</strong> ${htmlEscape(data.phone)}</li>
           </ul>
           <h3>Request</h3>
           <ul>
             <li><strong>Service:</strong> ${htmlEscape(specialtyNames[data.service] || data.service)}</li>
             <li><strong>Timeline:</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
-            <li><strong>City:</strong> ${htmlEscape(data.ville || 'Not specified')}</li>
-            <li><strong>ZIP code:</strong> ${htmlEscape(data.codePostal || 'Not specified')}</li>
+            <li><strong>City:</strong> ${htmlEscape(data.city || 'Not specified')}</li>
+            <li><strong>ZIP code:</strong> ${htmlEscape(data.postalCode || 'Not specified')}</li>
             <li><strong>Budget:</strong> ${htmlEscape(data.budget || 'Not specified')}</li>
             <li><strong>Description:</strong> ${htmlEscape(data.description || 'Not specified')}</li>
           </ul>
@@ -218,8 +219,8 @@ export async function POST(request: Request) {
       success: true,
       message: 'Consultation request sent successfully',
       id: lead?.id,
-      artisans_notified: assignedProviders.length,
-      ...(assignedProviders.length === 0 && { artisans_found: false }),
+      attorneys_notified: assignedProviders.length,
+      ...(assignedProviders.length === 0 && { attorneys_found: false }),
     })
   } catch (error) {
     logger.error('Quote request API error', error)

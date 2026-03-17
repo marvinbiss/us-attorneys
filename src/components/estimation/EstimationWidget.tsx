@@ -186,7 +186,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 <div className="min-w-0">
                   <p className="text-sm font-semibold truncate">
                     {context.artisan
-                      ? `Consultation with ${context.artisan.name}`
+                      ? `Consultation with ${context.attorney.name}`
                       : `${context.metier} in ${context.ville}`}
                   </p>
                   <p className="text-[11px] text-white/80">

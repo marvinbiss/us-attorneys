@@ -15,7 +15,8 @@ const quotesQuerySchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - List quote requests (devis_requests)
+// GET - List consultation requests
+// Table 'devis_requests' = consultation requests (legacy French name)
 export async function GET(request: NextRequest) {
   try {
     // Verify admin with services:read permission
@@ -66,7 +67,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const { data: demandes, count, error } = await query
+    const { data: consultationRequests, count, error } = await query
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -83,14 +84,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch lead_assignments for these requests to show which attorney(s) received each request
-    const demandeIds = (demandes || []).map((d) => d.id)
+    const requestIds = (consultationRequests || []).map((d) => d.id)
     let assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; attorney_id: string }>> = {}
 
-    if (demandeIds.length > 0) {
+    if (requestIds.length > 0) {
       const { data: assignments } = await supabase
         .from('lead_assignments')
         .select('id, lead_id, status, assigned_at, attorney_id, attorney:attorneys(id, name)')
-        .in('lead_id', demandeIds)
+        .in('lead_id', requestIds)
         .order('position', { ascending: true })
 
       if (assignments) {
@@ -113,7 +114,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      requests: demandes || [],
+      requests: consultationRequests || [],
       assignments: assignmentsByLead,
       total: count || 0,
       page,
@@ -154,7 +155,8 @@ export async function DELETE(request: NextRequest) {
       .delete()
       .eq('lead_id', id)
 
-    // Delete the devis_request
+    // Delete the consultation request
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { error } = await supabase
       .from('devis_requests')
       .delete()

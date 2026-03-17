@@ -22,7 +22,7 @@ export async function GET() {
         comment,
         client_name,
         created_at,
-        artisan:profiles!attorney_id (
+        attorney:profiles!attorney_id (
           id,
           full_name
         )
@@ -43,13 +43,13 @@ export async function GET() {
       .filter(r => r.comment && r.comment.length > 20) // Only reviews with actual content
       .map(review => {
         // Attorney can be null, single object, or array depending on the relation
-        const artisan = Array.isArray(review.artisan) ? review.artisan[0] : review.artisan
+        const attorney = Array.isArray(review.attorney) ? review.attorney[0] : review.attorney
         return {
           id: review.id,
           author_name: review.client_name || 'Client',
           rating: review.rating,
           comment: review.comment,
-          artisan_name: artisan?.full_name || null,
+          attorney_name: attorney?.full_name || null,
           created_at: review.created_at
         }
       })

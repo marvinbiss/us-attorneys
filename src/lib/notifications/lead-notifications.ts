@@ -73,16 +73,17 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
   const supabase = createAdminClient()
 
   // Resolve lead details (try devis_requests first, then leads table)
+  // Table 'devis_requests' = consultation requests (legacy DB table name, do not rename without migration)
   let lead: LeadData & { client_email?: string; client_phone?: string; client_id?: string | null } | null = null
 
-  const { data: devisLead } = await supabase
+  const { data: consultationLead } = await supabase
     .from('devis_requests')
     .select('id, service_name, city, postal_code, client_name, client_email, client_phone, client_id')
     .eq('id', event.lead_id)
     .single()
 
-  if (devisLead) {
-    lead = devisLead
+  if (consultationLead) {
+    lead = consultationLead
   }
 
   if (!lead) return

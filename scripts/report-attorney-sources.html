@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Attorneys Data Sources — Rapport d'Analyse</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --navy: #0f172a;
+    --blue: #1e40af;
+    --blue-light: #3b82f6;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --orange: #d97706;
+    --orange-light: #fef3c7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --gray-900: #0f172a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--gray-900);
+    background: white;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 20mm 18mm;
+    page-break-after: always;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; padding: 15mm 18mm; }
+  }
+
+  /* Cover Page */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 297mm;
+    padding: 40mm 25mm;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
+    color: white;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .cover h2 {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 50px;
+    max-width: 400px;
+  }
+
+  .cover-stats {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .cover-stat {
+    text-align: center;
+  }
+
+  .cover-stat .number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #60a5fa;
+  }
+
+  .cover-stat .label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .cover-meta {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .cover-meta strong { color: rgba(255,255,255,0.8); }
+
+  /* Section Headers */
+  h2.section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 4px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--blue);
+    display: inline-block;
+  }
+
+  h2.section-title + p {
+    color: var(--gray-500);
+    font-size: 11px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 16px 0 8px;
+  }
+
+  h4 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin: 10px 0 4px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px;
+    font-size: 10px;
+  }
+
+  thead th {
+    background: var(--navy);
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    padding: 7px 10px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child { border-radius: 0 6px 0 0; }
+
+  tbody td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) { background: var(--gray-50); }
+  tbody tr:hover { background: #eff6ff; }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-orange { background: var(--orange-light); color: var(--orange); }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-blue { background: #dbeafe; color: var(--blue); }
+
+  /* Cards */
+  .card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 10px 0;
+  }
+
+  .card-highlight {
+    background: #eff6ff;
+    border-color: #93c5fd;
+  }
+
+  .card-warning {
+    background: #fffbeb;
+    border-color: #fcd34d;
+  }
+
+  .card h4 {
+    margin: 0 0 6px;
+    font-size: 12px;
+  }
+
+  /* Progress bars */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0;
+  }
+
+  .progress-label {
+    width: 50px;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 14px;
+    background: var(--gray-200);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 6px;
+    font-size: 8px;
+    font-weight: 700;
+    color: white;
+    min-width: 30px;
+  }
+
+  .progress-value {
+    font-size: 10px;
+    font-weight: 600;
+    width: 60px;
+  }
+
+  /* Tier boxes */
+  .tier {
+    border-left: 4px solid;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .tier-1 { border-color: var(--green); background: #f0fdf4; }
+  .tier-2 { border-color: var(--blue-light); background: #eff6ff; }
+  .tier-3 { border-color: var(--orange); background: #fffbeb; }
+
+  .tier-header {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* Lists */
+  ul { padding-left: 16px; margin: 4px 0; }
+  li { margin: 2px 0; font-size: 10px; }
+
+  /* Footer */
+  .page-footer {
+    position: relative;
+    bottom: 0;
+    text-align: center;
+    font-size: 8px;
+    color: var(--gray-500);
+    padding-top: 12px;
+    border-top: 1px solid var(--gray-200);
+    margin-top: 20px;
+  }
+
+  /* Utility */
+  .text-green { color: var(--green); }
+  .text-blue { color: var(--blue); }
+  .text-orange { color: var(--orange); }
+  .text-red { color: var(--red); }
+  .text-gray { color: var(--gray-500); }
+  .text-sm { font-size: 10px; }
+  .text-xs { font-size: 9px; }
+  .font-bold { font-weight: 700; }
+  .font-mono { font-family: 'Courier New', monospace; }
+  .mt-2 { margin-top: 8px; }
+  .mt-4 { margin-top: 16px; }
+  .mb-2 { margin-bottom: 8px; }
+  .mb-4 { margin-bottom: 16px; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .highlight-number {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--blue);
+  }
+
+  .pagebreak { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- PAGE 1: COVER -->
+<!-- ============================================ -->
+<div class="page cover">
+  <div class="cover-badge">Confidentiel &mdash; Usage interne</div>
+  <h1>US Attorneys<br>Data Acquisition Strategy</h1>
+  <h2>Analyse exhaustive des sources de donn&eacute;es pour 1.3M+ avocats am&eacute;ricains</h2>
+
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <div class="number">1.3M+</div>
+      <div class="label">Avocats US actifs</div>
+    </div>
+    <div class="cover-stat">
+      <div class="number">50</div>
+      <div class="label">&Eacute;tats + DC</div>
+    </div>
+    <div class="cover-stat">
+      <div class="number">10</div>
+      <div class="label">Agents d&eacute;ploy&eacute;s</div>
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <strong>Projet</strong>: us-attorneys.com &mdash; <strong>Date</strong>: 16 mars 2026<br>
+    <strong>Objectif</strong>: 8.8M+ pages SEO programmatiques<br><br>
+    <em>R&egrave;gle d'or : mieux aucune information qu'une information fausse</em>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 2: EXECUTIVE SUMMARY -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">1. R&eacute;sum&eacute; ex&eacute;cutif</h2>
+  <p>Vue d'ensemble des sources identifi&eacute;es par 10 agents de recherche parall&egrave;les.</p>
+
+  <div class="card card-highlight">
+    <h4>Constat principal</h4>
+    <p><strong>New York est le seul &eacute;tat</strong> &agrave; publier un dataset open data complet (CSV/API Socrata) pour ses avocats. Pour les autres &eacute;tats, les voies les plus fiables sont : <strong>demandes de records publics</strong> (bulk officiel) et <strong>scraping cibl&eacute;</strong> (test&eacute; et prouv&eacute;).</p>
+  </div>
+
+  <h3>&Eacute;tat actuel de la base de donn&eacute;es</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Records</th><th>Statut</th></tr></thead>
+    <tbody>
+      <tr><td><strong>States</strong></td><td>57 (50 + DC + 6 territoires)</td><td><span class="badge badge-green">Complet</span></td></tr>
+      <tr><td><strong>Counties</strong></td><td>3 222</td><td><span class="badge badge-green">Complet</span></td></tr>
+      <tr><td><strong>Cities</strong> (locations_us)</td><td>32 109</td><td><span class="badge badge-green">Complet</span></td></tr>
+      <tr><td><strong>ZIP Codes</strong></td><td>33 781</td><td><span class="badge badge-green">Complet</span></td></tr>
+      <tr><td><strong>Attorneys</strong></td><td>334 468 (NY uniquement)</td><td><span class="badge badge-orange">1 &eacute;tat / 50</span></td></tr>
+      <tr><td>&rarr; Li&eacute;s &agrave; une ville</td><td>178 367 (53.3%)</td><td><span class="badge badge-blue">En cours</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Potentiel d'acquisition par phase</h3>
+  <div class="progress-row">
+    <div class="progress-label">Actuel</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:26%;background:var(--green);">334K</div></div>
+    <div class="progress-value">334 468</div>
+  </div>
+  <div class="progress-row">
+    <div class="progress-label">+1 sem.</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:49%;background:var(--blue-light);">+298K</div></div>
+    <div class="progress-value">~632K</div>
+  </div>
+  <div class="progress-row">
+    <div class="progress-label">+1 mois</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--blue);">+480K</div></div>
+    <div class="progress-value">~1.1M+</div>
+  </div>
+  <div class="progress-row">
+    <div class="progress-label">Cible</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--navy);">1.3M</div></div>
+    <div class="progress-value">1 322 649</div>
+  </div>
+
+  <h3>Classification des sources</h3>
+  <div class="tier tier-1">
+    <div class="tier-header text-green">Tier 1 &mdash; Bulk officiel, imm&eacute;diatement actionnable</div>
+    <p class="text-sm">Datasets complets fournis directement par les autorit&eacute;s. Qualit&eacute; maximale, bar numbers v&eacute;rifi&eacute;s.</p>
+    <p class="text-sm"><strong>&Eacute;tats :</strong> NY (done), FL (email gratuit), GA ($6.5K)</p>
+  </div>
+  <div class="tier tier-2">
+    <div class="tier-header text-blue">Tier 2 &mdash; Demandes formelles (PIA/FOIA), d&eacute;lai 2-6 semaines</div>
+    <p class="text-sm">Demandes de records publics aux barreaux d'&eacute;tat. Donn&eacute;es officielles, co&ucirc;t mod&eacute;r&eacute;.</p>
+    <p class="text-sm"><strong>&Eacute;tats :</strong> TX ($200-500), OH (gratuit/faible), NJ ($200-500), PA (sur devis), MA (frais copie)</p>
+  </div>
+  <div class="tier tier-3">
+    <div class="tier-header text-orange">Tier 3 &mdash; Scraping test&eacute; et prouv&eacute; (fallback)</div>
+    <p class="text-sm">M&eacute;thodes test&eacute;es avec 50-110 records. Fiable mais plus fragile &agrave; grande &eacute;chelle.</p>
+    <p class="text-sm"><strong>&Eacute;tats :</strong> CA (HTML scraping, ~14h), IL (ASP.NET grid, ~6-8h), TX (ColdFusion, ~8h)</p>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 2</div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 3: TIER 1 DETAIL -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">2. Tier 1 &mdash; Sources bulk officielles</h2>
+  <p>Donn&eacute;es compl&egrave;tes et v&eacute;rifi&eacute;es, disponibles imm&eacute;diatement ou sous quelques jours.</p>
+
+  <h3>New York &mdash; NY Open Data <span class="badge badge-green">DONE</span></h3>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h4>Source</h4>
+        <p class="text-sm">data.ny.gov &mdash; NYS Attorney Registrations<br>
+        <span class="font-mono text-xs">eqw2-r5nb</span></p>
+        <h4 class="mt-2">Format</h4>
+        <p class="text-sm">CSV, JSON, XML, API Socrata (SODA)</p>
+        <h4 class="mt-2">Co&ucirc;t</h4>
+        <p class="text-sm font-bold text-green">Gratuit</p>
+      </div>
+      <div>
+        <h4>Records</h4>
+        <p class="highlight-number">334 468</p>
+        <h4 class="mt-2">Champs cl&eacute;s</h4>
+        <p class="text-sm">Nom, pr&eacute;nom, bar number, statut, adresse, ville, &eacute;tat, ZIP, date d'admission, lieu de pratique</p>
+        <h4 class="mt-2">Mise &agrave; jour</h4>
+        <p class="text-sm">Quotidienne</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Florida &mdash; FL Bar Public Records Request <span class="badge badge-green">RECOMMAND&Eacute;</span></h3>
+  <div class="card card-highlight">
+    <div class="two-col">
+      <div>
+        <h4>Source</h4>
+        <p class="text-sm">Florida Bar &mdash; Membership Records Department<br>
+        <span class="font-mono text-xs">addressing@floridabar.org</span></p>
+        <h4 class="mt-2">Format</h4>
+        <p class="text-sm"><strong>Excel</strong> (envoy&eacute; par email)</p>
+        <h4 class="mt-2">Co&ucirc;t</h4>
+        <p class="text-sm font-bold text-green">Gratuit par email</p>
+        <p class="text-xs text-gray">Frais uniquement si DVD/cl&eacute; USB</p>
+      </div>
+      <div>
+        <h4>Records estim&eacute;s</h4>
+        <p class="highlight-number">~108 000</p>
+        <h4 class="mt-2">Champs</h4>
+        <p class="text-sm">Bar#, nom, adresse, firm, ville, &eacute;tat, ZIP, t&eacute;l&eacute;phone, fax, email, county code, circuit code + 23 sections + 26 certifications sur demande</p>
+        <h4 class="mt-2">Mise &agrave; jour</h4>
+        <p class="text-sm">Quotidienne</p>
+      </div>
+    </div>
+    <div class="mt-2">
+      <h4>Action requise</h4>
+      <p class="text-sm">T&eacute;l&eacute;charger le formulaire PDF depuis <span class="font-mono">floridabar.org/about/faq/rec-request/</span>, remplir et envoyer &agrave; <strong>addressing@floridabar.org</strong>. Demander : &laquo;All MIGS, Both (In + Out of State), All Circuits&raquo;.</p>
+    </div>
+  </div>
+
+  <h3>Georgia &mdash; State Bar Mailing Lists <span class="badge badge-orange">PAYANT</span></h3>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h4>Source</h4>
+        <p class="text-sm">State Bar of Georgia &mdash; Mailing Lists<br>
+        <span class="font-mono text-xs">gabrielled@gabar.org</span></p>
+        <h4 class="mt-2">Format</h4>
+        <p class="text-sm">Excel (.xls), Database (.dbf), ASCII (.txt)</p>
+        <h4 class="mt-2">Co&ucirc;t</h4>
+        <p class="text-sm font-bold text-orange">15&cent;/record = ~$6 517</p>
+        <p class="text-xs text-gray">Minimum $25/commande. D&eacute;lai 7-10 jours.</p>
+      </div>
+      <div>
+        <h4>Records</h4>
+        <p class="highlight-number">~56 347</p>
+        <p class="text-sm">(43 447 actifs)</p>
+        <h4 class="mt-2">Champs</h4>
+        <p class="text-sm">Nom, adresse, ville, county, state, ZIP, law school, date admission, date naissance, sections, judicial circuit, member type, genre</p>
+        <h4 class="mt-2">Mise &agrave; jour</h4>
+        <p class="text-sm">Quotidienne</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>USPTO Patent Practitioner Roster <span class="badge badge-green">GRATUIT</span></h3>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h4>Source</h4>
+        <p class="text-sm">US Patent & Trademark Office<br>
+        <span class="font-mono text-xs">uspto.gov/attorney-roster/attorney.zip</span></p>
+        <h4 class="mt-2">Co&ucirc;t</h4>
+        <p class="text-sm font-bold text-green">Gratuit (Public Domain)</p>
+      </div>
+      <div>
+        <h4>Records</h4>
+        <p class="text-sm"><strong>~48 625</strong> patent attorneys/agents (national)</p>
+        <h4 class="mt-2">Champs</h4>
+        <p class="text-sm">Nom, n&deg; enregistrement, titre, ville, &eacute;tat, ZIP, statut</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 3</div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 4: TIER 2 DETAIL -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">3. Tier 2 &mdash; Demandes de records publics</h2>
+  <p>Donn&eacute;es officielles obtenues via PIA/FOIA/Open Records. D&eacute;lai : 2 &agrave; 6 semaines.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>&Eacute;tat</th>
+        <th>Autorit&eacute;</th>
+        <th>Contact</th>
+        <th>Co&ucirc;t estim&eacute;</th>
+        <th>Records</th>
+        <th>Format</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Texas</strong></td>
+        <td>State Bar of TX &mdash; PIA</td>
+        <td class="font-mono text-xs">texasbar.govqa.us</td>
+        <td>$200&ndash;500</td>
+        <td>~130 000</td>
+        <td>CSV/Excel</td>
+      </tr>
+      <tr>
+        <td><strong>Ohio</strong></td>
+        <td>Supreme Court &mdash; Atty Reg.</td>
+        <td class="font-mono text-xs">attyreg@sc.ohio.gov</td>
+        <td>Gratuit/faible</td>
+        <td>~37 000</td>
+        <td>&Agrave; n&eacute;gocier</td>
+      </tr>
+      <tr>
+        <td><strong>New Jersey</strong></td>
+        <td>NJ Courts &mdash; CAMS Report</td>
+        <td class="text-xs">Superior Court Clerk's Office</td>
+        <td>$200&ndash;500</td>
+        <td>~100 000</td>
+        <td>Text d&eacute;limit&eacute;</td>
+      </tr>
+      <tr>
+        <td><strong>Pennsylvania</strong></td>
+        <td>PA Disciplinary Board</td>
+        <td class="text-xs">717-772-8572</td>
+        <td>Sur devis</td>
+        <td>~90 000</td>
+        <td>&Agrave; n&eacute;gocier</td>
+      </tr>
+      <tr>
+        <td><strong>Massachusetts</strong></td>
+        <td>Board of Bar Overseers</td>
+        <td class="font-mono text-xs">webmaster@massbbo.org</td>
+        <td>Frais copie</td>
+        <td>~70 000</td>
+        <td>&Agrave; n&eacute;gocier</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>D&eacute;tails par &eacute;tat</h3>
+
+  <h4>Texas &mdash; Public Information Act (PIA)</h4>
+  <div class="card">
+    <p class="text-sm">Le State Bar of Texas est soumis au Texas PIA. Soumettre via le portail <strong>texasbar.govqa.us</strong>. Demander le bar roll complet en format &eacute;lectronique (CSV/Excel). Champs publics : nom, bar card number, adresse cabinet, t&eacute;l&eacute;phone, date de licence, statut. Les adresses personnelles et SSN sont confidentiels.</p>
+    <p class="text-sm mt-2"><strong>Alternative :</strong> Programme de mailing lists via <span class="font-mono">listmail@texasbar.com</span> (payant, prix non publi&eacute;).</p>
+    <p class="text-sm mt-2"><strong>Alternative rapide :</strong> OpenGovUS (<span class="font-mono">opengovus.com/texas-lawyer</span>) semble avoir ~130K avocats scrapables.</p>
+  </div>
+
+  <h4>Ohio &mdash; Public Records Request</h4>
+  <div class="card">
+    <p class="text-sm">Contacter le Registration and CLE Section de la Supreme Court of Ohio. L'Ohio Public Records Act (R.C. 149.43) oblige la fourniture des records &eacute;lectroniques dans leur format natif. Champs : nom, adresse pro, t&eacute;l&eacute;phone, n&deg; enregistrement, statut, genre, date naissance, &eacute;cole de droit.</p>
+    <p class="text-sm mt-2"><strong>Note technique :</strong> Le domaine <span class="font-mono">supremecourt.ohio.gov</span> est inaccessible depuis notre machine (timeout). La demande officielle contourne ce probl&egrave;me.</p>
+  </div>
+
+  <h4>New Jersey &mdash; CAMS Report</h4>
+  <div class="card">
+    <p class="text-sm">Le <strong>Central Attorney Management System</strong> (CAMS) des NJ Courts fournit des rapports de donn&eacute;es d'avocats sur demande. Record layout PDF disponible. Mise &agrave; jour 2x/an. Restriction : interdiction de miner/revendre sans autorisation &eacute;crite.</p>
+    <p class="text-sm mt-2"><strong>Attention :</strong> Le portail de recherche en ligne interdit explicitement l'acc&egrave;s automatis&eacute; (&laquo;May not be accessed by any automated program&raquo;).</p>
+  </div>
+
+  <h4>Pennsylvania &mdash; Public Data Request</h4>
+  <div class="card">
+    <p class="text-sm">Le PA Disciplinary Board accepte les demandes de donn&eacute;es publiques via un formulaire d&eacute;di&eacute;, avec tarification au cas par cas. Champs : nom, statut (active/inactive/suspended/disbarred), adresse, historique disciplinaire, assurance malpractice.</p>
+  </div>
+
+  <h4>Massachusetts &mdash; Chapter 66 Public Records Request</h4>
+  <div class="card">
+    <p class="text-sm">Le Board of Bar Overseers (BBO) est probablement soumis aux lois de records publics du Massachusetts (Chapter 66). Soumettre une demande formelle. Champs disponibles via leur lookup : nom, BBO#, adresse, date admission, historique disciplinaire.</p>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 4</div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 5: TIER 3 + TESTS -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">4. Tier 3 &mdash; Scraping test&eacute; et prouv&eacute;</h2>
+  <p>M&eacute;thodes valid&eacute;es avec 50&ndash;110 records. Utilisables en fallback si les demandes officielles tardent.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>&Eacute;tat</th>
+        <th>M&eacute;thode</th>
+        <th>Test</th>
+        <th>Temps full</th>
+        <th>Fiabilit&eacute;</th>
+        <th>Risques</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>CA</strong></td>
+        <td>HTML scraping profils CalBar<br><span class="text-xs text-gray">apps.calbar.ca.gov/attorney/Licensee/Detail/{id}</span></td>
+        <td><span class="badge badge-green">95 records</span></td>
+        <td>~14h</td>
+        <td><span class="badge badge-green">Bonne</span></td>
+        <td class="text-xs">Rate limiting possible apr&egrave;s des heures</td>
+      </tr>
+      <tr>
+        <td><strong>IL</strong></td>
+        <td>ASP.NET MvcGrid + antiforgery<br><span class="text-xs text-gray">4 &eacute;tapes : GET search &rarr; POST form &rarr; Grid AJAX &rarr; Details</span></td>
+        <td><span class="badge badge-green">60 records</span></td>
+        <td>~6&ndash;8h</td>
+        <td><span class="badge badge-green">Bonne</span></td>
+        <td class="text-xs">Tokens expirent, pas de bar number</td>
+      </tr>
+      <tr>
+        <td><strong>TX</strong></td>
+        <td>Session ColdFusion + cookies<br><span class="text-xs text-gray">GET page &rarr; POST avec CFID/CFTOKEN</span></td>
+        <td><span class="badge badge-green">55 records</span></td>
+        <td>~8h</td>
+        <td><span class="badge badge-orange">Moyenne</span></td>
+        <td class="text-xs">Cookies expirent, pas d'emails, HTML fragile</td>
+      </tr>
+      <tr>
+        <td><strong>FL</strong></td>
+        <td>Federal Court rolls (FLMD)<br><span class="text-xs text-gray">apps.flmd.uscourts.gov/attyadm/</span></td>
+        <td><span class="badge badge-green">110 records</span></td>
+        <td>~2h</td>
+        <td><span class="badge badge-red">Partiel</span></td>
+        <td class="text-xs">Sous-ensemble (federal uniquement)</td>
+      </tr>
+      <tr>
+        <td><strong>OH</strong></td>
+        <td>API Ajax.ashx (Ember.js)<br><span class="text-xs text-gray">Reverse-engineer&eacute; via Wayback Machine</span></td>
+        <td><span class="badge badge-red">0 records</span></td>
+        <td>N/A</td>
+        <td><span class="badge badge-red">Bloqu&eacute;</span></td>
+        <td class="text-xs">Domaine inaccessible depuis cette machine</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>D&eacute;tails des tests CA &mdash; Meilleur candidat scraping</h3>
+  <div class="card card-highlight">
+    <div class="two-col">
+      <div>
+        <h4>Strat&eacute;gie en 2 &eacute;tapes</h4>
+        <ol class="text-sm" style="padding-left:16px;">
+          <li><strong>Discovery</strong> : Recherche par pr&eacute;fixe (AA&ndash;ZZ = 676 requ&ecirc;tes) &rarr; 500 liens/requ&ecirc;te &rarr; &eacute;num&egrave;re tous les ~190K avocats</li>
+          <li><strong>Detail fetch</strong> : Profil HTML pour chaque bar number avec parsing structur&eacute;</li>
+        </ol>
+        <h4 class="mt-2">Rate limiting</h4>
+        <p class="text-sm">200ms entre requ&ecirc;tes = aucun blocage observ&eacute; sur 95 tests</p>
+      </div>
+      <div>
+        <h4>Qualit&eacute; des donn&eacute;es (95 records)</h4>
+        <table style="font-size:9px;margin:0;">
+          <tr><td>Nom</td><td><strong>100%</strong></td></tr>
+          <tr><td>Date admission</td><td><strong>100%</strong></td></tr>
+          <tr><td>Statut</td><td><strong>100%</strong></td></tr>
+          <tr><td>Ville</td><td>94%</td></tr>
+          <tr><td>T&eacute;l&eacute;phone</td><td>74%</td></tr>
+          <tr><td>Firm name</td><td>69%</td></tr>
+          <tr><td>Email</td><td>68% (obfusqu&eacute;, d&eacute;codable)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-warning">
+    <h4>Avertissement &mdash; Tol&eacute;rance z&eacute;ro</h4>
+    <p class="text-sm">Le scraping &agrave; grande &eacute;chelle comporte des risques : donn&eacute;es partielles si blocage en cours de route, parsing HTML fragile, pas de garantie de compl&eacute;tude. <strong>Pour chaque &eacute;tat, la demande officielle de records publics reste la voie recommand&eacute;e.</strong> Le scraping n'est qu'un fallback.</p>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 5</div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 6: NATIONAL & COMMERCIAL SOURCES -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">5. Sources nationales et commerciales</h2>
+  <p>Bases de donn&eacute;es couvrant l'ensemble du territoire am&eacute;ricain.</p>
+
+  <h3>Sources nationales gratuites</h3>
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Couverture</th><th>Records</th><th>Bar#?</th><th>Format</th><th>Licence</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>CourtListener API</strong><br><span class="text-xs text-gray">courtlistener.com</span></td>
+        <td>F&eacute;d&eacute;ral (PACER)</td>
+        <td>Millions</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>REST API</td>
+        <td>Public Domain</td>
+      </tr>
+      <tr>
+        <td><strong>USPTO Roster</strong><br><span class="text-xs text-gray">uspto.gov/attorney-roster</span></td>
+        <td>National (brevets)</td>
+        <td>~48K</td>
+        <td><span class="badge badge-green">Oui</span></td>
+        <td>ZIP/Text</td>
+        <td>CC0</td>
+      </tr>
+      <tr>
+        <td><strong>Harvard Dataverse</strong><br><span class="text-xs text-gray">Bonica &amp; Sen dataset</span></td>
+        <td>National</td>
+        <td>380K</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>R/CSV</td>
+        <td>Acad&eacute;mique</td>
+      </tr>
+      <tr>
+        <td><strong>DOJ EOIR Roster</strong><br><span class="text-xs text-gray">justice.gov/eoir</span></td>
+        <td>Immigration</td>
+        <td>~2 600</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>PDF</td>
+        <td>Public</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card card-warning">
+    <h4>CourtListener &mdash; Point d'attention</h4>
+    <p class="text-sm">L'endpoint <span class="font-mono">/api/rest/v4/attorneys/</span> est <strong>restreint</strong> (&laquo;only available to select users&raquo;). Il faut contacter Free Law Project pour obtenir l'acc&egrave;s. Pas de bulk download pour les attorneys. Pas de bar numbers. Utile pour l'enrichissement (email, phone, firm) mais pas comme source primaire.</p>
+  </div>
+
+  <h3>Fournisseurs commerciaux</h3>
+  <table>
+    <thead>
+      <tr><th>Fournisseur</th><th>Records</th><th>Prix</th><th>Bar#?</th><th>Usage public?</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Martindale-Hubbell</strong> (LexisNexis)</td>
+        <td>1M+ (160 pays)</td>
+        <td>$50K&ndash;$200K+/an</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>&Agrave; n&eacute;gocier</td>
+      </tr>
+      <tr>
+        <td><strong>UniCourt</strong></td>
+        <td>630M+ parties/avocats</td>
+        <td>Enterprise (devis)</td>
+        <td><span class="badge badge-orange">Possible</span></td>
+        <td>API</td>
+      </tr>
+      <tr>
+        <td><strong>Avvo API</strong></td>
+        <td>~1.26M (97% des US)</td>
+        <td>Gratuit (API)</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td><span class="badge badge-red">Non*</span></td>
+      </tr>
+      <tr>
+        <td><strong>LeadsPlease</strong></td>
+        <td>544K</td>
+        <td>$0.09&ndash;$0.25/record</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>Marketing</td>
+      </tr>
+      <tr>
+        <td><strong>BookYourData</strong></td>
+        <td>373K (168K US)</td>
+        <td>$1 399 one-time</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>Marketing</td>
+      </tr>
+      <tr>
+        <td><strong>BizProspex</strong></td>
+        <td>~1.5M worldwide</td>
+        <td>&agrave; partir de $200</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>Marketing</td>
+      </tr>
+      <tr>
+        <td><strong>HasData</strong> (par &eacute;tat)</td>
+        <td>Variable</td>
+        <td>$219&ndash;$279/&eacute;tat</td>
+        <td><span class="badge badge-red">Non</span></td>
+        <td>CSV</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="text-sm text-gray mt-2">* Avvo API interdit la copie locale, la r&eacute;tention de donn&eacute;es, et la construction de directories ind&eacute;pendants. Uniquement affichage transactionnel en temps r&eacute;el.</p>
+
+  <div class="card">
+    <h4>Verdict sur les fournisseurs commerciaux</h4>
+    <p class="text-sm"><strong>Aucun fournisseur commercial ne vend la base compl&egrave;te des 1.3M avocats US avec bar numbers v&eacute;rifi&eacute;s.</strong> Les state bars restent la source primaire autoritaire. Les fournisseurs commerciaux sont utiles pour l'<strong>enrichissement</strong> (emails, t&eacute;l&eacute;phones, practice areas) mais pas comme source de v&eacute;rit&eacute;.</p>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 6</div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 7: ROADMAP -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">6. Plan d'action recommand&eacute;</h2>
+  <p>Strat&eacute;gie en 3 phases pour atteindre 1.1M+ avocats v&eacute;rifi&eacute;s.</p>
+
+  <h3>Phase 1 &mdash; Actions imm&eacute;diates (cette semaine)</h3>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Records</th><th>Co&ucirc;t</th><th>D&eacute;lai</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Email au FL Bar</strong> (addressing@floridabar.org)<br><span class="text-xs text-gray">Formulaire Public Records Request</span></td>
+        <td>~108K</td>
+        <td class="text-green font-bold">Gratuit</td>
+        <td>Quelques jours</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Lancer scraping CA</strong> (CalBar HTML profils)<br><span class="text-xs text-gray">M&eacute;thode prouv&eacute;e &agrave; 95 records, 200ms/req</span></td>
+        <td>~190K</td>
+        <td class="text-green font-bold">Gratuit</td>
+        <td>~14h</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>T&eacute;l&eacute;charger USPTO Roster</strong><br><span class="text-xs text-gray">T&eacute;l&eacute;chargement direct ZIP</span></td>
+        <td>~48K</td>
+        <td class="text-green font-bold">Gratuit</td>
+        <td>Imm&eacute;diat</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Phase 2 &mdash; Demandes officielles (cette semaine &rarr; r&eacute;ponses sous 2-6 sem.)</h3>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Records</th><th>Co&ucirc;t</th></tr></thead>
+    <tbody>
+      <tr><td>4</td><td><strong>PIA Request Texas</strong> (texasbar.govqa.us)</td><td>~130K</td><td>$200&ndash;500</td></tr>
+      <tr><td>5</td><td><strong>Public Records Ohio</strong> (attyreg@sc.ohio.gov)</td><td>~37K</td><td>Faible</td></tr>
+      <tr><td>6</td><td><strong>CAMS Report NJ</strong> (Clerk's Office)</td><td>~100K</td><td>$200&ndash;500</td></tr>
+      <tr><td>7</td><td><strong>Data Request PA</strong> (Disciplinary Board)</td><td>~90K</td><td>Sur devis</td></tr>
+      <tr><td>8</td><td><strong>Public Records MA</strong> (BBO)</td><td>~70K</td><td>Frais copie</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Phase 3 &mdash; Scraping fallback + &eacute;tats suppl&eacute;mentaires</h3>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Records</th><th>Condition</th></tr></thead>
+    <tbody>
+      <tr><td>9</td><td><strong>Scraping IL</strong> (ARDC MvcGrid)</td><td>~97K</td><td>Si demande ARDC &eacute;choue</td></tr>
+      <tr><td>10</td><td><strong>Scraping TX</strong> (ColdFusion)</td><td>~100K</td><td>Si PIA TX trop lente</td></tr>
+      <tr><td>11</td><td><strong>Achat GA Bar mailing list</strong></td><td>~56K</td><td>Si budget approuv&eacute; ($6.5K)</td></tr>
+      <tr><td>12</td><td><strong>CourtListener API</strong> (enrichissement)</td><td>Enrichissement</td><td>Apr&egrave;s obtention acc&egrave;s</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Budget total estim&eacute;</h3>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h4>Sc&eacute;nario minimal (gratuit + PIA)</h4>
+        <table style="font-size:10px;margin:0;">
+          <tr><td>NY, FL, CA, USPTO</td><td class="text-green font-bold">$0</td></tr>
+          <tr><td>TX, OH, NJ PIA requests</td><td>~$1 000</td></tr>
+          <tr><td>PA, MA requests</td><td>~$500</td></tr>
+          <tr style="border-top:2px solid var(--navy);"><td><strong>Total</strong></td><td><strong>~$1 500</strong></td></tr>
+          <tr><td>Records estim&eacute;s</td><td><strong>~1.0M</strong></td></tr>
+        </table>
+      </div>
+      <div>
+        <h4>Sc&eacute;nario complet (+ GA + enrichissement)</h4>
+        <table style="font-size:10px;margin:0;">
+          <tr><td>Sc&eacute;nario minimal</td><td>$1 500</td></tr>
+          <tr><td>GA mailing list</td><td>$6 500</td></tr>
+          <tr><td>HasData IL + enrichissement</td><td>~$500</td></tr>
+          <tr style="border-top:2px solid var(--navy);"><td><strong>Total</strong></td><td><strong>~$8 500</strong></td></tr>
+          <tr><td>Records estim&eacute;s</td><td><strong>~1.1M+</strong></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h3>Timeline</h3>
+  <div class="card">
+    <table style="font-size:10px;margin:0;">
+      <thead><tr><th>Semaine</th><th>Action</th><th>Total cumul&eacute;</th></tr></thead>
+      <tbody>
+        <tr><td><strong>S1</strong> (actuel)</td><td>NY done + envoyer emails FL/TX/OH/NJ/PA/MA + lancer CA scraping + USPTO</td><td>~572K</td></tr>
+        <tr><td><strong>S2</strong></td><td>FL Excel re&ccedil;u + CA scraping termin&eacute; + linking</td><td>~680K</td></tr>
+        <tr><td><strong>S3&ndash;4</strong></td><td>R&eacute;ponses TX, OH, NJ arrivent</td><td>~950K</td></tr>
+        <tr><td><strong>S5&ndash;6</strong></td><td>R&eacute;ponses PA, MA + scraping IL fallback</td><td>~1.1M+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 7</div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAGE 8: APPENDIX -->
+<!-- ============================================ -->
+<div class="page">
+  <h2 class="section-title">7. Annexes</h2>
+  <p>R&eacute;f&eacute;rences, contacts, et consid&eacute;rations l&eacute;gales.</p>
+
+  <h3>A. Annuaire des contacts officiels</h3>
+  <table>
+    <thead><tr><th>&Eacute;tat</th><th>Organisme</th><th>Email</th><th>T&eacute;l&eacute;phone</th></tr></thead>
+    <tbody>
+      <tr><td>FL</td><td>FL Bar Membership Records</td><td class="font-mono text-xs">addressing@floridabar.org</td><td>850-561-5674</td></tr>
+      <tr><td>TX</td><td>State Bar of TX &mdash; Lists</td><td class="font-mono text-xs">listmail@texasbar.com</td><td>800-204-2222 x1383</td></tr>
+      <tr><td>OH</td><td>Supreme Court Atty Reg.</td><td class="font-mono text-xs">attyreg@sc.ohio.gov</td><td>614-387-9320</td></tr>
+      <tr><td>IL</td><td>ARDC Registration</td><td class="font-mono text-xs">registration@iardc.org</td><td>312-565-2600</td></tr>
+      <tr><td>NJ</td><td>NJ Courts Clerk's Office</td><td class="text-xs">(formulaire en ligne)</td><td>&mdash;</td></tr>
+      <tr><td>PA</td><td>PA Disciplinary Board</td><td class="text-xs">(formulaire)</td><td>717-772-8572</td></tr>
+      <tr><td>MA</td><td>Board of Bar Overseers</td><td class="font-mono text-xs">webmaster@massbbo.org</td><td>&mdash;</td></tr>
+      <tr><td>GA</td><td>State Bar of GA</td><td class="font-mono text-xs">gabrielled@gabar.org</td><td>404-527-8777</td></tr>
+      <tr><td>CA</td><td>CalBar Public Records</td><td class="font-mono text-xs">calbarca.nextrequest.com</td><td>213-765-1400</td></tr>
+    </tbody>
+  </table>
+
+  <h3>B. Sources de donn&eacute;es par population d'avocats</h3>
+  <table>
+    <thead><tr><th>&Eacute;tat</th><th>Avocats actifs (ABA 2025)</th><th>Source identifi&eacute;e</th><th>Priorit&eacute;</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NY</strong></td><td>181 227</td><td>Open Data CSV <span class="badge badge-green">Done</span></td><td>&#9733;&#9733;&#9733;</td></tr>
+      <tr><td><strong>CA</strong></td><td>181 048</td><td>HTML Scraping CalBar</td><td>&#9733;&#9733;&#9733;</td></tr>
+      <tr><td><strong>TX</strong></td><td>113 330</td><td>PIA Request / Scraping</td><td>&#9733;&#9733;&#9733;</td></tr>
+      <tr><td><strong>FL</strong></td><td>97 426</td><td>Public Records Excel</td><td>&#9733;&#9733;&#9733;</td></tr>
+      <tr><td><strong>IL</strong></td><td>96 821</td><td>ARDC Scraping / Contact</td><td>&#9733;&#9733;</td></tr>
+      <tr><td><strong>NJ</strong></td><td>~100 000</td><td>CAMS Report</td><td>&#9733;&#9733;</td></tr>
+      <tr><td><strong>PA</strong></td><td>~90 000</td><td>Public Data Request</td><td>&#9733;&#9733;</td></tr>
+      <tr><td><strong>MA</strong></td><td>~70 000</td><td>Public Records Request</td><td>&#9733;&#9733;</td></tr>
+      <tr><td><strong>GA</strong></td><td>43 447</td><td>Mailing List ($6.5K)</td><td>&#9733;</td></tr>
+      <tr><td><strong>OH</strong></td><td>37 086</td><td>Public Records Request</td><td>&#9733;&#9733;</td></tr>
+    </tbody>
+  </table>
+  <p class="text-xs text-gray mt-2">Source : ABA National Lawyer Population Survey, janvier 2025. Total national : 1 322 649 avocats actifs.</p>
+
+  <h3>C. Consid&eacute;rations l&eacute;gales</h3>
+  <div class="card card-warning">
+    <ul class="text-sm">
+      <li><strong>Public Records</strong> : Les bar rolls sont des documents publics dans la plupart des &eacute;tats. Exception : l'ARDC (IL) est exempt de FOIA en tant qu'organe de la branche judiciaire.</li>
+      <li><strong>Scraping</strong> : Certains &eacute;tats interdisent explicitement l'acc&egrave;s automatis&eacute; (NJ : &laquo;automated program&raquo;, FLSD : &laquo;commercial use prohibited&raquo;). Privil&eacute;gier les demandes officielles.</li>
+      <li><strong>Usage commercial</strong> : La FL Bar interdit les &laquo;unauthorized uses&raquo;. La GA Bar exige un &laquo;one-time use&raquo;. V&eacute;rifier les conditions pour chaque source.</li>
+      <li><strong>R&egrave;gle d'or</strong> : Mieux aucune information qu'une information fausse. Toute donn&eacute;e d'avocat doit &ecirc;tre tra&ccedil;able &agrave; sa source officielle.</li>
+    </ul>
+  </div>
+
+  <h3>D. M&eacute;thodologie</h3>
+  <div class="card">
+    <p class="text-sm">Cette analyse a &eacute;t&eacute; r&eacute;alis&eacute;e le 16 mars 2026 par 10 agents de recherche parall&egrave;les, couvrant :</p>
+    <ul class="text-sm">
+      <li>Les 5 state bars prioritaires (CA, FL, TX, IL, OH)</li>
+      <li>4 &eacute;tats suppl&eacute;mentaires (NJ, PA, MA, GA)</li>
+      <li>Les sources f&eacute;d&eacute;rales/nationales (PACER, CourtListener, USPTO, EOIR)</li>
+      <li>Les portails open data (data.gov, Kaggle, GitHub, Harvard Dataverse, Socrata)</li>
+      <li>Les fournisseurs commerciaux (Martindale, Avvo, ZoomInfo, Data Axle, etc.)</li>
+    </ul>
+    <p class="text-sm mt-2">Chaque source a &eacute;t&eacute; &eacute;valu&eacute;e sur : compl&eacute;tude, co&ucirc;t, format, fra&icirc;cheur, pr&eacute;sence de bar numbers, et conditions d'utilisation.</p>
+  </div>
+
+  <div class="page-footer">us-attorneys.com &mdash; Rapport d'analyse des sources de donn&eacute;es &mdash; 16 mars 2026 &mdash; Page 8</div>
+</div>
+
+</body>
+</html>

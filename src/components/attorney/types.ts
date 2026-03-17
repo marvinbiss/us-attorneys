@@ -63,7 +63,7 @@ export interface Artisan {
   longitude?: number
   prices_are_estimated?: boolean
   available_24h?: boolean
-  // DB-bound: French keys from database (ouvert/debut/fin stored in Supabase JSONB)
+  // DB-bound: keys from database (ouvert/debut/fin stored in Supabase JSONB -- legacy column names, do not rename without migration)
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
   free_quote?: boolean
   intervention_radius_km?: number
@@ -72,7 +72,7 @@ export interface Artisan {
   // GUARD: Do NOT add is_premium, hourly_rate, response_time, avatar_url,
   // certifications, insurance, payment_methods, languages, emergency_available,
   // experience_years, employee_count, hourly_rate_min/max here.
-  // Legacy fields live in src/types/legacy/ (LegacyArtisan).
+  // Legacy fields live in src/types/legacy/ (LegacyAttorney).
 }
 
 export interface Review {
@@ -88,14 +88,14 @@ export interface Review {
   verified?: boolean
 }
 
-export function getDisplayName(artisan: Artisan): string {
-  if (artisan.is_center && artisan.business_name) {
-    return artisan.business_name
+export function getDisplayName(attorney: Artisan): string {
+  if (attorney.is_center && attorney.business_name) {
+    return attorney.business_name
   }
-  if (artisan.business_name) {
-    return artisan.business_name
+  if (attorney.business_name) {
+    return attorney.business_name
   }
-  return `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || 'Attorney'
+  return `${attorney.first_name || ''} ${attorney.last_name || ''}`.trim() || 'Attorney'
 }
 
 /** Preferred alias for Artisan interface */

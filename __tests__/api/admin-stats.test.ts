@@ -107,7 +107,7 @@ function buildAllSuccessResults(): MockQueryResult[] {
   return [
     // Batch 1 (14 queries)
     { count: 150, data: null, error: null },           // totalUsers
-    { count: 42, data: null, error: null },             // totalArtisans
+    { count: 42, data: null, error: null },             // totalAttorneys
     { count: 300, data: null, error: null },            // totalBookings
     { count: 3, data: null, error: null },              // pendingReports
     { data: [{ rating: 4 }, { rating: 5 }, { rating: 3 }], error: null }, // reviews

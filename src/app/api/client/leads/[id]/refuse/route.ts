@@ -46,7 +46,8 @@ export async function POST(
     }
     const { quote_id } = result.data
 
-    // Verify ownership of the devis_request via user client (RLS enforces client_id = auth.uid())
+    // Verify ownership of the consultation request via user client (RLS enforces client_id = auth.uid())
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: lead, error: leadError } = await supabase
       .from('devis_requests')
       .select('id, status')

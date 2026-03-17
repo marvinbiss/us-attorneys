@@ -289,16 +289,16 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
               <p className="text-gray-700 mb-4">{review.comment}</p>
             )}
 
-            {/* Artisan response */}
-            {review.artisan_response && (
+            {/* Attorney response */}
+            {review.attorney_response && (
               <div className="bg-violet-50 rounded-lg p-4 mb-4">
                 <p className="text-xs font-medium text-violet-700 mb-1">
                   Response from {attorneyName || 'the attorney'}
                 </p>
-                <p className="text-sm text-gray-700">{review.artisan_response}</p>
-                {review.artisan_responded_at && (
+                <p className="text-sm text-gray-700">{review.attorney_response}</p>
+                {review.attorney_responded_at && (
                   <p className="text-xs text-gray-500 mt-1">
-                    {formatDate(review.artisan_responded_at)}
+                    {formatDate(review.attorney_responded_at)}
                   </p>
                 )}
               </div>

@@ -1,5 +1,5 @@
 // TODO: Replace with US-specific local data insights (Census data, BLS stats, etc.)
-// Original component displayed French-specific local statistics (DPE energy ratings, artisan counts, etc.)
+// Original component displayed location-specific statistics — not yet adapted for US attorneys.
 
 import type { LocationData } from '@/lib/data/location-data'
 
@@ -7,7 +7,7 @@ interface LocalDataInsightsProps {
   locationData: LocationData | null
   specialtySlug: string
   specialtyName: string
-  villeName: string
+  cityName: string
 }
 
 export default function LocalDataInsights(_props: LocalDataInsightsProps) {

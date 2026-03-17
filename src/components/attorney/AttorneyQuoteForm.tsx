@@ -5,11 +5,11 @@ import { MessageCircle, Shield, Clock, Zap, CheckCircle } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 
 interface AttorneyQuoteFormProps {
-  artisan: Artisan
+  attorney: Artisan
 }
 
-export function AttorneyQuoteForm({ artisan }: AttorneyQuoteFormProps) {
-  const displayName = getDisplayName(artisan)
+export function AttorneyQuoteForm({ attorney }: AttorneyQuoteFormProps) {
+  const displayName = getDisplayName(attorney)
 
   const openEstimationWidget = () => {
     window.dispatchEvent(new Event('sa:open-estimation'))

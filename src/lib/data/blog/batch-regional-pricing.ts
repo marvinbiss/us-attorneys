@@ -1,3 +1,3 @@
 import type { BlogArticle } from './articles'
 
-export const prixRegionauxArticles: Record<string, BlogArticle> = {}
+export const regionalPricingArticles: Record<string, BlogArticle> = {}

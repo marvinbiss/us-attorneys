@@ -36,7 +36,8 @@ export async function GET(
       return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
     }
 
-    // Fetch the devis_request — RLS ensures client_id = auth.uid()
+    // Fetch the consultation request — RLS ensures client_id = auth.uid()
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: lead, error: leadError } = await supabase
       .from('devis_requests')
       .select('id, service_name, city, postal_code, description, budget, urgency, status, client_name, client_email, client_phone, created_at')
@@ -127,13 +128,13 @@ export async function GET(
     })
 
     const allAssignments = assignments || []
-    const artisansViewed = allAssignments.filter(a =>
+    const attorneysViewed = allAssignments.filter(a =>
       ['viewed', 'quoted', 'declined'].includes(a.status)
     ).length
 
     const stats = {
-      artisans_notified: allAssignments.length,
-      artisans_viewed: artisansViewed,
+      attorneys_notified: allAssignments.length,
+      attorneys_viewed: attorneysViewed,
       quotes_count: quotes.length,
     }
 

@@ -56,7 +56,8 @@ export async function GET(
 
     const isProvider = provider?.id === quote.attorney_id
 
-    // Check if user is the client via the devis_request
+    // Check if user is the client via the consultation request
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: devisRequest } = await supabase
       .from('devis_requests')
       .select('client_id')
@@ -148,6 +149,7 @@ export async function PATCH(
 
     const isProvider = provider?.id === quote.attorney_id
 
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: devisRequest } = await supabase
       .from('devis_requests')
       .select('client_id')

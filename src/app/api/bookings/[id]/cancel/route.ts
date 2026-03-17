@@ -97,7 +97,7 @@ export async function POST(
     // Fetch attorney details for notification
     // Uses admin client: RLS policy 328 restricts cross-user profile reads
     const adminSupabase = createAdminClient()
-    const { data: artisan } = await adminSupabase
+    const { data: attorneyProfile } = await adminSupabase
       .from('profiles')
       .select('full_name, email')
       .eq('id', booking.attorney_id)
@@ -112,13 +112,13 @@ export async function POST(
     })
 
     // Send cancellation notification (non-blocking)
-    if (artisan?.email) {
+    if (attorneyProfile?.email) {
       sendCancellationNotification({
         bookingId: id,
         clientName: booking.client_name,
         clientEmail: booking.client_email,
-        attorneyName: artisan.full_name || 'Attorney',
-        artisanEmail: artisan.email,
+        attorneyName: attorneyProfile.full_name || 'Attorney',
+        attorneyEmail: attorneyProfile.email,
         specialtyName: booking.service_description || 'Service',
         date: formattedDate,
         startTime: new Date(booking.scheduled_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),

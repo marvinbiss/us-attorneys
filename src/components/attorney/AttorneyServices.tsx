@@ -2,13 +2,13 @@
 
 import { motion } from 'framer-motion'
 import { Wrench, Clock, DollarSign, CheckCircle } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 interface AttorneyServicesProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
 }
 
-export function AttorneyServices({ artisan }: AttorneyServicesProps) {
+export function AttorneyServices({ attorney }: AttorneyServicesProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -28,9 +28,9 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
 
       <div className="px-6 pb-6">
         {/* Services tags */}
-        {artisan.services.length > 0 && (
+        {attorney.services.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services offered">
-            {artisan.services.map((service, i) => (
+            {attorney.services.map((service, i) => (
               <span
                 key={i}
                 role="listitem"
@@ -43,13 +43,13 @@ export function AttorneyServices({ artisan }: AttorneyServicesProps) {
           </div>
         )}
 
-        {/* Pricing table — only show real prices from the artisan */}
-        {artisan.service_prices.length > 0 ? (
+        {/* Pricing table — only show real prices from the attorney */}
+        {attorney.service_prices.length > 0 ? (
           <div className="space-y-2.5 mt-4" role="list" aria-label="Service fees">
-            {artisan.service_prices[0]?.price?.startsWith('Starting') && (
+            {attorney.service_prices[0]?.price?.startsWith('Starting') && (
               <p className="text-xs text-slate-400 italic mb-3">* Indicative fees, the final price depends on the exact nature of the consultation. Request a consultation for a precise quote.</p>
             )}
-            {artisan.service_prices.map((service, index) => (
+            {attorney.service_prices.map((service, index) => (
               <motion.div
                 key={index}
                 role="listitem"

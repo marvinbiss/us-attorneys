@@ -316,7 +316,7 @@ export function AttorneyCard({
 }
 
 // Attorney grid
-export function ArtisanGrid({
+export function AttorneyGrid({
   attorneys,
   loading = false,
 }: {
@@ -339,8 +339,8 @@ export function ArtisanGrid({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {attorneys.map((artisan) => (
-        <AttorneyCard key={artisan.id} {...artisan} />
+      {attorneys.map((atty) => (
+        <AttorneyCard key={atty.id} {...atty} />
       ))}
     </div>
   )

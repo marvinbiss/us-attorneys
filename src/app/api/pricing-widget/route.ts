@@ -42,7 +42,7 @@ export async function OPTIONS() {
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const specialtySlug = searchParams.get('service')?.toLowerCase().trim()
-  const citySlug = searchParams.get('ville')?.toLowerCase().trim() || searchParams.get('city')?.toLowerCase().trim()
+  const citySlug = searchParams.get('city')?.toLowerCase().trim() || searchParams.get('ville')?.toLowerCase().trim()
   const format = searchParams.get('format')?.toLowerCase().trim()
 
   // --- Validate service ---
@@ -64,8 +64,8 @@ export async function GET(request: NextRequest) {
     return errorResponse('Missing "city" parameter. Example: ?service=personal-injury&city=new-york', format)
   }
 
-  const ville = getCityBySlug(citySlug)
-  if (!ville) {
+  const cityData = getCityBySlug(citySlug)
+  if (!cityData) {
     return errorResponse(
       `City "${escapeHtml(citySlug)}" not found. Use the city slug (e.g., new-york, los-angeles, chicago).`,
       format,
@@ -73,25 +73,25 @@ export async function GET(request: NextRequest) {
   }
 
   // --- Compute prices ---
-  const cityRegion = getStateByCode(ville.stateCode)?.region ?? ''
+  const cityRegion = getStateByCode(cityData.stateCode)?.region ?? ''
   const multiplier = getRegionalMultiplier(cityRegion)
 
-  // Use barometre data if available for richer data, fallback to trade priceRange
-  const barometreService = servicePricings.find((s) => s.service === specialtySlug)
+  // Use pricing index data if available for richer data, fallback to trade priceRange
+  const pricingData = servicePricings.find((s) => s.service === specialtySlug)
 
   let priceMin: number
   let priceMax: number
   let unit: string
   let interventions: { name: string; minPrice: number; maxPrice: number; unit: string }[] | undefined
 
-  if (barometreService) {
+  if (pricingData) {
     // Compute overall range from all interventions
-    const allMin = barometreService.interventions.map((i) => i.minPrice)
-    const allMax = barometreService.interventions.map((i) => i.maxPrice)
+    const allMin = pricingData.interventions.map((i) => i.minPrice)
+    const allMax = pricingData.interventions.map((i) => i.maxPrice)
     priceMin = Math.round(Math.min(...allMin) * multiplier)
     priceMax = Math.round(Math.max(...allMax) * multiplier)
     unit = 'intervention'
-    interventions = barometreService.interventions.map((i) => ({
+    interventions = pricingData.interventions.map((i) => ({
       name: i.name,
       minPrice: Math.round(i.minPrice * multiplier),
       maxPrice: Math.round(i.maxPrice * multiplier),
@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
         service: specialtySlug,
         specialtyName: trade.name,
         city: citySlug,
-        cityName: ville.name,
+        cityName: cityData.name,
         region: cityRegion,
         priceMin,
         priceMax,
@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
   // --- HTML widget response ---
   const html = buildWidgetHtml({
     specialtyName: trade.name,
-    cityName: ville.name,
+    cityName: cityData.name,
     region: cityRegion,
     priceMin,
     priceMax,

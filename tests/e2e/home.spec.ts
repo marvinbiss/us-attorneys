@@ -5,16 +5,16 @@ test.describe('Home Page', () => {
     await page.goto('/')
 
     // Check title
-    await expect(page).toHaveTitle(/ServicesArtisans/)
+    await expect(page).toHaveTitle(/US Attorneys/)
 
     // Check header has logo link
-    await expect(page.getByRole('banner').getByRole('link', { name: /ServicesArtisans/i })).toBeVisible()
+    await expect(page.getByRole('banner').getByRole('link', { name: /US Attorneys/i })).toBeVisible()
 
     // Check main content
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   })
 
-  test('should navigate to services page', async ({ page }) => {
+  test('should navigate to practice areas page', async ({ page }) => {
     await page.goto('/')
 
     // Navigate to services - click on main CTA or services link
@@ -29,11 +29,11 @@ test.describe('Home Page', () => {
     await page.goto('/')
 
     // Find search input if visible
-    const searchInput = page.getByPlaceholder(/Rechercher|service|artisan/i).first()
+    const searchInput = page.getByPlaceholder(/Search|practice area|attorney/i).first()
 
     // If search is visible, test it
     if (await searchInput.isVisible().catch(() => false)) {
-      await searchInput.fill('plombier')
+      await searchInput.fill('personal injury')
     }
   })
 
@@ -58,7 +58,7 @@ test.describe('Footer', () => {
     await expect(footer).toBeVisible()
 
     // Check legal links - use first() to avoid strict mode
-    await expect(page.getByRole('link', { name: /Mentions l/i }).first()).toBeVisible()
-    await expect(page.getByRole('link', { name: /Confidentialit/i }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: /Terms/i }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: /Privacy/i }).first()).toBeVisible()
   })
 })

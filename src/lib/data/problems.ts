@@ -11,7 +11,7 @@ export interface Problem {
   description: string
   relatedServices: string[]
   primaryService: string
-  urgencyLevel: 'haute' | 'moyenne' | 'basse'
+  urgencyLevel: 'high' | 'medium' | 'low'
   symptoms: string[]
   immediateActions: string[]
   preventiveTips: string[]

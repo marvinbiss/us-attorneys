@@ -2,18 +2,18 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Booking Flow', () => {
   test('can navigate to service page', async ({ page }) => {
-    await page.goto('/services/plombier')
+    await page.goto('/services/personal-injury')
 
     // Should show service page
     await expect(page.locator('body')).toBeVisible()
     const url = page.url()
-    expect(url).toContain('plombier')
+    expect(url).toContain('personal-injury')
   })
 
   test('can navigate to service with location', async ({ page }) => {
-    await page.goto('/services/plombier/paris')
+    await page.goto('/services/personal-injury/new-york')
 
-    // Should show providers in Paris
+    // Should show attorneys in New York
     await expect(page.locator('body')).toBeVisible()
   })
 
@@ -23,13 +23,13 @@ test.describe('Booking Flow', () => {
 
     // Should either show booking or redirect to login
     const url = page.url()
-    expect(url).toMatch(/booking|connexion/)
+    expect(url).toMatch(/booking|login/)
   })
 
-  test('devis form is accessible', async ({ page }) => {
-    await page.goto('/devis')
+  test('consultation form is accessible', async ({ page }) => {
+    await page.goto('/consultation')
 
-    // Should show devis form
+    // Should show consultation form
     await expect(page.locator('body')).toBeVisible()
 
     // Should have input fields
@@ -38,11 +38,11 @@ test.describe('Booking Flow', () => {
     expect(count).toBeGreaterThan(0)
   })
 
-  test('can fill devis form', async ({ page }) => {
-    await page.goto('/devis')
+  test('can fill consultation form', async ({ page }) => {
+    await page.goto('/consultation')
 
     // Fill basic form fields if present
-    const nameInput = page.locator('input[name="name"], input[placeholder*="nom"]')
+    const nameInput = page.locator('input[name="name"], input[placeholder*="name"]')
     if (await nameInput.isVisible()) {
       await nameInput.fill('Test User')
     }
@@ -56,17 +56,17 @@ test.describe('Booking Flow', () => {
   })
 })
 
-test.describe('Provider Booking', () => {
-  test('provider profile shows booking options', async ({ page }) => {
-    // Use SEO-friendly URL format: /services/[service]/[city]/[artisan-slug]
-    await page.goto('/services/plombier/paris/test-provider')
+test.describe('Attorney Booking', () => {
+  test('attorney profile shows booking options', async ({ page }) => {
+    // Use SEO-friendly URL format: /services/[practice-area]/[city]/[attorney-slug]
+    await page.goto('/services/personal-injury/houston/test-attorney')
 
-    // Should show provider page or 404
+    // Should show attorney page or 404
     await expect(page.locator('body')).toBeVisible()
   })
 
-  test('urgence page shows emergency options', async ({ page }) => {
-    await page.goto('/urgence')
+  test('emergency page shows emergency options', async ({ page }) => {
+    await page.goto('/emergency')
 
     // Should show emergency services
     await expect(page.locator('body')).toBeVisible()
@@ -79,7 +79,7 @@ test.describe('Provider Booking', () => {
 
 test.describe('Quote Request', () => {
   test('can access quote request form from search', async ({ page }) => {
-    await page.goto('/recherche?q=plombier')
+    await page.goto('/search?q=personal-injury')
 
     // Should show search results
     await expect(page.locator('body')).toBeVisible()

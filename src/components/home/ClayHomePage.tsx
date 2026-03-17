@@ -27,7 +27,7 @@ const SERVICE_ITEMS = [
 ]
 
 // Featured attorneys (manual selection — verified profiles)
-const FEATURED_ARTISANS = [
+const FEATURED_ATTORNEYS = [
   {
     name: 'Smith & Associates', specialty: 'Personal Injury', address_city: 'New York', address_postal_code: '10001',
     rating_average: 4.6, review_count: 34, is_verified: true, slug: 'personal-injury',
@@ -139,7 +139,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
         ...p,
         profileCity: (p.address_city ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
       }))
-    : FEATURED_ARTISANS
+    : FEATURED_ATTORNEYS
   const bigReviews = recentReviews.length >= 3 ? recentReviews.slice(0, 3) : FALLBACK_REVIEWS
   const carouselReviews = recentReviews.length >= 6 ? recentReviews.slice(3) : undefined
 

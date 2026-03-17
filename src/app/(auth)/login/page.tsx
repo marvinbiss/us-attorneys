@@ -53,7 +53,7 @@ export default function SignInPage() {
       // Redirect: honor ?redirect= param, else default to dashboard
       if (redirectTo) {
         router.push(redirectTo)
-      } else if (data.data?.user?.isArtisan) {
+      } else if (data.data?.user?.isAttorney) {
         router.push('/attorney-dashboard')
       } else {
         router.push('/client-dashboard')

@@ -14,17 +14,18 @@ export async function OPTIONS() {
 
 /**
  * GET /api/v1/stats?region=new-york
- * GET /api/v1/stats?departement=75
+ * GET /api/v1/stats?state=CA
  *
  * Returns regional or state statistics.
+ * Legacy param "departement" still accepted for backward compatibility.
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
     const region = searchParams.get('region')
-    const departement = searchParams.get('departement')
+    const stateCode = searchParams.get('state') || searchParams.get('departement') // 'departement' kept for backward compat with existing API consumers
 
-    if (!region && !departement) {
+    if (!region && !stateCode) {
       return NextResponse.json(
         { error: 'Parameter "region" or "state" is required. Example: ?region=california or ?state=CA' },
         { status: 400, headers: CORS_HEADERS },
@@ -35,17 +36,17 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('barometre_stats')
-      .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at')
+      .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_attorneys, note_moyenne, nb_avis, taux_verification, updated_at')
       .is('ville', null)
 
     if (region) {
       query = query.eq('region_slug', region).is('departement', null)
-    } else if (departement) {
-      query = query.eq('departement_code', departement)
+    } else if (stateCode) {
+      query = query.eq('departement_code', stateCode) // DB column name 'departement_code' is legacy
     }
 
     const { data, error } = await query
-      .order('nb_artisans', { ascending: false })
+      .order('nb_attorneys', { ascending: false })
       .limit(100)
 
     if (error) {
@@ -57,13 +58,13 @@ export async function GET(request: NextRequest) {
 
     // Calculate totals
     const rows = data ?? []
-    const totalAttorneys = rows.reduce((s, r) => s + (r.nb_artisans ?? 0), 0)
+    const totalAttorneys = rows.reduce((s, r) => s + (r.nb_attorneys ?? 0), 0)
     const totalReviews = rows.reduce((s, r) => s + (r.nb_avis ?? 0), 0)
     const ratedRows = rows.filter((r) => r.note_moyenne !== null)
     const avgRating = ratedRows.length > 0
       ? Math.round(
-          (ratedRows.reduce((s, r) => s + (r.note_moyenne as number) * (r.nb_artisans ?? 1), 0) /
-            ratedRows.reduce((s, r) => s + (r.nb_artisans ?? 1), 0)) * 100,
+          (ratedRows.reduce((s, r) => s + (r.note_moyenne as number) * (r.nb_attorneys ?? 1), 0) /
+            ratedRows.reduce((s, r) => s + (r.nb_attorneys ?? 1), 0)) * 100,
         ) / 100
       : null
 
@@ -71,8 +72,8 @@ export async function GET(request: NextRequest) {
       {
         success: true,
         summary: {
-          zone: region || departement,
-          type: region ? 'region' : 'departement',
+          zone: region || stateCode,
+          type: region ? 'region' : 'state',
           total_attorneys: totalAttorneys,
           average_rating: avgRating,
           total_reviews: totalReviews,

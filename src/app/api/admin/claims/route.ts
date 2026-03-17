@@ -182,7 +182,7 @@ export async function PATCH(request: NextRequest) {
             email_confirm: true,
             user_metadata: {
               full_name: claim.claimant_name || '',
-              is_artisan: true,
+              is_attorney: true,
             },
           })
 
@@ -321,7 +321,7 @@ export async function PATCH(request: NextRequest) {
 
       // 4. Mark user as attorney in auth metadata
       await supabase.auth.admin.updateUserById(resolvedUserId, {
-        user_metadata: { is_artisan: true },
+        user_metadata: { is_attorney: true },
       })
 
       // 5. For anonymous claims: generate recovery link + send email

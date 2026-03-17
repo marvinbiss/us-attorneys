@@ -179,14 +179,14 @@ describe('isValidSIRET', () => {
 
 describe('calculateDistance', () => {
   it('should calculate distance between two points', () => {
-    // Paris to Lyon is approximately 392 km
-    const distance = calculateDistance(48.8566, 2.3522, 45.7640, 4.8357)
-    expect(distance).toBeGreaterThan(380)
-    expect(distance).toBeLessThan(410)
+    // New York to Los Angeles is approximately 3944 km
+    const distance = calculateDistance(40.7128, -74.0060, 34.0522, -118.2437)
+    expect(distance).toBeGreaterThan(3900)
+    expect(distance).toBeLessThan(4000)
   })
 
   it('should return 0 for same coordinates', () => {
-    const distance = calculateDistance(48.8566, 2.3522, 48.8566, 2.3522)
+    const distance = calculateDistance(40.7128, -74.0060, 40.7128, -74.0060)
     expect(distance).toBe(0)
   })
 })
@@ -238,18 +238,18 @@ describe('parseQueryString', () => {
 
 describe('getAttorneyUrl', () => {
   it('should build URL with known service and city', () => {
-    const url = getAttorneyUrl({ specialty: 'plombier', city: 'Paris', slug: 'dupont-plomberie-75' })
-    expect(url).toBe('/practice-areas/plombier/paris/dupont-plomberie-75')
+    const url = getAttorneyUrl({ specialty: 'personal-injury', city: 'New York', slug: 'smith-injury-law-ny' })
+    expect(url).toBe('/practice-areas/personal-injury/new-york/smith-injury-law-ny')
   })
 
   it('should prefer slug over stable_id', () => {
-    const url = getAttorneyUrl({ specialty: 'electricien', city: 'Lyon', slug: 'martin-elec-69', stable_id: 'STBL123' })
-    expect(url).toContain('martin-elec-69')
+    const url = getAttorneyUrl({ specialty: 'criminal-defense', city: 'Los Angeles', slug: 'martin-defense-ca', stable_id: 'STBL123' })
+    expect(url).toContain('martin-defense-ca')
     expect(url).not.toContain('STBL123')
   })
 
   it('should fall back to stable_id when no slug', () => {
-    const url = getAttorneyUrl({ specialty: 'plombier', city: 'Paris', stable_id: 'STBL456' })
+    const url = getAttorneyUrl({ specialty: 'personal-injury', city: 'New York', stable_id: 'STBL456' })
     expect(url).toContain('STBL456')
   })
 

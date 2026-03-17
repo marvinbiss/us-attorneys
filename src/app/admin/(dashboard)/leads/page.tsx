@@ -190,7 +190,7 @@ export default function AdminLeadsPage() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
-                  placeholder="Paris"
+                  placeholder="New York"
                 />
               </div>
             </div>

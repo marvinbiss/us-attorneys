@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
 
     // Data query with pagination
+    // Table 'devis_requests' = consultation requests (legacy French name)
     let dataQuery = supabase
       .from('lead_assignments')
       .select(`

@@ -62,7 +62,7 @@ export interface Provider {
   review_count?: number
   available_24h?: boolean
   phone_secondary?: string
-  // DB-bound: French keys from database (ouvert/debut/fin stored in Supabase JSONB)
+  // DB-bound: legacy column names in Supabase JSONB (ouvert/debut/fin), do not rename without migration
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
   accepts_new_clients?: boolean
   free_quote?: boolean

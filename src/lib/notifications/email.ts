@@ -15,7 +15,7 @@ export interface BookingEmailData {
   clientEmail: string
   clientPhone: string
   attorneyName: string
-  artisanEmail: string
+  attorneyEmail: string
   specialtyName: string
   date: string
   startTime: string
@@ -39,7 +39,7 @@ export interface CancellationEmailData {
   clientName: string
   clientEmail: string
   attorneyName: string
-  artisanEmail: string
+  attorneyEmail: string
   specialtyName: string
   date: string
   startTime: string
@@ -427,7 +427,7 @@ ${SITE_NAME}
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/attorney-dashboard/settings/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                <a href="${SITE_URL}/attorney-dashboard/settings/billing" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                   Update payment
                 </a>
               </div>
@@ -453,7 +453,7 @@ ${data.amount ? `Amount: ${data.amount}` : ''}
 
 Please update your payment information to continue your subscription.
 
-Update: ${SITE_URL}/attorney-dashboard/settings/facturation
+Update: ${SITE_URL}/attorney-dashboard/settings/billing
 
 ${SITE_NAME}
     `,
@@ -496,16 +496,16 @@ export async function sendEmail({
 // High-level email functions
 export async function sendBookingConfirmation(data: BookingEmailData) {
   const clientEmail = templates.bookingConfirmationClient(data)
-  const artisanEmail = templates.bookingNotificationAttorney(data)
+  const attorneyEmailContent = templates.bookingNotificationAttorney(data)
 
   const results = await Promise.all([
     sendEmail({ to: data.clientEmail, ...clientEmail }),
-    sendEmail({ to: data.artisanEmail, ...artisanEmail }),
+    sendEmail({ to: data.attorneyEmail, ...attorneyEmailContent }),
   ])
 
   return {
     clientNotification: results[0],
-    artisanNotification: results[1],
+    attorneyNotification: results[1],
   }
 }
 
@@ -517,15 +517,15 @@ export async function sendBookingReminder(data: ReminderEmailData) {
 export async function sendCancellationNotification(data: CancellationEmailData) {
   const notification = templates.cancellationNotification(data)
 
-  // Send to both client and artisan
+  // Send to both client and attorney
   const results = await Promise.all([
     sendEmail({ to: data.clientEmail, ...notification }),
-    sendEmail({ to: data.artisanEmail, ...notification }),
+    sendEmail({ to: data.attorneyEmail, ...notification }),
   ])
 
   return {
     clientNotification: results[0],
-    artisanNotification: results[1],
+    attorneyNotification: results[1],
   }
 }
 
@@ -551,7 +551,7 @@ export async function sendCancellationEmail(data: {
     clientName: data.clientName,
     clientEmail: data.clientEmail,
     attorneyName: data.attorneyName,
-    artisanEmail: '', // Not needed for client notification
+    attorneyEmail: '', // Not needed for client notification
     specialtyName: data.specialtyName,
     date: data.date,
     startTime: data.startTime,

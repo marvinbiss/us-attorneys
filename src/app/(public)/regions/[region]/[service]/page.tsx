@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { usRegions, getRegionBySlug } from '@/lib/data/usa'
-import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { getTradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 
 export function generateStaticParams() {
-  const allSlugs = getTradesSlugs()
+  const allSlugs = getPracticeAreaSlugs()
   return usRegions.flatMap((r) =>
     allSlugs.map((s) => ({ region: r.slug, service: s }))
   )

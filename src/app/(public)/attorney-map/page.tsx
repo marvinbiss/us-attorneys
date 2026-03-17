@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { SITE_URL } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
 
-const CarteClient = dynamic(() => import('./CarteClient'), {
+const MapClient = dynamic(() => import('./MapClient'), {
   ssr: false,
   loading: () => (
     <div className="bg-gray-100 rounded-xl flex items-center justify-center" style={{ height: '600px' }}>
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 86400
 
-export default function CarteArtisansPage() {
+export default function AttorneyMapPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -33,7 +33,7 @@ export default function CarteArtisansPage() {
         </h1>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <CarteClient />
+        <MapClient />
       </div>
     </div>
   )

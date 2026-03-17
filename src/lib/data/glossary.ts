@@ -11,9 +11,6 @@ export interface GlossaryTerm {
   relatedService?: string
 }
 
-/** @deprecated Use GlossaryTerm instead */
-export type GlossaireTerm = GlossaryTerm
-
 export const glossaryCategories = [
   'Civil Litigation',
   'Criminal Law',
@@ -25,15 +22,6 @@ export const glossaryCategories = [
   'Administrative & Regulatory',
 ] as const
 
-/** @deprecated Use glossaryCategories instead */
-export const glossaireCategories = glossaryCategories
-
 export type GlossaryCategory = (typeof glossaryCategories)[number]
 
-/** @deprecated Use GlossaryCategory instead */
-export type GlossaireCategory = GlossaryCategory
-
 export const glossaryTerms: GlossaryTerm[] = []
-
-/** @deprecated Use glossaryTerms instead */
-export const glossaireTerms = glossaryTerms

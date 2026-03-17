@@ -319,7 +319,7 @@ export function HowItWorksSection() {
 
 // ─── ATTORNEY CTA → PREMIUM DESIGN ──────────────────────────────
 
-const artisanBenefits = [
+const attorneyBenefits = [
   { icon: TrendingUp, text: 'Visibility to thousands of clients' },
   { icon: Users, text: 'Receive qualified consultation requests' },
   { icon: Banknote, text: 'Free registration, no obligation' },
@@ -374,7 +374,7 @@ export function ArtisanCTASection() {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {artisanBenefits.map((b, i) => (
+            {attorneyBenefits.map((b, i) => (
               <motion.div
                 key={i}
                 variants={staggerItem}

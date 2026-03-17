@@ -21,7 +21,7 @@ const CACHE_TTL = 86400
 // Types
 // ---------------------------------------------------------------------------
 
-// DB-bound: French column names from barometre_stats table in Supabase
+// DB-bound: column names from barometre_stats table in Supabase (legacy French names, do not rename without migration)
 export interface BarometreStatRow {
   id: number
   metier: string
@@ -73,7 +73,7 @@ async function _getStatsBySpecialty(specialtySlug: string): Promise<BarometreSta
 
 export async function getStatsBySpecialty(specialtySlug: string): Promise<BarometreStatRow | null> {
   if (IS_BUILD) return null
-  return unstable_cache(_getStatsBySpecialty, ['barometre-stats-metier', specialtySlug], {
+  return unstable_cache(_getStatsBySpecialty, ['barometer-stats-specialty', specialtySlug], {
     revalidate: CACHE_TTL,
     tags: ['barometre'],
   })(specialtySlug)
@@ -97,7 +97,7 @@ async function _getStatsBySpecialtyCity(specialtySlug: string, citySlug: string)
 
 export async function getStatsBySpecialtyCity(specialtySlug: string, citySlug: string): Promise<BarometreStatRow | null> {
   if (IS_BUILD) return null
-  return unstable_cache(_getStatsBySpecialtyCity, ['barometre-stats-metier-ville', specialtySlug, citySlug], {
+  return unstable_cache(_getStatsBySpecialtyCity, ['barometer-stats-specialty-city', specialtySlug, citySlug], {
     revalidate: CACHE_TTL,
     tags: ['barometre'],
   })(specialtySlug, citySlug)
@@ -129,7 +129,7 @@ export async function getStatsByRegion(regionSlug: string): Promise<BarometreSta
 }
 
 /** All specialties in a department */
-async function _getStatsByDepartement(deptCode: string): Promise<BarometreStatRow[]> {
+async function _getStatsByState(deptCode: string): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -144,9 +144,9 @@ async function _getStatsByDepartement(deptCode: string): Promise<BarometreStatRo
   }
 }
 
-export async function getStatsByDepartement(deptCode: string): Promise<BarometreStatRow[]> {
+export async function getStatsByState(deptCode: string): Promise<BarometreStatRow[]> {
   if (IS_BUILD) return []
-  return unstable_cache(_getStatsByDepartement, ['barometre-stats-dept', deptCode], {
+  return unstable_cache(_getStatsByState, ['barometre-stats-dept', deptCode], {
     revalidate: CACHE_TTL,
     tags: ['barometre'],
   })(deptCode)
@@ -206,7 +206,7 @@ export async function getNationalStats(): Promise<NationalStats> {
   })()
 }
 
-/** Top N practice areas by nb_artisans (national level) */
+/** Top N practice areas by attorney count (national level) */
 async function _getTopSpecialties(limit: number): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
@@ -226,13 +226,13 @@ async function _getTopSpecialties(limit: number): Promise<BarometreStatRow[]> {
 
 export async function getTopSpecialties(limit = 10): Promise<BarometreStatRow[]> {
   if (IS_BUILD) return []
-  return unstable_cache(_getTopSpecialties, ['barometre-top-metiers', String(limit)], {
+  return unstable_cache(_getTopSpecialties, ['barometer-top-specialties', String(limit)], {
     revalidate: CACHE_TTL,
     tags: ['barometre'],
   })(limit)
 }
 
-/** Top N cities by nb_artisans (all practice areas combined) */
+/** Top N cities by attorney count (all practice areas combined) */
 async function _getTopCities(limit: number): Promise<{ ville: string; ville_slug: string; total: number }[]> {
   try {
     const supabase = createAdminClient()
@@ -302,7 +302,7 @@ export async function getSpecialtyTopCities(
   cityNames: string[],
 ): Promise<BarometreStatRow[]> {
   if (IS_BUILD) return []
-  return unstable_cache(_getSpecialtyTopCities, ['barometre-metier-top-cities', specialtySlug], {
+  return unstable_cache(_getSpecialtyTopCities, ['barometer-specialty-top-cities', specialtySlug], {
     revalidate: CACHE_TTL,
     tags: ['barometre'],
   })(specialtySlug, cityNames)

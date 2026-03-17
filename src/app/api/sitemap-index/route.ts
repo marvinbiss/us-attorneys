@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, states } from '@/lib/data/usa'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 
 // Must match the BATCH constants used in sitemap.ts sitemap() handlers
@@ -20,12 +20,12 @@ const MAX_ATTORNEY_SITEMAPS = 20
  *
  * IMPORTANT: All intent pages (quotes, reviews, pricing, emergency, issues) use
  * Phase 1 (top 300 cities) to avoid declaring sitemaps that can't be served.
- * Quartier-level sitemaps are removed entirely.
+ * Neighborhood-level sitemaps are removed entirely.
  */
 export async function GET() {
   const emergencySlugs = Object.keys(tradeContent)
-  const tradeSlugs = getTradesSlugs()
-  const avisServiceSlugs = Object.keys(tradeContent)
+  const tradeSlugs = getPracticeAreaSlugs()
+  const reviewServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
   // Phase 1: top-300 cities only (conservative crawl budget for new domain).
@@ -38,20 +38,20 @@ export async function GET() {
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `service-cities-${i}`),
     'cities',
     'geo',
-    // Quartier & service-quartier sitemaps REMOVED — too granular for new domain
-    'devis-services',
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `devis-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `urgence-service-cities-${i}`),
+    // Neighborhood & service-neighborhood sitemaps REMOVED — too granular for new domain
+    'quotes-services',
+    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `quotes-service-cities-${i}`),
+    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `emergency-service-cities-${i}`),
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `tarifs-service-cities-${i}`),
     // tarifs task×city pages — uses LARGE_BATCH (45000) in sitemap()
     ...(() => {
       const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
       return Array.from({ length: Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `tarifs-task-cities-${i}`)
     })(),
-    'avis-services',
-    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
-    'problemes',
-    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `problemes-cities-${i}`),
+    'reviews-services',
+    ...Array.from({ length: Math.ceil(reviewServiceSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `reviews-service-cities-${i}`),
+    'issues',
+    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / BATCH_SIZE) }, (_, i) => `issues-cities-${i}`),
     // dept-services uses LARGE_BATCH (45000) in sitemap()
     ...Array.from({ length: Math.ceil(states.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
     'region-services',

@@ -6,13 +6,13 @@ import { HelpCircle, Plus, Minus } from 'lucide-react'
 import { Artisan } from './types'
 
 interface AttorneyFAQProps {
-  artisan: Artisan
+  attorney: Artisan
 }
 
-export function AttorneyFAQ({ artisan }: AttorneyFAQProps) {
+export function AttorneyFAQ({ attorney }: AttorneyFAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
-  if (!artisan.faq || artisan.faq.length === 0) {
+  if (!attorney.faq || attorney.faq.length === 0) {
     return null
   }
 
@@ -29,7 +29,7 @@ export function AttorneyFAQ({ artisan }: AttorneyFAQProps) {
       </h2>
 
       <div className="space-y-3" role="region" aria-label="Frequently asked questions">
-        {artisan.faq.map((item, index) => {
+        {attorney.faq.map((item, index) => {
           const isOpen = openIndex === index
           const headingId = `faq-heading-${index}`
           const panelId = `faq-panel-${index}`

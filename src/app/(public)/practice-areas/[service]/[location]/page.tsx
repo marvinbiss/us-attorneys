@@ -367,6 +367,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       const supabase = createAdminClient()
       const thirtyDaysAgo = new Date()
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      // legacy table name 'devis_requests' = consultation requests
       const { count } = await supabase
         .from('devis_requests')
         .select('*', { count: 'exact', head: true })

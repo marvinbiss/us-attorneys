@@ -7,7 +7,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs, slugifyTask } from '@/lib/data/trade-content'
 import { cities } from '@/lib/data/usa'
 import { getServiceImage } from '@/lib/data/images'
 import { getDefaultAuthor } from '@/lib/data/team'
@@ -30,7 +30,7 @@ const ExitIntentPopup = dynamic(
   { ssr: false }
 )
 
-const tradeSlugs = getTradesSlugs()
+const tradeSlugs = getPracticeAreaSlugs()
 
 const REGIONAL_PRICING = [
   { region: 'Northeast', multiplier: 1.25, label: 'New York, Boston, DC' },
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const tradeLower = trade.name.toLowerCase()
 
-  const titleHash = Math.abs(hashCode(`tarif-title-${service}`))
+  const titleHash = Math.abs(hashCode(`pricing-title-${service}`))
   const titleTemplates = [
     `${tradeLower} fees 2026 — Detailed rates`,
     `${tradeLower} fees 2026: complete guide`,
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const descHash = Math.abs(hashCode(`tarif-desc-${service}`))
+  const descHash = Math.abs(hashCode(`pricing-desc-${service}`))
   const descTemplates = [
     `${tradeLower} fees 2026: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Detailed rates by service, regional comparison. Free consultation.`,
     `${tradeLower} rates in 2026: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Complete fee schedule and online consultation.`,
@@ -111,7 +111,7 @@ const topCities = cities.slice(0, 6)
 export default async function PricingServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
 
-  const cmsPage = await getPageContent(service + '-tarifs', 'static')
+  const cmsPage = await getPageContent(service + '-pricing', 'static')
 
   if (cmsPage?.content_html) {
     return (
@@ -305,7 +305,7 @@ export default async function PricingServicePage({ params }: { params: Promise<{
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
               {(() => {
-                const h1Hash = Math.abs(hashCode(`tarif-h1-${service}`))
+                const h1Hash = Math.abs(hashCode(`pricing-h1-${service}`))
                 const tradeLower = trade.name.toLowerCase()
                 const h1Templates = [
                   `${tradeLower} fees 2026`,
@@ -738,15 +738,15 @@ export default async function PricingServicePage({ params }: { params: Promise<{
       <StickyMobileCTA specialtySlug={service} />
 
       <EstimationWidget context={{
-        metier: trade.name,
-        metierSlug: service,
+        practiceArea: trade.name,
+        practiceAreaSlug: service,
         ville: 'United States',
         departement: '',
         pageUrl: `/pricing/${service}`,
       }} />
 
       <ExitIntentPopup
-        sessionKey="sa:exit-tarifs"
+        sessionKey="sa:exit-pricing"
         description="Get the exact rate for your case — compare up to 3 free consultations."
         ctaHref={`/quotes/${service}`}
       />

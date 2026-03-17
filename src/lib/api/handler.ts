@@ -13,7 +13,9 @@ import { logger } from '@/lib/logger'
 interface HandlerContext {
   request: NextRequest
   user?: { id: string; email: string }
-  artisan?: { attorney_id: string } // legacy name -- matches profile.role='artisan' in DB
+  attorney?: { attorney_id: string }
+  /** @deprecated Use attorney instead */
+  artisan?: { attorney_id: string }
   body?: unknown
   params?: Record<string, string>
 }
@@ -70,19 +72,20 @@ export function createApiHandler<T = unknown>(
 
         context.user = { id: user.id, email: user.email || '' }
 
-        // Artisan check
+        // Attorney check
         if (options.requireAttorney) {
-          const { data: artisan } = await supabase
+          const { data: attorneyRow } = await supabase
             .from('attorneys')
             .select('id')
             .eq('user_id', user.id)
             .single()
 
-          if (!artisan) {
+          if (!attorneyRow) {
             throw new AuthorizationError('Attorney profile required')
           }
 
-          context.artisan = { attorney_id: artisan.id }
+          context.attorney = { attorney_id: attorneyRow.id }
+          context.artisan = context.attorney // backward compat
         }
 
         // Admin check

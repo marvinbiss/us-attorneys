@@ -64,6 +64,7 @@ export async function submitLead(
       flexible: 'normal',
     }
 
+    // Table 'devis_requests' = consultation requests (legacy DB table name, do not rename without migration)
     const { data: inserted, error } = await supabase.from('devis_requests').insert({
       client_id: user?.id ?? null,
       service_name: data.specialtyName,

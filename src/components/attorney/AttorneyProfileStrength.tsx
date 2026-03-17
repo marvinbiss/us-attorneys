@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 interface CriterionResult {
   label: string
@@ -11,18 +11,18 @@ interface CriterionResult {
   points: number
 }
 
-function computeProfileStrength(artisan: LegacyArtisan): { score: number; criteria: CriterionResult[] } {
+function computeProfileStrength(attorney: LegacyAttorney): { score: number; criteria: CriterionResult[] } {
   const criteria: CriterionResult[] = [
-    { label: 'Name', met: !!artisan.business_name, points: 10 },
-    { label: 'Description', met: !!artisan.description && artisan.description.length > 50, points: 15 },
-    { label: 'Phone', met: !!artisan.phone, points: 10 },
-    { label: 'Email', met: !!artisan.email, points: 5 },
-    { label: 'Verified', met: !!artisan.is_verified, points: 15 },
-    { label: 'Services', met: artisan.services.length > 0, points: 10 },
-    { label: 'Fees', met: artisan.service_prices.length > 0, points: 10 },
-    { label: 'Portfolio', met: !!(artisan.portfolio && artisan.portfolio.length > 0), points: 10 },
-    { label: 'Reviews', met: artisan.average_rating > 0, points: 10 },
-    { label: 'Experience', met: !!artisan.creation_date, points: 5 },
+    { label: 'Name', met: !!attorney.business_name, points: 10 },
+    { label: 'Description', met: !!attorney.description && attorney.description.length > 50, points: 15 },
+    { label: 'Phone', met: !!attorney.phone, points: 10 },
+    { label: 'Email', met: !!attorney.email, points: 5 },
+    { label: 'Verified', met: !!attorney.is_verified, points: 15 },
+    { label: 'Services', met: attorney.services.length > 0, points: 10 },
+    { label: 'Fees', met: attorney.service_prices.length > 0, points: 10 },
+    { label: 'Portfolio', met: !!(attorney.portfolio && attorney.portfolio.length > 0), points: 10 },
+    { label: 'Reviews', met: attorney.average_rating > 0, points: 10 },
+    { label: 'Experience', met: !!attorney.creation_date, points: 5 },
   ]
 
   const score = criteria.reduce((sum, c) => sum + (c.met ? c.points : 0), 0)
@@ -41,8 +41,8 @@ function getTextColor(score: number): string {
   return 'text-amber-600'
 }
 
-export function AttorneyProfileStrength({ artisan }: { artisan: LegacyArtisan }) {
-  const { score, criteria } = useMemo(() => computeProfileStrength(artisan), [artisan])
+export function AttorneyProfileStrength({ attorney }: { attorney: LegacyAttorney }) {
+  const { score, criteria } = useMemo(() => computeProfileStrength(attorney), [attorney])
 
   // Don't render for weak profiles
   if (score < 50) return null

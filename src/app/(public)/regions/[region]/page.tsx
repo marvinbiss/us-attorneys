@@ -97,7 +97,7 @@ export default async function RegionPage({ params }: PageProps) {
   const allCities = region.states.flatMap(st => stateCitiesMap[st.code])
   const cityCount = allCities.length
   const content = generateRegionContent(region, cityCount)
-  const regionArtisanCount = await getAttorneyCountByRegion(region.name)
+  const regionAttorneyCount = await getAttorneyCountByRegion(region.name)
 
   // Reorder services by climate-based priority
   const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
@@ -192,10 +192,10 @@ export default async function RegionPage({ params }: PageProps) {
 
             {/* Stats badges */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
-              {regionArtisanCount > 0 && (
+              {regionAttorneyCount > 0 && (
                 <div className="flex items-center gap-2 text-slate-300">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatAttorneyCount(regionArtisanCount)} attorney{regionArtisanCount > 1 ? 's' : ''}</span>
+                  <span>{formatAttorneyCount(regionAttorneyCount)} attorney{regionAttorneyCount > 1 ? 's' : ''}</span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-slate-300">
@@ -244,7 +244,7 @@ export default async function RegionPage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* ─── PROFIL RÉGIONAL ──────────────────────────────── */}
+        {/* ─── REGIONAL PROFILE ──────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
@@ -275,7 +275,7 @@ export default async function RegionPage({ params }: PageProps) {
               <div className="bg-amber-50 rounded-xl p-4">
                 <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Coverage</div>
                 <div className="text-sm text-slate-800 font-medium">
-                  {regionArtisanCount > 0 ? `${formatAttorneyCount(regionArtisanCount)} attorneys · ` : ''}{stateCount} states · {cityCount} cities
+                  {regionAttorneyCount > 0 ? `${formatAttorneyCount(regionAttorneyCount)} attorneys · ` : ''}{stateCount} states · {cityCount} cities
                 </div>
               </div>
             </div>
@@ -602,7 +602,7 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
         </section>
 
-      {/* Confiance & Sécurité */}
+      {/* Trust & Safety */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>

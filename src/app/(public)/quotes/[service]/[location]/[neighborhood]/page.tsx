@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities, getNeighborhoodBySlug, getNeighborhoodsByCity } from '@/lib/data/usa'
 
-const tradeSlugs = getTradesSlugs()
+const tradeSlugs = getPracticeAreaSlugs()
 
 export function generateStaticParams() {
   const topServices = tradeSlugs.slice(0, 10)

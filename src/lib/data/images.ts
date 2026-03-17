@@ -33,7 +33,7 @@ export function getServiceImage(slug: string) {
 }
 
 // ── 3. ATTORNEY FACES (trust) ────────────────────────────────────
-export const artisanFaces: { src: string; alt: string; name: string; specialty: string }[] = []
+export const attorneyFaces: { src: string; alt: string; name: string; specialty: string }[] = []
 
 // ── 4. CLIENT TESTIMONIALS ───────────────────────────────────────
 export const testimonialImages: { name: string; text: string; city: string; rating: number }[] = []

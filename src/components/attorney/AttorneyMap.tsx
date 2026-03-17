@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { MapPin, Navigation, ExternalLink, Loader2 } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
   ssr: false,
@@ -15,37 +15,37 @@ const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
 })
 
 interface AttorneyMapProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
 }
 
-export function AttorneyMap({ artisan }: AttorneyMapProps) {
-  const hasCoordinates = artisan.latitude && artisan.longitude
-  const hasCity = !!artisan.city
-  const hasAddress = artisan.address && artisan.address.length > 0
-  const hasZones = artisan.intervention_zones && artisan.intervention_zones.length > 0
-  const hasRadius = !!artisan.intervention_zone
+export function AttorneyMap({ attorney }: AttorneyMapProps) {
+  const hasCoordinates = attorney.latitude && attorney.longitude
+  const hasCity = !!attorney.city
+  const hasAddress = attorney.address && attorney.address.length > 0
+  const hasZones = attorney.intervention_zones && attorney.intervention_zones.length > 0
+  const hasRadius = !!attorney.intervention_zone
 
   if (!hasCoordinates && !hasCity && !hasAddress && !hasZones && !hasRadius) {
     return null
   }
 
   // Google Maps search link — used as CTA when no GPS coordinates are available
-  const mapsQuery = artisan.address
-    ? `${artisan.address}, ${artisan.city}, ${artisan.postal_code}`
-    : artisan.postal_code
-    ? `${artisan.city} ${artisan.postal_code}`
-    : `${artisan.city}`
+  const mapsQuery = attorney.address
+    ? `${attorney.address}, ${attorney.city}, ${attorney.postal_code}`
+    : attorney.postal_code
+    ? `${attorney.city} ${attorney.postal_code}`
+    : `${attorney.city}`
   const mapsLink = `https://www.google.com/maps/search/${encodeURIComponent(mapsQuery)}`
 
   // Provider marker for the map
   const mapProvider = hasCoordinates ? [{
     id: 'attorney',
-    name: artisan.business_name || `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || '',
-    latitude: artisan.latitude!,
-    longitude: artisan.longitude!,
-    specialty: artisan.specialty,
-    address_city: artisan.city,
-    is_verified: artisan.is_verified || false,
+    name: attorney.business_name || `${attorney.first_name || ''} ${attorney.last_name || ''}`.trim() || '',
+    latitude: attorney.latitude!,
+    longitude: attorney.longitude!,
+    specialty: attorney.specialty,
+    address_city: attorney.city,
+    is_verified: attorney.is_verified || false,
   }] : []
 
   return (
@@ -64,11 +64,11 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
       {hasCoordinates ? (
         <div className="rounded-xl overflow-hidden mb-4">
           <GeographicMap
-            centerLat={artisan.latitude!}
-            centerLng={artisan.longitude!}
+            centerLat={attorney.latitude!}
+            centerLng={attorney.longitude!}
             zoom={14}
             providers={mapProvider}
-            locationName={artisan.city}
+            locationName={attorney.city}
             height="280px"
           />
         </div>
@@ -79,7 +79,7 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-between gap-3 p-4 rounded-xl bg-clay-50 border border-clay-100 mb-4 hover:bg-clay-100 transition-colors group"
-          aria-label={`View ${artisan.city} on Google Maps`}
+          aria-label={`View ${attorney.city} on Google Maps`}
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-clay-400 flex items-center justify-center flex-shrink-0">
@@ -88,7 +88,7 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
             <div>
               <p className="font-semibold text-gray-900 text-sm">View on Google Maps</p>
               <p className="text-xs text-slate-500">
-                {artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}
+                {attorney.city}{attorney.postal_code ? ` (${attorney.postal_code})` : ''}
               </p>
             </div>
           </div>
@@ -97,22 +97,22 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
       ) : null}
 
       {/* Structured address */}
-      {artisan.address && (
+      {attorney.address && (
         <address className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 mb-4 not-italic">
           <Navigation className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
           <div>
-            <p className="text-gray-900">{artisan.address}</p>
-            <p className="text-gray-500">{artisan.postal_code} {artisan.city}</p>
+            <p className="text-gray-900">{attorney.address}</p>
+            <p className="text-gray-500">{attorney.postal_code} {attorney.city}</p>
           </div>
         </address>
       )}
 
       {/* Intervention zones */}
-      {artisan.intervention_zones && artisan.intervention_zones.length > 0 && (
+      {attorney.intervention_zones && attorney.intervention_zones.length > 0 && (
         <div>
           <h3 className="text-sm font-medium text-gray-700 mb-3">Areas served</h3>
           <div className="flex flex-wrap gap-2" role="list" aria-label="Areas served">
-            {artisan.intervention_zones.map((zone, i) => (
+            {attorney.intervention_zones.map((zone, i) => (
               <span
                 key={i}
                 role="listitem"
@@ -127,11 +127,11 @@ export function AttorneyMap({ artisan }: AttorneyMapProps) {
       )}
 
       {/* Intervention radius */}
-      {artisan.intervention_zone && (
+      {attorney.intervention_zone && (
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-gray-600">
             <Navigation className="w-4 h-4" aria-hidden="true" />
-            <span>Service radius: <strong>{artisan.intervention_zone}</strong></span>
+            <span>Service radius: <strong>{attorney.intervention_zone}</strong></span>
           </div>
         </div>
       )}

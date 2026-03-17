@@ -12,6 +12,7 @@ export async function GET() {
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { count: monthlyDevis } = await supabase
       .from('devis_requests')
       .select('*', { count: 'exact', head: true })

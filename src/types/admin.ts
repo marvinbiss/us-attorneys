@@ -357,7 +357,7 @@ export interface AdminCall {
   from_number: string
   to_number: string
   attorney_id?: string
-  artisan_name?: string
+  attorney_name?: string
   direction: 'inbound' | 'outbound'
   status: 'ringing' | 'in-progress' | 'completed' | 'busy' | 'no-answer' | 'failed'
   duration: number

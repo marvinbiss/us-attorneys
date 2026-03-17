@@ -308,7 +308,7 @@ export async function GET(request: Request) {
     })
 
     // -----------------------------------------------------------------------
-    // Top services (from devis_requests linked via lead_assignments)
+    // Top services (from devis_requests linked via lead_assignments) — legacy table name 'devis_requests' = consultation requests
     // -----------------------------------------------------------------------
     const leadIds = assignments.map(a => a.lead_id).filter(Boolean)
     let topServices: { name: string; count: number }[] = []
@@ -341,12 +341,12 @@ export async function GET(request: Request) {
     }
 
     // -----------------------------------------------------------------------
-    // Wave 2 — Dependent queries (unread messages, recent demandes)
+    // Wave 2 — Dependent queries (unread messages, recent cases)
     // -----------------------------------------------------------------------
     const convIds = (conversationsResult.data ?? []).map((c: { id: string }) => c.id)
     const recentLeadIds = assignments.slice(0, 5).map(a => a.lead_id).filter(Boolean)
 
-    const [unreadResult, recentDemandesResult] = await Promise.all([
+    const [unreadResult, recentCasesResult] = await Promise.all([
       supabase
         .from('messages')
         .select('id', { count: 'exact', head: true })
@@ -355,7 +355,7 @@ export async function GET(request: Request) {
         .is('read_at', null),
 
       recentLeadIds.length > 0
-        ? supabase
+        ? supabase // legacy table name 'devis_requests' = consultation requests
             .from('devis_requests')
             .select('id, service_name, postal_code, city, status, client_name, created_at')
             .in('id', recentLeadIds)
@@ -405,7 +405,7 @@ export async function GET(request: Request) {
         value: curPhoneClicks,
         change: fmtChange(curPhoneClicks, prevPhoneClicks),
       },
-      demandesRecues: {
+      caseRequests: {
         value: totalLeads,
         change: fmtChange(curLeads, prevLeads),
       },
@@ -417,7 +417,7 @@ export async function GET(request: Request) {
       stats,
       profile: profile || null,
       provider,
-      recentDemandes: recentDemandesResult.data || [],
+      recentCases: recentCasesResult.data || [],
     }, {
       headers: {
         'Cache-Control': 'private, no-cache, no-store, must-revalidate',

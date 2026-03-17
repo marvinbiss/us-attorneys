@@ -6,29 +6,29 @@ import { Artisan, getDisplayName } from './types'
 import { slugify } from '@/lib/utils'
 
 interface AttorneyBreadcrumbProps {
-  artisan: Artisan
+  attorney: Artisan
 }
 
-export function AttorneyBreadcrumb({ artisan }: AttorneyBreadcrumbProps) {
-  const displayName = getDisplayName(artisan)
+export function AttorneyBreadcrumb({ attorney }: AttorneyBreadcrumbProps) {
+  const displayName = getDisplayName(attorney)
   // Use provided slugs or generate them
-  const specialtySlug = artisan.specialty_slug || slugify(artisan.specialty)
-  const citySlug = artisan.city_slug || slugify(artisan.city)
+  const specialtySlug = attorney.specialty_slug || slugify(attorney.specialty)
+  const citySlug = attorney.city_slug || slugify(attorney.city)
 
   // Build breadcrumb with 5 levels for SEO clarity
   // Structure: Home > Practice Areas > {Service} > {City} > {Attorney name}
   const items: Array<{ label: string; href?: string; icon?: typeof Home }> = [
     { label: 'Home', href: '/', icon: Home },
     { label: 'Practice Areas', href: '/services' },
-    { label: artisan.specialty, href: `/practice-areas/${specialtySlug}` },
+    { label: attorney.specialty, href: `/practice-areas/${specialtySlug}` },
   ]
 
   // Add city with service+city URL structure
-  if (artisan.city && citySlug) {
-    items.push({ label: artisan.city, href: `/practice-areas/${specialtySlug}/${citySlug}` })
+  if (attorney.city && citySlug) {
+    items.push({ label: attorney.city, href: `/practice-areas/${specialtySlug}/${citySlug}` })
   }
 
-  // Add artisan name (no link - current page)
+  // Add attorney name (no link - current page)
   items.push({ label: displayName })
 
   return (

@@ -4,7 +4,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { states, getStateBySlug } from '@/lib/data/usa'
 import { getTradeContent } from '@/lib/data/trade-content'
 
-const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
+const topServices = ['personal-injury', 'criminal-defense', 'family-law', 'employment-law', 'real-estate-law']
 
 export function generateStaticParams() {
   return states.flatMap((d) =>

@@ -111,16 +111,16 @@ const _specialtyToServiceSlug: Record<string, string> = {
 }
 
 // Generate SEO-friendly attorney URL using static slug lookup
-export function getAttorneyUrl(artisan: {
+export function getAttorneyUrl(attorney: {
   stable_id?: string | null
   slug?: string | null
   specialty?: string | null
   city?: string | null
 }): string {
-  const normalized = _normalize(artisan.specialty || '')
-  const specialtySlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'attorney')
-  const locationSlug = _cityMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'nationwide')
-  const id = artisan.slug || artisan.stable_id || ''
+  const normalized = _normalize(attorney.specialty || '')
+  const specialtySlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(attorney.specialty || 'attorney')
+  const locationSlug = _cityMap.get(_normalize(attorney.city || '')) || slugify(attorney.city || 'nationwide')
+  const id = attorney.slug || attorney.stable_id || ''
   return `/practice-areas/${specialtySlug}/${locationSlug}/${id}`
 }
 

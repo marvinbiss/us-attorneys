@@ -84,7 +84,7 @@ export function useLeadSubmit(
             source: 'chat' as const,
             conversation_history: messages,
             page_url: context.pageUrl,
-            artisan_public_id: context.artisan?.publicId,
+            artisan_public_id: context.artisan?.publicId, // DB field: artisan_public_id (legacy name for attorney_public_id)
           }),
         })
 
@@ -100,7 +100,7 @@ export function useLeadSubmit(
         setLeadSubmitted(true)
 
         const confirmationMsg = context.artisan
-          ? `Your request has been sent to ${context.artisan.name}. They will contact you as soon as possible.`
+          ? `Your request has been sent to ${context.attorney.name}. They will contact you as soon as possible.`
           : `Your request has been submitted. A qualified ${context.metier.toLowerCase()} attorney in ${context.ville} will contact you as soon as possible.`
 
         onLeadSubmitted?.(confirmationMsg)
@@ -139,7 +139,7 @@ export function useLeadSubmit(
             state: context.departement || undefined,
             source: 'callback' as const,
             page_url: context.pageUrl,
-            artisan_public_id: context.artisan?.publicId,
+            artisan_public_id: context.artisan?.publicId, // DB field: artisan_public_id (legacy name for attorney_public_id)
           }),
         })
 

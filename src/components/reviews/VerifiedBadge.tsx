@@ -273,7 +273,7 @@ export function EscrowStatusBadge({
   )
 }
 
-interface ArtisanVerificationSummaryProps {
+interface AttorneyVerificationSummaryProps {
   identity: boolean
   insurance: boolean
   certification: boolean
@@ -283,7 +283,7 @@ interface ArtisanVerificationSummaryProps {
   className?: string
 }
 
-export function ArtisanVerificationSummary({
+export function AttorneyVerificationSummary({
   identity,
   insurance,
   certification,
@@ -291,7 +291,7 @@ export function ArtisanVerificationSummary({
   trustScore,
   compact = false,
   className,
-}: ArtisanVerificationSummaryProps) {
+}: AttorneyVerificationSummaryProps) {
   if (compact) {
     return (
       <div className={cn('flex items-center gap-2', className)}>

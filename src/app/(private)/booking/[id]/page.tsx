@@ -35,7 +35,7 @@ interface BookingDetails {
     start_time: string
     end_time: string
   }
-  artisan: {
+  attorney: {
     id: string
     name: string
     full_name: string
@@ -101,7 +101,7 @@ export default function BookingPage() {
       const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
 
       const response = await fetch(
-        `/api/bookings?attorneyId=${booking.artisan.id}&month=${monthStr}`
+        `/api/bookings?attorneyId=${booking.attorney.id}&month=${monthStr}`
       )
 
       if (!response.ok) throw new Error('Error loading available slots')
@@ -239,7 +239,7 @@ export default function BookingPage() {
         <div className="max-w-3xl mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold mb-2">My Booking</h1>
           <p className="text-blue-100">
-            Manage your appointment with {booking.artisan.name || booking.artisan.full_name}
+            Manage your appointment with {booking.attorney.name || booking.attorney.full_name}
           </p>
         </div>
       </div>
@@ -300,7 +300,7 @@ export default function BookingPage() {
               <div>
                 <p className="text-sm text-gray-500">Attorney</p>
                 <p className="font-medium text-gray-900">
-                  {booking.artisan.name || booking.artisan.full_name}
+                  {booking.attorney.name || booking.attorney.full_name}
                 </p>
               </div>
             </div>
@@ -388,9 +388,9 @@ export default function BookingPage() {
           <p className="text-gray-600 text-sm mb-2">
             Need help?
           </p>
-          {booking.artisan.phone && (
+          {booking.attorney.phone && (
             <a
-              href={`tel:${booking.artisan.phone}`}
+              href={`tel:${booking.attorney.phone}`}
               className="text-blue-600 hover:underline font-medium"
             >
               Contact Attorney
@@ -405,7 +405,7 @@ export default function BookingPage() {
           bookingId={bookingId}
           bookingDate={formatDate(booking.slot.date)}
           bookingTime={`${booking.slot.start_time} - ${booking.slot.end_time}`}
-          attorneyName={booking.artisan.name || booking.artisan.full_name}
+          attorneyName={booking.attorney.name || booking.attorney.full_name}
           specialtyName={booking.service_description}
           onClose={() => setShowCancelModal(false)}
           onCancelled={() => {

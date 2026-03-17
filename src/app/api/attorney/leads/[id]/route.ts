@@ -30,6 +30,7 @@ export async function GET(
     }
 
     // Fetch assignment with full lead data
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: assignment, error: assignError } = await supabase
       .from('lead_assignments')
       .select(`

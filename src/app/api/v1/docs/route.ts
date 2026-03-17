@@ -44,7 +44,7 @@ export async function GET() {
 
     <div class="warn">
       <strong>Required attribution</strong> — Any use of data from this API must include a visible link to
-      <a href="${SITE_URL}/attorney-statistics">${SITE_URL}/attorney-statistics</a> avec la mention
+      <a href="${SITE_URL}/attorney-statistics">${SITE_URL}/attorney-statistics</a> with the mention
       "Source: ${SITE_NAME} — Attorney Barometer".
     </div>
 
@@ -56,23 +56,23 @@ export async function GET() {
       <h3>Parameters</h3>
       <table>
         <tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr>
-        <tr><td><code>metier</code></td><td>string</td><td>Yes</td><td>Practice area slug (e.g. <code>personal-injury</code>)</td></tr>
-        <tr><td><code>ville</code></td><td>string</td><td>No</td><td>City slug (e.g. <code>paris</code>)</td></tr>
-        <tr><td><code>departement</code></td><td>string</td><td>No</td><td>State code (e.g. <code>CA</code>)</td></tr>
+        <tr><td><code>specialty</code></td><td>string</td><td>Yes</td><td>Practice area slug (e.g. <code>personal-injury</code>)</td></tr>
+        <tr><td><code>city</code></td><td>string</td><td>No</td><td>City slug (e.g. <code>new-york</code>)</td></tr>
+        <tr><td><code>state</code></td><td>string</td><td>No</td><td>State code (e.g. <code>CA</code>)</td></tr>
         <tr><td><code>region</code></td><td>string</td><td>No</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
       </table>
       <h3>Example</h3>
-      <pre><code>curl "${SITE_URL}/api/v1/pricing?metier=plombier&ville=paris"</code></pre>
+      <pre><code>curl "${SITE_URL}/api/v1/pricing?specialty=personal-injury&city=new-york"</code></pre>
       <pre><code>{
   "success": true,
   "data": [{
-    "metier": "Plombier",
-    "metier_slug": "plombier",
-    "ville": "Paris",
-    "nb_artisans": 1250,
-    "note_moyenne": 4.35,
-    "nb_avis": 8420,
-    "taux_verification": 0.4520
+    "specialty": "Personal Injury",
+    "specialty_slug": "personal-injury",
+    "city": "New York",
+    "attorney_count": 1250,
+    "avg_rating": 4.35,
+    "review_count": 8420,
+    "verification_rate": 0.4520
   }],
   "attribution": {
     "text": "Source: ${SITE_NAME} — Attorney Barometer",
@@ -88,7 +88,7 @@ export async function GET() {
       <table>
         <tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr>
         <tr><td><code>region</code></td><td>string</td><td>No*</td><td>Region slug (e.g. <code>west-coast</code>)</td></tr>
-        <tr><td><code>departement</code></td><td>string</td><td>No*</td><td>State code (e.g. <code>CA</code>)</td></tr>
+        <tr><td><code>state</code></td><td>string</td><td>No*</td><td>State code (e.g. <code>CA</code>)</td></tr>
       </table>
       <p>* One of the two parameters is required.</p>
       <h3>Example</h3>
@@ -103,14 +103,14 @@ export async function GET() {
     <p>No API key required. Rate limit: 60 requests/minute per IP. Commercial use: contact us.</p>
 
     <h2>Available Practice Areas</h2>
-    <p><code>plombier</code>, <code>electricien</code>, <code>serrurier</code>, <code>chauffagiste</code>,
-    <code>peintre-en-batiment</code>, <code>menuisier</code>, <code>carreleur</code>, <code>couvreur</code>,
-    <code>macon</code>, <code>jardinier</code>, <code>vitrier</code>, <code>climaticien</code>,
-    <code>plaquiste</code>, <code>charpentier</code>, <code>terrassier</code>, <code>facadier</code>,
-    <code>paysagiste</code>, et plus.</p>
+    <p><code>personal-injury</code>, <code>criminal-defense</code>, <code>family-law</code>, <code>estate-planning</code>,
+    <code>bankruptcy</code>, <code>immigration</code>, <code>real-estate</code>, <code>business-law</code>,
+    <code>employment-law</code>, <code>intellectual-property</code>, <code>tax-law</code>, <code>civil-litigation</code>,
+    <code>medical-malpractice</code>, <code>workers-compensation</code>, <code>dui-dwi</code>, <code>environmental-law</code>,
+    <code>elder-law</code>, and more.</p>
 
     <h2>Contact</h2>
-    <p>Questions ? <a href="${SITE_URL}/contact">Contactez-nous</a></p>
+    <p>Questions? <a href="${SITE_URL}/contact">Contact us</a></p>
 
     <p style="margin-top: 3rem; font-size: 0.75rem; color: #94a3b8;">
       &copy; ${new Date().getFullYear()} ${SITE_NAME} — All rights reserved

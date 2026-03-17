@@ -9,7 +9,7 @@ import {
   HelpCircle,
 } from "lucide-react"
 
-const PAGE_URL = `${SITE_URL}/guides/trouver-artisan`
+const PAGE_URL = `${SITE_URL}/guides/find-attorney`
 
 export const revalidate = 86400
 

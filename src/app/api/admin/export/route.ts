@@ -52,6 +52,7 @@ export async function GET(request: NextRequest) {
       case 'quotes': {
         // quotes table columns: id, request_id, attorney_id, amount, description, valid_until, status
         // client_name and client_email do not exist on quotes; join with devis_requests for client info if needed
+        // legacy table name 'devis_requests' = consultation requests
         const { data: quotes } = await supabase
           .from('quotes')
           .select('id, request_id, attorney_id, amount, description, valid_until, status')

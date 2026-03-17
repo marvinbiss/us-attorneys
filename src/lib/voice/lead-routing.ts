@@ -1,7 +1,7 @@
 /**
  * Voice Lead Routing — US Attorneys
  *
- * Creates a lead (devis_request) from a qualified voice call,
+ * Creates a lead (consultation request) from a qualified voice call,
  * dispatches it to a matching attorney, and notifies via SMS.
  *
  * Server-side only — uses createAdminClient() (service_role, bypasses RLS).
@@ -41,7 +41,7 @@ const VERTICAL_SERVICE_MAP: Record<string, string> = {
 // ---------------------------------------------------------------------------
 
 /**
- * Create a devis_request from a qualified voice call, find a matching attorney,
+ * Create a consultation request from a qualified voice call, find a matching attorney,
  * assign the lead, and notify the attorney via SMS.
  */
 export async function createVoiceLead(
@@ -62,12 +62,13 @@ export async function createVoiceLead(
   const specialtyName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'General Practice'
 
   // ------------------------------------------------------------------
-  // 1. Create the devis_request (lead)
+  // 1. Create the consultation request (lead)
   // ------------------------------------------------------------------
-  log.info('Creating devis_request from voice call', { projectType, postalCode })
+  log.info('Creating consultation request from voice call', { projectType, postalCode })
 
   const validUrgency = ['normal', 'urgent', 'very_urgent'].includes(urgency) ? urgency : 'normal'
 
+  // Table 'devis_requests' = consultation requests (legacy DB table name, do not rename without migration)
   const { data: lead, error: leadError } = await admin
     .from('devis_requests')
     .insert({
@@ -86,11 +87,11 @@ export async function createVoiceLead(
     .single()
 
   if (leadError || !lead) {
-    log.error('Failed to create devis_request', leadError)
+    log.error('Failed to create consultation request', leadError)
     return
   }
 
-  log.info('Devis request created', { leadId: lead.id })
+  log.info('Consultation request created', { leadId: lead.id })
 
   // ------------------------------------------------------------------
   // 2. Link voice_call → lead
@@ -119,7 +120,7 @@ export async function createVoiceLead(
   // ------------------------------------------------------------------
   // 4. Find matching attorney (specialty + location from postal code)
   // ------------------------------------------------------------------
-  const department = postalCode ? postalCode.slice(0, 2) : null
+  const zipPrefix = postalCode ? postalCode.slice(0, 2) : null
 
   let matchQuery = admin
     .from('attorneys')
@@ -130,12 +131,12 @@ export async function createVoiceLead(
     matchQuery = matchQuery.ilike('specialty', `%${specialtyName}%`)
   }
 
-  if (department) {
-    // Match providers whose address_postal_code starts with the same department
-    matchQuery = matchQuery.ilike('address_postal_code', `${department}%`)
+  if (zipPrefix) {
+    // Match attorneys whose address_postal_code starts with the same ZIP prefix
+    matchQuery = matchQuery.ilike('address_postal_code', `${zipPrefix}%`)
   }
 
-  // Round-robin: prefer providers who haven't received a lead recently
+  // Round-robin: prefer attorneys who haven't received a lead recently
   matchQuery = matchQuery
     .order('last_lead_assigned_at', { ascending: true, nullsFirst: true })
     .limit(1)
@@ -148,12 +149,12 @@ export async function createVoiceLead(
   }
 
   if (!providers || providers.length === 0) {
-    log.warn('No matching attorney found', { specialtyName, department })
+    log.warn('No matching attorney found', { specialtyName, zipPrefix })
     return
   }
 
-  const artisan = providers[0]
-  log.info('Matched attorney', { attorneyId: artisan.id, attorneyName: artisan.name })
+  const matchedAttorney = providers[0]
+  log.info('Matched attorney', { attorneyId: matchedAttorney.id, attorneyName: matchedAttorney.name })
 
   // ------------------------------------------------------------------
   // 5. Create lead_assignment
@@ -162,9 +163,9 @@ export async function createVoiceLead(
     .from('lead_assignments')
     .insert({
       lead_id: lead.id,
-      attorney_id: artisan.id,
+      attorney_id: matchedAttorney.id,
       status: 'pending',
-      source_table: 'devis_requests',
+      source_table: 'devis_requests', // legacy DB table name, do not rename without migration
     })
 
   if (assignError) {
@@ -176,23 +177,23 @@ export async function createVoiceLead(
   await admin
     .from('attorneys')
     .update({ last_lead_assigned_at: new Date().toISOString() })
-    .eq('id', artisan.id)
+    .eq('id', matchedAttorney.id)
 
   // Log the dispatch event
   await logLeadEvent(lead.id, 'dispatched', {
-    attorneyId: artisan.id,
+    attorneyId: matchedAttorney.id,
     metadata: {
       source: 'voice',
       voice_call_id: voiceCall.id,
     },
   })
 
-  log.info('Lead assigned to attorney', { leadId: lead.id, attorneyId: artisan.id })
+  log.info('Lead assigned to attorney', { leadId: lead.id, attorneyId: matchedAttorney.id })
 
   // ------------------------------------------------------------------
   // 6. Notify attorney via SMS
   // ------------------------------------------------------------------
-  if (artisan.phone) {
+  if (matchedAttorney.phone) {
     const location = postalCode ? ` (${postalCode})` : ''
     const smsMessage =
       `New lead on US Attorneys!\n` +
@@ -200,14 +201,14 @@ export async function createVoiceLead(
       `Client: ${callerName}\n` +
       `Log in to respond: us-attorneys.com/attorney-dashboard/leads`
 
-    const smsResult = await sendSMS(artisan.phone, smsMessage)
+    const smsResult = await sendSMS(matchedAttorney.phone, smsMessage)
 
     if (smsResult.success) {
-      log.info('Attorney notified via SMS', { attorneyId: artisan.id, messageId: smsResult.messageId })
+      log.info('Attorney notified via SMS', { attorneyId: matchedAttorney.id, messageId: smsResult.messageId })
     } else {
-      log.warn('SMS notification failed', { attorneyId: artisan.id, error: smsResult.error })
+      log.warn('SMS notification failed', { attorneyId: matchedAttorney.id, error: smsResult.error })
     }
   } else {
-    log.warn('Attorney has no phone number, SMS skipped', { attorneyId: artisan.id })
+    log.warn('Attorney has no phone number, SMS skipped', { attorneyId: matchedAttorney.id })
   }
 }

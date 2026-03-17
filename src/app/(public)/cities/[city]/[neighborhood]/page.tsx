@@ -9,7 +9,7 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { SITE_URL } from '@/lib/seo/config'
 import { cities, practiceAreas, getNeighborhoodBySlug, getNeighborhoodsByCity, getNearbyCities, getRegionSlugByName, getStateByCode } from '@/lib/data/usa'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
-import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
+import { generateNeighborhoodContent, hashCode } from '@/lib/seo/location-content'
 
 // Pre-render top 50 cities x their neighborhoods (~500+ pages)
 const TOP_CITIES = 50
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!result) return { title: 'Neighborhood Not Found' }
 
   const { city, neighborhoodName } = result
-  const metaContent = generateQuartierContent(city, neighborhoodName)
+  const metaContent = generateNeighborhoodContent(city, neighborhoodName)
   const cityImage = getCityImage(villeSlug)
 
   const titleHash = Math.abs(hashCode(`title-quartier-${villeSlug}-${quartierSlug}`))
@@ -96,7 +96,7 @@ export default async function QuartierPage({ params }: PageProps) {
   const regionSlug = stateData?.region ? getRegionSlugByName(stateData.region) : undefined
   const deptSlug = stateData?.slug
   const cityImage = getCityImage(villeSlug)
-  const content = generateQuartierContent(city, neighborhoodName)
+  const content = generateNeighborhoodContent(city, neighborhoodName)
 
   // Reorder services based on quartier building profile
   const orderedServices = [...practiceAreas].sort((a, b) => {
@@ -460,11 +460,11 @@ export default async function QuartierPage({ params }: PageProps) {
                     {city.stateName} ({city.stateCode})
                   </Link>
                 )}
-                <Link href={`/quotes/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                <Link href={`/quotes/family-law/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Family Law Consultation in {city.name}
                 </Link>
-                <Link href={`/quotes/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                <Link href={`/quotes/personal-injury/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Personal Injury Consultation in {city.name}
                 </Link>

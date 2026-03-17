@@ -9,7 +9,7 @@ import LogoutButton from '@/components/LogoutButton'
 
 interface PublishedReview {
   id: string
-  artisan: string // API field name (attorney name)
+  attorney: string // API field name (attorney name)
   attorney_id: string
   service: string | null
   date: string
@@ -20,7 +20,7 @@ interface PublishedReview {
 
 interface PendingReview {
   id: string
-  artisan: string // API field name (attorney name)
+  attorney: string // API field name (attorney name)
   attorney_id: string
   service: string | null
   date: string
@@ -228,7 +228,7 @@ export default function MyReviewsPage() {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium text-gray-900">{item.artisan}</h3>
+                          <h3 className="font-medium text-gray-900">{item.attorney}</h3>
                           <p className="text-sm text-gray-600">{item.service}</p>
                           <p className="text-sm text-gray-500 mt-1">
                             Service on {new Date(item.date).toLocaleDateString('en-US')}
@@ -266,7 +266,7 @@ export default function MyReviewsPage() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-medium text-gray-900">{item.artisan}</h3>
+                            <h3 className="font-medium text-gray-900">{item.attorney}</h3>
                             <div className="flex">
                               {[...Array(5)].map((_, i) => (
                                 <Star
@@ -319,7 +319,7 @@ export default function MyReviewsPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {editingReview ? 'Edit Your Review' : `Leave a Review for ${selectedReview?.artisan}`}
+              {editingReview ? 'Edit Your Review' : `Leave a Review for ${selectedReview?.attorney}`}
             </h2>
             <p className="text-gray-600 mb-6">
               Service: {editingReview?.service || selectedReview?.service}

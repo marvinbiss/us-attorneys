@@ -122,7 +122,8 @@ export async function GET() {
       supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
       supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
       supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
-      // Estimation leads (20–22)
+      // Table 'estimation_leads' = fee estimation leads (legacy French name)
+      // Columns: nom=name, telephone=phone, metier=practiceArea, ville=city (legacy French column names, must match DB schema)
       supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
       supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
       supabase.from('estimation_leads').select('id, nom, telephone, metier, ville, source, created_at').order('created_at', { ascending: false }).limit(5),
@@ -233,9 +234,18 @@ export async function GET() {
       estimationLeads: {
         total: safeCount(estimationTotalR),
         today: safeCount(estimationTodayR),
+        // Map French DB column names to English for the UI: nom->lastName, metier->practice_area, ville->city
         recent: safeData<{ id: string; nom: string | null; telephone: string; metier: string; ville: string; source: string; created_at: string }>(
           recentEstimationLeadsR as PromiseSettledResult<{ data: { id: string; nom: string | null; telephone: string; metier: string; ville: string; source: string; created_at: string }[] | null }>
-        ),
+        ).map(lead => ({
+          id: lead.id,
+          lastName: lead.nom,
+          telephone: lead.telephone,
+          practice_area: lead.metier,
+          city: lead.ville,
+          source: lead.source,
+          created_at: lead.created_at,
+        })),
       },
     })
 

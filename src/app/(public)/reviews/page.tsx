@@ -387,7 +387,7 @@ export default async function AvisPage() {
         </div>
       </section>
 
-      {/* ─── AVIS PAR MÉTIER ──────────────────────────────────── */}
+      {/* ─── REVIEWS BY PRACTICE AREA ────────────────────────── */}
       <section className="py-16 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
@@ -418,7 +418,7 @@ export default async function AvisPage() {
         </div>
       </section>
 
-      {/* ─── AVIS PAR VILLE ──────────────────────────────────── */}
+      {/* ─── REVIEWS BY CITY ────────────────────────────────── */}
       <section className="py-16 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
@@ -430,20 +430,20 @@ export default async function AvisPage() {
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-2.5">
-            {cities.slice(0, 20).map((ville) => (
+            {cities.slice(0, 20).map((city) => (
               <Link
-                key={ville.slug}
-                href={`/reviews/plombier/${ville.slug}`}
+                key={city.slug}
+                href={`/reviews/personal-injury/${city.slug}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 transition-all"
               >
-                {ville.name}
+                {city.name}
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── AVIS PAR MÉTIER × VILLE ─────────────────────────── */}
+      {/* ─── REVIEWS BY PRACTICE AREA & CITY ─────────────────── */}
       <section className="py-16 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
@@ -461,13 +461,13 @@ export default async function AvisPage() {
                   {service.name} reviews
                 </h3>
                 <div className="space-y-1.5">
-                  {cities.slice(0, 6).map((ville) => (
+                  {cities.slice(0, 6).map((city) => (
                     <Link
-                      key={ville.slug}
-                      href={`/reviews/${service.slug}/${ville.slug}`}
+                      key={city.slug}
+                      href={`/reviews/${service.slug}/${city.slug}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                     >
-                      <ChevronRight className="w-3 h-3" /> {ville.name}
+                      <ChevronRight className="w-3 h-3" /> {city.name}
                     </Link>
                   ))}
                 </div>
@@ -489,7 +489,7 @@ export default async function AvisPage() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Col 1: Devis */}
+            {/* Col 1: Consultations */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4 text-lg">Attorney Consultations</h3>
               <div className="space-y-1.5">
@@ -504,7 +504,7 @@ export default async function AvisPage() {
                 ))}
               </div>
             </div>
-            {/* Col 2: Tarifs */}
+            {/* Col 2: Pricing */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4 text-lg">Attorney Fees</h3>
               <div className="space-y-1.5">
@@ -519,7 +519,7 @@ export default async function AvisPage() {
                 ))}
               </div>
             </div>
-            {/* Col 3: Urgence */}
+            {/* Col 3: Emergency */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4 text-lg">Emergency Attorney</h3>
               <div className="space-y-1.5">

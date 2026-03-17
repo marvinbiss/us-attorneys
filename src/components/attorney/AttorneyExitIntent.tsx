@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 import { getDisplayName } from '@/components/attorney/types'
 
 const SESSION_KEY = 'sa:exit-intent-shown'
@@ -11,11 +11,11 @@ const AUTO_DISMISS_MS = 10_000
 const MOBILE_IDLE_MS = 45_000
 
 interface AttorneyExitIntentProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
   onOpenEstimation: () => void
 }
 
-export function AttorneyExitIntent({ artisan, onOpenEstimation }: AttorneyExitIntentProps) {
+export function AttorneyExitIntent({ attorney, onOpenEstimation }: AttorneyExitIntentProps) {
   const [visible, setVisible] = useState(false)
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const mobileTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -85,7 +85,7 @@ export function AttorneyExitIntent({ artisan, onOpenEstimation }: AttorneyExitIn
     }
   }, [show])
 
-  const displayName = getDisplayName(artisan)
+  const displayName = getDisplayName(attorney)
 
   return (
     <AnimatePresence>

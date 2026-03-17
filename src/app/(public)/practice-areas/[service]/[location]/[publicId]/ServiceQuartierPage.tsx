@@ -19,7 +19,7 @@ import {
 import { getTradeContent } from '@/lib/data/trade-content'
 // TODO: Neighborhood enrichment data removed (stub was always null)
 import {
-  generateQuartierContent,
+  generateNeighborhoodContent,
   hashCode,
 } from '@/lib/seo/location-content'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -88,7 +88,7 @@ export default async function ServiceQuartierPage({
 
   // 4. Generate content
   const trade = getTradeContent(specialtySlug)
-  const quartierContent = generateQuartierContent(ville, quartierName, specialtySlug)
+  const quartierContent = generateNeighborhoodContent(ville, quartierName, specialtySlug)
   const villeRegion = getStateByCode(ville.stateCode)?.region || ''
   const svcLower = service.name.toLowerCase()
 

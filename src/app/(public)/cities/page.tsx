@@ -28,19 +28,19 @@ export const metadata: Metadata = {
 }
 
 // Group cities by region (derived from state)
-const villesByRegion = cities.reduce((acc, ville) => {
-  const region = getStateByCode(ville.stateCode)?.region ?? 'Other'
+const citiesByRegion = cities.reduce((acc, city) => {
+  const region = getStateByCode(city.stateCode)?.region ?? 'Other'
   if (!acc[region]) acc[region] = []
-  acc[region].push(ville)
+  acc[region].push(city)
   return acc
 }, {} as Record<string, typeof cities>)
 
 // Sort regions by number of cities (biggest first)
-const sortedRegions = Object.entries(villesByRegion).sort(
+const sortedRegions = Object.entries(citiesByRegion).sort(
   (a, b) => b[1].length - a[1].length
 )
 
-export default async function VillesIndexPage() {
+export default async function CitiesIndexPage() {
   const cmsPage = await getPageContent('cities', 'static')
 
   if (cmsPage?.content_html) {
@@ -178,27 +178,27 @@ export default async function VillesIndexPage() {
           ))}
         </nav>
 
-        {sortedRegions.map(([region, regionVilles]) => {
+        {sortedRegions.map(([region, regionCities]) => {
           const regionId = region.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')
           return (
             <details key={region} id={`region-${regionId}`} className="mb-4 bg-white rounded-xl border border-gray-200 group">
               <summary className="flex items-center gap-3 p-4 cursor-pointer list-none select-none hover:bg-gray-50 rounded-xl transition-colors">
                 <Building2 className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 <h3 className="font-heading text-base font-bold text-slate-900 tracking-tight">{region}</h3>
-                <span className="text-sm text-slate-400 font-medium">({regionVilles.length} cities)</span>
+                <span className="text-sm text-slate-400 font-medium">({regionCities.length} cities)</span>
                 <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-open:rotate-90 transition-transform" />
               </summary>
               <div className="px-4 pb-4">
                 <div className="flex flex-wrap gap-x-1 gap-y-0.5">
-                  {regionVilles.map((ville, i) => (
-                    <span key={ville.slug}>
+                  {regionCities.map((city, i) => (
+                    <span key={city.slug}>
                       <Link
-                        href={`/cities/${ville.slug}`}
+                        href={`/cities/${city.slug}`}
                         className="text-sm text-slate-600 hover:text-blue-600 hover:underline transition-colors"
                       >
-                        {ville.name}
+                        {city.name}
                       </Link>
-                      {i < regionVilles.length - 1 && <span className="text-slate-300 mx-1">&middot;</span>}
+                      {i < regionCities.length - 1 && <span className="text-slate-300 mx-1">&middot;</span>}
                     </span>
                   ))}
                 </div>

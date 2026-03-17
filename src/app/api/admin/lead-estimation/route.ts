@@ -15,7 +15,7 @@ const querySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   source: z.enum(['all', 'chat', 'callback']).default('all'),
   search: z.string().optional(),
-  metier: z.string().optional(),
+  metier: z.string().optional(), // practiceArea filter — matches DB column 'metier' (legacy French name)
   from: z.string().optional(),
   to: z.string().optional(),
 })
@@ -40,6 +40,8 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     // Build query
+    // Table 'estimation_leads' = fee estimation leads (legacy French name)
+    // Search columns: nom=name, telephone=phone, ville=city, metier=practiceArea (legacy French column names)
     let query = supabase
       .from('estimation_leads')
       .select('*', { count: 'exact' })
@@ -120,6 +122,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const supabase = createAdminClient()
+    // legacy table name 'estimation_leads' = AI chat/callback lead captures
     const { error } = await supabase
       .from('estimation_leads')
       .delete()

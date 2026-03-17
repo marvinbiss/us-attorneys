@@ -24,7 +24,7 @@ import { AttorneyProfileStrength } from '@/components/attorney/AttorneyProfileSt
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/attorney/ClaimButton'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
 // Dynamic import for exit intent (not needed on first paint)
@@ -111,7 +111,7 @@ interface SimilarAttorney {
 }
 
 interface AttorneyPageClientProps {
-  initialArtisan: LegacyArtisan | null
+  initialAttorney: LegacyAttorney | null
   initialReviews: Review[]
   attorneyId: string
   similarAttorneys?: SimilarAttorney[]
@@ -120,26 +120,26 @@ interface AttorneyPageClientProps {
 }
 
 export default function AttorneyPageClient({
-  initialArtisan,
+  initialAttorney,
   initialReviews,
   attorneyId,
   similarAttorneys,
   isClaimed = true,
   hasSiret = false,
 }: AttorneyPageClientProps) {
-  const artisan = initialArtisan
+  const attorney = initialAttorney
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
 
   // Track profile view
   useEffect(() => {
-    if (artisan) {
-      BookingFunnel.viewProfile(attorneyId, artisan.business_name || '', 'profile_page')
+    if (attorney) {
+      BookingFunnel.viewProfile(attorneyId, attorney.business_name || '', 'profile_page')
     }
-  }, [artisan, attorneyId])
+  }, [attorney, attorneyId])
 
   // Not found state
-  if (!artisan) {
+  if (!attorney) {
     return (
       <div className="min-h-screen bg-sand-100 flex items-center justify-center">
         <motion.div
@@ -162,12 +162,12 @@ export default function AttorneyPageClient({
     )
   }
 
-  const displayName = getDisplayName(artisan)
+  const displayName = getDisplayName(attorney)
 
   return (
     <>
       {/* Schema.org JSON-LD */}
-      <AttorneySchema artisan={artisan} reviews={reviews} />
+      <AttorneySchema attorney={attorney} reviews={reviews} />
 
       {/* Sticky trust proof bar */}
 
@@ -206,7 +206,7 @@ export default function AttorneyPageClient({
                 <ShareButton
                   url={typeof window !== 'undefined' ? window.location.href : ''}
                   title={`Discover ${displayName}, attorney on US Attorneys`}
-                  description={`${displayName} — ${artisan.specialty} in ${artisan.city}. View their profile on US Attorneys.`}
+                  description={`${displayName} — ${attorney.specialty} in ${attorney.city}. View their profile on US Attorneys.`}
                   variant="icon"
                 />
                 <motion.button
@@ -232,13 +232,13 @@ export default function AttorneyPageClient({
         <main id="main-content" className="max-w-7xl mx-auto px-4 py-6" aria-label={`${displayName}'s profile`}>
           {/* Breadcrumb */}
           <nav className="mb-6" aria-label="Breadcrumb">
-            <AttorneyBreadcrumb artisan={artisan} />
+            <AttorneyBreadcrumb attorney={attorney} />
           </nav>
 
           {/* Photo Grid - Airbnb style (full width, only if portfolio exists) */}
-          {artisan.portfolio && artisan.portfolio.length > 0 && (
+          {attorney.portfolio && attorney.portfolio.length > 0 && (
             <section className="mb-8" aria-label="Photo gallery">
-              <AttorneyPhotoGrid artisan={artisan} />
+              <AttorneyPhotoGrid attorney={attorney} />
             </section>
           )}
 
@@ -247,59 +247,59 @@ export default function AttorneyPageClient({
             {/* Left column - Main content */}
             <div className="lg:col-span-2 space-y-6">
               <section aria-label="Main information">
-                <AttorneyHero artisan={artisan} />
+                <AttorneyHero attorney={attorney} />
               </section>
               <section aria-label="Availability and benefits">
-                <AttorneyUrgencyBanner artisan={artisan} />
+                <AttorneyUrgencyBanner attorney={attorney} />
               </section>
               <section aria-label="Statistics">
-                <AttorneyStats artisan={artisan} />
+                <AttorneyStats attorney={attorney} />
               </section>
               <section aria-label="About">
-                <AttorneyAbout artisan={artisan} />
+                <AttorneyAbout attorney={attorney} />
               </section>
               <section aria-label="Why choose this attorney">
-                <AttorneyWhyChoose artisan={artisan} />
+                <AttorneyWhyChoose attorney={attorney} />
               </section>
               <section aria-label="Business card">
-                <AttorneyBusinessCard artisan={artisan} />
+                <AttorneyBusinessCard attorney={attorney} />
               </section>
               {/* Mobile-only contact section (hidden on desktop where sidebar is visible) */}
               <section className="lg:hidden" aria-label="Contact this attorney">
-                <AttorneyContactCard artisan={artisan} />
+                <AttorneyContactCard attorney={attorney} />
               </section>
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Claim this profile">
-                  <ClaimButton attorneyId={attorneyId} attorneyName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                  <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />
                 </section>
               )}
               <section id="services" aria-label="Services and fees">
-                <AttorneyServices artisan={artisan} />
+                <AttorneyServices attorney={attorney} />
               </section>
               <section id="consultation" aria-label="Request a consultation">
-                <AttorneyQuoteForm artisan={artisan} />
+                <AttorneyQuoteForm attorney={attorney} />
               </section>
               <section id="reviews" aria-label="Client reviews">
-                <AttorneyReviews artisan={artisan} reviews={reviews} />
+                <AttorneyReviews attorney={attorney} reviews={reviews} />
               </section>
               <section aria-label="Frequently asked questions">
-                <AttorneyFAQ artisan={artisan} />
+                <AttorneyFAQ attorney={attorney} />
               </section>
               <section aria-label="Location">
-                <AttorneyMap artisan={artisan} />
+                <AttorneyMap attorney={attorney} />
               </section>
               <section aria-label="Similar attorneys">
-                <AttorneySimilar artisan={artisan} similarAttorneys={similarAttorneys} />
+                <AttorneySimilar attorney={attorney} similarAttorneys={similarAttorneys} />
               </section>
             </div>
 
             {/* Right column - Sticky sidebar */}
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Contact information">
               <div className="space-y-6 sticky top-20">
-                <AttorneySidebar artisan={artisan} />
-                <AttorneyProfileStrength artisan={artisan} />
+                <AttorneySidebar attorney={attorney} />
+                <AttorneyProfileStrength attorney={attorney} />
                 {!isClaimed && (
-                  <ClaimButton attorneyId={attorneyId} attorneyName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                  <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />
                 )}
               </div>
             </aside>
@@ -307,12 +307,12 @@ export default function AttorneyPageClient({
         </main>
 
         {/* Mobile CTA */}
-        <AttorneyMobileCTA artisan={artisan} />
+        <AttorneyMobileCTA attorney={attorney} />
       </div>
 
       {/* Exit intent slide-in */}
       <AttorneyExitIntent
-        artisan={artisan}
+        attorney={attorney}
         onOpenEstimation={() => window.dispatchEvent(new Event('sa:open-estimation'))}
       />
     </>

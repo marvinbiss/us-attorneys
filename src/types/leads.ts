@@ -75,7 +75,7 @@ export interface LeadFilters {
 // Stats
 // ============================================================
 
-export interface ArtisanLeadStats {
+export interface AttorneyLeadStats {
   total: number
   pending: number
   viewed: number

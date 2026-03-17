@@ -33,7 +33,7 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
 export class CacheService {
   private prefix: string
 
-  constructor(prefix = 'sa:') {
+  constructor(prefix = 'usa:') {
     this.prefix = prefix
   }
 
@@ -107,7 +107,7 @@ export const rateLimiter = {
   ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
     const now = Date.now()
     const windowMs = windowSeconds * 1000
-    const key = `sa:rl:${identifier}`
+    const key = `usa:rl:${identifier}`
 
     try {
       await redisCommand(['ZADD', key, String(now), String(now)])

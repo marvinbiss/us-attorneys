@@ -10,8 +10,12 @@ interface SocialProofData {
 
 interface SocialProofBannerProps {
   /** Practice area name for contextual display */
+  specialty?: string
+  /** @deprecated Use specialty instead */
   metier?: string
   /** City name for contextual display */
+  cityName?: string
+  /** @deprecated Use cityName instead */
   ville?: string
   /** Variant: 'inline' pills, 'card' full card, 'compact' minimal */
   variant?: 'inline' | 'card' | 'compact'
@@ -28,7 +32,9 @@ function getDailyCount(): number {
   return 47 + ((dayOfYear * 7 + 13) % 137) // 47-183, deterministic per day
 }
 
-export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialProofBannerProps) {
+export function SocialProofBanner({ specialty, metier, cityName, ville, variant = 'inline' }: SocialProofBannerProps) {
+  const displaySpecialty = specialty || metier
+  const displayCity = cityName || ville
   const fallbackCount = getDailyCount()
   const [data, setData] = useState<SocialProofData | null>(null)
 
@@ -84,7 +90,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
         <div className="flex items-center gap-2 mb-3">
           <TrendingUp className="w-4 h-4 text-blue-600" />
           <span className="text-sm font-semibold text-blue-900">
-            {metier ? `High demand for ${metier.toLowerCase()}` : 'High demand this month'}
+            {displaySpecialty ? `High demand for ${displaySpecialty.toLowerCase()}` : 'High demand this month'}
           </span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -116,9 +122,9 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
             </div>
           </div>
         </div>
-        {ville && (
+        {displayCity && (
           <p className="text-xs text-blue-600 mt-2">
-            Attorneys available in {ville} and surrounding areas
+            Attorneys available in {displayCity} and surrounding areas
           </p>
         )}
       </div>
@@ -130,7 +136,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline' }: SocialP
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
       <span className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full">
         <TrendingUp className="w-3.5 h-3.5" />
-        {devisCount.toLocaleString('en-US')} requests this month{ville ? ` in ${ville}` : ''}
+        {devisCount.toLocaleString('en-US')} requests this month{displayCity ? ` in ${displayCity}` : ''}
       </span>
       <span className="flex items-center gap-1.5 text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full">
         <Clock className="w-3.5 h-3.5" />

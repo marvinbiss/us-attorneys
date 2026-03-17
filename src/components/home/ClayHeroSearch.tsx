@@ -47,7 +47,7 @@ function searchCities(query: string, limit = 6): City[] {
 export function ClayHeroSearch() {
   const router = useRouter()
   const [service, setService] = useState('')
-  const [ville, setVille] = useState('')
+  const [cityInput, setCityInput] = useState('')
   const [serviceSuggestions, setServiceSuggestions] = useState<typeof services>([])
   const [citySuggestions, setCitySuggestions] = useState<City[]>([])
   const [activeField, setActiveField] = useState<'service' | 'city' | null>(null)
@@ -83,7 +83,7 @@ export function ClayHeroSearch() {
   }, [])
 
   const handleCityChange = useCallback((value: string) => {
-    setVille(value)
+    setCityInput(value)
     setSelectedCitySlug('')
     setHighlightedIndex(-1)
     setCitySuggestions(searchCities(value))
@@ -99,7 +99,7 @@ export function ClayHeroSearch() {
   }
 
   function selectCity(v: City) {
-    setVille(v.name)
+    setCityInput(v.name)
     setSelectedCitySlug(v.slug)
     setCitySuggestions([])
     setActiveField(null)
@@ -135,7 +135,7 @@ export function ClayHeroSearch() {
     } else {
       const params = new URLSearchParams()
       if (service) params.set('q', service)
-      if (ville) params.set('location', ville)
+      if (cityInput) params.set('location', cityInput)
       router.push(`/services${params.toString() ? `?${params.toString()}` : ''}`)
     }
   }
@@ -192,9 +192,9 @@ export function ClayHeroSearch() {
           <input
             ref={cityInputRef}
             type="text"
-            value={ville}
+            value={cityInput}
             onChange={e => handleCityChange(e.target.value)}
-            onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(ville)) }}
+            onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(cityInput)) }}
             placeholder="City or ZIP code"
             className="w-0 flex-1 bg-transparent text-stone-800 placeholder-stone-400 text-base outline-none"
             role="combobox"

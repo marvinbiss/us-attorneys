@@ -743,7 +743,7 @@ export default async function ServicePage({ params }: PageProps) {
               <h3 className="font-semibold text-gray-900 mb-4 mt-6">Practical Tools</h3>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  href="/tools/calculator-prix"
+                  href="/tools/calculator"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
                 >
                   Fee Calculator

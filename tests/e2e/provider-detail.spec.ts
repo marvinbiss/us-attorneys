@@ -1,21 +1,21 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Provider Detail Page', () => {
-  test('provider detail page loads', async ({ page }) => {
-    // Navigate to a known provider page structure
-    await page.goto('/services/plombier/paris')
+test.describe('Attorney Detail Page', () => {
+  test('attorney detail page loads', async ({ page }) => {
+    // Navigate to a known attorney page structure
+    await page.goto('/services/personal-injury/new-york')
 
     // Try to find and click a provider card
-    const card = page.locator('[data-testid="provider-card"], .provider-card, article a').first()
+    const card = page.locator('[data-testid="attorney-card"], .attorney-card, article a').first()
     if (await card.isVisible()) {
       await card.click()
       await expect(page.locator('body')).toBeVisible()
     }
   })
 
-  test('quote form is visible on provider pages', async ({ page }) => {
-    // Use SEO-friendly URL format: /services/[service]/[city]/[artisan-slug]
-    await page.goto('/services/plombier/paris/test')
+  test('consultation form is visible on attorney pages', async ({ page }) => {
+    // Use SEO-friendly URL format: /services/[practice-area]/[city]/[attorney-slug]
+    await page.goto('/services/personal-injury/new-york/test')
 
     // Check for quote form elements
     // May or may not be visible depending on page structure
@@ -23,8 +23,8 @@ test.describe('Provider Detail Page', () => {
   })
 
   test('phone number link format', async ({ page }) => {
-    // Use SEO-friendly URL format
-    await page.goto('/services/plombier/paris/test')
+    // Use SEO-friendly URL format: /services/[practice-area]/[city]/[attorney-slug]
+    await page.goto('/services/personal-injury/new-york/test')
 
     const phoneLink = page.locator('a[href^="tel:"]')
     if (await phoneLink.isVisible()) {
@@ -34,8 +34,8 @@ test.describe('Provider Detail Page', () => {
   })
 
   test('reviews section if available', async ({ page }) => {
-    // Use SEO-friendly URL format
-    await page.goto('/services/plombier/paris/test')
+    // Use SEO-friendly URL format: /services/[practice-area]/[city]/[attorney-slug]
+    await page.goto('/services/personal-injury/new-york/test')
 
     // Reviews may or may not be present
     await expect(page.locator('body')).toBeVisible()

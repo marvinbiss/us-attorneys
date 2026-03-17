@@ -47,7 +47,8 @@ export async function POST(
     }
     const { quote_id } = result.data
 
-    // Verify ownership of the devis_request via user client (RLS enforces client_id = auth.uid())
+    // Verify ownership of the consultation request via user client (RLS enforces client_id = auth.uid())
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: lead, error: leadError } = await supabase
       .from('devis_requests')
       .select('id, status')
@@ -109,7 +110,8 @@ export async function POST(
       // Non-fatal — the acceptance already happened, continue
     }
 
-    // 3. Mark the devis_request as accepted
+    // 3. Mark the consultation request as accepted
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { error: leadUpdateError } = await adminClient
       .from('devis_requests')
       .update({ status: 'accepted' })

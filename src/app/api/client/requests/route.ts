@@ -23,7 +23,8 @@ export async function GET() {
       )
     }
 
-    // Fetch quote requests for this client
+    // Fetch consultation requests for this client
+    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: requests, error: requestsError } = await supabase
       .from('devis_requests')
       .select(`

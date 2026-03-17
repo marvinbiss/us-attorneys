@@ -99,7 +99,7 @@ export function getStateFromZip(zipCode: string): string | null {
   if (zip >= 995 && zip <= 999) return 'AK'
   return null
 }
-// Backward compat
+/** @deprecated Use getStateFromZip() instead */
 export function getDeptCodeFromPostal(postalCode: string | null | undefined): string | null {
   if (!postalCode) return null
   return getStateFromZip(postalCode)
@@ -108,7 +108,7 @@ export function getDeptCodeFromPostal(postalCode: string | null | undefined): st
 /**
  * Gets the full state name from a state abbreviation or ZIP code
  */
-export function getDepartmentName(codeOrPostal: string | null | undefined): string | null {
+export function getStateName(codeOrPostal: string | null | undefined): string | null {
   if (!codeOrPostal) return null
 
   // If it's already a state name, return it
@@ -147,17 +147,28 @@ export function getRegionName(codeOrPostal: string | null | undefined): string |
  * Gets all geographic info from a ZIP code
  */
 export function getGeographyFromPostal(postalCode: string | null | undefined): {
-  departmentCode: string | null
-  departmentName: string | null
+  stateCode: string | null
+  stateName: string | null
   regionName: string | null
+  /** @deprecated Use stateCode instead */
+  departmentCode: string | null
+  /** @deprecated Use stateName instead */
+  departmentName: string | null
 } {
   const stateCode = postalCode ? getStateFromZip(postalCode) : null
+  const stateName = stateCode ? US_STATES[stateCode] || null : null
   return {
-    departmentCode: stateCode,
-    departmentName: stateCode ? US_STATES[stateCode] || null : null,
+    stateCode,
+    stateName,
     regionName: stateCode ? STATE_TO_REGION[stateCode] || null : null,
+    // Backward compat aliases
+    departmentCode: stateCode,
+    departmentName: stateName,
   }
 }
+
+/** @deprecated Use getStateName() instead */
+export const getDepartmentName = getStateName
 
 // slugify imported from '@/lib/utils' (canonical implementation)
 

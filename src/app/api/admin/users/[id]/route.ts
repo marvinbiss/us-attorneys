@@ -115,7 +115,7 @@ export async function GET(
         email: user.email,
         full_name: profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: profile.phone_e164 || user.user_metadata?.phone || null,
-        user_type: profile.role === 'attorney' ? 'attorney' : (user.user_metadata?.is_artisan ? 'attorney' : 'client'),
+        user_type: profile.role === 'attorney' ? 'attorney' : (user.user_metadata?.is_attorney ? 'attorney' : 'client'),
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: null,
@@ -173,7 +173,7 @@ export async function PATCH(
     const userMetadataUpdates: Record<string, unknown> = {}
     if (result.data.full_name !== undefined) userMetadataUpdates.full_name = result.data.full_name
     if (result.data.phone !== undefined) userMetadataUpdates.phone = result.data.phone
-    if (result.data.user_type !== undefined) userMetadataUpdates.is_artisan = result.data.user_type === 'attorney'
+    if (result.data.user_type !== undefined) userMetadataUpdates.is_attorney = result.data.user_type === 'attorney'
 
     if (Object.keys(userMetadataUpdates).length > 0) {
       const { error: authError } = await supabase.auth.admin.updateUserById(userId, {

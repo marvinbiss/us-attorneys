@@ -106,7 +106,7 @@ export function getCategoryColors(color: string) {
 }
 
 // TODO: Replace with US geocoding service (e.g., Census Geocoder, Google Maps, or Mapbox)
-// The previous implementation used the French government API (api-adresse.data.gouv.fr)
+// Original implementation removed (used a non-US government API)
 export async function getLocationFromCoords(_lon: number, _lat: number): Promise<string | null> {
   return null
 }

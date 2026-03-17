@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, cities, states, usRegions } from '@/lib/data/usa'
-import { tradeContent, getTradesSlugs, parseTask } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs, parseTask } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getQuestionSlugs } from '@/lib/data/faq'
 import { comparisons } from '@/lib/data/comparisons'
@@ -33,34 +33,35 @@ const TOP_CITIES_PHASE1 = 300
 export async function generateSitemaps() {
   // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
   // ALL intent pages (quotes, reviews, pricing, emergency, issues) also use Phase 1 cities.
-  // Quartier-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
+  // Neighborhood-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
   const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
   const emergencySlugs = Object.keys(tradeContent)
   const reviewServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
-  // Count total task×city combinations for tarifs-task-cities sitemaps
+  // Count total task×city combinations for pricing-task-cities sitemaps
+  // Note: sitemap IDs 'tarifs-*' are legacy — do not rename without updating Google Search Console
   const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
-  const tarifsTaskCitiesBatchCount = Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH)
+  const pricingTaskCitiesBatchCount = Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
   const sitemaps: { id: string }[] = [
     { id: 'static' },
     ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
     { id: 'cities' },
     { id: 'geo' },
-    // Quartier & service-quartier sitemaps REMOVED — too granular for new domain
+    // Neighborhood & service-neighborhood sitemaps REMOVED — too granular for new domain
     { id: 'quotes-services' },
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `quotes-service-cities-${i}` })),
     ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `emergency-service-cities-${i}` })),
     ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `tarifs-service-cities-${i}` })),
-    ...Array.from({ length: tarifsTaskCitiesBatchCount }, (_, i) => ({ id: `tarifs-task-cities-${i}` })),
+    ...Array.from({ length: pricingTaskCitiesBatchCount }, (_, i) => ({ id: `tarifs-task-cities-${i}` })),
     { id: 'reviews-services' },
     ...Array.from({ length: Math.ceil(reviewServiceSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `reviews-service-cities-${i}` })),
     { id: 'issues' },
     ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `issues-cities-${i}` })),
     ...Array.from(
-      { length: Math.ceil(states.length * getTradesSlugs().length / LARGE_BATCH) },
+      { length: Math.ceil(states.length * getPracticeAreaSlugs().length / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
     ),
     { id: 'region-services' },
@@ -153,12 +154,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     const emergencySlugs = Object.keys(tradeContent)
-    const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
+    const emergencyPages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/emergency/${slug}`,
       lastModified: BUILD_DATE,
     }))
 
-    const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
+    const pricingPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/pricing/${slug}`,
       lastModified: BUILD_DATE,
     }))
@@ -172,7 +173,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           ? new Date(Math.max(...categoryArticles.map(a => new Date(a.date).getTime())))
           : undefined
         return {
-          url: `${SITE_URL}/blog/categorie/${c.slug}`,
+          url: `${SITE_URL}/blog/category/${c.slug}`,
           lastModified: latestDate || BUILD_DATE,
         }
       })
@@ -199,7 +200,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     })
 
-    return [...homepage, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
+    return [...homepage, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...emergencyPages, ...pricingPages]
   }
 
   // ── Service + city — Phase 1: top 300 cities ────────────────────────
@@ -219,8 +220,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
-      for (const ville of mergedCities) {
-        allUrls.push({ url: `${SITE_URL}/practice-areas/${service.slug}/${ville.slug}` })
+      for (const city of mergedCities) {
+        allUrls.push({ url: `${SITE_URL}/practice-areas/${service.slug}/${city.slug}` })
       }
     }
 
@@ -230,25 +231,25 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
-    const villesIndex: MetadataRoute.Sitemap = [
+    const citiesIndex: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/cities` },
     ]
 
-    const villePages: MetadataRoute.Sitemap = cities.map((ville) => ({
-      url: `${SITE_URL}/cities/${ville.slug}`,
+    const cityPages: MetadataRoute.Sitemap = cities.map((city) => ({
+      url: `${SITE_URL}/cities/${city.slug}`,
     }))
 
-    return [...villesIndex, ...villePages]
+    return [...citiesIndex, ...cityPages]
   }
 
   // ── Geo pages (states + regions) ────────────────────────────────────
   if (id === 'geo') {
-    const departementsIndex: MetadataRoute.Sitemap = [
+    const statesIndex: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/states` },
     ]
 
-    const departementPages: MetadataRoute.Sitemap = states.map((dept) => ({
-      url: `${SITE_URL}/states/${dept.slug}`,
+    const statePages: MetadataRoute.Sitemap = states.map((state) => ({
+      url: `${SITE_URL}/states/${state.slug}`,
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
@@ -259,7 +260,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       url: `${SITE_URL}/regions/${region.slug}`,
     }))
 
-    return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
+    return [...statesIndex, ...statePages, ...regionsIndex, ...regionPages]
   }
 
 
@@ -282,9 +283,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     let count = 0
 
     outer: for (const svc of services) {
-      for (const ville of phase1Cities) {
+      for (const city of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/quotes/${svc.slug}/${ville.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/quotes/${svc.slug}/${city.slug}` })
         count++
       }
     }
@@ -411,9 +412,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     let count = 0
 
     outer: for (const problem of problemSlugs) {
-      for (const ville of phase1Cities) {
+      for (const city of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/issues/${problem}/${ville.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/issues/${problem}/${city.slug}` })
         count++
       }
     }
@@ -424,11 +425,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── State × service pages ──────────────────────────────────────────
   if (id.startsWith('dept-services-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
-    const tradeSlugs = getTradesSlugs()
+    const tradeSlugs = getPracticeAreaSlugs()
     const allUrls: MetadataRoute.Sitemap = []
-    for (const dept of states) {
+    for (const state of states) {
       for (const service of tradeSlugs) {
-        allUrls.push({ url: `${SITE_URL}/states/${dept.slug}/${service}` })
+        allUrls.push({ url: `${SITE_URL}/states/${state.slug}/${service}` })
       }
     }
     return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
@@ -436,7 +437,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Region × service pages ──────────────────────────────────────────
   if (id === 'region-services') {
-    const tradeSlugs = getTradesSlugs()
+    const tradeSlugs = getPracticeAreaSlugs()
     return usRegions.flatMap(region =>
       tradeSlugs.map(service => ({
         url: `${SITE_URL}/regions/${region.slug}/${service}`,

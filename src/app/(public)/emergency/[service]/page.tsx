@@ -32,7 +32,7 @@ const emergencySlugs = Object.keys(tradeContent)
 
 // Emergency-specific display data
 const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightText: string; problems: string[] }> = {
-  plombier: {
+  'personal-injury': {
     gradient: 'from-blue-600 to-blue-800',
     lightBg: 'bg-blue-50',
     lightText: 'text-blue-700',
@@ -45,7 +45,7 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Bail hearing needed',
     ],
   },
-  electricien: {
+  'criminal-defense': {
     gradient: 'from-amber-600 to-amber-800',
     lightBg: 'bg-amber-50',
     lightText: 'text-amber-700',
@@ -58,7 +58,7 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Whistleblower retaliation',
     ],
   },
-  serrurier: {
+  'family-law': {
     gradient: 'from-green-600 to-green-800',
     lightBg: 'bg-green-50',
     lightText: 'text-green-700',
@@ -71,7 +71,7 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Security deposit dispute',
     ],
   },
-  chauffagiste: {
+  'employment-law': {
     gradient: 'from-red-600 to-red-800',
     lightBg: 'bg-red-50',
     lightText: 'text-red-700',
@@ -84,7 +84,7 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Workers compensation claim',
     ],
   },
-  vitrier: {
+  'dui-dwi': {
     gradient: 'from-cyan-600 to-cyan-800',
     lightBg: 'bg-cyan-50',
     lightText: 'text-cyan-700',
@@ -97,7 +97,7 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Partnership dissolution',
     ],
   },
-  couvreur: {
+  'real-estate-law': {
     gradient: 'from-orange-600 to-orange-800',
     lightBg: 'bg-orange-50',
     lightText: 'text-orange-700',
@@ -110,7 +110,7 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
       'Spousal abuse protection',
     ],
   },
-  climaticien: {
+  'immigration-law': {
     gradient: 'from-indigo-600 to-indigo-800',
     lightBg: 'bg-indigo-50',
     lightText: 'text-indigo-700',
@@ -214,7 +214,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
   const trade = tradeContent[service]
   if (!trade) notFound()
 
-  const meta = emergencyMeta[service] || emergencyMeta.plombier
+  const meta = emergencyMeta[service] || emergencyMeta['personal-injury']
   const otherEmergencies = emergencySlugs.filter((s) => s !== service)
 
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -276,11 +276,11 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
     url: `${SITE_URL}/emergency/${service}`,
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: topCities.map((ville, i) => ({
+      itemListElement: topCities.map((city, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        name: `Emergency ${trade.name} in ${ville.name}`,
-        url: `${SITE_URL}/emergency/${service}/${ville.slug}`,
+        name: `Emergency ${trade.name} in ${city.name}`,
+        url: `${SITE_URL}/emergency/${service}/${city.slug}`,
       })),
     },
   }
@@ -466,10 +466,10 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             Emergency {trade.name} by city
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {topCities.map((ville) => (
+            {topCities.map((city) => (
               <Link
-                key={ville.slug}
-                href={`/emergency/${service}/${ville.slug}`}
+                key={city.slug}
+                href={`/emergency/${service}/${city.slug}`}
                 className="bg-white hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-xl p-4 transition-all group"
               >
                 <div className="flex items-center gap-3">
@@ -478,7 +478,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
-                      {trade.name} in {ville.name}
+                      {trade.name} in {city.name}
                     </div>
                     <div className="text-xs text-gray-500">Emergency nights & weekends</div>
                   </div>
@@ -660,7 +660,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       </section>
 
       <ExitIntentPopup
-        sessionKey="sa:exit-urgence"
+        sessionKey="sa:exit-emergency"
         title="Need urgent legal help?"
         description="A qualified attorney can respond quickly. Request a consultation now."
         ctaText="Request a consultation"

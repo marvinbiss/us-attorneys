@@ -8,7 +8,7 @@ import { z } from 'zod'
 const usersQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  filter: z.enum(['all', 'clients', 'artisans', 'banned']).optional().default('all'),
+  filter: z.enum(['all', 'clients', 'attorneys', 'banned']).optional().default('all'),
   plan: z.enum(['all', 'free', 'pro', 'premium']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
@@ -24,7 +24,7 @@ const createUserSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// GET - Liste des utilisateurs avec filtres et pagination
+// GET - List users with filters and pagination
 export async function GET(request: NextRequest) {
   try {
     // Verify admin with users:read permission
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
         email: user.email || '',
         full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: (profile.phone_e164 as string) || user.user_metadata?.phone || null,
-        user_type: Boolean(user.user_metadata?.is_artisan) ? 'attorney' : 'client',
+        user_type: Boolean(user.user_metadata?.is_attorney) ? 'attorney' : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: 'free',
@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
     // Apply type/ban filter BEFORE pagination so counts are accurate
     if (filter === 'clients') {
       users = users.filter(u => u.user_type === 'client')
-    } else if (filter === 'artisans') {
+    } else if (filter === 'attorneys') {
       users = users.filter(u => u.user_type === 'attorney')
     } else if (filter === 'banned') {
       users = users.filter(u => u.is_banned)
@@ -184,7 +184,7 @@ export async function POST(request: NextRequest) {
       user_metadata: {
         full_name,
         phone,
-        is_artisan: user_type === 'attorney',
+        is_attorney: user_type === 'attorney',
       },
     })
 

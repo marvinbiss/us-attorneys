@@ -10,7 +10,7 @@ export interface DispatchOptions {
   urgency?: string
   latitude?: number
   longitude?: number
-  sourceTable?: 'devis_requests' | 'leads'
+  sourceTable?: 'devis_requests' | 'leads' // Table 'devis_requests' = consultation requests (legacy French name)
 }
 
 /**

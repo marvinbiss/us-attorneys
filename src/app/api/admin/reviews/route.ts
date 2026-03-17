@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       .from('reviews')
       .select(`
         *,
-        artisan:profiles!attorney_id(id, full_name)
+        attorney:profiles!attorney_id(id, full_name)
       `, { count: 'exact' })
 
     // Apply filters — reviews.status: 'published' | 'pending_review' | 'hidden' | 'flagged'
@@ -78,11 +78,11 @@ export async function GET(request: NextRequest) {
       id: review.id,
       author_name: review.client_name || 'Anonymous',
       author_email: review.client_email || '',
-      provider_name: review.artisan?.full_name || 'Unknown',
+      provider_name: review.attorney?.full_name || 'Unknown',
       attorney_id: review.attorney_id,
       rating: review.rating,
       comment: review.comment,
-      response: review.artisan_response,
+      response: review.attorney_response,
       moderation_status: review.status === 'published' ? 'approved'
         : review.status === 'hidden' ? 'rejected'
         : review.status === 'pending_review' || review.status === 'flagged' ? 'pending'

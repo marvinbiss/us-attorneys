@@ -33,9 +33,10 @@ export function getTradeContent(slug: string): TradeContent | undefined {
 /**
  * Retrieves all available practice area slugs.
  */
-export function getTradesSlugs(): string[] {
+export function getPracticeAreaSlugs(): string[] {
   return Object.keys(tradeContent)
 }
+
 
 /**
  * Slugifies a task name for use in the URL /pricing/[service]/[location]/[task].

@@ -13,22 +13,26 @@ export async function OPTIONS() {
 }
 
 /**
- * GET /api/v1/pricing?metier=plombier&ville=paris
+ * GET /api/v1/pricing?specialty=personal-injury&city=new-york
  *
  * Returns aggregated barometer statistics for a practice area,
  * optionally filtered by city, state, or region.
+ *
+ * Note: Legacy parameter names (metier, ville, departement) are still
+ * accepted via the DB column names but the public API docs use
+ * specialty, city, and state.
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
-    const specialty = searchParams.get('metier')
-    const city = searchParams.get('ville')
-    const state = searchParams.get('departement')
+    const specialty = searchParams.get('specialty') || searchParams.get('metier')
+    const city = searchParams.get('city') || searchParams.get('ville')
+    const state = searchParams.get('state') || searchParams.get('departement')
     const region = searchParams.get('region')
 
     if (!specialty) {
       return NextResponse.json(
-        { error: 'The "metier" parameter is required. Example: ?metier=plumber' },
+        { error: 'The "specialty" parameter is required. Example: ?specialty=personal-injury' },
         { status: 400, headers: CORS_HEADERS },
       )
     }
@@ -37,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('barometre_stats')
-      .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at')
+      .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_attorneys, note_moyenne, nb_avis, taux_verification, updated_at')
       .eq('metier_slug', specialty)
 
     if (city) {

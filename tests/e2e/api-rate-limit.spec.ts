@@ -26,14 +26,14 @@ test.describe('API Rate Limiting', () => {
   })
 
   test('search API responds correctly', async ({ request }) => {
-    const response = await request.get('/api/search?q=plombier')
+    const response = await request.get('/api/search?q=personal-injury')
 
     // Should get a valid response
     expect(response.status()).toBeLessThan(500)
   })
 
   test('protected routes return 401 without auth', async ({ request }) => {
-    const response = await request.get('/api/artisan/profile')
+    const response = await request.get('/api/attorney/profile')
 
     // Should require authentication
     expect([401, 403]).toContain(response.status())

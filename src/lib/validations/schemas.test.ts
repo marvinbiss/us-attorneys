@@ -146,7 +146,7 @@ describe('createBookingSchema', () => {
     expect(createBookingSchema.safeParse(partial).success).toBe(false)
   })
 
-  it('rejects invalid artisan UUID', () => {
+  it('rejects invalid attorney UUID', () => {
     expect(createBookingSchema.safeParse({ ...validBooking, attorneyId: 'bad-id' }).success).toBe(false)
   })
 

@@ -9,7 +9,7 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { states, getStateBySlug, getCitiesByState, services, getRegionSlugByName } from '@/lib/data/usa'
 import { getAttorneyCountByDepartment, formatAttorneyCount } from '@/lib/data/stats'
 import { getDepartmentImage } from '@/lib/data/images'
-import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
+import { generateStateContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import problems from '@/lib/data/problems'
 
@@ -87,9 +87,9 @@ export default async function StatePage({ params }: PageProps) {
   const dept = getStateBySlug(deptSlug)
   if (!dept) notFound()
 
-  const villesDuDepartement = getCitiesByState(dept.code)
-  const content = generateDepartementContent(dept)
-  const deptArtisanCount = await getAttorneyCountByDepartment(dept.name)
+  const stateCities = getCitiesByState(dept.code)
+  const content = generateStateContent(dept)
+  const deptAttorneyCount = await getAttorneyCountByDepartment(dept.name)
 
   // Other departments in the same region
   const siblingDepts = states.filter(
@@ -198,10 +198,10 @@ export default async function StatePage({ params }: PageProps) {
 
             {/* Location info */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
-              {deptArtisanCount > 0 && (
+              {deptAttorneyCount > 0 && (
                 <div className="flex items-center gap-2 text-slate-300">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatAttorneyCount(deptArtisanCount)} attorney{deptArtisanCount > 1 ? 's' : ''}</span>
+                  <span>{formatAttorneyCount(deptAttorneyCount)} attorney{deptAttorneyCount > 1 ? 's' : ''}</span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-slate-300">
@@ -214,7 +214,7 @@ export default async function StatePage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-indigo-400" />
-                <span>{villesDuDepartement.length || dept.cities.length} cit{(villesDuDepartement.length || dept.cities.length) > 1 ? 'ies' : 'y'} covered</span>
+                <span>{stateCities.length || dept.cities.length} cit{(stateCities.length || dept.cities.length) > 1 ? 'ies' : 'y'} covered</span>
               </div>
             </div>
 
@@ -262,7 +262,7 @@ export default async function StatePage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ─── PROFIL DU DÉPARTEMENT ────────────────────────── */}
+        {/* ─── STATE PROFILE ────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
@@ -345,20 +345,20 @@ export default async function StatePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Major cities in {dept.name}
               </h2>
-              <p className="text-sm text-slate-500">{villesDuDepartement.length > 0 ? villesDuDepartement.length : dept.cities.length} cities listed</p>
+              <p className="text-sm text-slate-500">{stateCities.length > 0 ? stateCities.length : dept.cities.length} cities listed</p>
             </div>
           </div>
-          {villesDuDepartement.length > 0 ? (
+          {stateCities.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {villesDuDepartement.map((ville) => (
-                <Link key={ville.slug} href={`/cities/${ville.slug}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-indigo-300 hover:-translate-y-0.5 transition-all group">
+              {stateCities.map((city) => (
+                <Link key={city.slug} href={`/cities/${city.slug}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-indigo-300 hover:-translate-y-0.5 transition-all group">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
                       <MapPin className="w-5 h-5 text-indigo-600" />
                     </div>
                     <div className="min-w-0">
-                      <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm truncate">{ville.name}</div>
-                      <div className="text-xs text-slate-400">{ville.population} pop.</div>
+                      <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm truncate">{city.name}</div>
+                      <div className="text-xs text-slate-400">{city.population} pop.</div>
                     </div>
                   </div>
                 </Link>
@@ -366,17 +366,17 @@ export default async function StatePage({ params }: PageProps) {
             </div>
           ) : (
             <div className="flex flex-wrap gap-2.5">
-              {dept.cities.map((villeName) => (
-                <span key={villeName} className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors">
-                  {villeName}
+              {dept.cities.map((cityName) => (
+                <span key={cityName} className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors">
+                  {cityName}
                 </span>
               ))}
             </div>
           )}
         </section>
 
-        {/* ─── SERVICES PAR VILLE ───────────────────────────── */}
-        {villesDuDepartement.length > 0 && (
+        {/* ─── SERVICES BY CITY ───────────────────────────── */}
+        {stateCities.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
@@ -387,21 +387,21 @@ export default async function StatePage({ params }: PageProps) {
               </h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {villesDuDepartement.slice(0, 12).map((ville) => (
-                <div key={ville.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
-                  <h3 className="font-heading font-semibold text-slate-900 mb-4">Attorneys in {ville.name}</h3>
+              {stateCities.slice(0, 12).map((city) => (
+                <div key={city.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
+                  <h3 className="font-heading font-semibold text-slate-900 mb-4">Attorneys in {city.name}</h3>
                   <div className="flex flex-wrap gap-2">
                     {services.map((service) => (
                       <Link
-                        key={`${service.slug}-${ville.slug}`}
-                        href={`/practice-areas/${service.slug}/${ville.slug}`}
+                        key={`${service.slug}-${city.slug}`}
+                        href={`/practice-areas/${service.slug}/${city.slug}`}
                         className="text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-blue-100"
                       >
                         {service.name}
                       </Link>
                     ))}
                   </div>
-                  <Link href={`/cities/${ville.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
+                  <Link href={`/cities/${city.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
                     All attorneys <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -556,16 +556,16 @@ export default async function StatePage({ params }: PageProps) {
           </div>
 
           {/* Intent variant links -- quotes, reviews, pricing */}
-          {villesDuDepartement.length > 0 && (
+          {stateCities.length > 0 && (
             <div className="mt-10 grid md:grid-cols-3 gap-8">
               <div>
                 <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {dept.name}</h3>
                 <div className="space-y-1.5">
-                  {villesDuDepartement.slice(0, 6).flatMap((ville) =>
+                  {stateCities.slice(0, 6).flatMap((city) =>
                     orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`devis-${s.slug}-${ville.slug}`} href={`/quotes/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <Link key={`devis-${s.slug}-${city.slug}`} href={`/quotes/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
-                        {s.name} consultation in {ville.name}
+                        {s.name} consultation in {city.name}
                       </Link>
                     ))
                   )}
@@ -574,11 +574,11 @@ export default async function StatePage({ params }: PageProps) {
               <div>
                 <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {dept.name}</h3>
                 <div className="space-y-1.5">
-                  {villesDuDepartement.slice(0, 6).flatMap((ville) =>
+                  {stateCities.slice(0, 6).flatMap((city) =>
                     orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`avis-${s.slug}-${ville.slug}`} href={`/reviews/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <Link key={`avis-${s.slug}-${city.slug}`} href={`/reviews/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
-                        {s.name} reviews in {ville.name}
+                        {s.name} reviews in {city.name}
                       </Link>
                     ))
                   )}
@@ -587,11 +587,11 @@ export default async function StatePage({ params }: PageProps) {
               <div>
                 <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Pricing in {dept.name}</h3>
                 <div className="space-y-1.5">
-                  {villesDuDepartement.slice(0, 6).flatMap((ville) =>
+                  {stateCities.slice(0, 6).flatMap((city) =>
                     orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`tarifs-${s.slug}-${ville.slug}`} href={`/pricing/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/pricing/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
-                        {s.name} pricing in {ville.name}
+                        {s.name} pricing in {city.name}
                       </Link>
                     ))
                   )}
@@ -599,28 +599,28 @@ export default async function StatePage({ params }: PageProps) {
               </div>
             </div>
           )}
-          {villesDuDepartement.length > 0 && (
+          {stateCities.length > 0 && (
             <div className="mt-8">
               <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Emergency services in {dept.name}</h3>
               <div className="flex flex-wrap gap-2">
-                {villesDuDepartement.slice(0, 6).flatMap((ville) =>
+                {stateCities.slice(0, 6).flatMap((city) =>
                   orderedServices.slice(0, 5).map((s) => (
-                    <Link key={`urgence-${s.slug}-${ville.slug}`} href={`/emergency/${s.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
-                      Emergency {s.name.toLowerCase()} in {ville.name}
+                    <Link key={`urgence-${s.slug}-${city.slug}`} href={`/emergency/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
+                      Emergency {s.name.toLowerCase()} in {city.name}
                     </Link>
                   ))
                 )}
               </div>
             </div>
           )}
-          {villesDuDepartement.length > 0 && (
+          {stateCities.length > 0 && (
             <div className="mt-8">
               <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Common issues in {dept.name}</h3>
               <div className="flex flex-wrap gap-2">
-                {villesDuDepartement.slice(0, 4).flatMap((ville) =>
+                {stateCities.slice(0, 4).flatMap((city) =>
                   problems.slice(0, 6).map((p) => (
-                    <Link key={`prob-${p.slug}-${ville.slug}`} href={`/issues/${p.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
-                      {p.name} in {ville.name}
+                    <Link key={`prob-${p.slug}-${city.slug}`} href={`/issues/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
+                      {p.name} in {city.name}
                     </Link>
                   ))
                 )}
@@ -642,7 +642,7 @@ export default async function StatePage({ params }: PageProps) {
           </div>
         </section>
 
-      {/* Confiance & Sécurité */}
+      {/* Trust & Safety */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>

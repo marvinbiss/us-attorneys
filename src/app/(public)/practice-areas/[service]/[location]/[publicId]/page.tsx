@@ -6,7 +6,7 @@ import { getAttorneyUrl } from '@/lib/utils'
 import AttorneyPageClient from '@/components/attorney/AttorneyPageClient'
 import AttorneyInternalLinks from '@/components/attorney/AttorneyInternalLinks'
 import { Review } from '@/components/attorney'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 import type { Service, Location } from '@/types'
 import { getServiceImage } from '@/lib/data/images'
 
@@ -96,8 +96,8 @@ interface PageProps {
   }>
 }
 
-// Convert provider data to LegacyArtisan format (sub-components still read legacy fields)
-function convertToArtisan(provider: ProviderRecord, service: Service | null, location: Location | null, specialtySlug: string): LegacyArtisan {
+// Convert provider data to LegacyAttorney format (sub-components still read legacy fields)
+function convertToAttorney(provider: ProviderRecord, service: Service | null, location: Location | null, specialtySlug: string): LegacyAttorney {
   const specialty = service?.name || provider.specialty || 'Attorney'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Attorney'
@@ -518,15 +518,15 @@ export default async function AttorneyPage({ params }: PageProps) {
   }
 
   // Convert to Attorney format
-  const artisan = convertToArtisan(provider, service, location, specialtySlug)
+  const attorney = convertToAttorney(provider, service, location, specialtySlug)
 
   // Fetch reviews and similar attorneys in parallel (graceful degradation)
   let reviews: Review[] = []
   let similarAttorneys: Awaited<ReturnType<typeof getSimilarAttorneys>> = []
   try {
     ;[reviews, similarAttorneys] = await Promise.all([
-      getAttorneyReviews(provider.id, service?.name || artisan.specialty),
-      getSimilarAttorneys(provider.id, artisan.specialty, artisan.postal_code),
+      getAttorneyReviews(provider.id, service?.name || attorney.specialty),
+      getSimilarAttorneys(provider.id, attorney.specialty, attorney.postal_code),
     ])
   } catch {
     // Graceful degradation — page renders without reviews/similar attorneys
@@ -541,7 +541,7 @@ export default async function AttorneyPage({ params }: PageProps) {
            is rendered by AttorneySchema inside AttorneyPageClient — no duplicates here */}
 
       <AttorneyPageClient
-        initialArtisan={artisan}
+        initialAttorney={attorney}
         initialReviews={reviews}
         attorneyId={provider.id}
         similarAttorneys={similarAttorneys}
@@ -559,7 +559,7 @@ export default async function AttorneyPage({ params }: PageProps) {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            All {(service?.name || artisan.specialty).toLowerCase()}s in {artisan.city}
+            All {(service?.name || attorney.specialty).toLowerCase()}s in {attorney.city}
           </Link>
         </div>
       </section>
@@ -568,8 +568,8 @@ export default async function AttorneyPage({ params }: PageProps) {
       <AttorneyInternalLinks
         specialtySlug={specialtySlug}
         locationSlug={locationSlug}
-        specialtyName={service?.name || artisan.specialty}
-        cityName={artisan.city}
+        specialtyName={service?.name || attorney.specialty}
+        cityName={attorney.city}
         regionName={location?.region_name}
         departmentName={location?.department_name}
         departmentCode={location?.department_code}
@@ -577,13 +577,13 @@ export default async function AttorneyPage({ params }: PageProps) {
 
 
       <EstimationWidget hideLauncher context={{
-        metier: service?.name || artisan.specialty,
+        metier: service?.name || attorney.specialty,
         metierSlug: specialtySlug,
-        ville: artisan.city,
+        ville: attorney.city,
         departement: location?.department_code || '',
         pageUrl: `/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`,
-        artisan: {
-          name: artisan.business_name || 'Attorney',
+        attorney: {
+          name: attorney.business_name || 'Attorney',
           slug: provider.slug || '',
           publicId: provider.stable_id || provider.slug || publicId,
         },

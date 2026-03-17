@@ -111,7 +111,7 @@ const RANGES = [
 ]
 
 const EVENT_CONFIG = {
-  artisan_profile_view: { label: 'viewed the profile of', color: 'text-blue-600', bg: 'bg-blue-50', icon: Eye },
+  attorney_profile_view: { label: 'viewed the profile of', color: 'text-blue-600', bg: 'bg-blue-50', icon: Eye },
   phone_reveal: { label: 'revealed the number of', color: 'text-amber-600', bg: 'bg-amber-50', icon: Phone },
   phone_click: { label: 'called', color: 'text-green-600', bg: 'bg-green-50', icon: PhoneCall },
 } as const

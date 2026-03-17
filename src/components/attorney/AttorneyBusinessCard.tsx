@@ -12,10 +12,10 @@ import {
   Users,
   Briefcase,
 } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 interface AttorneyBusinessCardProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
 }
 
 /** Format bar number for display */
@@ -57,21 +57,21 @@ function formatTeamSize(size: number): string {
   return `${size} employees`
 }
 
-export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
-  const hasSiret = !!artisan.siret
-  const hasEmployees = artisan.team_size != null && artisan.team_size >= 0
+export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
+  const hasSiret = !!attorney.siret
+  const hasEmployees = attorney.team_size != null && attorney.team_size >= 0
   const hasAnyData =
     hasSiret ||
-    !!artisan.legal_form ||
-    !!artisan.creation_date ||
-    !!artisan.email ||
-    !!artisan.website ||
+    !!attorney.legal_form ||
+    !!attorney.creation_date ||
+    !!attorney.email ||
+    !!attorney.website ||
     hasEmployees
 
   if (!hasAnyData) return null
 
-  const yearsSinceCreation = artisan.creation_date
-    ? getYearsSinceCreation(artisan.creation_date)
+  const yearsSinceCreation = attorney.creation_date
+    ? getYearsSinceCreation(attorney.creation_date)
     : null
 
   return (
@@ -111,7 +111,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
           {/* Bar Number */}
-          {artisan.siret && (
+          {attorney.siret && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <Hash className="w-4 h-4 text-clay-400" aria-hidden="true" />
@@ -121,14 +121,14 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                   Bar Number
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-gray-900 font-mono tracking-widest">
-                  {formatBarNumber(artisan.siret)}
+                  {formatBarNumber(attorney.siret)}
                 </dd>
               </div>
             </div>
           )}
 
           {/* Creation date — prominent */}
-          {artisan.creation_date && (
+          {attorney.creation_date && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50/60 border border-amber-100 hover:bg-amber-50 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <Calendar className="w-4 h-4 text-amber-600" aria-hidden="true" />
@@ -139,7 +139,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                 </dt>
                 <dd className="mt-0.5">
                   <span className="text-sm font-bold text-gray-900">
-                    {formatCreationDate(artisan.creation_date)}
+                    {formatCreationDate(attorney.creation_date)}
                   </span>
                   {yearsSinceCreation !== null && yearsSinceCreation > 0 && (
                     <span className="mt-1.5 flex">
@@ -154,7 +154,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
           )}
 
           {/* Legal form */}
-          {artisan.legal_form && (
+          {attorney.legal_form && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <Scale className="w-4 h-4 text-stone-600" aria-hidden="true" />
@@ -164,7 +164,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                   Legal structure
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-gray-900">
-                  {artisan.legal_form}
+                  {attorney.legal_form}
                 </dd>
               </div>
             </div>
@@ -182,7 +182,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                 </dt>
                 <dd className="mt-0.5">
                   <span className="text-sm font-bold text-gray-900">
-                    {formatTeamSize(artisan.team_size!)}
+                    {formatTeamSize(attorney.team_size!)}
                   </span>
                   <span className="mt-1 block text-xs text-slate-400">
                     Source: State bar records
@@ -194,26 +194,26 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
         </dl>
 
         {/* ── Secondary links: website & email only (no phone here) ── */}
-        {(artisan.email || artisan.website) && (
+        {(attorney.email || attorney.website) && (
           <div className="mt-5 pt-5 border-t border-gray-100">
             <div className="flex flex-wrap gap-3">
-              {artisan.email && (
+              {attorney.email && (
                 <a
-                  href={`mailto:${artisan.email}`}
+                  href={`mailto:${attorney.email}`}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-slate-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-                  aria-label={`Send email to ${artisan.email}`}
+                  aria-label={`Send email to ${attorney.email}`}
                 >
                   <Briefcase className="w-4 h-4 text-slate-400" aria-hidden="true" />
-                  <span className="truncate max-w-[200px]">{artisan.email}</span>
+                  <span className="truncate max-w-[200px]">{attorney.email}</span>
                 </a>
               )}
 
-              {artisan.website && (
+              {attorney.website && (
                 <a
                   href={
-                    artisan.website.startsWith('http')
-                      ? artisan.website
-                      : `https://${artisan.website}`
+                    attorney.website.startsWith('http')
+                      ? attorney.website
+                      : `https://${attorney.website}`
                   }
                   target="_blank"
                   rel="nofollow noopener noreferrer"
@@ -221,7 +221,7 @@ export function AttorneyBusinessCard({ artisan }: AttorneyBusinessCardProps) {
                 >
                   <Building2 className="w-4 h-4" aria-hidden="true" />
                   <span className="truncate max-w-[180px]">
-                    {artisan.website
+                    {attorney.website
                       .replace(/^https?:\/\/(www\.)?/, '')
                       .replace(/\/$/, '')}
                   </span>

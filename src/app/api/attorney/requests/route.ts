@@ -56,30 +56,32 @@ export async function GET(request: Request) {
       return NextResponse.json({ requests: [], stats: { total: 0, new: 0, quotes_sent: 0, accepted: 0, declined: 0 } })
     }
 
-    // Fetch ALL devis_requests assigned to this provider (unfiltered) for accurate stats
-    const { data: allDemandes, error: allDemandesError } = await supabase
+    // Fetch ALL consultation requests assigned to this provider (unfiltered) for accurate stats
+    // Table 'devis_requests' = consultation requests (legacy French name)
+    const { data: allRequests, error: allRequestsError } = await supabase
       .from('devis_requests')
       .select('id, status')
       .in('id', leadIds)
 
-    if (allDemandesError) {
-      logger.error('Error fetching demandes for stats:', allDemandesError)
+    if (allRequestsError) {
+      logger.error('Error fetching consultation requests for stats:', allRequestsError)
       return NextResponse.json(
         { error: 'Error retrieving claims' },
         { status: 500 }
       )
     }
 
-    // Stats calculated on ALL demandes (not filtered by status)
+    // Stats calculated on ALL consultation requests (not filtered by status)
     const stats = {
-      total: allDemandes?.length || 0,
-      new: allDemandes?.filter(d => d.status === 'pending').length || 0,
-      quotes_sent: allDemandes?.filter(d => d.status === 'sent').length || 0,
-      accepted: allDemandes?.filter(d => d.status === 'accepted').length || 0,
-      declined: allDemandes?.filter(d => d.status === 'refused').length || 0,
+      total: allRequests?.length || 0,
+      new: allRequests?.filter(d => d.status === 'pending').length || 0,
+      quotes_sent: allRequests?.filter(d => d.status === 'sent').length || 0,
+      accepted: allRequests?.filter(d => d.status === 'accepted').length || 0,
+      declined: allRequests?.filter(d => d.status === 'refused').length || 0,
     }
 
-    // Fetch only devis_requests assigned to this provider, filtered by status if requested
+    // Fetch only consultation requests assigned to this provider, filtered by status if requested
+    // Table 'devis_requests' = consultation requests (legacy French name)
     let query = supabase
       .from('devis_requests')
       .select('id, client_id, service_id, service_name, postal_code, city, description, budget, urgency, status, client_name, client_email, client_phone, created_at, updated_at')
@@ -91,10 +93,10 @@ export async function GET(request: Request) {
       query = query.eq('status', status)
     }
 
-    const { data: demandes, error: demandesError } = await query
+    const { data: consultationRequests, error: requestsFetchError } = await query
 
-    if (demandesError) {
-      logger.error('Error fetching demandes:', demandesError)
+    if (requestsFetchError) {
+      logger.error('Error fetching consultation requests:', requestsFetchError)
       return NextResponse.json(
         { error: 'Error retrieving claims' },
         { status: 500 }
@@ -102,11 +104,11 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({
-      requests: demandes || [],
+      requests: consultationRequests || [],
       stats
     })
   } catch (error) {
-    logger.error('Demandes GET error:', error)
+    logger.error('Attorney requests GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }

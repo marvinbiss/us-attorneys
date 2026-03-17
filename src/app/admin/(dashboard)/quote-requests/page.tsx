@@ -49,7 +49,7 @@ interface Assignment {
 }
 
 interface QuoteListResponse {
-  demandes: QuoteRequest[]
+  requests: QuoteRequest[]
   assignments: Record<string, Assignment[]>
   totalPages: number
   total: number
@@ -100,7 +100,7 @@ export default function AdminQuoteRequestsPage() {
   const url = `/api/admin/quotes?page=${page}&limit=20&status=${status}&search=${encodeURIComponent(search)}`
   const { data, isLoading, error, mutate } = useAdminFetch<QuoteListResponse>(url)
 
-  const requests = data?.demandes || [] // API field name
+  const requests = data?.requests || []
   const assignments = data?.assignments || {}
   const totalPages = data?.totalPages || 1
   const total = data?.total || 0

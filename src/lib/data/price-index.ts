@@ -30,5 +30,5 @@ export const regionalIndices: RegionalIndex[] = []
 
 export function getNationalAverageFee(): number { return 0 }
 export function getAverageVariation(): number { return 0 }
-export function getNombreMetiers(): number { return 0 }
-export function getNombreRegions(): number { return 0 }
+export function getPracticeAreaCount(): number { return 0 }
+export function getStateCount(): number { return 0 }

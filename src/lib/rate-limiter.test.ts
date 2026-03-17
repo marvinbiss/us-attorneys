@@ -92,7 +92,7 @@ describe('getRateLimitConfig', () => {
   })
 
   it('returns default config for non-API routes', () => {
-    expect(getRateLimitConfig('/practice-areas/plombier/paris')).toBe(RATE_LIMITS.default)
+    expect(getRateLimitConfig('/practice-areas/personal-injury/new-york')).toBe(RATE_LIMITS.default)
     expect(getRateLimitConfig('/')).toBe(RATE_LIMITS.default)
   })
 })

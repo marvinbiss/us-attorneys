@@ -9,13 +9,13 @@ import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jso
 import { SITE_URL } from '@/lib/seo/config'
 import { cities, getCityBySlug, practiceAreas, getRegionSlugByName, getStateByCode, getNeighborhoodsByCity } from '@/lib/data/usa'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
-import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
+import { generateCityContent, hashCode } from '@/lib/seo/location-content'
 import problems from '@/lib/data/problems'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
 export function generateStaticParams() {
-  return cities.slice(0, TOP_CITIES_COUNT).map((ville) => ({ city: ville.slug }))
+  return cities.slice(0, TOP_CITIES_COUNT).map((c) => ({ city: c.slug }))
 }
 
 export const dynamicParams = true
@@ -31,32 +31,32 @@ function truncateTitle(title: string, maxLen = 42): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { city: villeSlug } = await params
-  const ville = getCityBySlug(villeSlug)
-  if (!ville) return { title: 'City Not Found' }
-  const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
+  const { city: citySlug } = await params
+  const cityInfo = getCityBySlug(citySlug)
+  if (!cityInfo) return { title: 'City Not Found' }
+  const cityRegion = getStateByCode(cityInfo.stateCode)?.region ?? ''
 
-  const cityImage = getCityImage(villeSlug)
-  const metaContent = generateVilleContent(ville)
+  const cityImage = getCityImage(citySlug)
+  const metaContent = generateCityContent(cityInfo)
 
 
-  const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
+  const titleHash = Math.abs(hashCode(`title-cityInfo-${cityInfo.slug}`))
   const titleTemplates = [
-    `Attorneys ${ville.name} (${ville.stateCode}) — Consultation`,
-    `Attorney ${ville.name} — Free Consultation`,
-    `${ville.name}: Qualified Attorneys — Consult`,
-    `Attorneys in ${ville.name} — Compare`,
-    `${ville.name} (${ville.stateCode}) — Directory`,
+    `Attorneys ${cityInfo.name} (${cityInfo.stateCode}) — Consultation`,
+    `Attorney ${cityInfo.name} — Free Consultation`,
+    `${cityInfo.name}: Qualified Attorneys — Consult`,
+    `Attorneys in ${cityInfo.name} — Compare`,
+    `${cityInfo.name} (${cityInfo.stateCode}) — Directory`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const descHash = Math.abs(hashCode(`desc-ville-${ville.slug}`))
+  const descHash = Math.abs(hashCode(`desc-cityInfo-${cityInfo.slug}`))
   const descTemplates = [
-    `Find qualified attorneys in ${ville.name} (${ville.stateCode}). ${metaContent.profile.climateLabel}, ${practiceAreas.length} practice areas. Free consultations.`,
-    `${ville.name}, ${ville.stateName}: verified attorneys. ${metaContent.profile.citySizeLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Free consultation.`,
-    `Directory of ${practiceAreas.length} practice areas in ${ville.name} (${ville.stateCode}), ${villeRegion}. ${metaContent.profile.climateLabel}. Compare attorneys.`,
-    `Attorneys in ${ville.name}: family law, personal injury, criminal defense and more. Pop. ${ville.population}, ${ville.stateName}. Free consultations online.`,
-    `All attorneys in ${ville.name} (${ville.stateCode}). ${metaContent.profile.citySizeLabel} in ${villeRegion}. ${practiceAreas.length} practice areas, free consultation.`,
+    `Find qualified attorneys in ${cityInfo.name} (${cityInfo.stateCode}). ${metaContent.profile.climateLabel}, ${practiceAreas.length} practice areas. Free consultations.`,
+    `${cityInfo.name}, ${cityInfo.stateName}: verified attorneys. ${metaContent.profile.citySizeLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Free consultation.`,
+    `Directory of ${practiceAreas.length} practice areas in ${cityInfo.name} (${cityInfo.stateCode}), ${cityRegion}. ${metaContent.profile.climateLabel}. Compare attorneys.`,
+    `Attorneys in ${cityInfo.name}: family law, personal injury, criminal defense and more. Pop. ${cityInfo.population}, ${cityInfo.stateName}. Free consultations online.`,
+    `All attorneys in ${cityInfo.name} (${cityInfo.stateCode}). ${metaContent.profile.citySizeLabel} in ${cityRegion}. ${practiceAreas.length} practice areas, free consultation.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       images: [cityImage
         ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
-        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Attorneys in ${ville.name}` }
+        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Attorneys in ${cityInfo.name}` }
       ],
     },
     twitter: {
@@ -81,32 +81,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [cityImage ? cityImage.src : `${SITE_URL}/opengraph-image`],
     },
-    alternates: { canonical: `${SITE_URL}/cities/${villeSlug}` },
+    alternates: { canonical: `${SITE_URL}/cities/${citySlug}` },
   }
 }
 
 export default async function VillePage({ params }: PageProps) {
-  const { city: villeSlug } = await params
-  const ville = getCityBySlug(villeSlug)
-  if (!ville) notFound()
-  const villeRegion = getStateByCode(ville.stateCode)?.region ?? ''
+  const { city: citySlug } = await params
+  const cityInfo = getCityBySlug(citySlug)
+  if (!cityInfo) notFound()
+  const cityRegion = getStateByCode(cityInfo.stateCode)?.region ?? ''
 
   // Get other cities in the same state
   const nearbyVilles = cities.filter(
-    (v) => v.stateCode === ville.stateCode && v.slug !== ville.slug
+    (v) => v.stateCode === cityInfo.stateCode && v.slug !== cityInfo.slug
   )
 
   // Get other cities in the same region
   const regionVilles = cities.filter(
-    (v) => getStateByCode(v.stateCode)?.region === villeRegion && v.slug !== ville.slug
+    (v) => getStateByCode(v.stateCode)?.region === cityRegion && v.slug !== cityInfo.slug
   ).slice(0, 8)
 
-  const regionSlug = getRegionSlugByName(villeRegion)
-  const dept = getStateByCode(ville.stateCode)
+  const regionSlug = getRegionSlugByName(cityRegion)
+  const dept = getStateByCode(cityInfo.stateCode)
   const deptSlug = dept?.slug
 
   // Generate unique SEO content
-  const content = generateVilleContent(ville)
+  const content = generateCityContent(cityInfo)
   const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
   const orderedServices = [...practiceAreas].sort((a, b) => {
     const aIdx = content.profile.topServiceSlugs.indexOf(a.slug)
@@ -115,19 +115,19 @@ export default async function VillePage({ params }: PageProps) {
   })
 
   // JSON-LD structured data
-  const cityImage = getCityImage(ville.slug)
+  const cityImage = getCityImage(cityInfo.slug)
   const placeSchema = getPlaceSchema({
-    name: ville.name,
-    slug: ville.slug,
-    region: villeRegion,
-    department: ville.stateName,
-    description: `Find qualified attorneys in ${ville.name}. Family law, personal injury, criminal defense and more.`,
+    name: cityInfo.name,
+    slug: cityInfo.slug,
+    region: cityRegion,
+    department: cityInfo.stateName,
+    description: `Find qualified attorneys in ${cityInfo.name}. Family law, personal injury, criminal defense and more.`,
     image: cityImage?.src,
   })
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Cities', url: '/cities' },
-    { name: ville.name, url: `/cities/${ville.slug}` },
+    { name: cityInfo.name, url: `/cities/${cityInfo.slug}` },
   ])
 
   const faqSchema = getFAQSchema(content.faqItems)
@@ -168,9 +168,9 @@ export default async function VillePage({ params }: PageProps) {
           <div className="mb-10">
             <Breadcrumb
               items={[
-                ...(regionSlug ? [{ label: villeRegion, href: `/regions/${regionSlug}` }] : []),
-                ...(deptSlug ? [{ label: `${ville.stateName} (${ville.stateCode})`, href: `/states/${deptSlug}` }] : []),
-                { label: ville.name },
+                ...(regionSlug ? [{ label: cityRegion, href: `/regions/${regionSlug}` }] : []),
+                ...(deptSlug ? [{ label: `${cityInfo.stateName} (${cityInfo.stateCode})`, href: `/states/${deptSlug}` }] : []),
+                { label: cityInfo.name },
               ]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
             />
@@ -189,13 +189,13 @@ export default async function VillePage({ params }: PageProps) {
             </div>
 
             {(() => {
-              const h1Hash = Math.abs(hashCode(`h1-ville-${ville.slug}`))
+              const h1Hash = Math.abs(hashCode(`h1-cityInfo-${cityInfo.slug}`))
               const h1Templates = [
-                `Attorneys in ${ville.name}`,
-                `Find an Attorney in ${ville.name} (${ville.stateCode})`,
-                `${ville.name}: Qualified Attorneys for Your Legal Needs`,
-                `Attorneys in ${ville.name}, ${ville.stateName}`,
-                `${practiceAreas.length} Practice Areas in ${ville.name}`,
+                `Attorneys in ${cityInfo.name}`,
+                `Find an Attorney in ${cityInfo.name} (${cityInfo.stateCode})`,
+                `${cityInfo.name}: Qualified Attorneys for Your Legal Needs`,
+                `Attorneys in ${cityInfo.name}, ${cityInfo.stateName}`,
+                `${practiceAreas.length} Practice Areas in ${cityInfo.name}`,
               ]
               return (
                 <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -211,15 +211,15 @@ export default async function VillePage({ params }: PageProps) {
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-blue-400" />
-                <span>{villeRegion}</span>
+                <span>{cityRegion}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-blue-400" />
-                <span>{ville.stateName} ({ville.stateCode})</span>
+                <span>{cityInfo.stateName} ({cityInfo.stateCode})</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Users className="w-4 h-4 text-blue-400" />
-                <span>{ville.population} residents</span>
+                <span>{cityInfo.population} residents</span>
               </div>
             </div>
 
@@ -245,7 +245,7 @@ export default async function VillePage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Find an Attorney in {ville.name}
+                Find an Attorney in {cityInfo.name}
               </h2>
               <p className="text-sm text-slate-500">{practiceAreas.length} practice areas available</p>
             </div>
@@ -254,21 +254,21 @@ export default async function VillePage({ params }: PageProps) {
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
-                href={`/practice-areas/${service.slug}/${villeSlug}`}
+                href={`/practice-areas/${service.slug}/${citySlug}`}
                 className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
                   <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Top Priority</span>
                 )}
                 <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{service.name}</h3>
-                <p className="text-xs text-slate-400 mt-1.5">in {ville.name}</p>
+                <p className="text-xs text-slate-400 mt-1.5">in {cityInfo.name}</p>
               </Link>
             ))}
           </div>
         </section>
 
         {/* ─── QUARTIERS ────────────────────────────────────── */}
-        {ville.neighborhoods && ville.neighborhoods.length > 0 && (
+        {cityInfo.neighborhoods && cityInfo.neighborhoods.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
@@ -276,15 +276,15 @@ export default async function VillePage({ params }: PageProps) {
               </div>
               <div>
                 <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                  Neighborhoods Served in {ville.name}
+                  Neighborhoods Served in {cityInfo.name}
                 </h2>
-                <p className="text-sm text-slate-500">{ville.neighborhoods.length} neighborhoods covered</p>
+                <p className="text-sm text-slate-500">{cityInfo.neighborhoods.length} neighborhoods covered</p>
               </div>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-6">
               <div className="flex flex-wrap gap-2.5">
-                {getNeighborhoodsByCity(villeSlug).map(({ name, slug }) => (
-                  <Link key={slug} href={`/cities/${villeSlug}/${slug}`} className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors">
+                {getNeighborhoodsByCity(citySlug).map(({ name, slug }) => (
+                  <Link key={slug} href={`/cities/${citySlug}/${slug}`} className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors">
                     {name}
                   </Link>
                 ))}
@@ -301,7 +301,7 @@ export default async function VillePage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-                Profile of {ville.name}
+                Profile of {cityInfo.name}
               </h2>
               <p className="text-sm text-slate-500">{content.profile.citySizeLabel} · {content.profile.climateLabel}</p>
             </div>
@@ -326,19 +326,19 @@ export default async function VillePage({ params }: PageProps) {
                 <Users className="w-4 h-4 text-violet-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Population</span>
               </div>
-              <p className="font-bold text-slate-900">{ville.population} pop.</p>
+              <p className="font-bold text-slate-900">{cityInfo.population} pop.</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Building2 className="w-4 h-4 text-amber-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">State</span>
               </div>
-              <p className="font-bold text-slate-900">{ville.stateName} ({ville.stateCode})</p>
+              <p className="font-bold text-slate-900">{cityInfo.stateName} ({cityInfo.stateCode})</p>
             </div>
           </div>
 
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-4">
-            <h3 className="font-semibold text-slate-900 mb-3">Housing in {ville.name}</h3>
+            <h3 className="font-semibold text-slate-900 mb-3">Housing in {cityInfo.name}</h3>
             <p className="text-sm text-slate-600 leading-relaxed">{content.profile.habitatDescription}</p>
           </div>
 
@@ -364,7 +364,7 @@ export default async function VillePage({ params }: PageProps) {
               <TrendingUp className="w-5 h-5 text-teal-600" />
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              Legal Services in {ville.name}
+              Legal Services in {cityInfo.name}
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
@@ -373,7 +373,7 @@ export default async function VillePage({ params }: PageProps) {
               <p className="text-sm text-slate-600 leading-relaxed">{content.priorityServices}</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-3">Tips for {ville.name}</h3>
+              <h3 className="font-semibold text-slate-900 mb-3">Tips for {cityInfo.name}</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{content.cityAdvice}</p>
             </div>
           </div>
@@ -387,7 +387,7 @@ export default async function VillePage({ params }: PageProps) {
                 <Building2 className="w-5 h-5 text-violet-600" />
               </div>
               <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
-                Other Cities in {ville.stateName}
+                Other Cities in {cityInfo.stateName}
               </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -434,12 +434,12 @@ export default async function VillePage({ params }: PageProps) {
           <div className="grid md:grid-cols-3 gap-10">
             {/* Services in this city */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Practice Areas in {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Practice Areas in {cityInfo.name}</h3>
               <div className="space-y-2">
                 {practiceAreas.map((s) => (
-                  <Link key={s.slug} href={`/practice-areas/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/practice-areas/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    {s.name} in {ville.name}
+                    {s.name} in {cityInfo.name}
                   </Link>
                 ))}
               </div>
@@ -450,7 +450,7 @@ export default async function VillePage({ params }: PageProps) {
 
             {/* Region cities */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Cities in {villeRegion}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Cities in {cityRegion}</h3>
               <div className="space-y-2">
                 {regionVilles.slice(0, 10).map((v) => (
                   <Link key={v.slug} href={`/cities/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
@@ -471,7 +471,7 @@ export default async function VillePage({ params }: PageProps) {
                 {regionSlug && (
                   <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    Region {villeRegion}
+                    Region {cityRegion}
                   </Link>
                 )}
                 <Link href="/states" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
@@ -490,21 +490,21 @@ export default async function VillePage({ params }: PageProps) {
                   <ChevronRight className="w-3 h-3" />
                   Request a Consultation
                 </Link>
-                <Link href={`/quotes/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href={`/quotes/family-law/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Family Law Consultation in {ville.name}
+                  Family Law Consultation in {cityInfo.name}
                 </Link>
-                <Link href={`/quotes/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href={`/quotes/personal-injury/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Personal Injury Consultation in {ville.name}
+                  Personal Injury Consultation in {cityInfo.name}
                 </Link>
-                <Link href={`/quotes/chauffagiste/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href={`/quotes/criminal-defense/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Criminal Defense Consultation in {ville.name}
+                  Criminal Defense Consultation in {cityInfo.name}
                 </Link>
-                <Link href={`/quotes/serrurier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href={`/quotes/estate-planning/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Estate Planning Consultation in {ville.name}
+                  Estate Planning Consultation in {cityInfo.name}
                 </Link>
               </div>
             </div>
@@ -513,10 +513,10 @@ export default async function VillePage({ params }: PageProps) {
           {/* Intent variant links — quotes, reviews, pricing, emergency, issues */}
           <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-5 gap-8">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`devis-${s.slug}`} href={`/quotes/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`devis-${s.slug}`} href={`/quotes/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name.toLowerCase()} consultation
                   </Link>
@@ -524,10 +524,10 @@ export default async function VillePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`avis-${s.slug}`} href={`/reviews/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`avis-${s.slug}`} href={`/reviews/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name.toLowerCase()} reviews
                   </Link>
@@ -535,10 +535,10 @@ export default async function VillePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Fees in {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Fees in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`tarifs-${s.slug}`} href={`/pricing/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`tarifs-${s.slug}`} href={`/pricing/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name.toLowerCase()} fees
                   </Link>
@@ -546,10 +546,10 @@ export default async function VillePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Emergency in {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Emergency in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`urgence-${s.slug}`} href={`/emergency/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`urgence-${s.slug}`} href={`/emergency/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} emergency
                   </Link>
@@ -557,10 +557,10 @@ export default async function VillePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Legal Issues in {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Legal Issues in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {problems.slice(0, 15).map((p) => (
-                  <Link key={`prob-${p.slug}`} href={`/issues/${p.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-orange-600 py-1 transition-colors">
+                  <Link key={`prob-${p.slug}`} href={`/issues/${p.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-orange-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {p.name}
                   </Link>

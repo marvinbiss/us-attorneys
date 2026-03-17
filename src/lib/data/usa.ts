@@ -456,15 +456,3 @@ export function getNeighborhoodBySlug(citySlug: string, nSlug: string): { city: 
   return { city, neighborhoodName: match }
 }
 
-// Backward compatibility aliases (for code that still uses old French names)
-export const villes = cities
-export const departements = states
-export const regions = usRegions
-export const services = practiceAreas
-export const getVilleBySlug = getCityBySlug
-export const getDepartementBySlug = getStateBySlug
-export const getDepartementByCode = getStateByCode
-export const getVillesByDepartement = getCitiesByState
-export const getQuartiersByVille = getNeighborhoodsByCity
-export const getQuartierBySlug = getNeighborhoodBySlug
-export type Ville = City

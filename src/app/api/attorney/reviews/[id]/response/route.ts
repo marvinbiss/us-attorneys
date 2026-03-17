@@ -46,7 +46,7 @@ export async function POST(
       )
     }
 
-    if (review.artisan_response) {
+    if (review.attorney_response) {
       return NextResponse.json(
         { success: false, error: { message: 'This review already has a response' } },
         { status: 400 }

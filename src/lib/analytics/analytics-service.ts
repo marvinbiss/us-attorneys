@@ -209,11 +209,11 @@ export class AnalyticsService {
 
     // Top cities (mock data - would need proper join)
     const topCities = [
-      { city: 'Paris', count: 300 },
-      { city: 'Lyon', count: 150 },
-      { city: 'Marseille', count: 120 },
-      { city: 'Toulouse', count: 80 },
-      { city: 'Nice', count: 70 },
+      { city: 'New York', count: 300 },
+      { city: 'Los Angeles', count: 150 },
+      { city: 'Chicago', count: 120 },
+      { city: 'Houston', count: 80 },
+      { city: 'Phoenix', count: 70 },
     ]
 
     // Bookings by day for last 30 days

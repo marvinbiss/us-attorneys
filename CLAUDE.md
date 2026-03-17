@@ -97,6 +97,7 @@ src/
 +-- test/                 # Vitest setup
 __tests__/                # Tests (api/, components/, hooks/, lib/, services/, validations/)
 scripts/                  # activate-providers, analyze-providers, aggregate-barometre, audit-all-mappings
+scripts/ingest/           # Data ingestion pipeline (see below)
 supabase/migrations/      # 87 migration SQL files (001-355)
 android/                  # Capacitor app (WebView wrapper)
 ```
@@ -317,3 +318,53 @@ Required variables (see `.env.example`):
 - **Middleware**: skip `updateSession()` for public pages
 - **Supabase queries**: wrapped with `next: { revalidate: N }` to avoid dynamic SSR
 - **330 'use client' files**: many could be server components (future refactoring)
+
+---
+
+## Data Ingestion Pipeline
+
+### Proven Strategy: Prefix Search + Auto-Subdivision
+
+For scraping state bar "Find a Lawyer" pages, **always use this approach before paying for data**:
+
+1. **3-letter last name prefixes** (AAA-ZZZ = 17,576 combos) → each returns ≤25 results
+2. **If prefix hits the cap** → auto-subdivide with 4th letter (26 sub-queries)
+3. **Run concurrently** (20-30 parallel) → discovery completes in ~12-15 min
+4. **Fetch detail pages** concurrently for bar numbers + extra data
+
+This avoids fighting pagination (ColdFusion sessions, AJAX tokens) and avoids paying for PIA/FOIA requests.
+
+**Proven**: TX Bar — 130K attorneys discovered for $0 in ~2h (vs $200-500 PIA + 4 week wait).
+
+### Ingestion Scripts
+
+| Script | Source | Records | Method |
+|--------|--------|---------|--------|
+| `ny-attorneys.ts` | NY Open Data CSV | ~334K | Direct download (free) |
+| `ca-attorneys-{af,gl,mr,sz}.ts` | CalBar HTML | ~190K | HTML scraping (4 parallel) |
+| `tx-attorneys-opengovus.ts` | Texas Bar search | ~130K | Prefix search + detail fetch |
+| `fl-attorneys.ts` | FL Bar Excel | ~108K | Email request (free) |
+| `il-attorneys-prod.ts` | ARDC directory | ~97K | ASP.NET MvcGrid + antiforgery |
+| `oh-attorneys.ts` | OH Supreme Court | ~37K | Blocked (use PIA request) |
+| `uspto-attorneys.ts` | USPTO FY25 Roster | ~52K | Direct ZIP download (free) |
+| `link-attorneys-fast.ts` | — | — | Link attorneys → cities by address |
+| `run-all.ts` | — | — | Master orchestrator |
+
+### Running Ingestion
+
+```bash
+# Load env vars first (required for all scripts)
+export $(grep -v '^#' .env.local | xargs)
+
+# Run individual script
+npx tsx scripts/ingest/ny-attorneys.ts [--dry-run] [--limit 1000]
+
+# Run all in sequence
+npx tsx scripts/ingest/run-all.ts [--from 4] [--step 5]
+```
+
+### Key Rules
+- **Always test with `--limit 50 --dry-run` first**
+- `address_state` is CHAR(2) — never insert full state names
+- `bar_number + bar_state` is the unique constraint for upserts
+- USPTO roster URL changes yearly: update to latest FY roster in `ROSTER_URLS`

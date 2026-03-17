@@ -52,7 +52,7 @@ export {
 export { SearchBar } from './SearchBar'
 
 // Attorney Cards
-export { AttorneyCard, ArtisanGrid } from './AttorneyCard'
+export { AttorneyCard, AttorneyGrid } from './AttorneyCard'
 
 // Autocomplete (World-class, Stripe/Doctolib-style)
 export { CityAutocomplete } from './VilleAutocomplete'

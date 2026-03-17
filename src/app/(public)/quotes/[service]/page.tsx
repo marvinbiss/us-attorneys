@@ -7,7 +7,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities } from '@/lib/data/usa'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -20,7 +20,7 @@ const EstimationWidget = dynamic(
 
 export const revalidate = false
 
-const tradeSlugs = getTradesSlugs()
+const tradeSlugs = getPracticeAreaSlugs()
 
 export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))
@@ -300,7 +300,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      {/* Trouver par ville */}
+      {/* Find by city */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
@@ -400,7 +400,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      {/* Devis associés */}
+      {/* Related consultations */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Consultations for other practice areas</h2>
@@ -427,7 +427,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      {/* Voir aussi */}
+      {/* See also */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">See also</h2>

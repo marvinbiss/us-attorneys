@@ -40,7 +40,7 @@ export interface LocationData {
 
   // Local enrichment
   climat_zone: string | null
-  nb_entreprises_artisanales: number | null
+  nb_law_firms: number | null
   gentile: string | null
   description: string | null
 
@@ -48,10 +48,10 @@ export interface LocationData {
   attorney_count: number
 
   // Business enrichment
-  nb_artisans_btp: number | null
+  nb_attorneys_licensed: number | null
 
   // Certification enrichment
-  nb_artisans_rge: number | null
+  nb_attorneys_verified: number | null
 
   // Energy performance enrichment
   pct_passoires_dpe: number | null
@@ -94,9 +94,9 @@ const LOCATION_COLUMNS = [
   'latitude', 'longitude', 'altitude_moyenne', 'superficie_km2',
   'population', 'densite_population',
   'revenu_median', 'prix_m2_moyen', 'nb_logements', 'part_maisons_pct',
-  'climat_zone', 'nb_entreprises_artisanales', 'gentile', 'description',
+  'climat_zone', 'nb_law_firms', 'gentile', 'description',
   'attorney_count',
-  'nb_artisans_btp', 'nb_artisans_rge',
+  'nb_attorneys_licensed', 'nb_attorneys_verified',
   'pct_passoires_dpe', 'nb_dpe_total',
   'jours_gel_annuels', 'precipitation_annuelle',
   'mois_travaux_ext_debut', 'mois_travaux_ext_fin',
@@ -149,8 +149,8 @@ export async function getLocationBySlug(slug: string): Promise<LocationData | nu
 
 export function hasEnrichmentData(location: LocationData): boolean {
   return !!(
-    location.nb_artisans_btp ||
-    location.nb_artisans_rge ||
+    location.nb_attorneys_licensed ||
+    location.nb_attorneys_verified ||
     location.pct_passoires_dpe ||
     location.jours_gel_annuels ||
     location.nb_transactions_annuelles ||
@@ -195,8 +195,7 @@ export function formatDollarSign(n: number): string {
   return '$' + (n ?? 0).toLocaleString('en-US')
 }
 
-/** @deprecated Use formatDollarSign instead */
-export const formatEuro = formatDollarSign
+// formatEuro removed — was a deprecated alias for formatDollarSign (French legacy)
 
 const MONTH_NAMES = [
   '', 'January', 'February', 'March', 'April', 'May', 'June',

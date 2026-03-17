@@ -49,7 +49,7 @@ export interface LocationContent {
 export function generateLocationContent(
   _specialtySlug: string,
   _specialtyName: string,
-  _villeRaw: unknown,
+  _cityRaw: unknown,
   _attorneyCount: number = 0,
   _locationData?: unknown | null | undefined,
 ): LocationContent {
@@ -68,10 +68,10 @@ export function generateLocationContent(
 }
 
 // ---------------------------------------------------------------------------
-// Quartier content
+// Neighborhood content
 // ---------------------------------------------------------------------------
 
-export interface QuartierProfile {
+export interface NeighborhoodProfile {
   era: string
   eraLabel: string
   density: string
@@ -98,7 +98,7 @@ export interface NeighborhoodDataDrivenContent {
 }
 
 export interface NeighborhoodContent {
-  profile: QuartierProfile
+  profile: NeighborhoodProfile
   intro: string
   buildingContext: string
   demandedServices: string
@@ -108,15 +108,12 @@ export interface NeighborhoodContent {
   dataDriven: NeighborhoodDataDrivenContent | null
 }
 
-/** @deprecated Use NeighborhoodContent instead */
-export type QuartierContent = NeighborhoodContent
-
-export function generateQuartierContent(_villeRaw: unknown, _quartierName: string, _specialtySlug?: string): NeighborhoodContent {
+export function generateNeighborhoodContent(_cityRaw: unknown, _neighborhoodName: string, _specialtySlug?: string): NeighborhoodContent {
   return {
     profile: {
-      era: 'mixte',
+      era: 'mixed',
       eraLabel: '',
-      density: 'residentiel',
+      density: 'residential',
       densityLabel: '',
       commonIssues: [],
       topServiceSlugs: [],
@@ -133,10 +130,10 @@ export function generateQuartierContent(_villeRaw: unknown, _quartierName: strin
 }
 
 // ---------------------------------------------------------------------------
-// Departement content
+// State content
 // ---------------------------------------------------------------------------
 
-export interface DepartementProfile {
+export interface StateProfile {
   climate: string
   climateLabel: string
   economy: string
@@ -148,7 +145,7 @@ export interface DepartementProfile {
 }
 
 export interface StateContent {
-  profile: DepartementProfile
+  profile: StateProfile
   intro: string
   housingContext: string
   priorityServices: string
@@ -156,17 +153,14 @@ export interface StateContent {
   faqItems: { question: string; answer: string }[]
 }
 
-/** @deprecated Use StateContent instead */
-export type DepartementContent = StateContent
-
-export function generateDepartementContent(_deptRaw: unknown): StateContent {
+export function generateStateContent(_deptRaw: unknown): StateContent {
   return {
     profile: {
-      climate: 'semi-oceanique',
+      climate: 'semi-oceanic',
       climateLabel: '',
-      economy: 'mixte',
+      economy: 'mixed',
       economyLabel: '',
-      housing: 'mixte-urbain',
+      housing: 'mixed-urban',
       housingLabel: '',
       topServiceSlugs: [],
       climaticIssues: [],
@@ -206,11 +200,11 @@ export interface RegionContent {
 export function generateRegionContent(_regionRaw: unknown, _cityCountOverride?: number): RegionContent {
   return {
     profile: {
-      climate: 'semi-oceanique',
+      climate: 'semi-oceanic',
       climateLabel: '',
-      geoType: 'plaine',
+      geoType: 'plain',
       geoLabel: '',
-      economy: 'economie-diversifiee',
+      economy: 'diversified-economy',
       economyLabel: '',
       topServiceSlugs: [],
       keyFacts: [],
@@ -224,10 +218,10 @@ export function generateRegionContent(_regionRaw: unknown, _cityCountOverride?: 
 }
 
 // ---------------------------------------------------------------------------
-// Ville (City) content
+// City content
 // ---------------------------------------------------------------------------
 
-export interface VilleProfile {
+export interface CityProfile {
   climate: string
   climateLabel: string
   citySize: string
@@ -238,7 +232,7 @@ export interface VilleProfile {
 }
 
 export interface CityContent {
-  profile: VilleProfile
+  profile: CityProfile
   intro: string
   urbanContext: string
   priorityServices: string
@@ -246,15 +240,12 @@ export interface CityContent {
   faqItems: { question: string; answer: string }[]
 }
 
-/** @deprecated Use CityContent instead */
-export type VilleContent = CityContent
-
-export function generateVilleContent(_villeRaw: unknown): CityContent {
+export function generateCityContent(_cityRaw: unknown): CityContent {
   return {
     profile: {
-      climate: 'semi-oceanique',
+      climate: 'semi-oceanic',
       climateLabel: '',
-      citySize: 'petite-ville',
+      citySize: 'small-town',
       citySizeLabel: '',
       topServiceSlugs: [],
       climaticIssues: [],

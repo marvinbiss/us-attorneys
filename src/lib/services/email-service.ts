@@ -112,8 +112,8 @@ export const emailTemplates = {
     `
   }),
 
-  // Welcome email for new artisans
-  welcomeArtisan: (name: string): EmailTemplate => ({
+  // Welcome email for new attorneys
+  welcomeAttorney: (name: string): EmailTemplate => ({
     subject: 'Welcome to US Attorneys - Your attorney dashboard is ready!',
     html: `
       <!DOCTYPE html>

@@ -24,12 +24,12 @@ const messageSchema = z.object({
 })
 
 const contextSchema = z.object({
-  metier: z.string().min(1),
-  metierSlug: z.string().optional(),
-  ville: z.string().min(1),
-  departement: z.string().max(3).optional().default(''),
+  practiceArea: z.string().min(1),
+  practiceAreaSlug: z.string().optional(),
+  city: z.string().min(1),
+  state: z.string().max(3).optional().default(''),
   pageUrl: z.string().optional(),
-  artisan: z.object({
+  attorney: z.object({
     name: z.string().min(1),
     slug: z.string().optional().default(''),
     publicId: z.string().optional().default(''),
@@ -45,6 +45,7 @@ const requestSchema = z.object({
 // Types
 // ---------------------------------------------------------------------------
 
+// DB-bound: column names from prestations_tarifs table (legacy French names, do not rename without migration)
 interface Tarif {
   prestation: string
   prix_min: number
@@ -71,28 +72,28 @@ function formatGrid(tarifs: Tarif[]): string {
 }
 
 function buildSystemPrompt(
-  metierName: string,
-  ville: string,
-  departement: string,
+  practiceAreaName: string,
+  cityName: string,
+  stateCode: string,
   coefficient: number,
   formattedGrid: string,
   attorneyName?: string,
 ): string {
   const attorneyLine = attorneyName
-    ? `\n• Attorney: ${attorneyName}\nThe visitor is viewing the profile of ${attorneyName}, a ${metierName.toLowerCase()} attorney in ${ville}.`
+    ? `\n• Attorney: ${attorneyName}\nThe visitor is viewing the profile of ${attorneyName}, a ${practiceAreaName.toLowerCase()} attorney in ${cityName}.`
     : ''
 
   const ctaLine = attorneyName
     ? `"Would you like to send your inquiry to ${attorneyName}?"`
-    : `"Would you like to connect with a verified ${metierName.toLowerCase()} attorney in ${ville}?"`
+    : `"Would you like to connect with a verified ${practiceAreaName.toLowerCase()} attorney in ${cityName}?"`
 
   return `You are the fee estimation assistant for us-attorneys.com.
 CONTEXT:
-• Practice Area: ${metierName}
-• City: ${ville} (${departement})
+• Practice Area: ${practiceAreaName}
+• City: ${cityName} (${stateCode})
 • Geographic coefficient: ${coefficient} (REQUIRED: ALWAYS multiply the fee schedule prices by this coefficient)${attorneyLine}
 
-FEE SCHEDULE — ${metierName.toUpperCase()}:
+FEE SCHEDULE — ${practiceAreaName.toUpperCase()}:
 ${formattedGrid}
 
 STRICT RULES:
@@ -158,10 +159,10 @@ export async function POST(request: NextRequest) {
     }
 
     const { messages, context } = validation.data
-    const { metier, ville, departement } = context
+    const { practiceArea, city, state: stateCode } = context
 
-    // Normalize metier to lowercase for DB lookup (widget sends display name like "Plombier")
-    const metierLower = metier.toLowerCase()
+    // Normalize practice area to lowercase for DB lookup
+    const practiceAreaLower = practiceArea.toLowerCase()
 
     // Guard: max 20 messages
     if (messages.length > 20) {
@@ -171,16 +172,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 2. Fetch tariff grid (cached 24h)
+    // 2. Fetch fee schedule grid (cached 24h)
     const supabase = createAdminClient()
 
     const tarifs = await getCachedData<Tarif[]>(
-      `tarifs:${metierLower}`,
+      `tarifs:${practiceAreaLower}`,
       async () => {
         const { data, error } = await supabase
           .from('prestations_tarifs')
           .select('prestation, prix_min, prix_max, unite')
-          .eq('metier', metierLower)
+          .eq('metier', practiceAreaLower)
 
         if (error) {
           logger.error('Error fetching fee schedule', error, { action: 'estimation' })
@@ -194,16 +195,16 @@ export async function POST(request: NextRequest) {
 
     // 3. Fetch geographic coefficient (cached 7d)
     const coeffData = await getCachedData<CoefficientGeo | null>(
-      `coeff:${departement}`,
+      `coeff:${stateCode}`,
       async () => {
         const { data, error } = await supabase
           .from('coefficients_geo')
           .select('coefficient')
-          .eq('departement', departement)
+          .eq('departement', stateCode)
           .single()
 
         if (error) {
-          logger.warn('Geographic coefficient not found, using 1.0', { action: 'estimation', departement })
+          logger.warn('Geographic coefficient not found, using 1.0', { action: 'estimation', state: stateCode })
           return null
         }
         return data as CoefficientGeo
@@ -214,13 +215,13 @@ export async function POST(request: NextRequest) {
     const coefficient = coeffData?.coefficient ?? 1.0
 
     // 4. Build system prompt (sanitize context fields to prevent prompt injection)
-    const safeMetier = sanitizeForPrompt(metier)
-    const safeVille = sanitizeForPrompt(ville)
-    const safeDepartement = sanitizeForPrompt(departement)
-    const safeArtisanName = context.artisan?.name ? sanitizeForPrompt(context.artisan.name) : undefined
+    const safePracticeArea = sanitizeForPrompt(practiceArea)
+    const safeCity = sanitizeForPrompt(city)
+    const safeState = sanitizeForPrompt(stateCode)
+    const safeAttorneyName = context.attorney?.name ? sanitizeForPrompt(context.attorney.name) : undefined
 
     const formattedGrid = formatGrid(tarifs)
-    const systemPrompt = buildSystemPrompt(safeMetier, safeVille, safeDepartement, coefficient, formattedGrid, safeArtisanName)
+    const systemPrompt = buildSystemPrompt(safePracticeArea, safeCity, safeState, coefficient, formattedGrid, safeAttorneyName)
 
     // 5. Call Anthropic with streaming + timeout
     const anthropic = new Anthropic()

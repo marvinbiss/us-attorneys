@@ -7,7 +7,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
-import { providerArtisanUpdateSchema } from '@/schemas/provider'
+import { providerAttorneyUpdateSchema } from '@/schemas/provider'
 // DOMPurify lazy-imported inside PUT to avoid JSDOM crash in serverless cold start
 
 export const dynamic = 'force-dynamic'
@@ -122,7 +122,7 @@ export async function PUT(request: Request) {
 
     // Parse + validate body
     const body = await request.json()
-    const result = providerArtisanUpdateSchema.safeParse(body)
+    const result = providerAttorneyUpdateSchema.safeParse(body)
 
     if (!result.success) {
       return NextResponse.json(

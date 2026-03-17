@@ -61,21 +61,21 @@ const tradeFaqs = [
 ]
 
 const tradeEmojis: Record<string, string> = {
-  plombier: '🔧',
-  electricien: '⚡',
-  serrurier: '🔑',
-  chauffagiste: '🔥',
-  'peintre-en-batiment': '🎨',
-  menuisier: '🪚',
-  carreleur: '🧱',
-  couvreur: '🏠',
-  macon: '🏗️',
-  jardinier: '🌳',
-  vitrier: '🪟',
-  climaticien: '❄️',
-  cuisiniste: '🍳',
-  solier: '🛋️',
-  nettoyage: '✨',
+  'personal-injury': '🔧',
+  'criminal-defense': '⚡',
+  'family-law': '🔑',
+  'employment-law': '🔥',
+  'intellectual-property': '🎨',
+  'estate-planning': '🪚',
+  'immigration-law': '🧱',
+  'real-estate-law': '🏠',
+  'business-law': '🏗️',
+  'bankruptcy': '🌳',
+  'dui-dwi': '🪟',
+  'workers-compensation': '❄️',
+  'medical-malpractice': '🍳',
+  'tax-law': '🛋️',
+  'civil-rights': '✨',
 }
 
 export default async function PricingPage() {
@@ -452,7 +452,7 @@ export default async function PricingPage() {
                   <Link href="/reviews" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Client reviews
                   </Link>
-                  <Link href="/tools/calculator-prix" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/tools/calculator" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Fee calculator
                   </Link>
                 </div>

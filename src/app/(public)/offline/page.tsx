@@ -13,18 +13,18 @@ export default function OfflinePage() {
         </div>
 
         <h1 className="font-heading text-3xl font-bold text-gray-900 mb-4 tracking-tight">
-          Hors connexion
+          You are offline
         </h1>
         <p className="text-gray-600 mb-8">
-          Vous semblez ne pas avoir de connexion internet.
-          Vérifiez votre connexion et réessayez.
+          It looks like you don&apos;t have an internet connection.
+          Please check your connection and try again.
         </p>
 
         <button
           onClick={() => window.location.reload()}
           className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
         >
-          Réessayer
+          Try again
         </button>
       </div>
     </div>

@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
       }
 
       const result = await dispatchLead(currentReplay.lead_id, {
-        sourceTable: (currentReplay.source_table as 'devis_requests' | 'leads') || 'devis_requests',
+        sourceTable: (currentReplay.source_table as 'devis_requests' | 'leads') || 'devis_requests', // legacy table name 'devis_requests' = consultation requests
       })
 
       await logAdminAction(

@@ -7,22 +7,22 @@ test.describe('Admin Authentication', () => {
   test('should redirect unauthenticated users to login', async ({ page }) => {
     await page.goto('/admin')
     // Should be redirected to login page
-    await expect(page).toHaveURL(/connexion/)
+    await expect(page).toHaveURL(/login/)
   })
 
-  test('should redirect from admin artisans page to login', async ({ page }) => {
-    await page.goto('/admin/artisans')
-    await expect(page).toHaveURL(/connexion/)
+  test('should redirect from admin attorneys page to login', async ({ page }) => {
+    await page.goto('/admin/attorneys')
+    await expect(page).toHaveURL(/login/)
   })
 
-  test('should redirect from admin avis page to login', async ({ page }) => {
-    await page.goto('/admin/avis')
-    await expect(page).toHaveURL(/connexion/)
+  test('should redirect from admin reviews page to login', async ({ page }) => {
+    await page.goto('/admin/reviews')
+    await expect(page).toHaveURL(/login/)
   })
 
-  test('should redirect from admin abonnements page to login', async ({ page }) => {
-    await page.goto('/admin/abonnements')
-    await expect(page).toHaveURL(/connexion/)
+  test('should redirect from admin subscriptions page to login', async ({ page }) => {
+    await page.goto('/admin/subscriptions')
+    await expect(page).toHaveURL(/login/)
   })
 })
 
@@ -36,18 +36,18 @@ test.describe('Admin Page Structure', () => {
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('admin artisans route should be defined', async ({ page }) => {
-    const response = await page.goto('/admin/artisans')
+  test('admin attorneys route should be defined', async ({ page }) => {
+    const response = await page.goto('/admin/attorneys')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('admin avis route should be defined', async ({ page }) => {
-    const response = await page.goto('/admin/avis')
+  test('admin reviews route should be defined', async ({ page }) => {
+    const response = await page.goto('/admin/reviews')
     expect(response?.status()).toBeLessThan(500)
   })
 
-  test('admin abonnements route should be defined', async ({ page }) => {
-    const response = await page.goto('/admin/abonnements')
+  test('admin subscriptions route should be defined', async ({ page }) => {
+    const response = await page.goto('/admin/subscriptions')
     expect(response?.status()).toBeLessThan(500)
   })
 })

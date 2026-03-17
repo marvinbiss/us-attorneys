@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities, getCityBySlug } from '@/lib/data/usa'
 
 function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
-const tradeSlugs = getTradesSlugs()
+const tradeSlugs = getPracticeAreaSlugs()
 
 const top5Cities = [...cities]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))

@@ -141,8 +141,8 @@ describe('generateCacheKey', () => {
   })
 
   it('uses prefix correctly', () => {
-    const key = generateCacheKey('artisans', { city: 'paris' })
-    expect(key.startsWith('artisans:')).toBe(true)
+    const key = generateCacheKey('attorneys', { city: 'new-york' })
+    expect(key.startsWith('attorneys:')).toBe(true)
   })
 
   it('different params produce different keys', () => {

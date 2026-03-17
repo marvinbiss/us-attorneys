@@ -7,7 +7,7 @@ import { getCityBySlug } from '@/lib/data/usa'
 // Return a minimal seed set (NOT empty — empty array in a child of a parent
 // with generateStaticParams causes a 500 on Vercel with Next.js 14.2).
 export function generateStaticParams() {
-  return [{ service: 'plombier', city: 'paris', travail: 'debouchage-de-canalisation' }]
+  return [{ service: 'personal-injury', city: 'new-york', task: 'debouchage-de-canalisation' }]
 }
 
 export const dynamicParams = true
@@ -16,15 +16,15 @@ export const revalidate = 86400
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ service: string; city: string; travail: string }>
+  params: Promise<{ service: string; city: string; task: string }>
 }): Promise<Metadata> {
-  const { service, city: villeSlug, travail } = await params
+  const { service, city: villeSlug, task: taskSlug } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) return {}
 
   const tasks = getTasksForService(service)
-  const task = tasks.find((t) => t.slug === travail)
+  const task = tasks.find((t) => t.slug === taskSlug)
 
   const title = task
     ? `${task.name} in ${villeData.name} — Pricing`
@@ -33,22 +33,22 @@ export async function generateMetadata({
   return {
     title,
     robots: { index: false },
-    alternates: { canonical: `${SITE_URL}/pricing/${service}/${villeSlug}/${travail}` },
+    alternates: { canonical: `${SITE_URL}/pricing/${service}/${villeSlug}/${taskSlug}` },
   }
 }
 
-export default async function PricingServiceTravailVillePage({
+export default async function PricingServiceTaskCityPage({
   params,
 }: {
-  params: Promise<{ service: string; city: string; travail: string }>
+  params: Promise<{ service: string; city: string; task: string }>
 }) {
-  const { service, city: villeSlug, travail } = await params
+  const { service, city: villeSlug, task: taskSlug } = await params
   const trade = tradeContent[service]
   const villeData = getCityBySlug(villeSlug)
   if (!trade || !villeData) notFound()
 
   const tasks = getTasksForService(service)
-  const task = tasks.find((t) => t.slug === travail)
+  const task = tasks.find((t) => t.slug === taskSlug)
   if (!task) notFound()
 
   return (

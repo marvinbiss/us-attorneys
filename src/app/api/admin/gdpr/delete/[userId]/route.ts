@@ -54,8 +54,8 @@ export async function POST(
         .maybeSingle()
 
       // Step 2 — Check if user is an attorney
-      completedSteps.push('check_artisan')
-      const { data: artisanRecord } = await supabase
+      completedSteps.push('check_attorney')
+      const { data: attorneyRecord } = await supabase
         .from('attorneys')
         .select('id')
         .eq('user_id', userId)
@@ -85,8 +85,8 @@ export async function POST(
       }
 
       // Step 5 — Anonymize review responses only if user is an attorney
-      completedSteps.push('anonymize_artisan_reviews')
-      if (artisanRecord) {
+      completedSteps.push('anonymize_attorney_reviews')
+      if (attorneyRecord) {
         await supabase
           .from('reviews')
           .update({
@@ -98,7 +98,7 @@ export async function POST(
 
       // Step 6 — Deactivate provider if user is an attorney
       completedSteps.push('deactivate_provider')
-      if (artisanRecord) {
+      if (attorneyRecord) {
         await supabase
           .from('attorneys')
           .update({

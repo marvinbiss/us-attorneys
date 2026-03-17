@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * STUB — French autocomplete hooks removed (depended on adresse.data.gouv.fr).
+ * STUB — Autocomplete hooks (originally used French gov API adresse.data.gouv.fr).
  * All hooks return no-op values for backward compatibility.
  * TODO: Replace with US address/geocoding APIs (USPS, Google Places, etc.)
  */
@@ -83,19 +83,22 @@ export function usePostalCodeLookup() {
   }
 }
 
-export function useSiretValidation() {
-  const [siret, setSiret] = useState('')
+export function useBarNumberValidation() {
+  const [barNumber, setBarNumber] = useState('')
   return {
-    siret,
-    setSiret: (value: string) => setSiret(value.replace(/\D/g, '').slice(0, 14)),
-    rawSiret: siret.replace(/\s/g, ''),
+    barNumber,
+    setBarNumber: (value: string) => setBarNumber(value.replace(/\D/g, '').slice(0, 14)),
+    rawBarNumber: barNumber.replace(/\s/g, ''),
     isValid: null as boolean | null,
     isLoading: false,
     error: null as string | null,
     companyInfo: null as { name: string; active: boolean } | null,
-    clear: () => setSiret(''),
+    clear: () => setBarNumber(''),
   }
 }
+
+/** @deprecated Use useBarNumberValidation instead */
+export const useSiretValidation = useBarNumberValidation
 
 export function useGeolocation() {
   return {

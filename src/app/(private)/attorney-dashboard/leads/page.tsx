@@ -153,7 +153,7 @@ export default function AttorneyLeadsInbox() {
             </div>
             <div className="flex items-center gap-3">
               <Link
-                href="/attorney-dashboard/leads/statistiques"
+                href="/attorney-dashboard/leads/stats"
                 className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium"
               >
                 <BarChart3 className="w-4 h-4" />

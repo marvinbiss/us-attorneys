@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 import { getAttorneyUrl } from '@/lib/utils'
 
 interface SimilarAttorney {
@@ -20,17 +20,17 @@ interface SimilarAttorney {
 }
 
 interface AttorneySimilarProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
   similarAttorneys?: SimilarAttorney[]
 }
 
-export function AttorneySimilar({ artisan: _artisan, similarAttorneys }: AttorneySimilarProps) {
+export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: AttorneySimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Fallback: show hub link when no similar attorneys available
   if (!similarAttorneys || similarAttorneys.length === 0) {
-    const hubUrl = _artisan.specialty_slug && _artisan.city_slug
-      ? `/practice-areas/${_artisan.specialty_slug}/${_artisan.city_slug}`
+    const hubUrl = _attorney.specialty_slug && _attorney.city_slug
+      ? `/practice-areas/${_attorney.specialty_slug}/${_attorney.city_slug}`
       : null
     if (!hubUrl) return null
     return (
@@ -40,13 +40,13 @@ export function AttorneySimilar({ artisan: _artisan, similarAttorneys }: Attorne
           Similar Attorneys
         </h2>
         <p className="text-gray-600 mb-4">
-          Discover other {_artisan.specialty?.toLowerCase() || 'attorneys'} in {_artisan.city}
+          Discover other {_attorney.specialty?.toLowerCase() || 'attorneys'} in {_attorney.city}
         </p>
         <Link
           href={hubUrl}
           className="text-clay-400 hover:text-clay-600 font-medium"
         >
-          See all {_artisan.specialty?.toLowerCase() || 'attorneys'} in {_artisan.city} →
+          See all {_attorney.specialty?.toLowerCase() || 'attorneys'} in {_attorney.city} →
         </Link>
       </div>
     )

@@ -65,7 +65,7 @@ export async function GET() {
       .from('reviews')
       .select(`
         *,
-        artisan:profiles!attorney_id(id, full_name),
+        attorney:profiles!attorney_id(id, full_name),
         booking:bookings!booking_id(service_name)
       `)
       .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
@@ -85,13 +85,13 @@ export async function GET() {
     // Format published reviews
     const formattedPublishedReviews = publishedReviews?.map(r => ({
       id: r.id,
-      attorney: r.artisan?.full_name || 'Attorney',
+      attorney: r.attorney?.full_name || 'Attorney',
       attorney_id: r.attorney_id,
       service: (r.booking as { service_name?: string } | null)?.service_name || null,
       date: r.created_at,
       rating: r.rating,
       comment: r.comment,
-      response: r.artisan_response,
+      response: r.attorney_response,
     })) || []
 
     return NextResponse.json({

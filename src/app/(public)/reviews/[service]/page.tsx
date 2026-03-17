@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 
 export const revalidate = 86400
 
-const tradeSlugs = getTradesSlugs()
+const tradeSlugs = getPracticeAreaSlugs()
 
 export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))

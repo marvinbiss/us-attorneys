@@ -48,7 +48,7 @@ const categories = [
           "Minimum number of outlets per room, GFCI protection required in wet areas, circuit breaker panel requirements, safety zones in bathrooms, dedicated circuits for major appliances (oven, dryer, washer).",
         link: "/guides/normes-electriques",
         linkLabel: "Electrical Code Guide",
-        service: "/practice-areas/electricien",
+        service: "/practice-areas/criminal-defense",
         serviceLabel: "Find an electrician",
       },
     ],
@@ -63,7 +63,7 @@ const categories = [
         scope: "Plumbing systems for buildings",
         requirements:
           "Pipe diameters for supply lines, water pressure requirements (40-80 PSI), backflow prevention devices, approved materials (copper, PEX, CPVC), drain-waste-vent system specifications.",
-        service: "/practice-areas/plombier",
+        service: "/practice-areas/personal-injury",
         serviceLabel: "Find a plumber",
       },
       {
@@ -71,7 +71,7 @@ const categories = [
         scope: "Wastewater and stormwater drainage",
         requirements:
           "Minimum drain pipe slopes (1/4 inch per foot), connection to municipal sewer or septic system, vent stack requirements, minimum drain pipe sizes (3-inch minimum for toilets).",
-        service: "/practice-areas/plombier",
+        service: "/practice-areas/personal-injury",
         serviceLabel: "Find a plumber",
       },
     ],
@@ -86,7 +86,7 @@ const categories = [
         scope: "Heating, ventilation, and air conditioning systems",
         requirements:
           "Combustion air requirements for furnaces, flue and chimney specifications, programmable thermostat requirements, annual maintenance requirements, minimum efficiency ratings by system size.",
-        service: "/practice-areas/chauffagiste",
+        service: "/practice-areas/employment-law",
         serviceLabel: "Find an HVAC contractor",
       },
       {
@@ -94,7 +94,7 @@ const categories = [
         scope: "Air-source and ground-source heat pumps",
         requirements:
           "Setback distance from property lines (noise compliance), sizing per Manual J load calculation, approved refrigerants, minimum SEER/HSPF ratings, maintenance intervals for systems over 5 tons.",
-        service: "/practice-areas/chauffagiste",
+        service: "/practice-areas/employment-law",
         serviceLabel: "Find a heat pump installer",
       },
     ],
@@ -140,7 +140,7 @@ const categories = [
         scope: "Roofing by material type",
         requirements:
           "Asphalt shingles: minimum slope, underlayment, and fastening requirements. Metal roofing: gauge thickness, standing seam specifications. Tile roofing: batten spacing, load calculations. All: ice and water shield in cold climates.",
-        service: "/practice-areas/couvreur",
+        service: "/practice-areas/real-estate-law",
         serviceLabel: "Find a roofer",
       },
       {
@@ -163,7 +163,7 @@ const categories = [
         scope: "Construction in seismic zones",
         requirements:
           "The US is divided into seismic design categories (A through F). In categories D-F, strict seismic requirements apply: reinforced foundations, continuous load paths, shear walls, hold-down connections, and limitations on cantilevered elements.",
-        service: "/practice-areas/macon",
+        service: "/practice-areas/business-law",
         serviceLabel: "Find a structural contractor",
       },
       {
@@ -186,7 +186,7 @@ const categories = [
         scope: "Window and door performance standards",
         requirements:
           "Shimming, leveling, and fastening requirements, air and water infiltration resistance, performance grade ratings based on design pressure, installation methods (nail-fin, block frame, or new construction).",
-        service: "/practice-areas/menuisier",
+        service: "/practice-areas/estate-planning",
         serviceLabel: "Find a window installer",
       },
       {
@@ -196,7 +196,7 @@ const categories = [
           "U-factor and SHGC (Solar Heat Gain Coefficient) requirements by climate zone. Northern zones require U-factor of 0.27 or below. Southern zones focus on low SHGC (0.25 or below) to reduce cooling loads.",
         link: "/guides/renovation-fenetres",
         linkLabel: "Window guide",
-        service: "/practice-areas/menuisier",
+        service: "/practice-areas/estate-planning",
         serviceLabel: "Find a window installer",
       },
     ],

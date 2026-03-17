@@ -126,7 +126,7 @@ function CityListFallback({
 
 /* ─── Main Component ─────────────────────────────────────────── */
 
-export default function CarteClient() {
+export default function MapClient() {
   const [mapReady, setMapReady] = useState(false)
   const [mapError, setMapError] = useState(false)
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')

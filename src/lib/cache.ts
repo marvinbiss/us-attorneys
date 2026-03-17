@@ -4,7 +4,7 @@ import { CacheService } from '@/lib/cache/redis-client'
 const memoryCache = new Map<string, { data: unknown; expiry: number }>()
 
 // L2: Redis (shared across all Vercel instances)
-const redisCache = new CacheService('sa:cache:')
+const redisCache = new CacheService('usa:cache:')
 
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {

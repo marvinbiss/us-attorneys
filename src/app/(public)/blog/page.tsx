@@ -132,7 +132,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
               return (
                 <Link
                   key={c.slug}
-                  href={`/blog/categorie/${c.slug}`}
+                  href={`/blog/category/${c.slug}`}
                   className="flex items-center justify-between p-4 bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all group"
                 >
                   <div>

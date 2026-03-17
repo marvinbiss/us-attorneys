@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Zap, Clock, CheckCircle, RefreshCw } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 interface UrgencyItem {
   icon: React.ElementType
@@ -10,10 +10,10 @@ interface UrgencyItem {
   color: string
 }
 
-function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
+function getUrgencyItems(attorney: LegacyAttorney): UrgencyItem[] {
   const items: UrgencyItem[] = []
 
-  if (artisan.accepts_new_clients === true) {
+  if (attorney.accepts_new_clients === true) {
     items.push({
       icon: Zap,
       label: 'Accepting new clients',
@@ -21,7 +21,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
     })
   }
 
-  if (artisan.available_24h === true) {
+  if (attorney.available_24h === true) {
     items.push({
       icon: Clock,
       label: 'Available 24/7 — Emergencies',
@@ -29,7 +29,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
     })
   }
 
-  if (artisan.free_quote === true) {
+  if (attorney.free_quote === true) {
     items.push({
       icon: CheckCircle,
       label: 'Free consultation, no obligation',
@@ -37,8 +37,8 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
     })
   }
 
-  if (artisan.updated_at) {
-    const updatedAt = new Date(artisan.updated_at)
+  if (attorney.updated_at) {
+    const updatedAt = new Date(attorney.updated_at)
     const now = new Date()
     const diffMs = now.getTime() - updatedAt.getTime()
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
@@ -75,8 +75,8 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
   return items
 }
 
-export function AttorneyUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
-  const items = getUrgencyItems(artisan)
+export function AttorneyUrgencyBanner({ attorney }: { attorney: LegacyAttorney }) {
+  const items = getUrgencyItems(attorney)
 
   if (items.length === 0) return null
 

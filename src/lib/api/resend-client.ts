@@ -215,9 +215,9 @@ export async function sendBatchEmails(params: BatchEmailParams): Promise<EmailRe
 export async function sendWelcomeEmail(params: {
   to: string
   name: string
-  isArtisan?: boolean
+  isAttorney?: boolean
 }): Promise<EmailResult> {
-  const { to, name, isArtisan } = params
+  const { to, name, isAttorney } = params
 
   const html = `
 <!DOCTYPE html>
@@ -233,9 +233,9 @@ export async function sendWelcomeEmail(params: {
 
   <h2>Welcome ${name}!</h2>
 
-  <p>We're glad to have you on US Attorneys${isArtisan ? ', the platform that connects attorneys with their clients' : ''}.</p>
+  <p>We're glad to have you on US Attorneys${isAttorney ? ', the platform that connects attorneys with their clients' : ''}.</p>
 
-  ${isArtisan ? `
+  ${isAttorney ? `
   <p>Next steps to get started:</p>
   <ul>
     <li>Complete your professional profile</li>
@@ -273,11 +273,11 @@ export async function sendWelcomeEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Welcome to US Attorneys${isArtisan ? '!' : ', ' + name}`,
+    subject: `Welcome to US Attorneys${isAttorney ? '!' : ', ' + name}`,
     html,
     tags: [
       { name: 'type', value: 'welcome' },
-      { name: 'user_type', value: isArtisan ? 'attorney' : 'client' },
+      { name: 'user_type', value: isAttorney ? 'attorney' : 'client' },
     ],
   })
 }

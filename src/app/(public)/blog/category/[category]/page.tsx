@@ -30,12 +30,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: cat.metaTitle,
     description: cat.metaDescription,
-    alternates: { canonical: `${SITE_URL}/blog/categorie/${categorySlug}` },
+    alternates: { canonical: `${SITE_URL}/blog/category/${categorySlug}` },
     robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const },
     openGraph: {
       title: cat.metaTitle,
       description: cat.metaDescription,
-      url: `${SITE_URL}/blog/categorie/${categorySlug}`,
+      url: `${SITE_URL}/blog/category/${categorySlug}`,
       type: 'website',
       locale: 'en_US',
     },
@@ -65,7 +65,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
     '@type': 'CollectionPage',
     name: cat.label,
     description: cat.description,
-    url: `${SITE_URL}/blog/categorie/${categorySlug}`,
+    url: `${SITE_URL}/blog/category/${categorySlug}`,
     numberOfItems: articles.length,
     isPartOf: {
       '@type': 'Blog',
@@ -92,7 +92,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-      { '@type': 'ListItem', position: 3, name: cat.label, item: `${SITE_URL}/blog/categorie/${categorySlug}` },
+      { '@type': 'ListItem', position: 3, name: cat.label, item: `${SITE_URL}/blog/category/${categorySlug}` },
     ],
   }
 
@@ -244,7 +244,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
                 return (
                   <Link
                     key={c.slug}
-                    href={`/blog/categorie/${c.slug}`}
+                    href={`/blog/category/${c.slug}`}
                     className="flex items-center justify-between p-4 bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all group"
                   >
                     <div>

@@ -6,13 +6,13 @@ import { User, ChevronDown } from 'lucide-react'
 import { Artisan } from './types'
 
 interface AttorneyAboutProps {
-  artisan: Artisan
+  attorney: Artisan
 }
 
-export function AttorneyAbout({ artisan }: AttorneyAboutProps) {
+export function AttorneyAbout({ attorney }: AttorneyAboutProps) {
   const [expanded, setExpanded] = useState(false)
 
-  const description = artisan.description || ''
+  const description = attorney.description || ''
   const isLong = description.length > 300
 
   return (

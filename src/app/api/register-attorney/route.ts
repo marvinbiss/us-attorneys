@@ -21,22 +21,22 @@ function escapeHtml(str: string): string {
 
 const getResend = () => getResendClient()
 
-const artisanSchema = z.object({
-  // Step 1 - Company
-  entreprise: z.string().min(2, 'Business name is required'),
-  siret: z.string().min(1, 'Bar number is required'),
-  metier: z.string().min(1, 'Practice area is required'),
-  autreMetier: z.string().optional(),
+const attorneyRegistrationSchema = z.object({
+  // Step 1 - Firm
+  firmName: z.string().min(2, 'Firm name is required'),
+  barNumber: z.string().min(1, 'Bar number is required'),
+  practiceArea: z.string().min(1, 'Practice area is required'),
+  otherPracticeArea: z.string().optional(),
   // Step 2 - Contact
-  nom: z.string().min(2, 'Name is required'),
-  prenom: z.string().min(2, 'First name is required'),
+  lastName: z.string().min(2, 'Last name is required'),
+  firstName: z.string().min(2, 'First name is required'),
   email: z.string().email('Invalid email'),
-  telephone: z.string().min(10, 'Invalid phone number'),
+  phone: z.string().min(10, 'Invalid phone number'),
   // Step 3 - Location
-  adresse: z.string().min(5, 'Address is required'),
-  codePostal: z.string().min(5, 'Invalid postal code'),
-  ville: z.string().min(2, 'City is required'),
-  rayonIntervention: z.string(),
+  address: z.string().min(5, 'Address is required'),
+  zipCode: z.string().min(5, 'Invalid ZIP code'),
+  city: z.string().min(2, 'City is required'),
+  serviceRadius: z.string(),
   // Step 4 - Description
   description: z.string().optional(),
   experience: z.string().optional(),
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const body = await request.json()
 
     // Validate input
-    const validation = artisanSchema.safeParse(body)
+    const validation = attorneyRegistrationSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
         { error: 'Invalid data', details: validation.error.flatten() },
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     }
 
     const data = validation.data
-    const metierFinal = data.metier === 'Autre' ? data.autreMetier : data.metier
+    const practiceAreaFinal = data.practiceArea === 'Other' ? data.otherPracticeArea : data.practiceArea
 
     // Send both emails in parallel (neither should crash the signup)
     const emailResults = await Promise.allSettled([
@@ -66,17 +66,17 @@ export async function POST(request: Request) {
         to: data.email,
         subject: 'Your registration on US Attorneys - Confirmation',
         html: `
-          <h2>Hello ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')},</h2>
+          <h2>Hello ${escapeHtml(data.firstName ?? '')} ${escapeHtml(data.lastName ?? '')},</h2>
           <p>We have received your registration request as an attorney on US Attorneys.</p>
           <p><strong>Registration summary:</strong></p>
           <ul>
-            <li><strong>Firm:</strong> ${escapeHtml(data.entreprise ?? '')}</li>
-            <li><strong>Bar Number:</strong> ${escapeHtml(data.siret ?? '')}</li>
-            <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
-            <li><strong>Coverage area:</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
+            <li><strong>Firm:</strong> ${escapeHtml(data.firmName ?? '')}</li>
+            <li><strong>Bar Number:</strong> ${escapeHtml(data.barNumber ?? '')}</li>
+            <li><strong>Practice area:</strong> ${escapeHtml(practiceAreaFinal ?? '')}</li>
+            <li><strong>Coverage area:</strong> ${escapeHtml(data.city ?? '')} (${escapeHtml(data.serviceRadius ?? '')} miles)</li>
           </ul>
           <p>Our team will verify your information and you will receive a response within 24-48 hours.</p>
-          <p>See you on US Attorneys!</p>
+          <p>Welcome to US Attorneys!</p>
           <hr />
           <p style="color: #666; font-size: 12px;">
             <a href="https://us-attorneys.com">us-attorneys.com</a>
@@ -86,30 +86,30 @@ export async function POST(request: Request) {
       getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
         to: 'attorneys@us-attorneys.com',
-        subject: `[New registration] ${escapeHtml(data.entreprise ?? '')} - ${escapeHtml(metierFinal ?? '')}`,
+        subject: `[New registration] ${escapeHtml(data.firmName ?? '')} - ${escapeHtml(practiceAreaFinal ?? '')}`,
         html: `
           <h2>New attorney registration request</h2>
           <h3>Firm</h3>
           <ul>
-            <li><strong>Name:</strong> ${escapeHtml(data.entreprise ?? '')}</li>
-            <li><strong>Bar Number:</strong> ${escapeHtml(data.siret ?? '')}</li>
-            <li><strong>Practice area:</strong> ${escapeHtml(metierFinal ?? '')}</li>
+            <li><strong>Name:</strong> ${escapeHtml(data.firmName ?? '')}</li>
+            <li><strong>Bar Number:</strong> ${escapeHtml(data.barNumber ?? '')}</li>
+            <li><strong>Practice area:</strong> ${escapeHtml(practiceAreaFinal ?? '')}</li>
           </ul>
           <h3>Contact</h3>
           <ul>
-            <li><strong>Name:</strong> ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')}</li>
+            <li><strong>Name:</strong> ${escapeHtml(data.firstName ?? '')} ${escapeHtml(data.lastName ?? '')}</li>
             <li><strong>Email:</strong> ${escapeHtml(data.email ?? '')}</li>
-            <li><strong>Phone:</strong> ${escapeHtml(data.telephone ?? '')}</li>
+            <li><strong>Phone:</strong> ${escapeHtml(data.phone ?? '')}</li>
           </ul>
           <h3>Location</h3>
           <ul>
-            <li><strong>Address:</strong> ${escapeHtml(data.adresse ?? '')}</li>
-            <li><strong>City:</strong> ${escapeHtml(data.codePostal ?? '')} ${escapeHtml(data.ville ?? '')}</li>
-            <li><strong>Coverage radius:</strong> ${escapeHtml(data.rayonIntervention ?? '')} km</li>
+            <li><strong>Address:</strong> ${escapeHtml(data.address ?? '')}</li>
+            <li><strong>City:</strong> ${escapeHtml(data.zipCode ?? '')} ${escapeHtml(data.city ?? '')}</li>
+            <li><strong>Coverage radius:</strong> ${escapeHtml(data.serviceRadius ?? '')} miles</li>
           </ul>
           ${data.description ? `<h3>Description</h3><p>${escapeHtml(data.description)}</p>` : ''}
           ${data.experience ? `<p><strong>Experience:</strong> ${escapeHtml(data.experience)}</p>` : ''}
-          ${data.certifications ? `<p><strong>Certifications :</strong> ${escapeHtml(data.certifications)}</p>` : ''}
+          ${data.certifications ? `<p><strong>Certifications:</strong> ${escapeHtml(data.certifications)}</p>` : ''}
           <hr />
           <p><a href="https://us-attorneys.com/admin">Access admin dashboard</a></p>
         `,

@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 export type BookingErrorCode =
   | 'SLOT_UNAVAILABLE'
   | 'BOOKING_CONFLICT'
-  | 'ARTISAN_UNAVAILABLE'
+  | 'ATTORNEY_UNAVAILABLE'
   | 'INVALID_DATA'
   | 'PAYMENT_FAILED'
   | 'PAYMENT_CANCELLED'
@@ -42,7 +42,7 @@ const errorMessages: Record<BookingErrorCode, { message: string; action?: string
     message: 'You already have a booking at this date/time.',
     action: 'Check your existing bookings.',
   },
-  ARTISAN_UNAVAILABLE: {
+  ATTORNEY_UNAVAILABLE: {
     message: "The attorney is no longer available for this date.",
     action: 'Try another date or a different attorney.',
   },

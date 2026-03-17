@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities, getCityBySlug } from '@/lib/data/usa'
 
 export const revalidate = 86400
 
-const tradeSlugs = getTradesSlugs()
+const tradeSlugs = getPracticeAreaSlugs()
 
 function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
@@ -19,8 +19,8 @@ const top50Cities = [...cities]
 export function generateStaticParams() {
   const params: { service: string; city: string }[] = []
   for (const service of tradeSlugs) {
-    for (const ville of top50Cities) {
-      params.push({ service, city: ville.slug })
+    for (const city of top50Cities) {
+      params.push({ service, city: city.slug })
     }
   }
   return params

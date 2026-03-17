@@ -43,7 +43,7 @@ export interface NotificationPayload {
   clientEmail: string
   clientPhone?: string
   attorneyName: string
-  artisanEmail?: string
+  attorneyEmail?: string
   specialtyName: string
   date: string
   startTime: string
@@ -200,7 +200,7 @@ export class UnifiedNotificationService {
             clientEmail: payload.clientEmail,
             clientPhone: payload.clientPhone || '',
             attorneyName: payload.attorneyName,
-            artisanEmail: payload.artisanEmail || '',
+            attorneyEmail: payload.attorneyEmail || '',
             specialtyName: payload.specialtyName,
             date: payload.date,
             startTime: payload.startTime,

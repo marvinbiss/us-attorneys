@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, Shield } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
 interface AttorneySidebarProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
 }
 
-export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
+export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
   const [shouldPulse, setShouldPulse] = useState(false)
 
   useEffect(() => {
@@ -22,8 +22,8 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
   }, [])
 
   const handleEmail = () => {
-    if (artisan.email) {
-      window.location.href = `mailto:${artisan.email}`
+    if (attorney.email) {
+      window.location.href = `mailto:${attorney.email}`
     }
   }
 
@@ -44,7 +44,7 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
 
       <div className="p-6">
         {/* Status */}
-        {artisan.accepts_new_clients === true && (
+        {attorney.accepts_new_clients === true && (
           <div className="flex items-center gap-2 text-green-600 mb-4 pb-4 border-b border-gray-100">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -57,7 +57,7 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
         {/* Trust badges */}
         <div className="space-y-2.5 mb-6 pb-6 border-b border-gray-100">
           <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Verifications</h4>
-          {artisan.is_verified && (
+          {attorney.is_verified && (
             <div className="flex items-center gap-2.5 text-sm text-slate-600">
               <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
               <span>Identity verified (Bar Number)</span>
@@ -67,20 +67,20 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
 
         {/* CTA Buttons */}
         <div className="space-y-3 mb-6" role="group" aria-label="Contact actions">
-          {artisan.phone && (
+          {attorney.phone && (
             <motion.a
-              href={`tel:${artisan.phone.replace(/\s/g, '')}`}
+              href={`tel:${attorney.phone.replace(/\s/g, '')}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
-                BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'sidebar')
-                BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'sidebar')
+                BookingFunnel.revealPhone(attorney.id, attorney.business_name || '', 'sidebar')
+                BookingFunnel.clickPhone(attorney.id, attorney.business_name || '', 'sidebar')
               }}
               className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-soft hover:shadow-premium hover:from-stone-900 hover:to-black transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
-              aria-label={`Call ${artisan.phone}`}
+              aria-label={`Call ${attorney.phone}`}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
-              {artisan.phone}
+              {attorney.phone}
             </motion.a>
           )}
 
@@ -104,13 +104,13 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
             Request a Free Consultation
           </motion.button>
 
-          {artisan.email && (
+          {attorney.email && (
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleEmail}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2"
-              aria-label={`Send an email to ${artisan.email}`}
+              aria-label={`Send an email to ${attorney.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400" aria-hidden="true" />
               Send an email
@@ -119,10 +119,10 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
         </div>
 
         {/* Bar Number */}
-        {artisan.siret && (
+        {attorney.siret && (
           <div className="pt-4 border-t border-gray-100">
             <div className="text-xs text-slate-400 font-mono">
-              Bar #: {artisan.siret}
+              Bar #: {attorney.siret}
             </div>
           </div>
         )}
@@ -132,7 +132,7 @@ export function AttorneySidebar({ artisan }: AttorneySidebarProps) {
 }
 
 // Mobile CTA bar — Single dominant CTA with subtle phone fallback
-export function AttorneyMobileCTA({ artisan }: AttorneySidebarProps) {
+export function AttorneyMobileCTA({ attorney }: AttorneySidebarProps) {
   /** Open the EstimationWidget via custom DOM event */
   const openEstimationWidget = () => {
     window.dispatchEvent(new Event('sa:open-estimation'))
@@ -171,10 +171,10 @@ export function AttorneyMobileCTA({ artisan }: AttorneySidebarProps) {
           initial="initial"
           animate="pulse"
           onClick={() => {
-            BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+            BookingFunnel.clickPhone(attorney.id, attorney.business_name || '', 'mobile_cta')
             openEstimationWidget()
           }}
-          className={`${artisan.phone ? 'flex-1' : 'w-full'} py-4 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2`}
+          className={`${attorney.phone ? 'flex-1' : 'w-full'} py-4 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2`}
           aria-label="Open the estimation assistant for a free consultation"
         >
           <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
@@ -182,16 +182,16 @@ export function AttorneyMobileCTA({ artisan }: AttorneySidebarProps) {
         </motion.button>
 
         {/* Phone: Prominent call button */}
-        {artisan.phone && (
+        {attorney.phone && (
           <motion.a
-            href={`tel:${artisan.phone.replace(/\s/g, '')}`}
+            href={`tel:${attorney.phone.replace(/\s/g, '')}`}
             whileTap={{ scale: 0.97 }}
             onClick={() => {
-              BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
-              BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+              BookingFunnel.revealPhone(attorney.id, attorney.business_name || '', 'mobile_cta')
+              BookingFunnel.clickPhone(attorney.id, attorney.business_name || '', 'mobile_cta')
             }}
             className="flex-1 py-4 px-4 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg hover:from-stone-900 hover:to-black transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
-            aria-label={`Call ${artisan.phone}`}
+            aria-label={`Call ${attorney.phone}`}
           >
             <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
             Call

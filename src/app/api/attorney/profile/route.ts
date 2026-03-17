@@ -153,7 +153,7 @@ export async function PUT(request: Request) {
         if (publicId) {
           revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
         }
-        // Listing ville
+        // Listing city page
         revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
         // Listing service
         revalidatePath(`/practice-areas/${specialtySlug}`, 'page')

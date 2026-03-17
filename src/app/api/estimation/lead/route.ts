@@ -14,19 +14,19 @@ import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
 export const dynamic = 'force-dynamic'
 
 const estimationLeadSchema = z.object({
-  nom: z.string().optional(),
-  telephone: z.string().min(10, 'Invalid phone number (min 10 characters)'),
+  name: z.string().optional(),
+  phone: z.string().min(10, 'Invalid phone number (min 10 characters)'),
   email: z.string().email('Invalid email').optional().or(z.literal('')),
-  metier: z.string().min(1, 'Practice area is required'),
-  ville: z.string().min(1, 'City is required'),
-  departement: z.string().default(''),
-  description_projet: z.string().optional(),
+  practiceArea: z.string().min(1, 'Practice area is required'),
+  city: z.string().min(1, 'City is required'),
+  state: z.string().default(''),
+  projectDescription: z.string().optional(),
   estimation_min: z.number().optional(),
   estimation_max: z.number().optional(),
   source: z.enum(['chat', 'callback'], { message: 'Source is required' }),
   conversation_history: z.array(z.unknown()).optional(),
   page_url: z.string().optional(),
-  artisan_public_id: z.string().optional(),
+  attorney_public_id: z.string().optional(),
 })
 
 export async function POST(request: Request) {
@@ -68,23 +68,24 @@ export async function POST(request: Request) {
     // Normalize empty email to null
     const email = data.email && data.email.length > 0 ? data.email : null
 
-    // Insert into estimation_leads
+    // Table 'estimation_leads' = fee estimation leads (legacy French name)
+    // DB columns use French names: nom=name, telephone=phone, metier=practiceArea, ville=city, departement=state
     const { data: lead, error: dbError } = await supabase
       .from('estimation_leads')
       .insert({
-        nom: data.nom || null,
-        telephone: data.telephone,
+        nom: data.name || null,
+        telephone: data.phone,
         email,
-        metier: data.metier,
-        ville: data.ville,
-        departement: data.departement,
-        description_projet: data.description_projet || null,
+        metier: data.practiceArea,
+        ville: data.city,
+        departement: data.state,
+        description_projet: data.projectDescription || null,
         estimation_min: data.estimation_min ?? null,
         estimation_max: data.estimation_max ?? null,
         source: data.source,
         conversation_history: data.conversation_history ?? null,
         page_url: data.page_url || null,
-        artisan_public_id: data.artisan_public_id || null,
+        artisan_public_id: data.attorney_public_id || null, // DB field: artisan_public_id (legacy name for attorney_public_id)
       })
       .select('id')
       .single()
@@ -111,11 +112,11 @@ export async function POST(request: Request) {
         resource_type: 'estimation_lead',
         resource_id: lead.id,
         new_value: {
-          metier: data.metier,
-          ville: data.ville,
-          departement: data.departement,
+          practiceArea: data.practiceArea,
+          city: data.city,
+          state: data.state,
           source: data.source,
-          artisan_public_id: data.artisan_public_id || null,
+          attorney_public_id: data.attorney_public_id || null,
         },
         metadata: {
           ip_address: ipAddress,
@@ -189,27 +190,27 @@ async function notifyAdminNewEstimationLead(
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
     <div style="background: #059669; padding: 24px; border-radius: 12px 12px 0 0; text-align: center;">
-      <h1 style="color: white; margin: 0; font-size: 22px;">New estimation lead IA</h1>
+      <h1 style="color: white; margin: 0; font-size: 22px;">New AI estimation lead</h1>
     </div>
     <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       <p style="color: #333; font-size: 16px; margin-bottom: 16px;">A visitor just submitted their contact information via the estimation widget.</p>
       <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <p style="margin: 0 0 10px 0;"><strong>Date :</strong> ${dateStr}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Source :</strong> ${sourceLabel}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Nom :</strong> ${data.nom || '—'}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Phone:</strong> ${data.telephone}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Email :</strong> ${data.email || '—'}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Practice area:</strong> ${data.metier}</p>
-        <p style="margin: 0 0 10px 0;"><strong>City:</strong> ${data.ville} (${data.departement})</p>
-        <p style="margin: 0 0 10px 0;"><strong>Estimation :</strong> ${estimation}</p>
-        ${data.artisan_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Attorney :</strong> ${htmlEscape(data.artisan_public_id)}</p>` : ''}
-        ${data.page_url ? `<p style="margin: 0;"><strong>Page :</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
+        <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${dateStr}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Source:</strong> ${sourceLabel}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name || '—'}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Phone:</strong> ${data.phone}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${data.email || '—'}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Practice area:</strong> ${data.practiceArea}</p>
+        <p style="margin: 0 0 10px 0;"><strong>City:</strong> ${data.city} (${data.state})</p>
+        <p style="margin: 0 0 10px 0;"><strong>Estimate:</strong> ${estimation}</p>
+        ${data.attorney_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Attorney:</strong> ${htmlEscape(data.attorney_public_id)}</p>` : ''}
+        ${data.page_url ? `<p style="margin: 0;"><strong>Page:</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
       </div>
       <div style="text-align: center; margin: 28px 0;">
-        <a href="${SITE_URL}/admin/lead-estimation" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">Voir dans l'admin</a>
+        <a href="${SITE_URL}/admin/lead-estimation" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">View in admin panel</a>
       </div>
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
-      <p style="color: #aaa; font-size: 12px; text-align: center;">US Attorneys – Notification automatique (lead #${leadId})</p>
+      <p style="color: #aaa; font-size: 12px; text-align: center;">US Attorneys – Automated notification (lead #${leadId})</p>
     </div>
   </div>
 </body>
@@ -217,7 +218,7 @@ async function notifyAdminNewEstimationLead(
 
   await sendEmail({
     to: recipients,
-    subject: `🔔 New estimation lead – ${data.metier} in ${data.ville}`,
+    subject: `New estimation lead – ${data.practiceArea} in ${data.city}`,
     html,
     tags: [
       { name: 'type', value: 'estimation_lead_admin' },
@@ -247,11 +248,11 @@ async function sendClientConfirmationEmail(
   const clientEmail = data.email
   if (!clientEmail || clientEmail.length === 0) return
 
-  const prenom = data.nom ? htmlEscape(data.nom.split(' ')[0]) : ''
-  const salutation = prenom ? `Hello ${prenom}` : 'Hello'
-  const metier = htmlEscape(data.metier.toLowerCase())
-  const ville = htmlEscape(data.ville)
-  const isAttorneyPage = !!data.artisan_public_id
+  const firstName = data.name ? htmlEscape(data.name.split(' ')[0]) : ''
+  const salutation = firstName ? `Hello ${firstName}` : 'Hello'
+  const practiceArea = htmlEscape(data.practiceArea.toLowerCase())
+  const city = htmlEscape(data.city)
+  const isAttorneyPage = !!data.attorney_public_id
 
   const nextSteps = isAttorneyPage
     ? `<p style="color: #333; font-size: 15px; line-height: 1.6;">
@@ -259,8 +260,8 @@ async function sendClientConfirmationEmail(
         as soon as possible by phone or email.
       </p>`
     : `<p style="color: #333; font-size: 15px; line-height: 1.6;">
-        We will forward your request to qualified and verified ${metier} professionals
-        in <strong>${ville}</strong>. You will be contacted as soon as possible
+        We will forward your request to qualified and verified ${practiceArea} professionals
+        in <strong>${city}</strong>. You will be contacted as soon as possible
         by phone or email.
       </p>`
 
@@ -275,15 +276,15 @@ async function sendClientConfirmationEmail(
     <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       <p style="color: #333; font-size: 16px; margin-bottom: 4px;">${salutation},</p>
       <p style="color: #333; font-size: 15px; line-height: 1.6;">
-        Thank you for your estimation request for a <strong>${metier}</strong>
-        in <strong>${ville}</strong>. We have recorded your contact information.
+        Thank you for your estimation request for a <strong>${practiceArea}</strong>
+        in <strong>${city}</strong>. We have recorded your contact information.
       </p>
 
       <div style="background: #fef7f4; border-left: 4px solid #E07040; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;">
         <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Summary:</strong></p>
-        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service: <strong>${htmlEscape(data.metier)}</strong></p>
-        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">City: <strong>${ville}${data.departement ? ` (${htmlEscape(data.departement)})` : ''}</strong></p>
-        <p style="margin: 0; font-size: 14px; color: #333;">Phone: <strong>${htmlEscape(data.telephone)}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service: <strong>${htmlEscape(data.practiceArea)}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">City: <strong>${city}${data.state ? ` (${htmlEscape(data.state)})` : ''}</strong></p>
+        <p style="margin: 0; font-size: 14px; color: #333;">Phone: <strong>${htmlEscape(data.phone)}</strong></p>
       </div>
 
       <h3 style="color: #333; font-size: 16px; margin: 24px 0 8px 0;">What happens next?</h3>
@@ -301,7 +302,7 @@ async function sendClientConfirmationEmail(
 
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #aaa; font-size: 12px; text-align: center;">
-        US Attorneys.fr – The qualified attorneys platform<br>
+        US Attorneys – The qualified attorneys platform<br>
         <a href="${SITE_URL}" style="color: #aaa;">us-attorneys.com</a>
       </p>
     </div>
@@ -311,7 +312,7 @@ async function sendClientConfirmationEmail(
 
   await sendEmail({
     to: clientEmail,
-    subject: `Your ${metier} request in ${ville} – US Attorneys`,
+    subject: `Your ${practiceArea} request in ${city} – US Attorneys`,
     html,
     tags: [
       { name: 'type', value: 'estimation_lead_client' },

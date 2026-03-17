@@ -167,7 +167,7 @@ function setDefaultListUsersData() {
     data: {
       users: [
         makeAuthUser({ id: 'u1', email: 'alice@test.com', user_metadata: { full_name: 'Alice Johnson' } }),
-        makeAuthUser({ id: 'u2', email: 'bob@test.com', user_metadata: { is_artisan: true, name: 'Bob Williams' } }),
+        makeAuthUser({ id: 'u2', email: 'bob@test.com', user_metadata: { is_attorney: true, name: 'Bob Williams' } }),
         makeAuthUser({ id: 'u3', email: 'charlie@test.com', banned_until: '2027-01-01T00:00:00Z' }),
       ],
     },
@@ -253,11 +253,11 @@ describe('GET /api/admin/users', () => {
     expect(ids).not.toContain('u2')
   })
 
-  it('filters by artisans', async () => {
+  it('filters by attorneys', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
     const result = await GET(makeRequest({ filter: 'artisans' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
-    // u2 has user_type artisan from profile
+    // u2 has user_type attorney from profile
     expect(result.body.users).toHaveLength(1)
     expect(result.body.users[0].id).toBe('u2')
   })
@@ -334,7 +334,7 @@ describe('GET /api/admin/users', () => {
     const charlie = result.body.users.find((u: Record<string, unknown>) => u.id === 'u3')
     expect(charlie?.is_banned).toBe(true)
     expect(charlie?.is_verified).toBe(true)
-    // u3 has no profile, falls back: user_metadata has no is_artisan => 'client'
+    // u3 has no profile, falls back: user_metadata has no is_attorney flag => 'client'
     expect(charlie?.user_type).toBe('client')
     expect(charlie?.subscription_plan).toBe('free')
   })
@@ -359,7 +359,7 @@ describe('POST /api/admin/users', () => {
     user_metadata: {
       full_name: 'New User',
       phone: '2125559999',
-      is_artisan: false,
+      is_attorney: false,
     },
   }
 
@@ -452,37 +452,37 @@ describe('POST /api/admin/users', () => {
     )
   })
 
-  it('sets is_artisan metadata for artisan type', async () => {
-    const artisanUser = {
-      id: 'artisan-id',
-      email: 'artisan@test.com',
+  it('sets is_attorney metadata for attorney type', async () => {
+    const attorneyUser = {
+      id: 'attorney-id',
+      email: 'attorney@test.com',
       user_metadata: {
         full_name: 'John Attorney',
         phone: '3105558888',
-        is_artisan: true,
+        is_attorney: true,
       },
     }
     mockCreateUserResult = {
-      data: { user: artisanUser },
+      data: { user: attorneyUser },
       error: null,
     }
 
     const { POST } = await import('@/app/api/admin/users/route')
     const result = await POST(makePostRequest({
       ...validBody,
-      email: 'artisan@test.com',
+      email: 'attorney@test.com',
       full_name: 'John Attorney',
       user_type: 'attorney',
     }) as never) as unknown as { body: { success: boolean; user: Record<string, unknown> } }
 
     expect(result.body.success).toBe(true)
-    expect(result.body.user).toEqual(artisanUser)
+    expect(result.body.user).toEqual(attorneyUser)
     // The logAdminAction should record user_type: 'attorney'
     expect(mockLogAdminAction).toHaveBeenCalledWith(
       ADMIN_ID,
       'user.create',
       'user',
-      'artisan-id',
+      'attorney-id',
       expect.objectContaining({ user_type: 'attorney' })
     )
   })

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { WidgetCopyButton } from './WidgetCopyButton'
 
-const EMBED_CODE = `<div id="sa-widget" data-service="attorney" data-ville="new-york" data-name="My Firm"></div>
+const EMBED_CODE = `<div id="sa-widget" data-service="attorney" data-city="new-york" data-name="My Firm"></div>
 <script src="${SITE_URL}/api/widget" async></script>`
 
 export const metadata: Metadata = {

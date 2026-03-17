@@ -12,10 +12,10 @@ import {
   Navigation,
   CheckCircle,
 } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
+import type { LegacyAttorney } from '@/types/legacy'
 
 interface AttorneyStatsProps {
-  artisan: LegacyArtisan
+  attorney: LegacyAttorney
 }
 
 interface StatConfig {
@@ -27,16 +27,16 @@ interface StatConfig {
   bgColor: string
 }
 
-export function AttorneyStats({ artisan }: AttorneyStatsProps) {
+export function AttorneyStats({ attorney }: AttorneyStatsProps) {
   const stats: StatConfig[] = []
   const currentYear = new Date().getFullYear()
 
   // Average rating
-  if (artisan.average_rating > 0) {
+  if (attorney.average_rating > 0) {
     stats.push({
       icon: Star,
       label: 'Average rating',
-      value: artisan.average_rating.toFixed(1),
+      value: attorney.average_rating.toFixed(1),
       subValue: '/ 5',
       color: 'text-amber-600',
       bgColor: 'bg-amber-50 border-amber-100',
@@ -44,19 +44,19 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   }
 
   // Review count
-  if (artisan.review_count > 0) {
+  if (attorney.review_count > 0) {
     stats.push({
       icon: MessageCircle,
       label: 'Client reviews',
-      value: artisan.review_count.toString(),
+      value: attorney.review_count.toString(),
       color: 'text-clay-600',
       bgColor: 'bg-clay-50 border-clay-100',
     })
   }
 
   // Company creation year (from bar admission / provider data)
-  if (artisan.creation_date) {
-    const year = new Date(artisan.creation_date).getFullYear()
+  if (attorney.creation_date) {
+    const year = new Date(attorney.creation_date).getFullYear()
     const age = currentYear - year
     stats.push({
       icon: Calendar,
@@ -65,19 +65,19 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
       color: 'text-stone-700',
       bgColor: 'bg-sand-200 border-sand-300',
     })
-  } else if (artisan.member_since && parseInt(artisan.member_since, 10) < currentYear) {
+  } else if (attorney.member_since && parseInt(attorney.member_since, 10) < currentYear) {
     // member_since is the platform join year — only show if it's a meaningful past year
     stats.push({
       icon: Calendar,
       label: 'Member since',
-      value: artisan.member_since,
+      value: attorney.member_since,
       color: 'text-stone-700',
       bgColor: 'bg-sand-200 border-sand-300',
     })
   }
 
   // Bar admission verified
-  if (artisan.is_verified) {
+  if (attorney.is_verified) {
     stats.push({
       icon: Shield,
       label: 'Identity verified',
@@ -88,7 +88,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   }
 
   // Available 24h/7j
-  if (artisan.available_24h) {
+  if (attorney.available_24h) {
     stats.push({
       icon: Clock,
       label: 'Availability',
@@ -99,7 +99,7 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   }
 
   // Free quote
-  if (artisan.free_quote) {
+  if (attorney.free_quote) {
     stats.push({
       icon: CheckCircle,
       label: 'Consultation',
@@ -110,11 +110,11 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   }
 
   // Team size
-  if (artisan.team_size && artisan.team_size > 1) {
+  if (attorney.team_size && attorney.team_size > 1) {
     stats.push({
       icon: Users,
       label: 'Team',
-      value: artisan.team_size.toString(),
+      value: attorney.team_size.toString(),
       subValue: 'pers.',
       color: 'text-stone-700',
       bgColor: 'bg-sand-200 border-sand-300',
@@ -122,11 +122,11 @@ export function AttorneyStats({ artisan }: AttorneyStatsProps) {
   }
 
   // Intervention radius
-  if (artisan.intervention_radius_km) {
+  if (attorney.intervention_radius_km) {
     stats.push({
       icon: Navigation,
       label: "Service area",
-      value: artisan.intervention_radius_km.toString(),
+      value: attorney.intervention_radius_km.toString(),
       subValue: 'km',
       color: 'text-clay-600',
       bgColor: 'bg-clay-50 border-clay-100',

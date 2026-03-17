@@ -53,7 +53,7 @@ const guides = [
     title: "RGE Certified Contractor: Verify and Find One",
     description:
       "How to verify RGE certification, why choose an RGE contractor, and where to find a certified professional near you.",
-    href: "/guides/artisan-rge",
+    href: "/guides/certified-attorney",
     icon: ShieldCheck,
     badge: undefined,
     badgeColor: "",
@@ -125,7 +125,7 @@ const guides = [
     title: "How to Find a Trusted Attorney in 2026",
     description:
       "Bar verification, malpractice insurance, certifications, comparing quotes, credentials, client rights, and recourse. The complete guide to avoiding bad experiences.",
-    href: "/guides/trouver-artisan",
+    href: "/guides/find-attorney",
     icon: Search,
     badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",
@@ -134,7 +134,7 @@ const guides = [
     title: "Legal Scams: How to Spot and Protect Yourself",
     description:
       "The 10 most common scams, warning signs, verifications, and recourse in case of fraud. Testimonials and consumer protection agencies.",
-    href: "/guides/eviter-arnaques-artisan",
+    href: "/guides/avoid-scams",
     icon: ShieldAlert,
     badge: "New",
     badgeColor: "bg-blue-100 text-blue-800",

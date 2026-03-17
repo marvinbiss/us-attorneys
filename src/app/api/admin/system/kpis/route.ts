@@ -30,6 +30,7 @@ export async function GET() {
       totalAssignmentsRes, assignPendingRes, assignViewedRes, assignQuotedRes, assignDeclinedRes,
       totalProvidersRes, activeProvidersRes,
     ] = await Promise.all([
+      // legacy table name 'devis_requests' = consultation requests
       adminClient.from('devis_requests').select('id', { count: 'exact', head: true }),
       adminClient.from('devis_requests').select('id', { count: 'exact', head: true }).gte('created_at', todayStart.toISOString()),
       adminClient.from('devis_requests').select('id', { count: 'exact', head: true }).gte('created_at', weekStart.toISOString()),
@@ -78,7 +79,7 @@ export async function GET() {
       adminClient.from('lead_assignments').select('status, assigned_at, viewed_at'),
       adminClient.from('lead_events').select('id', { count: 'exact', head: true }).eq('event_type', 'expired'),
       adminClient.from('lead_events').select('event_type'),
-      adminClient.from('devis_requests').select('created_at').gte('created_at', dailyTrend[0].date),
+      adminClient.from('devis_requests').select('created_at').gte('created_at', dailyTrend[0].date), // legacy table name 'devis_requests' = consultation requests
       adminClient.from('devis_requests').select('service_name'),
       adminClient.from('devis_requests').select('city'),
     ])

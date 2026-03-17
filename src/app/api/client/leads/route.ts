@@ -1,6 +1,7 @@
 /**
  * Client Leads API — read-only
- * GET: Fetch client's devis_requests with status derived from lead_events
+ * GET: Fetch client's consultation requests (devis_requests) with status derived from lead_events
+ * Table 'devis_requests' = consultation requests (legacy French name)
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -67,19 +68,20 @@ export async function GET(request: NextRequest) {
     const { page, pageSize } = parsed.data
     const statusFilter = parsed.data.status
 
-    // Fetch all devis_requests for this client
-    const { data: demandes, error: demandesError } = await supabase
+    // Fetch all consultation requests for this client
+    // Table 'devis_requests' = consultation requests (legacy French name)
+    const { data: clientRequests, error: clientRequestsError } = await supabase
       .from('devis_requests')
       .select('id, service_name, city, postal_code, description, budget, urgency, status, client_name, created_at')
       .eq('client_id', user.id)
       .order('created_at', { ascending: false })
 
-    if (demandesError) {
-      logger.error('Client leads fetch error:', demandesError)
+    if (clientRequestsError) {
+      logger.error('Client leads fetch error:', clientRequestsError)
       return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
     }
 
-    if (!demandes || demandes.length === 0) {
+    if (!clientRequests || clientRequests.length === 0) {
       return NextResponse.json({
         leads: [],
         stats: { total: 0, pending: 0, in_progress: 0, quotes_received: 0, completed: 0 },
@@ -89,7 +91,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch lead_events for all of this client's leads (admin client — RLS is admin-only)
     const adminClient = createAdminClient()
-    const leadIds = demandes.map(d => d.id)
+    const leadIds = clientRequests.map(d => d.id)
     const { data: allEvents, error: eventsError } = await adminClient
       .from('lead_events')
       .select('lead_id, event_type, created_at')
@@ -98,7 +100,7 @@ export async function GET(request: NextRequest) {
 
     if (eventsError) {
       logger.error('Client lead_events fetch error:', eventsError)
-      // Non-blocking: fall back to devis_requests.status
+      // Non-blocking: fall back to consultation request status
     }
 
     // Group events by lead_id
@@ -109,7 +111,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build enriched leads with derived status + last activity
-    const enrichedLeads = demandes.map(d => {
+    const enrichedLeads = clientRequests.map(d => {
       const events = eventsByLead[d.id] || []
       const derivedStatus = deriveStatus(events)
       const lastActivity = events.length > 0 ? events[0].created_at : d.created_at

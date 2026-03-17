@@ -97,14 +97,14 @@ export async function GET(
     }
 
     // Fetch attorney details (limited info for non-owners)
-    let artisan = null
+    let attorneyProfile = null
     if (slot?.attorney_id) {
       const { data: attorneyData } = await adminSupabase
         .from('profiles')
         .select('id, full_name, phone_e164, email')
         .eq('id', slot.attorney_id)
         .single()
-      artisan = attorneyData
+      attorneyProfile = attorneyData
     }
 
     // Format response for confirmation page
@@ -127,18 +127,18 @@ export async function GET(
         startTime: slot?.start_time,
         endTime: slot?.end_time,
         slotId: slot?.id,
-        attorneyId: artisan?.id || slot?.attorney_id,
-        attorneyName: artisan?.full_name || 'Attorney',
-        artisanPhone: artisan?.phone_e164 ?? null,
-        artisanEmail: artisan?.email,
-        artisanAvatar: null,
+        attorneyId: attorneyProfile?.id || slot?.attorney_id,
+        attorneyName: attorneyProfile?.full_name || 'Attorney',
+        attorneyPhone: attorneyProfile?.phone_e164 ?? null,
+        attorneyEmail: attorneyProfile?.email,
+        attorneyAvatar: null,
         // Legacy format for backward compatibility
         client_name: booking.client_name,
         client_phone: booking.client_phone,
         client_email: booking.client_email,
         service_description: booking.service_description,
         slot: booking.slot,
-        artisan: artisan || { id: slot?.attorney_id, full_name: 'Attorney' },
+        attorney: attorneyProfile || { id: slot?.attorney_id, full_name: 'Attorney' },
       },
     })
   } catch (error) {

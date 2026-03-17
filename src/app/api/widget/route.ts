@@ -6,13 +6,13 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
  *
  * Query params:
  * - service: attorney service slug (e.g. "family-law")
- * - ville: city slug (e.g. "new-york")
+ * - city: city slug (e.g. "new-york")
  * - name: attorney/business name
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const service = searchParams.get('service') || ''
-  const ville = searchParams.get('ville') || ''
+  const city = searchParams.get('city') || searchParams.get('ville') || '' // 'ville' kept for backward compat with existing widget embeds
   const name = searchParams.get('name') || ''
 
   // Build the profile link
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
   const escapedName = esc(name)
   const escapedService = esc(service)
-  const escapedVille = esc(ville)
+  const escapedCity = esc(city)
   const escapedSiteName = esc(SITE_NAME)
   const escapedSiteUrl = esc(SITE_URL)
 
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
   var c=document.getElementById('sa-widget');
   if(!c)return;
   var s=c.getAttribute('data-service')||'${escapedService}';
-  var v=c.getAttribute('data-ville')||'${escapedVille}';
+  var v=c.getAttribute('data-city')||c.getAttribute('data-ville')||'${escapedCity}';
   var n=c.getAttribute('data-name')||'${escapedName}';
   var cap=function(t){return t?t.charAt(0).toUpperCase()+t.slice(1).replace(/-/g,' '):''};
   var ds=cap(s);
