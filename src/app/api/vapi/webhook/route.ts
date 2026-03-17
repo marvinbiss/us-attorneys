@@ -318,13 +318,14 @@ async function handleEndOfCallReport(event: VapiWebhookEvent): Promise<NextRespo
   // TODO P2.19: Track qualified voice leads for attorney billing.
   // Currently voice_calls doesn't have a direct attorney_id FK.
   // Once lead dispatch assigns the call to an attorney, pass that ID here.
+  // Fire-and-forget billing — never block the webhook response
   if (voiceCall.qualification_score && voiceCall.qualification_score !== 'disqualified') {
-    await trackVoiceLeadForBilling({
+    trackVoiceLeadForBilling({
       voiceCallId: voiceCall.id,
       attorneyId: null, // TODO: resolve from lead dispatch once voice→attorney assignment exists
       qualificationScore: voiceCall.qualification_score,
       vapiCost: cost || 0,
-    })
+    }).catch((err) => logger.error('Voice billing tracking failed', { error: String(err), callId: call.id }))
   }
 
   logger.info('Voice call report processed', {

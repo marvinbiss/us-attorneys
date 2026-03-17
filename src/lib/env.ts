@@ -81,8 +81,8 @@ const envSchema = z.object({
   // ──────────────────────────────────────────────
   // Stripe plan price IDs (optional)
   // ──────────────────────────────────────────────
-  STRIPE_PRO_PRICE_ID: z.string().optional(),
-  STRIPE_PREMIUM_PRICE_ID: z.string().optional(),
+  STRIPE_PRO_PRICE_ID: z.string().startsWith('price_').optional(),
+  STRIPE_PREMIUM_PRICE_ID: z.string().startsWith('price_').optional(),
 
   // French APIs removed: INSEE, Pappers, SIRENE
 

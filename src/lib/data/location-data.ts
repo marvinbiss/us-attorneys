@@ -194,6 +194,17 @@ export function hasDemographicData(location: LocationData): boolean {
   )
 }
 
+/** Check if location has Census ACS data */
+export function hasCensusData(location: LocationData): boolean {
+  return !!(
+    location.census_data &&
+    (location.census_data.population ||
+     location.census_data.median_household_income ||
+     location.census_data.median_age ||
+     location.census_data.unemployment_rate)
+  )
+}
+
 // ---------------------------------------------------------------------------
 // Helper: format number with US thousands separator
 // ---------------------------------------------------------------------------

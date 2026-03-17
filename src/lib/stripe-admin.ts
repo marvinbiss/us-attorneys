@@ -356,3 +356,30 @@ export const PRICE_IDS = {
   pro: process.env.STRIPE_PRO_PRICE_ID,
   premium: process.env.STRIPE_PREMIUM_PRICE_ID,
 }
+
+/**
+ * Validate that Stripe price IDs are configured.
+ * Logs a warning on first call if missing — does not crash the app.
+ * Returns true if both price IDs are present.
+ */
+let _priceIdsValidated = false
+export function validateStripePriceIds(): boolean {
+  if (_priceIdsValidated) return !!(PRICE_IDS.pro && PRICE_IDS.premium)
+
+  _priceIdsValidated = true
+
+  const missing: string[] = []
+  if (!PRICE_IDS.pro) missing.push('STRIPE_PRO_PRICE_ID')
+  if (!PRICE_IDS.premium) missing.push('STRIPE_PREMIUM_PRICE_ID')
+
+  if (missing.length > 0) {
+    logger.warn(
+      `Stripe price IDs not configured: ${missing.join(', ')}. ` +
+      'Subscription checkout will return 503 until these are set.'
+    )
+    return false
+  }
+
+  logger.info('Stripe price IDs validated successfully')
+  return true
+}

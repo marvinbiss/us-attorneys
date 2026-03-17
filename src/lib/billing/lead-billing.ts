@@ -18,6 +18,7 @@ import { logger } from '@/lib/logger'
 export const LEAD_PRICES = {
   standard: 25,
   premium: 50,
+  voice: 75,
   exclusive: 100,
 } as const
 
@@ -110,6 +111,7 @@ export async function getMonthlyLeadCharges(attorneyId: string): Promise<{
       byType: {
         standard: { count: 0, totalCents: 0 },
         premium: { count: 0, totalCents: 0 },
+        voice: { count: 0, totalCents: 0 },
         exclusive: { count: 0, totalCents: 0 },
       },
     }
@@ -118,6 +120,7 @@ export async function getMonthlyLeadCharges(attorneyId: string): Promise<{
   const byType: Record<LeadType, { count: number; totalCents: number }> = {
     standard: { count: 0, totalCents: 0 },
     premium: { count: 0, totalCents: 0 },
+    voice: { count: 0, totalCents: 0 },
     exclusive: { count: 0, totalCents: 0 },
   }
 

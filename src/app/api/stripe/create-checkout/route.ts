@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { stripe, PLANS, PlanId } from '@/lib/stripe/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { validateStripePriceIds } from '@/lib/stripe-admin'
 import { z } from 'zod'
 
 // Accept both plan_id (from UpgradeButton) and planId (legacy)
@@ -20,6 +21,9 @@ const checkoutSchema = z.object({
 )
 
 export async function POST(request: Request) {
+  // Validate price IDs on first request (logs warning if missing, does not crash)
+  validateStripePriceIds()
+
   try {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()

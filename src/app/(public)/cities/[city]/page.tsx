@@ -14,6 +14,8 @@ import problems from '@/lib/data/problems'
 import { REVALIDATE } from '@/lib/cache'
 import { resolveZipToCity } from '@/lib/location-resolver'
 import CityDemographics from '@/components/seo/CityDemographics'
+import { getLocationBySlug } from '@/lib/data/location-data'
+import type { LocationData } from '@/lib/data/location-data'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -107,6 +109,14 @@ export default async function VillePage({ params }: PageProps) {
   const regionSlug = getRegionSlugByName(cityRegion)
   const dept = getStateByCode(cityInfo.stateCode)
   const deptSlug = dept?.slug
+
+  // Fetch DB location data (census_data, enrichment) — best-effort, never crash
+  let locationData: LocationData | null = null
+  try {
+    locationData = await getLocationBySlug(cityInfo.slug)
+  } catch {
+    // DB unavailable — continue with static data only
+  }
 
   // Generate unique SEO content
   const content = generateCityContent(cityInfo)
@@ -366,6 +376,7 @@ export default async function VillePage({ params }: PageProps) {
           stateCode={cityInfo.stateCode}
           stateName={cityInfo.stateName}
           population={cityInfo.population}
+          censusData={locationData?.census_data}
         />
 
         {/* ─── SEO CONTENT: SERVICES & TIPS ─────────────── */}

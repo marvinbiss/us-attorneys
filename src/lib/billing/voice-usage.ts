@@ -14,6 +14,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { trackLeadCharge } from '@/lib/billing/lead-billing'
 
 export interface VoiceUsageSummary {
   attorneyId: string
@@ -56,10 +57,12 @@ export async function trackVoiceLeadForBilling(params: {
     vapiCost,
   })
 
-  // TODO: When Stripe metered billing is configured:
-  // 1. Look up attorney's Stripe subscription item ID
-  // 2. Report usage: stripe.subscriptionItems.createUsageRecord(itemId, { quantity: 1, action: 'increment' })
-  // 3. Or create a one-off invoice item: stripe.invoiceItems.create({ customer, amount, description })
+  // Record a lead_charges entry so the voice lead appears on the attorney's invoice
+  const chargeId = await trackLeadCharge(attorneyId, voiceCallId, 'voice')
+
+  if (chargeId) {
+    logger.info('Voice lead charge recorded', { chargeId, attorneyId, voiceCallId })
+  }
 }
 
 /**
