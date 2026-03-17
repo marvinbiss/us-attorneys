@@ -1,13 +1,104 @@
 import { describe, it, expect } from 'vitest'
+import fs from 'fs'
+import path from 'path'
 import {
   getRateLimitConfig,
   getRateLimitKey,
   getClientIp,
   checkRateLimit,
+  rateLimit,
   RATE_LIMITS,
 } from './rate-limiter'
 
 // In test env: NODE_ENV !== 'production' and no Redis → always uses MemoryRateLimiter
+
+// ── P0.5: Lua script static analysis ───────────────────────────────────────
+// Verify that the atomic Lua EVAL script contains the correct Redis commands
+// and follows the correct ordering to prevent race conditions.
+
+describe('Lua EVAL script correctness (P0.5)', () => {
+  const source = fs.readFileSync(path.resolve(__dirname, 'rate-limiter.ts'), 'utf-8')
+
+  it('contains ZADD command for adding the current request', () => {
+    expect(source).toContain("redis.call('ZADD'")
+  })
+
+  it('contains ZREMRANGEBYSCORE for cleaning expired entries', () => {
+    expect(source).toContain("redis.call('ZREMRANGEBYSCORE'")
+  })
+
+  it('contains ZCARD to count entries in the sliding window', () => {
+    expect(source).toContain("redis.call('ZCARD'")
+  })
+
+  it('contains PEXPIRE to set TTL on the sorted set key', () => {
+    expect(source).toContain("redis.call('PEXPIRE'")
+  })
+
+  it('contains ZPOPMAX to rollback the entry when over limit', () => {
+    expect(source).toContain("redis.call('ZPOPMAX'")
+  })
+
+  it('EVAL command passes "1" for number of KEYS (single sorted-set key)', () => {
+    // The EVAL invocation must specify exactly 1 key
+    expect(source).toMatch(/'EVAL'[\s\S]*?'1'/)
+  })
+
+  it('runs ZREMRANGEBYSCORE before ZADD (cleanup before insert)', () => {
+    const zremIdx = source.indexOf("redis.call('ZREMRANGEBYSCORE'")
+    const zaddIdx = source.indexOf("redis.call('ZADD'")
+    expect(zremIdx).toBeGreaterThan(-1)
+    expect(zaddIdx).toBeGreaterThan(-1)
+    expect(zremIdx).toBeLessThan(zaddIdx)
+  })
+
+  it('checks count > max_requests before invoking ZPOPMAX', () => {
+    expect(source).toContain('if count > max_requests then')
+  })
+
+  it('decrements count after ZPOPMAX (atomicity: count = count - 1)', () => {
+    expect(source).toContain('count = count - 1')
+  })
+
+  it('returns {count, 0} when over limit (denied)', () => {
+    expect(source).toContain('return {count, 0}')
+  })
+
+  it('returns {count, 1} when under limit (allowed)', () => {
+    expect(source).toContain('return {count, 1}')
+  })
+
+  it('uses math.random() in ZADD member to avoid same-ms collisions', () => {
+    expect(source).toContain('math.random')
+  })
+})
+
+// ── P0.5: Fail-open / fail-close semantics ─────────────────────────────────
+
+describe('rateLimit() high-level helper', () => {
+  it('returns success=true for allowed requests', async () => {
+    const request = new Request('http://localhost/api/test', {
+      headers: { 'x-forwarded-for': `rl-helper-${Date.now()}` },
+    })
+    const result = await rateLimit(request, RATE_LIMITS.api)
+    expect(result.success).toBe(true)
+    expect(result.remaining).toBeGreaterThanOrEqual(0)
+    expect(result.reset).toBeGreaterThan(Date.now() - 1000)
+  })
+
+  it('returns success=false when rate limited', async () => {
+    const ip = `rl-block-${Date.now()}`
+    const config = { maxRequests: 1, windowMs: 60_000 }
+    const makeReq = () =>
+      new Request('http://localhost/api/test', {
+        headers: { 'x-forwarded-for': ip },
+      })
+
+    await rateLimit(makeReq(), config) // consumes the 1 allowed
+    const result = await rateLimit(makeReq(), config)
+    expect(result.success).toBe(false)
+  })
+})
 
 describe('getRateLimitConfig', () => {
   it('returns auth config for /api/auth routes', () => {

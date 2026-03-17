@@ -11,6 +11,7 @@ import { practiceAreas as staticPracticeAreas, getCityBySlug, getStateByCode } f
 import { resolveZipToCity } from '@/lib/location-resolver'
 import { SITE_URL } from '@/lib/seo/config'
 import { REVALIDATE } from '@/lib/cache'
+import { getServiceImage } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -106,6 +107,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
     alternates: {
       canonical: `${SITE_URL}/attorneys/${specialtySlug}/${locationSlug}/all`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: 'en_US',
+      url: `${SITE_URL}/attorneys/${specialtySlug}/${locationSlug}/all`,
+      images: [{ url: getServiceImage(specialtySlug).src, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [getServiceImage(specialtySlug).src],
     },
   }
 }

@@ -13,11 +13,17 @@ export async function generateMetadata({
   const cityName = params.city
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase())
+  const title = `${serviceName} Attorney Fees in ${cityName} | Pricing Guide`
+  const description = `How much does a ${serviceName.toLowerCase()} lawyer cost in ${cityName}? Compare local hourly rates, flat fees, and payment options.`
   return {
-    title: `${serviceName} Attorney Fees in ${cityName} | Pricing Guide`,
-    description: `How much does a ${serviceName.toLowerCase()} lawyer cost in ${cityName}? Compare local hourly rates, flat fees, and payment options.`,
+    title,
+    description,
     alternates: {
       canonical: `${SITE_URL}/attorney-pricing/${params.service}/${params.city}`,
+    },
+    openGraph: {
+      title,
+      description,
     },
   }
 }

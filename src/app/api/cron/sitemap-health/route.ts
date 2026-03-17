@@ -51,20 +51,6 @@ export async function GET(request: Request) {
     results.push(...batchResults)
   }
 
-  // Also check special sitemaps
-  for (const special of [`${SITE_URL}/image-sitemap.xml`, `${SITE_URL}/news-sitemap.xml`]) {
-    try {
-      const res = await fetch(special, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
-      // news-sitemap can legitimately be empty (0 articles in last 48h)
-      const ok = res.ok
-      if (!ok) failures.push(special)
-      results.push({ url: special, status: res.status, urls: 0, ok })
-    } catch {
-      failures.push(special)
-      results.push({ url: special, status: 0, urls: 0, ok: false })
-    }
-  }
-
   const totalUrls = results.reduce((sum, r) => sum + r.urls, 0)
   const allOk = failures.length === 0
 

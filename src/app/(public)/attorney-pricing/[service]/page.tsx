@@ -10,10 +10,16 @@ export async function generateMetadata({
   const name = params.service
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase())
+  const title = `${name} Attorney Fees & Costs | Pricing Guide`
+  const description = `How much does a ${name.toLowerCase()} lawyer cost? Compare hourly rates, flat fees, and payment options across the US.`
   return {
-    title: `${name} Attorney Fees & Costs | Pricing Guide`,
-    description: `How much does a ${name.toLowerCase()} lawyer cost? Compare hourly rates, flat fees, and payment options across the US.`,
+    title,
+    description,
     alternates: { canonical: `${SITE_URL}/attorney-pricing/${params.service}` },
+    openGraph: {
+      title,
+      description,
+    },
   }
 }
 
