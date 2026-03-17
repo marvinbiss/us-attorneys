@@ -5,8 +5,9 @@ import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
 import { SITE_URL } from "@/lib/seo/config"
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 export const metadata: Metadata = {
   title: "Practical Legal Guides | USAttorneys",

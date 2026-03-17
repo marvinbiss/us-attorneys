@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities, getNeighborhoodBySlug, getNeighborhoodsByCity } from '@/lib/data/usa'
+import { REVALIDATE } from '@/lib/cache'
 
 const tradeSlugs = getPracticeAreaSlugs()
 
@@ -21,7 +22,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 export async function generateMetadata({
   params,

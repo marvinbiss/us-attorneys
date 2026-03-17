@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import VerifierClient from './VerifierClient'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.attorneyProfile
 
 export const metadata: Metadata = {
   title: 'Verify an Attorney | US Attorneys',

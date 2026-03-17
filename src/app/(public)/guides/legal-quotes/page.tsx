@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import Breadcrumb from "@/components/Breadcrumb"
+import { REVALIDATE } from '@/lib/cache'
 import {
   FileText,
   Search,
@@ -12,7 +13,7 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/quotes-travaux`
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 export const metadata: Metadata = {
   title: "Legal Quotes: A Complete Guide to Comparing Fees",

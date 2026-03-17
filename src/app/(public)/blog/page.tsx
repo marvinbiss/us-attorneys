@@ -10,8 +10,9 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import BlogPageClient from './BlogPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.blog
 
 export const metadata: Metadata = {
   title: 'Legal Blog & Insights — Attorney Tips 2026',

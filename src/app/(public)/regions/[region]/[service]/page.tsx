@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { usRegions, getRegionBySlug } from '@/lib/data/usa'
 import { getTradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
+import { REVALIDATE } from '@/lib/cache'
 
 export function generateStaticParams() {
   const allSlugs = getPracticeAreaSlugs()
@@ -12,7 +13,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 interface PageProps {
   params: Promise<{ region: string; service: string }>

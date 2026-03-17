@@ -18,7 +18,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
     >
       <p className="text-sm font-semibold text-gray-900">
         {context.artisan
-          ? `Send my request to ${context.attorney.name}`
+          ? `Send my request to ${context.artisan.name}`
           : 'Receive my personalized estimate'}
       </p>
       <input
@@ -94,7 +94,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           <>
             <ArrowRight className="h-4 w-4" />
             {context.artisan
-              ? `Send to ${context.attorney.name}`
+              ? `Send to ${context.artisan.name}`
               : 'Get connected'}
           </>
         )}

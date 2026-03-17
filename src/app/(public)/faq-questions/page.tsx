@@ -1,9 +1,14 @@
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 export const metadata: Metadata = {
   title: 'Legal Questions & Answers | US Attorneys',
+  alternates: {
+    canonical: `${SITE_URL}/faq-questions`,
+  },
   robots: { index: false },
 }
 

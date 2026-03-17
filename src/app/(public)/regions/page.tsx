@@ -6,8 +6,9 @@ import { SITE_URL } from '@/lib/seo/config'
 import { usRegions, states, cities, services, getCitiesByState } from '@/lib/data/usa'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 export const metadata: Metadata = {
   title: 'Attorneys by Region | US Attorneys',

@@ -10,6 +10,7 @@ import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jso
 import { SITE_URL } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { REVALIDATE } from '@/lib/cache'
 
 export const metadata: Metadata = {
   title: 'How It Works — Find an Attorney',
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 const steps = [
   {

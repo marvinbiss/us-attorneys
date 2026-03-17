@@ -10,6 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { cities, practiceAreas, getNeighborhoodBySlug, getNeighborhoodsByCity, getNearbyCities, getRegionSlugByName, getStateByCode } from '@/lib/data/usa'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateNeighborhoodContent, hashCode } from '@/lib/seo/location-content'
+import { REVALIDATE } from '@/lib/cache'
 
 // Pre-render top 50 cities x their neighborhoods (~500+ pages)
 const TOP_CITIES = 50
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 interface PageProps {
   params: Promise<{ city: string; neighborhood: string }>

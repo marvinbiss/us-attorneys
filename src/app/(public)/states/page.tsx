@@ -7,8 +7,9 @@ import { states, usRegions, cities, services } from '@/lib/data/usa'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getAttorneyCount, formatAttorneyCount } from '@/lib/data/stats'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 export const metadata: Metadata = {
   title: 'Attorneys by State | US Attorneys',

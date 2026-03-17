@@ -27,6 +27,7 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import dynamic from 'next/dynamic'
+import { REVALIDATE } from '@/lib/cache'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
@@ -76,7 +77,7 @@ interface ServiceProvider {
 }
 
 // ISR: Revalidate every 24h
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceDetail
 export const dynamicParams = false
 
 // Pre-render all 15 service pages at build time

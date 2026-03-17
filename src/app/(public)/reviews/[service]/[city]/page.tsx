@@ -4,8 +4,9 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities, getCityBySlug } from '@/lib/data/usa'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 const tradeSlugs = getPracticeAreaSlugs()
 

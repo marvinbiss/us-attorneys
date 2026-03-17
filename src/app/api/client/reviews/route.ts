@@ -99,7 +99,7 @@ export async function GET() {
       pendingReviews: pendingReviews,
     })
   } catch (error) {
-    logger.error('Client avis GET error:', error)
+    logger.error('Client reviews GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }
@@ -194,7 +194,7 @@ export async function POST(request: Request) {
       message: 'Review published successfully',
     })
   } catch (error) {
-    logger.error('Client avis POST error:', error)
+    logger.error('Client reviews POST error:', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }
@@ -276,7 +276,7 @@ export async function PUT(request: Request) {
       message: 'Review updated successfully',
     })
   } catch (error) {
-    logger.error('Client avis PUT error:', error)
+    logger.error('Client reviews PUT error:', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }
@@ -358,7 +358,7 @@ export async function DELETE(request: Request) {
       message: 'Review deleted successfully',
     })
   } catch (error) {
-    logger.error('Client avis DELETE error:', error)
+    logger.error('Client reviews DELETE error:', error)
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }

@@ -11,7 +11,7 @@ interface ReviewItem {
   created_at: string
   rating: number
   comment: string | null
-  artisan_response: string | null // DB column name
+  artisan_response: string | null  // DB column name — do not rename
 }
 
 interface ReviewStats {
@@ -181,7 +181,7 @@ export default function ReviewsReceivedPage() {
                           {new Date(item.created_at).toLocaleDateString('en-US')}
                         </p>
                       </div>
-                      {!item.attorney_response && (
+                      {!item.artisan_response && (
                         <button
                           onClick={() => setReplyingTo(item.id)}
                           aria-label="Reply to this review"
@@ -234,10 +234,10 @@ export default function ReviewsReceivedPage() {
                       </div>
                     )}
 
-                    {item.attorney_response && (
+                    {item.artisan_response && (
                       <div className="bg-blue-50 rounded-lg p-4 ml-4">
                         <p className="text-sm text-blue-600 font-medium mb-1">Your Response:</p>
-                        <p className="text-gray-700 text-sm">{item.attorney_response}</p>
+                        <p className="text-gray-700 text-sm">{item.artisan_response}</p>
                       </div>
                     )}
                   </div>

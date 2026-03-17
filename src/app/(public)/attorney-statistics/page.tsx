@@ -12,6 +12,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 // TODO: Replace with real US state attorney counts from database
 const STATE_ATTORNEY_COUNTS: Record<string, { attorneys: number; legal: number }> = {}
 import { DEPARTMENTS } from '@/lib/geography'
+import { REVALIDATE } from '@/lib/cache'
 import {
   servicePricings,
   regionalIndices,
@@ -139,7 +140,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 86400 // 24h
+export const revalidate = REVALIDATE.attorneyProfile
 
 // ---------------------------------------------------------------------------
 // Helper components

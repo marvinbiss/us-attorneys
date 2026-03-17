@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { states, getStateBySlug } from '@/lib/data/usa'
 import { getTradeContent } from '@/lib/data/trade-content'
+import { REVALIDATE } from '@/lib/cache'
 
 const topServices = ['personal-injury', 'criminal-defense', 'family-law', 'employment-law', 'real-estate-law']
 
@@ -13,7 +14,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 interface PageProps {
   params: Promise<{ state: string; service: string }>

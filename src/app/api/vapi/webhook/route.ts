@@ -23,11 +23,16 @@ export const maxDuration = 30
 export async function POST(request: NextRequest) {
   const rawBody = await request.text()
 
-  // Verify signature (skip in development if no secret configured)
+  // Verify signature (fail-closed: reject if secret not configured)
+  const secret = process.env.VAPI_WEBHOOK_SECRET
+  if (!secret) {
+    logger.error('Vapi webhook: VAPI_WEBHOOK_SECRET not configured')
+    return NextResponse.json({ error: 'Webhook verification not configured' }, { status: 503 })
+  }
   const signature = request.headers.get('x-vapi-signature') || ''
-  if (process.env.VAPI_WEBHOOK_SECRET && !verifyVapiSignature(rawBody, signature)) {
+  if (!verifyVapiSignature(rawBody, signature)) {
     logger.warn('Vapi webhook: invalid signature')
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 403 })
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
 
   let event: VapiWebhookEvent

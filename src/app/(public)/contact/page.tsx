@@ -6,6 +6,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { REVALIDATE } from '@/lib/cache'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 export default async function ContactPage() {
   const cmsPage = await getPageContent('contact', 'static')

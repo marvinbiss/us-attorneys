@@ -4,8 +4,9 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import DiagnosticClient from './DiagnosticClient'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 export const metadata: Metadata = {
   title: 'Which Attorney Do You Need? Free 30-Second Diagnostic',

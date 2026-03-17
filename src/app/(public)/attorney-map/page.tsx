@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { SITE_URL } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
+import { REVALIDATE } from '@/lib/cache'
 
 const MapClient = dynamic(() => import('./MapClient'), {
   ssr: false,
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.attorneyProfile
 
 export default function AttorneyMapPage() {
   return (

@@ -19,6 +19,7 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import dynamic from 'next/dynamic'
+import { REVALIDATE } from '@/lib/cache'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
@@ -48,7 +49,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
@@ -236,11 +237,11 @@ export default async function PricingServicePage({ params }: { params: Promise<{
     url: `${SITE_URL}/pricing/${service}`,
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: topCities.map((ville, i) => ({
+      itemListElement: topCities.map((city, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        name: `${trade.name} fees in ${ville.name}`,
-        url: `${SITE_URL}/practice-areas/${service}/${ville.slug}`,
+        name: `${trade.name} fees in ${city.name}`,
+        url: `${SITE_URL}/practice-areas/${service}/${city.slug}`,
       })),
     },
   }
@@ -430,13 +431,13 @@ export default async function PricingServicePage({ params }: { params: Promise<{
                 <div key={taskSlug} className="bg-gray-50 rounded-xl border border-gray-200 p-5">
                   <h3 className="font-semibold text-gray-900 text-sm mb-3">{taskName}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {topCities.slice(0, 8).map((ville) => (
+                    {topCities.slice(0, 8).map((city) => (
                       <Link
-                        key={ville.slug}
-                        href={`/pricing/${service}/${ville.slug}/${taskSlug}`}
+                        key={city.slug}
+                        href={`/pricing/${service}/${city.slug}/${taskSlug}`}
                         className="text-xs text-blue-700 hover:text-blue-900 hover:underline bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
                       >
-                        {taskName} in {ville.name} →
+                        {taskName} in {city.name} →
                       </Link>
                     ))}
                   </div>
@@ -564,14 +565,14 @@ export default async function PricingServicePage({ params }: { params: Promise<{
             Find a {trade.name.toLowerCase()} near you
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {topCities.map((ville) => (
+            {topCities.map((city) => (
               <Link
-                key={ville.slug}
-                href={`/practice-areas/${service}/${ville.slug}`}
+                key={city.slug}
+                href={`/practice-areas/${service}/${city.slug}`}
                 className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                  {trade.name} in {ville.name}
+                  {trade.name} in {city.name}
                 </div>
               </Link>
             ))}
@@ -738,8 +739,8 @@ export default async function PricingServicePage({ params }: { params: Promise<{
       <StickyMobileCTA specialtySlug={service} />
 
       <EstimationWidget context={{
-        practiceArea: trade.name,
-        practiceAreaSlug: service,
+        metier: trade.name,
+        metierSlug: service,
         ville: 'United States',
         departement: '',
         pageUrl: `/pricing/${service}`,

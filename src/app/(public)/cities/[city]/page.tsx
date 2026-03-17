@@ -11,6 +11,7 @@ import { cities, getCityBySlug, practiceAreas, getRegionSlugByName, getStateByCo
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateCityContent, hashCode } from '@/lib/seo/location-content'
 import problems from '@/lib/data/problems'
+import { REVALIDATE } from '@/lib/cache'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -19,7 +20,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 interface PageProps {
   params: Promise<{ city: string }>
@@ -516,7 +517,7 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`devis-${s.slug}`} href={`/quotes/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`quotes-${s.slug}`} href={`/quotes/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name.toLowerCase()} consultation
                   </Link>
@@ -527,7 +528,7 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`avis-${s.slug}`} href={`/reviews/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`reviews-${s.slug}`} href={`/reviews/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name.toLowerCase()} reviews
                   </Link>
@@ -538,7 +539,7 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Fees in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`tarifs-${s.slug}`} href={`/pricing/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`pricing-${s.slug}`} href={`/pricing/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name.toLowerCase()} fees
                   </Link>
@@ -549,7 +550,7 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Emergency in {cityInfo.name}</h3>
               <div className="space-y-1.5">
                 {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`urgence-${s.slug}`} href={`/emergency/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={`emergency-${s.slug}`} href={`/emergency/${s.slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} emergency
                   </Link>

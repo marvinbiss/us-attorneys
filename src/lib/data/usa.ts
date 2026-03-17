@@ -430,6 +430,9 @@ export function getNearbyCities(citySlug: string, limit: number = 5): City[] {
   return [...sameState, ...sameMetro].slice(0, limit)
 }
 
+// Backward-compat alias — many files import `services` (the old French name for practice areas)
+export const services = practiceAreas
+
 export function getRegionBySlug(slug: string): USRegion | undefined {
   return usRegions.find(r => r.slug === slug)
 }

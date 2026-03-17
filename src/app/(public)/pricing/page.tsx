@@ -10,8 +10,9 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { services, cities } from '@/lib/data/usa'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 export const metadata: Metadata = {
   title: 'Attorney Fees 2026 — Pricing Guide',
@@ -370,10 +371,10 @@ export default async function PricingPage() {
                 <div key={service.slug}>
                   <h3 className="font-semibold text-gray-900 mb-3">{service.name} fees</h3>
                   <div className="space-y-1.5">
-                    {cities.slice(0, 6).map((ville) => (
-                      <Link key={ville.slug} href={`/pricing/${service.slug}/${ville.slug}`}
+                    {cities.slice(0, 6).map((city) => (
+                      <Link key={city.slug} href={`/pricing/${service.slug}/${city.slug}`}
                         className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                        <ChevronRight className="w-3 h-3" /> {ville.name}
+                        <ChevronRight className="w-3 h-3" /> {city.name}
                       </Link>
                     ))}
                   </div>

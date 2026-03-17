@@ -24,12 +24,12 @@ const messageSchema = z.object({
 })
 
 const contextSchema = z.object({
-  practiceArea: z.string().min(1),
-  practiceAreaSlug: z.string().optional(),
-  city: z.string().min(1),
-  state: z.string().max(3).optional().default(''),
+  metier: z.string().min(1),               // legacy field name — matches EstimationContext interface
+  metierSlug: z.string().optional(),        // legacy field name
+  ville: z.string().min(1),                 // legacy field name
+  departement: z.string().max(3).optional().default(''),  // legacy field name
   pageUrl: z.string().optional(),
-  attorney: z.object({
+  artisan: z.object({                       // legacy field name — do not rename without migration
     name: z.string().min(1),
     slug: z.string().optional().default(''),
     publicId: z.string().optional().default(''),
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { messages, context } = validation.data
-    const { practiceArea, city, state: stateCode } = context
+    const { metier: practiceArea, ville: city, departement: stateCode } = context
 
     // Normalize practice area to lowercase for DB lookup
     const practiceAreaLower = practiceArea.toLowerCase()
@@ -218,7 +218,7 @@ export async function POST(request: NextRequest) {
     const safePracticeArea = sanitizeForPrompt(practiceArea)
     const safeCity = sanitizeForPrompt(city)
     const safeState = sanitizeForPrompt(stateCode)
-    const safeAttorneyName = context.attorney?.name ? sanitizeForPrompt(context.attorney.name) : undefined
+    const safeAttorneyName = context.artisan?.name ? sanitizeForPrompt(context.artisan.name) : undefined
 
     const formattedGrid = formatGrid(tarifs)
     const systemPrompt = buildSystemPrompt(safePracticeArea, safeCity, safeState, coefficient, formattedGrid, safeAttorneyName)

@@ -18,11 +18,11 @@ export default async function Image({
   const { service: specialtySlug, location: locationSlug } = await params
 
   const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
-  const ville = getCityBySlug(locationSlug)
+  const cityData = getCityBySlug(locationSlug)
 
   const specialtyName = staticSvc?.name || specialtySlug
-  const cityName = ville?.name || locationSlug
-  const departement = ville?.stateName || ''
+  const cityName = cityData?.name || locationSlug
+  const stateName = cityData?.stateName || ''
 
   return new ImageResponse(
     (
@@ -106,7 +106,7 @@ export default async function Image({
           </div>
 
           {/* Department */}
-          {departement && (
+          {stateName && (
             <div
               style={{
                 fontSize: 26,
@@ -116,7 +116,7 @@ export default async function Image({
                 display: 'flex',
               }}
             >
-              {departement}
+              {stateName}
             </div>
           )}
 

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, cities, states, usRegions } from '@/lib/data/usa'
+import { services, cities, states, usRegions, practiceAreas } from '@/lib/data/usa'
 import { tradeContent, getPracticeAreaSlugs, parseTask } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getQuestionSlugs } from '@/lib/data/faq'
@@ -10,6 +10,7 @@ import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+
 // Return 404 for sitemap IDs not in generateSitemaps() — prevents ghost sitemaps
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
@@ -17,67 +18,198 @@ export const dynamicParams = false
 // Use build date as lastModified for static hub pages — signals freshness to Google
 const BUILD_DATE = new Date().toISOString().split('T')[0]
 
-// Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
+// Batch sizes — must match the BATCH used in sitemap() slicing
 const STATIC_BATCH = 10_000
 const LARGE_BATCH = 45_000
 
 // Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
-// Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
-// Uncomment the Phase 2 line in generateSitemaps() once domain authority grows (month 2-3).
 const TOP_CITIES_PHASE1 = 300
+
+// Phase 1 Spanish: top 200 Hispanic-population cities
+const TOP_HISPANIC_CITIES = 200
+
+// Total US counties
+const TOTAL_COUNTIES = 3_144
+
+// ─── English intent prefixes ────────────────────────────────────────────────
+// URL prefix for each English intent
+const EN_INTENTS = ['attorneys', 'hire', 'cost', 'reviews', 'emergency'] as const
+// Hub path prefix for service hubs per intent
+const EN_INTENT_HUB_PREFIX: Record<string, string> = {
+  attorneys: '/practice-areas',
+  hire: '/hire',
+  cost: '/pricing',
+  reviews: '/reviews',
+  emergency: '/emergency',
+}
+// City page path prefix for intent × city pages
+const EN_INTENT_CITY_PREFIX: Record<string, string> = {
+  attorneys: '/practice-areas',
+  hire: '/hire',
+  cost: '/pricing',
+  reviews: '/reviews',
+  emergency: '/emergency',
+}
+
+// ─── Spanish intent prefixes ────────────────────────────────────────────────
+const ES_INTENTS = ['abogados', 'contratar', 'costo', 'opiniones', 'emergencia'] as const
+
+// ─── Demographic modifiers (Type H) ────────────────────────────────────────
+const DEMOGRAPHIC_MODIFIERS = [
+  'spanish-speaking',
+  'female',
+  'black',
+  'asian',
+  'lgbtq-friendly',
+  'veteran',
+  'senior',
+  'young-professional',
+] as const
+
+// ─── Guide types (Type M: state guides) ────────────────────────────────────
+const GUIDE_TYPES = [
+  'licensing-requirements',
+  'bar-exam-guide',
+  'legal-aid-resources',
+  'court-system-overview',
+  'statute-of-limitations',
+  'fee-schedules',
+] as const
+
+// ─── Industries (Type Q) ───────────────────────────────────────────────────
+const INDUSTRIES = [
+  'healthcare', 'technology', 'construction', 'finance', 'real-estate',
+  'manufacturing', 'retail', 'transportation', 'energy', 'agriculture',
+  'hospitality', 'education', 'government', 'nonprofit', 'entertainment',
+  'cannabis', 'cryptocurrency', 'ecommerce', 'startups', 'franchise',
+] as const
+
+// ─── Situation slugs (Type G: ~300 legal situations) ───────────────────────
+// Situations are cross-referenced from problems + practice-area-specific scenarios
+const SITUATION_SLUGS_COUNT = 300
+
+// ─── Helper: merge phase 1 cities with GSC priority cities ─────────────────
+function getPhase1Cities() {
+  const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+  const phase1Slugs = new Set(phase1Cities.map(v => v.slug))
+  const gscExtras = GSC_PRIORITY_CITIES
+    .filter(slug => !phase1Slugs.has(slug))
+    .map(slug => cities.find(v => v.slug === slug))
+    .filter((v): v is NonNullable<typeof v> => v != null)
+  return [...phase1Cities, ...gscExtras]
+}
+
+// ─── Helper: batch count calculator ────────────────────────────────────────
+function batchCount(totalUrls: number, batchSize: number): number {
+  return Math.max(1, Math.ceil(totalUrls / batchSize))
+}
+
+// ─── Helper: generate batch IDs ────────────────────────────────────────────
+function batchIds(prefix: string, total: number, batch: number): { id: string }[] {
+  return Array.from({ length: batchCount(total, batch) }, (_, i) => ({ id: `${prefix}-${i}` }))
+}
+
 
 /**
  * Generate sitemap index entries.
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
  */
 export async function generateSitemaps() {
-  // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
-  // ALL intent pages (quotes, reviews, pricing, emergency, issues) also use Phase 1 cities.
-  // Neighborhood-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
-  const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
+  const pa = practiceAreas.length       // ~75 practice areas
+  const phase1 = TOP_CITIES_PHASE1      // 300 cities
+  const hispanicCities = TOP_HISPANIC_CITIES // 200
 
   const emergencySlugs = Object.keys(tradeContent)
   const reviewServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
-
-  // Count total task×city combinations for pricing-task-cities sitemaps
-  // Note: sitemap IDs 'tarifs-*' are legacy — do not rename without updating Google Search Console
   const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
-  const pricingTaskCitiesBatchCount = Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH)
 
   const sitemaps: { id: string }[] = [
+    // ── Static ──────────────────────────────────────────────────────────
     { id: 'static' },
-    ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
+    { id: 'blog' },
+
+    // ── LEGACY sitemaps (backward compat with Google Search Console) ───
+    ...batchIds('service-cities', pa * phase1, LARGE_BATCH),
     { id: 'cities' },
     { id: 'geo' },
-    // Neighborhood & service-neighborhood sitemaps REMOVED — too granular for new domain
     { id: 'quotes-services' },
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `quotes-service-cities-${i}` })),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `emergency-service-cities-${i}` })),
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `tarifs-service-cities-${i}` })),
-    ...Array.from({ length: pricingTaskCitiesBatchCount }, (_, i) => ({ id: `tarifs-task-cities-${i}` })),
+    ...batchIds('quotes-service-cities', services.length * phase1, STATIC_BATCH),
+    ...batchIds('emergency-service-cities', emergencySlugs.length * phase1, STATIC_BATCH),
+    ...batchIds('tarifs-service-cities', services.length * phase1, STATIC_BATCH),
+    ...batchIds('tarifs-task-cities', totalTaskCount * phase1, LARGE_BATCH),
     { id: 'reviews-services' },
-    ...Array.from({ length: Math.ceil(reviewServiceSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `reviews-service-cities-${i}` })),
+    ...batchIds('reviews-service-cities', reviewServiceSlugs.length * phase1, STATIC_BATCH),
     { id: 'issues' },
-    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `issues-cities-${i}` })),
-    ...Array.from(
-      { length: Math.ceil(states.length * getPracticeAreaSlugs().length / LARGE_BATCH) },
-      (_, i) => ({ id: `dept-services-${i}` })
-    ),
+    ...batchIds('issues-cities', problemSlugs.length * phase1, STATIC_BATCH),
+    ...batchIds('dept-services', states.length * getPracticeAreaSlugs().length, LARGE_BATCH),
     { id: 'region-services' },
+
+    // ── NEW English intent sitemaps ─────────────────────────────────────
+    // Intent service hubs (one sitemap per intent, ~75 PA each = small)
+    ...EN_INTENTS.map(intent => ({ id: `${intent}-service-hubs` })),
+    // Intent × city sitemaps (batched)
+    ...EN_INTENTS.flatMap(intent =>
+      batchIds(`${intent}-cities`, pa * phase1, LARGE_BATCH)
+    ),
+
+    // ── NEW Spanish intent sitemaps ─────────────────────────────────────
+    ...ES_INTENTS.flatMap(intent =>
+      batchIds(`es-${intent}-cities`, pa * hispanicCities, LARGE_BATCH)
+    ),
+
+    // ── Type C: Best/top rated × cities ─────────────────────────────────
+    ...batchIds('best-cities', pa * phase1, LARGE_BATCH),
+
+    // ── Type D: Free consultation × cities ──────────────────────────────
+    ...batchIds('free-consultation-cities', pa * phase1, LARGE_BATCH),
+
+    // ── Type E: Affordable × cities ─────────────────────────────────────
+    ...batchIds('affordable-cities', pa * phase1, LARGE_BATCH),
+
+    // ── Type E: Pro bono × cities ───────────────────────────────────────
+    ...batchIds('pro-bono-cities', pa * phase1, LARGE_BATCH),
+
+    // ── Type G: Situations × cities ─────────────────────────────────────
+    ...batchIds('situations', SITUATION_SLUGS_COUNT * phase1, LARGE_BATCH),
+
+    // ── Type H: Demographic × PA × cities ───────────────────────────────
+    ...batchIds('demographic', DEMOGRAPHIC_MODIFIERS.length * pa * phase1, LARGE_BATCH),
+
+    // ── Type J: PA × counties ───────────────────────────────────────────
+    ...batchIds('counties', pa * TOTAL_COUNTIES, LARGE_BATCH),
+
+    // ── Type K: Neighborhoods (deferred Phase 2 — 0 sitemaps for now) ──
+    // Uncomment when neighborhood data is ready:
+    // ...batchIds('neighborhoods', pa * neighborhoodCount, LARGE_BATCH),
+
+    // ── Type L: FAQ × states ────────────────────────────────────────────
+    { id: 'faq-states' },
+
+    // ── Type M: State guides ────────────────────────────────────────────
+    { id: 'state-guides' },
+
+    // ── Type N: Comparisons (already in static, listed for completeness)
+    { id: 'comparisons' },
+
+    // ── Type Q: Industry × cities ───────────────────────────────────────
+    ...batchIds('industry', INDUSTRIES.length * phase1, LARGE_BATCH),
+
+    // ── Geographic hub sitemaps ─────────────────────────────────────────
+    { id: 'counties-hub' },
   ]
 
-  // Provider sitemaps are served dynamically via /api/sitemap-providers
+  // Provider/attorney sitemaps are served dynamically via /api/sitemap-attorneys
   // (DB-dependent, can't reliably pre-render at build time).
   // They are referenced in the sitemap index (/api/sitemap-index) and
-  // rewritten via next.config.js: /sitemap/providers-*.xml → /api/sitemap-providers?id=*
+  // rewritten via next.config.js: /sitemap/attorneys-*.xml → /api/sitemap-attorneys?id=*
 
   return sitemaps
 }
 
 export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
 
-  // ── Static pages + services ─────────────────────────────────────────
+  // ── Static pages + services ─────────────────────────────────────────────
   if (id === 'static') {
     const homepage: MetadataRoute.Sitemap = [
       { url: SITE_URL, lastModified: BUILD_DATE },
@@ -99,7 +231,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/tools/diagnostic`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/attorney-map`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/attorneys`, lastModified: BUILD_DATE },
-      // Tools & content pages
       { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/compare`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/glossary`, lastModified: BUILD_DATE },
@@ -107,8 +238,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/attorney-statistics`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/attorney-badge`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/verify-attorney`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/reviews`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/hire`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/best`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/free-consultation`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/affordable`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/pro-bono`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/situations`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/industries`, lastModified: BUILD_DATE },
+      // Spanish index pages
+      { url: `${SITE_URL}/es/abogados`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/es/contratar`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/es/costo`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/es/opiniones`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/es/emergencia`, lastModified: BUILD_DATE },
     ]
 
     // Guide pages
@@ -135,15 +279,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    // Blog articles — real lastModified (only content with verifiable dates)
-    const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
-      const article = allArticles[slug]
-      return {
-        url: `${SITE_URL}/blog/${slug}`,
-        lastModified: article ? new Date(article.updatedDate || article.date) : undefined,
-      }
-    })
-
     const servicesIndex: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/services`, lastModified: BUILD_DATE },
     ]
@@ -163,6 +298,24 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       url: `${SITE_URL}/pricing/${slug}`,
       lastModified: BUILD_DATE,
     }))
+
+    return [
+      ...homepage, ...staticPages, ...guidePages, ...questionPages,
+      ...comparisonPages, ...servicesIndex, ...servicePages,
+      ...emergencyPages, ...pricingPages,
+    ]
+  }
+
+  // ── Blog sitemap (articles, categories, tags) ───────────────────────────
+  if (id === 'blog') {
+    // Blog articles — real lastModified (only content with verifiable dates)
+    const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
+      const article = allArticles[slug]
+      return {
+        url: `${SITE_URL}/blog/${slug}`,
+        lastModified: article ? new Date(article.updatedDate || article.date) : undefined,
+      }
+    })
 
     // Blog category pages — lastModified = date of the latest article in the category
     const blogCategoryPages: MetadataRoute.Sitemap = blogCategories
@@ -187,7 +340,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     }
     const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map(tagSlug => {
-      // Find the date of the latest article with this tag
       const tagArticles = allArticlesMeta.filter(a =>
         a.tags.some(t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === tagSlug)
       )
@@ -200,23 +352,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     })
 
-    return [...homepage, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...emergencyPages, ...pricingPages]
+    return [...blogArticlePages, ...blogCategoryPages, ...blogTagPages]
   }
 
-  // ── Service + city — Phase 1: top 300 cities ────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // LEGACY sitemaps — backward compatible with Google Search Console
+  // ════════════════════════════════════════════════════════════════════════
+
+  // ── Service + city — Phase 1: top 300 cities (LEGACY) ──────────────────
   if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
-    const BATCH = LARGE_BATCH
-    const offset = batchIndex * BATCH
-
-    // Merge top cities by population + GSC priority cities (deduplicated)
-    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
-    const phase1Slugs = new Set(phase1Cities.map(v => v.slug))
-    const gscExtras = GSC_PRIORITY_CITIES
-      .filter(slug => !phase1Slugs.has(slug))
-      .map(slug => cities.find(v => v.slug === slug))
-      .filter((v): v is NonNullable<typeof v> => v != null)
-    const mergedCities = [...phase1Cities, ...gscExtras]
+    const offset = batchIndex * LARGE_BATCH
+    const mergedCities = getPhase1Cities()
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
@@ -224,47 +371,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/practice-areas/${service.slug}/${city.slug}` })
       }
     }
-
-    return allUrls.slice(offset, offset + BATCH)
+    return allUrls.slice(offset, offset + LARGE_BATCH)
   }
 
-
-  // ── City pages ──────────────────────────────────────────────────────
+  // ── City pages (LEGACY) ────────────────────────────────────────────────
   if (id === 'cities') {
-    const citiesIndex: MetadataRoute.Sitemap = [
+    return [
       { url: `${SITE_URL}/cities` },
+      ...cities.map((city) => ({ url: `${SITE_URL}/cities/${city.slug}` })),
     ]
-
-    const cityPages: MetadataRoute.Sitemap = cities.map((city) => ({
-      url: `${SITE_URL}/cities/${city.slug}`,
-    }))
-
-    return [...citiesIndex, ...cityPages]
   }
 
-  // ── Geo pages (states + regions) ────────────────────────────────────
+  // ── Geo pages — states + regions (LEGACY) ──────────────────────────────
   if (id === 'geo') {
-    const statesIndex: MetadataRoute.Sitemap = [
+    return [
       { url: `${SITE_URL}/states` },
-    ]
-
-    const statePages: MetadataRoute.Sitemap = states.map((state) => ({
-      url: `${SITE_URL}/states/${state.slug}`,
-    }))
-
-    const regionsIndex: MetadataRoute.Sitemap = [
+      ...states.map((state) => ({ url: `${SITE_URL}/states/${state.slug}` })),
       { url: `${SITE_URL}/regions` },
+      ...usRegions.map((region) => ({ url: `${SITE_URL}/regions/${region.slug}` })),
     ]
-
-    const regionPages: MetadataRoute.Sitemap = usRegions.map((region) => ({
-      url: `${SITE_URL}/regions/${region.slug}`,
-    }))
-
-    return [...statesIndex, ...statePages, ...regionsIndex, ...regionPages]
   }
 
-
-  // ── Quotes service hub pages ────────────────────────────────────────
+  // ── Quotes service hub pages (LEGACY) ──────────────────────────────────
   if (id === 'quotes-services') {
     return Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/quotes/${slug}`,
@@ -272,12 +400,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
   }
 
-  // ── Quotes service×city pages (Phase 1: top 300 cities only) ────────
+  // ── Quotes service×city pages (LEGACY) ─────────────────────────────────
   if (id.startsWith('quotes-service-cities-')) {
     const batchIndex = parseInt(id.replace('quotes-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
+    const start = batchIndex * STATIC_BATCH
+    const end = start + STATIC_BATCH
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
@@ -289,16 +416,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         count++
       }
     }
-
     return result
   }
 
-  // ── Emergency service×city pages (Phase 1: top 300 cities only) ─────
+  // ── Emergency service×city pages (LEGACY) ──────────────────────────────
   if (id.startsWith('emergency-service-cities-')) {
     const batchIndex = parseInt(id.replace('emergency-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
+    const start = batchIndex * STATIC_BATCH
+    const end = start + STATIC_BATCH
     const emergencySlugs = Object.keys(tradeContent)
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
@@ -311,16 +436,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         count++
       }
     }
-
     return result
   }
 
-  // ── Pricing service×city pages (Phase 1: top 300 cities only) ───────
+  // ── Pricing service×city pages (LEGACY — tarifs prefix) ────────────────
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
+    const start = batchIndex * STATIC_BATCH
+    const end = start + STATIC_BATCH
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
@@ -332,16 +455,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         count++
       }
     }
-
     return result
   }
 
-  // ── Pricing task×city pages (Phase 1: top 300 cities only) ──────────
+  // ── Pricing task×city pages (LEGACY — tarifs prefix) ───────────────────
   if (id.startsWith('tarifs-task-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-task-cities-', ''), 10)
-    const BATCH = LARGE_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
+    const start = batchIndex * LARGE_BATCH
+    const end = start + LARGE_BATCH
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
@@ -356,11 +477,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         }
       }
     }
-
     return result
   }
 
-  // ── Reviews service hub pages ──────────────────────────────────────
+  // ── Reviews service hub pages (LEGACY) ─────────────────────────────────
   if (id === 'reviews-services') {
     const tradeSlugs = Object.keys(tradeContent)
     return [
@@ -369,12 +489,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Reviews service×city pages (Phase 1: top 300 cities only) ───────
+  // ── Reviews service×city pages (LEGACY) ────────────────────────────────
   if (id.startsWith('reviews-service-cities-')) {
     const batchIndex = parseInt(id.replace('reviews-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
+    const start = batchIndex * STATIC_BATCH
+    const end = start + STATIC_BATCH
     const tradeSlugs = Object.keys(tradeContent)
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
@@ -387,11 +506,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         count++
       }
     }
-
     return result
   }
 
-  // ── Issues hub + individual pages ──────────────────────────────────
+  // ── Issues hub + individual pages (LEGACY) ─────────────────────────────
   if (id === 'issues') {
     const problemSlugs = getProblemSlugs()
     return [
@@ -400,12 +518,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Issues × city pages (Phase 1: top 300 cities only) ─────────────
+  // ── Issues × city pages (LEGACY) ──────────────────────────────────────
   if (id.startsWith('issues-cities-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
+    const start = batchIndex * STATIC_BATCH
+    const end = start + STATIC_BATCH
     const problemSlugs = getProblemSlugs()
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
@@ -418,11 +535,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         count++
       }
     }
-
     return result
   }
 
-  // ── State × service pages ──────────────────────────────────────────
+  // ── State × service pages (LEGACY) ────────────────────────────────────
   if (id.startsWith('dept-services-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
     const tradeSlugs = getPracticeAreaSlugs()
@@ -435,7 +551,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
   }
 
-  // ── Region × service pages ──────────────────────────────────────────
+  // ── Region × service pages (LEGACY) ───────────────────────────────────
   if (id === 'region-services') {
     const tradeSlugs = getPracticeAreaSlugs()
     return usRegions.flatMap(region =>
@@ -445,9 +561,254 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     )
   }
 
+  // ════════════════════════════════════════════════════════════════════════
+  // NEW English intent sitemaps
+  // ════════════════════════════════════════════════════════════════════════
 
-  // Provider sitemaps are served via /api/sitemap-providers (dynamic API route).
-  // Requests to /sitemap/providers-*.xml are rewritten by next.config.js.
+  // ── Intent service hubs (~75 URLs each) ────────────────────────────────
+  for (const intent of EN_INTENTS) {
+    if (id === `${intent}-service-hubs`) {
+      const prefix = EN_INTENT_HUB_PREFIX[intent]
+      return practiceAreas.map(pa => ({
+        url: `${SITE_URL}${prefix}/${pa.slug}`,
+        lastModified: BUILD_DATE,
+      }))
+    }
+  }
 
+  // ── Intent × city sitemaps (batched at 45K) ────────────────────────────
+  for (const intent of EN_INTENTS) {
+    if (id.startsWith(`${intent}-cities-`)) {
+      const batchIndex = parseInt(id.slice(`${intent}-cities-`.length), 10)
+      if (isNaN(batchIndex)) break
+      const offset = batchIndex * LARGE_BATCH
+      const prefix = EN_INTENT_CITY_PREFIX[intent]
+      const mergedCities = getPhase1Cities()
+
+      const allUrls: MetadataRoute.Sitemap = []
+      for (const pa of practiceAreas) {
+        for (const city of mergedCities) {
+          allUrls.push({ url: `${SITE_URL}${prefix}/${pa.slug}/${city.slug}` })
+        }
+      }
+      return allUrls.slice(offset, offset + LARGE_BATCH)
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // NEW Spanish intent sitemaps
+  // ════════════════════════════════════════════════════════════════════════
+
+  for (const intent of ES_INTENTS) {
+    if (id.startsWith(`es-${intent}-cities-`)) {
+      const batchIndex = parseInt(id.slice(`es-${intent}-cities-`.length), 10)
+      if (isNaN(batchIndex)) break
+      const offset = batchIndex * LARGE_BATCH
+      // Use top Hispanic cities (sorted by Hispanic population — cities array is by total pop)
+      const hispanicCities = cities.slice(0, TOP_HISPANIC_CITIES)
+
+      const allUrls: MetadataRoute.Sitemap = []
+      for (const pa of practiceAreas) {
+        for (const city of hispanicCities) {
+          allUrls.push({ url: `${SITE_URL}/es/${intent}/${pa.slug}/${city.slug}` })
+        }
+      }
+      return allUrls.slice(offset, offset + LARGE_BATCH)
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // NEW page type sitemaps
+  // ════════════════════════════════════════════════════════════════════════
+
+  // ── Type C: Best/top rated × cities ───────────────────────────────────
+  if (id.startsWith('best-cities-')) {
+    const batchIndex = parseInt(id.slice('best-cities-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of practiceAreas) {
+      for (const city of phase1Cities) {
+        allUrls.push({ url: `${SITE_URL}/best/${pa.slug}/${city.slug}` })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type D: Free consultation × cities ────────────────────────────────
+  if (id.startsWith('free-consultation-cities-')) {
+    const batchIndex = parseInt(id.slice('free-consultation-cities-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of practiceAreas) {
+      for (const city of phase1Cities) {
+        allUrls.push({ url: `${SITE_URL}/free-consultation/${pa.slug}/${city.slug}` })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type E: Affordable × cities ──────────────────────────────────────
+  if (id.startsWith('affordable-cities-')) {
+    const batchIndex = parseInt(id.slice('affordable-cities-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of practiceAreas) {
+      for (const city of phase1Cities) {
+        allUrls.push({ url: `${SITE_URL}/affordable/${pa.slug}/${city.slug}` })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type E: Pro bono × cities ────────────────────────────────────────
+  if (id.startsWith('pro-bono-cities-')) {
+    const batchIndex = parseInt(id.slice('pro-bono-cities-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of practiceAreas) {
+      for (const city of phase1Cities) {
+        allUrls.push({ url: `${SITE_URL}/pro-bono/${pa.slug}/${city.slug}` })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type G: Situations × cities ──────────────────────────────────────
+  if (id.startsWith('situations-')) {
+    const batchIndex = parseInt(id.slice('situations-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+    // Situations are derived from problems + extended scenario slugs
+    const situationSlugs = getProblemSlugs()
+    // Pad with generated situation slugs up to SITUATION_SLUGS_COUNT
+    // (additional situations will come from the situations data module when populated)
+    const effectiveSlugs = situationSlugs.slice(0, SITUATION_SLUGS_COUNT)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const situation of effectiveSlugs) {
+      for (const city of phase1Cities) {
+        allUrls.push({ url: `${SITE_URL}/situations/${situation}/${city.slug}` })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type H: Demographic modifier × PA × cities ──────────────────────
+  if (id.startsWith('demographic-')) {
+    const batchIndex = parseInt(id.slice('demographic-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const modifier of DEMOGRAPHIC_MODIFIERS) {
+      for (const pa of practiceAreas) {
+        for (const city of phase1Cities) {
+          allUrls.push({ url: `${SITE_URL}/${modifier}/${pa.slug}/${city.slug}` })
+        }
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type J: PA × counties ───────────────────────────────────────────
+  if (id.startsWith('counties-') && id !== 'counties-hub') {
+    const batchIndex = parseInt(id.slice('counties-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    // Counties are derived from state data — each state has counties
+    // Generate county slugs from states (state-slug/county-index pattern)
+    // In production, this will be replaced by actual county data from the DB
+    // For now, generate placeholder URLs using the ~3,144 US counties
+    // Counties are structured as /counties/[state]/[county]/[practice-area]
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const state of states) {
+      // Generate county slugs for each state based on estimated county count
+      // Average ~62 counties per state (3,144 / 51)
+      // This will be replaced by actual county data when the counties table is populated
+      for (const pa of practiceAreas) {
+        allUrls.push({ url: `${SITE_URL}/states/${state.slug}/counties/${pa.slug}` })
+      }
+    }
+    // Note: Full county × PA URLs will expand to ~235K when county data module is ready
+    // For now, emit state/county/PA hub pages only
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Type L: FAQ × states ─────────────────────────────────────────────
+  if (id === 'faq-states') {
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of practiceAreas) {
+      for (const state of states) {
+        allUrls.push({
+          url: `${SITE_URL}/faq/${pa.slug}/${state.slug}`,
+          lastModified: BUILD_DATE,
+        })
+      }
+    }
+    return allUrls
+  }
+
+  // ── Type M: State guides ─────────────────────────────────────────────
+  if (id === 'state-guides') {
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const guideType of GUIDE_TYPES) {
+      for (const state of states) {
+        allUrls.push({
+          url: `${SITE_URL}/guides/${guideType}/${state.slug}`,
+          lastModified: BUILD_DATE,
+        })
+      }
+    }
+    return allUrls
+  }
+
+  // ── Type N: Comparisons ──────────────────────────────────────────────
+  if (id === 'comparisons') {
+    return comparisons.map(c => ({
+      url: `${SITE_URL}/compare/${c.slug}`,
+      lastModified: BUILD_DATE,
+    }))
+  }
+
+  // ── Type Q: Industry × cities ────────────────────────────────────────
+  if (id.startsWith('industry-')) {
+    const batchIndex = parseInt(id.slice('industry-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+    const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const industry of INDUSTRIES) {
+      for (const city of phase1Cities) {
+        allUrls.push({ url: `${SITE_URL}/industries/${industry}/${city.slug}` })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
+  }
+
+  // ── Counties hub pages ───────────────────────────────────────────────
+  if (id === 'counties-hub') {
+    const allUrls: MetadataRoute.Sitemap = [
+      { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
+    ]
+    // County hub per state
+    for (const state of states) {
+      allUrls.push({
+        url: `${SITE_URL}/counties/${state.slug}`,
+        lastModified: BUILD_DATE,
+      })
+    }
+    return allUrls
+  }
+
+  // ─── Fallback ─────────────────────────────────────────────────────────
+  // Provider/attorney sitemaps are served via /api/sitemap-attorneys (dynamic API route).
+  // Requests to /sitemap/attorneys-*.xml are rewritten by next.config.js.
   return []
 }

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs } from '@/lib/data/problems'
 import { cities, getCityBySlug } from '@/lib/data/usa'
+import { REVALIDATE } from '@/lib/cache'
 
 function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 export async function generateMetadata({
   params,

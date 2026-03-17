@@ -285,48 +285,6 @@ export const BookingFunnel = {
   },
 }
 
-// Conversion rate calculation
-export function calculateConversionRate(
-  profileViews: number,
-  completedBookings: number
-): number {
-  if (profileViews === 0) return 0
-  return Math.round((completedBookings / profileViews) * 100 * 100) / 100
-}
-
-// Funnel drop-off analysis
-export interface FunnelAnalysis {
-  step: string
-  count: number
-  dropOffRate: number
-}
-
-export function analyzeFunnel(stepCounts: number[]): FunnelAnalysis[] {
-  const steps = [
-    'Profile View',
-    'Calendar Opened',
-    'Date Selected',
-    'Slot Selected',
-    'Form Started',
-    'Form Completed',
-    'Booking Initiated',
-    'Booking Completed',
-  ]
-
-  return steps.map((step, index) => ({
-    step,
-    count: stepCounts[index] || 0,
-    dropOffRate:
-      index === 0
-        ? 0
-        : stepCounts[index - 1] > 0
-        ? Math.round(
-            ((stepCounts[index - 1] - stepCounts[index]) / stepCounts[index - 1]) * 100
-          )
-        : 0,
-  }))
-}
-
 // A/B Testing helper
 export function getVariant(experimentId: string, variants: string[]): string {
   if (typeof window === 'undefined') return variants[0]

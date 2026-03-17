@@ -48,7 +48,7 @@ const LEGACY_REDIRECTS: Record<string, string> = {
 // URL canonicalization — all fixes combined into a single 301 hop
 function getCanonicalRedirect(request: NextRequest): string | null {
   const url = request.nextUrl
-  const host = request.headers.get('host') || 'us-attorneys.com'
+  const host = request.headers.get('host') || 'lawtendr.com'
 
   let canonicalHost = host
   let pathname = url.pathname
@@ -101,7 +101,7 @@ export async function middleware(request: NextRequest) {
   // Redirect legacy pricing URLs → /pricing (301 permanent, cached at CDN edge)
   if (pathname.startsWith('/pricing-artisans') || pathname.startsWith('/pricing-attorneys')) {
     const newPath = pathname.replace('/pricing-artisans', '/pricing').replace('/pricing-attorneys', '/pricing')
-    const host = request.headers.get('host') || 'us-attorneys.com'
+    const host = request.headers.get('host') || 'lawtendr.com'
     const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
     redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
     redirectResponse.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
@@ -110,7 +110,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirect legacy/mistyped URLs → correct paths (301 permanent, cached at CDN edge)
   if (LEGACY_REDIRECTS[pathname]) {
-    const host = request.headers.get('host') || 'us-attorneys.com'
+    const host = request.headers.get('host') || 'lawtendr.com'
     const legacyRedirect = NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
     legacyRedirect.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
     legacyRedirect.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
@@ -174,8 +174,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Rate limiting for API routes (skip health check — must always respond fast)
-  if (pathname.startsWith('/api/') && pathname !== '/api/health') {
+  // Rate limiting for API routes and heavy page routes (skip health check — must always respond fast)
+  if ((pathname.startsWith('/api/') && pathname !== '/api/health') || pathname.startsWith('/find/')) {
     const clientIp = getClientIp(request.headers)
     const rateLimitConfig = getRateLimitConfig(pathname)
     const rateLimitKey = getRateLimitKey(clientIp, pathname)
@@ -237,6 +237,7 @@ export async function middleware(request: NextRequest) {
   // Strategy: prefix-match covers all dynamic/nested routes, exact-match covers leaf pages.
   // Any public route that starts with one of these prefixes gets CDN caching.
   const publicCachePrefixes = [
+    // English routes
     '/practice-areas/',
     '/quotes/',
     '/pricing/',
@@ -251,6 +252,25 @@ export async function middleware(request: NextRequest) {
     '/blog/',
     '/compare/',
     '/tools/',
+    // English intent routes
+    '/attorneys/',
+    '/hire/',
+    '/cost/',
+    '/best/',
+    '/free-consultation/',
+    '/affordable/',
+    '/pro-bono/',
+    '/situations/',
+    '/find/',
+    '/counties/',
+    '/legal-questions/',
+    '/industry/',
+    // Spanish mirror routes
+    '/abogados/',
+    '/contratar/',
+    '/costo/',
+    '/opiniones/',
+    '/emergencia/',
   ]
   // Exact-match pages (no sub-routes, or the index page of a prefix group)
   const publicCacheExact = new Set([
@@ -295,6 +315,50 @@ export async function middleware(request: NextRequest) {
   if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
     response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+  }
+
+  // hreflang header injection for bilingual pages
+  const spanishPrefixes = ['/abogados/', '/contratar/', '/costo/', '/opiniones/', '/emergencia/']
+  const englishPrefixes = ['/attorneys/', '/hire/', '/cost/', '/reviews/', '/emergency/']
+  const spanishToEnglish: Record<string, string> = {
+    '/abogados/': '/attorneys/',
+    '/contratar/': '/hire/',
+    '/costo/': '/cost/',
+    '/opiniones/': '/reviews/',
+    '/emergencia/': '/emergency/',
+  }
+  const englishToSpanish: Record<string, string> = {
+    '/attorneys/': '/abogados/',
+    '/hire/': '/contratar/',
+    '/cost/': '/costo/',
+    '/reviews/': '/opiniones/',
+    '/emergency/': '/emergencia/',
+  }
+
+  const matchedSpanish = spanishPrefixes.find(p => pathname.startsWith(p))
+  const matchedEnglish = englishPrefixes.find(p => pathname.startsWith(p))
+
+  if (matchedSpanish) {
+    // Spanish page — set Content-Language and add hreflang Link headers
+    response.headers.set('Content-Language', 'es')
+    const englishPrefix = spanishToEnglish[matchedSpanish]
+    const restOfPath = pathname.slice(matchedSpanish.length)
+    const englishUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${englishPrefix}${restOfPath}`
+    const selfUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${pathname}`
+    response.headers.set(
+      'Link',
+      `<${selfUrl}>; rel="alternate"; hreflang="es", <${englishUrl}>; rel="alternate"; hreflang="en"`
+    )
+  } else if (matchedEnglish) {
+    // English page with Spanish mirror — add hreflang Link headers
+    const spanishPrefix = englishToSpanish[matchedEnglish]
+    const restOfPath = pathname.slice(matchedEnglish.length)
+    const spanishUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${spanishPrefix}${restOfPath}`
+    const selfUrl = `https://${request.headers.get('host') || 'lawtendr.com'}${pathname}`
+    response.headers.set(
+      'Link',
+      `<${selfUrl}>; rel="alternate"; hreflang="en", <${spanishUrl}>; rel="alternate"; hreflang="es"`
+    )
   }
 
   return addCspHeaders(response, request, nonce)

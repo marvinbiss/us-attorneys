@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Verification Process | US Attorneys',
+  alternates: {
+    canonical: `${SITE_URL}/verification-process`,
+  },
   robots: { index: false },
 }
 

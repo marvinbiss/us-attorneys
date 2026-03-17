@@ -17,7 +17,7 @@ const estimationLeadSchema = z.object({
   name: z.string().optional(),
   phone: z.string().min(10, 'Invalid phone number (min 10 characters)'),
   email: z.string().email('Invalid email').optional().or(z.literal('')),
-  practiceArea: z.string().min(1, 'Practice area is required'),
+  specialty: z.string().min(1, 'Practice area is required'),  // frontend sends 'specialty' from context.metier
   city: z.string().min(1, 'City is required'),
   state: z.string().default(''),
   projectDescription: z.string().optional(),
@@ -26,7 +26,7 @@ const estimationLeadSchema = z.object({
   source: z.enum(['chat', 'callback'], { message: 'Source is required' }),
   conversation_history: z.array(z.unknown()).optional(),
   page_url: z.string().optional(),
-  attorney_public_id: z.string().optional(),
+  artisan_public_id: z.string().optional(),  // DB column name (legacy) — do not rename without migration
 })
 
 export async function POST(request: Request) {
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         nom: data.name || null,
         telephone: data.phone,
         email,
-        metier: data.practiceArea,
+        metier: data.specialty,
         ville: data.city,
         departement: data.state,
         description_projet: data.projectDescription || null,
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
         source: data.source,
         conversation_history: data.conversation_history ?? null,
         page_url: data.page_url || null,
-        artisan_public_id: data.attorney_public_id || null, // DB field: artisan_public_id (legacy name for attorney_public_id)
+        artisan_public_id: data.artisan_public_id || null, // DB field: artisan_public_id (legacy name for attorney_public_id)
       })
       .select('id')
       .single()
@@ -112,11 +112,11 @@ export async function POST(request: Request) {
         resource_type: 'estimation_lead',
         resource_id: lead.id,
         new_value: {
-          practiceArea: data.practiceArea,
+          practiceArea: data.specialty,
           city: data.city,
           state: data.state,
           source: data.source,
-          attorney_public_id: data.attorney_public_id || null,
+          attorney_public_id: data.artisan_public_id || null,
         },
         metadata: {
           ip_address: ipAddress,
@@ -200,10 +200,10 @@ async function notifyAdminNewEstimationLead(
         <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name || '—'}</p>
         <p style="margin: 0 0 10px 0;"><strong>Phone:</strong> ${data.phone}</p>
         <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${data.email || '—'}</p>
-        <p style="margin: 0 0 10px 0;"><strong>Practice area:</strong> ${data.practiceArea}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Practice area:</strong> ${data.specialty}</p>
         <p style="margin: 0 0 10px 0;"><strong>City:</strong> ${data.city} (${data.state})</p>
         <p style="margin: 0 0 10px 0;"><strong>Estimate:</strong> ${estimation}</p>
-        ${data.attorney_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Attorney:</strong> ${htmlEscape(data.attorney_public_id)}</p>` : ''}
+        ${data.artisan_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Attorney:</strong> ${htmlEscape(data.artisan_public_id)}</p>` : ''}
         ${data.page_url ? `<p style="margin: 0;"><strong>Page:</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
       </div>
       <div style="text-align: center; margin: 28px 0;">
@@ -218,7 +218,7 @@ async function notifyAdminNewEstimationLead(
 
   await sendEmail({
     to: recipients,
-    subject: `New estimation lead – ${data.practiceArea} in ${data.city}`,
+    subject: `New estimation lead – ${data.specialty} in ${data.city}`,
     html,
     tags: [
       { name: 'type', value: 'estimation_lead_admin' },
@@ -250,9 +250,9 @@ async function sendClientConfirmationEmail(
 
   const firstName = data.name ? htmlEscape(data.name.split(' ')[0]) : ''
   const salutation = firstName ? `Hello ${firstName}` : 'Hello'
-  const practiceArea = htmlEscape(data.practiceArea.toLowerCase())
+  const practiceArea = htmlEscape(data.specialty.toLowerCase())
   const city = htmlEscape(data.city)
-  const isAttorneyPage = !!data.attorney_public_id
+  const isAttorneyPage = !!data.artisan_public_id
 
   const nextSteps = isAttorneyPage
     ? `<p style="color: #333; font-size: 15px; line-height: 1.6;">
@@ -282,7 +282,7 @@ async function sendClientConfirmationEmail(
 
       <div style="background: #fef7f4; border-left: 4px solid #E07040; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;">
         <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Summary:</strong></p>
-        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service: <strong>${htmlEscape(data.practiceArea)}</strong></p>
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">Service: <strong>${htmlEscape(data.specialty)}</strong></p>
         <p style="margin: 0 0 4px 0; font-size: 14px; color: #333;">City: <strong>${city}${data.state ? ` (${htmlEscape(data.state)})` : ''}</strong></p>
         <p style="margin: 0; font-size: 14px; color: #333;">Phone: <strong>${htmlEscape(data.phone)}</strong></p>
       </div>

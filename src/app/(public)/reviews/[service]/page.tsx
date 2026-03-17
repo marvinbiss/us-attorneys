@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 const tradeSlugs = getPracticeAreaSlugs()
 

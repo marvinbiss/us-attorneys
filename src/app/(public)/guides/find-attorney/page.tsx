@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import Breadcrumb from "@/components/Breadcrumb"
+import { REVALIDATE } from '@/lib/cache'
 import {
   Search,
   ShieldCheck,
@@ -11,7 +12,7 @@ import {
 
 const PAGE_URL = `${SITE_URL}/guides/find-attorney`
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 export const metadata: Metadata = {
   title: "How to Find a Trusted Attorney",

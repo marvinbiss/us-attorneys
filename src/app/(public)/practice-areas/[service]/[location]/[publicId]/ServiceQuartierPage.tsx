@@ -48,7 +48,7 @@ export default async function ServiceQuartierPage({
   // 1. Resolve quartier (static data)
   const quartierData = getNeighborhoodBySlug(locationSlug, quartierSlug)
   if (!quartierData) notFound()
-  const { city: ville, neighborhoodName: quartierName } = quartierData
+  const { city: cityData, neighborhoodName: quartierName } = quartierData
 
   // 1b. Enriched neighborhood data (stub -- always null, to be replaced with real data)
   const quartierRealData = null as { codePostal?: string } | null
@@ -88,26 +88,26 @@ export default async function ServiceQuartierPage({
 
   // 4. Generate content
   const trade = getTradeContent(specialtySlug)
-  const quartierContent = generateNeighborhoodContent(ville, quartierName, specialtySlug)
-  const villeRegion = getStateByCode(ville.stateCode)?.region || ''
+  const quartierContent = generateNeighborhoodContent(cityData, quartierName, specialtySlug)
+  const cityRegion = getStateByCode(cityData.stateCode)?.region || ''
   const svcLower = service.name.toLowerCase()
 
   // 5. JSON-LD schemas
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${service.name} in ${quartierName}, ${ville.name}`,
-    description: `Find the best ${svcLower}s in the ${quartierName} neighborhood of ${ville.name}`,
+    name: `${service.name} in ${quartierName}, ${cityData.name}`,
+    description: `Find the best ${svcLower}s in the ${quartierName} neighborhood of ${cityData.name}`,
     image: getServiceImage(specialtySlug).src,
     areaServed: {
       '@type': 'Place',
-      name: `${quartierName}, ${ville.name}`,
+      name: `${quartierName}, ${cityData.name}`,
       containedInPlace: {
         '@type': 'City',
-        name: ville.name,
+        name: cityData.name,
         containedInPlace: {
           '@type': 'AdministrativeArea',
-          name: ville.stateName,
+          name: cityData.stateName,
         },
       },
     },
@@ -118,7 +118,7 @@ export default async function ServiceQuartierPage({
     { name: 'Home', url: '/' },
     { name: 'Practice Areas', url: '/services' },
     { name: service.name, url: `/practice-areas/${specialtySlug}` },
-    { name: ville.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
+    { name: cityData.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
     { name: quartierName, url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}` },
   ])
 
@@ -138,8 +138,8 @@ export default async function ServiceQuartierPage({
 
   const itemListSchema = providers.length > 0
     ? getItemListSchema({
-        name: `${service.name} in ${quartierName}, ${ville.name}`,
-        description: `List of verified ${svcLower}s in ${quartierName}, ${ville.name}`,
+        name: `${service.name} in ${quartierName}, ${cityData.name}`,
+        description: `List of verified ${svcLower}s in ${quartierName}, ${cityData.name}`,
         url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}`,
         items: providers.slice(0, 20).map((p, i) => ({
           name: p.name,
@@ -162,23 +162,23 @@ export default async function ServiceQuartierPage({
   // 7. Varied H1
   const h1Hash = Math.abs(hashCode(`h1-sq-${specialtySlug}-${locationSlug}-${quartierSlug}`))
   const h1Templates = [
-    `${service.name} in ${quartierName}, ${ville.name}`,
-    `${service.name} — ${quartierName} Neighborhood, ${ville.name}`,
-    `Find a ${svcLower} in ${quartierName} (${ville.name})`,
+    `${service.name} in ${quartierName}, ${cityData.name}`,
+    `${service.name} — ${quartierName} Neighborhood, ${cityData.name}`,
+    `Find a ${svcLower} in ${quartierName} (${cityData.name})`,
     `${service.name} in ${quartierName}: verified attorneys`,
-    `Best ${svcLower}s in ${quartierName}, ${ville.name}`,
+    `Best ${svcLower}s in ${quartierName}, ${cityData.name}`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
   // 8. Location for PageClient
   const location: LocationType = {
     id: '',
-    name: ville.name,
-    slug: ville.slug,
-    postal_code: ville.zipCode,
-    region_name: villeRegion,
-    department_name: ville.stateName,
-    department_code: ville.stateCode,
+    name: cityData.name,
+    slug: cityData.slug,
+    postal_code: cityData.zipCode,
+    region_name: cityRegion,
+    department_name: cityData.stateName,
+    department_code: cityData.stateCode,
     is_active: true,
     created_at: '',
   }
@@ -212,7 +212,7 @@ export default async function ServiceQuartierPage({
           <Breadcrumb items={[
             { label: 'Services', href: '/services' },
             { label: service.name, href: `/practice-areas/${specialtySlug}` },
-            { label: ville.name, href: `/practice-areas/${specialtySlug}/${locationSlug}` },
+            { label: cityData.name, href: `/practice-areas/${specialtySlug}/${locationSlug}` },
             { label: quartierName },
           ]} />
         </div>
@@ -238,14 +238,14 @@ export default async function ServiceQuartierPage({
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            Tous les {svcLower}s à {ville.name}
+            All {svcLower}s in {cityData.name}
           </Link>
 
           {/* Other quartiers for this service */}
           {otherQuartiers.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                {service.name} in Other Neighborhoods of {ville.name}
+                {service.name} in Other Neighborhoods of {cityData.name}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {otherQuartiers.map(q => (
@@ -265,7 +265,7 @@ export default async function ServiceQuartierPage({
           {otherServices.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                Other Services in {quartierName}, {ville.name}
+                Other Services in {quartierName}, {cityData.name}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {otherServices.map(s => (

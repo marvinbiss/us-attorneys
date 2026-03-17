@@ -14,6 +14,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
+import { REVALIDATE } from '@/lib/cache'
 
 const ExitIntentPopup = dynamic(
   () => import('@/components/ExitIntentPopup'),
@@ -25,7 +26,7 @@ const UrgencyCountdown = dynamic(
   { ssr: false }
 )
 
-export const revalidate = 86400 // ISR 24h
+export const revalidate = REVALIDATE.serviceLocation
 
 // All services are available for emergency pages
 const emergencySlugs = Object.keys(tradeContent)

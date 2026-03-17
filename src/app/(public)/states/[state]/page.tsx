@@ -12,13 +12,14 @@ import { getDepartmentImage } from '@/lib/data/images'
 import { generateStateContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import problems from '@/lib/data/problems'
+import { REVALIDATE } from '@/lib/cache'
 
 export function generateStaticParams() {
   return states.map((dept) => ({ state: dept.slug }))
 }
 
 export const dynamicParams = false
-export const revalidate = 86400
+export const revalidate = REVALIDATE.locations
 
 interface PageProps {
   params: Promise<{ state: string }>
@@ -563,7 +564,7 @@ export default async function StatePage({ params }: PageProps) {
                 <div className="space-y-1.5">
                   {stateCities.slice(0, 6).flatMap((city) =>
                     orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`devis-${s.slug}-${city.slug}`} href={`/quotes/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <Link key={`quotes-${s.slug}-${city.slug}`} href={`/quotes/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         {s.name} consultation in {city.name}
                       </Link>
@@ -576,7 +577,7 @@ export default async function StatePage({ params }: PageProps) {
                 <div className="space-y-1.5">
                   {stateCities.slice(0, 6).flatMap((city) =>
                     orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`avis-${s.slug}-${city.slug}`} href={`/reviews/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <Link key={`reviews-${s.slug}-${city.slug}`} href={`/reviews/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         {s.name} reviews in {city.name}
                       </Link>
@@ -589,7 +590,7 @@ export default async function StatePage({ params }: PageProps) {
                 <div className="space-y-1.5">
                   {stateCities.slice(0, 6).flatMap((city) =>
                     orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/pricing/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                      <Link key={`pricing-${s.slug}-${city.slug}`} href={`/pricing/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         {s.name} pricing in {city.name}
                       </Link>
@@ -605,7 +606,7 @@ export default async function StatePage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {stateCities.slice(0, 6).flatMap((city) =>
                   orderedServices.slice(0, 5).map((s) => (
-                    <Link key={`urgence-${s.slug}-${city.slug}`} href={`/emergency/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
+                    <Link key={`emergency-${s.slug}-${city.slug}`} href={`/emergency/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
                       Emergency {s.name.toLowerCase()} in {city.name}
                     </Link>
                   ))
@@ -619,7 +620,7 @@ export default async function StatePage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {stateCities.slice(0, 4).flatMap((city) =>
                   problems.slice(0, 6).map((p) => (
-                    <Link key={`prob-${p.slug}-${city.slug}`} href={`/issues/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
+                    <Link key={`issue-${p.slug}-${city.slug}`} href={`/issues/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
                       {p.name} in {city.name}
                     </Link>
                   ))

@@ -6,8 +6,9 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import problems from '@/lib/data/problems'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 export const metadata: Metadata = {
   title: 'Common Legal Issues — Solutions',

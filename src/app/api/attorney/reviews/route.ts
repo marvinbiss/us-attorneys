@@ -63,9 +63,9 @@ export async function GET() {
       date: r.created_at,
       rating: r.rating,
       comment: r.comment,
-      response: r.attorney_response,
-      artisan_responded_at: r.attorney_responded_at,
-      has_response: r.attorney_response !== null,
+      response: r.artisan_response,
+      artisan_responded_at: r.artisan_responded_at,
+      has_response: r.artisan_response !== null,
     })) || []
 
     return NextResponse.json({
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
     }
 
     // Guard against double-response
-    if (review.attorney_response !== null) {
+    if (review.artisan_response !== null) {
       return NextResponse.json(
         { error: 'A response already exists for this review' },
         { status: 409 }

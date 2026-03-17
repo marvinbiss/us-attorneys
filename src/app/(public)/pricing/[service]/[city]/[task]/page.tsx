@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent, getTasksForService } from '@/lib/data/trade-content'
 import { getCityBySlug } from '@/lib/data/usa'
+import { REVALIDATE } from '@/lib/cache'
 
 // Return a minimal seed set (NOT empty — empty array in a child of a parent
 // with generateStaticParams causes a 500 on Vercel with Next.js 14.2).
@@ -11,7 +12,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 
 export async function generateMetadata({
   params,

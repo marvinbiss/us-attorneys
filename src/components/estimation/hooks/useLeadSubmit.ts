@@ -100,7 +100,7 @@ export function useLeadSubmit(
         setLeadSubmitted(true)
 
         const confirmationMsg = context.artisan
-          ? `Your request has been sent to ${context.attorney.name}. They will contact you as soon as possible.`
+          ? `Your request has been sent to ${context.artisan.name}. They will contact you as soon as possible.`
           : `Your request has been submitted. A qualified ${context.metier.toLowerCase()} attorney in ${context.ville} will contact you as soon as possible.`
 
         onLeadSubmitted?.(confirmationMsg)

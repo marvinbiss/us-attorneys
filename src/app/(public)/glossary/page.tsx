@@ -4,6 +4,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { glossaryTerms, glossaryCategories } from '@/lib/data/glossary'
+import { REVALIDATE } from '@/lib/cache'
 import {
   BookOpen,
   Search,
@@ -20,7 +21,7 @@ import {
 
 const PAGE_URL = `${SITE_URL}/glossary`
 
-export const revalidate = 86400 // CDN cache: 24 h (ISR)
+export const revalidate = REVALIDATE.staticPages
 
 export const metadata: Metadata = {
   title: 'Legal Glossary — 150+ Terms Explained Simply',

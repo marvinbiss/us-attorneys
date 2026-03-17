@@ -160,11 +160,11 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
     url: `${SITE_URL}/quotes/${service}`,
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: topCities.map((ville, i) => ({
+      itemListElement: topCities.map((city, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        name: `${trade.name} consultation in ${ville.name}`,
-        url: `${SITE_URL}/quotes/${service}/${ville.slug}`,
+        name: `${trade.name} consultation in ${city.name}`,
+        url: `${SITE_URL}/quotes/${service}/${city.slug}`,
       })),
     },
   }
@@ -307,14 +307,14 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             {trade.name} consultation by city
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {topCities.map((ville) => (
+            {topCities.map((city) => (
               <Link
-                key={ville.slug}
-                href={`/quotes/${service}/${ville.slug}`}
+                key={city.slug}
+                href={`/quotes/${service}/${city.slug}`}
                 className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                  {trade.name} consultation in {ville.name}
+                  {trade.name} consultation in {city.name}
                 </div>
               </Link>
             ))}

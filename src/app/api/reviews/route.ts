@@ -247,7 +247,20 @@ export async function POST(request: Request) {
     const wouldRecommend = body.wouldRecommend ?? true
 
     // Validate HMAC review token (prevents fake reviews)
-    if (process.env.REVIEW_HMAC_SECRET && reviewToken) {
+    if (!reviewToken) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Review token is required'),
+        { status: 400 }
+      )
+    }
+    if (!process.env.REVIEW_HMAC_SECRET) {
+      logger.error('REVIEW_HMAC_SECRET is not configured — rejecting review submission')
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Review submission is temporarily unavailable'),
+        { status: 503 }
+      )
+    }
+    {
       const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
         .update(bookingId)
         .digest('hex')
@@ -258,7 +271,6 @@ export async function POST(request: Request) {
         return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Invalid token'), { status: 401 })
       }
     }
-    // If no REVIEW_HMAC_SECRET configured, allow without token (backward compat)
 
     // Validate bookingId is a valid UUID to prevent enumeration
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -295,7 +307,7 @@ export async function POST(request: Request) {
     // Check booking status
     if (!['confirmed', 'completed'].includes(booking.status)) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Cette reservation ne peut pas etre evaluee'),
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'This booking cannot be reviewed'),
         { status: 400 }
       )
     }

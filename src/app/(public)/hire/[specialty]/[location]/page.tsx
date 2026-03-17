@@ -35,6 +35,7 @@ import TradeSections from '@/app/(public)/practice-areas/[service]/[location]/_c
 import FaqAndBlogSection from '@/app/(public)/practice-areas/[service]/[location]/_components/FaqAndBlogSection'
 import CrossLinks from '@/app/(public)/practice-areas/[service]/[location]/_components/CrossLinks'
 import { getFAQSchema } from '@/lib/seo/jsonld'
+import { REVALIDATE } from '@/lib/cache'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
@@ -65,7 +66,7 @@ function safeJsonStringify(data: unknown): string {
 }
 
 // ISR: revalidate every 24h
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
 
 // Pre-render top 30 cities x all practice areas (lower priority than /attorneys/)

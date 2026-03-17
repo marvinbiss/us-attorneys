@@ -7,6 +7,7 @@ import FAQPageClient from './FAQPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
+import { REVALIDATE } from '@/lib/cache'
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions (FAQ)',
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 const breadcrumbSchema = getBreadcrumbSchema([
   { name: 'Home', url: '/' },

@@ -9,8 +9,9 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
 import { cities, services } from '@/lib/data/usa'
+import { REVALIDATE } from '@/lib/cache'
 
-export const revalidate = 86400 // 24h
+export const revalidate = REVALIDATE.serviceLocation
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 

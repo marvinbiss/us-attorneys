@@ -35,6 +35,7 @@ import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
+import { REVALIDATE } from '@/lib/cache'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
@@ -65,7 +66,7 @@ function safeJsonStringify(data: unknown): string {
 }
 
 // ISR: revalidate every 24h — stale cache served on DB outage
-export const revalidate = 86400
+export const revalidate = REVALIDATE.serviceLocation
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
@@ -80,17 +81,17 @@ export function generateStaticParams() {
 }
 
 /** Resolve a city from static data to Location shape (fallback when DB is down) */
-function villeToLocation(slug: string): LocationType | null {
-  const ville = getCityBySlug(slug)
-  if (!ville) return null
+function cityToLocation(slug: string): LocationType | null {
+  const cityData = getCityBySlug(slug)
+  if (!cityData) return null
   return {
     id: '',
-    name: ville.name,
-    slug: ville.slug,
-    postal_code: ville.zipCode,
-    region_name: getStateByCode(ville.stateCode)?.region || '',
-    department_name: ville.stateName,
-    department_code: ville.stateCode,
+    name: cityData.name,
+    slug: cityData.slug,
+    postal_code: cityData.zipCode,
+    region_name: getStateByCode(cityData.stateCode)?.region || '',
+    department_name: cityData.stateName,
+    department_code: cityData.stateCode,
     is_active: true,
     created_at: '',
   }
@@ -140,12 +141,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   } catch {
     // DB down — fallback to static data
     const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
-    const ville = getCityBySlug(locationSlug)
+    const fallbackCity = getCityBySlug(locationSlug)
     if (staticSvc) specialtyName = staticSvc.name
-    if (ville) {
-      locationName = ville.name
-      departmentCode = ville.stateCode
-      departmentName = ville.stateName
+    if (fallbackCity) {
+      locationName = fallbackCity.name
+      departmentCode = fallbackCity.stateCode
+      departmentName = fallbackCity.stateName
     }
     attorneyCount = 1 // Fail open: default to indexed. ISR will correct if truly 0 providers.
   }
@@ -328,14 +329,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   try {
     const dbLocation = await getLocationBySlug(locationSlug)
     if (!dbLocation) {
-      const fallback = villeToLocation(locationSlug)
+      const fallback = cityToLocation(locationSlug)
       if (!fallback) notFound()
       location = fallback
     } else {
       location = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
     }
   } catch {
-    const fallback = villeToLocation(locationSlug)
+    const fallback = cityToLocation(locationSlug)
     if (!fallback) notFound()
     location = fallback
   }
@@ -380,13 +381,13 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   }
 
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
-  const ville = getCityBySlug(locationSlug)
-  const locationContent = ville
-    ? generateLocationContent(specialtySlug, service.name, ville, providers.length, locationData)
+  const cityData = getCityBySlug(locationSlug)
+  const locationContent = cityData
+    ? generateLocationContent(specialtySlug, service.name, cityData, providers.length, locationData)
     : null
 
-  // Regional pricing multiplier for localized tariffs
-  const pricingMultiplier = ville ? getRegionalMultiplier(getStateByCode(ville.stateCode)?.region || '') : 1.0
+  // Regional pricing multiplier for localized pricing
+  const pricingMultiplier = cityData ? getRegionalMultiplier(getStateByCode(cityData.stateCode)?.region || '') : 1.0
 
   // FAQ: combine 2 trade FAQ (hash-selected) + 4 location-specific FAQ
   const combinedFaq: { question: string; answer: string }[] = []

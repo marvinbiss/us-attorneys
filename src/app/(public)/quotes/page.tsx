@@ -364,13 +364,13 @@ export default async function DevisPage() {
             Attorney consultations by city
           </h2>
           <div className="flex flex-wrap gap-2">
-            {cities.slice(0, 20).map((ville) => (
+            {cities.slice(0, 20).map((city) => (
               <Link
-                key={ville.slug}
-                href={`/quotes/personal-injury/${ville.slug}`}
+                key={city.slug}
+                href={`/quotes/personal-injury/${city.slug}`}
                 className="inline-flex items-center gap-1.5 bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-lg px-3 py-2 text-sm text-gray-700 hover:text-blue-700 transition-colors"
               >
-                {ville.name}
+                {city.name}
               </Link>
             ))}
           </div>
@@ -390,14 +390,14 @@ export default async function DevisPage() {
                   {service.name} consultation
                 </h3>
                 <div className="space-y-1.5">
-                  {cities.slice(0, 6).map((ville) => (
+                  {cities.slice(0, 6).map((city) => (
                     <Link
-                      key={ville.slug}
-                      href={`/quotes/${service.slug}/${ville.slug}`}
+                      key={city.slug}
+                      href={`/quotes/${service.slug}/${city.slug}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
                     >
                       <ChevronRight className="w-3 h-3" />
-                      {ville.name}
+                      {city.name}
                     </Link>
                   ))}
                 </div>

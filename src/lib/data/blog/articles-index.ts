@@ -17,7 +17,7 @@ export interface BlogArticleMeta {
 }
 
 /** Map category to a default emoji for the blog listing grid */
-export const categoryEmoji: Record<string, string> = {}
+const categoryEmoji: Record<string, string> = {}
 
 /** Normalize non-accented category names to their accented equivalents */
 const categoryNormalize: Record<string, string> = {}

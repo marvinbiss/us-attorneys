@@ -318,3 +318,280 @@ export function getSpeakableSchema(params: {
   }
 }
 
+// Schema.org LegalService (for attorney listing pages by specialty + location)
+export function getLegalServiceSchema(params: {
+  specialtyName: string
+  specialtySlug: string
+  location: string
+  state: string
+  stateCode: string
+  description: string
+  attorneyCount: number
+  url: string
+  avgRating?: number
+  reviewCount?: number
+  priceRange?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LegalService',
+    name: `${params.specialtyName} in ${params.location}`,
+    description: params.description,
+    url: params.url,
+    areaServed: {
+      '@type': 'City',
+      name: params.location,
+      containedInPlace: {
+        '@type': 'State',
+        name: params.state,
+        identifier: params.stateCode,
+      },
+    },
+    serviceType: params.specialtyName,
+    provider: {
+      '@type': 'Organization',
+      name: 'Lawtendr',
+      url: SITE_URL,
+    },
+    numberOfItems: params.attorneyCount,
+    ...(params.avgRating && params.reviewCount && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: params.avgRating,
+        reviewCount: params.reviewCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
+    ...(params.priceRange && { priceRange: params.priceRange }),
+    availableChannel: {
+      '@type': 'ServiceChannel',
+      serviceUrl: params.url,
+      serviceType: 'Free Consultation',
+    },
+  }
+}
+
+// Schema.org Attorney (Person + LegalService for individual attorney profile pages)
+export function getAttorneySchema(params: {
+  name: string
+  url: string
+  image?: string
+  description: string
+  specialty: string
+  location: string
+  state: string
+  barNumber?: string
+  barState?: string
+  rating?: number
+  reviewCount?: number
+  phone?: string
+  email?: string
+  firmName?: string
+  languages?: string[]
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['Person', 'LegalService'],
+    name: params.name,
+    url: params.url,
+    description: params.description,
+    ...(params.image && { image: params.image }),
+    jobTitle: `${params.specialty} Attorney`,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: params.location,
+      addressRegion: params.state,
+      addressCountry: 'US',
+    },
+    ...(params.barNumber && params.barState && {
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'Bar Admission',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: `${params.barState} State Bar`,
+        },
+        identifier: params.barNumber,
+      },
+    }),
+    ...(params.rating && params.reviewCount && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: params.rating,
+        reviewCount: params.reviewCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
+    ...(params.phone && { telephone: params.phone }),
+    ...(params.email && { email: params.email }),
+    ...(params.firmName && {
+      worksFor: {
+        '@type': 'LegalService',
+        name: params.firmName,
+      },
+    }),
+    ...(params.languages && params.languages.length > 0 && {
+      knowsLanguage: params.languages.map(lang => ({
+        '@type': 'Language',
+        name: lang,
+      })),
+    }),
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: params.state,
+    },
+    serviceType: params.specialty,
+    makesOffer: {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: params.specialty,
+      },
+    },
+  }
+}
+
+// Schema.org ReviewPage (for review listing pages)
+export function getReviewPageSchema(params: {
+  specialtyName: string
+  location: string
+  url: string
+  reviews: { author: string; rating: number; text: string; date: string }[]
+  avgRating: number
+  totalReviews: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${params.specialtyName} Reviews in ${params.location}`,
+    url: params.url,
+    mainEntity: {
+      '@type': 'LegalService',
+      name: `${params.specialtyName} in ${params.location}`,
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: params.avgRating,
+        reviewCount: params.totalReviews,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      review: params.reviews.slice(0, 10).map(review => ({
+        '@type': 'Review',
+        author: {
+          '@type': 'Person',
+          name: review.author,
+        },
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: review.rating,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        reviewBody: review.text,
+        datePublished: review.date,
+      })),
+    },
+  }
+}
+
+// Schema.org CostGuide (for pricing/cost pages — extends ServicePricing)
+export function getCostGuideSchema(params: {
+  specialtyName: string
+  location: string
+  state: string
+  url: string
+  feeTypes: { type: string; range: string; description: string }[]
+  lastUpdated: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${params.specialtyName} Cost Guide — ${params.location}, ${params.state}`,
+    url: params.url,
+    dateModified: params.lastUpdated,
+    mainEntity: {
+      '@type': 'Service',
+      name: `${params.specialtyName} in ${params.location}`,
+      areaServed: {
+        '@type': 'City',
+        name: params.location,
+        containedInPlace: {
+          '@type': 'State',
+          name: params.state,
+        },
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: `${params.specialtyName} Fee Types`,
+        itemListElement: params.feeTypes.map((fee, index) => ({
+          '@type': 'OfferCatalog',
+          position: index + 1,
+          name: fee.type,
+          description: `${fee.description}. Typical range: ${fee.range}`,
+        })),
+      },
+      provider: {
+        '@type': 'Organization',
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.cost-summary', '[data-speakable="true"]'],
+    },
+  }
+}
+
+// Schema.org EmergencyService (for /emergency/ pages)
+export function getEmergencyServiceSchema(params: {
+  specialtyName: string
+  location: string
+  url: string
+  available24h: boolean
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LegalService',
+    name: `Emergency ${params.specialtyName} in ${params.location}`,
+    url: params.url,
+    areaServed: {
+      '@type': 'City',
+      name: params.location,
+    },
+    serviceType: `Emergency ${params.specialtyName}`,
+    isAvailableGenerically: true,
+    ...(params.available24h && {
+      hoursAvailable: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+          'Friday', 'Saturday', 'Sunday',
+        ],
+        opens: '00:00',
+        closes: '23:59',
+      },
+    }),
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    potentialAction: {
+      '@type': 'CommunicateAction',
+      name: 'Request Emergency Consultation',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: params.url,
+        actionPlatform: [
+          'http://schema.org/DesktopWebPlatform',
+          'http://schema.org/MobileWebPlatform',
+        ],
+      },
+    },
+    additionalType: 'http://schema.org/EmergencyService',
+  }
+}
+

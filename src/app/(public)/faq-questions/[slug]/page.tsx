@@ -2,13 +2,14 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { getQuestionBySlug, getQuestionSlugs } from '@/lib/data/faq'
+import { REVALIDATE } from '@/lib/cache'
 
 export function generateStaticParams() {
   return getQuestionSlugs().map((slug) => ({ slug }))
 }
 
 export const dynamicParams = false
-export const revalidate = 86400
+export const revalidate = REVALIDATE.staticPages
 
 export function generateMetadata({
   params,

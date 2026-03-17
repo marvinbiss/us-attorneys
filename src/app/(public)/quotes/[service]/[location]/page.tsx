@@ -17,8 +17,8 @@ const top5Cities = [...cities]
 export function generateStaticParams() {
   const params: { service: string; location: string }[] = []
   for (const service of tradeSlugs) {
-    for (const ville of top5Cities) {
-      params.push({ service, location: ville.slug })
+    for (const city of top5Cities) {
+      params.push({ service, location: city.slug })
     }
   }
   return params

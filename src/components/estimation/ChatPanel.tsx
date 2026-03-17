@@ -54,7 +54,7 @@ export const ChatPanel = memo(function ChatPanel({
               {context.artisan ? (
                 <>
                   Hello! I&apos;m the AI estimation assistant for{' '}
-                  <strong>{context.attorney.name}</strong>,{' '}
+                  <strong>{context.artisan.name}</strong>,{' '}
                   {context.metier.toLowerCase()} in{' '}
                   <strong>{context.ville}</strong>. Describe your
                   case and I&apos;ll give you a cost estimate.

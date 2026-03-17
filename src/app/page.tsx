@@ -12,11 +12,12 @@ import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
 import dynamic from 'next/dynamic'
+import { REVALIDATE } from '@/lib/cache'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
 
-export const revalidate = 86400 // ISR: homepage revalidated every 24h
+export const revalidate = REVALIDATE.staticPages
 
 export async function generateMetadata(): Promise<Metadata> {
   const { attorneyCount: count } = await getSiteStats()

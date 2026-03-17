@@ -61,13 +61,14 @@ import { hashCode } from '@/lib/seo/location-content'
 import { getNeighborhoodBySlug, practiceAreas as staticPracticeAreas, cities, getStateByCode } from '@/lib/data/usa'
 import ServiceQuartierPage from './ServiceQuartierPage'
 import dynamic from 'next/dynamic'
+import { REVALIDATE } from '@/lib/cache'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
   { ssr: false }
 )
 
-export const revalidate = 86400
+export const revalidate = REVALIDATE.attorneyProfile
 
 // Pre-render top service x city x neighborhood combos for ISR warming
 const TOP_CITIES_QUARTIER = 30
@@ -341,7 +342,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // ─── QUARTIER DETECTION ──────────────────────────────────
   const quartierMatch = getNeighborhoodBySlug(locationSlug, publicId)
   if (quartierMatch) {
-    const { city: ville, neighborhoodName: quartierName } = quartierMatch
+    const { city: cityData, neighborhoodName: quartierName } = quartierMatch
     const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
     if (!staticSvc) return { title: 'Not Found', robots: { index: false, follow: false } }
 
@@ -353,27 +354,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const tHash = Math.abs(hashCode(`sq-title-${specialtySlug}-${locationSlug}-${publicId}`))
     const titleTemplates = hasProviders
       ? [
-          `${staticSvc.name} à ${quartierName}, ${ville.name} — ${attorneyCount} pros`,
-          `${attorneyCount} ${svcLower}s à ${quartierName} (${ville.name})`,
-          `${staticSvc.name} ${quartierName} ${ville.name}: free consultation`,
-          `Find a ${svcLower} in ${quartierName}, ${ville.name}`,
+          `${staticSvc.name} in ${quartierName}, ${cityData.name} — ${attorneyCount} pros`,
+          `${attorneyCount} ${svcLower}s in ${quartierName} (${cityData.name})`,
+          `${staticSvc.name} ${quartierName} ${cityData.name}: free consultation`,
+          `Find a ${svcLower} in ${quartierName}, ${cityData.name}`,
         ]
       : [
-          `${staticSvc.name} in ${quartierName}, ${ville.name} — Free Consultation`,
-          `${svcLower} in ${quartierName} (${ville.name}): verified attorneys`,
-          `Find a ${svcLower} in ${quartierName}, ${ville.name}`,
+          `${staticSvc.name} in ${quartierName}, ${cityData.name} — Free Consultation`,
+          `${svcLower} in ${quartierName} (${cityData.name}): verified attorneys`,
+          `Find a ${svcLower} in ${quartierName}, ${cityData.name}`,
         ]
     const title = truncateTitle(titleTemplates[tHash % titleTemplates.length])
 
     const dHash = Math.abs(hashCode(`sq-desc-${specialtySlug}-${locationSlug}-${publicId}`))
     const descTemplates = hasProviders
       ? [
-          `${attorneyCount} verified ${svcLower}s in ${quartierName}, ${ville.name} (${ville.stateCode}). Free consultation in ${getStateByCode(ville.stateCode)?.region || ''}.`,
-          `Compare ${svcLower}s in ${quartierName} (${ville.name}). ${attorneyCount} bar-verified attorneys. Free consultation.`,
+          `${attorneyCount} verified ${svcLower}s in ${quartierName}, ${cityData.name} (${cityData.stateCode}). Free consultation in ${getStateByCode(cityData.stateCode)?.region || ''}.`,
+          `Compare ${svcLower}s in ${quartierName} (${cityData.name}). ${attorneyCount} bar-verified attorneys. Free consultation.`,
         ]
       : [
-          `Find a qualified ${svcLower} in ${quartierName}, ${ville.name} (${ville.stateCode}). Verified attorneys, free consultation.`,
-          `${svcLower} in ${quartierName} (${ville.name}): directory of verified attorneys in ${getStateByCode(ville.stateCode)?.region || ''}. Free consultation.`,
+          `Find a qualified ${svcLower} in ${quartierName}, ${cityData.name} (${cityData.stateCode}). Verified attorneys, free consultation.`,
+          `${svcLower} in ${quartierName} (${cityData.name}): directory of verified attorneys in ${getStateByCode(cityData.stateCode)?.region || ''}. Free consultation.`,
         ]
     const description = descTemplates[dHash % descTemplates.length]
 
@@ -419,9 +420,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const title = truncateTitle(`${displayName} - ${specialtyName} à ${realCity}${ratingStr}`)
 
     const descParts: string[] = []
-    descParts.push(`${displayName}, ${specialtyName.toLowerCase()} à ${realCity}`)
+    descParts.push(`${displayName}, ${specialtyName.toLowerCase()} in ${realCity}`)
     if (provider.review_count && provider.review_count > 0) {
-      descParts.push(`${provider.review_count} avis${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
+      descParts.push(`${provider.review_count} reviews${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
     }
     if (provider.siret) descParts.push('Bar-verified')
     descParts.push('Free consultation')
@@ -582,7 +583,7 @@ export default async function AttorneyPage({ params }: PageProps) {
         ville: attorney.city,
         departement: location?.department_code || '',
         pageUrl: `/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`,
-        attorney: {
+        artisan: {  // API-bound field name — do not rename without migration
           name: attorney.business_name || 'Attorney',
           slug: provider.slug || '',
           publicId: provider.stable_id || provider.slug || publicId,
