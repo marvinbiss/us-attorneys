@@ -2,9 +2,11 @@
 
 import { Shield, CheckCircle, Star, BadgeCheck, Database, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 // Trust badges like Checkatrade — specific and verifiable
 export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'compact' | 'hero' }) {
+  const reducedMotion = useReducedMotion()
   const badges = [
     {
       icon: Database,
@@ -42,9 +44,9 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
         {badges.map((badge, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 10 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
+            transition={reducedMotion ? { duration: 0 } : { delay: i * 0.1 }}
             className="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm"
           >
             <badge.icon className={`w-4 h-4 ${badge.color}`} />
@@ -61,9 +63,9 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
         {badges.slice(0, 3).map((badge, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 + i * 0.1 }}
+            transition={reducedMotion ? { duration: 0 } : { delay: 0.5 + i * 0.1 }}
             className="flex items-center gap-2 px-4 py-2 bg-white/[0.06] backdrop-blur-sm rounded-full border border-white/10"
           >
             <badge.icon className="w-4 h-4 text-white/90" />
@@ -79,10 +81,10 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
       {badges.map((badge, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: i * 0.1 }}
+          transition={reducedMotion ? { duration: 0 } : { delay: i * 0.1 }}
           className={`${badge.bgColor} rounded-xl p-4 text-center hover:shadow-md transition-shadow`}
         >
           <div className={`w-12 h-12 ${badge.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}>
@@ -98,9 +100,10 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
 
 // B Corp style certification badge
 export function CertificationBadge() {
+  const reducedMotion = useReducedMotion()
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
+      initial={reducedMotion ? false : { opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       className="inline-flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-full px-4 py-2"
     >
@@ -127,10 +130,11 @@ export function SocialProofCounter({
   icon: React.ElementType
   suffix?: string
 }) {
+  const reducedMotion = useReducedMotion()
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
+      initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+      whileInView={reducedMotion ? undefined : { opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       className="text-center"
     >
@@ -138,8 +142,8 @@ export function SocialProofCounter({
         <Icon className="w-7 h-7 text-white" />
       </div>
       <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={reducedMotion ? false : { opacity: 0 }}
+        whileInView={reducedMotion ? undefined : { opacity: 1 }}
         viewport={{ once: true }}
         className="text-3xl md:text-4xl font-bold text-slate-900 mb-1"
       >
@@ -152,9 +156,10 @@ export function SocialProofCounter({
 
 // "Available now" badge (Doctolib style)
 export function AvailabilityBadge({ count = 0 }: { count?: number }) {
+  const reducedMotion = useReducedMotion()
   return (
     <motion.div
-      initial={{ opacity: 0, y: -10 }}
+      initial={reducedMotion ? false : { opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       className="inline-flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm rounded-full px-5 py-2.5 border border-white/10"
     >

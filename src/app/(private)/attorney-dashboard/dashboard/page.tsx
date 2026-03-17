@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   FileText,
   Eye,
@@ -325,6 +326,7 @@ function OnboardingChecklist({ provider, portfolioPhotoCount }: OnboardingCheckl
 // ─── Main Page Component ─────────────────────────────────────────────────────
 
 export default function AttorneyDashboardPage() {
+  const reducedMotion = useReducedMotion()
   const router = useRouter()
 
   const { data, error, isLoading, mutate } = useSWR<DashboardData, FetchError>(
@@ -477,7 +479,7 @@ export default function AttorneyDashboardPage() {
             {/* Inline error banner */}
             {hasGenericError && (
               <motion.div
-                initial={{ opacity: 0, y: -8 }}
+                initial={reducedMotion ? false : { opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4"
                 role="alert"
@@ -538,9 +540,9 @@ export default function AttorneyDashboardPage() {
                   <CasesSkeleton />
                 ) : (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={reducedMotion ? false : { opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
+                    transition={reducedMotion ? { duration: 0 } : { delay: 0.2 }}
                     className="bg-white rounded-xl border border-gray-200 p-6"
                   >
                     <div className="flex items-center justify-between mb-6">
@@ -562,9 +564,9 @@ export default function AttorneyDashboardPage() {
                         recentCases.map((caseItem, index) => (
                           <motion.div
                             key={caseItem.id}
-                            initial={{ opacity: 0, y: 12 }}
+                            initial={reducedMotion ? false : { opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.25 + index * 0.04 }}
+                            transition={reducedMotion ? { duration: 0 } : { delay: 0.25 + index * 0.04 }}
                           >
                             <Link
                               href={`/attorney-dashboard/received-cases?id=${caseItem.id}`}
@@ -611,9 +613,9 @@ export default function AttorneyDashboardPage() {
               {/* Profile Completion CTA (right column) */}
               {showProfileCTA && !isLoading && (
                 <motion.aside
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={reducedMotion ? false : { opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
+                  transition={reducedMotion ? { duration: 0 } : { delay: 0.3 }}
                   aria-label="Profile completion"
                 >
                   <ProfileCompletionCTA />

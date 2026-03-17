@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Zap, TrendingUp, Database } from 'lucide-react'
 
 interface MapPerformanceIndicatorProps {
@@ -26,6 +27,7 @@ export default function MapPerformanceIndicator({
   resultsCount,
   show = false
 }: MapPerformanceIndicatorProps) {
+  const reducedMotion = useReducedMotion()
   const [isVisible, setIsVisible] = useState(show)
 
   useEffect(() => {
@@ -43,9 +45,9 @@ export default function MapPerformanceIndicator({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={reducedMotion ? false : { opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
+          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
           className="absolute top-20 right-4 z-20 bg-white rounded-xl shadow-lg p-3 min-w-[200px]"
         >
           <div className="flex items-center gap-2 mb-2">
@@ -101,11 +103,11 @@ export default function MapPerformanceIndicator({
           {responseTime !== undefined && (
             <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
               <motion.div
-                initial={{ width: 0 }}
-                animate={{ 
-                  width: `${Math.min(100, (1000 - responseTime) / 10)}%` 
+                initial={reducedMotion ? false : { width: 0 }}
+                animate={{
+                  width: `${Math.min(100, (1000 - responseTime) / 10)}%`
                 }}
-                transition={{ duration: 0.5 }}
+                transition={reducedMotion ? { duration: 0 } : { duration: 0.5 }}
                 className={`h-full ${
                   responseTime < 500 ? 'bg-green-500' : 
                   responseTime < 1000 ? 'bg-yellow-500' : 

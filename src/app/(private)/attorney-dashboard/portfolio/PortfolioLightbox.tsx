@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { BeforeAfterSlider, VideoPlayer } from '@/components/portfolio'
 import type { PortfolioItem } from '@/types/portfolio'
 
@@ -18,6 +19,7 @@ export default function PortfolioLightbox({
   initialIndex,
   onClose,
 }: PortfolioLightboxProps) {
+  const reducedMotion = useReducedMotion()
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const currentItem = items[currentIndex]
 
@@ -55,7 +57,7 @@ export default function PortfolioLightbox({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={reducedMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
@@ -98,10 +100,10 @@ export default function PortfolioLightbox({
           {/* Content */}
           <motion.div
             key={currentItem.id}
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
             className="w-full max-w-5xl max-h-[70vh]"
           >
             {currentItem.media_type === 'before_after' &&

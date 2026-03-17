@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   FileText, ArrowLeft,
   User, Mail, Phone, Lock, Bell, Shield, Trash2, Download,
@@ -40,6 +41,7 @@ interface DisplayPreferences {
 }
 
 export default function ClientSettingsPage() {
+  const reducedMotion = useReducedMotion()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -372,9 +374,9 @@ export default function ClientSettingsPage() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
                 className="space-y-6"
               >
                 {/* Profile Tab */}
@@ -842,7 +844,7 @@ export default function ClientSettingsPage() {
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
+            initial={reducedMotion ? false : { scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             className="bg-white rounded-2xl max-w-md w-full p-6"
           >

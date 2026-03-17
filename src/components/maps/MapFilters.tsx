@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Search, Filter, Shield, Zap, Layers, List, Map as MapIcon
 } from 'lucide-react'
@@ -49,6 +50,7 @@ export default function MapFilters({
   viewMode,
   onViewModeChange,
 }: MapFiltersProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <div className="bg-white border-b shadow-sm z-30 relative">
       <div className="max-w-full mx-auto px-4 py-3">
@@ -139,10 +141,10 @@ export default function MapFilters({
         <AnimatePresence>
           {showFilters && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
+              initial={reducedMotion ? false : { height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+              transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
               className="overflow-hidden"
             >
               <div className="pt-4 pb-2">

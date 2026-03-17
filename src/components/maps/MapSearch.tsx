@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Star, Phone, MapPin, Loader2, Navigation, Layers, Shield
 } from 'lucide-react'
@@ -75,6 +76,7 @@ const MAP_STYLES = {
 }
 
 export default function MapSearch() {
+  const reducedMotion = useReducedMotion()
   const [providers, setProviders] = useState<MapProvider[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedProvider, setSelectedProvider] = useState<MapProvider | null>(null)
@@ -521,9 +523,9 @@ export default function MapSearch() {
               <AnimatePresence>
                 {showStylePicker && (
                   <motion.div
-                    initial={{ opacity: 0, x: 10 }}
+                    initial={reducedMotion ? false : { opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
+                    exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: 10 }}
                     className="absolute right-full mr-2 top-0 bg-white rounded-xl shadow-lg p-2 min-w-[120px]"
                   >
                     {(['street', 'light', 'dark'] as const).map((style) => (
@@ -550,7 +552,7 @@ export default function MapSearch() {
           <AnimatePresence>
             {loading && (
               <motion.div
-                initial={{ opacity: 0 }}
+                initial={reducedMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
@@ -567,9 +569,9 @@ export default function MapSearch() {
           <AnimatePresence>
             {hoveredProvider && viewMode === 'map' && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
+                exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
                 className="absolute bottom-24 left-4 right-4 md:left-auto md:right-4 md:w-80 z-20"
               >
                 <div className="bg-white rounded-2xl shadow-2xl p-4">

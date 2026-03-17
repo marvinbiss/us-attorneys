@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Star, MapPin, Phone, Clock } from 'lucide-react'
 
 interface Provider {
@@ -23,12 +24,13 @@ interface MapTooltipProps {
  * World-class tooltip for map markers with rich information
  */
 export default function MapTooltip({ provider, position }: MapTooltipProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 10 }}
+      initial={reducedMotion ? false : { opacity: 0, scale: 0.9, y: 10 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.9, y: 10 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
+      exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.9, y: 10 }}
+      transition={reducedMotion ? { duration: 0 } : { duration: 0.2, ease: 'easeOut' }}
       className="fixed z-[10000] pointer-events-none"
       style={{
         left: position.x + 20,

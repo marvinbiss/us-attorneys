@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Clock, BadgeCheck, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { useState } from 'react'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
@@ -49,6 +50,7 @@ export function AttorneyCard({
   responseTime,
   variant = 'default',
 }: AttorneyCardProps) {
+  const reducedMotion = useReducedMotion()
   const [_isHovered, setIsHovered] = useState(false)
 
   const href = getAttorneyUrl({ stable_id: id, slug, specialty: profession, city: location })
@@ -57,8 +59,8 @@ export function AttorneyCard({
   if (variant === 'horizontal') {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
         viewport={{ once: true }}
         className="group bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300"
       >
@@ -196,8 +198,8 @@ export function AttorneyCard({
   // Default variant (Airbnb-style card)
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -230,7 +232,7 @@ export function AttorneyCard({
           {/* Premium badge */}
           {isPremium && (
             <motion.div
-              initial={{ x: -10, opacity: 0 }}
+              initial={reducedMotion ? false : { x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg"
             >

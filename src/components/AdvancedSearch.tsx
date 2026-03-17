@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Search, X, MapPin, Star,
@@ -64,6 +65,7 @@ export default function AdvancedSearch({
   showFilters = true,
   variant = 'page',
 }: AdvancedSearchProps) {
+  const reducedMotion = useReducedMotion()
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -267,9 +269,9 @@ export default function AdvancedSearch({
           {showSuggestions && (suggestions.length > 0 || recentSearches.length > 0) && (
             <motion.div
               ref={suggestionsRef}
-              initial={{ opacity: 0, y: -10 }}
+              initial={reducedMotion ? false : { opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
               className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50"
             >
               {/* Recent searches */}
@@ -341,9 +343,9 @@ export default function AdvancedSearch({
       <AnimatePresence>
         {showFilterPanel && showFilters && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
+            initial={reducedMotion ? false : { opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
             className="mt-4 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
           >
             <div className="p-4 space-y-4">

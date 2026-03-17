@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Users,
   Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, Home, TreeDeciduous, Sparkles,
@@ -51,6 +52,7 @@ const services = [
 ]
 
 export function ServicesShowcase() {
+  const reducedMotion = useReducedMotion()
   // Bento layout: first 2 large, next 4 medium, remaining 4 in 3-col grid (last row)
   const featured = services.slice(0, 2)
   const medium = services.slice(2, 6)
@@ -60,10 +62,10 @@ export function ServicesShowcase() {
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
@@ -81,10 +83,10 @@ export function ServicesShowcase() {
 
         {/* Bento grid */}
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={staggerContainer}
+          variants={reducedMotion ? undefined : staggerContainer}
           className="space-y-4"
         >
           {/* Row 1: 2 featured large cards */}
@@ -92,7 +94,7 @@ export function ServicesShowcase() {
             {featured.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem}>
+                <motion.div key={service.slug} variants={reducedMotion ? undefined : staggerItem}>
                   <Link
                     href={`/practice-areas/${service.slug}`}
                     className="group relative flex items-center gap-6 p-8 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -131,7 +133,7 @@ export function ServicesShowcase() {
             {medium.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
+                <motion.div key={service.slug} variants={reducedMotion ? undefined : staggerItem} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
                   <Link
                     href={`/practice-areas/${service.slug}`}
                     className="group relative flex flex-col items-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -155,7 +157,7 @@ export function ServicesShowcase() {
             {compact.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem}>
+                <motion.div key={service.slug} variants={reducedMotion ? undefined : staggerItem}>
                   <Link
                     href={`/practice-areas/${service.slug}`}
                     className="group flex items-center gap-4 p-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -178,10 +180,10 @@ export function ServicesShowcase() {
         </motion.div>
 
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mt-12"
         >
           <Link
@@ -230,14 +232,15 @@ const steps = [
 ]
 
 export function HowItWorksSection() {
+  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-sm font-medium mb-5">
@@ -255,10 +258,10 @@ export function HowItWorksSection() {
 
         <motion.div
           className="grid md:grid-cols-3 gap-8 relative"
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={staggerContainer}
+          variants={reducedMotion ? undefined : staggerContainer}
         >
           {/* Connector line (desktop only) */}
           <div className="hidden md:block absolute top-[5.5rem] left-[20%] right-[20%] z-0">
@@ -270,7 +273,7 @@ export function HowItWorksSection() {
             return (
               <motion.div
                 key={item.step}
-                variants={staggerItem}
+                variants={reducedMotion ? undefined : staggerItem}
                 className="relative text-center"
               >
                 {/* Large step number background */}
@@ -299,10 +302,10 @@ export function HowItWorksSection() {
         </motion.div>
 
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mt-14"
         >
           <Link
@@ -326,6 +329,7 @@ const attorneyBenefits = [
 ]
 
 export function ArtisanCTASection() {
+  const reducedMotion = useReducedMotion()
   return (
     <section className="relative py-20 md:py-28 overflow-hidden">
       {/* Premium dark background with radial accents */}
@@ -346,10 +350,10 @@ export function ArtisanCTASection() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium mb-6 border border-white/10">
             <Users className="w-3.5 h-3.5" />
@@ -369,15 +373,15 @@ export function ArtisanCTASection() {
 
           <motion.div
             className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12"
-            initial="hidden"
-            whileInView="visible"
+            initial={reducedMotion ? false : "hidden"}
+            whileInView={reducedMotion ? undefined : "visible"}
             viewport={{ once: true }}
-            variants={staggerContainer}
+            variants={reducedMotion ? undefined : staggerContainer}
           >
             {attorneyBenefits.map((b, i) => (
               <motion.div
                 key={i}
-                variants={staggerItem}
+                variants={reducedMotion ? undefined : staggerItem}
                 className="flex items-center gap-3"
               >
                 <div className="w-10 h-10 bg-white/[0.08] backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
@@ -442,14 +446,15 @@ const trustPoints = [
 ]
 
 export function TrustSection() {
+  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
@@ -471,17 +476,17 @@ export function TrustSection() {
 
         <motion.div
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={staggerContainer}
+          variants={reducedMotion ? undefined : staggerContainer}
         >
           {trustPoints.map((item) => {
             const Icon = item.icon
             return (
               <motion.div
                 key={item.title}
-                variants={staggerItem}
+                variants={reducedMotion ? undefined : staggerItem}
                 className="group relative bg-gradient-to-b from-slate-50/90 to-white/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-out"
               >
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
@@ -500,10 +505,10 @@ export function TrustSection() {
 
         {/* Source attribution */}
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="mt-10 text-center"
         >
           <div className="inline-flex items-center gap-3 px-5 py-3 bg-slate-50 rounded-full border border-slate-100">
@@ -521,14 +526,15 @@ export function TrustSection() {
 // ─── TESTIMONIALS SECTION ────────────────────────────────────────
 
 export function TestimonialsSection() {
+  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-5">
@@ -546,15 +552,15 @@ export function TestimonialsSection() {
 
         <motion.div
           className="grid md:grid-cols-3 gap-8"
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={staggerContainer}
+          variants={reducedMotion ? undefined : staggerContainer}
         >
           {testimonialImages.map((t, i) => (
             <motion.div
               key={i}
-              variants={staggerItem}
+              variants={reducedMotion ? undefined : staggerItem}
               className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-4">
@@ -583,14 +589,15 @@ export function TestimonialsSection() {
 // ─── BEFORE/AFTER SHOWCASE ───────────────────────────────────────
 
 export function BeforeAfterShowcase() {
+  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
+          variants={reducedMotion ? undefined : sectionReveal}
           className="text-center mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
@@ -608,15 +615,15 @@ export function BeforeAfterShowcase() {
 
         <motion.div
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-          initial="hidden"
-          whileInView="visible"
+          initial={reducedMotion ? false : "hidden"}
+          whileInView={reducedMotion ? undefined : "visible"}
           viewport={{ once: true }}
-          variants={staggerContainer}
+          variants={reducedMotion ? undefined : staggerContainer}
         >
           {beforeAfterPairs.slice(0, 6).map((pair, i) => (
             <motion.div
               key={i}
-              variants={staggerItem}
+              variants={reducedMotion ? undefined : staggerItem}
               className="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="grid grid-cols-2 h-48">

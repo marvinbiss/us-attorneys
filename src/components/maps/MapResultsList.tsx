@@ -2,6 +2,7 @@
 
 import type { Ref } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Star, Phone, ChevronDown, ChevronUp,
   Loader2, X, Shield, Heart, ExternalLink, MapPin
@@ -54,14 +55,15 @@ export function DesktopResultsSidebar({
   onHoverProvider,
   onToggleFavorite,
 }: DesktopSidebarProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <AnimatePresence>
       {(viewMode === 'split' || viewMode === 'list') && (
         <motion.div
-          initial={{ width: 0, opacity: 0 }}
+          initial={reducedMotion ? false : { width: 0, opacity: 0 }}
           animate={{ width: viewMode === 'list' ? '100%' : '420px', opacity: 1 }}
-          exit={{ width: 0, opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          exit={reducedMotion ? { opacity: 0 } : { width: 0, opacity: 0 }}
+          transition={reducedMotion ? { duration: 0 } : { duration: 0.3 }}
           className="bg-white border-r overflow-hidden hidden md:flex flex-col"
         >
           {/* Results Header */}
@@ -83,7 +85,7 @@ export function DesktopResultsSidebar({
               <motion.div
                 key={provider.id}
                 id={`provider-${provider.id}`}
-                initial={{ opacity: 0, y: 20 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onMouseEnter={() => onHoverProvider(provider)}
                 onMouseLeave={() => onHoverProvider(null)}
@@ -263,14 +265,15 @@ export function MobileResultsDrawer({
   mobileDrawerOpen,
   onClose,
 }: MobileDrawerProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <AnimatePresence>
       {mobileDrawerOpen && (
         <motion.div
-          initial={{ y: '100%' }}
+          initial={reducedMotion ? false : { y: '100%' }}
           animate={{ y: 0 }}
-          exit={{ y: '100%' }}
-          transition={{ type: 'spring', damping: 25 }}
+          exit={reducedMotion ? { opacity: 0 } : { y: '100%' }}
+          transition={reducedMotion ? { duration: 0 } : { type: 'spring', damping: 25 }}
           className="md:hidden fixed inset-x-0 bottom-0 h-[70vh] bg-white rounded-t-3xl shadow-2xl z-40"
         >
           <div className="p-4 border-b">

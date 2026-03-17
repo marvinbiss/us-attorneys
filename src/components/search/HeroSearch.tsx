@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Navigation, ChevronRight, Clock, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { slugify } from '@/lib/utils'
 import { cities, type City } from '@/lib/data/usa'
 
@@ -179,6 +180,7 @@ const dropdownVariants = {
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════
 export function HeroSearch() {
+  const reducedMotion = useReducedMotion()
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [location, setLocation] = useState('')
@@ -427,9 +429,9 @@ export function HeroSearch() {
     <div ref={containerRef} className="w-full max-w-4xl mx-auto">
       {/* Search Box */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={reducedMotion ? { duration: 0 } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white rounded-2xl shadow-2xl shadow-slate-900/10 overflow-visible relative"
       >
         <form onSubmit={handleSubmit} role="search" aria-label="Search for an attorney">
@@ -489,11 +491,11 @@ export function HeroSearch() {
               <AnimatePresence>
                 {activeField === 'service' && (
                   <motion.div
-                    variants={dropdownVariants}
-                    initial="initial"
+                    variants={reducedMotion ? undefined : dropdownVariants}
+                    initial={reducedMotion ? false : "initial"}
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    transition={reducedMotion ? { duration: 0 } : { duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[420px] overflow-y-auto"
                     role="listbox"
                     aria-label="Available services"
@@ -646,11 +648,11 @@ export function HeroSearch() {
               <AnimatePresence>
                 {showCitySuggestions && (
                   <motion.div
-                    variants={dropdownVariants}
-                    initial="initial"
+                    variants={reducedMotion ? undefined : dropdownVariants}
+                    initial={reducedMotion ? false : "initial"}
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    transition={reducedMotion ? { duration: 0 } : { duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[460px] overflow-y-auto"
                     role="listbox"
                     aria-label="Available cities"
@@ -862,8 +864,8 @@ export function HeroSearch() {
             <div className="p-3 md:p-2 md:pr-3 flex items-center">
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={reducedMotion ? undefined : { scale: 1.03 }}
+                whileTap={reducedMotion ? undefined : { scale: 0.97 }}
                 aria-label="Search"
                 className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 flex items-center justify-center gap-2 min-h-[48px]"
               >
@@ -877,9 +879,9 @@ export function HeroSearch() {
 
       {/* Quick Links */}
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={reducedMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={reducedMotion ? { duration: 0 } : { delay: 0.3 }}
         className="mt-6 flex flex-wrap items-center justify-center gap-3"
       >
         <span className="text-sm text-white/60">Popular:</span>
