@@ -4,12 +4,13 @@
  * PATCH: Update algorithm config
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { DEFAULT_ALGORITHM_CONFIG } from '@/types/algorithm'
+import { createApiHandler } from '@/lib/api/handler'
 
 const algorithmConfigSchema = z.object({
   matching_strategy: z.enum(['scored', 'round_robin', 'geographic']).optional(),
@@ -38,36 +39,22 @@ const algorithmConfigSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export const GET = createApiHandler(async () => {
   // Verify admin with settings:read permission
   const auth = await requirePermission('settings', 'read')
   if (!auth.success || !auth.admin) return auth.error!
 
-  try {
-    const supabase = createAdminClient()
+  const supabase = createAdminClient()
 
-    // Try the app schema first
-    const { data, error } = await supabase
-      .from('algorithm_config')
-      .select('id, matching_strategy, max_attorneys_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
-      .limit(1)
-      .single()
+  // Try the app schema first
+  const { data, error } = await supabase
+    .from('algorithm_config')
+    .select('id, matching_strategy, max_attorneys_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
+    .limit(1)
+    .single()
 
-    if (error || !data) {
-      // Return defaults if the table does not exist yet
-      return NextResponse.json({
-        config: {
-          id: 'default',
-          ...DEFAULT_ALGORITHM_CONFIG,
-          updated_at: new Date().toISOString(),
-          updated_by: null,
-        },
-        source: 'defaults',
-      })
-    }
-
-    return NextResponse.json({ config: data, source: 'database' })
-  } catch {
+  if (error || !data) {
+    // Return defaults if the table does not exist yet
     return NextResponse.json({
       config: {
         id: 'default',
@@ -78,92 +65,90 @@ export async function GET() {
       source: 'defaults',
     })
   }
-}
 
-export async function PATCH(request: NextRequest) {
+  return NextResponse.json({ config: data, source: 'database' })
+})
+
+export const PATCH = createApiHandler(async ({ request }) => {
   // Verify admin with settings:write permission
   const auth = await requirePermission('settings', 'write')
   if (!auth.success || !auth.admin) return auth.error!
 
-  try {
-    const body = await request.json()
-    const supabase = createAdminClient()
+  const body = await request.json()
+  const supabase = createAdminClient()
 
-    // Remove non-modifiable fields before validation
-    const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<string, unknown>
+  // Remove non-modifiable fields before validation
+  const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<string, unknown>
+  void id; void created_at; void updated_at; void singleton
 
-    // Validate with Zod
-    const parsed = algorithmConfigSchema.safeParse(fieldsToValidate)
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          success: false, error: { message: 'Invalid data', details: parsed.error.flatten().fieldErrors },
-        },
-        { status: 400 }
-      )
-    }
+  // Validate with Zod
+  const parsed = algorithmConfigSchema.safeParse(fieldsToValidate)
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        success: false, error: { message: 'Invalid data', details: parsed.error.flatten().fieldErrors },
+      },
+      { status: 400 }
+    )
+  }
 
-    const updates: Record<string, unknown> = { ...parsed.data }
+  const updates: Record<string, unknown> = { ...parsed.data }
 
-    // Add metadata
-    updates.updated_by = auth.admin.id
-    updates.updated_at = new Date().toISOString()
+  // Add metadata
+  updates.updated_by = auth.admin.id
+  updates.updated_at = new Date().toISOString()
 
-    // Retrieve the ID of the current config
-    const { data: current } = await supabase
-      .from('algorithm_config')
-      .select('id')
-      .limit(1)
-      .single()
+  // Retrieve the ID of the current config
+  const { data: current } = await supabase
+    .from('algorithm_config')
+    .select('id')
+    .limit(1)
+    .single()
 
-    if (!current) {
-      // Insert if no config exists yet
-      const { data, error } = await supabase
-        .from('algorithm_config')
-        .insert(updates)
-        .select()
-        .single()
-
-      if (error) {
-        logger.error('Algorithm config insert error', { message: error.message })
-        return NextResponse.json({ success: false, error: { message: 'Error saving configuration' } }, { status: 500 })
-      }
-
-      await logAdminAction(
-        auth.admin.id,
-        'algorithm_config_create',
-        'algorithm_config',
-        data.id,
-        updates
-      )
-
-      return NextResponse.json({ config: data, action: 'created' })
-    }
-
-    // Update the existing config
+  if (!current) {
+    // Insert if no config exists yet
     const { data, error } = await supabase
       .from('algorithm_config')
-      .update(updates)
-      .eq('id', current.id)
+      .insert(updates)
       .select()
       .single()
 
     if (error) {
-      logger.error('Algorithm config update error', { message: error.message })
-      return NextResponse.json({ success: false, error: { message: 'Error updating configuration' } }, { status: 500 })
+      logger.error('Algorithm config insert error', { message: error.message })
+      return NextResponse.json({ success: false, error: { message: 'Error saving configuration' } }, { status: 500 })
     }
 
     await logAdminAction(
       auth.admin.id,
-      'algorithm_config_update',
+      'algorithm_config_create',
       'algorithm_config',
-      current.id,
+      data.id,
       updates
     )
 
-    return NextResponse.json({ config: data, action: 'updated' })
-  } catch (error) {
-    logger.error('Algorithm config PATCH error', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json({ config: data, action: 'created' })
   }
-}
+
+  // Update the existing config
+  const { data, error } = await supabase
+    .from('algorithm_config')
+    .update(updates)
+    .eq('id', current.id)
+    .select()
+    .single()
+
+  if (error) {
+    logger.error('Algorithm config update error', { message: error.message })
+    return NextResponse.json({ success: false, error: { message: 'Error updating configuration' } }, { status: 500 })
+  }
+
+  await logAdminAction(
+    auth.admin.id,
+    'algorithm_config_update',
+    'algorithm_config',
+    current.id,
+    updates
+  )
+
+  return NextResponse.json({ config: data, action: 'updated' })
+})

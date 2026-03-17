@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -11,7 +12,7 @@ type CheckResult = { status: ServiceStatus; latency?: number; error?: string }
  * 200 = healthy or degraded (at least one service up)
  * 503 = unhealthy (ALL services down)
  */
-export async function GET() {
+export const GET = createApiHandler(async () => {
   const startTime = Date.now()
   const checks: Record<string, CheckResult> = {}
 
@@ -109,4 +110,4 @@ export async function GET() {
     status: overallStatus === 'unhealthy' ? 503 : 200,
     headers: { 'Cache-Control': 'no-store, max-age=0' },
   })
-}
+}, {})

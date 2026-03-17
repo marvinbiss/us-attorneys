@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { createApiHandler } from '@/lib/api/handler'
 
-export async function GET(request: NextRequest) {
-  const q = request.nextUrl.searchParams.get('q')?.trim()
+export const GET = createApiHandler(async ({ request }) => {
+  const q = new URL(request.url).searchParams.get('q')?.trim()
 
   if (!q || q.length < 2) {
     return NextResponse.json({ results: [] })
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ results: [] })
   }
 
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('attorneys')
@@ -45,4 +46,4 @@ export async function GET(request: NextRequest) {
       'Cache-Control': 'public, max-age=300, stale-while-revalidate=600',
     },
   })
-}
+}, {})

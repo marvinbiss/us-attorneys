@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logAdminAction } from '@/lib/admin-auth'
+import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 // DOMPurify lazy-imported inside POST to avoid JSDOM crash in serverless cold start
 import { z } from 'zod'
@@ -21,90 +22,66 @@ const createSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: NextRequest) {
-  try {
-    const authResult = await requirePermission('prospection', 'read')
-    if (!authResult.success) return authResult.error
+export const GET = createApiHandler(async (ctx) => {
+  const supabase = createAdminClient()
+  const channel = ctx.request.nextUrl.searchParams.get('channel')
+  const audience = ctx.request.nextUrl.searchParams.get('audience_type')
+  const page = Math.max(parseInt(ctx.request.nextUrl.searchParams.get('page') || '1') || 1, 1)
+  const limit = Math.min(Math.max(parseInt(ctx.request.nextUrl.searchParams.get('limit') || '50') || 50, 1), 100)
+  const offset = (page - 1) * limit
 
-    const supabase = createAdminClient()
-    const channel = request.nextUrl.searchParams.get('channel')
-    const audience = request.nextUrl.searchParams.get('audience_type')
-    const page = Math.max(parseInt(request.nextUrl.searchParams.get('page') || '1') || 1, 1)
-    const limit = Math.min(Math.max(parseInt(request.nextUrl.searchParams.get('limit') || '50') || 50, 1), 100)
-    const offset = (page - 1) * limit
+  let query = supabase
+    .from('prospection_templates')
+    .select('*', { count: 'exact' })
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
 
-    let query = supabase
-      .from('prospection_templates')
-      .select('*', { count: 'exact' })
-      .eq('is_active', true)
-      .order('created_at', { ascending: false })
+  if (channel) query = query.eq('channel', channel)
+  if (audience) query = query.eq('audience_type', audience)
 
-    if (channel) query = query.eq('channel', channel)
-    if (audience) query = query.eq('audience_type', audience)
+  query = query.range(offset, offset + limit - 1)
 
-    query = query.range(offset, offset + limit - 1)
+  const { data, count, error } = await query
 
-    const { data, count, error } = await query
-
-    if (error) {
-      logger.warn('List templates query failed, returning empty list', { code: error.code, message: error.message })
-      return NextResponse.json({ success: true, data: [], pagination: { page, limit, total: 0 } })
-    }
-
-    return NextResponse.json({ success: true, data, pagination: { page, limit, total: count || 0 } })
-  } catch (error) {
-    logger.error('Templates GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+  if (error) {
+    logger.warn('List templates query failed, returning empty list', { code: error.code, message: error.message })
+    return NextResponse.json({ success: true, data: [], pagination: { page, limit, total: 0 } })
   }
-}
 
-export async function POST(request: NextRequest) {
-  try {
-    const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success || !authResult.admin) return authResult.error
+  return NextResponse.json({ success: true, data, pagination: { page, limit, total: count || 0 } })
+}, { requireAdmin: true })
 
-    const supabase = createAdminClient()
-    const body = await request.json()
-    const parsed = createSchema.safeParse(body)
+export const POST = createApiHandler(async (ctx) => {
+  const supabase = createAdminClient()
+  const body = ctx.body
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
-        { status: 400 }
-      )
-    }
-
-    // Sanitize template content before storing
-    const sanitizedData = { ...parsed.data }
-    // Strip HTML from text-only fields
-    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
-    if (sanitizedData.subject) sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
-    // Sanitize HTML body (allow safe HTML tags only)
-    if (sanitizedData.html_body) {
-      const { default: DOMPurify } = await import('isomorphic-dompurify')
-      sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
-    }
-
-    const { data, error } = await supabase
-      .from('prospection_templates')
-      .insert({ ...sanitizedData, created_by: authResult.admin.id })
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Create template error', error)
-      return NextResponse.json({ success: false, error: { message: 'Error during creation' } }, { status: 500 })
-    }
-
-    await logAdminAction(authResult.admin.id, 'template.create', 'prospection_template', data.id, {
-      name: sanitizedData.name,
-      channel: sanitizedData.channel,
-      audience_type: sanitizedData.audience_type,
-    })
-
-    return NextResponse.json({ success: true, data }, { status: 201 })
-  } catch (error) {
-    logger.error('Templates POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+  // Sanitize template content before storing
+  const sanitizedData = { ...body }
+  // Strip HTML from text-only fields
+  if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+  if (sanitizedData.subject) sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
+  // Sanitize HTML body (allow safe HTML tags only)
+  if (sanitizedData.html_body) {
+    const { default: DOMPurify } = await import('isomorphic-dompurify')
+    sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
   }
-}
+
+  const { data, error } = await supabase
+    .from('prospection_templates')
+    .insert({ ...sanitizedData, created_by: ctx.user!.id })
+    .select()
+    .single()
+
+  if (error) {
+    logger.error('Create template error', error)
+    return NextResponse.json({ success: false, error: { message: 'Error during creation' } }, { status: 500 })
+  }
+
+  await logAdminAction(ctx.user!.id, 'template.create', 'prospection_template', data.id, {
+    name: sanitizedData.name,
+    channel: sanitizedData.channel,
+    audience_type: sanitizedData.audience_type,
+  })
+
+  return NextResponse.json({ success: true, data }, { status: 201 })
+}, { requireAdmin: true, bodySchema: createSchema })

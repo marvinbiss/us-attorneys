@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { createApiHandler } from '@/lib/api/handler'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -19,9 +20,8 @@ export async function OPTIONS() {
  * Returns regional or state statistics.
  * Legacy param "departement" still accepted for backward compatibility.
  */
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = request.nextUrl
+export const GET = createApiHandler(async ({ request }) => {
+    const { searchParams } = new URL(request.url)
     const region = searchParams.get('region')
     const stateCode = searchParams.get('state') || searchParams.get('departement') // 'departement' kept for backward compat with existing API consumers
 
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = createAdminClient()
+    const supabase = await createClient()
 
     let query = supabase
       .from('barometre_stats')
@@ -94,10 +94,4 @@ export async function GET(request: NextRequest) {
         },
       },
     )
-  } catch {
-    return NextResponse.json(
-      { error: 'Unexpected server error.' },
-      { status: 500, headers: CORS_HEADERS },
-    )
-  }
-}
+}, {})

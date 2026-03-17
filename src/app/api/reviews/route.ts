@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { logger } from '@/lib/logger'
+import { createApiHandler } from '@/lib/api/handler'
 import { slugify } from '@/lib/utils'
 import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
@@ -90,8 +91,7 @@ const getQuerySchema = z.object({
 // GET /api/reviews - Get booking info for review or attorney reviews
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request) {
-  try {
+export const GET = createApiHandler(async ({ request }) => {
     const { searchParams } = new URL(request.url)
 
     const queryValidation = getQuerySchema.safeParse({
@@ -215,18 +215,10 @@ export async function GET(request: Request) {
       createErrorResponse(ErrorCode.VALIDATION_ERROR, 'bookingId or attorneyId required'),
       { status: 400 }
     )
-  } catch (error) {
-    logger.error('Reviews GET error:', error)
-    return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Server error'),
-      { status: 500 }
-    )
-  }
-}
+}, {})
 
 // POST /api/reviews - Submit a review
-export async function POST(request: Request) {
-  try {
+export const POST = createApiHandler(async ({ request }) => {
     const body = await request.json()
 
     // Validate request body
@@ -405,14 +397,7 @@ export async function POST(request: Request) {
       }),
       { status: 201 }
     )
-  } catch (error) {
-    logger.error('Reviews POST error:', error)
-    return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error submitting review'),
-      { status: 500 }
-    )
-  }
-}
+}, {})
 
 // Fraud detection helper
 function detectFraudIndicators(comment: string, rating: number): string[] {

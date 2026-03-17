@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logAdminAction } from '@/lib/admin-auth'
+import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
@@ -21,150 +22,109 @@ const updateSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const authResult = await requirePermission('prospection', 'read')
-    if (!authResult.success) return authResult.error
-
-    const { id } = await params
-    if (!isValidUuid(id)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
-
-    const supabase = createAdminClient()
-
-    const { data, error } = await supabase
-      .from('prospection_contacts')
-      .select('id, contact_type, company_name, contact_name, email, email_canonical, phone, phone_e164, address, postal_code, city, department, region, location_code, population, attorney_id, source, source_file, source_row, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
-      .eq('id', id)
-      .single()
-
-    if (error || !data) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Contact not found' } },
-        { status: 404 }
-      )
-    }
-
-    return NextResponse.json({ success: true, data })
-  } catch (error) {
-    logger.error('Get contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+export const GET = createApiHandler(async (ctx) => {
+  const id = ctx.params?.id
+  if (!id || !isValidUuid(id)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
   }
-}
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success || !authResult.admin) return authResult.error
+  const supabase = createAdminClient()
 
-    const { id } = await params
-    if (!isValidUuid(id)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
+  const { data, error } = await supabase
+    .from('prospection_contacts')
+    .select('id, contact_type, company_name, contact_name, email, email_canonical, phone, phone_e164, address, postal_code, city, department, region, location_code, population, attorney_id, source, source_file, source_row, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
+    .eq('id', id)
+    .single()
+
+  if (error || !data) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Contact not found' } },
+      { status: 404 }
+    )
+  }
+
+  return NextResponse.json({ success: true, data })
+}, { requireAdmin: true })
+
+export const PATCH = createApiHandler(async (ctx) => {
+  const id = ctx.params?.id
+  if (!id || !isValidUuid(id)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
+  }
+
+  const body = ctx.body
+
+  // Strip HTML tags from text fields before storing
+  const sanitizedData = { ...body }
+  const textFields = ['contact_name', 'company_name', 'address', 'city', 'region'] as const
+  for (const field of textFields) {
+    if (typeof sanitizedData[field] === 'string') {
+      sanitizedData[field] = (sanitizedData[field] as string).replace(/<[^>]*>/g, '').trim()
     }
+  }
 
-    const body = await request.json()
-    const parsed = updateSchema.safeParse(body)
+  const supabase = createAdminClient()
+  const { data, error } = await supabase
+    .from('prospection_contacts')
+    .update(sanitizedData)
+    .eq('id', id)
+    .select()
+    .single()
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
-        { status: 400 }
-      )
-    }
+  if (error) {
+    logger.error('Update contact error', error)
+    return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
+  }
 
-    // Strip HTML tags from text fields before storing
-    const sanitizedData = { ...parsed.data }
-    const textFields = ['contact_name', 'company_name', 'address', 'city', 'region'] as const
-    for (const field of textFields) {
-      if (typeof sanitizedData[field] === 'string') {
-        sanitizedData[field] = (sanitizedData[field] as string).replace(/<[^>]*>/g, '').trim()
-      }
-    }
+  await logAdminAction(ctx.user!.id, 'contact.update', 'prospection_contact', id, {
+    updated_fields: Object.keys(body),
+  })
 
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from('prospection_contacts')
-      .update(sanitizedData)
-      .eq('id', id)
-      .select()
-      .single()
+  return NextResponse.json({ success: true, data })
+}, { requireAdmin: true, bodySchema: updateSchema })
 
+export const DELETE = createApiHandler(async (ctx) => {
+  const id = ctx.params?.id
+  if (!id || !isValidUuid(id)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
+  }
+
+  const supabase = createAdminClient()
+  const gdpr = ctx.request.nextUrl.searchParams.get('gdpr') === 'true'
+
+  if (gdpr) {
+    // RGPD Article 17 — Full erasure
+    const { error } = await supabase.rpc('prospection_gdpr_erase', { p_contact_id: id })
     if (error) {
-      logger.error('Update contact error', error)
-      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
+      logger.error('GDPR erase error', error)
+      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
     }
-
-    await logAdminAction(authResult.admin.id, 'contact.update', 'prospection_contact', id, {
-      updated_fields: Object.keys(parsed.data),
+    await logAdminAction(ctx.user!.id, 'gdpr_erasure', 'prospection_contact', id, {
+      reason: 'GDPR Article 17 - Right to erasure'
     })
-
-    return NextResponse.json({ success: true, data })
-  } catch (error) {
-    logger.error('Patch contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
-  }
-}
-
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success || !authResult.admin) return authResult.error
-
-    const { id } = await params
-    if (!isValidUuid(id)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
+  } else {
+    // Soft delete
+    const { error } = await supabase
+      .from('prospection_contacts')
+      .update({ is_active: false })
+      .eq('id', id)
+    if (error) {
+      logger.error('Soft delete contact error', error)
+      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
     }
-
-    const supabase = createAdminClient()
-    const gdpr = request.nextUrl.searchParams.get('gdpr') === 'true'
-
-    if (gdpr) {
-      // RGPD Article 17 — Full erasure
-      const { error } = await supabase.rpc('prospection_gdpr_erase', { p_contact_id: id })
-      if (error) {
-        logger.error('GDPR erase error', error)
-        return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
-      }
-      await logAdminAction(authResult.admin.id, 'gdpr_erasure', 'prospection_contact', id, {
-        reason: 'GDPR Article 17 - Right to erasure'
-      })
-    } else {
-      // Soft delete
-      const { error } = await supabase
-        .from('prospection_contacts')
-        .update({ is_active: false })
-        .eq('id', id)
-      if (error) {
-        logger.error('Soft delete contact error', error)
-        return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
-      }
-      await logAdminAction(authResult.admin.id, 'contact.delete', 'prospection_contact', id, {
-        method: 'soft_delete',
-      })
-    }
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    logger.error('Delete contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    await logAdminAction(ctx.user!.id, 'contact.delete', 'prospection_contact', id, {
+      method: 'soft_delete',
+    })
   }
-}
+
+  return NextResponse.json({ success: true })
+}, { requireAdmin: true })

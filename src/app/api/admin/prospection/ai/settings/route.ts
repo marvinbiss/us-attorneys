@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logAdminAction } from '@/lib/admin-auth'
+import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -22,76 +23,52 @@ const updateSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
-  try {
-    const authResult = await requirePermission('prospection', 'read')
-    if (!authResult.success) return authResult.error
+export const GET = createApiHandler(async () => {
+  const supabase = createAdminClient()
+  const { data, error } = await supabase
+    .from('prospection_ai_settings')
+    .select('id, default_provider, claude_model, claude_api_key_set, claude_max_tokens, claude_temperature, openai_model, openai_api_key_set, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, attorney_system_prompt, client_system_prompt, municipality_system_prompt, updated_by, updated_at')
+    .limit(1)
+    .single()
 
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from('prospection_ai_settings')
-      .select('id, default_provider, claude_model, claude_api_key_set, claude_max_tokens, claude_temperature, openai_model, openai_api_key_set, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, attorney_system_prompt, client_system_prompt, municipality_system_prompt, updated_by, updated_at')
-      .limit(1)
-      .single()
-
-    if (error) {
-      logger.error('Get AI settings error', error)
-      return NextResponse.json({ success: false, error: { message: 'Error retrieving data' } }, { status: 500 })
-    }
-
-    return NextResponse.json({ success: true, data })
-  } catch (error) {
-    logger.error('AI settings GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+  if (error) {
+    logger.error('Get AI settings error', error)
+    return NextResponse.json({ success: false, error: { message: 'Error retrieving data' } }, { status: 500 })
   }
-}
 
-export async function PATCH(request: NextRequest) {
-  try {
-    const authResult = await requirePermission('prospection', 'ai')
-    if (!authResult.success || !authResult.admin) return authResult.error
+  return NextResponse.json({ success: true, data })
+}, { requireAdmin: true })
 
-    const supabase = createAdminClient()
-    const body = await request.json()
-    const parsed = updateSchema.safeParse(body)
+export const PATCH = createApiHandler(async (ctx) => {
+  const supabase = createAdminClient()
+  const body = ctx.body
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid data', details: parsed.error.flatten() } },
-        { status: 400 }
-      )
-    }
+  // Retrieve the ID of the existing settings
+  const { data: existing } = await supabase
+    .from('prospection_ai_settings')
+    .select('id')
+    .limit(1)
+    .single()
 
-    // Retrieve the ID of the existing settings
-    const { data: existing } = await supabase
-      .from('prospection_ai_settings')
-      .select('id')
-      .limit(1)
-      .single()
-
-    if (!existing) {
-      return NextResponse.json({ success: false, error: { message: 'Settings not found' } }, { status: 404 })
-    }
-
-    const { data, error } = await supabase
-      .from('prospection_ai_settings')
-      .update({ ...parsed.data, updated_by: authResult.admin.id })
-      .eq('id', existing.id)
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Update AI settings error', error)
-      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
-    }
-
-    await logAdminAction(authResult.admin.id, 'ai_settings.update', 'prospection_ai_settings', existing.id, {
-      updated_fields: Object.keys(parsed.data),
-    })
-
-    return NextResponse.json({ success: true, data })
-  } catch (error) {
-    logger.error('AI settings PATCH error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+  if (!existing) {
+    return NextResponse.json({ success: false, error: { message: 'Settings not found' } }, { status: 404 })
   }
-}
+
+  const { data, error } = await supabase
+    .from('prospection_ai_settings')
+    .update({ ...body, updated_by: ctx.user!.id })
+    .eq('id', existing.id)
+    .select()
+    .single()
+
+  if (error) {
+    logger.error('Update AI settings error', error)
+    return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
+  }
+
+  await logAdminAction(ctx.user!.id, 'ai_settings.update', 'prospection_ai_settings', existing.id, {
+    updated_fields: Object.keys(body),
+  })
+
+  return NextResponse.json({ success: true, data })
+}, { requireAdmin: true, bodySchema: updateSchema })

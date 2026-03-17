@@ -3,9 +3,10 @@
  * Searches in providers (scraped data) and profiles (registered users)
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 import { getDepartmentName, getRegionName, getDeptCodeFromPostal } from '@/lib/geography'
 import { slugify } from '@/lib/utils'
 import { z } from 'zod'
@@ -104,13 +105,9 @@ function generateDescription(name: string, specialty: string, city: string): str
 
 // REMOVED: generateSyntheticReviews function (illegal fake review generation)
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
+export const GET = createApiHandler(async ({ params }) => {
     // Validate attorney ID parameter
-    const idValidation = attorneyIdSchema.safeParse(params.id)
+    const idValidation = attorneyIdSchema.safeParse(params?.id)
     if (!idValidation.success) {
       return NextResponse.json(
         {
@@ -491,18 +488,4 @@ export async function GET(
     response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
 
     return response
-
-  } catch (error) {
-    logger.error('Error fetching attorney', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: 'SERVER_ERROR',
-          message: 'Server error'
-        }
-      },
-      { status: 500 }
-    )
-  }
-}
+}, {})

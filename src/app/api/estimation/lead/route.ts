@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { headers } from 'next/headers'
 import { sendEmail } from '@/lib/api/resend-client'
@@ -29,8 +30,7 @@ const estimationLeadSchema = z.object({
   artisan_public_id: z.string().optional(),  // DB column name (legacy) — do not rename without migration
 })
 
-export async function POST(request: Request) {
-  try {
+export const POST = createApiHandler(async ({ request }) => {
     // 0. Rate limiting (5 submissions per hour per IP)
     const headersList = await headers()
     const ip =
@@ -143,14 +143,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, id: lead.id })
-  } catch (error) {
-    logger.error('Estimation lead API error', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
-  }
-}
+}, {})
 
 // ============================================================
 // Admin notification

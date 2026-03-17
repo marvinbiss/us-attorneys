@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { createApiHandler } from '@/lib/api/handler'
 import { verifyVapiSignature } from '@/lib/voice/webhook-security'
 import {
   VOICE_QUALIFICATION_SYSTEM_PROMPT,
@@ -20,7 +21,7 @@ export const maxDuration = 30
 // POST /api/vapi/webhook — Main Vapi webhook handler
 // ---------------------------------------------------------------------------
 
-export async function POST(request: NextRequest) {
+export const POST = createApiHandler(async ({ request }) => {
   const rawBody = await request.text()
 
   // Verify signature (fail-closed: reject if secret not configured)
@@ -46,27 +47,22 @@ export async function POST(request: NextRequest) {
   const eventType = event.message?.type
   logger.info('Vapi webhook received', { type: eventType, callId: event.message?.call?.id })
 
-  try {
-    switch (eventType) {
-      case 'assistant-request':
-        return handleAssistantRequest()
-      case 'function-call':
-        return await handleFunctionCall(event)
-      case 'status-update':
-        return await handleStatusUpdate(event)
-      case 'end-of-call-report':
-        return await handleEndOfCallReport(event)
-      case 'transcript':
-        // Real-time transcript — just acknowledge
-        return NextResponse.json({ ok: true })
-      default:
-        return NextResponse.json({ ok: true })
-    }
-  } catch (error) {
-    logger.error('Vapi webhook error', { error, eventType })
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+  switch (eventType) {
+    case 'assistant-request':
+      return handleAssistantRequest()
+    case 'function-call':
+      return await handleFunctionCall(event)
+    case 'status-update':
+      return await handleStatusUpdate(event)
+    case 'end-of-call-report':
+      return await handleEndOfCallReport(event)
+    case 'transcript':
+      // Real-time transcript — just acknowledge
+      return NextResponse.json({ ok: true })
+    default:
+      return NextResponse.json({ ok: true })
   }
-}
+}, {})
 
 // ---------------------------------------------------------------------------
 // assistant-request — Vapi asks for assistant configuration at call start

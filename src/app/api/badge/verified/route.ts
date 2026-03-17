@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 
 /** Escape XML special characters */
 function escapeXml(str: string): string {
@@ -48,10 +49,11 @@ function shieldIcon(x: number, y: number, size: number, color: string): string {
   </g>`
 }
 
-export async function GET(request: NextRequest) {
-  const slug = request.nextUrl.searchParams.get('slug')
-  const id = request.nextUrl.searchParams.get('id')
-  const style = request.nextUrl.searchParams.get('style') || 'light'
+export const GET = createApiHandler(async ({ request }) => {
+  const url = new URL(request.url)
+  const slug = url.searchParams.get('slug')
+  const id = url.searchParams.get('id')
+  const style = url.searchParams.get('style') || 'light'
 
   if (!slug && !id) {
     return NextResponse.json({ error: 'slug or id required' }, { status: 400 })
@@ -168,4 +170,4 @@ export async function GET(request: NextRequest) {
       'Access-Control-Allow-Methods': 'GET',
     },
   })
-}
+}, {})

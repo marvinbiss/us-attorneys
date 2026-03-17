@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import { createApiHandler } from '@/lib/api/handler'
 
 // PATCH request schema
 const updateQuoteSchema = z.object({
@@ -15,148 +16,127 @@ const updateQuoteSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    // Verify admin with services:read permission
-    const authResult = await requirePermission('services', 'read')
-    if (!authResult.success || !authResult.admin) {
-      return authResult.error
-    }
+export const GET = createApiHandler(async ({ params }) => {
+  // Verify admin with services:read permission
+  const authResult = await requirePermission('services', 'read')
+  if (!authResult.success || !authResult.admin) {
+    return authResult.error!
+  }
 
-    if (!isValidUuid(params.id)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
+  const id = params?.id
+  if (!id || !isValidUuid(id)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
+  }
 
-    const supabase = createAdminClient()
+  const supabase = createAdminClient()
 
-    const { data: quote, error } = await supabase
-      .from('quotes')
-      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
-      .eq('id', params.id)
-      .single()
+  const { data: quote, error } = await supabase
+    .from('quotes')
+    .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
+    .eq('id', id)
+    .single()
 
-    if (error) {
-      logger.error('Quote fetch error', error)
-      return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
-    }
-
-    return NextResponse.json({ quote })
-  } catch (error) {
+  if (error) {
     logger.error('Quote fetch error', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
   }
-}
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    // Verify admin with services:write permission
-    const authResult = await requirePermission('services', 'write')
-    if (!authResult.success || !authResult.admin) {
-      return authResult.error
-    }
+  return NextResponse.json({ quote })
+})
 
-    if (!isValidUuid(params.id)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
-
-    const supabase = createAdminClient()
-    const body = await request.json()
-    const result = updateQuoteSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
-        { status: 400 }
-      )
-    }
-    const updates = result.data
-
-    // Get old data for audit
-    const { data: _oldQuote } = await supabase
-      .from('quotes')
-      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
-      .eq('id', params.id)
-      .single()
-
-    const { data: quote, error } = await supabase
-      .from('quotes')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Quote operation error', error)
-      return NextResponse.json({ success: false, error: { message: 'Error during operation' } }, { status: 500 })
-    }
-
-    // Audit log
-    await logAdminAction(authResult.admin.id, 'quote_updated', 'booking', params.id, updates)
-
-    return NextResponse.json({ quote })
-  } catch (error) {
-    logger.error('Quote update error', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+export const PATCH = createApiHandler(async ({ request, params }) => {
+  // Verify admin with services:write permission
+  const authResult = await requirePermission('services', 'write')
+  if (!authResult.success || !authResult.admin) {
+    return authResult.error!
   }
-}
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    // Verify admin with services:delete permission
-    const authResult = await requirePermission('services', 'delete')
-    if (!authResult.success || !authResult.admin) {
-      return authResult.error
-    }
-
-    if (!isValidUuid(params.id)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
-
-    const supabase = createAdminClient()
-
-    // Get quote data for audit
-    const { data: _quoteToDelete } = await supabase
-      .from('quotes')
-      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
-      .eq('id', params.id)
-      .single()
-
-    const { error } = await supabase
-      .from('quotes')
-      .delete()
-      .eq('id', params.id)
-
-    if (error) {
-      logger.error('Quote operation error', error)
-      return NextResponse.json({ success: false, error: { message: 'Error during operation' } }, { status: 500 })
-    }
-
-    // Audit log
-    await logAdminAction(authResult.admin.id, 'quote_deleted', 'booking', params.id)
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    logger.error('Quote delete error', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+  const id = params?.id
+  if (!id || !isValidUuid(id)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
   }
-}
+
+  const supabase = createAdminClient()
+  const body = await request.json()
+  const result = updateQuoteSchema.safeParse(body)
+  if (!result.success) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+      { status: 400 }
+    )
+  }
+  const updates = result.data
+
+  // Get old data for audit
+  const { data: _oldQuote } = await supabase
+    .from('quotes')
+    .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
+    .eq('id', id)
+    .single()
+
+  const { data: quote, error } = await supabase
+    .from('quotes')
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) {
+    logger.error('Quote operation error', error)
+    return NextResponse.json({ success: false, error: { message: 'Error during operation' } }, { status: 500 })
+  }
+
+  // Audit log
+  await logAdminAction(authResult.admin.id, 'quote_updated', 'booking', id, updates)
+
+  return NextResponse.json({ quote })
+})
+
+export const DELETE = createApiHandler(async ({ params }) => {
+  // Verify admin with services:delete permission
+  const authResult = await requirePermission('services', 'delete')
+  if (!authResult.success || !authResult.admin) {
+    return authResult.error!
+  }
+
+  const id = params?.id
+  if (!id || !isValidUuid(id)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
+  }
+
+  const supabase = createAdminClient()
+
+  // Get quote data for audit
+  const { data: _quoteToDelete } = await supabase
+    .from('quotes')
+    .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
+    .eq('id', id)
+    .single()
+
+  const { error } = await supabase
+    .from('quotes')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    logger.error('Quote operation error', error)
+    return NextResponse.json({ success: false, error: { message: 'Error during operation' } }, { status: 500 })
+  }
+
+  // Audit log
+  await logAdminAction(authResult.admin.id, 'quote_deleted', 'booking', id)
+
+  return NextResponse.json({ success: true })
+})

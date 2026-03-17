@@ -3,9 +3,10 @@
  * Chat streaming with Claude to estimate attorney fees
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 import { getCachedData } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -130,8 +131,7 @@ function sanitizeForPrompt(str: string): string {
 // Route handler
 // ---------------------------------------------------------------------------
 
-export async function POST(request: NextRequest) {
-  try {
+export const POST = createApiHandler(async ({ request }) => {
     // 0. Rate limiting (10 requests per minute per IP)
     const headersList = await headers()
     const ip =
@@ -269,19 +269,11 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return new Response(readable, {
+    return new NextResponse(readable, {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'no-cache',
         'Transfer-Encoding': 'chunked',
       },
     })
-  } catch (error) {
-    const errMsg = error instanceof Error ? error.message : String(error)
-    logger.error('Estimation API error', error, { action: 'estimation', message: errMsg })
-    return NextResponse.json(
-      { error: 'Server error', debug: process.env.NODE_ENV === 'development' ? errMsg : undefined },
-      { status: 500 },
-    )
-  }
-}
+}, {})

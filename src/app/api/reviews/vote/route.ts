@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -32,8 +33,7 @@ function getVoterFingerprint(
   return `ip:${ip}`
 }
 
-export async function POST(request: Request) {
-  try {
+export const POST = createApiHandler(async ({ request }) => {
     const body = await request.json()
     const result = voteSchema.safeParse(body)
     if (!result.success) {
@@ -128,11 +128,4 @@ export async function POST(request: Request) {
       }
       throw err
     }
-  } catch (error) {
-    logger.error('Review vote error:', error)
-    return NextResponse.json(
-      { success: false, error: { message: 'Server error during vote' } },
-      { status: 500 }
-    )
-  }
-}
+}, {})

@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
@@ -65,8 +66,7 @@ const urgencyLabels: Record<string, string> = {
 }
 
 
-export async function POST(request: Request) {
-  try {
+export const POST = createApiHandler(async ({ request }) => {
     const supabase = createAdminClient()
     const body = await request.json()
 
@@ -222,11 +222,4 @@ export async function POST(request: Request) {
       attorneys_notified: assignedProviders.length,
       ...(assignedProviders.length === 0 && { attorneys_found: false }),
     })
-  } catch (error) {
-    logger.error('Quote request API error', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
-  }
-}
+}, {})

@@ -4,9 +4,8 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createApiHandler } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 const exportPostSchema = z.object({
@@ -16,138 +15,100 @@ const exportPostSchema = z.object({
 // POST /api/gdpr/export - Request data export
 export const dynamic = 'force-dynamic'
 
-export async function POST(request: Request) {
-  try {
-    const supabase = await createClient()
+export const POST = createApiHandler(async ({ request, user }) => {
+  const body = await request.json()
+  const result = exportPostSchema.safeParse(body)
+  if (!result.success) {
+    return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
+  }
+  const { format } = result.data
 
-    const { data: { user } } = await supabase.auth.getUser()
+  const adminSupabase = createAdminClient()
 
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Authentication required' } },
-        { status: 401 }
-      )
-    }
+  // Check for existing pending request
+  const { data: existingRequest } = await adminSupabase
+    .from('data_export_requests')
+    .select('id, user_id, format, status, completed_at, created_at')
+    .eq('user_id', user!.id)
+    .eq('status', 'pending')
+    .single()
 
-    const body = await request.json()
-    const result = exportPostSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
-    }
-    const { format } = result.data
-
-    const adminSupabase = createAdminClient()
-
-    // Check for existing pending request
-    const { data: existingRequest } = await adminSupabase
-      .from('data_export_requests')
-      .select('id, user_id, format, status, completed_at, created_at')
-      .eq('user_id', user.id)
-      .eq('status', 'pending')
-      .single()
-
-    if (existingRequest) {
-      return NextResponse.json(
-        { success: false, error: { message: 'You already have an export request in progress' }, requestId: existingRequest.id },
-        { status: 400 }
-      )
-    }
-
-    // Create export request
-    const { data: exportRequest, error } = await adminSupabase
-      .from('data_export_requests')
-      .insert({
-        user_id: user.id,
-        format,
-        status: 'pending',
-      })
-      .select()
-      .single()
-
-    if (error) throw error
-
-    // Process immediately for small datasets
-    const exportData = await collectUserData(user.id)
-
-    // Update request with data
-    const { error: updateError } = await adminSupabase
-      .from('data_export_requests')
-      .update({
-        status: 'completed',
-        completed_at: new Date().toISOString(),
-        download_url: null,
-      })
-      .eq('id', exportRequest.id)
-
-    if (updateError) throw updateError
-
-    return NextResponse.json({
-      success: true,
-      requestId: exportRequest.id,
-      data: exportData,
-      message: 'Your data export is ready',
-    })
-  } catch (error) {
-    logger.error('GDPR export error:', error)
+  if (existingRequest) {
     return NextResponse.json(
-      { success: false, error: { message: 'Failed to process export request' } },
-      { status: 500 }
+      { success: false, error: { message: 'You already have an export request in progress' }, requestId: existingRequest.id },
+      { status: 400 }
     )
   }
-}
+
+  // Create export request
+  const { data: exportRequest, error } = await adminSupabase
+    .from('data_export_requests')
+    .insert({
+      user_id: user!.id,
+      format,
+      status: 'pending',
+    })
+    .select()
+    .single()
+
+  if (error) throw error
+
+  // Process immediately for small datasets
+  const exportData = await collectUserData(user!.id)
+
+  // Update request with data
+  const { error: updateError } = await adminSupabase
+    .from('data_export_requests')
+    .update({
+      status: 'completed',
+      completed_at: new Date().toISOString(),
+      download_url: null,
+    })
+    .eq('id', exportRequest.id)
+
+  if (updateError) throw updateError
+
+  return NextResponse.json({
+    success: true,
+    requestId: exportRequest.id,
+    data: exportData,
+    message: 'Your data export is ready',
+  })
+}, { requireAuth: true })
 
 // GET /api/gdpr/export - Get export status or download
-export async function GET(request: Request) {
-  try {
-    const supabase = await createClient()
+export const GET = createApiHandler(async ({ request, user }) => {
+  const adminSupabase = createAdminClient()
+  const { searchParams } = new URL(request.url)
+  const requestId = searchParams.get('requestId')
 
-    const { data: { user } } = await supabase.auth.getUser()
+  if (requestId) {
+    const { data: exportRequest } = await adminSupabase
+      .from('data_export_requests')
+      .select('id, user_id, format, status, completed_at, created_at')
+      .eq('id', requestId)
+      .eq('user_id', user!.id)
+      .single()
 
-    if (!user) {
+    if (!exportRequest) {
       return NextResponse.json(
-        { success: false, error: { message: 'Authentication required' } },
-        { status: 401 }
+        { success: false, error: { message: 'Export request not found' } },
+        { status: 404 }
       )
     }
 
-    const adminSupabase = createAdminClient()
-    const { searchParams } = new URL(request.url)
-    const requestId = searchParams.get('requestId')
-
-    if (requestId) {
-      const { data: exportRequest } = await adminSupabase
-        .from('data_export_requests')
-        .select('id, user_id, format, status, completed_at, created_at')
-        .eq('id', requestId)
-        .eq('user_id', user.id)
-        .single()
-
-      if (!exportRequest) {
-        return NextResponse.json(
-          { success: false, error: { message: 'Export request not found' } },
-          { status: 404 }
-        )
-      }
-
-      return NextResponse.json(exportRequest)
-    }
-
-    // Get all requests for user
-    const { data: requests } = await adminSupabase
-      .from('data_export_requests')
-      .select('id, user_id, format, status, completed_at, created_at')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-
-    return NextResponse.json({ requests: requests || [] })
-  } catch (error) {
-    logger.error('GDPR export status error:', error)
-    return NextResponse.json(
-      { success: false, error: { message: 'Failed to retrieve export status' } },
-      { status: 500 }
-    )
+    return NextResponse.json(exportRequest)
   }
-}
+
+  // Get all requests for user
+  const { data: requests } = await adminSupabase
+    .from('data_export_requests')
+    .select('id, user_id, format, status, completed_at, created_at')
+    .eq('user_id', user!.id)
+    .order('created_at', { ascending: false })
+
+  return NextResponse.json({ requests: requests || [] })
+}, { requireAuth: true })
 
 // Collect all user data for export
 async function collectUserData(userId: string) {

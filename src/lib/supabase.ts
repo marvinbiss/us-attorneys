@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { getCityBySlug as getCityBySlugImport } from '@/lib/data/usa'
 import { logger } from '@/lib/logger'
-import { getCachedData, CACHE_TTL } from '@/lib/cache'
+import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
 
 /**
  * Detect if we're inside `next build` (static generation phase).
@@ -130,19 +130,26 @@ const PROVIDER_LIST_SELECT = [
 
 export async function getSpecialties() {
   if (IS_BUILD) return Object.values(staticServices) // Use static data during build
-  return withTimeout(
-    (async () => {
-      const { data, error } = await supabase
-        .from('specialties')
-        .select('id, name, slug, description, icon, category, is_active')
-        .eq('is_active', true)
-        .order('name')
+  return getCachedData(
+    'specialties:all',
+    async () => {
+      return withTimeout(
+        (async () => {
+          const { data, error } = await supabase
+            .from('specialties')
+            .select('id, name, slug, description, icon, category, is_active')
+            .eq('is_active', true)
+            .order('name')
 
-      if (error) throw error
-      return data
-    })(),
-    QUERY_TIMEOUT_MS,
-    'getSpecialties',
+          if (error) throw error
+          return data
+        })(),
+        QUERY_TIMEOUT_MS,
+        'getSpecialties',
+      )
+    },
+    CACHE_TTL.services,
+    { skipNull: true },
   )
 }
 
@@ -276,43 +283,64 @@ async function queryAttorneyDetail(
 // Lookup by stable_id ONLY — no fallback.
 export async function getAttorneyByStableId(stableId: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
-  try {
-    return await withTimeout(
-      queryAttorneyDetail('stable_id', stableId),
-      QUERY_TIMEOUT_MS,
-      `getAttorneyByStableId(${stableId})`,
-    )
-  } catch {
-    return null
-  }
+  return getCachedData(
+    `attorney:stable:${stableId}`,
+    async () => {
+      try {
+        return await withTimeout(
+          queryAttorneyDetail('stable_id', stableId),
+          QUERY_TIMEOUT_MS,
+          `getAttorneyByStableId(${stableId})`,
+        )
+      } catch {
+        return null
+      }
+    },
+    CACHE_TTL.attorneys,
+    { skipNull: true },
+  )
 }
 
 // Lookup by primary UUID id — fallback for providers with no stable_id/slug.
 export async function getAttorneyById(id: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
-  try {
-    return await withTimeout(
-      queryAttorneyDetail('id', id),
-      QUERY_TIMEOUT_MS,
-      `getAttorneyById(${id})`,
-    )
-  } catch {
-    return null
-  }
+  return getCachedData(
+    `attorney:id:${id}`,
+    async () => {
+      try {
+        return await withTimeout(
+          queryAttorneyDetail('id', id),
+          QUERY_TIMEOUT_MS,
+          `getAttorneyById(${id})`,
+        )
+      } catch {
+        return null
+      }
+    },
+    CACHE_TTL.attorneys,
+    { skipNull: true },
+  )
 }
 
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
 export async function getAttorneyBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
-  try {
-    return await withTimeout(
-      queryAttorneyDetail('slug', slug),
-      QUERY_TIMEOUT_MS,
-      `getAttorneyBySlug(${slug})`,
-    )
-  } catch {
-    return null
-  }
+  return getCachedData(
+    `attorney:slug:${slug}`,
+    async () => {
+      try {
+        return await withTimeout(
+          queryAttorneyDetail('slug', slug),
+          QUERY_TIMEOUT_MS,
+          `getAttorneyBySlug(${slug})`,
+        )
+      } catch {
+        return null
+      }
+    },
+    CACHE_TTL.attorneys,
+    { skipNull: true },
+  )
 }
 
 // Reverse mapping: specialty slug → bar category aliases (for fallback queries)
@@ -650,33 +678,39 @@ export async function hasProvidersByServiceAndLocation(
   // Fail open: assume providers exist during build so pages are indexed by default.
   // ISR will correct to noindex if truly 0 providers on first revalidation.
   if (IS_BUILD) return true
-  try {
-    return await retryWithBackoff(
-      async () => {
-        const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
-        if (!specialties || specialties.length === 0) return false
+  return getCachedData(
+    `has-providers:svc-loc:${specialtySlug}:${locationSlug}`,
+    async () => {
+      try {
+        return await retryWithBackoff(
+          async () => {
+            const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
+            if (!specialties || specialties.length === 0) return false
 
-        const cityLookup = getCityBySlugImport(locationSlug)
-        const cityName = cityLookup?.name
-        if (!cityName) return false
+            const cityLookup = getCityBySlugImport(locationSlug)
+            const cityName = cityLookup?.name
+            if (!cityName) return false
 
-        const cityValues = [cityName]
-        const { count, error } = await supabase
-          .from('attorneys')
-          .select('id', { count: 'exact', head: true })
-          .in('specialty', specialties)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
+            const cityValues = [cityName]
+            const { count, error } = await supabase
+              .from('attorneys')
+              .select('id', { count: 'exact', head: true })
+              .in('specialty', specialties)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
 
-        if (error) throw error
-        return (count ?? 0) > 0
-      },
-      `hasProvidersByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
-    )
-  } catch {
-    // On any failure, conservatively return false (noindex)
-    return false
-  }
+            if (error) throw error
+            return (count ?? 0) > 0
+          },
+          `hasProvidersByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
+        )
+      } catch {
+        // On any failure, conservatively return false (noindex)
+        return false
+      }
+    },
+    CACHE_TTL.attorneys,
+  )
 }
 
 /**
@@ -734,29 +768,36 @@ export async function getAttorneysByLocation(locationSlug: string) {
   const cityLookup = getCityBySlugImport(locationSlug)
   if (!cityLookup) return []
 
-  const cityValues = [cityLookup.name]
-  try {
-    return await retryWithBackoff(
-      async () => {
-        const { data, error } = await supabase
-          .from('attorneys')
-          .select(PROVIDER_LIST_SELECT)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
-          .order('phone', { ascending: false, nullsFirst: false })
-          .order('is_verified', { ascending: false })
-          .order('name')
-          .limit(500)
+  return getCachedData(
+    `attorneys:location:${locationSlug}`,
+    async () => {
+      const cityValues = [cityLookup.name]
+      try {
+        return await retryWithBackoff(
+          async () => {
+            const { data, error } = await supabase
+              .from('attorneys')
+              .select(PROVIDER_LIST_SELECT)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+              .order('phone', { ascending: false, nullsFirst: false })
+              .order('is_verified', { ascending: false })
+              .order('name')
+              .limit(500)
 
-        if (error) throw error
-        return (data || []) as unknown as AttorneyListRow[]
-      },
-      `getAttorneysByLocation(${locationSlug})`,
-    )
-  } catch (err) {
-    logger.error(`[getAttorneysByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
-    throw err
-  }
+            if (error) throw error
+            return (data || []) as unknown as AttorneyListRow[]
+          },
+          `getAttorneysByLocation(${locationSlug})`,
+        )
+      } catch (err) {
+        logger.error(`[getAttorneysByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+        throw err
+      }
+    },
+    CACHE_TTL.attorneys,
+    { skipNull: true },
+  )
 }
 
 export async function getAllProviders() {
@@ -795,50 +836,63 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
   if (!specialties || specialties.length === 0) return []
 
   const effectiveLimit = limit || 50
-  try {
-    return await withTimeout(
-      (async () => {
-        const { data, error } = await supabase
-          .from('attorneys')
-          .select(PROVIDER_LIST_SELECT)
-          .in('specialty', specialties)
-          .eq('is_active', true)
-          .order('phone', { ascending: false, nullsFirst: false })
-          .order('is_verified', { ascending: false })
-          .limit(effectiveLimit)
+  return getCachedData(
+    generateCacheKey('attorneys:service', { slug: specialtySlug, limit: effectiveLimit }),
+    async () => {
+      try {
+        return await withTimeout(
+          (async () => {
+            const { data, error } = await supabase
+              .from('attorneys')
+              .select(PROVIDER_LIST_SELECT)
+              .in('specialty', specialties)
+              .eq('is_active', true)
+              .order('phone', { ascending: false, nullsFirst: false })
+              .order('is_verified', { ascending: false })
+              .limit(effectiveLimit)
 
-        if (error) throw error
-        return (data || []) as unknown as AttorneyListRow[]
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getAttorneysByService(${specialtySlug})`,
-    )
-  } catch {
-    return []
-  }
+            if (error) throw error
+            return (data || []) as unknown as AttorneyListRow[]
+          })(),
+          QUERY_TIMEOUT_MS,
+          `getAttorneysByService(${specialtySlug})`,
+        )
+      } catch {
+        return []
+      }
+    },
+    CACHE_TTL.attorneys,
+    { skipNull: true },
+  )
 }
 
 export async function getAttorneyCountByService(specialtySlug: string): Promise<number> {
   if (IS_BUILD) return 0
   const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return 0
-  try {
-    return await withTimeout(
-      (async () => {
-        const { count, error } = await supabase
-          .from('attorneys')
-          .select('id', { count: 'exact', head: true })
-          .in('specialty', specialties)
-          .eq('is_active', true)
-        if (error) throw error
-        return count ?? 0
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getAttorneyCountByService(${specialtySlug})`,
-    )
-  } catch {
-    return 0
-  }
+  return getCachedData(
+    `attorney-count:service:${specialtySlug}`,
+    async () => {
+      try {
+        return await withTimeout(
+          (async () => {
+            const { count, error } = await supabase
+              .from('attorneys')
+              .select('id', { count: 'exact', head: true })
+              .in('specialty', specialties)
+              .eq('is_active', true)
+            if (error) throw error
+            return count ?? 0
+          })(),
+          QUERY_TIMEOUT_MS,
+          `getAttorneyCountByService(${specialtySlug})`,
+        )
+      } catch {
+        return 0
+      }
+    },
+    CACHE_TTL.attorneys,
+  )
 }
 
 export async function getLocationsByService(specialtySlug: string) {
@@ -847,42 +901,49 @@ export async function getLocationsByService(specialtySlug: string) {
   const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
-  return retryWithBackoff(
+  return getCachedData(
+    `locations:service:${specialtySlug}`,
     async () => {
-      // Step 1: get distinct cities from active providers with this specialty
-      const { data: providerCities, error: citiesError } = await supabase
-        .from('attorneys')
-        .select('address_city')
-        .in('specialty', specialties)
-        .eq('is_active', true)
-        .not('address_city', 'is', null)
-        .limit(500)
+      return retryWithBackoff(
+        async () => {
+          // Step 1: get distinct cities from active providers with this specialty
+          const { data: providerCities, error: citiesError } = await supabase
+            .from('attorneys')
+            .select('address_city')
+            .in('specialty', specialties)
+            .eq('is_active', true)
+            .not('address_city', 'is', null)
+            .limit(500)
 
-      if (citiesError) throw citiesError
-      if (!providerCities || providerCities.length === 0) return []
+          if (citiesError) throw citiesError
+          if (!providerCities || providerCities.length === 0) return []
 
-      const uniqueCityNames = Array.from(new Set(
-        providerCities.map(p => p.address_city).filter(Boolean)
-      )) as string[]
+          const uniqueCityNames = Array.from(new Set(
+            providerCities.map(p => p.address_city).filter(Boolean)
+          )) as string[]
 
-      // Step 2: look up location data (slug, state, region) for those cities
-      const { data: locations, error: locationsError } = await supabase
-        .from('locations_us')
-        .select('code_insee, name, slug, departement_code, region_name')
-        .in('name', uniqueCityNames.slice(0, 200))
-        .order('population', { ascending: false })
-        .limit(100)
+          // Step 2: look up location data (slug, state, region) for those cities
+          const { data: locations, error: locationsError } = await supabase
+            .from('locations_us')
+            .select('code_insee, name, slug, departement_code, region_name')
+            .in('name', uniqueCityNames.slice(0, 200))
+            .order('population', { ascending: false })
+            .limit(100)
 
-      if (locationsError) throw locationsError
+          if (locationsError) throw locationsError
 
-      return (locations || []).map(c => ({
-        id: c.code_insee,
-        name: c.name,
-        slug: c.slug,
-        department_code: c.departement_code,
-        region_name: c.region_name,
-      }))
+          return (locations || []).map(c => ({
+            id: c.code_insee,
+            name: c.name,
+            slug: c.slug,
+            department_code: c.departement_code,
+            region_name: c.region_name,
+          }))
+        },
+        `getLocationsByService(${specialtySlug})`,
+      )
     },
-    `getLocationsByService(${specialtySlug})`,
+    CACHE_TTL.locations,
+    { skipNull: true },
   )
 }

@@ -5,12 +5,13 @@
  * DELETE: Soft delete
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { createApiHandler } from '@/lib/api/handler'
 
 const updateAttorneySchema = z.object({
   name: z.string().max(200).optional(),
@@ -106,187 +107,161 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
 }
 
 // GET - Retrieve a complete provider
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const authResult = await requirePermission('providers', 'read')
-    if (!authResult.success || !authResult.admin) return authResult.error
+export const GET = createApiHandler(async ({ params }) => {
+  const authResult = await requirePermission('providers', 'read')
+  if (!authResult.success || !authResult.admin) return authResult.error!
 
-    const attorneyId = params.id
-    if (!isValidUuid(attorneyId)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
-
-    const supabase = createAdminClient()
-
-    const { data: provider, error } = await supabase
-      .from('attorneys')
-      .select('id, user_id, stable_id, name, slug, email, phone, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, rating_average, review_count, created_at, updated_at')
-      .eq('id', params.id)
-      .single()
-
-    if (error || !provider) {
-      return NextResponse.json({ success: false, error: { message: 'Provider not found' } }, { status: 404 })
-    }
-
-    const response = NextResponse.json({
-      success: true,
-      provider: {
-        id: provider.id,
-        user_id: provider.user_id || null,
-        stable_id: provider.stable_id || null,
-        email: provider.email || '',
-        full_name: provider.name,
-        name: provider.name,
-        slug: provider.slug,
-        phone: provider.phone || '',
-        siret: provider.siret || '',
-        specialty: provider.specialty || '',
-        description: provider.description || '',
-        bio: provider.bio || '',
-        // Use DB column names directly so form fields match
-        address_street: provider.address_street || '',
-        address_city: provider.address_city || '',
-        address_postal_code: provider.address_postal_code || '',
-        address_region: provider.address_region || '',
-        address_department: provider.address_department || '',
-        latitude: provider.latitude,
-        longitude: provider.longitude,
-        is_verified: provider.is_verified || false,
-        is_active: provider.is_active !== false,
-        rating_average: provider.rating_average || null,
-        review_count: provider.review_count || 0,
-        created_at: provider.created_at,
-        updated_at: provider.updated_at,
-      },
-    })
-
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
-    response.headers.set('Pragma', 'no-cache')
-    return response
-  } catch (error) {
-    logger.error('Admin provider GET error', error)
-    return NextResponse.json({ success: false, error: { message: 'Error retrieving profile' } }, { status: 500 })
+  const attorneyId = params?.id
+  if (!attorneyId || !isValidUuid(attorneyId)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
   }
-}
+
+  const supabase = createAdminClient()
+
+  const { data: provider, error } = await supabase
+    .from('attorneys')
+    .select('id, user_id, stable_id, name, slug, email, phone, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, rating_average, review_count, created_at, updated_at')
+    .eq('id', attorneyId)
+    .single()
+
+  if (error || !provider) {
+    return NextResponse.json({ success: false, error: { message: 'Provider not found' } }, { status: 404 })
+  }
+
+  const response = NextResponse.json({
+    success: true,
+    provider: {
+      id: provider.id,
+      user_id: provider.user_id || null,
+      stable_id: provider.stable_id || null,
+      email: provider.email || '',
+      full_name: provider.name,
+      name: provider.name,
+      slug: provider.slug,
+      phone: provider.phone || '',
+      siret: provider.siret || '',
+      specialty: provider.specialty || '',
+      description: provider.description || '',
+      bio: provider.bio || '',
+      // Use DB column names directly so form fields match
+      address_street: provider.address_street || '',
+      address_city: provider.address_city || '',
+      address_postal_code: provider.address_postal_code || '',
+      address_region: provider.address_region || '',
+      address_department: provider.address_department || '',
+      latitude: provider.latitude,
+      longitude: provider.longitude,
+      is_verified: provider.is_verified || false,
+      is_active: provider.is_active !== false,
+      rating_average: provider.rating_average || null,
+      review_count: provider.review_count || 0,
+      created_at: provider.created_at,
+      updated_at: provider.updated_at,
+    },
+  })
+
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+  response.headers.set('Pragma', 'no-cache')
+  return response
+})
 
 // PATCH - Full provider update
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const attorneyId = params.id
+export const PATCH = createApiHandler(async ({ request, params }) => {
+  const attorneyId = params?.id
 
-  try {
-    const authResult = await requirePermission('providers', 'write')
-    if (!authResult.success || !authResult.admin) return authResult.error
+  const authResult = await requirePermission('providers', 'write')
+  if (!authResult.success || !authResult.admin) return authResult.error!
 
-    if (!isValidUuid(attorneyId)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
-
-    const supabase = createAdminClient()
-
-    // Parse and validate request body
-    let body: Record<string, unknown>
-    try {
-      body = await request.json()
-    } catch {
-      return NextResponse.json({ success: false, error: { message: 'Invalid JSON in request body' } }, { status: 400 })
-    }
-
-    const validationResult = updateAttorneySchema.safeParse(body)
-    if (!validationResult.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: validationResult.error.flatten() } },
-        { status: 400 }
-      )
-    }
-
-    // Build and execute update — filter to only allowed DB columns
-    const rawUpdateData = buildUpdateData(body)
-    const updateData = Object.fromEntries(
-      Object.entries(rawUpdateData).filter(([key]) => ALLOWED_PROVIDER_FIELDS.includes(key))
-    )
-
-    const { data, error } = await supabase
-      .from('attorneys')
-      .update(updateData)
-      .eq('id', attorneyId)
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Database update failed', { code: error.code, message: error.message })
-      return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
-    }
-
-    // Audit log
-    try {
-      await logAdminAction(authResult.admin.id, 'provider.update', 'provider', attorneyId, updateData)
-    } catch (auditError) {
-      logger.warn('Audit log failed')
-    }
-
+  if (!attorneyId || !isValidUuid(attorneyId)) {
     return NextResponse.json(
-      { success: true, data, message: 'Attorney updated successfully' },
-      { headers: NO_CACHE_HEADERS }
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
     )
-  } catch (error) {
-    const err = error as Error
-    logger.error('Unexpected PATCH error', { message: err.message })
-    return NextResponse.json({ success: false, error: { message: 'Unexpected error during update' } }, { status: 500 })
   }
-}
+
+  const supabase = createAdminClient()
+
+  // Parse and validate request body
+  let body: Record<string, unknown>
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ success: false, error: { message: 'Invalid JSON in request body' } }, { status: 400 })
+  }
+
+  const validationResult = updateAttorneySchema.safeParse(body)
+  if (!validationResult.success) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Validation error', details: validationResult.error.flatten() } },
+      { status: 400 }
+    )
+  }
+
+  // Build and execute update — filter to only allowed DB columns
+  const rawUpdateData = buildUpdateData(body)
+  const updateData = Object.fromEntries(
+    Object.entries(rawUpdateData).filter(([key]) => ALLOWED_PROVIDER_FIELDS.includes(key))
+  )
+
+  const { data, error } = await supabase
+    .from('attorneys')
+    .update(updateData)
+    .eq('id', attorneyId)
+    .select()
+    .single()
+
+  if (error) {
+    logger.error('Database update failed', { code: error.code, message: error.message })
+    return NextResponse.json({ success: false, error: { message: 'Error during update' } }, { status: 500 })
+  }
+
+  // Audit log
+  try {
+    await logAdminAction(authResult.admin.id, 'provider.update', 'provider', attorneyId, updateData)
+  } catch {
+    logger.warn('Audit log failed')
+  }
+
+  return NextResponse.json(
+    { success: true, data, message: 'Attorney updated successfully' },
+    { headers: NO_CACHE_HEADERS }
+  )
+})
 
 // DELETE - Soft delete
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const attorneyId = params.id
+export const DELETE = createApiHandler(async ({ params }) => {
+  const attorneyId = params?.id
 
-  try {
-    const authResult = await requirePermission('providers', 'delete')
-    if (!authResult.success || !authResult.admin) return authResult.error
+  const authResult = await requirePermission('providers', 'delete')
+  if (!authResult.success || !authResult.admin) return authResult.error!
 
-    if (!isValidUuid(attorneyId)) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid ID' } },
-        { status: 400 }
-      )
-    }
+  if (!attorneyId || !isValidUuid(attorneyId)) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid ID' } },
+      { status: 400 }
+    )
+  }
 
-    const supabase = createAdminClient()
+  const supabase = createAdminClient()
 
-    const { error } = await supabase
-      .from('attorneys')
-      .update({ is_active: false, updated_at: new Date().toISOString() })
-      .eq('id', attorneyId)
+  const { error } = await supabase
+    .from('attorneys')
+    .update({ is_active: false, updated_at: new Date().toISOString() })
+    .eq('id', attorneyId)
 
-    if (error) {
-      logger.error('Database delete failed', error)
-      return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
-    }
-
-    try {
-      await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', attorneyId)
-    } catch (auditError) {
-      logger.warn('Audit log failed')
-    }
-
-    return NextResponse.json({ success: true, message: 'Attorney deleted' })
-  } catch (error) {
-    const err = error as Error
-    logger.error('Unexpected DELETE error', { message: err.message })
+  if (error) {
+    logger.error('Database delete failed', error)
     return NextResponse.json({ success: false, error: { message: 'Error during deletion' } }, { status: 500 })
   }
-}
+
+  try {
+    await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', attorneyId)
+  } catch {
+    logger.warn('Audit log failed')
+  }
+
+  return NextResponse.json({ success: true, message: 'Attorney deleted' })
+})

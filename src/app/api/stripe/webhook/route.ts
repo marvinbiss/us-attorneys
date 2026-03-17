@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createApiHandler } from '@/lib/api/handler'
 import { env } from '@/lib/env'
 import Stripe from 'stripe'
 
@@ -116,7 +117,7 @@ async function markEventFailed(eventId: string, errorMsg: string): Promise<void>
     .eq('stripe_event_id', eventId)
 }
 
-export async function POST(request: Request) {
+export const POST = createApiHandler(async ({ request }) => {
   const body = await request.text()
   const headersList = await headers()
   const signature = headersList.get('stripe-signature')
@@ -208,7 +209,7 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
-}
+}, {})
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const userId = session.metadata?.user_id

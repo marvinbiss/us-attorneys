@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { createApiHandler } from '@/lib/api/handler'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -22,9 +23,8 @@ export async function OPTIONS() {
  * accepted via the DB column names but the public API docs use
  * specialty, city, and state.
  */
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = request.nextUrl
+export const GET = createApiHandler(async ({ request }) => {
+    const { searchParams } = new URL(request.url)
     const specialty = searchParams.get('specialty') || searchParams.get('metier')
     const city = searchParams.get('city') || searchParams.get('ville')
     const state = searchParams.get('state') || searchParams.get('departement')
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = createAdminClient()
+    const supabase = await createClient()
 
     let query = supabase
       .from('barometre_stats')
@@ -86,10 +86,4 @@ export async function GET(request: NextRequest) {
         },
       },
     )
-  } catch {
-    return NextResponse.json(
-      { error: 'Unexpected server error.' },
-      { status: 500, headers: CORS_HEADERS },
-    )
-  }
-}
+}, {})
