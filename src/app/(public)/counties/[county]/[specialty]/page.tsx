@@ -93,12 +93,9 @@ function getCounty(slug: string) {
   return topCounties.find(c => c.slug === slug) || null
 }
 
-// Pre-render: top 100 counties × top 10 PAs
+// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
 export function generateStaticParams() {
-  const topPAs = staticPracticeAreas.slice(0, 10)
-  return topCounties.flatMap(county =>
-    topPAs.map(pa => ({ county: county.slug, specialty: pa.slug }))
-  )
+  return [{ county: 'los-angeles-county-ca', specialty: 'personal-injury' }]
 }
 
 interface PageProps { params: Promise<{ county: string; specialty: string }> }

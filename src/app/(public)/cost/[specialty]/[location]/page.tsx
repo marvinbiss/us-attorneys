@@ -69,8 +69,8 @@ function safeJsonStringify(data: unknown): string {
 export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
 
-// Pre-render top 30 cities x all practice areas (lower priority)
-const TOP_CITIES_COUNT = 30
+// Pre-render 1 seed city x all practice areas — ISR 24h handles the rest
+const TOP_CITIES_COUNT = 1
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_COUNT)
   return staticPracticeAreas.flatMap(s =>

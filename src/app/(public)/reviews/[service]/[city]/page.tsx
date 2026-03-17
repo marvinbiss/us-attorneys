@@ -2,30 +2,15 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
-import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
-import { cities, getCityBySlug } from '@/lib/data/usa'
+import { tradeContent } from '@/lib/data/trade-content'
+import { getCityBySlug } from '@/lib/data/usa'
 import { REVALIDATE } from '@/lib/cache'
 
 export const revalidate = REVALIDATE.serviceLocation
 
-const tradeSlugs = getPracticeAreaSlugs()
-
-function parsePopulation(pop: string): number {
-  return parseInt(pop.replace(/\s/g, ''), 10) || 0
-}
-
-const top50Cities = [...cities]
-  .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 50)
-
 export function generateStaticParams() {
-  const params: { service: string; city: string }[] = []
-  for (const service of tradeSlugs) {
-    for (const city of top50Cities) {
-      params.push({ service, city: city.slug })
-    }
-  }
-  return params
+  // All review/city pages generated on-demand via ISR 24h
+  return []
 }
 
 export const dynamicParams = true

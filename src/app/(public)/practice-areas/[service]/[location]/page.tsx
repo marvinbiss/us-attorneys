@@ -70,9 +70,9 @@ export const revalidate = REVALIDATE.serviceLocation
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
-// Pre-render top 50 cities (46 x 50 = 2300 pages)
+// Pre-render top 15 cities (46 x 15 = 690 pages)
 // Remaining cities are generated on-demand via ISR
-const TOP_CITIES_COUNT = 50
+const TOP_CITIES_COUNT = 15
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_COUNT)
   return staticPracticeAreas.flatMap(s =>

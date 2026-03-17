@@ -3,28 +3,16 @@ import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { tradeContent } from '@/lib/data/trade-content'
-import { cities, getCityBySlug } from '@/lib/data/usa'
+import { getCityBySlug } from '@/lib/data/usa'
 import { REVALIDATE } from '@/lib/cache'
 
 export const revalidate = REVALIDATE.serviceLocation
 
-const emergencySlugs = Object.keys(tradeContent)
-
-function parsePopulation(pop: string): number {
-  return parseInt(pop.replace(/\s/g, ''), 10) || 0
-}
-
-const top10Cities = [...cities]
-  .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 10)
-
 export const dynamicParams = true
 
 export function generateStaticParams() {
-  const topServices = emergencySlugs.slice(0, 5)
-  return topServices.flatMap((s) =>
-    top10Cities.map((v) => ({ service: s, city: v.slug }))
-  )
+  // 1 seed only — ISR 24h handles the rest
+  return [{ service: 'personal-injury', city: 'new-york' }]
 }
 
 export async function generateMetadata({

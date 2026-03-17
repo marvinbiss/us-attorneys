@@ -14,7 +14,6 @@ import { getAttorneyUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
 import {
   practiceAreas as staticPracticeAreas,
-  cities,
   getCityBySlug,
   getNearbyCities,
   getCitiesByState,
@@ -98,12 +97,9 @@ function getSituation(slug: string) {
   return situations.find(s => s.slug === slug) || null
 }
 
-// Pre-render: top 50 situations × top 20 cities = 1 000 pages
+// Pre-render: 1 seed page only, ISR 24h handles the rest
 export function generateStaticParams() {
-  const topCities = cities.slice(0, 20)
-  return situations.flatMap(sit =>
-    topCities.map(c => ({ situation: sit.slug, location: c.slug }))
-  )
+  return [{ situation: 'car-accident', location: 'new-york' }]
 }
 
 function cityToLocation(slug: string): LocationType | null {

@@ -1,15 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { usRegions, getRegionBySlug } from '@/lib/data/usa'
-import { getTradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
+import { getRegionBySlug } from '@/lib/data/usa'
+import { getTradeContent } from '@/lib/data/trade-content'
 import { REVALIDATE } from '@/lib/cache'
 
+// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
 export function generateStaticParams() {
-  const allSlugs = getPracticeAreaSlugs()
-  return usRegions.flatMap((r) =>
-    allSlugs.map((s) => ({ region: r.slug, service: s }))
-  )
+  return [{ region: 'northeast', service: 'personal-injury' }]
 }
 
 export const dynamicParams = true

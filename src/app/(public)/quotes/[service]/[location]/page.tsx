@@ -1,27 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
-import { cities, getCityBySlug } from '@/lib/data/usa'
-
-function parsePopulation(pop: string): number {
-  return parseInt(pop.replace(/\s/g, ''), 10) || 0
-}
-
-const tradeSlugs = getPracticeAreaSlugs()
-
-const top5Cities = [...cities]
-  .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 5)
+import { tradeContent } from '@/lib/data/trade-content'
+import { getCityBySlug } from '@/lib/data/usa'
 
 export function generateStaticParams() {
-  const params: { service: string; location: string }[] = []
-  for (const service of tradeSlugs) {
-    for (const city of top5Cities) {
-      params.push({ service, location: city.slug })
-    }
-  }
-  return params
+  return [{ service: 'personal-injury', location: 'new-york' }]
 }
 
 export const dynamicParams = true

@@ -149,11 +149,9 @@ function getGuideType(slug: string): GuideType | null {
   return guideTypes.find(g => g.slug === slug) || null
 }
 
-// Pre-render: all guide types × all 51 states
+// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
 export function generateStaticParams() {
-  return guideTypes.flatMap(g =>
-    states.map(st => ({ type: g.slug, state: st.slug }))
-  )
+  return [{ type: guideTypes[0].slug, state: 'new-york' }]
 }
 
 interface PageProps { params: Promise<{ type: string; state: string }> }

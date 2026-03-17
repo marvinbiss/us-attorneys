@@ -49,9 +49,9 @@ function truncateTitle(title: string, maxLen = 55): string {
 export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
 
-// Pre-render: top 30 cities × top 50 PAs = 1 500 pages
-const TOP_CITIES = 30
-const TOP_PA = 50
+// Pre-render: 1 seed only — ISR 24h handles the rest
+const TOP_CITIES = 1
+const TOP_PA = 1
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES)
   const topPAs = staticPracticeAreas.slice(0, TOP_PA)

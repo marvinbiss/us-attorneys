@@ -101,22 +101,9 @@ const SPANISH_PA_MAP: Record<string, { esSlug: string; esName: string; enSlug: s
   'derecho-familiar': { esSlug: 'derecho-familiar', esName: 'Derecho Familiar', enSlug: 'family-law' },
 }
 
-const TOP_HISPANIC_CITIES = [
-  'houston', 'san-antonio', 'dallas', 'austin', 'el-paso', 'phoenix', 'los-angeles',
-  'san-diego', 'san-jose', 'fresno', 'tucson', 'las-vegas', 'albuquerque', 'denver',
-  'fort-worth', 'miami', 'orlando', 'tampa', 'jacksonville', 'hialeah', 'laredo',
-  'brownsville', 'corpus-christi', 'arlington', 'new-york', 'chicago', 'san-francisco',
-  'sacramento', 'riverside', 'santa-ana', 'anaheim', 'long-beach', 'bakersfield',
-  'stockton', 'oakland', 'mesa', 'chandler', 'gilbert', 'glendale', 'henderson',
-  'reno', 'colorado-springs', 'aurora', 'fort-collins', 'portland', 'seattle',
-  'atlanta', 'charlotte', 'raleigh', 'philadelphia',
-]
-
+// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
 export function generateStaticParams() {
-  const spanishSlugs = Object.keys(SPANISH_PA_MAP)
-  return spanishSlugs.flatMap(esSlug =>
-    TOP_HISPANIC_CITIES.map(citySlug => ({ especialidad: esSlug, ciudad: citySlug }))
-  )
+  return [{ especialidad: 'lesiones-personales', ciudad: 'houston' }]
 }
 
 function safeJsonStringify(data: unknown): string {

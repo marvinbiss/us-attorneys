@@ -1,23 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { getProblemBySlug, getProblemSlugs } from '@/lib/data/problems'
-import { cities, getCityBySlug } from '@/lib/data/usa'
+import { getProblemBySlug } from '@/lib/data/problems'
+import { getCityBySlug } from '@/lib/data/usa'
 import { REVALIDATE } from '@/lib/cache'
 
-function parsePopulation(pop: string): number {
-  return parseInt(pop.replace(/\s/g, ''), 10) || 0
-}
-
-const top30Cities = [...cities]
-  .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 30)
-
 export function generateStaticParams() {
-  const top10Problems = getProblemSlugs().slice(0, 10)
-  return top10Problems.flatMap((p) =>
-    top30Cities.map((v) => ({ issue: p, city: v.slug }))
-  )
+  // 1 seed only — ISR 24h handles the rest
+  return [{ issue: 'car-accident', city: 'new-york' }]
 }
 
 export const dynamicParams = true

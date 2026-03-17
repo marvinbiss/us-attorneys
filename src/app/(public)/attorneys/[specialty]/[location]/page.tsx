@@ -70,8 +70,8 @@ export const revalidate = REVALIDATE.attorneyProfile
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
-// Pre-render top 50 cities x all practice areas
-const TOP_CITIES_COUNT = 50
+// Pre-render 1 seed city per PA (secondary intent, ISR handles rest)
+const TOP_CITIES_COUNT = 1
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_COUNT)
   return staticPracticeAreas.flatMap(s =>

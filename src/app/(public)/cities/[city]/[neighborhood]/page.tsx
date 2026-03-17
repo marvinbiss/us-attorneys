@@ -12,8 +12,8 @@ import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateNeighborhoodContent, hashCode } from '@/lib/seo/location-content'
 import { REVALIDATE } from '@/lib/cache'
 
-// Pre-render top 50 cities x their neighborhoods (~500+ pages)
-const TOP_CITIES = 50
+// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
+const TOP_CITIES = 1
 export function generateStaticParams() {
   return cities.slice(0, TOP_CITIES).flatMap(v =>
     getNeighborhoodsByCity(v.slug).map(q => ({ city: v.slug, neighborhood: q.slug }))

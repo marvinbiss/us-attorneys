@@ -38,8 +38,8 @@ function truncateTitle(title: string, maxLen = 55): string {
 export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
 
-const TOP_CITIES = 20
-const TOP_PA = 20
+const TOP_CITIES = 1
+const TOP_PA = 1
 export function generateStaticParams() {
   return staticPracticeAreas.slice(0, TOP_PA).flatMap(pa =>
     cities.slice(0, TOP_CITIES).map(c => ({ specialty: pa.slug, location: c.slug }))

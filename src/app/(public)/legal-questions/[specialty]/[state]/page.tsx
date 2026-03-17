@@ -29,13 +29,9 @@ function truncateTitle(title: string, maxLen = 55): string {
 export const revalidate = REVALIDATE.serviceLocation
 export const dynamicParams = true
 
-// Pre-render: top 20 PAs × all 51 states = 1 020 pages
-const TOP_PA = 20
+// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
 export function generateStaticParams() {
-  const topPAs = staticPracticeAreas.slice(0, TOP_PA)
-  return topPAs.flatMap(pa =>
-    states.map(st => ({ specialty: pa.slug, state: st.slug }))
-  )
+  return [{ specialty: 'personal-injury', state: 'new-york' }]
 }
 
 // ---------------------------------------------------------------------------

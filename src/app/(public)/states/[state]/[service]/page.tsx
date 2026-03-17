@@ -1,16 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { states, getStateBySlug } from '@/lib/data/usa'
+import { getStateBySlug } from '@/lib/data/usa'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { REVALIDATE } from '@/lib/cache'
 
-const topServices = ['personal-injury', 'criminal-defense', 'family-law', 'employment-law', 'real-estate-law']
-
 export function generateStaticParams() {
-  return states.flatMap((d) =>
-    topServices.map((s) => ({ state: d.slug, service: s }))
-  )
+  // Pre-render: 1 seed page only, ISR 24h handles the rest
+  return [{ state: 'new-york', service: 'personal-injury' }]
 }
 
 export const dynamicParams = true

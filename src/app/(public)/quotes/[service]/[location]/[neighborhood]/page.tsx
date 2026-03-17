@@ -1,24 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
-import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
-import { cities, getNeighborhoodBySlug, getNeighborhoodsByCity } from '@/lib/data/usa'
+import { tradeContent } from '@/lib/data/trade-content'
+import { getNeighborhoodBySlug } from '@/lib/data/usa'
 import { REVALIDATE } from '@/lib/cache'
 
-const tradeSlugs = getPracticeAreaSlugs()
-
+// All ISR — parent route already has seeds (dynamicParams = true)
 export function generateStaticParams() {
-  const topServices = tradeSlugs.slice(0, 10)
-  const topCities = cities.slice(0, 30)
-  return topServices.flatMap((s) =>
-    topCities.flatMap((v) =>
-      getNeighborhoodsByCity(v.slug).map((q) => ({
-        service: s,
-        location: v.slug,
-        neighborhood: q.slug,
-      }))
-    )
-  )
+  return []
 }
 
 export const dynamicParams = true

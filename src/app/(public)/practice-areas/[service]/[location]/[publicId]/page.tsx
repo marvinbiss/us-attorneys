@@ -58,7 +58,7 @@ interface ProviderRecord {
 }
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { getNeighborhoodBySlug, practiceAreas as staticPracticeAreas, cities, getStateByCode } from '@/lib/data/usa'
+import { getNeighborhoodBySlug, practiceAreas as staticPracticeAreas, getStateByCode } from '@/lib/data/usa'
 import ServiceQuartierPage from './ServiceQuartierPage'
 import dynamic from 'next/dynamic'
 import { REVALIDATE } from '@/lib/cache'
@@ -70,22 +70,9 @@ const EstimationWidget = dynamic(
 
 export const revalidate = REVALIDATE.attorneyProfile
 
-// Pre-render top service x city x neighborhood combos for ISR warming
-const TOP_CITIES_QUARTIER = 30
+// All ISR — parent route already has seeds (dynamicParams = true)
 export function generateStaticParams() {
-  const topCities = cities.slice(0, TOP_CITIES_QUARTIER)
-  // Pre-render top 10 services x 30 cities x neighborhoods for better ISR coverage
-  const topServices = staticPracticeAreas.slice(0, 10)
-  return topServices.flatMap(s =>
-    topCities.flatMap(v => {
-      const quartiers = v.neighborhoods || []
-      return quartiers.map(q => ({
-        service: s.slug,
-        location: v.slug,
-        publicId: q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-      }))
-    })
-  )
+  return []
 }
 export const dynamicParams = true
 
