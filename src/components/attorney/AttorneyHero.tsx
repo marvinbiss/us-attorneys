@@ -73,6 +73,7 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 96px, 128px"
+                    priority
                   />
                 ) : (
                   <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>

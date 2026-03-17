@@ -74,19 +74,20 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     termsOfService: `${baseUrl}/terms`,
   }))
 
-  // LocalBusiness Schema — use more specific @type when possible for richer snippets
-  const businessType = attorney.specialty?.toLowerCase().includes('plomb') ? 'Plumber'
-    : attorney.specialty?.toLowerCase().includes('electr') ? 'Electrician'
-    : 'HomeAndConstructionBusiness'
-
+  // Attorney Schema — use Schema.org Attorney type (subtype of LegalService)
+  // This enables Google rich snippets for attorney profiles (ratings, specialties)
   const localBusinessSchema = {
-    '@type': ['LocalBusiness', businessType],
+    '@type': ['Attorney', 'LegalService'],
     '@id': `${attorneyUrl}#business`,
     name: displayName,
     description: attorney.description || `${displayName} - ${attorney.specialty} in ${attorney.city}`,
     image: attorney.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
-    // Add knowsAbout for E-E-A-T signals
-    knowsAbout: attorney.specialty,
+    // Add knowsAbout for E-E-A-T signals — array of practice areas for rich snippets
+    knowsAbout: [
+      attorney.specialty,
+      ...(attorney.services || []),
+      ...attorney.service_prices.map(sp => sp.name),
+    ].filter((v, i, arr) => v && arr.indexOf(v) === i),
     ...(attorney.phone && attorney.phone.replace(/\D/g, '').length >= 10 && {
       telephone: attorney.phone,
     }),

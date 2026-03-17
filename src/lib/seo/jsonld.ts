@@ -392,7 +392,7 @@ export function getAttorneySchema(params: {
 }) {
   return {
     '@context': 'https://schema.org',
-    '@type': ['Person', 'LegalService'],
+    '@type': 'Attorney',
     name: params.name,
     url: params.url,
     description: params.description,
