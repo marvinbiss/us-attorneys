@@ -74,9 +74,9 @@ export async function checkLeadQuota(attorneyId: string): Promise<LeadQuotaResul
     return { allowed: true, remaining: -1, limit: -1, used: 0, tier }
   }
 
-  // 4. Count leads assigned this calendar month
+  // 4. Count leads assigned this calendar month (UTC to avoid timezone boundary bugs)
   const now = new Date()
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString()
 
   const { count, error: countError } = await supabase
     .from('lead_assignments')

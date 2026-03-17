@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { trackLeadCharge } from '@/lib/billing/lead-billing'
 
 export interface DispatchOptions {
   specialtyName?: string
@@ -51,7 +52,16 @@ export async function dispatchLead(
       return []
     }
 
-    return (data as string[]) || []
+    const assignedIds = (data as string[]) || []
+
+    // Track billing charges for each dispatched attorney (non-blocking)
+    for (const attorneyId of assignedIds) {
+      trackLeadCharge(attorneyId, leadId, 'standard').catch((err) =>
+        logger.error('Failed to track lead charge in dispatch', { attorneyId, leadId, err })
+      )
+    }
+
+    return assignedIds
   } catch (err) {
     logger.error('Dispatch action error', err)
     return []

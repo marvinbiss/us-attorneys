@@ -183,6 +183,12 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-blue-600 focus:text-white focus:px-6 focus:py-3 focus:rounded-lg focus:shadow-lg focus:text-lg focus:font-semibold focus:outline-none focus:ring-2 focus:ring-white"
+        >
+          Skip to main content
+        </a>
         {/* Google Tag Manager */}
         <Script id="gtm" strategy="lazyOnload">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -223,13 +229,6 @@ fbq('track', 'PageView');`}
         <PageViewTracker />
         <ThemeProvider>
         <MobileMenuProvider>
-          {/* Skip to main content for accessibility */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg z-50 font-medium"
-          >
-            Skip to main content
-          </a>
           <Header attorneyCount={attorneyCount} />
           <main id="main-content" className="pb-16 md:pb-0">{children}</main>
           <Footer />

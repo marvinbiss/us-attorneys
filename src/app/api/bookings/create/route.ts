@@ -72,18 +72,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 3. Check for double booking (same attorney + same time, non-cancelled)
-    const { data: existingBookings } = await supabase
-      .from('bookings')
-      .select('id')
-      .eq('attorney_id', attorney_id)
-      .eq('scheduled_at', scheduled_at)
-      .neq('status', 'cancelled')
-      .limit(1)
+    // 3. Check for overlapping bookings (not just exact time match)
+    const requestedStart = new Date(scheduled_at)
+    const requestedEnd = new Date(requestedStart.getTime() + (duration_minutes || 30) * 60 * 1000)
 
-    if (existingBookings && existingBookings.length > 0) {
+    const { data: conflicting } = await supabase
+      .from('bookings')
+      .select('id, scheduled_at, duration_minutes')
+      .eq('attorney_id', attorney_id)
+      .neq('status', 'cancelled')
+      .neq('status', 'no_show')
+      .gte('scheduled_at', new Date(requestedStart.getTime() - 120 * 60 * 1000).toISOString()) // 2h window
+      .lte('scheduled_at', requestedEnd.toISOString())
+
+    // Check each existing booking for actual temporal overlap
+    const hasConflict = conflicting?.some(existing => {
+      const existingStart = new Date(existing.scheduled_at)
+      const existingEnd = new Date(existingStart.getTime() + (existing.duration_minutes || 30) * 60 * 1000)
+      return requestedStart < existingEnd && requestedEnd > existingStart
+    })
+
+    if (hasConflict) {
       return NextResponse.json(
-        { error: 'This time slot is no longer available' },
+        { error: 'Time slot conflicts with an existing booking' },
         { status: 409 }
       )
     }

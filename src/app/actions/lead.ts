@@ -6,6 +6,8 @@ import { z } from 'zod'
 import { dispatchLead } from './dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
+import { checkLeadQuota } from '@/lib/lead-quotas'
+import { trackLeadCharge } from '@/lib/billing/lead-billing'
 
 const leadSchema = z.object({
   attorneyId: z.string().min(1).optional(),
@@ -101,14 +103,25 @@ export async function submitLead(
         .single()
 
       if (provider && provider.is_active) {
-        useDirectDispatch = true
-        const { error: assignError } = await adminClient.from('lead_assignments').insert({
-          lead_id: inserted.id,
-          attorney_id: data.attorneyId,
-          source_table: 'devis_requests',
-        })
-        if (!assignError) {
-          logLeadEvent(inserted.id, 'dispatched', { attorneyId: data.attorneyId }).catch(() => {})
+        // Server-side quota enforcement — block if attorney exceeded monthly limit
+        const quota = await checkLeadQuota(data.attorneyId)
+        if (!quota.allowed) {
+          logger.warn('Lead quota exceeded for direct dispatch', { attorneyId: data.attorneyId, quota })
+          // Fall through to algorithmic dispatch (useDirectDispatch stays false)
+        } else {
+          useDirectDispatch = true
+          const { error: assignError } = await adminClient.from('lead_assignments').insert({
+            lead_id: inserted.id,
+            attorney_id: data.attorneyId,
+            source_table: 'devis_requests',
+          })
+          if (!assignError) {
+            logLeadEvent(inserted.id, 'dispatched', { attorneyId: data.attorneyId }).catch(() => {})
+            // Track billing charge for the dispatched lead
+            trackLeadCharge(data.attorneyId, inserted.id, 'standard').catch((err) =>
+              logger.error('Failed to track lead charge (non-blocking)', err)
+            )
+          }
         }
       }
     }

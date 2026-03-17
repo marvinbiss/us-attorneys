@@ -31,6 +31,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const generatedId = useId()
     const inputId = id || generatedId
+    const errorId = inputId ? `${inputId}-error` : undefined
+    const hintId = inputId ? `${inputId}-hint` : undefined
 
     return (
       <div className={clsx('w-full', containerClassName)}>
@@ -54,6 +56,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             disabled={disabled}
             required={required}
+            aria-invalid={!!error}
+            aria-describedby={
+              error ? errorId : hint ? hintId : undefined
+            }
             className={clsx(
               'w-full rounded-lg border transition-all duration-200',
               'px-4 py-2.5 text-gray-900 placeholder-gray-400',
@@ -75,10 +81,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error && (
-          <p className="mt-1 text-sm text-red-600">{error}</p>
+          <p id={errorId} className="mt-1 text-sm text-red-600">{error}</p>
         )}
         {hint && !error && (
-          <p className="mt-1 text-sm text-gray-500">{hint}</p>
+          <p id={hintId} className="mt-1 text-sm text-gray-500">{hint}</p>
         )}
       </div>
     )

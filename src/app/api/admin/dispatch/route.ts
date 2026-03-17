@@ -13,6 +13,8 @@ import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { createApiHandler } from '@/lib/api/handler'
 import { z } from 'zod'
+import { checkLeadQuota } from '@/lib/lead-quotas'
+import { trackLeadCharge } from '@/lib/billing/lead-billing'
 
 const actionBodySchema = z.object({
   action: z.enum(['reassign', 'replay']),
@@ -120,6 +122,15 @@ export const POST = createApiHandler(async ({ request }) => {
       return NextResponse.json({ success: false, error: { message: 'Assignment not found' } }, { status: 404 })
     }
 
+    // Server-side quota enforcement for the new attorney
+    const quota = await checkLeadQuota(newProviderId)
+    if (!quota.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Lead quota exceeded for target attorney' }, quota },
+        { status: 429 }
+      )
+    }
+
     // Update assignment to new provider
     await supabase
       .from('lead_assignments')
@@ -139,6 +150,11 @@ export const POST = createApiHandler(async ({ request }) => {
         reason: 'admin_reassign',
       },
     })
+
+    // Track billing charge for the reassigned lead
+    trackLeadCharge(newProviderId, current.lead_id, 'standard').catch((err) =>
+      logger.error('Failed to track lead charge on reassign', err)
+    )
 
     await logAdminAction(
       auth.admin.id,

@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, SelectHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, SelectHTMLAttributes, ReactNode, useId } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -38,7 +38,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     },
     ref
   ) => {
-    const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`
+    const generatedId = useId()
+    const selectId = id || generatedId
+    const errorId = selectId ? `${selectId}-error` : undefined
+    const hintId = selectId ? `${selectId}-hint` : undefined
 
     return (
       <div className={clsx('w-full', containerClassName)}>
@@ -62,6 +65,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             disabled={disabled}
             required={required}
+            aria-invalid={!!error}
+            aria-describedby={
+              error ? errorId : hint ? hintId : undefined
+            }
             className={clsx(
               'w-full rounded-lg border transition-all duration-200 appearance-none',
               'px-4 py-2.5 pr-10 text-gray-900',
@@ -96,10 +103,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </div>
         </div>
         {error && (
-          <p className="mt-1 text-sm text-red-600">{error}</p>
+          <p id={errorId} className="mt-1 text-sm text-red-600">{error}</p>
         )}
         {hint && !error && (
-          <p className="mt-1 text-sm text-gray-500">{hint}</p>
+          <p id={hintId} className="mt-1 text-sm text-gray-500">{hint}</p>
         )}
       </div>
     )

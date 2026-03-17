@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, TextareaHTMLAttributes } from 'react'
+import { forwardRef, TextareaHTMLAttributes, useId } from 'react'
 import { clsx } from 'clsx'
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -30,7 +30,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
-    const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`
+    const generatedId = useId()
+    const textareaId = id || generatedId
+    const errorId = textareaId ? `${textareaId}-error` : undefined
+    const hintId = textareaId ? `${textareaId}-hint` : undefined
     const currentLength = typeof value === 'string' ? value.length : 0
 
     return (
@@ -50,6 +53,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             id={textareaId}
             disabled={disabled}
             required={required}
+            aria-invalid={!!error}
+            aria-describedby={
+              error ? errorId : hint ? hintId : undefined
+            }
             maxLength={maxLength}
             value={value}
             className={clsx(
@@ -72,10 +79,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           )}
         </div>
         {error && (
-          <p className="mt-1 text-sm text-red-600">{error}</p>
+          <p id={errorId} className="mt-1 text-sm text-red-600">{error}</p>
         )}
         {hint && !error && (
-          <p className="mt-1 text-sm text-gray-500">{hint}</p>
+          <p id={hintId} className="mt-1 text-sm text-gray-500">{hint}</p>
         )}
       </div>
     )
