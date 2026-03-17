@@ -6,6 +6,13 @@
  * by city, state, specialty, and market data.
  */
 
+import {
+  getStatuteOfLimitations,
+  getStateName,
+  getStateAttorneyCount,
+  getStateAvgHourlyRate,
+} from '@/lib/data/state-legal-data'
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -580,308 +587,6 @@ export function generateLocationPricingNote(params: FAQParams): string {
 }
 
 // ---------------------------------------------------------------------------
-// Statute of Limitations — by legal category × 51 states (years)
-// ---------------------------------------------------------------------------
-
-type SOLCategory =
-  | 'personal-injury'
-  | 'medical-malpractice'
-  | 'property-damage'
-  | 'written-contract'
-  | 'oral-contract'
-  | 'fraud'
-  | 'employment'
-  | 'wrongful-death'
-  | 'product-liability'
-  | 'defamation'
-  | 'professional-malpractice'
-  | 'real-estate'
-  | 'debt-collection'
-
-const STATE_SOL: Record<string, Record<string, number>> = {
-  // FL personal-injury/property-damage/product-liability updated to 2 per HB 837 (eff. 2023-03-24)
-  'personal-injury': {
-    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
-    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
-    MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
-    NJ: 2, NM: 3, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
-    SC: 3, SD: 3, TN: 1, TX: 2, UT: 4, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
-  },
-  'medical-malpractice': {
-    AL: 2, AK: 2, AZ: 2, AR: 2, CA: 1, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
-    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 3,
-    MD: 3, MA: 3, MI: 2, MN: 4, MS: 2, MO: 2, MT: 3, NE: 2, NV: 3, NH: 2,
-    NJ: 2, NM: 3, NY: 2, NC: 3, ND: 2, OH: 1, OK: 2, OR: 2, PA: 2, RI: 3,
-    SC: 3, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
-  },
-  'property-damage': {
-    AL: 6, AK: 6, AZ: 2, AR: 3, CA: 3, CO: 2, CT: 2, DE: 2, DC: 3, FL: 2,
-    GA: 4, HI: 2, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 2, LA: 1, ME: 6,
-    MD: 3, MA: 3, MI: 3, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
-    NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 2, OK: 2, OR: 6, PA: 2, RI: 3,
-    SC: 3, SD: 6, TN: 3, TX: 2, UT: 3, VT: 3, VA: 5, WA: 3, WV: 2, WI: 6, WY: 4,
-  },
-  'written-contract': {
-    AL: 6, AK: 3, AZ: 6, AR: 5, CA: 4, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
-    GA: 6, HI: 6, ID: 5, IL: 10, IN: 6, IA: 10, KS: 5, KY: 15, LA: 10, ME: 6,
-    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 10, MT: 5, NE: 5, NV: 6, NH: 3,
-    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
-    SC: 3, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 10,
-  },
-  'oral-contract': {
-    AL: 6, AK: 3, AZ: 3, AR: 3, CA: 2, CO: 6, CT: 3, DE: 3, DC: 3, FL: 4,
-    GA: 4, HI: 6, ID: 4, IL: 5, IN: 6, IA: 5, KS: 3, KY: 5, LA: 10, ME: 6,
-    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 5, MT: 5, NE: 4, NV: 4, NH: 3,
-    NJ: 6, NM: 4, NY: 6, NC: 3, ND: 6, OH: 6, OK: 3, OR: 6, PA: 4, RI: 10,
-    SC: 3, SD: 6, TN: 6, TX: 4, UT: 4, VT: 6, VA: 3, WA: 3, WV: 5, WI: 6, WY: 8,
-  },
-  'fraud': {
-    AL: 2, AK: 2, AZ: 3, AR: 3, CA: 3, CO: 3, CT: 3, DE: 3, DC: 3, FL: 4,
-    GA: 4, HI: 6, ID: 3, IL: 5, IN: 2, IA: 5, KS: 2, KY: 5, LA: 1, ME: 6,
-    MD: 3, MA: 3, MI: 6, MN: 6, MS: 3, MO: 5, MT: 2, NE: 4, NV: 3, NH: 3,
-    NJ: 6, NM: 4, NY: 6, NC: 3, ND: 6, OH: 4, OK: 2, OR: 2, PA: 2, RI: 3,
-    SC: 3, SD: 6, TN: 3, TX: 4, UT: 3, VT: 6, VA: 2, WA: 3, WV: 2, WI: 6, WY: 4,
-  },
-  'employment': {
-    AL: 2, AK: 2, AZ: 1, AR: 1, CA: 3, CO: 3, CT: 2, DE: 2, DC: 1, FL: 1,
-    GA: 2, HI: 2, ID: 1, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 2,
-    MD: 2, MA: 3, MI: 3, MN: 1, MS: 2, MO: 2, MT: 1, NE: 2, NV: 2, NH: 3,
-    NJ: 2, NM: 2, NY: 3, NC: 3, ND: 2, OH: 2, OK: 2, OR: 1, PA: 2, RI: 1,
-    SC: 1, SD: 2, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 1, WY: 2,
-  },
-  'wrongful-death': {
-    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 2, DE: 2, DC: 2, FL: 2,
-    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 2,
-    MD: 3, MA: 3, MI: 3, MN: 3, MS: 3, MO: 3, MT: 3, NE: 2, NV: 2, NH: 3,
-    NJ: 2, NM: 3, NY: 2, NC: 2, ND: 2, OH: 2, OK: 2, OR: 3, PA: 2, RI: 3,
-    SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 2,
-  },
-  'product-liability': {
-    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 2, CO: 2, CT: 3, DE: 2, DC: 3, FL: 2,
-    GA: 2, HI: 2, ID: 2, IL: 2, IN: 2, IA: 2, KS: 2, KY: 1, LA: 1, ME: 6,
-    MD: 3, MA: 3, MI: 3, MN: 4, MS: 3, MO: 5, MT: 3, NE: 4, NV: 2, NH: 3,
-    NJ: 2, NM: 3, NY: 3, NC: 6, ND: 6, OH: 2, OK: 2, OR: 2, PA: 2, RI: 3,
-    SC: 3, SD: 3, TN: 1, TX: 2, UT: 2, VT: 3, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
-  },
-  'defamation': {
-    AL: 2, AK: 2, AZ: 1, AR: 1, CA: 1, CO: 1, CT: 2, DE: 2, DC: 1, FL: 2,
-    GA: 1, HI: 2, ID: 2, IL: 1, IN: 2, IA: 2, KS: 1, KY: 1, LA: 1, ME: 2,
-    MD: 1, MA: 3, MI: 1, MN: 2, MS: 1, MO: 2, MT: 2, NE: 1, NV: 2, NH: 3,
-    NJ: 1, NM: 3, NY: 1, NC: 1, ND: 2, OH: 1, OK: 1, OR: 1, PA: 1, RI: 1,
-    SC: 2, SD: 2, TN: 1, TX: 1, UT: 1, VT: 3, VA: 1, WA: 2, WV: 1, WI: 2, WY: 1,
-  },
-  'professional-malpractice': {
-    AL: 2, AK: 2, AZ: 2, AR: 3, CA: 1, CO: 2, CT: 3, DE: 2, DC: 3, FL: 2,
-    GA: 2, HI: 6, ID: 2, IL: 2, IN: 2, IA: 5, KS: 2, KY: 1, LA: 1, ME: 6,
-    MD: 3, MA: 3, MI: 2, MN: 6, MS: 3, MO: 5, MT: 3, NE: 4, NV: 4, NH: 3,
-    NJ: 6, NM: 4, NY: 3, NC: 3, ND: 6, OH: 1, OK: 2, OR: 2, PA: 2, RI: 3,
-    SC: 3, SD: 3, TN: 1, TX: 2, UT: 4, VT: 6, VA: 2, WA: 3, WV: 2, WI: 3, WY: 4,
-  },
-  'real-estate': {
-    AL: 6, AK: 10, AZ: 6, AR: 5, CA: 5, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
-    GA: 6, HI: 6, ID: 5, IL: 10, IN: 6, IA: 10, KS: 5, KY: 15, LA: 10, ME: 6,
-    MD: 3, MA: 6, MI: 6, MN: 6, MS: 6, MO: 10, MT: 5, NE: 5, NV: 6, NH: 3,
-    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
-    SC: 10, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 10,
-  },
-  'debt-collection': {
-    AL: 6, AK: 3, AZ: 6, AR: 5, CA: 4, CO: 6, CT: 6, DE: 3, DC: 3, FL: 5,
-    GA: 6, HI: 6, ID: 5, IL: 5, IN: 6, IA: 10, KS: 5, KY: 5, LA: 3, ME: 6,
-    MD: 3, MA: 6, MI: 6, MN: 6, MS: 3, MO: 5, MT: 5, NE: 5, NV: 6, NH: 3,
-    NJ: 6, NM: 6, NY: 6, NC: 3, ND: 6, OH: 6, OK: 5, OR: 6, PA: 4, RI: 10,
-    SC: 3, SD: 6, TN: 6, TX: 4, UT: 6, VT: 6, VA: 5, WA: 6, WV: 10, WI: 6, WY: 8,
-  },
-}
-
-// ---------------------------------------------------------------------------
-// Practice area slug → SOL category mapping
-// ---------------------------------------------------------------------------
-
-const PA_TO_SOL_CATEGORY: Record<string, SOLCategory> = {
-  'personal-injury': 'personal-injury',
-  'car-accidents': 'personal-injury',
-  'truck-accidents': 'personal-injury',
-  'motorcycle-accidents': 'personal-injury',
-  'slip-and-fall': 'personal-injury',
-  'dog-bites': 'personal-injury',
-  'bicycle-accidents': 'personal-injury',
-  'pedestrian-accidents': 'personal-injury',
-  'boat-accidents': 'personal-injury',
-  'bus-accidents': 'personal-injury',
-  'aviation-accidents': 'personal-injury',
-  'brain-injury': 'personal-injury',
-  'spinal-cord-injury': 'personal-injury',
-  'burn-injury': 'personal-injury',
-  'catastrophic-injury': 'personal-injury',
-  'construction-accidents': 'personal-injury',
-  'premises-liability': 'personal-injury',
-  'nursing-home-abuse': 'personal-injury',
-  'uber-lyft-accidents': 'personal-injury',
-  'rideshare-accidents': 'personal-injury',
-  'electric-scooter-accidents': 'personal-injury',
-  'delivery-driver-accidents': 'personal-injury',
-  'medical-malpractice': 'medical-malpractice',
-  'birth-injury': 'medical-malpractice',
-  'surgical-errors': 'medical-malpractice',
-  'misdiagnosis': 'medical-malpractice',
-  'medication-errors': 'medical-malpractice',
-  'dental-malpractice': 'medical-malpractice',
-  'hospital-negligence': 'medical-malpractice',
-  'wrongful-death': 'wrongful-death',
-  'product-liability': 'product-liability',
-  'defective-drugs': 'product-liability',
-  'defective-medical-devices': 'product-liability',
-  'toxic-torts': 'product-liability',
-  'asbestos-mesothelioma': 'product-liability',
-  'workers-compensation': 'employment',
-  'employment-law': 'employment',
-  'wrongful-termination': 'employment',
-  'workplace-discrimination': 'employment',
-  'sexual-harassment': 'employment',
-  'wage-hour-claims': 'employment',
-  'whistleblower': 'employment',
-  'ada-violations': 'employment',
-  'family-law': 'personal-injury',
-  'divorce': 'personal-injury',
-  'child-custody': 'personal-injury',
-  'child-support': 'personal-injury',
-  'adoption': 'personal-injury',
-  'alimony-spousal-support': 'personal-injury',
-  'domestic-violence': 'personal-injury',
-  'paternity': 'personal-injury',
-  'prenuptial-agreements': 'written-contract',
-  'criminal-defense': 'personal-injury',
-  'dui-dwi': 'personal-injury',
-  'drug-crimes': 'personal-injury',
-  'assault-battery': 'personal-injury',
-  'theft-crimes': 'personal-injury',
-  'white-collar-crimes': 'fraud',
-  'federal-crimes': 'personal-injury',
-  'juvenile-defense': 'personal-injury',
-  'sex-crimes': 'personal-injury',
-  'domestic-violence-defense': 'personal-injury',
-  'expungement': 'personal-injury',
-  'probation-violations': 'personal-injury',
-  'conspiracy': 'personal-injury',
-  'homicide': 'personal-injury',
-  'business-law': 'written-contract',
-  'business-litigation': 'written-contract',
-  'contract-law': 'written-contract',
-  'corporate-law': 'written-contract',
-  'mergers-acquisitions': 'written-contract',
-  'partnership-disputes': 'written-contract',
-  'franchise-law': 'written-contract',
-  'commercial-lease': 'written-contract',
-  'non-compete-agreements': 'written-contract',
-  'business-bankruptcy': 'debt-collection',
-  'real-estate': 'real-estate',
-  'commercial-real-estate': 'real-estate',
-  'boundary-disputes': 'real-estate',
-  'landlord-tenant': 'real-estate',
-  'construction-law': 'real-estate',
-  'zoning-land-use': 'real-estate',
-  'foreclosure-defense': 'real-estate',
-  'hoa-disputes': 'real-estate',
-  'title-disputes': 'real-estate',
-  'eminent-domain': 'real-estate',
-  'immigration': 'personal-injury',
-  'deportation-defense': 'personal-injury',
-  'visa-applications': 'personal-injury',
-  'asylum': 'personal-injury',
-  'citizenship-naturalization': 'personal-injury',
-  'green-card': 'personal-injury',
-  'daca': 'personal-injury',
-  'estate-planning': 'real-estate',
-  'probate': 'real-estate',
-  'trusts': 'real-estate',
-  'wills': 'real-estate',
-  'guardianship': 'real-estate',
-  'elder-law': 'real-estate',
-  'bankruptcy': 'debt-collection',
-  'chapter-7-bankruptcy': 'debt-collection',
-  'chapter-13-bankruptcy': 'debt-collection',
-  'intellectual-property': 'written-contract',
-  'patent-law': 'written-contract',
-  'trademark-law': 'written-contract',
-  'copyright-law': 'written-contract',
-  'trade-secrets': 'written-contract',
-  'tax-law': 'fraud',
-  'irs-audit-defense': 'fraud',
-  'tax-litigation': 'fraud',
-  'back-taxes': 'fraud',
-  'tax-fraud-defense': 'fraud',
-  'consumer-protection': 'fraud',
-  'lemon-law': 'product-liability',
-  'insurance-claims': 'written-contract',
-  'insurance-bad-faith': 'written-contract',
-  'class-action': 'personal-injury',
-  'civil-rights': 'personal-injury',
-  'defamation': 'defamation',
-  'internet-defamation': 'defamation',
-  'privacy-law': 'personal-injury',
-  'cybersecurity-law': 'written-contract',
-  'ai-law': 'written-contract',
-  'cannabis-law': 'personal-injury',
-  'environmental-law': 'property-damage',
-  'maritime-law': 'personal-injury',
-  'aviation-law': 'personal-injury',
-  'military-law': 'personal-injury',
-  'veterans-benefits': 'personal-injury',
-  'social-security-disability': 'personal-injury',
-  'appeals': 'personal-injury',
-  'arbitration-mediation': 'personal-injury',
-  'administrative-law': 'personal-injury',
-  'agricultural-law': 'real-estate',
-  'animal-law': 'personal-injury',
-  'church-abuse': 'personal-injury',
-  'education-law': 'personal-injury',
-  'entertainment-law': 'written-contract',
-  'health-care-law': 'professional-malpractice',
-  'hospitality-law': 'written-contract',
-  'international-law': 'written-contract',
-  'nonprofit-law': 'written-contract',
-  'sports-law': 'written-contract',
-  'telecommunications-law': 'written-contract',
-  'transportation-law': 'personal-injury',
-  'utilities-energy-law': 'written-contract',
-  'water-rights': 'real-estate',
-  'government-contracts': 'written-contract',
-  'election-law': 'personal-injury',
-  'lobbying-law': 'personal-injury',
-}
-
-/**
- * Get the statute of limitations (in years) for a practice area in a given state.
- * Returns 0 if not applicable or unknown.
- */
-export function getStatuteOfLimitations(paSlug: string, stateAbbr: string): number {
-  const category = PA_TO_SOL_CATEGORY[paSlug] ?? 'personal-injury'
-  return STATE_SOL[category]?.[stateAbbr.toUpperCase()] ?? 2
-}
-
-// ---------------------------------------------------------------------------
-// State names lookup
-// ---------------------------------------------------------------------------
-
-const STATE_NAMES: Record<string, string> = {
-  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
-  CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida',
-  GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana',
-  IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine',
-  MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi',
-  MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire',
-  NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota',
-  OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island',
-  SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah',
-  VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin',
-  WY: 'Wyoming',
-}
-
-export function getStateName(stateAbbr: string): string {
-  return STATE_NAMES[stateAbbr.toUpperCase()] ?? stateAbbr
-}
-
-// ---------------------------------------------------------------------------
 // State free legal resources
 // ---------------------------------------------------------------------------
 
@@ -1005,46 +710,59 @@ export function getStateBarComplaint(stateAbbr: string): { body: string; phone: 
   return STATE_BAR_COMPLAINT[stateAbbr.toUpperCase()]
 }
 
-// ---------------------------------------------------------------------------
-// Estimated active attorneys per state (approximate, for content generation)
-// ---------------------------------------------------------------------------
-
-const STATE_ATTORNEY_COUNTS: Record<string, number> = {
-  AL: 16500, AK: 3200, AZ: 22000, AR: 8500, CA: 190000,
-  CO: 28000, CT: 22000, DE: 4500, DC: 56000, FL: 108000,
-  GA: 40000, HI: 5500, ID: 5000, IL: 97000, IN: 20000,
-  IA: 10000, KS: 9500, KY: 14000, LA: 22000, ME: 5000,
-  MD: 38000, MA: 50000, MI: 38000, MN: 27000, MS: 9000,
-  MO: 30000, MT: 3500, NE: 7000, NV: 10000, NH: 5000,
-  NJ: 72000, NM: 6500, NY: 180000, NC: 30000, ND: 2500,
-  OH: 46000, OK: 15000, OR: 16000, PA: 70000, RI: 6000,
-  SC: 13000, SD: 3000, TN: 24000, TX: 105000, UT: 11000,
-  VT: 3200, VA: 35000, WA: 36000, WV: 5500, WI: 20000, WY: 2200,
+// Practice area market share — percentage of attorneys practicing each PA category
+const PA_MARKET_SHARE: Record<string, number> = {
+  'personal-injury': 0.15,
+  'car-accidents': 0.12,
+  'truck-accidents': 0.04,
+  'motorcycle-accidents': 0.03,
+  'medical-malpractice': 0.05,
+  'criminal-defense': 0.12,
+  'dui-dwi': 0.08,
+  'family-law': 0.14,
+  'divorce': 0.12,
+  'child-custody': 0.10,
+  'child-support': 0.08,
+  'real-estate': 0.10,
+  'business-law': 0.10,
+  'corporate-law': 0.08,
+  'bankruptcy': 0.05,
+  'chapter-7-bankruptcy': 0.04,
+  'chapter-13-bankruptcy': 0.03,
+  'immigration': 0.06,
+  'estate-planning': 0.08,
+  'probate': 0.06,
+  'employment-law': 0.07,
+  'workers-compensation': 0.05,
+  'wrongful-termination': 0.04,
+  'intellectual-property': 0.04,
+  'patent-law': 0.02,
+  'trademark-law': 0.03,
+  'tax-law': 0.05,
+  'consumer-protection': 0.03,
+  'civil-rights': 0.03,
+  'environmental-law': 0.02,
+  'slip-and-fall': 0.04,
+  'wrongful-death': 0.03,
+  'product-liability': 0.03,
+  'defamation': 0.02,
+  'landlord-tenant': 0.06,
+  'construction-law': 0.04,
+  'insurance-claims': 0.04,
+  'class-action': 0.02,
+  'appeals': 0.03,
+  'administrative-law': 0.03,
+  'elder-law': 0.03,
+  'cannabis-law': 0.01,
+  'ai-law': 0.005,
+  'surrogacy-law': 0.005,
+  'space-law': 0.002,
 }
 
-export function getStateAttorneyCount(stateAbbr: string): number {
-  return STATE_ATTORNEY_COUNTS[stateAbbr.toUpperCase()] ?? 5000
-}
-
-// ---------------------------------------------------------------------------
-// Average attorney cost per state (hourly rate in USD)
-// ---------------------------------------------------------------------------
-
-const STATE_AVG_HOURLY_RATE: Record<string, number> = {
-  AL: 225, AK: 300, AZ: 275, AR: 200, CA: 400,
-  CO: 300, CT: 350, DE: 300, DC: 425, FL: 300,
-  GA: 275, HI: 350, ID: 225, IL: 325, IN: 225,
-  IA: 225, KS: 225, KY: 225, LA: 250, ME: 250,
-  MD: 325, MA: 375, MI: 275, MN: 275, MS: 200,
-  MO: 250, MT: 225, NE: 225, NV: 300, NH: 275,
-  NJ: 350, NM: 225, NY: 400, NC: 275, ND: 225,
-  OH: 250, OK: 225, OR: 275, PA: 300, RI: 275,
-  SC: 250, SD: 225, TN: 250, TX: 300, UT: 250,
-  VT: 250, VA: 300, WA: 325, WV: 200, WI: 250, WY: 225,
-}
-
-export function getStateAvgHourlyRate(stateAbbr: string): number {
-  return STATE_AVG_HOURLY_RATE[stateAbbr.toUpperCase()] ?? 275
+function getEstimatedPAAttorneyCount(specialtySlug: string, stateAbbr: string): number {
+  const totalCount = getStateAttorneyCount(stateAbbr)
+  const share = PA_MARKET_SHARE[specialtySlug] ?? 0.03 // default 3% for unlisted PAs
+  return Math.max(Math.round(totalCount * share), 1)
 }
 
 // ---------------------------------------------------------------------------
@@ -1062,43 +780,43 @@ export interface PAStateFAQItem {
   slug: string
   question: string
   answer: string
+  disclaimer: string
 }
 
 function faqDoINeed(p: PAStateFAQParams): PAStateFAQItem {
   const sol = getStatuteOfLimitations(p.specialtySlug, p.stateAbbr)
   const rate = getStateAvgHourlyRate(p.stateAbbr)
   const multiplier = getRegionalPricingMultiplier(p.stateAbbr)
-  const count = getStateAttorneyCount(p.stateAbbr)
-  const paCount = Math.round(count * 0.08)
+  const paCount = getEstimatedPAAttorneyCount(p.specialtySlug, p.stateAbbr)
   const barUrl = getStateBarVerificationUrl(p.stateAbbr)
   const barRef = barUrl ? ` You can verify credentials through the ${p.stateName} State Bar directory.` : ''
 
   return {
     slug: `do-i-need-${p.specialtySlug}-lawyer-${p.stateAbbr.toLowerCase()}`,
     question: `Do I need a ${p.specialtyName} lawyer in ${p.stateName}?`,
-    answer: `Whether you need a ${p.specialtyName} attorney in ${p.stateName} depends on the complexity of your situation and what is at stake. ${p.stateName} has specific laws governing ${p.specialtyName} matters that differ from other states, and navigating them without legal expertise can be risky. The statute of limitations for most ${p.specialtyName} claims in ${p.stateName} is ${sol} year${sol !== 1 ? 's' : ''}, meaning you must take legal action within that window or lose your right to pursue your case entirely. With approximately ${fmtNumber(paCount)} ${p.specialtyName} attorneys actively practicing in ${p.stateName}, you have multiple options for representation. Average hourly rates for ${p.specialtyName} lawyers in ${p.stateName} range from ${fmtCurrency(rate * 0.6)} to ${fmtCurrency(rate * 1.5)} per hour, which is ${multiplier > 1.1 ? 'above' : multiplier < 0.9 ? 'below' : 'near'} the national average. Many ${p.specialtyName} attorneys in ${p.stateName} offer free initial consultations, allowing you to discuss your situation and understand your options before making any financial commitment. If your case involves significant financial stakes, potential criminal penalties, custody of children, or complex regulatory requirements, hiring a qualified ${p.specialtyName} attorney is strongly recommended.${barRef} Even for seemingly straightforward matters, a brief consultation can reveal legal nuances specific to ${p.stateName} that could significantly affect your outcome.`,
+    answer: `Whether you need a ${p.specialtyName} attorney in ${p.stateName} depends on the complexity of your situation and what is at stake. ${p.stateName} has specific laws governing ${p.specialtyName} matters that differ from other states, and navigating them without legal expertise can be risky. The statute of limitations for most ${p.specialtyName} claims in ${p.stateName} is generally ${sol} year${sol !== 1 ? 's' : ''}, meaning you must take legal action within that window or lose your right to pursue your case entirely. With approximately ${fmtNumber(paCount)} ${p.specialtyName} attorneys actively practicing in ${p.stateName}, you have multiple options for representation. Average hourly rates for ${p.specialtyName} lawyers in ${p.stateName} range from ${fmtCurrency(rate * 0.6)} to ${fmtCurrency(rate * 1.5)} per hour, which is ${multiplier > 1.1 ? 'above' : multiplier < 0.9 ? 'below' : 'near'} the national average. Many ${p.specialtyName} attorneys in ${p.stateName} offer free initial consultations, allowing you to discuss your situation and understand your options before making any financial commitment. If your case involves significant financial stakes, potential criminal penalties, custody of children, or complex regulatory requirements, hiring a qualified ${p.specialtyName} attorney is strongly recommended.${barRef} Even for seemingly straightforward matters, a brief consultation can reveal legal nuances specific to ${p.stateName} that could significantly affect your outcome.`,
+    disclaimer: `The information provided about ${p.specialtyName} law in ${p.stateName} is for general informational purposes only and does not constitute legal advice. Laws change frequently, and their application depends on your specific circumstances. Always consult a licensed ${p.specialtyName} attorney in ${p.stateName} for advice tailored to your situation.`,
   }
 }
 
 function faqWhatDoesLawyerDo(p: PAStateFAQParams): PAStateFAQItem {
   const sol = getStatuteOfLimitations(p.specialtySlug, p.stateAbbr)
   const rate = getStateAvgHourlyRate(p.stateAbbr)
-  const count = getStateAttorneyCount(p.stateAbbr)
-  const paCount = Math.round(count * 0.08)
+  const paCount = getEstimatedPAAttorneyCount(p.specialtySlug, p.stateAbbr)
   const resources = getStateLegalAid(p.stateAbbr)
   const resourceMention = resources.length > 0 ? ` Free resources like ${resources[0]} may also provide initial guidance.` : ''
 
   return {
     slug: `what-does-${p.specialtySlug}-lawyer-do-${p.stateAbbr.toLowerCase()}`,
     question: `What does a ${p.specialtyName} lawyer do in ${p.stateName}?`,
-    answer: `A ${p.specialtyName} attorney in ${p.stateName} provides specialized legal representation tailored to ${p.stateName}'s specific statutory framework and court procedures. Their core responsibilities include: evaluating the merits of your case under ${p.stateName} law, advising you on your legal rights and options, preparing and filing court documents in compliance with ${p.stateName} procedural rules, negotiating with opposing parties or their attorneys, and representing you in court proceedings if necessary. In ${p.stateName}, ${p.specialtyName} cases are subject to a ${sol}-year statute of limitations, and your attorney will ensure all deadlines are met. They will also handle discovery — the process of gathering evidence — and work with expert witnesses when needed. ${p.stateName} has approximately ${fmtNumber(paCount)} practicing ${p.specialtyName} attorneys, with average fees of ${fmtCurrency(rate)} per hour. Beyond litigation, ${p.specialtyName} lawyers in ${p.stateName} also provide preventive counsel: reviewing contracts, ensuring regulatory compliance, and helping you avoid legal pitfalls specific to ${p.stateName}'s legal environment.${resourceMention} A good ${p.specialtyName} attorney will also keep you informed about recent changes in ${p.stateName} law that may affect your case and provide realistic expectations about timelines and outcomes based on their experience with local courts.`,
+    answer: `A ${p.specialtyName} attorney in ${p.stateName} provides specialized legal representation tailored to ${p.stateName}'s specific statutory framework and court procedures. Their core responsibilities include: evaluating the merits of your case under ${p.stateName} law, advising you on your legal rights and options, preparing and filing court documents in compliance with ${p.stateName} procedural rules, negotiating with opposing parties or their attorneys, and representing you in court proceedings if necessary. In ${p.stateName}, ${p.specialtyName} cases are generally subject to a ${sol}-year statute of limitations, and your attorney will ensure all deadlines are met. They will also handle discovery — the process of gathering evidence — and work with expert witnesses when needed. ${p.stateName} has approximately ${fmtNumber(paCount)} practicing ${p.specialtyName} attorneys, with average fees of ${fmtCurrency(rate)} per hour. Beyond litigation, ${p.specialtyName} lawyers in ${p.stateName} also provide preventive counsel: reviewing contracts, ensuring regulatory compliance, and helping you avoid legal pitfalls specific to ${p.stateName}'s legal environment.${resourceMention} A good ${p.specialtyName} attorney will also keep you informed about recent changes in ${p.stateName} law that may affect your case and provide realistic expectations about timelines and outcomes based on their experience with local courts.`,
+    disclaimer: `The information provided about ${p.specialtyName} law in ${p.stateName} is for general informational purposes only and does not constitute legal advice. Laws change frequently, and their application depends on your specific circumstances. Always consult a licensed ${p.specialtyName} attorney in ${p.stateName} for advice tailored to your situation.`,
   }
 }
 
 function faqHowToFind(p: PAStateFAQParams): PAStateFAQItem {
   const rate = getStateAvgHourlyRate(p.stateAbbr)
-  const count = getStateAttorneyCount(p.stateAbbr)
-  const paCount = Math.round(count * 0.08)
+  const paCount = getEstimatedPAAttorneyCount(p.specialtySlug, p.stateAbbr)
   const barUrl = getStateBarVerificationUrl(p.stateAbbr)
   const resources = getStateLegalAid(p.stateAbbr)
   const complaint = getStateBarComplaint(p.stateAbbr)
@@ -1110,6 +828,7 @@ function faqHowToFind(p: PAStateFAQParams): PAStateFAQItem {
     slug: `how-to-find-${p.specialtySlug}-lawyer-${p.stateAbbr.toLowerCase()}`,
     question: `How to find a ${p.specialtyName} lawyer in ${p.stateName}?`,
     answer: `Finding the right ${p.specialtyName} attorney in ${p.stateName} requires a systematic approach. ${barRef}${p.stateName} has approximately ${fmtNumber(paCount)} attorneys who practice ${p.specialtyName} law, giving you a solid pool of candidates. Key steps to find the best fit: First, identify attorneys who specialize specifically in ${p.specialtyName} rather than general practitioners — specialization significantly impacts case quality. Second, check online reviews and ratings on legal directories while keeping in mind that no review source is perfect. Third, schedule consultations with at least 2-3 candidates (many offer free initial meetings). Fourth, during consultations, ask about their experience with ${p.specialtyName} cases in ${p.stateName}, their fee structure (average hourly rate: ${fmtCurrency(rate)}), who will handle your case day-to-day, and their communication practices. Fifth, verify their standing with the ${p.stateName} State Bar and check for any disciplinary actions.${resourceList}${complaintRef} Look for attorneys with board certifications, bar association leadership roles, or peer-recognition awards in ${p.specialtyName}. Personal referrals from trusted friends or other attorneys remain one of the most reliable ways to find quality representation.`,
+    disclaimer: `The information provided about ${p.specialtyName} law in ${p.stateName} is for general informational purposes only and does not constitute legal advice. Laws change frequently, and their application depends on your specific circumstances. Always consult a licensed ${p.specialtyName} attorney in ${p.stateName} for advice tailored to your situation.`,
   }
 }
 
@@ -1157,7 +876,16 @@ export function generateSinglePAStateFAQ(
 export {
   ALL_FAQ_TEMPLATES,
   hashCode,
-  STATE_NAMES,
 }
 
-export type { FAQTemplateFunction, RegionalTipSet, SOLCategory }
+// Re-export shared state data so existing consumers aren't broken
+export {
+  type SOLCategory,
+  STATE_NAMES,
+  getStatuteOfLimitations,
+  getStateName,
+  getStateAttorneyCount,
+  getStateAvgHourlyRate,
+} from '@/lib/data/state-legal-data'
+
+export type { FAQTemplateFunction, RegionalTipSet }
