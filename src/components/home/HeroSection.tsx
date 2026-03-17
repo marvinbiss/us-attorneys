@@ -150,6 +150,7 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
             fill
             className="object-cover opacity-20"
             priority
+            fetchPriority="high"
             sizes="100vw"
             placeholder="blur"
             blurDataURL={heroImage.blurDataURL}

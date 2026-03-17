@@ -55,6 +55,8 @@ interface ProviderRecord {
   created_at?: string | null
   updated_at?: string | null
   user_id?: string | null
+  trust_score?: number | null
+  trust_score_breakdown?: Record<string, number> | null
 }
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
@@ -535,6 +537,8 @@ export default async function AttorneyPage({ params }: PageProps) {
         similarAttorneys={similarAttorneys}
         isClaimed={!!provider.user_id}
         hasSiret={!!provider.siret}
+        trustScore={provider.trust_score ?? 0}
+        trustScoreBreakdown={provider.trust_score_breakdown ?? undefined}
       />
 
       {/* Back link to service+location listing */}

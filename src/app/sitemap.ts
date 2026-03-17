@@ -189,6 +189,9 @@ export async function generateSitemaps() {
     // ── Type M: State guides ────────────────────────────────────────────
     { id: 'state-guides' },
 
+    // ── Type M2: PA × State legal guides (75 PAs × 57 states = 4,275) ──
+    ...batchIds('legal-guides', pa * states.length, LARGE_BATCH),
+
     // ── Type N: Comparisons (already in static, listed for completeness)
     { id: 'comparisons' },
 
@@ -761,6 +764,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     }
     return allUrls
+  }
+
+  // ── Type M2: PA × State legal guides ─────────────────────────────────
+  if (id.startsWith('legal-guides-')) {
+    const batchIndex = parseInt(id.slice('legal-guides-'.length), 10)
+    const offset = batchIndex * LARGE_BATCH
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of practiceAreas) {
+      for (const state of states) {
+        allUrls.push({
+          url: `${SITE_URL}/guides/${pa.slug}/${state.slug}`,
+          lastModified: BUILD_DATE,
+        })
+      }
+    }
+    return allUrls.slice(offset, offset + LARGE_BATCH)
   }
 
   // ── Type N: Comparisons ──────────────────────────────────────────────

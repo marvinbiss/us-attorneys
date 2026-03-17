@@ -160,6 +160,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
             alt="Attorney at work"
             fill
             priority
+            fetchPriority="high"
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             sizes="100vw"

@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { cn } from '@/lib/utils'
 import { cities, usRegions, states, practiceAreas as allServices } from '@/lib/data/usa'
@@ -243,8 +244,8 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
           'relative flex items-center gap-1 px-3 py-2 rounded-xl font-medium text-[0.85rem] transition-all duration-200',
           'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
           openMenu === menu
-            ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
-            : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+            ? 'text-clay-400 bg-[#FDF1EC]/80 dark:bg-clay-900/30 after:w-[60%]'
+            : 'text-gray-600 dark:text-gray-300 hover:text-clay-400 hover:bg-gray-50/80 dark:hover:bg-gray-800/80 after:w-0 hover:after:w-[60%]'
         )}
       >
         {label}
@@ -252,11 +253,11 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
       </button>
       {/* Plus dropdown inline */}
       {menu === 'plus' && openMenu === 'plus' && (
-        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50" role="menu" aria-label="More options">
-          <Link href="/reviews" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Attorney reviews</Link>
-          <Link href="/pricing" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Fees</Link>
-          <Link href="/blog" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
-          <Link href="/guides" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Legal guides</Link>
+        <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50" role="menu" aria-label="More options">
+          <Link href="/reviews" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-clay-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => setOpenMenu(null)}>Attorney reviews</Link>
+          <Link href="/pricing" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-clay-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => setOpenMenu(null)}>Fees</Link>
+          <Link href="/blog" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-clay-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
+          <Link href="/guides" role="menuitem" tabIndex={0} className="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-clay-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => setOpenMenu(null)}>Legal guides</Link>
         </div>
       )}
     </div>
@@ -267,8 +268,8 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
     <header className={cn(
       'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300',
       scrolled
-        ? 'bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-200/50'
-        : 'bg-white/95 backdrop-blur-sm border-b border-gray-100/80'
+        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-200/50 dark:border-gray-700/50'
+        : 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-100/80 dark:border-gray-800/80'
     )}>
       {/* Main header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -294,7 +295,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
                 <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#headerShine)" />
                 <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
               </svg>
-              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
+              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 dark:text-white group-hover/logo:text-gray-700 dark:group-hover/logo:text-gray-300 transition-colors duration-200">
                 US<span className="text-clay-400 group-hover/logo:text-clay-300 transition-colors duration-200">Attorneys</span>
               </span>
             </div>
@@ -305,7 +306,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
             {mounted ? (
               <QuickSearch />
             ) : (
-              <div className="w-full rounded-full border border-gray-200 bg-gray-50 h-[38px] animate-pulse" />
+              <div className="w-full rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 h-[38px] animate-pulse" />
             )}
           </div>
 
@@ -319,7 +320,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
             {/* Favorites */}
             <Link
               href="/my-favorites"
-              className="relative text-gray-600 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80"
+              className="relative text-gray-600 dark:text-gray-300 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80 dark:hover:bg-red-950/30"
               aria-label={`My favorites${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
               title="My favorites"
             >
@@ -333,10 +334,12 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
 
             <Link
               href="/login"
-              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.85rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+              className="relative text-gray-600 dark:text-gray-300 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.85rem] hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Sign in
             </Link>
+
+            <ThemeToggle className="hidden xl:flex" />
 
             <Link
               href="/emergency"
@@ -364,12 +367,12 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
-            className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
+            className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 dark:active:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             {isMenuOpen ? (
-              <X className="w-6 h-6 text-gray-700" />
+              <X className="w-6 h-6 text-gray-700 dark:text-gray-200" />
             ) : (
-              <Menu className="w-6 h-6 text-gray-700" />
+              <Menu className="w-6 h-6 text-gray-700 dark:text-gray-200" />
             )}
           </button>
         </div>

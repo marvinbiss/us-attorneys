@@ -3,8 +3,11 @@ import { MapPin, Phone, Star, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Provider } from '@/types'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
+import { TrustScore } from '@/components/attorney/TrustScore'
 
-type AttorneyCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
+type AttorneyCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & {
+  trust_score?: number | null
+}
 
 function isValidPhone(phone: string | undefined | null): boolean {
   if (!phone) return false
@@ -128,6 +131,13 @@ export default function AttorneyCard({
           <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
           Bar # {provider.siret}
         </p>
+      )}
+
+      {/* Trust Score Badge */}
+      {provider.trust_score != null && provider.trust_score > 0 && (
+        <div className="mb-3 ml-6">
+          <TrustScore score={provider.trust_score} variant="badge" />
+        </div>
       )}
 
       {/* Buttons */}

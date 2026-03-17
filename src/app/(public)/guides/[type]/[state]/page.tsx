@@ -10,9 +10,15 @@ import {
   states,
   getStateBySlug,
 } from '@/lib/data/usa'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { REVALIDATE } from '@/lib/cache'
+import {
+  generateGuideContent,
+  isLegalGuidePASlug,
+  getPANameBySlug,
+  getLegalGuideSeedParams,
+} from '@/lib/data/legal-guides'
 
 function safeJsonStringify(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')
@@ -20,14 +26,14 @@ function safeJsonStringify(data: unknown): string {
 
 function truncateTitle(title: string, maxLen = 55): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
 
 export const revalidate = REVALIDATE.staticPages
 export const dynamicParams = true
 
 // ---------------------------------------------------------------------------
-// Guide type definitions — top 50 guide types
+// How-to guide type definitions (existing)
 // ---------------------------------------------------------------------------
 
 interface GuideType {
@@ -149,58 +155,280 @@ function getGuideType(slug: string): GuideType | null {
   return guideTypes.find(g => g.slug === slug) || null
 }
 
-// 1 seed page — ISR 24h handles the rest (dynamicParams = true)
+// ---------------------------------------------------------------------------
+// generateStaticParams — seed how-to + PA x State legal guides
+// ---------------------------------------------------------------------------
+
 export function generateStaticParams() {
-  return [{ type: guideTypes[0].slug, state: 'new-york' }]
+  // Existing how-to seed
+  const howToSeeds = [{ type: guideTypes[0].slug, state: 'new-york' }]
+  // PA x State seeds (top 10 x 10 = 100)
+  const legalGuideSeeds = getLegalGuideSeedParams()
+  return [...howToSeeds, ...legalGuideSeeds]
 }
 
 interface PageProps { params: Promise<{ type: string; state: string }> }
 
+// ---------------------------------------------------------------------------
+// Metadata
+// ---------------------------------------------------------------------------
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { type: typeSlug, state: stateSlug } = await params
-
-  const guide = getGuideType(typeSlug)
   const state = getStateBySlug(stateSlug)
-  if (!guide || !state) return { title: 'Not Found', robots: { index: false, follow: false } }
+  if (!state) return { title: 'Not Found', robots: { index: false, follow: false } }
 
-  const seed = Math.abs(hashCode(`guide-${typeSlug}-${stateSlug}`))
+  // --- How-to guide path ---
+  const guide = getGuideType(typeSlug)
+  if (guide) {
+    const seed = Math.abs(hashCode(`guide-${typeSlug}-${stateSlug}`))
+    const year = new Date().getFullYear()
+
+    const titles = [
+      `${guide.title} in ${state.name} \u2014 ${year} Guide`,
+      `${guide.title}: ${state.name} Step-by-Step (${year})`,
+      `${state.name} Guide: ${guide.title}`,
+      `${guide.title} in ${state.name} \u2014 Complete Guide`,
+      `How-To: ${guide.title} in ${state.name} (${year})`,
+    ]
+
+    const descs = [
+      `Step-by-step guide to ${guide.title.toLowerCase()} in ${state.name}. State-specific laws, timelines, costs and where to find legal help.`,
+      `${guide.title} in ${state.name}: everything you need to know. ${guide.steps.length}-step process explained with ${state.name}-specific details.`,
+      `Complete ${year} guide to ${guide.title.toLowerCase()} in ${state.name}. Requirements, costs, forms and attorney recommendations.`,
+      `Learn ${guide.title.toLowerCase()} in ${state.name}. Expert step-by-step instructions with state-specific information.`,
+      `${state.name} guide: ${guide.title.toLowerCase()}. Requirements, costs, timeline and how to find a qualified attorney.`,
+    ]
+
+    const title = truncateTitle(titles[seed % titles.length])
+    const description = descs[seed % descs.length]
+
+    return {
+      title, description,
+      robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+      openGraph: { title, description, type: 'article', locale: 'en_US', images: [{ url: getServiceImage(guide.paSlug).src, width: 1200, height: 630, alt: title }] },
+      twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(guide.paSlug).src] },
+      alternates: { canonical: `${SITE_URL}/guides/${typeSlug}/${stateSlug}` },
+    }
+  }
+
+  // --- PA x State legal guide path ---
+  const paName = getPANameBySlug(typeSlug)
+  if (!paName) return { title: 'Not Found', robots: { index: false, follow: false } }
+
   const year = new Date().getFullYear()
+  const seed = Math.abs(hashCode(`legal-guide-${typeSlug}-${stateSlug}`))
 
   const titles = [
-    `${guide.title} in ${state.name} — ${year} Guide`,
-    `${guide.title}: ${state.name} Step-by-Step (${year})`,
-    `${state.name} Guide: ${guide.title}`,
-    `${guide.title} in ${state.name} — Complete Guide`,
-    `How-To: ${guide.title} in ${state.name} (${year})`,
+    `${paName} Law in ${state.name} \u2014 ${year} Guide`,
+    `${state.name} ${paName} Attorney Guide (${year})`,
+    `${paName} in ${state.name}: Costs, Laws & How to Find a Lawyer`,
+    `Complete ${paName} Legal Guide for ${state.name}`,
+    `Find a ${paName} Lawyer in ${state.name} \u2014 ${year}`,
   ]
 
   const descs = [
-    `Step-by-step guide to ${guide.title.toLowerCase()} in ${state.name}. State-specific laws, timelines, costs and where to find legal help.`,
-    `${guide.title} in ${state.name}: everything you need to know. ${guide.steps.length}-step process explained with ${state.name}-specific details.`,
-    `Complete ${year} guide to ${guide.title.toLowerCase()} in ${state.name}. Requirements, costs, forms and attorney recommendations.`,
-    `Learn ${guide.title.toLowerCase()} in ${state.name}. Expert step-by-step instructions with state-specific information.`,
-    `${state.name} guide: ${guide.title.toLowerCase()}. Requirements, costs, timeline and how to find a qualified attorney.`,
+    `Everything you need to know about ${paName.toLowerCase()} law in ${state.name}. Find attorneys, understand costs, timelines, statute of limitations and your rights.`,
+    `${year} guide to ${paName.toLowerCase()} in ${state.name}. Attorney fees, filing costs, statute of limitations, and how to find the right lawyer for your case.`,
+    `${state.name} ${paName.toLowerCase()} guide: laws, costs, court fees, and top-rated attorneys. Free consultation available.`,
+    `Navigate ${paName.toLowerCase()} legal issues in ${state.name}. Expert guide covering costs, deadlines, and how to choose the right attorney.`,
   ]
 
-  const title = truncateTitle(titles[seed % titles.length])
+  const title = truncateTitle(titles[seed % titles.length], 60)
   const description = descs[seed % descs.length]
 
   return {
     title, description,
     robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
-    openGraph: { title, description, type: 'article', locale: 'en_US', images: [{ url: getServiceImage(guide.paSlug).src, width: 1200, height: 630, alt: title }] },
-    twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(guide.paSlug).src] },
+    openGraph: { title, description, type: 'article', locale: 'en_US', images: [{ url: getServiceImage(typeSlug).src, width: 1200, height: 630, alt: title }] },
+    twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(typeSlug).src] },
     alternates: { canonical: `${SITE_URL}/guides/${typeSlug}/${stateSlug}` },
   }
 }
 
+// ---------------------------------------------------------------------------
+// Page component
+// ---------------------------------------------------------------------------
+
 export default async function GuidePage({ params }: PageProps) {
   const { type: typeSlug, state: stateSlug } = await params
-
-  const guide = getGuideType(typeSlug)
   const state = getStateBySlug(stateSlug)
-  if (!guide || !state) notFound()
+  if (!state) notFound()
 
+  // --- How-to guide path ---
+  const howToGuide = getGuideType(typeSlug)
+  if (howToGuide) {
+    return <HowToGuidePage guide={howToGuide} stateSlug={stateSlug} state={state} typeSlug={typeSlug} />
+  }
+
+  // --- PA x State legal guide path ---
+  if (!isLegalGuidePASlug(typeSlug)) notFound()
+
+  const paName = getPANameBySlug(typeSlug)!
+  const guideContent = generateGuideContent(typeSlug, state.code, state.name, paName)
+  const year = new Date().getFullYear()
+
+  // JSON-LD: Article schema
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guideContent.title,
+    description: `Complete guide to ${paName.toLowerCase()} law in ${state.name}. Costs, timelines, statute of limitations, and how to find an attorney.`,
+    url: `${SITE_URL}/guides/${typeSlug}/${stateSlug}`,
+    datePublished: `${year}-01-01`,
+    dateModified: new Date().toISOString().split('T')[0],
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, logo: { '@type': 'ImageObject', url: `${SITE_URL}/icons/icon-512x512.png` } },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/guides/${typeSlug}/${stateSlug}` },
+    about: { '@type': 'Thing', name: `${paName} Law`, description: `${paName} legal services in ${state.name}` },
+    inLanguage: 'en-US',
+  }
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Guides', url: '/guides' },
+    { name: paName, url: `/practice-areas/${typeSlug}` },
+    { name: state.name, url: `/guides/${typeSlug}/${stateSlug}` },
+  ])
+
+  const speakableSchema = getSpeakableSchema({ url: `${SITE_URL}/guides/${typeSlug}/${stateSlug}`, title: guideContent.title })
+
+  const schemas = [articleSchema, breadcrumbSchema, speakableSchema]
+
+  // Related guides — other PAs in same state + same PA in other states
+  const relatedPAs = staticPracticeAreas.filter(p => p.slug !== typeSlug).slice(0, 8)
+  const otherStates = states.filter(s => s.slug !== stateSlug).slice(0, 12)
+
+  return (
+    <>
+      {schemas.map((s, i) => (<script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonStringify(s) }} />))}
+
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: paName, href: `/practice-areas/${typeSlug}` }, { label: state.name }]} />
+        </div>
+      </div>
+
+      {/* Hero */}
+      <section className="bg-gradient-to-b from-blue-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex items-center gap-2 text-sm text-blue-700 font-semibold mb-3">
+            <span>{year} Legal Guide</span>
+            <span>&middot;</span>
+            <span>{state.name}</span>
+            <span>&middot;</span>
+            <span>{guideContent.sections.length} Sections</span>
+          </div>
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-gray-900">{guideContent.title}</h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-3xl">
+            Your comprehensive guide to {paName.toLowerCase()} law in {state.name}. Find qualified attorneys, understand costs, know your rights, and navigate the legal process with confidence.
+          </p>
+        </div>
+      </section>
+
+      {/* Table of Contents */}
+      <section className="py-6 bg-white border-b">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">In This Guide</h2>
+          <nav>
+            <ul className="space-y-1">
+              {guideContent.sections.map((section, idx) => (
+                <li key={idx}>
+                  <a href={`#section-${idx}`} className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                    {section.heading}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      {/* Guide Sections */}
+      <section className="py-10 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-10">
+            {guideContent.sections.map((section, idx) => (
+              <div key={idx} id={`section-${idx}`}>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.heading}</h2>
+                <p className="text-gray-600 leading-relaxed">{section.content}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Disclaimer */}
+      <section className="py-6 bg-blue-50 border-y border-blue-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-sm text-blue-800">
+            <strong>Disclaimer:</strong> This guide provides general information about {paName.toLowerCase()} law in {state.name} and does not constitute legal advice. Laws and procedures may change. Consult a qualified attorney for advice specific to your situation.
+          </p>
+        </div>
+      </section>
+
+      {/* CTA: Find an Attorney */}
+      <section className="py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Find a {paName} Attorney in {state.name}</h2>
+          <p className="text-gray-600 mb-6">Connect with a verified, bar-licensed {paName.toLowerCase()} attorney in {state.name}. Compare profiles, read reviews, and request a free consultation.</p>
+          <div className="flex flex-wrap gap-2">
+            {state.cities.slice(0, 8).map(citySlug => {
+              const cityName = citySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+              return (
+                <Link key={citySlug} href={`/practice-areas/${typeSlug}/${citySlug}`} className="px-4 py-2 rounded-lg bg-blue-50 border border-blue-200 text-sm text-blue-700 hover:bg-blue-100 transition-colors">
+                  {paName} in {cityName}
+                </Link>
+              )
+            })}
+            <Link href={`/practice-areas/${typeSlug}`} className="px-4 py-2 rounded-lg bg-blue-600 text-sm text-white hover:bg-blue-700 transition-colors">
+              All {paName} Attorneys
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Sidebar: Same PA in other states */}
+      <section className="py-10 bg-gray-50 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">{paName} Law Guides in Other States</h2>
+          <div className="flex flex-wrap gap-2">
+            {otherStates.map(st => (
+              <Link key={st.slug} href={`/guides/${typeSlug}/${st.slug}`} className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-sm hover:border-blue-300 hover:text-blue-700 transition-colors">{st.name}</Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sidebar: Other PAs in same state */}
+      <section className="py-10 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Other Legal Guides for {state.name}</h2>
+          <div className="flex flex-wrap gap-2">
+            {relatedPAs.map(pa => (
+              <Link key={pa.slug} href={`/guides/${pa.slug}/${stateSlug}`} className="px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm hover:border-blue-300 hover:text-blue-700 transition-colors">{pa.name}</Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CrossIntentLinks service={typeSlug} specialtyName={paName} currentIntent="services" />
+    </>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// How-to guide sub-component (existing behavior, extracted)
+// ---------------------------------------------------------------------------
+
+interface HowToGuideProps {
+  guide: GuideType
+  stateSlug: string
+  state: { name: string; slug: string; code: string; cities: string[] }
+  typeSlug: string
+}
+
+function HowToGuidePage({ guide, stateSlug, state, typeSlug }: HowToGuideProps) {
   const paData = staticPracticeAreas.find(p => p.slug === guide.paSlug)
   const paName = paData?.name || guide.title
   const year = new Date().getFullYear()
@@ -209,14 +437,13 @@ export default async function GuidePage({ params }: PageProps) {
 
   const h1Variants = [
     `${guide.title} in ${state.name}`,
-    `${guide.title} — ${state.name} ${year} Guide`,
+    `${guide.title} \u2014 ${state.name} ${year} Guide`,
     `${state.name}: ${guide.title}`,
     `Complete Guide: ${guide.title} in ${state.name}`,
-    `${guide.title} in ${state.name} — Step by Step`,
+    `${guide.title} in ${state.name} \u2014 Step by Step`,
   ]
   const h1 = h1Variants[seed % h1Variants.length]
 
-  // Add state name to step text for state-specific context
   const stateSteps = guide.steps.map(step => ({
     ...step,
     text: step.text.replace(/your state/gi, state.name).replace(/Most states/gi, state.name),
@@ -265,7 +492,6 @@ export default async function GuidePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Steps */}
       <section className="py-10 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Step-by-Step Guide</h2>
@@ -283,7 +509,6 @@ export default async function GuidePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Disclaimer */}
       <section className="py-6 bg-emerald-50 border-y border-emerald-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-sm text-emerald-800">
@@ -292,7 +517,6 @@ export default async function GuidePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Find an Attorney */}
       <section className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Need a {paName} Attorney in {state.name}?</h2>
@@ -310,7 +534,6 @@ export default async function GuidePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Other states */}
       <section className="py-10 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">{guide.title} in Other States</h2>
@@ -322,7 +545,6 @@ export default async function GuidePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Other guides */}
       <section className="py-10 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Other Guides for {state.name}</h2>

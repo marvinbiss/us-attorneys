@@ -86,6 +86,12 @@ const AttorneyFAQ = dynamic(
   { loading: () => <SectionSkeleton height="h-64" /> }
 )
 
+// Trust Score (transparent 1-10 score)
+const TrustScore = dynamic(
+  () => import('@/components/attorney/TrustScore').then(mod => ({ default: mod.TrustScore })),
+  { loading: () => <SectionSkeleton height="h-48" /> }
+)
+
 // Business verification card
 const AttorneyBusinessCard = dynamic(
   () => import('@/components/attorney/AttorneyBusinessCard').then(mod => ({ default: mod.AttorneyBusinessCard })),
@@ -123,6 +129,8 @@ interface AttorneyPageClientProps {
   similarAttorneys?: SimilarAttorney[]
   isClaimed?: boolean
   hasSiret?: boolean
+  trustScore?: number
+  trustScoreBreakdown?: Record<string, number>
 }
 
 export default function AttorneyPageClient({
@@ -132,6 +140,8 @@ export default function AttorneyPageClient({
   similarAttorneys,
   isClaimed = true,
   hasSiret = false,
+  trustScore = 0,
+  trustScoreBreakdown,
 }: AttorneyPageClientProps) {
   const attorney = initialAttorney
   const reviews = initialReviews
@@ -261,6 +271,15 @@ export default function AttorneyPageClient({
               <section aria-label="Statistics">
                 <AttorneyStats attorney={attorney} />
               </section>
+              {trustScore > 0 && (
+                <section aria-label="Trust Score">
+                  <TrustScore
+                    score={trustScore}
+                    breakdown={trustScoreBreakdown}
+                    variant="full"
+                  />
+                </section>
+              )}
               <section aria-label="About">
                 <AttorneyAbout attorney={attorney} />
               </section>

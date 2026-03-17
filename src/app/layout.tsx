@@ -6,6 +6,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
+import { ThemeProvider } from '@/lib/theme/theme-provider'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAttorneyCount } from '@/lib/data/stats'
@@ -54,7 +55,7 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: '#E86B4B' },
     { media: '(prefers-color-scheme: dark)', color: '#C24B2A' },
   ],
-  colorScheme: 'light',
+  colorScheme: 'light dark',
 }
 
 export const metadata: Metadata = {
@@ -133,9 +134,15 @@ export default async function RootLayout({
 }) {
   const attorneyCount = await getAttorneyCount()
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`} suppressHydrationWarning>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
+        {/* Anti-FOUC: apply dark class before paint */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('us-attorneys-theme');var d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
         <meta name="msapplication-TileColor" content="#E86B4B" />
         <meta name="msapplication-tap-highlight" content="no" />
 
@@ -175,7 +182,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className="font-sans bg-gray-50 antialiased">
+      <body className="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
         {/* Google Tag Manager */}
         <Script id="gtm" strategy="lazyOnload">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -214,6 +221,7 @@ fbq('track', 'PageView');`}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
         <PageViewTracker />
+        <ThemeProvider>
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a
@@ -229,6 +237,7 @@ fbq('track', 'PageView');`}
           <ServiceWorkerRegistration />
           <CookieConsent />
         </MobileMenuProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

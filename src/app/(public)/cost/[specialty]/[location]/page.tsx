@@ -38,6 +38,7 @@ import FaqAndBlogSection from '@/app/(public)/practice-areas/[service]/[location
 import CrossLinks from '@/app/(public)/practice-areas/[service]/[location]/_components/CrossLinks'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
+import { getAdjustedFees, FEE_STRUCTURES, GENERAL_COST_FACTORS } from '@/lib/data/attorney-costs'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
@@ -259,6 +260,25 @@ function generateJsonLd(
     dateModified: new Date().toISOString().split('T')[0],
   }
 
+  const serviceSchema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${service.name} Attorney Services`,
+    serviceType: `${service.name} Legal Services`,
+    provider: {
+      '@type': 'Organization',
+      name: 'US Attorneys',
+      url: SITE_URL,
+    },
+    areaServed: {
+      '@type': 'City',
+      name: location.name,
+    },
+    description: `Professional ${svcLower} legal services in ${location.name}. Compare fees from verified attorneys.`,
+    url: `${SITE_URL}/cost/${specialtySlug}/${locationSlug}`,
+    priceRange: `$${minPrice}–$${maxPrice}`,
+  }
+
   const collectionPageSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -280,7 +300,239 @@ function generateJsonLd(
     { name: location.name, url: `/cost/${specialtySlug}/${locationSlug}` },
   ])
 
-  return [productSchema, collectionPageSchema, breadcrumbSchema]
+  return [productSchema, serviceSchema, collectionPageSchema, breadcrumbSchema]
+}
+
+// ── Inline sub-components for cost page sections ────────────────────
+
+function CostFeeStructureBreakdown({
+  service,
+  location,
+  specialtySlug,
+  stateCode,
+}: {
+  service: Service
+  location: LocationType
+  specialtySlug: string
+  stateCode: string
+}) {
+  const fees = getAdjustedFees(specialtySlug, stateCode)
+  const structures = Object.values(FEE_STRUCTURES)
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
+        Fee Structures for {service.name} Attorneys in {location.name}
+      </h2>
+      <p className="text-gray-600 mb-6">
+        {service.name} attorneys typically offer several payment options. Understanding these structures helps you choose
+        the right arrangement for your case and budget.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {structures.map((structure) => {
+          const isRelevant =
+            structure.type === fees.category.primaryFeeType ||
+            (structure.type === 'contingency' && fees.contingency) ||
+            (structure.type === 'flat_fee' && fees.flatFee) ||
+            (structure.type === 'retainer' && fees.retainer) ||
+            structure.type === 'hourly'
+
+          return (
+            <div
+              key={structure.type}
+              className={`rounded-xl border p-5 ${
+                structure.type === fees.category.primaryFeeType
+                  ? 'border-blue-300 bg-blue-50'
+                  : 'border-gray-200 bg-white'
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="font-semibold text-gray-900">{structure.label}</h3>
+                {structure.type === fees.category.primaryFeeType && (
+                  <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Most Common</span>
+                )}
+              </div>
+              <p className="text-sm text-gray-600 mb-3">{structure.description}</p>
+              {isRelevant && (
+                <div className="text-sm font-medium text-gray-900">
+                  {structure.type === 'hourly' && (
+                    <span>${fees.hourly.low}–${fees.hourly.high}/hr in {location.name}</span>
+                  )}
+                  {structure.type === 'flat_fee' && fees.flatFee && (
+                    <span>${fees.flatFee.low.toLocaleString()}–${fees.flatFee.high.toLocaleString()}</span>
+                  )}
+                  {structure.type === 'contingency' && fees.contingency && (
+                    <span>{fees.contingency.low}%–{fees.contingency.high}% of recovery</span>
+                  )}
+                  {structure.type === 'retainer' && fees.retainer && (
+                    <span>${fees.retainer.low.toLocaleString()}–${fees.retainer.high.toLocaleString()} initial deposit</span>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function CostComparisonTable({
+  service,
+  location,
+  specialtySlug,
+  stateCode,
+}: {
+  service: Service
+  location: LocationType
+  specialtySlug: string
+  stateCode: string
+}) {
+  const fees = getAdjustedFees(specialtySlug, stateCode)
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
+        {service.name} Attorney Cost Comparison — {location.name}
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse rounded-xl overflow-hidden">
+          <thead>
+            <tr className="bg-gray-800 text-white">
+              <th className="text-left p-4 font-semibold">Cost Level</th>
+              <th className="text-left p-4 font-semibold">Hourly Rate</th>
+              {fees.flatFee && <th className="text-left p-4 font-semibold">Flat Fee</th>}
+              {fees.contingency && <th className="text-left p-4 font-semibold">Contingency</th>}
+              <th className="text-left p-4 font-semibold">Typical Profile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="bg-green-50 border-b border-green-100">
+              <td className="p-4">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-3 h-3 bg-green-500 rounded-full" />
+                  <span className="font-medium text-green-800">Budget</span>
+                </span>
+              </td>
+              <td className="p-4 font-semibold text-gray-900">${fees.hourly.low}/hr</td>
+              {fees.flatFee && <td className="p-4 text-gray-900">${fees.flatFee.low.toLocaleString()}</td>}
+              {fees.contingency && <td className="p-4 text-gray-900">{fees.contingency.low}%</td>}
+              <td className="p-4 text-sm text-gray-600">Solo practitioner, 1–5 years experience</td>
+            </tr>
+            <tr className="bg-yellow-50 border-b border-yellow-100">
+              <td className="p-4">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-3 h-3 bg-yellow-500 rounded-full" />
+                  <span className="font-medium text-yellow-800">Mid-Range</span>
+                </span>
+              </td>
+              <td className="p-4 font-semibold text-gray-900">${fees.hourly.mid}/hr</td>
+              {fees.flatFee && (
+                <td className="p-4 text-gray-900">
+                  ${Math.round((fees.flatFee.low + fees.flatFee.high) / 2).toLocaleString()}
+                </td>
+              )}
+              {fees.contingency && (
+                <td className="p-4 text-gray-900">
+                  {Math.round((fees.contingency.low + fees.contingency.high) / 2)}%
+                </td>
+              )}
+              <td className="p-4 text-sm text-gray-600">Small/mid-size firm, 5–15 years experience</td>
+            </tr>
+            <tr className="bg-red-50">
+              <td className="p-4">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-3 h-3 bg-red-500 rounded-full" />
+                  <span className="font-medium text-red-800">Premium</span>
+                </span>
+              </td>
+              <td className="p-4 font-semibold text-gray-900">${fees.hourly.high}/hr</td>
+              {fees.flatFee && <td className="p-4 text-gray-900">${fees.flatFee.high.toLocaleString()}</td>}
+              {fees.contingency && <td className="p-4 text-gray-900">{fees.contingency.high}%</td>}
+              <td className="p-4 text-sm text-gray-600">Large firm / specialist, 15+ years experience</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500 mt-3">
+        * Rates adjusted for {fees.adjustment.label.toLowerCase()} ({location.department_name || location.name}). Actual fees depend on case specifics.
+      </p>
+    </div>
+  )
+}
+
+function CostFactorsSection({
+  service,
+  location,
+  specialtySlug,
+}: {
+  service: Service
+  location: LocationType
+  specialtySlug: string
+}) {
+  const fees = getAdjustedFees(specialtySlug, location.department_code || '')
+  const categoryFactors = fees.category.costFactors
+  const generalFactors = GENERAL_COST_FACTORS
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
+        Factors Affecting {service.name} Attorney Costs in {location.name}
+      </h2>
+
+      {/* Category-specific factors */}
+      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-4">
+        <h3 className="font-semibold text-gray-900 mb-3">
+          {service.name}-Specific Cost Factors
+        </h3>
+        <ul className="space-y-2">
+          {categoryFactors.map((factor, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+              <span className="text-blue-500 mt-0.5 flex-shrink-0">&#9679;</span>
+              {factor}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* General factors */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {generalFactors.map((item) => (
+          <div key={item.factor} className="bg-white border border-gray-200 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <h4 className="font-semibold text-gray-900 text-sm">{item.factor}</h4>
+              <span
+                className={`text-xs px-2 py-0.5 rounded-full ${
+                  item.impact === 'high'
+                    ? 'bg-red-100 text-red-700'
+                    : 'bg-yellow-100 text-yellow-700'
+                }`}
+              >
+                {item.impact === 'high' ? 'High Impact' : 'Medium Impact'}
+              </span>
+            </div>
+            <p className="text-xs text-gray-600">{item.description}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div className="mt-6 bg-blue-600 rounded-xl p-6 text-center">
+        <h3 className="text-xl font-bold text-white mb-2">
+          Get a Free Quote from {service.name} Attorneys in {location.name}
+        </h3>
+        <p className="text-blue-100 mb-4 text-sm">
+          Compare fees from verified attorneys. No obligation, no cost for the initial consultation.
+        </p>
+        <a
+          href={`/practice-areas/${specialtySlug}/${location.slug || ''}`}
+          className="inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
+        >
+          Find {service.name} Attorneys Near You
+        </a>
+      </div>
+    </div>
+  )
 }
 
 export default async function CostGuidePage({ params }: PageProps) {
@@ -544,6 +796,29 @@ export default async function CostGuidePage({ params }: PageProps) {
           </p>
         </div>
       </div>
+
+      {/* Fee Structure Breakdown */}
+      <CostFeeStructureBreakdown
+        service={service}
+        location={location}
+        specialtySlug={specialtySlug}
+        stateCode={location.department_code || ''}
+      />
+
+      {/* Cost Comparison Table: Low / Mid / High */}
+      <CostComparisonTable
+        service={service}
+        location={location}
+        specialtySlug={specialtySlug}
+        stateCode={location.department_code || ''}
+      />
+
+      {/* Factors Affecting Cost */}
+      <CostFactorsSection
+        service={service}
+        location={location}
+        specialtySlug={specialtySlug}
+      />
 
       {/* Demand indicator */}
       <div className="max-w-7xl mx-auto px-4 py-3">

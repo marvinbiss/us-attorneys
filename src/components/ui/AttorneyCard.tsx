@@ -60,7 +60,7 @@ export function AttorneyCard({
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+        className="group bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300"
       >
         <Link href={href} className="flex flex-col md:flex-row">
           {/* Image */}
@@ -104,26 +104,26 @@ export function AttorneyCard({
             <div className="flex items-start justify-between mb-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-lg text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-lg text-slate-900 dark:text-slate-100 group-hover:text-blue-600 transition-colors">
                     {name}
                   </h3>
                   {isVerified && (
                     <BadgeCheck className="w-5 h-5 text-blue-500" />
                   )}
                 </div>
-                <p className="text-slate-600">{profession}</p>
+                <p className="text-slate-600 dark:text-slate-400">{profession}</p>
               </div>
 
               {/* Rating */}
               <div className="flex items-center gap-1">
                 <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-                <span className="font-semibold text-slate-900">{rating.toFixed(1)}</span>
-                <span className="text-slate-500">({reviewCount})</span>
+                <span className="font-semibold text-slate-900 dark:text-slate-100">{rating.toFixed(1)}</span>
+                <span className="text-slate-500 dark:text-slate-400">({reviewCount})</span>
               </div>
             </div>
 
             {/* Location */}
-            <div className="flex items-center gap-1 text-slate-500 text-sm mb-3">
+            <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-sm mb-3">
               <MapPin className="w-4 h-4" />
               {location}
             </div>
@@ -134,7 +134,7 @@ export function AttorneyCard({
                 {specialties.slice(0, 3).map((specialty, i) => (
                   <span
                     key={i}
-                    className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full"
+                    className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full"
                   >
                     {specialty}
                   </span>
@@ -145,13 +145,13 @@ export function AttorneyCard({
             {/* Additional info */}
             <div className="flex items-center gap-4 text-sm">
               {responseTime && (
-                <div className="flex items-center gap-1 text-slate-500">
+                <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                   <Clock className="w-4 h-4" />
                   Responds in {responseTime}
                 </div>
               )}
               {priceRange && (
-                <div className="text-slate-500">
+                <div className="text-slate-500 dark:text-slate-400">
                   {priceRange}
                 </div>
               )}
@@ -167,7 +167,7 @@ export function AttorneyCard({
     return (
       <Link
         href={href}
-        className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow"
+        className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 hover:shadow-md transition-shadow"
       >
         <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
           {imageUrl ? (
@@ -180,10 +180,10 @@ export function AttorneyCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1">
-            <h4 className="font-medium text-slate-900 truncate">{name}</h4>
+            <h4 className="font-medium text-slate-900 dark:text-slate-100 truncate">{name}</h4>
             {isVerified && <BadgeCheck className="w-4 h-4 text-blue-500 flex-shrink-0" />}
           </div>
-          <p className="text-sm text-slate-500 truncate">{profession}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{profession}</p>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
           <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -268,7 +268,7 @@ export function AttorneyCard({
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-1.5">
-              <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 transition-colors">
                 {name}
               </h3>
               {isVerified && (
@@ -277,16 +277,16 @@ export function AttorneyCard({
             </div>
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span className="font-medium text-sm text-slate-900">{rating.toFixed(1)}</span>
-              <span className="text-slate-500 text-sm">({reviewCount})</span>
+              <span className="font-medium text-sm text-slate-900 dark:text-slate-100">{rating.toFixed(1)}</span>
+              <span className="text-slate-500 dark:text-slate-400 text-sm">({reviewCount})</span>
             </div>
           </div>
 
           {/* Profession */}
-          <p className="text-slate-600 text-sm">{profession}</p>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">{profession}</p>
 
           {/* Location */}
-          <div className="flex items-center gap-1 text-slate-500 text-sm">
+          <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-sm">
             <MapPin className="w-3.5 h-3.5" />
             {location}
           </div>
@@ -297,13 +297,13 @@ export function AttorneyCard({
               {specialties.slice(0, 2).map((specialty, i) => (
                 <span
                   key={i}
-                  className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded"
+                  className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded"
                 >
                   {specialty}
                 </span>
               ))}
               {specialties.length > 2 && (
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-500 dark:text-slate-400">
                   +{specialties.length - 2}
                 </span>
               )}
@@ -328,9 +328,9 @@ export function AttorneyGrid({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="aspect-[4/3] bg-slate-200 rounded-2xl mb-3" />
-            <div className="h-4 bg-slate-200 rounded w-3/4 mb-2" />
-            <div className="h-3 bg-slate-200 rounded w-1/2" />
+            <div className="aspect-[4/3] bg-slate-200 dark:bg-slate-700 rounded-2xl mb-3" />
+            <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-2" />
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
           </div>
         ))}
       </div>
