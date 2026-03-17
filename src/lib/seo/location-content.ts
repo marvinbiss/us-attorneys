@@ -1,18 +1,44 @@
 /**
- * Location content generator — stub.
+ * Location content generator.
  *
+ * Delegates to location-content-us.ts for real content generation.
  * All exported types, interfaces, and function signatures are preserved.
- * Functions return minimal/empty content.
  */
 
 import { type DataDrivenContent } from '@/lib/seo/data-driven-content'
+import {
+  getRegionalPricingMultiplier,
+  classifyCitySize,
+  getCitySizeLabel,
+  generateLocationFAQ,
+  generateLocationIntro,
+  generateLocationPricingNote,
+  getRegionalTips,
+  type FAQParams,
+} from '@/lib/seo/location-content-us'
+
+// Re-export US-specific functions for direct access
+export {
+  getRegionalPricingMultiplier,
+  classifyCitySize,
+  getCitySizeLabel,
+  generateLocationFAQ,
+  generateLocationIntro,
+  generateLocationPricingNote,
+  getRegionalTips,
+  getStateBarVerificationUrl,
+  STATE_BAR_URLS,
+  type FAQParams,
+  type FAQItem,
+  type CitySize,
+} from '@/lib/seo/location-content-us'
 
 // ---------------------------------------------------------------------------
 // Regional pricing multipliers
 // ---------------------------------------------------------------------------
 
-export function getRegionalMultiplier(_region: string): number {
-  return 1.0
+export function getRegionalMultiplier(region: string): number {
+  return getRegionalPricingMultiplier(region)
 }
 
 // ---------------------------------------------------------------------------
@@ -47,22 +73,63 @@ export interface LocationContent {
 }
 
 export function generateLocationContent(
-  _specialtySlug: string,
-  _specialtyName: string,
-  _cityRaw: unknown,
-  _attorneyCount: number = 0,
+  specialtySlug: string,
+  specialtyName: string,
+  cityRaw: unknown,
+  attorneyCount: number = 0,
   _locationData?: unknown | null | undefined,
 ): LocationContent {
+  // Extract city data from the raw object (shape: { name, slug, state, stateAbbr, population, county })
+  const city = cityRaw as { name?: string; slug?: string; state?: string; stateAbbr?: string; population?: number; county?: string } | null
+  if (!city?.name || !city?.state) {
+    return {
+      introText: '',
+      pricingNote: '',
+      localTips: [],
+      neighborhoodText: '',
+      conclusion: '',
+      climateLabel: '',
+      citySizeLabel: '',
+      climateTip: '',
+      faqItems: [],
+      dataDriven: null,
+    }
+  }
+
+  const stateAbbr = city.stateAbbr || city.state?.substring(0, 2).toUpperCase() || ''
+  const population = city.population || 0
+  const avgCost = Math.round(250 * getRegionalPricingMultiplier(stateAbbr))
+  const citySize = classifyCitySize(population)
+
+  const params: FAQParams = {
+    city: city.name,
+    state: city.state,
+    stateAbbr,
+    specialty: specialtySlug,
+    specialtyName,
+    avgCost,
+    winRate: 52,
+    attorneyCount,
+    population,
+    countyName: city.county || '',
+  }
+
+  const faqItems = generateLocationFAQ(params)
+  const introText = generateLocationIntro(params)
+  const pricingNote = generateLocationPricingNote(params)
+  const localTips = getRegionalTips(stateAbbr, 4)
+  const citySizeLabel = getCitySizeLabel(citySize)
+
   return {
-    introText: '',
-    pricingNote: '',
-    localTips: [],
+    introText,
+    pricingNote,
+    localTips,
     neighborhoodText: '',
-    conclusion: '',
+    conclusion: `Whether you need a ${specialtyName.toLowerCase()} attorney for a complex case or a simple consultation, ${city.name} has qualified legal professionals ready to help. Use our directory to compare attorneys, read reviews, and find the right fit for your needs.`,
     climateLabel: '',
-    citySizeLabel: '',
-    climateTip: '',
-    faqItems: [],
+    citySizeLabel,
+    climateTip: localTips[0] || '',
+    faqItems,
     dataDriven: null,
   }
 }

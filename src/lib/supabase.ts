@@ -315,44 +315,246 @@ export async function getAttorneyBySlug(slug: string) {
   }
 }
 
-// Reverse mapping: specialty slug → practice area aliases (for fallback queries)
-// All practice areas should be mapped here — unmapped ones can never show attorneys
+// Reverse mapping: specialty slug → bar category aliases (for fallback queries)
+// All 200 practice areas are mapped here — unmapped ones can never show attorneys
 // on neighborhood pages, causing them to be permanently noindexed.
-export const SPECIALTY_TO_PRACTICE_AREAS: Record<string, string[]> = {
+// Parent PAs map to themselves; child PAs map to themselves + parent (+ grandparent if any).
+export const SPECIALTY_TO_BAR_CATEGORIES: Record<string, string[]> = {
+  // ── PERSONAL INJURY (25 + 4 additional) ──────────────────────────────────
   'personal-injury': ['personal-injury'],
+  'car-accidents': ['car-accidents', 'personal-injury'],
+  'truck-accidents': ['truck-accidents', 'personal-injury'],
+  'motorcycle-accidents': ['motorcycle-accidents', 'personal-injury'],
+  'slip-and-fall': ['slip-and-fall', 'personal-injury'],
+  'medical-malpractice': ['medical-malpractice', 'personal-injury'],
+  'wrongful-death': ['wrongful-death', 'personal-injury'],
+  'product-liability': ['product-liability', 'personal-injury'],
+  'workers-compensation': ['workers-compensation', 'personal-injury', 'workers-comp'],
+  'nursing-home-abuse': ['nursing-home-abuse', 'personal-injury'],
+  'bicycle-accidents': ['bicycle-accidents', 'personal-injury'],
+  'pedestrian-accidents': ['pedestrian-accidents', 'personal-injury'],
+  'brain-injury': ['brain-injury', 'personal-injury'],
+  'spinal-cord-injury': ['spinal-cord-injury', 'personal-injury'],
+  'burn-injury': ['burn-injury', 'personal-injury'],
+  'dog-bite': ['dog-bite', 'personal-injury'],
+  'uber-lyft-accidents': ['uber-lyft-accidents', 'personal-injury'],
+  'boat-accidents': ['boat-accidents', 'personal-injury'],
+  'aviation-accidents': ['aviation-accidents', 'personal-injury'],
+  'construction-accidents': ['construction-accidents', 'personal-injury'],
+  'premises-liability': ['premises-liability', 'personal-injury'],
+  'catastrophic-injury': ['catastrophic-injury', 'personal-injury'],
+  'toxic-exposure': ['toxic-exposure', 'personal-injury'],
+  'railroad-injury': ['railroad-injury', 'personal-injury'],
+  'swimming-pool-accidents': ['swimming-pool-accidents', 'personal-injury'],
+  'medical-device-injury': ['medical-device-injury', 'personal-injury'],
+  'rideshare-law': ['rideshare-law', 'personal-injury'],
+  'uninsured-motorist': ['uninsured-motorist', 'personal-injury'],
+  'mesothelioma': ['mesothelioma', 'personal-injury'],
+  // Sub-subspecialties (grandchildren of personal-injury)
+  'birth-injury': ['birth-injury', 'medical-malpractice', 'personal-injury'],
+  'nursing-malpractice': ['nursing-malpractice', 'medical-malpractice', 'personal-injury'],
+  'dental-malpractice': ['dental-malpractice', 'medical-malpractice', 'personal-injury'],
+
+  // ── CRIMINAL DEFENSE (20) ────────────────────────────────────────────────
   'criminal-defense': ['criminal-defense'],
-  'family-law': ['family-law'],
-  'immigration': ['immigration', 'immigration-law'],
-  'estate-planning': ['estate-planning'],
-  'real-estate': ['real-estate', 'real-estate-law'],
+  'dui-dwi': ['dui-dwi', 'criminal-defense', 'dui', 'dwi'],
+  'drug-crimes': ['drug-crimes', 'criminal-defense'],
+  'white-collar-crime': ['white-collar-crime', 'criminal-defense'],
+  'federal-crimes': ['federal-crimes', 'criminal-defense'],
+  'juvenile-crimes': ['juvenile-crimes', 'criminal-defense'],
+  'sex-crimes': ['sex-crimes', 'criminal-defense'],
+  'theft-robbery': ['theft-robbery', 'criminal-defense'],
+  'violent-crimes': ['violent-crimes', 'criminal-defense'],
+  'traffic-violations': ['traffic-violations', 'criminal-defense'],
+  'assault-battery': ['assault-battery', 'criminal-defense'],
+  'domestic-assault': ['domestic-assault', 'criminal-defense'],
+  'gun-charges': ['gun-charges', 'criminal-defense'],
+  'probation-violations': ['probation-violations', 'criminal-defense'],
+  'expungement': ['expungement', 'criminal-defense'],
+  'embezzlement': ['embezzlement', 'criminal-defense'],
+  'fraud': ['fraud', 'criminal-defense'],
+  'manslaughter': ['manslaughter', 'criminal-defense'],
+  'conspiracy': ['conspiracy', 'criminal-defense'],
+  'hit-and-run': ['hit-and-run', 'criminal-defense'],
+
+  // ── FAMILY LAW (15) ──────────────────────────────────────────────────────
+  'divorce': ['divorce', 'family-law'],
+  'child-custody': ['child-custody', 'divorce', 'family-law'],
+  'child-support': ['child-support', 'divorce', 'family-law'],
+  'adoption': ['adoption', 'family-law'],
+  'alimony-spousal-support': ['alimony-spousal-support', 'divorce', 'alimony', 'spousal-support'],
+  'domestic-violence': ['domestic-violence', 'family-law'],
+  'prenuptial-agreements': ['prenuptial-agreements', 'divorce', 'prenup'],
+  'paternity': ['paternity', 'family-law'],
+  'grandparents-rights': ['grandparents-rights', 'divorce'],
+  'military-divorce': ['military-divorce', 'divorce'],
+  'same-sex-divorce': ['same-sex-divorce', 'divorce'],
+  'modification-orders': ['modification-orders', 'divorce'],
+  'relocation-custody': ['relocation-custody', 'child-custody', 'divorce'],
+  'father-rights': ['father-rights', 'child-custody', 'divorce'],
+  'mother-rights': ['mother-rights', 'child-custody', 'divorce'],
+
+  // ── BUSINESS & CORPORATE (15) ────────────────────────────────────────────
   'business-law': ['business-law', 'corporate-law'],
+  'corporate-law': ['corporate-law', 'business-law'],
+  'mergers-acquisitions': ['mergers-acquisitions', 'business-law'],
+  'contract-law': ['contract-law', 'business-law'],
+  'business-litigation': ['business-litigation', 'business-law'],
+  'startup-law': ['startup-law', 'business-law'],
+  'franchise-law': ['franchise-law', 'business-law'],
+  'partnership-disputes': ['partnership-disputes', 'business-law'],
+  'shareholder-disputes': ['shareholder-disputes', 'corporate-law', 'business-law'],
+  'non-compete-agreements': ['non-compete-agreements', 'business-law'],
+  'trade-secrets': ['trade-secrets', 'business-law'],
+  'securities-law': ['securities-law', 'corporate-law', 'business-law'],
+  'venture-capital': ['venture-capital', 'corporate-law', 'business-law'],
+  'commercial-lease': ['commercial-lease', 'business-law'],
+  'small-business-law': ['small-business-law', 'business-law'],
+
+  // ── INTELLECTUAL PROPERTY (8) ─────────────────────────────────────────────
+  'intellectual-property': ['intellectual-property', 'ip'],
+  'trademark': ['trademark', 'intellectual-property'],
+  'patent': ['patent', 'intellectual-property'],
+  'copyright': ['copyright', 'intellectual-property'],
+  'trade-dress': ['trade-dress', 'intellectual-property'],
+  'licensing-agreements': ['licensing-agreements', 'intellectual-property'],
+  'ip-litigation': ['ip-litigation', 'intellectual-property'],
+  'software-ip': ['software-ip', 'intellectual-property'],
+
+  // ── REAL ESTATE (10) ─────────────────────────────────────────────────────
+  'real-estate-law': ['real-estate-law', 'real-estate'],
+  'landlord-tenant': ['landlord-tenant', 'real-estate-law'],
+  'foreclosure': ['foreclosure', 'real-estate-law'],
+  'zoning-land-use': ['zoning-land-use', 'real-estate-law'],
+  'construction-law': ['construction-law', 'real-estate-law'],
+  'commercial-real-estate': ['commercial-real-estate', 'real-estate-law'],
+  'title-disputes': ['title-disputes', 'real-estate-law'],
+  'boundary-disputes': ['boundary-disputes', 'real-estate-law'],
+  'hoa-disputes': ['hoa-disputes', 'real-estate-law'],
+  'eminent-domain': ['eminent-domain', 'real-estate-law'],
+
+  // ── IMMIGRATION (12) ─────────────────────────────────────────────────────
+  'immigration-law': ['immigration-law', 'immigration'],
+  'green-cards': ['green-cards', 'immigration-law'],
+  'visa-applications': ['visa-applications', 'immigration-law'],
+  'deportation-defense': ['deportation-defense', 'immigration-law'],
+  'asylum': ['asylum', 'immigration-law'],
+  'citizenship-naturalization': ['citizenship-naturalization', 'immigration-law'],
+  'daca': ['daca', 'immigration-law'],
+  'work-permits': ['work-permits', 'immigration-law'],
+  'investor-visas': ['investor-visas', 'immigration-law'],
+  'family-immigration': ['family-immigration', 'immigration-law'],
+  'immigration-appeals': ['immigration-appeals', 'immigration-law'],
+  'immigration-detention': ['immigration-detention', 'immigration-law'],
+
+  // ── ESTATE PLANNING (10) ─────────────────────────────────────────────────
+  'estate-planning': ['estate-planning'],
+  'wills-trusts': ['wills-trusts', 'estate-planning', 'wills', 'trusts'],
+  'probate': ['probate', 'estate-planning'],
+  'elder-law': ['elder-law', 'estate-planning'],
+  'guardianship': ['guardianship', 'estate-planning'],
+  'living-trusts': ['living-trusts', 'wills-trusts', 'estate-planning'],
+  'power-of-attorney': ['power-of-attorney', 'estate-planning'],
+  'trust-administration': ['trust-administration', 'wills-trusts', 'estate-planning'],
+  'estate-litigation': ['estate-litigation', 'estate-planning'],
+  'medicaid-planning': ['medicaid-planning', 'elder-law', 'estate-planning'],
+
+  // ── EMPLOYMENT (13) ──────────────────────────────────────────────────────
   'employment-law': ['employment-law', 'labor-law'],
-  'intellectual-property': ['intellectual-property'],
-  'bankruptcy': ['bankruptcy'],
+  'wrongful-termination': ['wrongful-termination', 'employment-law'],
+  'workplace-discrimination': ['workplace-discrimination', 'employment-law'],
+  'sexual-harassment': ['sexual-harassment', 'employment-law'],
+  'wage-hour-claims': ['wage-hour-claims', 'employment-law'],
+  'fmla-violations': ['fmla-violations', 'employment-law'],
+  'whistleblower': ['whistleblower', 'employment-law'],
+  'non-compete-employment': ['non-compete-employment', 'employment-law'],
+  'executive-compensation': ['executive-compensation', 'employment-law'],
+  'workplace-injury': ['workplace-injury', 'employment-law'],
+  'retaliation': ['retaliation', 'employment-law'],
+  'unemployment-claims': ['unemployment-claims', 'employment-law'],
+  'ada-violations': ['ada-violations', 'employment-law'],
+
+  // ── BANKRUPTCY (7) ────────────────────────────────────────────────────────
+  'bankruptcy': ['bankruptcy', 'debt'],
+  'chapter-7-bankruptcy': ['chapter-7-bankruptcy', 'bankruptcy'],
+  'chapter-13-bankruptcy': ['chapter-13-bankruptcy', 'bankruptcy'],
+  'debt-relief': ['debt-relief', 'bankruptcy'],
+  'business-bankruptcy': ['business-bankruptcy', 'bankruptcy'],
+  'foreclosure-defense': ['foreclosure-defense', 'bankruptcy'],
+  'student-loan-debt': ['student-loan-debt', 'bankruptcy'],
+
+  // ── TAX (7) ───────────────────────────────────────────────────────────────
   'tax-law': ['tax-law'],
-  'civil-rights': ['civil-rights'],
-  'dui-dwi': ['dui-dwi'],
-  'workers-compensation': ['workers-compensation'],
-  'medical-malpractice': ['medical-malpractice'],
-  'social-security-disability': ['social-security-disability'],
-  'elder-law': ['elder-law'],
-  'environmental-law': ['environmental-law'],
+  'irs-disputes': ['irs-disputes', 'tax-law'],
+  'tax-planning': ['tax-planning', 'tax-law'],
+  'back-taxes': ['back-taxes', 'tax-law'],
+  'tax-fraud-defense': ['tax-fraud-defense', 'tax-law'],
+  'international-tax': ['international-tax', 'tax-law'],
+  'estate-tax': ['estate-tax', 'tax-law'],
+
+  // ── SPECIALIZED (23) ─────────────────────────────────────────────────────
   'entertainment-law': ['entertainment-law'],
-  'maritime-law': ['maritime-law', 'admiralty-law'],
-  'military-law': ['military-law'],
-  'securities-law': ['securities-law'],
-  'construction-law': ['construction-law'],
-  'healthcare-law': ['healthcare-law'],
-  'education-law': ['education-law'],
-  'government-law': ['government-law'],
+  'environmental-law': ['environmental-law'],
+  'health-care-law': ['health-care-law', 'healthcare-law'],
   'insurance-law': ['insurance-law'],
-  'banking-law': ['banking-law'],
+  'civil-rights': ['civil-rights'],
   'consumer-protection': ['consumer-protection'],
-  'landlord-tenant': ['landlord-tenant'],
-  'product-liability': ['product-liability'],
+  'social-security-disability': ['social-security-disability', 'ssd', 'ssdi'],
+  'veterans-benefits': ['veterans-benefits'],
   'class-action': ['class-action'],
-  'alternative-dispute-resolution': ['alternative-dispute-resolution', 'mediation', 'arbitration'],
+  'appeals': ['appeals'],
+  'mediation-arbitration': ['mediation-arbitration', 'mediation', 'arbitration', 'alternative-dispute-resolution'],
+  'military-law': ['military-law'],
+  'maritime-law': ['maritime-law', 'admiralty-law'],
+  'aviation-law': ['aviation-law'],
+  'sports-law': ['sports-law'],
+  'cannabis-law': ['cannabis-law', 'marijuana-law'],
+  'education-law': ['education-law'],
+  'animal-law': ['animal-law'],
+  'election-law': ['election-law'],
+  'native-american-law': ['native-american-law', 'tribal-law'],
+  'water-rights': ['water-rights'],
+  'agricultural-law': ['agricultural-law'],
+  'energy-law': ['energy-law'],
+  'telecommunications-law': ['telecommunications-law'],
+  'church-abuse': ['church-abuse'],
+  // Subspecialties under specialized parents
+  'insurance-bad-faith': ['insurance-bad-faith', 'insurance-law'],
+  'lemon-law': ['lemon-law', 'consumer-protection'],
+  'debt-collection-defense': ['debt-collection-defense', 'consumer-protection'],
+  'military-defense': ['military-defense', 'military-law'],
+  'nursing-license-defense': ['nursing-license-defense', 'health-care-law'],
+  'medical-license-defense': ['medical-license-defense', 'health-care-law'],
+
+  // ── GOVERNMENT & ADMINISTRATIVE (8) ───────────────────────────────────────
+  'administrative-law': ['administrative-law', 'government-law'],
+  'government-contracts': ['government-contracts', 'administrative-law'],
+  'regulatory-compliance': ['regulatory-compliance', 'administrative-law'],
+  'foia-requests': ['foia-requests', 'administrative-law'],
+  'licensing-permits': ['licensing-permits', 'administrative-law'],
+  'municipal-law': ['municipal-law', 'administrative-law'],
+  'government-ethics': ['government-ethics', 'administrative-law'],
+  'public-records': ['public-records', 'administrative-law'],
+
+  // ── TECHNOLOGY & CYBER (7) ────────────────────────────────────────────────
+  'cyber-law': ['cyber-law'],
+  'data-privacy': ['data-privacy', 'cyber-law'],
+  'ai-law': ['ai-law', 'cyber-law'],
+  'cryptocurrency-law': ['cryptocurrency-law', 'cyber-law'],
+  'internet-law': ['internet-law', 'cyber-law'],
+  'e-commerce-law': ['e-commerce-law', 'cyber-law'],
+  'social-media-law': ['social-media-law', 'cyber-law'],
+
+  // ── PERSONAL & FAMILY ADDITIONAL (5) ──────────────────────────────────────
+  'name-change': ['name-change'],
+  'gender-marker-change': ['gender-marker-change', 'name-change'],
+  'surrogacy-law': ['surrogacy-law'],
+  'egg-donor-law': ['egg-donor-law', 'surrogacy-law'],
+  'restraining-orders': ['restraining-orders'],
 }
+
+// Backward-compatible alias
+export const SPECIALTY_TO_PRACTICE_AREAS = SPECIALTY_TO_BAR_CATEGORIES
 
 export async function getAttorneysByServiceAndLocation(
   specialtySlug: string,
@@ -371,7 +573,7 @@ export async function getAttorneysByServiceAndLocation(
       const cityData = getCityBySlugImport(locationSlug)
       if (!cityData) return []
 
-      const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
+      const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
       if (!specialties || specialties.length === 0) return []
 
       // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
@@ -451,7 +653,7 @@ export async function hasProvidersByServiceAndLocation(
   try {
     return await retryWithBackoff(
       async () => {
-        const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
+        const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
         if (!specialties || specialties.length === 0) return false
 
         const cityLookup = getCityBySlugImport(locationSlug)
@@ -497,7 +699,7 @@ export async function getAttorneyCountByServiceAndLocation(
       try {
         return await retryWithBackoff(
           async () => {
-            const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
+            const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
             if (!specialties || specialties.length === 0) return 0
 
             const cityLookup = getCityBySlugImport(locationSlug)
@@ -589,7 +791,7 @@ export async function getAllProviders() {
 export async function getAttorneysByService(specialtySlug: string, limit?: number) {
   if (IS_BUILD) return [] // Skip during build
 
-  const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
+  const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
   const effectiveLimit = limit || 50
@@ -618,7 +820,7 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
 
 export async function getAttorneyCountByService(specialtySlug: string): Promise<number> {
   if (IS_BUILD) return 0
-  const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
+  const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return 0
   try {
     return await withTimeout(
@@ -642,7 +844,7 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
 export async function getLocationsByService(specialtySlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
-  const specialties = SPECIALTY_TO_PRACTICE_AREAS[specialtySlug]
+  const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
   return retryWithBackoff(

@@ -2,7 +2,26 @@
  * Rich SEO content for each legal practice area.
  * Used on practice area hub pages to add contextual content
  * (pricing guide, FAQ, practical tips).
+ *
+ * This module now re-exports from attorney-content.ts and provides
+ * backward-compatible TradeContent records mapped from AttorneyContent.
  */
+
+import { attorneyContent } from './attorney-content'
+
+// Re-export everything from attorney-content for new code
+export {
+  type AttorneyContent,
+  attorneyContent,
+  getAttorneyContent,
+  getAttorneyContentSlugs,
+  getAttorneyContentBatch,
+  getAttorneyContentByCategory,
+  getRelatedAttorneyContent,
+  slugifyCaseType,
+  parseCaseType,
+  getCaseTypesForPracticeArea,
+} from './attorney-content'
 
 export interface TradeContent {
   slug: string
@@ -20,7 +39,30 @@ export interface TradeContent {
   averageResponseTime: string
 }
 
-export const tradeContent: Record<string, TradeContent> = {}
+/**
+ * Backward-compatible tradeContent record mapped from attorneyContent.
+ * commonTasks maps from commonCaseTypes in AttorneyContent.
+ */
+export const tradeContent: Record<string, TradeContent> = Object.fromEntries(
+  Object.entries(attorneyContent).map(([slug, ac]) => [
+    slug,
+    {
+      slug: ac.slug,
+      name: ac.name,
+      priceRange: {
+        min: ac.priceRange.min,
+        max: ac.priceRange.max,
+        unit: ac.priceRange.unit,
+      },
+      commonTasks: ac.commonCaseTypes,
+      tips: ac.tips,
+      faq: ac.faq,
+      emergencyInfo: ac.emergencyInfo,
+      certifications: ac.certifications,
+      averageResponseTime: ac.averageResponseTime,
+    },
+  ])
+)
 
 /**
  * Retrieves the content for a practice area by its slug.
