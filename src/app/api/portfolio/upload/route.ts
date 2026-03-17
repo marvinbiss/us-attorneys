@@ -17,8 +17,6 @@ const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm']
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50MB
 
-export const dynamic = 'force-dynamic'
-
 function generateFilePath(attorneyId: string, fileName: string): string {
   const timestamp = Date.now()
   const randomStr = Math.random().toString(36).substring(2, 8)

@@ -16,8 +16,6 @@ import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
-
 const refuseSchema = z.object({
   quote_id: z.string().uuid(),
 })

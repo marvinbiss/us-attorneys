@@ -13,7 +13,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import AttorneySidebar from '@/components/attorney-dashboard/AttorneySidebar'
 import { PortfolioCard } from '@/components/portfolio'
-import Button from '@/components/ui/Button'
+import Button from '@/components/ui/button'
 import type { PortfolioItem, MediaType } from '@/types/portfolio'
 import AddPortfolioModal from './AddPortfolioModal'
 import PortfolioLightbox from './PortfolioLightbox'

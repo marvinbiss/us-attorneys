@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { FileDropzone } from '@/components/upload'
-import Button from '@/components/ui/Button'
+import Button from '@/components/ui/button'
 import type { PortfolioItem, MediaType, UploadedFile } from '@/types/portfolio'
 import { PORTFOLIO_CATEGORIES } from '@/types/portfolio'
 

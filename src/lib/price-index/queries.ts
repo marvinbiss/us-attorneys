@@ -14,6 +14,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
+/** Explicit column list for barometre_stats — avoids SELECT * */
+const BAROMETRE_COLS = 'id, metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, variation_trimestre, updated_at' as const
+
 /** Default cache TTL: 24h (aligned with barometer page revalidate) */
 const CACHE_TTL = 86400
 
@@ -59,7 +62,7 @@ async function _getStatsBySpecialty(specialtySlug: string): Promise<BarometreSta
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select(BAROMETRE_COLS)
       .eq('metier_slug', specialtySlug)
       .is('ville', null)
       .is('departement', null)
@@ -85,7 +88,7 @@ async function _getStatsBySpecialtyCity(specialtySlug: string, citySlug: string)
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select(BAROMETRE_COLS)
       .eq('metier_slug', specialtySlug)
       .eq('ville_slug', citySlug)
       .single()
@@ -109,7 +112,7 @@ async function _getStatsByRegion(regionSlug: string): Promise<BarometreStatRow[]
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select(BAROMETRE_COLS)
       .eq('region_slug', regionSlug)
       .is('ville', null)
       .is('departement', null)
@@ -134,7 +137,7 @@ async function _getStatsByState(deptCode: string): Promise<BarometreStatRow[]> {
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select(BAROMETRE_COLS)
       .eq('departement_code', deptCode)
       .is('ville', null)
       .order('nb_artisans', { ascending: false })
@@ -160,12 +163,12 @@ async function _getNationalStats(): Promise<NationalStats> {
     // Specialties at national level
     const { data: national } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select('nb_artisans, nb_avis, note_moyenne, taux_verification')
       .is('ville', null)
       .is('departement', null)
       .is('region', null)
 
-    const rows = (national ?? []) as BarometreStatRow[]
+    const rows = (national ?? []) as Pick<BarometreStatRow, 'nb_artisans' | 'nb_avis' | 'note_moyenne' | 'taux_verification'>[]
 
     const totalAttorneys = rows.reduce((s, r) => s + r.nb_artisans, 0)
     const totalReviews = rows.reduce((s, r) => s + r.nb_avis, 0)
@@ -180,7 +183,7 @@ async function _getNationalStats(): Promise<NationalStats> {
     // Count distinct cities
     const { count: cityCount } = await supabase
       .from('barometre_stats')
-      .select('*', { count: 'exact', head: true })
+      .select('id', { count: 'exact', head: true })
       .not('ville', 'is', null)
 
     return {
@@ -212,7 +215,7 @@ async function _getTopSpecialties(limit: number): Promise<BarometreStatRow[]> {
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select(BAROMETRE_COLS)
       .is('ville', null)
       .is('departement', null)
       .is('region', null)
@@ -287,7 +290,7 @@ async function _getSpecialtyTopCities(
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('barometre_stats')
-      .select('*')
+      .select(BAROMETRE_COLS)
       .eq('metier_slug', specialtySlug)
       .in('ville', cityNames)
       .order('nb_artisans', { ascending: false })

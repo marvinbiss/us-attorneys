@@ -14,8 +14,6 @@ import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: Request) {
   try {
     // Rate limiting
@@ -92,8 +90,10 @@ export async function POST(request: Request) {
           { status: 401 }
         )
       }
+      // Generic message — never leak internal error details to the client
+      authLogger.warn('Signin error (unhandled type)', { detail: error.message })
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, error.message),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Invalid email or password'),
         { status: 401 }
       )
     }

@@ -1,4 +1,5 @@
 import { CacheService } from '@/lib/cache/redis-client'
+import { logger } from '@/lib/logger'
 
 // L1: in-memory (fast path, same Lambda invocation)
 const memoryCache = new Map<string, { data: unknown; expiry: number }>()
@@ -49,7 +50,7 @@ export async function getCachedData<T>(
   const redisHit = await redisCache.get<T>(key)
   if (redisHit !== null) {
     // Warm L1 from Redis hit to avoid repeated Redis calls within same invocation
-    memoryCache.set(key, { data: redisHit, expiry: Date.now() + Math.min(ttl, 60) * 1000 })
+    memoryCache.set(key, { data: redisHit, expiry: Date.now() + Math.min(ttl, 3600) * 1000 })
     return redisHit
   }
 
@@ -64,8 +65,8 @@ export async function getCachedData<T>(
 
   if (!shouldSkip) {
     // Write to both layers (fire-and-forget Redis to not block the response)
-    redisCache.set(key, data, ttl).catch(() => {})
-    memoryCache.set(key, { data, expiry: Date.now() + Math.min(ttl, 60) * 1000 })
+    redisCache.set(key, data, ttl).catch((err) => logger.warn('[cache] Redis SET failed (non-blocking)', { key, error: (err as Error).message }))
+    memoryCache.set(key, { data, expiry: Date.now() + Math.min(ttl, 3600) * 1000 })
   }
 
   return data
@@ -77,12 +78,12 @@ export async function getCachedData<T>(
 export function invalidateCache(keyOrPattern: string | RegExp): void {
   if (typeof keyOrPattern === 'string') {
     memoryCache.delete(keyOrPattern)
-    redisCache.delete(keyOrPattern).catch(() => {})
+    redisCache.delete(keyOrPattern).catch((err) => logger.warn('[cache] Redis DELETE failed', { key: keyOrPattern, error: (err as Error).message }))
   } else {
     for (const key of Array.from(memoryCache.keys())) {
       if (keyOrPattern.test(key)) {
         memoryCache.delete(key)
-        redisCache.delete(key).catch(() => {})
+        redisCache.delete(key).catch((err) => logger.warn('[cache] Redis DELETE failed', { key, error: (err as Error).message }))
       }
     }
   }

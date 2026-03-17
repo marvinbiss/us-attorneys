@@ -13,8 +13,6 @@ import { z } from 'zod'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 
-export const dynamic = 'force-dynamic'
-
 /** Escape HTML special chars to prevent XSS in email templates */
 function htmlEscape(str: string): string {
   return str

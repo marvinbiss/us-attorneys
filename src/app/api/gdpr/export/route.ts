@@ -13,8 +13,6 @@ const exportPostSchema = z.object({
 })
 
 // POST /api/gdpr/export - Request data export
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async ({ request, user }) => {
   const body = await request.json()
   const result = exportPostSchema.safeParse(body)

@@ -12,8 +12,6 @@ import { headers } from 'next/headers'
 import { sendEmail } from '@/lib/api/resend-client'
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
 
-export const dynamic = 'force-dynamic'
-
 const estimationLeadSchema = z.object({
   name: z.string().optional(),
   phone: z.string().min(10, 'Invalid phone number (min 10 characters)'),

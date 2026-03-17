@@ -10,8 +10,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAttorney } from '@/lib/auth/attorney-guard'
 
-export const dynamic = 'force-dynamic'
-
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
 const MAX_SIZE_BYTES = 2 * 1024 * 1024 // 2 MB
 

@@ -6,6 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createApiHandler, jsonResponse } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -17,25 +18,15 @@ const updateClientProfileSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
-  try {
+export const GET = createApiHandler(
+  async ({ user }) => {
     const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
 
     // Fetch profile
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('id, email, full_name, phone_e164, average_rating, review_count, created_at, updated_at')
-      .eq('id', user.id)
+      .eq('id', user!.id)
       .single()
 
     if (profileError) {
@@ -46,40 +37,15 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ profile })
-  } catch (error) {
-    logger.error('Profile GET error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
-  }
-}
+    return jsonResponse({ profile })
+  },
+  { requireAuth: true }
+)
 
-export async function PUT(request: Request) {
-  try {
+export const PUT = createApiHandler<z.infer<typeof updateClientProfileSchema>>(
+  async ({ user, body }) => {
     const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    // Parse request body
-    const body = await request.json()
-    const result = updateClientProfileSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
-        { status: 400 }
-      )
-    }
-    const { full_name, phone } = result.data
+    const { full_name, phone } = body
 
     // Build update object with only defined fields
     const updateData: Record<string, string | undefined> = {
@@ -92,7 +58,7 @@ export async function PUT(request: Request) {
     const { data: profile, error: updateError } = await supabase
       .from('profiles')
       .update(updateData)
-      .eq('id', user.id)
+      .eq('id', user!.id)
       .select()
       .single()
 
@@ -104,16 +70,10 @@ export async function PUT(request: Request) {
       )
     }
 
-    return NextResponse.json({
-      success: true,
+    return jsonResponse({
       profile,
       message: 'Profile updated successfully'
     })
-  } catch (error) {
-    logger.error('Profile PUT error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
-  }
-}
+  },
+  { requireAuth: true, bodySchema: updateClientProfileSchema }
+)

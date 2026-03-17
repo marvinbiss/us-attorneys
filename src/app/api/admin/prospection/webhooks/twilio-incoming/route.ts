@@ -9,8 +9,6 @@ import { sendWhatsAppReply } from '@/lib/prospection/channels/whatsapp'
 import { sendProspectionSMS } from '@/lib/prospection/channels/sms'
 import type { ProspectionContact, ProspectionConversationMessage } from '@/types/prospection'
 
-export const dynamic = 'force-dynamic'
-
 /**
  * Twilio Webhook - Incoming messages (SMS and WhatsApp)
  * Handles contact responses and triggers AI if configured

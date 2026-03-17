@@ -21,7 +21,7 @@ export const GET = createApiHandler(async ({ params }) => {
 
   const { data: call, error } = await supabase
     .from('voice_calls')
-    .select('*, contact:contact_id(id, contact_name, phone_e164, email, postal_code, city)')
+    .select('id, conversation_id, contact_id, lead_id, vapi_call_id, twilio_call_sid, caller_phone, direction, status, started_at, ended_at, duration_seconds, recording_url, transcription, summary, qualification_score, qualification_data, vapi_cost, consent_recording, created_at, updated_at, contact:contact_id(id, contact_name, phone_e164, email, postal_code, city)')
     .eq('id', id)
     .single()
 
@@ -37,7 +37,7 @@ export const GET = createApiHandler(async ({ params }) => {
   if (call.conversation_id) {
     const { data } = await supabase
       .from('prospection_conversation_messages')
-      .select('*')
+      .select('id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at')
       .eq('conversation_id', call.conversation_id)
       .order('created_at', { ascending: true })
     messages = data

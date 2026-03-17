@@ -46,7 +46,8 @@ export class CacheService {
     if (value === null || value === undefined) return null
     try {
       return JSON.parse(value) as T
-    } catch {
+    } catch (err) {
+      logger.warn('Redis cache: failed to parse JSON value, returning raw', { key, error: (err as Error).message })
       return value as unknown as T
     }
   }
@@ -120,7 +121,8 @@ export const rateLimiter = {
         return { allowed: false, remaining: 0, resetAt: now + windowMs }
       }
       return { allowed: true, remaining: Math.max(0, limit - count), resetAt: now + windowMs }
-    } catch {
+    } catch (err) {
+      logger.error('Rate limiter Redis error — failing open', err as Error)
       return { allowed: true, remaining: limit, resetAt: now + windowMs }
     }
   },

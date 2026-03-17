@@ -3,8 +3,8 @@
  * World-class branded components
  */
 
-export { default as Button } from './Button'
-export type { ButtonProps } from './Button'
+export { default as Button } from './button'
+export type { ButtonProps } from './button'
 
 export { default as Badge, StatusBadge, SlotBadge } from './Badge'
 export type { BadgeProps } from './Badge'

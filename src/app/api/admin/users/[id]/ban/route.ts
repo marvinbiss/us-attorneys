@@ -12,8 +12,6 @@ const banUserSchema = z.object({
   reason: z.string().max(500).optional(),
 })
 
-export const dynamic = 'force-dynamic'
-
 // POST - Ban or unban a user
 export const POST = createApiHandler(async ({ request, params }) => {
   // Verify admin with users:write permission

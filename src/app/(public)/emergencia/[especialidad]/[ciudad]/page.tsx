@@ -161,7 +161,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(enSlug).src] },
     alternates: {
       canonical: `${SITE_URL}/emergencia/${especialidad}/${ciudad}`,
-      languages: { 'en': `${SITE_URL}/emergency/${enSlug}/${ciudad}`, 'es': `${SITE_URL}/emergencia/${especialidad}/${ciudad}` },
+      languages: { 'en': `${SITE_URL}/emergency/${enSlug}/${ciudad}`, 'es': `${SITE_URL}/emergencia/${especialidad}/${ciudad}`, 'x-default': `${SITE_URL}/emergency/${enSlug}/${ciudad}` },
     },
   }
 }

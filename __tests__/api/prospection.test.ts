@@ -937,10 +937,14 @@ describe('Prospection API -- Files existence & structure', () => {
     }
   })
 
-  it('all routes use force-dynamic', () => {
+  it('routes with GET handlers use force-dynamic', () => {
     for (const route of requiredRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
-      expect(content).toContain("dynamic = 'force-dynamic'")
+      // POST-only routes don't need force-dynamic (handled by createApiHandler)
+      const hasGet = content.includes('export const GET') || content.includes('export async function GET')
+      if (hasGet) {
+        expect(content).toContain("dynamic = 'force-dynamic'")
+      }
     }
   })
 

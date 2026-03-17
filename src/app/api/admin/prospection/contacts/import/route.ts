@@ -10,8 +10,6 @@ const importFormSchema = z.object({
   mapping: z.string().optional(),
 })
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requirePermission('prospection', 'write')

@@ -9,8 +9,6 @@ import { z } from 'zod'
 import { UUID_RE } from '@/lib/cms-utils'
 import { createApiHandler } from '@/lib/api/handler'
 
-export const dynamic = 'force-dynamic'
-
 // --- Schema ---
 
 const restoreSchema = z.object({

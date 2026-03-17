@@ -718,7 +718,7 @@ export function HeroSearch() {
                               <button
                                 type="button"
                                 onClick={(e) => handleRemoveRecent(cityName, e)}
-                                className="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
+                                className="flex-shrink-0 w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
                                 aria-label={`Remove ${cityName} from recent searches`}
                               >
                                 <X className="w-3 h-3 text-slate-400" />
@@ -793,7 +793,7 @@ export function HeroSearch() {
                                 key={fc.name}
                                 type="button"
                                 onClick={() => selectCity(fc.name)}
-                                className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors font-medium min-h-[36px]"
+                                className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3.5 py-2.5 rounded-full transition-colors font-medium min-h-[44px]"
                               >
                                 <MapPin className="w-3 h-3" />
                                 {fc.name} ({fc.dept})
@@ -893,7 +893,7 @@ export function HeroSearch() {
                 setActiveField('location')
                 setTimeout(() => locationInputRef.current?.focus(), 50)
               }}
-              className="text-sm text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 backdrop-blur-sm"
+              className="text-sm text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-2.5 min-h-[44px] rounded-full transition-all duration-200 flex items-center gap-1.5 backdrop-blur-sm"
             >
               <IconComponent className="w-3.5 h-3.5" />
               {service.name}

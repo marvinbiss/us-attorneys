@@ -162,7 +162,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(enSlug).src] },
     alternates: {
       canonical: `${SITE_URL}/opiniones/${especialidad}/${ciudad}`,
-      languages: { 'en': `${SITE_URL}/reviews/${enSlug}/${ciudad}`, 'es': `${SITE_URL}/opiniones/${especialidad}/${ciudad}` },
+      languages: { 'en': `${SITE_URL}/reviews/${enSlug}/${ciudad}`, 'es': `${SITE_URL}/opiniones/${especialidad}/${ciudad}`, 'x-default': `${SITE_URL}/reviews/${enSlug}/${ciudad}` },
     },
   }
 }

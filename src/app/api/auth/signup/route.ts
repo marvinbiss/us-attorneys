@@ -13,8 +13,6 @@ import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: Request) {
   try {
     // Rate limiting
@@ -61,9 +59,16 @@ export async function POST(request: Request) {
       .single()
 
     if (existingUser) {
+      // SECURITY: Do not reveal that the email is already registered (email enumeration).
+      // Return the same success response as a normal signup to prevent attackers
+      // from discovering valid email addresses.
+      logger.info('Signup attempted with existing email (suppressed)')
       return NextResponse.json(
-        createErrorResponse(ErrorCode.ALREADY_EXISTS, 'Un compte existe deja avec cet email'),
-        { status: 409 }
+        createSuccessResponse({
+          message: 'Account created successfully. Check your email to activate your account.',
+          requiresVerification: true,
+        }),
+        { status: 201 }
       )
     }
 
@@ -82,7 +87,7 @@ export async function POST(request: Request) {
     if (authError || !authData.user) {
       logger.error('Auth error:', authError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, authError?.message || 'Error creating account'),
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error creating account'),
         { status: 500 }
       )
     }

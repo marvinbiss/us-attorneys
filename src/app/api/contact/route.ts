@@ -24,8 +24,6 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"'`=/]/g, (char) => htmlEntities[char])
 }
 
-export const dynamic = 'force-dynamic'
-
 // Lazy initialization to avoid build-time errors
 const getResend = () => {
   if (!process.env.RESEND_API_KEY) {

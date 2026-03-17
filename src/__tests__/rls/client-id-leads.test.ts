@@ -43,19 +43,13 @@ describe('client_id on lead creation -- quotes API route', () => {
     expect(source).toContain("import { createClient } from '@/lib/supabase/server'")
   })
 
-  it('resolves authenticated user via server client', () => {
-    expect(source).toContain('await createClient()')
-    expect(source).toContain('supabase.auth.getUser()')
+  it('uses createApiHandler with requireAuth for authentication', () => {
+    expect(source).toContain('createApiHandler')
+    expect(source).toContain('requireAuth: true')
   })
 
   it('includes client_id in INSERT payload', () => {
     expect(source).toContain('client_id')
-  })
-
-  it('handles auth check before creating quote', () => {
-    // The route checks authentication and returns 401 if not authenticated
-    expect(source).toContain('status: 401')
-    expect(source).toContain('Authentication required')
   })
 
   it('uses force-dynamic', () => {
@@ -95,10 +89,6 @@ describe('claim-lead backfill endpoint', () => {
 
   it('returns count of claimed leads', () => {
     expect(source).toContain("claimed: claimed?.length || 0")
-  })
-
-  it('uses force-dynamic', () => {
-    expect(source).toContain("export const dynamic = 'force-dynamic'")
   })
 
   it('does not expose any toxic fields', () => {

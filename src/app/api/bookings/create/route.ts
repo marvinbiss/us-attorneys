@@ -9,8 +9,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
 import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
-
 const createBookingBodySchema = z.object({
   attorney_id: z.string().uuid(),
   scheduled_at: z.string().datetime(),

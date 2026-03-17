@@ -140,7 +140,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
                   }
                   aria-pressed={filters.minRating === rating}
                   aria-label={`Minimum ${rating} stars`}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
+                  className={`flex items-center gap-1 px-3 py-2 min-h-[44px] rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
                     filters.minRating === rating
                       ? 'bg-clay-50 border-clay-200 text-clay-600'
                       : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
@@ -157,7 +157,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               <button
                 onClick={clearFilters}
                 aria-label="Clear all filters"
-                className="flex items-center gap-1 px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 rounded-lg"
+                className="flex items-center gap-1 px-3 py-2 min-h-[44px] text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 rounded-lg"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
                 <span>Clear</span>

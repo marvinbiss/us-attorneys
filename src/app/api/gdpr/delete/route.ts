@@ -16,8 +16,6 @@ const deletePostSchema = z.object({
 })
 
 // POST /api/gdpr/delete - Request account deletion
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async ({ request, user }) => {
   const supabase = await createClient()
 

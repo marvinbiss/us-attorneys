@@ -14,8 +14,6 @@ const replySchema = z.object({
   sender_type: z.enum(['human', 'ai']).optional().default('human'),
 })
 
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async (ctx) => {
   const id = ctx.params?.id
   if (!id || !isValidUuid(id)) {

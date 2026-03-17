@@ -8,8 +8,6 @@ import { env } from '@/lib/env'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import Stripe from 'stripe'
 
-export const dynamic = 'force-dynamic'
-
 /**
  * Map Stripe subscription status to our DB subscription_status
  */

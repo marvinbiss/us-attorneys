@@ -11,6 +11,7 @@ import { sendBookingNotifications, type NotificationPayload } from '@/lib/notifi
 import { createBookingSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { apiLogger } from '@/lib/logger'
+import { getIdempotentResponse, setIdempotentResponse } from '@/lib/api/idempotency'
 import { z } from 'zod'
 
 // Schema for GET request query params
@@ -140,6 +141,16 @@ export const GET = createApiHandler(async ({ request }) => {
 
 // POST /api/bookings - Create a new booking
 export const POST = createApiHandler(async ({ request }) => {
+  // Idempotency: prevent duplicate bookings from retried requests
+  const idempotencyKey = request.headers.get('X-Idempotency-Key')
+  if (idempotencyKey) {
+    const cached = await getIdempotentResponse(idempotencyKey)
+    if (cached) {
+      apiLogger.info('Idempotency replay', { key: idempotencyKey })
+      return cached
+    }
+  }
+
   const body = await request.json()
 
   // Validate request body
@@ -250,7 +261,7 @@ export const POST = createApiHandler(async ({ request }) => {
     apiLogger.error('Failed to send booking confirmation notifications', err)
   })
 
-  return NextResponse.json(
+  const response = NextResponse.json(
     createSuccessResponse({
       booking: {
         id: booking.id,
@@ -264,4 +275,13 @@ export const POST = createApiHandler(async ({ request }) => {
     }),
     { status: 201 }
   )
+
+  // Cache the response for idempotency replay (24h TTL)
+  if (idempotencyKey) {
+    setIdempotentResponse(idempotencyKey, response).catch((err) => {
+      apiLogger.error('Failed to cache idempotent response', err)
+    })
+  }
+
+  return response
 }, { requireAuth: true })

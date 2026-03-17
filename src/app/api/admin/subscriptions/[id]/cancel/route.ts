@@ -10,8 +10,6 @@ const cancelSubscriptionSchema = z.object({
   immediately: z.boolean().optional().default(false),
 })
 
-export const dynamic = 'force-dynamic'
-
 // POST - Cancel or reactivate a subscription
 export async function POST(
   request: NextRequest,

@@ -15,8 +15,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
-
 const actionSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('view') }),
   z.object({

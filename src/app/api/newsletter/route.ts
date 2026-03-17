@@ -8,8 +8,6 @@ import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
-
 const getResend = () => getResendClient()
 
 const newsletterSchema = z.object({

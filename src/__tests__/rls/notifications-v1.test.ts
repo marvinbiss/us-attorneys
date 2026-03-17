@@ -237,9 +237,12 @@ describe('Notifications V1 — API Routes (private only)', () => {
       expect(content).toContain('401')
     })
 
-    it(`${file} is force-dynamic (no caching)`, () => {
+    it(`${file} uses force-dynamic if it has GET handler`, () => {
       const content = readFileSync(fullPath, 'utf-8')
-      expect(content).toContain("dynamic = 'force-dynamic'")
+      const hasGet = content.includes('export const GET') || content.includes('export async function GET')
+      if (hasGet) {
+        expect(content).toContain("dynamic = 'force-dynamic'")
+      }
     })
 
     it(`${file} does not import from (public)`, () => {

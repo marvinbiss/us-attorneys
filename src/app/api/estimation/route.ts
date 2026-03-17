@@ -13,8 +13,6 @@ import { z } from 'zod'
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
 import { headers } from 'next/headers'
 
-export const dynamic = 'force-dynamic'
-
 // ---------------------------------------------------------------------------
 // Validation
 // ---------------------------------------------------------------------------

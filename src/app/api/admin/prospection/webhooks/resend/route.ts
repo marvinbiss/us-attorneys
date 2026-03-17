@@ -4,8 +4,6 @@ import { logger } from '@/lib/logger'
 import { createApiHandler } from '@/lib/api/handler'
 import { verifyResendSignature } from '@/lib/prospection/webhook-security'
 
-export const dynamic = 'force-dynamic'
-
 /**
  * Webhook Resend - Delivery status callbacks pour les emails
  * Receives events: email.sent, email.delivered, email.bounced,

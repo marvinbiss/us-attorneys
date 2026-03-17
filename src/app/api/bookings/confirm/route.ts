@@ -9,8 +9,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
 import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
-
 const confirmBookingSchema = z.object({
   booking_id: z.string().uuid(),
   payment_intent_id: z.string().min(1),

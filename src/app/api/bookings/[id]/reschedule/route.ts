@@ -12,8 +12,6 @@ const rescheduleBookingSchema = z.object({
 })
 
 // POST /api/bookings/[id]/reschedule - Reschedule a booking to a new slot
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async ({ request, user, params }) => {
   const bookingId = params?.id
   if (!bookingId) {

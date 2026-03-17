@@ -226,8 +226,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: `${SITE_URL}/abogados/${especialidad}/${ciudad}`,
       languages: {
-        'en': `${SITE_URL}/practice-areas/${enSlug}/${ciudad}`,
+        'en': `${SITE_URL}/attorneys/${enSlug}/${ciudad}`,
         'es': `${SITE_URL}/abogados/${especialidad}/${ciudad}`,
+        'x-default': `${SITE_URL}/attorneys/${enSlug}/${ciudad}`,
       },
     },
   }

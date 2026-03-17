@@ -10,8 +10,6 @@ const refundSchema = z.object({
   reason: z.enum(['duplicate', 'fraudulent', 'requested_by_customer']).optional(),
 })
 
-export const dynamic = 'force-dynamic'
-
 // POST - Traiter un remboursement
 export async function POST(
   request: NextRequest,

@@ -13,8 +13,6 @@ const cancelBookingSchema = z.object({
 })
 
 // POST /api/bookings/[id]/cancel - Cancel a booking
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async ({ request, user, params }) => {
   const id = params?.id
   if (!id) {

@@ -5,6 +5,9 @@ import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { getBlogImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export function generateStaticParams() {
   return articleSlugs.map((slug) => ({ slug }))
@@ -51,9 +54,23 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
   const cmsPage = await getPageContent(`blog-${slug}`, 'blog')
 
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Blog', url: '/blog' },
+    { name: article.title, url: `/blog/${slug}` },
+  ])
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={breadcrumbSchema} />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Breadcrumb
+          items={[
+            { label: 'Blog', href: '/blog' },
+            { label: article.title },
+          ]}
+          className="mb-6"
+        />
         <h1 className="font-heading text-3xl font-bold text-gray-900">
           {article.title}
         </h1>

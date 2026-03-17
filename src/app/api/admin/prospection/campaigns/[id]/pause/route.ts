@@ -5,8 +5,6 @@ import { createApiHandler } from '@/lib/api/handler'
 import { isValidUuid } from '@/lib/sanitize'
 import { pauseCampaign } from '@/lib/prospection/message-queue'
 
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async (ctx) => {
   const id = ctx.params?.id
   if (!id || !isValidUuid(id)) {

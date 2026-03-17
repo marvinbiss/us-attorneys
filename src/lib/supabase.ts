@@ -249,7 +249,8 @@ export async function getLocationBySlug(slug: string) {
           `getLocationBySlug(${slug})`,
         )
         return data
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getLocationBySlug] DB query failed for slug="${slug}", falling back to static data`, err)
         // Fallback to usa.ts static data when DB table is empty/missing
         const fallbackCity = getCityBySlugImport(slug)
         if (fallbackCity) return { id: '', name: fallbackCity.name, slug: fallbackCity.slug, postal_code: fallbackCity.zipCode }
@@ -298,7 +299,8 @@ export async function getAttorneyByStableId(stableId: string) {
           QUERY_TIMEOUT_MS,
           `getAttorneyByStableId(${stableId})`,
         )
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getAttorneyByStableId] failed for stableId="${stableId}"`, err)
         return null
       }
     },
@@ -319,7 +321,8 @@ export async function getAttorneyById(id: string) {
           QUERY_TIMEOUT_MS,
           `getAttorneyById(${id})`,
         )
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getAttorneyById] failed for id="${id}"`, err)
         return null
       }
     },
@@ -340,7 +343,8 @@ export async function getAttorneyBySlug(slug: string) {
           QUERY_TIMEOUT_MS,
           `getAttorneyBySlug(${slug})`,
         )
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getAttorneyBySlug] failed for slug="${slug}"`, err)
         return null
       }
     },
@@ -749,8 +753,9 @@ export async function hasProvidersByServiceAndLocation(
           },
           `hasProvidersByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
-      } catch {
+      } catch (err) {
         // On any failure, conservatively return false (noindex)
+        dbLogger.error(`[hasProvidersByServiceAndLocation] failed for ${specialtySlug}/${locationSlug}`, err)
         return false
       }
     },
@@ -811,7 +816,8 @@ export async function getAttorneyCountByServiceAndLocation(
           },
           `getAttorneyCountByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getAttorneyCountByServiceAndLocation] failed for ${specialtySlug}/${locationSlug}`, err)
         return 0
       }
     },
@@ -948,7 +954,8 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
           QUERY_TIMEOUT_MS,
           `getAttorneysByService(${specialtySlug})`,
         )
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getAttorneysByService] failed for specialty="${specialtySlug}"`, err)
         return []
       }
     },
@@ -978,7 +985,8 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
           QUERY_TIMEOUT_MS,
           `getAttorneyCountByService(${specialtySlug})`,
         )
-      } catch {
+      } catch (err) {
+        dbLogger.error(`[getAttorneyCountByService] failed for specialty="${specialtySlug}"`, err)
         return 0
       }
     },

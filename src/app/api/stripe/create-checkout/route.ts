@@ -9,8 +9,6 @@ const checkoutSchema = z.object({
   planId: z.enum(['starter', 'pro', 'premium'] as const),
 })
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()

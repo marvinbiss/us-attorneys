@@ -14,8 +14,6 @@ const voteSchema = z.object({
   reviewId: z.string().uuid(),
 })
 
-export const dynamic = 'force-dynamic'
-
 /**
  * Build a voter fingerprint for deduplication.
  * Authenticated user -> user id; anonymous -> IP address.

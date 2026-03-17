@@ -8,8 +8,6 @@ import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
-
 function escapeHtml(str: string): string {
   return str
     .replace(/&/g, '&amp;')

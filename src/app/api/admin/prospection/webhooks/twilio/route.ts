@@ -12,8 +12,6 @@ const webhookSchema = z.object({
   ErrorMessage: z.string().optional(),
 }).passthrough()
 
-export const dynamic = 'force-dynamic'
-
 /**
  * Webhook Twilio - Status callbacks pour SMS et WhatsApp
  * Receives status updates: queued, sent, delivered, read, failed

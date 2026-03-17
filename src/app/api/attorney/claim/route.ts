@@ -12,8 +12,6 @@ import { logger } from '@/lib/logger'
 import { checkRateLimit } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
-
 const claimSchema = z.object({
   attorneyId: z.string().uuid('Invalid attorney ID'),
   siret: z.string().min(1, 'Bar number is required'),

@@ -62,13 +62,13 @@ export function Pagination({
       {currentPage > 1 ? (
         <Link
           href={getPageUrl(currentPage - 1)}
-          className="flex items-center gap-1 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+          className="flex items-center gap-1 px-3 py-2 min-h-[44px] text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
         >
           <ChevronLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Previous</span>
         </Link>
       ) : (
-        <span className="flex items-center gap-1 px-3 py-2 text-sm text-gray-300 cursor-not-allowed">
+        <span className="flex items-center gap-1 px-3 py-2 min-h-[44px] text-sm text-gray-300 cursor-not-allowed">
           <ChevronLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Previous</span>
         </span>
@@ -86,7 +86,7 @@ export function Pagination({
               key={page}
               href={getPageUrl(page)}
               className={clsx(
-                'min-w-[40px] h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
+                'min-w-[44px] h-11 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
                 page === currentPage
                   ? 'bg-blue-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -103,13 +103,13 @@ export function Pagination({
       {currentPage < totalPages ? (
         <Link
           href={getPageUrl(currentPage + 1)}
-          className="flex items-center gap-1 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+          className="flex items-center gap-1 px-3 py-2 min-h-[44px] text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
         >
           <span className="hidden sm:inline">Next</span>
           <ChevronRight className="w-4 h-4" />
         </Link>
       ) : (
-        <span className="flex items-center gap-1 px-3 py-2 text-sm text-gray-300 cursor-not-allowed">
+        <span className="flex items-center gap-1 px-3 py-2 min-h-[44px] text-sm text-gray-300 cursor-not-allowed">
           <span className="hidden sm:inline">Next</span>
           <ChevronRight className="w-4 h-4" />
         </span>

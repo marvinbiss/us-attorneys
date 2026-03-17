@@ -9,8 +9,6 @@ const previewSchema = z.object({
   subject: z.string().optional(),
 })
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requirePermission('prospection', 'read')

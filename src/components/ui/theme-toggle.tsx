@@ -10,7 +10,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       <button
         onClick={() => setTheme('light')}
         className={cn(
-          'p-2 rounded-md transition-colors',
+          'p-2.5 rounded-md transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center',
           theme === 'light' ? 'bg-white dark:bg-gray-700 shadow-sm' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
         )}
         title="Mode clair"
@@ -22,7 +22,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       <button
         onClick={() => setTheme('dark')}
         className={cn(
-          'p-2 rounded-md transition-colors',
+          'p-2.5 rounded-md transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center',
           theme === 'dark' ? 'bg-white dark:bg-gray-700 shadow-sm' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
         )}
         title="Mode sombre"
@@ -34,7 +34,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       <button
         onClick={() => setTheme('system')}
         className={cn(
-          'p-2 rounded-md transition-colors',
+          'p-2.5 rounded-md transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center',
           theme === 'system' ? 'bg-white dark:bg-gray-700 shadow-sm' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
         )}
         title="Automatique"

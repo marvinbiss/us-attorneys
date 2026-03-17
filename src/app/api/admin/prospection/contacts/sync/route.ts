@@ -8,8 +8,6 @@ const syncSchema = z.object({
   department: z.string().max(10).optional(),
 })
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requirePermission('prospection', 'write')

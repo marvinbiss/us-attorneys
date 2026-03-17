@@ -12,8 +12,6 @@ const resolveReportSchema = z.object({
   resolution: z.string().max(1000).optional(),
 })
 
-export const dynamic = 'force-dynamic'
-
 // POST - Resolve or reject a report
 export const POST = createApiHandler(async ({ request, params }) => {
   // Verify admin with reviews:write permission

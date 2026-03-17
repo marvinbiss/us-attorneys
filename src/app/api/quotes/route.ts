@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { logger } from '@/lib/logger'
+import { createApiHandler, jsonResponse, paginatedResponse } from '@/lib/api/handler'
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
@@ -18,20 +18,9 @@ const quoteSchema = z.object({
 })
 
 // GET - List quotes for authenticated user
-export async function GET(request: NextRequest) {
-  try {
+export const GET = createApiHandler(
+  async ({ user, request }) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { code: 1001, message: 'Authentication required' }
-        },
-        { status: 401 }
-      )
-    }
 
     const searchParams = request.nextUrl.searchParams
     const role = searchParams.get('role') || 'client'
@@ -56,7 +45,7 @@ export async function GET(request: NextRequest) {
       const { data: provider } = await supabase
         .from('attorneys')
         .select('id')
-        .eq('user_id', user.id)
+        .eq('user_id', user!.id)
         .single()
 
       if (!provider) {
@@ -71,7 +60,7 @@ export async function GET(request: NextRequest) {
 
       query = query.eq('attorney_id', provider.id)
     } else {
-      query = query.eq('client_id', user.id)
+      query = query.eq('client_id', user!.id)
     }
 
     if (status) {
@@ -86,93 +75,34 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json({
-      success: true,
-      data: quotes,
-      pagination: {
-        page,
-        limit,
-        total: count || 0,
-        pages: Math.ceil((count || 0) / limit),
-      },
+    return paginatedResponse(quotes || [], {
+      page,
+      limit,
+      total: count || 0,
     })
-  } catch (error) {
-    logger.error('Quotes fetch error', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: { code: 9999, message: 'Server error' }
-      },
-      { status: 500 }
-    )
-  }
-}
+  },
+  { requireAuth: true }
+)
 
-// POST - Create a new quote (provider only)
-export async function POST(request: NextRequest) {
-  try {
+// POST - Create a new quote (attorney only)
+export const POST = createApiHandler<z.infer<typeof quoteSchema>>(
+  async ({ body, attorney }) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { booking_id, amount, description, valid_until, items } = body
 
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { code: 1001, message: 'Authentication required' }
-        },
-        { status: 401 }
-      )
-    }
-
-    // Verify user is a provider
-    const { data: provider } = await supabase
-      .from('attorneys')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!provider) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { code: 1003, message: 'Seuls the attorneys peuvent creer consultations' }
-        },
-        { status: 403 }
-      )
-    }
-
-    const body = await request.json()
-    const validation = quoteSchema.safeParse(body)
-
-    if (!validation.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 2001,
-            message: 'Invalid data',
-            details: validation.error.issues,
-          }
-        },
-        { status: 400 }
-      )
-    }
-
-    const { booking_id, amount, description, valid_until, items } = validation.data
-
-    // Verify booking exists and belongs to this provider
+    // Verify booking exists and belongs to this attorney
     const { data: booking } = await supabase
       .from('bookings')
       .select('id, client_id, attorney_id')
       .eq('id', booking_id)
-      .eq('attorney_id', provider.id)
+      .eq('attorney_id', attorney!.attorney_id)
       .single()
 
     if (!booking) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Reservation non trouvee' }
+          error: { code: 2002, message: 'Booking not found' }
         },
         { status: 404 }
       )
@@ -183,7 +113,7 @@ export async function POST(request: NextRequest) {
       .from('quotes')
       .insert({
         booking_id,
-        attorney_id: provider.id,
+        attorney_id: attorney!.attorney_id,
         client_id: booking.client_id,
         amount,
         description,
@@ -196,18 +126,7 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json({
-      success: true,
-      data: quote,
-    }, { status: 201 })
-  } catch (error) {
-    logger.error('Quote creation error', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: { code: 9999, message: 'Server error' }
-      },
-      { status: 500 }
-    )
-  }
-}
+    return jsonResponse(quote, 201)
+  },
+  { requireAuth: true, requireAttorney: true, bodySchema: quoteSchema }
+)

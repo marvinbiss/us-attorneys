@@ -7,8 +7,6 @@ import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import { UUID_RE } from '@/lib/cms-utils'
 import { createApiHandler } from '@/lib/api/handler'
 
-export const dynamic = 'force-dynamic'
-
 // --- POST: Publish a page ---
 
 export const POST = createApiHandler(async ({ params }) => {

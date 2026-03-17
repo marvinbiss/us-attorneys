@@ -9,8 +9,6 @@ const generateSchema = z.object({
   conversation_id: z.string().uuid(),
 })
 
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async (ctx) => {
   const body = ctx.body
 

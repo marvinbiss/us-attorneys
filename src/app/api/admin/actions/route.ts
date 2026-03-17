@@ -8,8 +8,6 @@ const actionSchema = z.object({
   action: z.enum(['reset-stats', 'clear-cache']),
 })
 
-export const dynamic = 'force-dynamic'
-
 // POST - Execute an admin action
 export async function POST(request: NextRequest) {
   try {

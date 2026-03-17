@@ -17,7 +17,7 @@ export const GET = createApiHandler(async ({ request }) => {
   // Get daily stats
   let statsQuery = supabase
     .from('voice_stats_daily')
-    .select('*')
+    .select('date, total_calls, completed_calls, avg_duration_seconds, qualified_a, qualified_b, qualified_c, disqualified, leads_created, leads_dispatched, total_revenue, total_vapi_cost')
     .order('date', { ascending: false })
     .limit(30)
 
@@ -28,11 +28,11 @@ export const GET = createApiHandler(async ({ request }) => {
 
   // Get real-time totals from voice_calls
   const [totalResult, scoreAResult, scoreBResult, scoreCResult, disqualifiedResult] = await Promise.all([
-    supabase.from('voice_calls').select('*', { count: 'exact', head: true }),
-    supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'A'),
-    supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'B'),
-    supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'C'),
-    supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'disqualified'),
+    supabase.from('voice_calls').select('id', { count: 'exact', head: true }),
+    supabase.from('voice_calls').select('id', { count: 'exact', head: true }).eq('qualification_score', 'A'),
+    supabase.from('voice_calls').select('id', { count: 'exact', head: true }).eq('qualification_score', 'B'),
+    supabase.from('voice_calls').select('id', { count: 'exact', head: true }).eq('qualification_score', 'C'),
+    supabase.from('voice_calls').select('id', { count: 'exact', head: true }).eq('qualification_score', 'disqualified'),
   ])
 
   const totalCalls = totalResult.count || 0

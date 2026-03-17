@@ -16,8 +16,6 @@ import { createApiHandler } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
-
 export const POST = createApiHandler(async ({ user }) => {
   const supabase = await createClient()
 

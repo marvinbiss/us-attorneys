@@ -8,8 +8,6 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
-
 const archiveSchema = z.object({
   is_archived: z.boolean(),
 })

@@ -8,8 +8,6 @@ const reviewResponseSchema = z.object({
   response: z.string().min(10, 'Response must contain at least 10 characters').max(2000),
 })
 
-export const dynamic = 'force-dynamic'
-
 // POST - Respond to a review
 export const POST = createApiHandler(async ({ request, user, params }) => {
   const id = params?.id

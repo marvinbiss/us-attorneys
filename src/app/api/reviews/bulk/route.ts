@@ -1,9 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { logger } from '@/lib/logger'
-import { z } from 'zod'
+import { NextResponse } from 'next/server'
+import { createApiHandler, jsonResponse } from '@/lib/api/handler'
 import { createClient } from '@/lib/supabase/server'
-
-export const dynamic = 'force-dynamic'
+import { z } from 'zod'
 
 const bulkModerateSchema = z.object({
   review_ids: z.array(z.string().uuid()).min(1).max(50),
@@ -11,23 +9,15 @@ const bulkModerateSchema = z.object({
 })
 
 // PATCH /api/reviews/bulk - Bulk moderate reviews (Admin only)
-export async function PATCH(request: NextRequest) {
-  try {
+export const PATCH = createApiHandler<z.infer<typeof bulkModerateSchema>>(
+  async ({ user, body }) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Not authenticated' } },
-        { status: 401 }
-      )
-    }
 
     // Admin role check: only admins can bulk moderate reviews
     const { data: profile } = await supabase
       .from('profiles')
       .select('is_admin')
-      .eq('id', user.id)
+      .eq('id', user!.id)
       .single()
 
     if (!profile?.is_admin) {
@@ -37,23 +27,13 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
-    const parsed = bulkModerateSchema.safeParse(body)
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Invalid data' } },
-        { status: 400 }
-      )
-    }
-
-    const { review_ids, action } = parsed.data
+    const { review_ids, action } = body
 
     const updates = {
       moderation_status: action === 'approve' ? 'approved' : 'rejected',
       is_visible: action === 'approve',
       moderated_at: new Date().toISOString(),
-      moderated_by: user.id,
+      moderated_by: user!.id,
     }
 
     const { data, error } = await supabase
@@ -64,15 +44,9 @@ export async function PATCH(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json({
-      success: true,
+    return jsonResponse({
       moderated: data?.length || 0,
     })
-  } catch (error) {
-    logger.error('Bulk moderate reviews error', error)
-    return NextResponse.json(
-      { success: false, error: { message: 'Server error' } },
-      { status: 500 }
-    )
-  }
-}
+  },
+  { requireAuth: true, bodySchema: bulkModerateSchema }
+)
