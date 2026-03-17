@@ -4,6 +4,7 @@
  * POST: validation, HMAC token, duplicate check, fraud detection, 201 success
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mocks
@@ -18,8 +19,14 @@ vi.mock('next/server', () => ({
   NextResponse: { json: (body: unknown, init?: { status?: number }) => mockJsonFn(body, init) },
 }))
 
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
+}))
+
 vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  apiLogger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }))
 
 // Supabase state
@@ -62,7 +69,7 @@ const BOOKING_UUID = '550e8400-e29b-41d4-a716-446655440002'
 
 function makeGetRequest(params: Record<string, string> = {}) {
   const sp = new URLSearchParams(params)
-  return new Request(`http://localhost/api/reviews?${sp.toString()}`)
+  return new Request(`http://localhost/api/reviews?${sp.toString()}`) as unknown as NextRequest
 }
 
 function makePostRequest(body: Record<string, unknown>) {
@@ -70,13 +77,22 @@ function makePostRequest(body: Record<string, unknown>) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  })
+  }) as unknown as NextRequest
 }
+
+// Compute a valid HMAC token for tests
+import { createHmac } from 'crypto'
+const TEST_HMAC_SECRET = 'test-hmac-secret'
+const VALID_REVIEW_TOKEN = createHmac('sha256', TEST_HMAC_SECRET)
+  .update(BOOKING_UUID)
+  .digest('hex')
+  .slice(0, 32)
 
 const validReviewBody = {
   bookingId: BOOKING_UUID,
   rating: 5,
   comment: 'Excellent work, very professional and punctual.',
+  reviewToken: VALID_REVIEW_TOKEN,
 }
 
 // Env setup
@@ -87,7 +103,7 @@ beforeEach(() => {
   fromCallIndex = 0
   queryResults.length = 0
   process.env = { ...OLD_ENV }
-  delete process.env.REVIEW_HMAC_SECRET
+  process.env.REVIEW_HMAC_SECRET = TEST_HMAC_SECRET
   process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co'
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key'
 })
@@ -237,7 +253,7 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 400 when booking status is pending (not reviewable)', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'pending' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, status: 'pending', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest(validReviewBody)) as unknown as { body: Record<string, unknown>; status: number }
@@ -246,7 +262,7 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 409 when review already exists', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, status: 'confirmed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
     queryResults.push({ data: { id: 'existing-review' }, error: null }) // existing review
 
     const { POST } = await import('@/app/api/reviews/route')
@@ -256,11 +272,12 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 201 on successful review submission', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, status: 'confirmed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
     queryResults.push({ data: null, error: { code: 'PGRST116' } }) // no existing review
     queryResults.push({ data: { id: 'new-review-id', status: 'published' }, error: null }) // insert
     queryResults.push({ data: [{ rating: 5 }], error: null }) // update rating query
     queryResults.push({ data: null, error: null }) // profiles update
+    queryResults.push({ data: { specialty: 'criminal-defense', address_city: 'New York', slug: 'test-attorney', stable_id: null }, error: null }) // attorney data for revalidation
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest(validReviewBody)) as unknown as {
@@ -273,13 +290,14 @@ describe('POST /api/reviews', () => {
   })
 
   it('marks review as pending_review when fraud indicators detected', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'completed' }, error: null })
+    queryResults.push({ data: { id: BOOKING_UUID, attorney_id: ATTORNEY_UUID, status: 'completed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
     queryResults.push({ data: null, error: { code: 'PGRST116' } })
     queryResults.push({ data: { id: 'new-review-id', status: 'pending_review' }, error: null })
     queryResults.push({ data: [], error: null })
+    queryResults.push({ data: { specialty: 'criminal-defense', address_city: 'New York', slug: 'test-attorney', stable_id: null }, error: null }) // attorney data for revalidation
 
     // All-caps comment with link = fraud indicators
-    const fraudBody = { ...validReviewBody, comment: 'THIS IS AMAZING CHECK HTTP://SPAM.COM NOW!!!' }
+    const fraudBody = { ...validReviewBody, comment: 'THIS IS AMAZING CHECK HTTP://SPAM.COM NOW!!!', reviewToken: VALID_REVIEW_TOKEN }
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest(fraudBody)) as unknown as {

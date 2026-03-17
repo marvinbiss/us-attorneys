@@ -273,12 +273,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    // Comparison pages
-    const comparisonPages: MetadataRoute.Sitemap = comparisons.map(c => ({
-      url: `${SITE_URL}/compare/${c.slug}`,
-      lastModified: BUILD_DATE,
-    }))
-
     const servicesIndex: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/services`, lastModified: BUILD_DATE },
     ]
@@ -301,7 +295,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     return [
       ...homepage, ...staticPages, ...guidePages, ...questionPages,
-      ...comparisonPages, ...servicesIndex, ...servicePages,
+      ...servicesIndex, ...servicePages,
       ...emergencyPages, ...pricingPages,
     ]
   }

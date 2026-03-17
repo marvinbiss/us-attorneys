@@ -171,9 +171,9 @@ describe('Notifications V1 — Lead Event Processor', () => {
     expect(processorCode).toContain('sendEmail')
   })
 
-  it('dispatched event targets artisan only', () => {
-    // dispatched should notify artisan, not client
-    expect(processorCode).toContain("dispatched: { channels: ['email', 'in_app'], targetRoles: ['artisan'] }")
+  it('dispatched event targets attorney only', () => {
+    // dispatched should notify attorney, not client
+    expect(processorCode).toContain("dispatched: { channels: ['email', 'in_app'], targetRoles: ['attorney'] }")
   })
 
   it('viewed event is in-app only (no email)', () => {

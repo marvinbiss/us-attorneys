@@ -116,6 +116,25 @@ vi.mock('@/lib/sanitize', () => ({
   isValidUuid: () => mockIsValidUuid,
 }))
 
+// --- createApiHandler passthrough mock ---
+vi.mock('@/lib/api/handler', () => ({
+  createApiHandler: (handler: (ctx: Record<string, unknown>) => unknown) => {
+    return async (request: unknown, routeContext?: { params?: Record<string, string> }) => {
+      try {
+        return await handler({ request, params: routeContext?.params } as Record<string, unknown>)
+      } catch (err) {
+        const { logger } = await import('@/lib/logger')
+        const { NextResponse } = await import('next/server')
+        logger.error('API Error', err as Error)
+        return NextResponse.json(
+          { success: false, error: { message: 'Server error' } },
+          { status: 500 }
+        )
+      }
+    }
+  },
+}))
+
 // ============================================
 // Helpers
 // ============================================
@@ -144,9 +163,15 @@ function makeUnauthResult() {
 
 /** Builds a minimal NextRequest-like object for the GET route */
 function makeGetRequest(params?: Record<string, string>) {
-  const sp = new URLSearchParams(params)
+  const url = new URL('http://localhost:3000/api/admin/reports')
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.set(key, value)
+    }
+  }
   return {
-    nextUrl: { searchParams: sp },
+    nextUrl: { searchParams: url.searchParams },
+    url: url.toString(),
   }
 }
 
@@ -154,6 +179,7 @@ function makeGetRequest(params?: Record<string, string>) {
 function makePostRequest(body: unknown) {
   return {
     nextUrl: { searchParams: new URLSearchParams() },
+    url: 'http://localhost:3000/api/admin/reports/resolve',
     json: () => Promise.resolve(body),
   }
 }

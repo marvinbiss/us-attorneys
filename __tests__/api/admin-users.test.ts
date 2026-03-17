@@ -111,6 +111,25 @@ vi.mock('@/lib/admin-auth', () => ({
   logAdminAction: (...args: unknown[]) => mockLogAdminAction(...args),
 }))
 
+// --- createApiHandler passthrough mock ---
+vi.mock('@/lib/api/handler', () => ({
+  createApiHandler: (handler: (ctx: Record<string, unknown>) => unknown) => {
+    return async (request: unknown, routeContext?: { params?: Record<string, string> }) => {
+      try {
+        return await handler({ request, params: routeContext?.params } as Record<string, unknown>)
+      } catch (err) {
+        const { logger } = await import('@/lib/logger')
+        const { NextResponse } = await import('next/server')
+        logger.error('API Error', err as Error)
+        return NextResponse.json(
+          { success: false, error: { message: 'Server error' } },
+          { status: 500 }
+        )
+      }
+    }
+  },
+}))
+
 // ============================================
 // Helpers
 // ============================================
@@ -128,17 +147,18 @@ function makeAuthUser(overrides: Record<string, unknown> = {}) {
   }
 }
 
-function makeRequest(params: Record<string, string> = {}): { nextUrl: { searchParams: URLSearchParams } } {
-  const searchParams = new URLSearchParams()
+function makeRequest(params: Record<string, string> = {}): { nextUrl: { searchParams: URLSearchParams }; url: string } {
+  const url = new URL('http://localhost:3000/api/admin/users')
   for (const [key, value] of Object.entries(params)) {
-    searchParams.set(key, value)
+    url.searchParams.set(key, value)
   }
-  return { nextUrl: { searchParams } }
+  return { nextUrl: { searchParams: url.searchParams }, url: url.toString() }
 }
 
-function makePostRequest(body: Record<string, unknown>): { nextUrl: { searchParams: URLSearchParams }; json: () => Promise<Record<string, unknown>> } {
+function makePostRequest(body: Record<string, unknown>): { nextUrl: { searchParams: URLSearchParams }; url: string; json: () => Promise<Record<string, unknown>> } {
   return {
     nextUrl: { searchParams: new URLSearchParams() },
+    url: 'http://localhost:3000/api/admin/users',
     json: () => Promise.resolve(body),
   }
 }
@@ -255,7 +275,7 @@ describe('GET /api/admin/users', () => {
 
   it('filters by attorneys', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest({ filter: 'artisans' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest({ filter: 'attorneys' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     // u2 has user_type attorney from profile
     expect(result.body.users).toHaveLength(1)

@@ -4,6 +4,7 @@
  *      down (database error), correct structure, Cache-Control header
  */
 import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mocks
@@ -30,6 +31,7 @@ vi.mock('next/server', () => ({
 
 vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  apiLogger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }))
 
 let mockDbResult: { data: unknown; error: unknown } = { data: null, error: null }
@@ -88,16 +90,16 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
       body: { status: string; checks: Record<string, { status: string }> }
       status: number
     }
 
     expect(result.status).toBe(200)
-    expect(result.body.status).toBe('ok')
-    expect(result.body.checks.database.status).toBe('ok')
-    expect(result.body.checks.stripe.status).toBe('ok')
-    expect(result.body.checks.environment.status).toBe('ok')
+    expect(result.body.status).toBe('healthy')
+    expect(result.body.checks.database.status).toBe('healthy')
+    expect(result.body.checks.stripe.status).toBe('healthy')
+    expect(result.body.checks.environment.status).toBe('healthy')
   })
 
   it('reports stripe as ok when env vars are validated at startup', async () => {
@@ -106,27 +108,28 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
       body: { status: string; checks: Record<string, { status: string }> }
       status: number
     }
 
     expect(result.status).toBe(200)
-    expect(result.body.checks.stripe.status).toBe('ok')
+    expect(result.body.checks.stripe.status).toBe('healthy')
   })
 
   it('returns down when database check fails', async () => {
     mockDbResult = { data: null, error: { message: 'Connection refused' } }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
       body: { status: string; checks: Record<string, { status: string; error?: string }> }
       status: number
     }
 
-    expect(result.status).toBe(503)
-    expect(result.body.status).toBe('down')
-    expect(result.body.checks.database.status).toBe('down')
+    // DB is unhealthy but env + stripe are healthy -> overall = degraded -> 200
+    expect(result.status).toBe(200)
+    expect(result.body.status).toBe('degraded')
+    expect(result.body.checks.database.status).toBe('unhealthy')
     expect(result.body.checks.database.error).toBe('Connection refused')
   })
 
@@ -134,7 +137,7 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
       body: Record<string, unknown>
       status: number
     }
@@ -152,7 +155,7 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    await GET()
+    await GET(new Request('http://localhost/api/health') as unknown as NextRequest)
 
     // Verify the headers passed to NextResponse.json
     expect(capturedHeaders['Cache-Control']).toBe('no-store, max-age=0')

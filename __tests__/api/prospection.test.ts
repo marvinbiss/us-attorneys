@@ -895,11 +895,13 @@ describe('Prospection API -- Files existence & structure', () => {
     })
   }
 
-  it('all admin routes use requirePermission or verifyTwilio/Resend', () => {
+  it('all admin routes use requirePermission or requireAdmin or verifyTwilio/Resend', () => {
     const adminRoutes = requiredRoutes.filter(r => r.includes('/admin/prospection/') && !r.includes('webhooks'))
     for (const route of adminRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
-      expect(content).toContain('requirePermission')
+      const hasRequirePermission = content.includes('requirePermission')
+      const hasRequireAdmin = content.includes('requireAdmin')
+      expect(hasRequirePermission || hasRequireAdmin).toBe(true)
     }
   })
 

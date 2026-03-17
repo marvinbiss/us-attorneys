@@ -11,7 +11,7 @@
  * - Uses crypto.timingSafeEqual (not naive ===)
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import fs from 'fs'
 import path from 'path'
 import { verifyCronSecret } from './cron-auth'

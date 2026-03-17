@@ -4,6 +4,7 @@
  * POST: validation, atomic RPC success/failure, slot conflicts
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mocks
@@ -84,7 +85,7 @@ const ATTORNEY_UUID = '550e8400-e29b-41d4-a716-446655440001'
 
 function makeGetRequest(params: Record<string, string> = {}) {
   const searchParams = new URLSearchParams(params)
-  return new Request(`http://localhost/api/bookings?${searchParams.toString()}`)
+  return new Request(`http://localhost/api/bookings?${searchParams.toString()}`) as unknown as NextRequest
 }
 
 function makePostRequest(body: Record<string, unknown>) {
@@ -92,7 +93,7 @@ function makePostRequest(body: Record<string, unknown>) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  })
+  }) as unknown as NextRequest
 }
 
 const validBookingBody = {

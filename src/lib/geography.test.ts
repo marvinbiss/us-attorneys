@@ -169,8 +169,8 @@ describe('backward compatibility aliases', () => {
 })
 
 describe('US_STATES', () => {
-  it('should contain 51 entries (50 states + DC)', () => {
-    expect(Object.keys(US_STATES).length).toBe(51)
+  it('should contain 57 entries (50 states + DC + 6 territories)', () => {
+    expect(Object.keys(US_STATES).length).toBe(57)
   })
 
   it('should map abbreviations to full names', () => {
@@ -181,12 +181,12 @@ describe('US_STATES', () => {
 })
 
 describe('STATE_TO_REGION', () => {
-  it('should map all 51 entries to regions', () => {
-    expect(Object.keys(STATE_TO_REGION).length).toBe(51)
+  it('should map all 57 entries to regions', () => {
+    expect(Object.keys(STATE_TO_REGION).length).toBe(57)
   })
 
   it('should only contain valid region names', () => {
-    const validRegions = new Set(['Northeast', 'Midwest', 'South', 'West'])
+    const validRegions = new Set(['Northeast', 'Midwest', 'South', 'West', 'Territory'])
     Object.values(STATE_TO_REGION).forEach(region => {
       expect(validRegions.has(region)).toBe(true)
     })
@@ -194,8 +194,8 @@ describe('STATE_TO_REGION', () => {
 })
 
 describe('REGIONS', () => {
-  it('should contain 4 US Census regions', () => {
-    expect(REGIONS.length).toBe(4)
+  it('should contain 5 region groups (4 Census regions + Territory)', () => {
+    expect(REGIONS.length).toBe(5)
   })
 
   it('should have slugified names', () => {

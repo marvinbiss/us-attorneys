@@ -4,6 +4,7 @@
  * GET: unauthenticated, with requestId, without requestId (all requests)
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mocks
@@ -95,13 +96,13 @@ function makePostRequest(body: Record<string, unknown>) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  })
+  }) as unknown as NextRequest
 }
 
 function makeGetRequest(params: Record<string, string> = {}) {
   const searchParams = new URLSearchParams(params)
   const qs = searchParams.toString()
-  return new Request(`http://localhost/api/gdpr/export${qs ? '?' + qs : ''}`)
+  return new Request(`http://localhost/api/gdpr/export${qs ? '?' + qs : ''}`) as unknown as NextRequest
 }
 
 beforeEach(() => {
@@ -125,7 +126,7 @@ describe('POST /api/gdpr/export', () => {
     const result = await POST(makePostRequest({ format: 'json' })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(401)
-    expect(result.body.error).toEqual({ message: 'Authentication required' })
+    expect(result.body.error).toMatchObject({ message: 'Authentication required' })
   })
 
   it('returns 400 for invalid format', async () => {
@@ -191,7 +192,7 @@ describe('GET /api/gdpr/export', () => {
     const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(401)
-    expect(result.body.error).toEqual({ message: 'Authentication required' })
+    expect(result.body.error).toMatchObject({ message: 'Authentication required' })
   })
 
   it('returns specific request when requestId provided', async () => {

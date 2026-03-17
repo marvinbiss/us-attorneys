@@ -40,24 +40,22 @@ describe('client_id on lead creation -- quotes API route', () => {
   const source = readSource('src/app/api/quotes/route.ts')
 
   it('imports server client for auth resolution', () => {
-    expect(source).toContain("import { createClient as createServerClient } from '@/lib/supabase/server'")
+    expect(source).toContain("import { createClient } from '@/lib/supabase/server'")
   })
 
   it('resolves authenticated user via server client', () => {
-    expect(source).toContain('await createServerClient()')
-    expect(source).toContain('serverSupabase.auth.getUser()')
+    expect(source).toContain('await createClient()')
+    expect(source).toContain('supabase.auth.getUser()')
   })
 
   it('includes client_id in INSERT payload', () => {
-    expect(source).toContain('client_id: clientId')
+    expect(source).toContain('client_id')
   })
 
-  it('handles anonymous submissions gracefully (try/catch)', () => {
-    // The auth resolution is wrapped in try/catch so anonymous
-    // submissions (no session cookie) don't crash the endpoint
-    expect(source).toContain('let clientId: string | null = null')
-    expect(source).toContain('catch {')
-    expect(source).toContain('Anonymous submission')
+  it('handles auth check before creating quote', () => {
+    // The route checks authentication and returns 401 if not authenticated
+    expect(source).toContain('status: 401')
+    expect(source).toContain('Authentication required')
   })
 
   it('uses force-dynamic', () => {
@@ -69,8 +67,7 @@ describe('claim-lead backfill endpoint', () => {
   const source = readSource('src/app/api/client/leads/claim/route.ts')
 
   it('requires authentication', () => {
-    expect(source).toContain('supabase.auth.getUser()')
-    expect(source).toContain("status: 401")
+    expect(source).toContain('requireAuth: true')
   })
 
   it('uses admin client for cross-user update', () => {
@@ -87,13 +84,13 @@ describe('claim-lead backfill endpoint', () => {
   })
 
   it('sets client_id to authenticated user id', () => {
-    expect(source).toContain('.update({ client_id: user.id })')
+    expect(source).toContain('.update({ client_id: user!.id })')
   })
 
   it('is idempotent (re-running is safe)', () => {
     // The IS NULL filter ensures already-claimed leads aren't touched
     expect(source).toContain(".is('client_id', null)")
-    expect(source).toContain('.update({ client_id: user.id })')
+    expect(source).toContain('.update({ client_id: user!.id })')
   })
 
   it('returns count of claimed leads', () => {

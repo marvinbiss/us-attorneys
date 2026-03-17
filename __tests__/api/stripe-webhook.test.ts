@@ -5,6 +5,7 @@
  *       unknown events, handler errors
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mocks
@@ -171,7 +172,7 @@ function makeWebhookRequest(body: string = '{"test":"body"}', sig: string | null
     method: 'POST',
     headers,
     body,
-  })
+  }) as unknown as NextRequest
 }
 
 function makeStripeEvent(type: string, dataObject: Record<string, unknown>, id: string = 'evt_test_123') {
@@ -184,7 +185,7 @@ function makeStripeEvent(type: string, dataObject: Record<string, unknown>, id: 
 
 type ResponseLike = { body: Record<string, unknown>; status: number }
 
-async function callPOST(request: Request): Promise<ResponseLike> {
+async function callPOST(request: NextRequest): Promise<ResponseLike> {
   const { POST } = await import('@/app/api/stripe/webhook/route')
   return POST(request) as unknown as ResponseLike
 }

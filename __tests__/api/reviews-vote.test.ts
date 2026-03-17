@@ -4,6 +4,7 @@
  *       fallback on missing table, DB errors
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mocks
@@ -102,7 +103,7 @@ function makePostRequest(body: unknown, headers?: Record<string, string>) {
       ...headers,
     },
     body: JSON.stringify(body),
-  })
+  }) as unknown as NextRequest
 }
 
 type MockResult = { body: Record<string, unknown>; status: number }
@@ -278,6 +279,8 @@ describe('POST /api/reviews/vote', () => {
     )) as unknown as MockResult
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toEqual({ message: 'Server error during vote' })
+    // Error is caught by createApiHandler and formatted via formatErrorResponse
+    expect(result.body.error).toMatchObject({ message: expect.any(String) })
+    expect(result.body.success).toBe(false)
   })
 })

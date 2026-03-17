@@ -42,8 +42,8 @@ const mockFrom = vi.fn(() => ({ select: mockSelect }))
 // For count queries
 const mockCountEqActive = vi.fn()
 const mockCountEqZip = vi.fn(() => ({ eq: mockCountEqActive }))
-const mockCountIn = vi.fn(() => ({ eq: mockCountEqZip }))
-const mockCountSelect = vi.fn(() => ({ in: mockCountIn }))
+void mockCountEqZip // used indirectly via mockCountEqActive
+// mockCountSelect removed (unused)
 
 vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn(() => ({ from: mockFrom })),
@@ -141,7 +141,8 @@ describe('getAttorneyCountByServiceAndLocation — ZIP slug', () => {
     mockCountEqActive.mockResolvedValueOnce(countResult)
 
     // Re-wire mockFrom for this test to use count chain
-    mockFrom.mockImplementationOnce(() => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(mockFrom as any).mockImplementationOnce(() => ({
       select: () => ({
         in: () => ({
           eq: () => ({
@@ -168,7 +169,8 @@ describe('getAttorneyCountByServiceAndLocation — ZIP slug', () => {
   })
 
   it('returns 0 on error (fail-safe)', async () => {
-    mockFrom.mockImplementationOnce(() => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(mockFrom as any).mockImplementationOnce(() => ({
       select: () => ({
         in: () => ({
           eq: () => ({

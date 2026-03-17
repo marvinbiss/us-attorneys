@@ -140,16 +140,36 @@ vi.mock('@/lib/sanitize', () => ({
   sanitizeSearchQuery: vi.fn((input: string) => input.trim()),
 }))
 
+// --- createApiHandler passthrough mock ---
+vi.mock('@/lib/api/handler', () => ({
+  createApiHandler: (handler: (ctx: Record<string, unknown>) => unknown) => {
+    return async (request: unknown, routeContext?: { params?: Record<string, string> }) => {
+      try {
+        return await handler({ request, params: routeContext?.params } as Record<string, unknown>)
+      } catch (err) {
+        const { logger } = await import('@/lib/logger')
+        const { NextResponse } = await import('next/server')
+        logger.error('Admin providers list error', err as Error)
+        return NextResponse.json(
+          { success: false, error: { message: 'Server error' } },
+          { status: 500 }
+        )
+      }
+    }
+  },
+}))
+
+
 // ============================================
 // Helper: create a mock NextRequest with URL
 // ============================================
 
-function createMockRequest(params: Record<string, string> = {}): { nextUrl: URL } {
+function createMockRequest(params: Record<string, string> = {}): { nextUrl: URL; url: string } {
   const url = new URL('http://localhost:3000/api/admin/providers')
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.set(key, value)
   }
-  return { nextUrl: url }
+  return { nextUrl: url, url: url.toString() }
 }
 
 // ============================================

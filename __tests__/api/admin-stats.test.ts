@@ -4,6 +4,7 @@
  *         auth checks, response format, and Supabase error logging
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // ============================================
 // Mock setup — must come before route imports
@@ -159,7 +160,7 @@ describe('GET /api/admin/stats', () => {
     }
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET()
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest)
 
     expect(result).toEqual(
       expect.objectContaining({ status: 401 })
@@ -168,7 +169,7 @@ describe('GET /api/admin/stats', () => {
 
   it('returns success: true with all stats on success', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: Record<string, unknown> }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: Record<string, unknown> }
 
     expect(result.body).toHaveProperty('success', true)
     expect(result.body).toHaveProperty('stats')
@@ -179,7 +180,7 @@ describe('GET /api/admin/stats', () => {
 
   it('computes correct stat values from DB', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: Record<string, unknown> } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { stats: Record<string, unknown> } }
     const stats = result.body.stats
 
     expect(stats.totalUsers).toBe(150)
@@ -193,7 +194,7 @@ describe('GET /api/admin/stats', () => {
 
   it('computes average rating from reviews', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { averageRating: number } } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { stats: { averageRating: number } } }
 
     // (4 + 5 + 3) / 3 = 4.0
     expect(result.body.stats.averageRating).toBe(4)
@@ -201,7 +202,7 @@ describe('GET /api/admin/stats', () => {
 
   it('returns zero totalRevenue (no amount column in bookings)', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { totalRevenue: number } } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { stats: { totalRevenue: number } } }
 
     // total_amount does not exist in bookings table — revenue is always 0
     expect(result.body.stats.totalRevenue).toBe(0)
@@ -209,7 +210,7 @@ describe('GET /api/admin/stats', () => {
 
   it('computes trend percentages', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { trends: Record<string, number> } } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { stats: { trends: Record<string, number> } } }
     const trends = result.body.stats.trends
 
     // users: (20 - 15) / 15 = 33%
@@ -220,7 +221,7 @@ describe('GET /api/admin/stats', () => {
 
   it('builds activity feed from bookings and reviews', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { recentActivity: Array<{ id: string; type: string }> } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { recentActivity: Array<{ id: string; type: string }> } }
     const activity = result.body.recentActivity
 
     expect(activity.length).toBe(2)
@@ -233,7 +234,7 @@ describe('GET /api/admin/stats', () => {
 
   it('returns pending reports from user_reports', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { pendingReports: Array<{ id: string }> } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { pendingReports: Array<{ id: string }> } }
 
     expect(result.body.pendingReports.length).toBe(1)
     expect(result.body.pendingReports[0].id).toBe('rpt1')
@@ -241,7 +242,7 @@ describe('GET /api/admin/stats', () => {
 
   it('generates 30-day chart data', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { chartData: Array<{ date: string }> } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { chartData: Array<{ date: string }> } }
 
     expect(result.body.chartData).toHaveLength(30)
     // Each entry has date, users, bookings, reviews
@@ -254,7 +255,7 @@ describe('GET /api/admin/stats', () => {
 
   it('sets no-cache headers', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    await GET()
+    await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest)
 
     expect(capturedHeaders['Cache-Control']).toContain('no-store')
     expect(capturedHeaders['Pragma']).toBe('no-cache')
@@ -267,7 +268,7 @@ describe('GET /api/admin/stats', () => {
     queryResults[0] = { data: null, error: { code: 'PGRST301', message: 'permission denied' }, count: null }
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { success: boolean; stats: { totalUsers: number } } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { success: boolean; stats: { totalUsers: number } } }
 
     // Should still return success with fallback value
     expect(result.body.success).toBe(true)
@@ -284,7 +285,7 @@ describe('GET /api/admin/stats', () => {
     queryResults[4] = { data: [], error: null } // empty reviews
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { averageRating: number } } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { stats: { averageRating: number } } }
 
     expect(result.body.stats.averageRating).toBe(0)
   })
@@ -295,7 +296,7 @@ describe('GET /api/admin/stats', () => {
     queryResults[10] = { count: 0, data: null, error: null }  // bookingsLastMonth = 0
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { trends: Record<string, number> } } }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: { stats: { trends: Record<string, number> } } }
 
     // When previous is 0 and current > 0, trend = 100
     expect(result.body.stats.trends.users).toBe(100)
@@ -323,7 +324,7 @@ describe('GET /api/admin/stats', () => {
     }))
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: Record<string, unknown>; status: number }
+    const result = await GET(new Request('http://localhost/api/admin/stats') as unknown as NextRequest) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body).toHaveProperty('success', false)
