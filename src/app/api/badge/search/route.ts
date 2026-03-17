@@ -8,12 +8,18 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ results: [] })
   }
 
+  // Sanitize: only allow alphanumeric, spaces, hyphens, apostrophes
+  const safeQ = q.replace(/[^a-zA-Z0-9\s'-]/g, '')
+  if (!safeQ || safeQ.length < 2) {
+    return NextResponse.json({ results: [] })
+  }
+
   const supabase = createAdminClient()
 
   const { data, error } = await supabase
     .from('attorneys')
     .select('name, slug, stable_id, specialty, address_city, is_verified, rating_average, review_count')
-    .or(`name.ilike.%${q}%,slug.ilike.%${q}%`)
+    .or(`name.ilike.%${safeQ}%,slug.ilike.%${safeQ}%`)
     .eq('is_active', true)
     .order('is_verified', { ascending: false })
     .order('review_count', { ascending: false, nullsFirst: false })

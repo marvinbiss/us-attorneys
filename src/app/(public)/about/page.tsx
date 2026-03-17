@@ -178,6 +178,7 @@ export default async function AProposPage() {
             </h2>
             {(() => {
               const editorial = teamMembers[0]
+              if (!editorial) return null
               return (
                 <div className="bg-gray-50 rounded-xl shadow-sm p-8 border border-gray-100">
                   <div className="flex items-start gap-6">
@@ -286,6 +287,7 @@ export default async function AProposPage() {
             {/* Technology */}
             <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
               <div className="relative h-48 w-full">
+                {pageImages.about?.[0] && (
                 <Image
                   src={pageImages.about[0].src}
                   alt={pageImages.about[0].alt}
@@ -295,6 +297,7 @@ export default async function AProposPage() {
                   placeholder="blur"
                   blurDataURL={BLUR_PLACEHOLDER}
                 />
+                )}
               </div>
               <div className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Our technology</h2>
@@ -336,6 +339,7 @@ export default async function AProposPage() {
             {/* Business model */}
             <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl overflow-hidden text-white">
               <div className="relative h-48 w-full">
+                {pageImages.about?.[1] && (
                 <Image
                   src={pageImages.about[1].src}
                   alt={pageImages.about[1].alt}
@@ -345,6 +349,7 @@ export default async function AProposPage() {
                   placeholder="blur"
                   blurDataURL={BLUR_PLACEHOLDER}
                 />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-b from-blue-600/60 to-blue-700/90" />
               </div>
               <div className="p-8">
@@ -539,6 +544,7 @@ export default async function AProposPage() {
           {/* Editorial team */}
           {(() => {
             const editorial = teamMembers[0]
+            if (!editorial) return null
             return (
               <div className="bg-gray-50 rounded-xl shadow-sm p-8 mb-10 max-w-4xl mx-auto border border-gray-100">
                 <div className="flex items-start gap-6">

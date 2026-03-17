@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SITE_URL } from '@/lib/seo/config'
+import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { tradeContent, getPracticeAreaSlugs } from '@/lib/data/trade-content'
 import { cities, getCityBySlug } from '@/lib/data/usa'
 
@@ -42,7 +43,10 @@ export async function generateMetadata({
   return {
     title,
     robots: { index: false },
-    alternates: { canonical: `${SITE_URL}/reviews/${service}/${villeSlug}` },
+    alternates: {
+      canonical: `${SITE_URL}/reviews/${service}/${villeSlug}`,
+      languages: getAlternateLanguages(`/reviews/${service}/${villeSlug}`),
+    },
   }
 }
 

@@ -249,7 +249,7 @@ export default async function HowItWorksPage() {
                   {/* Image/Icon */}
                   <div className="flex-1 w-full">
                     <div className={`relative bg-gradient-to-br ${step.gradient} rounded-2xl p-12 text-white text-center overflow-hidden`}>
-                      {pageImages.howItWorks[index] && (
+                      {pageImages.howItWorks?.[index] && (
                         <>
                           <Image
                             src={pageImages.howItWorks[index].src}
