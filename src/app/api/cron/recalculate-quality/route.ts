@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/cron-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,11 +55,8 @@ export async function GET(request: Request) {
   try {
     const supabase = createAdminClient()
 
-    // Verify cron secret
-    const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    // Verify cron secret (timing-safe comparison)
+    if (!verifyCronSecret(request.headers.get('authorization'))) {
       logger.warn('[Cron] Unauthorized access attempt to recalculate-quality')
       return NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 401 })
     }

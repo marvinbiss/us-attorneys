@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
+import { verifyCronSecret } from '@/lib/cron-auth'
 
 /**
  * Daily cron: Verify all sitemaps return HTTP 200 with valid XML.
  * Alerts via structured logging (visible in Vercel logs).
  */
 export async function GET(request: Request) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(request.headers.get('authorization'))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

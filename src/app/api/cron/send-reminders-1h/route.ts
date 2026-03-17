@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { getNotificationService, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/cron-auth'
 
 // GET /api/cron/send-reminders-1h - Send 1h reminder SMS
 export const dynamic = 'force-dynamic'
@@ -19,11 +20,8 @@ export async function GET(request: Request) {
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
-    // Verify cron secret - REQUIRED in production
-    const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    // Verify cron secret (timing-safe comparison)
+    if (!verifyCronSecret(request.headers.get('authorization'))) {
       logger.warn('[Cron 1h] Unauthorized access attempt')
       return NextResponse.json(
         { error: 'Unauthorized' },

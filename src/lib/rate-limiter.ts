@@ -70,37 +70,64 @@ class UpstashRateLimiter {
     return data.result
   }
 
+  /**
+   * Lua script for atomic sliding-window rate limiting.
+   * Executes ZADD + ZREMRANGEBYSCORE + ZCARD + PEXPIRE in a single
+   * Redis EVAL call, eliminating the race condition where concurrent
+   * requests could all pass the count check before any cleanup runs.
+   *
+   * KEYS[1] = sorted-set key
+   * ARGV[1] = current timestamp (ms)
+   * ARGV[2] = window start (now - windowMs)
+   * ARGV[3] = window TTL (ms)
+   * ARGV[4] = max allowed requests
+   *
+   * Returns {count, allowed} — count AFTER cleanup, allowed = 1 or 0.
+   * If over limit, the just-added member is removed atomically.
+   */
+  private static readonly RATE_LIMIT_LUA = `
+local key = KEYS[1]
+local now = tonumber(ARGV[1])
+local window_start = tonumber(ARGV[2])
+local window_ms = tonumber(ARGV[3])
+local max_requests = tonumber(ARGV[4])
+
+redis.call('ZREMRANGEBYSCORE', key, 0, window_start)
+redis.call('ZADD', key, now, tostring(now) .. ':' .. tostring(math.random(1000000)))
+local count = redis.call('ZCARD', key)
+redis.call('PEXPIRE', key, window_ms)
+
+if count > max_requests then
+  redis.call('ZPOPMAX', key)
+  count = count - 1
+  return {count, 0}
+end
+
+return {count, 1}
+`
+
   async checkRateLimit(key: string, config: InternalConfig): Promise<RateLimitResult> {
     const now = Date.now()
     const windowKey = `ratelimit:${key}`
     const windowMs = config.window
 
     try {
-      // Use sliding window algorithm with Redis
-      // MULTI/EXEC equivalent using pipeline
-      const pipeline = [
-        ['ZADD', windowKey, String(now), String(now)],
-        ['ZREMRANGEBYSCORE', windowKey, '0', String(now - windowMs)],
-        ['ZCARD', windowKey],
-        ['PEXPIRE', windowKey, String(windowMs)],
-      ]
+      // Atomic sliding window via Lua script — no race condition
+      const result = await this.redisCommand([
+        'EVAL',
+        UpstashRateLimiter.RATE_LIMIT_LUA,
+        '1',              // number of KEYS
+        windowKey,         // KEYS[1]
+        String(now),       // ARGV[1] — current timestamp
+        String(now - windowMs), // ARGV[2] — window start
+        String(windowMs),  // ARGV[3] — TTL
+        String(config.max) // ARGV[4] — max requests
+      ]) as [number, number]
 
-      // Execute commands
-      for (const cmd of pipeline.slice(0, 2)) {
-        await this.redisCommand(cmd)
-      }
-
-      const count = await this.redisCommand(['ZCARD', windowKey]) as number
-      await this.redisCommand(['PEXPIRE', windowKey, String(windowMs)])
-
-      const allowed = count <= config.max
+      const count = result[0]
+      const allowed = result[1] === 1
       const remaining = Math.max(0, config.max - count)
       const resetTime = now + windowMs
-
-      if (!allowed) {
-        // Remove the request we just added since it's over limit
-        await this.redisCommand(['ZREM', windowKey, String(now)])
-      }
 
       return { allowed, remaining, resetTime }
     } catch (error) {

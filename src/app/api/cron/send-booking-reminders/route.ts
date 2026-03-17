@@ -8,16 +8,14 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/cron-auth'
 
 export const dynamic = 'force-dynamic'
 
 // POST /api/cron/send-booking-reminders
 export async function POST(request: Request) {
-  // Verify cron secret - REQUIRED in production
-  const authHeader = request.headers.get('authorization')
-  const cronSecret = process.env.CRON_SECRET
-
-  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+  // Verify cron secret (timing-safe comparison)
+  if (!verifyCronSecret(request.headers.get('authorization'))) {
     logger.warn('[Cron Booking Reminder] Unauthorized access attempt')
     return NextResponse.json(
       { error: 'Unauthorized' },

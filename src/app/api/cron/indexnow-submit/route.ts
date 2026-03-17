@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services } from '@/lib/data/usa'
+import { verifyCronSecret } from '@/lib/cron-auth'
 
 const TOP_CITIES = ['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 'philadelphia', 'san-antonio', 'san-diego', 'dallas', 'austin']
 
@@ -9,8 +10,7 @@ const TOP_CITIES = ['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 
  * Runs daily to ensure Bing always has fresh data.
  */
 export async function GET(request: Request) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(request.headers.get('authorization'))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

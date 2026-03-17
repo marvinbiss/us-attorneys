@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
+import { verifyCronSecret } from '@/lib/cron-auth'
 
 const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || ''
 
@@ -8,9 +9,7 @@ const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || ''
  * Called by the sitemap health cron or manually after deploys.
  */
 export async function POST(request: Request) {
-  // Verify this is an internal call (simple auth check)
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(request.headers.get('authorization'))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
