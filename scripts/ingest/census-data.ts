@@ -7,7 +7,7 @@
  *   - B01003_001E: Total population
  *   - B19013_001E: Median household income
  *   - B23025_005E / B23025_003E: Unemployment rate
- *   - B16001_002E: Spanish speakers (proxy for Hispanic population)
+ *   - B03001_003E: Hispanic or Latino population
  *   - B01002_001E: Median age
  *
  * Stores in locations_us.census_data (JSONB)
@@ -119,7 +119,7 @@ const VARIABLES = [
   'B19013_001E', // Median household income
   'B23025_003E', // Civilian labor force
   'B23025_005E', // Unemployed
-  'B16001_002E', // Spanish speakers (5+ years)
+  'B03001_003E', // Hispanic or Latino population (B16001_002E deprecated in ACS 2022)
   'B01002_001E', // Median age
 ].join(',')
 
@@ -146,7 +146,7 @@ async function fetchStatePlaces(stateFips: string, year: number = 2022): Promise
   const incomeIdx = headers.indexOf('B19013_001E')
   const laborIdx = headers.indexOf('B23025_003E')
   const unemplIdx = headers.indexOf('B23025_005E')
-  const spanishIdx = headers.indexOf('B16001_002E')
+  const spanishIdx = headers.indexOf('B03001_003E')
   const ageIdx = headers.indexOf('B01002_001E')
 
   const stateAbbr = FIPS_TO_STATE[stateFips] || 'XX'
@@ -280,20 +280,56 @@ async function main() {
   const stateIdMap = new Map(states.map(s => [s.abbreviation, s.id]))
   console.log(`Loaded ${stateIdMap.size} states`)
 
-  // 2. Load cities from DB (to match Census places)
-  let cityQuery = supabase
-    .from('locations_us')
-    .select('id, name, slug, state_id, population')
-    .order('population', { ascending: false, nullsFirst: false })
+  // 2. Load cities from DB (to match Census places) -- paginated to avoid 1000-row limit
+  const PAGE_SIZE = 1000
+  const cities: { id: string; name: string; slug: string; state_id: string; population: number | null }[] = []
 
-  if (LIMIT > 0) {
-    cityQuery = cityQuery.limit(LIMIT)
+  if (LIMIT > 0 && LIMIT <= PAGE_SIZE) {
+    const { data, error: cityErr } = await supabase
+      .from('locations_us')
+      .select('id, name, slug, state_id, population')
+      .order('population', { ascending: false, nullsFirst: false })
+      .limit(LIMIT)
+
+    if (cityErr || !data?.length) {
+      console.error('Failed to load cities:', cityErr?.message || 'no cities')
+      process.exit(1)
+    }
+    cities.push(...data)
+  } else {
+    let offset = 0
+    let hasMore = true
+    while (hasMore) {
+      const { data, error: cityErr } = await supabase
+        .from('locations_us')
+        .select('id, name, slug, state_id, population')
+        .order('id', { ascending: true })
+        .range(offset, offset + PAGE_SIZE - 1)
+
+      if (cityErr) {
+        console.error('Failed to load cities at offset', offset, ':', cityErr.message)
+        process.exit(1)
+      }
+
+      if (!data || data.length === 0) {
+        hasMore = false
+      } else {
+        cities.push(...data)
+        offset += data.length
+        if (data.length < PAGE_SIZE) hasMore = false
+        process.stdout.write(`\r  Loading cities: ${cities.length.toLocaleString()}...`)
+      }
+
+      if (LIMIT > 0 && cities.length >= LIMIT) {
+        cities.splice(LIMIT)
+        hasMore = false
+      }
+    }
+    console.log()
   }
 
-  const { data: cities, error: cityErr } = await cityQuery
-
-  if (cityErr || !cities?.length) {
-    console.error('Failed to load cities:', cityErr?.message || 'no cities')
+  if (!cities.length) {
+    console.error('No cities found in DB')
     process.exit(1)
   }
 
