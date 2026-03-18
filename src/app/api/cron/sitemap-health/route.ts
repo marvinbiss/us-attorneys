@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { verifyCronSecret } from '@/lib/cron-auth'
+import { validateFetchUrl, filterSafeUrls } from '@/lib/url-validation'
 
 /**
  * Daily cron: Verify all sitemaps return HTTP 200 with valid XML.
@@ -11,8 +12,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Validate the sitemap index URL before fetching
+  const sitemapIndexUrl = `${SITE_URL}/sitemap.xml`
+  const indexValidation = validateFetchUrl(sitemapIndexUrl)
+  if (!indexValidation.valid) {
+    console.error('[sitemap-health] CRITICAL: sitemap index URL blocked by SSRF filter:', indexValidation.reason)
+    return NextResponse.json({ error: 'Invalid sitemap index URL', reason: indexValidation.reason }, { status: 500 })
+  }
+
   // Fetch sitemap index to get all child sitemaps
-  const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
+  const indexRes = await fetch(sitemapIndexUrl, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
   if (!indexRes.ok) {
     console.error('[sitemap-health] CRITICAL: sitemap index returned', indexRes.status)
     return NextResponse.json({ error: 'Sitemap index failed', status: indexRes.status }, { status: 500 })
@@ -20,10 +29,17 @@ export async function GET(request: Request) {
 
   const indexXml = await indexRes.text()
   const locRegex = /<loc>(.*?)<\/loc>/g
-  const sitemapUrls: string[] = []
+  const rawUrls: string[] = []
   let match
   while ((match = locRegex.exec(indexXml)) !== null) {
-    sitemapUrls.push(match[1])
+    rawUrls.push(match[1])
+  }
+
+  // Validate all extracted URLs against SSRF whitelist (own domain only)
+  const sitemapUrls = filterSafeUrls(rawUrls, 'sitemap-health')
+
+  if (sitemapUrls.length < rawUrls.length) {
+    console.warn(`[sitemap-health] SSRF filter blocked ${rawUrls.length - sitemapUrls.length} URLs out of ${rawUrls.length}`)
   }
 
   // Check each child sitemap
@@ -42,7 +58,9 @@ export async function GET(request: Request) {
           const ok = res.ok && urlCount > 0
           if (!ok) failures.push(url)
           return { url, status: res.status, urls: urlCount, ok }
-        } catch {
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Unknown error'
+          console.error(`[sitemap-health] Fetch failed for ${url}: ${message}`)
           failures.push(url)
           return { url, status: 0, urls: 0, ok: false }
         }

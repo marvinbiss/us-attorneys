@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services } from '@/lib/data/usa'
 import { verifyCronSecret } from '@/lib/cron-auth'
+import { validateFetchUrl } from '@/lib/url-validation'
 
 const TOP_CITIES = ['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 'philadelphia', 'san-antonio', 'san-diego', 'dallas', 'austin']
 
@@ -29,8 +30,16 @@ export async function GET(request: Request) {
     }
   }
 
+  // Validate the IndexNow API URL before fetching (SSRF prevention)
+  const indexNowUrl = `${SITE_URL}/api/indexnow`
+  const validation = validateFetchUrl(indexNowUrl)
+  if (!validation.valid) {
+    console.error(`[indexnow-submit] SSRF blocked: ${validation.reason}`)
+    return NextResponse.json({ error: 'Invalid IndexNow URL', reason: validation.reason }, { status: 500 })
+  }
+
   // Submit to IndexNow
-  const response = await fetch(`${SITE_URL}/api/indexnow`, {
+  const response = await fetch(indexNowUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
