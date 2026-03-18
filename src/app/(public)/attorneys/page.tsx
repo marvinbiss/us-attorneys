@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
 }
 
-// Direct Supabase query — bypasses IS_BUILD since page is force-dynamic
+// Direct Supabase query — ISR with revalidate=3600
 async function getRecentProviders(limit = 50) {
   try {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
