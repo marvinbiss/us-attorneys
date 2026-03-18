@@ -13,6 +13,7 @@ import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { formatZodErrors } from '@/lib/validations/schemas'
 import { sendBookingNotifications, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
+import { distributeLead } from '@/lib/matching'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -20,7 +21,7 @@ export const dynamic = 'force-dynamic'
 // --- Validation schema ---
 
 const consultationRequestSchema = z.object({
-  attorneyId: z.string().uuid('Invalid attorney ID'),
+  attorneyId: z.string().uuid('Invalid attorney ID').nullable().optional(),
   consultationType: z.enum(['video', 'phone', 'in_person'], {
     error: 'Consultation type must be video, phone, or in_person',
   }),
@@ -42,6 +43,11 @@ const consultationRequestSchema = z.object({
   clientEmail: z.string().email('Invalid email address').max(255),
   clientPhone: z.string().min(7, 'Phone too short').max(20, 'Phone too long'),
   legalIssue: z.string().max(500, 'Description too long').nullable().optional(),
+  // Lead matching fields (optional — used when no specific attorney is targeted)
+  practiceAreaSlug: z.string().max(100).nullable().optional(),
+  clientState: z.string().length(2).nullable().optional(),
+  clientCity: z.string().max(100).nullable().optional(),
+  clientZip: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').nullable().optional(),
 })
 
 // Custom rate limit: 5 requests per hour per IP
@@ -102,22 +108,30 @@ export async function POST(request: NextRequest) {
       clientEmail,
       clientPhone,
       legalIssue,
+      practiceAreaSlug,
+      clientState,
+      clientCity,
+      clientZip,
     } = validation.data
 
-    // --- Verify attorney exists ---
     const adminSupabase = createAdminClient()
 
-    const { data: attorney, error: attorneyError } = await adminSupabase
-      .from('attorneys')
-      .select('id, name, slug, user_id')
-      .eq('id', attorneyId)
-      .single()
+    // --- Verify attorney exists (if specified) ---
+    let attorney: { id: string; name: string; slug: string; user_id: string | null } | null = null
+    if (attorneyId) {
+      const { data: attyData, error: attorneyError } = await adminSupabase
+        .from('attorneys')
+        .select('id, name, slug, user_id')
+        .eq('id', attorneyId)
+        .single()
 
-    if (attorneyError || !attorney) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.NOT_FOUND, 'Attorney not found'),
-        { status: 404 }
-      )
+      if (attorneyError || !attyData) {
+        return NextResponse.json(
+          createErrorResponse(ErrorCode.NOT_FOUND, 'Attorney not found'),
+          { status: 404 }
+        )
+      }
+      attorney = attyData
     }
 
     // --- Build scheduled_at timestamp ---
@@ -145,7 +159,7 @@ export async function POST(request: NextRequest) {
     const { data: booking, error: insertError } = await adminSupabase
       .from('bookings')
       .insert({
-        attorney_id: attorneyId,
+        attorney_id: attorneyId || null,
         client_name: clientName.trim(),
         client_email: clientEmail.toLowerCase().trim(),
         client_phone: clientPhone.trim(),
@@ -154,6 +168,12 @@ export async function POST(request: NextRequest) {
         status: 'pending',
         notes,
         booking_fee: 0,
+        // Lead matching fields
+        practice_area_slug: practiceAreaSlug || null,
+        client_state: clientState || null,
+        client_city: clientCity || null,
+        client_zip: clientZip || null,
+        matching_status: attorneyId ? 'assigned' : 'unmatched',
       })
       .select('id')
       .single()
@@ -166,6 +186,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // --- Trigger lead matching (non-blocking) ---
+    // If no specific attorney was targeted, run the matching algorithm
+    if (!attorneyId) {
+      distributeLead(booking.id).catch((err) => {
+        logger.error('Lead distribution failed (non-blocking)', err)
+      })
+    }
+
     // --- Format date for notification ---
     const formattedDate = preferredDate
       ? new Date(preferredDate).toLocaleDateString('en-US', {
@@ -176,9 +204,9 @@ export async function POST(request: NextRequest) {
         })
       : 'To be confirmed'
 
-    // --- Fetch attorney email for notification ---
+    // --- Fetch attorney email for notification (if attorney specified) ---
     let attorneyEmail: string | undefined
-    if (attorney.user_id) {
+    if (attorney?.user_id) {
       const { data: profile } = await adminSupabase
         .from('profiles')
         .select('email')
@@ -187,34 +215,39 @@ export async function POST(request: NextRequest) {
       attorneyEmail = profile?.email || undefined
     }
 
-    // --- Send notification (non-blocking) ---
-    const notificationPayload: NotificationPayload = {
-      bookingId: booking.id,
-      clientName: clientName.trim(),
-      clientEmail: clientEmail.toLowerCase().trim(),
-      clientPhone: clientPhone.trim(),
-      attorneyName: attorney.name,
-      attorneyEmail,
-      specialtyName: consultationTypeLabel,
-      date: formattedDate,
-      startTime: preferredTime || 'TBD',
-      message: legalIssue || undefined,
-    }
+    // --- Send notification (non-blocking, only when attorney is known) ---
+    if (attorney) {
+      const notificationPayload: NotificationPayload = {
+        bookingId: booking.id,
+        clientName: clientName.trim(),
+        clientEmail: clientEmail.toLowerCase().trim(),
+        clientPhone: clientPhone.trim(),
+        attorneyName: attorney.name,
+        attorneyEmail,
+        specialtyName: consultationTypeLabel,
+        date: formattedDate,
+        startTime: preferredTime || 'TBD',
+        message: legalIssue || undefined,
+      }
 
-    sendBookingNotifications(notificationPayload).catch((err) => {
-      logger.error('Failed to send consultation notification', err)
-    })
+      sendBookingNotifications(notificationPayload).catch((err) => {
+        logger.error('Failed to send consultation notification', err)
+      })
+    }
 
     // --- Return success ---
     return NextResponse.json(
       createSuccessResponse({
         consultationId: booking.id,
         status: 'pending',
-        attorneyName: attorney.name,
+        attorneyName: attorney?.name || null,
         consultationType: consultationTypeLabel,
         preferredDate: preferredDate || null,
         preferredTime: preferredTime || null,
-        message: 'Consultation request submitted successfully. The attorney will contact you shortly.',
+        matchingTriggered: !attorneyId,
+        message: attorneyId
+          ? 'Consultation request submitted successfully. The attorney will contact you shortly.'
+          : 'Consultation request submitted. We are matching you with the best attorney for your needs.',
       }),
       { status: 201 }
     )

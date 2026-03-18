@@ -19,8 +19,11 @@ import { cn } from '@/lib/utils'
 import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
 import { VerifiedAttorneyBadge } from '@/components/ui/VerifiedBadge'
 import { ResponseTimeBadge } from '@/components/ui/ResponseTimeBadge'
+import { SubscriptionBadge } from '@/components/ui/SubscriptionBadge'
 import { ConsultationModal } from '@/components/booking/ConsultationModal'
+import { getSubscriptionTier } from '@/lib/search/ranking'
 import type { AvailabilitySlot } from '@/lib/availability'
+import type { SubscriptionTier } from '@/lib/billing/cpa-model'
 
 export interface SearchAttorney {
   id: string
@@ -47,6 +50,9 @@ export interface SearchAttorney {
   languages?: string[] | null
   response_time_hours?: number | null // avg response time in hours
   practice_areas?: { slug: string; name: string }[] | null
+  // ── Subscription tier ────────────────────────────────────────────
+  subscription_tier?: SubscriptionTier
+  boost_level?: number | null
 }
 
 interface SearchResultCardProps {
@@ -89,6 +95,11 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
   const [showAllPAs, setShowAllPAs] = useState(false)
   const [showConsultation, setShowConsultation] = useState(false)
 
+  const tier = attorney.subscription_tier || getSubscriptionTier(attorney.boost_level)
+  const isPro = tier === 'pro'
+  const isPremium = tier === 'premium'
+  const isPaid = isPro || isPremium
+
   const specialtyName = attorney.specialty_name || attorney.specialty?.name || null
   const locationParts = [attorney.address_city, attorney.address_state].filter(Boolean)
   const locationText = locationParts.join(', ')
@@ -121,14 +132,40 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
     <article
       className={cn(
         'group relative bg-white dark:bg-gray-800 rounded-2xl border transition-all duration-300',
-        attorney.is_featured
-          ? 'border-amber-200 dark:border-amber-700 shadow-md shadow-amber-100/50 dark:shadow-amber-900/20'
-          : 'border-gray-100 dark:border-gray-700 shadow-sm',
+        // Premium tier: gold gradient border
+        isPremium
+          ? 'border-amber-300 dark:border-amber-600 shadow-md shadow-amber-100/50 dark:shadow-amber-900/20 ring-1 ring-amber-200/50 dark:ring-amber-700/30'
+          // Pro tier: blue border
+          : isPro
+            ? 'border-blue-300 dark:border-blue-600 shadow-md shadow-blue-100/50 dark:shadow-blue-900/20 ring-1 ring-blue-200/50 dark:ring-blue-700/30'
+            // Featured (legacy)
+            : attorney.is_featured
+              ? 'border-amber-200 dark:border-amber-700 shadow-md shadow-amber-100/50 dark:shadow-amber-900/20'
+              // Default
+              : 'border-gray-100 dark:border-gray-700 shadow-sm',
         'hover:shadow-xl hover:shadow-gray-200/60 dark:hover:shadow-gray-900/40 hover:-translate-y-0.5 hover:border-gray-200 dark:hover:border-gray-600'
       )}
     >
-      {/* Featured badge */}
-      {attorney.is_featured && (
+      {/* Top accent bar for paid tiers */}
+      {isPremium && (
+        <div className="h-1 rounded-t-2xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500" />
+      )}
+      {isPro && !isPremium && (
+        <div className="h-0.5 rounded-t-2xl bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400" />
+      )}
+
+      {/* Featured / Premium badge */}
+      {isPremium && (
+        <div className="absolute -top-3 left-6 px-3 py-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white text-xs font-bold rounded-full shadow-sm shadow-amber-500/30 z-10">
+          Featured Attorney
+        </div>
+      )}
+      {isPro && !isPremium && (
+        <div className="absolute -top-3 left-6 px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-bold rounded-full shadow-sm shadow-blue-500/30 z-10">
+          Pro
+        </div>
+      )}
+      {!isPaid && attorney.is_featured && (
         <div className="absolute -top-3 left-6 px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold rounded-full shadow-sm shadow-amber-500/30">
           Featured
         </div>
@@ -140,16 +177,31 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
         aria-label={`View profile of ${attorney.name}`}
       >
         <div className="flex gap-4 sm:gap-5">
-          {/* Avatar */}
+          {/* Avatar with tier-based ring */}
           <div className="flex-shrink-0">
-            <div
-              className={cn(
-                'w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-inner',
-                avatarColor
+            <div className="relative">
+              {/* Ring for premium/pro */}
+              {isPremium && (
+                <div
+                  className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-500 opacity-80"
+                  aria-hidden="true"
+                />
               )}
-              aria-hidden="true"
-            >
-              {initials}
+              {isPro && !isPremium && (
+                <div
+                  className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 opacity-70"
+                  aria-hidden="true"
+                />
+              )}
+              <div
+                className={cn(
+                  'relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-inner',
+                  avatarColor
+                )}
+                aria-hidden="true"
+              >
+                {initials}
+              </div>
             </div>
           </div>
 
@@ -158,9 +210,12 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
             {/* Name row */}
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
-                  {attorney.name}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                    {attorney.name}
+                  </h3>
+                  {isPaid && <SubscriptionBadge tier={tier} size="sm" />}
+                </div>
                 {/* Badges row: Verified + Bar + Free consultation + Response time + Availability */}
                 <div className="flex flex-wrap items-center gap-1.5 mt-1">
                   {attorney.is_verified && (
@@ -285,7 +340,13 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
                   e.stopPropagation()
                   setShowConsultation(true)
                 }}
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
+                className={cn(
+                  'inline-flex items-center gap-1.5 text-sm font-semibold transition-colors rounded-full',
+                  // Premium CTA: more prominent
+                  isPremium
+                    ? 'text-white bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 px-4 py-1.5 shadow-sm shadow-amber-500/20'
+                    : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 hover:bg-emerald-100 dark:hover:bg-emerald-900/30',
+                )}
                 aria-label={`Request consultation with ${attorney.name}`}
               >
                 <MessageCircle className="w-3.5 h-3.5" />
@@ -308,7 +369,12 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
               e.stopPropagation()
               setShowConsultation(true)
             }}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2.5 py-1 rounded-full"
+            className={cn(
+              'inline-flex items-center gap-1.5 text-xs font-semibold rounded-full',
+              isPremium
+                ? 'text-white bg-gradient-to-r from-amber-500 to-amber-600 px-3 py-1 shadow-sm'
+                : 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2.5 py-1',
+            )}
             aria-label={`Request consultation with ${attorney.name}`}
           >
             <MessageCircle className="w-3 h-3" />

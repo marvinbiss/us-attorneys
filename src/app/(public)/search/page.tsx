@@ -9,6 +9,7 @@ import { SearchResults } from '@/components/search/SearchResults'
 import { HeroSearch } from '@/components/search/HeroSearch'
 import type { SearchAttorney } from '@/components/search/SearchResultCard'
 import { getNextAvailableBatch } from '@/lib/availability'
+import { applySubscriptionBoost, getSubscriptionTier } from '@/lib/search/ranking'
 
 // ISR: revalidate every hour (search results change frequently)
 export const revalidate = 3600
@@ -116,6 +117,9 @@ function mapToSearchAttorney(row: AttorneyListRow & { distance_miles?: number | 
     years_experience: row.years_experience ?? null,
     consultation_fee: row.consultation_fee ?? null,
     languages: row.languages ?? null,
+    // Subscription tier (derived from boost_level in DB)
+    boost_level: row.boost_level ?? null,
+    subscription_tier: getSubscriptionTier(row.boost_level),
   }
 }
 
@@ -151,14 +155,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   // Execute search
   const result = await searchAttorneys(filters)
-  const baseAttorneys = result.attorneys.map(mapToSearchAttorney)
+  const mappedAttorneys = result.attorneys.map(mapToSearchAttorney)
+
+  // Apply subscription-based ranking boost (premium pinned to top, pro boosted)
+  const boostedAttorneys = applySubscriptionBoost(mappedAttorneys)
 
   // Fetch availability for all attorneys in a single batch query (no N+1)
-  const attorneyIds = baseAttorneys.map((a) => a.id)
+  const attorneyIds = boostedAttorneys.map((a) => a.id)
   const availabilityMap = await getNextAvailableBatch(attorneyIds)
 
   // Merge availability into attorney data
-  const attorneys = baseAttorneys.map((a) => ({
+  const attorneys = boostedAttorneys.map((a) => ({
     ...a,
     availability: availabilityMap.get(a.id) ?? null,
   }))

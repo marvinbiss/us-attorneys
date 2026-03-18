@@ -27,6 +27,7 @@ import {
   FileEdit,
   BadgeCheck,
   BarChart3,
+  DollarSign,
   Menu,
   X,
 } from 'lucide-react'
@@ -48,6 +49,7 @@ const nav = [
   { name: 'Quotes', href: '/admin/quotes', icon: FileText },
   { name: 'Reviews', href: '/admin/reviews', icon: Star },
   { name: 'Payments', href: '/admin/payments', icon: CreditCard },
+  { name: 'Revenue', href: '/admin/revenue', icon: DollarSign },
   { name: 'Services', href: '/admin/services', icon: Grid },
   { name: 'Content', href: '/admin/content', icon: FileEdit },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },

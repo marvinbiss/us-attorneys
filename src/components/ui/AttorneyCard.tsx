@@ -10,7 +10,9 @@ import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
+import { SubscriptionBadge } from '@/components/ui/SubscriptionBadge'
 import type { AvailabilitySlot } from '@/lib/availability'
+import type { SubscriptionTier } from '@/lib/billing/cpa-model'
 
 interface AttorneyCardProps {
   id: string
@@ -33,6 +35,10 @@ interface AttorneyCardProps {
   priceRange?: string
   responseTime?: string
   variant?: 'default' | 'horizontal' | 'compact'
+  /** Subscription tier for badge display (overrides isPremium) */
+  subscriptionTier?: SubscriptionTier
+  /** Boost level from DB (used to derive tier if subscriptionTier not provided) */
+  boostLevel?: number | null
 }
 
 export function AttorneyCard({
@@ -56,9 +62,15 @@ export function AttorneyCard({
   priceRange,
   responseTime,
   variant = 'default',
+  subscriptionTier,
+  boostLevel,
 }: AttorneyCardProps) {
   const reducedMotion = useReducedMotion()
   const [_isHovered, setIsHovered] = useState(false)
+
+  // Derive effective tier: explicit prop > boostLevel > isPremium legacy
+  const effectiveTier: SubscriptionTier = subscriptionTier
+    || (boostLevel && boostLevel >= 2 ? 'premium' : boostLevel === 1 ? 'pro' : isPremium ? 'premium' : 'free')
 
   const href = getAttorneyUrl({ stable_id: id, slug, specialty: profession, city: location })
 
@@ -92,15 +104,15 @@ export function AttorneyCard({
               </div>
             )}
 
-            {/* Badge premium */}
-            {isPremium && (
-              <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-                Premium
+            {/* Subscription tier badge */}
+            {effectiveTier !== 'free' && (
+              <div className="absolute top-3 left-3">
+                <SubscriptionBadge tier={effectiveTier} size="sm" />
               </div>
             )}
 
-            {/* Featured badge */}
-            {isFeatured && !isPremium && (
+            {/* Featured badge (only for non-paid featured attorneys) */}
+            {isFeatured && effectiveTier === 'free' && (
               <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
                 <Award className="w-3 h-3" />
                 Featured
@@ -251,22 +263,19 @@ export function AttorneyCard({
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-          {/* Premium badge */}
-          {isPremium && (
+          {/* Subscription tier badge */}
+          {effectiveTier !== 'free' && (
             <motion.div
               initial={reducedMotion ? false : { x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg"
+              className="absolute top-3 left-3"
             >
-              <span className="flex items-center gap-1">
-                <Star className="w-3 h-3 fill-white" />
-                Premium
-              </span>
+              <SubscriptionBadge tier={effectiveTier} size="sm" />
             </motion.div>
           )}
 
-          {/* Featured badge */}
-          {isFeatured && !isPremium && (
+          {/* Featured badge (only for non-paid) */}
+          {isFeatured && effectiveTier === 'free' && (
             <motion.div
               initial={reducedMotion ? false : { x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}

@@ -16,6 +16,7 @@ import {
   Zap,
   CalendarDays,
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { getDisplayName } from './types'
 import type { LegacyAttorney } from '@/types/legacy'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -29,7 +30,10 @@ import { BarVerificationLink } from '@/components/attorney/BarVerificationLink'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 import { ConsultationModal } from '@/components/booking/ConsultationModal'
 import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
+import { SubscriptionBadge } from '@/components/ui/SubscriptionBadge'
+import { getSubscriptionTier } from '@/lib/search/ranking'
 import type { AvailabilitySlot } from '@/lib/availability'
+import type { SubscriptionTier } from '@/lib/billing/cpa-model'
 
 interface AttorneyHeroProps {
   attorney: LegacyAttorney
@@ -49,6 +53,8 @@ interface AttorneyHeroProps {
   lastBookedAt?: string | null
   /** Real availability slot from server (replaces pseudo-random fallback) */
   availability?: AvailabilitySlot | null
+  /** Subscription tier (from boost_level or explicitly set) */
+  subscriptionTier?: SubscriptionTier
 }
 
 // Determine verification level based on attorney data
@@ -85,6 +91,7 @@ export function AttorneyHero({
   consultationsThisMonth,
   lastBookedAt,
   availability,
+  subscriptionTier,
 }: AttorneyHeroProps) {
   const displayName = getDisplayName(attorney)
   const verificationLevel = getVerificationLevel(attorney)
@@ -92,6 +99,12 @@ export function AttorneyHero({
   const [showConsultationModal, setShowConsultationModal] = useState(false)
   const reducedMotion = useReducedMotion()
   const noMotion = { duration: 0 }
+
+  // Derive tier from prop or from boost_level on attorney (if available from DB)
+  const tier: SubscriptionTier = subscriptionTier || getSubscriptionTier((attorney as unknown as { boost_level?: number | null }).boost_level)
+  const isPremium = tier === 'premium'
+  const isPro = tier === 'pro'
+  const isPaid = isPremium || isPro
 
   const hasPortfolioImage = attorney.portfolio && attorney.portfolio.length > 0 && attorney.portfolio[0].imageUrl
   const nextAvailable = getNextAvailableDate(attorney.id)
@@ -101,12 +114,33 @@ export function AttorneyHero({
       initial={reducedMotion ? false : { opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={reducedMotion ? noMotion : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-[#FFFCF8] dark:bg-gray-800 rounded-2xl shadow-soft border border-stone-200/60 dark:border-gray-700 overflow-hidden"
+      className={cn(
+        'bg-[#FFFCF8] dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden',
+        isPremium
+          ? 'border-2 border-amber-300 dark:border-amber-600 shadow-lg shadow-amber-100/30 dark:shadow-amber-900/20'
+          : isPro
+            ? 'border-2 border-blue-300 dark:border-blue-600 shadow-lg shadow-blue-100/30 dark:shadow-blue-900/20'
+            : 'border border-stone-200/60 dark:border-gray-700',
+      )}
       role="banner"
       aria-label={`${displayName}'s profile`}
     >
-      {/* Premium gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-clay-400 via-clay-300 to-clay-500" />
+      {/* Featured Attorney banner for premium */}
+      {isPremium && (
+        <div className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white text-center py-2 px-4">
+          <span className="text-sm font-bold tracking-wide uppercase">Featured Attorney</span>
+        </div>
+      )}
+
+      {/* Top gradient accent bar */}
+      <div className={cn(
+        'h-1.5 bg-gradient-to-r',
+        isPremium
+          ? 'from-amber-400 via-yellow-300 to-amber-500'
+          : isPro
+            ? 'from-blue-400 via-blue-500 to-blue-400'
+            : 'from-clay-400 via-clay-300 to-clay-500',
+      )} />
 
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-6">
@@ -129,7 +163,14 @@ export function AttorneyHero({
                   aria-hidden="true"
                 />
               )}
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-glow-clay overflow-hidden ring-4 ring-[#FFFCF8] dark:ring-gray-800 relative">
+              <div className={cn(
+                'w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg overflow-hidden ring-4 relative',
+                isPremium
+                  ? 'from-amber-400 to-amber-600 shadow-glow-amber ring-amber-200 dark:ring-amber-700'
+                  : isPro
+                    ? 'from-blue-400 to-blue-600 shadow-glow-blue ring-blue-200 dark:ring-blue-700'
+                    : 'from-clay-400 to-clay-600 shadow-glow-clay ring-[#FFFCF8] dark:ring-gray-800',
+              )}>
                 {hasPortfolioImage ? (
                   <Image
                     src={attorney.portfolio![0].imageUrl}
@@ -180,10 +221,13 @@ export function AttorneyHero({
             </div>
 
             {/* Name & Specialty */}
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 font-heading mb-1.5 tracking-tight">
-              {displayName}
-              <span className="sr-only"> — {attorney.specialty} in {attorney.city}</span>
-            </h1>
+            <div className="flex items-center gap-3 mb-1.5">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 font-heading tracking-tight">
+                {displayName}
+                <span className="sr-only"> — {attorney.specialty} in {attorney.city}</span>
+              </h1>
+              {isPaid && <SubscriptionBadge tier={tier} size="md" />}
+            </div>
             <p className="text-lg text-slate-600 dark:text-gray-400 mb-3 font-medium">{attorney.specialty}</p>
 
             {/* Location */}
@@ -294,16 +338,64 @@ export function AttorneyHero({
               />
             </div>
 
+            {/* "Why Choose" section for premium profiles */}
+            {isPremium && (
+              <div className="mb-5 p-4 rounded-xl bg-gradient-to-br from-amber-50/80 to-yellow-50/60 dark:from-amber-900/10 dark:to-yellow-900/10 border border-amber-200/60 dark:border-amber-700/40">
+                <h3 className="text-sm font-bold text-amber-800 dark:text-amber-300 mb-2 uppercase tracking-wide">
+                  Why Choose {displayName}
+                </h3>
+                <ul className="space-y-1.5 text-sm text-amber-900/80 dark:text-amber-200/80">
+                  {attorney.is_verified && (
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                      Bar-verified and in active standing
+                    </li>
+                  )}
+                  {yearsExperience && yearsExperience > 0 && (
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                      {yearsExperience}+ years of legal experience
+                    </li>
+                  )}
+                  {attorney.average_rating > 0 && (
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                      {attorney.average_rating.toFixed(1)}-star average from {attorney.review_count} client reviews
+                    </li>
+                  )}
+                  {responseTimeHours != null && responseTimeHours > 0 && responseTimeHours <= 24 && (
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                      Responds within {responseTimeHours < 1 ? 'minutes' : `${Math.round(responseTimeHours)} hours`}
+                    </li>
+                  )}
+                  {attorney.free_quote && (
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                      Offers free initial consultations
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
+
             {/* Primary CTA row */}
             <div className="flex flex-wrap gap-3">
               <motion.button
                 whileHover={reducedMotion ? undefined : { scale: 1.02 }}
                 whileTap={reducedMotion ? undefined : { scale: 0.98 }}
                 onClick={() => setShowConsultationModal(true)}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center gap-2 shadow-lg shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
+                className={cn(
+                  'rounded-xl text-white font-semibold flex items-center gap-2 shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2',
+                  isPremium
+                    ? 'px-8 py-4 text-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-amber-500/30 focus:ring-amber-400'
+                    : isPro
+                      ? 'px-7 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-blue-500/30 focus:ring-blue-400'
+                      : 'px-6 py-3 bg-gradient-to-r from-clay-400 to-clay-500 hover:from-clay-500 hover:to-clay-600 shadow-glow-clay focus:ring-clay-400',
+                )}
                 aria-label="Request a free consultation"
               >
-                <MessageCircle className="w-5 h-5" aria-hidden="true" />
+                <MessageCircle className={cn('aria-hidden', isPremium ? 'w-6 h-6' : 'w-5 h-5')} aria-hidden="true" />
                 Free Consultation
               </motion.button>
 

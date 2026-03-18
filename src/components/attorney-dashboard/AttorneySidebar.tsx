@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, DollarSign, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X, Video } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, DollarSign, Calendar, CalendarClock, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X, Video, CreditCard } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import ProfileCompletionBar from '@/components/attorney-dashboard/ProfileCompletionBar'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { getSupabaseClient } from '@/lib/supabase/client'
 
 interface AttorneySidebarProps {
-  activePage?: 'dashboard' | 'leads' | 'received-cases' | 'calendar' | 'bookings' | 'messages' | 'portfolio' | 'statistics' | 'reviews-received' | 'profile' | 'subscription'
+  activePage?: 'dashboard' | 'leads' | 'received-cases' | 'calendar' | 'availability' | 'bookings' | 'messages' | 'portfolio' | 'statistics' | 'reviews-received' | 'profile' | 'subscription' | 'billing'
   newCasesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
@@ -38,6 +39,7 @@ const navSections: NavSection[] = [
       { key: 'received-cases', href: '/attorney-dashboard/received-cases', icon: FileText, label: 'Received requests' },
       { key: 'leads', href: '/attorney-dashboard/leads', icon: Inbox, label: 'Opportunities' },
       { key: 'calendar', href: '/attorney-dashboard/calendar', icon: Calendar, label: 'Calendar' },
+      { key: 'availability', href: '/attorney-dashboard/availability', icon: CalendarClock, label: 'Availability' },
       { key: 'bookings', href: '/attorney-dashboard/bookings', icon: Video, label: 'Bookings' },
       { key: 'messages', href: '/attorney-dashboard/messages', icon: MessageSquare, label: 'Messages' },
     ],
@@ -54,6 +56,7 @@ const navSections: NavSection[] = [
     title: 'Settings',
     items: [
       { key: 'profile', href: '/attorney-dashboard/profile', icon: Settings, label: 'My profile' },
+      { key: 'billing', href: '/attorney-dashboard/billing', icon: CreditCard, label: 'Billing' },
       { key: 'subscription', href: '/attorney-dashboard/subscription', icon: DollarSign, label: 'My account' },
     ],
   },
@@ -280,6 +283,11 @@ export default function AttorneySidebar({ activePage = 'dashboard', newCasesCoun
           </Link>
         </div>
       )}
+
+      {/* Profile completion bar */}
+      <div className="mt-4 hidden lg:block">
+        <ProfileCompletionBar />
+      </div>
 
       {/* Quick links */}
       <div className="mt-4 hidden lg:block">

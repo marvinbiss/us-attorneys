@@ -7,6 +7,7 @@ import { createApiHandler } from '@/lib/api/handler'
 import { withTimeout, TIMEOUTS } from '@/lib/api/timeout'
 import { env } from '@/lib/env'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
+import { sendPushToUser } from '@/lib/push/send'
 import Stripe from 'stripe'
 
 /**
@@ -177,6 +178,12 @@ export const POST = createApiHandler(async ({ request }) => {
         break
       }
 
+      case 'customer.subscription.created': {
+        const subscription = event.data.object as Stripe.Subscription
+        await handleSubscriptionCreated(subscription)
+        break
+      }
+
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription
         await handleSubscriptionUpdated(subscription)
@@ -226,6 +233,7 @@ export const POST = createApiHandler(async ({ request }) => {
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const userId = session.metadata?.user_id
   const planId = session.metadata?.plan_id
+  const attorneyId = session.metadata?.attorney_id
 
   if (!userId || !planId) {
     logger.warn('Checkout session missing user_id or plan_id in metadata', {
@@ -238,8 +246,13 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     ? session.customer
     : session.customer?.id ?? null
 
+  const subscriptionId = typeof session.subscription === 'string'
+    ? session.subscription
+    : session.subscription?.id ?? null
+
   const supabase = createAdminClient()
 
+  // Update profiles table (legacy compatibility)
   const { error: updateError } = await withTimeout(
     supabase
       .from('profiles')
@@ -258,6 +271,16 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     throw new Error(`Profile update failed: ${updateError.message}`)
   }
 
+  // Update attorneys table (new subscription system)
+  if (attorneyId) {
+    await updateAttorneySubscription(attorneyId, {
+      subscription_tier: planId as 'pro' | 'premium',
+      stripe_subscription_id: subscriptionId,
+      stripe_customer_id: customerId,
+      subscription_started_at: new Date().toISOString(),
+    })
+  }
+
   await supabase.from('audit_logs').insert({
     user_id: userId,
     action: 'subscription.checkout_completed',
@@ -268,10 +291,83 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       subscription_status: 'active',
       stripe_customer_id: customerId,
       stripe_session_id: session.id,
+      attorney_id: attorneyId,
     },
   })
 
-  logger.info(`Checkout completed for user ${userId}: plan=${planId}, customer=${customerId}`)
+  logger.info(`Checkout completed for user ${userId}: plan=${planId}, customer=${customerId}, attorney=${attorneyId}`)
+}
+
+/**
+ * Handle new subscription creation — update attorney tier
+ */
+async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
+  const customerId = typeof subscription.customer === 'string'
+    ? subscription.customer
+    : subscription.customer.id
+
+  const attorneyId = subscription.metadata?.attorney_id
+  const planId = subscription.metadata?.plan_id
+
+  // Find attorney by stripe_customer_id or metadata
+  const supabase = createAdminClient()
+  let targetAttorneyId = attorneyId
+
+  if (!targetAttorneyId) {
+    const { data: attorney } = await supabase
+      .from('attorneys')
+      .select('id')
+      .eq('stripe_customer_id', customerId)
+      .single()
+    targetAttorneyId = attorney?.id
+  }
+
+  if (!targetAttorneyId) {
+    logger.warn(`No attorney found for subscription.created, customer=${customerId}`)
+    return
+  }
+
+  // Resolve tier from price ID
+  const tier = planId || await resolveTierFromSubscription(subscription)
+
+  const periodEnd = subscription.current_period_end
+    ? new Date(subscription.current_period_end * 1000).toISOString()
+    : null
+
+  await updateAttorneySubscription(targetAttorneyId, {
+    subscription_tier: tier as 'pro' | 'premium',
+    stripe_subscription_id: subscription.id,
+    stripe_customer_id: customerId,
+    subscription_started_at: new Date(subscription.created * 1000).toISOString(),
+    subscription_ends_at: periodEnd,
+  })
+
+  // Also update profile
+  const profile = await findProfileByCustomerId(customerId)
+  if (profile) {
+    await supabase
+      .from('profiles')
+      .update({
+        subscription_plan: tier,
+        subscription_status: mapStripeStatus(subscription.status),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', profile.id)
+  }
+
+  await supabase.from('audit_logs').insert({
+    user_id: profile?.id || null,
+    action: 'subscription.created',
+    resource_type: 'attorney',
+    resource_id: targetAttorneyId,
+    new_value: {
+      subscription_tier: tier,
+      stripe_subscription_id: subscription.id,
+      status: subscription.status,
+    },
+  })
+
+  logger.info(`Subscription created for attorney ${targetAttorneyId}: tier=${tier}, status=${subscription.status}`)
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
@@ -280,35 +376,51 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     : subscription.customer.id
 
   const profile = await findProfileByCustomerId(customerId)
-  if (!profile) return
-
   const newStatus = mapStripeStatus(subscription.status)
-  const priceId = subscription.items?.data?.[0]?.price?.id ?? null
-  const productId = subscription.items?.data?.[0]?.price?.product
-  const planIdentifier = typeof productId === 'string' ? productId : priceId
+  const tier = await resolveTierFromSubscription(subscription)
 
   const supabase = createAdminClient()
 
-  const updateData: Record<string, unknown> = {
-    subscription_status: newStatus,
-    updated_at: new Date().toISOString(),
+  // Update profiles table (legacy)
+  if (profile) {
+    const updateData: Record<string, unknown> = {
+      subscription_status: newStatus,
+      updated_at: new Date().toISOString(),
+    }
+    if (tier) {
+      updateData.subscription_plan = tier
+    }
+
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update(updateData)
+      .eq('id', profile.id)
+
+    if (updateError) {
+      logger.error(`Failed to update subscription for profile ${profile.id}`, updateError)
+      throw new Error(`Subscription update failed: ${updateError.message}`)
+    }
   }
 
-  if (planIdentifier) {
-    updateData.subscription_plan = planIdentifier
+  // Update attorneys table (new system)
+  const { data: attorney } = await supabase
+    .from('attorneys')
+    .select('id')
+    .eq('stripe_customer_id', customerId)
+    .single()
+
+  if (attorney && tier) {
+    const periodEnd = subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000).toISOString()
+      : null
+
+    await updateAttorneySubscription(attorney.id, {
+      subscription_tier: tier as 'pro' | 'premium',
+      subscription_ends_at: periodEnd,
+    })
   }
 
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update(updateData)
-    .eq('id', profile.id)
-
-  if (updateError) {
-    logger.error(`Failed to update subscription for profile ${profile.id}`, updateError)
-    throw new Error(`Subscription update failed: ${updateError.message}`)
-  }
-
-  logger.info(`Subscription updated for profile ${profile.id}: status=${newStatus}`)
+  logger.info(`Subscription updated for customer ${customerId}: status=${newStatus}, tier=${tier}`)
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
@@ -317,38 +429,54 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     : subscription.customer.id
 
   const profile = await findProfileByCustomerId(customerId)
-  if (!profile) return
-
   const supabase = createAdminClient()
 
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({
-      subscription_plan: 'free',
-      subscription_status: 'canceled',
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', profile.id)
+  // Downgrade profile (legacy)
+  if (profile) {
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        subscription_plan: 'free',
+        subscription_status: 'canceled',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', profile.id)
 
-  if (updateError) {
-    logger.error(`Failed to cancel subscription for profile ${profile.id}`, updateError)
-    throw new Error(`Subscription deletion failed: ${updateError.message}`)
+    if (updateError) {
+      logger.error(`Failed to cancel subscription for profile ${profile.id}`, updateError)
+      throw new Error(`Subscription deletion failed: ${updateError.message}`)
+    }
+  }
+
+  // Downgrade attorney to free tier
+  const { data: attorney } = await supabase
+    .from('attorneys')
+    .select('id, subscription_tier')
+    .eq('stripe_customer_id', customerId)
+    .single()
+
+  if (attorney) {
+    await updateAttorneySubscription(attorney.id, {
+      subscription_tier: 'free',
+      stripe_subscription_id: null,
+      subscription_ends_at: new Date().toISOString(),
+    })
   }
 
   await supabase.from('audit_logs').insert({
-    user_id: profile.id,
+    user_id: profile?.id || null,
     action: 'subscription.deleted',
-    resource_type: 'profile',
-    resource_id: profile.id,
+    resource_type: 'attorney',
+    resource_id: attorney?.id || profile?.id || 'unknown',
     new_value: {
       subscription_plan: 'free',
       subscription_status: 'canceled',
-      previous_plan: profile.subscription_plan,
+      previous_plan: attorney?.subscription_tier || profile?.subscription_plan,
       stripe_subscription_id: subscription.id,
     },
   })
 
-  logger.info(`Subscription deleted for profile ${profile.id}: reverted to free`)
+  logger.info(`Subscription deleted for customer ${customerId}: reverted to free`)
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
@@ -422,5 +550,84 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     },
   })
 
+  // Send push notification to the attorney about failed payment
+  const amountFormatted = invoice.amount_due
+    ? `$${(invoice.amount_due / 100).toFixed(2)}`
+    : 'your subscription payment'
+
+  try {
+    await sendPushToUser(profile.id, {
+      title: 'Payment Failed',
+      body: `Your payment of ${amountFormatted} could not be processed. Please update your payment method to avoid service interruption.`,
+      url: '/attorney-dashboard/subscription',
+      tag: 'payment-failed',
+      requireInteraction: true,
+    })
+    logger.info(`Push notification sent to profile ${profile.id} for payment failure`)
+  } catch (pushError) {
+    // Push notification failure should not break the webhook
+    logger.warn(`Failed to send push notification for payment failure`, { error: String(pushError) })
+  }
+
   logger.info(`Invoice payment failed for profile ${profile.id}: status set to past_due`)
+}
+
+// ─── Attorney Subscription Helpers ─────────────────────────────────
+
+/**
+ * Update attorney subscription fields in the attorneys table
+ */
+async function updateAttorneySubscription(
+  attorneyId: string,
+  updates: {
+    subscription_tier?: 'free' | 'pro' | 'premium'
+    stripe_subscription_id?: string | null
+    stripe_customer_id?: string | null
+    subscription_started_at?: string
+    subscription_ends_at?: string | null
+  }
+): Promise<void> {
+  const supabase = createAdminClient()
+  const { error } = await supabase
+    .from('attorneys')
+    .update(updates)
+    .eq('id', attorneyId)
+
+  if (error) {
+    logger.error(`Failed to update attorney subscription for ${attorneyId}`, error)
+    throw new Error(`Attorney subscription update failed: ${error.message}`)
+  }
+}
+
+/**
+ * Resolve subscription tier from Stripe price ID
+ */
+async function resolveTierFromSubscription(subscription: Stripe.Subscription): Promise<string> {
+  // Check metadata first
+  if (subscription.metadata?.plan_id) {
+    return subscription.metadata.plan_id
+  }
+
+  // Try to match price ID against subscription_plans table
+  const priceId = subscription.items?.data?.[0]?.price?.id
+  if (priceId) {
+    const supabase = createAdminClient()
+    const { data: plan } = await supabase
+      .from('subscription_plans')
+      .select('slug')
+      .eq('stripe_price_id', priceId)
+      .single()
+
+    if (plan) return plan.slug
+  }
+
+  // Fallback: match against env vars
+  const proPriceId = process.env.STRIPE_PRO_PRICE_ID
+  const premiumPriceId = process.env.STRIPE_PREMIUM_PRICE_ID
+
+  if (priceId === proPriceId) return 'pro'
+  if (priceId === premiumPriceId) return 'premium'
+
+  logger.warn(`Could not resolve tier for subscription ${subscription.id}, defaulting to 'pro'`)
+  return 'pro'
 }
