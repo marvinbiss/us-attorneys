@@ -10,6 +10,13 @@ CREATE INDEX IF NOT EXISTS idx_reviews_attorney_id ON reviews(attorney_id);
 -- Add response_time_hours to attorneys
 ALTER TABLE attorneys ADD COLUMN IF NOT EXISTS response_time_hours NUMERIC(6,2);
 
+-- Add boost_level to attorneys (subscription tier: 0=free, 1=pro, 2=premium)
+ALTER TABLE attorneys ADD COLUMN IF NOT EXISTS boost_level INTEGER DEFAULT 0;
+CREATE INDEX IF NOT EXISTS idx_attorneys_boost_level ON attorneys(boost_level DESC NULLS LAST);
+
+-- Add is_featured to attorneys
+ALTER TABLE attorneys ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT false;
+
 -- Create client_documents table
 CREATE TABLE IF NOT EXISTS client_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
