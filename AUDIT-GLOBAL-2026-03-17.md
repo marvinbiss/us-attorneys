@@ -351,18 +351,18 @@
 | Post-P2 | 92+/100 | 2026-06-17 | **91/100** (2026-03-18) |
 | **Top 3 legal directories USA** | 95+/100 | 2026-09-17 | Pending (data + UX) |
 
-### Estimated Current Score (2026-03-18): **91/100**
+### Estimated Current Score (2026-03-18): **93/100**
 
 | Axe | Original | Current | Key fixes |
 |---|---|---|---|
 | Architecture | 76 | **91** | CI/CD, HeroSearch refactor, img→Image, 2856 tests/120 files, 6 e2e specs, use client audit (all legitimate) |
-| SEO | 72 | **87** | generateMetadata, JSON-LD Attorney, sitemaps, breadcrumbs |
+| SEO | 72 | **93** | generateMetadata, JSON-LD Attorney, sitemaps, breadcrumbs, **full hreflang EN↔ES** (259 PAs, 5 intents, lang="es", Content-Language header) |
 | Security | 74 | **90** | RLS bookings, SSRF whitelist, CSP nonce, rate-limit failClose, UNIQUE constraints |
 | Data | 64 | **85** | French cols fixed, 12 CHECK constraints, MV cron, cursor pagination |
 | UX | 75 | **90** | Accessibility page, skip-to-content, focus rings, skeletons, form disabled states |
 
 ### Remaining for 95+
-- [ ] Hreflang implementation (requires Spanish page completion)
+- [x] Hreflang: full 259-PA slug mapping in middleware, lang="es" layouts, Content-Language header, metadata.alternates on all 12 pages
 - [ ] Data enrichment pipeline (CourtListener case law, awards, disciplinary)
 - [ ] Trust signals (years verified, certifications, video intro)
 - [x] Test coverage: 2856 tests / 120 files + 6 e2e specs (hooks, components, API, lib, services)
