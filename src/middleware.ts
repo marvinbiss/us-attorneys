@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
+import { SPANISH_PA_SLUGS, ENGLISH_PA_SLUGS } from '@/lib/seo/hreflang'
 
 /**
  * Middleware v4 — security-hardened + performance-optimized
@@ -390,24 +391,9 @@ export async function middleware(request: NextRequest) {
     '/emergency/': '/emergencia/',
   }
 
-  // Practice area slug translation (English -> Spanish) for hreflang URLs
-  // Only the most common PAs are included here; the full map is in hreflang.ts
-  const enToEsPA: Record<string, string> = {
-    'personal-injury': 'lesiones-personales', 'car-accidents': 'accidentes-de-auto',
-    'truck-accidents': 'accidentes-de-camion', 'motorcycle-accidents': 'accidentes-de-motocicleta',
-    'slip-and-fall': 'resbalones-y-caidas', 'medical-malpractice': 'negligencia-medica',
-    'wrongful-death': 'muerte-injusta', 'workers-compensation': 'compensacion-laboral',
-    'criminal-defense': 'defensa-criminal', 'dui-dwi': 'dui-y-dwi',
-    'drug-crimes': 'delitos-de-drogas', 'divorce': 'divorcio',
-    'child-custody': 'custodia-de-menores', 'child-support': 'manutencion-infantil',
-    'immigration-law': 'derecho-migratorio', 'bankruptcy': 'bancarrota',
-    'estate-planning': 'planificacion-patrimonial', 'employment-law': 'derecho-laboral',
-    'business-law': 'derecho-empresarial', 'real-estate-law': 'derecho-inmobiliario',
-    'intellectual-property': 'propiedad-intelectual', 'tax-law': 'derecho-fiscal',
-  }
-  const esToEnPA: Record<string, string> = Object.fromEntries(
-    Object.entries(enToEsPA).map(([en, es]) => [es, en])
-  )
+  // Full 259-entry practice area slug maps imported from hreflang.ts
+  const enToEsPA = SPANISH_PA_SLUGS
+  const esToEnPA = ENGLISH_PA_SLUGS
 
   /** Translate path segments between English and Spanish PA slugs */
   function translatePathSegments(restOfPath: string, paMap: Record<string, string>): string {
