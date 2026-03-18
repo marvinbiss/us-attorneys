@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   AlertTriangle,
   Clock,
@@ -157,6 +158,7 @@ export default function DeadlineResult({
   onSaveReminder,
 }: DeadlineResultProps) {
   const [showExceptions, setShowExceptions] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const config = getUrgencyConfig(result.urgencyLevel)
   const UrgencyIcon = config.icon
 
@@ -175,9 +177,9 @@ export default function DeadlineResult({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.4 }}
       className="space-y-6"
     >
       {/* Urgency Banner */}
@@ -203,9 +205,9 @@ export default function DeadlineResult({
         >
           <motion.div
             className={`h-full rounded-full ${config.meterColor}`}
-            initial={{ width: 0 }}
+            initial={prefersReducedMotion ? false : { width: 0 }}
             animate={{ width: config.meterWidth }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8, ease: 'easeOut' }}
           />
         </div>
 
@@ -267,7 +269,7 @@ export default function DeadlineResult({
         <AnimatePresence>
           {result.discoveryDeadline && result.discoveryDaysRemaining !== undefined && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
@@ -313,10 +315,10 @@ export default function DeadlineResult({
               {showExceptions && (
                 <motion.div
                   id="exceptions-panel"
-                  initial={{ height: 0, opacity: 0 }}
+                  initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }}
                   className="overflow-hidden"
                 >
                   <ul className="px-4 py-3 space-y-2">

@@ -2,18 +2,32 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { services, cities, type City } from '@/lib/data/usa'
+// City and service data is passed as props from the server parent component
+// to avoid importing the 94KB usa.ts in the client bundle.
+
+interface CityItem {
+  slug: string
+  name: string
+  stateCode: string
+  population: string
+  zipCode: string
+}
+
+interface ServiceItem {
+  slug: string
+  name: string
+}
 
 function normalizeText(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
 }
 
-function searchServices(query: string, limit = 6): typeof services {
+export function searchServicesFromList(servicesList: ServiceItem[], query: string, limit = 6): ServiceItem[] {
   if (!query || query.length < 1) return []
   const n = normalizeText(query)
-  const prefix: typeof services = []
-  const contains: typeof services = []
-  for (const s of services) {
+  const prefix: ServiceItem[] = []
+  const contains: ServiceItem[] = []
+  for (const s of servicesList) {
     const sn = normalizeText(s.name)
     if (sn.startsWith(n)) prefix.push(s)
     else if (sn.includes(n)) contains.push(s)
@@ -21,19 +35,19 @@ function searchServices(query: string, limit = 6): typeof services {
   return [...prefix, ...contains].slice(0, limit)
 }
 
-function searchCities(query: string, limit = 6): City[] {
+function searchCitiesFromList(citiesList: CityItem[], query: string, limit = 6): CityItem[] {
   if (!query || query.length < 1) return []
   const n = normalizeText(query)
-  const prefix: City[] = []
-  const contains: City[] = []
-  const postal: City[] = []
-  for (const v of cities) {
+  const prefix: CityItem[] = []
+  const contains: CityItem[] = []
+  const postal: CityItem[] = []
+  for (const v of citiesList) {
     const vn = normalizeText(v.name)
     if (vn.startsWith(n)) prefix.push(v)
     else if (vn.includes(n)) contains.push(v)
     else if (v.zipCode.startsWith(query.trim())) postal.push(v)
   }
-  const sortByPop = (a: City, b: City) => {
+  const sortByPop = (a: CityItem, b: CityItem) => {
     const pa = parseInt(a.population.replace(/\s/g, ''), 10) || 0
     const pb = parseInt(b.population.replace(/\s/g, ''), 10) || 0
     return pb - pa
@@ -44,12 +58,17 @@ function searchCities(query: string, limit = 6): City[] {
   return [...prefix, ...contains, ...postal].slice(0, limit)
 }
 
-export function ClayHeroSearch() {
+interface ClayHeroSearchProps {
+  cities: CityItem[]
+  services: ServiceItem[]
+}
+
+export function ClayHeroSearch({ cities, services }: ClayHeroSearchProps) {
   const router = useRouter()
   const [service, setService] = useState('')
   const [cityInput, setCityInput] = useState('')
-  const [serviceSuggestions, setServiceSuggestions] = useState<typeof services>([])
-  const [citySuggestions, setCitySuggestions] = useState<City[]>([])
+  const [serviceSuggestions, setServiceSuggestions] = useState<ServiceItem[]>([])
+  const [citySuggestions, setCitySuggestions] = useState<CityItem[]>([])
   const [activeField, setActiveField] = useState<'service' | 'city' | null>(null)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [selectedServiceSlug, setSelectedServiceSlug] = useState('')
@@ -79,17 +98,17 @@ export function ClayHeroSearch() {
     setService(value)
     setSelectedServiceSlug('')
     setHighlightedIndex(-1)
-    setServiceSuggestions(searchServices(value))
-  }, [])
+    setServiceSuggestions(searchServicesFromList(services, value))
+  }, [services])
 
   const handleCityChange = useCallback((value: string) => {
     setCityInput(value)
     setSelectedCitySlug('')
     setHighlightedIndex(-1)
-    setCitySuggestions(searchCities(value))
-  }, [])
+    setCitySuggestions(searchCitiesFromList(cities, value))
+  }, [cities])
 
-  function selectService(s: typeof services[0]) {
+  function selectService(s: ServiceItem) {
     setService(s.name)
     setSelectedServiceSlug(s.slug)
     setServiceSuggestions([])
@@ -98,7 +117,7 @@ export function ClayHeroSearch() {
     cityInputRef.current?.focus()
   }
 
-  function selectCity(v: City) {
+  function selectCity(v: CityItem) {
     setCityInput(v.name)
     setSelectedCitySlug(v.slug)
     setCitySuggestions([])
@@ -153,7 +172,7 @@ export function ClayHeroSearch() {
             type="text"
             value={service}
             onChange={e => handleServiceChange(e.target.value)}
-            onFocus={() => { setActiveField('service'); setHighlightedIndex(-1); setServiceSuggestions(searchServices(service)) }}
+            onFocus={() => { setActiveField('service'); setHighlightedIndex(-1); setServiceSuggestions(searchServicesFromList(services, service)) }}
             placeholder="What service?"
             className="w-0 flex-1 bg-transparent text-stone-800 dark:text-stone-200 placeholder-stone-400 dark:placeholder-stone-500 text-base outline-none"
             role="combobox"
@@ -194,7 +213,7 @@ export function ClayHeroSearch() {
             type="text"
             value={cityInput}
             onChange={e => handleCityChange(e.target.value)}
-            onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(cityInput)) }}
+            onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCitiesFromList(cities, cityInput)) }}
             placeholder="City or ZIP code"
             className="w-0 flex-1 bg-transparent text-stone-800 dark:text-stone-200 placeholder-stone-400 dark:placeholder-stone-500 text-base outline-none"
             role="combobox"

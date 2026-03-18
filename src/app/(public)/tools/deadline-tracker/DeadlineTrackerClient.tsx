@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Scale,
   MapPin,
@@ -150,6 +151,7 @@ function AttorneyMiniCard({ attorney }: { attorney: RelatedAttorney }) {
 // ─── Main Client Component ──────────────────────────────────────────────────
 
 export default function DeadlineTrackerClient() {
+  const prefersReducedMotion = useReducedMotion()
   const [step, setStep] = useState(1)
   const [specialtySlug, setSpecialtySlug] = useState('')
   const [stateCode, setStateCode] = useState('')
@@ -269,10 +271,10 @@ export default function DeadlineTrackerClient() {
           {step === 1 && !result && (
             <motion.div
               key="step1"
-              initial={{ opacity: 0, x: 20 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, x: -20 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }}
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
@@ -322,10 +324,10 @@ export default function DeadlineTrackerClient() {
           {step === 2 && !result && (
             <motion.div
               key="step2"
-              initial={{ opacity: 0, x: 20 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, x: -20 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }}
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
@@ -395,10 +397,10 @@ export default function DeadlineTrackerClient() {
           {step === 3 && !result && (
             <motion.div
               key="step3"
-              initial={{ opacity: 0, x: 20 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, x: -20 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }}
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
@@ -459,7 +461,7 @@ export default function DeadlineTrackerClient() {
                   <AnimatePresence>
                     {showDiscovery && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
+                        initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
@@ -527,9 +529,9 @@ export default function DeadlineTrackerClient() {
           {result && (
             <motion.div
               key="result"
-              initial={{ opacity: 0, y: 20 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3 }}
             >
               {/* Header with reset */}
               <div className="flex items-center justify-between mb-6">
@@ -556,9 +558,9 @@ export default function DeadlineTrackerClient() {
               {/* Related Attorneys Section */}
               {relatedAttorneys.length > 0 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.3 }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.4, duration: 0.3 }}
                   className="mt-8"
                 >
                   <div className="flex items-center justify-between mb-4">
@@ -586,9 +588,9 @@ export default function DeadlineTrackerClient() {
 
               {/* State comparison teaser */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.3 }}
+                transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.5, duration: 0.3 }}
                 className="mt-6 p-4 rounded-xl bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/20 dark:to-blue-950/20 border border-indigo-100 dark:border-indigo-900"
               >
                 <p className="text-sm text-indigo-700 dark:text-indigo-300">

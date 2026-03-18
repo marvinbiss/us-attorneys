@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -22,6 +22,8 @@ export default function PortfolioLightbox({
   const reducedMotion = useReducedMotion()
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const currentItem = items[currentIndex]
+  const lightboxRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
 
   const goToPrevious = useCallback(() => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : items.length - 1))
@@ -31,15 +33,52 @@ export default function PortfolioLightbox({
     setCurrentIndex((prev) => (prev < items.length - 1 ? prev + 1 : 0))
   }, [items.length])
 
-  // Keyboard navigation
+  // Save/restore focus + keyboard navigation + focus trap
   useEffect(() => {
+    previousFocusRef.current = document.activeElement as HTMLElement
+
+    // Focus first button in lightbox
+    const timer = setTimeout(() => {
+      if (lightboxRef.current) {
+        const first = lightboxRef.current.querySelector<HTMLElement>('button')
+        first?.focus()
+      }
+    }, 50)
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose()
-      } else if (e.key === 'ArrowLeft') {
+        return
+      }
+      if (e.key === 'ArrowLeft') {
         goToPrevious()
-      } else if (e.key === 'ArrowRight') {
+        return
+      }
+      if (e.key === 'ArrowRight') {
         goToNext()
+        return
+      }
+
+      // Focus trap
+      if (e.key === 'Tab' && lightboxRef.current) {
+        const focusable = lightboxRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
       }
     }
 
@@ -49,6 +88,8 @@ export default function PortfolioLightbox({
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
+      clearTimeout(timer)
+      previousFocusRef.current?.focus()
     }
   }, [onClose, goToPrevious, goToNext])
 
@@ -57,10 +98,14 @@ export default function PortfolioLightbox({
   return (
     <AnimatePresence>
       <motion.div
+        ref={lightboxRef}
         initial={reducedMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Portfolio lightbox"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 text-white">

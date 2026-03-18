@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -16,6 +16,8 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
   const reducedMotion = useReducedMotion()
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const lightboxRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
 
   // Only show if attorney has real portfolio items
   const photos = attorney.portfolio || []
@@ -43,18 +45,64 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
     setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1))
   }, [photos.length])
 
-  // Keyboard navigation
+  // Keyboard navigation + focus trap
   useEffect(() => {
     if (!lightboxOpen) return
 
+    previousFocusRef.current = document.activeElement as HTMLElement
+
+    // Focus first button in lightbox
+    const timer = setTimeout(() => {
+      if (lightboxRef.current) {
+        const first = lightboxRef.current.querySelector<HTMLElement>('button')
+        first?.focus()
+      }
+    }, 50)
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeLightbox()
-      if (e.key === 'ArrowLeft') goToPrevious()
-      if (e.key === 'ArrowRight') goToNext()
+      if (e.key === 'Escape') {
+        closeLightbox()
+        return
+      }
+      if (e.key === 'ArrowLeft') {
+        goToPrevious()
+        return
+      }
+      if (e.key === 'ArrowRight') {
+        goToNext()
+        return
+      }
+
+      // Focus trap
+      if (e.key === 'Tab' && lightboxRef.current) {
+        const focusable = lightboxRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
+      }
     }
 
     document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      clearTimeout(timer)
+      previousFocusRef.current?.focus()
+    }
   }, [lightboxOpen, closeLightbox, goToPrevious, goToNext])
 
   const currentPhoto = photos[currentIndex]
@@ -184,6 +232,7 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
+            ref={lightboxRef}
             initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

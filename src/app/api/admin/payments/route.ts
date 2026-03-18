@@ -102,7 +102,7 @@ export const GET = createApiHandler(async ({ request }) => {
       )
 
       // Enrich with user data (use email from Stripe since profiles may not have stripe_customer_id)
-      const enrichedData = subscriptions.data.map((sub) => ({
+      const enrichedData = (subscriptions?.data ?? []).map((sub) => ({
         ...sub,
         userId: null,
         userName: null,

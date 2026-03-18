@@ -128,9 +128,6 @@ export async function generateSitemaps() {
   const hispanicCities = TOP_HISPANIC_CITIES // 200
 
   const emergencySlugs = Object.keys(tradeContent)
-  const reviewServiceSlugs = Object.keys(tradeContent)
-  const problemSlugs = getProblemSlugs()
-  const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
 
   const sitemaps: { id: string }[] = [
     // ── Static ──────────────────────────────────────────────────────────
@@ -142,16 +139,16 @@ export async function generateSitemaps() {
     { id: 'cities' },
     { id: 'geo' },
     { id: 'quotes-services' },
-    ...batchIds('quotes-service-cities', services.length * phase1, BATCH_SIZE),
+    // quotes-service-cities removed — /quotes/[service]/[location] pages have noindex
     ...batchIds('emergency-service-cities', emergencySlugs.length * phase1, BATCH_SIZE),
-    ...batchIds('tarifs-service-cities', services.length * phase1, BATCH_SIZE),
-    ...batchIds('tarifs-task-cities', totalTaskCount * phase1, BATCH_SIZE),
-    { id: 'reviews-services' },
-    ...batchIds('reviews-service-cities', reviewServiceSlugs.length * phase1, BATCH_SIZE),
-    { id: 'issues' },
-    ...batchIds('issues-cities', problemSlugs.length * phase1, BATCH_SIZE),
-    ...batchIds('dept-services', states.length * getPracticeAreaSlugs().length, BATCH_SIZE),
-    { id: 'region-services' },
+    // tarifs-service-cities removed — /pricing/[service]/[city] pages have noindex
+    // tarifs-task-cities removed — /pricing/[service]/[city]/[task] pages have noindex
+    // reviews-services removed — /reviews/[service] pages have noindex
+    // reviews-service-cities removed — /reviews/[service]/[city] pages have noindex
+    // issues removed — /issues/[issue] pages have noindex
+    // issues-cities removed — /issues/[issue]/[city] pages have noindex
+    // dept-services removed — /states/[state]/[service] pages have noindex
+    // region-services removed — /regions/[region]/[service] pages have noindex
 
     // ── NEW English intent sitemaps ─────────────────────────────────────
     // Intent service hubs (one sitemap per intent, ~75 PA each = small)
@@ -200,8 +197,7 @@ export async function generateSitemaps() {
     // ── Type M2: PA × State legal guides (75 PAs × 57 states = 4,275) ──
     ...batchIds('legal-guides', pa * states.length, BATCH_SIZE),
 
-    // ── Type N: Comparisons (already in static, listed for completeness)
-    { id: 'comparisons' },
+    // comparisons removed — /compare/[slug] pages have noindex
 
     // ── Type Q: Industry × cities ───────────────────────────────────────
     ...batchIds('industry', INDUSTRIES.length * phase1, BATCH_SIZE),
@@ -239,14 +235,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/pricing`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/quotes`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/tools/diagnostic`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/attorney-map`, lastModified: BUILD_DATE },
+      // /attorney-map removed — page has noindex
       { url: `${SITE_URL}/attorneys`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/compare`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/glossary`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/regulations`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/attorney-statistics`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/attorney-badge`, lastModified: BUILD_DATE },
+      // /attorney-badge removed — page has noindex
       { url: `${SITE_URL}/verify-attorney`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/reviews`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/hire`, lastModified: BUILD_DATE },
@@ -257,6 +253,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/situations`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/industries`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/issues`, lastModified: BUILD_DATE },
       // Spanish hub pages (routes live at /{intent-es}/ — no /es/ prefix)
       { url: `${SITE_URL}/abogados`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/contratar`, lastModified: BUILD_DATE },
@@ -526,12 +523,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Issues hub + individual pages (LEGACY) ─────────────────────────────
+  // ── Issues hub (LEGACY) — individual /issues/[slug] pages removed (noindex)
   if (id === 'issues') {
-    const problemSlugs = getProblemSlugs()
     return [
       { url: `${SITE_URL}/issues`, lastModified: BUILD_DATE },
-      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/issues/${slug}`, lastModified: BUILD_DATE })),
     ]
   }
 

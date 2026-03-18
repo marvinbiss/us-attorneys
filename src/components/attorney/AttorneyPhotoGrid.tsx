@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -19,6 +19,8 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
   const reducedMotion = useReducedMotion()
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const lightboxRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
 
   // Only show real portfolio photos — no fake stock images
   const photos = attorney.portfolio && attorney.portfolio.length > 0
@@ -44,12 +46,64 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
     setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1))
   }, [photos.length])
 
-  // Keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') closeLightbox()
-    if (e.key === 'ArrowLeft') goToPrevious()
-    if (e.key === 'ArrowRight') goToNext()
-  }, [closeLightbox, goToPrevious, goToNext])
+  // Keyboard navigation + focus trap
+  useEffect(() => {
+    if (!lightboxOpen) return
+
+    previousFocusRef.current = document.activeElement as HTMLElement
+
+    const timer = setTimeout(() => {
+      if (lightboxRef.current) {
+        const first = lightboxRef.current.querySelector<HTMLElement>('button')
+        first?.focus()
+      }
+    }, 50)
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeLightbox()
+        return
+      }
+      if (e.key === 'ArrowLeft') {
+        goToPrevious()
+        return
+      }
+      if (e.key === 'ArrowRight') {
+        goToNext()
+        return
+      }
+
+      // Focus trap
+      if (e.key === 'Tab' && lightboxRef.current) {
+        const focusable = lightboxRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      clearTimeout(timer)
+      previousFocusRef.current?.focus()
+    }
+  }, [lightboxOpen, closeLightbox, goToPrevious, goToNext])
 
   if (photos.length === 0) return null
 
@@ -201,14 +255,13 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
+            ref={lightboxRef}
             initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={reducedMotion ? { duration: 0 } : undefined}
             className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
             onClick={closeLightbox}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
             role="dialog"
             aria-modal="true"
             aria-label={`Photo gallery - Image ${currentIndex + 1} of ${photos.length}`}

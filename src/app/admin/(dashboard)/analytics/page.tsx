@@ -965,6 +965,14 @@ function ConversionBadge({ rate }: { rate: number }) {
 }
 
 function MiniChart({ data }: { data: ChartPoint[] }) {
+  if (!data || data.length < 2) {
+    return (
+      <div className="h-20 flex items-center justify-center text-sm text-gray-400">
+        Not enough data to display the chart
+      </div>
+    )
+  }
+
   const width = 800
   const height = 80
   const padding = { top: 4, bottom: 4, left: 0, right: 0 }
@@ -1001,7 +1009,7 @@ function MiniChart({ data }: { data: ChartPoint[] }) {
 }
 
 function VisitorChart({ data }: { data: VisitorChartPoint[] }) {
-  if (data.length < 2) {
+  if (!data || data.length < 2) {
     return (
       <div className="h-20 flex items-center justify-center text-sm text-gray-400">
         Not enough data to display the chart

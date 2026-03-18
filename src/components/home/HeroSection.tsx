@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
-import { services, cities, states } from '@/lib/data/usa'
+// Counts are passed as props from a server parent to avoid importing the 94KB usa.ts in the client bundle
 import { heroImage } from '@/lib/data/images'
 import { HeroSearch } from '@/components/search/HeroSearch'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -135,7 +135,14 @@ function AnimatedHeadingLine({ text, className }: { text: string; className?: st
 }
 
 // ── Main Hero Component ───────────────────────────────────────────────
-export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
+interface HeroSectionProps {
+  attorneyCount?: number
+  citiesCount?: number
+  statesCount?: number
+  servicesCount?: number
+}
+
+export function HeroSection({ attorneyCount = 0, citiesCount = 0, statesCount = 0, servicesCount = 0 }: HeroSectionProps) {
   const reducedMotion = useReducedMotion()
   const noMotion = { duration: 0 }
   return (
@@ -307,9 +314,9 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
             >
               {[
                 { value: attorneyCount, suffix: '', label: 'attorneys' },
-                { value: cities.length, suffix: '', label: 'cities' },
-                { value: states.length, suffix: '', label: 'states' },
-                { value: services.length, suffix: '', label: 'practice areas' },
+                { value: citiesCount, suffix: '', label: 'cities' },
+                { value: statesCount, suffix: '', label: 'states' },
+                { value: servicesCount, suffix: '', label: 'practice areas' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-3xl md:text-4xl font-extrabold text-white tracking-tight font-heading">
@@ -383,7 +390,7 @@ export function HeroSection({ attorneyCount = 0 }: { attorneyCount?: number }) {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  {services.length} practice areas
+                  {servicesCount} practice areas
                 </div>
                 <div className="text-xs text-slate-500">
                   All legal practice areas

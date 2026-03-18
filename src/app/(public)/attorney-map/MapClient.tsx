@@ -22,7 +22,7 @@ function getMarkerColor(_count: number): string { return '#3B82F6' }
 function getMarkerRadius(attorneyCount: number): number {
   return Math.max(5, Math.min(20, Math.sqrt(attorneyCount) * 2))
 }
-import { services } from '@/lib/data/usa'
+import { searchServices as services } from '@/lib/data/usa-search-data'
 
 // Dynamic imports for Leaflet (SSR-incompatible)
 const MapContainer = dynamic(

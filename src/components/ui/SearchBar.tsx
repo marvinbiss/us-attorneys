@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ArrowRight, Clock, TrendingUp, X, Navigation, Wrench } from 'lucide-react'
-import { practiceAreas as allServices } from '@/lib/data/usa'
+import { searchServices as allServices } from '@/lib/data/usa-search-data'
 
 // ── Autocomplete types ──────────────────────────────────────────────
 interface AutocompleteResult {

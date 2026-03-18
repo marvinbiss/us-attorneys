@@ -1,4 +1,5 @@
-import { cities, type City } from '@/lib/data/usa'
+import { searchCities as cities } from '@/lib/data/usa-search-data'
+import type { SearchCity as City } from '@/lib/data/usa-search-data'
 import { Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous } from 'lucide-react'
 
 // ── Icon map ─────────────────────────────────────────────────────────

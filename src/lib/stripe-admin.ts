@@ -170,7 +170,11 @@ export async function changeSubscriptionPlan(
   try {
     // Retrieve the current subscription
     const subscription = await getStripe().subscriptions.retrieve(subscriptionId)
-    const subscriptionItemId = subscription.items.data[0].id
+    const firstItem = subscription.items.data[0]
+    if (!firstItem) {
+      throw new Error(`Subscription ${subscriptionId} has no items`)
+    }
+    const subscriptionItemId = firstItem.id
 
     // Update with the new price
     const updatedSubscription = await getStripe().subscriptions.update(subscriptionId, {

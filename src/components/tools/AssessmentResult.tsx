@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   AlertTriangle, CheckCircle, Clock, ArrowRight, RotateCcw,
   Share2, Copy, Check, Scale, Shield, MapPin, ExternalLink,
@@ -31,6 +32,7 @@ export default function AssessmentResult({
   onRestart,
 }: AssessmentResultProps) {
   const [copied, setCopied] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   const stateName = stateCode ? US_STATES[stateCode] : null
   const primary = recommendation.practiceAreas[0]
@@ -71,16 +73,16 @@ export default function AssessmentResult({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Urgency banner */}
       {isUrgent && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1 }}
+          transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.1 }}
           className="flex items-start gap-3 p-4 mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl"
         >
           <Zap className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
@@ -95,9 +97,9 @@ export default function AssessmentResult({
 
       {/* Main recommendation card */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.15 }}
         className="bg-gradient-to-br from-cta-50 via-white to-cta-50/50 dark:from-cta-900/20 dark:via-gray-800 dark:to-cta-900/10 border border-cta-200 dark:border-cta-800 rounded-2xl p-6 sm:p-8 mb-6"
       >
         <div className="flex items-center gap-3 mb-1">
@@ -132,9 +134,9 @@ export default function AssessmentResult({
                   className="stroke-cta-500"
                   strokeWidth="3"
                   strokeLinecap="round"
-                  initial={{ strokeDasharray: '0 100' }}
+                  initial={prefersReducedMotion ? false : { strokeDasharray: '0 100' }}
                   animate={{ strokeDasharray: `${primary.confidence} 100` }}
-                  transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 1, delay: 0.3, ease: 'easeOut' }}
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
@@ -174,9 +176,9 @@ export default function AssessmentResult({
       {/* Secondary practice areas */}
       {secondary.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
+          transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.25 }}
           className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 mb-6"
         >
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -216,9 +218,9 @@ export default function AssessmentResult({
       {/* Deadline warning */}
       {recommendation.deadlineWarning && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.3 }}
           className="flex items-start gap-3 p-5 mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl"
         >
           <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
@@ -238,9 +240,9 @@ export default function AssessmentResult({
 
       {/* Top 3 attorney cards (placeholder — links to search) */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.35 }}
         className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 mb-6"
       >
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -272,9 +274,9 @@ export default function AssessmentResult({
 
       {/* Preparation checklist */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.4 }}
         className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 mb-6"
       >
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -285,9 +287,9 @@ export default function AssessmentResult({
           {recommendation.preparationChecklist.map((item, i) => (
             <motion.li
               key={i}
-              initial={{ opacity: 0, x: -10 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 + i * 0.05 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.5 + i * 0.05 }}
               className="flex items-start gap-3"
             >
               <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
@@ -299,9 +301,9 @@ export default function AssessmentResult({
 
       {/* Urgency-specific advice */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.5 }}
         className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 mb-6"
       >
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -345,9 +347,9 @@ export default function AssessmentResult({
 
       {/* Actions: Share / Restart */}
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={prefersReducedMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.55 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.55 }}
         className="flex flex-col sm:flex-row items-center justify-between gap-4"
       >
         <button

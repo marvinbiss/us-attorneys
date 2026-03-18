@@ -131,7 +131,7 @@ export const GET = createApiHandler(async ({ user, attorney }) => {
       }
 
       // Parse invoices
-      invoices = invoicesResult.data.map((inv) => ({
+      invoices = (invoicesResult?.data ?? []).map((inv) => ({
         id: inv.id,
         number: inv.number,
         amount: inv.amount_paid / 100,

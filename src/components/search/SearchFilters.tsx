@@ -19,7 +19,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { practiceAreas, states } from '@/lib/data/usa'
+import { searchServices as practiceAreas, searchStates as states } from '@/lib/data/usa-search-data'
 import { useGeolocation } from '@/hooks/useGeolocation'
 
 interface FilterState {

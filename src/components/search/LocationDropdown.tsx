@@ -4,7 +4,7 @@ import { useRef, useEffect, useCallback } from 'react'
 import { MapPin, Navigation, Clock, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
-import type { City } from '@/lib/data/usa'
+import type { SearchCity as City } from '@/lib/data/usa-search-data'
 import {
   dropdownVariants,
   HighlightedText,

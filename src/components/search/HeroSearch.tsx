@@ -6,7 +6,7 @@ import { Search, MapPin, X, Wrench } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { slugify } from '@/lib/utils'
-import { cities } from '@/lib/data/usa'
+import { searchCities as cities } from '@/lib/data/usa-search-data'
 import { ServiceDropdown } from './ServiceDropdown'
 import { LocationDropdown } from './LocationDropdown'
 import {
@@ -74,12 +74,12 @@ export function HeroSearch() {
     if (!hasTypedCity && recentSearches.length > 0) {
       return recentSearches.map(name => {
         const match = cities.find(v => normalizeText(v.name) === normalizeText(name))
-        return match || { name, slug: slugify(name), stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as typeof cities[0]
+        return match || { name, slug: slugify(name), stateCode: '', stateName: '', population: '', zipCode: '' } as typeof cities[0]
       })
     }
     return popularCities.map(pc => {
       const match = cities.find(v => v.slug === pc.slug)
-      return match || { name: pc.name, slug: pc.slug, stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as typeof cities[0]
+      return match || { name: pc.name, slug: pc.slug, stateCode: '', stateName: '', population: '', zipCode: '' } as typeof cities[0]
     })
   }, [filteredCities, hasTypedCity, recentSearches])
 

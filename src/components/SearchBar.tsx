@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ChevronDown } from 'lucide-react'
-import { services, cities, type City } from '@/lib/data/usa'
+import { searchServices as services, searchCities as cities, type SearchCity as City } from '@/lib/data/usa-search-data'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 interface SearchBarProps {
@@ -153,7 +153,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
       // Return popular cities mapped to City objects
       return popularCities.map(pc => {
         const match = cities.find(v => v.slug === pc.slug)
-        return match || { name: pc.name, slug: pc.slug, stateCode: '', stateName: '', county: '', population: '', zipCode: '', description: '', neighborhoods: [], latitude: 0, longitude: 0, metroArea: '' } as City
+        return match || { name: pc.name, slug: pc.slug, stateCode: '', stateName: '', population: '', zipCode: '' } as City
       })
     }
     return []

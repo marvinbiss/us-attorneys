@@ -89,9 +89,9 @@ export default function SystemDashboardPage() {
     )
   }
 
-  const maxDaily = Math.max(...data.dailyLeads.map((d) => d.count), 1)
-  const maxService = Math.max(...data.topServices.map((s) => s.count), 1)
-  const maxCity = Math.max(...data.topCities.map((c) => c.count), 1)
+  const maxDaily = Math.max(...(data.dailyLeads ?? []).map((d) => d.count), 1)
+  const maxService = Math.max(...(data.topServices ?? []).map((s) => s.count), 1)
+  const maxCity = Math.max(...(data.topCities ?? []).map((c) => c.count), 1)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -165,11 +165,11 @@ export default function SystemDashboardPage() {
 
         {/* Section 5: Funnel + Daily trend */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <FunnelChart steps={data.funnel} title="Conversion funnel" />
+          <FunnelChart steps={data.funnel ?? []} title="Conversion funnel" />
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Leads / day (last 14 days)</h3>
             <div className="flex items-end gap-1.5 h-40">
-              {data.dailyLeads.map((d) => (
+              {(data.dailyLeads ?? []).map((d) => (
                 <div key={d.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
                   <span className="text-xs font-semibold text-gray-700 tabular-nums">{d.count > 0 ? d.count : ''}</span>
                   <div className="w-full bg-gray-100 rounded-t overflow-hidden" style={{ height: '100%' }}>
@@ -188,11 +188,11 @@ export default function SystemDashboardPage() {
             <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Wrench className="w-4 h-4 text-gray-400" /> Top 10 services
             </h3>
-            {data.topServices.length === 0 ? (
+            {(data.topServices ?? []).length === 0 ? (
               <p className="text-sm text-gray-400">No data</p>
             ) : (
               <div className="space-y-2.5">
-                {data.topServices.map((s, i) => (
+                {(data.topServices ?? []).map((s, i) => (
                   <div key={s.service} className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 w-5 tabular-nums">{i + 1}.</span>
                     <span className="text-sm text-gray-700 flex-1 truncate">{s.service}</span>
@@ -209,11 +209,11 @@ export default function SystemDashboardPage() {
             <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-gray-400" /> Top 10 cities
             </h3>
-            {data.topCities.length === 0 ? (
+            {(data.topCities ?? []).length === 0 ? (
               <p className="text-sm text-gray-400">No data</p>
             ) : (
               <div className="space-y-2.5">
-                {data.topCities.map((c, i) => (
+                {(data.topCities ?? []).map((c, i) => (
                   <div key={c.city} className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 w-5 tabular-nums">{i + 1}.</span>
                     <span className="text-sm text-gray-700 flex-1 truncate">{c.city}</span>

@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, Wrench, X } from 'lucide-react'
-import { services, cities, type City } from '@/lib/data/usa'
+import { searchServices as services, searchCities as cities, type SearchCity as City } from '@/lib/data/usa-search-data'
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
 function normalizeText(text: string): string {

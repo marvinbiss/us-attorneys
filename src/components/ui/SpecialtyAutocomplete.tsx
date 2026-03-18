@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Search, X, Wrench, Zap, Key, Flame, Hammer, Home, Wind } from 'lucide-react'
-import { services } from '@/lib/data/usa'
+import { searchServices as services } from '@/lib/data/usa-search-data'
 
 interface ServiceItem {
   slug: string

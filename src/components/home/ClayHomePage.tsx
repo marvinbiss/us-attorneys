@@ -7,6 +7,7 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { formatAttorneyCount, type SiteStats, type HomepageProvider, type HomepageReview } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { cities, practiceAreas } from '@/lib/data/usa'
 
 interface Props {
   stats: SiteStats
@@ -193,7 +194,10 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
           </p>
 
           <div className="max-w-2xl mx-auto mb-3 md:mb-6">
-            <ClayHeroSearch />
+            <ClayHeroSearch
+              cities={cities.map(c => ({ slug: c.slug, name: c.name, stateCode: c.stateCode, population: c.population, zipCode: c.zipCode }))}
+              services={practiceAreas.map(s => ({ slug: s.slug, name: s.name }))}
+            />
           </div>
 
           {/* Quick filter chips — functional links */}

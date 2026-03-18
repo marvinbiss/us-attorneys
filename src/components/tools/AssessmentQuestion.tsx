@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   ArrowLeft,
   Users, Briefcase, Shield, Globe, Home, Building, MoreHorizontal,
@@ -105,6 +106,7 @@ const slideTransition = {
 // ---------------------------------------------------------------------------
 
 export function ProgressBar({ currentStep, totalSteps, onBack, canGoBack }: ProgressBarProps) {
+  const prefersReducedMotion = useReducedMotion()
   const pct = ((currentStep) / totalSteps) * 100
   return (
     <div className="mb-8">
@@ -128,7 +130,7 @@ export function ProgressBar({ currentStep, totalSteps, onBack, canGoBack }: Prog
           className="h-full bg-gradient-to-r from-cta-500 to-cta-600 rounded-full"
           initial={false}
           animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.4, ease: 'easeOut' }}
         />
       </div>
     </div>
@@ -140,16 +142,17 @@ export function ProgressBar({ currentStep, totalSteps, onBack, canGoBack }: Prog
 // ---------------------------------------------------------------------------
 
 export function CategoryStep({ categories, onSelect, direction }: CategoryStepProps) {
+  const prefersReducedMotion = useReducedMotion()
   return (
     <AnimatePresence mode="wait" custom={direction}>
       <motion.div
         key="category-step"
         custom={direction}
-        variants={slideVariants}
-        initial="enter"
+        variants={prefersReducedMotion ? undefined : slideVariants}
+        initial={prefersReducedMotion ? false : "enter"}
         animate="center"
-        exit="exit"
-        transition={slideTransition}
+        exit={prefersReducedMotion ? undefined : "exit"}
+        transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
       >
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 font-heading">
           What area does your issue relate to?
@@ -192,17 +195,18 @@ export function CategoryStep({ categories, onSelect, direction }: CategoryStepPr
 // ---------------------------------------------------------------------------
 
 export function SubCategoryStep({ category, onSelect, direction }: SubCategoryStepProps) {
+  const prefersReducedMotion = useReducedMotion()
   const CategoryIcon = getIcon(category.icon)
   return (
     <AnimatePresence mode="wait" custom={direction}>
       <motion.div
         key="subcategory-step"
         custom={direction}
-        variants={slideVariants}
-        initial="enter"
+        variants={prefersReducedMotion ? undefined : slideVariants}
+        initial={prefersReducedMotion ? false : "enter"}
         animate="center"
-        exit="exit"
-        transition={slideTransition}
+        exit={prefersReducedMotion ? undefined : "exit"}
+        transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
       >
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 font-heading">
           What specifically is your issue?
@@ -257,16 +261,17 @@ const TIMELINE_OPTIONS = [
 ]
 
 export function TimelineStep({ onSelect, direction }: TimelineStepProps) {
+  const prefersReducedMotion = useReducedMotion()
   return (
     <AnimatePresence mode="wait" custom={direction}>
       <motion.div
         key="timeline-step"
         custom={direction}
-        variants={slideVariants}
-        initial="enter"
+        variants={prefersReducedMotion ? undefined : slideVariants}
+        initial={prefersReducedMotion ? false : "enter"}
         animate="center"
-        exit="exit"
-        transition={slideTransition}
+        exit={prefersReducedMotion ? undefined : "exit"}
+        transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
       >
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 font-heading">
           When did this happen?
@@ -305,6 +310,7 @@ export function TimelineStep({ onSelect, direction }: TimelineStepProps) {
 const TOP_STATES = ['CA', 'TX', 'FL', 'NY', 'PA', 'IL', 'OH', 'GA', 'NC', 'MI', 'NJ', 'VA']
 
 export function StateStep({ onSelect, direction }: StateStepProps) {
+  const prefersReducedMotion = useReducedMotion()
   const stateEntries = Object.entries(US_STATES).filter(([code]) => {
     // Exclude territories for the main list, they appear at the bottom
     return !['PR', 'GU', 'VI', 'AS', 'MP', 'UM'].includes(code)
@@ -315,11 +321,11 @@ export function StateStep({ onSelect, direction }: StateStepProps) {
       <motion.div
         key="state-step"
         custom={direction}
-        variants={slideVariants}
-        initial="enter"
+        variants={prefersReducedMotion ? undefined : slideVariants}
+        initial={prefersReducedMotion ? false : "enter"}
         animate="center"
-        exit="exit"
-        transition={slideTransition}
+        exit={prefersReducedMotion ? undefined : "exit"}
+        transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
       >
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 font-heading">
           What state are you in?
@@ -400,16 +406,17 @@ const URGENCY_OPTIONS: { value: UrgencyLevel; label: string; description: string
 ]
 
 export function UrgencyStep({ onSelect, direction }: UrgencyStepProps) {
+  const prefersReducedMotion = useReducedMotion()
   return (
     <AnimatePresence mode="wait" custom={direction}>
       <motion.div
         key="urgency-step"
         custom={direction}
-        variants={slideVariants}
-        initial="enter"
+        variants={prefersReducedMotion ? undefined : slideVariants}
+        initial={prefersReducedMotion ? false : "enter"}
         animate="center"
-        exit="exit"
-        transition={slideTransition}
+        exit={prefersReducedMotion ? undefined : "exit"}
+        transition={prefersReducedMotion ? { duration: 0 } : slideTransition}
       >
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 font-heading">
           How urgent is this?

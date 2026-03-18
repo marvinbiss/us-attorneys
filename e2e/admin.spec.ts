@@ -127,9 +127,9 @@ const MOCK_CLAIMS = {
 // Mock bookings list
 const MOCK_BOOKINGS = {
   bookings: [
-    { id: 'bk-1', attorney_id: 'att-1', client_id: 'cl-1', service_name: 'Consultation', scheduled_date: '2026-03-20T10:00:00Z', status: 'pending', payment_status: 'paid', deposit_amount: 15000, created_at: '2026-03-15T00:00:00Z', provider: { id: 'att-1', name: 'John Smith', email: 'john@example.com' } },
-    { id: 'bk-2', attorney_id: 'att-2', client_id: 'cl-2', service_name: 'Video Consultation', scheduled_date: '2026-03-22T14:00:00Z', status: 'confirmed', payment_status: 'paid', deposit_amount: 20000, created_at: '2026-03-16T00:00:00Z', provider: { id: 'att-2', name: 'Jane Doe', email: 'jane@example.com' } },
-    { id: 'bk-3', attorney_id: 'att-3', client_id: 'cl-3', service_name: 'Case Review', scheduled_date: '2026-03-18T09:00:00Z', status: 'completed', payment_status: 'paid', deposit_amount: 10000, created_at: '2026-03-10T00:00:00Z', provider: { id: 'att-3', name: 'Bob Wilson', email: 'bob@example.com' } },
+    { id: 'bk-1', attorney_id: 'att-1', client_id: 'cl-1', service_name: 'Consultation', scheduled_at: '2026-03-20T10:00:00Z', status: 'pending', payment_status: 'paid', deposit_amount: 15000, created_at: '2026-03-15T00:00:00Z', provider: { id: 'att-1', name: 'John Smith', email: 'john@example.com' } },
+    { id: 'bk-2', attorney_id: 'att-2', client_id: 'cl-2', service_name: 'Video Consultation', scheduled_at: '2026-03-22T14:00:00Z', status: 'confirmed', payment_status: 'paid', deposit_amount: 20000, created_at: '2026-03-16T00:00:00Z', provider: { id: 'att-2', name: 'Jane Doe', email: 'jane@example.com' } },
+    { id: 'bk-3', attorney_id: 'att-3', client_id: 'cl-3', service_name: 'Case Review', scheduled_at: '2026-03-18T09:00:00Z', status: 'completed', payment_status: 'paid', deposit_amount: 10000, created_at: '2026-03-10T00:00:00Z', provider: { id: 'att-3', name: 'Bob Wilson', email: 'bob@example.com' } },
   ],
   totalPages: 1,
   total: 3,
