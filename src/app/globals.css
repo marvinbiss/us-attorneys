@@ -379,9 +379,25 @@
    World-class mobile experience like Doctolib
    =========================================== */
 
-/* Safe area support for iOS devices with notch */
+/* Safe area support for iOS devices with notch (viewport-fit: cover) */
 .pb-safe {
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-left {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.safe-right {
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 /* Improve tap feedback on mobile — haptic-like press effect */
@@ -428,7 +444,7 @@
 /* Bottom navigation spacer */
 @media (max-width: 767px) {
   main {
-    padding-bottom: 80px; /* Bottom nav height + safe area */
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); /* Bottom nav height + safe area */
   }
 }
 

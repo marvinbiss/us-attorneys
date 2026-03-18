@@ -20,8 +20,8 @@ export const dynamicParams = false
 const BUILD_DATE = new Date().toISOString().split('T')[0]
 
 // Batch sizes — must match the BATCH used in sitemap() slicing
-const STATIC_BATCH = 10_000
-const LARGE_BATCH = 45_000
+// Max 5,000 URLs per sitemap file (Doctolib pattern — better crawl efficiency)
+const BATCH_SIZE = 5_000
 
 // Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
 const TOP_CITIES_PHASE1 = 300
@@ -131,19 +131,19 @@ export async function generateSitemaps() {
     { id: 'blog' },
 
     // ── LEGACY sitemaps (backward compat with Google Search Console) ───
-    ...batchIds('service-cities', pa * phase1, LARGE_BATCH),
+    ...batchIds('service-cities', pa * phase1, BATCH_SIZE),
     { id: 'cities' },
     { id: 'geo' },
     { id: 'quotes-services' },
-    ...batchIds('quotes-service-cities', services.length * phase1, STATIC_BATCH),
-    ...batchIds('emergency-service-cities', emergencySlugs.length * phase1, STATIC_BATCH),
-    ...batchIds('tarifs-service-cities', services.length * phase1, STATIC_BATCH),
-    ...batchIds('tarifs-task-cities', totalTaskCount * phase1, LARGE_BATCH),
+    ...batchIds('quotes-service-cities', services.length * phase1, BATCH_SIZE),
+    ...batchIds('emergency-service-cities', emergencySlugs.length * phase1, BATCH_SIZE),
+    ...batchIds('tarifs-service-cities', services.length * phase1, BATCH_SIZE),
+    ...batchIds('tarifs-task-cities', totalTaskCount * phase1, BATCH_SIZE),
     { id: 'reviews-services' },
-    ...batchIds('reviews-service-cities', reviewServiceSlugs.length * phase1, STATIC_BATCH),
+    ...batchIds('reviews-service-cities', reviewServiceSlugs.length * phase1, BATCH_SIZE),
     { id: 'issues' },
-    ...batchIds('issues-cities', problemSlugs.length * phase1, STATIC_BATCH),
-    ...batchIds('dept-services', states.length * getPracticeAreaSlugs().length, LARGE_BATCH),
+    ...batchIds('issues-cities', problemSlugs.length * phase1, BATCH_SIZE),
+    ...batchIds('dept-services', states.length * getPracticeAreaSlugs().length, BATCH_SIZE),
     { id: 'region-services' },
 
     // ── NEW English intent sitemaps ─────────────────────────────────────
@@ -151,38 +151,38 @@ export async function generateSitemaps() {
     ...EN_INTENTS.map(intent => ({ id: `${intent}-service-hubs` })),
     // Intent × city sitemaps (batched)
     ...EN_INTENTS.flatMap(intent =>
-      batchIds(`${intent}-cities`, pa * phase1, LARGE_BATCH)
+      batchIds(`${intent}-cities`, pa * phase1, BATCH_SIZE)
     ),
 
     // ── NEW Spanish intent sitemaps ─────────────────────────────────────
     ...ES_INTENTS.flatMap(intent =>
-      batchIds(`es-${intent}-cities`, pa * hispanicCities, LARGE_BATCH)
+      batchIds(`es-${intent}-cities`, pa * hispanicCities, BATCH_SIZE)
     ),
 
     // ── Type C: Best/top rated × cities ─────────────────────────────────
-    ...batchIds('best-cities', pa * phase1, LARGE_BATCH),
+    ...batchIds('best-cities', pa * phase1, BATCH_SIZE),
 
     // ── Type D: Free consultation × cities ──────────────────────────────
-    ...batchIds('free-consultation-cities', pa * phase1, LARGE_BATCH),
+    ...batchIds('free-consultation-cities', pa * phase1, BATCH_SIZE),
 
     // ── Type E: Affordable × cities ─────────────────────────────────────
-    ...batchIds('affordable-cities', pa * phase1, LARGE_BATCH),
+    ...batchIds('affordable-cities', pa * phase1, BATCH_SIZE),
 
     // ── Type E: Pro bono × cities ───────────────────────────────────────
-    ...batchIds('pro-bono-cities', pa * phase1, LARGE_BATCH),
+    ...batchIds('pro-bono-cities', pa * phase1, BATCH_SIZE),
 
     // ── Type G: Situations × cities ─────────────────────────────────────
-    ...batchIds('situations', SITUATION_SLUGS_COUNT * phase1, LARGE_BATCH),
+    ...batchIds('situations', SITUATION_SLUGS_COUNT * phase1, BATCH_SIZE),
 
     // ── Type H: Demographic × PA × cities ───────────────────────────────
-    ...batchIds('demographic', DEMOGRAPHIC_MODIFIERS.length * pa * phase1, LARGE_BATCH),
+    ...batchIds('demographic', DEMOGRAPHIC_MODIFIERS.length * pa * phase1, BATCH_SIZE),
 
     // ── Type J: PA × counties ───────────────────────────────────────────
-    ...batchIds('counties', pa * TOTAL_COUNTIES, LARGE_BATCH),
+    ...batchIds('counties', pa * TOTAL_COUNTIES, BATCH_SIZE),
 
     // ── Type K: Neighborhoods (deferred Phase 2 — 0 sitemaps for now) ──
     // Uncomment when neighborhood data is ready:
-    // ...batchIds('neighborhoods', pa * neighborhoodCount, LARGE_BATCH),
+    // ...batchIds('neighborhoods', pa * neighborhoodCount, BATCH_SIZE),
 
     // ── Type L: FAQ × states ────────────────────────────────────────────
     { id: 'faq-states' },
@@ -191,13 +191,13 @@ export async function generateSitemaps() {
     { id: 'state-guides' },
 
     // ── Type M2: PA × State legal guides (75 PAs × 57 states = 4,275) ──
-    ...batchIds('legal-guides', pa * states.length, LARGE_BATCH),
+    ...batchIds('legal-guides', pa * states.length, BATCH_SIZE),
 
     // ── Type N: Comparisons (already in static, listed for completeness)
     { id: 'comparisons' },
 
     // ── Type Q: Industry × cities ───────────────────────────────────────
-    ...batchIds('industry', INDUSTRIES.length * phase1, LARGE_BATCH),
+    ...batchIds('industry', INDUSTRIES.length * phase1, BATCH_SIZE),
 
     // ── Geographic hub sitemaps ─────────────────────────────────────────
     { id: 'counties-hub' },
@@ -363,7 +363,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Service + city — Phase 1: top 300 cities (LEGACY) ──────────────────
   if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const mergedCities = getPhase1Cities()
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -372,7 +372,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/practice-areas/${service.slug}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── City pages (LEGACY) ────────────────────────────────────────────────
@@ -404,8 +404,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Quotes service×city pages (LEGACY) ─────────────────────────────────
   if (id.startsWith('quotes-service-cities-')) {
     const batchIndex = parseInt(id.replace('quotes-service-cities-', ''), 10)
-    const start = batchIndex * STATIC_BATCH
-    const end = start + STATIC_BATCH
+    const start = batchIndex * BATCH_SIZE
+    const end = start + BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
@@ -423,8 +423,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Emergency service×city pages (LEGACY) ──────────────────────────────
   if (id.startsWith('emergency-service-cities-')) {
     const batchIndex = parseInt(id.replace('emergency-service-cities-', ''), 10)
-    const start = batchIndex * STATIC_BATCH
-    const end = start + STATIC_BATCH
+    const start = batchIndex * BATCH_SIZE
+    const end = start + BATCH_SIZE
     const emergencySlugs = Object.keys(tradeContent)
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
@@ -443,8 +443,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Pricing service×city pages (LEGACY — tarifs prefix) ────────────────
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
-    const start = batchIndex * STATIC_BATCH
-    const end = start + STATIC_BATCH
+    const start = batchIndex * BATCH_SIZE
+    const end = start + BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
@@ -462,8 +462,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Pricing task×city pages (LEGACY — tarifs prefix) ───────────────────
   if (id.startsWith('tarifs-task-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-task-cities-', ''), 10)
-    const start = batchIndex * LARGE_BATCH
-    const end = start + LARGE_BATCH
+    const start = batchIndex * BATCH_SIZE
+    const end = start + BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
     let count = 0
@@ -493,8 +493,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Reviews service×city pages (LEGACY) ────────────────────────────────
   if (id.startsWith('reviews-service-cities-')) {
     const batchIndex = parseInt(id.replace('reviews-service-cities-', ''), 10)
-    const start = batchIndex * STATIC_BATCH
-    const end = start + STATIC_BATCH
+    const start = batchIndex * BATCH_SIZE
+    const end = start + BATCH_SIZE
     const tradeSlugs = Object.keys(tradeContent)
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
@@ -522,8 +522,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Issues × city pages (LEGACY) ──────────────────────────────────────
   if (id.startsWith('issues-cities-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
-    const start = batchIndex * STATIC_BATCH
-    const end = start + STATIC_BATCH
+    const start = batchIndex * BATCH_SIZE
+    const end = start + BATCH_SIZE
     const problemSlugs = getProblemSlugs()
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     const result: MetadataRoute.Sitemap = []
@@ -549,7 +549,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/states/${state.slug}/${service}` })
       }
     }
-    return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
+    return allUrls.slice(batchIndex * BATCH_SIZE, (batchIndex + 1) * BATCH_SIZE)
   }
 
   // ── Region × service pages (LEGACY) ───────────────────────────────────
@@ -582,7 +582,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     if (id.startsWith(`${intent}-cities-`)) {
       const batchIndex = parseInt(id.slice(`${intent}-cities-`.length), 10)
       if (isNaN(batchIndex)) break
-      const offset = batchIndex * LARGE_BATCH
+      const offset = batchIndex * BATCH_SIZE
       const prefix = EN_INTENT_CITY_PREFIX[intent]
       const mergedCities = getPhase1Cities()
 
@@ -592,7 +592,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           allUrls.push({ url: `${SITE_URL}${prefix}/${pa.slug}/${city.slug}` })
         }
       }
-      return allUrls.slice(offset, offset + LARGE_BATCH)
+      return allUrls.slice(offset, offset + BATCH_SIZE)
     }
   }
 
@@ -604,7 +604,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     if (id.startsWith(`es-${intent}-cities-`)) {
       const batchIndex = parseInt(id.slice(`es-${intent}-cities-`.length), 10)
       if (isNaN(batchIndex)) break
-      const offset = batchIndex * LARGE_BATCH
+      const offset = batchIndex * BATCH_SIZE
       // Use top Hispanic cities (sorted by Hispanic population — cities array is by total pop)
       const hispanicCities = cities.slice(0, TOP_HISPANIC_CITIES)
 
@@ -617,7 +617,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           allUrls.push({ url: `${SITE_URL}/${intent}/${esPaSlug}/${city.slug}` })
         }
       }
-      return allUrls.slice(offset, offset + LARGE_BATCH)
+      return allUrls.slice(offset, offset + BATCH_SIZE)
     }
   }
 
@@ -628,7 +628,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Type C: Best/top rated × cities ───────────────────────────────────
   if (id.startsWith('best-cities-')) {
     const batchIndex = parseInt(id.slice('best-cities-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -637,13 +637,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/best/${pa.slug}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type D: Free consultation × cities ────────────────────────────────
   if (id.startsWith('free-consultation-cities-')) {
     const batchIndex = parseInt(id.slice('free-consultation-cities-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -652,13 +652,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/free-consultation/${pa.slug}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type E: Affordable × cities ──────────────────────────────────────
   if (id.startsWith('affordable-cities-')) {
     const batchIndex = parseInt(id.slice('affordable-cities-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -667,13 +667,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/affordable/${pa.slug}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type E: Pro bono × cities ────────────────────────────────────────
   if (id.startsWith('pro-bono-cities-')) {
     const batchIndex = parseInt(id.slice('pro-bono-cities-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -682,13 +682,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/pro-bono/${pa.slug}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type G: Situations × cities ──────────────────────────────────────
   if (id.startsWith('situations-')) {
     const batchIndex = parseInt(id.slice('situations-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
     // Situations are derived from problems + extended scenario slugs
     const situationSlugs = getProblemSlugs()
@@ -702,13 +702,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/situations/${situation}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type H: Demographic modifier × PA × cities ──────────────────────
   if (id.startsWith('demographic-')) {
     const batchIndex = parseInt(id.slice('demographic-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -719,13 +719,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         }
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type J: PA × counties ───────────────────────────────────────────
   if (id.startsWith('counties-') && id !== 'counties-hub') {
     const batchIndex = parseInt(id.slice('counties-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     // Counties are derived from state data — each state has counties
     // Generate county slugs from states (state-slug/county-index pattern)
     // In production, this will be replaced by actual county data from the DB
@@ -742,7 +742,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }
     // Note: Full county × PA URLs will expand to ~235K when county data module is ready
     // For now, emit state/county/PA hub pages only
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type L: FAQ × states ─────────────────────────────────────────────
@@ -776,7 +776,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Type M2: PA × State legal guides ─────────────────────────────────
   if (id.startsWith('legal-guides-')) {
     const batchIndex = parseInt(id.slice('legal-guides-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const pa of practiceAreas) {
@@ -787,7 +787,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Type N: Comparisons ──────────────────────────────────────────────
@@ -801,7 +801,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Type Q: Industry × cities ────────────────────────────────────────
   if (id.startsWith('industry-')) {
     const batchIndex = parseInt(id.slice('industry-'.length), 10)
-    const offset = batchIndex * LARGE_BATCH
+    const offset = batchIndex * BATCH_SIZE
     const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
 
     const allUrls: MetadataRoute.Sitemap = []
@@ -810,7 +810,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/industries/${industry}/${city.slug}` })
       }
     }
-    return allUrls.slice(offset, offset + LARGE_BATCH)
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ── Counties hub pages ───────────────────────────────────────────────

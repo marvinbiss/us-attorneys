@@ -1,0 +1,221 @@
+'use client'
+
+import Link from 'next/link'
+import {
+  Star,
+  MapPin,
+  Phone,
+  Shield,
+  CheckCircle,
+  Briefcase,
+  ChevronRight,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface SearchAttorney {
+  id: string
+  name: string
+  slug: string
+  specialty_slug?: string | null
+  specialty_name?: string | null
+  specialty?: { slug: string; name: string } | null
+  address_city: string | null
+  address_state: string | null
+  address_county: string | null
+  is_verified: boolean | null
+  rating_average: number | null
+  review_count: number | null
+  phone: string | null
+  bar_number: string | null
+  is_featured: boolean | null
+  distance_miles?: number | null
+}
+
+interface SearchResultCardProps {
+  attorney: SearchAttorney
+  index: number
+}
+
+function StarRating({ rating, count }: { rating: number; count: number }) {
+  const fullStars = Math.floor(rating)
+  const hasHalf = rating - fullStars >= 0.25
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className="flex items-center" aria-label={`${rating.toFixed(1)} out of 5 stars`}>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Star
+            key={i}
+            className={cn(
+              'w-4 h-4',
+              i <= fullStars
+                ? 'text-amber-400 fill-amber-400'
+                : i === fullStars + 1 && hasHalf
+                  ? 'text-amber-400 fill-amber-400/50'
+                  : 'text-gray-200 dark:text-gray-600'
+            )}
+          />
+        ))}
+      </div>
+      <span className="text-sm font-semibold text-gray-900 dark:text-white">
+        {rating.toFixed(1)}
+      </span>
+      <span className="text-sm text-gray-500 dark:text-gray-400">
+        ({count} review{count !== 1 ? 's' : ''})
+      </span>
+    </div>
+  )
+}
+
+export function SearchResultCard({ attorney }: SearchResultCardProps) {
+  const specialtyName = attorney.specialty_name || attorney.specialty?.name || null
+  const locationParts = [attorney.address_city, attorney.address_state].filter(Boolean)
+  const locationText = locationParts.join(', ')
+  const profileHref = `/attorneys/${attorney.slug}`
+
+  // Generate initials for avatar
+  const initials = attorney.name
+    .split(' ')
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+
+  // Generate a deterministic color from the name
+  const colors = [
+    'bg-blue-600', 'bg-emerald-600', 'bg-violet-600', 'bg-amber-600',
+    'bg-rose-600', 'bg-cyan-600', 'bg-indigo-600', 'bg-teal-600',
+  ]
+  const colorIndex = attorney.name.split('').reduce((sum, c) => sum + c.charCodeAt(0), 0) % colors.length
+  const avatarColor = colors[colorIndex]
+
+  return (
+    <article
+      className={cn(
+        'group relative bg-white dark:bg-gray-800 rounded-2xl border transition-all duration-300',
+        attorney.is_featured
+          ? 'border-amber-200 dark:border-amber-700 shadow-md shadow-amber-100/50 dark:shadow-amber-900/20'
+          : 'border-gray-100 dark:border-gray-700 shadow-sm',
+        'hover:shadow-xl hover:shadow-gray-200/60 dark:hover:shadow-gray-900/40 hover:-translate-y-0.5 hover:border-gray-200 dark:hover:border-gray-600'
+      )}
+    >
+      {/* Featured badge */}
+      {attorney.is_featured && (
+        <div className="absolute -top-3 left-6 px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold rounded-full shadow-sm shadow-amber-500/30">
+          Featured
+        </div>
+      )}
+
+      <Link
+        href={profileHref}
+        className="block p-5 sm:p-6"
+        aria-label={`View profile of ${attorney.name}`}
+      >
+        <div className="flex gap-4 sm:gap-5">
+          {/* Avatar */}
+          <div className="flex-shrink-0">
+            <div
+              className={cn(
+                'w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-inner',
+                avatarColor
+              )}
+              aria-hidden="true"
+            >
+              {initials}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            {/* Name row */}
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                  {attorney.name}
+                </h3>
+                {/* Verified + Bar */}
+                <div className="flex flex-wrap items-center gap-2 mt-1">
+                  {attorney.is_verified && (
+                    <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">
+                      <CheckCircle className="w-3 h-3" />
+                      Verified
+                    </span>
+                  )}
+                  {attorney.bar_number && (
+                    <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                      <Shield className="w-3 h-3" />
+                      Bar #{attorney.bar_number}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-blue-500 dark:group-hover:text-blue-400 flex-shrink-0 mt-1 transition-colors" />
+            </div>
+
+            {/* Rating */}
+            {attorney.rating_average && attorney.rating_average > 0 && (
+              <div className="mt-2.5">
+                <StarRating
+                  rating={attorney.rating_average}
+                  count={attorney.review_count || 0}
+                />
+              </div>
+            )}
+
+            {/* Practice area + location */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-sm">
+              {specialtyName && (
+                <span className="inline-flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
+                  <Briefcase className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
+                  {specialtyName}
+                </span>
+              )}
+              {locationText && (
+                <span className="inline-flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
+                  <MapPin className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
+                  {locationText}
+                </span>
+              )}
+              {attorney.distance_miles != null && (
+                <span className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                  {attorney.distance_miles.toFixed(1)} mi away
+                </span>
+              )}
+            </div>
+
+            {/* Phone + CTA on desktop */}
+            <div className="hidden sm:flex items-center gap-4 mt-4">
+              {attorney.phone && (
+                <span className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                  <Phone className="w-3.5 h-3.5" />
+                  {attorney.phone}
+                </span>
+              )}
+              <span className="ml-auto inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:underline">
+                View profile
+                <ChevronRight className="w-4 h-4" />
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile CTA bar */}
+        <div className="sm:hidden mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          {attorney.phone && (
+            <span className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+              <Phone className="w-3.5 h-3.5" />
+              {attorney.phone}
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400">
+            View profile
+            <ChevronRight className="w-4 h-4" />
+          </span>
+        </div>
+      </Link>
+    </article>
+  )
+}
+
+export default SearchResultCard

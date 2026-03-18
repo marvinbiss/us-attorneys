@@ -55,9 +55,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const cmsPage = await getPageContent(`blog-${slug}`, 'blog')
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Blog', url: '/blog' },
-    { name: article.title, url: `/blog/${slug}` },
+    { name: 'Home', url: '/', semanticType: 'Organization' },
+    { name: 'Blog', url: '/blog', semanticType: 'Blog' },
+    { name: article.title, url: `/blog/${slug}`, semanticType: 'BlogPosting' },
   ])
 
   return (

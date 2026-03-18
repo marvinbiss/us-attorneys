@@ -396,6 +396,8 @@ const nextConfig = {
       { source: '/sitemap.xml', destination: '/api/sitemap-index' },
       // Attorney sitemaps served dynamically (DB-dependent, can't pre-render at build time)
       { source: '/sitemap/attorneys-:id.xml', destination: '/api/sitemap-attorneys?id=:id' },
+      // Hreflang sitemaps (EN<->ES mappings, batched at 5K URLs)
+      { source: '/sitemap/hreflang-:id.xml', destination: '/api/sitemap-hreflang?id=:id' },
     ]
   },
 

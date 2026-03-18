@@ -34,7 +34,17 @@ export {
   getReviewPageSchema,
   getCostGuideSchema,
   getEmergencyServiceSchema,
+  // Semantic breadcrumb builders (Doctolib-style)
+  getHomeBreadcrumb,
+  getPracticeAreaBreadcrumb,
+  getPracticeAreaCityBreadcrumb,
+  getAttorneyProfileBreadcrumb,
+  getStateBreadcrumb,
+  getBlogListBreadcrumb,
+  getBlogPostBreadcrumb,
+  getGenericBreadcrumb,
 } from './jsonld'
+export type { SemanticBreadcrumbItem, SemanticBreadcrumbType } from './jsonld'
 
 // --- Blog Schema ---
 export { extractFAQFromContent, getBlogArticleSchema } from './blog-schema'

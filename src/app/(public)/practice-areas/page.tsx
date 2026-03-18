@@ -189,8 +189,8 @@ export default async function ServicesPage() {
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Practice Areas', url: '/services' },
+    { name: 'Home', url: '/', semanticType: 'Organization' },
+    { name: 'Practice Areas', url: '/services', semanticType: 'CollectionPage' },
   ])
 
   const organizationSchema = getOrganizationSchema()

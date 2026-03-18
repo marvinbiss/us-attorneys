@@ -138,9 +138,9 @@ export default async function VillePage({ params }: PageProps) {
     image: cityImage?.src,
   })
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Cities', url: '/cities' },
-    { name: cityInfo.name, url: `/cities/${cityInfo.slug}` },
+    { name: 'Home', url: '/', semanticType: 'Organization' },
+    { name: 'Cities', url: '/cities', semanticType: 'CollectionPage' },
+    { name: cityInfo.name, url: `/cities/${cityInfo.slug}`, semanticType: 'City' },
   ])
 
   const faqSchema = getFAQSchema(content.faqItems)

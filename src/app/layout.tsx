@@ -53,6 +53,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#E86B4B' },
     { media: '(prefers-color-scheme: dark)', color: '#C24B2A' },
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
   applicationName: 'US Attorneys',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
+    statusBarStyle: 'black-translucent',
     title: 'US Attorneys',
   },
   formatDetection: {
@@ -148,7 +149,11 @@ export default async function RootLayout({
         <meta name="msapplication-TileColor" content="#E86B4B" />
         <meta name="msapplication-tap-highlight" content="no" />
 
-        {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
+        {/* OpenSearch — enables browser address bar search */}
+        <link rel="search" type="application/opensearchdescription+xml" title="US Attorneys" href="/open_search.xml" />
+
+        {/* Additional icon sizes (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
+        <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
 
         {/* LLM discovery — llms.txt (GEO/AEO optimization) */}
@@ -260,7 +265,7 @@ fbq('track', 'PageView');`}
         <ThemeProvider>
         <MobileMenuProvider>
           <Header attorneyCount={attorneyCount} />
-          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">
+          <main id="main-content" tabIndex={-1} className="pb-16 pb-[calc(4rem+env(safe-area-inset-bottom,0px))] md:pb-0 outline-none">
             <Suspense fallback={<PageSkeleton />}>
               {children}
             </Suspense>

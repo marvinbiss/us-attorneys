@@ -582,11 +582,11 @@ export default async function AttorneyPage({ params }: PageProps) {
               // State level for geographic hierarchy
               ...(attorney.department_code ? (() => {
                 const stateData = getStateByCode(attorney.department_code!)
-                return stateData ? [{ label: stateData.name, href: `/states/${stateData.slug}` }] : []
+                return stateData ? [{ label: stateData.name, href: `/states/${stateData.slug}`, semanticType: 'AdministrativeArea' as const }] : []
               })() : []),
-              { label: specialtyName, href: `/practice-areas/${specialtySlug}` },
-              ...(cityName ? [{ label: cityName, href: `/practice-areas/${specialtySlug}/${locationSlug}` }] : []),
-              { label: attorney.business_name || 'Attorney' },
+              { label: specialtyName, href: `/practice-areas/${specialtySlug}`, semanticType: 'LegalService' },
+              ...(cityName ? [{ label: cityName, href: `/practice-areas/${specialtySlug}/${locationSlug}`, semanticType: 'City' as const }] : []),
+              { label: attorney.business_name || 'Attorney', semanticType: 'Person' },
             ]}
           />
         </div>

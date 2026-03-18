@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { generateSitemaps } from '@/app/sitemap'
+import { getHreflangBatchCount } from '@/app/api/sitemap-hreflang/route'
 
 const ATTORNEY_BATCH_SIZE = 5_000
 // Max attorney sitemaps to avoid declaring hundreds of broken sitemaps
@@ -44,6 +45,12 @@ export async function GET() {
     }
   } catch {
     // DB unavailable — omit attorney sitemaps from index
+  }
+
+  // ── Hreflang sitemaps (EN<->ES mappings) ──────────────────────────────
+  const hreflangBatches = getHreflangBatchCount()
+  for (let i = 0; i < hreflangBatches; i++) {
+    ids.push(`hreflang-${i}`)
   }
 
   const xml = [

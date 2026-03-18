@@ -288,10 +288,10 @@ function generateJsonLd(
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Practice Areas', url: '/services' },
-    { name: service.name, url: `/practice-areas/${specialtySlug}` },
-    { name: location.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
+    { name: 'Home', url: '/', semanticType: 'Organization' },
+    { name: 'Practice Areas', url: '/services', semanticType: 'CollectionPage' },
+    { name: service.name, url: `/practice-areas/${specialtySlug}`, semanticType: 'LegalService' },
+    { name: location.name, url: `/practice-areas/${specialtySlug}/${locationSlug}`, semanticType: 'City' },
   ])
 
   return [collectionPageSchema, serviceSchema, breadcrumbSchema]

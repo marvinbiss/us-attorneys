@@ -90,7 +90,7 @@ export default async function ArtisansPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumbs
             items={[
-              { label: 'Attorneys' },
+              { label: 'Attorneys', semanticType: 'CollectionPage' },
             ]}
           />
         </div>

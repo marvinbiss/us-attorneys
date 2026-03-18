@@ -110,9 +110,9 @@ export default async function StatePage({ params }: PageProps) {
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'States', url: '/states' },
-    { name: `${dept.name} (${dept.code})`, url: `/states/${dept.slug}` },
+    { name: 'Home', url: '/', semanticType: 'Organization' },
+    { name: 'States', url: '/states', semanticType: 'CollectionPage' },
+    { name: `${dept.name} (${dept.code})`, url: `/states/${dept.slug}`, semanticType: 'AdministrativeArea' },
   ])
 
   const collectionPageSchema = getCollectionPageSchema({

@@ -19,11 +19,18 @@ const PRIVATE_DISALLOW = [
   // Query parameter variations (duplicate content).
   // Pattern /*?*param= covers BOTH first (?param=) and secondary (&param=) occurrences.
   // Google doc example: disallow: /*?*color= (blocks /items?color=x AND /items?cat=y&color=x)
+  // NOTE: ?page= is intentionally ALLOWED — each paginated page has its own canonical.
+  // Google deprecated rel=next/prev in 2019; Doctolib pattern = index all pagination.
   '/*?*sort=',
-  '/*?*page=',
   '/*?*filter=',
   '/*?*q=',
   '/*?*redirect=',
+  '/*?*rating=',
+  '/*?*availability=',
+  '/*?*fee_type=',
+  '/*?*gender=',
+  '/*?*language=',
+  '/*?*distance=',
 ]
 
 export default function robots(): MetadataRoute.Robots {

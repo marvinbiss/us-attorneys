@@ -90,8 +90,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Blog', url: '/blog' },
+    { name: 'Home', url: '/', semanticType: 'Organization' },
+    { name: 'Blog', url: '/blog', semanticType: 'Blog' },
   ])
 
   // Category article counts for cross-link section

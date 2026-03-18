@@ -329,8 +329,8 @@ export default async function ServicePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumbs
             items={[
-              { label: 'Practice Areas', href: '/practice-areas' },
-              { label: service.name },
+              { label: 'Practice Areas', href: '/practice-areas', semanticType: 'CollectionPage' },
+              { label: service.name, semanticType: 'LegalService' },
             ]}
           />
         </div>

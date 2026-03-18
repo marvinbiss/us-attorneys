@@ -104,24 +104,145 @@ export function getServiceSchema(service: {
   }
 }
 
-// Schema.org BreadcrumbList — Google-compliant format
-// Last item = current page (no `item`), others use WebPage object with @id
-export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
+// --- Semantic BreadcrumbList (Doctolib-style) ---
+// Each item can carry a Schema.org @type (Organization, LegalService, City, Person, etc.)
+// Google renders these as rich breadcrumbs with entity hints.
+
+export type SemanticBreadcrumbType =
+  | 'Organization'
+  | 'LegalService'
+  | 'City'
+  | 'Person'
+  | 'AdministrativeArea'
+  | 'Blog'
+  | 'BlogPosting'
+  | 'CollectionPage'
+  | 'WebPage'
+
+export interface SemanticBreadcrumbItem {
+  name: string
+  url: string
+  /** Schema.org type for the breadcrumb item entity. Defaults to 'WebPage'. */
+  semanticType?: SemanticBreadcrumbType
+}
+
+/**
+ * Generate BreadcrumbList JSON-LD with optional semantic types on each item.
+ * - Last item = current page (no `item` URL per Google spec)
+ * - Non-last items include a typed `item` object when semanticType is provided
+ * - Backward-compatible: items without semanticType produce a plain URL string
+ */
+export function getBreadcrumbSchema(items: (SemanticBreadcrumbItem | { name: string; url: string })[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => {
       const isLast = index === items.length - 1
+      const semanticType = 'semanticType' in item ? item.semanticType : undefined
+      const fullUrl = item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url}`
+
       return {
         '@type': 'ListItem',
         position: index + 1,
         name: item.name,
         ...(!isLast && {
-          item: `${SITE_URL}${item.url}`,
+          item: semanticType
+            ? { '@type': semanticType, '@id': fullUrl, name: item.name, url: fullUrl }
+            : fullUrl,
         }),
       }
     }),
   }
+}
+
+// --- Pre-built semantic breadcrumb builders per page type ---
+
+/** Homepage breadcrumb — just Organization root */
+export function getHomeBreadcrumb(): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+  ]
+}
+
+/** Practice area hub: Organization > LegalService */
+export function getPracticeAreaBreadcrumb(params: {
+  practiceAreaName: string
+  practiceAreaSlug: string
+}): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    { name: params.practiceAreaName, url: `/practice-areas/${params.practiceAreaSlug}`, semanticType: 'LegalService' },
+  ]
+}
+
+/** Practice area + city: Organization > LegalService > City */
+export function getPracticeAreaCityBreadcrumb(params: {
+  practiceAreaName: string
+  practiceAreaSlug: string
+  cityName: string
+  citySlug: string
+}): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    { name: params.practiceAreaName, url: `/practice-areas/${params.practiceAreaSlug}`, semanticType: 'LegalService' },
+    { name: params.cityName, url: `/practice-areas/${params.practiceAreaSlug}/${params.citySlug}`, semanticType: 'City' },
+  ]
+}
+
+/** Attorney profile: Organization > LegalService > City > Person */
+export function getAttorneyProfileBreadcrumb(params: {
+  practiceAreaName: string
+  practiceAreaSlug: string
+  cityName: string
+  citySlug: string
+  attorneyName: string
+  attorneyUrl: string
+}): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    { name: params.practiceAreaName, url: `/practice-areas/${params.practiceAreaSlug}`, semanticType: 'LegalService' },
+    { name: params.cityName, url: `/practice-areas/${params.practiceAreaSlug}/${params.citySlug}`, semanticType: 'City' },
+    { name: params.attorneyName, url: params.attorneyUrl, semanticType: 'Person' },
+  ]
+}
+
+/** State page: Organization > AdministrativeArea */
+export function getStateBreadcrumb(params: {
+  stateName: string
+  stateSlug: string
+}): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    { name: params.stateName, url: `/states/${params.stateSlug}`, semanticType: 'AdministrativeArea' },
+  ]
+}
+
+/** Blog listing: Organization > Blog */
+export function getBlogListBreadcrumb(): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    { name: 'Blog', url: '/blog', semanticType: 'Blog' },
+  ]
+}
+
+/** Blog post: Organization > Blog > BlogPosting */
+export function getBlogPostBreadcrumb(params: {
+  title: string
+  slug: string
+}): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    { name: 'Blog', url: '/blog', semanticType: 'Blog' },
+    { name: params.title, url: `/blog/${params.slug}`, semanticType: 'BlogPosting' },
+  ]
+}
+
+/** Generic breadcrumb with custom items — adds Organization root automatically */
+export function getGenericBreadcrumb(items: SemanticBreadcrumbItem[]): SemanticBreadcrumbItem[] {
+  return [
+    { name: SITE_NAME, url: '/', semanticType: 'Organization' },
+    ...items,
+  ]
 }
 
 // Schema.org FAQPage

@@ -36,17 +36,17 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
       : null
     if (!hubUrl) return null
     return (
-      <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
+      <div className="bg-[#FFFCF8] dark:bg-gray-800 rounded-2xl shadow-soft border border-stone-200/60 dark:border-gray-700 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           Similar Attorneys
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
           Discover other {_attorney.specialty?.toLowerCase() || 'attorneys'} in {_attorney.city}
         </p>
         <Link
           href={hubUrl}
-          className="text-clay-400 hover:text-clay-600 font-medium"
+          className="text-clay-400 hover:text-clay-600 dark:text-clay-300 dark:hover:text-clay-200 font-medium"
         >
           See all {_attorney.specialty?.toLowerCase() || 'attorneys'} in {_attorney.city} →
         </Link>
@@ -71,11 +71,13 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
       initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.6 }}
-      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
+      className="bg-[#FFFCF8] dark:bg-gray-800 rounded-2xl shadow-soft border border-stone-200/60 dark:border-gray-700 p-6"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-          <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-lg bg-clay-50 dark:bg-clay-900/30 flex items-center justify-center">
+            <Users className="w-4.5 h-4.5 text-clay-400" aria-hidden="true" />
+          </div>
           Similar Attorneys
         </h2>
 
@@ -125,7 +127,7 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
             >
               <motion.article
                 whileHover={reducedMotion ? undefined : { y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
-                className="w-72 bg-white rounded-xl border border-gray-100 p-4 transition-all cursor-pointer"
+                className="w-72 bg-white dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-600 p-4 transition-all cursor-pointer"
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
@@ -133,15 +135,15 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
                     <span aria-hidden="true">{item.name.charAt(0).toUpperCase()}</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
-                    <p className="text-sm text-gray-500">{item.specialty}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate">{item.name}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{item.specialty}</p>
                   </div>
                 </div>
 
                 {/* Badges */}
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {item.is_verified && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-clay-50 text-clay-700 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-clay-50 dark:bg-clay-900/30 text-clay-700 dark:text-clay-300 text-xs font-medium">
                       <BadgeCheck className="w-3 h-3" aria-hidden="true" />
                       Verified
                     </span>
@@ -152,10 +154,10 @@ export function AttorneySimilar({ attorney: _attorney, similarAttorneys }: Attor
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1" aria-label={`Rating: ${item.rating} out of 5, ${item.reviews} reviews`}>
                     <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
-                    <span className="font-semibold text-gray-900">{item.rating}</span>
-                    <span className="text-gray-500 text-sm">({item.reviews})</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">{item.rating}</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">({item.reviews})</span>
                   </div>
-                  <div className="flex items-center gap-1 text-gray-500 text-sm">
+                  <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm">
                     <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>{item.city}</span>
                   </div>
