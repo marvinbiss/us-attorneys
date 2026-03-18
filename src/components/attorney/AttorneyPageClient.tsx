@@ -94,6 +94,18 @@ const TrustScore = dynamic(
   { loading: () => <SectionSkeleton height="h-48" /> }
 )
 
+// Peer Endorsements (LinkedIn-style endorsements from other attorneys)
+const PeerEndorsements = dynamic(
+  () => import('@/components/attorney/PeerEndorsements'),
+  { loading: () => <SectionSkeleton height="h-64" /> }
+)
+
+// Endorse Button (for authenticated attorneys to endorse peers)
+const EndorseButton = dynamic(
+  () => import('@/components/attorney/EndorseButton').then(mod => ({ default: mod.EndorseButton })),
+  { ssr: false }
+)
+
 // Business verification card
 const AttorneyBusinessCard = dynamic(
   () => import('@/components/attorney/AttorneyBusinessCard').then(mod => ({ default: mod.AttorneyBusinessCard })),
@@ -124,15 +136,23 @@ interface SimilarAttorney {
   is_verified?: boolean
 }
 
+interface AttorneySpecialty {
+  id: string
+  name: string
+  slug: string
+}
+
 interface AttorneyPageClientProps {
   initialAttorney: LegacyAttorney | null
   initialReviews: Review[]
   attorneyId: string
   similarAttorneys?: SimilarAttorney[]
   isClaimed?: boolean
-  hasSiret?: boolean
+  hasBarNumber?: boolean
   trustScore?: number
   trustScoreBreakdown?: Record<string, number>
+  endorsementCount?: number
+  attorneySpecialties?: AttorneySpecialty[]
 }
 
 export default function AttorneyPageClient({
@@ -141,9 +161,11 @@ export default function AttorneyPageClient({
   attorneyId,
   similarAttorneys,
   isClaimed = true,
-  hasSiret = false,
+  hasBarNumber = false,
   trustScore = 0,
   trustScoreBreakdown,
+  endorsementCount = 0,
+  attorneySpecialties = [],
 }: AttorneyPageClientProps) {
   const reducedMotion = useReducedMotion()
   const attorney = initialAttorney
@@ -284,6 +306,19 @@ export default function AttorneyPageClient({
                   />
                 </section>
               )}
+              <section aria-label="Peer Endorsements">
+                <PeerEndorsements
+                  attorneyId={attorneyId}
+                  endorsementCount={endorsementCount}
+                />
+                <div className="mt-3">
+                  <EndorseButton
+                    endorsedAttorneyId={attorneyId}
+                    endorsedAttorneyName={displayName}
+                    specialties={attorneySpecialties}
+                  />
+                </div>
+              </section>
               <section aria-label="About">
                 <AttorneyAbout attorney={attorney} />
               </section>
@@ -308,7 +343,7 @@ export default function AttorneyPageClient({
               </section>
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Claim this profile">
-                  <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />
+                  <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasBarNumber={hasBarNumber} />
                 </section>
               )}
               <section id="services" aria-label="Services and fees">
@@ -344,7 +379,7 @@ export default function AttorneyPageClient({
                 </ErrorBoundary>
                 <AttorneyProfileStrength attorney={attorney} />
                 {!isClaimed && (
-                  <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasSiret={hasSiret} />
+                  <ClaimButton attorneyId={attorneyId} attorneyName={attorney.business_name || displayName} hasBarNumber={hasBarNumber} />
                 )}
               </div>
             </aside>

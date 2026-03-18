@@ -8,9 +8,9 @@ interface Provider {
   description?: string
   phone?: string
   email?: string
-  address_street?: string
+  address_line1?: string
   address_city?: string
-  address_postal_code?: string
+  address_zip?: string
   logo?: string
   is_verified?: boolean
 }
@@ -25,7 +25,7 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
     { label: 'Description (50+ chars)', done: (provider.description?.length || 0) >= 50 },
     { label: 'Phone', done: !!provider.phone },
     { label: 'Email', done: !!provider.email },
-    { label: 'Full address', done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code },
+    { label: 'Full address', done: !!provider.address_line1 && !!provider.address_city && !!provider.address_zip },
     { label: 'Logo', done: !!provider.logo },
   ]
 

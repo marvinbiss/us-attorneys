@@ -27,8 +27,8 @@ export const providerUpdateSchema = z.object({
     .transform((v) => v?.replace(/\s/g, '')),
   email: z.string().email('Invalid email').optional().nullable(),
   website: z.string().url('Invalid URL').optional().nullable(),
-  address_street: z.string().max(200).optional().nullable(),
-  address_postal_code: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional().nullable(),
+  address_line1: z.string().max(200).optional().nullable(),
+  address_zip: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
   intervention_radius_km: z.number().int().min(1).max(200).optional().default(30),
   free_quote: z.boolean().optional().default(true),
@@ -74,7 +74,7 @@ export const faqItemSchema = z.object({
 export const providerAttorneyUpdateSchema = z.object({
   // Identity
   name: z.string().min(2).max(100).transform(v => v.trim()).optional(),
-  siret: z.string().regex(/^\d{14}$/, 'Bar number is required').optional().nullable(),
+  bar_number: z.string().min(1, 'Bar number is required').max(50).optional().nullable(),
   team_size: z.number().int().min(1).max(1000).optional().nullable(),
 
   // Contact — preprocess strips spaces/dots/dashes before validation so "06 12 34 56 78" passes
@@ -89,12 +89,12 @@ export const providerAttorneyUpdateSchema = z.object({
   email: z.string().email('Invalid email').optional().nullable(),
   website: z.string().url('Invalid URL').optional().nullable(),
 
-  // Location — address_department, latitude, longitude exist in providers (migrations 009, 007)
-  address_street: z.string().max(200).optional().nullable(),
+  // Location — address columns match attorneys table (migrations 400+)
+  address_line1: z.string().max(200).optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
-  address_postal_code: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional().nullable(),
-  address_region: z.string().max(50).optional().nullable(),
-  address_department: z.string().max(50).optional().nullable(),
+  address_zip: z.string().regex(/^\d{5}$/, 'Invalid ZIP code').optional().nullable(),
+  address_state: z.string().max(2).optional().nullable(),
+  address_county: z.string().max(100).optional().nullable(),
   latitude: z.number().min(-90).max(90).optional().nullable(),
   longitude: z.number().min(-180).max(180).optional().nullable(),
   intervention_radius_km: z.number().int().min(1).max(200).optional(),

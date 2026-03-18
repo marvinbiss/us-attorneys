@@ -304,7 +304,7 @@ export default async function FreeConsultationPage({ params }: PageProps) {
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 truncate">{p.name}</p>
-                    <p className="text-sm text-gray-500">{p.address_city}{p.address_department ? `, ${p.address_department}` : ''}</p>
+                    <p className="text-sm text-gray-500">{p.address_city}{p.address_county ? `, ${p.address_county}` : ''}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold whitespace-nowrap">Free Consult</span>
                 </Link>

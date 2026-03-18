@@ -22,8 +22,8 @@ interface Provider {
   address_city?: string
   is_verified?: boolean
   phone?: string
-  address_street?: string
-  address_postal_code?: string
+  address_line1?: string
+  address_zip?: string
 }
 
 interface GeographicMapProps {
@@ -242,11 +242,11 @@ export default function GeographicMap({
           </div>`
         : ''
 
-      const addressText = provider.address_street
-        ? (provider.address_postal_code && provider.address_street.includes(provider.address_postal_code)
-          ? provider.address_street
-          : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim())
-        : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
+      const addressText = provider.address_line1
+        ? (provider.address_zip && provider.address_line1.includes(provider.address_zip)
+          ? provider.address_line1
+          : `${provider.address_line1}, ${provider.address_zip ?? ''} ${provider.address_city ?? ''}`.trim())
+        : `${provider.address_zip ?? ''} ${provider.address_city ?? ''}`.trim()
 
       const profileUrl = getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
 

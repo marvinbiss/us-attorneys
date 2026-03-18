@@ -30,14 +30,14 @@ interface AttorneyProfile {
   full_name: string | null
   slug: string | null
   phone: string | null
-  siret: string | null
+  bar_number: string | null
   description: string | null
   bio: string | null
   specialty: string | null
-  address_street: string | null
+  address_line1: string | null
   address_city: string | null
-  address_postal_code: string | null
-  address_region: string | null
+  address_zip: string | null
+  address_state: string | null
   is_verified: boolean
   is_active: boolean
   rating_average: number | null
@@ -274,15 +274,15 @@ export default function AdminAttorneyDetailPage() {
                   <div>
                     <p className="text-sm text-gray-500">Address</p>
                     <p className="text-gray-900">
-                      {[attorney.address_street, attorney.address_postal_code, attorney.address_city].filter(Boolean).join(', ') || '-'}
+                      {[attorney.address_line1, attorney.address_zip, attorney.address_city].filter(Boolean).join(', ') || '-'}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <Building className="w-5 h-5 text-gray-400" />
                   <div>
-                    <p className="text-sm text-gray-500">SIRET</p>
-                    <p className="text-gray-900 font-mono">{attorney.siret || '-'}</p>
+                    <p className="text-sm text-gray-500">Bar Number</p>
+                    <p className="text-gray-900 font-mono">{attorney.bar_number || '-'}</p>
                   </div>
                 </div>
               </div>

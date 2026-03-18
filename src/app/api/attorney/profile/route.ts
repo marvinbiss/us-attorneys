@@ -13,16 +13,16 @@ import { z } from 'zod'
 
 // PUT request schema — only columns that actually exist
 // profiles: full_name
-// providers: name, siret, phone, address_street, address_city, address_postal_code, specialty
+// providers: name, bar_number, phone, address_line1, address_city, address_zip, specialty
 const updateProfileSchema = z.object({
   full_name: z.string().max(100).optional(),
   // Provider fields (written to providers table, not profiles)
   name: z.string().max(200).optional(),
-  siret: z.string().max(20).optional(),
+  bar_number: z.string().max(20).optional(),
   phone: z.string().max(20).optional(),
-  address_street: z.string().max(200).optional(),
+  address_line1: z.string().max(200).optional(),
   address_city: z.string().max(100).optional(),
-  address_postal_code: z.string().max(10).optional(),
+  address_zip: z.string().max(10).optional(),
   specialty: z.string().max(100).optional(),
 })
 
@@ -51,7 +51,7 @@ export async function GET() {
     // Fetch associated provider data
     const { data: provider } = await supabase
       .from('attorneys')
-      .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, address_region, specialty, rating_average, review_count, is_verified, is_active')
+      .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, address_state, specialty, rating_average, review_count, is_verified, is_active')
       .eq('user_id', user!.id)
       .single()
 
@@ -82,11 +82,11 @@ export async function PUT(request: Request) {
     const {
       full_name,
       name,
-      siret,
+      bar_number,
       phone,
-      address_street,
+      address_line1,
       address_city,
-      address_postal_code,
+      address_zip,
       specialty,
     } = result.data
 
@@ -116,11 +116,11 @@ export async function PUT(request: Request) {
     // Update providers table (business data)
     const providerUpdate: Record<string, string> = {}
     if (name !== undefined) providerUpdate.name = name
-    if (siret !== undefined) providerUpdate.siret = siret
+    if (bar_number !== undefined) providerUpdate.bar_number = bar_number
     if (phone !== undefined) providerUpdate.phone = phone
-    if (address_street !== undefined) providerUpdate.address_street = address_street
+    if (address_line1 !== undefined) providerUpdate.address_line1 = address_line1
     if (address_city !== undefined) providerUpdate.address_city = address_city
-    if (address_postal_code !== undefined) providerUpdate.address_postal_code = address_postal_code
+    if (address_zip !== undefined) providerUpdate.address_zip = address_zip
     if (specialty !== undefined) providerUpdate.specialty = specialty
 
     let provider = null
@@ -129,7 +129,7 @@ export async function PUT(request: Request) {
         .from('attorneys')
         .update(providerUpdate)
         .eq('user_id', user!.id)
-        .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, stable_id, is_verified, is_active')
+        .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, specialty, stable_id, is_verified, is_active')
         .single()
 
       if (attorneyError) {

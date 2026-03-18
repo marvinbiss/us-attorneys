@@ -22,10 +22,10 @@ interface ProviderRecord {
   specialty?: string | null
   description?: string | null
   bio?: string | null
-  address_street?: string | null
+  address_line1?: string | null
   address_city?: string | null
-  address_postal_code?: string | null
-  address_region?: string | null
+  address_zip?: string | null
+  address_state?: string | null
   is_verified?: boolean | null
   is_active?: boolean | null
   is_center?: boolean | null
@@ -41,9 +41,7 @@ interface ProviderRecord {
   phone_secondary?: string | null
   email?: string | null
   website?: string | null
-  siret?: string | null
-  legal_form?: string | null
-  legal_form_code?: string | null
+  bar_number?: string | null
   creation_date?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -57,6 +55,7 @@ interface ProviderRecord {
   user_id?: string | null
   trust_score?: number | null
   trust_score_breakdown?: Record<string, number> | null
+  endorsement_count?: number | null
 }
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
@@ -112,8 +111,8 @@ function convertToAttorney(provider: ProviderRecord, service: Service | null, lo
     first_name: provider.first_name || null,
     last_name: provider.last_name || null,
     city: city,
-    postal_code: String(location?.postal_code || provider.address_postal_code || '').replace(/\.0$/, ''),
-    address: provider.address_street || '',
+    postal_code: String(location?.postal_code || provider.address_zip || '').replace(/\.0$/, ''),
+    address: provider.address_line1 || '',
     department: location?.department_name || undefined,
     department_code: location?.department_code || undefined,
     region: location?.region_name || undefined,
@@ -139,8 +138,7 @@ function convertToAttorney(provider: ProviderRecord, service: Service | null, lo
     opening_hours: provider.opening_hours && Object.keys(provider.opening_hours).length > 0 ? provider.opening_hours : undefined,
     intervention_radius_km: provider.intervention_radius_km || undefined,
     member_since: (memberYear && memberYear < currentYear) ? memberYear.toString() : undefined,
-    siret: provider.siret || undefined,
-    legal_form: provider.legal_form_code || provider.legal_form || undefined,
+    bar_number: provider.bar_number || undefined,
     phone: provider.phone || undefined,
     email: provider.email || undefined,
     website: provider.website || undefined,
@@ -180,13 +178,8 @@ function generateDescription(name: string, specialty: string, city: string, prov
   }
 
   // Verification
-  if (provider?.siret) {
-    parts.push(`Registered and verified firm (ID ${provider.siret.substring(0, 9)}...).`)
-  }
-
-  // Legal form
-  if (provider?.legal_form_code || provider?.legal_form) {
-    parts.push(`Legal structure: ${provider.legal_form_code || provider.legal_form}.`)
+  if (provider?.bar_number) {
+    parts.push(`Registered and verified attorney (Bar # ${provider.bar_number}).`)
   }
 
   // Rating
@@ -252,7 +245,7 @@ async function getSimilarAttorneys(attorneyId: string, specialty: string, postal
 
     // Prefer same department
     if (deptCode) {
-      query = query.like('address_postal_code', `${deptCode}%`)
+      query = query.like('address_zip', `${deptCode}%`)
     }
 
     const { data } = await query
@@ -270,6 +263,27 @@ async function getSimilarAttorneys(attorneyId: string, specialty: string, postal
         is_verified: p.is_verified || false,
       }
     })
+  } catch {
+    return []
+  }
+}
+
+// Fetch attorney's specialties for endorsement form
+async function getAttorneySpecialtiesList(attorneyId: string): Promise<Array<{ id: string; name: string; slug: string }>> {
+  try {
+    const { supabase } = await import('@/lib/supabase')
+    const { data } = await supabase
+      .from('attorney_specialties')
+      .select('specialty:specialty_id (id, name, slug)')
+      .eq('attorney_id', attorneyId)
+      .limit(20)
+
+    if (!data || data.length === 0) return []
+    // Supabase returns joined rows; cast via unknown for safety
+    const rows = data as unknown as Array<{ specialty: { id: string; name: string; slug: string } | null }>
+    return rows
+      .filter((d) => d.specialty !== null)
+      .map((d) => d.specialty!)
   } catch {
     return []
   }
@@ -413,7 +427,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (provider.review_count && provider.review_count > 0) {
       descParts.push(`${provider.review_count} reviews${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
     }
-    if (provider.siret) descParts.push('Bar-verified')
+    if (provider.bar_number) descParts.push('Bar-verified')
     descParts.push('Free consultation')
     const rawDesc = descParts.join(' · ') + '.'
     const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '…' : rawDesc
@@ -510,14 +524,19 @@ export default async function AttorneyPage({ params }: PageProps) {
   // Convert to Attorney format
   const attorney = convertToAttorney(provider, service, location, specialtySlug)
 
-  // Fetch reviews and similar attorneys in parallel (graceful degradation)
+  // Fetch reviews, similar attorneys, and specialties in parallel (graceful degradation)
   let reviews: Review[] = []
   let similarAttorneys: Awaited<ReturnType<typeof getSimilarAttorneys>> = []
+  let attorneySpecialties: Array<{ id: string; name: string; slug: string }> = []
   try {
-    ;[reviews, similarAttorneys] = await Promise.all([
+    const [revs, similar, specs] = await Promise.all([
       getAttorneyReviews(provider.id, service?.name || attorney.specialty),
       getSimilarAttorneys(provider.id, attorney.specialty, attorney.postal_code),
+      getAttorneySpecialtiesList(provider.id),
     ])
+    reviews = revs
+    similarAttorneys = similar
+    attorneySpecialties = specs
   } catch {
     // Graceful degradation — page renders without reviews/similar attorneys
   }
@@ -536,9 +555,11 @@ export default async function AttorneyPage({ params }: PageProps) {
         attorneyId={provider.id}
         similarAttorneys={similarAttorneys}
         isClaimed={!!provider.user_id}
-        hasSiret={!!provider.siret}
+        hasBarNumber={!!provider.bar_number}
         trustScore={provider.trust_score ?? 0}
         trustScoreBreakdown={provider.trust_score_breakdown ?? undefined}
+        endorsementCount={provider.endorsement_count ?? 0}
+        attorneySpecialties={attorneySpecialties}
       />
 
       {/* Back link to service+location listing */}

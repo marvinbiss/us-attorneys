@@ -60,10 +60,10 @@ function formatTeamSize(size: number): string {
 
 export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
   const reducedMotion = useReducedMotion()
-  const hasSiret = !!attorney.siret
+  const hasBarNumber = !!attorney.bar_number
   const hasEmployees = attorney.team_size != null && attorney.team_size >= 0
   const hasAnyData =
-    hasSiret ||
+    hasBarNumber ||
     !!attorney.legal_form ||
     !!attorney.creation_date ||
     !!attorney.email ||
@@ -99,7 +99,7 @@ export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
               </p>
             </div>
           </div>
-          {hasSiret && (
+          {hasBarNumber && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-semibold border border-green-200 shadow-sm flex-shrink-0">
               <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
               Verified
@@ -113,7 +113,7 @@ export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
           {/* Bar Number */}
-          {attorney.siret && (
+          {attorney.bar_number && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <Hash className="w-4 h-4 text-clay-400" aria-hidden="true" />
@@ -123,7 +123,7 @@ export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
                   Bar Number
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-gray-900 font-mono tracking-widest">
-                  {formatBarNumber(attorney.siret)}
+                  {formatBarNumber(attorney.bar_number)}
                 </dd>
               </div>
             </div>

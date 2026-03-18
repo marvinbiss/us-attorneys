@@ -23,14 +23,14 @@ interface AttorneyData {
   full_name: string | null
   name: string | null
   phone: string | null
-  siret: string | null
+  bar_number: string | null
   specialty: string | null
   description: string | null
   bio: string | null
-  address_street: string | null
+  address_line1: string | null
   address_city: string | null
-  address_postal_code: string | null
-  address_region: string | null
+  address_zip: string | null
+  address_state: string | null
   is_verified: boolean
   is_active: boolean
   rating_average: number | null
@@ -53,14 +53,14 @@ export default function EditAttorneyPage() {
     email: '',
     full_name: '',
     phone: '',
-    siret: '',
+    bar_number: '',
     specialty: '',
     description: '',
     bio: '',
-    address_street: '',
+    address_line1: '',
     address_city: '',
-    address_postal_code: '',
-    address_region: '',
+    address_zip: '',
+    address_state: '',
     is_verified: false,
     is_active: true,
   })
@@ -79,7 +79,7 @@ export default function EditAttorneyPage() {
       case 'phone':
         return value && !/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/.test(value.replace(/[\s.-]/g, ''))
           ? 'Invalid phone number' : null
-      case 'address_postal_code':
+      case 'address_zip':
         return value && !/^\d{5}$/.test(value)
           ? 'ZIP code must be 5 digits' : null
       default:
@@ -123,14 +123,14 @@ export default function EditAttorneyPage() {
             email: data.provider.email || '',
             full_name: data.provider.full_name || data.provider.name || '',
             phone: data.provider.phone || '',
-            siret: data.provider.siret || '',
+            bar_number: data.provider.bar_number || '',
             specialty: data.provider.specialty || '',
             description: data.provider.description || '',
             bio: data.provider.bio || '',
-            address_street: data.provider.address_street || '',
+            address_line1: data.provider.address_line1 || '',
             address_city: data.provider.address_city || '',
-            address_postal_code: data.provider.address_postal_code || '',
-            address_region: data.provider.address_region || '',
+            address_zip: data.provider.address_zip || '',
+            address_state: data.provider.address_state || '',
             is_verified: data.provider.is_verified || false,
             is_active: data.provider.is_active ?? true,
           })
@@ -166,7 +166,7 @@ export default function EditAttorneyPage() {
     const fieldsToValidate: [string, string][] = [
       ['full_name', formData.full_name],
       ['phone', formData.phone],
-      ['address_postal_code', formData.address_postal_code],
+      ['address_zip', formData.address_zip],
     ]
     const errors: Record<string, string> = {}
     for (const [name, value] of fieldsToValidate) {
@@ -366,14 +366,14 @@ export default function EditAttorneyPage() {
                 </div>
               </div>
               <div>
-                <label htmlFor="siret" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="bar_number" className="block text-sm font-medium text-gray-700 mb-1">
                   Bar Number
                 </label>
                 <input
-                  id="siret"
+                  id="bar_number"
                   type="text"
-                  value={formData.siret}
-                  onChange={(e) => updateFormData({ siret: e.target.value })}
+                  value={formData.bar_number}
+                  onChange={(e) => updateFormData({ bar_number: e.target.value })}
                   placeholder="123456"
                   maxLength={20}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
@@ -418,14 +418,14 @@ export default function EditAttorneyPage() {
             </h2>
             <div className="grid gap-4">
               <div>
-                <label htmlFor="address_street" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="address_line1" className="block text-sm font-medium text-gray-700 mb-1">
                   Street Address
                 </label>
                 <input
-                  id="address_street"
+                  id="address_line1"
                   type="text"
-                  value={formData.address_street}
-                  onChange={(e) => updateFormData({ address_street: e.target.value })}
+                  value={formData.address_line1}
+                  onChange={(e) => updateFormData({ address_line1: e.target.value })}
                   placeholder="123 Main Street"
                   maxLength={500}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -433,21 +433,21 @@ export default function EditAttorneyPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label htmlFor="address_postal_code" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="address_zip" className="block text-sm font-medium text-gray-700 mb-1">
                     ZIP Code
                   </label>
                   <input
-                    id="address_postal_code"
+                    id="address_zip"
                     type="text"
-                    value={formData.address_postal_code}
-                    onChange={(e) => { updateFormData({ address_postal_code: e.target.value }); clearFieldError('address_postal_code') }}
-                    onBlur={(e) => handleBlur('address_postal_code', e.target.value)}
+                    value={formData.address_zip}
+                    onChange={(e) => { updateFormData({ address_zip: e.target.value }); clearFieldError('address_zip') }}
+                    onBlur={(e) => handleBlur('address_zip', e.target.value)}
                     placeholder="10001"
                     maxLength={10}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.address_postal_code ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.address_zip ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
-                  {fieldErrors.address_postal_code && (
-                    <p className="mt-1 text-xs text-red-600">{fieldErrors.address_postal_code}</p>
+                  {fieldErrors.address_zip && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.address_zip}</p>
                   )}
                 </div>
                 <div>
@@ -465,14 +465,14 @@ export default function EditAttorneyPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="address_region" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="address_state" className="block text-sm font-medium text-gray-700 mb-1">
                     State
                   </label>
                   <input
-                    id="address_region"
+                    id="address_state"
                     type="text"
-                    value={formData.address_region}
-                    onChange={(e) => updateFormData({ address_region: e.target.value })}
+                    value={formData.address_state}
+                    onChange={(e) => updateFormData({ address_state: e.target.value })}
                     placeholder="New York"
                     maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

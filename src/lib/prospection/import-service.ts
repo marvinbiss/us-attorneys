@@ -419,11 +419,11 @@ export async function syncAttorneysFromDatabase(
   // Build the query
   let query = supabase
     .from('attorneys')
-    .select('id, name, email, phone, address_street, address_city, address_postal_code, address_department, address_region, siret')
+    .select('id, name, email, phone, address_line1, address_city, address_zip, address_county, address_state, bar_number')
     .eq('is_active', true)
 
   if (filters?.department) {
-    query = query.eq('address_department', filters.department)
+    query = query.eq('address_county', filters.department)
   }
 
   const { data: providers, error } = await query
@@ -456,11 +456,11 @@ export async function syncAttorneysFromDatabase(
       contact_name: provider.name,
       email: provider.email,
       phone: provider.phone,
-      address: provider.address_street,
-      postal_code: provider.address_postal_code,
+      address: provider.address_line1,
+      postal_code: provider.address_zip,
       city: provider.address_city,
-      department: provider.address_department,
-      region: provider.address_region,
+      department: provider.address_county,
+      region: provider.address_state,
       attorney_id: provider.id,
       source: 'database',
     }

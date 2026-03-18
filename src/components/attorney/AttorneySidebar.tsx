@@ -121,10 +121,10 @@ export function AttorneySidebar({ attorney }: AttorneySidebarProps) {
         </div>
 
         {/* Bar Number */}
-        {attorney.siret && (
+        {attorney.bar_number && (
           <div className="pt-4 border-t border-gray-100">
             <div className="text-xs text-slate-400 font-mono">
-              Bar #: {attorney.siret}
+              Bar #: {attorney.bar_number}
             </div>
           </div>
         )}

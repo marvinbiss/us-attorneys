@@ -9,18 +9,18 @@ interface IdentitySectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const FIELDS = ['name', 'siret'] as const
+const FIELDS = ['name', 'bar_number'] as const
 
 export function IdentitySection({ provider, onSaved }: IdentitySectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
 
   const isVerified = Boolean(provider.is_verified)
 
-  const siretValue = (formData.siret as string) || ''
-  const siretInvalid = siretValue.length > 0 && siretValue.length !== 14
+  const barNumberValue = (formData.bar_number as string) || ''
+  const barNumberInvalid = barNumberValue.length > 0 && barNumberValue.length !== 14
 
   const onSave = async () => {
-    if (siretInvalid) return
+    if (barNumberInvalid) return
     const updated = await handleSave()
     if (updated) onSaved(updated)
   }
@@ -55,27 +55,27 @@ export function IdentitySection({ provider, onSaved }: IdentitySectionProps) {
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="identite-siret" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="identite-bar-number" className="block text-sm font-medium text-gray-700 mb-2">
               Bar Number
               {isVerified && (
                 <span className="ml-2 text-xs text-green-600 font-normal">(verified - not editable)</span>
               )}
             </label>
             <input
-              id="identite-siret"
+              id="identite-bar-number"
               type="text"
-              value={(formData.siret as string) || ''}
-              onChange={(e) => setField('siret', e.target.value.replace(/\D/g, '').slice(0, 14))}
+              value={(formData.bar_number as string) || ''}
+              onChange={(e) => setField('bar_number', e.target.value.replace(/\D/g, '').slice(0, 14))}
               maxLength={14}
               readOnly={isVerified}
-              aria-describedby="siret-help"
+              aria-describedby="bar-number-help"
               aria-readonly={isVerified}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                isVerified ? 'bg-gray-100 cursor-not-allowed border-gray-300' : siretInvalid ? 'border-amber-400' : 'border-gray-300'
+                isVerified ? 'bg-gray-100 cursor-not-allowed border-gray-300' : barNumberInvalid ? 'border-amber-400' : 'border-gray-300'
               }`}
             />
-            <p id="siret-help" className={`text-xs mt-1 ${siretInvalid ? 'text-amber-600' : 'text-gray-500'}`}>
-              {isVerified ? 'Bar number verified, not editable' : siretInvalid ? `${siretValue.length}/14 digits — bar number must contain exactly 14 digits` : 'Bar number'}
+            <p id="bar-number-help" className={`text-xs mt-1 ${barNumberInvalid ? 'text-amber-600' : 'text-gray-500'}`}>
+              {isVerified ? 'Bar number verified, not editable' : barNumberInvalid ? `${barNumberValue.length}/14 digits — bar number must contain exactly 14 digits` : 'Bar number'}
             </p>
           </div>
         </div>

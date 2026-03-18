@@ -26,16 +26,15 @@ function calculateQualityScore(provider: Record<string, unknown>): {
   let score = 0
   const flags: string[] = []
 
-  // Identity (30 points)
+  // Identity (20 points)
   if (provider.name) score += 10; else flags.push('missing_name')
-  if (provider.siren) score += 10; else flags.push('missing_siren')
-  if (provider.siret) score += 10; else flags.push('missing_siret')
+  if (provider.bar_number) score += 10; else flags.push('missing_bar_number')
 
   // Address (25 points)
-  if (provider.address_street) score += 5; else flags.push('missing_street')
+  if (provider.address_line1) score += 5; else flags.push('missing_street')
   if (provider.address_city) score += 5; else flags.push('missing_city')
-  if (provider.address_postal_code) score += 5; else flags.push('missing_postal_code')
-  if (provider.address_department) score += 5; else flags.push('missing_department')
+  if (provider.address_zip) score += 5; else flags.push('missing_postal_code')
+  if (provider.address_county) score += 5; else flags.push('missing_county')
   if (provider.latitude && provider.longitude) score += 5; else flags.push('missing_gps')
 
   // Contact (15 points)
@@ -72,7 +71,7 @@ export async function GET(request: Request) {
       // Fetch active providers for quality score calculation
       const { data: providers, error } = await supabase
         .from('attorneys')
-        .select('id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, specialty, description, updated_at')
+        .select('id, name, bar_number, address_line1, address_city, address_zip, address_county, latitude, longitude, phone, email, specialty, description, updated_at')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')

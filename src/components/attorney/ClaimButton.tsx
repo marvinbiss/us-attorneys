@@ -6,12 +6,12 @@ import { Shield, Loader2, X, CheckCircle, AlertCircle } from 'lucide-react'
 interface ClaimButtonProps {
   attorneyId: string
   attorneyName: string
-  hasSiret: boolean
+  hasBarNumber: boolean
 }
 
-export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonProps) {
+export function ClaimButton({ attorneyId, attorneyName, hasBarNumber }: ClaimButtonProps) {
   const [showModal, setShowModal] = useState(false)
-  const [siret, setSiret] = useState('')
+  const [barNumber, setBarNumber] = useState('')
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -43,7 +43,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
   }
 
   const handleBarNumberChange = (value: string) => {
-    setSiret(value.trim())
+    setBarNumber(value.trim())
     setError(null)
   }
 
@@ -52,14 +52,14 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
   }
 
   const isFormValid =
-    siret.length >= 1 &&
+    barNumber.length >= 1 &&
     fullName.trim().length >= 2 &&
     email.includes('@') &&
     phone.replace(/\D/g, '').length >= 10 &&
     position.trim().length >= 2
 
   const handleClaim = async () => {
-    if (!siret.trim()) {
+    if (!barNumber.trim()) {
       setError('Bar number is required')
       return
     }
@@ -89,7 +89,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           attorneyId,
-          siret,
+          siret: barNumber,
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: phone.trim(),
@@ -113,7 +113,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
     }
   }
 
-  if (!hasSiret) {
+  if (!hasBarNumber) {
     return (
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
         <div className="flex items-start gap-3">
@@ -277,7 +277,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasSiret }: ClaimButtonP
                     </label>
                     <input
                       type="text"
-                      value={formatBarNumber(siret)}
+                      value={formatBarNumber(barNumber)}
                       onChange={(e) => handleBarNumberChange(e.target.value)}
                       placeholder="e.g. 123456"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"

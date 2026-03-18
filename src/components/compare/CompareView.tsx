@@ -199,9 +199,9 @@ export function CompareView({ onClose }: CompareViewProps) {
                 {(provider) => (
                   <span className="text-gray-700">
                     {provider.address_city || '-'}
-                    {provider.address_region && (
+                    {provider.address_state && (
                       <span className="text-gray-400 text-xs block">
-                        {provider.address_region}
+                        {provider.address_state}
                       </span>
                     )}
                   </span>
@@ -253,7 +253,7 @@ export function CompareView({ onClose }: CompareViewProps) {
               <AttorneyGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700 text-xs font-mono">
-                    {provider.siret || '-'}
+                    {provider.bar_number || '-'}
                   </span>
                 )}
               </AttorneyGrid>
@@ -268,7 +268,7 @@ export function CompareView({ onClose }: CompareViewProps) {
               <AttorneyGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700">
-                    {provider.address_postal_code || '-'}
+                    {provider.address_zip || '-'}
                   </span>
                 )}
               </AttorneyGrid>

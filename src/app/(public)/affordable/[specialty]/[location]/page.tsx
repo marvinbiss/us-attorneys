@@ -197,7 +197,7 @@ export default async function AffordablePage({ params }: PageProps) {
                 <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all bg-white">
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 truncate">{p.name}</p>
-                    <p className="text-sm text-gray-500">{p.address_city}{p.address_department ? `, ${p.address_department}` : ''}</p>
+                    <p className="text-sm text-gray-500">{p.address_city}{p.address_county ? `, ${p.address_county}` : ''}</p>
                   </div>
                   {p.rating_average != null && <span className="text-sm font-semibold text-blue-600">★ {p.rating_average.toFixed(1)}</span>}
                 </Link>

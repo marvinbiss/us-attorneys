@@ -9,7 +9,7 @@ interface LocationSectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const FIELDS = ['address_street', 'address_city', 'address_postal_code', 'intervention_radius_km'] as const
+const FIELDS = ['address_line1', 'address_city', 'address_zip', 'intervention_radius_km'] as const
 
 export function LocationSection({ provider, onSaved }: LocationSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
@@ -39,8 +39,8 @@ export function LocationSection({ provider, onSaved }: LocationSectionProps) {
           <input
             id="localisation-street"
             type="text"
-            value={(formData.address_street as string) || ''}
-            onChange={(e) => setField('address_street', e.target.value || null)}
+            value={(formData.address_line1 as string) || ''}
+            onChange={(e) => setField('address_line1', e.target.value || null)}
             maxLength={200}
             placeholder="123 Main Street"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -69,8 +69,8 @@ export function LocationSection({ provider, onSaved }: LocationSectionProps) {
             <input
               id="localisation-postal-code"
               type="text"
-              value={(formData.address_postal_code as string) || ''}
-              onChange={(e) => setField('address_postal_code', e.target.value.replace(/\D/g, '').slice(0, 5) || null)}
+              value={(formData.address_zip as string) || ''}
+              onChange={(e) => setField('address_zip', e.target.value.replace(/\D/g, '').slice(0, 5) || null)}
               maxLength={5}
               placeholder="10001"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

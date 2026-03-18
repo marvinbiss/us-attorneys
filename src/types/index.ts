@@ -33,20 +33,17 @@ export interface Provider {
   stable_id?: string | null
   name: string
   slug: string
-  siren?: string
-  siret?: string
   bar_number?: string
   email?: string
   phone?: string
   website?: string
-  address_street?: string
+  address_line1?: string
   address_city?: string
-  address_postal_code?: string
-  address_department?: string
-  address_region?: string
+  address_zip?: string
+  address_county?: string
+  address_state?: string
   latitude?: number
   longitude?: number
-  legal_form?: string
   creation_date?: string
   is_verified: boolean
   is_active: boolean

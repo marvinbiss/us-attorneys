@@ -29,7 +29,7 @@ interface Provider {
   email: string
   phone: string
   address_city: string
-  address_region: string
+  address_state: string
   specialty: string
   is_verified: boolean
   is_active: boolean
@@ -37,7 +37,6 @@ interface Provider {
   review_count: number
   created_at: string
   source?: string
-  siret?: string
   bar_number?: string
 }
 
@@ -297,8 +296,8 @@ export default function AdminProvidersPage() {
                             <MapPin className="w-4 h-4 text-gray-400" />
                             <span className="text-gray-900">{provider.address_city || 'Not specified'}</span>
                           </div>
-                          {provider.address_region && (
-                            <p className="text-sm text-gray-500">{provider.address_region}</p>
+                          {provider.address_state && (
+                            <p className="text-sm text-gray-500">{provider.address_state}</p>
                           )}
                         </td>
                         <td className="px-6 py-4">{getStatusBadge(provider)}</td>

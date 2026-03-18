@@ -125,11 +125,10 @@ export function formatFileSize(bytes: number): string {
 }
 
 /**
- * Format a SIRET number with spaces
- * @deprecated Legacy French business ID formatting. Use bar_number display instead.
+ * Format a bar number for display.
+ * Bar numbers are already formatted by state bars; this trims whitespace.
  */
-export function formatSiret(siret: string): string {
-  const cleaned = siret.replace(/\s/g, '')
-  if (cleaned.length !== 14) return siret
-  return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6, 9)} ${cleaned.slice(9, 14)}`
+export function formatBarNumber(barNumber: string): string {
+  if (!barNumber) return ''
+  return barNumber.trim()
 }

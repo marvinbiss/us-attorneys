@@ -36,17 +36,18 @@ interface AttorneyListRow {
   name: string
   slug: string
   specialty: string | null
-  address_street: string | null
-  address_postal_code: string | null
+  address_line1: string | null
+  address_zip: string | null
   address_city: string | null
-  address_region: string | null
+  address_state: string | null
+  address_county: string | null
   is_verified: boolean | null
   is_active: boolean | null
   noindex: boolean | null
   rating_average: number | null
   review_count: number | null
   phone: string | null
-  siret: string | null
+  bar_number: string | null
   latitude: number | null
   longitude: number | null
   created_at: string | null
@@ -122,10 +123,10 @@ async function retryWithBackoff<T>(
 // Covers: AttorneyCard, AttorneyList, GeographicMap, ServiceNeighborhoodPage
 const PROVIDER_LIST_SELECT = [
   'id', 'stable_id', 'name', 'slug', 'specialty',
-  'address_street', 'address_postal_code', 'address_city', 'address_region',
+  'address_line1', 'address_zip', 'address_city', 'address_state', 'address_county',
   'is_verified', 'is_active', 'noindex',
   'rating_average', 'review_count',
-  'phone', 'siret',
+  'phone', 'bar_number',
   'latitude', 'longitude',
   'created_at', 'updated_at',
   'is_featured', 'boost_level',
@@ -609,8 +610,8 @@ export async function getAttorneysByServiceAndLocation(
       const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
       if (!specialties || specialties.length === 0) return []
 
-      // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
-      // whose address_postal_code matches the exact arrondissement.
+      // STRICT RULE: ZIP-specific pages show ONLY providers
+      // whose address_zip matches the exact ZIP code.
       if (postalCode) {
         return await retryWithBackoff(
           async () => {
@@ -618,7 +619,7 @@ export async function getAttorneysByServiceAndLocation(
               .from('attorneys')
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
-              .eq('address_postal_code', postalCode)
+              .eq('address_zip', postalCode)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
               .order('is_featured', { ascending: false, nullsFirst: true })

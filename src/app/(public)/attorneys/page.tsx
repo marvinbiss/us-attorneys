@@ -46,7 +46,7 @@ async function getRecentProviders(limit = 50) {
 
     const { data, error } = await supabase
       .from('attorneys')
-      .select('id, stable_id, name, slug, specialty, address_street, address_postal_code, address_city, address_region, is_verified, is_active, phone, siret, rating_average, review_count')
+      .select('id, stable_id, name, slug, specialty, address_line1, address_zip, address_city, address_state, is_verified, is_active, phone, bar_number, rating_average, review_count')
       .eq('is_active', true)
       .order('phone', { ascending: false, nullsFirst: false })
       .order('is_verified', { ascending: false })
@@ -240,25 +240,25 @@ export default async function ArtisansPage() {
                     <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
                       <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
                       <span>
-                        {provider.address_street
-                          ? provider.address_postal_code && provider.address_street.includes(provider.address_postal_code)
-                            ? provider.address_street
-                            : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
-                          : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()}
+                        {provider.address_line1
+                          ? provider.address_zip && provider.address_line1.includes(provider.address_zip)
+                            ? provider.address_line1
+                            : `${provider.address_line1}, ${provider.address_zip ?? ''} ${provider.address_city ?? ''}`.trim()
+                          : `${provider.address_zip ?? ''} ${provider.address_city ?? ''}`.trim()}
                       </span>
                     </div>
                   )}
 
-                  {/* SIRET */}
-                  {provider.siret && (
-                    <p className="text-xs text-gray-400 mb-3 ml-6">Bar # {provider.siret.slice(0, 9)}</p>
+                  {/* Bar Number */}
+                  {provider.bar_number && (
+                    <p className="text-xs text-gray-400 mb-3 ml-6">Bar # {provider.bar_number}</p>
                   )}
 
                   {/* Badges */}
-                  {provider.address_region && (
+                  {provider.address_state && (
                     <div className="flex flex-wrap gap-2 mb-4">
                       <span className="text-xs px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 font-medium">
-                        {provider.address_region}
+                        {provider.address_state}
                       </span>
                     </div>
                   )}

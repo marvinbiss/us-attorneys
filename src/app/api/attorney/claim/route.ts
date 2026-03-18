@@ -14,7 +14,7 @@ import { z } from 'zod'
 
 const claimSchema = z.object({
   attorneyId: z.string().uuid('Invalid attorney ID'),
-  siret: z.string().min(1, 'Bar number is required'),
+  bar_number: z.string().min(1, 'Bar number is required'),
   fullName: z.string().min(2, 'Name is required (min. 2 characters)'),
   email: z.string().email('Invalid email'),
   phone: z.string().min(10, 'Invalid phone number'),
@@ -58,7 +58,7 @@ export const POST = createApiHandler(async ({ request }) => {
     )
   }
 
-  const { attorneyId, siret, fullName, email, phone, position } = validation.data
+  const { attorneyId, bar_number, fullName, email, phone, position } = validation.data
   const adminClient = createAdminClient()
 
   // Duplicate checks — different logic for authenticated vs anonymous
@@ -126,7 +126,7 @@ export const POST = createApiHandler(async ({ request }) => {
   // Fetch provider
   const { data: provider, error: attorneyError } = await adminClient
     .from('attorneys')
-    .select('id, name, siret, user_id')
+    .select('id, name, bar_number, user_id')
     .eq('id', attorneyId)
     .single()
 
@@ -144,7 +144,7 @@ export const POST = createApiHandler(async ({ request }) => {
     )
   }
 
-  if (!provider.siret) {
+  if (!provider.bar_number) {
     return NextResponse.json(
       { error: 'This listing does not have a bar number. Contact us at support@us-attorneys.com to claim this listing manually.' },
       { status: 400 }
@@ -152,8 +152,8 @@ export const POST = createApiHandler(async ({ request }) => {
   }
 
   // Bar number verification (normalize: strip spaces)
-  const normalizedInput = siret.replace(/\s/g, '').toLowerCase()
-  const normalizedStored = provider.siret.replace(/\s/g, '').toLowerCase()
+  const normalizedInput = bar_number.replace(/\s/g, '').toLowerCase()
+  const normalizedStored = provider.bar_number.replace(/\s/g, '').toLowerCase()
 
   if (normalizedInput !== normalizedStored) {
     logger.warn('Claim bar number mismatch', {

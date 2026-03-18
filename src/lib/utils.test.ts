@@ -8,7 +8,7 @@ import {
   isValidEmail,
   isValidUSPhone,
   formatUSPhone,
-  isValidSIRET,
+  isValidBarNumber,
   calculateDistance,
   getRatingColor,
   parseQueryString,
@@ -159,21 +159,21 @@ describe('formatUSPhone', () => {
   })
 })
 
-describe('isValidSIRET', () => {
-  it('should validate correct SIRET numbers', () => {
-    // Test with a known valid SIRET (Luhn algorithm valid)
-    expect(isValidSIRET('73282932000074')).toBe(true)
+describe('isValidBarNumber', () => {
+  it('should validate correct bar numbers', () => {
+    expect(isValidBarNumber('TX12345')).toBe(true)
+    expect(isValidBarNumber('123456')).toBe(true)
+    expect(isValidBarNumber('NY-2024-00001')).toBe(true)
   })
 
-  it('should reject invalid SIRET numbers', () => {
-    expect(isValidSIRET('12345678901234')).toBe(false) // Invalid Luhn
-    expect(isValidSIRET('1234567890123')).toBe(false) // Too short
-    expect(isValidSIRET('123456789012345')).toBe(false) // Too long
-    expect(isValidSIRET('abcdefghijklmn')).toBe(false) // Non-numeric
+  it('should reject invalid bar numbers', () => {
+    expect(isValidBarNumber('')).toBe(false) // Empty
+    expect(isValidBarNumber('AB')).toBe(false) // Too short
+    expect(isValidBarNumber('A!@#')).toBe(false) // Special characters
   })
 
-  it('should handle SIRET with spaces', () => {
-    expect(isValidSIRET('732 829 320 00074')).toBe(true)
+  it('should handle bar numbers with hyphens', () => {
+    expect(isValidBarNumber('CA-12345')).toBe(true)
   })
 })
 

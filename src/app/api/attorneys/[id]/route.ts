@@ -26,22 +26,20 @@ interface ProviderRow {
   slug: string | null
   email: string | null
   phone: string | null
-  siret: string | null
-  siren: string | null
+  bar_number: string | null
   is_verified: boolean | null
   is_active: boolean | null
   stable_id: string | null
   noindex: boolean | null
   address_city: string | null
-  address_postal_code: string | null
-  address_street: string | null
-  address_region: string | null
-  address_department?: string | null
+  address_zip: string | null
+  address_line1: string | null
+  address_state: string | null
+  address_county?: string | null
   specialty: string | null
   rating_average: number | null
   review_count: number | null
   created_at: string | null
-  legal_form_code: string | null
   description: string | null
   meta_description: string | null
   website: string | null
@@ -111,9 +109,7 @@ interface AttorneyDetails {
     question: string
     answer: string
   }>
-  siret: string | null
-  siren: string | null
-  legal_form: string | null
+  bar_number: string | null
   creation_date: string | null
   phone: string | null
   email: string | null
@@ -184,7 +180,7 @@ export const GET = createApiHandler(async ({ params }) => {
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(attorneyId)
 
     // First, try a simple query to find the provider
-    const PROVIDER_COLUMNS = 'id,name,slug,email,phone,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form_code,description,meta_description,website,latitude,longitude'
+    const PROVIDER_COLUMNS = 'id,name,slug,email,phone,bar_number,is_verified,is_active,stable_id,noindex,address_city,address_zip,address_line1,address_state,specialty,rating_average,review_count,created_at,description,meta_description,website,latitude,longitude'
     let simpleQuery = supabase
       .from('attorneys')
       .select(PROVIDER_COLUMNS)
@@ -298,10 +294,10 @@ export const GET = createApiHandler(async ({ params }) => {
       // provider_faq table does not exist in migrations — return empty array
       const faq: Array<{ question: string; answer: string }> = []
 
-      const postalCode = provider.address_postal_code || ''
+      const postalCode = provider.address_zip || ''
       const deptCode = getDeptCodeFromPostal(postalCode)
-      const departmentName = getDepartmentName(deptCode) || getDepartmentName(provider.address_department)
-      const regionName = getRegionName(deptCode) || getRegionName(provider.address_region)
+      const departmentName = getDepartmentName(deptCode) || getDepartmentName(provider.address_county)
+      const regionName = getRegionName(deptCode) || getRegionName(provider.address_state)
 
       const finalRating = averageRating > 0 ? averageRating : 0
       const finalReviewCount = reviewCount
@@ -326,7 +322,7 @@ export const GET = createApiHandler(async ({ params }) => {
         city: provider.address_city || '',
         city_slug: provider.address_city ? slugify(provider.address_city) : undefined,
         postal_code: postalCode,
-        address: provider.address_street,
+        address: provider.address_line1,
         department: departmentName || undefined,
         department_code: deptCode || undefined,
         region: regionName || undefined,
@@ -361,9 +357,7 @@ export const GET = createApiHandler(async ({ params }) => {
           : null,
         portfolio,
         faq,
-        siret: provider.siret,
-        siren: provider.siren,
-        legal_form: provider.legal_form_code,
+        bar_number: provider.bar_number,
         creation_date: null,
         phone: provider.phone,
         email: provider.email,
@@ -482,9 +476,7 @@ export const GET = createApiHandler(async ({ params }) => {
             : null,
           portfolio,
           faq,
-          siret: null,
-          siren: null,
-          legal_form: null,
+          bar_number: null,
           creation_date: null,
           phone: profile.phone_e164,
           email: profile.email,

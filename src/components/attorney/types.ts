@@ -51,7 +51,7 @@ export interface Artisan {
   member_since?: string
   portfolio?: PortfolioItem[]
   faq?: Array<{ question: string; answer: string }>
-  siret?: string
+  bar_number?: string
   siren?: string
   legal_form?: string
   creation_date?: string

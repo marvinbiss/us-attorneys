@@ -186,23 +186,12 @@ export function formatUSPhone(phone: string): string {
   return phone
 }
 
-// Validate SIRET
-/** @deprecated Legacy French business ID validation. Use bar_number validation instead. */
-export function isValidSIRET(siret: string): boolean {
-  const cleaned = siret.replace(/\s/g, '')
-  if (!/^\d{14}$/.test(cleaned)) return false
-
-  // Luhn algorithm for SIRET
-  let sum = 0
-  for (let i = 0; i < 14; i++) {
-    let digit = parseInt(cleaned[i], 10)
-    if (i % 2 === 0) {
-      digit *= 2
-      if (digit > 9) digit -= 9
-    }
-    sum += digit
-  }
-  return sum % 10 === 0
+// Validate bar number (US attorney bar registration number)
+export function isValidBarNumber(barNumber: string): boolean {
+  if (!barNumber) return false
+  const cleaned = barNumber.trim()
+  // Bar numbers vary by state: typically alphanumeric, 4-15 characters
+  return /^[A-Za-z0-9-]{4,50}$/.test(cleaned)
 }
 
 // Debounce function

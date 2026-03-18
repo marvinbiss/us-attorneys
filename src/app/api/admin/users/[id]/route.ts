@@ -12,7 +12,7 @@ const updateUserSchema = z.object({
   phone: z.string().max(20).optional(),
   user_type: z.enum(['client', 'attorney']).optional(),
   name: z.string().max(100).optional(),
-  siret: z.string().max(20).optional(),
+  bar_number: z.string().max(20).optional(),
   description: z.string().max(1000).optional(),
   address: z.string().max(200).optional(),
   city: z.string().max(100).optional(),
@@ -70,7 +70,7 @@ export const GET = createApiHandler(async ({ params }) => {
   try {
     const { data: provider } = await supabase
       .from('attorneys')
-      .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+      .select('id, name, slug, email, phone, bar_number, is_verified, is_active, stable_id, noindex, address_city, address_zip, address_line1, address_state, specialty, rating_average, review_count, created_at')
       .eq('user_id', userId)
       .maybeSingle()
     attorneyData = provider

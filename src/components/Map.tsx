@@ -93,7 +93,7 @@ export default function Map({
               <h3 className="font-semibold text-gray-900">{provider.name}</h3>
               {provider.address_city && (
                 <p className="text-sm text-gray-600 mt-1">
-                  {provider.address_postal_code} {provider.address_city}
+                  {provider.address_zip} {provider.address_city}
                 </p>
               )}
               {provider.phone && (

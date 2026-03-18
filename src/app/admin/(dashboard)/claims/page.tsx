@@ -33,7 +33,7 @@ interface ProviderClaim {
   provider: {
     id: string
     name: string
-    siret: string
+    bar_number: string
     address_city: string
     stable_id: string
   } | null
@@ -238,7 +238,7 @@ export default function AdminClaimsPage() {
                     <div>
                       <span className="text-gray-500">Bar number on file:</span>{' '}
                       <span className="font-mono font-medium text-gray-900">
-                        {claim.provider?.siret || 'N/A'}
+                        {claim.provider?.bar_number || 'N/A'}
                       </span>
                     </div>
                     <div>

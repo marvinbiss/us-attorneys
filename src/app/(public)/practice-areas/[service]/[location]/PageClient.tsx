@@ -131,8 +131,8 @@ export default function ServiceLocationPageClient({
     address_city: p.address_city,
     is_verified: p.is_verified || false,
     phone: p.phone,
-    address_street: p.address_street,
-    address_postal_code: p.address_postal_code,
+    address_line1: p.address_line1,
+    address_zip: p.address_zip,
   })), [allProviders])
 
   // Default center: location coordinates → provider average → US fallback

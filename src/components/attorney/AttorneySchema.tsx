@@ -188,11 +188,11 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
       },
     }),
 
-    ...(attorney.siret && {
+    ...(attorney.bar_number && {
       identifier: {
         '@type': 'PropertyValue',
         name: 'barNumber',
-        value: attorney.siret,
+        value: attorney.bar_number,
       },
     }),
 

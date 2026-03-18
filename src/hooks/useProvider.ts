@@ -7,7 +7,7 @@ export interface Provider {
   id: string
   name: string
   slug: string
-  siret: string
+  bar_number: string | null
   phone: string | null
   email: string | null
   is_verified: boolean
@@ -15,9 +15,10 @@ export interface Provider {
   stable_id: string | null
   noindex: boolean | null
   address_city: string | null
-  address_postal_code: string | null
-  address_street: string | null
-  address_region: string | null
+  address_zip: string | null
+  address_line1: string | null
+  address_state: string | null
+  address_county: string | null
   specialty: string | null
   rating_average: number
   review_count: number
@@ -67,7 +68,7 @@ export function useProvider(): UseProviderReturn {
       // Fetch provider profile with explicit column list
       const { data: attorneyData, error: attorneyError } = await supabase
         .from('attorneys')
-        .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+        .select('id, name, slug, email, phone, bar_number, is_verified, is_active, stable_id, noindex, address_city, address_zip, address_line1, address_state, address_county, specialty, rating_average, review_count, created_at')
         .eq('user_id', user.id)
         .single()
 

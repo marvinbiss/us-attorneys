@@ -303,7 +303,7 @@ export default async function BestAttorneysPage({ params }: PageProps) {
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 truncate">{p.name}</p>
-                    <p className="text-sm text-gray-500">{p.address_city}{p.address_department ? `, ${p.address_department}` : ''}</p>
+                    <p className="text-sm text-gray-500">{p.address_city}{p.address_county ? `, ${p.address_county}` : ''}</p>
                   </div>
                   {p.rating_average != null && (
                     <span className="text-sm font-semibold text-yellow-600">★ {p.rating_average.toFixed(1)}</span>

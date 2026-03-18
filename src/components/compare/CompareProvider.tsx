@@ -20,13 +20,13 @@ export interface CompareProvider {
   stable_id?: string
   specialty?: string
   address_city?: string
-  address_region?: string
-  address_postal_code?: string
+  address_state?: string
+  address_zip?: string
   is_verified?: boolean
   rating_average?: number
   review_count?: number
   phone?: string
-  siret?: string
+  bar_number?: string
 }
 
 interface CompareContextType {
