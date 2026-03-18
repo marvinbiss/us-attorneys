@@ -53,7 +53,7 @@ vi.mock('@/lib/services/email-service', () => ({
 // ---------------------------------------------------------------------------
 
 const ATTORNEY_UUID = '550e8400-e29b-41d4-a716-446655440001'
-const SPECIALTY_UUID = '550e8400-e29b-41d4-a716-446655440010'
+// Reserved for future use in specialty-specific booking tests
 
 function makePostRequest(body: Record<string, unknown>, headers?: Record<string, string>): NextRequest {
   return new NextRequest('http://localhost/api/bookings/create', {

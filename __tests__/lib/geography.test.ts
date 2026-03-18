@@ -2,7 +2,7 @@
  * Tests — src/lib/geography.ts
  * State mappings, ZIP-to-state resolution, region lookups, full geography helper
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 
 // Mock slugify dependency (imported by geography.ts from @/lib/utils)
 vi.mock('@/lib/utils', () => ({

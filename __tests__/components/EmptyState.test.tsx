@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { EmptyState } from '@/components/ui/EmptyState'
 
 // Mock next/link
@@ -88,16 +88,15 @@ describe('EmptyState', () => {
     expect(link).toHaveAttribute('href', '/')
   })
 
-  it('renders action as a button when onClick is provided', () => {
-    const onClick = vi.fn()
+  it('renders action as a link when href is provided', () => {
     render(
       <EmptyState
         title="Empty"
-        action={{ label: 'Retry', onClick }}
+        action={{ label: 'Retry', href: '/retry' }}
       />
     )
-    fireEvent.click(screen.getByText('Retry'))
-    expect(onClick).toHaveBeenCalledOnce()
+    const link = screen.getByText('Retry').closest('a')
+    expect(link).toHaveAttribute('href', '/retry')
   })
 
   it('renders secondary action as a link', () => {
@@ -112,16 +111,15 @@ describe('EmptyState', () => {
     expect(link).toHaveAttribute('href', '/help')
   })
 
-  it('renders secondary action as a button', () => {
-    const onClick = vi.fn()
+  it('renders secondary action as a link', () => {
     render(
       <EmptyState
         title="Empty"
-        secondaryAction={{ label: 'Clear', onClick }}
+        secondaryAction={{ label: 'Clear', href: '/clear' }}
       />
     )
-    fireEvent.click(screen.getByText('Clear'))
-    expect(onClick).toHaveBeenCalledOnce()
+    const link = screen.getByText('Clear').closest('a')
+    expect(link).toHaveAttribute('href', '/clear')
   })
 
   it('applies custom className', () => {
