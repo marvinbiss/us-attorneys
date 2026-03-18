@@ -56,7 +56,7 @@ export default function StickyMobileCTA({
             setDismissed(true)
             sessionStorage.setItem('stickyMobileCTA_dismissed', '1')
           }}
-          className="absolute -top-2 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-gray-600"
+          className="absolute -top-3 -right-2 w-11 h-11 bg-white rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-gray-600"
           aria-label="Close"
         >
           <X className="w-3.5 h-3.5" />

@@ -191,7 +191,14 @@ export default async function RootLayout({
         >
           Skip to main content
         </a>
-        {/* Google Tag Manager */}
+        {/*
+          Google Tag Manager — SRI NOT applicable.
+          GTM loads via an inline snippet that dynamically creates a <script> element
+          pointing to https://www.googletagmanager.com/gtm.js?id=GTM-THV3KZ8N.
+          The response is dynamically generated per-request by Google (container config,
+          consent state, A/B tests), so its content hash changes on every build/publish.
+          Adding an integrity attribute would break GTM on every container update.
+        */}
         <Script id="gtm" strategy="lazyOnload">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -208,7 +215,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        {/* Meta Pixel — loaded after analytics consent */}
+        {/*
+          Meta Pixel (fbevents.js) — SRI NOT applicable.
+          The inline snippet dynamically creates a <script> element loading
+          https://connect.facebook.net/en_US/fbevents.js. Facebook rebuilds this
+          file frequently (feature flags, SDK version bumps), so its hash is
+          unpredictable. An integrity attribute would cause silent breakage whenever
+          Meta ships a new SDK version.
+        */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <Script id="meta-pixel" strategy="lazyOnload">
             {`!function(f,b,e,v,n,t,s)
@@ -223,8 +237,22 @@ fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
 fbq('track', 'PageView');`}
           </Script>
         )}
-        {/* Contentsquare UX Analytics */}
-        <Script src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js" strategy="lazyOnload" />
+        {/*
+          Contentsquare UX Analytics — SRI applicable.
+          Unlike GTM/fbevents, the Contentsquare tag JS is version-pinned per account.
+          TODO: Generate the SRI hash by running:
+            curl -s https://t.contentsquare.net/uxa/8da7eeef2dab8.js | openssl dgst -sha384 -binary | openssl base64 -A
+          Then set integrity="sha384-<hash>" below.
+          IMPORTANT: Re-generate the hash after every Contentsquare SDK version bump.
+          If the hash becomes stale, the script will be blocked by the browser —
+          monitor for CSP/SRI errors in /api/csp-report.
+        */}
+        <Script
+          src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+          // TODO: Add integrity="sha384-<hash>" once hash is generated (see comment above)
+        />
         {/* Microsoft Clarity — loaded only after analytics consent via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />

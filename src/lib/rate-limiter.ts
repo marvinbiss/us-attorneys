@@ -213,14 +213,15 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
 // Rate limit configurations per route type
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   auth: { maxRequests: 5, windowMs: 60_000, failOpen: false },             // 5 requests per minute for auth — fail-close (brute force prevention)
-  api: { maxRequests: 60, windowMs: 60_000, failOpen: true },              // 60 requests per minute for general API
+  api: { maxRequests: 60, windowMs: 60_000, failOpen: true },              // 60 requests per minute for general API (GET/HEAD reads)
+  apiWrite: { maxRequests: 10, windowMs: 60_000, failOpen: true },         // 10 requests per minute for generic API writes (POST/PUT/DELETE/PATCH)
   booking: { maxRequests: 10, windowMs: 60_000 },                          // 10 requests per minute for bookings
   payment: { maxRequests: 10, windowMs: 60_000, failOpen: false },         // 10 requests per minute for payments — fail-close
   reviews: { maxRequests: 5, windowMs: 60_000 },                           // 5 requests per minute for reviews
   quotes: { maxRequests: 10, windowMs: 60_000 },                           // 10 requests per minute for quotes
   contact: { maxRequests: 3, windowMs: 60_000, failOpen: false },           // 3 requests per minute for contact (sends email, unauthenticated) — fail-close
   upload: { maxRequests: 5, windowMs: 60_000 },                            // 5 uploads per minute (storage-intensive)
-  search: { maxRequests: 100, windowMs: 60_000, failOpen: true },          // 100 searches per minute
+  search: { maxRequests: 30, windowMs: 60_000, failOpen: true },           // 30 searches per minute (scraping prevention)
   gdpr: { maxRequests: 5, windowMs: 300_000 },                             // 5 requests per 5 minutes for GDPR export/delete
   newsletter: { maxRequests: 3, windowMs: 300_000 },                       // 3 requests per 5 minutes for newsletter (sends email)
   registration: { maxRequests: 3, windowMs: 300_000 },                     // 3 requests per 5 minutes for attorney registration (sends emails)
@@ -237,12 +238,17 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
 }
 
 /**
- * Get rate limit configuration for a given pathname
+ * Get rate limit configuration for a given pathname and HTTP method.
+ *
+ * Write operations (POST/PUT/DELETE/PATCH) get stricter limits than reads (GET/HEAD/OPTIONS)
+ * on generic API routes. Specific route categories (auth, payment, etc.) have their own
+ * fixed limits regardless of method.
  *
  * Order matters: more specific prefixes MUST come before generic ones.
  * e.g. /api/admin/prospection/ai must match before /api/admin
  */
-export function getRateLimitConfig(pathname: string): RateLimitConfig {
+export function getRateLimitConfig(pathname: string, method?: string): RateLimitConfig {
+  const isWrite = method ? ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method.toUpperCase()) : false
   // Auth — signin, signup, password reset, 2FA, OAuth
   if (pathname.startsWith('/api/auth')) return RATE_LIMITS.auth
 
@@ -303,9 +309,12 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   // Search and public listing endpoints — scraping prevention
   if (pathname.startsWith('/api/search') || pathname.startsWith('/api/attorneys/listing') || pathname.startsWith('/api/attorneys/by-city')) return RATE_LIMITS.search
 
-  // All other API routes
-  if (pathname.startsWith('/api/')) return RATE_LIMITS.api
+  // All other API routes — differentiate reads vs writes
+  if (pathname.startsWith('/api/')) {
+    return isWrite ? RATE_LIMITS.apiWrite : RATE_LIMITS.api
+  }
 
+  // Heavy page routes (e.g. /find/) — scraping prevention
   return RATE_LIMITS.default
 }
 

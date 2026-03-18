@@ -1,7 +1,11 @@
 import { SITE_URL } from '@/lib/seo/config'
 import { articleSlugs, allArticles } from '@/lib/data/blog/articles'
-import { services } from '@/lib/data/usa'
-import { getBlogImage, serviceImages, heroImage, pageImages, cityImages } from '@/lib/data/images'
+import { services, states } from '@/lib/data/usa'
+import { getBlogImage, serviceImages, heroImage, pageImages, cityImages, getDepartmentImage } from '@/lib/data/images'
+import { logger } from '@/lib/logger'
+
+/** ISR: regenerate every 24 hours */
+export const revalidate = 86400
 
 function escapeXml(s: string): string {
   return s
@@ -27,11 +31,15 @@ ${images.map((img) => imageTag(img.loc, img.title, img.caption)).join('\n')}
   </url>`
 }
 
+/** Max attorneys to include in image sitemap (keep file size reasonable for Google) */
+const ATTORNEY_IMAGE_LIMIT = 1_000
+
 /**
  * Image sitemap — Next.js 14 does not generate <image:image> tags with the correct namespace
  * in MetadataRoute.Sitemap. This handler produces the correct XML for Google Image Search.
  *
- * Content: homepage, services, top 20 cities, blog articles, key static pages.
+ * Content: homepage, services, states, top cities, attorney profiles (with images),
+ * blog articles, key static pages.
  */
 export async function GET() {
   const urls: string[] = []
@@ -53,12 +61,25 @@ export async function GET() {
     }
   }
 
-  // 3. Top 20 cities — geographic photos
+  // 3. State pages — geographic images
+  for (const state of states) {
+    const img = getDepartmentImage(state.code)
+    // Only include if state has a distinct image (not the generic hero fallback)
+    if (img && img.src !== heroImage.src) {
+      urls.push(
+        urlEntry(`${SITE_URL}/states/${state.slug}`, [
+          { loc: img.src, title: `Attorneys in ${state.name}`, caption: `Find qualified attorneys in ${state.name} (${state.code}) -- browse all practice areas on US Attorneys` },
+        ])
+      )
+    }
+  }
+
+  // 4. Top cities — geographic photos
   for (const [citySlug, img] of Object.entries(cityImages)) {
     const cityName = citySlug
       .split('-')
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join('-')
+      .join(' ')
     urls.push(
       urlEntry(`${SITE_URL}/cities/${citySlug}`, [
         { loc: img.src, title: img.alt, caption: `Photo of ${cityName} -- find qualified attorneys in ${cityName} on US Attorneys` },
@@ -66,7 +87,50 @@ export async function GET() {
     )
   }
 
-  // 4. Blog articles — smart slug → image matching
+  // 5. Attorney profile images — fetched from DB
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    const { data: attorneys, error } = await supabase
+      .from('attorneys')
+      .select('slug, stable_id, name, profile_image_url, address_city, address_state')
+      .eq('is_active', true)
+      .eq('noindex', false)
+      .not('profile_image_url', 'is', null)
+      .order('rating_average', { ascending: false, nullsFirst: false })
+      .limit(ATTORNEY_IMAGE_LIMIT)
+
+    if (error) {
+      logger.error('Image sitemap: failed to fetch attorney images', error)
+    } else if (attorneys && attorneys.length > 0) {
+      for (const attorney of attorneys) {
+        if (!attorney.profile_image_url || !attorney.name) continue
+        const publicId = attorney.slug || attorney.stable_id
+        if (!publicId) continue
+
+        const locationStr = [attorney.address_city, attorney.address_state].filter(Boolean).join(', ')
+        const caption = locationStr
+          ? `${attorney.name}, attorney in ${locationStr} -- verified professional profile on US Attorneys`
+          : `${attorney.name}, attorney -- verified professional profile on US Attorneys`
+
+        urls.push(
+          urlEntry(`${SITE_URL}/attorneys/${publicId}`, [
+            {
+              loc: attorney.profile_image_url,
+              title: `${attorney.name} -- Attorney Profile Photo`,
+              caption,
+            },
+          ])
+        )
+      }
+    }
+  } catch (err) {
+    // DB unavailable — skip attorney images silently (static content still served)
+    logger.warn('Image sitemap: DB unavailable for attorney images', { error: String(err) })
+  }
+
+  // 6. Blog articles — smart slug → image matching
   for (const slug of articleSlugs) {
     const article = allArticles[slug]
     const img = getBlogImage(slug, article?.category)
@@ -76,7 +140,7 @@ export async function GET() {
     )
   }
 
-  // 5. Static pages with known images
+  // 7. Static pages with known images
   const staticPageMap: Record<string, { url: string; captionPrefix: string }> = {
     howItWorks: { url: `${SITE_URL}/how-it-works`, captionPrefix: 'How it works' },
     about: { url: `${SITE_URL}/about`, captionPrefix: 'About US Attorneys' },
@@ -101,8 +165,7 @@ export async function GET() {
 ${urls.join('\n')}
 </urlset>`
 
-  // Last-Modified = date of the latest article (only dynamic content in this sitemap).
-  // Google uses Last-Modified to decide whether to re-fetch the file (HTTP 304).
+  // Last-Modified: latest article date or attorney fetch time
   const latestDate = articleSlugs.reduce<Date | null>((max, slug) => {
     const d = allArticles[slug]?.updatedDate || allArticles[slug]?.date
     if (!d) return max

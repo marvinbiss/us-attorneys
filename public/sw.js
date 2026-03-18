@@ -1,11 +1,12 @@
-const CACHE_NAME = 'us-attorneys-v1'
-const STATIC_CACHE_NAME = 'us-attorneys-static-v1'
-const DYNAMIC_CACHE_NAME = 'us-attorneys-dynamic-v1'
+const CACHE_NAME = 'us-attorneys-v2'
+const STATIC_CACHE_NAME = 'us-attorneys-static-v2'
+const DYNAMIC_CACHE_NAME = 'us-attorneys-dynamic-v2'
+const OFFLINE_URL = '/offline.html'
 
 // Static assets to cache
 const STATIC_ASSETS = [
   '/',
-  '/offline',
+  OFFLINE_URL,
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
@@ -97,9 +98,9 @@ self.addEventListener('fetch', (event) => {
           return response
         })
         .catch(() => {
-          // Network failed, try to return offline page for navigation requests
+          // Network failed, serve offline.html for navigation requests
           if (request.mode === 'navigate') {
-            return caches.match('/offline')
+            return caches.match(OFFLINE_URL)
           }
           return new Response('Offline', { status: 503 })
         })

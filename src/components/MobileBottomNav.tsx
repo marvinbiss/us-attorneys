@@ -50,7 +50,7 @@ export default function MobileBottomNav() {
                 key={href}
                 href={href}
                 aria-current={isActive ? 'page' : undefined}
-                className="flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95"
+                className="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] w-full h-full transition-colors touch-manipulation active:scale-95"
               >
                 <div className="w-11 h-11 -mt-5 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30 ring-4 ring-white dark:ring-gray-900">
                   <Icon className="w-5 h-5 text-white stroke-[2.5]" />
@@ -65,7 +65,7 @@ export default function MobileBottomNav() {
               key={href}
               href={href}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95 ${
+              className={`flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] w-full h-full transition-colors touch-manipulation active:scale-95 ${
                 isActive ? 'text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400'
               }`}
             >

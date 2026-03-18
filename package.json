@@ -16,6 +16,8 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "ci:guardrails": "bash scripts/ci-guardrails.sh",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "prepare": "husky"
   },
   "dependencies": {
@@ -97,6 +99,11 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "@storybook/addon-a11y": "^8.0.0",
+    "@storybook/addon-essentials": "^8.0.0",
+    "@storybook/nextjs": "^8.0.0",
+    "@storybook/react": "^8.0.0",
+    "storybook": "^8.0.0"
   }
 }

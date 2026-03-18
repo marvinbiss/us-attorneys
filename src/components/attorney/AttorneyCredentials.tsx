@@ -95,13 +95,13 @@ function CollapsibleSection({
           </span>
         </div>
         <ChevronDown
-          className={`w-5 h-5 text-slate-400 dark:text-gray-500 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-slate-400 dark:text-gray-500 transition-transform duration-200 motion-reduce:transition-none ${open ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
 
       <div
-        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`transition-all duration-300 ease-in-out motion-reduce:transition-none overflow-hidden ${
           open ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -313,7 +313,7 @@ function PublicationsSection({ publications }: { publications: AttorneyPublicati
             ? 'Show fewer'
             : `Show all ${publications.length} publications`}
           <ChevronDown
-            className={`w-4 h-4 transition-transform duration-200 ${showAll ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 transition-transform duration-200 motion-reduce:transition-none ${showAll ? 'rotate-180' : ''}`}
             aria-hidden="true"
           />
         </button>

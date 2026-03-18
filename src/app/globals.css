@@ -61,6 +61,27 @@
     --color-text-secondary: var(--color-gray-600);
     --color-text-muted: var(--color-gray-400);
 
+    /* =========================================
+       WCAG AAA Compliant Color Overrides
+       7:1 contrast ratio for normal text
+       4.5:1 contrast ratio for large text (18px+ or 14px bold)
+       ========================================= */
+
+    /* AAA body text: #171717 on white = 18.4:1 (already great) */
+    --aaa-text-body: #171717;
+    /* AAA secondary text: #404040 on white = 10.4:1 (was #525252 = 7.4:1 — upgraded) */
+    --aaa-text-secondary: #404040;
+    /* AAA muted text: #525252 on white = 7.4:1 (was #a3a3a3 = 2.6:1 — FAILS AAA, upgraded) */
+    --aaa-text-muted: #525252;
+    /* AAA placeholder text: #525252 on white = 7.4:1 (was #9ca3af ~3:1 — FAILS AAA) */
+    --aaa-text-placeholder: #525252;
+    /* AAA link color — brand primary darkened: #1840b8 on white = 8.2:1 */
+    --aaa-link-color: #1840b8;
+    /* AAA clay/brand on white: #85321C on white = 8.6:1 (was #E86B4B = 3.1:1 — FAILS AAA for normal text) */
+    --aaa-brand-on-light: #85321C;
+    /* AAA clay/brand for large text on white: #C24B2A on white = 4.9:1 (passes 4.5:1 for large text) */
+    --aaa-brand-on-light-lg: #C24B2A;
+
     /* Typography */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
@@ -124,6 +145,22 @@
     --color-text-primary: var(--color-gray-100);
     --color-text-secondary: var(--color-gray-300);
     --color-text-muted: var(--color-gray-500);
+
+    /* AAA dark mode overrides (on #171717 bg) */
+    /* AAA body text: #f5f5f5 on #171717 = 17.4:1 */
+    --aaa-text-body: #f5f5f5;
+    /* AAA secondary text: #d4d4d4 on #171717 = 12.7:1 */
+    --aaa-text-secondary: #d4d4d4;
+    /* AAA muted text: #a3a3a3 on #171717 = 7.4:1 */
+    --aaa-text-muted: #a3a3a3;
+    /* AAA placeholder text: #a3a3a3 on #262626 = 6.0:1, use #b0b0b0 = 7.2:1 */
+    --aaa-text-placeholder: #b0b0b0;
+    /* AAA link color: #93bbfd on #171717 = 8.6:1 */
+    --aaa-link-color: #93bbfd;
+    /* AAA brand on dark: #F5BAA0 on #171717 = 10.4:1 */
+    --aaa-brand-on-light: #F5BAA0;
+    /* AAA brand for large text on dark: #EF9171 on #171717 = 7.6:1 */
+    --aaa-brand-on-light-lg: #EF9171;
   }
 }
 
@@ -520,24 +557,28 @@ img {
 }
 
 /* ===========================================
-   WCAG 2.1 AA Focus Indicators (P2-33)
-   - 2px solid outline with high-contrast color
+   WCAG 2.1 AAA Focus Indicators
+   - 3px solid outline for maximum visibility
+   - High-contrast color (7:1+ on both light & dark)
    - :focus-visible only (keyboard nav, not mouse)
-   - Dark mode support
+   - Double-ring technique for visibility on any bg
    =========================================== */
 :focus-visible {
-  outline: 2px solid #2563eb; /* blue-600 — 4.6:1 contrast on white */
+  outline: 3px solid #1d4fd7; /* primary-600 — 8.1:1 contrast on white */
   outline-offset: 2px;
   border-radius: 4px;
+  box-shadow: 0 0 0 6px rgba(29, 79, 215, 0.15); /* subtle outer glow for visibility on busy backgrounds */
 }
 
 .dark :focus-visible {
-  outline-color: #60a5fa; /* blue-400 — 5.3:1 contrast on gray-900 */
+  outline-color: #93bbfd; /* light blue — 8.6:1 contrast on #171717 */
+  box-shadow: 0 0 0 6px rgba(147, 187, 253, 0.2);
 }
 
 /* Remove default focus outline when not using keyboard */
 :focus:not(:focus-visible) {
   outline: none;
+  box-shadow: none;
 }
 
 /* Custom selection color */
@@ -908,6 +949,47 @@ img {
   color: #4b5563;
   line-height: 1.75;
   font-size: inherit;
+}
+
+/* ===========================================
+   WCAG AAA Utility Classes
+   Use these for text that must meet AAA 7:1
+   =========================================== */
+
+/* Body text — AAA compliant */
+.text-aaa-body {
+  color: var(--aaa-text-body);
+}
+
+/* Secondary text — AAA compliant (replaces text-gray-500/600 in critical areas) */
+.text-aaa-secondary {
+  color: var(--aaa-text-secondary);
+}
+
+/* Muted text — AAA compliant (replaces text-gray-400 in critical areas) */
+.text-aaa-muted {
+  color: var(--aaa-text-muted);
+}
+
+/* Links — AAA compliant */
+.text-aaa-link {
+  color: var(--aaa-link-color);
+}
+
+/* Brand color on light bg — AAA for normal text */
+.text-aaa-brand {
+  color: var(--aaa-brand-on-light);
+}
+
+/* Brand color on light bg — AAA for large text only (18px+) */
+.text-aaa-brand-lg {
+  color: var(--aaa-brand-on-light-lg);
+}
+
+/* Placeholder override — AAA compliant */
+.placeholder-aaa::placeholder {
+  color: var(--aaa-text-placeholder);
+  opacity: 1;
 }
 
 

@@ -1,16 +1,11 @@
 /**
  * US Attorneys - UI Components
- * World-class branded components
+ * Barrel exports for all reusable UI components
  */
 
+// --- Core Form Elements ---
 export { default as Button } from './button'
 export type { ButtonProps } from './button'
-
-export { default as Badge, StatusBadge, SlotBadge } from './Badge'
-export type { BadgeProps } from './Badge'
-
-export { default as Logo, Tagline, BrandHeader } from './Logo'
-export type { LogoProps } from './Logo'
 
 export { default as Input } from './Input'
 export type { InputProps } from './Input'
@@ -21,7 +16,15 @@ export type { TextareaProps } from './Textarea'
 export { default as Select } from './Select'
 export type { SelectProps, SelectOption } from './Select'
 
-export { Skeleton, CardSkeleton, ListSkeleton, GridSkeleton, PageSkeleton, FormSkeleton } from './Skeleton'
+// --- Display Components ---
+export { default as Badge, StatusBadge, SlotBadge } from './Badge'
+export type { BadgeProps } from './Badge'
+
+export { default as Logo, Tagline, BrandHeader } from './Logo'
+export type { LogoProps } from './Logo'
+
+export { default as Avatar, AvatarGroup } from './Avatar'
+export type { AvatarProps, AvatarGroupProps } from './Avatar'
 
 export { default as Card, CardHeader, CardContent, CardFooter } from './Card'
 export type { CardProps, CardHeaderProps, CardContentProps, CardFooterProps } from './Card'
@@ -29,16 +32,20 @@ export type { CardProps, CardHeaderProps, CardContentProps, CardFooterProps } fr
 export { Modal, ConfirmModal } from './Modal'
 export type { ModalProps, ConfirmModalProps } from './Modal'
 
-export { default as Avatar, AvatarGroup } from './Avatar'
-export type { AvatarProps, AvatarGroupProps } from './Avatar'
-
 export { Toast, ToastContainer } from './Toast'
 
 export { Pagination } from './Pagination'
 
+// --- Loading & Skeleton ---
 export { Loading, LoadingPage, LoadingOverlay, LoadingButton } from './Loading'
 
-// Trust & Social Proof (2026 design patterns)
+export { Skeleton, CardSkeleton, ListSkeleton, GridSkeleton, PageSkeleton, FormSkeleton } from './Skeleton'
+
+// --- Empty & Error States ---
+export { default as EmptyState } from './EmptyState'
+export type { EmptyStateProps } from './EmptyState'
+
+// --- Trust & Social Proof ---
 export {
   TrustBadges,
   CertificationBadge,
@@ -48,21 +55,29 @@ export {
   RatingStars,
 } from './TrustBadges'
 
-// Search (Doctolib-style)
+// --- Search ---
 export { SearchBar } from './SearchBar'
 
-// Attorney Cards
+// --- Attorney Cards ---
 export { AttorneyCard, AttorneyGrid } from './AttorneyCard'
 
-// Autocomplete (World-class, Stripe/Doctolib-style)
+// --- Autocomplete ---
 export { CityAutocomplete } from './VilleAutocomplete'
-// AdresseAutocomplete removed (French data.gouv.fr API)
-// SiretAutocomplete removed (French SIRET validation)
 export { SpecialtyAutocomplete } from './SpecialtyAutocomplete'
 
-// Scroll-triggered animations (Framer Motion)
+// --- Animations (Framer Motion) ---
+export { default as AnimateOnScroll } from './AnimateOnScroll'
+export { default as PageTransition } from './PageTransition'
 export { ScrollReveal } from './ScrollReveal'
 export { StaggerGrid, StaggerItem } from './StaggerGrid'
 
-// Layout
+// --- Interactive Buttons ---
+export { CompareButton } from './CompareButton'
+export { FavoriteButton } from './FavoriteButton'
+export { ShareButton } from './ShareButton'
+
+// --- Layout ---
 export { SectionDivider } from './SectionDivider'
+
+// --- Theme ---
+export { ThemeToggle } from './theme-toggle'

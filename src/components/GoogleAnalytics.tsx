@@ -12,6 +12,12 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
 
   return (
     <>
+      {/*
+        Google Analytics (gtag.js) — SRI NOT applicable.
+        The gtag.js script at googletagmanager.com/gtag/js is dynamically generated
+        based on the measurement ID and Google's current SDK version. Its content
+        hash changes without notice, making SRI hashes unreliable.
+      */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
         strategy="afterInteractive"

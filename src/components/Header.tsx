@@ -320,7 +320,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
             {/* Favorites */}
             <Link
               href="/my-favorites"
-              className="relative text-gray-600 dark:text-gray-300 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80 dark:hover:bg-red-950/30"
+              className="relative text-gray-600 dark:text-gray-300 hover:text-red-500 px-3 py-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-all duration-200 hover:bg-red-50/80 dark:hover:bg-red-950/30"
               aria-label={`My favorites${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
               title="My favorites"
             >
@@ -343,7 +343,7 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
 
             <Link
               href="/emergency"
-              className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors duration-200"
+              className="relative flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-full text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors duration-200"
             >
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />

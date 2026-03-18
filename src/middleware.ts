@@ -3,6 +3,12 @@ import { updateSession } from '@/lib/supabase/middleware'
 import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 import { SPANISH_PA_SLUGS, ENGLISH_PA_SLUGS } from '@/lib/seo/hreflang'
+import {
+  CSRF_COOKIE_NAME,
+  generateCsrfToken,
+  requiresCsrfValidation,
+  validateCsrfToken,
+} from '@/lib/security/csrf'
 
 /**
  * Middleware v4 — security-hardened + performance-optimized
@@ -52,6 +58,27 @@ function buildCSP(nonce: string): string {
   ].join('; ')
 }
 
+/**
+ * Build Content-Security-Policy-Report-Only header.
+ * Stricter than the enforcing CSP — used to discover violations before tightening.
+ * Reports are sent to /api/csp-report for logging and analysis.
+ */
+function buildCSPReportOnly(): string {
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com connect.facebook.net t.contentsquare.net",
+    "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+    "img-src 'self' data: blob: images.unsplash.com *.google-analytics.com *.facebook.com",
+    "connect-src 'self' *.supabase.co *.google-analytics.com *.facebook.com",
+    "font-src 'self' fonts.gstatic.com",
+    "frame-src 'self' *.googletagmanager.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "report-uri /api/csp-report",
+  ].join('; ')
+}
+
 // ---------------------------------------------------------------------------
 // Security headers — applied to ALL dynamic responses as defense-in-depth.
 // These duplicate next.config.js headers() which are applied at CDN edge;
@@ -79,6 +106,11 @@ function addSecurityHeaders(response: NextResponse, request: NextRequest, nonce:
   if (!isCapacitor) {
     response.headers.set('Content-Security-Policy', buildCSP(nonce))
     response.headers.set('x-nonce', nonce)
+
+    // CSP-Report-Only — strict policy for monitoring violations without blocking.
+    // This runs in parallel with the enforcing CSP above. Violations are reported
+    // to /api/csp-report for analysis before tightening the enforcing policy.
+    response.headers.set('Content-Security-Policy-Report-Only', buildCSPReportOnly())
   }
 
   return response
@@ -228,10 +260,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Rate limiting for API routes and heavy page routes (skip health check — must always respond fast)
-  if ((pathname.startsWith('/api/') && pathname !== '/api/health') || pathname.startsWith('/find/')) {
+  // Rate limiting for API routes and heavy page routes
+  // Skip health check (must always respond fast) and csp-report (has its own rate limiting)
+  if ((pathname.startsWith('/api/') && pathname !== '/api/health' && pathname !== '/api/csp-report') || pathname.startsWith('/find/')) {
     const clientIp = getClientIp(request.headers)
-    const rateLimitConfig = getRateLimitConfig(pathname)
+    const rateLimitConfig = getRateLimitConfig(pathname, request.method)
     const rateLimitKey = getRateLimitKey(clientIp, pathname)
 
     try {
@@ -256,6 +289,24 @@ export async function middleware(request: NextRequest) {
     } catch (error: unknown) {
       // Fail open: if rate limiter errors, allow the request through
       logger.error('Rate limiter error:', error)
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // CSRF double-submit cookie validation
+  // Mutating requests (POST/PUT/DELETE/PATCH) to API routes must include an
+  // X-CSRF-Token header matching the __csrf cookie. Webhooks and cron jobs
+  // are exempt (they use their own authentication: signatures, API keys, secrets).
+  // ---------------------------------------------------------------------------
+  if (requiresCsrfValidation(request)) {
+    if (!validateCsrfToken(request)) {
+      return new NextResponse(
+        JSON.stringify({ error: 'Invalid or missing CSRF token' }),
+        {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
     }
   }
 
@@ -428,6 +479,19 @@ export async function middleware(request: NextRequest) {
       'Link',
       `<${selfUrl}>; rel="alternate"; hreflang="en", <${spanishUrl}>; rel="alternate"; hreflang="es", <${selfUrl}>; rel="alternate"; hreflang="x-default"`
     )
+  }
+
+  // Set CSRF cookie if not already present.
+  // The cookie is NOT HttpOnly so client-side JS can read it and send it
+  // as an X-CSRF-Token header (double-submit cookie pattern).
+  if (!request.cookies.get(CSRF_COOKIE_NAME)) {
+    response.cookies.set(CSRF_COOKIE_NAME, generateCsrfToken(), {
+      httpOnly: false,  // Must be readable by JavaScript
+      secure: !IS_DEV,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24, // 24 hours
+    })
   }
 
   return addSecurityHeaders(response, request, nonce)

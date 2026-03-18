@@ -285,27 +285,27 @@ export default function CookieConsent() {
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
                 onClick={acceptAll}
-                className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                className="rounded-lg bg-blue-600 px-6 py-2.5 min-h-[44px] text-sm font-medium text-white hover:bg-blue-700 transition-colors"
               >
                 Accept all
               </button>
               <button
                 onClick={acceptNecessaryOnly}
-                className="rounded-lg border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="rounded-lg border border-gray-300 bg-white px-6 py-2.5 min-h-[44px] text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Reject all
               </button>
               {showDetails ? (
                 <button
                   onClick={saveCustomPreferences}
-                  className="rounded-lg border border-blue-300 bg-blue-50 px-6 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                  className="rounded-lg border border-blue-300 bg-blue-50 px-6 py-2.5 min-h-[44px] text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
                 >
                   Save my choices
                 </button>
               ) : (
                 <button
                   onClick={() => setShowDetails(true)}
-                  className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
+                  className="text-sm font-medium text-gray-600 hover:text-gray-900 underline min-h-[44px] px-2 flex items-center"
                 >
                   Customize
                 </button>

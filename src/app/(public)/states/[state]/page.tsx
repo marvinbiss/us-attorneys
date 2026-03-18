@@ -5,7 +5,7 @@ import { MapPin, Building2, Users, ArrowRight, Shield, Clock, ChevronRight, Wren
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema, getStateFAQItems } from '@/lib/seo/jsonld'
 import { states, getStateBySlug, getCitiesByState, services, getRegionSlugByName } from '@/lib/data/usa'
 import { getAttorneyCountByDepartment, formatAttorneyCount } from '@/lib/data/stats'
 import { getDepartmentImage } from '@/lib/data/images'
@@ -121,7 +121,17 @@ export default async function StatePage({ params }: PageProps) {
     itemCount: services.length,
   })
 
-  const faqSchema = getFAQSchema(content.faqItems)
+  // Merge editorial FAQs (from location-content) with programmatic SEO FAQs
+  const programmaticStateFaqs = getStateFAQItems(dept.name, dept.code, {
+    attorneyCount: deptAttorneyCount || undefined,
+    cityCount: stateCities.length || dept.cities.length || undefined,
+    // barAssociationUrl not in static data yet — omitted
+  })
+  const allStateFaqs = [
+    ...content.faqItems,
+    ...programmaticStateFaqs,
+  ]
+  const faqSchema = getFAQSchema(allStateFaqs)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -443,7 +453,7 @@ export default async function StatePage({ params }: PageProps) {
             </h2>
           </div>
           <div className="space-y-4">
-            {content.faqItems.map((faq, i) => (
+            {allStateFaqs.map((faq, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
                 <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>

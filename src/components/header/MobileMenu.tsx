@@ -85,7 +85,7 @@ export default function MobileMenu({
                 type="button"
                 onClick={handleGeolocation}
                 disabled={isLocating}
-                className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                className="absolute right-1 top-1/2 -translate-y-1/2 p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
                 aria-label="Use my location"
                 title="My location"
               >
@@ -143,7 +143,7 @@ export default function MobileMenu({
                           <Link
                             key={`mob-${cat.category}-${service.slug}`}
                             href={`/practice-areas/${service.slug}`}
-                            className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                            className="flex items-center gap-2 p-2.5 min-h-[44px] bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
                             onClick={closeAndResetAccordion}
                           >
                             <Icon className="w-4 h-4 text-blue-600" />
@@ -199,7 +199,7 @@ export default function MobileMenu({
                     <Link
                       key={city.slug}
                       href={`/cities/${city.slug}`}
-                      className="inline-flex items-center gap-1.5 text-sm bg-gray-100 hover:bg-blue-100 text-slate-700 hover:text-blue-700 px-3 py-2 rounded-lg font-medium transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm bg-gray-100 hover:bg-blue-100 text-slate-700 hover:text-blue-700 px-3 py-2.5 min-h-[44px] rounded-lg font-medium transition-colors"
                       onClick={closeAndResetAccordion}
                     >
                       <MapPin className="w-3 h-3" />
@@ -252,7 +252,7 @@ export default function MobileMenu({
                     <Link
                       key={region.slug}
                       href={`/regions/${region.slug}`}
-                      className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                      className="flex items-center gap-2 p-2.5 min-h-[44px] bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
                       onClick={closeAndResetAccordion}
                     >
                       <Map className="w-3.5 h-3.5 text-slate-400" />

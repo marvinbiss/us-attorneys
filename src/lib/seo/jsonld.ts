@@ -141,6 +141,76 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]): Reco
   }
 }
 
+/**
+ * Generate programmatic FAQ items for practice area hub pages.
+ * These supplement the editorial FAQs from trade-content with high-intent
+ * questions that match common Google search patterns.
+ */
+export function getPracticeAreaFAQItems(practiceAreaName: string, opts?: {
+  priceRange?: { min: number; max: number; unit: string }
+  attorneyCount?: number
+  cityCount?: number
+}): { question: string; answer: string }[] {
+  const paLower = practiceAreaName.toLowerCase()
+  const faqs: { question: string; answer: string }[] = [
+    {
+      question: `What does a ${paLower} lawyer do?`,
+      answer: `A ${paLower} lawyer specializes in legal matters related to ${paLower}. They advise clients on their rights, represent them in negotiations and court proceedings, draft legal documents, and work to achieve the best possible outcome for their case. Most ${paLower} attorneys offer a free initial consultation to evaluate your situation.`,
+    },
+    {
+      question: `How much does a ${paLower} attorney cost?`,
+      answer: opts?.priceRange
+        ? `${practiceAreaName} attorney fees typically range from $${opts.priceRange.min} to $${opts.priceRange.max} ${opts.priceRange.unit}. Actual costs depend on case complexity, the attorney's experience, and your location. Many ${paLower} attorneys offer free consultations and some work on contingency (you pay only if you win).`
+        : `${practiceAreaName} attorney fees vary based on case complexity, experience level, and location. Many ${paLower} lawyers offer free initial consultations, and some work on contingency — meaning you only pay if you win your case. Request quotes from multiple attorneys to compare rates.`,
+    },
+    {
+      question: `When should I hire a ${paLower} lawyer?`,
+      answer: `You should consult a ${paLower} attorney as soon as you become aware of a legal issue in this area. Early legal advice can protect your rights, preserve evidence, and prevent costly mistakes. Most ${paLower} lawyers offer free consultations, so there is no cost to getting an initial assessment of your situation.`,
+    },
+    {
+      question: `How do I choose the best ${paLower} attorney?`,
+      answer: `When selecting a ${paLower} attorney, consider their experience with cases similar to yours, their bar standing and credentials, client reviews, fee structure, and communication style. Verify they are licensed in your state and check for any disciplinary history with the state bar association.${opts?.attorneyCount ? ` US Attorneys lists ${opts.attorneyCount.toLocaleString('en-US')} verified ${paLower} attorneys` : ''} to help you compare and choose.`,
+    },
+  ]
+
+  return faqs
+}
+
+/**
+ * Generate programmatic FAQ items for state attorney pages.
+ * Targets high-volume "lawyers in [state]" search queries.
+ */
+export function getStateFAQItems(stateName: string, stateCode: string, opts?: {
+  attorneyCount?: number
+  cityCount?: number
+  barAssociationUrl?: string
+}): { question: string; answer: string }[] {
+  const faqs: { question: string; answer: string }[] = [
+    {
+      question: `How do I find a lawyer in ${stateName}?`,
+      answer: `You can find a lawyer in ${stateName} by searching our directory of bar-verified attorneys. Filter by practice area, city, reviews, and fees to find the right match. ${opts?.attorneyCount ? `We list ${opts.attorneyCount.toLocaleString('en-US')} verified attorneys across ${stateName}.` : `All listed attorneys are verified through the ${stateName} State Bar.`} You can also request a free consultation directly through our platform.`,
+    },
+    {
+      question: `What are the bar requirements in ${stateName}?`,
+      answer: `To practice law in ${stateName} (${stateCode}), attorneys must pass the ${stateName} Bar Exam, meet character and fitness requirements, and be admitted to the ${stateName} State Bar. All attorneys listed on US Attorneys have been verified against official bar records.${opts?.barAssociationUrl ? ` You can verify any attorney's status directly at the ${stateName} State Bar website.` : ''}`,
+    },
+    {
+      question: `How much do lawyers charge in ${stateName}?`,
+      answer: `Attorney fees in ${stateName} vary widely depending on the practice area, case complexity, and the lawyer's experience. Hourly rates in ${stateName} typically range from $150 to $500+ per hour. Many attorneys offer free initial consultations, and some practice areas (like personal injury) commonly use contingency fee arrangements where you pay nothing unless you win.`,
+    },
+    {
+      question: `Can I get a free legal consultation in ${stateName}?`,
+      answer: `Yes, many attorneys in ${stateName} offer free initial consultations. This allows you to discuss your legal issue, understand your options, and evaluate whether the attorney is a good fit — all at no cost. You can request free consultations from multiple ${stateName} attorneys through US Attorneys to compare before making a decision.`,
+    },
+    {
+      question: `What types of lawyers are available in ${stateName}?`,
+      answer: `${stateName} attorneys cover all major practice areas including personal injury, criminal defense, family law, immigration, estate planning, business law, employment law, real estate, bankruptcy, and more.${opts?.cityCount ? ` Our directory covers attorneys across ${opts.cityCount} cities in ${stateName}.` : ''} You can search by practice area to find a specialist for your specific legal need.`,
+    },
+  ]
+
+  return faqs
+}
+
 // Schema.org HowTo (for "How it works" page and problem pages)
 export function getHowToSchema(
   steps: { name: string; text: string; image?: string }[],

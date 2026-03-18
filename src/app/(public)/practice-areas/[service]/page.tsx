@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText } from 'lucide-react'
 import { getSpecialtyBySlug, getLocationsByService, getAttorneysByService, getAttorneyCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
+import { getServiceSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema, getPracticeAreaFAQItems } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -290,9 +290,17 @@ export default async function ServicePage({ params }: PageProps) {
     image: getServiceImage(specialtySlug).src,
   })
 
-  const faqSchema = trade
-    ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a })))
-    : null
+  // Merge editorial FAQs (from trade-content) with programmatic SEO FAQs
+  const programmaticFaqs = getPracticeAreaFAQItems(service.name, {
+    priceRange: trade?.priceRange,
+    attorneyCount: totalAttorneyCount || undefined,
+    cityCount: topCities?.length || undefined,
+  })
+  const allFaqs = [
+    ...(trade ? trade.faq.map(f => ({ question: f.q, answer: f.a })) : []),
+    ...programmaticFaqs,
+  ]
+  const faqSchema = getFAQSchema(allFaqs)
 
   const speakableSchema = getSpeakableSchema({
     url: `${SITE_URL}/practice-areas/${specialtySlug}`,
@@ -685,8 +693,8 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      {/* FAQ — rich content for SEO */}
-      {trade && trade.faq.length > 0 && (
+      {/* FAQ — rich content for SEO (editorial + programmatic) */}
+      {allFaqs.length > 0 && (
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-8">
@@ -695,14 +703,14 @@ export default async function ServicePage({ params }: PageProps) {
               </h2>
             </div>
             <div className="space-y-4">
-              {trade.faq.map((item, i) => (
+              {allFaqs.map((item, i) => (
                 <details key={i} className="group bg-white rounded-xl shadow-sm border border-gray-100">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="font-semibold text-gray-900 pr-4">{item.q}</h3>
+                    <h3 className="font-semibold text-gray-900 pr-4">{item.question}</h3>
                     <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
                   </summary>
                   <div className="px-6 pb-6 pt-0">
-                    <p className="text-gray-600 leading-relaxed">{item.a}</p>
+                    <p className="text-gray-600 leading-relaxed">{item.answer}</p>
                   </div>
                 </details>
               ))}
