@@ -43,9 +43,9 @@ export default function ContactsPage() {
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
-        setContacts(data.data)
-        setTotalPages(data.pagination.totalPages)
-        setTotal(data.pagination.total)
+        setContacts(data.data ?? [])
+        setTotalPages(data.pagination?.totalPages ?? 1)
+        setTotal(data.pagination?.total ?? 0)
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return

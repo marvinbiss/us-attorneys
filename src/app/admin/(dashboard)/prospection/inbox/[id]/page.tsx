@@ -25,7 +25,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       const res = await fetch(`/api/admin/prospection/conversations/${id}`, { signal })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setConversation(data.data)
         setMessages(data.data.messages || [])
       }
@@ -87,7 +87,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setReplyText(data.data.content)
       } else {
         setError(data.error?.message || 'AI error')

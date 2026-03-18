@@ -45,8 +45,8 @@ export default function CreateCampaignPage() {
       if (!templatesRes.ok) throw new Error(`Server error templates (${templatesRes.status})`)
       if (!listsRes.ok) throw new Error(`Server error lists (${listsRes.status})`)
       const [templatesData, listsData] = await Promise.all([templatesRes.json(), listsRes.json()])
-      if (templatesData.success) setTemplates(templatesData.data)
-      if (listsData.success) setLists(listsData.data)
+      if (templatesData.success) setTemplates(templatesData.data ?? [])
+      if (listsData.success) setLists(listsData.data ?? [])
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       if (err instanceof Error) {
@@ -104,7 +104,7 @@ export default function CreateCampaignPage() {
       })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         router.push(`/admin/prospection/campaigns/${data.data.id}`)
       } else {
         setError(data.error?.message || 'Error')

@@ -4,7 +4,7 @@
  * POST: Submit answer (attorney only)
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createApiHandler, jsonResponse } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'

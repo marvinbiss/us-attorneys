@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Shield, Loader2, X, CheckCircle, AlertCircle } from 'lucide-react'
 
 interface ClaimButtonProps {
@@ -20,6 +20,52 @@ export function ClaimButton({ attorneyId, attorneyName, hasBarNumber }: ClaimBut
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [profileLoaded, setProfileLoaded] = useState(false)
+  const claimModalRef = useRef<HTMLDivElement>(null)
+
+  // Focus trap for claim modal
+  const handleClaimKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      if (!isLoading) setShowModal(false)
+      return
+    }
+    if (e.key !== 'Tab' || !claimModalRef.current) return
+
+    const focusable = claimModalRef.current.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusable.length === 0) return
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+  }, [isLoading])
+
+  useEffect(() => {
+    if (!showModal) return
+    document.addEventListener('keydown', handleClaimKeyDown)
+    const timer = setTimeout(() => {
+      if (claimModalRef.current) {
+        const first = claimModalRef.current.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        first?.focus()
+      }
+    }, 50)
+    return () => {
+      document.removeEventListener('keydown', handleClaimKeyDown)
+      clearTimeout(timer)
+    }
+  }, [showModal, handleClaimKeyDown])
 
   // Best-effort prefill from profile if user is logged in (non-blocking)
   useEffect(() => {
@@ -154,7 +200,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasBarNumber }: ClaimBut
           />
 
           {/* Modal content */}
-          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div ref={claimModalRef} role="dialog" aria-modal="true" aria-labelledby="claim-modal-title" className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             {/* Close button */}
             <button
               onClick={() => !isLoading && setShowModal(false)}
@@ -191,7 +237,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasBarNumber }: ClaimBut
                     <Shield className="w-5 h-5 text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 id="claim-modal-title" className="text-lg font-bold text-gray-900">
                       Claim this profile
                     </h3>
                     <p className="text-sm text-gray-500">{attorneyName}</p>

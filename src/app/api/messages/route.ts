@@ -87,34 +87,60 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get unread counts for each conversation
-    const conversationsWithUnread = await Promise.all(
-      (conversations || []).map(async (conv) => {
-        const { data: unreadData } = await admin.rpc('get_unread_count', {
-          p_conversation_id: conv.id,
-          p_user_id: user.id,
-        })
+    // Batch: get unread counts + last messages for all conversations in parallel (2 queries total, not 2N)
+    const convIds = (conversations || []).map(c => c.id)
+    let unreadMap: Record<string, number> = {}
+    let lastMsgMap: Record<string, { content_preview: string | null; content: string | null; sender_type: string | null }> = {}
 
-        // Get last message preview
-        const { data: lastMsg } = await admin
+    if (convIds.length > 0) {
+      // Batch unread counts via Promise.all on the RPC (unavoidable per-conv RPC, but done in parallel)
+      const [unreadResults, lastMsgResult] = await Promise.all([
+        Promise.all(
+          convIds.map(async (convId) => {
+            const { data } = await admin.rpc('get_unread_count', {
+              p_conversation_id: convId,
+              p_user_id: user.id,
+            })
+            return { convId, count: data || 0 }
+          })
+        ),
+        // Single query: get last message for all conversations using distinct on
+        admin
           .from('messages')
-          .select('content, content_preview, encrypted_content, sender_type, created_at')
-          .eq('conversation_id', conv.id)
+          .select('conversation_id, content, content_preview, sender_type, created_at')
+          .in('conversation_id', convIds)
           .is('deleted_at', null)
+          .order('conversation_id')
           .order('created_at', { ascending: false })
-          .limit(1)
-          .single()
+      ])
 
-        const lastMessagePreview = lastMsg?.content_preview || lastMsg?.content || null
+      for (const { convId, count } of unreadResults) {
+        unreadMap[convId] = count
+      }
 
-        return {
-          ...conv,
-          unread_count: unreadData || 0,
-          last_message_preview: lastMessagePreview,
-          last_message_sender_type: lastMsg?.sender_type || null,
+      // Group last messages by conversation (first per group = latest due to ordering)
+      const seen = new Set<string>()
+      for (const msg of lastMsgResult.data || []) {
+        if (!seen.has(msg.conversation_id)) {
+          seen.add(msg.conversation_id)
+          lastMsgMap[msg.conversation_id] = {
+            content_preview: msg.content_preview,
+            content: msg.content,
+            sender_type: msg.sender_type,
+          }
         }
-      })
-    )
+      }
+    }
+
+    const conversationsWithUnread = (conversations || []).map((conv) => {
+      const lastMsg = lastMsgMap[conv.id]
+      return {
+        ...conv,
+        unread_count: unreadMap[conv.id] || 0,
+        last_message_preview: lastMsg?.content_preview || lastMsg?.content || null,
+        last_message_sender_type: lastMsg?.sender_type || null,
+      }
+    })
 
     return NextResponse.json({
       success: true,

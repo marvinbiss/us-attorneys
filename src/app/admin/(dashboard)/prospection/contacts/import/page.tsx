@@ -52,11 +52,11 @@ export default function ImportPage() {
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
 
-      if (data.success) {
-        setHeaders(data.data.headers)
-        setMapping(data.data.suggested_mapping)
-        setPreviewRows(data.data.preview_rows)
-        setTotalRows(data.data.total_rows)
+      if (data.success && data.data) {
+        setHeaders(data.data.headers ?? [])
+        setMapping(data.data.suggested_mapping ?? {})
+        setPreviewRows(data.data.preview_rows ?? [])
+        setTotalRows(data.data.total_rows ?? 0)
         setStep('mapping')
       } else {
         setError(data.error?.message || 'Error')
@@ -87,7 +87,7 @@ export default function ImportPage() {
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
 
-      if (data.success) {
+      if (data.success && data.data) {
         setResult(data.data)
         setStep('result')
       } else {

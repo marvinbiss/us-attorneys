@@ -29,7 +29,7 @@ export default function InboxPage() {
       const res = await fetch(`/api/admin/prospection/conversations?${params}`, { signal })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) setConversations(data.data)
+      if (data.success) setConversations(data.data ?? [])
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')

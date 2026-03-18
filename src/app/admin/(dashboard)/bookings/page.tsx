@@ -20,7 +20,7 @@ interface Booking {
   attorney_id: string
   client_id: string
   service_name: string
-  scheduled_date: string
+  scheduled_at: string
   status: string
   payment_status: string
   deposit_amount: number | null
@@ -189,7 +189,7 @@ export default function AdminReservationsPage() {
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-400" />
                             <p className="font-medium text-gray-900">
-                              {formatDate(booking.scheduled_date)}
+                              {formatDate(booking.scheduled_at)}
                             </p>
                           </div>
                         </td>

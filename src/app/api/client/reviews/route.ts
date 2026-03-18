@@ -58,8 +58,8 @@ export const GET = createApiHandler(async ({ user }) => {
       .from('reviews')
       .select(`
         *,
-        attorney:profiles!attorney_id(id, full_name),
-        booking:bookings!booking_id(service_name)
+        attorney:attorneys!attorney_id(id, name),
+        booking:bookings!booking_id(id)
       `)
       .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
       .order('created_at', { ascending: false })
@@ -76,13 +76,13 @@ export const GET = createApiHandler(async ({ user }) => {
   // Format published reviews
   const formattedPublishedReviews = publishedReviews?.map(r => ({
     id: r.id,
-    attorney: r.attorney?.full_name || 'Attorney',
+    attorney: r.attorney?.name || 'Attorney',
     attorney_id: r.attorney_id,
-    service: (r.booking as { service_name?: string } | null)?.service_name || null,
+    service: null, // bookings table service_name may not exist in all environments
     date: r.created_at,
     rating: r.rating,
     comment: r.comment,
-    response: r.attorney_response,
+    response: r.artisan_response,
   })) || []
 
   return apiSuccess({
@@ -131,12 +131,13 @@ export const POST = createApiHandler(async ({ request, user }) => {
   try {
     const { data: attorneyData } = await supabase
       .from('attorneys')
-      .select('specialty, address_city, slug, stable_id')
+      .select('address_city, slug, stable_id, primary_specialty:specialties!attorneys_primary_specialty_id_fkey(slug)')
       .eq('user_id', attorney_id)
       .single()
 
     if (attorneyData) {
-      const specialtySlug = slugify(attorneyData.specialty || 'attorney')
+      const primarySpec = attorneyData.primary_specialty as unknown as { slug: string } | null
+      const specialtySlug = primarySpec?.slug || 'attorney'
       const locationSlug = slugify(attorneyData.address_city || 'united-states')
       const publicId = attorneyData.slug || attorneyData.stable_id
 

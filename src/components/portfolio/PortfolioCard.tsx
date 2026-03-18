@@ -57,7 +57,7 @@ export default function PortfolioCard({
       )}
     >
       {/* Image container */}
-      <div className="relative aspect-[4/3] bg-gray-100" onClick={onClick}>
+      <div className="relative aspect-[4/3] bg-gray-100" role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined} onClick={onClick} onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}>
         {thumbnailUrl && !imageError ? (
           <Image
             src={thumbnailUrl}

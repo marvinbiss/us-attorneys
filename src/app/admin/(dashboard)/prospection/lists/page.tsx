@@ -24,7 +24,7 @@ export default function ListsPage() {
       }
       const data = await res.json()
       if (data.success) {
-        setLists(data.data)
+        setLists(data.data ?? [])
       } else {
         setError(data.error?.message || 'Unknown error')
       }

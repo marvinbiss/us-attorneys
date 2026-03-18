@@ -51,20 +51,21 @@ export default function ContactDetailPage() {
         return
       }
       const data = await res.json()
-      if (data.success) {
-        setContact(data.data)
+      if (data.success && data.data) {
+        const d = data.data
+        setContact(d)
         setEditFields({
-          contact_name: data.data.contact_name || '',
-          company_name: data.data.company_name || '',
-          email: data.data.email || '',
-          phone: data.data.phone || '',
-          address: data.data.address || '',
-          postal_code: data.data.postal_code || '',
-          city: data.data.city || '',
-          department: data.data.department || '',
-          region: data.data.region || '',
-          tags: (data.data.tags || []).join(', '),
-          consent_status: data.data.consent_status || 'unknown',
+          contact_name: d.contact_name || '',
+          company_name: d.company_name || '',
+          email: d.email || '',
+          phone: d.phone || '',
+          address: d.address || '',
+          postal_code: d.postal_code || '',
+          city: d.city || '',
+          department: d.department || '',
+          region: d.region || '',
+          tags: (d.tags || []).join(', '),
+          consent_status: d.consent_status || 'unknown',
         })
       } else {
         setError(data.error?.message || 'Contact not found')
@@ -82,7 +83,7 @@ export default function ContactDetailPage() {
       const res = await fetch('/api/admin/prospection/lists')
       if (res.ok) {
         const data = await res.json()
-        if (data.success) setLists(data.data)
+        if (data.success) setLists(data.data ?? [])
       }
     } catch {
       // Non-critical

@@ -128,7 +128,7 @@ export const GET = createApiHandler(async ({ request }) => {
     supabase
       .from('bookings')
       .select(`
-        id, client_id, attorney_id, service_name, status, scheduled_date, payment_status,
+        id, client_id, attorney_id, service_name, status, scheduled_at, payment_status,
         client_name, client_email, client_phone, service_description,
         cancelled_at, cancelled_by, cancellation_reason,
         rescheduled_at, deposit_amount, created_at, updated_at

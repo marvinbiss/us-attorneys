@@ -130,7 +130,7 @@ async function collectUserData(userId: string) {
   ] = await Promise.all([
     adminSupabase
       .from('bookings')
-      .select('id, client_id, attorney_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at')
+      .select('id, client_id, attorney_id, status, scheduled_at, client_name, client_email, booking_fee, created_at')
       .or(`client_id.eq.${userId},attorney_id.eq.${userId}`),
 
     adminSupabase

@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { createApiHandler } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
@@ -17,11 +16,11 @@ const bookingPatchSchema = z.object({
 // GET /api/bookings/[id] - Get booking details
 export const dynamic = 'force-dynamic'
 
-export const GET = createApiHandler(async ({ params }) => {
+export const GET = createApiHandler(async ({ user, params }) => {
   const bookingId = params?.id
   if (!bookingId) {
     return NextResponse.json(
-      { success: false, error: { message: 'Missing booking ID' } },
+      { success: false, error: { code: 'VALIDATION_ERROR', message: 'Missing booking ID' } },
       { status: 400 }
     )
   }
@@ -30,16 +29,12 @@ export const GET = createApiHandler(async ({ params }) => {
   const idValidation = bookingIdSchema.safeParse(bookingId)
   if (!idValidation.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Invalid booking ID' } },
+      { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid booking ID' } },
       { status: 400 }
     )
   }
 
-  // Get authenticated user (optional for booking lookup by ID)
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  // Use admin client for booking lookup
+  // Use admin client for booking lookup (cross-user reads)
   const adminSupabase = createAdminClient()
 
   // Query booking by exact ID only (no partial matching for security)
@@ -73,7 +68,7 @@ export const GET = createApiHandler(async ({ params }) => {
 
   if (error || !booking) {
     return NextResponse.json(
-      { success: false, error: { message: 'Booking not found' } },
+      { success: false, error: { code: 'NOT_FOUND', message: 'Booking not found' } },
       { status: 404 }
     )
   }
@@ -81,25 +76,19 @@ export const GET = createApiHandler(async ({ params }) => {
   const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; attorney_id: string }> | null
   const slot = slotData?.[0] || null
 
-  // Security check: If user is authenticated, verify they have access to this booking
-  // (either as the client who made it, or as the attorney)
-  if (user) {
-    const isOwner = booking.client_id === user.id
-    const isAttorney = slot?.attorney_id === user.id
+  // Authorization check: user must be the client or the attorney
+  const isOwner = booking.client_id === user!.id
+  const isAttorney = slot?.attorney_id === user!.id
+  const isEmailMatch = user!.email?.toLowerCase() === booking.client_email?.toLowerCase()
 
-    // For authenticated users, they must be the owner or the attorney
-    if (!isOwner && !isAttorney) {
-      // Check if user email matches booking email (for non-registered users who made booking)
-      if (user.email?.toLowerCase() !== booking.client_email?.toLowerCase()) {
-        return NextResponse.json(
-          { success: false, error: { message: 'Unauthorized access to this booking' } },
-          { status: 403 }
-        )
-      }
-    }
+  if (!isOwner && !isAttorney && !isEmailMatch) {
+    return NextResponse.json(
+      { success: false, error: { code: 'FORBIDDEN', message: 'Unauthorized access to this booking' } },
+      { status: 403 }
+    )
   }
 
-  // Fetch attorney details (limited info for non-owners)
+  // Fetch attorney details
   let attorneyProfile = null
   if (slot?.attorney_id) {
     const { data: attorneyData } = await adminSupabase
@@ -112,39 +101,42 @@ export const GET = createApiHandler(async ({ params }) => {
 
   // Format response for confirmation page
   return NextResponse.json({
-    booking: {
-      id: booking.id,
-      clientName: booking.client_name,
-      clientEmail: booking.client_email,
-      clientPhone: booking.client_phone,
-      specialtyName: booking.service_description || 'Service',
-      status: booking.status,
-      createdAt: booking.created_at,
-      cancelledAt: booking.cancelled_at,
-      cancelledBy: booking.cancelled_by,
-      cancellationReason: booking.cancellation_reason,
-      rescheduledAt: booking.rescheduled_at,
-      paymentStatus: booking.payment_status,
-      depositAmount: booking.deposit_amount,
-      date: slot?.date,
-      startTime: slot?.start_time,
-      endTime: slot?.end_time,
-      slotId: slot?.id,
-      attorneyId: attorneyProfile?.id || slot?.attorney_id,
-      attorneyName: attorneyProfile?.full_name || 'Attorney',
-      attorneyPhone: attorneyProfile?.phone_e164 ?? null,
-      attorneyEmail: attorneyProfile?.email,
-      attorneyAvatar: null,
-      // Legacy format for backward compatibility
-      client_name: booking.client_name,
-      client_phone: booking.client_phone,
-      client_email: booking.client_email,
-      service_description: booking.service_description,
-      slot: booking.slot,
-      attorney: attorneyProfile || { id: slot?.attorney_id, full_name: 'Attorney' },
+    success: true,
+    data: {
+      booking: {
+        id: booking.id,
+        clientName: booking.client_name,
+        clientEmail: booking.client_email,
+        clientPhone: booking.client_phone,
+        specialtyName: booking.service_description || 'Service',
+        status: booking.status,
+        createdAt: booking.created_at,
+        cancelledAt: booking.cancelled_at,
+        cancelledBy: booking.cancelled_by,
+        cancellationReason: booking.cancellation_reason,
+        rescheduledAt: booking.rescheduled_at,
+        paymentStatus: booking.payment_status,
+        depositAmount: booking.deposit_amount,
+        date: slot?.date,
+        startTime: slot?.start_time,
+        endTime: slot?.end_time,
+        slotId: slot?.id,
+        attorneyId: attorneyProfile?.id || slot?.attorney_id,
+        attorneyName: attorneyProfile?.full_name || 'Attorney',
+        attorneyPhone: attorneyProfile?.phone_e164 ?? null,
+        attorneyEmail: attorneyProfile?.email,
+        attorneyAvatar: null,
+        // Legacy format for backward compatibility
+        client_name: booking.client_name,
+        client_phone: booking.client_phone,
+        client_email: booking.client_email,
+        service_description: booking.service_description,
+        slot: booking.slot,
+        attorney: attorneyProfile || { id: slot?.attorney_id, full_name: 'Attorney' },
+      },
     },
   })
-}, {})
+}, { requireAuth: true })
 
 // PATCH /api/bookings/[id] - Update booking status
 export const PATCH = createApiHandler(async ({ request, user, params }) => {

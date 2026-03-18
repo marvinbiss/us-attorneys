@@ -42,10 +42,10 @@ export async function GET(request: Request) {
     let hasMore = true
 
     while (hasMore) {
-      // Fetch active providers with their current metrics (user_id needed to match attorney_id in reviews)
+      // Fetch active providers with their current metrics
       const { data: providers, error } = await supabase
         .from('attorneys')
-        .select('id, user_id, rating_average, review_count')
+        .select('id, rating_average, review_count')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')
@@ -62,27 +62,13 @@ export async function GET(request: Request) {
       }
 
       // Batch-fetch all reviews for this batch of providers (eliminates N+1)
-      const userIds = providers
-        .map(p => p.user_id)
-        .filter((id): id is string => !!id)
-
-      const skippedInBatch = providers.filter(p => !p.user_id).length
-      totalSkipped += skippedInBatch
-
-      if (userIds.length === 0) {
-        if (providers.length < BATCH_SIZE) {
-          hasMore = false
-        } else {
-          offset += BATCH_SIZE
-        }
-        continue
-      }
+      const attorneyIds = providers.map(p => p.id)
 
       // Single query instead of N queries
       const { data: allReviews, error: reviewError } = await supabase
         .from('reviews')
         .select('attorney_id, rating')
-        .in('attorney_id', userIds)
+        .in('attorney_id', attorneyIds)
         .eq('status', 'published')
 
       if (reviewError) {
@@ -101,9 +87,7 @@ export async function GET(request: Request) {
         const updates: Promise<void>[] = []
 
         for (const provider of providers) {
-          if (!provider.user_id) continue
-
-          const ratings = reviewsByAttorney.get(provider.user_id) || []
+          const ratings = reviewsByAttorney.get(provider.id) || []
           const reviewCount = ratings.length
           const ratingAverage = reviewCount > 0
             ? ratings.reduce((sum, r) => sum + r, 0) / reviewCount

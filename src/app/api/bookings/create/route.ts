@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
 import { apiError } from '@/lib/api/handler'
@@ -28,6 +29,16 @@ type CreateBookingBody = z.infer<typeof createBookingBodySchema>
 
 export async function POST(request: NextRequest) {
   try {
+    // Authentication check
+    const supabaseAuth = await createClient()
+    const { data: { user } } = await supabaseAuth.auth.getUser()
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: { code: 'UNAUTHORIZED', message: 'Authentication required' } },
+        { status: 401 }
+      )
+    }
+
     // Idempotency check — prevent double bookings
     const idempotency = await handleIdempotency(request)
     if (idempotency && 'cached' in idempotency) return idempotency.cached
@@ -67,10 +78,9 @@ export async function POST(request: NextRequest) {
       payment_intent_id,
     } = body
 
-    const supabase = createAdminClient()
-
-    // 2. Verify attorney exists
-    const { data: attorney, error: attorneyError } = await supabase
+    // 2. Verify attorney exists (admin client needed: RLS may restrict cross-user reads on attorneys table)
+    const adminSupabase = createAdminClient()
+    const { data: attorney, error: attorneyError } = await adminSupabase
       .from('attorneys')
       .select('id, name')
       .eq('id', attorney_id)
@@ -84,7 +94,7 @@ export async function POST(request: NextRequest) {
     const requestedStart = new Date(scheduled_at)
     const requestedEnd = new Date(requestedStart.getTime() + (duration_minutes || 30) * 60 * 1000)
 
-    const { data: conflicting } = await supabase
+    const { data: conflicting } = await adminSupabase
       .from('bookings')
       .select('id, scheduled_at, duration_minutes')
       .eq('attorney_id', attorney_id)
@@ -125,12 +135,13 @@ export async function POST(request: NextRequest) {
       logger.warn('Daily.co room creation failed (non-blocking)', { error: dailyError instanceof Error ? dailyError.message : String(dailyError) })
     }
 
-    // 6. Insert booking
-    const { data: booking, error: insertError } = await supabase
+    // 6. Insert booking (admin client needed to bypass RLS for insert with client_id)
+    const { data: booking, error: insertError } = await adminSupabase
       .from('bookings')
       .insert({
         id: tempId,
         attorney_id,
+        client_id: user.id,
         scheduled_at,
         duration_minutes,
         specialty_id: specialty_id || null,
@@ -186,7 +197,7 @@ export async function POST(request: NextRequest) {
 
     // Attorney notification email
     try {
-      const { data: attorneyProfile } = await supabase
+      const { data: attorneyProfile } = await adminSupabase
         .from('attorneys')
         .select('email')
         .eq('id', attorney_id)

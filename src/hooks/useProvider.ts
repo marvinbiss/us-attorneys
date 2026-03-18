@@ -19,7 +19,7 @@ export interface Provider {
   address_line1: string | null
   address_state: string | null
   address_county: string | null
-  specialty: string | null
+  specialty: { slug: string; name: string } | null
   rating_average: number
   review_count: number
   created_at: string
@@ -68,7 +68,7 @@ export function useProvider(): UseProviderReturn {
       // Fetch provider profile with explicit column list
       const { data: attorneyData, error: attorneyError } = await supabase
         .from('attorneys')
-        .select('id, name, slug, email, phone, bar_number, is_verified, is_active, stable_id, noindex, address_city, address_zip, address_line1, address_state, address_county, specialty, rating_average, review_count, created_at')
+        .select('id, name, slug, email, phone, bar_number, is_verified, is_active, stable_id, noindex, address_city, address_zip, address_line1, address_state, address_county, rating_average, review_count, created_at, specialty:specialties!primary_specialty_id(slug,name)')
         .eq('user_id', user.id)
         .single()
 
@@ -82,7 +82,11 @@ export function useProvider(): UseProviderReturn {
         throw attorneyError
       }
 
-      setProvider(attorneyData)
+      // Supabase returns FK joins as arrays; unwrap to single object
+      const specialty = Array.isArray(attorneyData.specialty)
+        ? attorneyData.specialty[0] ?? null
+        : attorneyData.specialty ?? null
+      setProvider({ ...attorneyData, specialty } as Provider)
 
       // Fetch provider stats in parallel to avoid N+1 queries
       const [{ data: bookingsData }, { data: reviewsData }] = await Promise.all([
@@ -94,7 +98,7 @@ export function useProvider(): UseProviderReturn {
         supabase
           .from('reviews')
           .select('rating')
-          .eq('attorney_id', user.id)
+          .eq('attorney_id', attorneyData.id)
           .limit(500),
       ])
 

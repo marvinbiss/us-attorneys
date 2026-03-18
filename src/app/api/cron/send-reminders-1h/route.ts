@@ -39,20 +39,20 @@ export async function GET(request: Request) {
 
     logger.info(`[Cron 1h] Looking for appointments between ${windowStartTime} and ${windowEndTime}`)
 
-    // Fetch bookings in the time window using scheduled_date (availability_slots has no FK on bookings)
+    // Fetch bookings in the time window using scheduled_at (availability_slots has no FK on bookings)
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
         id,
         service_name,
         status,
-        scheduled_date,
+        scheduled_at,
         attorney_id,
         client:profiles!client_id(full_name, email, phone_e164)
       `)
       .eq('status', 'confirmed')
-      .gte('scheduled_date', windowStart.toISOString())
-      .lte('scheduled_date', windowEnd.toISOString())
+      .gte('scheduled_at', windowStart.toISOString())
+      .lte('scheduled_at', windowEnd.toISOString())
       .limit(500)
 
     if (error) {
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
         clientPhone: client?.phone_e164 || '',
         attorneyName: attorney?.full_name || 'Attorney',
         specialtyName: booking.service_name || 'Service',
-        date: booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('en-US', {
+        date: booking.scheduled_at ? new Date(booking.scheduled_at).toLocaleDateString('en-US', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',

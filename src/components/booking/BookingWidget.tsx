@@ -204,14 +204,16 @@ export default function BookingWidget({
       })
 
       if (!res.ok) {
-        const errData = await res.json().catch(() => ({}))
-        throw new Error(
-          (errData as { error?: string }).error || 'Failed to create booking'
-        )
+        const errData = await res.json().catch(() => ({})) as { error?: { message?: string } | string; success?: boolean }
+        const errMsg = typeof errData.error === 'string' ? errData.error : errData.error?.message
+        throw new Error(errMsg || 'Failed to create booking')
       }
 
-      const data = (await res.json()) as BookingResponse
-      setBookingResult(data)
+      const json = await res.json() as { success: boolean; data?: { booking: BookingResponse } }
+      const booking = json.data?.booking
+      if (booking) {
+        setBookingResult(booking)
+      }
       setStep('success')
       toastSuccess('Booking confirmed!', 'A confirmation email has been sent.')
     } catch (err: unknown) {

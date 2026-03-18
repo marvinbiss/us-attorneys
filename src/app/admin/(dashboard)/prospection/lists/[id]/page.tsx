@@ -58,7 +58,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         return
       }
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setList(data.data)
         setEditName(data.data.name)
         setEditDesc(data.data.description || '')
@@ -81,9 +81,9 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       if (!res.ok) return
       const data = await res.json()
       if (data.success) {
-        setMembers(data.data)
-        setTotalPages(data.pagination.totalPages)
-        setTotalMembers(data.pagination.total)
+        setMembers(data.data ?? [])
+        setTotalPages(data.pagination?.totalPages ?? 1)
+        setTotalMembers(data.pagination?.total ?? 0)
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return

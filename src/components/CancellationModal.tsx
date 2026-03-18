@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { X, AlertTriangle, Loader2, Calendar, Clock } from 'lucide-react'
 
 interface CancellationModalProps {
@@ -25,6 +25,52 @@ export default function CancellationModal({
   const [reason, setReason] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  // Focus trap: cycle Tab/Shift+Tab, close on Escape
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose()
+      return
+    }
+    if (e.key !== 'Tab' || !modalRef.current) return
+
+    const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusable.length === 0) return
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+  }, [onClose])
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    // Focus first element on mount
+    const timer = setTimeout(() => {
+      if (modalRef.current) {
+        const first = modalRef.current.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        first?.focus()
+      }
+    }, 50)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      clearTimeout(timer)
+    }
+  }, [handleKeyDown])
 
   const handleCancel = async () => {
     setIsSubmitting(true)
@@ -57,10 +103,10 @@ export default function CancellationModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-md w-full shadow-2xl">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="cancellation-modal-title" className="bg-white rounded-xl max-w-md w-full shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 id="cancellation-modal-title" className="text-lg font-semibold text-gray-900">
             Cancel booking
           </h3>
           <button

@@ -70,7 +70,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
           {/* Main hero image (left half) */}
           <div
             className="col-span-2 row-span-2 relative overflow-hidden"
+            role="button"
+            tabIndex={0}
             onClick={() => openLightbox(0)}
+            onKeyDown={(e) => e.key === 'Enter' && openLightbox(0)}
           >
             <Image
               src={gridPhotos[0]?.imageUrl}
@@ -89,7 +92,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
           {gridPhotos[1] && (
             <div
               className="relative overflow-hidden"
+              role="button"
+              tabIndex={0}
               onClick={() => openLightbox(1)}
+              onKeyDown={(e) => e.key === 'Enter' && openLightbox(1)}
             >
               <Image
                 src={gridPhotos[1].imageUrl}
@@ -107,7 +113,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
           {gridPhotos[2] && (
             <div
               className="relative overflow-hidden rounded-tr-2xl"
+              role="button"
+              tabIndex={0}
               onClick={() => openLightbox(2)}
+              onKeyDown={(e) => e.key === 'Enter' && openLightbox(2)}
             >
               <Image
                 src={gridPhotos[2].imageUrl}
@@ -126,7 +135,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
           {gridPhotos[3] && (
             <div
               className="relative overflow-hidden"
+              role="button"
+              tabIndex={0}
               onClick={() => openLightbox(3)}
+              onKeyDown={(e) => e.key === 'Enter' && openLightbox(3)}
             >
               <Image
                 src={gridPhotos[3].imageUrl}
@@ -144,7 +156,10 @@ export function AttorneyPhotoGrid({ attorney }: AttorneyPhotoGridProps) {
           {gridPhotos[4] && (
             <div
               className="relative overflow-hidden rounded-br-2xl"
+              role="button"
+              tabIndex={0}
               onClick={() => openLightbox(4)}
+              onKeyDown={(e) => e.key === 'Enter' && openLightbox(4)}
             >
               <Image
                 src={gridPhotos[4].imageUrl}

@@ -77,8 +77,8 @@ export default function BookingPage() {
         throw new Error('Error loading data')
       }
 
-      const data = await response.json()
-      setBooking(data.booking)
+      const json = await response.json()
+      setBooking(json.data?.booking || json.booking)
     } catch (err: unknown) {
       console.error('Error fetching booking:', err)
       setError(err instanceof Error ? err.message : 'Error loading data')

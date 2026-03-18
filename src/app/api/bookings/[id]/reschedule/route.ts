@@ -89,7 +89,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
   const { error: updateError } = await supabase
     .from('bookings')
     .update({
-      scheduled_date: newSlot.start_time
+      scheduled_at: newSlot.start_time
         ? `${newSlot.date}T${newSlot.start_time}`
         : newSlot.date,
       rescheduled_at: new Date().toISOString(),

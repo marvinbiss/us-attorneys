@@ -103,9 +103,10 @@ export function createApiHandler<T = unknown>(
         // Admin check
         if (options.requireAdmin) {
           const { data: admin } = await supabase
-            .from('admin_users')
+            .from('profiles')
             .select('id')
             .eq('id', user.id)
+            .eq('is_admin', true)
             .single()
 
           if (!admin) {

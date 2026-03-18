@@ -20,7 +20,7 @@ export default function SettingsPage() {
       const res = await fetch('/api/admin/prospection/ai/settings', { signal })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setSettings(data.data)
         initialSettingsRef.current = JSON.stringify(data.data)
         setHasUnsavedChanges(false)
@@ -74,7 +74,7 @@ export default function SettingsPage() {
       })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setSettings(data.data)
         initialSettingsRef.current = JSON.stringify(data.data)
         setHasUnsavedChanges(false)

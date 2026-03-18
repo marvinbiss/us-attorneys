@@ -22,7 +22,7 @@ export default function CampaignsPage() {
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) {
-        setCampaigns(data.data)
+        setCampaigns(data.data ?? [])
       } else {
         setError(data.error?.message || 'Loading error')
       }

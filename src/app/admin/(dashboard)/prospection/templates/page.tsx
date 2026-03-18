@@ -18,7 +18,7 @@ export default function TemplatesPage() {
       const res = await fetch('/api/admin/prospection/templates', { signal })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) setTemplates(data.data)
+      if (data.success) setTemplates(data.data ?? [])
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')

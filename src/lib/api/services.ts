@@ -200,8 +200,7 @@ export async function getAttorneyReviews(attorneyId: string, limit = 10) {
       const { data, error } = await supabase
         .from('reviews')
         .select(`
-          id, attorney_id, rating, comment, client_name, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at,
-          client:profiles!reviews_client_id_fkey(full_name)
+          id, attorney_id, rating, comment, client_name, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at
         `)
         .eq('attorney_id', attorneyId)
         // REMOVED: .eq('is_verified', true) to show ALL real reviews

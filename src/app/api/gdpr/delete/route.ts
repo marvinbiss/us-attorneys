@@ -65,7 +65,7 @@ export const POST = createApiHandler(async ({ request, user }) => {
     .select('id')
     .eq('attorney_id', user!.id)
     .in('status', ['pending', 'confirmed'])
-    .gte('scheduled_date', new Date().toISOString().split('T')[0])
+    .gte('scheduled_at', new Date().toISOString())
 
   if (pendingBookings && pendingBookings.length > 0) {
     return NextResponse.json(

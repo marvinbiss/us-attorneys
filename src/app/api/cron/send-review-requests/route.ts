@@ -103,20 +103,20 @@ export async function GET(request: Request) {
 
     logger.info(`[Review Cron] Looking for completed appointments between ${windowStart.toISOString()} and ${windowEnd.toISOString()}`)
 
-    // Fetch completed bookings in the time window using scheduled_date
+    // Fetch completed bookings in the time window using scheduled_at
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
         id,
         service_name,
         status,
-        scheduled_date,
+        scheduled_at,
         attorney_id,
         client:profiles!client_id(full_name, email, phone_e164)
       `)
       .in('status', ['confirmed', 'completed'])
-      .gte('scheduled_date', windowStart.toISOString())
-      .lte('scheduled_date', windowEnd.toISOString())
+      .gte('scheduled_at', windowStart.toISOString())
+      .lte('scheduled_at', windowEnd.toISOString())
       .limit(500)
 
     if (error) {

@@ -11,7 +11,9 @@ import NotificationCenter from '@/components/notifications/NotificationCenter'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { cn } from '@/lib/utils'
-import { cities, usRegions, states, practiceAreas as allServices } from '@/lib/data/usa'
+// Counts only — avoid importing full usa.ts (94KB) into client bundle
+// These match the array lengths in @/lib/data/usa and are safe to hardcode.
+const USA_DATA_COUNTS = { services: 76, cities: 110, regions: 4, states: 57 } as const
 import {
   getLocationFromCoords,
   type MenuType, type MobileAccordion,
@@ -387,10 +389,10 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
         <DesktopMegaMenus
           openMenu={openMenu}
           attorneyCount={attorneyCount}
-          allServicesCount={allServices.length}
-          villesCount={cities.length}
-          regionsCount={usRegions.length}
-          departementsCount={states.length}
+          allServicesCount={USA_DATA_COUNTS.services}
+          villesCount={USA_DATA_COUNTS.cities}
+          regionsCount={USA_DATA_COUNTS.regions}
+          departementsCount={USA_DATA_COUNTS.states}
           citiesByRegion={citiesByRegion}
           metroRegions={metroRegions}
           domTomRegions={domTomRegions}

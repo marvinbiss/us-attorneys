@@ -30,14 +30,14 @@ export async function GET(request: Request) {
 
     logger.info(`[Cron] Fetching bookings for ${tomorrowStr}`)
 
-    // Fetch all confirmed bookings for tomorrow using scheduled_date (availability_slots has no FK on bookings)
+    // Fetch all confirmed bookings for tomorrow using scheduled_at (availability_slots has no FK on bookings)
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
         id,
         service_name,
         status,
-        scheduled_date,
+        scheduled_at,
         attorney_id,
         client:profiles!client_id(full_name, email, phone_e164)
       `)
@@ -49,9 +49,9 @@ export async function GET(request: Request) {
       throw error
     }
 
-    // Filter bookings for tomorrow using scheduled_date
+    // Filter bookings for tomorrow using scheduled_at
     const tomorrowBookings = bookings?.filter(
-      (b) => b.scheduled_date && b.scheduled_date.startsWith(tomorrowStr)
+      (b) => b.scheduled_at && b.scheduled_at.startsWith(tomorrowStr)
     ) || []
 
     logger.info(`[Cron] Found ${tomorrowBookings.length} bookings for tomorrow`)
@@ -94,7 +94,7 @@ export async function GET(request: Request) {
     const payloads: NotificationPayload[] = bookingsToRemind.map((booking) => {
       const attorney = attorneyMap.get(booking.attorney_id || '')
       const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
-      const formattedDate = booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('en-US', {
+      const formattedDate = booking.scheduled_at ? new Date(booking.scheduled_at).toLocaleDateString('en-US', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',

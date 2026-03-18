@@ -66,11 +66,11 @@ export default function VideoConsultationButton({
     try {
       const res = await fetch(`/api/bookings/${bookingId}/join`)
       if (!res.ok) {
-        const errData: { error?: string } = await res.json().catch(() => ({}))
-        throw new Error(errData.error || 'Failed to join call')
+        const errData: { error?: { message?: string }; success?: boolean } = await res.json().catch(() => ({}))
+        throw new Error(errData.error?.message || 'Failed to join call')
       }
-      const data: { room_url: string } = await res.json()
-      window.open(data.room_url, '_blank')
+      const json: { success: boolean; data: { room_url: string } } = await res.json()
+      window.open(json.data.room_url, '_blank')
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {

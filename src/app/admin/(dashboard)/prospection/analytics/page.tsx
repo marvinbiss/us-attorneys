@@ -18,9 +18,9 @@ export default function AnalyticsPage() {
       const res = await fetch('/api/admin/prospection/analytics', { signal })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setStats(data.data.overview)
-        setChannels(data.data.channels)
+        setChannels(data.data.channels ?? [])
       } else {
         setError(data.error?.message || 'Loading error')
       }

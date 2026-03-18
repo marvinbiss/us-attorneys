@@ -51,8 +51,8 @@ export default function BookingConfirmationPage() {
       try {
         const response = await fetch(`/api/bookings/${bookingId}`)
         if (!response.ok) throw new Error('Booking not found')
-        const data = await response.json()
-        setBooking(data.booking)
+        const json = await response.json()
+        setBooking(json.data?.booking || json.booking)
 
         // Trigger confetti on successful load
         confettiTimer = setTimeout(() => {

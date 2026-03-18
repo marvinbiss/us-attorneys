@@ -32,7 +32,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
   // Fetch booking info
   const { data: booking, error: bookingError } = await supabase
     .from('bookings')
-    .select('id, client_id, attorney_id, status, scheduled_date, client_name, client_email, service_description')
+    .select('id, client_id, attorney_id, status, scheduled_at, client_name, client_email, service_description')
     .eq('id', id)
     .single()
 
@@ -50,7 +50,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
   }
 
   // Check if cancellation is allowed (at least 24h before)
-  const bookingDate = new Date(booking.scheduled_date)
+  const bookingDate = new Date(booking.scheduled_at)
   const now = new Date()
   const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
 
@@ -81,7 +81,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     .single()
 
   // Format date for email
-  const formattedDate = new Date(booking.scheduled_date).toLocaleDateString('en-US', {
+  const formattedDate = new Date(booking.scheduled_at).toLocaleDateString('en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -98,7 +98,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
       attorneyEmail: attorneyProfile.email,
       specialtyName: booking.service_description || 'Service',
       date: formattedDate,
-      startTime: new Date(booking.scheduled_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      startTime: new Date(booking.scheduled_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
       endTime: '',
       cancelledBy,
       reason,

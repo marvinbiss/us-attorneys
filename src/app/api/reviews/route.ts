@@ -339,12 +339,13 @@ export const POST = createApiHandler(async ({ request }) => {
     try {
       const { data: attorneyData } = await supabase
         .from('attorneys')
-        .select('specialty, address_city, slug, stable_id')
+        .select('address_city, slug, stable_id, primary_specialty:specialties!attorneys_primary_specialty_id_fkey(slug)')
         .eq('id', booking.attorney_id)
         .single()
 
       if (attorneyData) {
-        const specialtySlug = slugify(attorneyData.specialty || 'attorney')
+        const primarySpec = attorneyData.primary_specialty as unknown as { slug: string } | null
+        const specialtySlug = primarySpec?.slug || 'attorney'
         const locationSlug = slugify(attorneyData.address_city || 'united-states')
         const publicId = attorneyData.slug || attorneyData.stable_id
 
@@ -423,9 +424,9 @@ async function updateAttorneyRating(supabase: SupabaseClientType, attorneyId: st
     const avgRating = reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
 
     await supabase
-      .from('profiles')
+      .from('attorneys')
       .update({
-        average_rating: Math.round(avgRating * 10) / 10,
+        rating_average: Math.round(avgRating * 10) / 10,
         review_count: reviews.length,
       })
       .eq('id', attorneyId)

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createApiHandler, jsonResponse, paginatedResponse } from '@/lib/api/handler'
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
@@ -35,7 +35,7 @@ export const GET = createApiHandler(
         booking:bookings(
           id,
           service_name,
-          scheduled_date,
+          scheduled_at,
           client:profiles!client_id(full_name, email),
           provider:providers(name)
         )

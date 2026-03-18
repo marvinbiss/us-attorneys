@@ -1,5 +1,45 @@
 # CLAUDE.md -- US Attorneys
 
+## MANDATORY QUALITY GATES (NEVER SKIP)
+
+**Every agent, every sprint, every file MUST follow these rules:**
+
+### Before writing ANY Supabase query:
+1. **READ the migration file** to verify the table/column exists
+2. **Check FK relationships** before using nested selects like `table(col)`
+3. **NEVER guess column names** -- `artisan_id` ≠ `attorney_id`, `artisan_response` ≠ `attorney_response`
+4. Legacy tables from ServicesArtisans: `reviews.artisan_id`, `reviews.artisan_response`, `devis_requests`, `quotes`
+
+### Before writing ANY API route:
+1. **Auth check**: State-changing (POST/PUT/DELETE) MUST use `requireAuth` or verify `user`
+2. **Use `createClient()`** (RLS) by default. Only `createAdminClient()` for admin/cron routes
+3. **Zod validation** on ALL request body/params
+4. **Rate limiting** on ALL public endpoints (handler-level, not just middleware)
+5. **Response format**: Always `{ success: true, data: {...} }` or `{ success: false, error: { code, message } }`
+6. **Check if the route already exists** before creating a new one (search for similar paths)
+
+### Before writing ANY component:
+1. **Check for existing similar components** (grep the name pattern)
+2. **framer-motion**: ALWAYS use `useReducedMotion()` hook
+3. **Modals/dialogs**: MUST have focus trap
+4. **'use client'**: Only if you NEED hooks/state. Prefer server components
+5. **Large libs** (recharts, leaflet): MUST use `next/dynamic({ ssr: false })`
+6. **Data files** (usa.ts, practice-areas-200.ts): NEVER import in client components -- pass as server props
+
+### Before writing ANY migration:
+1. **Check existing migration numbers** -- no duplicates allowed
+2. **Check if the table already exists** in earlier migrations
+3. **Verify FK targets exist** in earlier migrations
+4. **Use CREATE TABLE IF NOT EXISTS** and **ADD COLUMN IF NOT EXISTS**
+
+### Before ANY commit:
+1. `npx next build` MUST pass (TypeScript + pages)
+2. Check for unused imports/variables (TypeScript strict catches these)
+3. Verify NO `[...map.keys()]` patterns (use `Array.from()`)
+4. Verify Zod v4 syntax: `.issues` not `.errors`, `z.record(z.string(), z.unknown())`
+
+---
+
 ## Project
 
 US Attorney directory. Next.js 14 App Router, TypeScript strict, Tailwind CSS, Supabase (auth + DB + storage), deployed on Vercel.

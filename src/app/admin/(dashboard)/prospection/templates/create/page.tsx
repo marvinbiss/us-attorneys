@@ -47,7 +47,7 @@ export default function CreateTemplatePage() {
       })
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
-      if (data.success) setPreview(data.data.rendered_body)
+      if (data.success && data.data) setPreview(data.data.rendered_body)
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)

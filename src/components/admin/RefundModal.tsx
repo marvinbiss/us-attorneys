@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, CreditCard, AlertTriangle } from 'lucide-react'
 
 interface RefundModalProps {
@@ -34,6 +34,46 @@ export function RefundModal({
   const [customReason, setCustomReason] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  // Focus trap: cycle Tab/Shift+Tab, close on Escape
+  useEffect(() => {
+    if (!isOpen) return
+
+    const modal = modalRef.current
+    if (!modal) return
+
+    const focusableElements = modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
+
+    firstElement?.focus()
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose()
+        return
+      }
+      if (e.key !== 'Tab') return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    modal.addEventListener('keydown', handleKeyDown)
+    return () => modal.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -92,7 +132,7 @@ export function RefundModal({
         />
 
         {/* Modal */}
-        <div role="dialog" aria-modal="true" aria-labelledby="refund-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
+        <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="refund-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">

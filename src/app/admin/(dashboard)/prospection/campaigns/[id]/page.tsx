@@ -43,9 +43,9 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         return
       }
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setCampaign(data.data)
-      } else {
+      } else if (!data.success) {
         setError(data.error?.message || 'Campaign not found')
       }
     } catch {
@@ -60,7 +60,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       const res = await fetch(`/api/admin/prospection/campaigns/${id}/stats`)
       if (!res.ok) return
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         setStats(data.data)
       }
     } catch {

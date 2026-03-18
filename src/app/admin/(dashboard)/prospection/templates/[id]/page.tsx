@@ -51,7 +51,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         return
       }
       const data = await res.json()
-      if (data.success) {
+      if (data.success && data.data) {
         const t: ProspectionTemplate = data.data
         setTemplate(t)
         setName(t.name)
@@ -92,7 +92,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         return
       }
       const data = await res.json()
-      if (data.success) setPreview(data.data.rendered_body)
+      if (data.success && data.data) setPreview(data.data.rendered_body)
     } catch {
       setActionError('Unable to generate preview')
     }
