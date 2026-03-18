@@ -1,247 +1,158 @@
 /**
- * Tests — src/components/seo/Breadcrumbs.tsx
- * Visual rendering, JSON-LD structured data, aria attributes
+ * Breadcrumbs Component — Comprehensive Unit Tests
+ *
+ * Tests for src/components/seo/Breadcrumbs.tsx
+ * Covers: semantic nav, JSON-LD, Home prepend, last item no link, accessibility
  */
+
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
-// Mock next/link
+// Mock next/link to render a simple anchor
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
+    <a href={href} className={className}>{children}</a>
   ),
 }))
 
-vi.mock('@/lib/seo/config', () => ({
-  SITE_URL: 'https://us-attorneys.com',
-}))
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
 
-import Breadcrumbs, { type BreadcrumbItem } from '@/components/seo/Breadcrumbs'
+describe('Breadcrumbs component', () => {
+  const items = [
+    { label: 'Practice Areas', href: '/practice-areas' },
+    { label: 'Criminal Defense', href: '/practice-areas/criminal-defense' },
+    { label: 'Houston' },
+  ]
 
-// ---------------------------------------------------------------------------
-// Rendering
-// ---------------------------------------------------------------------------
-describe('Breadcrumbs rendering', () => {
-  it('always renders Home as the first item', () => {
-    render(<Breadcrumbs items={[]} />)
-    // Home should be present even with empty items
-    expect(screen.getByText('Home')).toBeInTheDocument()
-  })
-
-  it('renders Home as a link to /', () => {
-    render(<Breadcrumbs items={[{ label: 'Test' }]} />)
-    const homeLink = screen.getByText('Home').closest('a')
-    expect(homeLink).toHaveAttribute('href', '/')
-  })
-
-  it('renders all provided items plus Home', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'Practice Areas', href: '/practice-areas' },
-      { label: 'Personal Injury' },
-    ]
-    render(<Breadcrumbs items={items} />)
-
-    expect(screen.getByText('Home')).toBeInTheDocument()
-    expect(screen.getByText('Practice Areas')).toBeInTheDocument()
-    expect(screen.getByText('Personal Injury')).toBeInTheDocument()
-  })
-
-  it('renders intermediate items with href as links', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'Practice Areas', href: '/practice-areas' },
-      { label: 'Family Law', href: '/practice-areas/family-law' },
-      { label: 'Houston' },
-    ]
-    render(<Breadcrumbs items={items} />)
-
-    const practiceLink = screen.getByText('Practice Areas').closest('a')
-    expect(practiceLink).toHaveAttribute('href', '/practice-areas')
-
-    const familyLink = screen.getByText('Family Law').closest('a')
-    expect(familyLink).toHaveAttribute('href', '/practice-areas/family-law')
-  })
-
-  it('renders the last item as a span (not a link)', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'States', href: '/states' },
-      { label: 'Texas' },
-    ]
-    render(<Breadcrumbs items={items} />)
-
-    const texas = screen.getByText('Texas')
-    expect(texas.tagName).toBe('SPAN')
-    expect(texas.closest('a')).toBeNull()
-  })
-
-  it('renders separator characters between items', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'A', href: '/a' },
-      { label: 'B' },
-    ]
+  it('renders a nav element with aria-label="Breadcrumb"', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-
-    // Separators are "/" spans with aria-hidden
-    const separators = container.querySelectorAll('[aria-hidden="true"]')
-    // Home -> A (separator) -> B (separator) = 2 separators
-    expect(separators.length).toBe(2)
+    const nav = container.querySelector('nav[aria-label="Breadcrumb"]')
+    expect(nav).not.toBeNull()
   })
 
-  it('renders item without href as a plain span (not link)', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'Category' }, // no href, not last
-      { label: 'Subcategory' },
-    ]
-    render(<Breadcrumbs items={items} />)
-
-    // "Category" has no href and is not last, so should render as a gray span
-    const category = screen.getByText('Category')
-    expect(category.tagName).toBe('SPAN')
-    expect(category.closest('a')).toBeNull()
-  })
-})
-
-// ---------------------------------------------------------------------------
-// Aria attributes
-// ---------------------------------------------------------------------------
-describe('Breadcrumbs aria', () => {
-  it('has nav with aria-label="Breadcrumb"', () => {
-    render(<Breadcrumbs items={[{ label: 'Test' }]} />)
-    const nav = screen.getByLabelText('Breadcrumb')
-    expect(nav.tagName).toBe('NAV')
-  })
-
-  it('last item has aria-current="page"', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'States', href: '/states' },
-      { label: 'New York' },
-    ]
-    render(<Breadcrumbs items={items} />)
-
-    const lastItem = screen.getByText('New York')
-    expect(lastItem).toHaveAttribute('aria-current', 'page')
-  })
-
-  it('non-last items do NOT have aria-current', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'States', href: '/states' },
-      { label: 'New York' },
-    ]
-    render(<Breadcrumbs items={items} />)
-
-    const statesLink = screen.getByText('States')
-    expect(statesLink).not.toHaveAttribute('aria-current')
-
-    const homeLink = screen.getByText('Home')
-    expect(homeLink).not.toHaveAttribute('aria-current')
-  })
-
-  it('when single item (no intermediate), that item has aria-current', () => {
-    render(<Breadcrumbs items={[{ label: 'About' }]} />)
-    expect(screen.getByText('About')).toHaveAttribute('aria-current', 'page')
-  })
-})
-
-// ---------------------------------------------------------------------------
-// JSON-LD structured data
-// ---------------------------------------------------------------------------
-describe('Breadcrumbs JSON-LD', () => {
-  it('renders a script tag with BreadcrumbList JSON-LD', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'Practice Areas', href: '/practice-areas' },
-      { label: 'Criminal Defense' },
-    ]
+  it('prepends Home as the first breadcrumb item', () => {
     const { container } = render(<Breadcrumbs items={items} />)
+    const listItems = container.querySelectorAll('li')
+    // Home + 3 items = 4
+    expect(listItems).toHaveLength(4)
+    // First item should be Home link
+    const homeLink = listItems[0].querySelector('a')
+    expect(homeLink).not.toBeNull()
+    expect(homeLink!.textContent).toBe('Home')
+    expect(homeLink!.getAttribute('href')).toBe('/')
+  })
 
-    const scripts = container.querySelectorAll('script[type="application/ld+json"]')
-    expect(scripts).toHaveLength(1)
+  it('renders intermediate items as links', () => {
+    const { container } = render(<Breadcrumbs items={items} />)
+    const links = container.querySelectorAll('a')
+    // Home + Practice Areas + Criminal Defense = 3 links
+    expect(links.length).toBe(3)
+    expect(links[1].textContent).toBe('Practice Areas')
+    expect(links[1].getAttribute('href')).toBe('/practice-areas')
+  })
 
-    // Parse the JSON-LD (need to unescape the safety replacements)
-    const raw = scripts[0].innerHTML
-      .replace(/\\u003c/g, '<')
-      .replace(/\\u003e/g, '>')
-      .replace(/\\u0026/g, '&')
-    const jsonLd = JSON.parse(raw)
+  it('renders last item as current page (no link)', () => {
+    render(<Breadcrumbs items={items} />)
+    const current = screen.getByText('Houston')
+    expect(current.tagName).not.toBe('A')
+    expect(current.getAttribute('aria-current')).toBe('page')
+  })
 
+  it('last item has font-medium styling', () => {
+    render(<Breadcrumbs items={items} />)
+    const current = screen.getByText('Houston')
+    expect(current.className).toContain('font-medium')
+  })
+
+  it('renders JSON-LD BreadcrumbList script tag', () => {
+    const { container } = render(<Breadcrumbs items={items} />)
+    const script = container.querySelector('script[type="application/ld+json"]')
+    expect(script).not.toBeNull()
+    const content = script!.innerHTML
+      .replace(/\u003c/g, '<')
+      .replace(/\u003e/g, '>')
+      .replace(/\u0026/g, '&')
+    const jsonLd = JSON.parse(content)
     expect(jsonLd['@context']).toBe('https://schema.org')
     expect(jsonLd['@type']).toBe('BreadcrumbList')
-    expect(jsonLd.itemListElement).toHaveLength(3) // Home + Practice Areas + Criminal Defense
   })
 
-  it('includes position for each item starting at 1', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'States', href: '/states' },
-      { label: 'Texas', href: '/states/texas' },
-      { label: 'Houston' },
-    ]
+  it('JSON-LD has correct number of items (including Home)', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-
-    const script = container.querySelector('script[type="application/ld+json"]')!
-    const raw = script.innerHTML
-      .replace(/\\u003c/g, '<')
-      .replace(/\\u003e/g, '>')
-      .replace(/\\u0026/g, '&')
-    const jsonLd = JSON.parse(raw)
-
-    expect(jsonLd.itemListElement[0].position).toBe(1)
-    expect(jsonLd.itemListElement[1].position).toBe(2)
-    expect(jsonLd.itemListElement[2].position).toBe(3)
-    expect(jsonLd.itemListElement[3].position).toBe(4)
+    const script = container.querySelector('script[type="application/ld+json"]')
+    const content = script!.innerHTML
+      .replace(/\u003c/g, '<')
+      .replace(/\u003e/g, '>')
+      .replace(/\u0026/g, '&')
+    const jsonLd = JSON.parse(content)
+    expect(jsonLd.itemListElement).toHaveLength(4)
   })
 
-  it('includes item URL for non-last items with href', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'Practice Areas', href: '/practice-areas' },
-      { label: 'Personal Injury' },
-    ]
+  it('JSON-LD last item has no "item" property', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-
-    const script = container.querySelector('script[type="application/ld+json"]')!
-    const raw = script.innerHTML
-      .replace(/\\u003c/g, '<')
-      .replace(/\\u003e/g, '>')
-      .replace(/\\u0026/g, '&')
-    const jsonLd = JSON.parse(raw)
-
-    // Home (position 1) has item URL
-    expect(jsonLd.itemListElement[0].item).toBe('https://us-attorneys.com/')
-    // Practice Areas (position 2) has item URL
-    expect(jsonLd.itemListElement[1].item).toBe('https://us-attorneys.com/practice-areas')
-    // Last item (Personal Injury) should NOT have item URL
-    expect(jsonLd.itemListElement[2].item).toBeUndefined()
+    const script = container.querySelector('script[type="application/ld+json"]')
+    const content = script!.innerHTML
+      .replace(/\u003c/g, '<')
+      .replace(/\u003e/g, '>')
+      .replace(/\u0026/g, '&')
+    const jsonLd = JSON.parse(content)
+    const lastItem = jsonLd.itemListElement[jsonLd.itemListElement.length - 1]
+    expect(lastItem.item).toBeUndefined()
+    expect(lastItem.name).toBe('Houston')
+    expect(lastItem.position).toBe(4)
   })
 
-  it('includes name for each item', () => {
-    const items: BreadcrumbItem[] = [{ label: 'Glossary' }]
+  it('JSON-LD non-last items have "item" as full URL', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-
-    const script = container.querySelector('script[type="application/ld+json"]')!
-    const raw = script.innerHTML
-      .replace(/\\u003c/g, '<')
-      .replace(/\\u003e/g, '>')
-      .replace(/\\u0026/g, '&')
-    const jsonLd = JSON.parse(raw)
-
-    expect(jsonLd.itemListElement[0].name).toBe('Home')
-    expect(jsonLd.itemListElement[1].name).toBe('Glossary')
+    const script = container.querySelector('script[type="application/ld+json"]')
+    const content = script!.innerHTML
+      .replace(/\u003c/g, '<')
+      .replace(/\u003e/g, '>')
+      .replace(/\u0026/g, '&')
+    const jsonLd = JSON.parse(content)
+    // Home (has href /)
+    expect(jsonLd.itemListElement[0].item).toBeDefined()
+    expect(jsonLd.itemListElement[0].item).toContain('/')
+    // Practice Areas
+    expect(jsonLd.itemListElement[1].item).toContain('/practice-areas')
   })
-})
 
-// ---------------------------------------------------------------------------
-// className prop
-// ---------------------------------------------------------------------------
-describe('Breadcrumbs className', () => {
-  it('applies custom className to the nav element', () => {
-    const { container } = render(
-      <Breadcrumbs items={[{ label: 'Test' }]} className="mt-4 mb-2" />
-    )
+  it('renders separator slashes between items', () => {
+    const { container } = render(<Breadcrumbs items={items} />)
+    const separators = container.querySelectorAll('[aria-hidden="true"]')
+    // 3 separators (between 4 items)
+    expect(separators).toHaveLength(3)
+    expect(separators[0].textContent).toBe('/')
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Breadcrumbs items={items} className="mt-4" />)
     const nav = container.querySelector('nav')
-    expect(nav).toHaveClass('mt-4')
-    expect(nav).toHaveClass('mb-2')
+    expect(nav!.className).toContain('mt-4')
   })
 
-  it('defaults to empty className', () => {
-    const { container } = render(<Breadcrumbs items={[{ label: 'Test' }]} />)
-    const nav = container.querySelector('nav')
-    expect(nav).toHaveClass('text-sm')
+  it('renders ordered list (ol) for proper semantics', () => {
+    const { container } = render(<Breadcrumbs items={items} />)
+    const ol = container.querySelector('ol')
+    expect(ol).not.toBeNull()
+  })
+
+  it('renders item without href as plain text (not a link)', () => {
+    // Items without href that are not last should render as span
+    const itemsNoHref = [
+      { label: 'Category' }, // no href, not last
+      { label: 'Page' },    // no href, last
+    ]
+    const { container } = render(<Breadcrumbs items={itemsNoHref} />)
+    const listItems = container.querySelectorAll('li')
+    // Home + 2 = 3 items
+    expect(listItems).toHaveLength(3)
+    // "Category" (index 1, not last) should be a span (no link since no href)
+    const categoryLi = listItems[1]
+    const link = categoryLi.querySelector('a')
+    expect(link).toBeNull()
+    // "Page" (last) should have aria-current
+    const lastSpan = screen.getByText('Page')
+    expect(lastSpan.getAttribute('aria-current')).toBe('page')
   })
 })

@@ -8,6 +8,7 @@ import {
   Skeleton,
   CardSkeleton,
   ListSkeleton,
+  GridSkeleton,
   AttorneyCardSkeleton,
   AttorneyListSkeleton,
   FormSkeleton,
@@ -68,6 +69,47 @@ describe('ListSkeleton', () => {
     const { container } = render(<ListSkeleton count={3} />)
     const items = container.querySelectorAll('.rounded-xl')
     expect(items).toHaveLength(3)
+  })
+})
+
+describe('GridSkeleton', () => {
+  it('renders 8 cards by default in a grid', () => {
+    const { container } = render(<GridSkeleton />)
+    const grid = container.firstChild as HTMLElement
+    expect(grid.className).toContain('grid')
+    // Default 8 CardSkeletons
+    const cards = container.querySelectorAll('.rounded-xl')
+    expect(cards).toHaveLength(8)
+  })
+
+  it('renders custom count of cards', () => {
+    const { container } = render(<GridSkeleton count={3} />)
+    const cards = container.querySelectorAll('.rounded-xl')
+    expect(cards).toHaveLength(3)
+  })
+
+  it('applies 2-col grid class when cols=2', () => {
+    const { container } = render(<GridSkeleton cols={2} count={2} />)
+    const grid = container.firstChild as HTMLElement
+    expect(grid.className).toContain('grid-cols-2')
+  })
+
+  it('applies 3-col grid class when cols=3', () => {
+    const { container } = render(<GridSkeleton cols={3} count={2} />)
+    const grid = container.firstChild as HTMLElement
+    expect(grid.className).toContain('md:grid-cols-3')
+  })
+
+  it('applies 4-col grid class when cols=4', () => {
+    const { container } = render(<GridSkeleton cols={4} count={2} />)
+    const grid = container.firstChild as HTMLElement
+    expect(grid.className).toContain('md:grid-cols-4')
+  })
+
+  it('falls back to 4-col grid for unsupported cols value', () => {
+    const { container } = render(<GridSkeleton cols={5} count={2} />)
+    const grid = container.firstChild as HTMLElement
+    expect(grid.className).toContain('md:grid-cols-4')
   })
 })
 
