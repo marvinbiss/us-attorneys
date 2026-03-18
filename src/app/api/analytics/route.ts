@@ -102,6 +102,7 @@ export const POST = createApiHandler(async ({ request }) => {
     .digest('hex')
     .substring(0, 16)
 
+  // adminClient justified: public analytics beacon, no user session — RLS would block anonymous inserts
   const supabase = createAdminClient()
 
   // Build insert data based on event type

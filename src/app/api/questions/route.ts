@@ -34,6 +34,11 @@ const createQuestionSchema = z.object({
 
 // GET /api/questions
 export const GET = createApiHandler(async ({ request }) => {
+  const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+  if (!rateLimitResult.success) {
+    return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+  }
+
   const { searchParams } = new URL(request.url)
 
   const parsed = listQuerySchema.safeParse({
@@ -52,6 +57,7 @@ export const GET = createApiHandler(async ({ request }) => {
   const { page, limit, specialty, state, status, sort } = parsed.data
   const offset = (page - 1) * limit
 
+  // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
   const supabase = createAdminClient()
 
   // Build query
@@ -126,6 +132,7 @@ export const POST = createApiHandler(async ({ request, user, body }) => {
   const baseSlug = slugify(data.title)
   const slug = `${baseSlug}-${Date.now().toString(36)}`
 
+  // adminClient justified: needs to insert into legal_questions which may lack user-specific RLS INSERT policy
   const supabase = createAdminClient()
 
   // Get user display name

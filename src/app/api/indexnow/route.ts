@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
 import { SITE_URL } from '@/lib/seo/config'
 import { verifyCronSecret } from '@/lib/cron-auth'
 
 const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || ''
+
+const indexNowSchema = z.object({
+  urls: z.array(z.string().url()).min(1, 'At least one URL is required').max(10000),
+})
 
 /**
  * POST /api/indexnow — Submit URLs to IndexNow (Bing, Yandex, etc.)
@@ -14,11 +19,16 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => null)
-  const urls: string[] = body?.urls || []
+  const parsed = indexNowSchema.safeParse(body)
 
-  if (urls.length === 0) {
-    return NextResponse.json({ error: 'No URLs provided' }, { status: 400 })
+  if (!parsed.success) {
+    return NextResponse.json(
+      { success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.issues[0]?.message || 'Invalid request body' } },
+      { status: 400 }
+    )
   }
+
+  const urls = parsed.data.urls
 
   // IndexNow API - submit to Bing (which shares with Yandex, Seznam, etc.)
   const payload = {

@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 export const revalidate = 300
 
@@ -52,6 +53,11 @@ export interface CompareAttorney {
 
 export async function GET(request: NextRequest) {
   try {
+    const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+    if (!rateLimitResult.success) {
+      return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+    }
+
     const { searchParams } = new URL(request.url)
     const rawSlugs = searchParams.get('slugs')
 
@@ -71,6 +77,7 @@ export async function GET(request: NextRequest) {
     }
 
     const slugs = parsed.data
+    // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
     const supabase = createAdminClient()
 
     // Fetch attorneys by slugs

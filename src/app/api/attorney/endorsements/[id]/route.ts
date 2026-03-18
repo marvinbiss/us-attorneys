@@ -4,11 +4,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
+
+const endorsementIdSchema = z.string().uuid('Invalid endorsement ID')
 
 export async function DELETE(
   _request: NextRequest,
@@ -17,9 +20,10 @@ export async function DELETE(
   try {
     const { id } = await params
 
-    if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
+    const parsed = endorsementIdSchema.safeParse(id)
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Invalid endorsement ID' },
+        { success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.issues[0]?.message || 'Invalid endorsement ID' } },
         { status: 400 }
       )
     }
@@ -35,6 +39,7 @@ export async function DELETE(
     }
 
     // Find the attorney record for this user
+    // adminClient justified: needs to read peer_endorsements across users to verify ownership
     const adminClient = createAdminClient()
     const { data: attorney } = await adminClient
       .from('attorneys')

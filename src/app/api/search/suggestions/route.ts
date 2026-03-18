@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 const querySchema = z.string().min(2).max(100)
 
@@ -21,6 +22,11 @@ const postSchema = z.object({
 // GET - Return suggestions for autocomplete
 export async function GET(request: NextRequest) {
   try {
+    const rateLimitResult = await rateLimit(request, RATE_LIMITS.search)
+    if (!rateLimitResult.success) {
+      return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+    }
+
     const url = new URL(request.url)
     const q = url.searchParams.get('q')?.trim()
 
@@ -39,6 +45,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
     const supabase = createAdminClient()
 
     // Run queries in parallel

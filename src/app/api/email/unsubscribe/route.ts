@@ -47,6 +47,7 @@ function verifyToken(attorneyId: string, token: string): boolean {
 // ── Unsubscribe logic ────────────────────────────────────────────────────────
 
 async function processUnsubscribe(attorneyId: string): Promise<{ success: boolean; error?: string }> {
+  // adminClient justified: no user session — HMAC-verified unsubscribe link, needs direct DB write
   const supabase = createAdminClient()
 
   // Upsert email preferences — set unsubscribed_at

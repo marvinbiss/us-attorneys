@@ -87,24 +87,22 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Batch: get unread counts + last messages for all conversations in parallel (2 queries total, not 2N)
+    // Batch: get unread counts + last messages for all conversations (2 queries total, not N+1)
     const convIds = (conversations || []).map(c => c.id)
     let unreadMap: Record<string, number> = {}
     let lastMsgMap: Record<string, { content_preview: string | null; content: string | null; sender_type: string | null }> = {}
 
     if (convIds.length > 0) {
-      // Batch unread counts via Promise.all on the RPC (unavoidable per-conv RPC, but done in parallel)
-      const [unreadResults, lastMsgResult] = await Promise.all([
-        Promise.all(
-          convIds.map(async (convId) => {
-            const { data } = await admin.rpc('get_unread_count', {
-              p_conversation_id: convId,
-              p_user_id: user.id,
-            })
-            return { convId, count: data || 0 }
-          })
-        ),
-        // Single query: get last message for all conversations using distinct on
+      const [unreadResult, lastMsgResult] = await Promise.all([
+        // Single query: count unread messages per conversation (replaces N parallel RPCs)
+        admin
+          .from('messages')
+          .select('conversation_id')
+          .in('conversation_id', convIds)
+          .neq('sender_id', user.id)
+          .eq('is_read', false)
+          .is('deleted_at', null),
+        // Single query: get last message for all conversations
         admin
           .from('messages')
           .select('conversation_id, content, content_preview, sender_type, created_at')
@@ -114,8 +112,9 @@ export async function GET(request: NextRequest) {
           .order('created_at', { ascending: false })
       ])
 
-      for (const { convId, count } of unreadResults) {
-        unreadMap[convId] = count
+      // Aggregate unread counts from raw rows
+      for (const row of unreadResult.data || []) {
+        unreadMap[row.conversation_id] = (unreadMap[row.conversation_id] || 0) + 1
       }
 
       // Group last messages by conversation (first per group = latest due to ordering)

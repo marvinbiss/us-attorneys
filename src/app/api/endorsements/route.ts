@@ -10,10 +10,16 @@ import { z } from 'zod'
 import { createApiHandler, jsonResponse } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 // ── GET: list endorsements ──────────────────────────────────────────
 
 export const GET = createApiHandler(async ({ request }) => {
+  const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+  if (!rateLimitResult.success) {
+    return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+  }
+
   const { searchParams } = new URL(request.url)
   const endorsedId = searchParams.get('endorsed_id')
 
@@ -33,6 +39,7 @@ export const GET = createApiHandler(async ({ request }) => {
     )
   }
 
+  // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
   const supabase = createAdminClient()
 
   const { data, error } = await supabase
@@ -91,6 +98,7 @@ export const POST = createApiHandler(
       )
     }
 
+    // adminClient justified: needs cross-user reads (endorser verifying endorsed attorney exists)
     const supabase = createAdminClient()
 
     // Verify the endorsed attorney exists

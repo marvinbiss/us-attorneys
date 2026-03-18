@@ -1,10 +1,17 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 export const revalidate = 3600 // Cache for 1 hour
 
-export const GET = createApiHandler(async () => {
+export const GET = createApiHandler(async ({ request }) => {
+  const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+  if (!rateLimitResult.success) {
+    return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+  }
+
+  // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
   const supabase = createAdminClient()
 
   // Count quote requests in the last 30 days

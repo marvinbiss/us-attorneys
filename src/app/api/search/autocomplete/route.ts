@@ -16,6 +16,7 @@ import { z } from 'zod'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 const querySchema = z.string().min(2).max(100)
 
@@ -46,6 +47,11 @@ interface AutocompleteResult {
 }
 
 export const GET = createApiHandler(async ({ request }) => {
+  const rateLimitResult = await rateLimit(request, RATE_LIMITS.search)
+  if (!rateLimitResult.success) {
+    return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+  }
+
   const url = new URL(request.url)
   const q = url.searchParams.get('q')?.trim()
 
@@ -61,6 +67,7 @@ export const GET = createApiHandler(async ({ request }) => {
     return NextResponse.json({ attorneys: [], locations: [], specialties: [] })
   }
 
+  // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
   const supabase = createAdminClient()
 
   try {

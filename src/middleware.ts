@@ -216,6 +216,7 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 }
 
 export async function middleware(request: NextRequest) {
+  const requestStartTime = Date.now()
   const { pathname } = request.nextUrl
 
   // Redirect legacy pricing URLs → /pricing (301 permanent, cached at CDN edge)
@@ -558,6 +559,18 @@ export async function middleware(request: NextRequest) {
       response.headers.set('X-Degraded-Mode', 'true')
       response.headers.set('X-Degraded-Reason', 'supabase-unreachable')
     }
+  }
+
+  // Response time tracking — set header on all responses, warn on slow requests (>2s)
+  const responseTimeMs = Date.now() - requestStartTime
+  response.headers.set('X-Response-Time', `${responseTimeMs}ms`)
+
+  if (responseTimeMs > 2000) {
+    logger.warn(`Slow middleware response: ${responseTimeMs}ms`, {
+      action: 'slow_request',
+      pathname,
+      responseTimeMs,
+    })
   }
 
   return addSecurityHeaders(response, request, nonce)

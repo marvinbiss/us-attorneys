@@ -118,7 +118,7 @@ export function PopularCitiesLinks({
 // Component: Geographic navigation
 export function GeographicNavigation({ className = '' }: { className?: string }) {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
+    <nav aria-label="Browse attorneys by geography" className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
       <Link
         href="/regions"
         className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
@@ -155,7 +155,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
           <div className="text-sm text-gray-500">{cities.length} cities</div>
         </div>
       </Link>
-    </div>
+    </nav>
   )
 }
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 /** Escape XML special characters */
 function escapeXml(str: string): string {
@@ -50,6 +51,11 @@ function shieldIcon(x: number, y: number, size: number, color: string): string {
 }
 
 export const GET = createApiHandler(async ({ request }) => {
+  const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+  if (!rateLimitResult.success) {
+    return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+  }
+
   const url = new URL(request.url)
   const slug = url.searchParams.get('slug')
   const id = url.searchParams.get('id')
@@ -59,6 +65,7 @@ export const GET = createApiHandler(async ({ request }) => {
     return NextResponse.json({ error: 'slug or id required' }, { status: 400 })
   }
 
+  // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
   const supabase = createAdminClient()
 
   let query = supabase

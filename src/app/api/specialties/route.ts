@@ -4,14 +4,21 @@
  * Cached for 24 hours — these rarely change
  */
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+    if (!rateLimitResult.success) {
+      return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+    }
+
+    // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
     const supabase = createAdminClient()
 
     const { data, error } = await supabase

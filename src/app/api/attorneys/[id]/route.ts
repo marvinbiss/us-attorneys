@@ -10,6 +10,7 @@ import { createApiHandler } from '@/lib/api/handler'
 import { getDepartmentName, getRegionName, getDeptCodeFromPostal } from '@/lib/geography'
 import { slugify } from '@/lib/utils'
 import { z } from 'zod'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 export const revalidate = 300 // ISR - revalidate every 5 minutes
 
@@ -150,7 +151,12 @@ function generateDescription(name: string, specialty: string, city: string): str
 
 // REMOVED: generateSyntheticReviews function (illegal fake review generation)
 
-export const GET = createApiHandler(async ({ params }) => {
+export const GET = createApiHandler(async ({ request, params }) => {
+    const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
+    if (!rateLimitResult.success) {
+      return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+    }
+
     // Validate attorney ID parameter
     const idValidation = attorneyIdSchema.safeParse(params?.id)
     if (!idValidation.success) {
@@ -167,6 +173,7 @@ export const GET = createApiHandler(async ({ params }) => {
       )
     }
 
+    // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
     const supabase = createAdminClient()
     const attorneyId = idValidation.data
 
