@@ -338,16 +338,15 @@ export interface ApiResponse<T = unknown> {
   message?: string
 }
 
-// Provider verification details
+// Attorney verification details
 export interface ProviderVerification {
-  siret: string
-  siretValid: boolean
-  siretVerified: boolean
-  siretVerifiedAt?: string
-  companyName?: string
+  barNumber: string
+  barNumberValid: boolean
+  barNumberVerified: boolean
+  barNumberVerifiedAt?: string
+  firmName?: string
   trustBadge?: 'gold' | 'silver' | 'bronze' | 'none'
   healthScore?: number
-  pappersData?: Record<string, unknown>
 }
 
 // Call/Lead tracking

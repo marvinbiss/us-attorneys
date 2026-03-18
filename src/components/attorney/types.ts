@@ -52,7 +52,7 @@ export interface Artisan {
   portfolio?: PortfolioItem[]
   faq?: Array<{ question: string; answer: string }>
   bar_number?: string
-  siren?: string
+  ein?: string
   legal_form?: string
   creation_date?: string
   phone?: string

@@ -62,7 +62,8 @@ export const GET = createApiHandler(async ({ request }) => {
     .select(`
       id,
       status,
-      siret_provided,
+      bar_number_provided,
+      bar_state_provided,
       claimant_name,
       claimant_email,
       claimant_phone,
@@ -72,7 +73,7 @@ export const GET = createApiHandler(async ({ request }) => {
       created_at,
       attorney_id,
       user_id,
-      provider:attorney_id(id, name, siret, address_city, stable_id),
+      provider:attorney_id(id, name, bar_number, address_city, stable_id),
       user:user_id(id, email, full_name)
     `, { count: 'exact' })
     .order('created_at', { ascending: false })
@@ -362,12 +363,13 @@ export const PATCH = createApiHandler(async ({ request }) => {
     try {
       const { data: attorneyInfo } = await supabase
         .from('attorneys')
-        .select('specialty, address_city, slug, stable_id')
+        .select('address_city, slug, stable_id, specialty:specialties!primary_specialty_id(slug)')
         .eq('id', claim.attorney_id)
         .single()
 
       if (attorneyInfo) {
-        const specialtySlug = slugify(attorneyInfo.specialty || 'attorney')
+        const specialtyJoin = attorneyInfo.specialty as unknown as { slug: string }[] | null
+        const specialtySlug = specialtyJoin?.[0]?.slug || 'attorney'
         const locationSlug = slugify(attorneyInfo.address_city || 'united-states')
         const publicId = attorneyInfo.slug || attorneyInfo.stable_id
 

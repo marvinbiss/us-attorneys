@@ -126,7 +126,7 @@ export const POST = createApiHandler(async ({ request }) => {
   // Fetch provider
   const { data: provider, error: attorneyError } = await adminClient
     .from('attorneys')
-    .select('id, name, bar_number, user_id')
+    .select('id, name, bar_number, bar_state, user_id')
     .eq('id', attorneyId)
     .single()
 
@@ -175,7 +175,8 @@ export const POST = createApiHandler(async ({ request }) => {
     .insert({
       attorney_id: attorneyId,
       user_id: user?.id ?? null,
-      siret_provided: normalizedInput,
+      bar_number_provided: normalizedInput,
+      bar_state_provided: provider.bar_state ?? '',
       claimant_name: fullName,
       claimant_email: email.trim().toLowerCase(),
       claimant_phone: phone,

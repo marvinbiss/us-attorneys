@@ -69,8 +69,8 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
     data.name = stripTags(body.full_name as string)
   }
 
-  // Specialty
-  if (body.specialty !== undefined) data.specialty = stripTags(body.specialty as string)
+  // Specialty (primary_specialty_id is a UUID FK to specialties table)
+  if (body.primary_specialty_id !== undefined) data.primary_specialty_id = body.primary_specialty_id || null
 
   // Direct nullable fields
   const directFields: [string, string][] = [

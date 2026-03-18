@@ -89,7 +89,7 @@ export function ClaimButton({ attorneyId, attorneyName, hasBarNumber }: ClaimBut
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           attorneyId,
-          siret: barNumber,
+          bar_number: barNumber,
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: phone.trim(),

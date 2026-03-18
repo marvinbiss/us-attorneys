@@ -22,7 +22,7 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 interface ProviderClaim {
   id: string
   status: 'pending' | 'approved' | 'rejected'
-  siret_provided: string
+  bar_number_provided: string
   claimant_name: string | null
   claimant_email: string | null
   claimant_phone: string | null
@@ -244,7 +244,7 @@ export default function AdminClaimsPage() {
                     <div>
                       <span className="text-gray-500">Bar number provided:</span>{' '}
                       <span className="font-mono font-medium text-gray-900">
-                        {claim.siret_provided}
+                        {claim.bar_number_provided}
                       </span>
                     </div>
                   </div>

@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { signInSchema, validateRequest } from '@/lib/validations/schemas'
-import { apiSuccess, apiError } from '@/lib/api/handler'
+import { apiError } from '@/lib/api/handler'
 import { authLogger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
