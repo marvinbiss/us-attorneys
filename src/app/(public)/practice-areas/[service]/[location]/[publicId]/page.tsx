@@ -60,6 +60,7 @@ interface ProviderRecord {
   endorsement_count?: number | null
 }
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import NearbyCities from '@/components/seo/NearbyCities'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getNeighborhoodBySlug, practiceAreas as staticPracticeAreas, getStateByCode } from '@/lib/data/usa'
@@ -573,12 +574,16 @@ export default async function AttorneyPage({ params }: PageProps) {
       {/* Preload hints */}
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
-      {/* Breadcrumbs (visual + JSON-LD) */}
+      {/* Breadcrumbs (visual + JSON-LD) — Hierarchy: Home > State > Practice Area > City > Attorney */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumbs
             items={[
-              { label: 'Practice Areas', href: '/practice-areas' },
+              // State level for geographic hierarchy
+              ...(attorney.department_code ? (() => {
+                const stateData = getStateByCode(attorney.department_code!)
+                return stateData ? [{ label: stateData.name, href: `/states/${stateData.slug}` }] : []
+              })() : []),
               { label: specialtyName, href: `/practice-areas/${specialtySlug}` },
               ...(cityName ? [{ label: cityName, href: `/practice-areas/${specialtySlug}/${locationSlug}` }] : []),
               { label: attorney.business_name || 'Attorney' },
@@ -627,6 +632,14 @@ export default async function AttorneyPage({ params }: PageProps) {
         departmentCode={location?.department_code}
       />
 
+      {/* Nearby cities for internal linking mesh */}
+      <NearbyCities
+        citySlug={locationSlug}
+        specialtySlug={specialtySlug}
+        specialtyName={service?.name || attorney.specialty}
+        limit={6}
+        className="border-t border-stone-200/40"
+      />
 
       <EstimationWidget hideLauncher context={{
         metier: service?.name || attorney.specialty,

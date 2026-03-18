@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { X } from 'lucide-react'
+import { X, Scale } from 'lucide-react'
 import Link from 'next/link'
 import { trackEvent } from '@/lib/analytics/tracking'
 
-const AUTO_DISMISS_MS = 10_000
-const MOBILE_IDLE_MS = 45_000
+const AUTO_DISMISS_MS = 15_000
+const MOBILE_IDLE_MS = 60_000
 
 interface ExitIntentPopupProps {
   /** Unique session key to avoid showing twice */
@@ -23,11 +23,15 @@ interface ExitIntentPopupProps {
   onCtaClick?: () => void
 }
 
+/**
+ * Helpful prompt shown when user appears to be leaving.
+ * No urgency, no scarcity, no dark patterns — just a helpful offer.
+ */
 export default function ExitIntentPopup({
   sessionKey = 'sa:exit-intent-shown',
-  title = 'Before you go...',
-  description = 'Receive up to 3 free consultations from qualified attorneys in less than 60 seconds.',
-  ctaText = 'Get my free consultations',
+  title = 'Need help finding a lawyer?',
+  description = 'We can connect you with qualified attorneys for a free consultation — no obligation, no pressure.',
+  ctaText = 'Find an attorney',
   ctaHref = '/quotes',
   onCtaClick,
 }: ExitIntentPopupProps) {
@@ -59,7 +63,7 @@ export default function ExitIntentPopup({
     if (onCtaClick) onCtaClick()
   }, [close, onCtaClick, ctaHref, ctaText])
 
-  // Auto-dismiss after 10s
+  // Auto-dismiss after 15s
   useEffect(() => {
     if (!visible) return
     dismissTimer.current = setTimeout(() => setVisible(false), AUTO_DISMISS_MS)
@@ -80,7 +84,7 @@ export default function ExitIntentPopup({
     return () => document.removeEventListener('mouseleave', handler)
   }, [show])
 
-  // Mobile: 45s idle timer, reset on scroll/touch
+  // Mobile: 60s idle timer, reset on scroll/touch
   useEffect(() => {
     const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
     if (!isMobile) return
@@ -116,14 +120,21 @@ export default function ExitIntentPopup({
         </button>
 
         {/* Content */}
-        <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
-        <p className="text-sm text-slate-600 mb-4 pr-6">{description}</p>
+        <div className="flex items-start gap-3 mb-4">
+          <div className="flex-shrink-0 w-9 h-9 rounded-full bg-brand-50 flex items-center justify-center">
+            <Scale className="w-5 h-5 text-brand" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-800 mb-1">{title}</p>
+            <p className="text-sm text-slate-600 pr-4">{description}</p>
+          </div>
+        </div>
 
         {/* CTA */}
         {onCtaClick ? (
           <button
             onClick={handleCTA}
-            className="w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md"
+            className="w-full py-2.5 px-4 bg-brand text-white text-sm font-semibold rounded-xl hover:bg-brand-dark transition-colors shadow-md"
           >
             {ctaText}
           </button>
@@ -134,14 +145,14 @@ export default function ExitIntentPopup({
               trackEvent('exit_intent_click', { ctaHref, ctaText })
               close()
             }}
-            className="block w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md text-center"
+            className="block w-full py-2.5 px-4 bg-brand text-white text-sm font-semibold rounded-xl hover:bg-brand-dark transition-colors shadow-md text-center"
           >
             {ctaText}
           </Link>
         )}
 
         <p className="text-[10px] text-gray-400 text-center mt-2">
-          Free · No obligation · Response within 24h
+          Free · No obligation · No pressure
         </p>
       </div>
     </div>

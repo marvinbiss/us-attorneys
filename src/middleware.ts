@@ -23,6 +23,48 @@ import {
 const IS_DEV = process.env.NODE_ENV === 'development'
 
 // ---------------------------------------------------------------------------
+// Supabase health probe — lightweight degraded-mode detection for Edge Runtime.
+// Caches result in module scope to avoid probing on every single request.
+// ---------------------------------------------------------------------------
+let lastHealthCheck = 0
+let lastHealthResult = false // false = healthy, true = degraded
+const HEALTH_CHECK_INTERVAL_MS = 30_000 // probe at most every 30s per Edge isolate
+
+async function checkSupabaseHealth(): Promise<boolean> {
+  const now = Date.now()
+  if (now - lastHealthCheck < HEALTH_CHECK_INTERVAL_MS) {
+    return lastHealthResult
+  }
+  lastHealthCheck = now
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!supabaseUrl) {
+    lastHealthResult = true
+    return true
+  }
+
+  try {
+    // HEAD request to the Supabase REST endpoint — minimal payload, fast response
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 2000)
+    const res = await fetch(`${supabaseUrl}/rest/v1/`, {
+      method: 'HEAD',
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+      },
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
+    lastHealthResult = !res.ok
+  } catch {
+    lastHealthResult = true
+    logger.warn('Supabase health probe failed — entering degraded mode')
+  }
+
+  return lastHealthResult
+}
+
+// ---------------------------------------------------------------------------
 // Content-Security-Policy — pre-computed parts (only nonce changes per request)
 // ---------------------------------------------------------------------------
 
@@ -492,6 +534,30 @@ export async function middleware(request: NextRequest) {
       path: '/',
       maxAge: 60 * 60 * 24, // 24 hours
     })
+  }
+
+  // ---------------------------------------------------------------------------
+  // Graceful degradation — lightweight Supabase health probe.
+  // Pings the Supabase REST endpoint (HEAD request, 2s timeout).
+  // On failure, sets X-Degraded-Mode header so pages can serve cached content.
+  //
+  // Rate-limited to avoid hammering Supabase: only probes once per ~30s per
+  // Edge isolate (in-memory timestamp). Public GET pages only (skip API routes,
+  // auth routes, etc. which have their own error handling).
+  // ---------------------------------------------------------------------------
+  const isPublicPage = !pathname.startsWith('/api/') &&
+    !pathname.startsWith('/admin') &&
+    !pathname.startsWith('/client-dashboard') &&
+    !pathname.startsWith('/attorney-dashboard') &&
+    !pathname.startsWith('/login') &&
+    !pathname.startsWith('/register')
+
+  if (isPublicPage) {
+    const degraded = await checkSupabaseHealth()
+    if (degraded) {
+      response.headers.set('X-Degraded-Mode', 'true')
+      response.headers.set('X-Degraded-Reason', 'supabase-unreachable')
+    }
   }
 
   return addSecurityHeaders(response, request, nonce)

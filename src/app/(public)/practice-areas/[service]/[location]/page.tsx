@@ -37,6 +37,7 @@ import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import StatuteOfLimitations from '@/components/seo/StatuteOfLimitations'
 import CityDemographics from '@/components/seo/CityDemographics'
+import NearbyCities from '@/components/seo/NearbyCities'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
@@ -609,6 +610,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         city={locationSlug}
         cityName={location.name}
         currentIntent="services"
+      />
+
+      {/* Nearby cities for internal linking mesh */}
+      <NearbyCities
+        citySlug={locationSlug}
+        specialtySlug={specialtySlug}
+        specialtyName={service.name}
+        limit={8}
+        className="bg-sand-50 border-t border-stone-200/40"
       />
 
       <StickyMobileCTA specialtySlug={specialtySlug} citySlug={locationSlug} attorneyCount={totalAttorneyCount} />

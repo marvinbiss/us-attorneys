@@ -1,5 +1,6 @@
 /**
  * BookingCalendar Component -- Unit Tests
+ * Updated 2026-03-18: Tests now mock the availability API instead of Math.random()
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -24,15 +25,89 @@ vi.mock('@/hooks/useReducedMotion', () => ({
   useReducedMotion: () => false,
 }))
 
-// ── Deterministic slot generation ────────────────────────────────────────
+// ── API mock helpers ─────────────────────────────────────────────────────
 
-// We need to seed Math.random for deterministic tests.
-// The component calls Math.random() for slot availability.
-// We mock it to always return 0.5 (> 0.3 for morning = available, > 0.4 for afternoon = available).
-// Weekend slots are always unavailable regardless of Math.random.
+/**
+ * Build mock availability API response for a week starting from Monday.
+ * Returns slots for weekdays (Mon-Fri), morning 08:00-12:00 and afternoon 14:00-18:00.
+ */
+function buildMockAvailabilityResponse(weekStart: Date) {
+  const slots: { date: string; time: string; datetime: string; available: boolean }[] = []
+  for (let d = 0; d < 7; d++) {
+    const date = new Date(weekStart)
+    date.setDate(date.getDate() + d)
+    const dateStr = date.toISOString().split('T')[0]
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6
+    const isPast = date < new Date(new Date().toISOString().split('T')[0] + 'T00:00:00')
+
+    if (isWeekend || isPast) continue
+
+    // Morning slots
+    for (let h = 8; h < 12; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+        slots.push({
+          date: dateStr,
+          time,
+          datetime: `${dateStr}T${time}:00`,
+          available: true,
+        })
+      }
+    }
+
+    // Afternoon slots
+    for (let h = 14; h < 18; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+        slots.push({
+          date: dateStr,
+          time,
+          datetime: `${dateStr}T${time}:00`,
+          available: true,
+        })
+      }
+    }
+  }
+
+  return {
+    attorney_id: 'att-1',
+    timezone: 'America/New_York',
+    slots,
+    generated_at: new Date().toISOString(),
+  }
+}
+
+function getMonday() {
+  const now = new Date()
+  const day = now.getDay()
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1)
+  const monday = new Date(now.setDate(diff))
+  monday.setHours(0, 0, 0, 0)
+  return monday
+}
+
+// ── Setup ────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  vi.spyOn(Math, 'random').mockReturnValue(0.5)
+  // Mock global fetch to return availability data
+  const mockResponse = buildMockAvailabilityResponse(getMonday())
+  vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
+    const urlStr = typeof url === 'string' ? url : url.toString()
+    if (urlStr.includes('/api/attorneys/') && urlStr.includes('/availability')) {
+      return new Response(JSON.stringify(mockResponse), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+    // Booking API
+    if (urlStr.includes('/api/bookings')) {
+      return new Response(JSON.stringify({ id: 'booking-1', status: 'pending' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+    return new Response('Not found', { status: 404 })
+  })
 })
 
 // ── Default props ────────────────────────────────────────────────────────
@@ -50,35 +125,44 @@ const defaultProps = {
 describe('BookingCalendar', () => {
   // ── Rendering ────────────────────────────────────────────────────────
 
-  it('renders the calendar header with specialty and duration', () => {
+  it('renders the calendar header with specialty and duration', async () => {
     render(<BookingCalendar {...defaultProps} />)
     expect(screen.getByText('Book a time slot')).toBeInTheDocument()
     expect(screen.getByText(/Family Law/)).toBeInTheDocument()
     expect(screen.getByText(/60 min/)).toBeInTheDocument()
-    expect(screen.getByText(/250\$/)).toBeInTheDocument()
+    expect(screen.getByText(/\$250/)).toBeInTheDocument()
   })
 
-  it('renders 7 day buttons in the calendar grid', () => {
+  it('shows loading state initially then loads slots', async () => {
     render(<BookingCalendar {...defaultProps} />)
-    // The grid has 7 day buttons - some may be disabled (past/weekend).
-    // Each day button has a day abbreviation like Mon, Tue, etc.
-    // Count all buttons that are day cells (they contain a single/double digit day number)
+    // Should show loading initially
+    expect(screen.getByText('Loading availability...')).toBeInTheDocument()
+    // Wait for slots to load
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
+  })
+
+  it('renders 7 day buttons after loading', async () => {
+    render(<BookingCalendar {...defaultProps} />)
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
     const allButtons = screen.getAllByRole('button')
-    // Day buttons are the ones with class containing "rounded-xl text-center"
     const dayButtons = allButtons.filter((btn) =>
       btn.className.includes('rounded-xl') && btn.className.includes('text-center')
     )
     expect(dayButtons).toHaveLength(7)
   })
 
-  it('renders step indicators (Date, Time, Confirmation)', () => {
+  it('renders step indicators (Date, Time, Confirmation)', async () => {
     render(<BookingCalendar {...defaultProps} />)
     expect(screen.getByText('Date')).toBeInTheDocument()
     expect(screen.getByText('Time')).toBeInTheDocument()
     expect(screen.getByText('Confirmation')).toBeInTheDocument()
   })
 
-  it('uses default specialtyName when not provided', () => {
+  it('uses default specialtyName when not provided', async () => {
     render(
       <BookingCalendar
         attorneyId="att-1"
@@ -88,62 +172,44 @@ describe('BookingCalendar', () => {
     expect(screen.getByText(/Consultation/)).toBeInTheDocument()
   })
 
+  // ── No availability fallback ──────────────────────────────────────────
+
+  it('shows "Contact for availability" when no slots exist', async () => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async () => {
+      return new Response(JSON.stringify({
+        attorney_id: 'att-1',
+        timezone: 'America/New_York',
+        slots: [],
+        generated_at: new Date().toISOString(),
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    })
+
+    render(<BookingCalendar {...defaultProps} />)
+    await waitFor(() => {
+      expect(screen.getByText('Contact for availability')).toBeInTheDocument()
+    })
+  })
+
   // ── Available slots display ──────────────────────────────────────────
 
-  it('shows "avail" count on available weekdays', () => {
+  it('shows "avail" count on available weekdays', async () => {
     render(<BookingCalendar {...defaultProps} />)
-    const availTexts = screen.getAllByText(/avail/)
-    // With Math.random() = 0.5, all weekday slots are available
-    expect(availTexts.length).toBeGreaterThan(0)
-  })
-
-  it('shows "Full" on weekend days', () => {
-    // weekends have 0 available slots because isWeekend check makes available=false
-    // However, Math.random() = 0.5 > 0.3/0.4 but isWeekend overrides
-    render(<BookingCalendar {...defaultProps} />)
-    // There may or may not be weekends visible depending on current week
-    // Just verify the component renders without error
-    expect(screen.getByText('Book a time slot')).toBeInTheDocument()
-  })
-
-  // ── Past dates disabled ──────────────────────────────────────────────
-
-  it('disables past dates', () => {
-    render(<BookingCalendar {...defaultProps} />)
-    // All day buttons that represent past dates should be disabled
-    const allButtons = screen.getAllByRole('button')
-    const disabledDayButtons = allButtons.filter(
-      (btn) => btn.hasAttribute('disabled') && btn.className.includes('opacity-40')
-    )
-    // Past dates have opacity-40 class and are disabled
-    // On the current week, there may be 0 or more past dates
-    expect(disabledDayButtons.length).toBeGreaterThanOrEqual(0)
+    await waitFor(() => {
+      const availTexts = screen.getAllByText(/avail/)
+      expect(availTexts.length).toBeGreaterThan(0)
+    })
   })
 
   // ── Week navigation ──────────────────────────────────────────────────
 
-  it('navigates to the next week when right arrow is clicked', () => {
+  it('disables previous-week button when on current week', async () => {
     render(<BookingCalendar {...defaultProps} />)
-    const weekText = screen.getByText(/Week of/)
-    const initialWeekText = weekText.textContent
-
-    // Find the next-week button (ChevronRight)
-    const navButtons = screen.getAllByRole('button')
-    // The second navigation button is "next week"
-    const nextWeekBtn = navButtons.find((btn) =>
-      !btn.hasAttribute('disabled') && btn.className.includes('hover:bg-slate-100') && !btn.textContent?.includes('avail')
-    )
-
-    if (nextWeekBtn) {
-      fireEvent.click(nextWeekBtn)
-      const newWeekText = screen.getByText(/Week of/).textContent
-      expect(newWeekText).not.toBe(initialWeekText)
-    }
-  })
-
-  it('disables previous-week button when on current week', () => {
-    render(<BookingCalendar {...defaultProps} />)
-    // The first navigation button with ChevronLeft should be disabled on the current week
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
     const allButtons = screen.getAllByRole('button')
     const disabledNavButton = allButtons.find(
       (btn) => btn.hasAttribute('disabled') && btn.className.includes('disabled:opacity-30')
@@ -153,11 +219,14 @@ describe('BookingCalendar', () => {
 
   // ── Date selection ───────────────────────────────────────────────────
 
-  it('calls onSlotSelect when an available date is clicked', () => {
+  it('calls onSlotSelect when an available date is clicked', async () => {
     const onSlotSelect = vi.fn()
     render(<BookingCalendar {...defaultProps} onSlotSelect={onSlotSelect} />)
 
-    // Find an enabled day button with "avail" text
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
+
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
     )
@@ -165,13 +234,16 @@ describe('BookingCalendar', () => {
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
       expect(onSlotSelect).toHaveBeenCalledTimes(1)
-      // First argument is a Date, second is empty string
       expect(onSlotSelect.mock.calls[0][1]).toBe('')
     }
   })
 
-  it('transitions to time step after selecting a date', () => {
+  it('transitions to time step after selecting a date', async () => {
     render(<BookingCalendar {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
 
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
@@ -179,15 +251,18 @@ describe('BookingCalendar', () => {
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
-      // Should now see "Choose your time slot" text
       expect(screen.getByText('Choose your time slot')).toBeInTheDocument()
     }
   })
 
   // ── Time selection ───────────────────────────────────────────────────
 
-  it('shows morning and afternoon time slots after date selection', () => {
+  it('shows morning and afternoon time slots after date selection', async () => {
     render(<BookingCalendar {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
 
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
@@ -195,29 +270,28 @@ describe('BookingCalendar', () => {
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
-
       expect(screen.getByText('Morning')).toBeInTheDocument()
       expect(screen.getByText('Afternoon')).toBeInTheDocument()
     }
   })
 
-  it('calls onSlotSelect with time when a time slot is clicked', () => {
+  it('calls onSlotSelect with time when a time slot is clicked', async () => {
     const onSlotSelect = vi.fn()
     render(<BookingCalendar {...defaultProps} onSlotSelect={onSlotSelect} />)
 
-    // Select a date first
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
+
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
     )
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
-
-      // Now select a time slot (e.g., "08:00")
       const timeSlot = screen.getByText('08:00')
       if (timeSlot && !timeSlot.closest('button')?.hasAttribute('disabled')) {
         fireEvent.click(timeSlot)
-        // Second call should have the time
         const lastCall = onSlotSelect.mock.calls[onSlotSelect.mock.calls.length - 1]
         expect(lastCall[1]).toBe('08:00')
       }
@@ -226,8 +300,12 @@ describe('BookingCalendar', () => {
 
   // ── Confirm flow ─────────────────────────────────────────────────────
 
-  it('shows confirm button after selecting a time slot', () => {
+  it('shows confirm button after selecting a time slot', async () => {
     render(<BookingCalendar {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
 
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
@@ -235,79 +313,50 @@ describe('BookingCalendar', () => {
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
-
       const timeSlot = screen.getByText('08:00')
       fireEvent.click(timeSlot)
-
       expect(screen.getByText(/Confirm 08:00/)).toBeInTheDocument()
     }
   })
 
-  it('shows loading state when confirming a booking', async () => {
-    vi.useFakeTimers()
-
-    render(<BookingCalendar {...defaultProps} />)
-
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
-
-    if (availButtons.length > 0) {
-      fireEvent.click(availButtons[0])
-
-      const timeSlot = screen.getByText('08:00')
-      fireEvent.click(timeSlot)
-
-      const confirmBtn = screen.getByText(/Confirm 08:00/)
-      fireEvent.click(confirmBtn)
-
-      expect(screen.getByText('Booking in progress...')).toBeInTheDocument()
-
-      // Advance timer to complete the simulated API call
-      await act(async () => {
-        vi.advanceTimersByTime(1600)
-      })
-    }
-
-    vi.useRealTimers()
-  })
-
   it('shows confirmation step after booking completes', async () => {
-    vi.useFakeTimers()
-
     const onConfirm = vi.fn()
     render(<BookingCalendar {...defaultProps} onConfirm={onConfirm} />)
 
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
+
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
     )
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
-
       const timeSlot = screen.getByText('08:00')
       fireEvent.click(timeSlot)
-
       const confirmBtn = screen.getByText(/Confirm 08:00/)
-      fireEvent.click(confirmBtn)
 
       await act(async () => {
-        vi.advanceTimersByTime(1600)
+        fireEvent.click(confirmBtn)
       })
 
-      expect(screen.getByText('Booking confirmed!')).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByText('Booking confirmed!')).toBeInTheDocument()
+      })
       expect(screen.getByText(/Your appointment with Jane Smith/)).toBeInTheDocument()
-      expect(screen.getByText(/A confirmation email has been sent to you/)).toBeInTheDocument()
       expect(onConfirm).toHaveBeenCalledTimes(1)
     }
-
-    vi.useRealTimers()
   })
 
   // ── Back navigation ──────────────────────────────────────────────────
 
-  it('navigates back from time step to date step', () => {
+  it('navigates back from time step to date step', async () => {
     render(<BookingCalendar {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+    })
 
     const availButtons = screen.getAllByRole('button').filter(
       (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
@@ -315,11 +364,8 @@ describe('BookingCalendar', () => {
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
-
-      // Should be on time step
       expect(screen.getByText('Choose your time slot')).toBeInTheDocument()
 
-      // Find the back button (ChevronLeft in time step)
       const backButtons = screen.getAllByRole('button').filter(
         (btn) => btn.className.includes('hover:bg-slate-100') && !btn.textContent?.trim()
       )

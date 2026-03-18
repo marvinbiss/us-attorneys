@@ -1,47 +1,76 @@
 import { NextResponse } from 'next/server'
 import { createApiHandler } from '@/lib/api/handler'
 import { apiLogger } from '@/lib/logger'
+import { getCacheMetrics } from '@/lib/cache'
 
 export const dynamic = 'force-dynamic'
 
 type ServiceStatus = 'healthy' | 'degraded' | 'unhealthy'
-type CheckResult = { status: ServiceStatus; latency?: number; error?: string }
+type CheckResult = { status: ServiceStatus; latency?: number; error?: string; details?: Record<string, unknown> }
+
+// Critical env vars that MUST be set for the app to function
+const CRITICAL_ENV_VARS = [
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+  'SUPABASE_SERVICE_ROLE_KEY',
+] as const
+
+const IMPORTANT_ENV_VARS = [
+  'CRON_SECRET',
+  'NEXT_PUBLIC_SITE_URL',
+  'RESEND_API_KEY',
+  'STRIPE_SECRET_KEY',
+  'UPSTASH_REDIS_REST_URL',
+] as const
 
 /**
  * Health check — NEVER returns 500.
  * 200 = healthy or degraded (at least one service up)
- * 503 = unhealthy (ALL services down)
+ * 503 = unhealthy (any critical dependency is down)
  */
 export const GET = createApiHandler(async () => {
   const startTime = Date.now()
   const checks: Record<string, CheckResult> = {}
 
-  // Lazy-import env to catch Zod errors instead of crashing the module
-  let env: Record<string, string | undefined> | null = null
-  try {
-    env = (await import('@/lib/env')).env as Record<string, string | undefined>
-    checks.environment = { status: 'healthy' }
-  } catch (err: unknown) {
-    checks.environment = {
-      status: 'unhealthy',
-      error: err instanceof Error ? err.message : 'Env validation failed',
-    }
+  // ── Environment Variables ──
+  const missingCritical: string[] = []
+  const missingImportant: string[] = []
+
+  for (const key of CRITICAL_ENV_VARS) {
+    if (!process.env[key]) missingCritical.push(key)
+  }
+  for (const key of IMPORTANT_ENV_VARS) {
+    if (!process.env[key]) missingImportant.push(key)
   }
 
-  // Check Supabase
+  if (missingCritical.length > 0) {
+    checks.environment = {
+      status: 'unhealthy',
+      error: `Missing critical env vars: ${missingCritical.join(', ')}`,
+    }
+  } else if (missingImportant.length > 0) {
+    checks.environment = {
+      status: 'degraded',
+      error: `Missing optional env vars: ${missingImportant.join(', ')}`,
+    }
+  } else {
+    checks.environment = { status: 'healthy' }
+  }
+
+  // ── Supabase Connectivity ──
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
     const dbStart = Date.now()
-    const { error } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
+    const { count, error } = await supabase.from('states').select('*', { count: 'exact', head: true })
     const dbLatency = Date.now() - dbStart
 
     if (error) {
       checks.database = { status: 'unhealthy', latency: dbLatency, error: error.message }
     } else if (dbLatency > 5000) {
-      checks.database = { status: 'degraded', latency: dbLatency, error: 'High latency' }
+      checks.database = { status: 'degraded', latency: dbLatency, error: 'High latency (>5s)' }
     } else {
-      checks.database = { status: 'healthy', latency: dbLatency }
+      checks.database = { status: 'healthy', latency: dbLatency, details: { statesCount: count } }
     }
   } catch (err: unknown) {
     checks.database = {
@@ -50,42 +79,66 @@ export const GET = createApiHandler(async () => {
     }
   }
 
-  // Check Stripe (config only)
-  const stripeKey = env?.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY
-  checks.stripe = stripeKey
-    ? { status: 'healthy' }
-    : { status: 'degraded', error: 'Stripe keys not configured' }
-
-  // Check Redis (optional)
-  const redisUrl = env?.UPSTASH_REDIS_REST_URL ?? process.env.UPSTASH_REDIS_REST_URL
-  const redisToken = env?.UPSTASH_REDIS_REST_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN
-  if (redisUrl) {
+  // ── Redis Connectivity (PING) ──
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (redisUrl && redisToken) {
     try {
       const redisStart = Date.now()
       const res = await fetch(`${redisUrl}/ping`, {
         headers: { Authorization: `Bearer ${redisToken}` },
         signal: AbortSignal.timeout(3000),
+        cache: 'no-store',
       })
       const redisLatency = Date.now() - redisStart
-      checks.redis = res.ok
-        ? { status: 'healthy', latency: redisLatency }
-        : { status: 'degraded', error: `HTTP ${res.status}`, latency: redisLatency }
+
+      if (res.ok) {
+        const body = await res.json()
+        const pong = body?.result === 'PONG'
+        checks.redis = pong
+          ? { status: 'healthy', latency: redisLatency }
+          : { status: 'degraded', latency: redisLatency, error: `Unexpected PING response: ${body?.result}` }
+      } else {
+        checks.redis = { status: 'degraded', latency: redisLatency, error: `HTTP ${res.status}` }
+      }
     } catch (err: unknown) {
       checks.redis = {
         status: 'degraded',
         error: err instanceof Error ? err.message : 'Redis unreachable',
       }
     }
+  } else {
+    checks.redis = { status: 'degraded', error: 'Redis not configured' }
   }
 
-  // Overall status
+  // ── Stripe Config ──
+  const stripeKey = process.env.STRIPE_SECRET_KEY
+  checks.stripe = stripeKey
+    ? { status: 'healthy' }
+    : { status: 'degraded', error: 'Stripe keys not configured' }
+
+  // ── Cache Metrics ──
+  const cacheMetrics = getCacheMetrics()
+  checks.cache = {
+    status: 'healthy',
+    details: {
+      l1Size: cacheMetrics.l1.size,
+      l1HitRate: `${cacheMetrics.l1.hitRate}%`,
+      l2HitRate: `${cacheMetrics.l2.hitRate}%`,
+      totalRequests: cacheMetrics.total.requests,
+      evictions: cacheMetrics.l1.evictions,
+    },
+  }
+
+  // ── Overall Status ──
   const statuses = Object.values(checks).map(c => c.status)
-  const allUnhealthy = statuses.length > 0 && statuses.every(s => s === 'unhealthy')
-  const anyUnhealthy = statuses.some(s => s === 'unhealthy')
+  // 503 if ANY critical dependency is unhealthy (database or environment)
+  const criticalDown = checks.database?.status === 'unhealthy' || checks.environment?.status === 'unhealthy'
   const anyDegraded = statuses.some(s => s === 'degraded')
+  const anyUnhealthy = statuses.some(s => s === 'unhealthy')
 
   let overallStatus: ServiceStatus = 'healthy'
-  if (allUnhealthy) {
+  if (criticalDown) {
     overallStatus = 'unhealthy'
   } else if (anyUnhealthy || anyDegraded) {
     overallStatus = 'degraded'
@@ -97,7 +150,7 @@ export const GET = createApiHandler(async () => {
     apiLogger.warn('Health check degraded', { overallStatus, checks, totalLatency })
   }
 
-  const appVersion = env?.NEXT_PUBLIC_APP_VERSION ?? process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0'
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0'
 
   return NextResponse.json({
     status: overallStatus,

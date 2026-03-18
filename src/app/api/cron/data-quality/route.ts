@@ -16,6 +16,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/cron-auth'
+import { sendAlert } from '@/lib/monitoring/alerts'
 
 export const dynamic = 'force-dynamic'
 
@@ -255,6 +256,24 @@ export async function GET(request: Request) {
       }
     }
 
+    // ── Send alert if any warnings detected ──
+    if (warnings.length > 0) {
+      const warningDetails = warnings.map(w =>
+        w.error ? `${w.metric}: ERROR (${w.error})` : `${w.metric}: ${w.count} (threshold: ${w.threshold})`
+      )
+      await sendAlert({
+        level: warnings.some(w => w.error) ? 'critical' : 'warning',
+        title: `Data quality: ${warnings.length} check(s) above threshold`,
+        message: warningDetails.join('\n'),
+        source: 'cron:data-quality',
+        metadata: {
+          totalChecks: metrics.length,
+          warningCount: warnings.length,
+          metrics: Object.fromEntries(warnings.map(w => [w.metric, w.count])),
+        },
+      })
+    }
+
     const totalDuration = Date.now() - startTime
     const okCount = metrics.filter(m => m.status === 'ok').length
     const warnCount = warnings.length
@@ -278,6 +297,12 @@ export async function GET(request: Request) {
     })
   } catch (error: unknown) {
     logger.error('[Cron] Error in data-quality:', error)
+    await sendAlert({
+      level: 'critical',
+      title: 'Data quality cron crashed',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      source: 'cron:data-quality',
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Error during data quality checks' } },
       { status: 500 }

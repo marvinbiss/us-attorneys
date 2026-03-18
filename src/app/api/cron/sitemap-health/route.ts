@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { verifyCronSecret } from '@/lib/cron-auth'
 import { validateFetchUrl, filterSafeUrls } from '@/lib/url-validation'
+import { sendAlert } from '@/lib/monitoring/alerts'
+import { logger } from '@/lib/logger'
 
 /**
  * Daily cron: Verify all sitemaps return HTTP 200 with valid XML.
@@ -23,7 +25,14 @@ export async function GET(request: Request) {
   // Fetch sitemap index to get all child sitemaps
   const indexRes = await fetch(sitemapIndexUrl, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
   if (!indexRes.ok) {
-    console.error('[sitemap-health] CRITICAL: sitemap index returned', indexRes.status)
+    logger.error('[sitemap-health] CRITICAL: sitemap index returned non-200', new Error(`HTTP ${indexRes.status}`))
+    await sendAlert({
+      level: 'critical',
+      title: 'Sitemap index unreachable',
+      message: `Sitemap index at ${sitemapIndexUrl} returned HTTP ${indexRes.status}`,
+      source: 'cron:sitemap-health',
+      metadata: { statusCode: indexRes.status },
+    })
     return NextResponse.json({ error: 'Sitemap index failed', status: indexRes.status }, { status: 500 })
   }
 
@@ -73,9 +82,16 @@ export async function GET(request: Request) {
   const allOk = failures.length === 0
 
   if (!allOk) {
-    console.error(`[sitemap-health] ALERT: ${failures.length} sitemaps failed:`, failures)
+    logger.error('[sitemap-health] Sitemaps failed', new Error(`${failures.length} sitemaps failed`), { failures })
+    await sendAlert({
+      level: failures.length > 3 ? 'critical' : 'warning',
+      title: `${failures.length} sitemap(s) unhealthy`,
+      message: `Failed sitemaps:\n${failures.join('\n')}`,
+      source: 'cron:sitemap-health',
+      metadata: { failedCount: failures.length, totalChecked: results.length, totalUrls },
+    })
   } else {
-    console.log(`[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`)
+    logger.info(`[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`)
   }
 
   return NextResponse.json({

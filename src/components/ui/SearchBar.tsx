@@ -5,22 +5,80 @@ import { useRouter } from 'next/navigation'
 import { Search, MapPin, ArrowRight, Clock, TrendingUp, X, Navigation, Wrench } from 'lucide-react'
 import { practiceAreas as allServices } from '@/lib/data/usa'
 
-// Simple client-side city autocomplete
+// ── Autocomplete types ──────────────────────────────────────────────
+interface AutocompleteResult {
+  attorneys: Array<{
+    type: 'attorney'
+    name: string
+    slug: string
+    stable_id: string | null
+    city: string | null
+    state: string | null
+    specialty: string | null
+  }>
+  locations: Array<{
+    type: 'location'
+    name: string
+    slug: string
+    state_name: string | null
+    state_abbr: string | null
+    population: number | null
+  }>
+  specialties: Array<{
+    type: 'specialty'
+    name: string
+    slug: string
+    category: string | null
+  }>
+}
+
 interface CitySuggestion {
   city: string
   context: string
   label: string
   postcode: string
+  slug?: string
 }
 
-// TODO: Replace with US geocoding service (Census Geocoder, Google Places, or Mapbox)
-// French data.gouv.fr API removed — does not serve US locations
-async function searchCities(_query: string): Promise<CitySuggestion[]> {
-  return []
+/**
+ * Call the autocomplete API and map location results to CitySuggestion format.
+ * Returns locations from the DB (real cities with state context).
+ */
+async function searchCities(query: string): Promise<CitySuggestion[]> {
+  if (!query || query.trim().length < 2) return []
+
+  try {
+    const response = await fetch(`/api/search/autocomplete?q=${encodeURIComponent(query.trim())}`)
+    if (!response.ok) return []
+
+    const data: AutocompleteResult = await response.json()
+
+    return (data.locations || []).map((loc) => ({
+      city: loc.name,
+      context: loc.state_name ? `${loc.state_name} (${loc.state_abbr})` : '',
+      label: loc.state_abbr ? `${loc.name}, ${loc.state_abbr}` : loc.name,
+      postcode: '',
+      slug: loc.slug,
+    }))
+  } catch {
+    return []
+  }
 }
 
-async function getLocationFromCoords(_lon: number, _lat: number): Promise<string | null> {
-  return null
+/**
+ * Reverse geocode coordinates to a city name using Nominatim.
+ */
+async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lon=${lon}&lat=${lat}`
+    )
+    if (!response.ok) return null
+    const data = await response.json()
+    return data.address?.city || data.address?.town || null
+  } catch {
+    return null
+  }
 }
 
 interface SearchBarProps {

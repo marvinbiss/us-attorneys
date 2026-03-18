@@ -5,7 +5,8 @@
  * All exported types, interfaces, and function signatures are preserved.
  */
 
-import { type DataDrivenContent } from '@/lib/seo/data-driven-content'
+import { type DataDrivenContent, generateDataDrivenContent } from '@/lib/seo/data-driven-content'
+import type { LocationData } from '@/lib/data/location-data'
 import {
   getRegionalPricingMultiplier,
   classifyCitySize,
@@ -77,8 +78,12 @@ export function generateLocationContent(
   specialtyName: string,
   cityRaw: unknown,
   attorneyCount: number = 0,
-  _locationData?: unknown | null | undefined,
+  locationDataRaw?: unknown | null | undefined,
 ): LocationContent {
+  // Cast locationData — only used if it has the expected shape (census_data field)
+  const locationData = (locationDataRaw && typeof locationDataRaw === 'object' && 'census_data' in locationDataRaw)
+    ? locationDataRaw as LocationData
+    : null
   // Extract city data from the raw object (shape: { name, slug, state, stateAbbr, population, county })
   const city = cityRaw as { name?: string; slug?: string; state?: string; stateAbbr?: string; population?: number; county?: string } | null
   if (!city?.name || !city?.state) {
@@ -130,7 +135,9 @@ export function generateLocationContent(
     citySizeLabel,
     climateTip: localTips[0] || '',
     faqItems,
-    dataDriven: null,
+    dataDriven: locationData
+      ? generateDataDrivenContent(locationData, specialtySlug, specialtyName, attorneyCount)
+      : null,
   }
 }
 

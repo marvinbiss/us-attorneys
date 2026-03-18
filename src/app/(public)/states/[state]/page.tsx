@@ -12,6 +12,7 @@ import { getDepartmentImage } from '@/lib/data/images'
 import { generateStateContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import problems from '@/lib/data/problems'
+import { getCountiesByState as getCountiesByStateData } from '@/lib/data/counties'
 import { REVALIDATE } from '@/lib/cache'
 
 export function generateStaticParams() {
@@ -385,6 +386,41 @@ export default async function StatePage({ params }: PageProps) {
             </div>
           )}
         </section>
+
+        {/* ─── COUNTIES (hierarchical navigation) ──────────── */}
+        {(() => {
+          const stateCounties = getCountiesByStateData(dept.code)
+            .sort((a, b) => b.population - a.population)
+            .slice(0, 20)
+          if (stateCounties.length === 0) return null
+          return (
+            <section className="mb-16">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-violet-600" />
+                </div>
+                <div>
+                  <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                    Counties in {dept.name}
+                  </h2>
+                  <p className="text-sm text-slate-500">Browse attorneys by county</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                {stateCounties.map((county) => (
+                  <Link
+                    key={county.fips}
+                    href={`/counties/${county.slug}/personal-injury`}
+                    className="bg-white rounded-xl border border-gray-200 p-3 hover:shadow-md hover:border-violet-300 hover:-translate-y-0.5 transition-all group text-center"
+                  >
+                    <div className="font-semibold text-slate-800 group-hover:text-violet-600 transition-colors text-sm truncate">{county.name}</div>
+                    <div className="text-xs text-slate-400 mt-0.5">{county.population.toLocaleString()} pop. · {county.seat}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )
+        })()}
 
         {/* ─── SERVICES BY CITY ───────────────────────────── */}
         {stateCities.length > 0 && (

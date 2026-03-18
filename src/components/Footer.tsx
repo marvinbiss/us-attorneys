@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Instagram, Shield, Cr
 import { popularServices, popularCities, popularRegions } from '@/lib/constants/navigation'
 import NewsletterForm from './NewsletterForm'
 import { companyIdentity } from '@/lib/config/company-identity'
+import GeoFooterLinks from './seo/GeoFooterLinks'
 
 // Navigation links
 const navigationLinks = [
@@ -554,6 +555,9 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Comprehensive Geographic + Practice Area Internal Links */}
+      <GeoFooterLinks />
 
       {/* Horizontal separator before copyright */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

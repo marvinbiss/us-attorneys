@@ -9,6 +9,10 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { type AdminRole, type AdminPermissions, DEFAULT_PERMISSIONS } from '@/types/admin'
+import { checkSessionIdle, touchSession } from '@/lib/session-timeout'
+
+/** Roles that require 2FA to be enabled */
+const ROLES_REQUIRING_2FA: AdminRole[] = ['super_admin', 'admin', 'moderator']
 
 // Re-export types so existing imports from '@/lib/admin-auth' continue to work
 export type { AdminRole, AdminPermissions } from '@/types/admin'
@@ -239,6 +243,40 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     // If user has is_admin=true but no role column, grant super_admin
     const adminRole: AdminRole = role && validRoles.includes(role) ? role : (isAdmin ? 'super_admin' : 'viewer')
 
+    // 2FA enforcement for privileged admin roles (super_admin, admin, moderator)
+    if (ROLES_REQUIRING_2FA.includes(adminRole)) {
+      const { data: twoFactorRow } = await adminSupabase
+        .from('two_factor_auth')
+        .select('verified')
+        .eq('user_id', user.id)
+        .eq('verified', true)
+        .single()
+
+      if (!twoFactorRow) {
+        logger.warn('Admin access denied: 2FA not enabled', {
+          userId: user.id,
+          email: user.email,
+          role: adminRole,
+        })
+        return {
+          success: false,
+          error: NextResponse.json(
+            {
+              success: false,
+              error: {
+                code: '2FA_REQUIRED',
+                message: 'Two-factor authentication is mandatory for admin accounts. Please enable 2FA in your security settings before accessing the admin panel.',
+              },
+            },
+            { status: 403 }
+          ),
+        }
+      }
+    }
+
+    // Refresh session activity timestamp on successful admin auth
+    await touchSession()
+
     return {
       success: true,
       admin: {
@@ -284,6 +322,12 @@ export async function requirePermission(
   const csrfError = await validateCsrf()
   if (csrfError) {
     return { success: false, error: csrfError }
+  }
+
+  // Session idle timeout — 15 minutes for admin sessions
+  const sessionCheck = await checkSessionIdle(true)
+  if (sessionCheck.expired && sessionCheck.error) {
+    return { success: false, error: sessionCheck.error }
   }
 
   const authResult = await verifyAdmin()

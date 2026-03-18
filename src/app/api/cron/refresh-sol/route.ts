@@ -13,6 +13,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/cron-auth'
+import { sendAlert } from '@/lib/monitoring/alerts'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -168,11 +169,33 @@ export async function GET(request: Request) {
       })
     }
 
-    // 5. Log warnings for link rot
+    // 5. Log warnings for link rot and send alert
     if (linkRotDetails.length > 0) {
       logger.warn('[Cron] SOL source URL link rot detected:', {
         count: linkRotDetails.length,
         records: linkRotDetails,
+      })
+      await sendAlert({
+        level: linkRotDetails.length > 10 ? 'critical' : 'warning',
+        title: `SOL link rot: ${linkRotDetails.length} broken source URL(s)`,
+        message: `${linkRotDetails.length} statute of limitations records have broken source URLs that need manual review.\n\nTop affected:\n${linkRotDetails.slice(0, 5).map(d => `- ${d.state_code}/${d.specialty_slug}: ${d.source_url} (HTTP ${d.status})`).join('\n')}`,
+        source: 'cron:refresh-sol',
+        metadata: {
+          totalRecords: totalRecords ?? 0,
+          staleCount,
+          linkRotCount: linkRotDetails.length,
+        },
+      })
+    }
+
+    // 5b. Alert if too many stale records
+    if (staleCount > 500) {
+      await sendAlert({
+        level: 'warning',
+        title: `SOL data staleness: ${staleCount} records older than ${STALE_THRESHOLD_DAYS} days`,
+        message: `${staleCount} out of ${totalRecords ?? 0} SOL records have not been updated in ${STALE_THRESHOLD_DAYS}+ days. Consider scheduling a refresh.`,
+        source: 'cron:refresh-sol',
+        metadata: { staleCount, totalRecords: totalRecords ?? 0 },
       })
     }
 
@@ -197,6 +220,13 @@ export async function GET(request: Request) {
   } catch (error: unknown) {
     const durationMs = Date.now() - startTime
     logger.error('[Cron] Error in refresh-sol:', error)
+    await sendAlert({
+      level: 'critical',
+      title: 'SOL refresh cron crashed',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      source: 'cron:refresh-sol',
+      metadata: { durationMs },
+    })
     return NextResponse.json(
       {
         success: false,

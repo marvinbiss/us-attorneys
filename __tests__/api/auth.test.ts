@@ -177,7 +177,8 @@ vi.mock('@/lib/errors', () => ({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MockResponse = { body: any; status: number; headers?: any; cookies?: { set: ReturnType<typeof vi.fn> } }
 
-function makeRequest(body: unknown, url = 'http://localhost/api/auth/test'): Request {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function makeRequest(body: unknown, url = 'http://localhost/api/auth/test'): any {
   return new Request(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

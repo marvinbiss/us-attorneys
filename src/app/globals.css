@@ -165,6 +165,20 @@
 }
 
 /* ===========================================
+   Design System Utility Classes (2026-03-18)
+   Maps CSS variables to usable utility classes.
+   Tailwind spacing: use gap-ds-4, p-ds-8, etc.
+   Tailwind borderRadius: use rounded-ds-lg, etc.
+   Below: shadow utilities (can't map CSS var shadows to TW config easily).
+   =========================================== */
+
+.shadow-ds-sm { box-shadow: var(--shadow-sm); }
+.shadow-ds-md { box-shadow: var(--shadow-md); }
+.shadow-ds-lg { box-shadow: var(--shadow-lg); }
+.shadow-ds-xl { box-shadow: var(--shadow-xl); }
+.shadow-ds-primary { box-shadow: var(--shadow-primary); }
+
+/* ===========================================
    Brand Component Styles
    =========================================== */
 
@@ -250,13 +264,16 @@
      =========================================== */
 
   .card-premium {
-    @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-100 dark:border-gray-700 rounded-2xl
-           shadow-sm hover:shadow-xl hover:border-amber-200/50 dark:hover:border-amber-700/50
+    @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-100 dark:border-gray-700
            transition-all duration-300 ease-out;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
   }
 
   .card-premium:hover {
     @apply -translate-y-1 scale-[1.01];
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(245, 186, 160, 0.5); /* brand-200 at 50% opacity */
   }
 
   .btn-premium-primary {

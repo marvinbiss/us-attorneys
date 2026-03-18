@@ -10,6 +10,8 @@ import {
 } from '@/lib/errors'
 import { logger } from '@/lib/logger'
 import { isTimeoutError } from '@/lib/api/timeout'
+import { handleApiError, ApiError as CentralApiError } from '@/lib/api/errors'
+import { checkSessionIdle, touchSession } from '@/lib/session-timeout'
 
 interface HandlerContext {
   request: NextRequest
@@ -62,6 +64,12 @@ export function createApiHandler<T = unknown>(
 
       // Auth check
       if (options.requireAuth || options.requireAttorney || options.requireAdmin) {
+        // Session idle timeout check (30 min for regular users, admin routes use requirePermission which has its own 15 min check)
+        const sessionCheck = await checkSessionIdle(false)
+        if (sessionCheck.expired) {
+          throw new AuthenticationError('Session expired due to inactivity. Please sign in again.')
+        }
+
         const supabase = await createClient()
         const {
           data: { user },
@@ -70,6 +78,9 @@ export function createApiHandler<T = unknown>(
         if (!user) {
           throw new AuthenticationError()
         }
+
+        // Refresh session activity timestamp
+        await touchSession()
 
         context.user = { id: user.id, email: user.email || '' }
 
@@ -105,17 +116,20 @@ export function createApiHandler<T = unknown>(
 
       return await handler(context as HandlerContext & { body: T })
     } catch (error: unknown) {
+      // New centralized ApiError instances — use handleApiError directly
+      if (error instanceof CentralApiError) {
+        return handleApiError(error)
+      }
+
       // Return 504 Gateway Timeout for database timeout errors
       if (isTimeoutError(error)) {
         logger.error('API Timeout', error as Error)
-        return NextResponse.json(
-          { success: false, error: { code: 'GATEWAY_TIMEOUT', message: 'The request timed out. Please try again.' } },
-          { status: 504 }
-        )
+        return handleApiError(error)
       }
 
       logger.error('API Error', error as Error)
 
+      // Legacy AppError from src/lib/errors.ts
       if (error instanceof AppError) {
         return NextResponse.json(formatErrorResponse(error), {
           status: error.statusCode,

@@ -1091,6 +1091,312 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
   )
 }
 
+// ============================================================================
+// FULL-TEXT SEARCH + GEO-RADIUS SEARCH
+// Uses search_vector tsvector (GIN-indexed) from migration 400
+// Weights: A=name, B=firm_name, C=description+city, D=bio
+// ============================================================================
+
+export interface SearchFilters {
+  q?: string
+  specialty?: string
+  state?: string
+  city?: string
+  rating_min?: number
+  lat?: number
+  lng?: number
+  radius_miles?: number
+  sort?: 'relevance' | 'distance' | 'rating'
+  page?: number
+  limit?: number
+}
+
+export interface SearchResult {
+  attorneys: AttorneyListRow[]
+  total: number
+  page: number
+  limit: number
+  has_more: boolean
+}
+
+/**
+ * Unified full-text search for attorneys.
+ * Combines tsvector search (search_vector) with geo-distance and filters.
+ *
+ * For full-text: uses plainto_tsquery to safely parse user input,
+ * then ts_rank for relevance scoring with weights.
+ *
+ * For geo: uses PostGIS ST_DWithin for radius filtering and
+ * ST_Distance for distance sorting.
+ *
+ * Falls back to RPC for combined full-text + geo queries since
+ * Supabase JS client cannot do ts_rank ordering natively.
+ */
+export async function searchAttorneys(filters: SearchFilters): Promise<SearchResult> {
+  if (IS_BUILD) return { attorneys: [], total: 0, page: 1, limit: 20, has_more: false }
+
+  const page = Math.max(1, filters.page || 1)
+  const limit = Math.min(100, Math.max(1, filters.limit || 20))
+  const offset = (page - 1) * limit
+
+  const cacheKey = generateCacheKey('search:attorneys', {
+    q: filters.q || '',
+    specialty: filters.specialty || '',
+    state: filters.state || '',
+    city: filters.city || '',
+    rating_min: filters.rating_min || 0,
+    lat: filters.lat || '',
+    lng: filters.lng || '',
+    radius: filters.radius_miles || '',
+    sort: filters.sort || 'relevance',
+    page,
+    limit,
+  })
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      return retryWithBackoff(
+        async () => {
+          const hasTextQuery = !!(filters.q && filters.q.trim().length >= 2)
+          const hasGeoQuery = !!(filters.lat && filters.lng)
+
+          // If we have text search OR geo query, use the RPC function for
+          // ts_rank / ST_Distance ordering (not possible via PostgREST)
+          if (hasTextQuery || hasGeoQuery) {
+            return _searchWithRPC(filters, page, limit, offset)
+          }
+
+          // Simple filter-only query (no text, no geo) — use PostgREST
+          return _searchWithPostgREST(filters, page, limit, offset)
+        },
+        'searchAttorneys',
+      )
+    },
+    CACHE_TTL.attorneys,
+    { skipNull: true },
+  )
+}
+
+/**
+ * Search via RPC for full-text + geo queries.
+ * Calls the search_attorneys_v1 function created in migration.
+ * Falls back to PostgREST with textSearch if RPC is unavailable.
+ */
+async function _searchWithRPC(
+  filters: SearchFilters,
+  page: number,
+  limit: number,
+  offset: number,
+): Promise<SearchResult> {
+  const { q, specialty, state, city, rating_min, lat, lng, radius_miles, sort } = filters
+
+  // Resolve specialty slugs to IDs if provided
+  let specialtyIds: string[] = []
+  if (specialty) {
+    const slugs = SPECIALTY_TO_BAR_CATEGORIES[specialty]
+    if (slugs && slugs.length > 0) {
+      specialtyIds = await resolveSpecialtyIds(slugs)
+    }
+  }
+
+  // Try RPC first (server-side function for combined search)
+  try {
+    const { data, error } = await supabase.rpc('search_attorneys_v1', {
+      search_query: q?.trim() || null,
+      filter_specialty_ids: specialtyIds.length > 0 ? specialtyIds : null,
+      filter_state: state?.toUpperCase() || null,
+      filter_city: city || null,
+      filter_rating_min: rating_min || null,
+      geo_lat: lat || null,
+      geo_lng: lng || null,
+      geo_radius_miles: radius_miles || null,
+      sort_by: sort || 'relevance',
+      result_limit: limit,
+      result_offset: offset,
+    })
+
+    if (error) throw error
+
+    const rows = (data || []) as Array<AttorneyListRow & { total_count?: number }>
+    const total = rows.length > 0 && rows[0].total_count ? Number(rows[0].total_count) : rows.length
+
+    return {
+      attorneys: rows.map(r => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { total_count: _tc, ...rest } = r as unknown as Record<string, unknown>
+        return rest as unknown as AttorneyListRow
+      }),
+      total,
+      page,
+      limit,
+      has_more: offset + rows.length < total,
+    }
+  } catch (rpcError) {
+    dbLogger.warn('[searchAttorneys] RPC search_attorneys_v1 failed, falling back to PostgREST', {
+      error: rpcError instanceof Error ? rpcError.message : rpcError,
+    })
+    // Fallback: use PostgREST textSearch
+    return _searchWithPostgRESTTextSearch(filters, page, limit, offset)
+  }
+}
+
+/**
+ * Fallback: PostgREST with .textSearch() on search_vector.
+ * No ts_rank ordering (PostgREST limitation) but still uses the GIN index.
+ */
+async function _searchWithPostgRESTTextSearch(
+  filters: SearchFilters,
+  page: number,
+  limit: number,
+  offset: number,
+): Promise<SearchResult> {
+  let query = supabase
+    .from('attorneys')
+    .select(PROVIDER_LIST_SELECT, { count: 'exact' })
+    .eq('is_active', true)
+    .is('canonical_attorney_id', null)
+
+  // Full-text search using textSearch (uses the GIN index on search_vector)
+  if (filters.q && filters.q.trim().length >= 2) {
+    // Convert user input to safe tsquery tokens
+    const sanitized = filters.q.trim().replace(/[^a-zA-Z0-9\s'-]/g, '')
+    if (sanitized) {
+      query = query.textSearch('search_vector', sanitized, { type: 'plain', config: 'english' })
+    }
+  }
+
+  // Apply filters
+  if (filters.specialty) {
+    const slugs = SPECIALTY_TO_BAR_CATEGORIES[filters.specialty]
+    if (slugs && slugs.length > 0) {
+      const ids = await resolveSpecialtyIds(slugs)
+      if (ids.length > 0) {
+        query = query.in('primary_specialty_id', ids)
+      }
+    }
+  }
+
+  if (filters.state) {
+    query = query.eq('address_state', filters.state.toUpperCase())
+  }
+
+  if (filters.city) {
+    query = query.ilike('address_city', filters.city)
+  }
+
+  if (filters.rating_min && filters.rating_min > 0) {
+    query = query.gte('rating_average', filters.rating_min)
+  }
+
+  // Ordering: best available without RPC
+  if (filters.sort === 'rating') {
+    query = query.order('rating_average', { ascending: false, nullsFirst: false })
+  } else {
+    query = query.order('is_featured', { ascending: false, nullsFirst: true })
+    query = query.order('boost_level', { ascending: false, nullsFirst: true })
+    query = query.order('rating_average', { ascending: false, nullsFirst: false })
+  }
+  query = query.order('name')
+
+  query = query.range(offset, offset + limit - 1)
+
+  const { data, error, count } = await query
+  if (error) throw error
+
+  const total = count ?? 0
+  return {
+    attorneys: asAttorneyListRows(data || []),
+    total,
+    page,
+    limit,
+    has_more: offset + (data?.length ?? 0) < total,
+  }
+}
+
+/**
+ * Simple filter-only search (no text, no geo) — pure PostgREST.
+ */
+async function _searchWithPostgREST(
+  filters: SearchFilters,
+  page: number,
+  limit: number,
+  offset: number,
+): Promise<SearchResult> {
+  let query = supabase
+    .from('attorneys')
+    .select(PROVIDER_LIST_SELECT, { count: 'exact' })
+    .eq('is_active', true)
+    .is('canonical_attorney_id', null)
+
+  if (filters.specialty) {
+    const slugs = SPECIALTY_TO_BAR_CATEGORIES[filters.specialty]
+    if (slugs && slugs.length > 0) {
+      const ids = await resolveSpecialtyIds(slugs)
+      if (ids.length > 0) {
+        query = query.in('primary_specialty_id', ids)
+      }
+    }
+  }
+
+  if (filters.state) {
+    query = query.eq('address_state', filters.state.toUpperCase())
+  }
+
+  if (filters.city) {
+    query = query.ilike('address_city', filters.city)
+  }
+
+  if (filters.rating_min && filters.rating_min > 0) {
+    query = query.gte('rating_average', filters.rating_min)
+  }
+
+  // Default ordering
+  if (filters.sort === 'rating') {
+    query = query.order('rating_average', { ascending: false, nullsFirst: false })
+  } else {
+    query = query.order('is_featured', { ascending: false, nullsFirst: true })
+    query = query.order('boost_level', { ascending: false, nullsFirst: true })
+    query = query.order('phone', { ascending: false, nullsFirst: false })
+    query = query.order('is_verified', { ascending: false })
+  }
+  query = query.order('name')
+
+  query = query.range(offset, offset + limit - 1)
+
+  const { data, error, count } = await query
+  if (error) throw error
+
+  const total = count ?? 0
+  return {
+    attorneys: asAttorneyListRows(data || []),
+    total,
+    page,
+    limit,
+    has_more: offset + (data?.length ?? 0) < total,
+  }
+}
+
+/**
+ * Geo-radius search: find attorneys within a given radius of a point.
+ * Uses PostGIS ST_DWithin on the `geo` GEOGRAPHY(POINT) column.
+ * Results sorted by distance (closest first).
+ */
+export async function searchAttorneysByRadius(
+  lat: number,
+  lng: number,
+  radiusMiles: number,
+  filters: Omit<SearchFilters, 'lat' | 'lng' | 'radius_miles'> = {},
+): Promise<SearchResult> {
+  return searchAttorneys({
+    ...filters,
+    lat,
+    lng,
+    radius_miles: radiusMiles,
+    sort: filters.sort || 'distance',
+  })
+}
+
 export async function getLocationsByService(specialtySlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
@@ -1148,5 +1454,98 @@ export async function getLocationsByService(specialtySlug: string) {
     },
     CACHE_TTL.locations,
     { skipNull: true },
+  )
+}
+
+/**
+ * Get similar attorneys matching by primary specialty and state/city.
+ * Used by the SimilarAttorneys server component for internal linking.
+ * Returns attorneys with same specialty, preferring same city/state, sorted by rating.
+ */
+export async function getSimilarAttorneys(
+  attorneyId: string,
+  specialtyName: string,
+  stateCode?: string | null,
+  limit: number = 6,
+): Promise<Array<{
+  id: string
+  stable_id: string | null
+  slug: string | null
+  name: string
+  specialty: string
+  rating: number
+  reviews: number
+  city: string
+  is_verified: boolean
+}>> {
+  if (IS_BUILD) return []
+
+  return getCachedData(
+    generateCacheKey('similar-attorneys', { attorneyId, specialtyName, stateCode: stateCode || '', limit: String(limit) }),
+    async () => {
+      try {
+        // Resolve specialty name to ID
+        let specialtyId: string | null = null
+        if (specialtyName) {
+          const { data: specData } = await supabase
+            .from('specialties')
+            .select('id')
+            .eq('name', specialtyName)
+            .limit(1)
+            .single()
+          specialtyId = specData?.id ?? null
+        }
+
+        let query = supabase
+          .from('attorneys')
+          .select('id, stable_id, slug, name, primary_specialty_id, rating_average, review_count, address_city, is_verified, phone, specialty:specialties!primary_specialty_id(slug,name)')
+          .eq('is_active', true)
+          .neq('id', attorneyId)
+          .is('canonical_attorney_id', null)
+          .order('phone', { ascending: false, nullsFirst: false })
+          .order('rating_average', { ascending: false, nullsFirst: false })
+          .limit(limit)
+
+        if (specialtyId) {
+          query = query.eq('primary_specialty_id', specialtyId)
+        }
+
+        // Prefer same state
+        if (stateCode) {
+          query = query.eq('address_state', stateCode)
+        }
+
+        const { data } = await query
+
+        return ((data || []) as Array<{
+          id: string
+          stable_id: string | null
+          slug: string | null
+          name: string | null
+          specialty: { slug: string; name: string } | { slug: string; name: string }[] | null
+          primary_specialty_id: string | null
+          rating_average: number | null
+          review_count: number | null
+          address_city: string | null
+          is_verified: boolean | null
+        }>).map((p) => {
+          const spec = Array.isArray(p.specialty) ? p.specialty[0] ?? null : p.specialty
+          return {
+            id: p.id,
+            stable_id: p.stable_id,
+            slug: p.slug,
+            name: p.name || 'Attorney',
+            specialty: spec?.name || specialtyName,
+            rating: p.rating_average || 0,
+            reviews: p.review_count || 0,
+            city: p.address_city || '',
+            is_verified: p.is_verified || false,
+          }
+        })
+      } catch {
+        return []
+      }
+    },
+    CACHE_TTL.attorneys, // 3600s (1h)
   )
 }

@@ -12,7 +12,7 @@ import { z } from 'zod'
 const deletePostSchema = z.object({
   reason: z.string().max(500).optional(),
   password: z.string().min(1),
-  confirmText: z.literal('SUPPRIMER MON COMPTE'),
+  confirmText: z.literal('DELETE MY ACCOUNT'),
 })
 
 // POST /api/gdpr/delete - Request account deletion

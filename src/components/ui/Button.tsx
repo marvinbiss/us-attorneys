@@ -41,11 +41,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary: [
-        'bg-blue-600 text-white',
-        'hover:bg-blue-700',
-        'focus-visible:ring-blue-500',
-        'shadow-[0_4px_14px_0_rgba(37,99,235,0.25)]',
-        'hover:shadow-[0_8px_25px_0_rgba(37,99,235,0.35)]',
+        'bg-brand text-white',
+        'hover:bg-brand-dark',
+        'focus-visible:ring-brand',
+        'shadow-[0_4px_14px_0_rgba(232,107,75,0.25)]',
+        'hover:shadow-[0_8px_25px_0_rgba(232,107,75,0.35)]',
         'hover:-translate-y-[2px]',
       ],
       secondary: [

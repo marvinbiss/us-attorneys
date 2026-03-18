@@ -9,8 +9,124 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary - Blue (Trust, CTAs, links, primary actions)
-        // Custom richer blue — not Tailwind default
+        /* ==============================================
+           UNIFIED BRAND COLOR SYSTEM (2026-03-18)
+           Single source of truth for the entire app.
+           ============================================== */
+
+        // Brand — Clay/Terracotta (primary brand identity)
+        // Used for: logo, primary CTAs, brand accents, hero elements
+        brand: {
+          DEFAULT: '#E86B4B', // clay-400 — the hero brand color
+          light: '#F5BAA0',   // clay-200
+          dark: '#C24B2A',    // clay-600
+          50:  '#FDF1EC',
+          100: '#FADDCF',
+          200: '#F5BAA0',
+          300: '#EF9171',
+          400: '#E86B4B',
+          500: '#D4553A',
+          600: '#C24B2A',
+          700: '#A33E22',
+          800: '#85321C',
+          900: '#6B2916',
+        },
+
+        // CTA — Blue (interactive elements, links, form focus)
+        // Used for: buttons, links, focus rings, interactive states
+        cta: {
+          DEFAULT: '#1d4fd7', // primary-600
+          light: '#3464f4',   // primary-500
+          dark: '#1840b8',    // primary-700
+          50: '#eef4ff',
+          100: '#d9e7ff',
+          200: '#bbcfff',
+          300: '#8eaffe',
+          400: '#5a86fc',
+          500: '#3464f4',
+          600: '#1d4fd7',
+          700: '#1840b8',
+          800: '#1a369a',
+          900: '#1b3179',
+          950: '#13214a',
+        },
+
+        // Status colors — semantic, self-explanatory
+        success: {
+          DEFAULT: '#10B981',
+          50: '#ECFDF5',
+          100: '#D1FAE5',
+          200: '#A7F3D0',
+          300: '#6EE7B7',
+          400: '#34D399',
+          500: '#10B981',
+          600: '#059669',
+          700: '#047857',
+          800: '#065F46',
+          900: '#064E3B',
+        },
+        warning: {
+          DEFAULT: '#e8960a',
+          50: '#fefaec',
+          100: '#fcf0c9',
+          200: '#f9de8c',
+          300: '#f5c94f',
+          400: '#f2b523',
+          500: '#e8960a',
+          600: '#c97308',
+          700: '#a8530b',
+          800: '#894110',
+          900: '#713610',
+        },
+        error: {
+          DEFAULT: '#ef4444',
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+        },
+
+        // Neutral — Sand warm neutrals (backgrounds, cards, borders)
+        neutral: {
+          50:  '#FDFAF7',
+          100: '#F9F4EE',
+          200: '#F4EFE8',
+          300: '#EDE8E1',
+          400: '#E5DDD4',
+          500: '#D5C9BE',
+          600: '#B8A99A',
+          700: '#9A8879',
+          800: '#7D6A5C',
+          900: '#614F43',
+        },
+
+        /* ==============================================
+           DEPRECATED — Legacy color palettes.
+           Kept to avoid breaking existing components.
+           Migrate to brand/cta/success/warning/error/neutral.
+           Target removal: 2026-Q2
+           ============================================== */
+
+        /** @deprecated Use `brand` instead */
+        clay: {
+          50:  '#FDF1EC',
+          100: '#FADDCF',
+          200: '#F5BAA0',
+          300: '#EF9171',
+          400: '#E86B4B',
+          500: '#D4553A',
+          600: '#C24B2A',
+          700: '#A33E22',
+          800: '#85321C',
+          900: '#6B2916',
+        },
+        /** @deprecated Use `cta` instead */
         primary: {
           50: '#eef4ff',
           100: '#d9e7ff',
@@ -24,8 +140,7 @@ module.exports = {
           900: '#1b3179',
           950: '#13214a',
         },
-        // Secondary - Honey Gold (highlights, stars, badges)
-        // Custom warmer gold — not Tailwind default amber
+        /** @deprecated Use `warning` instead */
         secondary: {
           50: '#fefaec',
           100: '#fcf0c9',
@@ -39,20 +154,7 @@ module.exports = {
           900: '#713610',
           950: '#421b05',
         },
-        // Clay - Terracotta (new homepage brand color)
-        clay: {
-          50:  '#FDF1EC',
-          100: '#FADDCF',
-          200: '#F5BAA0',
-          300: '#EF9171',
-          400: '#E86B4B',
-          500: '#D4553A',
-          600: '#C24B2A',
-          700: '#A33E22',
-          800: '#85321C',
-          900: '#6B2916',
-        },
-        // Sand - Warm neutrals (clay homepage backgrounds)
+        /** @deprecated Use `neutral` instead */
         sand: {
           50:  '#FDFAF7',
           100: '#F9F4EE',
@@ -65,7 +167,7 @@ module.exports = {
           800: '#7D6A5C',
           900: '#614F43',
         },
-        // Success - Green (verified badges, success states)
+        /** @deprecated Use `success` instead */
         accent: {
           50: '#ECFDF5',
           100: '#D1FAE5',
@@ -79,6 +181,24 @@ module.exports = {
           900: '#064E3B',
           950: '#022C22',
         },
+      },
+      /* ==============================================
+         CSS VARIABLE INTEGRATION (2026-03-18)
+         Maps --space-*, --radius-*, --shadow-* CSS vars
+         from globals.css into Tailwind utilities.
+         Use: gap-ds-4, p-ds-8, rounded-ds-lg, shadow-ds-md
+         ============================================== */
+      spacing: {
+        'ds-1': 'var(--space-1)',   // 0.25rem
+        'ds-2': 'var(--space-2)',   // 0.5rem
+        'ds-3': 'var(--space-3)',   // 0.75rem
+        'ds-4': 'var(--space-4)',   // 1rem
+        'ds-5': 'var(--space-5)',   // 1.25rem
+        'ds-6': 'var(--space-6)',   // 1.5rem
+        'ds-8': 'var(--space-8)',   // 2rem
+        'ds-10': 'var(--space-10)', // 2.5rem
+        'ds-12': 'var(--space-12)', // 3rem
+        'ds-16': 'var(--space-16)', // 4rem
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
@@ -206,6 +326,11 @@ module.exports = {
       borderRadius: {
         '4xl': '2rem',
         '5xl': '2.5rem',
+        'ds-sm': 'var(--radius-sm)',   // 0.25rem
+        'ds-md': 'var(--radius-md)',   // 0.5rem
+        'ds-lg': 'var(--radius-lg)',   // 0.75rem
+        'ds-xl': 'var(--radius-xl)',   // 1rem
+        'ds-2xl': 'var(--radius-2xl)', // 1.5rem
       },
       transitionDuration: {
         '400': '400ms',

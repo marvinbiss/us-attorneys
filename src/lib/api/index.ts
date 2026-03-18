@@ -4,6 +4,33 @@
  */
 
 // ============================================
+// CENTRALIZED API LAYER (v2)
+// ============================================
+export {
+  ApiError,
+  NotFoundError,
+  ValidationError as ApiValidationError,
+  UnauthorizedError,
+  ForbiddenError,
+  RateLimitError as ApiRateLimitError,
+  ConflictError as ApiConflictError,
+  PaymentRequiredError,
+  ExternalServiceError as ApiExternalServiceError,
+  handleApiError,
+  withErrorHandler,
+  toApiError,
+} from './errors'
+
+export {
+  apiSuccess as apiSuccessV2,
+  apiPaginated,
+  apiCreated,
+  apiNoContent,
+} from './response'
+
+export { validateBody, validateQuery } from './validation'
+
+// ============================================
 // UTILITIES
 // ============================================
 export * from '../utils/errors'
